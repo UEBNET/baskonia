@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# Datos generados por las ejecuciones (brutos y procesados)
+data/raw/
+data/processed/

@@ -1,0 +1,45 @@
+name: EJECUTAR extracción de estadísticas
+
+# Sólo se ejecuta a mano (botón "Run workflow" en la pestaña Actions). No hay programación periódica.
+on:
+  workflow_dispatch:
+    inputs:
+      ligas:
+        description: "Ligas separadas por espacios (vacío = todas las activas)"
+        required: false
+        default: ""
+      temporada:
+        description: "Temporada"
+        required: false
+        default: "2025-26"
+
+jobs:
+  ejecutar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      # Recupera los JSON brutos de ejecuciones anteriores (reutilizar partidos y respaldo si una web falla)
+      - uses: actions/cache@v4
+        with:
+          path: data/raw
+          key: raw-${{ inputs.temporada }}-${{ github.run_id }}
+          restore-keys: raw-${{ inputs.temporada }}-
+      - name: Ejecutar
+        env:
+          LIGAS: ${{ inputs.ligas }}
+          TEMPORADA: ${{ inputs.temporada }}
+        run: |
+          ARGS=(--temporada "$TEMPORADA")
+          if [ -n "$LIGAS" ]; then read -ra L <<< "$LIGAS"; ARGS+=(--ligas "${L[@]}"); fi
+          python -m bbstats ejecutar "${ARGS[@]}" || echo "Alguna liga terminó con error (ver informe)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: estadisticas-${{ inputs.temporada }}-${{ github.run_number }}
+          path: |
+            data/processed
+            data/raw

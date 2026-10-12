@@ -1,0 +1,147 @@
+{
+  "_descripcion": "Configuración de fuentes. Puedes cambiar URLs, ids de temporada o activar/desactivar ligas sin tocar código. 'estado_verificacion' indica si el endpoint se ha comprobado contra la web real.",
+  "temporada_por_defecto": "2025-26",
+  "rutas": {
+    "bruto": "data/raw",
+    "procesado": "data/processed"
+  },
+  "http": {
+    "delay_s": 1.0,
+    "timeout_s": 30,
+    "retries": 3
+  },
+  "comprimir_bruto": false,
+  "ligas": {
+    "euroleague": {
+      "adaptador": "euroleague",
+      "activa": true,
+      "nombre": "Turkish Airlines EuroLeague",
+      "pais": "Europa",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "competicion": "E",
+      "base_url": "https://feeds.incrowdsports.com/provider/euroleague-feeds/v3/competitions",
+      "statistic_mode": "Accumulated",
+      "temporadas": {
+        "2025-26": {"season_code": "E2025"}
+      },
+      "estado_verificacion": "pendiente: endpoint público conocido, sin validar desde este entorno"
+    },
+    "acb": {
+      "adaptador": "acb",
+      "activa": true,
+      "nombre": "Liga Endesa (ACB)",
+      "pais": "España",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "competicion_id": 1,
+      "max_jornadas": 45,
+      "calendar_url": "https://www.acb.com/resultados-clasificacion/ver/temporada_id/{temporada_id}/competicion_id/{competicion_id}/jornada_numero/{jornada}",
+      "game_url": "https://www.acb.com/partido/estadisticas/id/{game_id}",
+      "fuente": "https://www.acb.com",
+      "temporadas": {
+        "2025-26": {"temporada_id": 2025}
+      },
+      "estado_verificacion": "pendiente: patrón /partido/estadisticas/id/<id> confirmado públicamente; parser HTML sin validar contra la página real"
+    },
+    "nba": {
+      "adaptador": "nba",
+      "activa": true,
+      "nombre": "NBA",
+      "pais": "EEUU",
+      "minutos_partido": 48,
+      "fase": "regular",
+      "season_type": "Regular Season",
+      "base_url": "https://stats.nba.com/stats",
+      "extras": true,
+      "temporadas": {
+        "2025-26": {"season": "2025-26"}
+      },
+      "estado_verificacion": "pendiente: API pública conocida (stats.nba.com); bloquea IPs de algunos proveedores cloud"
+    },
+    "gleague": {
+      "adaptador": "gleague",
+      "activa": true,
+      "nombre": "NBA G League",
+      "pais": "EEUU",
+      "minutos_partido": 48,
+      "fase": "regular",
+      "season_type": "Regular Season",
+      "base_url": "https://stats.gleague.nba.com/stats",
+      "league_id": "20",
+      "temporadas": {
+        "2025-26": {"season": "2025-26"}
+      },
+      "estado_verificacion": "pendiente: misma API que NBA con LeagueID=20"
+    },
+    "lba": {
+      "adaptador": "fiba_livestats",
+      "activa": true,
+      "nombre": "LBA Serie A (Italia)",
+      "pais": "Italia",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "FIBA LiveStats (Genius Sports)",
+      "data_url": "https://fibalivestats.dcd.shared.geniussports.com/data/{match_id}/data.json",
+      "temporadas": {
+        "2025-26": {
+          "match_ids": [],
+          "discovery": []
+        }
+      },
+      "estado_verificacion": "pendiente: falta configurar el origen de ids de partido (ver README, sección 'Configurar LBA/BBL/LNB')"
+    },
+    "bbl": {
+      "adaptador": "fiba_livestats",
+      "activa": true,
+      "nombre": "easyCredit BBL (Alemania)",
+      "pais": "Alemania",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "FIBA LiveStats (Genius Sports)",
+      "data_url": "https://fibalivestats.dcd.shared.geniussports.com/data/{match_id}/data.json",
+      "temporadas": {
+        "2025-26": {
+          "match_ids": [],
+          "discovery": []
+        }
+      },
+      "estado_verificacion": "pendiente: falta configurar el origen de ids de partido (ver README)"
+    },
+    "lnb": {
+      "adaptador": "html_table",
+      "activa": true,
+      "nombre": "LNB Betclic ÉLITE (Francia)",
+      "pais": "Francia",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://www.lnb.fr",
+      "promedios": false,
+      "match_table": "MIN",
+      "column_map": {},
+      "temporadas": {
+        "2025-26": {
+          "players_urls": [],
+          "teams_url": null,
+          "opp_teams_url": null
+        }
+      },
+      "estado_verificacion": "pendiente: el proveedor de datos de la LNB es Sportradar/Synergy; falta fijar la URL de la tabla de jugadores (ver README)"
+    },
+    "eurocup": {
+      "adaptador": "euroleague",
+      "activa": false,
+      "nombre": "BKT EuroCup",
+      "pais": "Europa",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "competicion": "U",
+      "base_url": "https://feeds.incrowdsports.com/provider/euroleague-feeds/v3/competitions",
+      "statistic_mode": "Accumulated",
+      "temporadas": {
+        "2025-26": {"season_code": "U2025"}
+      },
+      "estado_verificacion": "ejemplo de ampliación: misma fuente que Euroliga"
+    }
+  }
+}
