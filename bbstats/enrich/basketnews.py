@@ -150,6 +150,9 @@ def fetch(http: HttpClient, league_id: int, season_start: int, errors: list[str]
         errors.append(f"BasketNews: {exc}")
         return out
     out["players"]["total"] = first
+    if isinstance(first, dict) and first.get("success") is False:
+        msg = str((first.get("data") or {}).get("message") or "")[:120]
+        errors.append(f"BasketNews: sin datos para la temporada {season_start} (la fuente responde: {msg})")
     out["stages"] = ((first or {}).get("data") or {}).get("stages") or []
     try:
         out["onoff"]["total"] = http.post_json(f"{BASE}/on-off.json", data=base, headers=headers)
