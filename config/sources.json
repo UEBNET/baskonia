@@ -14,7 +14,8 @@
     "timeout_s": 30,
     "retries": 3,
     "delay_por_dominio": {
-      "www.basketball-reference.com": 3.5
+      "www.basketball-reference.com": 3.5,
+      "www.easycredit-bbl.de": 0.5
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -134,7 +135,9 @@
         ]
       ],
       "paso_rango": 100,
-      "_semillas": "Temporadas pasadas sin 'semillas': se buscan solas (bajando desde la temporada siguiente y, si no aparece la temporada regular, recorriendo 'rangos_busqueda' en saltos de 'paso_rango') y se guardan aquí. Numeración de la web: hasta la temporada regular 2024-25 ids bajos (2020-21 ≈ 25500); desde los playoffs 2024-25, ids ≥ 2003000."
+      "_semillas": "Temporadas pasadas sin 'semillas': se buscan solas (bajando desde la temporada siguiente y, si no aparece la temporada regular, recorriendo 'rangos_busqueda' en saltos de 'paso_rango') y se guardan aquí. Numeración de la web: hasta la temporada regular 2024-25 ids bajos (2020-21 ≈ 25500); desde los playoffs 2024-25, ids ≥ 2003000.",
+      "ventana_busqueda": 3500,
+      "paso_fino": 10
     },
     "lnb": {
       "adaptador": "lnb",

@@ -169,22 +169,34 @@ class BBLAdapter(BaseAdapter):
         if not regular:
             step = int(self.cfg.get("paso_rango", 100))
             for lo, hi in self.cfg.get("rangos_busqueda", [[1, 40000]]):
-                gid, hits, after = int(hi), 0, 0
+                gid, after = int(hi), 0
                 while gid >= int(lo):
                     gd = self._probe(http, gid)
                     sid = gd.get("seasonId")
                     if sid == year and gd.get("competition") == comp:
                         found.append(gid)
-                        hits += 1
                         after = 0
                         regular |= gd.get("stage") in REGULAR_STAGES
-                    elif hits and sid is not None and sid < year:
+                    elif regular and sid is not None and sid < year:
                         after += 1
-                        if after >= 15:  # ya por debajo de la temporada buscada
+                        if after >= 15:  # ya por debajo de la temporada regular buscada
                             break
                     gid -= step
                 if regular:
                     break
+        if regular and found:
+            # Paso C: en la numeración antigua los playoffs quedan lejos de su temporada regular (p.ej.
+            # 2022-23: regular 27480-27770, playoffs ≈ 30500) y hay partidos sueltos; se barre una ventana
+            # alrededor de lo encontrado en saltos finos para recogerlos.
+            window = int(self.cfg.get("ventana_busqueda", 3500))
+            step = int(self.cfg.get("paso_fino", 10))
+            known = set(found)
+            for gid in range(max(1, min(found) - window), max(found) + window + 1, step):
+                if gid in known:
+                    continue
+                gd = self._probe(http, gid)
+                if gd.get("seasonId") == year and gd.get("competition") == comp:
+                    found.append(gid)
         return sorted(set(found))
 
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
@@ -237,6 +249,13 @@ class BBLAdapter(BaseAdapter):
         finished = {k: v for k, v in games.items() if (v.get("initialGameData") or {}).get("status") == "OFFICIAL"}
         if not finished:
             raise NoDataYet(f"BBL {season}: no se encontraron partidos finalizados (revisa 'semillas')")
+        n_teams = len({t.get("teamId") for v in finished.values() for t in
+                       ((v.get("initialGameData") or {}).get("homeTeam") or {},
+                        (v.get("initialGameData") or {}).get("guestTeam") or {}) if t.get("teamId")})
+        n_regular = sum((v.get("initialGameData") or {}).get("stage") in REGULAR_STAGES for v in finished.values())
+        if self._is_past(season) and n_teams and n_regular < n_teams * (n_teams - 1):
+            self.soft_fail(f"BBL {season}: {n_regular} partidos de temporada regular encontrados; "
+                           f"con {n_teams} equipos deberían ser {n_teams * (n_teams - 1)}")
         has_regular = any((v.get("initialGameData") or {}).get("stage") in REGULAR_STAGES for v in finished.values())
         if discovered and has_regular:
             # Se guardan en config/sources.json (lo hace el pipeline): la próxima ejecución de esta
