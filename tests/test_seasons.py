@@ -71,3 +71,14 @@ def test_run_seasons_writes_season_index(config, router, tmp_path):
     seasons = [s["temporada"] for s in idx["temporadas"]]
     assert seasons[0] == "2025-26"
     assert set(idx["temporadas"][0]["ligas"]) == {"acb", "euroleague"}
+
+
+def test_bbl_discovery_scans_ranges_when_anchor_misses(config, router, tmp_path):
+    """Si bajar desde la temporada siguiente no encuentra la temporada regular (cambio de numeración),
+    se recorren los rangos de búsqueda."""
+    cfg, path = _bbl_config(config, tmp_path)
+    cfg["ligas"]["bbl"].update(temporadas={"2026-27": {"semillas": [5]}}, paso_rango=5,
+                               rangos_busqueda=[[synth.FIRST_ID - 50, synth.FIRST_ID + 50]])
+    rep = run(config=cfg, temporada="2025-26", http_factory=lambda: FakeHttp(router), paralelo=False)
+    assert rep["ligas"][0]["estado"] == "ok"
+    assert cfg["ligas"]["bbl"]["temporadas"]["2025-26"] == {"semillas": [synth.FIRST_ID]}

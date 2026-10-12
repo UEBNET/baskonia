@@ -125,7 +125,16 @@
       },
       "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
       "competicion": "BBL",
-      "max_huecos": 30
+      "max_huecos": 30,
+      "paso_busqueda": 40,
+      "rangos_busqueda": [
+        [
+          1,
+          40000
+        ]
+      ],
+      "paso_rango": 100,
+      "_semillas": "Temporadas pasadas sin 'semillas': se buscan solas (bajando desde la temporada siguiente y, si no aparece la temporada regular, recorriendo 'rangos_busqueda' en saltos de 'paso_rango') y se guardan aquí. Numeración de la web: hasta la temporada regular 2024-25 ids bajos (2020-21 ≈ 25500); desde los playoffs 2024-25, ids ≥ 2003000."
     },
     "lnb": {
       "adaptador": "lnb",

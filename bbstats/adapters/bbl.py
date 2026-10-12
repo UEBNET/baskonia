@@ -117,45 +117,75 @@ class BBLAdapter(BaseAdapter):
             return []
         return sorted({int(x) for x in re.findall(r'"id":\s*"(\d{7})"', html)})
 
+    def _probe(self, http: HttpClient, gid: int) -> dict:
+        try:
+            doc = self._game(http, gid)
+        except FetchError as exc:
+            self.soft_fail(str(exc))
+            doc = None
+        return (doc or {}).get("initialGameData") or {}
+
     def _discover_seeds(self, http: HttpClient, year: int) -> list[int]:
         """Temporadas pasadas sin `semillas`: busca ids de partido de esa temporada.
 
-        Parte del id semilla más bajo conocido de una temporada posterior (config o temporada en curso)
-        y baja en saltos de `paso_busqueda` ids leyendo la temporada de cada página. Se guardan todos los
-        ids de la temporada buscada que aparezcan (temporada regular y playoffs están en bloques distintos)
-        y se para cuando las páginas ya son de dos temporadas anteriores o tras muchos saltos vacíos.
+        Paso A: parte del id semilla más bajo conocido de una temporada posterior (config o temporada
+        en curso) y baja en saltos de `paso_busqueda` ids leyendo la temporada de cada página; se para
+        cuando las páginas ya son de dos temporadas anteriores o tras muchos saltos vacíos.
+        Paso B: si no ha aparecido la temporada regular (MAIN_ROUND), recorre de arriba abajo los
+        `rangos_busqueda` en saltos de `paso_rango`. Hace falta porque la web cambió de numeración en
+        2025: hasta la temporada regular 2024-25 los ids son bajos (p.ej. 2020-21 ≈ 25500) y desde los
+        playoffs 2024-25 empiezan en 2003000; entre medias hay partidos históricos (1968-1998) importados.
+        Se devuelven todos los ids de la temporada buscada que aparezcan (regular y playoffs van en
+        bloques distintos); fetch() recorre después cada bloque entero.
         """
+        comp = self.cfg.get("competicion", "BBL")
         later = [int(x) for t, v in (self.cfg.get("temporadas") or {}).items()
                  if int(t[:4]) > year for x in (v.get("semillas") or [])]
         anchors = later or self._current_seeds(http)
-        if not anchors:
-            return []
-        step = int(self.cfg.get("paso_busqueda", 40))
-        max_probes = int(self.cfg.get("max_saltos_busqueda", 1500))
-        gid, found, empty, older = min(anchors), [], 0, 0
-        for _ in range(max_probes):
-            gid -= step
-            if gid <= 0:
-                break
-            try:
-                doc = self._game(http, gid)
-            except FetchError as exc:
-                self.soft_fail(str(exc))
-                doc = None
-            gd = (doc or {}).get("initialGameData") or {}
-            sid = gd.get("seasonId")
-            if sid is None:
-                empty += 1
-                if empty > 150:
+        found: list[int] = []
+        regular = False
+        if anchors:
+            step = int(self.cfg.get("paso_busqueda", 40))
+            max_probes = int(self.cfg.get("max_saltos_busqueda", 1500))
+            gid, empty, older = min(anchors), 0, 0
+            for _ in range(max_probes):
+                gid -= step
+                if gid <= 0:
                     break
-                continue
-            empty = 0
-            if sid == year and gd.get("competition") == self.cfg.get("competicion", "BBL"):
-                found.append(gid)
-            older = older + 1 if sid < year - 1 else 0
-            if older >= 25:
-                break
-        return found
+                gd = self._probe(http, gid)
+                sid = gd.get("seasonId")
+                if sid is None:
+                    empty += 1
+                    if empty > 150:
+                        break
+                    continue
+                empty = 0
+                if sid == year and gd.get("competition") == comp:
+                    found.append(gid)
+                    regular |= gd.get("stage") in REGULAR_STAGES
+                older = older + 1 if sid < year - 1 else 0
+                if older >= 25:
+                    break
+        if not regular:
+            step = int(self.cfg.get("paso_rango", 100))
+            for lo, hi in self.cfg.get("rangos_busqueda", [[1, 40000]]):
+                gid, hits, after = int(hi), 0, 0
+                while gid >= int(lo):
+                    gd = self._probe(http, gid)
+                    sid = gd.get("seasonId")
+                    if sid == year and gd.get("competition") == comp:
+                        found.append(gid)
+                        hits += 1
+                        after = 0
+                        regular |= gd.get("stage") in REGULAR_STAGES
+                    elif hits and sid is not None and sid < year:
+                        after += 1
+                        if after >= 15:  # ya por debajo de la temporada buscada
+                            break
+                    gid -= step
+                if regular:
+                    break
+        return sorted(set(found))
 
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
         sc = self.season_cfg(season)
@@ -207,11 +237,15 @@ class BBLAdapter(BaseAdapter):
         finished = {k: v for k, v in games.items() if (v.get("initialGameData") or {}).get("status") == "OFFICIAL"}
         if not finished:
             raise NoDataYet(f"BBL {season}: no se encontraron partidos finalizados (revisa 'semillas')")
-        if discovered:
+        has_regular = any((v.get("initialGameData") or {}).get("stage") in REGULAR_STAGES for v in finished.values())
+        if discovered and has_regular:
             # Se guardan en config/sources.json (lo hace el pipeline): la próxima ejecución de esta
             # temporada no repite la búsqueda y la temporada anterior la empieza desde aquí.
+            # Sólo si está la temporada regular: unas semillas a medias impedirían volver a buscar.
             block_seeds = self.block_starts([int(g) for g in finished], max_gap)
             self.config_updates = {"temporadas": {season: {"semillas": block_seeds}}}
+        elif discovered:
+            self.soft_fail(f"BBL {season}: no se encontró la temporada regular; semillas no guardadas")
         return {"season_id": year, "seeds": seeds, "games": finished, "reused_games": reused,
                 "ids_scanned": len(visited)}
 

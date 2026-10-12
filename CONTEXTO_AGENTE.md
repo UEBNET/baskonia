@@ -19,7 +19,8 @@
    eficiencia de tiro, ratios (USG%, AST%, REB%…), PER, ORtg/DRtg de Dean Oliver, Win Shares, PIE, Game Score…
 6. Se conservan además las métricas **oficiales** de cada fuente (`src_*`) y el **on/off de BasketNews** (`bn_*`).
 7. En las filas de playoffs hay columnas **`rs_*`** (valor en temporada regular) y **`delta_*`** (playoffs − regular).
-8. Datos reales versionados en `data/`: **2025-26 completa** (regular + playoffs) y **2026-27 en curso**.
+8. Datos reales versionados en `data/`: **de 2020-21 a 2025-26 completas** (regular + playoffs) y **2026-27 en curso**.
+   La carga histórica se hace una vez (`python -m bbstats historico`); después se actualiza **una temporada cada vez**.
 9. La extracción sólo se ejecuta bajo demanda (`python ejecutar.py`, CLI, API, GitHub Actions o el botón EJECUTAR).
 10. Un **Artifact** de claude.ai ("Mesa Multiliga Baskonia") muestra los datos con selector de temporada/fase y botón EJECUTAR.
 
@@ -96,11 +97,25 @@ Comandos:
 
 ```bash
 python ejecutar.py                                   # todas las ligas activas, temporada por defecto (2026-27)
-python ejecutar.py acb euroleague --temporada 2025-26
-python -m bbstats reprocesar --temporada 2025-26     # recalcula TODO desde los brutos, sin red
+python ejecutar.py acb euroleague --temporada 2025-26   # una temporada (sólo esa)
+python -m bbstats historico                          # carga histórica: temporada_inicial (2020-21) .. temporada_por_defecto
+python -m bbstats historico --desde 2020-21 --hasta 2024-25 --ligas bbl
+python -m bbstats historico --sin-descarga           # reprocesa todas las temporadas desde los brutos
+python -m bbstats reprocesar --temporada 2025-26     # recalcula una temporada desde los brutos, sin red
 python -m bbstats estado
-python -m pytest -q                                  # 25 tests
+python -m pytest -q                                  # 31 tests
 ```
+
+**Modo de operación (desde la versión 1.1):**
+1. Carga histórica, una sola vez: `historico` recorre las temporadas de `temporada_inicial` a
+   `temporada_por_defecto` (config), **de la más reciente a la más antigua**, compartiendo la configuración
+   en memoria (lo que una temporada descubre sirve a la anterior).
+2. Mantenimiento: cada actualización (`ejecutar --temporada X`, botón EJECUTAR del Artifact o GitHub Actions)
+   descarga **una única temporada** y no toca las demás.
+3. Tras cada ejecución se reescribe `data/processed/temporadas.json` (temporadas con datos, ligas y filas por
+   fase); el Artifact construye con él su selector de temporada.
+4. Lo que una fuente descubre sola se guarda en `config/sources.json` (`guardar_descubrimientos: true`):
+   `adapter.config_updates` → `config.update_league_config()` (en memoria y en disco, releyendo el fichero).
 
 `reprocesar` es clave para el agente: si se cambia una fórmula en `metrics.py` o se añade una columna en
 `schema.py`, se regenera toda la salida histórica sin volver a descargar.
@@ -127,8 +142,15 @@ con pausa de cortesía; Basketball-Reference exige 3,5 s entre peticiones).
 Detalles operativos relevantes:
 - ACB usa la clave de cliente pública incluida en el código de acb.com; LNB el token anónimo que su web da a cualquier visitante.
 - La API privada de la BBL exige un secreto ofuscado: **no se usa**; se leen las páginas públicas.
-- BBL: los ids de partido de una temporada son bloques consecutivos. Temporadas pasadas necesitan ids semilla en
-  `config/sources.json` (`bbl.temporadas."2025-26".semillas = [2004000, 2005750]`); la temporada en curso los obtiene sola.
+- BBL: los ids de partido de una temporada son bloques consecutivos (regular y playoffs, cada uno el suyo). La
+  temporada en curso toma sus partidos de `/saison/aktuelle-spiele`. Una temporada pasada sin `semillas` las
+  **descubre sola**: (A) baja en saltos de `paso_busqueda` desde el id más bajo conocido de una temporada
+  posterior; (B) si no aparece la temporada regular, recorre `rangos_busqueda` (`[[1, 40000]]`) en saltos de
+  `paso_rango` (100). Al encontrarlas guarda en `config/sources.json` el primer id de cada bloque
+  (`ligas.bbl.temporadas.<t>.semillas`), sólo si incluye la temporada regular, y la temporada anterior parte de ahí.
+  Motivo del paso B: la web cambió de numeración en 2025. Hasta la temporada regular 2024-25 los ids son bajos
+  (2019-20 ≈ 24000, 2020-21 ≈ 25500, 2021-22 ≈ 26000, 2022-23 ≈ 27500); desde los playoffs 2024-25 (≈ 2003212) y
+  2025-26 (≈ 2004000) son ≥ 2003000; entre 2000000 y 2003000 hay partidos históricos (1968-1998) importados.
 - Basketball-Reference rechaza la huella TLS de `requests`: se descarga con el binario `curl`.
 - Descartadas: stats.nba.com (bloquea servidores), RealGM y Proballers (Cloudflare), FIBA LiveStats (no usado por estas ligas).
 
@@ -259,17 +281,19 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Código: `artifact/mesa-multiliga.html`. Datos publicados junto a la página como ficheros:
   `datos/<temporada>/{indice,regular,playoffs,total}.json` (copias de `data/processed/<temporada>/por_fase/` e `indice.json`)
   y `datos/diccionario_columnas.json`.
-- Funciones: selector de temporada (2026-27, 2025-26); pestañas de fase **Temporada regular / Playoffs / Total**;
+- Funciones: selector de temporada (lista leída de `datos/temporadas.json`: 2026-27 … 2020-21); pestañas de fase **Temporada regular / Playoffs / Total**;
   filtros por liga, búsqueda y minutos mínimos; vistas (básico, tiro, por 40'/100, avanzada, ratings, on/off,
   playoffs vs regular, métricas oficiales, contexto de equipo); tabla ordenable; ficha del jugador con barras
   playoffs frente a regular.
 - **Botón EJECUTAR**: la página no puede ejecutar Python, así que usa la capacidad `mcp` con el conector
   **Claude Code Remote** (herramientas `get_trigger` y `fire_trigger`) para lanzar la Routine
   `EJECUTAR Mesa Multiliga Baskonia` (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda). El mensaje que envía es
-  `temporada=<T> ligas=<l1 l2 …>`. La Routine abre una sesión de Claude Code que: clona/actualiza la rama, ejecuta
-  `python -m bbstats ejecutar`, hace commit y push de `data/`, y republica los ficheros `datos/<temporada>/*.json`
-  del Artifact (misma URL). Pendiente de validar en la primera ejecución real: permisos de push y disponibilidad de la
-  herramienta de Artifacts en la sesión de la Routine.
+  `temporada=<T> ligas=<l1 l2 …>` y **sólo se actualiza esa temporada**. La Routine abre una sesión de Claude Code que:
+  adjunta el repositorio con permiso de escritura (`add_repo`), clona/actualiza la rama, ejecuta
+  `python -m bbstats ejecutar --temporada <T>`, hace commit y push de `data/` y `config/sources.json`, y republica
+  en el Artifact (misma URL) `datos/temporadas.json` y los ficheros `datos/<T>/*.json` de esa temporada.
+  Primera ejecución real (12-10-2026, 2026-27): descarga y republicación correctas; el push falló (403) porque la
+  sesión no tenía el repositorio autorizado, de ahí el paso `add_repo` añadido después.
 - Para editar la página: pedirlo a Claude con la URL (lee la versión publicada y republica en la misma URL), o editar
   `artifact/mesa-multiliga.html` y republicarlo con `url` = la del Artifact.
 
@@ -293,7 +317,7 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 7. **Reproducibilidad**: cada fila lleva `fecha_extraccion` y `archivo_bruto`; cualquier cambio de métrica se aplica
    con `python -m bbstats reprocesar --temporada T`.
 8. **Ampliar**: nuevas métricas → `schema.py` (columna + descripción) y `metrics.py` (cálculo), y luego `reprocesar`;
-   nuevas ligas → adaptador en `bbstats/adapters/` + entrada en `config/sources.json`; nuevas temporadas → `--temporada`.
+   nuevas ligas → adaptador en `bbstats/adapters/` + entrada en `config/sources.json`; nuevas temporadas → `--temporada`, o `temporada_inicial` + `historico`.
 
 ---
 
@@ -304,3 +328,9 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   (EuroLeague), datos 2025-26 y 2026-27.
 - Commit 3 — Artifact "Mesa Multiliga Baskonia" y Routine EJECUTAR.
 - Commit 4 — este documento de contexto.
+- 6b9ec9a — G League: coeficiente de tiro libre en posesiones 0,79 (calibrado); BasketNews: emparejamiento determinista;
+  BBL: descubrimiento de semillas para temporadas pasadas.
+- Commit 6 — modo histórico (desde 2020-21) + actualización por temporada; la BBL guarda en config las semillas que
+  descubre y busca también por rangos (cambio de numeración de su web); `temporadas.json`; Artifact con selector
+  de temporadas dinámico.
+- Commit 7 — datos 2020-21 a 2024-25.
