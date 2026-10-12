@@ -111,16 +111,25 @@ def split_name(name: str) -> tuple[frozenset[str], str]:
         parts = raw.strip().split()
         first, last = (" ".join(parts[:-1]), parts[-1]) if len(parts) > 1 else ("", raw)
     ft = sorted(name_tokens(first))
-    return name_tokens(last), (min(ft, key=lambda t: raw.lower().find(t))[0] if ft else "")
+    low = re.sub(r"[.'’`]", "", unicodedata.normalize("NFKD", raw).encode("ascii", "ignore").decode().lower())  # "Rubén" -> "ruben", "O'Shae" -> "oshae"
+    pos = lambda t: low.find(t) if low.find(t) >= 0 else len(low)  # noqa: E731
+    return name_tokens(last), (min(ft, key=pos)[0] if ft else "")
+
+
+_PARTICULAS = frozenset({"de", "la", "del", "las", "los", "da", "das", "do", "dos", "di", "van", "von", "der", "le", "el"})
 
 
 def _match_score(a: frozenset, b: frozenset) -> float:
+    # Sin partículas ("de la") y con desempate determinista: antes `max(set, key=len)` dependía del orden
+    # de hash del conjunto, de modo que dos ejecuciones podían emparejar jugadores distintos.
+    a, b = (a - _PARTICULAS) or a, (b - _PARTICULAS) or b
     if not a or not b:
         return 0.0
     inter = len(a & b)
     if inter == 0:
         return 0.0
-    return inter / len(a | b) + (0.5 if max(a, key=len) in b or max(b, key=len) in a else 0)
+    la, lb = max(sorted(a), key=len), max(sorted(b), key=len)
+    return inter / len(a | b) + (0.5 if la in b or lb in a else 0)
 
 
 def _team_tokens(name: str) -> frozenset[str]:
@@ -223,8 +232,10 @@ def apply(df, payload: dict, phase: str, notes: list[str]):
         toks = name_tokens(name)
         cands = by_tokens.get(toks)
         if not cands:
-            scored = [(_match_score(toks, k), k) for k in by_tokens]
-            scored = [s for s in scored if s[0] >= 0.9]
+            ini = split_name(name)[1]
+            scored = [(_match_score(toks, k), k) for k in sorted(by_tokens, key=lambda k: sorted(k))]
+            # emparejamiento aproximado sólo si coincide la inicial del nombre (evita López De La Torre -> Torres de la Torre)
+            scored = [s for s in scored if s[0] >= 0.9 and (not ini or split_name(by_tokens[s[1]][0]["_name"])[1] == ini)]
             if scored:
                 cands = by_tokens[max(scored, key=lambda s: s[0])[1]]
         if not cands:  # respaldo: mismo apellido, mismo equipo y misma inicial (Zac/Zachary, Will/William)

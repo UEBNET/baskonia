@@ -58,7 +58,8 @@ def _phase_frame(parsed: ParsedLeague, phase: str, liga: str, lcfg: dict, season
         players[k] = players.get(k, pd.Series(index=players.index, dtype=object)).astype(str)
     teams = pd.DataFrame(parsed.teams)
     game_min = float(lcfg.get("minutos_partido", 40))
-    df = compute_player_metrics(players, teams, game_min, single_ft=bool(lcfg.get("tiro_libre_unico")))
+    df = compute_player_metrics(players, teams, game_min, single_ft=bool(lcfg.get("tiro_libre_unico")),
+                                coef_tl=float(lcfg.get("coef_tl_posesion", 0.4)))
     df = df.assign(
         liga=liga, liga_nombre=lcfg.get("nombre", liga), pais=lcfg.get("pais"), temporada=season,
         fase=phase, fuente=lcfg.get("fuente") or lcfg.get("base_url"),

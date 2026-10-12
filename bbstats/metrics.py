@@ -36,8 +36,14 @@ def _num(df: pd.DataFrame, cols) -> pd.DataFrame:
 # ---------------------------------------------------------------------------------------------
 # Contexto de equipo y liga
 # ---------------------------------------------------------------------------------------------
-def build_team_context(players: pd.DataFrame, teams: pd.DataFrame, game_min: float) -> pd.DataFrame:
-    """Completa la tabla de equipos (sumando jugadores donde falte) y calcula posesiones/ritmo."""
+def build_team_context(players: pd.DataFrame, teams: pd.DataFrame, game_min: float,
+                       coef_tl: float = 0.4) -> pd.DataFrame:
+    """Completa la tabla de equipos (sumando jugadores donde falte) y calcula posesiones/ritmo.
+
+    `coef_tl`: fracción de los tiros libres intentados que cierra una posesión. 0,4 (0,44 en la fórmula
+    simple) en ligas con dos tiros libres por falta. En ligas de tiro libre único (G League) cada visita a
+    la línea es un solo intento, así que el coeficiente es mucho mayor: se configura en `coef_tl_posesion`.
+    """
     team_cols = [f"team_{s}" for s in TEAM_STATS] + [f"opp_{s}" for s in _TEAM_SUMMABLE]
     teams = teams.copy() if teams is not None and len(teams) else pd.DataFrame(columns=["team_id"])
     teams["team_id"] = teams["team_id"].astype(str)
@@ -65,14 +71,15 @@ def build_team_context(players: pd.DataFrame, teams: pd.DataFrame, game_min: flo
     teams["opp_min"] = teams["opp_min"].fillna(teams["team_min"])
 
     t, o = (lambda c: teams[f"team_{c}"]), (lambda c: teams[f"opp_{c}"])
-    t_part = (t("fga") + 0.4 * t("fta")
+    c_full, c_simple = coef_tl, coef_tl + 0.04
+    t_part = (t("fga") + c_full * t("fta")
               - 1.07 * _div(t("oreb"), t("oreb") + o("dreb")) * (t("fga") - t("fgm")) + t("tov"))
-    o_part = (o("fga") + 0.4 * o("fta")
+    o_part = (o("fga") + c_full * o("fta")
               - 1.07 * _div(o("oreb"), o("oreb") + t("dreb")) * (o("fga") - o("fgm")) + o("tov"))
     full = 0.5 * (t_part + o_part)
-    simple = t("fga") + 0.44 * t("fta") - t("oreb") + t("tov")
+    simple = t("fga") + c_simple * t("fta") - t("oreb") + t("tov")
     teams["team_poss"] = full.fillna(simple)
-    teams["opp_poss"] = full.fillna(o("fga") + 0.44 * o("fta") - o("oreb") + o("tov")).fillna(teams["team_poss"])
+    teams["opp_poss"] = full.fillna(o("fga") + c_simple * o("fta") - o("oreb") + o("tov")).fillna(teams["team_poss"])
     teams["team_pace"] = game_min * _div(teams["team_poss"] + teams["opp_poss"], 2 * (teams["team_min"] / 5))
     teams["team_ortg"] = 100 * _div(t("pts"), teams["team_poss"])
     teams["team_drtg"] = 100 * _div(o("pts"), teams["opp_poss"])
@@ -97,7 +104,7 @@ def league_context(teams: pd.DataFrame, game_min: float) -> dict:
 # Métricas de jugador
 # ---------------------------------------------------------------------------------------------
 def compute_player_metrics(players: pd.DataFrame, teams: pd.DataFrame, game_min: float,
-                           single_ft: bool = False) -> pd.DataFrame:
+                           single_ft: bool = False, coef_tl: float = 0.4) -> pd.DataFrame:
     """`single_ft`: liga con tiro libre único que vale 2 o 3 puntos (G League). Entonces los puntos de
     tiro libre son pts - 2*T2 - 3*T3 y cada visita a la línea anota con probabilidad FT% (no 1-(1-FT%)^2)."""
     df = players.copy()
@@ -110,7 +117,7 @@ def compute_player_metrics(players: pd.DataFrame, teams: pd.DataFrame, game_min:
     if multi.any():
         df.loc[multi, "team_id"] = df.loc[multi, "team_id"].map(
             lambda t: next((x for x in reversed(t.split(";")) if not known or x in known), t.split(";")[-1]))
-    teams = build_team_context(df, teams, game_min)
+    teams = build_team_context(df, teams, game_min, coef_tl=coef_tl)
     lg = league_context(teams, game_min)
 
     ctx_cols = [c for c in teams.columns if c.startswith(("team_", "opp_")) and c != "team_id"]

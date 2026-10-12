@@ -91,6 +91,13 @@ class BBLAdapter(BaseAdapter):
             return None
         return _page_data(resp.text)
 
+    @staticmethod
+    def _is_past(season: str) -> bool:
+        from datetime import date
+        today = date.today()
+        current_start = today.year if today.month >= 8 else today.year - 1
+        return int(season[:4]) < current_start
+
     def _current_seeds(self, http: HttpClient) -> list[int]:
         try:
             html = http.get_text(f"{SITE}/saison/aktuelle-spiele")
@@ -99,12 +106,59 @@ class BBLAdapter(BaseAdapter):
             return []
         return sorted({int(x) for x in re.findall(r'"id":\s*"(\d{7})"', html)})
 
+    def _discover_seeds(self, http: HttpClient, year: int) -> list[int]:
+        """Temporadas pasadas sin `semillas`: busca ids de partido de esa temporada.
+
+        Parte del id semilla más bajo conocido de una temporada posterior (config o temporada en curso)
+        y baja en saltos de `paso_busqueda` ids leyendo la temporada de cada página. Se guardan todos los
+        ids de la temporada buscada que aparezcan (temporada regular y playoffs están en bloques distintos)
+        y se para cuando las páginas ya son de dos temporadas anteriores o tras muchos saltos vacíos.
+        """
+        later = [int(x) for t, v in (self.cfg.get("temporadas") or {}).items()
+                 if int(t[:4]) > year for x in (v.get("semillas") or [])]
+        anchors = later or self._current_seeds(http)
+        if not anchors:
+            return []
+        step = int(self.cfg.get("paso_busqueda", 40))
+        max_probes = int(self.cfg.get("max_saltos_busqueda", 1500))
+        gid, found, empty, older = min(anchors), [], 0, 0
+        for _ in range(max_probes):
+            gid -= step
+            if gid <= 0:
+                break
+            try:
+                doc = self._game(http, gid)
+            except FetchError as exc:
+                self.soft_fail(str(exc))
+                doc = None
+            gd = (doc or {}).get("initialGameData") or {}
+            sid = gd.get("seasonId")
+            if sid is None:
+                empty += 1
+                if empty > 150:
+                    break
+                continue
+            empty = 0
+            if sid == year and gd.get("competition") == self.cfg.get("competicion", "BBL"):
+                found.append(gid)
+            older = older + 1 if sid < year - 1 else 0
+            if older >= 25:
+                break
+        if found:
+            self.soft_fail(f"BBL {year}: semillas descubiertas automáticamente {found[:3]}… ({len(found)}); "
+                           f"conviene fijarlas en config temporadas.<t>.semillas")
+        return found
+
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
         sc = self.season_cfg(season)
         year = int(sc.get("season_id", sc["start_year"]))
         max_gap = int(self.cfg.get("max_huecos", 30))
         prev = (previous_payload or {}).get("games", {}) if isinstance(previous_payload, dict) else {}
-        seeds = [int(x) for x in sc.get("semillas", [])] or self._current_seeds(http)
+        seeds = [int(x) for x in sc.get("semillas", [])]
+        if not seeds:
+            seeds = self._current_seeds(http) if "semillas" in sc else []
+        if not seeds or (self._is_past(season) and "semillas" not in sc):
+            seeds = self._discover_seeds(http, year) or seeds
         games: dict[str, Any] = {}
         visited: set[int] = set()
         reused = 0

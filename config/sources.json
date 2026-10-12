@@ -84,7 +84,9 @@
         "Referer": "https://gleague.nba.com/",
         "Origin": "https://gleague.nba.com"
       },
-      "tiro_libre_unico": true
+      "tiro_libre_unico": true,
+      "coef_tl_posesion": 0.79,
+      "_coef_tl_posesion": "Calibrado con las posesiones oficiales de la G League 2025-26 (0,798 regular, 0,781 playoffs). Con 0,4 el ritmo salía un 6 % bajo y el ORtg un 6 % alto."
     },
     "lba": {
       "adaptador": "lba",

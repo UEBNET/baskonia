@@ -2,9 +2,9 @@
   "version": "1.0.0",
   "temporada": "2026-27",
   "modo": "reprocesar",
-  "inicio": "2026-10-12T12:09:48.278857+00:00",
-  "fin": "2026-10-12T12:09:55.068456+00:00",
-  "salida_combinada": "/home/user/baskonia/data/processed/2026-27/todas_las_ligas.csv",
+  "inicio": "2026-10-12T16:59:54.847654+00:00",
+  "fin": "2026-10-12T17:00:00.962309+00:00",
+  "salida_combinada": "/home/claude/baskonia/data/processed/2026-27/todas_las_ligas.csv",
   "ligas": [
     {
       "liga": "euroleague",
@@ -15,9 +15,9 @@
         "regular": 263,
         "total": 263
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/euroleague/2026-27/euroleague_2026-27_20261012T114802Z.json.gz",
+      "archivo_bruto": "/home/claude/baskonia/data/raw/euroleague/2026-27/euroleague_2026-27_20261012T114802Z.json.gz",
       "fecha_extraccion": "2026-10-12T11:48:02.015707+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/euroleague.csv",
+      "archivo_salida": "/home/claude/baskonia/data/processed/2026-27/ligas/euroleague.csv",
       "columnas_con_datos": 308,
       "columnas_vacias": [
         "dorsal",
@@ -198,7 +198,7 @@
         "BasketNews (regular): 260/263 jugadores emparejados",
         "BasketNews (total): 260/263 jugadores emparejados"
       ],
-      "duracion_s": 0.73
+      "duracion_s": 0.94
     },
     {
       "liga": "acb",
@@ -209,9 +209,9 @@
         "regular": 237,
         "total": 237
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/acb/2026-27/acb_2026-27_20261012T114802Z.json.gz",
+      "archivo_bruto": "/home/claude/baskonia/data/raw/acb/2026-27/acb_2026-27_20261012T114802Z.json.gz",
       "fecha_extraccion": "2026-10-12T11:48:02.015277+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/acb.csv",
+      "archivo_salida": "/home/claude/baskonia/data/processed/2026-27/ligas/acb.csv",
       "columnas_con_datos": 311,
       "columnas_vacias": [
         "altura_cm",
@@ -393,7 +393,7 @@
         "[total] 26 partidos agregados",
         "BasketNews (total): 224/237 jugadores emparejados"
       ],
-      "duracion_s": 0.57
+      "duracion_s": 0.7
     },
     {
       "liga": "nba",
@@ -438,9 +438,9 @@
         "regular": 210,
         "total": 210
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/lba/2026-27/lba_2026-27_20261012T114802Z.json.gz",
+      "archivo_bruto": "/home/claude/baskonia/data/raw/lba/2026-27/lba_2026-27_20261012T114802Z.json.gz",
       "fecha_extraccion": "2026-10-12T11:48:02.021682+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/lba.csv",
+      "archivo_salida": "/home/claude/baskonia/data/processed/2026-27/ligas/lba.csv",
       "columnas_con_datos": 243,
       "columnas_vacias": [
         "posicion",
@@ -688,7 +688,7 @@
         "[total] 24 boxscores LBA; 0 reutilizados",
         "[total] 24 partidos agregados"
       ],
-      "duracion_s": 0.47
+      "duracion_s": 0.42
     },
     {
       "liga": "bbl",
@@ -699,9 +699,9 @@
         "regular": 237,
         "total": 237
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/bbl/2026-27/bbl_2026-27_20261012T114802Z.json.gz",
+      "archivo_bruto": "/home/claude/baskonia/data/raw/bbl/2026-27/bbl_2026-27_20261012T114802Z.json.gz",
       "fecha_extraccion": "2026-10-12T11:48:02.026024+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/bbl.csv",
+      "archivo_salida": "/home/claude/baskonia/data/processed/2026-27/ligas/bbl.csv",
       "columnas_con_datos": 227,
       "columnas_vacias": [
         "altura_cm",
@@ -965,7 +965,7 @@
         "[total] 43 partidos BBL; 0 reutilizados; 1226 ids explorados",
         "[total] 43 partidos agregados"
       ],
-      "duracion_s": 0.64
+      "duracion_s": 0.48
     },
     {
       "liga": "lnb",
@@ -976,9 +976,9 @@
         "regular": 179,
         "total": 179
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/lnb/2026-27/lnb_2026-27_20261012T114802Z.json.gz",
+      "archivo_bruto": "/home/claude/baskonia/data/raw/lnb/2026-27/lnb_2026-27_20261012T114802Z.json.gz",
       "fecha_extraccion": "2026-10-12T11:48:02.023856+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/lnb.csv",
+      "archivo_salida": "/home/claude/baskonia/data/processed/2026-27/ligas/lnb.csv",
       "columnas_con_datos": 204,
       "columnas_vacias": [
         "peso_kg",
@@ -1264,7 +1264,7 @@
         "[regular] LNB: 16 filas completadas desde fichas individuales (sin pérdidas, faltas, tapones recibidos ni +/-, que la ficha no publica)",
         "[total] Fase total = suma de: regular"
       ],
-      "duracion_s": 0.44
+      "duracion_s": 0.36
     },
     {
       "liga": "eurocup",
@@ -1275,9 +1275,9 @@
         "regular": 367,
         "total": 367
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/eurocup/2026-27/eurocup_2026-27_20261012T114802Z.json.gz",
+      "archivo_bruto": "/home/claude/baskonia/data/raw/eurocup/2026-27/eurocup_2026-27_20261012T114802Z.json.gz",
       "fecha_extraccion": "2026-10-12T11:48:02.024946+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/eurocup.csv",
+      "archivo_salida": "/home/claude/baskonia/data/processed/2026-27/ligas/eurocup.csv",
       "columnas_con_datos": 241,
       "columnas_vacias": [
         "dorsal",
@@ -1522,7 +1522,7 @@
       ],
       "errores": [],
       "notas": [],
-      "duracion_s": 0.89
+      "duracion_s": 0.76
     }
   ]
 }
