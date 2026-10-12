@@ -1,6 +1,9 @@
-"""Generador de una liga SINTÉTICA (datos inventados, sólo para tests) y renderizado de la misma
-en el formato de cada fuente. Permite comprobar que todos los adaptadores producen las mismas
-columnas y las mismas métricas a partir de los mismos datos."""
+"""Liga SINTÉTICA (datos inventados, sólo para tests) renderizada en el formato real de cada fuente.
+
+Mismos partidos -> mismas métricas en todas las fuentes: así se comprueba que cada adaptador
+interpreta bien su formato y que el motor de métricas es coherente entre ligas.
+Temporada: doble vuelta entre 4 equipos (12 partidos, fase regular) + 4 partidos de playoffs.
+"""
 from __future__ import annotations
 
 import json
@@ -12,6 +15,7 @@ TEAMS = [("T1", "Alfa Basket", "101"), ("T2", "Beta Club", "102"), ("T3", "Gamma
 MINUTES = [32, 30, 28, 26, 24, 22, 20, 18]  # suma 200 = 5 x 40
 STATS = ["min", "pts", "fg2m", "fg2a", "fg3m", "fg3a", "ftm", "fta", "oreb", "dreb", "reb", "ast", "stl",
          "tov", "blk", "blka", "pf", "pfd", "plus_minus", "dunks"]
+FIRST_ID = 100001
 
 
 def player_name(team_idx: int, k: int) -> tuple[str, str]:
@@ -34,40 +38,50 @@ def _line(rng: random.Random, minutes: int) -> dict:
             "pfd": rng.randint(0, 5), "dunks": min(fg2m, rng.randint(0, 1))}
 
 
+def _game(rng, gid, home, away, phase):
+    sides = []
+    for ti in (home, away):
+        players = []
+        for k, m in enumerate(MINUTES):
+            pid, name = player_name(ti, k)
+            line = _line(rng, m)
+            line.update({"player_id": pid, "name": name, "starter": k < 5, "dorsal": str(k + 4)})
+            players.append(line)
+        sides.append({"team_idx": ti, "players": players})
+    pts = [sum(p["pts"] for p in s["players"]) for s in sides]
+    if pts[0] == pts[1]:  # en baloncesto no hay empates
+        p0 = sides[0]["players"][0]
+        p0["ftm"] += 1
+        p0["fta"] += 1
+        p0["pts"] += 1
+        pts[0] += 1
+    for s, own, opp in ((sides[0], pts[0], pts[1]), (sides[1], pts[1], pts[0])):
+        for p in s["players"]:
+            p["plus_minus"] = round((own - opp) * p["min"] / 40)
+    return {"game_id": str(gid), "phase": phase, "sides": sides}
+
+
 def make_games(seed: int = 7) -> list[dict]:
     rng = random.Random(seed)
-    games = []
-    gid = 100000
+    games, gid = [], FIRST_ID
     for rnd in range(2):
         for i in range(len(TEAMS)):
             for j in range(i + 1, len(TEAMS)):
                 home, away = (i, j) if rnd == 0 else (j, i)
+                games.append(_game(rng, gid, home, away, "regular"))
                 gid += 1
-                sides = []
-                for ti in (home, away):
-                    players = []
-                    for k, m in enumerate(MINUTES):
-                        pid, name = player_name(ti, k)
-                        line = _line(rng, m)
-                        line.update({"player_id": pid, "name": name, "starter": k < 5, "dorsal": str(k + 4)})
-                        players.append(line)
-                    sides.append({"team_idx": ti, "players": players})
-                pts = [sum(p["pts"] for p in s["players"]) for s in sides]
-                if pts[0] == pts[1]:  # en baloncesto no hay empates: tiro libre extra
-                    p0 = sides[0]["players"][0]
-                    p0["ftm"] += 1
-                    p0["fta"] += 1
-                    p0["pts"] += 1
-                    pts[0] += 1
-                for s, own, opp in ((sides[0], pts[0], pts[1]), (sides[1], pts[1], pts[0])):
-                    for p in s["players"]:
-                        p["plus_minus"] = round((own - opp) * p["min"] / 40)
-                games.append({"game_id": str(gid), "sides": sides})
+    for home, away in ((0, 3), (3, 0), (1, 2), (2, 1)):
+        games.append(_game(rng, gid, home, away, "playoffs"))
+        gid += 1
     return games
 
 
+def by_phase(games: list[dict], phase: str) -> list[dict]:
+    return games if phase == "total" else [g for g in games if g["phase"] == phase]
+
+
 def season_totals(games: list[dict]) -> tuple[dict, dict]:
-    """Totales de temporada por jugador y por equipo (+ rivales), calculados a mano."""
+    """Totales por jugador y equipo (+ rivales), calculados a mano."""
     pl: dict = defaultdict(lambda: defaultdict(float))
     tm: dict = defaultdict(lambda: defaultdict(float))
     for g in games:
@@ -101,181 +115,269 @@ def season_totals(games: list[dict]) -> tuple[dict, dict]:
     return pl, tm
 
 
-# ------------------------------------------------------------------ FIBA LiveStats data.json
-def to_fiba(game: dict) -> dict:
-    tm = {}
-    for n, s in zip(("1", "2"), game["sides"]):
-        code, name, _ = TEAMS[s["team_idx"]]
-        pl = {}
-        tot = defaultdict(float)
-        for i, p in enumerate(s["players"], 1):
-            first, family = p["name"].split(" ", 1)
-            pl[str(i)] = {"firstName": first, "familyName": family, "name": p["name"],
-                          "personId": p["player_id"], "shirtNumber": p["dorsal"], "playingPosition": "G",
-                          "starter": 1 if p["starter"] else 0, "sMinutes": f"{p['min']}:00",
-                          "sPoints": p["pts"], "sFieldGoalsMade": p["fg2m"] + p["fg3m"],
-                          "sFieldGoalsAttempted": p["fg2a"] + p["fg3a"], "sTwoPointersMade": p["fg2m"],
-                          "sTwoPointersAttempted": p["fg2a"], "sThreePointersMade": p["fg3m"],
-                          "sThreePointersAttempted": p["fg3a"], "sFreeThrowsMade": p["ftm"],
-                          "sFreeThrowsAttempted": p["fta"], "sReboundsOffensive": p["oreb"],
-                          "sReboundsDefensive": p["dreb"], "sReboundsTotal": p["reb"], "sAssists": p["ast"],
-                          "sSteals": p["stl"], "sTurnovers": p["tov"], "sBlocks": p["blk"],
-                          "sBlocksReceived": p["blka"], "sFoulsPersonal": p["pf"], "sFoulsOn": p["pfd"],
-                          "sPlusMinusPoints": p["plus_minus"]}
-            for k in STATS:
-                tot[k] += p[k]
-        tm[n] = {"name": name, "code": code, "score": tot["pts"], "pl": pl,
-                 "tot_sPoints": tot["pts"], "tot_sTwoPointersMade": tot["fg2m"],
-                 "tot_sTwoPointersAttempted": tot["fg2a"], "tot_sThreePointersMade": tot["fg3m"],
-                 "tot_sThreePointersAttempted": tot["fg3a"], "tot_sFreeThrowsMade": tot["ftm"],
-                 "tot_sFreeThrowsAttempted": tot["fta"], "tot_sReboundsOffensive": tot["oreb"],
-                 "tot_sReboundsDefensive": tot["dreb"], "tot_sAssists": tot["ast"], "tot_sSteals": tot["stl"],
-                 "tot_sTurnovers": tot["tov"], "tot_sBlocks": tot["blk"], "tot_sFoulsPersonal": tot["pf"],
-                 "tot_sMinutes": "200:00"}
-    return {"tm": tm, "period": 4, "clock": "00:00", "periodType": "REGULAR"}
+def pir(p: dict) -> float:
+    return (p["pts"] + p["reb"] + p["ast"] + p["stl"] + p["blk"] + p["pfd"] - (p["fg2a"] + p["fg3a"] - p["fg2m"] - p["fg3m"])
+            - (p["fta"] - p["ftm"]) - p["tov"] - p["blka"] - p["pf"])
 
 
-# ------------------------------------------------------------------ ACB HTML
-def to_acb_html(game: dict) -> str:
-    out = ["<html><head><title>Alfa - Beta | ACB.com</title></head><body><p>Jornada 1 · 05/10/2025</p>"]
-    for s in game["sides"]:
-        code, name, tid = TEAMS[s["team_idx"]]
-        out.append(f'<div class="cabecera_equipo"><a href="/club/plantilla/id/{tid}">{name}</a></div>')
-        out.append("<table><thead><tr>"
-                   '<th rowspan="2">D</th><th rowspan="2">Nombre</th><th rowspan="2">Min</th><th rowspan="2">P</th>'
-                   '<th rowspan="2">T2</th><th rowspan="2">T2 %</th><th rowspan="2">T3</th><th rowspan="2">T3 %</th>'
-                   '<th rowspan="2">T1</th><th rowspan="2">T1 %</th><th colspan="2">REB</th>'
-                   '<th rowspan="2">A</th><th rowspan="2">BR</th><th rowspan="2">BP</th><th rowspan="2">C</th>'
-                   '<th colspan="2">TAP</th><th rowspan="2">M</th><th colspan="2">FP</th>'
-                   '<th rowspan="2">+/-</th><th rowspan="2">V</th></tr>'
-                   "<tr><th>T</th><th>D+O</th><th>F</th><th>C</th><th>C</th><th>F</th></tr></thead><tbody>")
-        tot = defaultdict(float)
-        for p in s["players"]:
-            v = (p["pts"] + p["reb"] + p["ast"] + p["stl"] + p["blk"] + p["pfd"] - (p["fg2a"] + p["fg3a"] - p["fg2m"] - p["fg3m"])
-                 - (p["fta"] - p["ftm"]) - p["tov"] - p["blka"] - p["pf"])
-            star = "*" if p["starter"] else ""
-            slug = p["name"].lower().replace(" ", "-")
-            out.append(
-                f"<tr><td>{star}{p['dorsal']}</td><td><a href=\"/jugador/ver/{p['player_id']}-{slug}\">{p['name']}</a></td>"
-                f"<td>{p['min']}:00</td><td>{p['pts']}</td><td>{p['fg2m']}/{p['fg2a']}</td><td>-</td>"
-                f"<td>{p['fg3m']}/{p['fg3a']}</td><td>-</td><td>{p['ftm']}/{p['fta']}</td><td>-</td>"
-                f"<td>{p['reb']}</td><td>{p['dreb']}+{p['oreb']}</td><td>{p['ast']}</td><td>{p['stl']}</td>"
-                f"<td>{p['tov']}</td><td>0</td><td>{p['blk']}</td><td>{p['blka']}</td><td>{p['dunks']}</td>"
-                f"<td>{p['pf']}</td><td>{p['pfd']}</td><td>{p['plus_minus']}</td><td>{v}</td></tr>")
-            for k in STATS:
-                tot[k] += p[k]
-        out.append("<tr><td></td><td>Equipo</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"
-                   "<td></td><td>0</td><td>0+0</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"
-                   "<td></td><td></td><td></td><td></td></tr>")
-        t = {k: int(v) for k, v in tot.items()}
-        out.append(
-            f"<tr><td>Total</td><td></td><td>200:00</td><td>{t['pts']}</td><td>{t['fg2m']}/{t['fg2a']}</td><td>-</td>"
-            f"<td>{t['fg3m']}/{t['fg3a']}</td><td>-</td><td>{t['ftm']}/{t['fta']}</td><td>-</td><td>{t['reb']}</td>"
-            f"<td>{t['dreb']}+{t['oreb']}</td><td>{t['ast']}</td><td>{t['stl']}</td><td>{t['tov']}</td><td>0</td>"
-            f"<td>{t['blk']}</td><td>{t['blka']}</td><td>{t['dunks']}</td><td>{t['pf']}</td><td>{t['pfd']}</td>"
-            f"<td></td><td></td></tr>")
-        out.append("</tbody></table>")
-    out.append("</body></html>")
-    return "".join(out)
+# ------------------------------------------------------------------ Euroliga (feed v3)
+_EL = [("pts", "pointsScored"), ("fg2m", "twoPointersMade"), ("fg2a", "twoPointersAttempted"),
+       ("fg3m", "threePointersMade"), ("fg3a", "threePointersAttempted"), ("ftm", "freeThrowsMade"),
+       ("fta", "freeThrowsAttempted"), ("oreb", "offensiveRebounds"), ("dreb", "defensiveRebounds"),
+       ("reb", "totalRebounds"), ("ast", "assists"), ("stl", "steals"), ("tov", "turnovers"),
+       ("blk", "blocks"), ("pf", "foulsCommited")]
 
 
-def acb_calendar_html(game_ids: list[str]) -> str:
-    links = "".join(f'<a href="/partido/estadisticas/id/{g}">Estadísticas</a>' for g in game_ids)
-    return f"<html><body>{links}</body></html>"
-
-
-# ------------------------------------------------------------------ Euroliga v3
-def to_euroleague(games: list[dict]) -> dict:
-    pl, tm = season_totals(games)
+def to_euroleague(games: list[dict], phase: str) -> dict:
+    pl, tm = season_totals(by_phase(games, phase))
     players = []
     for (pid, ti), P in pl.items():
         code, name, _ = TEAMS[ti]
-        players.append({
-            "playerRanking": 1,
-            "player": {"code": f"P{pid}", "name": P["name"], "age": 25,
-                       "team": {"code": code, "tvCodes": code, "name": name}},
-            "gamesPlayed": P["gp"], "gamesStarted": P["gs"], "minutesPlayed": P["min"],
-            "pointsScored": P["pts"], "twoPointersMade": P["fg2m"], "twoPointersAttempted": P["fg2a"],
-            "twoPointersPercentage": f"{100 * P['fg2m'] / P['fg2a']:.1f}%" if P["fg2a"] else "0%",
-            "threePointersMade": P["fg3m"], "threePointersAttempted": P["fg3a"],
-            "freeThrowsMade": P["ftm"], "freeThrowsAttempted": P["fta"], "offensiveRebounds": P["oreb"],
-            "defensiveRebounds": P["dreb"], "totalRebounds": P["reb"], "assists": P["ast"], "steals": P["stl"],
-            "turnovers": P["tov"], "blocks": P["blk"], "blocksAgainst": P["blka"], "foulsCommited": P["pf"],
-            "foulsDrawn": P["pfd"], "pir": None})
+        players.append({"player": {"code": f"P{pid}", "name": P["name"], "age": 25,
+                                   "team": {"code": code, "tvCodes": code, "name": name}},
+                        "gamesPlayed": P["gp"], "gamesStarted": P["gs"], "minutesPlayed": P["min"],
+                        **{k2: P[k1] for k1, k2 in _EL}, "blocksAgainst": P["blka"], "foulsDrawn": P["pfd"],
+                        "pir": pir(P)})
     adv = [{"player": {"code": p["player"]["code"], "team": p["player"]["team"]},
-            "trueShootingPercentage": "55.5%", "possessions": 100} for p in players]
+            "trueShootingPercentage": "55.5%", "possesions": 3.0} for p in players]
     teams, opps = [], []
     for ti, T in tm.items():
         code, name, _ = TEAMS[ti]
-        base = {"team": {"code": code, "name": name}, "gamesPlayed": T["gp"], "minutesPlayed": T["min"]}
-        teams.append({**base, **{k2: T[k1] for k1, k2 in _EL_MAP}})
-        opps.append({**base, **{k2: T["opp_" + k1] for k1, k2 in _EL_MAP}})
-    return {"players": {"traditional": [{"players": players, "total": len(players)}],
-                        "advanced": [{"players": adv, "total": len(adv)}], "misc": [], "scoring": []},
-            "teams": {"traditional": [{"teams": teams, "total": 4}],
-                      "opponentsTraditional": [{"teams": opps, "total": 4}]}}
+        base = {"team": {"code": code, "name": name}, "gamesPlayed": T["gp"], "minutesPlayed": T["min"] / 5}
+        teams.append({**base, **{k2: T[k1] for k1, k2 in _EL}})
+        opps.append({**base, **{k2: T["opp_" + k1] for k1, k2 in _EL}})
+    return {"players": {"traditional": {"players": players, "total": len(players)},
+                        "advanced": {"players": adv, "total": len(adv)}},
+            "teams": {"traditional": {"teams": teams, "total": 4}, "opponentsTraditional": {"teams": opps, "total": 4}}}
 
 
-_EL_MAP = [("pts", "pointsScored"), ("fg2m", "twoPointersMade"), ("fg2a", "twoPointersAttempted"),
-           ("fg3m", "threePointersMade"), ("fg3a", "threePointersAttempted"), ("ftm", "freeThrowsMade"),
-           ("fta", "freeThrowsAttempted"), ("oreb", "offensiveRebounds"), ("dreb", "defensiveRebounds"),
-           ("reb", "totalRebounds"), ("ast", "assists"), ("stl", "steals"), ("tov", "turnovers"),
-           ("blk", "blocks"), ("pf", "foulsCommited")]
-
-
-# ------------------------------------------------------------------ NBA resultSets
+# ------------------------------------------------------------------ G League (stats API resultSets)
 def _rs(headers: list[str], rows: list[list]) -> dict:
     return {"resultSets": [{"name": "X", "headers": headers, "rowSet": rows}]}
 
 
-def to_nba(games: list[dict]) -> dict:
-    pl, tm = season_totals(games)
-    h = ["PLAYER_ID", "PLAYER_NAME", "TEAM_ID", "TEAM_ABBREVIATION", "AGE", "GP", "W", "L", "MIN", "FGM", "FGA",
-         "FG3M", "FG3A", "FTM", "FTA", "OREB", "DREB", "REB", "AST", "TOV", "STL", "BLK", "BLKA", "PF", "PFD",
-         "PTS", "PLUS_MINUS", "DD2", "TD3"]
-    rows = []
-    for (pid, ti), P in pl.items():
-        code, _, tid = TEAMS[ti]
-        rows.append([int(pid), P["name"], int(tid), code, 27, P["gp"], 0, 0, P["min"], P["fg2m"] + P["fg3m"],
-                     P["fg2a"] + P["fg3a"], P["fg3m"], P["fg3a"], P["ftm"], P["fta"], P["oreb"], P["dreb"],
-                     P["reb"], P["ast"], P["tov"], P["stl"], P["blk"], P["blka"], P["pf"], P["pfd"], P["pts"],
-                     P["plus_minus"], P["dd2"], P["td3"]])
-    adv_h = ["PLAYER_ID", "OFF_RATING", "DEF_RATING", "USG_PCT", "TS_PCT", "PIE", "PACE"]
+_NBA_TEAM = ["FGM", "FGA", "FG3M", "FG3A", "FTM", "FTA", "OREB", "DREB", "REB", "AST", "TOV", "STL", "BLK", "PF", "PTS"]
+
+
+def to_nba_stats(games: list[dict], phase: str) -> dict:
+    pl, tm = season_totals(by_phase(games, phase))
+    h = ["PLAYER_ID", "PLAYER_NAME", "TEAM_ID", "TEAM_ABBREVIATION", "AGE", "GP", "MIN", "FGM", "FGA", "FG3M", "FG3A",
+         "FTM", "FTA", "OREB", "DREB", "REB", "AST", "TOV", "STL", "BLK", "BLKA", "PF", "PFD", "PTS", "PLUS_MINUS",
+         "DD2", "TD3"]
+    rows = [[int(pid), P["name"], int(TEAMS[ti][2]), TEAMS[ti][0], 27, P["gp"], P["min"], P["fg2m"] + P["fg3m"],
+             P["fg2a"] + P["fg3a"], P["fg3m"], P["fg3a"], P["ftm"], P["fta"], P["oreb"], P["dreb"], P["reb"], P["ast"],
+             P["tov"], P["stl"], P["blk"], P["blka"], P["pf"], P["pfd"], P["pts"], P["plus_minus"], P["dd2"], P["td3"]]
+            for (pid, ti), P in pl.items()]
     adv = [[r[0], 110.0, 105.0, 0.2, 0.55, 0.1, 70.0] for r in rows]
-    th = ["TEAM_ID", "TEAM_NAME", "GP", "W", "L", "MIN", "FGM", "FGA", "FG3M", "FG3A", "FTM", "FTA", "OREB",
-          "DREB", "REB", "AST", "TOV", "STL", "BLK", "PF", "PTS"]
-    oh = ["TEAM_ID", "TEAM_NAME", "GP", "W", "L", "MIN"] + ["OPP_" + x for x in th[6:]]
-    trows, orows = [], []
-    for ti, T in tm.items():
-        _, name, tid = TEAMS[ti]
-        vals = lambda p: [T[p + "fg2m"] + T[p + "fg3m"], T[p + "fg2a"] + T[p + "fg3a"], T[p + "fg3m"],  # noqa: E731
-                          T[p + "fg3a"], T[p + "ftm"], T[p + "fta"], T[p + "oreb"], T[p + "dreb"], T[p + "reb"],
-                          T[p + "ast"], T[p + "tov"], T[p + "stl"], T[p + "blk"], T[p + "pf"], T[p + "pts"]]
-        game_min = T["min"] / 5  # NBA publica minutos de partido
-        trows.append([int(tid), name, T["gp"], T["w"], T["l"], game_min] + vals(""))
-        orows.append([int(tid), name, T["gp"], T["w"], T["l"], game_min] + vals("opp_"))
-    idx_h = ["PERSON_ID", "HEIGHT", "WEIGHT", "POSITION", "COUNTRY", "JERSEY_NUMBER", "TEAM_CITY", "TEAM_NAME"]
-    idx = [[r[0], "6-8", "220", "F", "Spain", "9", "City", "Club"] for r in rows]
-    return {"Base": _rs(h, rows), "Advanced": _rs(adv_h, adv), "teams_Base": _rs(th, trows),
-            "teams_Opponent": _rs(oh, orows), "playerindex": _rs(idx_h, idx),
-            "hustle": _rs(["PLAYER_ID", "DEFLECTIONS", "CONTESTED_SHOTS"], [[r[0], 10, 50] for r in rows])}
+
+    def tv(T, p):
+        return [T[p + "fg2m"] + T[p + "fg3m"], T[p + "fg2a"] + T[p + "fg3a"], T[p + "fg3m"], T[p + "fg3a"], T[p + "ftm"],
+                T[p + "fta"], T[p + "oreb"], T[p + "dreb"], T[p + "reb"], T[p + "ast"], T[p + "tov"], T[p + "stl"],
+                T[p + "blk"], T[p + "pf"], T[p + "pts"]]
+    th = ["TEAM_ID", "TEAM_NAME", "GP", "W", "L", "MIN"]
+    trows = [[int(TEAMS[ti][2]), TEAMS[ti][1], T["gp"], T["w"], T["l"], T["min"] / 5] + tv(T, "") for ti, T in tm.items()]
+    orows = [[int(TEAMS[ti][2]), TEAMS[ti][1], T["gp"], T["w"], T["l"], T["min"] / 5] + tv(T, "opp_")
+             for ti, T in tm.items()]
+    return {"Base": _rs(h, rows), "Advanced": _rs(["PLAYER_ID", "OFF_RATING", "DEF_RATING", "USG_PCT", "TS_PCT", "PIE",
+                                                   "PACE"], adv),
+            "teams_Base": _rs(th + _NBA_TEAM, trows), "teams_Opponent": _rs(th + ["OPP_" + x for x in _NBA_TEAM], orows),
+            "playerindex": _rs(["PERSON_ID", "HEIGHT", "WEIGHT", "POSITION", "COUNTRY", "JERSEY_NUMBER"],
+                               [[r[0], "6-8", "220", "F", "Spain", "9"] for r in rows])}
 
 
-# ------------------------------------------------------------------ tabla HTML genérica
-def to_html_table(games: list[dict]) -> str:
-    pl, _ = season_totals(games)
-    head = ["Joueur", "Equipe", "G", "MIN", "PTS", "2PM", "2PA", "3PM", "3PA", "FTM", "FTA", "OREB", "DREB",
-            "REB", "AST", "STL", "TOV", "BLK", "PF"]
-    rows = []
-    for (pid, ti), P in pl.items():
-        rows.append([P["name"], TEAMS[ti][1], P["gp"], P["min"], P["pts"], P["fg2m"], P["fg2a"], P["fg3m"],
-                     P["fg3a"], P["ftm"], P["fta"], P["oreb"], P["dreb"], P["reb"], P["ast"], P["stl"], P["tov"],
-                     P["blk"], P["pf"]])
-    th = "".join(f"<th>{h}</th>" for h in head)
-    trs = "".join("<tr>" + "".join(f"<td>{int(v) if isinstance(v, float) else v}</td>" for v in r) + "</tr>"
-                  for r in rows)
-    return f"<html><body><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></body></html>"
+# ------------------------------------------------------------------ ACB (api2.acb.com)
+_ACB = {"pts": "points", "fg2m": "twoPointersMade", "fg2a": "twoPointersAttempted", "fg3m": "threePointersMade",
+        "fg3a": "threePointersAttempted", "ftm": "freeThrowsMade", "fta": "freeThrowsAttempted", "oreb": "offRebounds",
+        "dreb": "defRebounds", "reb": "totalRebounds", "ast": "assists", "stl": "steals", "tov": "turnovers",
+        "blk": "blocks", "blka": "receivedBlocks", "dunks": "dunks", "pf": "personalFouls", "pfd": "foulsDrawn",
+        "plus_minus": "plusMinus"}
 
 
-def dumps(obj) -> str:
-    return json.dumps(obj, ensure_ascii=False)
+def to_acb(games: list[dict]) -> dict:
+    rounds = [{"subphaseId": None if g["phase"] == "regular" else 7,
+               "matches": [{"id": int(g["game_id"]), "matchStatus": "FINALIZED"}]} for g in games]
+    box = {}
+    for g in games:
+        tbs = []
+        for s in g["sides"]:
+            code, name, tid = TEAMS[s["team_idx"]]
+            players = [{"player": {"id": int(p["player_id"]), "nickname": p["name"], "shirtNumber": p["dorsal"],
+                                   "gameRole": "Base"}, "playTime": f"{p['min']}:00", "isStarted": p["starter"],
+                        "rating": pir(p), **{v: p[k] for k, v in _ACB.items()}} for p in s["players"]]
+            total = {v: sum(p[k] for p in s["players"]) for k, v in _ACB.items() if k != "plus_minus"}
+            tbs.append({"team": {"clubId": int(tid), "fullName": name, "abbreviatedName": code},
+                        "statsByPeriods": [{"quarter": 0, "stats": {"players": players, "total": total}}]})
+        box[g["game_id"]] = {"matchFinished": True, "teamBoxscores": tbs}
+    return {"seasons": {"availableFilters": {"seasons": [{"id": 90, "seasonStartYear": 2025}]}},
+            "calendar": {"rounds": rounds}, "boxscores": box}
+
+
+# ------------------------------------------------------------------ LBA (legabasket.it)
+_LBA = {"pts": "pun", "fg2m": "t2_r", "fg2a": "t2_t", "fg3m": "t3_r", "fg3a": "t3_t", "ftm": "tl_r", "fta": "tl_t",
+        "oreb": "rimbalzi_o", "dreb": "rimbalzi_d", "reb": "rimbalzi_t", "ast": "ass", "stl": "palle_r", "tov": "palle_p",
+        "blk": "stoppate_dat", "blka": "stoppate_sub", "pf": "falli_c", "pfd": "falli_sf", "dunks": "sc",
+        "plus_minus": "plus_minus"}
+
+
+def to_lba(games: list[dict]) -> dict:
+    champs = {"competitions": [{"id": 596, "year": 2025, "cserie_code": "A1", "ctype_code": "RS"},
+                               {"id": 595, "year": 2025, "cserie_code": "A1", "ctype_code": "PO"}],
+              "pagination": {"pages": 1}}
+    cal, scores = {"596": [], "595": []}, {}
+    for g in games:
+        h, v = (TEAMS[s["team_idx"]] for s in g["sides"])
+        cal["596" if g["phase"] == "regular" else "595"].append(
+            {"id": int(g["game_id"]), "game_status": "2", "h_team_id": int(h[2]), "h_team_name": h[1],
+             "h_club_code": h[0], "v_team_id": int(v[2]), "v_team_name": v[1], "v_club_code": v[0]})
+        sc = {}
+        for key, s in zip(("ht", "vt"), g["sides"]):
+            rows = [{"player_id": int(p["player_id"]), "player_name": p["name"].split()[0],
+                     "player_surname": p["name"].split()[1], "player_num": p["dorsal"], "sf": "1" if p["starter"] else "0",
+                     "sec": p["min"] * 60, "val_lega": pir(p), **{v_: p[k] for k, v_ in _LBA.items()}}
+                    for p in s["players"]]
+            tot = {v_: sum(p[k] for p in s["players"]) for k, v_ in _LBA.items() if k != "plus_minus"}
+            sc[key] = {"rows": rows, "totals": {**tot, "sec": 12000}}
+        scores[g["game_id"]] = {"match": {}, "scores": sc}
+    return {"champs": champs, "calendar": cal, "scores": scores}
+
+
+# ------------------------------------------------------------------ BBL (páginas de partido)
+_BBL = {"pts": "points", "fg2m": "twoPointShotsMade", "fg2a": "twoPointShotsAttempted", "fg3m": "threePointShotsMade",
+        "fg3a": "threePointShotsAttempted", "ftm": "freeThrowsMade", "fta": "freeThrowsAttempted",
+        "oreb": "offensiveRebounds", "dreb": "defensiveRebounds", "reb": "totalRebounds", "ast": "assists",
+        "stl": "steals", "tov": "turnovers", "blk": "blocks", "pf": "foulsCommitted", "pfd": "foulsReceived",
+        "plus_minus": "plusMinus"}
+
+
+def to_bbl_pages(games: list[dict]) -> dict[str, str]:
+    pages = {}
+    for g in games:
+        gd = {"id": g["game_id"], "seasonId": 2025, "competition": "BBL", "status": "OFFICIAL",
+              "stage": "MAIN_ROUND" if g["phase"] == "regular" else "SEMI_FINALS"}
+        gs = {}
+        for key, s in zip(("homeTeam", "guestTeam"), g["sides"]):
+            code, name, tid = TEAMS[s["team_idx"]]
+            gd[key] = {"teamId": tid, "name": name, "tlc": code}
+            ps = [{"secondsPlayed": p["min"] * 60, "isStartingFive": p["starter"],
+                   "seasonPlayer": {"playerId": p["player_id"], "firstName": p["name"].split()[0],
+                                    "lastName": p["name"].split()[1], "shirtNumber": p["dorsal"], "position": "GUARD"},
+                   **{v: p[k] for k, v in _BBL.items()}} for p in s["players"]]
+            tot = {v: sum(p[k] for p in s["players"]) for k, v in _BBL.items() if k != "plus_minus"}
+            gs[key] = {"gameStat": {**tot, "secondsPlayed": 12000}, "playerStats": ps}
+        data = {"props": {"pageProps": {"initialGameData": gd, "initialGameStats": gs}}}
+        pages[g["game_id"]] = f'<html><script id="__NEXT_DATA__" type="application/json">{json.dumps(data)}</script></html>'
+    return pages
+
+
+# ------------------------------------------------------------------ LNB (api-prod.lnb.fr)
+_LNB = {"gp": "s_games", "gs": "s_games_started", "min": "s_minutes_average", "pts": "s_points_average",
+        "fg2m": "s_two_pointers_made_average", "fg2a": "s_two_pointers_attempted_average",
+        "fg3m": "s_three_pointers_made_average", "fg3a": "s_three_pointers_attempted_average",
+        "ftm": "s_free_throws_made_average", "fta": "s_free_throws_attempted_average",
+        "oreb": "s_rebounds_offensive_average", "dreb": "s_rebounds_defensive_average",
+        "reb": "s_rebounds_total_average", "ast": "s_assists_average", "blk": "s_blocks_average",
+        "blka": "s_blocks_received", "stl": "s_steals_average", "tov": "s_turnovers_average",
+        "pf": "s_fouls_total_average", "pfd": "s_fouls_on_average", "plus_minus": "s_plus_minus_points"}
+LNB_HIDDEN_K = 7  # el jugador nº 7 de cada equipo no aparece en el ranking (umbral de partidos)
+
+
+def to_lnb(games: list[dict]) -> dict:
+    comps = {302: "regular", 311: "playoffs"}
+    out = {"comps": {"data": [{"external_id": 302, "competition_name": "Betclic ÉLITE", "competition_abbrev": "PROA"},
+                              {"external_id": 311, "competition_name": "Betclic ÉLITE - Playoffs",
+                               "competition_abbrev": "PROA PO"}]},
+           "players": {}, "teams": {}, "season_all": {}}
+    for cid, phase in comps.items():
+        sel = by_phase(games, phase)
+        pl, tm = season_totals(sel)
+        out["players"][cid] = {"data": [
+            {"person": {"external_id": int(pid), "first_name": P["name"].split()[0], "family_name": P["name"].split()[1]},
+             "team": {"external_id": int(TEAMS[ti][2]), "team_name": TEAMS[ti][1]}, **{v: P[k] for k, v in _LNB.items()}}
+            for (pid, ti), P in pl.items() if not pid.endswith(str(LNB_HIDDEN_K))]}
+        out["teams"][cid] = {"data": [
+            {"team": {"external_id": int(TEAMS[ti][2]), "team_name": TEAMS[ti][1]}, "s_w_l": f"{int(T['w'])}-{int(T['l'])}",
+             **{v: T[k] for k, v in _LNB.items() if k not in ("gs", "blka", "pfd")},
+             "s_plus_minus_points": T["pts"] - T["opp_pts"]} for ti, T in tm.items()]}
+        for (pid, ti), P in pl.items():
+            if pid.endswith(str(LNB_HIDDEN_K)):
+                log = [{"two_p": p["fg2m"], "two_pa": p["fg2a"], "three_p": p["fg3m"], "three_pa": p["fg3a"],
+                        "ft": p["ftm"], "fta": p["fta"], "or": p["oreb"], "dr": p["dreb"]}
+                       for g in sel for s in g["sides"] for p in s["players"] if p["player_id"] == pid]
+                out["season_all"][(pid, cid)] = {"data": {"general": {
+                    "games": P["gp"], "first_five": P["gs"], "minutes": P["min"], "points": P["pts"], "rebounds": P["reb"],
+                    "assists": P["ast"], "steals": P["stl"], "blocks": P["blk"]}, "general_game_log": log}}
+    out["rosters"] = {TEAMS[ti][2]: {"data": [
+        {"person": {"external_id": int(player_name(ti, k)[0]), "first_name": "Jugador",
+                    "family_name": player_name(ti, k)[1].split()[1], "height": 200, "nationality": "France",
+                    "dob": "2000-01-01T00:00:00.000Z", "age": 25},
+         "player_role": {"playing_position": "Meneur", "shirt_number": str(k + 4)}} for k in range(8)]}
+        for ti in range(4)}
+    return out
+
+
+# ------------------------------------------------------------------ Basketball-Reference
+def _bref_row(cells: list[tuple]) -> str:
+    out = []
+    for ds, val, href in cells:
+        inner = f'<a href="{href}">{val}</a>' if href else str(val)
+        out.append(f'<td data-stat="{ds}">{inner}</td>')
+    return "<tr>" + "".join(out) + "</tr>"
+
+
+def to_bref(games: list[dict]) -> dict[str, str]:
+    def players_table(table_id, phase):
+        pl, _ = season_totals(by_phase(games, phase))
+        rows = []
+        for (pid, ti), P in pl.items():
+            code = TEAMS[ti][0]
+            rows.append(_bref_row([
+                ("name_display", P["name"], f"/players/x/p{pid}.html"), ("team_name_abbr", code, f"/teams/{code}/2026.html"),
+                ("pos", "PG", None), ("age", 25, None), ("games", int(P["gp"]), None), ("games_started", int(P["gs"]), None),
+                ("mp", int(P["min"]), None), ("fg", int(P["fg2m"] + P["fg3m"]), None), ("fga", int(P["fg2a"] + P["fg3a"]), None),
+                ("fg3", int(P["fg3m"]), None), ("fg3a", int(P["fg3a"]), None), ("ft", int(P["ftm"]), None),
+                ("fta", int(P["fta"]), None), ("orb", int(P["oreb"]), None), ("drb", int(P["dreb"]), None),
+                ("trb", int(P["reb"]), None), ("ast", int(P["ast"]), None), ("stl", int(P["stl"]), None),
+                ("blk", int(P["blk"]), None), ("tov", int(P["tov"]), None), ("pf", int(P["pf"]), None),
+                ("pts", int(P["pts"]), None)]))
+        return f'<table id="{table_id}"><tbody>{"".join(rows)}</tbody></table>'
+
+    def team_page(phase):
+        _, tm = season_totals(by_phase(games, phase))
+        out = []
+        for table, pfx in (("totals-team", ""), ("totals-opponent", "opp_")):
+            rows = []
+            for ti, T in tm.items():
+                code, name, _ = TEAMS[ti]
+                g = lambda k: int(T[pfx + k])  # noqa: E731
+                ds = (lambda k: f"opp_{k}") if pfx else (lambda k: k)
+                rows.append(_bref_row([
+                    ("team", name, f"/teams/{code}/2026.html"), ("g", int(T["gp"]), None), ("mp", int(T["min"]), None),
+                    (ds("fg"), g("fg2m") + g("fg3m"), None), (ds("fga"), g("fg2a") + g("fg3a"), None),
+                    (ds("fg3"), g("fg3m"), None), (ds("fg3a"), g("fg3a"), None), (ds("ft"), g("ftm"), None),
+                    (ds("fta"), g("fta"), None), (ds("orb"), g("oreb"), None), (ds("drb"), g("dreb"), None),
+                    (ds("trb"), g("reb"), None), (ds("ast"), g("ast"), None), (ds("stl"), g("stl"), None),
+                    (ds("blk"), g("blk"), None), (ds("tov"), g("tov"), None), (ds("pf"), g("pf"), None),
+                    (ds("pts"), g("pts"), None)]))
+            out.append(f'<table id="{table}"><tbody>{"".join(rows)}</tbody></table>')
+        adv = "".join(_bref_row([("team", TEAMS[ti][1], f"/teams/{TEAMS[ti][0]}/2026.html"), ("wins", int(T["w"]), None),
+                                 ("losses", int(T["l"]), None)]) for ti, T in tm.items())
+        out.append(f'<!-- <table id="advanced-team"><tbody>{adv}</tbody></table> -->')
+        return "<html>" + "".join(out) + "</html>"
+
+    return {"totals": "<html><!--" + players_table("totals_stats", "regular") + "-->"
+                      + players_table("totals_stats_post", "playoffs") + "</html>",
+            "teams_regular": team_page("regular"), "teams_playoffs": team_page("playoffs")}
+
+
+# ------------------------------------------------------------------ BasketNews
+def to_basketnews(names: list[str]) -> dict:
+    players = [{"id": 900 + i, "full_name": n} for i, n in enumerate(names)]
+    stats = [{"player_id": 900 + i, "team_id": 1, "usage_percentage": {"value": 22.5, "pct": 50},
+              "offensive_rating_ind": {"value": 111.0}} for i in range(len(names))]
+    onoff = [{"player_id": 900 + i, "team_id": 1, "net_rating_lineup": {"value": 5.0},
+              "net_rating_lineup_diff": {"value": 3.0}, "time_played_lineup": {"value": 600}} for i in range(len(names))]
+    stages = [{"stage_id": 1, "total_games": 12, "translations": {"en": {"name": "Regular Season"}}},
+              {"stage_id": 2, "total_games": 4, "translations": {"en": {"name": "Playoffs"}}}]
+    teams = [{"id": 1, "name": "Alfa Basket"}]
+    return {"players": {"success": True, "data": {"stats": stats, "players": players, "teams": teams, "stages": stages}},
+            "onoff": {"success": True, "data": {"stats": onoff, "players": players, "teams": teams, "stages": stages}}}

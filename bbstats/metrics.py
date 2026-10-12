@@ -85,6 +85,7 @@ def build_team_context(players: pd.DataFrame, teams: pd.DataFrame, game_min: flo
 def league_context(teams: pd.DataFrame, game_min: float) -> dict:
     s = lambda c: teams[c].sum(min_count=1)  # noqa: E731
     lg = {c: s(f"team_{c}") for c in _TEAM_SUMMABLE + ["gp"]}
+    lg["ft_pts"] = lg["pts"] - 2 * lg["fg2m"] - 3 * lg["fg3m"]
     lg["poss"] = s("team_poss")
     lg["pace"] = game_min * lg["poss"] / (lg["min"] / 5) if lg["min"] else np.nan
     lg["ortg"] = 100 * lg["pts"] / lg["poss"] if lg["poss"] else np.nan
@@ -95,10 +96,20 @@ def league_context(teams: pd.DataFrame, game_min: float) -> dict:
 # ---------------------------------------------------------------------------------------------
 # Métricas de jugador
 # ---------------------------------------------------------------------------------------------
-def compute_player_metrics(players: pd.DataFrame, teams: pd.DataFrame, game_min: float) -> pd.DataFrame:
+def compute_player_metrics(players: pd.DataFrame, teams: pd.DataFrame, game_min: float,
+                           single_ft: bool = False) -> pd.DataFrame:
+    """`single_ft`: liga con tiro libre único que vale 2 o 3 puntos (G League). Entonces los puntos de
+    tiro libre son pts - 2*T2 - 3*T3 y cada visita a la línea anota con probabilidad FT% (no 1-(1-FT%)^2)."""
     df = players.copy()
     df["team_id"] = df["team_id"].astype(str)
     df = _num(df, COUNTING_NAMES + SOURCE_METRIC_NAMES)
+    # Jugadores traspasados que la fuente agrega en una fila ("ASV;ULK"): contexto del último equipo
+    known = set(teams["team_id"].astype(str)) if teams is not None and len(teams) else set()
+    orig_team = df["team_id"].copy()
+    multi = df["team_id"].str.contains(";", regex=False)
+    if multi.any():
+        df.loc[multi, "team_id"] = df.loc[multi, "team_id"].map(
+            lambda t: next((x for x in reversed(t.split(";")) if not known or x in known), t.split(";")[-1]))
     teams = build_team_context(df, teams, game_min)
     lg = league_context(teams, game_min)
 
@@ -202,12 +213,12 @@ def compute_player_metrics(players: pd.DataFrame, teams: pd.DataFrame, game_min:
     tm_ast_fg = _div(t("ast"), t("fgm"))
     uper = _div(1, mp) * (
         c("fg3m") + (2 / 3) * c("ast") + (2 - factor * tm_ast_fg) * c("fgm")
-        + c("ftm") * 0.5 * (1 + (1 - tm_ast_fg) + (2 / 3) * tm_ast_fg)
+        + _ft_points(df, "", single_ft) * 0.5 * (1 + (1 - tm_ast_fg) + (2 / 3) * tm_ast_fg)
         - vop * c("tov") - vop * drbp * (c("fga") - c("fgm"))
         - vop * 0.44 * (0.44 + 0.56 * drbp) * (c("fta") - c("ftm"))
         + vop * (1 - drbp) * (c("reb") - c("oreb")) + vop * drbp * c("oreb")
         + vop * c("stl") + vop * drbp * c("blk")
-        - c("pf") * (_ratio(lg["ftm"], lg["pf"]) - 0.44 * _ratio(lg["fta"], lg["pf"]) * vop))
+        - c("pf") * (_ratio(lg["ft_pts"] if single_ft else lg["ftm"], lg["pf"]) - 0.44 * _ratio(lg["fta"], lg["pf"]) * vop))
     aper = uper * _div(pd.Series(lg["pace"], index=df.index), df["team_pace"])
     w = mp.where(aper.notna(), 0).fillna(0)
     lg_aper = float((aper.fillna(0) * w).sum() / w.sum()) if w.sum() > 0 else np.nan
@@ -215,7 +226,7 @@ def compute_player_metrics(players: pd.DataFrame, teams: pd.DataFrame, game_min:
     o["per"] = aper * (15 / lg_aper) if lg_aper and np.isfinite(lg_aper) else aper * np.nan
 
     # --- Rating ofensivo / defensivo individual (Dean Oliver) ---
-    o.update(_oliver(df, lg))
+    o.update(_oliver(df, lg, single_ft))
 
     # --- Win Shares ---
     lg_ppp = _ratio(lg["pts"], lg["poss"])
@@ -225,6 +236,7 @@ def compute_player_metrics(players: pd.DataFrame, teams: pd.DataFrame, game_min:
     o.update({"ows": ows, "dws": dws, "ws": ows + dws,
               "ws_per_40": 40 * _div(ows + dws, mp), "ws_per_48": 48 * _div(ows + dws, mp)})
 
+    df["team_id"] = orig_team
     out = pd.concat([df, pd.DataFrame(o, index=df.index)], axis=1)
     out = out.loc[:, ~out.columns.duplicated(keep="last")]
     _normalize_source_pct(out)
@@ -238,24 +250,37 @@ def _ratio(a: float, b: float) -> float:
         return np.nan
 
 
-def _oliver(df: pd.DataFrame, lg: dict) -> dict[str, pd.Series]:
+def _ft_points(df: pd.DataFrame, prefix: str, single_ft: bool) -> pd.Series:
+    """Puntos anotados de tiro libre (= TL anotados salvo en ligas de tiro libre único)."""
+    ftm = df[f"{prefix}ftm"]
+    if not single_ft:
+        return ftm
+    return (df[f"{prefix}pts"] - 2 * df[f"{prefix}fg2m"] - 3 * df[f"{prefix}fg3m"]).fillna(ftm)
+
+
+def _oliver(df: pd.DataFrame, lg: dict, single_ft: bool = False) -> dict[str, pd.Series]:
     c = lambda k: df[k]  # noqa: E731
     t = lambda k: df[f"team_{k}"]  # noqa: E731
     op = lambda k: df[f"opp_{k}"]  # noqa: E731
-    mp, fg, fga, ft, fta = c("min"), c("fgm"), c("fga"), c("ftm"), c("fta")
+    score_p = (lambda p: p) if single_ft else (lambda p: 1 - (1 - p) ** 2)  # noqa: E731
+    miss_p = (lambda p: 1 - p) if single_ft else (lambda p: (1 - p) ** 2)  # noqa: E731
+    mp, fg, fga, fta = c("min"), c("fgm"), c("fga"), c("fta")
+    ft = c("ftm")  # tiros libres anotados (para probabilidades)
+    ftp = _ft_points(df, "", single_ft)  # puntos de tiro libre
+    t_ftp = _ft_points(df, "team_", single_ft)
     pts, fg3, ast, orb, tov = c("pts"), c("fg3m"), c("ast"), c("oreb"), c("tov")
     tm_mp = t("min")
     share = _div(mp, tm_mp / 5)
 
     ft_pct = _div(ft, fta).fillna(0)
-    shot_pts = _div(pts - ft, 2 * fga).fillna(0)
+    shot_pts = _div(pts - ftp, 2 * fga).fillna(0)
     q_ast = (share * (1.14 * _div(t("ast") - ast, t("fgm")))
              + _div((t("ast") / tm_mp) * mp * 5 - ast, (t("fgm") / tm_mp) * mp * 5 - fg) * (1 - share))
     fg_part = fg * (1 - 0.5 * shot_pts * q_ast)
-    ast_part = 0.5 * _div((t("pts") - t("ftm")) - (pts - ft), 2 * (t("fga") - fga)) * ast
-    ft_part = (1 - (1 - ft_pct) ** 2) * 0.4 * fta
+    ast_part = 0.5 * _div((t("pts") - t_ftp) - (pts - ftp), 2 * (t("fga") - fga)) * ast
+    ft_part = score_p(ft_pct) * 0.4 * fta
     tm_ft_pct = _div(t("ftm"), t("fta"))
-    tm_sc_poss = t("fgm") + (1 - (1 - tm_ft_pct) ** 2) * t("fta") * 0.4
+    tm_sc_poss = t("fgm") + score_p(tm_ft_pct) * t("fta") * 0.4
     tm_orb_pct = _div(t("oreb"), t("oreb") + (op("reb") - op("oreb")))
     tm_play_pct = _div(tm_sc_poss, t("fga") + t("fta") * 0.4 + t("tov"))
     tm_orb_w = _div((1 - tm_orb_pct) * tm_play_pct,
@@ -264,14 +289,14 @@ def _oliver(df: pd.DataFrame, lg: dict) -> dict[str, pd.Series]:
     orb_adj = 1 - _div(t("oreb"), tm_sc_poss) * tm_orb_w * tm_play_pct
     sc_poss = (fg_part + ast_part + ft_part) * orb_adj + orb_part
     fgx_poss = (fga - fg) * (1 - 1.07 * tm_orb_pct)
-    ftx_poss = ((1 - ft_pct) ** 2) * 0.4 * fta
+    ftx_poss = miss_p(ft_pct) * 0.4 * fta
     tot_poss = sc_poss + fgx_poss + ftx_poss + tov
 
     pprod_fg = 2 * (fg + 0.5 * fg3) * (1 - 0.5 * shot_pts * q_ast)
     pprod_ast = (2 * _div(t("fgm") - fg + 0.5 * (t("fg3m") - fg3), t("fgm") - fg) * 0.5
-                 * _div((t("pts") - t("ftm")) - (pts - ft), 2 * (t("fga") - fga)) * ast)
+                 * _div((t("pts") - t_ftp) - (pts - ftp), 2 * (t("fga") - fga)) * ast)
     pprod_orb = orb * tm_orb_w * tm_play_pct * _div(t("pts"), tm_sc_poss)
-    pprod = (pprod_fg + pprod_ast + ft) * orb_adj + pprod_orb
+    pprod = (pprod_fg + pprod_ast + ftp) * orb_adj + pprod_orb
     ortg = 100 * _div(pprod, tot_poss)
 
     # Defensa
@@ -282,11 +307,11 @@ def _oliver(df: pd.DataFrame, lg: dict) -> dict[str, pd.Series]:
     opp_ft_pct = _div(op("ftm"), op("fta"))
     stops2 = ((_div(op("fga") - op("fgm") - t("blk"), tm_mp) * fmwt * (1 - 1.07 * dor_pct)
                + _div(op("tov") - t("stl"), tm_mp)) * mp
-              + _div(c("pf"), t("pf")) * 0.4 * op("fta") * (1 - opp_ft_pct) ** 2)
+              + _div(c("pf"), t("pf")) * 0.4 * op("fta") * miss_p(opp_ft_pct))
     stops = stops1 + stops2
     stop_pct = _div(stops * op("min"), df["team_poss"] * mp)
     tm_drtg = 100 * _div(op("pts"), df["team_poss"])
-    d_pts_sc = _div(op("pts"), op("fgm") + (1 - (1 - opp_ft_pct) ** 2) * op("fta") * 0.4)
+    d_pts_sc = _div(op("pts"), op("fgm") + score_p(opp_ft_pct) * op("fta") * 0.4)
     drtg = tm_drtg + 0.2 * (100 * d_pts_sc * (1 - stop_pct) - tm_drtg)
     return {"pprod": pprod, "scposs": sc_poss, "totposs": tot_poss, "ortg": ortg,
             "floor_pct": 100 * _div(sc_poss, tot_poss), "stops": stops, "stop_pct": 100 * stop_pct,

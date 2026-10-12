@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -14,26 +15,34 @@ from bbstats.http import FetchError, HttpClient  # noqa: E402
 import synth  # noqa: E402
 
 
+class FakeResp:
+    def __init__(self, url: str, status: int, payload) -> None:
+        self.url, self.status_code = url, status
+        self.ok = 200 <= status < 400
+        self.encoding = self.apparent_encoding = "utf-8"
+        self._payload = payload
+        self.text = payload if isinstance(payload, str) else json.dumps(payload)
+
+    def json(self):
+        return self._payload if not isinstance(self._payload, str) else json.loads(self._payload)
+
+
 class FakeHttp(HttpClient):
-    """Cliente HTTP falso: responde desde los datos sintéticos, sin red."""
+    """Cliente HTTP falso: responde desde la liga sintética, sin red."""
 
     def __init__(self, router):
         super().__init__(delay_s=0)
         self.router = router
         self.calls: list[str] = []
 
-    def _route(self, url, params):
+    def request(self, method, url, params=None, headers=None, data=None, json_body=None, ok_status=()):
         self.calls.append(url)
-        res = self.router(url, params or {})
+        res = self.router(method, url, params or {}, data or json_body or {})
         if res is None:
+            if 404 in ok_status:
+                return FakeResp(url, 404, "")
             raise FetchError(f"404 simulado: {url}")
-        return res
-
-    def get_json(self, url, params=None, headers=None):
-        return self._route(url, params)
-
-    def get_text(self, url, params=None, headers=None):
-        return self._route(url, params)
+        return FakeResp(url, 200, res)
 
 
 @pytest.fixture(scope="session")
@@ -43,41 +52,73 @@ def games():
 
 @pytest.fixture(scope="session")
 def router(games):
-    el = synth.to_euroleague(games)
-    nba = synth.to_nba(games)
-    acb_html = {g["game_id"]: synth.to_acb_html(g) for g in games}
-    fiba = {g["game_id"]: synth.to_fiba(g) for g in games}
-    table = synth.to_html_table(games)
+    el = {ph: synth.to_euroleague(games, ph) for ph in ("total", "regular")}
+    gl = {ph: synth.to_nba_stats(games, ph) for ph in ("regular", "playoffs")}
+    acb = synth.to_acb(games)
+    lba = synth.to_lba(games)
+    bbl = synth.to_bbl_pages(games)
+    lnb = synth.to_lnb(games)
+    bref = synth.to_bref(games)
+    bn = synth.to_basketnews([f"Jugador A{k}" for k in range(8)])
     state = {"down": set()}
 
-    def route(url, params):
+    def route(method, url, params, body):
         if any(d in url for d in state["down"]):
             return None
+        # Euroliga
         m = re.search(r"/statistics/(players|teams)/(\w+)$", url)
         if m:
-            page = el[m.group(1)].get(m.group(2))
-            return page[0] if page else None
-        if "leaguedashplayerstats" in url:
-            return nba.get(params.get("MeasureType"))
-        if "leaguedashteamstats" in url:
-            return nba.get("teams_" + params.get("MeasureType", ""))
-        if "leaguehustlestatsplayer" in url:
-            return nba["hustle"]
+            ph = "regular" if params.get("phaseTypeCode") == "RS" else "total"
+            return el[ph][m.group(1)].get(m.group(2))
+        # G League
+        if "leaguedashplayerstats" in url or "leaguedashteamstats" in url:
+            ph = "playoffs" if params.get("SeasonType") == "Playoffs" else "regular"
+            key = params.get("MeasureType") if "player" in url else "teams_" + params.get("MeasureType", "")
+            return gl[ph].get(key)
         if "playerindex" in url:
-            return nba["playerindex"]
-        if "leaguedashptstats" in url:
-            return None  # tracking no disponible: debe registrarse como error no fatal
-        m = re.search(r"jornada_numero/(\d+)", url)
+            return gl["regular"]["playerindex"]
+        # ACB
+        if "season-calendar" in url:
+            return acb["calendar"] if params.get("editionId") else acb["seasons"]
+        if "Result/boxscores" in url:
+            return acb["boxscores"].get(str(params.get("matchId")))
+        # LBA
+        if "get-championships-calendar-by-id" in url:
+            cid = str(params.get("id"))
+            if "d" not in params:
+                return {"filters": {"days": [{"event_serial": 1}]}, "matches": []}
+            return {"matches": lba["calendar"][cid]}
+        if "get-championships-matches-scores-by-id" in url:
+            return lba["scores"].get(str(params.get("id")))
+        if "championships/get-championships" in url:
+            return lba["champs"]
+        # BBL
+        m = re.search(r"easycredit-bbl\.de/spiele/(\d+)", url)
         if m:
-            return synth.acb_calendar_html(list(acb_html)) if m.group(1) == "1" else "<html></html>"
-        m = re.search(r"/partido/estadisticas/id/(\d+)", url)
-        if m:
-            return acb_html.get(m.group(1))
-        m = re.search(r"/data/(\d+)/data.json", url)
-        if m:
-            return fiba.get(m.group(1))
-        if "lnb-test" in url:
-            return table
+            return bbl.get(m.group(1))
+        # LNB
+        if url.endswith("lnb.fr/api/token"):
+            return {"token": "anon"}
+        if "getDivisionCompetitionByYear" in url:
+            return lnb["comps"]
+        if "getPersonCriterion" in url:
+            return lnb["players"][body["competitionExternalId"]]
+        if "getTeamsCriterion" in url:
+            return lnb["teams"][body["competitionExternalId"]]
+        if "teams/getRoster" in url:
+            return lnb["rosters"].get(str(params.get("team_external_id")))
+        if "getPersonSeasonAll" in url:
+            return lnb["season_all"].get((str(body["person_external_id"]), body["competition_external_id"]))
+        # Basketball-Reference
+        if "basketball-reference.com/leagues/NBA_2026_totals" in url:
+            return bref["totals"]
+        if "basketball-reference.com/leagues/NBA_2026.html" in url:
+            return bref["teams_regular"]
+        if "basketball-reference.com/playoffs/NBA_2026.html" in url:
+            return bref["teams_playoffs"]
+        # BasketNews
+        if "basketnews.com" in url:
+            return bn["players"] if url.endswith("players.json") else bn["onoff"]
         return None
 
     route.state = state
@@ -94,12 +135,14 @@ def config(tmp_path):
         "temporada_por_defecto": "2025-26",
         "rutas": {"bruto": str(tmp_path / "raw"), "procesado": str(tmp_path / "processed")},
         "http": {"delay_s": 0},
+        "comprimir_bruto": True,
         "ligas": {
-            "euroleague": league("euroleague", competicion="E"),
+            "euroleague": league("euroleague", competicion="E", basketnews_league_id=25),
+            "gleague": league("gleague", season_types={"regular": "Regular Season", "playoffs": "Playoffs"}),
             "acb": league("acb"),
-            "nba": league("nba", minutos_partido=48),
-            "gleague": league("gleague", minutos_partido=48),
-            "lba": league("fiba_livestats", temporadas={"2025-26": {"match_ids": [str(100001 + i) for i in range(12)]}}),
-            "lnb": league("html_table", temporadas={"2025-26": {"players_urls": ["https://lnb-test/players"]}}),
+            "lba": league("lba"),
+            "bbl": league("bbl", max_huecos=3, temporadas={"2025-26": {"semillas": [synth.FIRST_ID + 3]}}),
+            "lnb": league("lnb"),
+            "nba": league("bref_nba"),
         },
     }

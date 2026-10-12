@@ -31,6 +31,10 @@ class AdapterError(RuntimeError):
     pass
 
 
+class NoDataYet(AdapterError):
+    """La temporada/competición todavía no tiene datos publicados (no es un error)."""
+
+
 class BaseAdapter(ABC):
     name: str = "base"
     version: str = "1.0"
@@ -58,8 +62,9 @@ class BaseAdapter(ABC):
         partidos ya finalizados y no volver a descargarlos)."""
 
     @abstractmethod
-    def parse(self, payload: Any, season: str) -> ParsedLeague:
-        """Convierte el payload original a filas canónicas. No accede a la red."""
+    def parse(self, payload: Any, season: str) -> "dict[str, ParsedLeague] | ParsedLeague":
+        """Convierte el payload original a filas canónicas por fase ('regular', 'playoffs', 'total'
+        u otras). No accede a la red. Devolver un único ParsedLeague equivale a {'total': ...}."""
 
     # ---------------------------------------------------------------- helpers
     def soft_fail(self, msg: str) -> None:

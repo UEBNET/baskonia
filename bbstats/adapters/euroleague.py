@@ -14,6 +14,7 @@ from ..normalize import (complete_counting, is_per_game_scale, map_counting, map
                          per_game_to_totals)
 from ..schema import COUNTING_NAMES, TEAM_STATS
 from ..utils import first_present, flatten, to_float
+from ..phases import subtract_phase
 from .base import AdapterError, BaseAdapter, ParsedLeague
 
 DEFAULT_BASE = "https://feeds.incrowdsports.com/provider/euroleague-feeds/v3/competitions"
@@ -61,15 +62,14 @@ class EuroleagueAdapter(BaseAdapter):
             offset += len(items)
         return pages
 
-    def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
+    def _fetch_set(self, http: HttpClient, params: dict) -> dict:
         base = self.cfg.get("base_url", DEFAULT_BASE).rstrip("/")
         comp = self.cfg.get("competicion", "E")
-        params = self._params(season)
-        payload: dict[str, Any] = {"params": params, "players": {}, "teams": {}}
+        out: dict[str, Any] = {"players": {}, "teams": {}}
         for ep in PLAYER_ENDPOINTS:
             url = f"{base}/{comp}/statistics/players/{ep}"
             try:
-                payload["players"][ep] = self._get_all(http, url, params, "players")
+                out["players"][ep] = self._get_all(http, url, params, "players")
             except FetchError as exc:
                 if ep == "traditional":
                     raise AdapterError(f"Euroliga: sin datos de jugadores ({exc})") from exc
@@ -77,9 +77,20 @@ class EuroleagueAdapter(BaseAdapter):
         for ep in TEAM_ENDPOINTS:
             url = f"{base}/{comp}/statistics/teams/{ep}"
             try:
-                payload["teams"][ep] = self._get_all(http, url, params, "teams")
+                out["teams"][ep] = self._get_all(http, url, params, "teams")
             except FetchError as exc:
                 self.soft_fail(str(exc))
+        return out
+
+    def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
+        params = self._params(season)
+        params.pop("phaseTypeCode", None)
+        payload: dict[str, Any] = {"params": params, "fases": {}}
+        payload["fases"]["total"] = self._fetch_set(http, params)
+        try:
+            payload["fases"]["regular"] = self._fetch_set(http, {**params, "phaseTypeCode": "RS"})
+        except AdapterError as exc:
+            self.soft_fail(f"Temporada regular: {exc}")
         return payload
 
     # ------------------------------------------------------------------ parse
@@ -90,7 +101,17 @@ class EuroleagueAdapter(BaseAdapter):
         tid = first_present(f, ["player.team.code", "team.code", "teamCode", "player.clubCode"])
         return str(pid), str(tid)
 
-    def parse(self, payload: Any, season: str) -> ParsedLeague:
+    def parse(self, payload: Any, season: str) -> dict[str, ParsedLeague]:
+        fases = payload.get("fases") or {"total": payload}
+        out: dict[str, ParsedLeague] = {}
+        for ph, data in fases.items():
+            out[ph] = self._parse_set(data)
+        if "total" in out and "regular" in out:
+            out["playoffs"] = subtract_phase(out["total"], out["regular"],
+                                             ["Playoffs (play-in + playoffs + final four) = total - temporada regular"])
+        return out
+
+    def _parse_set(self, payload: Any) -> ParsedLeague:
         notes: list[str] = []
         pl = payload.get("players", {})
         by_key: dict[tuple, dict] = {}
@@ -124,7 +145,8 @@ class EuroleagueAdapter(BaseAdapter):
                     if row is None:
                         continue
                     for k, v in map_source_metrics(f).items():
-                        row.setdefault(k, v)
+                        if k != "src_poss":  # en el feed avanzado las posesiones son por partido
+                            row.setdefault(k, v)
                     # conteos que sólo aparecen en misc/scoring (dobles-dobles, puntos pintura...)
                     for k, v in map_counting(f).items():
                         if row.get(k) is None and k not in {"gp", "min", "pts"}:

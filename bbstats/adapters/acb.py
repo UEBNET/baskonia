@@ -1,214 +1,115 @@
-"""Liga Endesa (ACB) — boxscores oficiales de acb.com (HTML).
+"""Liga Endesa (ACB) — API de datos de acb.com (api2.acb.com).
 
-1. Calendario por jornada -> ids de partido  (/partido/estadisticas/id/<id>)
-2. Página de estadísticas de cada partido   -> tablas por equipo (Min, P, T2, T3, T1, REB, A,
-   BR, BP, C, TAP F/C, M, FP C/F, +/-, V) con fila 'Total'.
-3. Agregación de boxscores -> totales de temporada exactos de jugador, equipo y rival.
+La web oficial (acb.com / live.acb.com) carga sus datos desde api2.acb.com con una clave de
+cliente pública incluida en su propio código (cabecera X-APIKEY). Endpoints usados:
 
-Los partidos ya finalizados de la descarga anterior se reutilizan (no se vuelven a pedir).
+  /api/seasondata/Calendar/season-calendar?competitionId=1[&editionId=N]
+        temporadas disponibles (editionId por año), jornadas y partidos. Las jornadas con
+        `subphaseId` pertenecen a los playoffs; sin subfase = temporada regular.
+  /api/matchdata/Result/boxscores?matchId=N
+        boxscore completo: jugadores (id, titular, minutos, tiros, rebotes, asistencias, robos,
+        pérdidas, tapones a favor/en contra, mates, faltas cometidas/recibidas, +/-, valoración),
+        rebotes de equipo y totales.
+
+Los partidos finalizados del JSON bruto anterior se reutilizan (no se vuelven a pedir).
 """
 from __future__ import annotations
 
-import re
-import unicodedata
 from typing import Any
 
-from bs4 import BeautifulSoup
-
 from ..http import FetchError, HttpClient
-from ..utils import parse_made_attempted, parse_minutes, parse_sum_pair, to_float
-from .base import AdapterError, BaseAdapter, ParsedLeague
-from .boxscore import aggregate_games
+from ..utils import parse_minutes
+from .base import AdapterError, BaseAdapter, NoDataYet, ParsedLeague
+from .boxscore import aggregate_by_phase
 
-DEFAULT_CALENDAR = ("https://www.acb.com/resultados-clasificacion/ver/temporada_id/{temporada_id}"
-                    "/competicion_id/{competicion_id}/jornada_numero/{jornada}")
-DEFAULT_GAME = "https://www.acb.com/partido/estadisticas/id/{game_id}"
-GAME_ID_RE = re.compile(r"/partido/estadisticas/id/(\d+)")
-PLAYER_ID_RE = re.compile(r"/jugador/[a-z\-]+/(?:id/)?(\d+)")
-TEAM_ID_RE = re.compile(r"/club/[a-z\-]+/(?:id/)?(\d+)")
+API = "https://api2.acb.com"
+PUBLIC_KEY = "0dd94928-6f57-4c08-a3bd-b1b2f092976e"
 
-# etiqueta normalizada (grupo+subcolumna) -> campo
-LABELS = {
-    "D": "dorsal", "DORSAL": "dorsal", "NOMBRE": "name", "JUGADOR": "name",
-    "MIN": "min", "P": "pts", "PTS": "pts", "PUNTOS": "pts",
-    "T2": "t2", "T3": "t3", "T1": "t1",
-    "REBT": "reb", "T": "reb", "REBOTEST": "reb", "REB": "reb",
-    "REBD+O": "rebdo", "D+O": "rebdo", "REBOTESD+O": "rebdo",
-    "A": "ast", "AS": "ast", "BR": "stl", "BP": "tov", "C": "fastbreaks",
-    "TAPF": "blk", "TAPONESF": "blk", "TPF": "blk", "TAPC": "blka", "TAPONESC": "blka", "TPC": "blka",
-    "M": "dunks", "FPC": "pf", "FALTASC": "pf", "FC": "pf", "FPF": "pfd", "FPR": "pfd",
-    "FALTASR": "pfd", "FALTASF": "pfd", "FR": "pfd", "+/-": "plus_minus", "V": "pir", "VAL": "pir",
-}
+_STATS = {"points": "pts", "twoPointersMade": "fg2m", "twoPointersAttempted": "fg2a",
+          "threePointersMade": "fg3m", "threePointersAttempted": "fg3a", "freeThrowsMade": "ftm",
+          "freeThrowsAttempted": "fta", "offRebounds": "oreb", "defRebounds": "dreb", "totalRebounds": "reb",
+          "assists": "ast", "steals": "stl", "turnovers": "tov", "blocks": "blk", "receivedBlocks": "blka",
+          "dunks": "dunks", "personalFouls": "pf", "foulsDrawn": "pfd", "plusMinus": "plus_minus", "rating": "pir"}
 
 
-def _norm_label(s: str) -> str:
-    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
-    return re.sub(r"\s+", "", s.upper())
+def _stats(rec: dict) -> dict:
+    return {c: float(rec[k]) for k, c in _STATS.items() if rec.get(k) is not None}
 
 
-def _header_labels(table) -> list[str]:
-    """Cabecera (posiblemente en dos filas con rowspan/colspan) -> etiquetas planas 'GRUPO+SUB'.
-
-    Ejemplo: 'Rebotes' (colspan=2) sobre 'T' y 'D+O' -> 'REBOTEST', 'REBOTESD+O'.
-    """
-    thead = table.find("thead")
-    rows = thead.find_all("tr") if thead else \
-        [tr for tr in table.find_all("tr") if tr.find("th") and not tr.find("td")]
-    grid: dict[tuple[int, int], str] = {}
-    ncols = 0
-    for r, tr in enumerate(rows):
-        c = 0
-        for cell in tr.find_all(["th", "td"]):
-            while (r, c) in grid:
-                c += 1
-            rs = int(cell.get("rowspan", 1) or 1)
-            cs = int(cell.get("colspan", 1) or 1)
-            txt = cell.get_text(" ", strip=True)
-            for dr in range(rs):
-                for dc in range(cs):
-                    grid[(r + dr, c + dc)] = txt
-            c += cs
-            ncols = max(ncols, c)
-    labels = []
-    for c in range(ncols):
-        parts: list[str] = []
-        for r in range(len(rows)):
-            t = grid.get((r, c), "")
-            if t and (not parts or parts[-1] != t):
-                parts.append(t)
-        labels.append(_norm_label("".join(parts)))
-    return labels
-
-
-def _row_to_line(labels: list[str], cells, starter_mark: str = "*") -> dict:
-    line: dict[str, Any] = {}
-    for lab, cell in zip(labels, cells):
-        field = LABELS.get(lab)
-        txt = cell.get_text(" ", strip=True)
-        if field is None:
-            continue
-        if field == "name":
-            line["name"] = txt
-            a = cell.find("a", href=PLAYER_ID_RE)
-            if a:
-                line["player_id"] = PLAYER_ID_RE.search(a["href"]).group(1)
-        elif field == "dorsal":
-            line["starter"] = starter_mark in txt
-            line["dorsal"] = txt.replace(starter_mark, "").strip()
-        elif field == "min":
-            line["min"] = parse_minutes(txt)
-        elif field in ("t2", "t3", "t1"):
-            m, a = parse_made_attempted(txt)
-            key = {"t2": "fg2", "t3": "fg3", "t1": "ft"}[field]
-            line[f"{key}m"], line[f"{key}a"] = m, a
-        elif field == "rebdo":
-            d, o = parse_sum_pair(txt)
-            line["dreb"], line["oreb"] = d, o
-        else:
-            line[field] = to_float(txt)
-    return line
-
-
-def parse_acb_game(game_id: str, html: str) -> dict:
-    soup = BeautifulSoup(html, "lxml")
+def parse_boxscore(match_id: str, doc: dict, phase: str) -> dict:
     sides = []
-    for table in soup.find_all("table"):
-        labels = _header_labels(table)
-        if "MIN" not in labels or not any(l in labels for l in ("T2", "P", "PTS")):
+    for tb in doc.get("teamBoxscores") or []:
+        team = tb.get("team") or {}
+        q0 = next((p for p in tb.get("statsByPeriods") or [] if p.get("quarter") == 0), None)
+        if q0 is None:
             continue
-        body = table.find("tbody") or table
-        players, totals = [], None
-        for tr in body.find_all("tr"):
-            cells = tr.find_all(["td", "th"])
-            if len(cells) < len(labels) - 2 or tr.find_parent("thead"):
-                continue
-            line = _row_to_line(labels, cells)
-            nm = (line.get("name") or "").strip().lower()
-            first = cells[0].get_text(" ", strip=True).lower()
-            if nm.startswith("total") or first.startswith("total"):
-                totals = {k: v for k, v in line.items() if k not in {"name", "dorsal", "starter", "player_id"}}
-            elif nm in {"equipo", "equipo:"} or first == "equipo" or not nm:
-                continue  # rebotes de equipo: quedan dentro de 'Total'
-            else:
-                players.append(line)
-        # nombre / id del equipo: título o enlace anterior a la tabla
-        name, team_id = None, None
-        cap = table.find("caption")
-        heading = cap or table.find_previous(
-            lambda tag: tag.name in {"h1", "h2", "h3", "h4", "h5", "h6", "div", "span", "a"}
-            and tag.get("class") and any(re.search(r"equipo|team|nombre", c) for c in tag.get("class")))
-        if heading is not None:
-            name = heading.get_text(" ", strip=True) or None
-            link = heading if heading.name == "a" and heading.get("href") else heading.find("a", href=TEAM_ID_RE)
-            if link is not None and link.get("href") and TEAM_ID_RE.search(link["href"]):
-                team_id = TEAM_ID_RE.search(link["href"]).group(1)
-        roster = frozenset(p.get("player_id") or p.get("name") for p in players)
-        if not players or any(sd["_roster"] == roster for sd in sides):
-            continue  # tabla vacía o duplicada (p.ej. versión móvil de la misma tabla)
-        sides.append({"_roster": roster, "team_id": team_id or name or f"equipo_{len(sides) + 1}", "name": name,
-                      "code": None, "totals": totals, "players": players})
-    sides = sides[:2]
-    for sd in sides:
-        sd.pop("_roster", None)
-    # Si no se pudo leer el nombre de los equipos, usar el <title> 'Local - Visitante'
-    if len(sides) == 2 and (not sides[0]["name"] or sides[0]["team_id"] == sides[1]["team_id"]):
-        title = soup.title.get_text(" ", strip=True) if soup.title else ""
-        parts = re.split(r"\s+(?:-|vs\.?|–)\s+", title.split("|")[0])
-        if len(parts) >= 2:
-            for side, nm in zip(sides, parts[:2]):
-                side["name"] = nm.strip()
-                side["team_id"] = nm.strip()
-    final = len(sides) == 2 and all(s["totals"] and s["totals"].get("pts") is not None for s in sides)
-    date = re.search(r"\b(\d{2}/\d{2}/\d{4})\b", soup.get_text(" "))
-    return {"game_id": str(game_id), "date": date.group(1) if date else None, "final": final, "teams": sides}
+        st = q0.get("stats") or {}
+        players = []
+        for pl in st.get("players") or []:
+            info = pl.get("player") or {}
+            line = {"player_id": str(info.get("id")),
+                    "name": info.get("nickname") or f"{info.get('firstName', '')} {info.get('lastName', '')}".strip(),
+                    "dorsal": info.get("shirtNumber"), "posicion": info.get("gameRole"),
+                    "starter": bool(pl.get("isStarted")), "min": parse_minutes(pl.get("playTime"))}
+            line.update(_stats(pl))
+            players.append(line)
+        totals = _stats(st.get("total") or {})
+        totals.pop("plus_minus", None)
+        sides.append({"team_id": str(team.get("clubId") or team.get("id")), "name": team.get("fullName"),
+                      "code": team.get("abbreviatedName"), "totals": totals, "players": players})
+    return {"game_id": str(match_id), "phase": phase, "final": bool(doc.get("matchFinished")), "teams": sides}
 
 
 class ACBAdapter(BaseAdapter):
     name = "acb"
-    version = "1.0"
+    version = "2.0"
+
+    def _get(self, http: HttpClient, path: str, params: dict) -> Any:
+        headers = {"X-APIKEY": self.cfg.get("api_key", PUBLIC_KEY), "Origin": "https://acb.com",
+                   "Referer": "https://acb.com/", "Accept": "application/json"}
+        return http.get_json(f"{self.cfg.get('base_url', API)}{path}", params=params, headers=headers)
 
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
         sc = self.season_cfg(season)
-        fmt = {"temporada_id": sc.get("temporada_id", sc["start_year"]),
-               "competicion_id": sc.get("competicion_id", self.cfg.get("competicion_id", 1))}
-        cal_tpl = self.cfg.get("calendar_url", DEFAULT_CALENDAR)
-        max_j = int(self.cfg.get("max_jornadas", 45))
-        calendar: dict[str, str] = {}
-        ids: list[str] = list(map(str, sc.get("game_ids", [])))
-        empty_streak = 0
-        for j in range(1, max_j + 1):
-            try:
-                html = http.get_text(cal_tpl.format(jornada=j, **fmt))
-            except FetchError as exc:
-                self.soft_fail(str(exc))
-                empty_streak += 1
-                if empty_streak >= 3 and ids:
-                    break
-                continue
-            calendar[str(j)] = html
-            found = GAME_ID_RE.findall(html)
-            empty_streak = 0 if found else empty_streak + 1
-            ids.extend(found)
-            if empty_streak >= 3 and ids:
-                break
-        ids = list(dict.fromkeys(ids))
-        if not ids:
-            raise AdapterError("ACB: no se encontraron partidos en el calendario")
-        prev = (previous_payload or {}).get("games", {}) if isinstance(previous_payload, dict) else {}
-        games: dict[str, str] = {}
+        comp = int(self.cfg.get("competicion_id", 1))
+        cal_path = "/api/seasondata/Calendar/season-calendar"
+        edition = sc.get("edition_id")
+        if edition is None:
+            base_cal = self._get(http, cal_path, {"competitionId": comp})
+            seasons = (base_cal.get("availableFilters") or {}).get("seasons") or []
+            match = [s for s in seasons if s.get("seasonStartYear") == sc["start_year"]]
+            if not match:
+                raise NoDataYet(f"ACB: temporada {season} no disponible en el calendario")
+            edition = match[0]["id"]
+        calendar = self._get(http, cal_path, {"competitionId": comp, "editionId": edition})
+        prev = (previous_payload or {}).get("boxscores", {}) if isinstance(previous_payload, dict) else {}
+        boxscores: dict[str, Any] = {}
         reused = 0
-        for gid in ids:
-            if gid in prev and parse_acb_game(gid, prev[gid])["final"]:
-                games[gid] = prev[gid]
-                reused += 1
-                continue
-            try:
-                games[gid] = http.get_text(self.cfg.get("game_url", DEFAULT_GAME).format(game_id=gid))
-            except FetchError as exc:
-                self.soft_fail(str(exc))
-        return {"params": fmt, "calendar": calendar, "games": games, "reused_games": reused}
+        for rnd in calendar.get("rounds") or []:
+            for m in rnd.get("matches") or []:
+                if m.get("matchStatus") != "FINALIZED":
+                    continue
+                mid = str(m["id"])
+                if mid in prev and (prev[mid] or {}).get("matchFinished"):
+                    boxscores[mid] = prev[mid]
+                    reused += 1
+                    continue
+                try:
+                    boxscores[mid] = self._get(http, "/api/matchdata/Result/boxscores", {"matchId": mid})
+                except FetchError as exc:
+                    self.soft_fail(str(exc))
+        if not boxscores:
+            raise NoDataYet(f"ACB {season}: aún no hay partidos finalizados")
+        return {"edition_id": edition, "calendar": calendar, "boxscores": boxscores, "reused_games": reused}
 
-    def parse(self, payload: Any, season: str) -> ParsedLeague:
-        games = [parse_acb_game(gid, html) for gid, html in (payload.get("games") or {}).items()]
-        notes = [f"{len(games)} páginas de partido ACB; {payload.get('reused_games', 0)} reutilizadas"]
-        return aggregate_games(games, notes)
+    def parse(self, payload: Any, season: str) -> dict[str, ParsedLeague]:
+        phase_of: dict[str, str] = {}
+        for rnd in (payload.get("calendar") or {}).get("rounds") or []:
+            ph = "playoffs" if rnd.get("subphaseId") else "regular"
+            for m in rnd.get("matches") or []:
+                phase_of[str(m["id"])] = ph
+        games = [parse_boxscore(mid, doc, phase_of.get(mid, "regular"))
+                 for mid, doc in (payload.get("boxscores") or {}).items() if isinstance(doc, dict)]
+        if not games:
+            raise AdapterError("ACB: el bruto no contiene boxscores")
+        return aggregate_by_phase(games, [f"{len(games)} boxscores ACB; {payload.get('reused_games', 0)} reutilizados"])

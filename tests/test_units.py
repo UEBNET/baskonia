@@ -4,9 +4,7 @@ import math
 
 import pandas as pd
 import pytest
-from bs4 import BeautifulSoup
 
-from bbstats.adapters.acb import _header_labels
 from bbstats.metrics import compute_player_metrics, finalize_columns
 from bbstats.normalize import canonical_field, complete_counting, map_counting
 from bbstats.schema import COLUMN_NAMES
@@ -41,13 +39,6 @@ def test_complete_counting_never_overwrites():
     assert d["fgm"] == 6 and d["fga"] == 13 and d["reb"] == 4 and d["pts"] == 15
     d = complete_counting({"fgm": 6, "fg3m": 2, "pts": 99})
     assert d["fg2m"] == 4 and d["pts"] == 99
-
-
-def test_acb_header_two_rows():
-    html = ('<table><thead><tr><th rowspan="2">D</th><th rowspan="2">Min</th><th colspan="2">REB</th>'
-            '<th colspan="2">TAP</th></tr><tr><th>T</th><th>D+O</th><th>F</th><th>C</th></tr></thead></table>')
-    labels = _header_labels(BeautifulSoup(html, "lxml").find("table"))
-    assert labels == ["D", "MIN", "REBT", "REBD+O", "TAPF", "TAPC"]
 
 
 def test_metrics_formulas_simple_case():

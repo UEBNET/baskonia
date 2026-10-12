@@ -7,7 +7,7 @@ Endpoints (JSON, con CORS):
     POST /api/reprocesar    {"ligas": [...], "temporada": "..."}       -> {"job_id": ...}
     GET  /api/trabajo/<id>  -> {"estado": "en_curso|terminado|error", "progreso": [...], "informe": {...}}
     GET  /api/estado        -> estado de ligas y último informe
-    GET  /api/datos?liga=acb&temporada=2025-26  -> filas procesadas
+    GET  /api/datos?liga=acb&temporada=2025-26&fase=playoffs  -> filas procesadas
     GET  /api/diccionario   -> diccionario de columnas
 
 Si se define la variable de entorno BBSTATS_TOKEN, las peticiones deben llevar la cabecera
@@ -82,7 +82,7 @@ def make_handler(config: str | None):
             if u.path == "/api/estado":
                 return self._send(200, api.estado(q.get("temporada"), config))
             if u.path == "/api/datos":
-                return self._send(200, api.datos(q.get("liga"), q.get("temporada"), config))
+                return self._send(200, api.datos(q.get("liga"), q.get("temporada"), q.get("fase"), config))
             if u.path == "/api/diccionario":
                 return self._send(200, api.diccionario())
             if u.path.startswith("/api/trabajo/"):

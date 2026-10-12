@@ -109,3 +109,16 @@ def aggregate_games(games: list[dict], notes: list[str] | None = None) -> Parsed
             p["gs"] = None
     notes.append(f"{n_games} partidos agregados")
     return ParsedLeague(players=list(players.values()), teams=list(teams.values()), notes=notes)
+
+
+def aggregate_by_phase(games: list[dict], notes: list[str] | None = None) -> dict[str, ParsedLeague]:
+    """Agrega por fase usando la clave 'phase' de cada partido ('regular', 'playoffs', ...).
+
+    'total' incluye todos los partidos de la competición (también play-in u otras fases)."""
+    out: dict[str, ParsedLeague] = {}
+    phases = sorted({g.get("phase") or "regular" for g in games})
+    for ph in phases:
+        sel = [g for g in games if (g.get("phase") or "regular") == ph]
+        out[ph] = aggregate_games(sel, [f"fase {ph}: {len(sel)} partidos en origen"])
+    out["total"] = aggregate_games(games, list(notes or []))
+    return out

@@ -31,7 +31,7 @@ for _n, _d in [
     ("liga_nombre", "Nombre oficial de la competición"),
     ("pais", "País / ámbito de la competición"),
     ("temporada", "Temporada canónica (p.ej. 2025-26)"),
-    ("fase", "Fase cubierta por la extracción (regular, playoffs, todas)"),
+    ("fase", "Fase: regular (temporada regular), playoffs (play-in + playoffs + final four/finales) o total"),
     ("fuente", "Origen de los datos (URL base / proveedor)"),
     ("fecha_extraccion", "Fecha UTC de la descarga del JSON bruto usado"),
     ("archivo_bruto", "Ruta del JSON bruto del que sale esta fila (trazabilidad)"),
@@ -273,10 +273,78 @@ SOURCE_METRICS: list[tuple[str, str]] = [
     ("src_paint_touches", "Toques en la pintura (tracking)"),
     ("src_post_touches", "Toques en el poste (tracking)"),
     ("src_elbow_touches", "Toques en el codo (tracking)"),
+    # Basketball-Reference (NBA)
+    ("src_per", "PER oficial de Basketball-Reference"),
+    ("src_ows", "Offensive Win Shares (Basketball-Reference)"),
+    ("src_dws", "Defensive Win Shares (Basketball-Reference)"),
+    ("src_ws", "Win Shares (Basketball-Reference)"),
+    ("src_ws48", "Win Shares por 48 minutos (Basketball-Reference)"),
+    ("src_obpm", "Offensive Box Plus/Minus"),
+    ("src_dbpm", "Defensive Box Plus/Minus"),
+    ("src_bpm", "Box Plus/Minus"),
+    ("src_vorp", "Value Over Replacement Player"),
+    ("src_stl_pct", "STL% oficial"),
+    ("src_blk_pct", "BLK% oficial"),
+    ("src_pos_pg_pct", "% de minutos como base (estimado jugada a jugada)"),
+    ("src_pos_sg_pct", "% de minutos como escolta"),
+    ("src_pos_sf_pct", "% de minutos como alero"),
+    ("src_pos_pf_pct", "% de minutos como ala-pívot"),
+    ("src_pos_c_pct", "% de minutos como pívot"),
+    ("src_on_court_pm100", "+/- del equipo por 100 posesiones con él en pista"),
+    ("src_on_off_pm100", "+/- on-off por 100 posesiones"),
+    ("src_tov_bad_pass", "Pérdidas por mal pase"),
+    ("src_tov_lost_ball", "Pérdidas de balón en bote/manejo"),
+    ("src_fouls_shooting", "Faltas personales en tiro cometidas"),
+    ("src_fouls_offensive", "Faltas en ataque cometidas"),
+    ("src_drawn_shooting", "Faltas en tiro recibidas"),
+    ("src_drawn_offensive", "Faltas en ataque provocadas"),
+    ("src_astd_pts", "Puntos generados con sus asistencias"),
+    ("src_and1", "Jugadas de 2+1 / 3+1"),
+    ("src_avg_shot_dist", "Distancia media de tiro (pies)"),
+    ("src_pct_fga_00_03", "% FGA a 0-3 pies"),
+    ("src_pct_fga_03_10", "% FGA a 3-10 pies"),
+    ("src_pct_fga_10_16", "% FGA a 10-16 pies"),
+    ("src_pct_fga_16_3p", "% FGA de 16 pies a la línea de 3"),
+    ("src_fg_pct_00_03", "FG% a 0-3 pies"),
+    ("src_fg_pct_03_10", "FG% a 3-10 pies"),
+    ("src_fg_pct_10_16", "FG% a 10-16 pies"),
+    ("src_fg_pct_16_3p", "FG% de 16 pies a la línea de 3"),
+    ("src_pct_ast_fg2", "% de canastas de 2 asistidas"),
+    ("src_pct_ast_fg3", "% de triples asistidos"),
+    ("src_pct_fga_dunk", "% de FGA que son mates"),
+    ("src_pct_fg3a_corner", "% de triples desde la esquina"),
+    ("src_fg3_pct_corner", "3P% desde la esquina"),
+    # Otras ligas
+    ("src_eff", "Valoración / eficiencia publicada por la liga"),
+    ("src_oer", "Offensive efficiency rating publicado por la liga (LBA)"),
 ]
 for _n, _d in SOURCE_METRICS:
     _add(_n, "metricas_fuente", _d, "fuente")
 SOURCE_METRIC_NAMES = [c for c, _ in SOURCE_METRICS]
+
+# --------------------------------------------------------------------------------------
+# 8. BasketNews (on/off, ratings individuales, stops...). Sólo EuroLeague y Liga Endesa.
+# --------------------------------------------------------------------------------------
+from .enrich.basketnews import BN_COLUMNS  # noqa: E402
+
+for _n, _d in BN_COLUMNS:
+    _add(_n, "basketnews", _d, "fuente")
+BN_COLUMN_NAMES = [c for c, _ in BN_COLUMNS]
+
+# --------------------------------------------------------------------------------------
+# 9. Contexto de fase: en las filas de playoffs, valor en temporada regular y diferencia.
+# --------------------------------------------------------------------------------------
+PHASES = ["regular", "playoffs", "total"]
+PHASE_CONTEXT_METRICS = ["gp", "min_pg", "pts_pg", "pts_p40", "reb_p40", "ast_p40", "ts_pct", "efg_pct",
+                         "usg_pct", "ast_pct", "tov_pct", "reb_pct", "per", "ortg", "drtg", "net_rtg",
+                         "game_score_pg", "pir_pg", "ws_per_40", "pie", "bn_netrtg_onoff"]
+for _n in PHASE_CONTEXT_METRICS:
+    _add(f"rs_{_n}", "contexto_fase", f"{_n} del mismo jugador y equipo en la temporada regular "
+                                      f"(sólo filas de playoffs)", "calculado")
+for _n in PHASE_CONTEXT_METRICS:
+    if _n == "gp":
+        continue
+    _add(f"delta_{_n}", "contexto_fase", f"{_n} en playoffs menos {_n} en temporada regular", "calculado")
 
 COLUMNS: list[Column] = list(_COLS)
 COLUMN_NAMES: list[str] = [c.name for c in COLUMNS]

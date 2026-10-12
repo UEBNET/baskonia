@@ -12,7 +12,7 @@ from ..http import FetchError, HttpClient
 from ..normalize import complete_counting, map_counting, map_source_metrics
 from ..schema import TEAM_STATS
 from ..utils import height_to_cm, to_float, weight_to_kg
-from .base import AdapterError, BaseAdapter, ParsedLeague
+from .base import AdapterError, BaseAdapter, NoDataYet, ParsedLeague
 
 NBA_HEADERS = {
     "Accept": "application/json, text/plain, */*",
@@ -69,49 +69,70 @@ class NBAAdapter(BaseAdapter):
         headers = {**NBA_HEADERS, **(self.cfg.get("headers") or {})}
         return http.get_json(f"{self._base()}/{endpoint}", params=params, headers=headers)
 
-    def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
-        s = self._season(season)
-        season_type = self.cfg.get("season_type", "Regular Season")
-        lid = self.cfg.get("league_id", self.league_id)
+    def _fetch_type(self, http: HttpClient, s: str, season_type: str, lid: str, required: bool) -> dict:
         base = {**_COMMON, "LeagueID": lid, "Season": s, "SeasonType": season_type, "PerMode": "Totals"}
-        payload: dict[str, Any] = {"season": s, "season_type": season_type, "players": {}, "teams": {},
-                                   "hustle": None, "tracking": {}, "playerindex": None}
+        out: dict[str, Any] = {"players": {}, "teams": {}, "hustle": None, "tracking": {}}
         for m in PLAYER_MEASURES:
             try:
-                payload["players"][m] = self._get(http, "leaguedashplayerstats", {**base, "MeasureType": m})
+                out["players"][m] = self._get(http, "leaguedashplayerstats", {**base, "MeasureType": m})
             except FetchError as exc:
-                if m == "Base":
+                if m == "Base" and required:
                     raise AdapterError(f"{self.league}: sin datos base de jugadores ({exc})") from exc
                 self.soft_fail(str(exc))
+                if m == "Base":
+                    return out
+        if not result_rows(out["players"].get("Base")):
+            return out  # fase sin partidos (p.ej. playoffs aún no jugados)
         for m in TEAM_MEASURES:
             try:
-                payload["teams"][m] = self._get(http, "leaguedashteamstats", {**base, "MeasureType": m})
+                out["teams"][m] = self._get(http, "leaguedashteamstats", {**base, "MeasureType": m})
             except FetchError as exc:
                 self.soft_fail(str(exc))
         if self.cfg.get("extras", self.extras):
             try:
-                payload["hustle"] = self._get(http, "leaguehustlestatsplayer", base)
+                out["hustle"] = self._get(http, "leaguehustlestatsplayer", base)
             except FetchError as exc:
                 self.soft_fail(str(exc))
             for pt in TRACKING:
                 try:
-                    payload["tracking"][pt] = self._get(http, "leaguedashptstats",
-                                                        {**base, "PlayerOrTeam": "Player", "PtMeasureType": pt})
+                    out["tracking"][pt] = self._get(http, "leaguedashptstats",
+                                                    {**base, "PlayerOrTeam": "Player", "PtMeasureType": pt})
                 except FetchError as exc:
                     self.soft_fail(str(exc))
+        return out
+
+    def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
+        s = self._season(season)
+        lid = self.cfg.get("league_id", self.league_id)
+        types = self.cfg.get("season_types") or {"regular": "Regular Season", "playoffs": "Playoffs"}
+        payload: dict[str, Any] = {"season": s, "tipos": {}, "playerindex": None}
+        for i, (phase, st) in enumerate(types.items()):
+            payload["tipos"][phase] = {"season_type": st, **self._fetch_type(http, s, st, lid, required=i == 0)}
+        if not any(result_rows((t.get("players") or {}).get("Base")) for t in payload["tipos"].values()):
+            raise NoDataYet(f"{self.league} {season}: la temporada aún no tiene partidos")
         try:
             payload["playerindex"] = self._get(http, "playerindex", {
                 "LeagueID": lid, "Season": s, "Historical": "0", "Active": "", "AllStar": "",
                 "College": "", "Country": "", "DraftPick": "", "DraftRound": "", "DraftYear": "",
-                "Height": "", "TeamID": "0", "Weight": "", "SeasonType": season_type})
+                "Height": "", "TeamID": "0", "Weight": "", "SeasonType": "Regular Season"})
         except FetchError as exc:
             self.soft_fail(str(exc))
         return payload
 
-    def parse(self, payload: Any, season: str) -> ParsedLeague:
+    def parse(self, payload: Any, season: str) -> dict[str, ParsedLeague]:
+        if "tipos" not in payload:  # formato antiguo (una sola fase)
+            return {"regular": self._parse_type(payload, payload)}
+        out = {}
+        for phase, data in payload["tipos"].items():
+            parsed = self._parse_type(data, payload)
+            if parsed.players:
+                out[phase] = parsed
+        return out
+
+    def _parse_type(self, payload: Any, root: Any) -> ParsedLeague:
         notes: list[str] = []
         rows: dict[str, dict] = {}
-        for r in result_rows(payload["players"].get("Base")):
+        for r in result_rows((payload.get("players") or {}).get("Base")):
             pid = str(r.get("PLAYER_ID"))
             row = {"player_id": pid, "team_id": str(r.get("TEAM_ID")),
                    "nombre": r.get("PLAYER_NAME"), "equipo_codigo": r.get("TEAM_ABBREVIATION"),
@@ -120,7 +141,7 @@ class NBAAdapter(BaseAdapter):
             row.update(map_source_metrics(r))
             rows[pid] = row
         for m in PLAYER_MEASURES[1:]:
-            for r in result_rows(payload["players"].get(m)):
+            for r in result_rows((payload.get("players") or {}).get(m)):
                 row = rows.get(str(r.get("PLAYER_ID")))
                 if row is None:
                     continue
@@ -138,7 +159,7 @@ class NBAAdapter(BaseAdapter):
                 if row is not None:
                     for k, v in map_source_metrics(r).items():
                         row.setdefault(k, v)
-        for r in result_rows(payload.get("playerindex")):
+        for r in result_rows(root.get("playerindex")):
             row = rows.get(str(r.get("PERSON_ID")))
             if row is None:
                 continue
@@ -158,7 +179,7 @@ class NBAAdapter(BaseAdapter):
 
         teams: dict[str, dict] = {}
         for m, prefix in (("Base", "team_"), ("Opponent", "opp_")):
-            for r in result_rows(payload["teams"].get(m)):
+            for r in result_rows((payload.get("teams") or {}).get(m)):
                 tid = str(r.get("TEAM_ID"))
                 t = teams.setdefault(tid, {"team_id": tid, "equipo": r.get("TEAM_NAME")})
                 # En 'Opponent' las columnas vienen como OPP_FGM, OPP_PTS...

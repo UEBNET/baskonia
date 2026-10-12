@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import json
 import logging
+import shutil
+import subprocess
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -24,6 +26,23 @@ class FetchError(RuntimeError):
     pass
 
 
+class _CurlResponse:
+    """Respuesta mínima compatible con requests.Response para el transporte curl."""
+
+    def __init__(self, url: str, status: int, content: bytes) -> None:
+        self.url, self.status_code, self.content = url, status, content
+        self.ok = 200 <= status < 400
+        self.encoding = "utf-8"
+        self.apparent_encoding = "utf-8"
+
+    @property
+    def text(self) -> str:
+        return self.content.decode(self.encoding or "utf-8", errors="replace")
+
+    def json(self):
+        return json.loads(self.content)
+
+
 @dataclass
 class RequestLog:
     url: str
@@ -43,6 +62,8 @@ class HttpClient:
     - `log`: lista de peticiones realizadas (se guarda en el JSON bruto para trazabilidad).
     """
     delay_s: float = 1.0
+    domain_delays: dict = field(default_factory=dict)  # p.ej. {"www.basketball-reference.com": 3.5}
+    curl_domains: tuple = ()  # dominios que rechazan la huella TLS de requests: se usa el binario curl
     timeout_s: float = 30.0
     retries: int = 3
     user_agent: str = DEFAULT_UA
@@ -64,26 +85,66 @@ class HttpClient:
         host = urlparse(url).netloc
         last = self._last_hit.get(host)
         if last is not None:
-            wait = self.delay_s - (time.monotonic() - last)
+            wait = self.domain_delays.get(host, self.delay_s) - (time.monotonic() - last)
             if wait > 0:
                 time.sleep(wait)
         self._last_hit[host] = time.monotonic()
 
-    def get(self, url: str, params: dict | None = None, headers: dict | None = None) -> requests.Response:
+    def get(self, url: str, params: dict | None = None, headers: dict | None = None,
+            ok_status: tuple = ()) -> requests.Response:
+        return self.request("GET", url, params=params, headers=headers, ok_status=ok_status)
+
+    def request(self, method: str, url: str, params: dict | None = None, headers: dict | None = None,
+                data: dict | None = None, json_body: Any = None, ok_status: tuple = ()) -> requests.Response:
+        """`ok_status`: códigos no-2xx que se devuelven sin lanzar error (p.ej. 404 esperados)."""
         self._throttle(url)
         t0 = time.monotonic()
+        if urlparse(url).netloc in self.curl_domains and method == "GET" and shutil.which("curl"):
+            resp = self._curl_get(url, params, headers)
+            self.log.append(RequestLog(resp.url, params, resp.status_code, utc_now().isoformat(),
+                                       round(time.monotonic() - t0, 3), None if resp.ok else resp.text[:300]))
+            if not resp.ok and resp.status_code not in ok_status:
+                raise FetchError(f"{method} {resp.url} -> HTTP {resp.status_code}")
+            return resp
         try:
-            resp = self.session.get(url, params=params, headers=headers, timeout=self.timeout_s)
+            resp = self.session.request(method, url, params=params, headers=headers, data=data, json=json_body,
+                                        timeout=self.timeout_s)
         except requests.RequestException as exc:
             self.log.append(RequestLog(url, params, None, utc_now().isoformat(),
                                        round(time.monotonic() - t0, 3), repr(exc)))
-            raise FetchError(f"GET {url} falló: {exc}") from exc
+            raise FetchError(f"{method} {url} falló: {exc}") from exc
         self.log.append(RequestLog(resp.url, params, resp.status_code, utc_now().isoformat(),
                                    round(time.monotonic() - t0, 3),
                                    None if resp.ok else resp.text[:300]))
-        if not resp.ok:
-            raise FetchError(f"GET {resp.url} -> HTTP {resp.status_code}")
+        if not resp.ok and resp.status_code not in ok_status:
+            raise FetchError(f"{method} {resp.url} -> HTTP {resp.status_code}")
         return resp
+
+    def _curl_get(self, url: str, params: dict | None, headers: dict | None) -> "_CurlResponse":
+        req = requests.Request("GET", url, params=params).prepare()
+        cmd = ["curl", "-sS", "-L", "--compressed", "-m", str(int(self.timeout_s)), "-A", self.user_agent,
+               "-w", "\n%{http_code}"]
+        for k, v in (headers or {}).items():
+            cmd += ["-H", f"{k}: {v}"]
+        cmd.append(req.url)
+        for attempt in range(self.retries + 1):
+            proc = subprocess.run(cmd, capture_output=True, timeout=self.timeout_s + 10)
+            body, _, code = proc.stdout.rpartition(b"\n")
+            status = int(code or 0) if code.strip().isdigit() else 0
+            if status not in (0, 429, 500, 502, 503, 504) or attempt == self.retries:
+                break
+            time.sleep(1.5 * 2 ** attempt)
+        if status == 0:
+            raise FetchError(f"GET {url} (curl) falló: {proc.stderr.decode(errors='replace')[:200]}")
+        return _CurlResponse(req.url, status, body)
+
+    def post_json(self, url: str, data: dict | None = None, json_body: Any = None,
+                  headers: dict | None = None) -> Any:
+        resp = self.request("POST", url, data=data, json_body=json_body, headers=headers)
+        try:
+            return resp.json()
+        except ValueError as exc:
+            raise FetchError(f"Respuesta no JSON en {resp.url}: {resp.text[:200]!r}") from exc
 
     def get_json(self, url: str, params: dict | None = None, headers: dict | None = None) -> Any:
         resp = self.get(url, params=params, headers=headers)

@@ -53,16 +53,13 @@ def estado(temporada: str | None = None, config: dict | str | None = None) -> di
             "ultimo_informe": report}
 
 
-def datos(liga: str | None = None, temporada: str | None = None,
+def datos(liga: str | None = None, temporada: str | None = None, fase: str | None = None,
           config: dict | str | None = None) -> list[dict]:
-    """Devuelve las filas procesadas (todas las ligas o una) como lista de diccionarios."""
-    cfg = config if isinstance(config, dict) else load_config(config)
-    season = temporada or cfg.get("temporada_por_defecto")
-    base = resolve_path(cfg, "procesado") / season
-    path = (base / "ligas" / f"{liga}.json") if liga else (base / "todas_las_ligas.json")
-    if not path.exists():
-        return []
-    return json.loads(path.read_text(encoding="utf-8"))
+    """Filas procesadas (todas las ligas o una; todas las fases o una) como lista de diccionarios."""
+    df = dataframe(liga, temporada, config)
+    if fase and not df.empty:
+        df = df[df["fase"] == fase]
+    return df.astype(object).where(df.notna(), None).to_dict("records")
 
 
 def diccionario() -> list[dict]:
@@ -72,5 +69,12 @@ def diccionario() -> list[dict]:
 
 def dataframe(liga: str | None = None, temporada: str | None = None,
               config: dict | str | None = None) -> pd.DataFrame:
-    """Igual que datos() pero como pandas.DataFrame (para tus algoritmos)."""
-    return pd.DataFrame(datos(liga, temporada, config))
+    """Datos procesados como pandas.DataFrame (para tus algoritmos)."""
+    cfg = config if isinstance(config, dict) else load_config(config)
+    season = temporada or cfg.get("temporada_por_defecto")
+    base = resolve_path(cfg, "procesado") / season
+    path = (base / "ligas" / f"{liga}.csv") if liga else (base / "todas_las_ligas.csv")
+    if not path.exists():
+        return pd.DataFrame()
+    return pd.read_csv(path, low_memory=False, dtype={"player_id": str, "team_id": str, "dorsal": str,
+                                                      "bn_player_id": str})
