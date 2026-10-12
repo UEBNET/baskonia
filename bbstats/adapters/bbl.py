@@ -92,6 +92,17 @@ class BBLAdapter(BaseAdapter):
         return _page_data(resp.text)
 
     @staticmethod
+    def block_starts(ids: list[int], max_gap: int) -> list[int]:
+        """Primer id de cada bloque de partidos (bloques separados por más de `max_gap` ids)."""
+        out: list[int] = []
+        prev = None
+        for gid in sorted(ids):
+            if prev is None or gid - prev > max_gap:
+                out.append(gid)
+            prev = gid
+        return out
+
+    @staticmethod
     def _is_past(season: str) -> bool:
         from datetime import date
         today = date.today()
@@ -144,9 +155,6 @@ class BBLAdapter(BaseAdapter):
             older = older + 1 if sid < year - 1 else 0
             if older >= 25:
                 break
-        if found:
-            self.soft_fail(f"BBL {year}: semillas descubiertas automáticamente {found[:3]}… ({len(found)}); "
-                           f"conviene fijarlas en config temporadas.<t>.semillas")
         return found
 
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
@@ -157,8 +165,11 @@ class BBLAdapter(BaseAdapter):
         seeds = [int(x) for x in sc.get("semillas", [])]
         if not seeds:
             seeds = self._current_seeds(http) if "semillas" in sc else []
+        discovered = False
         if not seeds or (self._is_past(season) and "semillas" not in sc):
-            seeds = self._discover_seeds(http, year) or seeds
+            found = self._discover_seeds(http, year)
+            discovered = bool(found)
+            seeds = found or seeds
         games: dict[str, Any] = {}
         visited: set[int] = set()
         reused = 0
@@ -196,6 +207,11 @@ class BBLAdapter(BaseAdapter):
         finished = {k: v for k, v in games.items() if (v.get("initialGameData") or {}).get("status") == "OFFICIAL"}
         if not finished:
             raise NoDataYet(f"BBL {season}: no se encontraron partidos finalizados (revisa 'semillas')")
+        if discovered:
+            # Se guardan en config/sources.json (lo hace el pipeline): la próxima ejecución de esta
+            # temporada no repite la búsqueda y la temporada anterior la empieza desde aquí.
+            block_seeds = self.block_starts([int(g) for g in finished], max_gap)
+            self.config_updates = {"temporadas": {season: {"semillas": block_seeds}}}
         return {"season_id": year, "seeds": seeds, "games": finished, "reused_games": reused,
                 "ids_scanned": len(visited)}
 

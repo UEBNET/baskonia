@@ -19,7 +19,7 @@ import pandas as pd
 from . import __version__
 from .adapters import NoDataYet, ParsedLeague, build_adapter
 from .enrich import basketnews
-from .config import active_leagues, load_config, resolve_path
+from .config import active_leagues, load_config, resolve_path, update_league_config
 from .http import HttpClient
 from .metrics import compute_player_metrics, finalize_columns
 from .raw_store import RawStore
@@ -186,6 +186,11 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
                         "errores": adapter.errors}
                 raw_path = store.save(liga, season, meta, payload)
                 res.estado = "ok"
+                if adapter.config_updates:
+                    saved = update_league_config(cfg, liga, adapter.config_updates)
+                    res.notas.append(f"Config actualizada{' (sources.json)' if saved else ''}: "
+                                     f"{json.dumps(adapter.config_updates, ensure_ascii=False)}")
+                    progress(f"[{liga}] guardado en config: {adapter.config_updates}")
                 progress(f"[{liga}] bruto guardado en {raw_path}")
             except NoDataYet:
                 raise
@@ -285,7 +290,43 @@ def run(ligas: list[str] | None = None, temporada: str | None = None, descargar:
     hist.mkdir(exist_ok=True)
     (hist / f"informe_{utc_stamp(started)}.json").write_text(json.dumps(report, ensure_ascii=False, indent=2),
                                                              encoding="utf-8")
+    write_seasons_index(resolve_path(cfg, "procesado"))
     return report
+
+
+def run_seasons(temporadas: list[str], ligas: list[str] | None = None, descargar: bool = True,
+                config: dict | str | None = None, paralelo: bool = True, progreso: Progress | None = None,
+                http_factory: Callable[[], HttpClient] | None = None) -> dict:
+    """Ejecuta `run` para varias temporadas, una tras otra, compartiendo la misma config en memoria
+    (así lo descubierto en una temporada, como las semillas de la BBL, sirve para la siguiente)."""
+    cfg = config if isinstance(config, dict) else load_config(config)
+    progress = progreso or (lambda m: log.info(m))
+    reports = []
+    for season in temporadas:
+        progress(f"===== Temporada {season} =====")
+        reports.append(run(ligas=ligas, temporada=season, descargar=descargar, config=cfg, paralelo=paralelo,
+                           progreso=progress, http_factory=http_factory))
+    return {"temporadas": temporadas, "informes": reports}
+
+
+def write_seasons_index(processed_root: Path) -> Path:
+    """data/processed/temporadas.json: temporadas con datos procesados (más reciente primero) y,
+    por cada una, ligas, filas por fase y fecha de la última extracción. Lo usa el Artifact para
+    construir el selector de temporada."""
+    seasons = []
+    for d in sorted((p for p in processed_root.glob("*-*") if p.is_dir()), reverse=True):
+        idx_path = d / "indice.json"
+        if not idx_path.exists():
+            continue
+        idx = json.loads(idx_path.read_text(encoding="utf-8"))
+        seasons.append({"temporada": d.name, "generado": idx.get("generado"),
+                        "fases": [f for f in PHASES if f in idx.get("archivos", {})],
+                        "ligas": {k: v.get("fases", {}) for k, v in idx.get("ligas", {}).items()}})
+    out = processed_root / "temporadas.json"
+    processed_root.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"generado": utc_now().isoformat(), "temporadas": seasons}, ensure_ascii=False,
+                              indent=2), encoding="utf-8")
+    return out
 
 
 def write_combined(out_dir: Path, season: str | None = None) -> Path | None:

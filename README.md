@@ -99,10 +99,18 @@ En este repositorio, rama `claude/basketball-stats-extractor-jpas93`:
 pip install -r requirements.txt
 python ejecutar.py                              # todas las ligas activas, temporada por defecto
 python ejecutar.py acb euroleague               # sólo algunas
-python ejecutar.py --temporada 2026-27          # otra temporada
+python ejecutar.py --temporada 2026-27          # otra temporada (sólo esa)
+python -m bbstats historico                     # carga histórica: temporada_inicial (2020-21) .. temporada_por_defecto
+python -m bbstats historico --desde 2020-21 --hasta 2024-25 --ligas bbl acb
+python -m bbstats historico --sin-descarga      # reprocesa todas las temporadas desde los brutos
 python -m bbstats reprocesar --temporada 2025-26   # recalcula desde los brutos, sin red
 python -m bbstats estado
 ```
+
+**Modo de trabajo:** la carga histórica (`historico`) se hace una vez y recorre las temporadas de
+la más reciente a la más antigua. Después, cada actualización (`ejecutar --temporada X`, el botón
+EJECUTAR del Artifact o GitHub Actions) descarga **una sola temporada** y no toca las demás.
+`data/processed/temporadas.json` lista las temporadas con datos (lo usa el selector del Artifact).
 
 ```python
 from bbstats import ejecutar
@@ -177,9 +185,13 @@ Un Artifact se ejecuta en el navegador: no puede correr Python ni leer las webs 
 
 ## 8. Ampliar
 
-* Otra temporada: `--temporada`. La BBL necesita, para temporadas pasadas, un id de partido semilla
-  de la temporada regular y otro de playoffs en `config/sources.json` (`bbl.temporadas.<t>.semillas`);
-  para la temporada en curso los toma solo.
+* Otra temporada: `--temporada`, o `historico --desde`. Para empezar el histórico antes, cambia
+  `temporada_inicial` en `config/sources.json`.
+* BBL: la temporada en curso toma sus partidos de la web. Para una temporada pasada sin
+  `semillas`, las busca sola bajando desde los ids de la temporada siguiente, y al encontrarlas
+  **las guarda en `config/sources.json`** (`ligas.bbl.temporadas.<t>.semillas`, primer id de cada
+  bloque: temporada regular y playoffs). La siguiente ejecución de esa temporada ya no busca, y
+  la temporada anterior empieza la búsqueda desde ahí. Se desactiva con `"guardar_descubrimientos": false`.
 * Otra liga con fuente ya soportada: nueva entrada en `config/sources.json`.
 * Otra fuente: nuevo adaptador en `bbstats/adapters/` (`fetch()` + `parse()` por fase).
 
@@ -206,4 +218,6 @@ Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM
   con la comparación playoffs/regular.
 * **EJECUTAR** lanza la Routine de Claude Code `EJECUTAR Mesa Multiliga Baskonia`
   (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda) mediante el conector Claude Code Remote:
-  descarga las ligas elegidas, sube los datos a esta rama y republica los datos del Artifact.
+  descarga las ligas elegidas de **la temporada elegida (sólo esa)**, sube los datos a esta rama
+  y republica los datos de esa temporada en el Artifact. La sesión de la Routine adjunta el
+  repositorio con permiso de escritura (`add_repo`) antes de subir los datos.

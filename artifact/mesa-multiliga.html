@@ -127,7 +127,7 @@ td.na { color: var(--muted); opacity: .6; }
       <div class="row"><span class="label" style="color:var(--muted)">Ligas a actualizar</span><div class="row" id="runLeagues"></div></div>
       <div class="row">
         <label for="runSeason">Temporada</label><select id="runSeason"></select>
-        <span class="note">Se lanza una sesión de Claude Code que descarga las fuentes oficiales, guarda los JSON en el repositorio y republica los datos de esta página. Tarda entre 10 y 20 minutos.</span>
+        <span class="note">Sólo se actualiza la temporada elegida; las demás no se tocan. Se lanza una sesión de Claude Code que descarga las fuentes oficiales, guarda los JSON en el repositorio y republica los datos de esa temporada en esta página. Tarda entre 10 y 20 minutos.</span>
       </div>
       <div class="row"><button class="btn" id="runGo" type="button">Lanzar actualización</button><button class="btn ghost" id="runCancel" type="button">Cancelar</button></div>
     </div>
@@ -167,7 +167,8 @@ td.na { color: var(--muted); opacity: .6; }
 // ---------------------------------------------------------------------------- configuración
 const TRIGGER_ID = "trig_01VA8u4RqAzGbKy4v4bFn1mw";
 const SERVER = "Claude Code Remote";
-const SEASONS = ["2026-27", "2025-26"];
+// Lista de respaldo; la real se lee de datos/temporadas.json (la escribe bbstats en cada ejecución).
+let SEASONS = ["2026-27", "2025-26", "2024-25", "2023-24", "2022-23", "2021-22", "2020-21"];
 const PHASES = [["regular", "Temporada regular"], ["playoffs", "Playoffs"], ["total", "Total"]];
 const LEAGUES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB" };
 const VIEWS = {
@@ -404,6 +405,8 @@ function bind() {
 }
 
 async function start() {
+  const list = await getJSON("datos/temporadas.json").catch(() => null);
+  if (list && Array.isArray(list.temporadas) && list.temporadas.length) SEASONS = list.temporadas.map((t) => t.temporada);
   st.season = SEASONS.includes(store.get("mm.season")) ? store.get("mm.season") : SEASONS[0];
   st.phase = store.get("mm.phase") || "regular";
   st.view = VIEWS[store.get("mm.view")] ? store.get("mm.view") : "basico";

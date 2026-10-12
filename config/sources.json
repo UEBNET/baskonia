@@ -1,6 +1,10 @@
 {
   "_descripcion": "Configuración de fuentes. Puedes cambiar URLs, ids de temporada o activar/desactivar ligas sin tocar código. 'estado_verificacion' indica si el endpoint se ha comprobado contra la web real.",
   "temporada_por_defecto": "2026-27",
+  "temporada_inicial": "2020-21",
+  "_temporadas": "Histórico: de temporada_inicial a temporada_por_defecto (python -m bbstats historico). El botón EJECUTAR y 'python -m bbstats ejecutar --temporada X' actualizan una sola temporada.",
+  "guardar_descubrimientos": true,
+  "_guardar_descubrimientos": "Si es true, lo que una fuente descubre sola (p.ej. ids semilla de la BBL) se guarda aquí, en ligas.<liga>.temporadas.<t>.",
   "rutas": {
     "bruto": "data/raw",
     "procesado": "data/processed"

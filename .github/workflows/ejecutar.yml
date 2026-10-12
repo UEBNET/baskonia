@@ -9,9 +9,13 @@ on:
         required: false
         default: ""
       temporada:
-        description: "Temporada"
+        description: "Temporada a actualizar (sólo esa)"
         required: false
         default: "2026-27"
+      desde:
+        description: "Opcional: carga histórica desde esta temporada hasta 'temporada' (p.ej. 2020-21)"
+        required: false
+        default: ""
 
 jobs:
   ejecutar:
@@ -27,19 +31,25 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: data/raw
-          key: raw-${{ inputs.temporada }}-${{ github.run_id }}
-          restore-keys: raw-${{ inputs.temporada }}-
+          key: raw-${{ inputs.desde }}${{ inputs.temporada }}-${{ github.run_id }}
+          restore-keys: raw-${{ inputs.desde }}${{ inputs.temporada }}-
       - name: Ejecutar
         env:
           LIGAS: ${{ inputs.ligas }}
           TEMPORADA: ${{ inputs.temporada }}
+          DESDE: ${{ inputs.desde }}
         run: |
-          ARGS=(--temporada "$TEMPORADA")
+          ARGS=()
           if [ -n "$LIGAS" ]; then read -ra L <<< "$LIGAS"; ARGS+=(--ligas "${L[@]}"); fi
-          python -m bbstats ejecutar "${ARGS[@]}" || echo "Alguna liga terminó con error (ver informe)"
+          if [ -n "$DESDE" ]; then
+            python -m bbstats historico --desde "$DESDE" --hasta "$TEMPORADA" "${ARGS[@]}" || echo "Alguna liga terminó con error (ver informes)"
+          else
+            python -m bbstats ejecutar --temporada "$TEMPORADA" "${ARGS[@]}" || echo "Alguna liga terminó con error (ver informe)"
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: estadisticas-${{ inputs.temporada }}-${{ github.run_number }}
           path: |
             data/processed
             data/raw
+            config/sources.json

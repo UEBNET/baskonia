@@ -10,7 +10,7 @@ from typing import Callable
 
 import pandas as pd
 
-from .config import active_leagues, load_config, resolve_path
+from .config import active_leagues, configured_seasons, load_config, resolve_path, season_range
 from .raw_store import RawStore
 from .schema import dictionary_records
 
@@ -24,6 +24,24 @@ def ejecutar(ligas: list[str] | None = None, temporada: str | None = None,
     from .pipeline import run
     return run(ligas=ligas, temporada=temporada, descargar=True, config=config,
                paralelo=paralelo, progreso=progreso)
+
+
+def ejecutar_temporadas(temporadas: list[str] | None = None, desde: str | None = None, hasta: str | None = None,
+                        ligas: list[str] | None = None, config: dict | str | None = None, paralelo: bool = True,
+                        progreso: Callable[[str], None] | None = None, descargar: bool = True) -> dict:
+    """Descarga (o reprocesa, con descargar=False) varias temporadas: la lista `temporadas` o el rango
+    `desde`..`hasta`. Sin argumentos: de `temporada_inicial` a `temporada_por_defecto` de la config.
+    Es la carga histórica inicial; el botón EJECUTAR actualiza después una sola temporada."""
+    from .pipeline import run_seasons
+    cfg = config if isinstance(config, dict) else load_config(config)
+    if not temporadas:
+        if desde or hasta:
+            temporadas = season_range(desde or cfg.get("temporada_inicial", hasta),
+                                      hasta or cfg.get("temporada_por_defecto"))
+        else:
+            temporadas = configured_seasons(cfg)
+    return run_seasons(temporadas, ligas=ligas, descargar=descargar, config=cfg, paralelo=paralelo,
+                       progreso=progreso)
 
 
 def reprocesar(ligas: list[str] | None = None, temporada: str | None = None,
