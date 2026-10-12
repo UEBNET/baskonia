@@ -7,6 +7,7 @@ columnas para todas las ligas**, listas para aplicar tus propios algoritmos.
 - Temporadas descargadas: **2025-26** (completa, con playoffs) y **2026-27** (hasta el 12-10-2026).
   La temporada por defecto es 2026-27; cualquier otra: `python ejecutar.py --temporada 2024-25`.
 - Datos reales en el repositorio: ver [¿Dónde están los JSON?](#3-dónde-están-los-json).
+- **Contexto para agentes de IA**: [`CONTEXTO_AGENTE.md`](CONTEXTO_AGENTE.md) explica todo el proceso operativo, el esquema, las fórmulas, las limitaciones y el Artifact asociado.
 
 **Jugadores (filas jugador-equipo) descargados:**
 

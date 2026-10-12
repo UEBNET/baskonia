@@ -1,0 +1,306 @@
+# Contexto para agentes: datos de baloncesto multi-liga (`bbstats`) y Mesa Multiliga Baskonia
+
+> Documento de contexto para un agente que diseña **algoritmos y modelos de evaluación de ligas y
+> jugadores**. Describe qué datos existen, de dónde salen, cómo se procesan, qué significa cada
+> columna, qué limitaciones tienen y cómo actualizarlos. Repositorio: `uebnet/baskonia`, rama
+> `claude/basketball-stats-extractor-jpas93`. Última actualización de datos: 12-10-2026.
+
+---
+
+## 1. Resumen en 10 líneas
+
+1. `bbstats` es un paquete Python que extrae estadísticas de **todos los jugadores** de 8 competiciones:
+   EuroLeague, EuroCup, Liga Endesa (ACB), NBA, NBA G League, LBA (Italia), BBL (Alemania) y LNB (Francia).
+2. Cada liga tiene un **adaptador** que descarga su fuente (oficial siempre que existe) y la guarda **sin tocar**
+   como JSON comprimido con fecha (almacén bruto).
+3. Los datos se normalizan a **un esquema único de 480 columnas**, idéntico para todas las ligas.
+4. Todo se separa en **fases**: `regular`, `playoffs` y `total`. Cada fase tiene sus propios totales y métricas.
+5. Un **motor de métricas** recalcula con las **mismas fórmulas** en todas las ligas: por partido/36/40/100 posesiones,
+   eficiencia de tiro, ratios (USG%, AST%, REB%…), PER, ORtg/DRtg de Dean Oliver, Win Shares, PIE, Game Score…
+6. Se conservan además las métricas **oficiales** de cada fuente (`src_*`) y el **on/off de BasketNews** (`bn_*`).
+7. En las filas de playoffs hay columnas **`rs_*`** (valor en temporada regular) y **`delta_*`** (playoffs − regular).
+8. Datos reales versionados en `data/`: **2025-26 completa** (regular + playoffs) y **2026-27 en curso**.
+9. La extracción sólo se ejecuta bajo demanda (`python ejecutar.py`, CLI, API, GitHub Actions o el botón EJECUTAR).
+10. Un **Artifact** de claude.ai ("Mesa Multiliga Baskonia") muestra los datos con selector de temporada/fase y botón EJECUTAR.
+
+---
+
+## 2. Mapa del repositorio
+
+```
+baskonia/
+├── CONTEXTO_AGENTE.md        ← este documento
+├── README.md                 ← guía de uso y fuentes consultadas
+├── ejecutar.py               ← "botón EJECUTAR" en script: python ejecutar.py [ligas] [--temporada T]
+├── requirements.txt          ← requests, pandas, numpy, beautifulsoup4, lxml   (+ requirements-dev.txt: pytest)
+├── config/sources.json       ← configuración de ligas, URLs, temporadas, pausas HTTP (editable sin tocar código)
+├── bbstats/
+│   ├── adapters/             ← 1 adaptador por fuente (fetch() descarga, parse() normaliza por fase)
+│   │   ├── base.py           ← contrato BaseAdapter, ParsedLeague, AdapterError, NoDataYet
+│   │   ├── euroleague.py     ← EuroLeague y EuroCup (feed oficial v3)
+│   │   ├── acb.py            ← Liga Endesa (api2.acb.com)
+│   │   ├── bref_nba.py       ← NBA (Basketball-Reference)
+│   │   ├── nba.py            ← G League (API oficial stats.gleague.nba.com; también válido para stats.nba.com)
+│   │   ├── lba.py            ← LBA (API de legabasket.it)
+│   │   ├── bbl.py            ← BBL (JSON embebido en páginas de partido de easycredit-bbl.de)
+│   │   ├── lnb.py            ← LNB (API del stats centre de lnb.fr)
+│   │   ├── boxscore.py       ← agregación partido a partido → totales jugador/equipo/rival por fase
+│   │   ├── fiba_livestats.py, html_table.py ← adaptadores genéricos de reserva (no usados por las 8 ligas)
+│   ├── enrich/basketnews.py  ← enriquecimiento bn_* (EuroLeague y ACB)
+│   ├── normalize.py          ← tabla de alias campo-de-origen → columna canónica, completado de conteos
+│   ├── phases.py             ← suma/resta de fases (total = Σ fases; playoffs = total − regular)
+│   ├── metrics.py            ← motor de métricas (fórmulas en §6)
+│   ├── schema.py             ← esquema canónico: lista ordenada de las 480 columnas con descripción
+│   ├── pipeline.py           ← orquestación: descarga → bruto → parse → métricas → fases → salida
+│   ├── raw_store.py          ← almacén bruto (JSON gz con fecha, nunca se sobrescribe)
+│   ├── http.py               ← cliente HTTP: reintentos, pausas por dominio, transporte curl
+│   ├── api.py                ← API Python: ejecutar(), reprocesar(), estado(), datos(), dataframe(), diccionario()
+│   ├── server.py             ← API HTTP mínima (POST /api/ejecutar, GET /api/datos…)
+│   └── __main__.py           ← CLI: python -m bbstats {ejecutar|reprocesar|estado|servidor}
+├── data/
+│   ├── raw/<liga>/<temporada>/<liga>_<temporada>_<YYYYmmddTHHMMSSZ>.json.gz   ← brutos originales
+│   └── processed/<temporada>/                                                ← salida unificada (ver §5)
+├── artifact/mesa-multiliga.html  ← código de la página del Artifact
+├── tests/                    ← 25 tests con una liga sintética servida en el formato real de cada fuente
+└── .github/workflows/ejecutar.yml ← ejecución manual en GitHub Actions (workflow_dispatch)
+```
+
+---
+
+## 3. Proceso operativo de extracción (paso a paso)
+
+```
+EJECUTAR
+ └─► por cada liga activa (en paralelo; una liga caída no detiene al resto)
+      1. adapter.fetch(temporada, http, bruto_anterior)
+           · descarga la fuente; reutiliza del bruto anterior los partidos ya finalizados (ACB, LBA, BBL)
+           · si la liga añade enriquecimiento (EuroLeague/ACB) descarga BasketNews y lo guarda en el mismo bruto
+      2. RawStore.save()  → data/raw/<liga>/<temporada>/<liga>_<temporada>_<fecha>.json.gz
+           · contenido: {"meta": {fecha, adaptador, peticiones HTTP, errores}, "payload": respuestas originales}
+           · si la descarga falla se usa el último bruto (estado "ok_bruto_anterior")
+           · si la temporada aún no tiene partidos: estado "sin_datos" (no es error)
+      3. adapter.parse(payload) → {fase: ParsedLeague(players, teams)}   (sin red)
+           · normalización de nombres de campo con normalize.py
+           · por boxscores: suma partido a partido, separando fases por el calendario
+           · por agregados: fases que da la fuente; total = suma, o playoffs = total − regular
+      4. por cada fase: metrics.compute_player_metrics()  (contexto de equipo, rival y liga de ESA fase)
+      5. enriquecimiento BasketNews por fase (emparejado por nombre + equipo)
+      6. columnas rs_*/delta_* en las filas de playoffs
+      7. finalize_columns(): reordena al esquema de 480 columnas (las ausentes quedan vacías)
+      8. escribe data/processed/<temporada>/ligas/<liga>.csv
+ └─► write_combined(): todas_las_ligas.{csv,json}, por_fase/<fase>.json, indice.json,
+     diccionario_columnas.{csv,json}, completitud.csv, informe_ejecucion.json
+```
+
+Comandos:
+
+```bash
+python ejecutar.py                                   # todas las ligas activas, temporada por defecto (2026-27)
+python ejecutar.py acb euroleague --temporada 2025-26
+python -m bbstats reprocesar --temporada 2025-26     # recalcula TODO desde los brutos, sin red
+python -m bbstats estado
+python -m pytest -q                                  # 25 tests
+```
+
+`reprocesar` es clave para el agente: si se cambia una fórmula en `metrics.py` o se añade una columna en
+`schema.py`, se regenera toda la salida histórica sin volver a descargar.
+
+Tiempos aproximados de una ejecución completa: 10-20 min (BBL y ACB son las más lentas: un acceso por partido
+con pausa de cortesía; Basketball-Reference exige 3,5 s entre peticiones).
+
+---
+
+## 4. Fuentes por liga (verificadas con datos reales)
+
+| Código | Liga | Fuente | Tipo de dato | Fases |
+|---|---|---|---|---|
+| `euroleague` | EuroLeague | `feeds.incrowdsports.com/provider/euroleague-feeds/v3/competitions/E/statistics/...` (feed oficial) | agregados de temporada (jugador, equipo, rivales) | `phaseTypeCode=RS` = regular; playoffs = total − RS (play-in + playoffs + Final Four) |
+| `eurocup` | EuroCup | mismo feed, competición `U` | idem | idem |
+| `acb` | Liga Endesa | `api2.acb.com` (calendario `season-calendar` + `Result/boxscores` por partido) | boxscores partido a partido | jornadas con `subphaseId` = playoffs |
+| `nba` | NBA | Basketball-Reference (`leagues/NBA_Y_{totals,advanced,per_poss,play-by-play,shooting}`, `leagues/NBA_Y`, `playoffs/NBA_Y`) | agregados; tablas `*_post` = playoffs | regular y playoffs; total = suma |
+| `gleague` | G League | `stats.gleague.nba.com/stats` (leaguedashplayerstats Base/Advanced/Misc/Scoring/Usage/Defense, leaguedashteamstats Base/Opponent/Advanced, playerindex) | agregados | Regular Season, Playoffs, Showcase (copa); total = suma de las tres |
+| `lba` | LBA Serie A | `legabasket.it/api/championships/...` (campeonatos RS/PO, calendario por jornada, `matches-scores-by-id`) | boxscores | RS = regular, PO = playoffs |
+| `bbl` | easyCredit BBL | `easycredit-bbl.de/spiele/<id>` (JSON `__NEXT_DATA__` de la página pública) | boxscores | `MAIN_ROUND` = regular; play-in, cuartos, semis y final = playoffs |
+| `lnb` | LNB Betclic ÉLITE | `api-prod.lnb.fr` (token anónimo de `lnb.fr/api/token`; `altrstats/getPersonCriterion`, `getTeamsCriterion`, `teams/getRoster`, `person/getPersonSeasonAll`) | agregados por competición | Betclic ÉLITE = regular; Play-In + Playoffs = playoffs |
+| (enriquecimiento) | EuroLeague, ACB | BasketNews `basketnews.com/advanced-stats/team-profile/{players,on-off}.json` | ratings individuales, stops, on/off | total, regular y fase "Playoffs" |
+
+Detalles operativos relevantes:
+- ACB usa la clave de cliente pública incluida en el código de acb.com; LNB el token anónimo que su web da a cualquier visitante.
+- La API privada de la BBL exige un secreto ofuscado: **no se usa**; se leen las páginas públicas.
+- BBL: los ids de partido de una temporada son bloques consecutivos. Temporadas pasadas necesitan ids semilla en
+  `config/sources.json` (`bbl.temporadas."2025-26".semillas = [2004000, 2005750]`); la temporada en curso los obtiene sola.
+- Basketball-Reference rechaza la huella TLS de `requests`: se descarga con el binario `curl`.
+- Descartadas: stats.nba.com (bloquea servidores), RealGM y Proballers (Cloudflare), FIBA LiveStats (no usado por estas ligas).
+
+---
+
+## 5. Datos disponibles y cómo cargarlos
+
+### 5.1 Ficheros (`data/processed/<temporada>/`)
+
+| Fichero | Contenido | Formato |
+|---|---|---|
+| `todas_las_ligas.csv` | todas las ligas y fases | CSV, 480 columnas, 1 fila = jugador-equipo-fase |
+| `todas_las_ligas.json` | lo mismo | JSON columnar `{"columnas": [...], "filas": [[...]]}` (4 decimales) |
+| `por_fase/{regular,playoffs,total}.json` | una fase | JSON columnar |
+| `ligas/<liga>.csv` | una liga, todas sus fases | CSV |
+| `indice.json` | ligas, filas por fase, fecha de extracción | JSON |
+| `diccionario_columnas.{csv,json}` | columna, grupo, origen, descripción | |
+| `completitud.csv` | % de filas con dato por columna × (liga\|fase) | CSV |
+| `informe_ejecucion.json` | estado y notas de cada liga en la última ejecución | JSON |
+
+### 5.2 Volumen (filas jugador-equipo)
+
+| Liga | 2025-26 regular | 2025-26 playoffs | 2025-26 total | 2026-27 (a 12-10-2026) |
+|---|---|---|---|---|
+| EuroLeague | 335 | 124 | 335 | 263 (4 jornadas) |
+| EuroCup | 315 | 131 | 316 | 367 (2 jornadas) |
+| ACB | 339 | 103 | 340 | 237 (3 jornadas) |
+| NBA | 661 | 230 | 661 | sin datos (no ha empezado) |
+| G League | 526 | 160 | 562 (incl. Showcase) | sin datos |
+| LBA | 265 | 103 | 266 | 210 (3 jornadas) |
+| BBL | 331 | 128 | 331 | 237 (5 jornadas) |
+| LNB | 275 | 118 | 277 | 179 (3 jornadas) |
+
+### 5.3 Carga en Python
+
+```python
+import pandas as pd
+from bbstats.api import dataframe, diccionario
+df = dataframe(temporada="2025-26")            # lee data/processed/2025-26/todas_las_ligas.csv
+reg = df[df.fase == "regular"]
+po  = df[df.fase == "playoffs"]                 # incluye rs_* y delta_*
+dic = pd.DataFrame(diccionario())               # descripción de cada columna
+
+# JSON columnar (p.ej. para la web):
+from bbstats.pipeline import read_columnar_json
+rows = read_columnar_json("data/processed/2025-26/por_fase/playoffs.json")   # lista de dicts
+```
+
+Claves:
+- `player_uid` = `<liga>:<player_id>` identifica al jugador **dentro de una liga** (los ids no se comparten entre ligas;
+  para cruzar ligas hay que emparejar por nombre/fecha de nacimiento).
+- Una fila es **jugador-equipo-fase**. Un jugador traspasado tiene varias filas en ACB, LBA, BBL, LNB y NBA (una por equipo).
+  En EuroLeague/EuroCup y G League la fuente da una sola fila acumulada (ver §7).
+- Para agregar por jugador en una liga: agrupar por `player_uid` y `fase`, sumando columnas del grupo `totales`, y
+  recalcular tasas (no promediar porcentajes).
+
+---
+
+## 6. Esquema (480 columnas) y fórmulas
+
+Todas las ligas tienen exactamente las mismas columnas, en el mismo orden (`bbstats/schema.py`).
+**Convenciones:** porcentajes en escala 0-100; dato no publicado/no calculable = vacío (NaN), nunca 0;
+ninguna fila ni columna se elimina.
+
+| Grupo (nº columnas) | Contenido |
+|---|---|
+| `identidad` (23) | liga, liga_nombre, pais, temporada, **fase**, fuente, fecha_extraccion, archivo_bruto, player_id, player_uid, nombre, dorsal, posicion, altura_cm, peso_kg, edad, fecha_nacimiento, nacionalidad, team_id, equipo, equipo_codigo, minutos_partido (40/48), **calidad_contexto** |
+| `totales` (32) | gp, gs, min, pts, fgm, fga, fg2m, fg2a, fg3m, fg3a, ftm, fta, oreb, dreb, reb, ast, stl, tov, blk, blka (tapones recibidos), pf, pfd (faltas recibidas), plus_minus, pir (valoración), dunks, fastbreaks, pts_fastbreak, pts_paint, pts_2ndchance, pts_off_tov, dd2, td3 |
+| `por_partido` (28), `por_36` (27), `por_40` (27), `por_100_pos` (27) | `<stat>_pg`, `<stat>_p36`, `<stat>_p40`, `<stat>_p100` de cada conteo (p100 = por 100 posesiones de su equipo con él en pista) |
+| `tiro` (19) | fg_pct, fg2_pct, fg3_pct, ft_pct, efg_pct, ts_pct, tsa, pts_per_fga, pts_per_tsa, fg3a_rate, fta_rate, ft_per_fga, fg2a_share, pct_pts_2/3/ft/paint/fastbreak, dunk_rate |
+| `ratios` (22) | min_pct, usg_pct, ast_pct, tov_pct, oreb_pct, dreb_pct, reb_pct, stl_pct, blk_pct, ast_to, ast_ratio, tov_ratio, stl_to_tov, blk_to_pf, stl_plus_blk_p40, pfd_to_pf, pts/reb/ast/fga_share, poss_on_court, poss_used |
+| `ratings` (23) | game_score(_pg/_p40), eff(_pg), pir_calc, pie, uper, per, ortg, drtg, net_rtg, floor_pct, pprod, scposs, totposs, stops, stop_pct, ows, dws, ws, ws_per_40, ws_per_48 |
+| `contexto_equipo` (21), `contexto_rival` (18), `contexto_liga` (9) | team_<stat> y opp_<stat> (totales de la fase), team_poss, opp_poss, team_pace, team_ortg, team_drtg, team_netrtg, lg_pace, lg_ortg, lg_pts_per_game |
+| `metricas_fuente` (96) `src_*` | cifras oficiales de la fuente: PER/OWS/DWS/WS/WS48/OBPM/DBPM/BPM/VORP, % por posición, on/off por 100, tipos de pérdida y falta, distancias y % de tiro por zona (NBA vía Basketball-Reference); ORtg/DRtg/Net/Pace/PIE/USG%/TS% oficiales y % de puntos por tipo (G League); TS%/eFG%/% rebote/AST ratio oficiales (EuroLeague/EuroCup); src_eff, src_oer… |
+| `basketnews` (67) `bn_*` | (EuroLeague y ACB) USG/TS/AST/TOV/STL/BLK/OREB/DREB%, ORtg/DRtg/Net individuales, stops, Stop%, puntos creados y asistidos, PIR, y **on/off**: minutos y posesiones con él, ORtg/DRtg/Net on, off y on−off, y % de tiro/rebote/pérdidas/faltas del equipo y del rival con él en pista |
+| `contexto_fase` (41) | sólo en filas de playoffs: `rs_<m>` (valor en temporada regular del mismo jugador-equipo) y `delta_<m>` (playoffs − regular) para m ∈ gp, min_pg, pts_pg, pts_p40, reb_p40, ast_p40, ts_pct, efg_pct, usg_pct, ast_pct, tov_pct, reb_pct, per, ortg, drtg, net_rtg, game_score_pg, pir_pg, ws_per_40, pie, bn_netrtg_onoff |
+
+### 6.1 Fórmulas principales (metrics.py)
+
+Notación: MP = minutos del jugador, TmMP = minutos-jugador del equipo (≈200 por partido FIBA, 240 NBA), Tm* = totales
+del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son de Basketball-Reference (Hollinger / Dean Oliver).
+
+- Posesiones de equipo: `0.5·[(TmFGA + 0.4·TmFTA − 1.07·TmORB/(TmORB+OppDRB)·(TmFGA−TmFG) + TmTOV) + (lo mismo del rival)]`
+  (sin datos de rival: `FGA + 0.44·FTA − ORB + TOV`). Ritmo = `minutos_partido · Poss / (TmMP/5)`.
+- `ts_pct = PTS / (2·(FGA + 0.44·FTA))`, `efg_pct = (FGM + 0.5·3PM)/FGA`.
+- `usg_pct = 100·(FGA + 0.44·FTA + TOV)·(TmMP/5) / (MP·(TmFGA + 0.44·TmFTA + TmTOV))`.
+- `ast_pct = 100·AST / ((MP/(TmMP/5))·TmFG − FG)`; `oreb/dreb/reb_pct = 100·X·(TmMP/5)/(MP·(TmX + OppX'))`;
+  `stl_pct = 100·STL·(TmMP/5)/(MP·OppPoss)`; `blk_pct = 100·BLK·(TmMP/5)/(MP·(OppFGA − Opp3PA))`.
+- `game_score = PTS + 0.4·FG − 0.7·FGA − 0.4·(FTA−FT) + 0.7·ORB + 0.3·DRB + STL + 0.7·AST + 0.7·BLK − 0.4·PF − TOV`.
+- `pir_calc` (y `pir` si la fuente no lo publica) = `PTS+REB+AST+STL+BLK+PFD − fallos de campo − fallos de TL − TOV − BLKA − PF`.
+- `pie = 100·(PTS+FGM+FTM−FGA−FTA+DREB+0.5·OREB+AST+STL+0.5·BLK−PF−TOV) / (lo mismo de equipo + rival)`.
+- `per`: uPER de Hollinger, ajustado por ritmo (`lgPace/TmPace`) y normalizado para que la media ponderada por minutos de la liga en la fase = 15.
+- `ortg`, `floor_pct`, `pprod`, `scposs`, `totposs`: puntos producidos y posesiones individuales de Dean Oliver; `drtg`, `stops`, `stop_pct`: rating defensivo individual de Oliver.
+- Win Shares: `OWS = (PProd − 0.92·lgPPP·TotPoss)/MPPW`, `DWS = (MP/TmMP)·OppPoss·(1.08·lgPPP − DRtg/100)/MPPW`,
+  `MPPW = 0.32·lgPts/partido·(TmPace/lgPace)`.
+- **G League (`tiro_libre_unico`)**: un único tiro libre vale 2 o 3 puntos; puntos de TL = `PTS − 2·T2 − 3·T3` y la
+  probabilidad de anotar una visita a la línea = FT% (no `1−(1−FT%)²`). Afecta a PProd, ORtg, WS y PER.
+
+### 6.2 Validación con datos reales (2025-26)
+- TS% calculado = TS% oficial de la Euroliga (exacto); USG% difiere en décimas del de BasketNews.
+- Suma de Win Shares ≈ victorias: ACB 306/306, BBL 305/306, LBA 206/210, EuroLeague 375/380, EuroCup 177/180,
+  NBA 1259/1230, G League 574/558.
+- Invariantes por liga y fase: PER medio ponderado por minutos = 15; USG% medio = 20 (salvo LNB, sin contexto de rival).
+
+---
+
+## 7. Limitaciones y sesgos que el agente debe tener en cuenta
+
+| Liga | Limitación | Consecuencia para modelos |
+|---|---|---|
+| NBA | sin faltas recibidas totales (`pfd`) | `pir` vacío; usar `src_drawn_shooting`/`src_drawn_offensive` si interesa |
+| G League | sin titularidades (`gs`); jugadores traspasados en una fila (equipo = último) y muchos asignados desde la NBA | contexto de equipo aproximado para traspasados; filtrar por minutos |
+| EuroLeague / EuroCup | sin +/-, mates ni puntos por zona; equipos sin V/D en el feed; traspasados en una fila (`team_id` = `ASV;ULK`, contexto del último equipo) | `team_w/team_l` vacíos; `team_id` con `;` indica traspaso |
+| BBL | sin tapones recibidos ni mates | `pir` vacío |
+| LNB | la fuente no publica totales de rivales (sólo puntos encajados) → `calidad_contexto = parcial` | **ortg, drtg, ws, stl_pct, blk_pct, reb_pct… vacíos**; usar ratios sin rival (ts, usg, ast_ratio, por 40). Jugadores bajo el umbral del ranking (≈40 % de la plantilla) se completan desde su ficha: sin tov, pf, pfd, blka ni +/- |
+| BasketNews | sólo EuroLeague y ACB; promedios redondeados; en playoffs usa sólo su fase "Playoffs" (no play-in ni Final Four); ~99 % de jugadores emparejados en regular (fallan apodos: Sasha/Aleksandr Vezenkov) | `bn_*` vacíos en el resto de ligas |
+| General | duraciones distintas (40' FIBA vs 48' NBA), ritmos distintos (≈67 EuroLeague, ≈75 FIBA nacional, ≈97-99 NBA/G League) y nivel competitivo distinto | comparar entre ligas con tasas por posesión/40', percentiles dentro de liga-fase, y un factor de nivel de liga que el agente debe estimar (no está en los datos) |
+| Muestras pequeñas | jugadores con pocos minutos dan ratings extremos | filtrar por `min` (p.ej. ≥ 200 en regular, ≥ 60 en playoffs) o usar estimadores bayesianos con shrinkage |
+
+`calidad_contexto`: `completo` = hay totales de equipo y rival (todas las métricas); `parcial` = sólo equipo;
+`sin_contexto` = ninguno. Consultar `completitud.csv` antes de usar una columna en una liga.
+
+---
+
+## 8. Artifact asociado: "Mesa Multiliga Baskonia"
+
+- URL: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (privado del propietario; se comparte desde su menú Compartir).
+- Código: `artifact/mesa-multiliga.html`. Datos publicados junto a la página como ficheros:
+  `datos/<temporada>/{indice,regular,playoffs,total}.json` (copias de `data/processed/<temporada>/por_fase/` e `indice.json`)
+  y `datos/diccionario_columnas.json`.
+- Funciones: selector de temporada (2026-27, 2025-26); pestañas de fase **Temporada regular / Playoffs / Total**;
+  filtros por liga, búsqueda y minutos mínimos; vistas (básico, tiro, por 40'/100, avanzada, ratings, on/off,
+  playoffs vs regular, métricas oficiales, contexto de equipo); tabla ordenable; ficha del jugador con barras
+  playoffs frente a regular.
+- **Botón EJECUTAR**: la página no puede ejecutar Python, así que usa la capacidad `mcp` con el conector
+  **Claude Code Remote** (herramientas `get_trigger` y `fire_trigger`) para lanzar la Routine
+  `EJECUTAR Mesa Multiliga Baskonia` (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda). El mensaje que envía es
+  `temporada=<T> ligas=<l1 l2 …>`. La Routine abre una sesión de Claude Code que: clona/actualiza la rama, ejecuta
+  `python -m bbstats ejecutar`, hace commit y push de `data/`, y republica los ficheros `datos/<temporada>/*.json`
+  del Artifact (misma URL). Pendiente de validar en la primera ejecución real: permisos de push y disponibilidad de la
+  herramienta de Artifacts en la sesión de la Routine.
+- Para editar la página: pedirlo a Claude con la URL (lee la versión publicada y republica en la misma URL), o editar
+  `artifact/mesa-multiliga.html` y republicarlo con `url` = la del Artifact.
+
+---
+
+## 9. Guía para construir algoritmos y modelos sobre estos datos
+
+1. **Unidad de análisis**: fila jugador-equipo-fase. Para evaluar jugadores, usar normalmente `fase == "regular"`
+   (muestra mayor) y `playoffs` como señal adicional con `delta_*`.
+2. **Filtrar muestra**: `min` mínimo por fase; ponderar por `min` o `poss_on_court` al promediar.
+3. **Comparar entre ligas**: usar tasas (`*_p40`, `*_p100`, `*_pct`, ratings) y estandarizar dentro de cada
+   (liga, temporada, fase) — z-scores o percentiles — antes de mezclar ligas; añadir un coeficiente de nivel de liga
+   (p.ej. estimado con jugadores que cambian de liga entre temporadas).
+4. **Rasgos útiles**: perfil de tiro (fg3a_rate, fta_rate, pct_pts_*, src_pct_fga_*), creación (ast_pct, usg_pct,
+   bn_created_pts_pg), cuidado del balón (tov_pct), rebote (oreb/dreb_pct), defensa (stl_pct, blk_pct, drtg,
+   bn_stop_pct, bn_drtg_onoff), impacto (net_rtg, bn_netrtg_onoff, src_bpm, ws_per_40), físico/biografía
+   (altura_cm, edad, posicion) y contexto (team_pace, team_netrtg, min_pct).
+5. **Columnas con huecos**: comprobar `completitud.csv`; no imputar con 0. Usar modelos que admitan NaN o imputación por liga.
+6. **No mezclar** `src_*` de distintas fuentes como si fueran la misma métrica: cada fuente usa su propia definición.
+   Para comparabilidad usar las columnas calculadas por el motor (mismas fórmulas en todas las ligas).
+7. **Reproducibilidad**: cada fila lleva `fecha_extraccion` y `archivo_bruto`; cualquier cambio de métrica se aplica
+   con `python -m bbstats reprocesar --temporada T`.
+8. **Ampliar**: nuevas métricas → `schema.py` (columna + descripción) y `metrics.py` (cálculo), y luego `reprocesar`;
+   nuevas ligas → adaptador en `bbstats/adapters/` + entrada en `config/sources.json`; nuevas temporadas → `--temporada`.
+
+---
+
+## 10. Historial
+
+- Commit 1 — arquitectura por capas, esquema, motor de métricas, tests.
+- Commit 2 — fuentes reales validadas, fases, BasketNews, corrección de tiro libre único (G League) y traspasos
+  (EuroLeague), datos 2025-26 y 2026-27.
+- Commit 3 — Artifact "Mesa Multiliga Baskonia" y Routine EJECUTAR.
+- Commit 4 — este documento de contexto.
