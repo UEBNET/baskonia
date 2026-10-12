@@ -1,0 +1,72 @@
+{
+  "temporada": "2026-27",
+  "generado": "2026-10-12T12:09:54.263222+00:00",
+  "fases": [
+    "regular",
+    "playoffs",
+    "total"
+  ],
+  "ligas": {
+    "acb": {
+      "nombre": "Liga Endesa (ACB)",
+      "archivo": "ligas/acb.csv",
+      "fecha_extraccion": "2026-10-12T11:48:02.015277+00:00",
+      "fases": {
+        "regular": 237,
+        "total": 237
+      }
+    },
+    "bbl": {
+      "nombre": "easyCredit BBL (Alemania)",
+      "archivo": "ligas/bbl.csv",
+      "fecha_extraccion": "2026-10-12T11:48:02.026024+00:00",
+      "fases": {
+        "regular": 237,
+        "total": 237
+      }
+    },
+    "eurocup": {
+      "nombre": "BKT EuroCup",
+      "archivo": "ligas/eurocup.csv",
+      "fecha_extraccion": "2026-10-12T11:48:02.024946+00:00",
+      "fases": {
+        "regular": 367,
+        "total": 367
+      }
+    },
+    "euroleague": {
+      "nombre": "Turkish Airlines EuroLeague",
+      "archivo": "ligas/euroleague.csv",
+      "fecha_extraccion": "2026-10-12T11:48:02.015707+00:00",
+      "fases": {
+        "regular": 263,
+        "total": 263
+      }
+    },
+    "lba": {
+      "nombre": "LBA Serie A (Italia)",
+      "archivo": "ligas/lba.csv",
+      "fecha_extraccion": "2026-10-12T11:48:02.021682+00:00",
+      "fases": {
+        "regular": 210,
+        "total": 210
+      }
+    },
+    "lnb": {
+      "nombre": "LNB Betclic ÉLITE (Francia)",
+      "archivo": "ligas/lnb.csv",
+      "fecha_extraccion": "2026-10-12T11:48:02.023856+00:00",
+      "fases": {
+        "regular": 179,
+        "total": 179
+      }
+    }
+  },
+  "formato_json": "columnar: {columnas: [...], filas: [[...]]}",
+  "archivos": {
+    "todas": "todas_las_ligas.json",
+    "diccionario": "diccionario_columnas.json",
+    "regular": "por_fase/regular.json",
+    "total": "por_fase/total.json"
+  }
+}

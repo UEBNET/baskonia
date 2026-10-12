@@ -1,0 +1,2882 @@
+[
+ {
+  "columna": "liga",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Código interno de la liga (euroleague, acb, nba, ...)"
+ },
+ {
+  "columna": "liga_nombre",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Nombre oficial de la competición"
+ },
+ {
+  "columna": "pais",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "País / ámbito de la competición"
+ },
+ {
+  "columna": "temporada",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Temporada canónica (p.ej. 2025-26)"
+ },
+ {
+  "columna": "fase",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Fase: regular (temporada regular), playoffs (play-in + playoffs + final four/finales) o total"
+ },
+ {
+  "columna": "fuente",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Origen de los datos (URL base / proveedor)"
+ },
+ {
+  "columna": "fecha_extraccion",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Fecha UTC de la descarga del JSON bruto usado"
+ },
+ {
+  "columna": "archivo_bruto",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Ruta del JSON bruto del que sale esta fila (trazabilidad)"
+ },
+ {
+  "columna": "player_id",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Identificador del jugador en la fuente"
+ },
+ {
+  "columna": "player_uid",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Identificador único global: <liga>:<player_id>"
+ },
+ {
+  "columna": "nombre",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Nombre completo del jugador"
+ },
+ {
+  "columna": "dorsal",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Dorsal"
+ },
+ {
+  "columna": "posicion",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Posición publicada por la fuente"
+ },
+ {
+  "columna": "altura_cm",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Altura en centímetros"
+ },
+ {
+  "columna": "peso_kg",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Peso en kilogramos"
+ },
+ {
+  "columna": "edad",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Edad"
+ },
+ {
+  "columna": "fecha_nacimiento",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Fecha de nacimiento"
+ },
+ {
+  "columna": "nacionalidad",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Nacionalidad / país"
+ },
+ {
+  "columna": "team_id",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Identificador del equipo en la fuente"
+ },
+ {
+  "columna": "equipo",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Nombre del equipo"
+ },
+ {
+  "columna": "equipo_codigo",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Código / abreviatura del equipo"
+ },
+ {
+  "columna": "minutos_partido",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "Duración reglamentaria del partido en la liga (40 FIBA, 48 NBA)"
+ },
+ {
+  "columna": "calidad_contexto",
+  "grupo": "identidad",
+  "origen": "contexto",
+  "descripcion": "completo = hay totales de equipo y rival; parcial = solo equipo; sin_contexto"
+ },
+ {
+  "columna": "gp",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Partidos jugados"
+ },
+ {
+  "columna": "gs",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Partidos como titular"
+ },
+ {
+  "columna": "min",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Minutos totales"
+ },
+ {
+  "columna": "pts",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Puntos"
+ },
+ {
+  "columna": "fgm",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tiros de campo anotados (T2+T3)"
+ },
+ {
+  "columna": "fga",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tiros de campo intentados"
+ },
+ {
+  "columna": "fg2m",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tiros de 2 anotados"
+ },
+ {
+  "columna": "fg2a",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tiros de 2 intentados"
+ },
+ {
+  "columna": "fg3m",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Triples anotados"
+ },
+ {
+  "columna": "fg3a",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Triples intentados"
+ },
+ {
+  "columna": "ftm",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tiros libres anotados"
+ },
+ {
+  "columna": "fta",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tiros libres intentados"
+ },
+ {
+  "columna": "oreb",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Rebotes ofensivos"
+ },
+ {
+  "columna": "dreb",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Rebotes defensivos"
+ },
+ {
+  "columna": "reb",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Rebotes totales"
+ },
+ {
+  "columna": "ast",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Asistencias"
+ },
+ {
+  "columna": "stl",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Robos"
+ },
+ {
+  "columna": "tov",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Pérdidas"
+ },
+ {
+  "columna": "blk",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tapones a favor"
+ },
+ {
+  "columna": "blka",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Tapones recibidos"
+ },
+ {
+  "columna": "pf",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Faltas personales cometidas"
+ },
+ {
+  "columna": "pfd",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Faltas recibidas"
+ },
+ {
+  "columna": "plus_minus",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Más/menos (+/-) acumulado"
+ },
+ {
+  "columna": "pir",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Valoración (PIR / VAL) acumulada"
+ },
+ {
+  "columna": "dunks",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Mates"
+ },
+ {
+  "columna": "fastbreaks",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Contraataques (número de acciones; ACB 'C')"
+ },
+ {
+  "columna": "pts_fastbreak",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Puntos de contraataque"
+ },
+ {
+  "columna": "pts_paint",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Puntos en la pintura"
+ },
+ {
+  "columna": "pts_2ndchance",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Puntos de segunda oportunidad"
+ },
+ {
+  "columna": "pts_off_tov",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Puntos tras pérdida rival"
+ },
+ {
+  "columna": "dd2",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Dobles-dobles"
+ },
+ {
+  "columna": "td3",
+  "grupo": "totales",
+  "origen": "fuente",
+  "descripcion": "Triples-dobles"
+ },
+ {
+  "columna": "min_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Minutos totales por partido"
+ },
+ {
+  "columna": "pts_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Puntos por partido"
+ },
+ {
+  "columna": "fgm_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo anotados (T2+T3) por partido"
+ },
+ {
+  "columna": "fga_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo intentados por partido"
+ },
+ {
+  "columna": "fg2m_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 anotados por partido"
+ },
+ {
+  "columna": "fg2a_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 intentados por partido"
+ },
+ {
+  "columna": "fg3m_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Triples anotados por partido"
+ },
+ {
+  "columna": "fg3a_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Triples intentados por partido"
+ },
+ {
+  "columna": "ftm_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tiros libres anotados por partido"
+ },
+ {
+  "columna": "fta_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tiros libres intentados por partido"
+ },
+ {
+  "columna": "oreb_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Rebotes ofensivos por partido"
+ },
+ {
+  "columna": "dreb_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Rebotes defensivos por partido"
+ },
+ {
+  "columna": "reb_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Rebotes totales por partido"
+ },
+ {
+  "columna": "ast_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Asistencias por partido"
+ },
+ {
+  "columna": "stl_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Robos por partido"
+ },
+ {
+  "columna": "tov_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Pérdidas por partido"
+ },
+ {
+  "columna": "blk_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tapones a favor por partido"
+ },
+ {
+  "columna": "blka_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Tapones recibidos por partido"
+ },
+ {
+  "columna": "pf_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Faltas personales cometidas por partido"
+ },
+ {
+  "columna": "pfd_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Faltas recibidas por partido"
+ },
+ {
+  "columna": "plus_minus_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Más/menos (+/-) acumulado por partido"
+ },
+ {
+  "columna": "pir_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Valoración (PIR / VAL) acumulada por partido"
+ },
+ {
+  "columna": "dunks_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Mates por partido"
+ },
+ {
+  "columna": "fastbreaks_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Contraataques (número de acciones; ACB 'C') por partido"
+ },
+ {
+  "columna": "pts_fastbreak_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Puntos de contraataque por partido"
+ },
+ {
+  "columna": "pts_paint_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Puntos en la pintura por partido"
+ },
+ {
+  "columna": "pts_2ndchance_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Puntos de segunda oportunidad por partido"
+ },
+ {
+  "columna": "pts_off_tov_pg",
+  "grupo": "por_partido",
+  "origen": "calculado",
+  "descripcion": "Puntos tras pérdida rival por partido"
+ },
+ {
+  "columna": "pts_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Puntos por 36 minutos"
+ },
+ {
+  "columna": "fgm_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo anotados (T2+T3) por 36 minutos"
+ },
+ {
+  "columna": "fga_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo intentados por 36 minutos"
+ },
+ {
+  "columna": "fg2m_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 anotados por 36 minutos"
+ },
+ {
+  "columna": "fg2a_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 intentados por 36 minutos"
+ },
+ {
+  "columna": "fg3m_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Triples anotados por 36 minutos"
+ },
+ {
+  "columna": "fg3a_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Triples intentados por 36 minutos"
+ },
+ {
+  "columna": "ftm_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tiros libres anotados por 36 minutos"
+ },
+ {
+  "columna": "fta_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tiros libres intentados por 36 minutos"
+ },
+ {
+  "columna": "oreb_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Rebotes ofensivos por 36 minutos"
+ },
+ {
+  "columna": "dreb_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Rebotes defensivos por 36 minutos"
+ },
+ {
+  "columna": "reb_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Rebotes totales por 36 minutos"
+ },
+ {
+  "columna": "ast_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Asistencias por 36 minutos"
+ },
+ {
+  "columna": "stl_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Robos por 36 minutos"
+ },
+ {
+  "columna": "tov_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Pérdidas por 36 minutos"
+ },
+ {
+  "columna": "blk_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tapones a favor por 36 minutos"
+ },
+ {
+  "columna": "blka_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Tapones recibidos por 36 minutos"
+ },
+ {
+  "columna": "pf_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Faltas personales cometidas por 36 minutos"
+ },
+ {
+  "columna": "pfd_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Faltas recibidas por 36 minutos"
+ },
+ {
+  "columna": "plus_minus_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Más/menos (+/-) acumulado por 36 minutos"
+ },
+ {
+  "columna": "pir_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Valoración (PIR / VAL) acumulada por 36 minutos"
+ },
+ {
+  "columna": "dunks_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Mates por 36 minutos"
+ },
+ {
+  "columna": "fastbreaks_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Contraataques (número de acciones; ACB 'C') por 36 minutos"
+ },
+ {
+  "columna": "pts_fastbreak_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Puntos de contraataque por 36 minutos"
+ },
+ {
+  "columna": "pts_paint_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Puntos en la pintura por 36 minutos"
+ },
+ {
+  "columna": "pts_2ndchance_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Puntos de segunda oportunidad por 36 minutos"
+ },
+ {
+  "columna": "pts_off_tov_p36",
+  "grupo": "por_36",
+  "origen": "calculado",
+  "descripcion": "Puntos tras pérdida rival por 36 minutos"
+ },
+ {
+  "columna": "pts_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Puntos por 40 minutos"
+ },
+ {
+  "columna": "fgm_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo anotados (T2+T3) por 40 minutos"
+ },
+ {
+  "columna": "fga_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo intentados por 40 minutos"
+ },
+ {
+  "columna": "fg2m_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 anotados por 40 minutos"
+ },
+ {
+  "columna": "fg2a_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 intentados por 40 minutos"
+ },
+ {
+  "columna": "fg3m_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Triples anotados por 40 minutos"
+ },
+ {
+  "columna": "fg3a_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Triples intentados por 40 minutos"
+ },
+ {
+  "columna": "ftm_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tiros libres anotados por 40 minutos"
+ },
+ {
+  "columna": "fta_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tiros libres intentados por 40 minutos"
+ },
+ {
+  "columna": "oreb_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Rebotes ofensivos por 40 minutos"
+ },
+ {
+  "columna": "dreb_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Rebotes defensivos por 40 minutos"
+ },
+ {
+  "columna": "reb_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Rebotes totales por 40 minutos"
+ },
+ {
+  "columna": "ast_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Asistencias por 40 minutos"
+ },
+ {
+  "columna": "stl_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Robos por 40 minutos"
+ },
+ {
+  "columna": "tov_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Pérdidas por 40 minutos"
+ },
+ {
+  "columna": "blk_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tapones a favor por 40 minutos"
+ },
+ {
+  "columna": "blka_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Tapones recibidos por 40 minutos"
+ },
+ {
+  "columna": "pf_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Faltas personales cometidas por 40 minutos"
+ },
+ {
+  "columna": "pfd_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Faltas recibidas por 40 minutos"
+ },
+ {
+  "columna": "plus_minus_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Más/menos (+/-) acumulado por 40 minutos"
+ },
+ {
+  "columna": "pir_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Valoración (PIR / VAL) acumulada por 40 minutos"
+ },
+ {
+  "columna": "dunks_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Mates por 40 minutos"
+ },
+ {
+  "columna": "fastbreaks_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Contraataques (número de acciones; ACB 'C') por 40 minutos"
+ },
+ {
+  "columna": "pts_fastbreak_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Puntos de contraataque por 40 minutos"
+ },
+ {
+  "columna": "pts_paint_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Puntos en la pintura por 40 minutos"
+ },
+ {
+  "columna": "pts_2ndchance_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Puntos de segunda oportunidad por 40 minutos"
+ },
+ {
+  "columna": "pts_off_tov_p40",
+  "grupo": "por_40",
+  "origen": "calculado",
+  "descripcion": "Puntos tras pérdida rival por 40 minutos"
+ },
+ {
+  "columna": "pts_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Puntos por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fgm_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo anotados (T2+T3) por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fga_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tiros de campo intentados por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fg2m_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 anotados por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fg2a_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tiros de 2 intentados por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fg3m_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Triples anotados por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fg3a_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Triples intentados por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "ftm_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tiros libres anotados por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fta_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tiros libres intentados por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "oreb_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Rebotes ofensivos por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "dreb_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Rebotes defensivos por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "reb_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Rebotes totales por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "ast_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Asistencias por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "stl_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Robos por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "tov_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Pérdidas por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "blk_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tapones a favor por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "blka_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Tapones recibidos por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "pf_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Faltas personales cometidas por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "pfd_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Faltas recibidas por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "plus_minus_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Más/menos (+/-) acumulado por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "pir_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Valoración (PIR / VAL) acumulada por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "dunks_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Mates por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fastbreaks_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Contraataques (número de acciones; ACB 'C') por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "pts_fastbreak_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Puntos de contraataque por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "pts_paint_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Puntos en la pintura por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "pts_2ndchance_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Puntos de segunda oportunidad por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "pts_off_tov_p100",
+  "grupo": "por_100_pos",
+  "origen": "calculado",
+  "descripcion": "Puntos tras pérdida rival por 100 posesiones de su equipo con él en pista"
+ },
+ {
+  "columna": "fg_pct",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% tiros de campo"
+ },
+ {
+  "columna": "fg2_pct",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% tiros de 2"
+ },
+ {
+  "columna": "fg3_pct",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% triples"
+ },
+ {
+  "columna": "ft_pct",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% tiros libres"
+ },
+ {
+  "columna": "efg_pct",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "eFG%: (FGM + 0.5*3PM) / FGA"
+ },
+ {
+  "columna": "ts_pct",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "TS%: PTS / (2*(FGA + 0.44*FTA))"
+ },
+ {
+  "columna": "tsa",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "Intentos de tiro reales: FGA + 0.44*FTA"
+ },
+ {
+  "columna": "pts_per_fga",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "Puntos por tiro de campo intentado"
+ },
+ {
+  "columna": "pts_per_tsa",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "Puntos por intento real de tiro"
+ },
+ {
+  "columna": "fg3a_rate",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "3PAr: triples intentados / FGA"
+ },
+ {
+  "columna": "fta_rate",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "FTr: FTA / FGA"
+ },
+ {
+  "columna": "ft_per_fga",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "FTM / FGA"
+ },
+ {
+  "columna": "fg2a_share",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "Proporción de tiros de 2 sobre FGA"
+ },
+ {
+  "columna": "pct_pts_2",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% de los puntos que llegan de 2"
+ },
+ {
+  "columna": "pct_pts_3",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% de los puntos que llegan de 3"
+ },
+ {
+  "columna": "pct_pts_ft",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% de los puntos que llegan de tiro libre"
+ },
+ {
+  "columna": "pct_pts_paint",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% de los puntos en la pintura"
+ },
+ {
+  "columna": "pct_pts_fastbreak",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "% de los puntos al contraataque"
+ },
+ {
+  "columna": "dunk_rate",
+  "grupo": "tiro",
+  "origen": "calculado",
+  "descripcion": "Mates / tiros de 2 intentados"
+ },
+ {
+  "columna": "min_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "% de los minutos disponibles del equipo que juega"
+ },
+ {
+  "columna": "usg_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "USG%: % de posesiones del equipo que usa en pista"
+ },
+ {
+  "columna": "ast_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "AST%: % de canastas de compañeros asistidas en pista"
+ },
+ {
+  "columna": "tov_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "TOV%: pérdidas por cada 100 jugadas propias"
+ },
+ {
+  "columna": "oreb_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "OREB%: % de rebotes ofensivos disponibles capturados"
+ },
+ {
+  "columna": "dreb_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "DREB%: % de rebotes defensivos disponibles capturados"
+ },
+ {
+  "columna": "reb_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "REB%: % de rebotes totales disponibles capturados"
+ },
+ {
+  "columna": "stl_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "STL%: % de posesiones rivales que acaban en robo suyo"
+ },
+ {
+  "columna": "blk_pct",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "BLK%: % de tiros de 2 rivales que tapona"
+ },
+ {
+  "columna": "ast_to",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "Asistencias / pérdidas"
+ },
+ {
+  "columna": "ast_ratio",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "AST ratio: asistencias por cada 100 jugadas propias"
+ },
+ {
+  "columna": "tov_ratio",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "TOV ratio (Hollinger): pérdidas por cada 100 jugadas propias"
+ },
+ {
+  "columna": "stl_to_tov",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "Robos / pérdidas"
+ },
+ {
+  "columna": "blk_to_pf",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "Tapones / faltas"
+ },
+ {
+  "columna": "stl_plus_blk_p40",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "Robos + tapones por 40 minutos"
+ },
+ {
+  "columna": "pfd_to_pf",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "Faltas recibidas / faltas cometidas"
+ },
+ {
+  "columna": "pts_share",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "% de los puntos del equipo"
+ },
+ {
+  "columna": "reb_share",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "% de los rebotes del equipo"
+ },
+ {
+  "columna": "ast_share",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "% de las asistencias del equipo"
+ },
+ {
+  "columna": "fga_share",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "% de los tiros de campo del equipo"
+ },
+ {
+  "columna": "poss_on_court",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "Posesiones estimadas del equipo con el jugador en pista"
+ },
+ {
+  "columna": "poss_used",
+  "grupo": "ratios",
+  "origen": "calculado",
+  "descripcion": "Posesiones usadas: FGA + 0.44*FTA + TOV"
+ },
+ {
+  "columna": "game_score",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Game Score (Hollinger) acumulado"
+ },
+ {
+  "columna": "game_score_pg",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Game Score por partido"
+ },
+ {
+  "columna": "game_score_p40",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Game Score por 40 minutos"
+ },
+ {
+  "columna": "eff",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "EFF (NBA): PTS+REB+AST+STL+BLK-fallos-TOV, acumulado"
+ },
+ {
+  "columna": "eff_pg",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "EFF por partido"
+ },
+ {
+  "columna": "pir_calc",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "PIR calculado con la fórmula Euroliga (comprobación de 'pir')"
+ },
+ {
+  "columna": "pie",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "PIE: impacto del jugador sobre el total del partido (equipo + rival)"
+ },
+ {
+  "columna": "uper",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "PER sin ajustar (uPER, Hollinger)"
+ },
+ {
+  "columna": "per",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "PER ajustado al ritmo y normalizado a media de liga = 15"
+ },
+ {
+  "columna": "ortg",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Rating ofensivo individual (Dean Oliver): puntos producidos /100 posesiones"
+ },
+ {
+  "columna": "drtg",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Rating defensivo individual (Dean Oliver): puntos permitidos /100 posesiones"
+ },
+ {
+  "columna": "net_rtg",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "ortg - drtg"
+ },
+ {
+  "columna": "floor_pct",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Floor%: % de posesiones propias que acaban en anotación"
+ },
+ {
+  "columna": "pprod",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Puntos producidos (Dean Oliver)"
+ },
+ {
+  "columna": "scposs",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Posesiones anotadoras (Dean Oliver)"
+ },
+ {
+  "columna": "totposs",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Posesiones individuales totales (Dean Oliver)"
+ },
+ {
+  "columna": "stops",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Stops defensivos (Dean Oliver)"
+ },
+ {
+  "columna": "stop_pct",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Stop%: % de posesiones rivales detenidas"
+ },
+ {
+  "columna": "ows",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Offensive Win Shares"
+ },
+ {
+  "columna": "dws",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Defensive Win Shares"
+ },
+ {
+  "columna": "ws",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Win Shares totales"
+ },
+ {
+  "columna": "ws_per_40",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Win Shares por 40 minutos"
+ },
+ {
+  "columna": "ws_per_48",
+  "grupo": "ratings",
+  "origen": "calculado",
+  "descripcion": "Win Shares por 48 minutos"
+ },
+ {
+  "columna": "team_gp",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: gp (totales de temporada)"
+ },
+ {
+  "columna": "team_w",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: w (totales de temporada)"
+ },
+ {
+  "columna": "team_l",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: l (totales de temporada)"
+ },
+ {
+  "columna": "team_min",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: min (totales de temporada)"
+ },
+ {
+  "columna": "team_pts",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: pts (totales de temporada)"
+ },
+ {
+  "columna": "team_fgm",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: fgm (totales de temporada)"
+ },
+ {
+  "columna": "team_fga",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: fga (totales de temporada)"
+ },
+ {
+  "columna": "team_fg2m",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: fg2m (totales de temporada)"
+ },
+ {
+  "columna": "team_fg2a",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: fg2a (totales de temporada)"
+ },
+ {
+  "columna": "team_fg3m",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: fg3m (totales de temporada)"
+ },
+ {
+  "columna": "team_fg3a",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: fg3a (totales de temporada)"
+ },
+ {
+  "columna": "team_ftm",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: ftm (totales de temporada)"
+ },
+ {
+  "columna": "team_fta",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: fta (totales de temporada)"
+ },
+ {
+  "columna": "team_oreb",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: oreb (totales de temporada)"
+ },
+ {
+  "columna": "team_dreb",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: dreb (totales de temporada)"
+ },
+ {
+  "columna": "team_reb",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: reb (totales de temporada)"
+ },
+ {
+  "columna": "team_ast",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: ast (totales de temporada)"
+ },
+ {
+  "columna": "team_stl",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: stl (totales de temporada)"
+ },
+ {
+  "columna": "team_tov",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: tov (totales de temporada)"
+ },
+ {
+  "columna": "team_blk",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: blk (totales de temporada)"
+ },
+ {
+  "columna": "team_pf",
+  "grupo": "contexto_equipo",
+  "origen": "contexto",
+  "descripcion": "Equipo: pf (totales de temporada)"
+ },
+ {
+  "columna": "opp_min",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: min (totales de temporada)"
+ },
+ {
+  "columna": "opp_pts",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: pts (totales de temporada)"
+ },
+ {
+  "columna": "opp_fgm",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: fgm (totales de temporada)"
+ },
+ {
+  "columna": "opp_fga",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: fga (totales de temporada)"
+ },
+ {
+  "columna": "opp_fg2m",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: fg2m (totales de temporada)"
+ },
+ {
+  "columna": "opp_fg2a",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: fg2a (totales de temporada)"
+ },
+ {
+  "columna": "opp_fg3m",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: fg3m (totales de temporada)"
+ },
+ {
+  "columna": "opp_fg3a",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: fg3a (totales de temporada)"
+ },
+ {
+  "columna": "opp_ftm",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: ftm (totales de temporada)"
+ },
+ {
+  "columna": "opp_fta",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: fta (totales de temporada)"
+ },
+ {
+  "columna": "opp_oreb",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: oreb (totales de temporada)"
+ },
+ {
+  "columna": "opp_dreb",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: dreb (totales de temporada)"
+ },
+ {
+  "columna": "opp_reb",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: reb (totales de temporada)"
+ },
+ {
+  "columna": "opp_ast",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: ast (totales de temporada)"
+ },
+ {
+  "columna": "opp_stl",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: stl (totales de temporada)"
+ },
+ {
+  "columna": "opp_tov",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: tov (totales de temporada)"
+ },
+ {
+  "columna": "opp_blk",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: blk (totales de temporada)"
+ },
+ {
+  "columna": "opp_pf",
+  "grupo": "contexto_rival",
+  "origen": "contexto",
+  "descripcion": "Rivales del equipo: pf (totales de temporada)"
+ },
+ {
+  "columna": "team_poss",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Posesiones del equipo en la temporada"
+ },
+ {
+  "columna": "opp_poss",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Posesiones de los rivales"
+ },
+ {
+  "columna": "team_pace",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Ritmo del equipo (posesiones por partido reglamentario)"
+ },
+ {
+  "columna": "team_ortg",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Puntos del equipo por 100 posesiones"
+ },
+ {
+  "columna": "team_drtg",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Puntos permitidos por 100 posesiones"
+ },
+ {
+  "columna": "team_netrtg",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "team_ortg - team_drtg"
+ },
+ {
+  "columna": "lg_pace",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Ritmo medio de la liga"
+ },
+ {
+  "columna": "lg_ortg",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Puntos por 100 posesiones de la liga"
+ },
+ {
+  "columna": "lg_pts_per_game",
+  "grupo": "contexto_liga",
+  "origen": "calculado",
+  "descripcion": "Puntos por partido y equipo en la liga"
+ },
+ {
+  "columna": "src_ortg",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Rating ofensivo oficial de la fuente"
+ },
+ {
+  "columna": "src_drtg",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Rating defensivo oficial de la fuente"
+ },
+ {
+  "columna": "src_netrtg",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Net rating oficial"
+ },
+ {
+  "columna": "src_pace",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Ritmo oficial con el jugador en pista"
+ },
+ {
+  "columna": "src_poss",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Posesiones oficiales"
+ },
+ {
+  "columna": "src_pie",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "PIE oficial (NBA)"
+ },
+ {
+  "columna": "src_usg_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "USG% oficial"
+ },
+ {
+  "columna": "src_ts_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "TS% oficial"
+ },
+ {
+  "columna": "src_efg_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "eFG% oficial"
+ },
+ {
+  "columna": "src_ast_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "AST% oficial"
+ },
+ {
+  "columna": "src_ast_ratio",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "AST ratio oficial"
+ },
+ {
+  "columna": "src_tov_ratio",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "TOV ratio / TOV% oficial"
+ },
+ {
+  "columna": "src_oreb_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "OREB% oficial"
+ },
+ {
+  "columna": "src_dreb_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "DREB% oficial"
+ },
+ {
+  "columna": "src_reb_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "REB% oficial"
+ },
+ {
+  "columna": "src_fta_rate",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Free throw rate oficial"
+ },
+ {
+  "columna": "src_fg3a_rate",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "3PA rate oficial"
+ },
+ {
+  "columna": "src_def_ws",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Defensive win shares oficiales (NBA)"
+ },
+ {
+  "columna": "src_pct_fga_2pt",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% FGA de 2 (oficial)"
+ },
+ {
+  "columna": "src_pct_fga_3pt",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% FGA de 3 (oficial)"
+ },
+ {
+  "columna": "src_pct_pts_mid",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% puntos de media distancia"
+ },
+ {
+  "columna": "src_pct_ast_fgm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% canastas asistidas"
+ },
+ {
+  "columna": "src_pct_uast_fgm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% canastas no asistidas"
+ },
+ {
+  "columna": "src_pct_ast_3pm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% triples asistidos"
+ },
+ {
+  "columna": "src_pct_uast_2pm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% canastas de 2 no asistidas"
+ },
+ {
+  "columna": "src_fantasy_pts",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Puntos fantasy oficiales"
+ },
+ {
+  "columna": "src_contested_shots",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Tiros rivales defendidos (hustle)"
+ },
+ {
+  "columna": "src_contested_shots_3pt",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Triples rivales defendidos (hustle)"
+ },
+ {
+  "columna": "src_deflections",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Desvíos (hustle)"
+ },
+ {
+  "columna": "src_charges_drawn",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Faltas en ataque provocadas (hustle)"
+ },
+ {
+  "columna": "src_screen_assists",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Bloqueos que acaban en canasta (hustle)"
+ },
+ {
+  "columna": "src_screen_ast_pts",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Puntos tras bloqueo (hustle)"
+ },
+ {
+  "columna": "src_loose_balls",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Balones sueltos recuperados (hustle)"
+ },
+ {
+  "columna": "src_box_outs",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Bloqueos de rebote (hustle)"
+ },
+ {
+  "columna": "src_dist_miles",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Distancia recorrida en millas (tracking)"
+ },
+ {
+  "columna": "src_avg_speed",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Velocidad media (tracking)"
+ },
+ {
+  "columna": "src_touches",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Toques de balón (tracking)"
+ },
+ {
+  "columna": "src_time_of_poss",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Tiempo de posesión en minutos (tracking)"
+ },
+ {
+  "columna": "src_drives",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Penetraciones (tracking)"
+ },
+ {
+  "columna": "src_drive_pts",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Puntos tras penetración (tracking)"
+ },
+ {
+  "columna": "src_passes_made",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Pases realizados (tracking)"
+ },
+ {
+  "columna": "src_potential_ast",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Asistencias potenciales (tracking)"
+ },
+ {
+  "columna": "src_secondary_ast",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Asistencias secundarias (tracking)"
+ },
+ {
+  "columna": "src_ft_ast",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Asistencias a tiro libre (tracking)"
+ },
+ {
+  "columna": "src_ast_pts_created",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Puntos creados con asistencias (tracking)"
+ },
+ {
+  "columna": "src_catch_shoot_fgm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Catch & shoot anotados (tracking)"
+ },
+ {
+  "columna": "src_catch_shoot_fga",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Catch & shoot intentados (tracking)"
+ },
+ {
+  "columna": "src_catch_shoot_pts",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Puntos en catch & shoot (tracking)"
+ },
+ {
+  "columna": "src_pull_up_fgm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Tiros tras bote anotados (tracking)"
+ },
+ {
+  "columna": "src_pull_up_fga",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Tiros tras bote intentados (tracking)"
+ },
+ {
+  "columna": "src_pull_up_pts",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Puntos en tiros tras bote (tracking)"
+ },
+ {
+  "columna": "src_paint_touches",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Toques en la pintura (tracking)"
+ },
+ {
+  "columna": "src_post_touches",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Toques en el poste (tracking)"
+ },
+ {
+  "columna": "src_elbow_touches",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Toques en el codo (tracking)"
+ },
+ {
+  "columna": "src_per",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "PER oficial de Basketball-Reference"
+ },
+ {
+  "columna": "src_ows",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Offensive Win Shares (Basketball-Reference)"
+ },
+ {
+  "columna": "src_dws",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Defensive Win Shares (Basketball-Reference)"
+ },
+ {
+  "columna": "src_ws",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Win Shares (Basketball-Reference)"
+ },
+ {
+  "columna": "src_ws48",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Win Shares por 48 minutos (Basketball-Reference)"
+ },
+ {
+  "columna": "src_obpm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Offensive Box Plus/Minus"
+ },
+ {
+  "columna": "src_dbpm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Defensive Box Plus/Minus"
+ },
+ {
+  "columna": "src_bpm",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Box Plus/Minus"
+ },
+ {
+  "columna": "src_vorp",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Value Over Replacement Player"
+ },
+ {
+  "columna": "src_stl_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "STL% oficial"
+ },
+ {
+  "columna": "src_blk_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "BLK% oficial"
+ },
+ {
+  "columna": "src_pos_pg_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de minutos como base (estimado jugada a jugada)"
+ },
+ {
+  "columna": "src_pos_sg_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de minutos como escolta"
+ },
+ {
+  "columna": "src_pos_sf_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de minutos como alero"
+ },
+ {
+  "columna": "src_pos_pf_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de minutos como ala-pívot"
+ },
+ {
+  "columna": "src_pos_c_pct",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de minutos como pívot"
+ },
+ {
+  "columna": "src_on_court_pm100",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "+/- del equipo por 100 posesiones con él en pista"
+ },
+ {
+  "columna": "src_on_off_pm100",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "+/- on-off por 100 posesiones"
+ },
+ {
+  "columna": "src_tov_bad_pass",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Pérdidas por mal pase"
+ },
+ {
+  "columna": "src_tov_lost_ball",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Pérdidas de balón en bote/manejo"
+ },
+ {
+  "columna": "src_fouls_shooting",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Faltas personales en tiro cometidas"
+ },
+ {
+  "columna": "src_fouls_offensive",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Faltas en ataque cometidas"
+ },
+ {
+  "columna": "src_drawn_shooting",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Faltas en tiro recibidas"
+ },
+ {
+  "columna": "src_drawn_offensive",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Faltas en ataque provocadas"
+ },
+ {
+  "columna": "src_astd_pts",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Puntos generados con sus asistencias"
+ },
+ {
+  "columna": "src_and1",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Jugadas de 2+1 / 3+1"
+ },
+ {
+  "columna": "src_avg_shot_dist",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Distancia media de tiro (pies)"
+ },
+ {
+  "columna": "src_pct_fga_00_03",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% FGA a 0-3 pies"
+ },
+ {
+  "columna": "src_pct_fga_03_10",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% FGA a 3-10 pies"
+ },
+ {
+  "columna": "src_pct_fga_10_16",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% FGA a 10-16 pies"
+ },
+ {
+  "columna": "src_pct_fga_16_3p",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% FGA de 16 pies a la línea de 3"
+ },
+ {
+  "columna": "src_fg_pct_00_03",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "FG% a 0-3 pies"
+ },
+ {
+  "columna": "src_fg_pct_03_10",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "FG% a 3-10 pies"
+ },
+ {
+  "columna": "src_fg_pct_10_16",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "FG% a 10-16 pies"
+ },
+ {
+  "columna": "src_fg_pct_16_3p",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "FG% de 16 pies a la línea de 3"
+ },
+ {
+  "columna": "src_pct_ast_fg2",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de canastas de 2 asistidas"
+ },
+ {
+  "columna": "src_pct_ast_fg3",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de triples asistidos"
+ },
+ {
+  "columna": "src_pct_fga_dunk",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de FGA que son mates"
+ },
+ {
+  "columna": "src_pct_fg3a_corner",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "% de triples desde la esquina"
+ },
+ {
+  "columna": "src_fg3_pct_corner",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "3P% desde la esquina"
+ },
+ {
+  "columna": "src_eff",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Valoración / eficiencia publicada por la liga"
+ },
+ {
+  "columna": "src_oer",
+  "grupo": "metricas_fuente",
+  "origen": "fuente",
+  "descripcion": "Offensive efficiency rating publicado por la liga (LBA)"
+ },
+ {
+  "columna": "bn_player_id",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Id del jugador en BasketNews (trazabilidad del cruce)"
+ },
+ {
+  "columna": "bn_usg_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "USG% (BasketNews)"
+ },
+ {
+  "columna": "bn_ts_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "TS% (BasketNews)"
+ },
+ {
+  "columna": "bn_ast_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "AST% (BasketNews)"
+ },
+ {
+  "columna": "bn_tov_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "TOV% (BasketNews)"
+ },
+ {
+  "columna": "bn_stl_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "STL% (BasketNews)"
+ },
+ {
+  "columna": "bn_blk_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "BLK% (BasketNews)"
+ },
+ {
+  "columna": "bn_oreb_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "OREB% (BasketNews)"
+ },
+ {
+  "columna": "bn_dreb_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "DREB% (BasketNews)"
+ },
+ {
+  "columna": "bn_fg3a_rate",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3PAr (BasketNews)"
+ },
+ {
+  "columna": "bn_ast_to",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "AST/TO (BasketNews)"
+ },
+ {
+  "columna": "bn_poss_pg",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Posesiones individuales por partido"
+ },
+ {
+  "columna": "bn_ortg_ind",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Rating ofensivo individual (BasketNews)"
+ },
+ {
+  "columna": "bn_drtg_ind",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Rating defensivo individual (BasketNews)"
+ },
+ {
+  "columna": "bn_netrtg_ind",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Net rating individual (BasketNews)"
+ },
+ {
+  "columna": "bn_stops_pg",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Stops defensivos por partido"
+ },
+ {
+  "columna": "bn_foul_stops_pg",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Stops por falta por partido"
+ },
+ {
+  "columna": "bn_stop_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Stop% (BasketNews)"
+ },
+ {
+  "columna": "bn_created_pts_pg",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Puntos creados por partido (propios + asistidos)"
+ },
+ {
+  "columna": "bn_assisted_pts_pg",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Puntos generados con asistencias por partido"
+ },
+ {
+  "columna": "bn_3fta_poss_pg",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Posesiones con tiro libre de 3 por partido"
+ },
+ {
+  "columna": "bn_pir_pg",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "PIR por partido (BasketNews)"
+ },
+ {
+  "columna": "bn_min_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Minutos con el jugador en pista"
+ },
+ {
+  "columna": "bn_poss_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Posesiones del equipo con él en pista"
+ },
+ {
+  "columna": "bn_poss_on_pct",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "% de las posesiones del equipo con él en pista"
+ },
+ {
+  "columna": "bn_pts_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Puntos del equipo con él en pista"
+ },
+ {
+  "columna": "bn_opp_pts_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Puntos del rival con él en pista"
+ },
+ {
+  "columna": "bn_net_pts_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Diferencial de puntos con él en pista"
+ },
+ {
+  "columna": "bn_ortg_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "ORtg del equipo con él en pista"
+ },
+ {
+  "columna": "bn_drtg_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "DRtg del equipo con él en pista"
+ },
+ {
+  "columna": "bn_netrtg_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Net rating del equipo con él en pista"
+ },
+ {
+  "columna": "bn_ortg_off",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "ORtg del equipo con él en el banquillo"
+ },
+ {
+  "columna": "bn_drtg_off",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "DRtg del equipo con él en el banquillo"
+ },
+ {
+  "columna": "bn_netrtg_off",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Net rating del equipo con él en el banquillo"
+ },
+ {
+  "columna": "bn_ortg_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "ORtg on - off"
+ },
+ {
+  "columna": "bn_drtg_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "DRtg on - off"
+ },
+ {
+  "columna": "bn_netrtg_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Net rating on - off (impacto)"
+ },
+ {
+  "columna": "bn_2p_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "2P% del equipo con él en pista"
+ },
+ {
+  "columna": "bn_2p_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "2P% del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_3p_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3P% del equipo con él en pista"
+ },
+ {
+  "columna": "bn_3p_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3P% del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_fg3a_rate_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3PAr del equipo con él en pista"
+ },
+ {
+  "columna": "bn_fg3a_rate_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3PAr del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_ast_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "AST% del equipo con él en pista"
+ },
+ {
+  "columna": "bn_ast_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "AST% del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_tov_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "TOV% del equipo con él en pista"
+ },
+ {
+  "columna": "bn_tov_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "TOV% del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_oreb_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "OREB% del equipo con él en pista"
+ },
+ {
+  "columna": "bn_oreb_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "OREB% del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_dreb_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "DREB% del equipo con él en pista"
+ },
+ {
+  "columna": "bn_dreb_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "DREB% del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_reb_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "REB% del equipo con él en pista"
+ },
+ {
+  "columna": "bn_reb_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "REB% del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_foul_rate_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Faltas cometidas (tasa) del equipo con él en pista"
+ },
+ {
+  "columna": "bn_foul_rate_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Faltas cometidas (tasa) del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_fouled_rate_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Faltas recibidas (tasa) del equipo con él en pista"
+ },
+ {
+  "columna": "bn_fouled_rate_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "Faltas recibidas (tasa) del equipo: diferencia on - off"
+ },
+ {
+  "columna": "bn_opp_2p_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "2P% del rival con él en pista"
+ },
+ {
+  "columna": "bn_opp_2p_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "2P% del rival: diferencia on - off"
+ },
+ {
+  "columna": "bn_opp_3p_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3P% del rival con él en pista"
+ },
+ {
+  "columna": "bn_opp_3p_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3P% del rival: diferencia on - off"
+ },
+ {
+  "columna": "bn_opp_fg3a_rate_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3PAr del rival con él en pista"
+ },
+ {
+  "columna": "bn_opp_fg3a_rate_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "3PAr del rival: diferencia on - off"
+ },
+ {
+  "columna": "bn_opp_ast_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "AST% del rival con él en pista"
+ },
+ {
+  "columna": "bn_opp_ast_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "AST% del rival: diferencia on - off"
+ },
+ {
+  "columna": "bn_opp_tov_pct_on",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "TOV% del rival con él en pista"
+ },
+ {
+  "columna": "bn_opp_tov_pct_onoff",
+  "grupo": "basketnews",
+  "origen": "fuente",
+  "descripcion": "TOV% del rival: diferencia on - off"
+ },
+ {
+  "columna": "rs_gp",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "gp del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_min_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "min_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_pts_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pts_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_pts_p40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pts_p40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_reb_p40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "reb_p40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_ast_p40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ast_p40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_ts_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ts_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_efg_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "efg_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_usg_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "usg_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_ast_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ast_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_tov_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "tov_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_reb_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "reb_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_per",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "per del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_ortg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ortg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_drtg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "drtg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_net_rtg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "net_rtg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_game_score_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "game_score_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_pir_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pir_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_ws_per_40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ws_per_40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_pie",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pie del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "rs_bn_netrtg_onoff",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "bn_netrtg_onoff del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)"
+ },
+ {
+  "columna": "delta_min_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "min_pg en playoffs menos min_pg en temporada regular"
+ },
+ {
+  "columna": "delta_pts_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pts_pg en playoffs menos pts_pg en temporada regular"
+ },
+ {
+  "columna": "delta_pts_p40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pts_p40 en playoffs menos pts_p40 en temporada regular"
+ },
+ {
+  "columna": "delta_reb_p40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "reb_p40 en playoffs menos reb_p40 en temporada regular"
+ },
+ {
+  "columna": "delta_ast_p40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ast_p40 en playoffs menos ast_p40 en temporada regular"
+ },
+ {
+  "columna": "delta_ts_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ts_pct en playoffs menos ts_pct en temporada regular"
+ },
+ {
+  "columna": "delta_efg_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "efg_pct en playoffs menos efg_pct en temporada regular"
+ },
+ {
+  "columna": "delta_usg_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "usg_pct en playoffs menos usg_pct en temporada regular"
+ },
+ {
+  "columna": "delta_ast_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ast_pct en playoffs menos ast_pct en temporada regular"
+ },
+ {
+  "columna": "delta_tov_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "tov_pct en playoffs menos tov_pct en temporada regular"
+ },
+ {
+  "columna": "delta_reb_pct",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "reb_pct en playoffs menos reb_pct en temporada regular"
+ },
+ {
+  "columna": "delta_per",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "per en playoffs menos per en temporada regular"
+ },
+ {
+  "columna": "delta_ortg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ortg en playoffs menos ortg en temporada regular"
+ },
+ {
+  "columna": "delta_drtg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "drtg en playoffs menos drtg en temporada regular"
+ },
+ {
+  "columna": "delta_net_rtg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "net_rtg en playoffs menos net_rtg en temporada regular"
+ },
+ {
+  "columna": "delta_game_score_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "game_score_pg en playoffs menos game_score_pg en temporada regular"
+ },
+ {
+  "columna": "delta_pir_pg",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pir_pg en playoffs menos pir_pg en temporada regular"
+ },
+ {
+  "columna": "delta_ws_per_40",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "ws_per_40 en playoffs menos ws_per_40 en temporada regular"
+ },
+ {
+  "columna": "delta_pie",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "pie en playoffs menos pie en temporada regular"
+ },
+ {
+  "columna": "delta_bn_netrtg_onoff",
+  "grupo": "contexto_fase",
+  "origen": "calculado",
+  "descripcion": "bn_netrtg_onoff en playoffs menos bn_netrtg_onoff en temporada regular"
+ }
+]

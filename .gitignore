@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# Los datos (data/raw y data/processed) SÍ se versionan: son el resultado de las ejecuciones.
+data/processed/*/informes/

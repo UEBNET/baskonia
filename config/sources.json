@@ -1,0 +1,154 @@
+{
+  "_descripcion": "Configuración de fuentes. Puedes cambiar URLs, ids de temporada o activar/desactivar ligas sin tocar código. 'estado_verificacion' indica si el endpoint se ha comprobado contra la web real.",
+  "temporada_por_defecto": "2026-27",
+  "rutas": {
+    "bruto": "data/raw",
+    "procesado": "data/processed"
+  },
+  "http": {
+    "delay_s": 1.0,
+    "timeout_s": 30,
+    "retries": 3,
+    "delay_por_dominio": {
+      "www.basketball-reference.com": 3.5
+    },
+    "dominios_curl": [
+      "www.basketball-reference.com"
+    ]
+  },
+  "comprimir_bruto": true,
+  "ligas": {
+    "euroleague": {
+      "adaptador": "euroleague",
+      "activa": true,
+      "nombre": "Turkish Airlines EuroLeague",
+      "pais": "Europa",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "competicion": "E",
+      "base_url": "https://feeds.incrowdsports.com/provider/euroleague-feeds/v3/competitions",
+      "statistic_mode": "Accumulated",
+      "temporadas": {
+        "2025-26": {
+          "season_code": "E2025"
+        }
+      },
+      "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
+      "basketnews_league_id": 25
+    },
+    "acb": {
+      "adaptador": "acb",
+      "activa": true,
+      "nombre": "Liga Endesa (ACB)",
+      "pais": "España",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "competicion_id": 1,
+      "fuente": "https://acb.com (api2.acb.com)",
+      "temporadas": {},
+      "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
+      "basketnews_league_id": 41
+    },
+    "nba": {
+      "adaptador": "bref_nba",
+      "activa": true,
+      "nombre": "NBA",
+      "pais": "EEUU",
+      "minutos_partido": 48,
+      "fase": "todas",
+      "temporadas": {},
+      "estado_verificacion": "verificado con datos reales (2025-26); 2026-27 aún sin partidos",
+      "fuente": "https://www.basketball-reference.com"
+    },
+    "gleague": {
+      "adaptador": "gleague",
+      "activa": true,
+      "nombre": "NBA G League",
+      "pais": "EEUU",
+      "minutos_partido": 48,
+      "fase": "todas",
+      "base_url": "https://stats.gleague.nba.com/stats",
+      "league_id": "20",
+      "temporadas": {
+        "2025-26": {
+          "season": "2025-26"
+        }
+      },
+      "estado_verificacion": "verificado con datos reales (2025-26); 2026-27 aún sin partidos",
+      "season_types": {
+        "regular": "Regular Season",
+        "playoffs": "Playoffs",
+        "copa": "Showcase"
+      },
+      "headers": {
+        "Referer": "https://gleague.nba.com/",
+        "Origin": "https://gleague.nba.com"
+      },
+      "tiro_libre_unico": true
+    },
+    "lba": {
+      "adaptador": "lba",
+      "activa": true,
+      "nombre": "LBA Serie A (Italia)",
+      "pais": "Italia",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://www.legabasket.it (API pública de la web)",
+      "temporadas": {},
+      "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
+      "serie": "A1"
+    },
+    "bbl": {
+      "adaptador": "bbl",
+      "activa": true,
+      "nombre": "easyCredit BBL (Alemania)",
+      "pais": "Alemania",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://www.easycredit-bbl.de (datos de las páginas de partido)",
+      "temporadas": {
+        "2025-26": {
+          "semillas": [
+            2004000,
+            2005750
+          ]
+        },
+        "2026-27": {
+          "semillas": []
+        }
+      },
+      "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
+      "competicion": "BBL",
+      "max_huecos": 30
+    },
+    "lnb": {
+      "adaptador": "lnb",
+      "activa": true,
+      "nombre": "LNB Betclic ÉLITE (Francia)",
+      "pais": "Francia",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://lnb.fr (api-prod.lnb.fr, stats centre)",
+      "temporadas": {},
+      "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
+      "division": 1
+    },
+    "eurocup": {
+      "adaptador": "euroleague",
+      "activa": true,
+      "nombre": "BKT EuroCup",
+      "pais": "Europa",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "competicion": "U",
+      "base_url": "https://feeds.incrowdsports.com/provider/euroleague-feeds/v3/competitions",
+      "statistic_mode": "Accumulated",
+      "temporadas": {
+        "2025-26": {
+          "season_code": "U2025"
+        }
+      },
+      "estado_verificacion": "verificado con datos reales"
+    }
+  }
+}
