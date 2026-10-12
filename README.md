@@ -193,3 +193,16 @@ Una liga sintética (temporada regular + playoffs) se sirve en el formato real d
 todas dan las mismas métricas para los mismos partidos en cada fase, el contexto de playoffs,
 PER medio = 15, USG% medio = 20, brutos comprimidos, reproceso sin red, respaldo con el bruto
 anterior y reutilización de partidos.
+
+## 10. Artifact "Mesa Multiliga Baskonia"
+
+Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN
+(fuente en `artifact/mesa-multiliga.html`; los datos son los `por_fase/*.json` de cada temporada).
+
+* Selector de temporada y pestañas de fase (Temporada regular / Playoffs / Total), filtros por liga,
+  búsqueda, minutos mínimos y vistas de columnas (básico, tiro, por 40/100, avanzada, ratings,
+  on/off, playoffs frente a regular, métricas oficiales, contexto de equipo). Ficha del jugador
+  con la comparación playoffs/regular.
+* **EJECUTAR** lanza la Routine de Claude Code `EJECUTAR Mesa Multiliga Baskonia`
+  (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda) mediante el conector Claude Code Remote:
+  descarga las ligas elegidas, sube los datos a esta rama y republica los datos del Artifact.
