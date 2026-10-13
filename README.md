@@ -4,26 +4,27 @@ Extrae, guarda en bruto, normaliza y enriquece las estadísticas de **todos los 
 8 competiciones, separadas por **fase (temporada regular / playoffs / total)**, con **las mismas
 columnas para todas las ligas**, listas para aplicar tus propios algoritmos.
 
-- Temporadas descargadas: **2025-26** (completa, con playoffs) y **2026-27** (hasta el 12-10-2026).
+- Temporadas descargadas: **de 2020-21 a 2025-26** (completas, con playoffs) y **2026-27** (hasta el 12-10-2026).
   La temporada por defecto es 2026-27; cualquier otra: `python ejecutar.py --temporada 2024-25`.
 - Datos reales en el repositorio: ver [¿Dónde están los datos?](#3-dónde-están-los-datos).
 - **Contexto para agentes de IA**: [`CONTEXTO_AGENTE.md`](CONTEXTO_AGENTE.md) explica todo el proceso operativo, el esquema, las fórmulas, las limitaciones y el Artifact asociado.
 
-**Jugadores (filas jugador-equipo) descargados:**
+**Jugadores (filas jugador-equipo) descargados — temporada regular / playoffs:**
 
-| Liga | 2025-26 regular | 2025-26 playoffs | 2025-26 total | 2026-27 (en curso) |
-|---|---|---|---|---|
-| Euroliga | 335 | 124 | 335 | 263 (4 jornadas) |
-| EuroCup | 315 | 131 | 316 | 367 (2 jornadas) |
-| ACB | 339 | 103 | 340 | 237 (3 jornadas) |
-| NBA | 661 | 230 | 661 | aún no ha empezado |
-| G League | 526 | 160 | 562 (incl. Showcase Cup) | aún no ha empezado |
-| LBA | 265 | 103 | 266 | 210 (3 jornadas) |
-| BBL | 331 | 128 | 331 | 237 (5 jornadas) |
-| LNB | 275 | 118 | 277 | 179 (3 jornadas) |
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| EuroLeague | 297 / 110 | 293 / 102 | 295 / 101 | 287 / 125 | 295 / 125 | 335 / 124 | 263 / – |
+| EuroCup | 342 / 211 | 311 / 169 | 306 / 168 | 307 / 136 | 300 / 130 | 315 / 131 | 367 / – |
+| ACB | 365 / 102 | 325 / 104 | 330 / 102 | 318 / 100 | 328 / 102 | 339 / 103 | 237 / – |
+| NBA | 626 / 239 | 715 / 217 | 609 / 217 | 657 / 214 | 654 / 219 | 661 / 230 | sin datos |
+| G League | 246 / 83 | 493 / 124 | 471 / 123 | 512 / 120 | 510 / 121 | 526 / 160 | sin datos |
+| LBA | 244 / 106 | 315 / 99 | 287 / 100 | 289 / 104 | 306 / 103 | 265 / 103 | 210 / – |
+| BBL | 307 / 107 | 315 / 100 | 287 / 99 | 299 / 127 | 306 / 124 | 331 / 128 | 237 / – |
+| LNB | 313 / 87 | 287 / 93 | 299 / 91 | 305 / 93 | 262 / 113 | 275 / 118 | 179 / – |
 
-Comprobación de coherencia con los datos reales: la suma de Win Shares de cada liga coincide
-con el número de victorias (p.ej. ACB 306 WS / 306 victorias; NBA 1.259 / 1.230; G League 574 / 558).
+Comprobación de coherencia con los datos reales: la suma de Win Shares de temporada regular coincide
+con el número de victorias con un margen de ±3 % (p.ej. ACB 2025-26 306 / 306; BBL 2024-25 270 / 272;
+G League 2025-26 572 / 558; NBA 2025-26 1.259 / 1.230). Excepción: ACB 2022-23 (279 / 306).
 
 ---
 

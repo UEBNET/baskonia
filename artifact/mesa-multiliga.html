@@ -1,51 +1,50 @@
-<title>Mesa Multiliga Baskonia</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Moneyball Analytics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: banda de mando (temporada · fase · EJECUTAR) arriba, filtros en una fila, tabla densa tipo hoja de scouting, ficha del jugador como panel lateral */
+/* Layout: banda de mando sobre parquet (temporada · fase · EJECUTAR), emblemas de liga, filtros por métrica con slider, tabla con mapa de calor y ficha lateral */
+/* Paleta del cliente: #efe0cd #f2e6d7 #f5ece1 #f9f3eb #fcf9f5. Texto y líneas en marrón nogal derivado para que se lea. Tema claro único, por decisión. */
 :root {
-  --bg: #f3f5f8; --surface: #ffffff; --surface-2: #e9edf3; --ink: #0f1b33; --muted: #5a6680;
-  --line: #d4dbe6; --accent: #c8102e; --accent-ink: #ffffff; --navy: #12305e;
-  --good: #1d7a46; --bad: #b42318; --warn: #a15c07;
-  --cmd-bg: #12305e; --cmd-ink: #ffffff; --cmd-muted: #b9c6e0;
+  --c1: #efe0cd; --c2: #f2e6d7; --c3: #f5ece1; --c4: #f9f3eb; --c5: #fcf9f5;
+  --bg: var(--c3); --surface: var(--c5); --surface-2: var(--c2); --ink: #3a2a1c; --muted: #7a6450;
+  --line: #e3d0b8; --accent: var(--c1); --accent-ink: #3a2a1c; --accent-strong: #6b4f38; --accent-soft: var(--c4); --navy: #6b4f38;
+  --good: #2f7a4c; --bad: #b0402c; --warn: #a15c07;
+  --heat-good: 74,158,102; --heat-bad: 212,96,76; --heat-mid: 249,243,235;
+  --cmd-bg: var(--c2); --cmd-ink: #3a2a1c; --cmd-muted: #7a6450; --plank-a: var(--c1); --plank-b: var(--c2); --seam: rgba(107,79,56,.16);
   --f-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0b1220; --surface: #121b2e; --surface-2: #1a2540; --ink: #e6ebf5; --muted: #93a0bb;
-  --line: #26324d; --accent: #f0425b; --accent-ink: #0b1220; --navy: #8fb3ff;
-  --good: #4cc787; --bad: #ff7a6b; --warn: #f2b45a; --cmd-bg: #17284a; --cmd-ink: #f2f5fb; --cmd-muted: #a9b6d3; color-scheme: dark; } }
-:root[data-theme="dark"] {
-  --bg: #0b1220; --surface: #121b2e; --surface-2: #1a2540; --ink: #e6ebf5; --muted: #93a0bb;
-  --line: #26324d; --accent: #f0425b; --accent-ink: #0b1220; --navy: #8fb3ff;
-  --good: #4cc787; --bad: #ff7a6b; --warn: #f2b45a; --cmd-bg: #17284a; --cmd-ink: #f2f5fb; --cmd-muted: #a9b6d3; color-scheme: dark; }
 * { box-sizing: border-box; }
 html, body { background: var(--bg); color: var(--ink); }
 body { font-family: var(--f-body); font-size: 14px; line-height: 1.45; }
 .wrap { max-width: 1400px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 40px; display: grid; gap: 14px; }
-h1 { font-family: var(--f-display); font-weight: 700; font-size: 34px; letter-spacing: .01em; margin: 0; line-height: 1; text-wrap: balance; }
-h1 span { color: var(--accent); }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 38px; letter-spacing: .06em; margin: 0; line-height: 1; text-wrap: balance; }
+h1 span { color: var(--accent-strong); }
 .sub { color: var(--muted); margin: 4px 0 0; max-width: 70ch; }
 .label { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .08em; font-size: 13px; color: var(--muted); font-weight: 600; }
 .top { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; }
-.command { background: var(--cmd-bg); color: var(--cmd-ink); border-radius: 10px; padding: 14px 16px; display: grid; gap: 12px; }
+.command { background-color: var(--cmd-bg); background-image: repeating-linear-gradient(90deg, transparent 0 95px, var(--seam) 95px 96px), repeating-linear-gradient(0deg, var(--plank-a) 0 22px, var(--seam) 22px 23px, var(--plank-b) 23px 45px, var(--seam) 45px 46px); color: var(--cmd-ink); border-radius: 10px; padding: 14px 16px; display: grid; gap: 12px; box-shadow: inset 0 0 0 1px var(--seam); }
 .command .label { color: var(--cmd-muted); }
 .cmd-row { display: flex; flex-wrap: wrap; gap: 16px 22px; align-items: center; }
 .cmd-group { display: grid; gap: 6px; min-width: 0; }
 select, input[type="search"], input[type="number"] { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; }
 .command select { background: var(--surface); }
-.tabs { display: inline-flex; background: color-mix(in srgb, var(--cmd-ink) 12%, transparent); border-radius: 8px; padding: 3px; gap: 3px; flex-wrap: wrap; }
+.tabs { display: inline-flex; background: color-mix(in srgb, var(--cmd-bg) 70%, var(--cmd-ink) 14%); border-radius: 8px; padding: 3px; gap: 3px; flex-wrap: wrap; }
 .tab { font-family: var(--f-display); font-size: 17px; font-weight: 600; letter-spacing: .03em; border: 0; border-radius: 6px; padding: 6px 14px; cursor: pointer; background: transparent; color: var(--cmd-ink); }
-.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent-strong); }
+.tab:not([aria-selected="true"]):not(:disabled):hover { background: color-mix(in srgb, var(--accent) 35%, transparent); }
 .tab:disabled { opacity: .4; cursor: not-allowed; }
 .tab small { font-family: var(--f-data); font-size: 11px; opacity: .75; margin-left: 4px; }
 .run { margin-left: auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.btn { font-family: var(--f-display); font-weight: 700; letter-spacing: .06em; font-size: 18px; border: 0; border-radius: 8px; padding: 9px 22px; cursor: pointer; background: var(--accent); color: var(--accent-ink); }
-.btn.ghost { background: transparent; color: inherit; border: 1px solid currentColor; font-size: 15px; padding: 6px 12px; }
+.btn { font-family: var(--f-display); font-weight: 700; letter-spacing: .06em; font-size: 18px; border: 0; border-radius: 8px; padding: 9px 22px; cursor: pointer; background: var(--accent-strong); color: var(--c5); }
+.btn:hover:not(:disabled) { background: var(--ink); color: var(--c5); }
+.btn.ghost { background: var(--c4); color: var(--ink); border: 1px solid var(--line); font-size: 15px; padding: 6px 12px; }
+.btn.ghost:hover:not(:disabled) { background: var(--c1); color: var(--ink); border-color: var(--accent-strong); }
 .btn:disabled { opacity: .5; cursor: progress; }
-.btn:focus-visible, .tab:focus-visible, .chip:focus-visible, th button:focus-visible, select:focus-visible, input:focus-visible, tr:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn:focus-visible, .tab:focus-visible, .chip:focus-visible, th button:focus-visible, select:focus-visible, input:focus-visible, tr:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
 .status { font-size: 13px; color: var(--cmd-muted); max-width: 60ch; }
 .status b { color: var(--cmd-ink); }
 .confirm { background: var(--surface); color: var(--ink); border-radius: 8px; padding: 12px 14px; display: grid; gap: 10px; }
@@ -54,7 +53,9 @@ select, input[type="search"], input[type="number"] { font: inherit; color: var(-
 .filters { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { font: 500 13px var(--f-body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip:hover:not(:disabled) { border-color: var(--accent-strong); background: var(--c4); }
+.chip[aria-pressed="true"] { background: var(--c1); color: var(--ink); border-color: var(--accent-strong); font-weight: 600; }
+.chip:disabled { opacity: .45; cursor: not-allowed; }
 .chip .n { font-family: var(--f-data); font-size: 11px; opacity: .7; margin-left: 4px; }
 .views { display: flex; flex-wrap: wrap; gap: 6px; }
 .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 12.5px; }
@@ -67,19 +68,28 @@ table { border-collapse: separate; border-spacing: 0; width: max-content; min-wi
 th, td { padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; text-align: right; }
 th { position: sticky; top: 0; background: var(--surface-2); z-index: 2; font: 600 12px var(--f-display); letter-spacing: .05em; text-transform: uppercase; }
 th button { all: unset; cursor: pointer; display: inline-flex; gap: 3px; align-items: center; }
-th[aria-sort="descending"] button::after { content: "▼"; font-size: 9px; color: var(--accent); }
-th[aria-sort="ascending"] button::after { content: "▲"; font-size: 9px; color: var(--accent); }
+th[aria-sort="descending"] button::after { content: "▼"; font-size: 9px; color: var(--accent-strong); }
+th[aria-sort="ascending"] button::after { content: "▲"; font-size: 9px; color: var(--accent-strong); }
+th.filt { background: var(--c1); box-shadow: inset 0 -3px 0 var(--accent-strong); }
 td { font-family: var(--f-data); font-size: 12.5px; }
 td.txt, th.txt { text-align: left; font-family: var(--f-body); }
 td.name { font-weight: 600; font-family: var(--f-body); }
 th.sticky, td.sticky { position: sticky; left: 0; background: var(--surface); z-index: 1; border-right: 1px solid var(--line); }
 th.sticky { z-index: 3; background: var(--surface-2); }
 tbody tr { cursor: pointer; }
-tbody tr:hover td { background: var(--surface-2); }
-tbody tr.sel td { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
-td.pos { color: var(--good); } td.neg { color: var(--bad); }
+tbody tr:hover td { box-shadow: inset 0 1px 0 var(--accent-strong), inset 0 -1px 0 var(--accent-strong); }
+tbody tr.sel td { box-shadow: inset 0 2px 0 var(--ink), inset 0 -2px 0 var(--ink); }
+tbody tr.sel td.sticky { background: var(--c1); }
+tbody tr.hit td { box-shadow: inset 0 2px 0 var(--accent-strong), inset 0 -2px 0 var(--accent-strong); font-weight: 600; }
+tbody tr.hit td.sticky { background: var(--accent-strong); color: var(--c5); }
+tbody tr.hit.cur td.sticky { background: var(--ink); }
+tbody tr.hit.cur td { box-shadow: inset 0 3px 0 var(--ink), inset 0 -3px 0 var(--ink); }
+.hitmark { font-size: 9px; margin-right: 6px; vertical-align: 1px; }
+.qhits { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--muted); min-height: 18px; }
+.qhits button { all: unset; cursor: pointer; font: 600 12px var(--f-display); letter-spacing: .05em; padding: 1px 7px; border: 1px solid var(--line); border-radius: 4px; background: var(--c4); color: var(--ink); }
+.qhits button:hover, .qhits button:focus-visible { border-color: var(--accent-strong); background: var(--c1); }
+
 td.na { color: var(--muted); opacity: .6; }
-.lg { font: 600 11px var(--f-display); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; color: var(--muted); }
 .pager { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; align-content: start; max-height: 76vh; overflow: auto; min-width: 0; }
 .panel h2 { font-family: var(--f-display); font-size: 26px; margin: 0; line-height: 1.05; }
@@ -91,21 +101,253 @@ td.na { color: var(--muted); opacity: .6; }
 .cmp-row { display: grid; grid-template-columns: 90px minmax(0, 1fr) 62px; gap: 8px; align-items: center; font-size: 12.5px; }
 .bars { display: grid; gap: 2px; }
 .bar { height: 7px; border-radius: 4px; background: var(--muted); opacity: .45; }
-.bar.po { background: var(--accent); opacity: 1; }
+.bar.po { background: var(--accent-strong); opacity: 1; }
 .delta { font-family: var(--f-data); text-align: right; }
 .note { font-size: 12.5px; color: var(--muted); }
 .empty { padding: 40px 16px; text-align: center; color: var(--muted); }
 .legend { display: flex; gap: 12px; font-size: 12px; color: var(--muted); align-items: center; }
 .legend i { display: inline-block; width: 18px; height: 7px; border-radius: 4px; vertical-align: middle; margin-right: 4px; }
+
+/* filtros por métrica */
+.mfilters { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 12px; }
+.mf-head { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; }
+.mf-head .grow { flex: 1 1 260px; min-width: 0; display: grid; gap: 6px; }
+.mf-head select { width: 100%; max-width: 420px; }
+.mf-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 10px; }
+.mf { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 8px; min-width: 0; }
+.mf-top { display: flex; gap: 8px; align-items: baseline; justify-content: space-between; }
+.mf-top b { font: 700 17px var(--f-display); letter-spacing: .02em; }
+.mf-top .note { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.mf-x { all: unset; cursor: pointer; font: 600 12px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-strong); padding: 2px 6px; border-radius: 4px; }
+.mf-x:hover, .mf-x:focus-visible { background: var(--c1); outline: 2px solid var(--accent-strong); }
+.range { position: relative; height: 26px; }
+.range .track { position: absolute; left: 0; right: 0; top: 11px; height: 4px; border-radius: 2px; background: var(--line); }
+.range .fill { position: absolute; top: 11px; height: 4px; border-radius: 2px; background: var(--accent-strong); }
+.range input[type=range] { position: absolute; inset: 0; width: 100%; margin: 0; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; height: 26px; }
+.range input[type=range]::-webkit-slider-runnable-track { background: none; height: 26px; }
+.range input[type=range]::-moz-range-track { background: none; }
+.range input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 18px; height: 18px; margin-top: 4px; border-radius: 50%; background: var(--c5); border: 2px solid var(--accent-strong); cursor: grab; }
+.range input[type=range]::-moz-range-thumb { pointer-events: auto; width: 15px; height: 15px; border-radius: 50%; background: var(--c5); border: 2px solid var(--accent-strong); cursor: grab; }
+.range input[type=range]:focus-visible { outline: none; }
+.range input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--accent-soft); }
+.range input[type=range]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--accent-soft); }
+.mf-vals { display: flex; gap: 8px; align-items: center; justify-content: space-between; font-size: 12px; color: var(--muted); }
+.mf-vals input { width: 92px; font-family: var(--f-data); font-size: 12.5px; padding: 4px 6px; }
+.mf-empty { font-size: 13px; color: var(--muted); }
+
+/* emblemas de liga (diseño propio, no son los logotipos oficiales) */
+.crests { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.crest { all: unset; box-sizing: border-box; cursor: pointer; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; align-content: center; gap: 0; position: relative;
+  background: radial-gradient(circle at 50% 50%, var(--c5) 0 54%, transparent 55%), conic-gradient(from 0deg, var(--c1) 0 25%, var(--c2) 0 50%, var(--c1) 0 75%, var(--c2) 0); border: 2px solid var(--line); color: var(--muted); transition: transform .12s, border-color .12s; }
+.crest::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; border: 1px dashed var(--line); }
+.crest b { font: 700 var(--crest-size, 19px)/1 var(--f-display); letter-spacing: .04em; position: relative; }
+.crest .n { font: 500 10px var(--f-data); position: relative; opacity: .8; }
+.crest[aria-pressed="true"] { border-color: var(--accent-strong); color: var(--ink); background: radial-gradient(circle at 50% 50%, var(--c5) 0 54%, transparent 55%), conic-gradient(from 0deg, var(--accent-strong) 0 25%, var(--c1) 0 50%, var(--accent-strong) 0 75%, var(--c1) 0); }
+.crest[aria-pressed="true"]::before { border-color: var(--accent-strong); }
+.crest[aria-pressed="false"] { opacity: .55; filter: grayscale(.6); }
+.crest:hover:not(:disabled) { transform: translateY(-1px); opacity: 1; }
+.crest:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
+.crest:disabled { opacity: .25; cursor: not-allowed; }
+.crest-all { all: unset; cursor: pointer; font: 600 12px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-strong); padding: 4px 8px; border-radius: 4px; }
+.crest-all:hover, .crest-all:focus-visible { background: var(--c1); }
+.lg { font: 700 10.5px var(--f-display); letter-spacing: .05em; display: inline-grid; place-items: center; min-width: 30px; height: 20px; padding: 0 5px; border-radius: 10px; border: 1px solid var(--accent-strong); background: var(--c5); color: var(--ink); }
+td.heat { color: var(--ink); }
+td.pos-cell { font-family: var(--f-body); text-align: left; }
+td.pos-cell.est { color: var(--muted); font-style: italic; }
+.agebox { display: grid; gap: 4px; width: 220px; max-width: 100%; }
+.agebox .mf-vals { font-family: var(--f-data); color: var(--ink); justify-content: flex-start; gap: 4px; }
+.optcheck { display: inline-flex; gap: 5px; align-items: center; font-size: 12px; color: var(--muted); }
+.heat-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 12px; color: var(--muted); }
+.heat-legend .ramp { width: 140px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, rgb(var(--heat-bad)), rgb(var(--heat-mid)), rgb(var(--heat-good))); border: 1px solid var(--line); }
+
+/* pestañas de página */
+.top { align-items: center; }
+.pagetabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--c1); border-radius: 10px; flex-wrap: wrap; }
+.pagetab { font: 700 18px var(--f-display); letter-spacing: .05em; text-transform: uppercase; border: 0; border-radius: 7px; padding: 7px 16px; cursor: pointer; background: transparent; color: var(--muted); }
+.pagetab[aria-selected="true"] { background: var(--c5); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent-strong); }
+.pagetab:hover:not([aria-selected="true"]) { color: var(--ink); background: var(--c3); }
+.pagetab:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
+.page { display: grid; gap: 14px; min-width: 0; }
+
+/* comparador */
+.cmp { --p1: #1f63a8; --p2: #d07a2a; --p3: #8a4f9e; }
+.cmp-bar { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; }
+.cmp-pick { display: grid; gap: 6px; flex: 1 1 280px; min-width: 0; max-width: 480px; }
+.cmp-search { position: relative; }
+.cmp-search input { width: 100%; }
+.cmp-sug { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 4px); margin: 0; padding: 4px; list-style: none; background: var(--c5); border: 1px solid var(--accent-strong); border-radius: 8px; box-shadow: 0 8px 24px rgba(58,42,28,.14); max-height: 320px; overflow: auto; }
+.cmp-sug li { padding: 7px 9px; border-radius: 6px; cursor: pointer; display: flex; gap: 8px; align-items: baseline; justify-content: space-between; }
+.cmp-sug li[aria-selected="true"], .cmp-sug li:hover { background: var(--c2); }
+.cmp-sug li b { font-weight: 600; }
+.cmp-sug li small { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.cmp-sug li.dis { opacity: .5; cursor: not-allowed; }
+.cmp-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 12px; }
+.pcard { background: var(--c5); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; }
+.pdisc { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 700 18px var(--f-display); letter-spacing: .04em; grid-row: span 2; }
+.pcard h3 { margin: 0; font: 700 22px/1.05 var(--f-display); letter-spacing: .02em; overflow-wrap: anywhere; }
+.pcard .sub2 { font-size: 12.5px; color: var(--muted); grid-column: 2 / 4; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.pcard .facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+.pcard .facts div { background: var(--c3); border-radius: 6px; padding: 5px 7px; display: grid; }
+.pcard .facts span { font: 600 10.5px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.pcard .facts b { font: 500 15px var(--f-data); }
+.pcard.empty-slot { grid-template-columns: 1fr; place-items: center; min-height: 128px; border-style: dashed; color: var(--muted); text-align: center; background: var(--c4); }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.dcard { background: var(--c5); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.dcard h2 { margin: 0; font: 700 20px var(--f-display); letter-spacing: .04em; text-transform: uppercase; }
+.dcard .hint { font-size: 12px; color: var(--muted); margin: -6px 0 0; }
+.dcard svg { width: 100%; height: auto; display: block; overflow: visible; }
+.legend2 { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--ink); }
+.legend2 span { display: inline-flex; gap: 6px; align-items: center; }
+.legend2 i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.lol-group { display: grid; gap: 8px; }
+.lol-group h3 { margin: 4px 0 0; font: 700 14px var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-strong); border-bottom: 1px solid var(--line); padding-bottom: 3px; }
+.lol-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 10px; align-items: center; }
+.lol-row > span { font: 600 13px var(--f-display); letter-spacing: .04em; color: var(--ink); }
+.lol-lanes { display: grid; gap: 3px; }
+.lol { display: grid; grid-template-columns: minmax(0, 1fr) 86px; gap: 8px; align-items: center; }
+.lol-track { position: relative; height: 12px; background: var(--c3); border-radius: 6px; }
+.lol-track .p50 { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); opacity: .6; }
+.lol-stem { position: absolute; left: 0; top: 5px; height: 2px; opacity: .55; }
+.lol-dot { position: absolute; top: 1px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; border: 2px solid var(--c5); box-sizing: content-box; transform: translate(-1px, -1px); }
+.lol em { font: 500 12.5px var(--f-data); font-style: normal; text-align: right; color: var(--ink); white-space: nowrap; }
+.lol em small { color: var(--muted); font-size: 11px; }
+.zones { display: grid; gap: 8px; width: 100%; text-align: left; }
+.zrow { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 8px; align-items: start; }
+.zrow > i { width: 10px; height: 10px; border-radius: 3px; margin-top: 4px; }
+.zhead, .zfoot { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; }
+.zhead span { font-family: var(--f-data); }
+.zfoot { color: var(--muted); font-size: 11.5px; }
+.zfoot b { color: var(--ink); font-family: var(--f-data); font-weight: 500; }
+.zbar { position: relative; height: 10px; background: var(--c3); border-radius: 5px; margin: 3px 0; }
+.zfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; }
+.ztick { position: absolute; top: -3px; bottom: -3px; width: 3px; margin-left: -1.5px; border-radius: 1px; text-decoration: none; }
+.ztick.team { background: var(--accent-strong); }
+.ztick.lg { background: var(--muted); opacity: .75; }
+.ctx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+.ctx-col { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.ctx-row { display: grid; gap: 0; border-top: 1px solid var(--line); padding-top: 6px; }
+.ctx-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px; align-items: baseline; }
+.ctx-head b { font: 700 14px var(--f-display); letter-spacing: .04em; cursor: help; }
+.ctx-head span { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.dz { font: 500 11.5px var(--f-data); color: var(--muted); white-space: nowrap; }
+.dz.up { color: var(--good); } .dz.down { color: var(--bad); }
+.cmp-table tr.grp th { text-align: left; background: var(--c1); font: 700 13px var(--f-display); letter-spacing: .08em; text-transform: uppercase; }
+.cmp-table td { font-family: var(--f-data); font-size: 12.5px; color: var(--ink); }
+.duel { display: grid; gap: 10px; }
+.duel-row { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; align-items: center; }
+.duel-row > span { font: 600 13px var(--f-display); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.duel-bars { display: grid; gap: 3px; }
+.duel-bar { display: grid; grid-template-columns: minmax(0, 1fr) 58px; gap: 8px; align-items: center; }
+.duel-track { height: 12px; position: relative; }
+.duel-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; min-width: 2px; }
+.duel-bar em { font: 500 12.5px var(--f-data); font-style: normal; text-align: right; color: var(--ink); white-space: nowrap; }
+.duel-bar em.best::after { content: " ★"; color: var(--accent-strong); }
+.donuts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; }
+.donut { display: grid; gap: 6px; justify-items: center; text-align: center; }
+.donut svg { max-width: 190px; }
+.donut .who { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; font-size: 13.5px; }
+.who i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.rings { display: grid; gap: 4px; overflow-x: auto; }
+.rings table { border-collapse: collapse; width: 100%; min-width: 360px; }
+.rings th { font: 600 12px var(--f-display); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 4px 6px; background: none; position: static; }
+.rings td { padding: 4px 6px; text-align: center; border: 0; font-family: var(--f-body); }
+.rings svg { width: 74px; height: 74px; }
+.cmp-table { overflow-x: auto; }
+.cmp-table table { border-collapse: collapse; width: 100%; min-width: 420px; }
+.cmp-table th, .cmp-table td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; }
+.cmp-table th { position: static; background: var(--c2); }
+.cmp-table td:first-child, .cmp-table th:first-child { text-align: left; font-family: var(--f-body); }
+details.dcard summary { cursor: pointer; font: 700 16px var(--f-display); letter-spacing: .05em; text-transform: uppercase; }
+.tip { position: fixed; z-index: 50; pointer-events: none; background: var(--ink); color: var(--c5); font-size: 12.5px; line-height: 1.4; padding: 7px 9px; border-radius: 6px; max-width: 260px; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+.tip b { font-weight: 600; }
+.addcmp { justify-self: start; }
 @media (prefers-reduced-motion: no-preference) { tbody tr td { transition: background-color .12s; } }
+
+/* evaluación de ligas: barra de mando propia, ficha de métrica (barras, cajas, transporte), matriz de todas las métricas, porqués y resumen estático al pie */
+.ev { --ev-pos: 42,120,214; --ev-neg: 235,104,52; --ev-mid: var(--c4); }
+.ev-bar { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; }
+.ev-bar .cmd-group { min-width: 0; }
+.ev-bar select, .ev-bar input { min-width: 0; max-width: 100%; }
+.ev-intro { display: grid; gap: 6px; max-width: 92ch; }
+.ev-intro p { margin: 0; color: var(--muted); }
+.ev-note { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.ev-note b { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+.ev-warn { background: var(--c4); border: 1px solid var(--line); border-left: 4px solid var(--warn); border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+.ev-h { font: 700 26px var(--f-display); letter-spacing: .04em; text-transform: uppercase; margin: 10px 0 0; }
+.ev-h3 { margin: 0; font: 700 17px var(--f-display); letter-spacing: .05em; text-transform: uppercase; }
+.ev-sub { margin: -4px 0 0; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
+.ev-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 14px; }
+.ev-kpis { display: flex; flex-wrap: wrap; gap: 8px; }
+.ev-kpi { background: var(--c3); border-radius: 8px; padding: 6px 10px; display: grid; min-width: 96px; }
+.ev-kpi span { font: 600 11px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ev-kpi b { font: 500 16px var(--f-data); font-variant-numeric: tabular-nums; }
+.ev-kpi small { font-size: 11px; color: var(--muted); }
+.ev-mhead { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; justify-content: space-between; }
+.ev-mhead h2 { margin: 0; font: 700 30px/1 var(--f-display); letter-spacing: .02em; }
+.ev-mhead code { font: 500 12px var(--f-data); color: var(--muted); }
+.ev-badge { font: 600 11px var(--f-display); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--accent-strong); border-radius: 999px; padding: 2px 8px; color: var(--accent-strong); }
+.ev-svgbox { overflow-x: auto; }
+.ev-svgbox svg { min-width: 420px; }
+.ev-svgbox.fit svg { min-width: 0; }
+.ev svg text { fill: var(--ink); font-family: var(--f-data); font-size: 11px; }
+.ev svg .ax { stroke: var(--line); stroke-width: 1; }
+.ev svg .ax0 { stroke: var(--muted); stroke-width: 1; }
+.ev svg .mut { fill: var(--muted); }
+.ev svg .lab { font-family: var(--f-display); font-weight: 600; font-size: 12.5px; letter-spacing: .03em; }
+.ev-tablebox { overflow: auto; max-height: 68vh; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.ev-tablebox table th { position: sticky; top: 0; }
+.ev-tablebox table td.txt { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+.ev-mx tbody tr { cursor: pointer; }
+.ev-mx tbody tr.on td { box-shadow: inset 0 2px 0 var(--ink), inset 0 -2px 0 var(--ink); }
+.ev-mx td.cell { min-width: 74px; }
+.ev-mx td.refc { font-weight: 600; background: var(--c2); }
+.ev-mx td.abs::after { content: " abs"; font-size: 9.5px; color: var(--muted); }
+.ev-mx .grp { color: var(--muted); font-size: 12px; }
+.ev-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12px; color: var(--muted); }
+.ev-legend .ramp { width: 160px; height: 8px; border-radius: 4px; border: 1px solid var(--line); background: linear-gradient(90deg, rgb(var(--ev-neg)), var(--c4), rgb(var(--ev-pos))); }
+.ev-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -2px; margin-right: 4px; }
+.ev-st th, .ev-st td { white-space: nowrap; }
+.ev-st td small, .evd { font: 500 10.5px var(--f-data); }
+.evd { display: inline-block; margin-left: 5px; padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+.evd.ref { background: var(--c2); color: var(--muted); }
+.evsw { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.ev-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.ev-find { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 13.5px; max-width: 75ch; }
+.ev-find b { font-weight: 600; }
+.ev-twolists { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px; }
+.ev-rank { margin: 6px 0 0; padding-left: 22px; display: grid; gap: 4px; font-size: 13px; }
+.ev-rank li { display: list-item; }
+.ev-rank li b { font-weight: 600; }
+.ev-rank li span { float: right; margin-left: 8px; font-family: var(--f-data); color: var(--muted); }
+.ev-sep { border: 0; height: 18px; margin: 18px 0 4px; background: repeating-linear-gradient(90deg, var(--accent-strong) 0 18px, transparent 18px 26px) center / 100% 3px no-repeat; }
+.ev-static { display: grid; gap: 14px; background: var(--c2); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.ev-static-head { display: grid; gap: 4px; }
+.ev-static-head h2 { margin: 0; font: 700 32px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; text-wrap: balance; }
+.ev-static-head p { margin: 0; color: var(--muted); max-width: 90ch; font-size: 13px; }
+.ev-static-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 14px; }
+.ev-static-grid.three { grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); }
+.ev-math { font: 500 12.5px var(--f-data); background: var(--c3); border-radius: 6px; padding: 6px 9px; overflow-x: auto; white-space: nowrap; }
+.ev-r2 { display: grid; gap: 5px; }
+.ev-r2 div { display: grid; grid-template-columns: 120px minmax(0, 1fr) 54px; gap: 8px; align-items: center; font-size: 12.5px; }
+.ev-r2 .trk { height: 9px; background: var(--c3); border-radius: 5px; position: relative; }
+.ev-r2 .trk i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: var(--accent-strong); }
+.ev-r2 em { font: 500 12px var(--f-data); font-style: normal; text-align: right; }
+.ev-check { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); }
+.ev details summary { cursor: pointer; font: 600 13px var(--f-display); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-strong); }
+.ev details p { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
 </style>
 
 <div class="wrap">
   <header class="top">
     <div>
-      <h1>Mesa Multiliga <span>Baskonia</span></h1>
-      <p class="sub">Estadística básica y avanzada de 8 competiciones con las mismas columnas: EuroLeague, EuroCup, Liga Endesa, NBA, G League, LBA, BBL y LNB. Pulsa una fila para ver la ficha del jugador.</p>
+      <h1>MONEYBALL <span>ANALYTICS</span></h1>
     </div>
+    <nav class="pagetabs" role="tablist" aria-label="Secciones">
+      <button class="pagetab" role="tab" type="button" id="tab-tabla" data-page="tabla" aria-selected="true">Tabla de datos</button>
+      <button class="pagetab" role="tab" type="button" id="tab-comparador" data-page="comparador" aria-selected="false">Comparador</button>
+      <button class="pagetab" role="tab" type="button" id="tab-evaluacion" data-page="evaluacion" aria-selected="false">Evaluación de ligas</button>
+    </nav>
   </header>
 
   <section class="command" aria-label="Temporada, fase y actualización">
@@ -127,24 +369,39 @@ td.na { color: var(--muted); opacity: .6; }
       <div class="row"><span class="label" style="color:var(--muted)">Ligas a actualizar</span><div class="row" id="runLeagues"></div></div>
       <div class="row">
         <label for="runSeason">Temporada</label><select id="runSeason"></select>
-        <span class="note">Sólo se actualiza la temporada elegida; las demás no se tocan. Se lanza una sesión de Claude Code que descarga las fuentes oficiales, guarda los JSON en el repositorio y republica los datos de esa temporada en esta página. Tarda entre 10 y 20 minutos.</span>
+        <span class="note">Sólo se actualiza la temporada elegida; las demás no se tocan. Se lanza una sesión de Claude Code que descarga las fuentes, guarda los datos en el repositorio y republica los de esa temporada en esta página. Tarda entre 10 y 20 minutos.</span>
       </div>
       <div class="row"><button class="btn" id="runGo" type="button">Lanzar actualización</button><button class="btn ghost" id="runCancel" type="button">Cancelar</button></div>
     </div>
   </section>
 
+  <div id="pageTabla" class="page">
   <section class="filters" aria-label="Filtros">
     <div class="cmd-group" style="min-width:0">
-      <span class="label">Ligas</span>
-      <div class="chips" id="leagues"></div>
+      <span class="label">Ligas <button class="crest-all" id="allLeagues" type="button">Todas</button><button class="crest-all" id="noLeagues" type="button">Ninguna</button></span>
+      <div class="crests" id="leagues"></div>
     </div>
     <div class="cmd-group">
       <label class="label" for="q">Jugador o equipo</label>
-      <input type="search" id="q" placeholder="Buscar…">
+      <input type="search" id="q" placeholder="Resaltar… (no filtra)">
+      <div class="qhits" id="qHits" aria-live="polite"></div>
     </div>
     <div class="cmd-group">
       <label class="label" for="minMin">Minutos mínimos</label>
       <input type="number" id="minMin" min="0" step="10" value="100" style="width:110px">
+    </div>
+    <div class="cmd-group">
+      <label class="label" for="maxMin">Minutos máximos</label>
+      <input type="number" id="maxMin" min="0" step="10" placeholder="Sin límite" style="width:110px">
+    </div>
+    <div class="cmd-group" style="min-width:0">
+      <span class="label">Posición</span>
+      <div class="chips" id="posChips"></div>
+      <label class="optcheck" for="posEst"><input type="checkbox" id="posEst" checked> Incluir posiciones estimadas (≈)</label>
+    </div>
+    <div class="cmd-group">
+      <span class="label">Edad</span>
+      <div class="agebox" id="ageBox"></div>
     </div>
     <div class="cmd-group" style="min-width:0">
       <span class="label">Vista</span>
@@ -152,7 +409,20 @@ td.na { color: var(--muted); opacity: .6; }
     </div>
   </section>
 
+  <section class="mfilters" aria-label="Filtros por métrica">
+    <div class="mf-head">
+      <div class="grow">
+        <label class="label" for="mfPick">Filtrar por métrica</label>
+        <select id="mfPick"></select>
+      </div>
+      <button class="btn ghost" id="mfAdd" type="button">Añadir filtro</button>
+      <button class="btn ghost" id="mfClear" type="button" hidden>Quitar todos</button>
+    </div>
+    <div class="mf-list" id="mfList"></div>
+  </section>
+
   <div class="meta" id="meta"></div>
+  <div class="heat-legend"><span class="ramp"></span><span>Fondo de celda: rojo = peor, verde = mejor, por percentil dentro de los jugadores filtrados. En pérdidas, faltas y ratings defensivos, menos es mejor.</span></div>
 
   <div class="main" id="main">
     <div style="display:grid;gap:10px;min-width:0">
@@ -161,13 +431,130 @@ td.na { color: var(--muted); opacity: .6; }
     </div>
     <aside class="panel" id="panel" hidden></aside>
   </div>
+  </div>
+
+  <div id="pageCmp" class="page cmp" hidden>
+    <section class="cmp-bar" aria-label="Jugadores a comparar">
+      <div class="cmp-pick">
+        <label class="label" for="cmpQ">Añadir jugador (hasta 3)</label>
+        <div class="cmp-search">
+          <input type="search" id="cmpQ" placeholder="Escribe un nombre o un equipo…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="cmpSug">
+          <ul class="cmp-sug" id="cmpSug" role="listbox" hidden></ul>
+        </div>
+      </div>
+      <div class="cmd-group">
+        <label class="label" for="cmpRef">Percentiles frente a</label>
+        <select id="cmpRef"><option value="liga">Su propia liga</option><option value="todas">Todas las ligas</option></select>
+      </div>
+      <div class="cmd-group">
+        <label class="label" for="cmpMin">Minutos mínimos del grupo</label>
+        <input type="number" id="cmpMin" min="0" step="10" value="100" style="width:110px">
+      </div>
+    </section>
+    <div class="note" id="cmpNote"></div>
+    <section class="cmp-cards" id="cmpCards"></section>
+    <div id="cmpBody"></div>
+  </div>
+
+  <div id="pageEval" class="page ev" hidden>
+    <section class="ev-intro" aria-label="Qué muestra esta pestaña">
+      <span class="label">Evaluación de ligas</span>
+      <p>Cada métrica comparada entre competiciones con la temporada y la fase elegidas arriba. Las diferencias porcentuales se miden frente a la liga de referencia. Debajo se descompone por qué difieren: ritmo, reglamento, posición, equipo, nivel y criterio de anotación.</p>
+    </section>
+    <section class="ev-bar" aria-label="Opciones de la evaluación">
+      <div class="cmd-group"><label class="label" for="evRef">Liga de referencia</label><select id="evRef"></select></div>
+      <div class="cmd-group" style="flex:1 1 260px;max-width:440px"><label class="label" for="evMetricSel">Métrica en detalle</label><select id="evMetricSel"></select></div>
+      <div class="cmd-group"><label class="label" for="evGroup">Grupo de métricas</label><select id="evGroup"></select></div>
+      <div class="cmd-group"><label class="label" for="evQ">Buscar métrica</label><input type="search" id="evQ" placeholder="ORtg, TS%, pace…"></div>
+      <div class="cmd-group"><label class="label" for="evSort">Ordenar la matriz por</label><select id="evSort">
+        <option value="eta2">η² de liga (mayor primero)</option><option value="maxabs">Mayor |Δ%| frente a la referencia</option><option value="eps2">ε² de Kruskal-Wallis</option><option value="orden">Orden del esquema</option><option value="nombre">Nombre</option></select></div>
+      <label class="ev-check" for="evHideTot"><input type="checkbox" id="evHideTot" checked> Ocultar totales de temporada en la matriz</label>
+    </section>
+    <div class="ev-note" id="evNote"></div>
+    <div id="evWarn"></div>
+
+    <article class="dcard" id="evMetric" aria-live="polite"><div class="empty">Cargando evaluación…</div></article>
+
+    <section class="dcard" aria-labelledby="evMxTitle">
+      <h2 id="evMxTitle">Matriz de todas las métricas</h2>
+      <p class="hint" id="evMxHint"></p>
+      <div class="ev-legend"><span class="ramp"></span><span>naranja: por debajo de la referencia · azul: por encima (saturación a ±50 %). «abs» = diferencia absoluta, para métricas con signo o referencia cercana a cero. Pulsa una fila para verla en detalle.</span></div>
+      <div class="ev-tablebox" id="evMatrix"></div>
+    </section>
+
+    <h2 class="ev-h">Por qué difieren las ligas</h2>
+    <div class="ev-grid2">
+      <article class="dcard" id="evShap"></article>
+      <article class="dcard" id="evScale"></article>
+      <article class="dcard" id="evPos"></article>
+      <article class="dcard" id="evTeams"></article>
+      <article class="dcard" id="evDisc"></article>
+      <article class="dcard" id="evBridge"></article>
+    </div>
+    <article class="dcard" id="evQual"></article>
+
+    <hr class="ev-sep">
+    
+<section class="ev-static" id="evStatic" aria-labelledby="evStaticTitle">
+  <div class="ev-static-head">
+    <span class="label">Resumen final · fotografía fija</span>
+    <h2 id="evStaticTitle">Variaciones entre ligas en 2025-26</h2>
+    <p>Temporada regular 2025-26 completa, jugadores con 200 minutos o más (medias ponderadas por minutos) y todos los equipos para el contexto de equipo. Liga de referencia: EuroLeague. Este bloque no cambia con los selectores de arriba.</p>
+  </div>
+
+  <div class="ev-static-grid">
+    <article class="dcard">
+      <h3 class="ev-h3">Entorno de juego (equipos)</h3>
+      <div class="cmp-table"><table class="ev-st">
+        <thead><tr><th class="txt">Liga</th><th title="Posesiones por partido">Ritmo</th><th title="Puntos por 100 posesiones">ORtg</th><th>eFG%</th><th title="Pérdidas por 100 posesiones">Pér/100</th><th title="Rebotes ofensivos por 100 posesiones">OREB/100</th><th title="Tiros libres intentados por 100 posesiones">TL/100</th><th title="Puntos por tiro libre intentado">Pts/TL</th><th title="Triples intentados / tiros de campo">3PAr</th><th title="Canastas asistidas / canastas">AST/FGM</th></tr></thead>
+        <tbody><tr><td class="txt"><span class="evsw" style="background:#2a78d6"></span>EuroLeague</td><td>72,5</td><td>118,0</td><td>54,9</td><td>17,0</td><td>15,3</td><td>27,1</td><td>0,78</td><td>41,3</td><td>61,9</td></tr><tr><td class="txt"><span class="evsw" style="background:#eb6834"></span>EuroCup</td><td>75,3<small class="evd" style="background:rgba(42,120,214,0.15)">+3,8 %</small></td><td>113,5<small class="evd" style="background:rgba(235,104,52,0.15)">-3,8 %</small></td><td>53,5<small class="evd" style="background:rgba(235,104,52,0.13)">-2,6 %</small></td><td>18,3<small class="evd" style="background:rgba(42,120,214,0.22)">+7,5 %</small></td><td>14,9<small class="evd" style="background:rgba(235,104,52,0.13)">-2,9 %</small></td><td>31,0<small class="evd" style="background:rgba(42,120,214,0.34)">+14,2 %</small></td><td>0,75<small class="evd" style="background:rgba(235,104,52,0.16)">-4,4 %</small></td><td>40,4<small class="evd" style="background:rgba(235,104,52,0.12)">-2,1 %</small></td><td>61,5<small class="evd" style="background:rgba(235,104,52,0.09)">-0,8 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#1baf7a"></span>Liga Endesa</td><td>75,8<small class="evd" style="background:rgba(42,120,214,0.16)">+4,5 %</small></td><td>115,6<small class="evd" style="background:rgba(235,104,52,0.12)">-2,0 %</small></td><td>54,1<small class="evd" style="background:rgba(235,104,52,0.11)">-1,4 %</small></td><td>17,4<small class="evd" style="background:rgba(42,120,214,0.11)">+1,8 %</small></td><td>14,2<small class="evd" style="background:rgba(235,104,52,0.21)">-6,9 %</small></td><td>30,4<small class="evd" style="background:rgba(42,120,214,0.3)">+12,1 %</small></td><td>0,76<small class="evd" style="background:rgba(235,104,52,0.13)">-2,9 %</small></td><td>42,3<small class="evd" style="background:rgba(42,120,214,0.13)">+2,5 %</small></td><td>57,0<small class="evd" style="background:rgba(235,104,52,0.23)">-8,0 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#eda100"></span>LBA</td><td>74,0<small class="evd" style="background:rgba(42,120,214,0.12)">+2,0 %</small></td><td>114,5<small class="evd" style="background:rgba(235,104,52,0.13)">-3,0 %</small></td><td>53,1<small class="evd" style="background:rgba(235,104,52,0.14)">-3,2 %</small></td><td>16,5<small class="evd" style="background:rgba(235,104,52,0.14)">-3,4 %</small></td><td>15,1<small class="evd" style="background:rgba(235,104,52,0.11)">-1,5 %</small></td><td>27,7<small class="evd" style="background:rgba(42,120,214,0.12)">+2,2 %</small></td><td>0,76<small class="evd" style="background:rgba(235,104,52,0.14)">-3,5 %</small></td><td>42,3<small class="evd" style="background:rgba(42,120,214,0.13)">+2,5 %</small></td><td>58,8<small class="evd" style="background:rgba(235,104,52,0.17)">-5,0 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#e87ba4"></span>BBL</td><td>74,8<small class="evd" style="background:rgba(42,120,214,0.14)">+3,2 %</small></td><td>111,7<small class="evd" style="background:rgba(235,104,52,0.18)">-5,3 %</small></td><td>52,8<small class="evd" style="background:rgba(235,104,52,0.15)">-4,0 %</small></td><td>18,7<small class="evd" style="background:rgba(42,120,214,0.25)">+9,5 %</small></td><td>15,8<small class="evd" style="background:rgba(42,120,214,0.15)">+3,6 %</small></td><td>28,2<small class="evd" style="background:rgba(42,120,214,0.16)">+4,2 %</small></td><td>0,73<small class="evd" style="background:rgba(235,104,52,0.2)">-6,4 %</small></td><td>43,6<small class="evd" style="background:rgba(42,120,214,0.18)">+5,6 %</small></td><td>58,8<small class="evd" style="background:rgba(235,104,52,0.17)">-5,1 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#008300"></span>LNB</td><td>76,2<small class="evd" style="background:rgba(42,120,214,0.17)">+5,1 %</small></td><td>112,8<small class="evd" style="background:rgba(235,104,52,0.16)">-4,4 %</small></td><td>53,9<small class="evd" style="background:rgba(235,104,52,0.11)">-1,9 %</small></td><td>18,4<small class="evd" style="background:rgba(42,120,214,0.22)">+7,7 %</small></td><td>14,9<small class="evd" style="background:rgba(235,104,52,0.13)">-2,9 %</small></td><td>31,4<small class="evd" style="background:rgba(42,120,214,0.37)">+15,8 %</small></td><td>0,75<small class="evd" style="background:rgba(235,104,52,0.16)">-4,1 %</small></td><td>42,8<small class="evd" style="background:rgba(42,120,214,0.15)">+3,8 %</small></td><td>66,5<small class="evd" style="background:rgba(42,120,214,0.22)">+7,4 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#6250d6"></span>NBA</td><td>99,4<small class="evd" style="background:rgba(42,120,214,0.63)">+37,0 %</small></td><td>115,8<small class="evd" style="background:rgba(235,104,52,0.11)">-1,9 %</small></td><td>54,6<small class="evd" style="background:rgba(235,104,52,0.09)">-0,6 %</small></td><td>14,5<small class="evd" style="background:rgba(235,104,52,0.35)">-14,7 %</small></td><td>11,4<small class="evd" style="background:rgba(235,104,52,0.55)">-25,6 %</small></td><td>23,5<small class="evd" style="background:rgba(235,104,52,0.32)">-13,3 %</small></td><td>0,78<small class="evd" style="background:rgba(235,104,52,0.08)">-0,3 %</small></td><td>41,5<small class="evd" style="background:rgba(42,120,214,0.09)">+0,5 %</small></td><td>63,7<small class="evd" style="background:rgba(42,120,214,0.13)">+2,9 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#e34948"></span>G League</td><td>102,7<small class="evd" style="background:rgba(42,120,214,0.63)">+41,6 %</small></td><td>113,0<small class="evd" style="background:rgba(235,104,52,0.16)">-4,2 %</small></td><td>54,7<small class="evd" style="background:rgba(235,104,52,0.09)">-0,5 %</small></td><td>14,9<small class="evd" style="background:rgba(235,104,52,0.31)">-12,4 %</small></td><td>11,8<small class="evd" style="background:rgba(235,104,52,0.5)">-22,9 %</small></td><td>14,7<small class="evd" style="background:rgba(235,104,52,0.63)">-45,9 %</small></td><td>1,24<small class="evd" style="background:rgba(42,120,214,0.63)">+57,9 %</small></td><td>40,9<small class="evd" style="background:rgba(235,104,52,0.1)">-0,9 %</small></td><td>61,0<small class="evd" style="background:rgba(235,104,52,0.11)">-1,5 %</small></td></tr></tbody></table></div>
+      <p class="note">G League: posesiones con el coeficiente de tiro libre único (ritmo 102,5 frente a 102,7 oficial; ORtg 113,1 frente a 113,0).</p>
+    </article>
+    <article class="dcard">
+      <h3 class="ev-h3">Jugadores (media ponderada por minutos)</h3>
+      <div class="cmp-table"><table class="ev-st">
+        <thead><tr><th class="txt">Liga</th><th>TS%</th><th>Pts/40</th><th>Pts/100</th><th>AST%</th><th>TOV%</th><th>BLK%</th><th>FTr</th><th>Falt/100</th><th>Edad</th></tr></thead>
+        <tbody><tr><td class="txt"><span class="evsw" style="background:#2a78d6"></span>EuroLeague</td><td>59,4</td><td>17,3</td><td>23,9</td><td>15,8</td><td>13,9</td><td>1,34</td><td>31,1</td><td>5,64</td><td>28,9</td></tr><tr><td class="txt"><span class="evsw" style="background:#eb6834"></span>EuroCup</td><td>58,5<small class="evd" style="background:rgba(235,104,52,0.11)">-1,5 %</small></td><td>17,8<small class="evd" style="background:rgba(42,120,214,0.13)">+2,5 %</small></td><td>23,6<small class="evd" style="background:rgba(235,104,52,0.1)">-1,3 %</small></td><td>16,1<small class="evd" style="background:rgba(42,120,214,0.11)">+1,9 %</small></td><td>14,8<small class="evd" style="background:rgba(42,120,214,0.2)">+6,6 %</small></td><td>1,33<small class="evd" style="background:rgba(235,104,52,0.09)">-0,7 %</small></td><td>38,5<small class="evd" style="background:rgba(42,120,214,0.51)">+23,5 %</small></td><td>5,78<small class="evd" style="background:rgba(42,120,214,0.12)">+2,4 %</small></td><td>27,7<small class="evd" style="background:rgba(235,104,52,0.16)">-4,2 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#1baf7a"></span>Liga Endesa</td><td>58,9<small class="evd" style="background:rgba(235,104,52,0.1)">-0,9 %</small></td><td>17,7<small class="evd" style="background:rgba(42,120,214,0.12)">+2,2 %</small></td><td>23,4<small class="evd" style="background:rgba(235,104,52,0.12)">-2,1 %</small></td><td>14,6<small class="evd" style="background:rgba(235,104,52,0.22)">-7,5 %</small></td><td>13,8<small class="evd" style="background:rgba(235,104,52,0.09)">-0,8 %</small></td><td>1,50<small class="evd" style="background:rgba(42,120,214,0.29)">+11,2 %</small></td><td>36,4<small class="evd" style="background:rgba(42,120,214,0.39)">+16,8 %</small></td><td>5,84<small class="evd" style="background:rgba(42,120,214,0.15)">+3,6 %</small></td><td>–</td></tr><tr><td class="txt"><span class="evsw" style="background:#eda100"></span>LBA</td><td>57,3<small class="evd" style="background:rgba(235,104,52,0.15)">-3,6 %</small></td><td>17,1<small class="evd" style="background:rgba(235,104,52,0.11)">-1,4 %</small></td><td>23,1<small class="evd" style="background:rgba(235,104,52,0.14)">-3,3 %</small></td><td>14,9<small class="evd" style="background:rgba(235,104,52,0.18)">-5,4 %</small></td><td>13,7<small class="evd" style="background:rgba(235,104,52,0.11)">-1,5 %</small></td><td>1,30<small class="evd" style="background:rgba(235,104,52,0.14)">-3,5 %</small></td><td>32,1<small class="evd" style="background:rgba(42,120,214,0.14)">+3,1 %</small></td><td>5,67<small class="evd" style="background:rgba(42,120,214,0.09)">+0,5 %</small></td><td>–</td></tr><tr><td class="txt"><span class="evsw" style="background:#e87ba4"></span>BBL</td><td>56,9<small class="evd" style="background:rgba(235,104,52,0.16)">-4,2 %</small></td><td>17,0<small class="evd" style="background:rgba(235,104,52,0.12)">-2,0 %</small></td><td>22,7<small class="evd" style="background:rgba(235,104,52,0.17)">-5,0 %</small></td><td>15,1<small class="evd" style="background:rgba(235,104,52,0.16)">-4,3 %</small></td><td>15,1<small class="evd" style="background:rgba(42,120,214,0.24)">+8,6 %</small></td><td>1,31<small class="evd" style="background:rgba(235,104,52,0.13)">-2,5 %</small></td><td>33,9<small class="evd" style="background:rgba(42,120,214,0.24)">+8,9 %</small></td><td>5,67<small class="evd" style="background:rgba(42,120,214,0.09)">+0,6 %</small></td><td>–</td></tr><tr><td class="txt"><span class="evsw" style="background:#008300"></span>LNB</td><td>58,6<small class="evd" style="background:rgba(235,104,52,0.1)">-1,3 %</small></td><td>17,4<small class="evd" style="background:rgba(42,120,214,0.08)">+0,2 %</small></td><td>22,8<small class="evd" style="background:rgba(235,104,52,0.16)">-4,6 %</small></td><td>16,9<small class="evd" style="background:rgba(42,120,214,0.21)">+6,9 %</small></td><td>15,2<small class="evd" style="background:rgba(42,120,214,0.26)">+9,8 %</small></td><td>–</td><td>38,7<small class="evd" style="background:rgba(42,120,214,0.53)">+24,3 %</small></td><td>5,83<small class="evd" style="background:rgba(42,120,214,0.14)">+3,4 %</small></td><td>28,3<small class="evd" style="background:rgba(235,104,52,0.12)">-2,3 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#6250d6"></span>NBA</td><td>58,2<small class="evd" style="background:rgba(235,104,52,0.12)">-2,1 %</small></td><td>19,3<small class="evd" style="background:rgba(42,120,214,0.29)">+11,3 %</small></td><td>23,3<small class="evd" style="background:rgba(235,104,52,0.13)">-2,5 %</small></td><td>16,3<small class="evd" style="background:rgba(42,120,214,0.14)">+3,4 %</small></td><td>12,2<small class="evd" style="background:rgba(235,104,52,0.3)">-12,2 %</small></td><td>1,85<small class="evd" style="background:rgba(42,120,214,0.63)">+37,8 %</small></td><td>26,0<small class="evd" style="background:rgba(235,104,52,0.38)">-16,5 %</small></td><td>3,96<small class="evd" style="background:rgba(235,104,52,0.63)">-29,7 %</small></td><td>26,1<small class="evd" style="background:rgba(235,104,52,0.26)">-9,9 %</small></td></tr><tr><td class="txt"><span class="evsw" style="background:#e34948"></span>G League</td><td>60,7<small class="evd" style="background:rgba(42,120,214,0.12)">+2,1 %</small></td><td>19,4<small class="evd" style="background:rgba(42,120,214,0.3)">+12,1 %</small></td><td>22,7<small class="evd" style="background:rgba(235,104,52,0.17)">-4,8 %</small></td><td>15,4<small class="evd" style="background:rgba(235,104,52,0.12)">-2,2 %</small></td><td>13,2<small class="evd" style="background:rgba(235,104,52,0.17)">-4,9 %</small></td><td>1,98<small class="evd" style="background:rgba(42,120,214,0.63)">+47,1 %</small></td><td>16,9<small class="evd" style="background:rgba(235,104,52,0.63)">-45,6 %</small></td><td>3,90<small class="evd" style="background:rgba(235,104,52,0.63)">-30,9 %</small></td><td>25,2<small class="evd" style="background:rgba(235,104,52,0.32)">-13,1 %</small></td></tr></tbody></table></div>
+      <p class="note">Las fuentes de ACB, LBA, BBL, EuroLeague y EuroCup no publican la edad; LNB no publica totales de rivales, por eso faltan sus ratings defensivos y de rebote.</p>
+    </article>
+  </div>
+
+  <div class="ev-static-grid three">
+    <article class="dcard">
+      <h3 class="ev-h3">Qué explica las diferencias</h3>
+      <ul class="ev-find">
+        <li><b>El ritmo explica casi todo el volumen.</b> La parte de la varianza de los puntos que explica la liga (η²) cae de 0,106 por partido a 0,033 por 40 minutos y a 0,003 por 100 posesiones. La EuroLeague juega a 72,5 posesiones y la NBA a 99,4.</li>
+        <li><b>El ORtg de liga va de 111,7 (BBL) a 118,0 (EuroLeague).</b> Frente a la EuroLeague, la NBA queda en 115,8: rebote ofensivo -4,3, pérdidas +2,8, volumen de tiros libres -1,1 (descomposición de Shapley, puntos por 100 posesiones). Liga Endesa: acierto (eFG%) -1,3, rebote ofensivo -1,2, volumen de tiros libres +1,0.</li>
+        <li><b>El reglamento deja huella aunque se normalice por posesión.</b> Faltas por 100 posesiones: η² = 0,283 (NBA 3,96 frente a 5,64 en la EuroLeague). Tiros libres por 100: η² = 0,142; la G League lanza un único tiro libre que vale 2 o 3 puntos (1,24 puntos por intento).</li>
+        <li><b>Tapones y estilo de anotación.</b> BLK% de 1,85 en la NBA y 1,98 en la G League frente a 1,34–1,50 en Europa. AST/FGM de 57,0 % en la Liga Endesa frente a 61,9 % en la EuroLeague: el criterio de anotación de asistencias puede pesar tanto como el estilo.</li>
+        <li><b>PER y USG% ya están normalizados por liga.</b> Su η² es 0,0012 y 0,0003: por construcción valen 15 y 20 de media en cada liga, así que no dicen nada sobre el nivel de la competición.</li>
+        <li><b>Las ligas se distinguen solas.</b> Una regresión logística con 51 métricas por posesión acierta la liga de un jugador en el 65 % de los casos (azar: 12,5 %). Proxy A-distance entre ligas europeas: 0,63–1,69; entre Europa y NBA/G League: 1,89–1,99 (máximo teórico 2).</li>
+      </ul>
+    </article>
+    <article class="dcard">
+      <h3 class="ev-h3">Cuánto pesa la liga en cada métrica</h3>
+      <p class="note">η² ponderado por minutos: fracción de la varianza entre jugadores que explica la liga (métricas de tasa con dato en 7 u 8 ligas).</p>
+      <div class="ev-twolists"><div><span class="label">Más dependientes</span><ol class="ev-rank"><li><b>Faltas /100</b><span>0,283</span></li><li><b>% pts de TL</b><span>0,237</span></li><li><b>FTr</b><span>0,193</span></li><li><b>TL/TCI</b><span>0,191</span></li><li><b>Tapones recibidos /40</b><span>0,179</span></li><li><b>Faltas /40</b><span>0,166</span></li><li><b>TL intentados /100</b><span>0,142</span></li><li><b>TL anotados /100</b><span>0,126</span></li><li><b>Tap/Falt</b><span>0,126</span></li><li><b>Faltas recibidas /100</b><span>0,124</span></li></ol></div>
+      <div><span class="label">Más estables</span><ol class="ev-rank"><li><b>USG%</b><span>0,000</span></li><li><b>PER</b><span>0,001</span></li><li><b>OREB%</b><span>0,001</span></li><li><b>% T2 sobre TCI</b><span>0,002</span></li><li><b>3PAr</b><span>0,002</span></li><li><b>Rebotes /100</b><span>0,002</span></li><li><b>T3 intentados /100</b><span>0,002</span></li><li><b>Reb. ofensivos /40</b><span>0,002</span></li></ol></div></div>
+    </article>
+    <article class="dcard">
+      <h3 class="ev-h3">Mismo jugador, dos competiciones</h3>
+      <p class="note">Jugadores que en 2025-26 jugaron a la vez dos competiciones (100+ minutos en cada una). Diferencia media ponderada (primera − segunda) e IC 95 % por bootstrap.</p>
+      <div class="cmp-table"><table class="ev-st"><thead><tr><th class="txt">Par</th><th>n</th><th>PER</th><th>TS%</th><th>Pts/100</th><th>AST%</th></tr></thead><tbody><tr><td class='txt'>EuroLeague − Liga Endesa</td><td>50</td><td>-1,8 <small>[-2,8; -0,9]</small></td><td>-1,7 <small>[-3,4; 0,1]</small></td><td>-1,1 <small>[-2,1; 0,0]</small></td><td>+1,3 <small>[0,4; 2,1]</small></td></tr><tr><td class='txt'>EuroLeague − LBA</td><td>22</td><td>-2,0 <small>[-3,1; -0,8]</small></td><td>-0,5 <small>[-3,0; 1,9]</small></td><td>-1,2 <small>[-2,9; 0,5]</small></td><td>+0,3 <small>[-1,1; 1,6]</small></td></tr><tr><td class='txt'>EuroLeague − BBL</td><td>14</td><td>-5,0 <small>[-6,5; -3,5]</small></td><td>-2,7 <small>[-6,3; 1,1]</small></td><td>-2,6 <small>[-4,2; -0,9]</small></td><td>-0,8 <small>[-1,8; 0,1]</small></td></tr><tr><td class='txt'>EuroLeague − LNB</td><td>38</td><td>-3,2 <small>[-4,6; -1,9]</small></td><td>-4,7 <small>[-7,3; -2,3]</small></td><td>-2,1 <small>[-3,7; -0,7]</small></td><td>-2,3 <small>[-3,6; -0,9]</small></td></tr><tr><td class='txt'>EuroCup − Liga Endesa</td><td>14</td><td>+2,1 <small>[0,2; 4,4]</small></td><td>+0,6 <small>[-2,2; 3,7]</small></td><td>+1,3 <small>[-0,3; 3,0]</small></td><td>+3,3 <small>[1,3; 5,4]</small></td></tr><tr><td class='txt'>EuroCup − LBA</td><td>22</td><td>-0,2 <small>[-2,3; 1,9]</small></td><td>-0,2 <small>[-3,3; 3,0]</small></td><td>-0,0 <small>[-2,1; 2,2]</small></td><td>+1,1 <small>[-0,7; 2,9]</small></td></tr><tr><td class='txt'>EuroCup − BBL</td><td>35</td><td>-1,2 <small>[-2,3; -0,0]</small></td><td>-0,2 <small>[-2,6; 2,0]</small></td><td>-0,2 <small>[-1,3; 0,9]</small></td><td>+1,1 <small>[-0,4; 2,6]</small></td></tr><tr><td class='txt'>EuroCup − LNB</td><td>11</td><td>-0,1 <small>[-2,7; 2,7]</small></td><td>-3,5 <small>[-8,2; 1,6]</small></td><td>-1,1 <small>[-3,5; 1,7]</small></td><td>-0,2 <small>[-2,5; 2,2]</small></td></tr><tr><td class='txt'>NBA − G League</td><td>85</td><td>-6,2 <small>[-7,3; -5,3]</small></td><td>-7,7 <small>[-9,5; -6,2]</small></td><td>-8,2 <small>[-9,5; -6,9]</small></td><td>-5,9 <small>[-7,3; -4,6]</small></td></tr></tbody></table></div>
+      <p class="note">EuroLeague − Liga Endesa: PER -1,85 (-10,9 %). NBA − G League: PER -6,24 (-35,5 %). Son cotas con sesgo de selección: los clubes de EuroLeague son los mejores de su liga nacional y los jugadores asignados a la G League tienen roles muy distintos en la NBA.</p>
+    </article>
+  </div>
+</section>
+
+  </div>
 </div>
+<div class="tip" id="tip" role="tooltip" hidden></div>
 
 <script>
 // ---------------------------------------------------------------------------- configuración
 const TRIGGER_ID = "trig_01VA8u4RqAzGbKy4v4bFn1mw";
 const SERVER = "Claude Code Remote";
-// Lista de respaldo; la real se lee de datos/temporadas.json (la escribe bbstats en cada ejecución).
+// Lista de respaldo; la real se lee de datos/temporadas.json (la genera "python -m bbstats artifact").
 let SEASONS = ["2026-27", "2025-26", "2024-25", "2023-24", "2022-23", "2021-22", "2020-21"];
 const PHASES = [["regular", "Temporada regular"], ["playoffs", "Playoffs"], ["total", "Total"]];
 const LEAGUES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB" };
@@ -192,10 +579,31 @@ const LABELS = { gp:"PJ", gs:"Tit", min_pg:"Min", pts_pg:"Pts", reb_pg:"Reb", as
   src_per:"PER of.", src_bpm:"BPM", src_obpm:"OBPM", src_dbpm:"DBPM", src_vorp:"VORP", src_ws:"WS of.", src_ws48:"WS/48", src_ortg:"ORtg of.", src_drtg:"DRtg of.", src_usg_pct:"USG% of.", src_ts_pct:"TS% of.", src_pie:"PIE of.", src_on_off_pm100:"On-off/100", src_avg_shot_dist:"Dist. tiro",
   team_gp:"PJ eq.", team_w:"V", team_l:"D", team_pace:"Ritmo", team_ortg:"ORtg eq.", team_drtg:"DRtg eq.", team_netrtg:"Net eq.", lg_pace:"Ritmo liga", lg_ortg:"ORtg liga", calidad_contexto:"Contexto" };
 const PAGE = 50;
+const POS = ["Base", "Escolta", "Alero", "Alapívot", "Pívot"];
+const POS_MAP = { "Base": 1, "Escolta": 2, "Alero": 3, "Ala-pívot": 4, "Pívot": 5, POINT_GUARD: 1, SHOOTING_GUARD: 2, SMALL_FORWARD: 3, POWER_FORWARD: 4, CENTER: 5,
+  PG: 1, SG: 2, SF: 3, PF: 4, C: 5, "C-F": 5 };
+const POS_CANDS = { G: [1, 2], "G-F": [1, 2], F: [3, 4], "F-G": [3, 4], "F-C": [3, 4] };
+const POS_FEATS = ["ast_pct", "oreb_pct", "dreb_pct", "blk_pct", "fg3a_rate", "stl_pct", "fta_rate", "tov_pct"];
+const LEAGUE_ABBR = { euroleague: "EL", eurocup: "EC", acb: "ACB", nba: "NBA", gleague: "GL", lba: "LBA", bbl: "BBL", lnb: "LNB" };
+// Dirección de cada métrica para el mapa de calor: -1 = menos es mejor, 0 = sin juicio (rol o contexto), resto = más es mejor
+const HEAT_DIR = { tov_pg: -1, pf_pg: -1, tov_p40: -1, tov_pct: -1, drtg: -1, team_drtg: -1, src_drtg: -1, bn_drtg_ind: -1, bn_drtg_onoff: -1, delta_drtg: -1, team_l: -1,
+  usg_pct: 0, bn_usg_pct: 0, src_usg_pct: 0, delta_usg_pct: 0, fg3a_rate: 0, src_avg_shot_dist: 0, team_pace: 0, lg_pace: 0, lg_ortg: 0, calidad_contexto: 0 };
+const HEAT = { good: [74, 158, 102], bad: [212, 96, 76], mid: [249, 243, 235], max: 0.78 };
+function heatBg(t) {
+  const to = t >= 0.5 ? HEAT.good : HEAT.bad, k = Math.min(1, Math.abs(t - 0.5) * 2) * HEAT.max;
+  const c = HEAT.mid.map((m, i) => Math.round(m + (to[i] - m) * k));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+function rankOf(sorted, v) { // percentil medio (empates al centro)
+  let lo = 0, hi = sorted.length; while (lo < hi) { const m = (lo + hi) >> 1; if (sorted[m] < v) lo = m + 1; else hi = m; }
+  let up = lo; while (up < sorted.length && sorted[up] === v) up++;
+  return sorted.length > 1 ? ((lo + up - 1) / 2) / (sorted.length - 1) : 0.5;
+}
 
 // ---------------------------------------------------------------------------- estado
-const st = { season: SEASONS[0], phase: "regular", leagues: new Set(), q: "", minMin: 100, view: "basico",
-             sort: { col: "pts_pg", dir: -1 }, page: 0, sel: null, index: {}, dict: {}, cache: {} };
+const st = { season: SEASONS[0], phase: "regular", leagues: new Set(), q: "", minMin: 100, maxMin: null, view: "basico",
+             sort: { col: "pts_pg", dir: -1 }, page: 0, sel: null, index: {}, dict: {}, cache: {}, mf: [], leaguesTouched: false,
+             pos: new Set([1, 2, 3, 4, 5]), posEst: true, age: { lo: null, hi: null } };
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -207,10 +615,68 @@ async function loadPhase(season, phase) {
   if (!st.cache[key]) {
     st.cache[key] = getJSON(`datos/${season}/${phase}.json`).then((doc) => {
       const idx = {}; doc.columnas.forEach((c, i) => (idx[c] = i));
+      derive(idx, doc.filas);
       return { idx, rows: doc.filas };
     });
   }
   return st.cache[key];
+}
+// Posición representativa (1-5) y edad. Oficial cuando la fuente la da; si no, estimada por perfil estadístico.
+function officialPos(raw) {
+  if (raw == null || raw === "") return null;
+  const t = String(raw).trim();
+  if (POS_MAP[t]) return { p: POS_MAP[t] };
+  const m = t.match(/^(\d)/); if (m && +m[1] >= 1 && +m[1] <= 5) return { p: +m[1] }; // LNB "1/2 - Meneur/Arrière": la primera es la principal
+  if (POS_CANDS[t]) return { cands: POS_CANDS[t] };
+  return null;
+}
+function derive(idx, rows) {
+  const n0 = Object.keys(idx).length;
+  idx.pos_rep = n0; idx.pos_est = n0 + 1; idx.edad_rep = n0 + 2;
+  const L = idx.liga, M = idx.min;
+  // medias y desviaciones por liga (jugadores con 100+ minutos) para comparar perfiles entre competiciones
+  // umbral de minutos por liga: 100, o menos al inicio de temporada (el percentil 40 de minutos de esa liga)
+  const mins = {}; for (const r of rows) (mins[r[L]] ||= []).push(r[M] ?? 0);
+  const thr = {}; for (const l in mins) { const v = mins[l].sort((a, b) => a - b); thr[l] = Math.min(100, v[Math.floor(v.length * 0.4)] || 0); }
+  const ok = (r) => (r[M] ?? 0) >= thr[r[L]];
+  const stats = {};
+  for (const r of rows) {
+    if (!ok(r)) continue;
+    const s = (stats[r[L]] ||= {});
+    for (const f of POS_FEATS) { const v = r[idx[f]]; if (typeof v !== "number") continue; const a = (s[f] ||= [0, 0, 0]); a[0]++; a[1] += v; a[2] += v * v; }
+  }
+  const zOf = (r) => { const s = stats[r[L]] || {}; const z = {};
+    for (const f of POS_FEATS) { const a = s[f], v = r[idx[f]]; if (!a || a[0] < 5 || typeof v !== "number") continue;
+      const m = a[1] / a[0], sd = Math.sqrt(Math.max(1e-9, a[2] / a[0] - m * m)); z[f] = (v - m) / sd; }
+    return z; };
+  const off = rows.map((r) => officialPos(r[idx.posicion]));
+  // centroides de cada posición con los jugadores que sí tienen posición oficial exacta
+  const acc = {}; POS.forEach((_, i) => (acc[i + 1] = {}));
+  rows.forEach((r, k) => { const o = off[k]; if (!o || !o.p || !ok(r)) return; const z = zOf(r);
+    for (const f in z) { const a = (acc[o.p][f] ||= [0, 0]); a[0]++; a[1] += z[f]; } });
+  const cent = {}; for (const p in acc) { cent[p] = {}; for (const f in acc[p]) cent[p][f] = acc[p][f][1] / acc[p][f][0]; }
+  const haveCent = Object.values(acc).every((o) => Object.keys(o).length >= 4);
+  const today = new Date();
+  rows.forEach((r, k) => {
+    const o = off[k]; let p = null, est = 0;
+    if (o && o.p) p = o.p;
+    else if (haveCent) {
+      const z = zOf(r); const fs = Object.keys(z);
+      if (fs.length >= 3) { const cands = (o && o.cands) || [1, 2, 3, 4, 5]; let best = null, bd = Infinity;
+        for (const c of cands) { let d = 0; for (const f of fs) { const dv = z[f] - (cent[c][f] ?? 0); d += dv * dv; } if (d < bd) { bd = d; best = c; } }
+        p = best; est = o && o.cands ? 2 : 1; }
+    }
+    let age = typeof r[idx.edad] === "number" ? r[idx.edad] : null;
+    if (age == null && idx.fecha_nacimiento != null && r[idx.fecha_nacimiento]) { const b = new Date(r[idx.fecha_nacimiento]);
+      if (!isNaN(b)) { age = today.getFullYear() - b.getFullYear() - ((today.getMonth() < b.getMonth() || (today.getMonth() === b.getMonth() && today.getDate() < b.getDate())) ? 1 : 0); } }
+    r[idx.pos_rep] = p; r[idx.pos_est] = est; r[idx.edad_rep] = age == null ? null : Math.floor(age);
+  });
+}
+function posTitle(r, idx) {
+  const est = r[idx.pos_est], raw = r[idx.posicion];
+  if (est === 1) return "Estimada por perfil estadístico (asistencias, rebote, tapones, triples, tiros libres). La fuente no publica la posición.";
+  if (est === 2) return `La fuente indica "${raw}". Base/Escolta o Alero/Alapívot elegido por perfil estadístico.`;
+  return raw && String(raw) !== POS[r[idx.pos_rep] - 1] ? `Fuente: ${raw}` : "Posición oficial";
 }
 function fmt(col, v) {
   if (v === null || v === undefined || v === "") return "–";
@@ -241,9 +707,12 @@ function renderPhases() {
 function renderLeagues(data) {
   const ix = st.index[st.season]; const counts = {};
   if (data) { const li = data.idx.liga; for (const r of data.rows) counts[r[li]] = (counts[r[li]] || 0) + 1; }
+  const avail = Object.keys(LEAGUES).filter((k) => ix && ix.ligas[k]);
+  if (!st.leaguesTouched) st.leagues = new Set(avail);
+  else st.leagues = new Set([...st.leagues].filter((k) => avail.includes(k)));
   $("leagues").innerHTML = Object.entries(LEAGUES).map(([k, name]) => {
-    const has = ix && ix.ligas[k];
-    return `<button class="chip" type="button" data-league="${k}" aria-pressed="${st.leagues.has(k)}" ${has ? "" : "disabled title='Sin datos en esta temporada'"}>${name}<span class="n">${counts[k] || 0}</span></button>`;
+    const has = avail.includes(k), ab = LEAGUE_ABBR[k] || k;
+    return `<button class="crest" type="button" data-league="${k}" aria-pressed="${st.leagues.has(k)}" aria-label="${esc(name)}" title="${esc(name)}${has ? ` · ${counts[k] || 0} jugadores` : " · sin datos en esta temporada"}" ${has ? "" : "disabled"} style="--crest-size:${ab.length > 2 ? 17 : 21}px"><b>${ab}</b><span class="n">${counts[k] || 0}</span></button>`;
   }).join("");
   $("runLeagues").innerHTML = Object.entries(LEAGUES).map(([k, name]) =>
     `<label><input type="checkbox" id="run-${k}" value="${k}" checked> ${name}</label>`).join("");
@@ -270,14 +739,131 @@ async function refresh() {
   let data;
   try { data = await loadPhase(st.season, st.phase); }
   catch (e) { $("tablebox").innerHTML = `<div class="empty">No se pudieron cargar los datos de ${st.season} (${st.phase}).</div>`; return; }
-  current = data; renderLeagues(data); renderTable();
+  current = data; renderLeagues(data); renderMf(); renderAge(); renderTable(); if (st.pageTab === "comparador") { cmpExample(); renderCmp(); }
+  if (st.pageTab === "evaluacion") renderEval();
 }
+function baseRows() {
+  const { idx, rows } = current;
+  return rows.filter((r) => st.leagues.has(r[idx.liga]) && (r[idx.min] ?? 0) >= st.minMin && (st.maxMin == null || (r[idx.min] ?? 0) <= st.maxMin));
+}
+// búsqueda: no filtra, resalta. Sin tildes ni mayúsculas ("doncic" encuentra "Dončić" y "DONCIC, LUKA")
+const norm = (t) => String(t ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+function isHit(r, idx, q) { return !!q && (norm(r[idx.nombre]).includes(q) || norm(r[idx.equipo]).includes(q)); }
 function filtered() {
-  const { idx, rows } = current; const q = st.q.trim().toLowerCase();
-  return rows.filter((r) => (st.leagues.size === 0 || st.leagues.has(r[idx.liga]))
-    && (r[idx.min] ?? 0) >= st.minMin
-    && (!q || String(r[idx.nombre]).toLowerCase().includes(q) || String(r[idx.equipo]).toLowerCase().includes(q)));
+  const { idx } = current;
+  const allPos = st.pos.size === 5 && st.posEst, ageOn = st.age.lo != null || st.age.hi != null;
+  const mf = st.mf.filter((f) => f.col in idx);
+  return baseRows().filter((r) => (allPos || (r[idx.pos_rep] != null && st.pos.has(r[idx.pos_rep]) && (st.posEst || !r[idx.pos_est])))
+    && (!ageOn || (r[idx.edad_rep] != null && (st.age.lo == null || r[idx.edad_rep] >= st.age.lo) && (st.age.hi == null || r[idx.edad_rep] <= st.age.hi)))
+    && mf.every((f) => { const v = r[idx[f.col]]; return typeof v === "number" && (f.lo == null || v >= f.lo) && (f.hi == null || v <= f.hi); }));
 }
+
+// ---------------------------------------------------------------------------- filtros por métrica (slider de rango)
+function saveMf() { store.set("mm.mf", JSON.stringify(st.mf)); }
+function niceStep(span) {
+  if (!(span > 0)) return 1;
+  const raw = span / 100, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+  return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p;
+}
+function decimals(step) { return Math.max(0, -Math.floor(Math.log10(step) + 1e-9)); }
+function boundsFor(col, base) {
+  const i = current.idx[col]; let lo = Infinity, hi = -Infinity, n = 0;
+  for (const r of base) { const v = r[i]; if (typeof v === "number" && isFinite(v)) { if (v < lo) lo = v; if (v > hi) hi = v; n++; } }
+  if (!n) return null;
+  if (lo === hi) { lo -= 1; hi += 1; }
+  const step = niceStep(hi - lo);
+  return { min: Math.floor(lo / step) * step, max: Math.ceil(hi / step) * step, step, d: decimals(step), n };
+}
+function metricName(c) { return LABELS[c] || c; }
+function renderMfPick() {
+  if (!current) return;
+  const { idx } = current; const used = new Set(st.mf.map((f) => f.col)); const seen = new Set();
+  const order = [st.view, ...Object.keys(VIEWS).filter((k) => k !== st.view)];
+  let first = null;
+  const groups = order.map((k) => {
+    const opts = VIEWS[k].cols.filter((c) => c in idx && !seen.has(c) && c !== "calidad_contexto").map((c) => {
+      seen.add(c); const dis = used.has(c);
+      if (!dis && !first) first = c;
+      return `<option value="${c}" ${dis ? "disabled" : ""}>${esc(metricName(c))}${st.dict[c] ? " · " + esc(st.dict[c]).slice(0, 70) : ""}${dis ? " (activo)" : ""}</option>`;
+    }).join("");
+    return opts ? `<optgroup label="${esc(VIEWS[k].name)}${k === st.view ? " (vista actual)" : ""}">${opts}</optgroup>` : "";
+  }).join("");
+  const keep = $("mfPick").value;
+  $("mfPick").innerHTML = groups;
+  $("mfPick").value = keep && !used.has(keep) && keep in idx ? keep : (first || "");
+  $("mfAdd").disabled = !first;
+}
+function fmtNum(v, d) { return v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function renderMf() {
+  if (!current) return;
+  const base = baseRows();
+  $("mfClear").hidden = st.mf.length < 2;
+  if (!st.mf.length) {
+    $("mfList").innerHTML = `<div class="mf-empty">Elige una métrica (por ejemplo ORtg en la vista Ratings) y pulsa Añadir filtro. Después arrastra los dos extremos para quedarte con un rango, como 115–130.</div>`;
+  } else {
+    $("mfList").innerHTML = st.mf.map((f, i) => {
+      const desc = st.dict[f.col] ? esc(st.dict[f.col]) : "";
+      if (!(f.col in current.idx)) return `<div class="mf"><div class="mf-top"><b>${esc(metricName(f.col))}</b><button class="mf-x" type="button" data-mfdel="${i}">Quitar</button></div><div class="note">Esta métrica no existe en ${esc(st.phase)} ${esc(st.season)}; no se aplica.</div></div>`;
+      const b = boundsFor(f.col, base);
+      if (!b) return `<div class="mf"><div class="mf-top"><b>${esc(metricName(f.col))}</b><button class="mf-x" type="button" data-mfdel="${i}">Quitar</button></div><div class="note">Ningún jugador de la selección tiene datos de esta métrica.</div></div>`;
+      const lo = Math.max(b.min, Math.min(b.max, f.lo ?? b.min)), hi = Math.max(b.min, Math.min(b.max, f.hi ?? b.max));
+      const id = `mf-${f.col}`;
+      return `<div class="mf" data-mf="${i}" data-min="${b.min}" data-max="${b.max}" data-step="${b.step}" data-d="${b.d}">
+        <div class="mf-top"><b>${esc(metricName(f.col))}</b><span class="note" title="${desc}">${desc}</span><button class="mf-x" type="button" data-mfdel="${i}" aria-label="Quitar filtro ${esc(metricName(f.col))}">Quitar</button></div>
+        <div class="range"><div class="track"></div><div class="fill"></div>
+          <input type="range" id="${id}-lo" data-end="lo" min="${b.min}" max="${b.max}" step="${b.step}" value="${lo}" aria-label="${esc(metricName(f.col))} mínimo">
+          <input type="range" id="${id}-hi" data-end="hi" min="${b.min}" max="${b.max}" step="${b.step}" value="${hi}" aria-label="${esc(metricName(f.col))} máximo"></div>
+        <div class="mf-vals"><label>Desde <input type="number" id="${id}-nlo" data-num="lo" step="${b.step}" value="${lo.toFixed(b.d)}"></label>
+          <span>rango ${fmtNum(b.min, b.d)} – ${fmtNum(b.max, b.d)}</span>
+          <label>Hasta <input type="number" id="${id}-nhi" data-num="hi" step="${b.step}" value="${hi.toFixed(b.d)}"></label></div></div>`;
+    }).join("");
+    $("mfList").querySelectorAll(".mf[data-min]").forEach(paintFill);
+  }
+  renderMfPick();
+}
+function paintFill(card) {
+  const min = +card.dataset.min, max = +card.dataset.max;
+  const lo = +card.querySelector('[data-end="lo"]').value, hi = +card.querySelector('[data-end="hi"]').value;
+  const fill = card.querySelector(".fill"); const pct = (v) => ((v - min) / (max - min || 1)) * 100;
+  fill.style.left = pct(lo) + "%"; fill.style.width = Math.max(0, pct(hi) - pct(lo)) + "%";
+}
+function setEnd(card, end, raw) {
+  const f = st.mf[+card.dataset.mf]; const min = +card.dataset.min, max = +card.dataset.max, d = +card.dataset.d;
+  const loEl = card.querySelector('[data-end="lo"]'), hiEl = card.querySelector('[data-end="hi"]');
+  let v = Math.max(min, Math.min(max, raw));
+  if (end === "lo") { v = Math.min(v, +hiEl.value); loEl.value = v; f.lo = v <= min ? null : v; card.querySelector('[data-num="lo"]').value = v.toFixed(d); }
+  else { v = Math.max(v, +loEl.value); hiEl.value = v; f.hi = v >= max ? null : v; card.querySelector('[data-num="hi"]').value = v.toFixed(d); }
+  // el tirador que queda delante es el último movido, para que siempre se pueda agarrar
+  loEl.style.zIndex = end === "lo" ? 2 : 1; hiEl.style.zIndex = end === "hi" ? 2 : 1;
+  paintFill(card);
+}
+function renderPos() {
+  $("posChips").innerHTML = POS.map((name, i) => `<button class="chip" type="button" data-pos="${i + 1}" aria-pressed="${st.pos.has(i + 1)}">${name}</button>`).join("");
+  $("posEst").checked = st.posEst;
+}
+function renderAge() {
+  if (!current) return;
+  const i = current.idx.edad_rep; let lo = Infinity, hi = -Infinity, n = 0, tot = 0;
+  for (const r of baseRows()) { tot++; const v = r[i]; if (v == null) continue; n++; if (v < lo) lo = v; if (v > hi) hi = v; }
+  if (!n) { $("ageBox").innerHTML = `<div class="note">Las ligas activas no publican edad.</div>`; return; }
+  if (lo === hi) hi = lo + 1;
+  const a = Math.max(lo, Math.min(hi, st.age.lo ?? lo)), b = Math.max(lo, Math.min(hi, st.age.hi ?? hi));
+  $("ageBox").dataset.min = lo; $("ageBox").dataset.max = hi;
+  $("ageBox").innerHTML = `<div class="range"><div class="track"></div><div class="fill"></div>
+      <input type="range" id="ageLo" data-end="lo" min="${lo}" max="${hi}" step="1" value="${a}" aria-label="Edad mínima">
+      <input type="range" id="ageHi" data-end="hi" min="${lo}" max="${hi}" step="1" value="${b}" aria-label="Edad máxima"></div>
+    <div class="mf-vals"><span id="ageTxt">${a} – ${b} años</span><span class="note">${n < tot ? `· ${tot - n} sin edad${st.age.lo != null || st.age.hi != null ? " (excluidos)" : ""}` : ""}</span></div>`;
+  paintFill($("ageBox"));
+}
+function renderHits(q, hits) {
+  const el = $("qHits");
+  if (!q) { el.innerHTML = ""; st.hit = null; return; }
+  if (!hits.length) { el.innerHTML = "Sin coincidencias con los filtros actuales"; return; }
+  if (st.hit == null || st.hit >= hits.length) st.hit = 0;
+  el.innerHTML = `<span>${st.hit + 1} de ${hits.length} resaltados</span>${hits.length > 1 ? '<button type="button" data-hit="prev" aria-label="Coincidencia anterior">‹</button><button type="button" data-hit="next" aria-label="Siguiente coincidencia">›</button>' : ""}`;
+}
+let mfRaf = 0;
+function queueTable() { cancelAnimationFrame(mfRaf); mfRaf = requestAnimationFrame(() => { st.page = 0; renderTable(); }); }
 function renderTable() {
   if (!current) return;
   const { idx } = current;
@@ -288,21 +874,44 @@ function renderTable() {
   list.sort((a, b) => { const x = a[si], y = b[si]; if (x == null && y == null) return 0; if (x == null) return 1; if (y == null) return -1;
     return (typeof x === "string" ? x.localeCompare(y) : x - y) * st.sort.dir; });
   const pages = Math.max(1, Math.ceil(list.length / PAGE));
+  const q = norm(st.q.trim()); const hits = [];
+  if (q) list.forEach((r, i) => { if (isHit(r, idx, q)) hits.push(i); });
+  st.hitPos = hits;
+  if (st.jump != null && hits.length) { st.hit = Math.max(0, Math.min(hits.length - 1, st.jump)); st.page = Math.floor(hits[st.hit] / PAGE); }
   st.page = Math.min(st.page, pages - 1);
+  renderHits(q, hits);
   const slice = list.slice(st.page * PAGE, st.page * PAGE + PAGE);
-  const head = `<tr><th class="txt sticky">Jugador</th><th class="txt">Equipo</th><th class="txt">Liga</th>` + cols.map((c) =>
-    `<th aria-sort="${st.sort.col === c ? (st.sort.dir < 0 ? "descending" : "ascending") : "none"}" title="${esc(st.dict[c] || c)}"><button type="button" data-sort="${c}">${esc(LABELS[c] || c)}</button></th>`).join("") + "</tr>";
-  const body = slice.map((r) => {
-    const uid = r[idx.player_uid] + "|" + r[idx.team_id];
-    return `<tr tabindex="0" data-uid="${esc(uid)}" class="${st.sel === uid ? "sel" : ""}"><td class="txt sticky name">${esc(r[idx.nombre])}</td><td class="txt">${esc(r[idx.equipo])}</td><td class="txt"><span class="lg">${esc(LEAGUES[r[idx.liga]] || r[idx.liga])}</span></td>` +
-      cols.map((c) => { const v = r[idx[c]]; const cls = v == null ? "na" : (c.startsWith("delta_") || /net|onoff|plus_minus/.test(c)) && typeof v === "number" ? (v > 0 ? "pos" : v < 0 ? "neg" : "") : "";
-        return `<td class="${cls}">${fmt(c, v)}</td>`; }).join("") + "</tr>";
+  const fcols = new Set(st.mf.filter((f) => f.lo != null || f.hi != null).map((f) => f.col));
+  const head = `<tr><th class="txt sticky">Jugador</th><th class="txt">Equipo</th><th class="txt">Liga</th>` + [["pos_rep", "Pos"], ["edad_rep", "Edad"]].map(([c, l]) =>
+    `<th class="txt" aria-sort="${st.sort.col === c ? (st.sort.dir < 0 ? "descending" : "ascending") : "none"}"><button type="button" data-sort="${c}">${l}</button></th>`).join("") + cols.map((c) =>
+    `<th class="${fcols.has(c) ? "filt" : ""}" aria-sort="${st.sort.col === c ? (st.sort.dir < 0 ? "descending" : "ascending") : "none"}" title="${esc(st.dict[c] || c)}"><button type="button" data-sort="${c}">${esc(LABELS[c] || c)}</button></th>`).join("") + "</tr>";
+  // mapa de calor: percentil de cada valor dentro de todos los jugadores filtrados (no solo la página)
+  const heat = {};
+  for (const c of cols) {
+    if (HEAT_DIR[c] === 0) continue;
+    const i = idx[c]; const vals = [];
+    for (const r of list) { const v = r[i]; if (typeof v === "number" && isFinite(v)) vals.push(v); }
+    if (vals.length > 2) heat[c] = vals.sort((a, b) => a - b);
+  }
+  const curHit = hits.length && st.hit != null ? hits[st.hit] : -1;
+  const body = slice.map((r, k) => {
+    const uid = r[idx.player_uid] + "|" + r[idx.team_id]; const gi = st.page * PAGE + k; const hit = q && isHit(r, idx, q);
+    const cls = [st.sel === uid ? "sel" : "", hit ? "hit" : "", gi === curHit ? "cur" : ""].filter(Boolean).join(" ");
+    return `<tr tabindex="0" data-uid="${esc(uid)}" data-gi="${gi}" class="${cls}"><td class="txt sticky name">${hit ? '<span class="hitmark" aria-hidden="true">◆</span>' : ""}${esc(r[idx.nombre])}</td><td class="txt">${esc(r[idx.equipo])}</td><td class="txt"><span class="lg" title="${esc(LEAGUES[r[idx.liga]] || r[idx.liga])}">${esc(LEAGUE_ABBR[r[idx.liga]] || r[idx.liga])}</span></td>` +
+      (r[idx.pos_rep] ? `<td class="pos-cell${r[idx.pos_est] ? " est" : ""}" title="${esc(posTitle(r, idx))}">${r[idx.pos_est] ? "≈ " : ""}${POS[r[idx.pos_rep] - 1]}</td>` : `<td class="pos-cell na" title="Sin datos suficientes">–</td>`) +
+      (r[idx.edad_rep] != null ? `<td>${r[idx.edad_rep]}</td>` : `<td class="na" title="La fuente no publica edad ni fecha de nacimiento">–</td>`) +
+      cols.map((c) => { const v = r[idx[c]];
+        if (v == null) return `<td class="na">${fmt(c, v)}</td>`;
+        if (heat[c] && typeof v === "number") { let t = rankOf(heat[c], v); if (HEAT_DIR[c] === -1) t = 1 - t;
+          return `<td class="heat" style="background:${heatBg(t)}" title="Percentil ${Math.round(t * 100)} (más alto = mejor)">${fmt(c, v)}</td>`; }
+        return `<td>${fmt(c, v)}</td>`; }).join("") + "</tr>";
   }).join("");
   $("tablebox").innerHTML = list.length ? `<table><thead>${head}</thead><tbody>${body}</tbody></table>`
-    : `<div class="empty">Ningún jugador cumple los filtros. Baja los minutos mínimos o activa más ligas.</div>`;
+    : (st.leagues.size ? `<div class="empty">Ningún jugador cumple los filtros. Amplía el rango de los filtros por métrica, revisa los minutos mínimos y máximos o activa más ligas.</div>` : `<div class="empty">No hay ninguna liga activa. Pulsa un emblema de liga para verla.</div>`);
   $("count").textContent = `${list.length.toLocaleString("es-ES")} filas jugador-equipo · ${PHASES.find((p) => p[0] === st.phase)[1]} ${st.season}`;
   $("page").textContent = `${st.page + 1} / ${pages}`;
   $("prev").disabled = st.page === 0; $("next").disabled = st.page >= pages - 1;
+  if (st.jump != null) { st.jump = null; const row = $("tablebox").querySelector("tr.cur"); if (row) row.scrollIntoView({ block: "center", inline: "nearest" }); }
 }
 
 // ---------------------------------------------------------------------------- ficha
@@ -315,7 +924,7 @@ async function renderPanel(uid) {
   const g = (c) => (c in idx ? row[idx[c]] : null);
   const tiles = [["Min/P", "min_pg"], ["Pts/P", "pts_pg"], ["TS%", "ts_pct"], ["USG%", "usg_pct"], ["PER", "per"], ["Net", "net_rtg"], ["ORtg", "ortg"], ["DRtg", "drtg"], ["WS/40", "ws_per_40"]];
   let html = `<div><span class="label">${esc(LEAGUES[g("liga")] || g("liga"))} · ${esc(g("equipo"))}</span><h2>${esc(g("nombre"))}</h2>
-    <div class="note">${[g("posicion"), g("altura_cm") ? Math.round(g("altura_cm")) + " cm" : null, g("edad") ? Math.round(g("edad")) + " años" : null, g("nacionalidad")].filter(Boolean).map(esc).join(" · ")}</div></div>
+    <div class="note">${[g("pos_rep") ? (g("pos_est") ? "≈ " : "") + POS[g("pos_rep") - 1] + (g("posicion") && String(g("posicion")) !== POS[g("pos_rep") - 1] ? ` (fuente: ${g("posicion")})` : "") : null, g("altura_cm") ? Math.round(g("altura_cm")) + " cm" : null, g("edad_rep") != null ? g("edad_rep") + " años" : null, g("nacionalidad")].filter(Boolean).map(esc).join(" · ")}</div></div>
     <div class="kv">${tiles.map(([l, c]) => `<div><span>${l}</span><b>${fmt(c, g(c))}</b></div>`).join("")}</div>`;
   if (st.phase === "playoffs") {
     const comp = [["Min/P", "min_pg"], ["Pts/P", "pts_pg"], ["Pts/40", "pts_p40"], ["TS%", "ts_pct"], ["USG%", "usg_pct"], ["PER", "per"], ["ORtg", "ortg"], ["DRtg", "drtg"], ["Net", "net_rtg"], ["Val/P", "pir_pg"]];
@@ -328,14 +937,251 @@ async function renderPanel(uid) {
       return `<div class="cmp-row"><span>${l}</span><div class="bars"><div class="bar po" style="width:${w(po)}%"></div><div class="bar" style="width:${w(rs)}%"></div></div><span class="delta ${cls}" style="color:var(--${cls === "pos" ? "good" : cls === "neg" ? "bad" : "muted"})">${d == null ? "–" : (d > 0 ? "+" : "") + fmt(c, d)}</span></div>`;
     }).join("");
     html += `<div class="cmp"><div class="legend"><span class="label">Playoffs frente a temporada regular</span></div>
-      <div class="legend"><span><i style="background:var(--accent)"></i>Playoffs</span><span><i style="background:var(--muted);opacity:.45"></i>Regular (${fmt("rs_gp", g("rs_gp"))} PJ)</span></div>
+      <div class="legend"><span><i style="background:var(--accent-strong)"></i>Playoffs</span><span><i style="background:var(--muted);opacity:.45"></i>Regular (${fmt("rs_gp", g("rs_gp"))} PJ)</span></div>
       ${rowsHtml || '<div class="note">Sin datos de temporada regular para este jugador y equipo.</div>'}</div>`;
   }
   if (g("bn_netrtg_onoff") != null) {
     html += `<div class="kv"><div><span>Net on</span><b>${fmt("bn_netrtg_on", g("bn_netrtg_on"))}</b></div><div><span>Net off</span><b>${fmt("bn_netrtg_off", g("bn_netrtg_off"))}</b></div><div><span>On-off</span><b>${fmt("bn_netrtg_onoff", g("bn_netrtg_onoff"))}</b></div></div>`;
   }
-  html += `<div class="note">Contexto: ${esc(g("calidad_contexto"))}. Fuente: ${esc(g("fuente"))}.</div><button class="btn ghost" type="button" id="closePanel">Cerrar ficha</button>`;
+  html += `<div class="note">Contexto: ${esc(g("calidad_contexto"))}. Fuente: ${esc(g("fuente"))}.</div><button class="btn ghost addcmp" type="button" id="addCmp" data-uid="${esc(uid)}">Añadir al comparador</button><button class="btn ghost" type="button" id="closePanel">Cerrar ficha</button>`;
   panel.innerHTML = html; panel.hidden = false; $("main").classList.add("with-panel");
+}
+
+// ---------------------------------------------------------------------------- comparador
+const PCOL = ["var(--p1)", "var(--p2)", "var(--p3)"];
+const RADAR = [["pts_p40", "Anotación", 1], ["ts_pct", "Eficiencia", 1], ["ast_pct", "Creación", 1], ["tov_pct", "Cuidado del balón", -1], ["reb_pct", "Rebote", 1],
+  ["stl_pct", "Robos", 1], ["blk_pct", "Tapones", 1], ["drtg", "Defensa", -1], ["net_rtg", "Impacto", 1], ["usg_pct", "Uso", 1]];
+const RATING_GROUPS = [["Ofensivo", [["ortg", 1], ["floor_pct", 1], ["ows", 1]]], ["Defensivo", [["drtg", -1], ["stop_pct", 1], ["dws", 1]]],
+  ["Global", [["per", 1], ["net_rtg", 1], ["ws", 1], ["ws_per_40", 1], ["pie", 1], ["game_score_pg", 1], ["eff_pg", 1]]]];
+const ZONES = [["Tiros de 2", "#6b4f38"], ["Triples", "#b08560"], ["Tiros libres", "#dcc09b"]];
+const cmpState = { uids: [], example: false, ref: "liga", min: 100, sorted: {} };
+const uidOf = (r, idx) => r[idx.player_uid] + "|" + r[idx.team_id];
+function cmpRows() { if (!current) return []; const { idx, rows } = current; return cmpState.uids.map((u) => rows.find((r) => uidOf(r, idx) === u) || null); }
+function refSorted(r, col) {
+  const { idx, rows } = current; const i = idx[col]; if (i == null) return null;
+  const key = (cmpState.ref === "liga" ? r[idx.liga] : "*") + "|" + col + "|" + cmpState.min;
+  if (!cmpState.sorted[key]) {
+    let pool = rows.filter((x) => (x[idx.min] ?? 0) >= cmpState.min && (cmpState.ref !== "liga" || x[idx.liga] === r[idx.liga]));
+    const vals = pool.map((x) => x[i]).filter((v) => typeof v === "number" && isFinite(v)).sort((a, b) => a - b);
+    cmpState.sorted[key] = vals.length >= 8 ? vals : null;
+  }
+  return cmpState.sorted[key];
+}
+function pctl(r, col, dir) { const v = r[current.idx[col]]; if (typeof v !== "number") return null; const s = refSorted(r, col); if (!s) return null; const t = rankOf(s, v); return Math.round((dir < 0 ? 1 - t : t) * 100); }
+const tipAttr = (html) => `data-tip="${esc(html)}"`;
+function polar(cx, cy, rad, a) { return [cx + rad * Math.cos(a), cy + rad * Math.sin(a)]; }
+function radarSvg(players) {
+  const W = 480, H = 420, cx = 240, cy = 210, Rr = 140, n = RADAR.length; const ang = (k) => -Math.PI / 2 + (k * 2 * Math.PI) / n;
+  let g = "";
+  for (const lv of [25, 50, 75, 100]) { const pts = RADAR.map((_, k) => polar(cx, cy, (Rr * lv) / 100, ang(k)).join(",")).join(" ");
+    g += `<polygon points="${pts}" fill="${lv === 100 ? "var(--c4)" : "none"}" stroke="var(--line)" stroke-width="1" ${lv === 50 ? 'stroke-dasharray="4 3"' : ""}/>`; }
+  RADAR.forEach(([, l], k) => { const [x, y] = polar(cx, cy, Rr, ang(k)); g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width="1"/>`;
+    const [lx, ly] = polar(cx, cy, Rr + 22, ang(k)); const c = Math.cos(ang(k));
+    g += `<text x="${lx}" y="${ly}" text-anchor="${c > 0.25 ? "start" : c < -0.25 ? "end" : "middle"}" dominant-baseline="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="600" font-size="14" letter-spacing=".5" fill="var(--muted)">${esc(l.toUpperCase())}</text>`; });
+  g += `<text x="${cx + 4}" y="${cy - Rr / 2 - 2}" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono, monospace">P50</text>`;
+  players.forEach(({ r, i }) => { if (!r) return;
+    const vals = RADAR.map(([c, , d]) => pctl(r, c, d));
+    const pts = vals.map((v, k) => polar(cx, cy, (Rr * (v ?? 0)) / 100, ang(k)));
+    g += `<polygon points="${pts.map((p) => p.join(",")).join(" ")}" fill="${PCOL[i]}" fill-opacity=".14" stroke="${PCOL[i]}" stroke-width="2" stroke-linejoin="round"/>`;
+    pts.forEach(([x, y], k) => { const [c, l] = RADAR[k]; const v = vals[k];
+      g += `<circle cx="${x}" cy="${y}" r="5" fill="${PCOL[i]}" stroke="var(--c5)" stroke-width="2" ${tipAttr(`<b>${esc(r[current.idx.nombre])}</b><br>${l}: ${v == null ? "sin dato" : "percentil " + v} · ${LABELS[c] || c} ${fmt(c, r[current.idx[c]])}`)}/>`;
+      g += `<circle cx="${x}" cy="${y}" r="12" fill="transparent" ${tipAttr(`<b>${esc(r[current.idx.nombre])}</b><br>${l}: ${v == null ? "sin dato" : "percentil " + v} · ${LABELS[c] || c} ${fmt(c, r[current.idx[c]])}`)}/>`; }); });
+  return `<svg viewBox="-40 0 ${W + 80} ${H}" role="img" aria-label="Gráfico de araña con percentiles de ${players.filter((p) => p.r).length} jugadores">${g}</svg>`;
+}
+function ratingsHtml(players) {
+  const { idx } = current;
+  return RATING_GROUPS.map(([gname, cols]) => {
+    const rows = cols.filter(([c]) => c in idx).map(([c, d]) => `<div class="lol-row"><span title="${esc(st.dict[c] || "")}">${esc(LABELS[c] || c)}</span><div class="lol-lanes">${players.map(({ r, i }) => {
+      const v = r[idx[c]]; const pc = pctl(r, c, d);
+      return `<div class="lol" ${tipAttr(`<b>${esc(r[idx.nombre])}</b><br>${LABELS[c] || c}: ${fmt(c, v)}${pc != null ? ` · percentil ${pc}` : ""}${d < 0 ? "<br>Más bajo es mejor" : ""}`)}><div class="lol-track"><i class="p50"></i><div class="lol-stem" style="width:${pc ?? 0}%;background:${PCOL[i]}"></div>${pc != null ? `<b class="lol-dot" style="left:${pc}%;background:${PCOL[i]}"></b>` : ""}</div><em>${fmt(c, v)}<small>${pc != null ? " P" + pc : ""}</small></em></div>`;
+    }).join("")}</div></div>`).join("");
+    return rows ? `<div class="lol-group"><h3>${gname}</h3>${rows}</div>` : "";
+  }).join("");
+}
+const p01 = (v) => (typeof v !== "number" ? null : v > 1.5 ? v / 100 : v);
+function ptsSources(r) {
+  const g = (c) => (c in current.idx ? r[current.idx[c]] : null);
+  const f2a = g("fg2a_pg") ?? (g("fga_pg") != null && g("fg3a_pg") != null ? g("fga_pg") - g("fg3a_pg") : null);
+  const a = [f2a != null && p01(g("fg2_pct")) != null ? 2 * f2a * p01(g("fg2_pct")) : null, g("fg3a_pg") != null && p01(g("fg3_pct")) != null ? 3 * g("fg3a_pg") * p01(g("fg3_pct")) : null, g("fta_pg") != null && p01(g("ft_pct")) != null ? g("fta_pg") * p01(g("ft_pct")) : null];
+  return a.some((v) => v == null) ? null : a.map((v) => Math.max(0, v));
+}
+// rates por zona: 2PA rate y 3PA rate suman 100 % de los tiros de campo; FT rate = tiros libres intentados por cada tiro de campo
+function shotRates(r) {
+  const g = (c) => (c in current.idx ? r[current.idx[c]] : null);
+  let r3 = p01(g("fg3a_rate")), ft = p01(g("fta_rate"));
+  const fga = g("fga_pg");
+  if (r3 == null && fga > 0 && g("fg3a_pg") != null) r3 = g("fg3a_pg") / fga;
+  if (ft == null && fga > 0 && g("fta_pg") != null) ft = g("fta_pg") / fga;
+  return r3 == null ? null : [1 - r3, r3, ft];
+}
+function teamRates(r) {
+  const g = (c) => (c in current.idx ? r[current.idx[c]] : null);
+  const fga = g("team_fga"); if (!(fga > 0)) return null;
+  return [g("team_fg2a") != null ? g("team_fg2a") / fga : 1 - g("team_fg3a") / fga, g("team_fg3a") / fga, g("team_fta") != null ? g("team_fta") / fga : null];
+}
+function leagueRates(r) {
+  const { idx, rows } = current; const key = "lgrates|" + r[idx.liga];
+  if (!cmpState.sorted[key]) { const seen = new Set(); let a = 0, b3 = 0, ft = 0;
+    for (const x of rows) { if (x[idx.liga] !== r[idx.liga]) continue; const t = x[idx.team_id]; if (seen.has(t) || !(x[idx.team_fga] > 0)) continue; seen.add(t); a += x[idx.team_fga]; b3 += x[idx.team_fg3a] || 0; ft += x[idx.team_fta] || 0; }
+    cmpState.sorted[key] = a > 0 ? [1 - b3 / a, b3 / a, ft / a] : null; }
+  return cmpState.sorted[key];
+}
+function arcRing(vals, rad, w, colors, tips) {
+  const tot = vals.reduce((a, b) => a + b, 0) || 1e-9, C = 2 * Math.PI * rad; let off = 0;
+  return vals.map((v, k) => { const len = (v / tot) * C, gap = len > 4 ? 2 : 0;
+    const el = `<circle cx="100" cy="100" r="${rad}" fill="none" stroke="${colors[k]}" stroke-width="${w}" stroke-dasharray="${Math.max(0, len - gap)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 100 100)" ${tipAttr(tips[k])}/>`;
+    off += len; return el; }).join("");
+}
+function zonesHtml(r) {
+  const name = esc(r[current.idx.nombre]); const pts = ptsSources(r), rt = shotRates(r), tr = teamRates(r), lr = leagueRates(r);
+  if (!pts && !rt) return `<div class="note">Sin datos de tiro suficientes.</div>`;
+  const pct = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
+  const cols = ZONES.map((z) => z[1]);
+  const tot = pts ? pts.reduce((a, b) => a + b, 0) : null;
+  let svg = `<svg viewBox="0 0 200 200" role="img" aria-label="Puntos y tiros por zona de ${name}">`;
+  if (pts) svg += arcRing(pts, 82, 20, cols, pts.map((v, k) => `<b>${name}</b><br>${ZONES[k][0]}: ${fmtNum(v, 1)} pts/partido (${Math.round((v / tot) * 100)}% de sus puntos)`));
+  if (rt) svg += arcRing([rt[0], rt[1]], 56, 14, cols, [`<b>${name}</b><br>2PA rate: ${pct(rt[0])} de sus tiros de campo`, `<b>${name}</b><br>3PA rate: ${pct(rt[1])} de sus tiros de campo`]);
+  svg += `<text x="100" y="96" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="22" fill="var(--ink)">${tot != null ? fmtNum(tot, 1) : "–"}</text><text x="100" y="116" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-size="12" letter-spacing="1" fill="var(--muted)">PTS / PARTIDO</text></svg>`;
+  const labels = ["2PA rate", "3PA rate", "FT rate"];
+  const rowsZ = ZONES.map(([zn, col], k) => {
+    const v = rt ? rt[k] : null, t = tr ? tr[k] : null, l = lr ? lr[k] : null, max = k === 2 ? Math.max(0.6, v || 0, t || 0, l || 0) : 1;
+    return `<div class="zrow"><i style="background:${col}"></i><div class="zmain"><div class="zhead"><b>${zn}</b><span>${pts ? fmtNum(pts[k], 1) + " pts" : ""}</span></div>
+      <div class="zbar" ${tipAttr(`<b>${name}</b><br>${labels[k]}: ${pct(v)}<br>Su equipo: ${pct(t)} · Su liga: ${pct(l)}`)}><div class="zfill" style="width:${v == null ? 0 : (v / max) * 100}%;background:${col}"></div>${t != null ? `<u class="ztick team" style="left:${(t / max) * 100}%"></u>` : ""}${l != null ? `<u class="ztick lg" style="left:${(l / max) * 100}%"></u>` : ""}</div>
+      <div class="zfoot"><span>${labels[k]} <b>${pct(v)}</b></span><span>eq. ${pct(t)} · liga ${pct(l)}</span></div></div></div>`;
+  }).join("");
+  return `${svg}<div class="zones">${rowsZ}</div>`;
+}
+// contexto: jugador frente a su equipo y su liga en la misma escala
+function ctxRows(r) {
+  const g = (c) => (c in current.idx ? r[current.idx[c]] : null); const lr = leagueRates(r); const tr = teamRates(r); const sr = shotRates(r);
+  const out = [
+    ["ORtg", g("ortg"), g("team_ortg"), g("lg_ortg"), 1, "Puntos producidos por 100 posesiones"],
+    ["DRtg", g("drtg"), g("team_drtg"), g("lg_ortg"), -1, "Puntos permitidos por 100 posesiones (menos es mejor). Media de liga = ORtg medio de la liga"],
+    ["Net Rtg", g("net_rtg"), g("team_netrtg"), g("lg_ortg") != null ? 0 : null, 1, "ORtg − DRtg. La liga promedia 0"],
+  ];
+  if (g("bn_netrtg_on") != null || g("bn_netrtg_off") != null) out.push(["Net con él / sin él", g("bn_netrtg_on"), g("bn_netrtg_off"), null, 1, "BasketNews: Net Rtg del equipo con el jugador en pista (punto de color) y sin él (cuadrado)", ["Con él", "Sin él"]]);
+  out.push(["Ritmo", null, g("team_pace"), g("lg_pace"), 0, "Posesiones por 40 minutos del equipo frente a la liga"]);
+  if (sr) { out.push(["3PA rate", sr[1] * 100, tr && tr[1] * 100, lr && lr[1] * 100, 0, "% de tiros de campo que son triples"]); if (sr[2] != null) out.push(["FT rate", sr[2] * 100, tr && tr[2] != null ? tr[2] * 100 : null, lr && lr[2] * 100, 1, "Tiros libres intentados por cada 100 tiros de campo"]); }
+  return out;
+}
+function ctxSvg(row, color, name) {
+  const [lab, pv, tv, lv, dir, , names] = row; const nm = names || ["Jugador", "Equipo"];
+  const vals = [pv, tv, lv].filter((v) => typeof v === "number");
+  if (vals.length < 2) return "";
+  let lo = Math.min(...vals), hi = Math.max(...vals); const span = Math.max(hi - lo, Math.abs(hi) * 0.04, 2); lo -= span * 0.25; hi += span * 0.25;
+  const W = 300, x = (v) => 10 + ((v - lo) / (hi - lo)) * (W - 20); const f = (v) => fmtNum(v, 1);
+  let g = `<line x1="10" y1="22" x2="${W - 10}" y2="22" stroke="var(--line)" stroke-width="2"/>`;
+  if (typeof lv === "number") g += `<path d="M${x(lv)} 15 l7 7 l-7 7 l-7 -7z" fill="var(--muted)" stroke="var(--c5)" stroke-width="1.5" ${tipAttr(`Liga · ${lab}: ${f(lv)}`)}/><text x="${x(lv)}" y="44" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--muted)">L ${f(lv)}</text>`;
+  if (typeof tv === "number") g += `<rect x="${x(tv) - 6}" y="16" width="12" height="12" rx="2" fill="var(--accent-strong)" stroke="var(--c5)" stroke-width="1.5" ${tipAttr(`${nm[1]} · ${lab}: ${f(tv)}`)}/><text x="${x(tv)}" y="10" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--accent-strong)">${nm[1] === "Equipo" ? "E" : "Sin"} ${f(tv)}</text>`;
+  if (typeof pv === "number") g += `<circle cx="${x(pv)}" cy="22" r="7" fill="${color}" stroke="var(--c5)" stroke-width="2" ${tipAttr(`<b>${name}</b> · ${lab}: ${f(pv)}`)}/><text x="${x(pv)}" y="${typeof tv === "number" && Math.abs(x(pv) - x(tv)) < 40 ? 44 : 10}" text-anchor="middle" font-size="10.5" font-weight="600" font-family="IBM Plex Mono, monospace" fill="var(--ink)">${f(pv)}</text>`;
+  return `<svg viewBox="0 0 ${W} 50" role="img" aria-label="${esc(lab)}">${g}</svg>`;
+}
+function ctxDelta(row) {
+  const [, pv, tv, lv, dir, , names] = row; if (typeof pv !== "number" || dir === 0 && !names) {
+    if (typeof pv !== "number" && typeof tv === "number" && typeof lv === "number") { const d = tv - lv; return `<span class="dz">equipo ${d > 0 ? "+" : ""}${fmtNum(d, 1)} vs liga</span>`; }
+    if (dir === 0 && typeof pv === "number") return [typeof tv === "number" ? `${pv - tv > 0 ? "+" : ""}${fmtNum(pv - tv, 1)} vs eq.` : "", typeof lv === "number" ? `${pv - lv > 0 ? "+" : ""}${fmtNum(pv - lv, 1)} vs liga` : ""].filter(Boolean).map((t) => `<span class="dz">${t}</span>`).join("");
+    return ""; }
+  const part = (ref, lbl) => { if (typeof ref !== "number") return ""; const d = pv - ref, good = dir < 0 ? d < 0 : d > 0;
+    return `<span class="dz ${Math.abs(d) < 0.05 ? "" : good ? "up" : "down"}">${good && Math.abs(d) >= 0.05 ? "▲" : Math.abs(d) >= 0.05 ? "▼" : "="} ${d > 0 ? "+" : ""}${fmtNum(d, 1)} ${lbl}</span>`; };
+  return names ? part(tv, "on-off") : part(tv, "vs eq.") + part(lv, "vs liga");
+}
+function ctxHtml(r, i) {
+  const name = esc(r[current.idx.nombre]);
+  return ctxRows(r).map((row) => { const svg = ctxSvg(row, PCOL[i], name); if (!svg) return "";
+    return `<div class="ctx-row"><div class="ctx-head"><b title="${esc(row[5])}">${esc(row[0])}</b><span>${ctxDelta(row)}</span></div>${svg}</div>`; }).join("") || `<div class="note">Sin datos de contexto para este jugador.</div>`;
+}
+function renderCmp() {
+  if (!current || $("pageCmp").hidden) return;
+  const { idx } = current; cmpState.sorted = {};
+  const rows = cmpRows(); const players = rows.map((r, i) => ({ r, i }));
+  const missing = cmpState.uids.filter((_, k) => !rows[k]).length;
+  $("cmpNote").innerHTML = [cmpState.example ? "Ejemplo con jugadores de muchos minutos. Usa el buscador para elegir los tuyos." : "",
+    missing ? `${missing} jugador(es) no tienen datos en ${PHASES.find((p) => p[0] === st.phase)[1].toLowerCase()} ${st.season}.` : "",
+    "Percentiles frente a jugadores con " + cmpState.min + "+ minutos " + (cmpState.ref === "liga" ? "de su misma liga." : "de todas las ligas.")].filter(Boolean).join(" ");
+  $("cmpCards").innerHTML = [0, 1, 2].map((i) => {
+    const r = rows[i];
+    if (!r) return `<div class="pcard empty-slot"><div><b>Hueco ${i + 1}</b><br>${cmpState.uids[i] ? "Sin datos en esta fase" : "Busca un jugador arriba para añadirlo"}</div>${cmpState.uids[i] ? `<button class="mf-x" type="button" data-cmpdel="${i}">Quitar</button>` : ""}</div>`;
+    const ini = String(r[idx.nombre]).split(/[\s,]+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+    const g = (c) => (c in idx ? r[idx[c]] : null);
+    return `<article class="pcard"><div class="pdisc" style="background:${PCOL[i]}">${esc(ini)}</div><h3>${esc(r[idx.nombre])}</h3><button class="mf-x" type="button" data-cmpdel="${i}" aria-label="Quitar ${esc(r[idx.nombre])}">Quitar</button>
+      <div class="sub2"><span class="lg" title="${esc(LEAGUES[g("liga")] || g("liga"))}">${esc(LEAGUE_ABBR[g("liga")] || g("liga"))}</span>${esc(g("equipo"))}${g("pos_rep") ? ` · ${g("pos_est") ? "≈ " : ""}${POS[g("pos_rep") - 1]}` : ""}${g("edad_rep") != null ? ` · ${g("edad_rep")} años` : ""}</div>
+      <div class="facts"><div><span>PJ</span><b>${fmt("gp", g("gp"))}</b></div><div><span>Min</span><b>${fmt("min_pg", g("min_pg"))}</b></div><div><span>Pts</span><b>${fmt("pts_pg", g("pts_pg"))}</b></div><div><span>Val</span><b>${fmt("pir_pg", g("pir_pg"))}</b></div></div></article>`;
+  }).join("");
+  const live = players.filter((p) => p.r);
+  if (!live.length) { $("cmpBody").innerHTML = `<div class="dcard"><div class="empty">Añade al menos un jugador para ver su perfil.</div></div>`; return; }
+  const legend = `<div class="legend2">${live.map(({ r, i }) => `<span><i style="background:${PCOL[i]};border-radius:50%"></i>${esc(r[idx.nombre])}</span>`).join("")}</div>`;
+  const sections = Object.entries(VIEWS).filter(([, v]) => !v.phase || v.phase === st.phase);
+  const tableRows = sections.map(([, v]) => { const cols = v.cols.filter((c) => c in idx && c !== "calidad_contexto"); if (!cols.length) return "";
+    return `<tr class="grp"><th colspan="${live.length + 1}">${esc(v.name)}</th></tr>` + cols.map((c) => { const d = HEAT_DIR[c] ?? 1;
+      return `<tr><td title="${esc(st.dict[c] || "")}">${esc(LABELS[c] || c)}</td>${live.map(({ r }) => { const v = r[idx[c]];
+        if (typeof v !== "number") return `<td class="na">${fmt(c, v)}</td>`;
+        const pc = d === 0 ? null : pctl(r, c, d);
+        return pc == null ? `<td>${fmt(c, v)}</td>` : `<td style="background:${heatBg(pc / 100)}" title="Percentil ${pc}${d < 0 ? " (más bajo es mejor)" : ""}">${fmt(c, v)}</td>`; }).join("")}</tr>`; }).join(""); }).join("");
+  $("cmpBody").innerHTML = `
+    <div class="grid2">
+      <section class="dcard"><h2>Perfil por percentiles</h2><p class="hint">Cada eje va de 0 (centro) a 100 (borde). En pérdidas y DRtg, más hacia fuera significa menos, es decir, mejor.</p>${legend}${radarSvg(live)}</section>
+      <section class="dcard"><h2>Ratings</h2><p class="hint">Todas las métricas de la vista Ratings. La barra llega hasta el percentil del jugador; la marca vertical es la mediana (P50). En DRtg, percentil alto = rating más bajo.</p>${legend}${ratingsHtml(live)}</section>
+    </div>
+    <section class="dcard"><h2>Tiro por zonas</h2><p class="hint">Anillo exterior: puntos por partido de cada zona. Anillo interior: 2PA rate y 3PA rate (reparto de sus tiros de campo). En las barras, la marca oscura es su equipo y la gris, su liga.</p>
+      <div class="donuts">${live.map(({ r, i }) => `<div class="donut"><span class="who"><i style="background:${PCOL[i]}"></i>${esc(r[idx.nombre])}</span>${zonesHtml(r)}</div>`).join("")}</div></section>
+    <section class="dcard"><h2>Indicadores avanzados en contexto</h2><p class="hint">Cada línea compara al jugador (círculo de color) con su equipo (cuadrado) y la media de su liga (rombo). Las flechas indican si está por encima o por debajo, teniendo en cuenta que en DRtg menos es mejor.</p>
+      <div class="ctx-grid">${live.map(({ r, i }) => `<div class="ctx-col"><span class="who"><i style="background:${PCOL[i]}"></i>${esc(r[idx.nombre])} <small class="note">${esc(r[idx.equipo])}</small></span>${ctxHtml(r, i)}</div>`).join("")}</div></section>
+    <details class="dcard"><summary>Ver como tabla</summary><p class="hint">Colores por percentil frente al mismo grupo de referencia, como en la Tabla de datos.</p><div class="cmp-table"><table><thead><tr><th>Métrica</th>${live.map(({ r, i }) => `<th><span class="who"><i style="background:${PCOL[i]}"></i>${esc(r[idx.nombre])}</span></th>`).join("")}</tr></thead><tbody>${tableRows}</tbody></table></div></details>`;
+}
+function cmpSave() { store.set("mm.cmp", JSON.stringify(cmpState.uids)); }
+function cmpAdd(uid) {
+  cmpState.uids = cmpState.uids.filter(Boolean);
+  if (cmpState.example) { cmpState.uids = []; cmpState.example = false; }
+  if (cmpState.uids.includes(uid)) return "Ya está en el comparador.";
+  if (cmpState.uids.length >= 3) cmpState.uids.shift();
+  cmpState.uids.push(uid); cmpSave(); renderCmp(); return "";
+}
+function cmpExample() {
+  if (cmpState.uids.length || !current) return;
+  const { idx, rows } = current; const pref = ["euroleague", "acb", "eurocup", "nba"].find((l) => rows.some((r) => r[idx.liga] === l));
+  const top = rows.filter((r) => r[idx.liga] === pref).sort((a, b) => (b[idx.min] ?? 0) - (a[idx.min] ?? 0)).slice(0, 2);
+  cmpState.uids = top.map((r) => uidOf(r, idx)); cmpState.example = true;
+}
+function cmpSuggest() {
+  const q = norm($("cmpQ").value.trim()); const ul = $("cmpSug");
+  if (!q || !current) { ul.hidden = true; $("cmpQ").setAttribute("aria-expanded", "false"); return; }
+  const { idx, rows } = current;
+  const m = rows.filter((r) => norm(r[idx.nombre]).includes(q) || norm(r[idx.equipo]).includes(q)).sort((a, b) => (b[idx.min] ?? 0) - (a[idx.min] ?? 0)).slice(0, 10);
+  ul.innerHTML = m.length ? m.map((r, k) => { const u = uidOf(r, idx); const inn = cmpState.uids.includes(u) && !cmpState.example;
+    return `<li role="option" id="sug-${k}" data-uid="${esc(u)}" aria-selected="${k === 0}" class="${inn ? "dis" : ""}"><b>${esc(r[idx.nombre])}</b><small>${esc(r[idx.equipo])} · ${esc(LEAGUE_ABBR[r[idx.liga]] || r[idx.liga])} · ${fmt("min", r[idx.min])} min${inn ? " · ya añadido" : ""}</small></li>`; }).join("")
+    : `<li class="dis">Sin coincidencias en ${esc(st.season)}</li>`;
+  ul.hidden = false; $("cmpQ").setAttribute("aria-expanded", "true");
+}
+function showPage(pg) {
+  st.pageTab = pg === "comparador" || pg === "evaluacion" ? pg : "tabla";
+  $("pageTabla").hidden = st.pageTab !== "tabla"; $("pageCmp").hidden = st.pageTab !== "comparador"; $("pageEval").hidden = st.pageTab !== "evaluacion";
+  $("tab-tabla").setAttribute("aria-selected", st.pageTab === "tabla"); $("tab-comparador").setAttribute("aria-selected", st.pageTab === "comparador"); $("tab-evaluacion").setAttribute("aria-selected", st.pageTab === "evaluacion");
+  store.set("mm.page", st.pageTab);
+  if (st.pageTab === "comparador" && current) { cmpExample(); renderCmp(); }
+  if (st.pageTab === "evaluacion" && st.dictGroup) renderEval();
+}
+function bindCmp() {
+  document.querySelector(".pagetabs").addEventListener("click", (e) => { const b = e.target.closest("[data-page]"); if (b) showPage(b.dataset.page); });
+  $("cmpQ").addEventListener("input", cmpSuggest);
+  $("cmpQ").addEventListener("keydown", (e) => {
+    const ul = $("cmpSug"); const items = [...ul.querySelectorAll("li[data-uid]")]; if (ul.hidden || !items.length) return;
+    let k = items.findIndex((li) => li.getAttribute("aria-selected") === "true");
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); k = (k + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length; items.forEach((li, j) => li.setAttribute("aria-selected", j === k)); items[k].scrollIntoView({ block: "nearest" }); }
+    if (e.key === "Enter" && items[k] && !items[k].classList.contains("dis")) { e.preventDefault(); cmpAdd(items[k].dataset.uid); $("cmpQ").value = ""; cmpSuggest(); }
+    if (e.key === "Escape") { ul.hidden = true; }
+  });
+  $("cmpSug").addEventListener("mousedown", (e) => { const li = e.target.closest("li[data-uid]"); if (!li || li.classList.contains("dis")) return; e.preventDefault(); cmpAdd(li.dataset.uid); $("cmpQ").value = ""; cmpSuggest(); $("cmpQ").focus(); });
+  $("cmpQ").addEventListener("blur", () => setTimeout(() => { $("cmpSug").hidden = true; }, 120));
+  $("cmpRef").addEventListener("change", (e) => { cmpState.ref = e.target.value; renderCmp(); });
+  $("cmpMin").addEventListener("change", (e) => { cmpState.min = Math.max(0, Number(e.target.value) || 0); renderCmp(); });
+  $("cmpCards").addEventListener("click", (e) => { const x = e.target.closest("[data-cmpdel]"); if (!x) return; cmpState.uids.splice(+x.dataset.cmpdel, 1); cmpState.example = false; cmpSave(); renderCmp(); });
+  const tip = $("tip");
+  const place = (e) => { const w = tip.offsetWidth, h = tip.offsetHeight; let x = e.clientX + 14, y = e.clientY + 14;
+    if (x + w > innerWidth - 8) x = e.clientX - w - 14; if (y + h > innerHeight - 8) y = e.clientY - h - 14; tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px"; };
+  $("pageCmp").addEventListener("mouseover", (e) => { const t = e.target.closest("[data-tip]"); if (!t) return; tip.innerHTML = t.getAttribute("data-tip"); tip.hidden = false; place(e); });
+  $("pageCmp").addEventListener("mousemove", (e) => { if (!tip.hidden) place(e); });
+  $("pageCmp").addEventListener("mouseout", (e) => { const t = e.target.closest("[data-tip]"); if (t && !t.contains(e.relatedTarget)) tip.hidden = true; });
+  $("panel").addEventListener("click", (e) => { const b = e.target.closest("#addCmp"); if (!b) return; const msg = cmpAdd(b.dataset.uid); b.textContent = msg || "Añadido al comparador ✓"; });
 }
 
 // ---------------------------------------------------------------------------- EJECUTAR (Routine de Claude Code)
@@ -386,10 +1232,34 @@ async function fireRun() {
 function bind() {
   $("season").addEventListener("change", (e) => { st.season = e.target.value; st.page = 0; st.sel = null; renderPanel(null); store.set("mm.season", st.season); refresh(); });
   $("phases").addEventListener("click", (e) => { const b = e.target.closest("[data-phase]"); if (!b || b.disabled) return; st.phase = b.dataset.phase; st.page = 0; st.sel = null; renderPanel(null); store.set("mm.phase", st.phase); refresh(); });
-  $("leagues").addEventListener("click", (e) => { const b = e.target.closest("[data-league]"); if (!b || b.disabled) return; const k = b.dataset.league; st.leagues.has(k) ? st.leagues.delete(k) : st.leagues.add(k); b.setAttribute("aria-pressed", st.leagues.has(k)); st.page = 0; renderTable(); });
-  $("views").addEventListener("click", (e) => { const b = e.target.closest("[data-view]"); if (!b) return; st.view = b.dataset.view; st.page = 0; store.set("mm.view", st.view); renderViews(); renderTable(); });
-  $("q").addEventListener("input", (e) => { st.q = e.target.value; st.page = 0; renderTable(); });
-  $("minMin").addEventListener("input", (e) => { st.minMin = Number(e.target.value) || 0; st.page = 0; renderTable(); });
+  $("leagues").addEventListener("click", (e) => { const b = e.target.closest("[data-league]"); if (!b || b.disabled) return; const k = b.dataset.league; st.leaguesTouched = true; st.leagues.has(k) ? st.leagues.delete(k) : st.leagues.add(k); b.setAttribute("aria-pressed", st.leagues.has(k)); st.page = 0; renderMf(); renderAge(); renderTable(); });
+  $("allLeagues").addEventListener("click", () => { st.leaguesTouched = false; renderLeagues(current); st.page = 0; renderMf(); renderAge(); renderTable(); });
+  $("noLeagues").addEventListener("click", () => { st.leaguesTouched = true; st.leagues = new Set(); renderLeagues(current); st.page = 0; renderMf(); renderAge(); renderTable(); });
+  $("posChips").addEventListener("click", (e) => { const b = e.target.closest("[data-pos]"); if (!b) return; const k = +b.dataset.pos; st.pos.has(k) ? st.pos.delete(k) : st.pos.add(k); b.setAttribute("aria-pressed", st.pos.has(k)); store.set("mm.pos", JSON.stringify([...st.pos])); st.page = 0; renderTable(); });
+  $("posEst").addEventListener("change", (e) => { st.posEst = e.target.checked; store.set("mm.posEst", st.posEst ? "1" : "0"); st.page = 0; renderTable(); });
+  $("ageBox").addEventListener("input", (e) => { const r = e.target.closest("[data-end]"); if (!r) return; const box = $("ageBox");
+    const min = +box.dataset.min, max = +box.dataset.max, lo = $("ageLo"), hi = $("ageHi");
+    if (r === lo && +lo.value > +hi.value) lo.value = hi.value; if (r === hi && +hi.value < +lo.value) hi.value = lo.value;
+    lo.style.zIndex = r === lo ? 2 : 1; hi.style.zIndex = r === hi ? 2 : 1;
+    st.age = { lo: +lo.value <= min ? null : +lo.value, hi: +hi.value >= max ? null : +hi.value };
+    $("ageTxt").textContent = `${lo.value} – ${hi.value} años`; paintFill(box); queueTable(); });
+  $("ageBox").addEventListener("change", () => { store.set("mm.age", JSON.stringify(st.age)); renderAge(); });
+  $("views").addEventListener("click", (e) => { const b = e.target.closest("[data-view]"); if (!b) return; st.view = b.dataset.view; st.page = 0; store.set("mm.view", st.view); renderViews(); renderMfPick(); renderTable(); });
+  $("q").addEventListener("input", (e) => { st.q = e.target.value; st.jump = 0; renderTable(); });
+  $("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && st.hitPos && st.hitPos.length) { e.preventDefault(); st.jump = ((st.hit ?? -1) + (e.shiftKey ? -1 : 1) + st.hitPos.length) % st.hitPos.length; renderTable(); } });
+  $("qHits").addEventListener("click", (e) => { const b = e.target.closest("[data-hit]"); if (!b || !st.hitPos.length) return; const n = st.hitPos.length;
+    st.jump = ((st.hit ?? 0) + (b.dataset.hit === "next" ? 1 : -1) + n) % n; renderTable(); });
+  $("minMin").addEventListener("input", (e) => { st.minMin = Number(e.target.value) || 0; st.page = 0; renderMf(); renderAge(); renderTable(); });
+  $("maxMin").addEventListener("input", (e) => { const v = String(e.target.value).trim(); st.maxMin = v === "" || isNaN(Number(v)) ? null : Number(v); st.page = 0; renderMf(); renderAge(); renderTable(); });
+  $("mfAdd").addEventListener("click", () => { const c = $("mfPick").value; if (!c || st.mf.some((f) => f.col === c)) return; st.mf.push({ col: c, lo: null, hi: null }); saveMf(); renderMf(); renderTable(); });
+  $("mfClear").addEventListener("click", () => { st.mf = []; saveMf(); renderMf(); st.page = 0; renderTable(); });
+  $("mfList").addEventListener("input", (e) => { const r = e.target.closest("[data-end]"); if (!r) return; setEnd(r.closest(".mf"), r.dataset.end, +r.value); queueTable(); });
+  $("mfList").addEventListener("change", (e) => {
+    const t = e.target; const card = t.closest(".mf"); if (!card) return;
+    if (t.dataset.end) { saveMf(); renderTable(); return; }
+    if (t.dataset.num) { const v = parseFloat(String(t.value).replace(",", ".")); if (isNaN(v)) { renderMf(); return; } setEnd(card, t.dataset.num, v); saveMf(); st.page = 0; renderTable(); }
+  });
+  $("mfList").addEventListener("click", (e) => { const x = e.target.closest("[data-mfdel]"); if (!x) return; st.mf.splice(+x.dataset.mfdel, 1); saveMf(); renderMf(); st.page = 0; renderTable(); });
   $("prev").addEventListener("click", () => { st.page--; renderTable(); });
   $("next").addEventListener("click", () => { st.page++; renderTable(); });
   $("tablebox").addEventListener("click", (e) => {
@@ -404,19 +1274,490 @@ function bind() {
   $("runGo").addEventListener("click", fireRun);
 }
 
+// ---------------------------------------------------------------------------- evaluación de ligas
+// Datos precalculados en datos/<temporada>/evaluacion_<fase>.json (script compute_eval.py sobre estos mismos JSON).
+const EV_LABELS = {"liga": "liga", "liga_nombre": "liga_nombre", "pais": "pais", "temporada": "temporada", "fase": "fase", "fuente": "fuente", "fecha_extraccion": "fecha_extraccion", "archivo_bruto": "archivo_bruto", "player_id": "player_id", "player_uid": "player_uid", "nombre": "nombre", "dorsal": "dorsal", "posicion": "posicion", "altura_cm": "Altura (cm)", "peso_kg": "Peso (kg)", "edad": "Edad", "fecha_nacimiento": "fecha_nacimiento", "nacionalidad": "nacionalidad", "team_id": "team_id", "equipo": "equipo", "equipo_codigo": "equipo_codigo", "minutos_partido": "minutos_partido", "calidad_contexto": "Contexto", "gp": "PJ", "gs": "Tit", "min": "Minutos", "pts": "Puntos", "fgm": "TC anotados", "fga": "TC intentados", "fg2m": "T2 anotados", "fg2a": "T2 intentados", "fg3m": "T3 anotados", "fg3a": "T3 intentados", "ftm": "TL anotados", "fta": "TL intentados", "oreb": "Reb. ofensivos", "dreb": "Reb. defensivos", "reb": "Rebotes", "ast": "Asistencias", "stl": "Robos", "tov": "Pérdidas", "blk": "Tapones", "blka": "Tapones recibidos", "pf": "Faltas", "pfd": "Faltas recibidas", "plus_minus": "+/-", "pir": "Valoración", "dunks": "Mates", "fastbreaks": "Contraataques", "pts_fastbreak": "Pts contraataque", "pts_paint": "Pts pintura", "pts_2ndchance": "Pts 2ª oportunidad", "pts_off_tov": "Pts tras pérdida", "dd2": "Dobles-dobles", "td3": "Triples-dobles", "min_pg": "Minutos /p", "pts_pg": "Puntos /p", "fgm_pg": "TC anotados /p", "fga_pg": "TC intentados /p", "fg2m_pg": "T2 anotados /p", "fg2a_pg": "T2 intentados /p", "fg3m_pg": "T3 anotados /p", "fg3a_pg": "T3 intentados /p", "ftm_pg": "TL anotados /p", "fta_pg": "TL intentados /p", "oreb_pg": "Reb. ofensivos /p", "dreb_pg": "Reb. defensivos /p", "reb_pg": "Rebotes /p", "ast_pg": "Asistencias /p", "stl_pg": "Robos /p", "tov_pg": "Pérdidas /p", "blk_pg": "Tapones /p", "blka_pg": "Tapones recibidos /p", "pf_pg": "Faltas /p", "pfd_pg": "Faltas recibidas /p", "plus_minus_pg": "+/- /p", "pir_pg": "Valoración /p", "dunks_pg": "Mates /p", "fastbreaks_pg": "Contraataques /p", "pts_fastbreak_pg": "Pts contraataque /p", "pts_paint_pg": "Pts pintura /p", "pts_2ndchance_pg": "Pts 2ª oportunidad /p", "pts_off_tov_pg": "Pts tras pérdida /p", "pts_p36": "Puntos /36", "fgm_p36": "TC anotados /36", "fga_p36": "TC intentados /36", "fg2m_p36": "T2 anotados /36", "fg2a_p36": "T2 intentados /36", "fg3m_p36": "T3 anotados /36", "fg3a_p36": "T3 intentados /36", "ftm_p36": "TL anotados /36", "fta_p36": "TL intentados /36", "oreb_p36": "Reb. ofensivos /36", "dreb_p36": "Reb. defensivos /36", "reb_p36": "Rebotes /36", "ast_p36": "Asistencias /36", "stl_p36": "Robos /36", "tov_p36": "Pérdidas /36", "blk_p36": "Tapones /36", "blka_p36": "Tapones recibidos /36", "pf_p36": "Faltas /36", "pfd_p36": "Faltas recibidas /36", "plus_minus_p36": "+/- /36", "pir_p36": "Valoración /36", "dunks_p36": "Mates /36", "fastbreaks_p36": "Contraataques /36", "pts_fastbreak_p36": "Pts contraataque /36", "pts_paint_p36": "Pts pintura /36", "pts_2ndchance_p36": "Pts 2ª oportunidad /36", "pts_off_tov_p36": "Pts tras pérdida /36", "pts_p40": "Puntos /40", "fgm_p40": "TC anotados /40", "fga_p40": "TC intentados /40", "fg2m_p40": "T2 anotados /40", "fg2a_p40": "T2 intentados /40", "fg3m_p40": "T3 anotados /40", "fg3a_p40": "T3 intentados /40", "ftm_p40": "TL anotados /40", "fta_p40": "TL intentados /40", "oreb_p40": "Reb. ofensivos /40", "dreb_p40": "Reb. defensivos /40", "reb_p40": "Rebotes /40", "ast_p40": "Asistencias /40", "stl_p40": "Robos /40", "tov_p40": "Pérdidas /40", "blk_p40": "Tapones /40", "blka_p40": "Tapones recibidos /40", "pf_p40": "Faltas /40", "pfd_p40": "Faltas recibidas /40", "plus_minus_p40": "+/- /40", "pir_p40": "Valoración /40", "dunks_p40": "Mates /40", "fastbreaks_p40": "Contraataques /40", "pts_fastbreak_p40": "Pts contraataque /40", "pts_paint_p40": "Pts pintura /40", "pts_2ndchance_p40": "Pts 2ª oportunidad /40", "pts_off_tov_p40": "Pts tras pérdida /40", "pts_p100": "Puntos /100", "fgm_p100": "TC anotados /100", "fga_p100": "TC intentados /100", "fg2m_p100": "T2 anotados /100", "fg2a_p100": "T2 intentados /100", "fg3m_p100": "T3 anotados /100", "fg3a_p100": "T3 intentados /100", "ftm_p100": "TL anotados /100", "fta_p100": "TL intentados /100", "oreb_p100": "Reb. ofensivos /100", "dreb_p100": "Reb. defensivos /100", "reb_p100": "Rebotes /100", "ast_p100": "Asistencias /100", "stl_p100": "Robos /100", "tov_p100": "Pérdidas /100", "blk_p100": "Tapones /100", "blka_p100": "Tapones recibidos /100", "pf_p100": "Faltas /100", "pfd_p100": "Faltas recibidas /100", "plus_minus_p100": "+/- /100", "pir_p100": "Valoración /100", "dunks_p100": "Mates /100", "fastbreaks_p100": "Contraataques /100", "pts_fastbreak_p100": "Pts contraataque /100", "pts_paint_p100": "Pts pintura /100", "pts_2ndchance_p100": "Pts 2ª oportunidad /100", "pts_off_tov_p100": "Pts tras pérdida /100", "fg_pct": "TC%", "fg2_pct": "T2%", "fg3_pct": "T3%", "ft_pct": "TL%", "efg_pct": "eFG%", "ts_pct": "TS%", "tsa": "Intentos de tiro (TSA)", "pts_per_fga": "Pts/TCI", "pts_per_tsa": "Pts/TSA", "fg3a_rate": "3PAr", "fta_rate": "FTr", "ft_per_fga": "TL/TCI", "fg2a_share": "% T2 sobre TCI", "pct_pts_2": "% pts de 2", "pct_pts_3": "% pts de 3", "pct_pts_ft": "% pts de TL", "pct_pts_paint": "% pts pintura", "pct_pts_fastbreak": "% pts contraataque", "dunk_rate": "% mates", "min_pct": "% min", "usg_pct": "USG%", "ast_pct": "AST%", "tov_pct": "TOV%", "oreb_pct": "OREB%", "dreb_pct": "DREB%", "reb_pct": "REB%", "stl_pct": "STL%", "blk_pct": "BLK%", "ast_to": "AST/TO", "ast_ratio": "AST ratio", "tov_ratio": "TOV ratio", "stl_to_tov": "Rob/Pér", "blk_to_pf": "Tap/Falt", "stl_plus_blk_p40": "Rob+Tap/40", "pfd_to_pf": "Falt rec/Falt", "pts_share": "% pts eq.", "reb_share": "% reb eq.", "ast_share": "% ast eq.", "fga_share": "% TCI eq.", "poss_on_court": "Pos. en pista", "poss_used": "Posesiones usadas", "game_score": "Game Score", "game_score_pg": "Game Score /p", "game_score_p40": "Game Score /40", "eff": "EFF", "eff_pg": "EFF /p", "pir_calc": "Valoración calc.", "pie": "PIE", "uper": "uPER", "per": "PER", "ortg": "ORtg", "drtg": "DRtg", "net_rtg": "Net", "floor_pct": "Floor%", "pprod": "Pts producidos", "scposs": "Pos. anotadas", "totposs": "Pos. totales", "stops": "Stops", "stop_pct": "Stop%", "ows": "OWS", "dws": "DWS", "ws": "WS", "ws_per_40": "WS/40", "ws_per_48": "WS/48", "team_gp": "PJ eq.", "team_w": "V", "team_l": "D", "team_min": "Minutos eq.", "team_pts": "Eq. puntos", "team_fgm": "Eq. tc anotados", "team_fga": "Eq. tc intentados", "team_fg2m": "Eq. t2 anotados", "team_fg2a": "Eq. t2 intentados", "team_fg3m": "Eq. t3 anotados", "team_fg3a": "Eq. t3 intentados", "team_ftm": "Eq. tl anotados", "team_fta": "Eq. tl intentados", "team_oreb": "Eq. reb. ofensivos", "team_dreb": "Eq. reb. defensivos", "team_reb": "Eq. rebotes", "team_ast": "Eq. asistencias", "team_stl": "Eq. robos", "team_tov": "Eq. pérdidas", "team_blk": "Eq. tapones", "team_pf": "Eq. faltas", "opp_min": "Rival minutos", "opp_pts": "Rival puntos", "opp_fgm": "Rival tc anotados", "opp_fga": "Rival tc intentados", "opp_fg2m": "Rival t2 anotados", "opp_fg2a": "Rival t2 intentados", "opp_fg3m": "Rival t3 anotados", "opp_fg3a": "Rival t3 intentados", "opp_ftm": "Rival tl anotados", "opp_fta": "Rival tl intentados", "opp_oreb": "Rival reb. ofensivos", "opp_dreb": "Rival reb. defensivos", "opp_reb": "Rival rebotes", "opp_ast": "Rival asistencias", "opp_stl": "Rival robos", "opp_tov": "Rival pérdidas", "opp_blk": "Rival tapones", "opp_pf": "Rival faltas", "team_poss": "Posesiones eq.", "opp_poss": "Posesiones rival", "team_pace": "Ritmo", "team_ortg": "ORtg eq.", "team_drtg": "DRtg eq.", "team_netrtg": "Net eq.", "lg_pace": "Ritmo liga", "lg_ortg": "ORtg liga", "lg_pts_per_game": "Pts/partido liga", "src_ortg": "ORtg of.", "src_drtg": "DRtg of.", "src_netrtg": "src_netrtg", "src_pace": "src_pace", "src_poss": "src_poss", "src_pie": "PIE of.", "src_usg_pct": "USG% of.", "src_ts_pct": "TS% of.", "src_efg_pct": "src_efg_pct", "src_ast_pct": "src_ast_pct", "src_ast_ratio": "src_ast_ratio", "src_tov_ratio": "src_tov_ratio", "src_oreb_pct": "src_oreb_pct", "src_dreb_pct": "src_dreb_pct", "src_reb_pct": "src_reb_pct", "src_fta_rate": "src_fta_rate", "src_fg3a_rate": "src_fg3a_rate", "src_def_ws": "src_def_ws", "src_pct_fga_2pt": "src_pct_fga_2pt", "src_pct_fga_3pt": "src_pct_fga_3pt", "src_pct_pts_mid": "src_pct_pts_mid", "src_pct_ast_fgm": "src_pct_ast_fgm", "src_pct_uast_fgm": "src_pct_uast_fgm", "src_pct_ast_3pm": "src_pct_ast_3pm", "src_pct_uast_2pm": "src_pct_uast_2pm", "src_fantasy_pts": "src_fantasy_pts", "src_contested_shots": "src_contested_shots", "src_contested_shots_3pt": "src_contested_shots_3pt", "src_deflections": "src_deflections", "src_charges_drawn": "src_charges_drawn", "src_screen_assists": "src_screen_assists", "src_screen_ast_pts": "src_screen_ast_pts", "src_loose_balls": "src_loose_balls", "src_box_outs": "src_box_outs", "src_dist_miles": "src_dist_miles", "src_avg_speed": "src_avg_speed", "src_touches": "src_touches", "src_time_of_poss": "src_time_of_poss", "src_drives": "src_drives", "src_drive_pts": "src_drive_pts", "src_passes_made": "src_passes_made", "src_potential_ast": "src_potential_ast", "src_secondary_ast": "src_secondary_ast", "src_ft_ast": "src_ft_ast", "src_ast_pts_created": "src_ast_pts_created", "src_catch_shoot_fgm": "src_catch_shoot_fgm", "src_catch_shoot_fga": "src_catch_shoot_fga", "src_catch_shoot_pts": "src_catch_shoot_pts", "src_pull_up_fgm": "src_pull_up_fgm", "src_pull_up_fga": "src_pull_up_fga", "src_pull_up_pts": "src_pull_up_pts", "src_paint_touches": "src_paint_touches", "src_post_touches": "src_post_touches", "src_elbow_touches": "src_elbow_touches", "src_per": "PER of.", "src_ows": "src_ows", "src_dws": "src_dws", "src_ws": "WS of.", "src_ws48": "WS/48", "src_obpm": "OBPM", "src_dbpm": "DBPM", "src_bpm": "BPM", "src_vorp": "VORP", "src_stl_pct": "src_stl_pct", "src_blk_pct": "src_blk_pct", "src_pos_pg_pct": "src_pos_pg_pct", "src_pos_sg_pct": "src_pos_sg_pct", "src_pos_sf_pct": "src_pos_sf_pct", "src_pos_pf_pct": "src_pos_pf_pct", "src_pos_c_pct": "src_pos_c_pct", "src_on_court_pm100": "src_on_court_pm100", "src_on_off_pm100": "On-off/100", "src_tov_bad_pass": "src_tov_bad_pass", "src_tov_lost_ball": "src_tov_lost_ball", "src_fouls_shooting": "src_fouls_shooting", "src_fouls_offensive": "src_fouls_offensive", "src_drawn_shooting": "src_drawn_shooting", "src_drawn_offensive": "src_drawn_offensive", "src_astd_pts": "src_astd_pts", "src_and1": "src_and1", "src_avg_shot_dist": "Dist. tiro", "src_pct_fga_00_03": "src_pct_fga_00_03", "src_pct_fga_03_10": "src_pct_fga_03_10", "src_pct_fga_10_16": "src_pct_fga_10_16", "src_pct_fga_16_3p": "src_pct_fga_16_3p", "src_fg_pct_00_03": "src_fg_pct_00_03", "src_fg_pct_03_10": "src_fg_pct_03_10", "src_fg_pct_10_16": "src_fg_pct_10_16", "src_fg_pct_16_3p": "src_fg_pct_16_3p", "src_pct_ast_fg2": "src_pct_ast_fg2", "src_pct_ast_fg3": "src_pct_ast_fg3", "src_pct_fga_dunk": "src_pct_fga_dunk", "src_pct_fg3a_corner": "src_pct_fg3a_corner", "src_fg3_pct_corner": "src_fg3_pct_corner", "src_eff": "src_eff", "src_oer": "src_oer", "bn_player_id": "bn_player_id", "bn_usg_pct": "USG% BN", "bn_ts_pct": "bn_ts_pct", "bn_ast_pct": "bn_ast_pct", "bn_tov_pct": "bn_tov_pct", "bn_stl_pct": "bn_stl_pct", "bn_blk_pct": "bn_blk_pct", "bn_oreb_pct": "bn_oreb_pct", "bn_dreb_pct": "bn_dreb_pct", "bn_fg3a_rate": "bn_fg3a_rate", "bn_ast_to": "bn_ast_to", "bn_poss_pg": "bn_poss_pg", "bn_ortg_ind": "ORtg ind", "bn_drtg_ind": "DRtg ind", "bn_netrtg_ind": "bn_netrtg_ind", "bn_stops_pg": "Stops", "bn_foul_stops_pg": "bn_foul_stops_pg", "bn_stop_pct": "Stop%", "bn_created_pts_pg": "Pts creados", "bn_assisted_pts_pg": "bn_assisted_pts_pg", "bn_3fta_poss_pg": "bn_3fta_poss_pg", "bn_pir_pg": "bn_pir_pg", "bn_min_on": "Min on", "bn_poss_on": "bn_poss_on", "bn_poss_on_pct": "bn_poss_on_pct", "bn_pts_on": "bn_pts_on", "bn_opp_pts_on": "bn_opp_pts_on", "bn_net_pts_on": "bn_net_pts_on", "bn_ortg_on": "bn_ortg_on", "bn_drtg_on": "bn_drtg_on", "bn_netrtg_on": "Net on", "bn_ortg_off": "bn_ortg_off", "bn_drtg_off": "bn_drtg_off", "bn_netrtg_off": "Net off", "bn_ortg_onoff": "ORtg on-off", "bn_drtg_onoff": "DRtg on-off", "bn_netrtg_onoff": "On-off", "bn_2p_pct_on": "bn_2p_pct_on", "bn_2p_pct_onoff": "bn_2p_pct_onoff", "bn_3p_pct_on": "bn_3p_pct_on", "bn_3p_pct_onoff": "bn_3p_pct_onoff", "bn_fg3a_rate_on": "bn_fg3a_rate_on", "bn_fg3a_rate_onoff": "bn_fg3a_rate_onoff", "bn_ast_pct_on": "bn_ast_pct_on", "bn_ast_pct_onoff": "bn_ast_pct_onoff", "bn_tov_pct_on": "bn_tov_pct_on", "bn_tov_pct_onoff": "bn_tov_pct_onoff", "bn_oreb_pct_on": "bn_oreb_pct_on", "bn_oreb_pct_onoff": "bn_oreb_pct_onoff", "bn_dreb_pct_on": "bn_dreb_pct_on", "bn_dreb_pct_onoff": "bn_dreb_pct_onoff", "bn_reb_pct_on": "bn_reb_pct_on", "bn_reb_pct_onoff": "bn_reb_pct_onoff", "bn_foul_rate_on": "bn_foul_rate_on", "bn_foul_rate_onoff": "bn_foul_rate_onoff", "bn_fouled_rate_on": "bn_fouled_rate_on", "bn_fouled_rate_onoff": "bn_fouled_rate_onoff", "bn_opp_2p_pct_on": "bn_opp_2p_pct_on", "bn_opp_2p_pct_onoff": "bn_opp_2p_pct_onoff", "bn_opp_3p_pct_on": "bn_opp_3p_pct_on", "bn_opp_3p_pct_onoff": "bn_opp_3p_pct_onoff", "bn_opp_fg3a_rate_on": "bn_opp_fg3a_rate_on", "bn_opp_fg3a_rate_onoff": "bn_opp_fg3a_rate_onoff", "bn_opp_ast_pct_on": "bn_opp_ast_pct_on", "bn_opp_ast_pct_onoff": "bn_opp_ast_pct_onoff", "bn_opp_tov_pct_on": "bn_opp_tov_pct_on", "bn_opp_tov_pct_onoff": "bn_opp_tov_pct_onoff", "rs_gp": "PJ reg.", "rs_min_pg": "Regular · Min", "rs_pts_pg": "Pts reg.", "rs_pts_p40": "Regular · Pts/40", "rs_reb_p40": "Regular · Reb/40", "rs_ast_p40": "Regular · Ast/40", "rs_ts_pct": "Regular · TS%", "rs_efg_pct": "Regular · eFG%", "rs_usg_pct": "Regular · USG%", "rs_ast_pct": "Regular · AST%", "rs_tov_pct": "Regular · TOV%", "rs_reb_pct": "Regular · REB%", "rs_per": "Regular · PER", "rs_ortg": "Regular · ORtg", "rs_drtg": "Regular · DRtg", "rs_net_rtg": "Regular · Net", "rs_game_score_pg": "Regular · GmSc", "rs_pir_pg": "Regular · Val", "rs_ws_per_40": "Regular · WS/40", "rs_pie": "Regular · PIE", "rs_bn_netrtg_onoff": "Regular · On-off", "delta_min_pg": "Δ Min", "delta_pts_pg": "Δ Pts", "delta_pts_p40": "Δ PO−RS · Pts/40", "delta_reb_p40": "Δ PO−RS · Reb/40", "delta_ast_p40": "Δ PO−RS · Ast/40", "delta_ts_pct": "Δ TS%", "delta_efg_pct": "Δ PO−RS · eFG%", "delta_usg_pct": "Δ USG%", "delta_ast_pct": "Δ PO−RS · AST%", "delta_tov_pct": "Δ PO−RS · TOV%", "delta_reb_pct": "Δ PO−RS · REB%", "delta_per": "Δ PER", "delta_ortg": "Δ ORtg", "delta_drtg": "Δ DRtg", "delta_net_rtg": "Δ Net", "delta_game_score_pg": "Δ PO−RS · GmSc", "delta_pir_pg": "Δ PO−RS · Val", "delta_ws_per_40": "Δ WS/40", "delta_pie": "Δ PO−RS · PIE", "delta_bn_netrtg_onoff": "Δ PO−RS · On-off"};
+const EV_COL = { euroleague: "#2a78d6", eurocup: "#eb6834", acb: "#1baf7a", lba: "#eda100", bbl: "#e87ba4", lnb: "#008300", nba: "#6250d6", gleague: "#e34948" };
+const EV_GROUPS = { identidad: "Físico y edad", totales: "Totales de temporada", por_partido: "Por partido", por_36: "Por 36 minutos", por_40: "Por 40 minutos",
+  por_100_pos: "Por 100 posesiones", tiro: "Tiro", ratios: "Ratios de uso y rol", ratings: "Ratings", contexto_equipo: "Totales de equipo", contexto_rival: "Totales de rivales",
+  contexto_liga: "Ritmo y eficiencia de equipo", metricas_fuente: "Métricas oficiales de la fuente (src_)", basketnews: "BasketNews (bn_)", contexto_fase: "Playoffs frente a regular" };
+const EV_GORDER = Object.keys(EV_GROUPS);
+const EV_FAC = { e: ["eFG%", "acierto de campo"], pft: ["Pts/TL", "puntos por tiro libre intentado"], a: ["TL/100", "tiros libres por 100 posesiones"],
+  t: ["Pér/100", "pérdidas por 100 posesiones"], o: ["OREB/100", "rebotes ofensivos por 100 posesiones"], r: ["Resto", "desajuste entre la fórmula de posesiones y la identidad simple"] };
+const EV_FAC_COL = { e: "#2a78d6", pft: "#eb6834", a: "#1baf7a", t: "#eda100", o: "#e87ba4", r: "#a89a8a" };
+const EV_PW = {
+  g: ["Hedges g", "Diferencia de medias en desviaciones típicas combinadas, con corrección de muestra pequeña J = 1 − 3/(4(n₁+n₂) − 9). |g| ≈ 0,2 pequeño, 0,5 medio, 0,8 grande."],
+  d: ["Cliff δ", "P(X > Y) − P(X < Y) para un jugador al azar de cada liga (= 2U/(n₁n₂) − 1 con la U de Mann-Whitney). No paramétrico, entre −1 y 1."],
+  ks: ["KS D", "Distancia máxima entre las dos funciones de distribución acumulada (Kolmogórov-Smirnov), entre 0 y 1."],
+  w1: ["W₁ / σ", "Distancia de Wasserstein-1 (coste mínimo de transportar una distribución sobre la otra) dividida por la σ combinada."],
+  js: ["JSD", "Divergencia de Jensen-Shannon entre histogramas de 20 intervalos, en bits, entre 0 y 1."] };
+const EV_SIGNED = /net|plus_minus|onoff|on_off|bpm|vorp|^delta_|_diff/;
+const EV_BASES = { pts: "Puntos", reb: "Rebotes", ast: "Asistencias", stl: "Robos", blk: "Tapones", tov: "Pérdidas", fga: "Tiros de campo intentados", fta: "Tiros libres intentados",
+  fg3a: "Triples intentados", oreb: "Rebotes ofensivos", dreb: "Rebotes defensivos", pf: "Faltas" };
+const EV_POS = ["Base", "Escolta", "Alero", "Alapívot", "Pívot"];
+const evSt = { ref: "euroleague", group: "", q: "", sort: "eta2", metric: "team_ortg", pw: "g", pos: "blk_pct", pair: "0-2", cross: false, hideTot: true, cache: {} };
+try { const s = JSON.parse(store.get("mm.ev") || "null"); if (s && typeof s === "object") for (const k of ["ref", "group", "sort", "metric", "pw", "pos", "pair"]) if (typeof s[k] === "string") evSt[k] = s[k]; } catch {}
+const evSave = () => store.set("mm.ev", JSON.stringify({ ref: evSt.ref, group: evSt.group, sort: evSt.sort, metric: evSt.metric, pw: evSt.pw, pos: evSt.pos, pair: evSt.pair }));
+const evLab = (c) => EV_LABELS[c] || c;
+const evAb = (l) => LEAGUE_ABBR[l] || l;
+const evName = (l) => LEAGUES[l] || l;
+function evN(v, d) {
+  if (v == null || !isFinite(v)) return "–";
+  if (d == null) { const a = Math.abs(v); d = a >= 10 ? 1 : a >= 1 ? 2 : 3; }
+  return v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+const evSig = (v, d, suf = "") => (v == null || !isFinite(v) ? "–" : (v > 0 ? "+" : v < 0 ? "−" : "") + evN(Math.abs(v), d) + suf);
+function evP(p) {
+  if (p == null) return "–"; if (p === 0) return "< 10⁻³⁰⁰";
+  if (p < 1e-4) { const e = Math.floor(Math.log10(p)); return `${evN(p / 10 ** e, 1)}·10^${e}`; }
+  return evN(p, 4);
+}
+async function loadEval(season, phase) {
+  const k = season + "/" + phase;
+  if (!evSt.cache[k]) evSt.cache[k] = getJSON(`datos/${season}/evaluacion_${phase}.json`).catch((e) => { delete evSt.cache[k]; throw e; });
+  return evSt.cache[k];
+}
+function evPw(D, m, stat, i, j) { // estadístico de la liga i frente a la j (signo i − j en g y δ)
+  if (!m.pw || i === j) return null;
+  const k = D.pares.findIndex(([a, b]) => (a === i && b === j) || (a === j && b === i)); if (k < 0) return null;
+  const v = m.pw[stat][k]; if (v == null) return null;
+  return (stat === "g" || stat === "d") && D.pares[k][0] !== i ? -v : v;
+}
+function evIsSigned(m) {
+  const means = m.l.filter((e) => e && e.m != null).map((e) => e.m);
+  return EV_SIGNED.test(m.c) || (means.length && Math.min(...means) < 0);
+}
+function evDelta(m, li, ri, key = "m") {
+  const a = m.l[li], b = m.l[ri]; if (!a || !b || a[key] == null || b[key] == null) return null;
+  if (evIsSigned(m) || Math.abs(b[key]) < 1e-6) return { v: a[key] - b[key], abs: true };
+  return { v: 100 * (a[key] - b[key]) / Math.abs(b[key]), abs: false };
+}
+function evDivBg(t) {
+  const k = Math.min(1, Math.abs(t)) * 0.62, to = t >= 0 ? [42, 120, 214] : [235, 104, 52], mid = [249, 243, 235];
+  const c = mid.map((x, i) => Math.round(x + (to[i] - x) * k)); return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+function evSeqBg(t) { const k = Math.max(0, Math.min(1, t)) * 0.7; const to = [107, 79, 56], mid = [249, 243, 235];
+  const c = mid.map((x, i) => Math.round(x + (to[i] - x) * k)); return `rgb(${c[0]},${c[1]},${c[2]})`; }
+const evInk = (bg) => { const m = bg.match(/\d+/g).map(Number); return (0.299 * m[0] + 0.587 * m[1] + 0.114 * m[2]) < 140 ? "#fcf9f5" : "#3a2a1c"; };
+function evTicks(lo, hi, n = 5) {
+  if (!(hi > lo)) hi = lo + 1;
+  const step0 = (hi - lo) / n, mag = 10 ** Math.floor(Math.log10(step0)), err = step0 / mag;
+  const step = (err >= 7.5 ? 10 : err >= 3.5 ? 5 : err >= 1.5 ? 2 : 1) * mag;
+  const out = []; for (let v = Math.ceil(lo / step - 1e-9) * step; v <= hi + step * 1e-9; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function evTF(ticks) { const st2 = ticks.length > 1 ? Math.abs(ticks[1] - ticks[0]) : 1; const d = st2 >= 1 ? 0 : Math.min(3, Math.ceil(-Math.log10(st2) - 1e-9)); return (v) => evN(v, d); }
+const evLeagueIdx = () => evSt.D.ligas.indexOf(evSt.ref);
+
+// ---------------------------------------------------------------------------- orquestación
+async function renderEval() {
+  if (st.pageTab !== "evaluacion") return;
+  let D;
+  try { D = await loadEval(st.season, st.phase); }
+  catch (e) { $("evMetric").innerHTML = `<div class="empty">No hay evaluación calculada para ${esc(st.season)} · ${esc(st.phase)}.</div>`; return; }
+  if (st.pageTab !== "evaluacion") return;
+  evSt.D = D; evSt.M = {}; D.metricas.forEach((m) => (evSt.M[m.c] = m));
+  evSt.avail = D.ligas.map((_, i) => i).filter((i) => D.n_elegibles[D.ligas[i]] > 0);
+  if (!evSt.avail.includes(D.ligas.indexOf(evSt.ref))) evSt.ref = D.ligas[evSt.avail[0]];
+  if (!evSt.M[evSt.metric]) evSt.metric = evSt.M.team_ortg ? "team_ortg" : D.metricas[0].c;
+  if (evSt.group && !D.metricas.some((m) => GRUPO_OF(m.c) === evSt.group)) evSt.group = "";
+  evControls(); evNote(); evMetric(); evMatrix(); evShap(); evScale(); evPos(); evTeams(); evDisc(); evBridge(); evQual();
+}
+const GRUPO_OF = (c) => (st.dictGroup && st.dictGroup[c]) || "";
+
+function evControls() {
+  const D = evSt.D;
+  $("evRef").innerHTML = evSt.avail.map((i) => `<option value="${D.ligas[i]}">${esc(evName(D.ligas[i]))}</option>`).join("");
+  $("evRef").value = evSt.ref;
+  const groups = EV_GORDER.filter((g) => D.metricas.some((m) => GRUPO_OF(m.c) === g));
+  $("evGroup").innerHTML = `<option value="">Todos (${D.metricas.length})</option>` + groups.map((g) => `<option value="${g}">${esc(EV_GROUPS[g])} (${D.metricas.filter((m) => GRUPO_OF(m.c) === g).length})</option>`).join("");
+  $("evGroup").value = evSt.group;
+  $("evMetricSel").innerHTML = groups.map((g) => `<optgroup label="${esc(EV_GROUPS[g])}">` +
+    D.metricas.filter((m) => GRUPO_OF(m.c) === g).map((m) => `<option value="${m.c}">${esc(evLab(m.c))} · ${m.c}</option>`).join("") + "</optgroup>").join("");
+  $("evMetricSel").value = evSt.metric;
+  $("evSort").value = evSt.sort;
+}
+
+function evNote() {
+  const D = evSt.D, ph = (PHASES.find((p) => p[0] === D.fase) || [0, D.fase])[1];
+  const ns = D.ligas.map((l) => `<span>${evAb(l)} <b>${D.n_elegibles[l]}</b></span>`).join("");
+  $("evNote").innerHTML = `<span><b>${esc(D.temporada)}</b> · ${esc(ph)}</span><span>Jugadores con <b>${D.umbral_min}</b>+ minutos:</span>${ns}<span>Métricas comparadas: <b>${D.metricas.length}</b></span>`;
+  const warns = [];
+  const missing = D.ligas.filter((l) => !D.n_elegibles[l]);
+  if (missing.length) warns.push(`Sin partidos en esta selección: ${missing.map(evName).join(", ")}.`);
+  if (D.temporada === "2026-27") warns.push("Temporada 2026-27 en curso (2-5 jornadas por liga): las diferencias tienen mucha varianza de muestra. Para conclusiones usa 2025-26.");
+  if (D.fase === "playoffs") warns.push("Playoffs: pocas decenas de jugadores por liga y rivales de más nivel; los intervalos son amplios y el contexto no es comparable con la temporada regular.");
+  $("evWarn").innerHTML = warns.length ? `<div class="ev-warn">${warns.map(esc).join(" ")}</div>` : "";
+}
+
+// ---------------------------------------------------------------------------- ficha de métrica
+function evMetric() {
+  const D = evSt.D, m = evSt.M[evSt.metric], ri = evLeagueIdx(), box = $("evMetric");
+  if (!m) { box.innerHTML = `<div class="empty">Elige una métrica.</div>`; return; }
+  const kind = { jugador: "Por jugador · media ponderada por minutos", equipo: "Por equipo · media simple de equipos", liga: "Valor único de liga" }[m.k];
+  const kw = m.kw || [], vd = m.vd;
+  const kpis = [
+    ["η² liga", m.eta2 != null ? evN(m.eta2, 3) : "–", "varianza explicada por la liga"],
+    ["ε² Kruskal-Wallis", kw[2] != null ? evN(kw[2], 3) : "–", "tamaño del efecto por rangos"],
+    ["H", kw[0] != null ? evN(kw[0], 1) : "–", `p = ${evP(kw[1])}`],
+    ["CV entre ligas", m.cv != null ? evN(100 * m.cv, 1) + " %" : "–", "σ de las medias / media"],
+  ];
+  const vdHtml = vd ? `<div class="ev-kpi" style="min-width:220px"><span>Partición de la varianza</span>${evStack([["Liga", vd[0], "#6b4f38"], ["Equipo", vd[1], "#b08a66"], ["Jugador", vd[2], "#e3d0b8"]])}</div>` : "";
+  box.innerHTML = `
+    <div class="ev-mhead"><div><h2>${esc(evLab(m.c))}</h2><code>${esc(m.c)}</code></div><span class="ev-badge">${esc(kind)}</span></div>
+    <p class="hint" style="margin:0">${esc(st.dict[m.c] || "")}</p>
+    <div class="ev-kpis">${kpis.map(([a, b, c]) => `<div class="ev-kpi"><span>${a}</span><b>${b}</b><small>${c}</small></div>`).join("")}${vdHtml}</div>
+    <div class="ev-grid2">
+      <div style="display:grid;gap:6px;min-width:0"><h3 class="ev-h3">Media por liga y Δ frente a ${esc(evName(evSt.ref))}</h3><div class="ev-svgbox">${evMeansSvg(m, ri)}</div></div>
+      <div style="display:grid;gap:6px;min-width:0"><h3 class="ev-h3">Distribución entre jugadores</h3><p class="ev-sub">Bigotes p5–p95, caja p25–p75, raya en la mediana y rombo en la media ponderada.</p><div class="ev-svgbox">${evBoxSvg(m, ri)}</div></div>
+    </div>
+    <div class="ev-grid2">
+      <div style="display:grid;gap:6px;min-width:0"><h3 class="ev-h3">Mapa de transporte hacia ${esc(evName(evSt.ref))}</h3>
+        <p class="ev-sub">Cada curva es T(x) = F<sub>ref</sub>⁻¹(F<sub>liga</sub>(x)): el valor que ocupa en ${esc(evName(evSt.ref))} el mismo percentil que x en su liga. En una dimensión es el transporte óptimo de Monge-Kantorovich (coste cuadrático). Por encima de la diagonal, la referencia «paga» más por el mismo percentil.</p>
+        <div class="ev-svgbox">${evTransportSvg(m, ri)}</div></div>
+      <div style="display:grid;gap:6px;min-width:0"><h3 class="ev-h3">Distancias entre ligas</h3>
+        <div class="ev-pills" role="group" aria-label="Estadístico">${Object.entries(EV_PW).map(([k, v]) => `<button type="button" class="chip" data-evpw="${k}" aria-pressed="${k === evSt.pw}">${v[0]}</button>`).join("")}</div>
+        <p class="ev-sub">${esc(EV_PW[evSt.pw][1])} Fila frente a columna.</p>
+        <div class="ev-svgbox">${evPairSvg(m)}</div></div>
+    </div>
+    <h3 class="ev-h3">Tabla de la métrica</h3>
+    <div class="cmp-table">${evStatTable(m, ri)}</div>
+    <details><summary>Cómo se calcula</summary>
+      <p>Población: jugadores con ${D.umbral_min}+ minutos en la fase (las métricas de equipo usan una fila por equipo; los traspasados de la EuroLeague y EuroCup, agregados en una fila, no cuentan como equipo). Media ponderada por minutos; mediana y cuantiles por jugador. Δ% = 100·(μ<sub>liga</sub> − μ<sub>ref</sub>)/|μ<sub>ref</sub>|; si la métrica tiene signo o la referencia es casi cero se da la diferencia absoluta.
+      η² = SS<sub>entre</sub>/SS<sub>total</sub> con pesos de minutos. ε² = H/(N − 1). La partición liga / equipo / jugador es una ANOVA anidada ponderada: equipo = varianza de las medias de equipo alrededor de la media de su liga; incluye ruido de muestra, así que es descriptiva. Ligas con menos de 10 jugadores (8 equipos) con dato no entran en cuantiles ni distancias.</p></details>`;
+}
+function evStack(parts) {
+  const tot = parts.reduce((s, p) => s + (p[1] || 0), 0) || 1;
+  return `<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px;margin:4px 0" role="img" aria-label="${parts.map((p) => `${p[0]} ${evN(100 * p[1], 0)} %`).join(", ")}">${parts.map((p) => `<i style="flex:${Math.max(0.001, p[1] / tot)};background:${p[2]}" title="${p[0]}: ${evN(100 * p[1], 1)} %"></i>`).join("")}</div>
+    <small>${parts.map((p) => `${p[0]} <b style="font:500 11px var(--f-data)">${evN(100 * p[1], 0)} %</b>`).join(" · ")}</small>`;
+}
+function evMeansSvg(m, ri) {
+  const D = evSt.D, rows = D.ligas.map((l, i) => ({ l, i, e: m.l[i] })).filter((r) => r.e && r.e.m != null);
+  if (!rows.length) return `<div class="empty">Sin datos.</div>`;
+  const W = 640, L0 = 108, R0 = 168, rowH = 28, H = rows.length * rowH + 30;
+  const vals = rows.map((r) => r.e.m), lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+  const x = (v) => L0 + (v - lo) / ((hi - lo) || 1) * (W - L0 - R0);
+  const ticks = evTicks(lo, hi, 4), tf = evTF(ticks);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Media de ${esc(evLab(m.c))} por liga">`;
+  ticks.forEach((t) => { s += `<line class="ax" x1="${x(t)}" x2="${x(t)}" y1="4" y2="${H - 22}"/><text class="mut" x="${x(t)}" y="${H - 8}" text-anchor="middle">${tf(t)}</text>`; });
+  s += `<line class="ax0" x1="${x(0)}" x2="${x(0)}" y1="4" y2="${H - 22}"/>`;
+  rows.forEach((r, k) => {
+    const y = 8 + k * rowH, isRef = r.i === ri, d = evDelta(m, r.i, ri);
+    const x0 = x(0), x1 = x(r.e.m), bx = Math.min(x0, x1), bw = Math.max(1.5, Math.abs(x1 - x0));
+    s += `<g><title>${esc(evName(r.l))}: ${evN(r.e.m)} (n = ${r.e.n})</title>
+      <text class="lab" x="${L0 - 10}" y="${y + 14}" text-anchor="end"${isRef ? ' style="text-decoration:underline"' : ""}>${esc(evName(r.l))}</text>
+      <rect x="${bx}" y="${y + 3}" width="${bw}" height="${rowH - 10}" rx="4" fill="${EV_COL[r.l]}" ${isRef ? 'stroke="#3a2a1c" stroke-width="1.5"' : ""}/>
+      <text x="${W - R0 + 8}" y="${y + 14}">${evN(r.e.m)}</text>
+      <text x="${W - 8}" y="${y + 14}" text-anchor="end" style="font-weight:600">${isRef ? "ref." : d ? evSig(d.v, 1, d.abs ? "" : " %") : "–"}</text></g>`;
+  });
+  return s + "</svg>";
+}
+function evBoxSvg(m, ri) {
+  const D = evSt.D, rows = D.ligas.map((l, i) => ({ l, i, e: m.l[i] })).filter((r) => r.e && r.e.q);
+  if (!rows.length) return `<div class="empty">${m.k === "liga" ? "Métrica de liga: un único valor por competición." : "Sin muestra suficiente para cuantiles."}</div>`;
+  const W = 640, L0 = 108, R0 = 16, rowH = 26, H = rows.length * rowH + 30;
+  const lo = Math.min(...rows.map((r) => r.e.q[1])), hi = Math.max(...rows.map((r) => r.e.q[19]));
+  const x = (v) => L0 + (Math.max(lo, Math.min(hi, v)) - lo) / ((hi - lo) || 1) * (W - L0 - R0);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Distribución de ${esc(evLab(m.c))} por liga">`;
+  const tk = evTicks(lo, hi, 5), tf = evTF(tk);
+  tk.forEach((t) => { if (t < lo || t > hi) return; s += `<line class="ax" x1="${x(t)}" x2="${x(t)}" y1="4" y2="${H - 22}"/><text class="mut" x="${x(t)}" y="${H - 8}" text-anchor="middle">${tf(t)}</text>`; });
+  rows.forEach((r, k) => {
+    const q = r.e.q, y = 8 + k * rowH + rowH / 2 - 4, c = EV_COL[r.l];
+    s += `<g><title>${esc(evName(r.l))} · p5 ${evN(q[1])} · p25 ${evN(q[5])} · mediana ${evN(q[10])} · p75 ${evN(q[15])} · p95 ${evN(q[19])} · media ${evN(r.e.m)}</title>
+      <text class="lab" x="${L0 - 10}" y="${y + 4}" text-anchor="end"${r.i === ri ? ' style="text-decoration:underline"' : ""}>${esc(evName(r.l))}</text>
+      <line x1="${x(q[1])}" x2="${x(q[19])}" y1="${y}" y2="${y}" stroke="${c}" stroke-width="2"/>
+      <rect x="${x(q[5])}" y="${y - 7}" width="${Math.max(2, x(q[15]) - x(q[5]))}" height="14" rx="3" fill="${c}" fill-opacity=".35" stroke="${c}" stroke-width="1.5"/>
+      <line x1="${x(q[10])}" x2="${x(q[10])}" y1="${y - 8}" y2="${y + 8}" stroke="#3a2a1c" stroke-width="2"/>
+      ${r.e.m != null ? `<rect x="${x(r.e.m) - 4}" y="${y - 4}" width="8" height="8" transform="rotate(45 ${x(r.e.m)} ${y})" fill="#fcf9f5" stroke="#3a2a1c" stroke-width="1.5"/>` : ""}</g>`;
+  });
+  return s + "</svg>";
+}
+function evTransportSvg(m, ri) {
+  const D = evSt.D, ref = m.l[ri];
+  if (!ref || !ref.q) return `<div class="empty">La referencia no tiene cuantiles para esta métrica.</div>`;
+  const rows = D.ligas.map((l, i) => ({ l, i, e: m.l[i] })).filter((r) => r.e && r.e.q && r.i !== ri);
+  if (!rows.length) return `<div class="empty">No hay otra liga con muestra suficiente.</div>`;
+  const all = [ref, ...rows.map((r) => r.e)];
+  const lo = Math.min(...all.map((e) => e.q[1])), hi = Math.max(...all.map((e) => e.q[19]));
+  const W = 460, H = 380, P = 46, x = (v) => P + (v - lo) / ((hi - lo) || 1) * (W - P - 14), y = (v) => H - P + 10 - (v - lo) / ((hi - lo) || 1) * (H - P - 20);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de transporte por cuantiles hacia ${esc(evName(evSt.ref))}">`;
+  const tk = evTicks(lo, hi, 5), tf = evTF(tk);
+  tk.forEach((t) => { if (t < lo || t > hi) return;
+    s += `<line class="ax" x1="${x(t)}" x2="${x(t)}" y1="10" y2="${H - P + 10}"/><text class="mut" x="${x(t)}" y="${H - P + 26}" text-anchor="middle">${tf(t)}</text>`;
+    s += `<line class="ax" x1="${P}" x2="${W - 14}" y1="${y(t)}" y2="${y(t)}"/><text class="mut" x="${P - 6}" y="${y(t) + 4}" text-anchor="end">${tf(t)}</text>`; });
+  s += `<line x1="${x(lo)}" y1="${y(lo)}" x2="${x(hi)}" y2="${y(hi)}" stroke="#7a6450" stroke-dasharray="4 4"/>`;
+  s += `<text class="mut" x="${(P + W) / 2}" y="${H - 4}" text-anchor="middle">valor en su liga</text><text class="mut" transform="translate(11 ${H / 2}) rotate(-90)" text-anchor="middle">equivalente en ${esc(evAb(evSt.ref))}</text>`;
+  rows.forEach((r) => {
+    const pts = []; for (let k = 1; k <= 19; k++) pts.push([x(Math.max(lo, Math.min(hi, r.e.q[k]))), y(Math.max(lo, Math.min(hi, ref.q[k])))]);
+    s += `<polyline points="${pts.map((p) => p.join(",")).join(" ")}" fill="none" stroke="${EV_COL[r.l]}" stroke-width="2"/>`;
+    [5, 10, 15].forEach((k) => { s += `<circle cx="${pts[k - 1][0]}" cy="${pts[k - 1][1]}" r="4.5" fill="${EV_COL[r.l]}" stroke="#fcf9f5" stroke-width="2"><title>${esc(evName(r.l))} p${k * 5}: ${evN(r.e.q[k])} → ${esc(evAb(evSt.ref))} ${evN(ref.q[k])}</title></circle>`; });
+  });
+  const leg = `<div class="ev-legend" style="margin-bottom:4px">${rows.map((r) => `<span><i style="background:${EV_COL[r.l]}"></i>${esc(evName(r.l))}</span>`).join("")}<span>· puntos en p25, p50 y p75</span></div>`;
+  return leg + s + "</svg>";
+}
+function evPairSvg(m) {
+  const D = evSt.D, idx = evSt.avail.filter((i) => m.l[i] && m.l[i].q);
+  if (idx.length < 2 || !m.pw) return `<div class="empty">Hace falta muestra en dos ligas o más.</div>`;
+  const stat = evSt.pw, signed = stat === "g" || stat === "d";
+  const vals = []; idx.forEach((i) => idx.forEach((j) => { const v = evPw(D, m, stat, i, j); if (v != null) vals.push(Math.abs(v)); }));
+  const mx = Math.max(...vals, stat === "g" ? 0.8 : stat === "w1" ? 0.8 : 0.3) || 1;
+  const C = 52, P = 54, W = P + idx.length * C + 4, H = P + idx.length * C + 4;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${EV_PW[stat][0]} entre ligas">`;
+  idx.forEach((i, a) => { s += `<text class="lab" x="${P + a * C + C / 2}" y="${P - 10}" text-anchor="middle">${evAb(D.ligas[i])}</text><text class="lab" x="${P - 8}" y="${P + a * C + C / 2 + 4}" text-anchor="end">${evAb(D.ligas[i])}</text>`; });
+  idx.forEach((i, a) => idx.forEach((j, b) => {
+    const v = evPw(D, m, stat, i, j), X = P + b * C, Y = P + a * C;
+    const bg = i === j ? "rgb(239,224,205)" : v == null ? "rgb(245,236,225)" : signed ? evDivBg(v / mx) : evSeqBg(v / mx);
+    s += `<g><title>${esc(evName(D.ligas[i]))} frente a ${esc(evName(D.ligas[j]))}: ${v == null ? "–" : evN(v, 3)}</title><rect x="${X + 1}" y="${Y + 1}" width="${C - 2}" height="${C - 2}" rx="4" fill="${bg}"/>
+      <text x="${X + C / 2}" y="${Y + C / 2 + 4}" text-anchor="middle" style="fill:${evInk(bg)};font-size:11.5px">${i === j ? "·" : v == null ? "–" : evN(v, 2)}</text></g>`;
+  }));
+  return s + "</svg>";
+}
+function evStatTable(m, ri) {
+  const D = evSt.D;
+  const head = ["Liga", "n", "Cobertura", "Media", "σ", "Mediana", "p10", "p90", "Δ media", "Δ mediana", "g", "δ", "KS", "W₁/σ", "JSD"];
+  const body = D.ligas.map((l, i) => {
+    const e = m.l[i]; if (!e) return `<tr><td>${esc(evName(l))}</td>${head.slice(1).map(() => "<td>–</td>").join("")}</tr>`;
+    const d = evDelta(m, i, ri), dm = evDelta(m, i, ri, "med"), q = e.q;
+    const f = (x) => (i === ri ? "ref." : x ? evSig(x.v, 1, x.abs ? "" : " %") : "–");
+    const pw = (k) => (i === ri ? "–" : evN(evPw(D, m, k, i, ri), 3));
+    return `<tr${i === ri ? ' style="font-weight:600"' : ""}><td><span class="evsw" style="background:${EV_COL[l]}"></span>${esc(evName(l))}</td><td>${e.n}</td><td>${e.cov != null ? evN(100 * e.cov, 0) + " %" : "–"}</td><td>${evN(e.m)}</td><td>${evN(e.sd)}</td><td>${evN(e.med)}</td>
+      <td>${q ? evN(q[2]) : "–"}</td><td>${q ? evN(q[18]) : "–"}</td><td>${f(d)}</td><td>${f(dm)}</td><td>${pw("g")}</td><td>${pw("d")}</td><td>${pw("ks")}</td><td>${pw("w1")}</td><td>${pw("js")}</td></tr>`;
+  }).join("");
+  return `<table><thead><tr>${head.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+// ---------------------------------------------------------------------------- matriz de todas las métricas
+function evMatrix() {
+  const D = evSt.D, ri = evLeagueIdx(), q = norm(evSt.q);
+  const CAL = /^(totales|contexto_equipo|contexto_rival)$/, CALC = new Set(["team_poss", "opp_poss", "gp", "gs", "min"]);
+  let list = D.metricas.filter((m) => (!evSt.hideTot || evSt.group || !(CAL.test(GRUPO_OF(m.c)) || CALC.has(m.c))) && (!evSt.group || GRUPO_OF(m.c) === evSt.group) && (!q || norm(m.c + " " + evLab(m.c) + " " + (st.dict[m.c] || "")).includes(q)));
+  const maxabs = (m) => { let mx = -1; evSt.avail.forEach((i) => { if (i === ri) return; const d = evDelta(m, i, ri); if (d && !d.abs) mx = Math.max(mx, Math.abs(d.v)); }); return mx; };
+  const order = Object.fromEntries(D.metricas.map((m, k) => [m.c, k]));
+  const by = { eta2: (m) => -(m.eta2 ?? -1), eps2: (m) => -((m.kw || [])[2] ?? -1), maxabs: (m) => -maxabs(m), orden: (m) => order[m.c], nombre: (m) => evLab(m.c) };
+  const key = by[evSt.sort] || by.eta2;
+  list = list.slice().sort((a, b) => { const x = key(a), y = key(b); return typeof x === "string" ? x.localeCompare(y, "es") : x - y; });
+  $("evMxHint").textContent = `${list.length} de ${D.metricas.length} métricas${evSt.hideTot && !evSt.group ? " (sin totales de temporada, que dependen del calendario)" : ""}. Celdas: Δ% de la media de cada liga frente a ${evName(evSt.ref)}; en la columna de la referencia, su valor.`;
+  const ligas = evSt.avail;
+  const head = `<tr><th class="sticky txt">Métrica</th><th class="txt">Grupo</th><th title="Varianza explicada por la liga (ponderada por minutos)">η²</th><th title="Tamaño del efecto de Kruskal-Wallis">ε²</th>${ligas.map((i) => `<th title="${esc(evName(D.ligas[i]))}"><span class="evsw" style="background:${EV_COL[D.ligas[i]]}"></span>${evAb(D.ligas[i])}</th>`).join("")}</tr>`;
+  const rows = list.map((m) => {
+    const cells = ligas.map((i) => {
+      const e = m.l[i];
+      if (i === ri) return `<td class="cell refc" title="${esc(evName(D.ligas[i]))}: ${evN(e && e.m)}">${evN(e && e.m)}</td>`;
+      const d = evDelta(m, i, ri); if (!d) return `<td class="cell na">–</td>`;
+      let t; if (d.abs) { const ref = m.l[ri]; const sd = (ref && ref.sd) || Math.abs(d.v) || 1; t = d.v / (2 * sd); } else t = d.v / 50;
+      const bg = evDivBg(t);
+      return `<td class="cell heat${d.abs ? " abs" : ""}" style="background:${bg};color:${evInk(bg)}" title="${esc(evName(D.ligas[i]))}: ${evN(e.m)} (n = ${e.n})">${evSig(d.v, 1, d.abs ? "" : " %")}</td>`;
+    }).join("");
+    return `<tr data-evm="${m.c}" class="${m.c === evSt.metric ? "on" : ""}" tabindex="0"><td class="sticky txt name" title="${esc(st.dict[m.c] || "")}">${esc(evLab(m.c))} <span class="grp">${esc(m.c)}</span></td><td class="txt grp">${esc(EV_GROUPS[GRUPO_OF(m.c)] || "")}</td><td>${evN(m.eta2, 3)}</td><td>${evN((m.kw || [])[2], 3)}</td>${cells}</tr>`;
+  }).join("");
+  $("evMatrix").innerHTML = `<table class="ev-mx"><thead>${head}</thead><tbody>${rows || `<tr><td class="txt" colspan="${ligas.length + 4}">Ninguna métrica coincide con la búsqueda.</td></tr>`}</tbody></table>`;
+}
+
+// ---------------------------------------------------------------------------- porqués
+function evShap() {
+  const D = evSt.D, O = D.ortg, box = $("evShap");
+  const ls = D.ligas.filter((l) => O.liga[l]);
+  if (!O.liga[evSt.ref]) { box.innerHTML = `<h2>Eficiencia ofensiva de liga</h2><div class="empty">La referencia no tiene totales de equipo.</div>`; return; }
+  const S = O.shapley[evSt.ref], fac = O.factores;
+  const rows = ls.map((l) => ({ l, s: S[l], d: O.liga[l].ppp - O.liga[evSt.ref].ppp }));
+  let mx = 1; rows.forEach((r) => { let p = 0, n = 0; fac.forEach((f) => { const v = r.s[f] || 0; v > 0 ? (p += v) : (n += v); }); mx = Math.max(mx, p, -n); });
+  const W = 640, L0 = 108, R0 = 70, rowH = 30, H = rows.length * rowH + 34, mid = L0 + (W - L0 - R0) / 2, k = (W - L0 - R0) / 2 / (mx * 1.05);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Descomposición de Shapley del ORtg frente a ${esc(evName(evSt.ref))}">`;
+  evTicks(-mx, mx, 6).forEach((t) => { s += `<line class="ax" x1="${mid + t * k}" x2="${mid + t * k}" y1="4" y2="${H - 24}"/><text class="mut" x="${mid + t * k}" y="${H - 9}" text-anchor="middle">${evSig(t, 0)}</text>`; });
+  s += `<line class="ax0" x1="${mid}" x2="${mid}" y1="4" y2="${H - 24}"/>`;
+  rows.forEach((r, i) => {
+    const y = 8 + i * rowH; let pos = mid, neg = mid;
+    s += `<text class="lab" x="${L0 - 10}" y="${y + 15}" text-anchor="end">${esc(evName(r.l))}</text>`;
+    fac.forEach((f) => { const v = r.s[f] || 0; if (Math.abs(v) < 1e-6) return; const w = Math.abs(v) * k;
+      const X = v > 0 ? pos : neg - w; if (v > 0) pos += w; else neg -= w;
+      s += `<rect x="${X}" y="${y + 4}" width="${Math.max(1, w - 1)}" height="${rowH - 12}" fill="${EV_FAC_COL[f]}"><title>${esc(evName(r.l))} · ${EV_FAC[f][0]}: ${evSig(v, 2)} pts/100 pos.</title></rect>`; });
+    if (r.l !== evSt.ref) s += `<line x1="${mid + r.d * k}" x2="${mid + r.d * k}" y1="${y + 1}" y2="${y + rowH - 5}" stroke="#3a2a1c" stroke-width="2.5"/>`;
+    s += `<text x="${W - 6}" y="${y + 15}" text-anchor="end" style="font-weight:600">${r.l === evSt.ref ? "ref." : evSig(r.d, 1)}</text>`;
+  });
+  s += "</svg>";
+  const T = (l, key, d) => evN(O.liga[l][key], d);
+  const table = `<table><thead><tr><th class="txt">Liga</th><th>ORtg</th><th>Ritmo</th><th>eFG%</th><th>Pér/100</th><th>OREB/100</th><th>TL/100</th><th>Pts/TL</th><th>3PAr</th><th>AST/FGM</th><th>Equipos</th></tr></thead><tbody>${ls.map((l) =>
+    `<tr${l === evSt.ref ? ' style="font-weight:600"' : ""}><td class="txt"><span class="evsw" style="background:${EV_COL[l]}"></span>${esc(evName(l))}</td><td>${T(l, "ppp", 1)}</td><td>${T(l, "pace", 1)}</td><td>${T(l, "e", 1)}</td><td>${T(l, "t", 1)}</td><td>${T(l, "o", 1)}</td><td>${T(l, "a", 1)}</td><td>${T(l, "pft", 2)}</td><td>${T(l, "fg3a_rate", 1)}</td><td>${T(l, "ast_fgm", 1)}</td><td>${O.liga[l].teams}</td></tr>`).join("")}</tbody></table>`;
+  box.innerHTML = `<h2>Eficiencia ofensiva de liga: descomposición de Shapley</h2>
+    <p class="hint">Diferencia de puntos por 100 posesiones de cada liga frente a ${esc(evName(evSt.ref))}, repartida de forma exacta entre seis factores con valores de Shapley (raya negra = diferencia total).</p>
+    <div class="ev-legend">${fac.map((f) => `<span><i style="background:${EV_FAC_COL[f]}"></i>${EV_FAC[f][0]} · ${EV_FAC[f][1]}</span>`).join("")}</div>
+    <div class="ev-svgbox">${s}</div>
+    <div class="ev-math">PPP = 2·eFG·(1 − 0,44·a + o − t + r) + p<sub>TL</sub>·a &nbsp;·&nbsp; φ<sub>k</sub> = Σ<sub>S⊆F∖{k}</sub> |S|!(6−|S|−1)!/6! · [v(S∪{k}) − v(S)]</div>
+    <div class="cmp-table">${table}</div>
+    <p class="note">a, t, o = tiros libres, pérdidas y rebotes ofensivos por posesión; p<sub>TL</sub> = puntos por tiro libre intentado (en la G League un tiro libre vale 2 o 3). v(S) es el ORtg con los factores de S tomados de la liga y el resto de la referencia, así que Σφ<sub>k</sub> = ΔORtg sin residuo.${O.gl_factor && Math.abs(O.gl_factor - 1) > 0.01 ? ` La G League usa sus posesiones oficiales (×${evN(O.gl_factor, 3)} sobre las calculadas).` : ""}</p>`;
+}
+function evScale() {
+  const D = evSt.D, box = $("evScale"), E = D.escala || [];
+  const mx = Math.max(0.05, ...E.flatMap((e) => ["pg", "p40", "p100"].map((k) => (e[k] || [])[0] || 0)));
+  const bar = (v) => `<div style="display:grid;grid-template-columns:minmax(40px,1fr) 46px;gap:6px;align-items:center"><div class="ev-r2" style="display:block"><div class="trk" style="display:block;height:9px;background:var(--c3);border-radius:5px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--accent-strong);width:${v == null ? 0 : Math.max(1, 100 * v / mx)}%"></i></div></div><span style="font:500 12px var(--f-data);text-align:right">${evN(v, 3)}</span></div>`;
+  box.innerHTML = `<h2>Ritmo y escala</h2>
+    <p class="hint">η² de la liga para cada conteo según la escala. Si el η² cae al pasar de «por partido» a «por 100 posesiones», la diferencia era ritmo y minutos; si se mantiene o sube, es reglamento, estilo o criterio de anotación.</p>
+    <div class="cmp-table"><table><thead><tr><th class="txt">Conteo</th><th>Por partido</th><th>Por 40'</th><th>Por 100 pos.</th><th title="Media de la liga más alta / más baja, por 100 posesiones">Máx/mín /100</th></tr></thead><tbody>${E.map((e) =>
+      `<tr><td class="txt">${esc(EV_BASES[e.b] || e.b)}</td><td style="min-width:120px">${bar((e.pg || [])[0])}</td><td style="min-width:120px">${bar((e.p40 || [])[0])}</td><td style="min-width:120px">${bar((e.p100 || [])[0])}</td><td>${evN((e.p100 || [])[1], 2)}×</td></tr>`).join("")}</tbody></table></div>
+    <p class="note">Por 100 posesiones = 100·X/(posesiones de su equipo con él en pista). Ritmo = minutos de partido·posesiones/(minutos de equipo/5); 40' en FIBA y 48' en la NBA y la G League.</p>`;
+}
+function evPos() {
+  const D = evSt.D, box = $("evPos"), P = D.posicion || {}, keys = Object.keys(P);
+  if (!keys.length) { box.innerHTML = `<h2>Posición</h2><div class="empty">Sin muestra suficiente.</div>`; return; }
+  if (!P[evSt.pos]) evSt.pos = keys.includes("blk_pct") ? "blk_pct" : keys[0];
+  const p = P[evSt.pos], ri = evLeagueIdx(), refRow = p.tab[evSt.ref];
+  const rows = D.ligas.filter((l) => p.tab[l] && p.tab[l].some(Boolean)).map((l) => `<tr${l === evSt.ref ? ' style="font-weight:600"' : ""}><td class="txt"><span class="evsw" style="background:${EV_COL[l]}"></span>${esc(evName(l))}</td>${p.tab[l].map((c, k) => {
+    if (!c) return "<td>–</td>";
+    const rv = refRow && refRow[k] ? refRow[k][0] : null; const signed = EV_SIGNED.test(evSt.pos);
+    if (l === evSt.ref || rv == null) return `<td title="n = ${c[1]}">${evN(c[0])}</td>`;
+    const dv = signed || Math.abs(rv) < 1e-6 ? c[0] - rv : 100 * (c[0] - rv) / Math.abs(rv);
+    const bg = evDivBg(signed ? dv / 5 : dv / 50);
+    return `<td title="n = ${c[1]}" style="background:${bg};color:${evInk(bg)}">${evN(c[0])} <small>${evSig(dv, 0, signed ? "" : "%")}</small></td>`;
+  }).join("")}</tr>`).join("");
+  const r2 = p.r2, labels = ["Sólo liga", "Sólo posición", "Liga + posición", "Liga × posición"];
+  const est = Object.entries(D.pos_estimada || {}).filter(([, v]) => v[1] > 0).map(([l, v]) => `${evAb(l)} ${v[1]}`).join(", ");
+  box.innerHTML = `<h2>Posición</h2>
+    <div class="cmd-group" style="max-width:320px"><label class="label" for="evPosSel">Métrica</label><select id="evPosSel">${keys.map((k) => `<option value="${k}">${esc(evLab(k))}</option>`).join("")}</select></div>
+    <p class="hint">Media ponderada por liga y posición; el porcentaje compara con la misma posición en ${esc(evName(evSt.ref))}. Si la diferencia entre ligas cambia de una posición a otra, la normalización tiene que ser condicional a la posición.</p>
+    <div class="cmp-table"><table><thead><tr><th class="txt">Liga</th>${EV_POS.map((x) => `<th>${x}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="ev-r2">${r2.map((v, k) => `<div><span>${labels[k]}</span><span class="trk"><i style="width:${Math.max(0, 100 * (v || 0))}%"></i></span><em>R² ${evN(v, 3)}</em></div>`).join("")}</div>
+    <p class="note">ΔR² de la interacción liga × posición: <b>${evN((r2[3] ?? 0) - (r2[2] ?? 0), 3)}</b> (mínimos cuadrados ponderados por minutos). Posiciones estimadas por perfil estadístico, igual que en la tabla de datos${est ? `: ${est} jugadores` : ""}.</p>`;
+  $("evPosSel").value = evSt.pos;
+}
+function evTeams() {
+  const D = evSt.D, box = $("evTeams"), T = D.equipos || {};
+  const vds = D.metricas.filter((m) => m.vd && m.k === "jugador" && /^(tiro|ratios|ratings|por_100_pos|por_40)$/.test(GRUPO_OF(m.c)));
+  const med = (a) => { const s = a.slice().sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
+  const f = (v) => (v ? `${evN(v[0], 1)} <small>± ${evN(v[1], 1)}</small>` : "–");
+  box.innerHTML = `<h2>Equipos dentro de cada liga</h2>
+    <p class="hint">La liga no es un bloque: el estilo del equipo también desplaza las métricas. Media ± desviación típica entre equipos y rango.</p>
+    <div class="cmp-table"><table><thead><tr><th class="txt">Liga</th><th>Equipos</th><th>Ritmo</th><th>Rango ritmo</th><th>ORtg</th><th>DRtg</th><th>Rango Net</th></tr></thead><tbody>${D.ligas.filter((l) => T[l]).map((l) => {
+      const t = T[l]; return `<tr><td class="txt"><span class="evsw" style="background:${EV_COL[l]}"></span>${esc(evName(l))}</td><td>${t.n}</td><td>${f(t.team_pace)}</td><td>${t.team_pace ? `${evN(t.team_pace[2], 1)}–${evN(t.team_pace[3], 1)}` : "–"}</td><td>${f(t.team_ortg)}</td><td>${f(t.team_drtg)}</td><td>${t.team_netrtg ? `${evSig(t.team_netrtg[2], 1)} / ${evSig(t.team_netrtg[3], 1)}` : "–"}</td></tr>`; }).join("")}</tbody></table></div>
+    <div class="ev-kpis"><div class="ev-kpi"><span>Mediana del peso de la liga</span><b>${evN(100 * med(vds.map((m) => m.vd[0])), 1)} %</b><small>${vds.length} métricas de tasa</small></div>
+    <div class="ev-kpi"><span>Mediana del peso del equipo</span><b>${evN(100 * med(vds.map((m) => m.vd[1])), 1)} %</b><small>dentro de su liga</small></div>
+    <div class="ev-kpi"><span>Mediana del jugador</span><b>${evN(100 * med(vds.map((m) => m.vd[2])), 1)} %</b><small>resto de la varianza</small></div></div>
+    <p class="note">En la mayoría de métricas de tasa el equipo pesa más que la liga: un modelo de normalización necesita un término de equipo (o de sistema) además del de competición.</p>`;
+}
+function evDisc() {
+  const D = evSt.D, box = $("evDisc"), X = D.discrim;
+  if (!X || !X.posesion) { box.innerHTML = `<h2>¿Se distinguen las ligas?</h2><div class="empty">Necesita las ocho ligas con datos (temporada 2025-26).</div>`; return; }
+  const P = X.posesion, idx = D.ligas.map((_, i) => i), C = 44, Pd = 50, W = Pd + idx.length * C + 4;
+  const heat = (val, lab, signedMax) => {
+    let s = `<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="${lab}">`;
+    idx.forEach((i) => { s += `<text class="lab" x="${Pd + i * C + C / 2}" y="${Pd - 8}" text-anchor="middle" style="font-size:11px">${evAb(D.ligas[i])}</text><text class="lab" x="${Pd - 6}" y="${Pd + i * C + C / 2 + 4}" text-anchor="end" style="font-size:11px">${evAb(D.ligas[i])}</text>`; });
+    idx.forEach((i) => idx.forEach((j) => { const v = val(i, j); const bg = v == null ? "rgb(239,224,205)" : evSeqBg(v / signedMax);
+      s += `<g><title>${esc(evName(D.ligas[i]))} / ${esc(evName(D.ligas[j]))}: ${v == null ? "–" : evN(v, 2)}</title><rect x="${Pd + j * C + 1}" y="${Pd + i * C + 1}" width="${C - 2}" height="${C - 2}" rx="4" fill="${bg}"/><text x="${Pd + j * C + C / 2}" y="${Pd + i * C + C / 2 + 4}" text-anchor="middle" style="fill:${evInk(bg)};font-size:10.5px">${v == null ? "·" : evN(v, 2)}</text></g>`; }));
+    return s + "</svg>";
+  };
+  const padv = (i, j) => { if (i === j) return null; const k = D.pares.findIndex(([a, b]) => (a === i && b === j) || (a === j && b === i)); return P.pad[k]; };
+  const lda = P.lda; let sc = "";
+  if (lda) {
+    const xs = lda.pts.map((p) => p[1]), ys = lda.pts.map((p) => p[2]);
+    const q = (a, t) => { const s = a.slice().sort((x, y) => x - y); return s[Math.floor(t * (s.length - 1))]; };
+    const x0 = q(xs, 0.01), x1 = q(xs, 0.99), y0 = q(ys, 0.01), y1 = q(ys, 0.99), Ws = 460, Hs = 330, pad = 26;
+    const X1 = (v) => pad + (Math.max(x0, Math.min(x1, v)) - x0) / (x1 - x0) * (Ws - 2 * pad), Y1 = (v) => Hs - pad - (Math.max(y0, Math.min(y1, v)) - y0) / (y1 - y0) * (Hs - 2 * pad);
+    sc = `<svg viewBox="0 0 ${Ws} ${Hs}" role="img" aria-label="Proyección discriminante lineal de los jugadores"><rect x="${pad}" y="${pad / 2}" width="${Ws - 2 * pad}" height="${Hs - 1.5 * pad}" fill="none" class="ax" stroke="#e3d0b8"/>`;
+    lda.pts.forEach((p) => { sc += `<circle cx="${X1(p[1]).toFixed(1)}" cy="${Y1(p[2]).toFixed(1)}" r="2.3" fill="${EV_COL[D.ligas[p[0]]]}" fill-opacity=".5"/>`; });
+    Object.entries(lda.cent).forEach(([l, c]) => { sc += `<circle cx="${X1(c[0])}" cy="${Y1(c[1])}" r="7" fill="${EV_COL[l]}" stroke="#3a2a1c" stroke-width="1.5"><title>Centroide ${esc(evName(l))}</title></circle><text class="lab" x="${X1(c[0]) + 9}" y="${Y1(c[1]) - 6}">${evAb(l)}</text>`; });
+    sc += `<text class="mut" x="${Ws / 2}" y="${Hs - 4}" text-anchor="middle">LD1</text><text class="mut" transform="translate(10 ${Hs / 2}) rotate(-90)" text-anchor="middle">LD2</text></svg>`;
+  }
+  const acc = (k) => (X[k] ? evN(100 * X[k].bal_acc, 0) + " %" : "–");
+  box.innerHTML = `<h2>¿Se distinguen las ligas? Discriminabilidad de dominio</h2>
+    <p class="hint">Si un clasificador adivina la liga a partir de las métricas de un jugador, las distribuciones difieren y una comparación directa está sesgada. Es la idea de la H-divergencia de Ben-David et al. en adaptación de dominio.</p>
+    <div class="ev-kpis"><div class="ev-kpi"><span>Métricas por posesión y ratios</span><b>${acc("posesion")}</b><small>${P.feats.length} variables · ${P.n} jugadores</small></div>
+      <div class="ev-kpi"><span>12 conteos por partido</span><b>${acc("conteos_pg")}</b><small>misma información</small></div>
+      <div class="ev-kpi"><span>Por 40'</span><b>${acc("conteos_p40")}</b><small>ajuste de minutos</small></div>
+      <div class="ev-kpi"><span>Por 100 posesiones</span><b>${acc("conteos_p100")}</b><small>ajuste de ritmo</small></div>
+      <div class="ev-kpi"><span>Azar</span><b>${evN(100 * P.azar, 1)} %</b><small>8 clases</small></div></div>
+    <p class="note">Exactitud balanceada de una regresión logística multinomial estandarizada (L2, C = 1) con validación cruzada estratificada de 5 particiones.</p>
+    <div class="ev-grid2" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))">
+      <div style="min-width:0"><h3 class="ev-h3">Proxy A-distance por pares</h3><p class="ev-sub">d<sub>A</sub> = 2(1 − 2ε), con ε el error balanceado del clasificador binario. 0 = indistinguibles, 2 = separables.</p><div class="ev-svgbox fit">${heat(padv, "Proxy A-distance", 2)}</div></div>
+      <div style="min-width:0"><h3 class="ev-h3">Matriz de confusión</h3><p class="ev-sub">Fila = liga real, columna = liga predicha (proporción de la fila).</p><div class="ev-svgbox fit">${heat((i, j) => P.cm[i][j], "Matriz de confusión", 1)}</div></div>
+    </div>
+    ${sc ? `<h3 class="ev-h3">Análisis discriminante lineal (LDA con contracción de Ledoit-Wolf)</h3><p class="ev-sub">Los dos ejes que mejor separan las ligas. Puntos = jugadores (muestra de hasta 220 por liga); círculos grandes = centroides.</p><div class="ev-svgbox">${sc}</div>` : ""}`;
+}
+async function evBridge() {
+  const box = $("evBridge"); let P = evSt.D.puentes;
+  if (!P) { try { P = (await loadEval("2025-26", "regular")).puentes; } catch { P = null; } }
+  if (!P) { box.innerHTML = `<h2>Jugadores puente</h2><div class="empty">No disponible.</div>`; return; }
+  const L = evSt.D.ligas, same = P.mismo_ano, cross = P.entre_temporadas || {};
+  const R = 120, cx = 200, cy = 158, pos = L.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / L.length; return [cx + R * Math.cos(a), cy + R * Math.sin(a)]; });
+  let s = `<svg viewBox="0 0 400 320" role="img" aria-label="Red de jugadores puente entre ligas">`;
+  if (evSt.cross) {
+    const agg = {}; Object.entries(cross).forEach(([k, n]) => { const [a, b] = k.split(">"); if (a === b) return; const i = L.indexOf(a), j = L.indexOf(b); const key = Math.min(i, j) + "-" + Math.max(i, j); agg[key] = (agg[key] || 0) + n; });
+    Object.entries(agg).forEach(([k, n]) => { if (n < 5) return; const [i, j] = k.split("-").map(Number);
+      s += `<line x1="${pos[i][0]}" y1="${pos[i][1]}" x2="${pos[j][0]}" y2="${pos[j][1]}" stroke="#7a6450" stroke-opacity=".55" stroke-dasharray="4 3" stroke-width="${1 + Math.sqrt(n) / 2.5}"><title>${esc(evName(L[i]))} ↔ ${esc(evName(L[j]))}: ${n} cambios de liga entre 2025-26 y 2026-27</title></line>`; });
+  }
+  Object.entries(same).forEach(([k, v]) => { if (v.n < 3) return; const [i, j] = k.split("-").map(Number);
+    s += `<line x1="${pos[i][0]}" y1="${pos[i][1]}" x2="${pos[j][0]}" y2="${pos[j][1]}" stroke="#3a2a1c" stroke-opacity=".8" stroke-width="${1 + Math.sqrt(v.n) / 1.6}"><title>${esc(evName(L[i]))} y ${esc(evName(L[j]))} a la vez: ${v.n} jugadores (${v.n100} con 100+ minutos en ambas)</title></line>`;
+    const mx = (pos[i][0] + pos[j][0]) / 2, my = (pos[i][1] + pos[j][1]) / 2;
+    s += `<rect x="${mx - 13}" y="${my - 9}" width="26" height="16" rx="4" fill="#fcf9f5" stroke="#e3d0b8"/><text x="${mx}" y="${my + 3}" text-anchor="middle" style="font-size:10.5px">${v.n}</text>`; });
+  L.forEach((l, i) => { s += `<circle cx="${pos[i][0]}" cy="${pos[i][1]}" r="20" fill="${EV_COL[l]}" stroke="#fcf9f5" stroke-width="3"/><text class="lab" x="${pos[i][0]}" y="${pos[i][1] + 4}" text-anchor="middle" style="fill:#fcf9f5;font-size:${evAb(l).length > 2 ? 11 : 13}px">${evAb(l)}</text>`; });
+  s += "</svg>";
+  const pairs = Object.entries(same).filter(([, v]) => v.dif);
+  if (!same[evSt.pair] || !same[evSt.pair].dif) evSt.pair = pairs.length ? pairs[0][0] : "";
+  const cur = same[evSt.pair];
+  const pl = (k) => { const [i, j] = k.split("-").map(Number); return `${evName(L[i])} − ${evName(L[j])}`; };
+  const tbl = cur ? `<table><thead><tr><th class="txt">Métrica</th><th>Δ medio</th><th>IC 95 %</th><th>Δ %</th><th>n</th></tr></thead><tbody>${Object.entries(cur.dif).map(([c, d]) => {
+    const sig = d[1] > 0 || d[2] < 0; return `<tr${sig ? ' style="font-weight:600"' : ""}><td class="txt">${esc(evLab(c))}</td><td>${evSig(d[0], 2)}</td><td>[${evN(d[1], 2)}; ${evN(d[2], 2)}]</td><td>${evSig(d[3], 1, " %")}</td><td>${d[4]}</td></tr>`; }).join("")}</tbody></table>` : "";
+  const xs = Object.entries(cross).filter(([k]) => { const [a, b] = k.split(">"); return a !== b; }).reduce((s2, [, n]) => s2 + n, 0);
+  const fromUS = Object.entries(cross).filter(([k]) => /^(nba|gleague)>/.test(k)).reduce((s2, [, n]) => s2 + n, 0);
+  box.innerHTML = `<h2>Jugadores puente</h2>
+    <p class="hint">El mismo jugador en dos competiciones aísla el efecto de la liga de su capacidad. Línea continua: jugadores que en 2025-26 compitieron a la vez en dos ligas (casi siempre club de EuroLeague o EuroCup en su liga nacional, o NBA y G League). Emparejados por nombre normalizado.</p>
+    <label class="ev-check" for="evCross"><input type="checkbox" id="evCross" ${evSt.cross ? "checked" : ""}> Añadir cambios de liga del verano (2025-26 → 2026-27): ${xs} jugadores, ${fromUS} desde NBA o G League</label>
+    <div class="ev-svgbox">${s}</div>
+    <div class="cmd-group" style="max-width:340px"><label class="label" for="evPair">Contraste dentro de jugador</label><select id="evPair">${pairs.map(([k, v]) => `<option value="${k}">${esc(pl(k))} · ${v.n100} jugadores</option>`).join("")}</select></div>
+    <div class="cmp-table">${tbl}</div>
+    <p class="note">Δ = primera liga − segunda, media ponderada por la media armónica de minutos, IC por bootstrap (2.000 remuestreos). En negrita, intervalos que no cruzan el cero. Sesgos: los clubes de EuroLeague son los mejores de su liga nacional y rotan distinto en ella; los jugadores asignados de la NBA a la G League tienen otro rol en cada liga. Entre Europa y NBA/G League sólo hay un puñado de cambios a mitad de temporada (Nigel Hayes-Davis, Cameron Payne, Ömer Yurtseven, Monte Morris) y algún homónimo: el Devin Booker del Olimpia Milano no es el de Phoenix. Ese puente necesita los cambios entre temporadas y una resolución de identidades con fecha de nacimiento.</p>`;
+  if ($("evPair")) $("evPair").value = evSt.pair;
+}
+async function evQual() {
+  const box = $("evQual"); let V = evSt.D.validacion_gl;
+  if (!V) { try { V = (await loadEval("2025-26", "regular")).validacion_gl; } catch { V = null; } }
+  const items = [];
+  if (V) items.push(`<b>G League: posesiones (corregido).</b> La G League lanza un único tiro libre por falta, así que la fórmula clásica (0,4·TLI) infravaloraba las posesiones. El extractor usa ahora un coeficiente de 0,79, calibrado con las posesiones oficiales de la liga. Contra las cifras oficiales de 2025-26 (ponderado por minutos): ritmo ${evN(V.src_pace[0], 1)} oficial frente a ${evN(V.src_pace[1], 1)} calculado; ORtg ${evN(V.src_ortg[0], 1)} frente a ${evN(V.src_ortg[1], 1)}.`);
+  items.push(`<b>LNB:</b> la fuente no publica totales de los rivales, así que faltan ORtg y DRtg individuales, WS, OREB%/DREB%/REB% y BLK%.`);
+  items.push(`<b>Posición:</b> EuroLeague, EuroCup y LBA no la publican y la G League sólo da G/F/C; se estima por perfil estadístico (centroide más cercano), como en la tabla de datos.`);
+  items.push(`<b>Métricas de una sola fuente:</b> src_* (oficiales de Basketball-Reference, G League o EuroLeague) y bn_* (BasketNews, sólo EuroLeague y Liga Endesa) sólo se comparan entre las ligas que las tienen; cada fuente usa su propia definición.`);
+  items.push(`<b>Totales:</b> los conteos de temporada dependen del calendario (82 partidos en la NBA, 34 en la Liga Endesa); sus Δ% miden calendario, no rendimiento.`);
+  items.push(`<b>Valoración (PIR):</b> vacía en la NBA (sin faltas recibidas) y en la BBL (sin tapones recibidos).`);
+  box.innerHTML = `<h2>Calidad de los datos que afecta a la comparación</h2><ul class="ev-find">${items.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+}
+
+function bindEval() {
+  $("evRef").addEventListener("change", (e) => { evSt.ref = e.target.value; evSave(); renderEval(); });
+  $("evMetricSel").addEventListener("change", (e) => { evSt.metric = e.target.value; evSave(); evMetric(); evMatrix(); });
+  $("evGroup").addEventListener("change", (e) => { evSt.group = e.target.value; evSave(); evMatrix(); });
+  $("evSort").addEventListener("change", (e) => { evSt.sort = e.target.value; evSave(); evMatrix(); });
+  $("evQ").addEventListener("input", (e) => { evSt.q = e.target.value; evMatrix(); });
+  $("evHideTot").addEventListener("change", (e) => { evSt.hideTot = e.target.checked; evMatrix(); });
+  const pick = (tr) => { evSt.metric = tr.dataset.evm; evSave(); $("evMetricSel").value = evSt.metric; evMetric(); evMatrix(); $("evMetric").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }); };
+  $("evMatrix").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-evm]"); if (tr) pick(tr); });
+  $("evMatrix").addEventListener("keydown", (e) => { if (e.key === "Enter") { const tr = e.target.closest("tr[data-evm]"); if (tr) pick(tr); } });
+  $("evMetric").addEventListener("click", (e) => { const b = e.target.closest("[data-evpw]"); if (b) { evSt.pw = b.dataset.evpw; evSave(); evMetric(); } });
+  $("evPos").addEventListener("change", (e) => { if (e.target.id === "evPosSel") { evSt.pos = e.target.value; evSave(); evPos(); } });
+  $("evBridge").addEventListener("change", (e) => {
+    if (e.target.id === "evPair") { evSt.pair = e.target.value; evSave(); evBridge(); }
+    if (e.target.id === "evCross") { evSt.cross = e.target.checked; evBridge(); }
+  });
+}
+
 async function start() {
   const list = await getJSON("datos/temporadas.json").catch(() => null);
   if (list && Array.isArray(list.temporadas) && list.temporadas.length) SEASONS = list.temporadas.map((t) => t.temporada);
   st.season = SEASONS.includes(store.get("mm.season")) ? store.get("mm.season") : SEASONS[0];
   st.phase = store.get("mm.phase") || "regular";
   st.view = VIEWS[store.get("mm.view")] ? store.get("mm.view") : "basico";
-  renderSeasons(); bind();
+  try { const m = JSON.parse(store.get("mm.mf") || "[]"); if (Array.isArray(m)) st.mf = m.filter((f) => f && typeof f.col === "string").map((f) => ({ col: f.col, lo: typeof f.lo === "number" ? f.lo : null, hi: typeof f.hi === "number" ? f.hi : null })); } catch { st.mf = []; }
+  try { const p = JSON.parse(store.get("mm.pos") || "null"); if (Array.isArray(p)) st.pos = new Set(p.filter((x) => x >= 1 && x <= 5)); } catch {}
+  st.posEst = store.get("mm.posEst") !== "0";
+  try { const a = JSON.parse(store.get("mm.age") || "null"); if (a && typeof a === "object") st.age = { lo: typeof a.lo === "number" ? a.lo : null, hi: typeof a.hi === "number" ? a.hi : null }; } catch {}
+  try { const c = JSON.parse(store.get("mm.cmp") || "[]"); if (Array.isArray(c)) cmpState.uids = c.filter((u) => typeof u === "string").slice(0, 3); } catch {}
+  renderSeasons(); renderPos(); bind(); bindCmp(); bindEval();
+  showPage(location.hash === "#comparador" ? "comparador" : location.hash === "#evaluacion" ? "evaluacion" : (store.get("mm.page") || "tabla"));
   const [dict, ...idxs] = await Promise.all([getJSON("datos/diccionario_columnas.json").catch(() => []),
     ...SEASONS.map((s) => getJSON(`datos/${s}/indice.json`).catch(() => null))]);
-  dict.forEach((d) => (st.dict[d.columna] = d.descripcion));
+  dict.forEach((d) => { st.dict[d.columna] = d.descripcion; (st.dictGroup ||= {})[d.columna] = d.grupo; });
   SEASONS.forEach((s, i) => { if (idxs[i]) st.index[s] = idxs[i]; });
   await refresh();
   initRun();
 }
 start();
 </script>
+
+</body></html>

@@ -3,7 +3,7 @@
 > Documento de contexto para un agente que diseña **algoritmos y modelos de evaluación de ligas y
 > jugadores**. Describe qué datos existen, de dónde salen, cómo se procesan, qué significa cada
 > columna, qué limitaciones tienen y cómo actualizarlos. Repositorio: `uebnet/baskonia`, rama
-> `claude/basketball-stats-extractor-jpas93`. Última actualización de datos: 12-10-2026.
+> `claude/basketball-stats-extractor-jpas93`. Última actualización de datos: 13-10-2026 (temporadas 2020-21 a 2026-27).
 
 ---
 
@@ -176,18 +176,20 @@ un CSV combinado y copias JSON: ~4 veces más espacio). Para tener todas las lig
 generan aparte, sin versionar: `python -m bbstats artifact [--temporada T]` → `data/artifact/<T>/<fase>.json`
 (JSON columnar `{"columnas": [...], "filas": [[...]]}`), `indice.json`, `diccionario_columnas.json`, `temporadas.json`.
 
-### 5.2 Volumen (filas jugador-equipo)
+### 5.2 Volumen (filas jugador-equipo: temporada regular / playoffs)
 
-| Liga | 2025-26 regular | 2025-26 playoffs | 2025-26 total | 2026-27 (a 12-10-2026) |
-|---|---|---|---|---|
-| EuroLeague | 335 | 124 | 335 | 263 (4 jornadas) |
-| EuroCup | 315 | 131 | 316 | 367 (2 jornadas) |
-| ACB | 339 | 103 | 340 | 237 (3 jornadas) |
-| NBA | 661 | 230 | 661 | sin datos (no ha empezado) |
-| G League | 526 | 160 | 562 (incl. Showcase) | sin datos |
-| LBA | 265 | 103 | 266 | 210 (3 jornadas) |
-| BBL | 331 | 128 | 331 | 237 (5 jornadas) |
-| LNB | 275 | 118 | 277 | 179 (3 jornadas) |
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| EuroLeague | 297 / 110 | 293 / 102 | 295 / 101 | 287 / 125 | 295 / 125 | 335 / 124 | 263 / – |
+| EuroCup | 342 / 211 | 311 / 169 | 306 / 168 | 307 / 136 | 300 / 130 | 315 / 131 | 367 / – |
+| ACB | 365 / 102 | 325 / 104 | 330 / 102 | 318 / 100 | 328 / 102 | 339 / 103 | 237 / – |
+| NBA | 626 / 239 | 715 / 217 | 609 / 217 | 657 / 214 | 654 / 219 | 661 / 230 | sin datos |
+| G League | 246 / 83 | 493 / 124 | 471 / 123 | 512 / 120 | 510 / 121 | 526 / 160 | sin datos |
+| LBA | 244 / 106 | 315 / 99 | 287 / 100 | 289 / 104 | 306 / 103 | 265 / 103 | 210 / – |
+| BBL | 307 / 107 | 315 / 100 | 287 / 99 | 299 / 127 | 306 / 124 | 331 / 128 | 237 / – |
+| LNB | 313 / 87 | 287 / 93 | 299 / 91 | 305 / 93 | 262 / 113 | 275 / 118 | 179 / – |
+
+2026-27 en curso a 12-10-2026 (2-5 jornadas; NBA y G League aún sin partidos). Fase `total` ≈ regular + playoffs.
 
 ### 5.3 Carga en Python
 
@@ -270,10 +272,12 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 |---|---|---|
 | NBA | sin faltas recibidas totales (`pfd`) | `pir` vacío; usar `src_drawn_shooting`/`src_drawn_offensive` si interesa |
 | G League | sin titularidades (`gs`); jugadores traspasados en una fila (equipo = último) y muchos asignados desde la NBA | contexto de equipo aproximado para traspasados; filtrar por minutos |
+| Todas (validación) | Win Shares de temporada regular ≈ victorias reales: ±3 % en ACB, BBL, G League, LBA y NBA de 2020-21 a 2025-26; excepción ACB 2022-23 (279 / 306) | tratar WS de ACB 2022-23 con cautela |
+| EuroCup 2020-21 | el feed sólo distingue `RS`; el Top 16 de esa temporada cae en `playoffs` (= total − RS) | 211 filas de "playoffs" en 2020-21 |
 | EuroLeague / EuroCup | sin +/-, mates ni puntos por zona; equipos sin V/D en el feed; traspasados en una fila (`team_id` = `ASV;ULK`, contexto del último equipo) | `team_w/team_l` vacíos; `team_id` con `;` indica traspaso |
-| BBL | sin tapones recibidos ni mates | `pir` vacío |
+| BBL | sin tapones recibidos ni mates; temporadas pasadas localizadas por búsqueda de ids (semillas guardadas en `config/sources.json`); 2021-22: 305 de 306 partidos de temporada regular | `pir` vacío |
 | LNB | la fuente no publica totales de rivales (sólo puntos encajados) → `calidad_contexto = parcial` | **ortg, drtg, ws, stl_pct, blk_pct, reb_pct… vacíos**; usar ratios sin rival (ts, usg, ast_ratio, por 40). Jugadores bajo el umbral del ranking (≈40 % de la plantilla) se completan desde su ficha: sin tov, pf, pfd, blka ni +/- |
-| BasketNews | sólo EuroLeague y ACB; promedios redondeados; en playoffs usa sólo su fase "Playoffs" (no play-in ni Final Four); ~99 % de jugadores emparejados en regular (fallan apodos: Sasha/Aleksandr Vezenkov) | `bn_*` vacíos en el resto de ligas |
+| BasketNews | sólo EuroLeague y ACB y **sólo desde 2024-25** (para 2020-21…2023-24 su API responde 422: `bn_*` vacíos, anotado en el informe); promedios redondeados; en playoffs usa sólo su fase "Playoffs" (no play-in ni Final Four); ~99 % de jugadores emparejados en regular (fallan apodos: Sasha/Aleksandr Vezenkov) | `bn_*` vacíos en el resto de ligas |
 | General | duraciones distintas (40' FIBA vs 48' NBA), ritmos distintos (≈67 EuroLeague, ≈75 FIBA nacional, ≈97-99 NBA/G League) y nivel competitivo distinto | comparar entre ligas con tasas por posesión/40', percentiles dentro de liga-fase, y un factor de nivel de liga que el agente debe estimar (no está en los datos) |
 | Muestras pequeñas | jugadores con pocos minutos dan ratings extremos | filtrar por `min` (p.ej. ≥ 200 en regular, ≥ 60 en playoffs) o usar estimadores bayesianos con shrinkage |
 
@@ -340,4 +344,10 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Commit 6 — modo histórico (desde 2020-21) + actualización por temporada; la BBL guarda en config las semillas que
   descubre y busca también por rangos (cambio de numeración de su web); `temporadas.json`; Artifact con selector
   de temporadas dinámico.
-- Commit 7 — datos 2020-21 a 2024-25.
+- Datos 2020-21 a 2024-25 de las 8 ligas; procesados sólo en CSV por liga y temporada (~80 MB en total).
+- Correcciones: G League (mismo coeficiente de tiro libre en las fórmulas de Oliver: WS vuelven a ≈ victorias),
+  LBA (playoffs por fase `ph_id` y competición ausente del listado) y LNB ("Phase Finale" 2020-21 = playoffs).
+- Artifact (versión 16): la página publicada se rediseñó fuera de este repositorio ("Moneyball Analytics", con
+  Comparador y Evaluación de ligas); `artifact/mesa-multiliga.html` es ahora esa versión con el selector de
+  temporadas dinámico. La pestaña Evaluación usa `datos/<T>/evaluacion_<fase>.json`, que sólo existen para
+  2025-26 y 2026-27 (los generó un script `compute_eval.py` que no está en este repositorio).
