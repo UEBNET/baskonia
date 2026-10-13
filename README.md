@@ -4,26 +4,27 @@ Extrae, guarda en bruto, normaliza y enriquece las estadísticas de **todos los 
 8 competiciones, separadas por **fase (temporada regular / playoffs / total)**, con **las mismas
 columnas para todas las ligas**, listas para aplicar tus propios algoritmos.
 
-- Temporadas descargadas: **2025-26** (completa, con playoffs) y **2026-27** (hasta el 12-10-2026).
+- Temporadas descargadas: **de 2020-21 a 2025-26** (completas, con playoffs) y **2026-27** (hasta el 12-10-2026).
   La temporada por defecto es 2026-27; cualquier otra: `python ejecutar.py --temporada 2024-25`.
-- Datos reales en el repositorio: ver [¿Dónde están los JSON?](#3-dónde-están-los-json).
+- Datos reales en el repositorio: ver [¿Dónde están los datos?](#3-dónde-están-los-datos).
 - **Contexto para agentes de IA**: [`CONTEXTO_AGENTE.md`](CONTEXTO_AGENTE.md) explica todo el proceso operativo, el esquema, las fórmulas, las limitaciones y el Artifact asociado.
 
-**Jugadores (filas jugador-equipo) descargados:**
+**Jugadores (filas jugador-equipo) descargados — temporada regular / playoffs:**
 
-| Liga | 2025-26 regular | 2025-26 playoffs | 2025-26 total | 2026-27 (en curso) |
-|---|---|---|---|---|
-| Euroliga | 335 | 124 | 335 | 263 (4 jornadas) |
-| EuroCup | 315 | 131 | 316 | 367 (2 jornadas) |
-| ACB | 339 | 103 | 340 | 237 (3 jornadas) |
-| NBA | 661 | 230 | 661 | aún no ha empezado |
-| G League | 526 | 160 | 562 (incl. Showcase Cup) | aún no ha empezado |
-| LBA | 265 | 103 | 266 | 210 (3 jornadas) |
-| BBL | 331 | 128 | 331 | 237 (5 jornadas) |
-| LNB | 275 | 118 | 277 | 179 (3 jornadas) |
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| EuroLeague | 297 / 110 | 293 / 102 | 295 / 101 | 287 / 125 | 295 / 125 | 335 / 124 | 263 / – |
+| EuroCup | 342 / 211 | 311 / 169 | 306 / 168 | 307 / 136 | 300 / 130 | 315 / 131 | 367 / – |
+| ACB | 365 / 102 | 325 / 104 | 330 / 102 | 318 / 100 | 328 / 102 | 339 / 103 | 237 / – |
+| NBA | 626 / 239 | 715 / 217 | 609 / 217 | 657 / 214 | 654 / 219 | 661 / 230 | sin datos |
+| G League | 246 / 83 | 493 / 124 | 471 / 123 | 512 / 120 | 510 / 121 | 526 / 160 | sin datos |
+| LBA | 244 / 106 | 315 / 99 | 287 / 100 | 289 / 104 | 306 / 103 | 265 / 103 | 210 / – |
+| BBL | 307 / 107 | 315 / 100 | 287 / 99 | 299 / 127 | 306 / 124 | 331 / 128 | 237 / – |
+| LNB | 313 / 87 | 287 / 93 | 299 / 91 | 305 / 93 | 262 / 113 | 275 / 118 | 179 / – |
 
-Comprobación de coherencia con los datos reales: la suma de Win Shares de cada liga coincide
-con el número de victorias (p.ej. ACB 306 WS / 306 victorias; NBA 1.259 / 1.230; G League 574 / 558).
+Comprobación de coherencia con los datos reales: la suma de Win Shares de temporada regular coincide
+con el número de victorias con un margen de ±3 % (p.ej. ACB 2025-26 306 / 306; BBL 2024-25 270 / 272;
+G League 2025-26 572 / 558; NBA 2025-26 1.259 / 1.230). Excepción: ACB 2022-23 (279 / 306).
 
 ---
 
@@ -78,20 +79,20 @@ Todas las fuentes se han comprobado descargando datos reales (octubre de 2026).
 
 `reprocesar` regenera toda la salida desde los brutos sin volver a descargar.
 
-## 3. ¿Dónde están los JSON?
+## 3. ¿Dónde están los datos?
 
 En este repositorio, rama `claude/basketball-stats-extractor-jpas93`:
 
 | Ruta | Contenido |
 |---|---|
 | `data/raw/<liga>/<temporada>/<liga>_<temporada>_<YYYYmmddTHHMMSSZ>.json.gz` | **JSON original por liga y descarga**, con fecha, nunca se sobrescribe. Es JSON comprimido con gzip (los boxscores ocupan mucho); se abre con cualquier descompresor o con `RawStore.load()`. Contiene `meta` (fecha, peticiones hechas, errores) y `payload` (respuestas originales de la fuente). |
-| `data/processed/<temporada>/todas_las_ligas.json` / `.csv` | Todas las ligas y fases juntas |
-| `data/processed/<temporada>/por_fase/{regular,playoffs,total}.json` / `.csv` | Un fichero por fase (para el selector de pestañas) |
-| `data/processed/<temporada>/ligas/<liga>.json` / `.csv` | Una liga, todas sus fases |
+| `data/processed/<temporada>/ligas/<liga>.csv` | **Datos procesados: un CSV por liga y temporada**, todas sus fases (columna `fase`), 480 columnas, números con 4 decimales. Es la única copia de los datos procesados (sin duplicados combinados ni JSON, para ocupar menos). Todas las ligas juntas: `bbstats.api.dataframe(temporada=...)` |
 | `data/processed/<temporada>/indice.json` | Índice: ligas, filas por fase, fecha de extracción, rutas de ficheros |
-| `data/processed/<temporada>/diccionario_columnas.json` / `.csv` | Descripción de cada columna |
+| `data/processed/<temporada>/diccionario_columnas.csv` | Descripción de cada columna |
 | `data/processed/<temporada>/completitud.csv` | % de filas con dato por columna, liga y fase |
 | `data/processed/<temporada>/informe_ejecucion.json` | Estado de cada liga en la última ejecución |
+| `data/processed/temporadas.json` | Temporadas con datos, ligas y filas por fase |
+| `data/artifact/` (**no versionado**) | JSON columnar por temporada y fase para el Artifact; se genera con `python -m bbstats artifact [--temporada T]` |
 
 ## 4. Ejecutar (sólo cuando tú lo pides)
 
@@ -99,10 +100,18 @@ En este repositorio, rama `claude/basketball-stats-extractor-jpas93`:
 pip install -r requirements.txt
 python ejecutar.py                              # todas las ligas activas, temporada por defecto
 python ejecutar.py acb euroleague               # sólo algunas
-python ejecutar.py --temporada 2026-27          # otra temporada
+python ejecutar.py --temporada 2026-27          # otra temporada (sólo esa)
+python -m bbstats historico                     # carga histórica: temporada_inicial (2020-21) .. temporada_por_defecto
+python -m bbstats historico --desde 2020-21 --hasta 2024-25 --ligas bbl acb
+python -m bbstats historico --sin-descarga      # reprocesa todas las temporadas desde los brutos
 python -m bbstats reprocesar --temporada 2025-26   # recalcula desde los brutos, sin red
 python -m bbstats estado
 ```
+
+**Modo de trabajo:** la carga histórica (`historico`) se hace una vez y recorre las temporadas de
+la más reciente a la más antigua. Después, cada actualización (`ejecutar --temporada X`, el botón
+EJECUTAR del Artifact o GitHub Actions) descarga **una sola temporada** y no toca las demás.
+`data/processed/temporadas.json` lista las temporadas con datos (lo usa el selector del Artifact).
 
 ```python
 from bbstats import ejecutar
@@ -131,8 +140,8 @@ ORtg de la liga en playoffs, etc.). Además, en las filas de playoffs:
 Métricas con contexto: partidos, minutos, puntos, puntos/rebotes/asistencias por 40, TS%, eFG%,
 USG%, AST%, TOV%, REB%, PER, ORtg, DRtg, Net, Game Score, PIR, WS/40, PIE y on/off (BasketNews).
 
-Para el Artifact, el selector de fase puede leer `indice.json` y cargar `por_fase/<fase>.json`
-(o filtrar `todas_las_ligas.json` por la columna `fase`).
+Para el Artifact, `python -m bbstats artifact` genera `data/artifact/<temporada>/<fase>.json` (una fase por
+fichero, JSON columnar) a partir de los CSV; el selector de fase carga el de la fase elegida.
 
 ## 6. Esquema (480 columnas, idénticas en todas las ligas)
 
@@ -177,9 +186,13 @@ Un Artifact se ejecuta en el navegador: no puede correr Python ni leer las webs 
 
 ## 8. Ampliar
 
-* Otra temporada: `--temporada`. La BBL necesita, para temporadas pasadas, un id de partido semilla
-  de la temporada regular y otro de playoffs en `config/sources.json` (`bbl.temporadas.<t>.semillas`);
-  para la temporada en curso los toma solo.
+* Otra temporada: `--temporada`, o `historico --desde`. Para empezar el histórico antes, cambia
+  `temporada_inicial` en `config/sources.json`.
+* BBL: la temporada en curso toma sus partidos de la web. Para una temporada pasada sin
+  `semillas`, las busca sola bajando desde los ids de la temporada siguiente, y al encontrarlas
+  **las guarda en `config/sources.json`** (`ligas.bbl.temporadas.<t>.semillas`, primer id de cada
+  bloque: temporada regular y playoffs). La siguiente ejecución de esa temporada ya no busca, y
+  la temporada anterior empieza la búsqueda desde ahí. Se desactiva con `"guardar_descubrimientos": false`.
 * Otra liga con fuente ya soportada: nueva entrada en `config/sources.json`.
 * Otra fuente: nuevo adaptador en `bbstats/adapters/` (`fetch()` + `parse()` por fase).
 
@@ -198,7 +211,7 @@ anterior y reutilización de partidos.
 ## 10. Artifact "Mesa Multiliga Baskonia"
 
 Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN
-(fuente en `artifact/mesa-multiliga.html`; los datos son los `por_fase/*.json` de cada temporada).
+(fuente en `artifact/mesa-multiliga.html`; los datos son los `data/artifact/<temporada>/<fase>.json` que genera `python -m bbstats artifact`).
 
 * Selector de temporada y pestañas de fase (Temporada regular / Playoffs / Total), filtros por liga,
   búsqueda, minutos mínimos y vistas de columnas (básico, tiro, por 40/100, avanzada, ratings,
@@ -206,4 +219,34 @@ Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM
   con la comparación playoffs/regular.
 * **EJECUTAR** lanza la Routine de Claude Code `EJECUTAR Mesa Multiliga Baskonia`
   (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda) mediante el conector Claude Code Remote:
-  descarga las ligas elegidas, sube los datos a esta rama y republica los datos del Artifact.
+  descarga las ligas elegidas de **la temporada elegida (sólo esa)**, sube los datos a esta rama
+  y republica los datos de esa temporada en el Artifact. La sesión de la Routine adjunta el
+  repositorio con permiso de escritura (`add_repo`) antes de subir los datos.
+
+---
+
+## 11. Modelos: `bbmodel` (algoritmos A y B)
+
+Traduce las métricas de cualquier jugador de las 8 ligas a su **equivalente en la EuroLeague** (entorno
+2025-26), con intervalo del 80 % y percentil EuroLeague por posición. Separa el entorno de cada liga de su
+nivel, usando 4.336 jugadores puente entre ligas. Explicación completa, fórmulas y validación:
+[`docs/algoritmo_A.md`](docs/algoritmo_A.md).
+
+```bash
+pip install -r requirements.txt
+python -m bbmodel ajustar            # ≈ 10-15 min; escribe data/modelos/algoritmo_A/
+python -m bbmodel validar            # examen fuera de muestra con cambios de liga reales
+python -m bbmodel evaluacion-ligas   # JSON de la pestaña «Evaluación de ligas» (en data/artifact/)
+python -m bbmodel ajustar-b          # algoritmo B (red neuronal, 5 redes); escribe data/modelos/algoritmo_B/
+python -m bbmodel validar-b          # examen fuera de muestra del B
+python -m bbmodel mesa-normalizacion # JSON de la pestaña «Normalización de ligas» (A, B y A+B, en data/artifact/normalizacion/)
+```
+
+**Algoritmo B** ([`docs/algoritmo_B.md`](docs/algoritmo_B.md)): red neuronal multitarea que aprende un «ADN» de 8
+números por jugador y separa a la vez nivel, liga, temporada, posición y equipo. La estimación recomendada es la
+media **A+B**: en el examen fuera de muestra (412 cambios de liga) reduce el error frente a «mismo percentil» una
+mediana del 20 % por métrica (A 10,8 %, B 8,1 %) y gana a A en las 25 métricas.
+
+Resultado principal: `data/modelos/algoritmo_A/traducciones/<temporada>.csv` (una fila por jugador-liga-
+temporada; columnas `<métrica>_el`, `_el_lo`, `_el_hi`, `_pct_el`, `_el_prox`) y `tipo_de_cambio.csv`.
+

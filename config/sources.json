@@ -1,6 +1,10 @@
 {
   "_descripcion": "Configuración de fuentes. Puedes cambiar URLs, ids de temporada o activar/desactivar ligas sin tocar código. 'estado_verificacion' indica si el endpoint se ha comprobado contra la web real.",
   "temporada_por_defecto": "2026-27",
+  "temporada_inicial": "2020-21",
+  "_temporadas": "Histórico: de temporada_inicial a temporada_por_defecto (python -m bbstats historico). El botón EJECUTAR y 'python -m bbstats ejecutar --temporada X' actualizan una sola temporada.",
+  "guardar_descubrimientos": true,
+  "_guardar_descubrimientos": "Si es true, lo que una fuente descubre sola (p.ej. ids semilla de la BBL) se guarda aquí, en ligas.<liga>.temporadas.<t>.",
   "rutas": {
     "bruto": "data/raw",
     "procesado": "data/processed"
@@ -10,7 +14,8 @@
     "timeout_s": 30,
     "retries": 3,
     "delay_por_dominio": {
-      "www.basketball-reference.com": 3.5
+      "www.basketball-reference.com": 3.5,
+      "www.easycredit-bbl.de": 0.5
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -84,7 +89,9 @@
         "Referer": "https://gleague.nba.com/",
         "Origin": "https://gleague.nba.com"
       },
-      "tiro_libre_unico": true
+      "tiro_libre_unico": true,
+      "coef_tl_posesion": 0.79,
+      "_coef_tl_posesion": "Calibrado con las posesiones oficiales de la G League 2025-26 (0,798 regular, 0,781 playoffs). Con 0,4 el ritmo salía un 6 % bajo y el ORtg un 6 % alto."
     },
     "lba": {
       "adaptador": "lba",
@@ -115,11 +122,57 @@
         },
         "2026-27": {
           "semillas": []
+        },
+        "2023-24": {
+          "semillas": [
+            32767,
+            33192,
+            34024
+          ]
+        },
+        "2022-23": {
+          "semillas": [
+            27464,
+            30740
+          ]
+        },
+        "2021-22": {
+          "semillas": [
+            25939,
+            27247
+          ]
+        },
+        "2024-25": {
+          "semillas": [
+            110401,
+            2003212
+          ]
+        },
+        "2020-21": {
+          "semillas": [
+            25490,
+            25900
+          ]
         }
       },
       "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
       "competicion": "BBL",
-      "max_huecos": 30
+      "max_huecos": 30,
+      "paso_busqueda": 40,
+      "rangos_busqueda": [
+        [
+          60000,
+          150000
+        ],
+        [
+          1,
+          40000
+        ]
+      ],
+      "paso_rango": 100,
+      "_semillas": "Temporadas pasadas sin 'semillas': se buscan solas (bajando desde la temporada siguiente y, si no aparece la temporada regular, recorriendo 'rangos_busqueda' en saltos de 'paso_rango') y se guardan aquí. Numeración de la web: 2020-21 ≈ 25500, 2021-22 ≈ 26000, 2022-23 ≈ 27480 (playoffs ≈ 30500), 2023-24 ≈ 33200 (playoffs ≈ 34025), regular 2024-25 ≈ 110500 (copa ≈ 90000), playoffs 2024-25 ≈ 2003212, 2025-26 ≥ 2004000.",
+      "ventana_busqueda": 3500,
+      "paso_fino": 10
     },
     "lnb": {
       "adaptador": "lnb",

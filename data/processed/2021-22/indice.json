@@ -1,0 +1,101 @@
+{
+  "temporada": "2021-22",
+  "generado": "2026-10-13T08:00:45.816866+00:00",
+  "fases": [
+    "regular",
+    "playoffs",
+    "total"
+  ],
+  "fases_con_datos": [
+    "regular",
+    "playoffs",
+    "total"
+  ],
+  "ligas": {
+    "acb": {
+      "nombre": "Liga Endesa (ACB)",
+      "archivo": "ligas/acb.csv",
+      "fecha_extraccion": "2026-10-12T17:47:19.045105+00:00",
+      "fases": {
+        "playoffs": 104,
+        "regular": 325,
+        "total": 325
+      }
+    },
+    "bbl": {
+      "nombre": "easyCredit BBL (Alemania)",
+      "archivo": "ligas/bbl.csv",
+      "fecha_extraccion": "2026-10-13T07:08:57.435642+00:00",
+      "fases": {
+        "playoffs": 100,
+        "regular": 315,
+        "total": 316
+      }
+    },
+    "eurocup": {
+      "nombre": "BKT EuroCup",
+      "archivo": "ligas/eurocup.csv",
+      "fecha_extraccion": "2026-10-12T17:47:19.058742+00:00",
+      "fases": {
+        "playoffs": 169,
+        "regular": 311,
+        "total": 311
+      }
+    },
+    "euroleague": {
+      "nombre": "Turkish Airlines EuroLeague",
+      "archivo": "ligas/euroleague.csv",
+      "fecha_extraccion": "2026-10-12T17:47:19.041771+00:00",
+      "fases": {
+        "playoffs": 102,
+        "regular": 293,
+        "total": 293
+      }
+    },
+    "gleague": {
+      "nombre": "NBA G League",
+      "archivo": "ligas/gleague.csv",
+      "fecha_extraccion": "2026-10-12T17:47:19.046954+00:00",
+      "fases": {
+        "playoffs": 124,
+        "regular": 493,
+        "total": 568
+      }
+    },
+    "lba": {
+      "nombre": "LBA Serie A (Italia)",
+      "archivo": "ligas/lba.csv",
+      "fecha_extraccion": "2026-10-13T07:58:53.658186+00:00",
+      "fases": {
+        "playoffs": 99,
+        "regular": 315,
+        "total": 315
+      }
+    },
+    "lnb": {
+      "nombre": "LNB Betclic ÉLITE (Francia)",
+      "archivo": "ligas/lnb.csv",
+      "fecha_extraccion": "2026-10-12T17:47:19.053851+00:00",
+      "fases": {
+        "playoffs": 93,
+        "regular": 287,
+        "total": 289
+      }
+    },
+    "nba": {
+      "nombre": "NBA",
+      "archivo": "ligas/nba.csv",
+      "fecha_extraccion": "2026-10-12T17:47:19.049886+00:00",
+      "fases": {
+        "playoffs": 217,
+        "regular": 715,
+        "total": 716
+      }
+    }
+  },
+  "formato": "CSV por liga (ligas/<liga>.csv), 1 fila = jugador-equipo-fase",
+  "archivos": {
+    "diccionario": "diccionario_columnas.csv",
+    "completitud": "completitud.csv"
+  }
+}
