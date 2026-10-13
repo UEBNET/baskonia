@@ -13,8 +13,12 @@ CLUBES = RAIZ / "config" / "clubes.json"
 TEMPORADAS_ENTRENO = ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
 # Temporada en curso: B no la traduce (sólo 4 filas), se usa A y se marca como provisional.
 TEMPORADAS_PROVISIONALES = ["2026-27"]
-N_ESTILOS = 12
+N_ESTILOS = 8           # v1 (12 estilos, sin neutralizar): data/modelos/estilos/v1_12estilos/
 D_MAPA = 3
+# Neutralización del nivel: a cada rasgo de estilo se le quita la parte que explica el índice de nivel
+# (regresión en 1, nivel y nivel², ajustada sobre la vara común A+B de todas las ligas a la vez).
+NEUTRALIZAR_NIVEL = True
+GRADO_NEUTRALIZACION = 2
 MIN_JUGADOR = 100        # minutos mínimos de una fila jugador-equipo para situarla en el mapa
 MIN_ESCALA_JUGADOR = 150  # minutos mínimos para estimar la escala de los jugadores
 

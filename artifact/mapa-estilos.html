@@ -3,8 +3,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-gl3d-dist-min@2.35.2/plotly-gl3d.min.js"></script>
 <style>
-/* Layout: banda de mando sobre parquet (red · temporada · competiciones), mapa 3D con ficha de encaje a la derecha,
-   y debajo la trayectoria de Baskonia, los 12 estilos y la comparativa de las dos redes. */
+/* Layout: resumen ejecutivo arriba; mesa de trabajo de tres columnas (filtros · mapa 3D · comparador con fichaje
+   opcional); debajo, comparación detallada, ligas y temporadas, Baskonia, los 8 estilos, hallazgos y modelo. */
 /* Sistema de la Mesa Multiliga del cliente: paleta kraft, nogal para texto, tema claro único por decisión del cliente. */
 :root {
   --c1: #efe0cd; --c2: #f2e6d7; --c3: #f5ece1; --c4: #f9f3eb; --c5: #fcf9f5;
@@ -12,578 +12,709 @@
   --line: #e3d0b8; --accent: var(--c1); --accent-strong: #6b4f38;
   --good: #2f7a4c; --bad: #b0402c; --warn: #a15c07;
   --seam: rgba(107,79,56,.16); --plank-a: var(--c1); --plank-b: var(--c2);
-  /* 12 estilos = 4 tonos (validados para daltonismo sobre --surface) × 3 formas */
-  --s1: #2a78d6; --s2: #eb6834; --s3: #0f8a6a; --s4: #7a3b8f;
+  /* 8 estilos, 8 tonos distintos (contraste ≥ 3:1 sobre --surface; forma de marcador como apoyo) */
+  --e1: #2a78d6; --e2: #e0662c; --e3: #0f8a6a; --e4: #b98500; --e5: #c94f86; --e6: #5b8c12; --e7: #6a4fd0; --e8: #a33a2e;
   --f-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: light;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { background: var(--bg); color: var(--ink); }
 body { font-family: var(--f-body); font-size: 14px; line-height: 1.45; }
-.wrap { max-width: 1440px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 48px; display: grid; gap: 16px; }
-h1 { font-family: var(--f-display); font-weight: 700; font-size: 40px; letter-spacing: .05em; margin: 0; line-height: 1; text-wrap: balance; }
+.wrap { max-width: 1560px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 56px; display: grid; gap: 18px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 42px; letter-spacing: .05em; margin: 0; line-height: 1; text-wrap: balance; }
 h1 span { color: var(--accent-strong); }
-h2 { font-family: var(--f-display); font-weight: 700; font-size: 24px; letter-spacing: .04em; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 25px; letter-spacing: .04em; margin: 0; text-wrap: balance; }
 h3 { font-family: var(--f-display); font-weight: 600; font-size: 18px; letter-spacing: .03em; margin: 0; }
-.sub { color: var(--muted); margin: 6px 0 0; max-width: 78ch; }
+p { margin: 0; }
+.sub { color: var(--muted); max-width: 82ch; }
 .label { font-family: var(--f-display); text-transform: uppercase; letter-spacing: .08em; font-size: 13px; color: var(--muted); font-weight: 600; }
-.command { background-color: var(--c2); background-image: repeating-linear-gradient(90deg, transparent 0 95px, var(--seam) 95px 96px), repeating-linear-gradient(0deg, var(--plank-a) 0 22px, var(--seam) 22px 23px, var(--plank-b) 23px 45px, var(--seam) 45px 46px); border-radius: 10px; padding: 14px 16px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-end; box-shadow: inset 0 0 0 1px var(--seam); }
-.grp { display: grid; gap: 6px; min-width: 0; }
-.tabs { display: inline-flex; background: color-mix(in srgb, var(--c2) 70%, var(--ink) 14%); border-radius: 8px; padding: 3px; gap: 3px; flex-wrap: wrap; }
-.tab { font-family: var(--f-display); font-size: 17px; font-weight: 600; letter-spacing: .03em; border: 0; border-radius: 6px; padding: 6px 14px; cursor: pointer; background: transparent; color: var(--ink); }
-.tab[aria-selected="true"] { background: var(--surface); box-shadow: inset 0 0 0 1px var(--accent-strong); }
-.tab:not([aria-selected="true"]):hover { background: color-mix(in srgb, var(--accent) 45%, transparent); }
-.tab small { font-family: var(--f-data); font-size: 11px; opacity: .75; margin-left: 4px; }
-select, input[type="search"], input[type="number"] { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; max-width: 100%; }
+.note { color: var(--muted); font-size: 12.5px; }
+.muted { color: var(--muted); }
+.num { font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.head { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: flex-end; justify-content: space-between; }
+.head .acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { font: 700 16px var(--f-display); letter-spacing: .05em; border: 0; border-radius: 8px; padding: 8px 16px; cursor: pointer; background: var(--accent-strong); color: var(--c5); }
+.btn:hover { background: var(--ink); }
+.btn.ghost { background: var(--c4); color: var(--ink); border: 1px solid var(--line); font-size: 15px; padding: 6px 12px; }
+.btn.ghost:hover { border-color: var(--accent-strong); background: var(--c1); }
+.btn.sm { font-size: 13px; padding: 4px 9px; }
+button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, .chip:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
+select, input[type="search"], input[type="number"] { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; width: 100%; min-width: 0; }
 input[type="range"] { accent-color: var(--accent-strong); width: 100%; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font: 500 13px var(--f-body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+section.block { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 14px; min-width: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font: 500 12.5px var(--f-body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
 .chip:hover { border-color: var(--accent-strong); background: var(--c4); }
 .chip[aria-pressed="true"] { background: var(--c1); border-color: var(--accent-strong); font-weight: 600; }
-.chip .n { font-family: var(--f-data); font-size: 11px; opacity: .7; margin-left: 4px; }
-.tab:focus-visible, .chip:focus-visible, select:focus-visible, input:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
-.main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px; align-items: start; }
-@media (max-width: 1050px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.chip[aria-pressed="false"] { opacity: .55; }
+.chip .n { font-family: var(--f-data); font-size: 10.5px; opacity: .75; }
+.sw { width: 11px; height: 11px; border-radius: 50%; display: inline-block; flex: none; box-shadow: 0 0 0 1px var(--c5); }
+
+/* resumen ejecutivo */
+.exec { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 1000px) { .exec { grid-template-columns: minmax(0, 1fr); } }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpi { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: var(--c4); display: grid; gap: 2px; align-content: start; }
+.kpi b { font: 700 30px var(--f-display); letter-spacing: .02em; line-height: 1.05; }
+.kpi span { font-size: 12px; color: var(--muted); }
+.bask { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: var(--c4); display: grid; gap: 10px; }
+.strip { display: flex; flex-wrap: wrap; gap: 4px; align-items: stretch; }
+.strip .cell { display: grid; gap: 2px; text-align: center; min-width: 54px; flex: 1 1 54px; }
+.strip .cell i { height: 18px; border-radius: 4px; display: block; }
+.strip .cell small { font: 500 10.5px var(--f-data); color: var(--muted); }
+.findings { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.findings li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 13.5px; }
+.findings li::before { content: attr(data-n); font: 700 13px var(--f-display); color: var(--c5); background: var(--accent-strong); border-radius: 50%; width: 20px; height: 20px; display: grid; place-items: center; }
+
+/* mesa de trabajo */
+.desk { display: grid; grid-template-columns: 250px minmax(0, 1fr) 360px; gap: 14px; align-items: start; }
+@media (max-width: 1280px) { .desk { grid-template-columns: 230px minmax(0, 1fr); } .desk .side-r { grid-column: 1 / -1; } }
+@media (max-width: 820px) { .desk { grid-template-columns: minmax(0, 1fr); } }
+.side { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 2px; min-width: 0; }
+.side details { border-bottom: 1px solid var(--line); padding: 6px 2px; }
+.side details:last-child { border-bottom: 0; }
+.side summary { cursor: pointer; font: 600 14px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); list-style: none; display: flex; justify-content: space-between; align-items: center; }
+.side summary::after { content: "+"; font-family: var(--f-data); color: var(--muted); }
+.side details[open] summary::after { content: "−"; }
+.side .body { display: grid; gap: 8px; padding-top: 8px; }
+.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px; }
+.tog { display: flex; gap: 7px; align-items: center; font-size: 13px; cursor: pointer; }
+.seg { display: inline-flex; flex-wrap: wrap; background: var(--c2); border-radius: 7px; padding: 2px; gap: 2px; }
+.seg button { font: 600 12.5px var(--f-body); border: 0; background: transparent; color: var(--ink); border-radius: 5px; padding: 4px 8px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface); box-shadow: inset 0 0 0 1px var(--accent-strong); }
 .mapbox { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-width: 0; display: grid; }
-.maphead { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding: 10px 12px 0; }
-#mapa { width: 100%; height: 620px; }
-@media (max-width: 700px) { #mapa { height: 430px; } h1 { font-size: 32px; } }
-.legend { display: flex; flex-wrap: wrap; gap: 4px 6px; padding: 0 12px 12px; }
-.lg { display: inline-flex; align-items: center; gap: 5px; font: 500 12px var(--f-data); border: 1px solid var(--line); background: var(--c4); border-radius: 6px; padding: 3px 7px; cursor: pointer; color: var(--ink); }
-.lg[aria-pressed="false"] { opacity: .38; }
-.lg svg { flex: none; }
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 14px; min-width: 0; }
-.panel .row { display: grid; gap: 6px; }
-.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
-.two > * { min-width: 0; }
-.panel select, .panel input[type="number"], .panel input[type="search"] { width: 100%; min-width: 0; }
-.sugs { display: grid; gap: 2px; max-height: 190px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--c4); }
+.maphead { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; justify-content: space-between; padding: 10px 12px 0; }
+#mapa { width: 100%; height: 640px; }
+@media (max-width: 820px) { #mapa { height: 440px; } h1 { font-size: 34px; } }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 6px; padding: 2px 12px 12px; }
+.lg { display: inline-flex; align-items: center; gap: 6px; font: 500 12px var(--f-body); border: 1px solid var(--line); background: var(--c4); border-radius: 6px; padding: 3px 8px; cursor: pointer; color: var(--ink); }
+.lg[aria-pressed="false"] { opacity: .35; }
+.side-r { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 14px; min-width: 0; }
+.ents { display: grid; gap: 6px; }
+.ent { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 8px; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--c4); }
+.ent .who { min-width: 0; }
+.ent .who b { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ent .who small { color: var(--muted); font-size: 11.5px; }
+.badge { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 700 13px var(--f-display); color: var(--c5); }
+.x { all: unset; cursor: pointer; color: var(--muted); font: 600 16px var(--f-body); padding: 0 4px; }
+.x:hover { color: var(--bad); }
+.adder { display: grid; gap: 6px; border: 1px dashed var(--line); border-radius: 8px; padding: 8px; }
+.sugs { display: grid; gap: 1px; max-height: 200px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--c4); }
 .sugs button { all: unset; cursor: pointer; padding: 5px 8px; font-size: 13px; display: flex; justify-content: space-between; gap: 8px; }
 .sugs button:hover, .sugs button:focus-visible { background: var(--c1); }
 .sugs small { color: var(--muted); font-family: var(--f-data); font-size: 11px; white-space: nowrap; }
-.card { border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 8px; }
-.kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: baseline; }
-.kv dt { color: var(--muted); font-size: 13px; }
-.kv dd { margin: 0; font: 500 13px var(--f-data); font-variant-numeric: tabular-nums; text-align: right; }
-.who { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 8px; align-items: center; font-size: 13px; }
-.who b { font-weight: 600; }
-.who .meta { color: var(--muted); font-size: 12px; grid-column: 2 / 4; margin-top: -2px; }
-.st { display: inline-flex; align-items: center; gap: 4px; font: 600 12px var(--f-data); padding: 2px 7px; border-radius: 999px; background: var(--c4); border: 1px solid var(--line); white-space: nowrap; }
+.card { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 8px; }
+.kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: baseline; margin: 0; }
+.kv dt { color: var(--muted); font-size: 12.5px; }
+.kv dd { margin: 0; font: 500 12.5px var(--f-data); font-variant-numeric: tabular-nums; text-align: right; }
+.st { display: inline-flex; align-items: center; gap: 5px; font: 600 12px var(--f-body); padding: 2px 8px; border-radius: 999px; background: var(--c4); border: 1px solid var(--line); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.verdict { font-size: 13px; padding: 9px 11px; border-radius: 8px; background: var(--c4); border: 1px solid var(--line); }
+.verdict b { font-family: var(--f-display); font-size: 17px; letter-spacing: .03em; display: block; }
+.good { color: var(--good); } .warn { color: var(--warn); } .bad { color: var(--bad); }
 .meter { height: 8px; border-radius: 4px; background: var(--c2); position: relative; overflow: hidden; }
 .meter i { position: absolute; inset: 0 auto 0 0; background: var(--accent-strong); border-radius: 4px; }
-.verdict { font-size: 13px; padding: 9px 11px; border-radius: 8px; background: var(--c4); border: 1px solid var(--line); }
-.verdict b { font-family: var(--f-display); font-size: 16px; letter-spacing: .03em; display: block; }
-.pill-good { color: var(--good); } .pill-warn { color: var(--warn); } .pill-bad { color: var(--bad); }
-.muted { color: var(--muted); }
-.note { color: var(--muted); font-size: 12.5px; }
-section.block { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+
+/* comparación y gráficos */
+.grid2 { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 1000px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.chart { min-width: 0; display: grid; gap: 6px; }
+.chart svg { width: 100%; height: auto; display: block; }
 .tablebox { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-th, td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th, td { padding: 6px 9px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 th { font: 600 12px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); white-space: nowrap; }
-td.num { font-family: var(--f-data); font-size: 12.5px; text-align: right; white-space: nowrap; }
+td.n { font-family: var(--f-data); font-size: 12.5px; text-align: right; white-space: nowrap; }
 td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-weight: 600; }
-.styles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 10px; }
-.sc { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 6px; background: var(--c5); min-width: 0; }
-.sc header { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
-.sc .d { font-size: 13px; font-weight: 500; }
+.heat td.h { text-align: center; font: 500 12px var(--f-data); min-width: 52px; }
+.styles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 10px; }
+.sc { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 6px; background: var(--c5); min-width: 0; border-top: 5px solid var(--c, var(--line)); }
+.sc header { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.sc h3 { font-size: 20px; }
+.sc .res { font-size: 13px; }
 .sc .ex { font-size: 12px; color: var(--muted); }
 .sc svg { width: 100%; height: auto; display: block; }
-.specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 12px; }
-.spec { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: grid; gap: 8px; background: var(--c5); min-width: 0; }
-.spec dl { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 5px 12px; margin: 0; font-size: 13px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 12px; }
+.fact { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 8px; background: var(--c5); min-width: 0; align-content: start; }
+.fact p { font-size: 13px; }
+.spec dl { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 5px 12px; margin: 0; font-size: 13px; }
 .spec dt { color: var(--muted); font-weight: 500; }
 .spec dd { margin: 0; }
 .spec code { font-family: var(--f-data); font-size: 12px; background: var(--c4); padding: 1px 4px; border-radius: 4px; }
-@media (max-width: 520px) { .spec dl { grid-template-columns: minmax(0, 1fr); } .spec dt { margin-top: 6px; } }
-.loading { padding: 40px 16px; text-align: center; color: var(--muted); }
-.toggles { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 13px; }
-.toggles label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+@media (max-width: 560px) { .spec dl { grid-template-columns: minmax(0, 1fr); } }
+.tip { position: fixed; z-index: 30; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-size: 12px; box-shadow: 0 4px 14px rgba(58,42,28,.14); max-width: 280px; }
+.loading { padding: 60px 16px; text-align: center; color: var(--muted); }
+.howto { font-size: 13px; display: grid; gap: 6px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
 <div class="wrap">
-  <header>
-    <h1>Atlas de <span>Estilos</span></h1>
-    <p class="sub">Doce estilos de juego por club, competición y temporada, calculados por dos redes neuronales sobre los datos normalizados a la vara EuroLeague (algoritmos A+B). Cada punto del mapa es un club o un jugador; la distancia entre puntos se lee en desviaciones típicas del perfil de estilo.</p>
+  <header class="head">
+    <div>
+      <h1>Atlas de <span>Estilos</span></h1>
+      <p class="sub" style="margin-top:6px">Ocho estilos de juego por club, competición y temporada en las 8 ligas, calculados con una red neuronal VaDE sobre los datos normalizados a la vara EuroLeague (A+B) y con el nivel neutralizado: el estilo dice cómo juega un equipo, no cuán bueno es.</p>
+    </div>
+    <div class="acts">
+      <button class="btn ghost" id="btnGuia" aria-expanded="false" aria-controls="guia">Cómo leer el mapa</button>
+      <button class="btn" id="btnPdf" hidden>Descargar artículo (PDF)</button>
+      <span class="note" id="pdfMsg" aria-live="polite"></span>
+    </div>
   </header>
+  <div class="note howto" id="guia" hidden></div>
 
-  <div class="command" role="group" aria-label="Controles del mapa">
-    <div class="grp">
-      <span class="label">Red neuronal</span>
-      <div class="tabs" role="tablist" id="redTabs">
-        <button class="tab" role="tab" data-red="idec" aria-selected="true">IDEC <small>t de Student</small></button>
-        <button class="tab" role="tab" data-red="vade" aria-selected="false">VaDE <small>mezcla gaussiana</small></button>
+  <section class="block" aria-labelledby="exT">
+    <h2 id="exT">Resumen ejecutivo</h2>
+    <div class="exec">
+      <div style="display:grid;gap:12px;align-content:start">
+        <div class="kpis" id="kpis"></div>
+        <ol class="findings" id="hallazgos"></ol>
       </div>
+      <div class="bask" id="bask"></div>
     </div>
-    <div class="grp">
-      <label class="label" for="temp">Temporada</label>
-      <select id="temp"></select>
-    </div>
-    <div class="grp" style="flex:1 1 320px">
-      <span class="label">Competiciones</span>
-      <div class="chips" id="ligas"></div>
-    </div>
-    <div class="grp">
-      <span class="label">Color</span>
-      <div class="tabs" role="tablist" id="colorTabs">
-        <button class="tab" role="tab" data-color="estilo" aria-selected="true">Estilo</button>
-        <button class="tab" role="tab" data-color="nivel" aria-selected="false">Nivel</button>
-      </div>
-    </div>
-  </div>
+  </section>
 
-  <div class="main">
+  <div class="desk">
+    <aside class="side" aria-label="Filtros y apariencia">
+      <details open><summary>Temporadas</summary><div class="body"><div class="chips" id="fTemp"></div>
+        <div class="chips"><button class="chip" id="tUlt">Última completa</button><button class="chip" id="tTodas">Todas</button></div></div></details>
+      <details open><summary>Competiciones</summary><div class="body"><div class="chips" id="fLiga"></div></div></details>
+      <details open><summary>Estilos</summary><div class="body"><div class="chips" id="fEst"></div>
+        <div class="chips"><button class="chip" id="eTodos">Todos</button><button class="chip" id="eNing">Ninguno</button></div></div></details>
+      <details><summary>Nivel</summary><div class="body">
+        <p class="note">Índice de nivel del club (z, capa aparte del estilo).</p>
+        <div class="row2"><label class="note">Mín. <input type="number" id="nMin" step="0.1"></label><label class="note">Máx. <input type="number" id="nMax" step="0.1"></label></div>
+      </div></details>
+      <details open><summary>Capas</summary><div class="body">
+        <label class="tog"><input type="checkbox" id="cClubes" checked> Clubes</label>
+        <label class="tog"><input type="checkbox" id="cJug"> Jugadores</label>
+        <label class="tog"><input type="checkbox" id="cCentros" checked> Centros de estilo</label>
+        <label class="tog"><input type="checkbox" id="cElip"> Elipsoides de estilo</label>
+        <label class="tog"><input type="checkbox" id="cTray" checked> Trayectoria de los clubes comparados</label>
+        <label class="tog"><input type="checkbox" id="cLigas"> Centro de cada liga</label>
+      </div></details>
+      <details><summary>Jugadores</summary><div class="body">
+        <div class="chips" id="fPos"></div>
+        <label class="note" for="minJ">Minutos mínimos: <b id="minJv"></b></label><input type="range" id="minJ" min="100" max="2000" step="50">
+      </div></details>
+      <details open><summary>Apariencia</summary><div class="body">
+        <span class="label">Color</span><div class="seg" id="sColor"></div>
+        <span class="label">Tamaño</span><div class="seg" id="sTam"></div>
+        <span class="label">Etiquetas</span><div class="seg" id="sEtiq"></div>
+        <label class="tog"><input type="checkbox" id="cFormas" checked> Forma por estilo (apoyo al color)</label>
+        <label class="note" for="aTam">Tamaño de punto</label><input type="range" id="aTam" min="2" max="10" step="0.5">
+        <label class="note" for="aOp">Opacidad</label><input type="range" id="aOp" min="0.2" max="1" step="0.05">
+      </div></details>
+      <details><summary>Buscar club</summary><div class="body">
+        <input type="search" id="bClub" placeholder="Nombre del club" autocomplete="off"><div class="sugs" id="sClub" hidden></div>
+      </div></details>
+      <div style="padding:8px 2px"><button class="btn ghost sm" id="reset">Restablecer vista</button></div>
+    </aside>
+
     <div class="mapbox">
       <div class="maphead">
         <span class="label" id="mapTitle">Mapa 3D</span>
-        <div class="toggles">
-          <label><input type="checkbox" id="verJug"> Jugadores de la temporada</label>
-          <label><input type="checkbox" id="verTray" checked> Trayectoria del club destino</label>
-          <label><input type="checkbox" id="verCentros" checked> Centros de estilo</label>
+        <div class="seg" id="cam" aria-label="Cámara">
+          <button data-cam="persp" aria-pressed="true">Perspectiva</button><button data-cam="xy" aria-pressed="false">Ejes 1-2</button><button data-cam="xz" aria-pressed="false">Ejes 1-3</button><button data-cam="yz" aria-pressed="false">Ejes 2-3</button><button data-cam="rot" aria-pressed="false">Girar</button>
         </div>
       </div>
-      <div id="mapa"><div class="loading">Cargando redes y datos…</div></div>
-      <div class="legend" id="leyenda" aria-label="Estilos (pulsa para ocultar o mostrar)"></div>
+      <div id="mapa"><div class="loading">Cargando la red y los datos…</div></div>
+      <div class="legend" id="leyenda"></div>
+      <p class="note" style="padding:0 12px 12px">Pulsa un club en el mapa para añadirlo a la comparación. Pulsa un estilo de la leyenda para ocultarlo o mostrarlo.</p>
     </div>
 
-    <aside class="panel" aria-label="Encaje de un fichaje">
-      <div>
-        <h2>Encaje de un fichaje</h2>
-        <p class="note" style="margin:4px 0 0">Elige el club destino y busca al jugador. La ficha compara sus estilos y simula el club con él dentro.</p>
+    <aside class="side-r" aria-label="Comparador">
+      <div><h2>Comparar</h2><p class="note" style="margin-top:2px">Hasta 4 equipos o ligas. El jugador es opcional.</p></div>
+      <div class="ents" id="ents"></div>
+      <div class="adder">
+        <div class="seg" id="addTipo"><button data-t="club" aria-pressed="true">Club</button><button data-t="liga" aria-pressed="false">Liga</button></div>
+        <div class="row2"><select id="addLiga" aria-label="Competición"></select><select id="addTemp" aria-label="Temporada"></select></div>
+        <select id="addClub" aria-label="Club"></select>
+        <button class="btn ghost sm" id="addBtn">Añadir a la comparación</button>
       </div>
-      <div class="row">
-        <span class="label">Club destino</span>
-        <div class="two">
-          <select id="dComp" aria-label="Competición del club destino"></select>
-          <select id="dTemp" aria-label="Temporada del club destino"></select>
-        </div>
-        <select id="dClub" aria-label="Club destino"></select>
+      <div class="card">
+        <span class="label">Jugador (opcional)</span>
+        <input type="search" id="bJug" placeholder="Busca un jugador para simular su fichaje" autocomplete="off">
+        <div class="sugs" id="sJug" hidden></div>
+        <div id="ficha"></div>
       </div>
-      <div class="row">
-        <label class="label" for="buscar">Jugador candidato</label>
-        <input type="search" id="buscar" placeholder="Nombre del jugador" autocomplete="off">
-        <div class="sugs" id="sugs" hidden></div>
-      </div>
-      <div class="row" id="simCtl" hidden>
-        <div class="two">
-          <div class="grp">
-            <label class="label" for="minutos">Minutos en el club</label>
-            <input type="number" id="minutos" min="0" step="10">
-          </div>
-          <div class="grp">
-            <label class="label" for="sust">Hereda los de</label>
-            <select id="sust"></select>
-          </div>
-        </div>
-        <input type="range" id="minR" min="0" max="1600" step="10" aria-label="Minutos en el club">
-      </div>
-      <div id="ficha"></div>
     </aside>
   </div>
 
-  <section class="block" id="trayectoria">
-    <div>
-      <h2 id="trTitle">Estilo del club por temporada</h2>
-      <p class="sub" style="margin-top:4px">Un estilo por competición y temporada. «p» es la salida de la neurona ganadora; «robustez», la parte de 30 plantillas con minutos remuestreados que conservan el estilo.</p>
+  <section class="block" aria-labelledby="cmpT">
+    <div><h2 id="cmpT">Comparación detallada</h2><p class="sub" style="margin-top:4px">Perfil de estilo sin nivel (desviaciones típicas frente al club medio), reparto entre los 8 estilos y distancias en el mapa.</p></div>
+    <div class="grid2">
+      <div class="chart"><span class="label">Perfil de estilo</span><div id="gPerfil"></div></div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <div class="chart"><span class="label">Reparto entre estilos</span><div id="gReparto"></div></div>
+        <div class="chart"><span class="label">Distancias en el mapa</span><div class="tablebox" id="gDist"></div><p class="note">p = percentil entre todas las parejas de clubes (bajo = muy parecidos).</p></div>
+      </div>
     </div>
+  </section>
+
+  <section class="block" aria-labelledby="lgT">
+    <div><h2 id="lgT">Ligas y temporadas</h2><p class="sub" style="margin-top:4px">Reparto de los clubes de cada liga entre los 8 estilos (temporadas y ligas filtradas arriba) y evolución por temporada.</p></div>
+    <div class="grid2">
+      <div class="chart"><span class="label">Estilo por liga (% de clubes)</span><div class="tablebox" id="gHeat"></div></div>
+      <div class="chart"><span class="label">Estilo por temporada</span><div id="gTemp"></div></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="trT">
+    <div><h2 id="trT">Saski Baskonia, temporada a temporada</h2><p class="sub" style="margin-top:4px">Estilo, seguridad de la asignación, clubes más parecidos de esa temporada y cuánto se movió el equipo en el mapa respecto al año anterior.</p></div>
     <div class="tablebox"><table id="trTabla"></table></div>
   </section>
 
-  <section class="block">
-    <div>
-      <h2 id="estTitle">Los 12 estilos</h2>
-      <p class="sub" style="margin-top:4px">Perfil medio de los clubes de cada estilo frente al club medio, en desviaciones típicas (barra a la derecha = más que la media). Los nombres son abstractos; la etiqueta resume sus rasgos más marcados. Junto al tamaño, el nivel medio y la liga con más clubes en el estilo: en la vara EuroLeague el nivel de cada liga se traslada a las métricas de estilo, y por eso algunos estilos reúnen casi sólo a clubes NBA.</p>
-    </div>
+  <section class="block" aria-labelledby="esT">
+    <div><h2 id="esT">Los 8 estilos</h2><p class="sub" style="margin-top:4px">Nombre interpretativo a partir del perfil medio (barra a la derecha = más que el club medio a igual nivel). El número del estilo es su orden en el eje 1 del mapa.</p></div>
     <div class="styles" id="estilos"></div>
   </section>
 
-  <section class="block">
-    <div>
-      <h2>Las dos redes, frente a frente</h2>
-      <p class="sub" style="margin-top:4px">Mismos datos, mismas 13 entradas, mismo mapa de 3 neuronas y misma capa final de 12. Cambia el mecanismo que forma los estilos. Medido sobre los 997 clubes de 2020-21 a 2025-26.</p>
-    </div>
-    <div class="tablebox"><table id="comp"></table></div>
-    <p class="note" id="compNota"></p>
-    <div class="specs">
+  <section class="block" aria-labelledby="haT">
+    <div><h2 id="haT">Hallazgos estadísticos</h2><p class="sub" style="margin-top:4px">Pruebas complementarias sobre 2020-21 a 2025-26. El artículo en PDF detalla métodos y cifras.</p></div>
+    <div class="facts" id="facts"></div>
+  </section>
+
+  <section class="block" aria-labelledby="moT">
+    <div><h2 id="moT">El modelo</h2><p class="sub" style="margin-top:4px">VaDE v2 frente a la red de contraste (IDEC con los mismos datos) y a la versión anterior (VaDE con 12 estilos y sin neutralizar el nivel).</p></div>
+    <div class="grid2">
+      <div class="tablebox"><table id="tModelo"></table></div>
       <article class="spec">
-        <h3>Red 1 · IDEC <span class="muted">Improved Deep Embedded Clustering</span></h3>
         <dl>
-          <dt>Idea</dt><dd>Autoencoder que aprende el mapa y, a la vez, 12 centroides dentro de él. Un club pertenece al estilo cuyo centroide tiene más cerca.</dd>
-          <dt>Arquitectura</dt><dd>Codificador <code>13 → 64 → 32 → 3</code> · decodificador <code>3 → 32 → 64 → 13</code> · GELU · capa de salida de 12 neuronas con núcleo t de Student <code>q<sub>k</sub> ∝ (1 + ‖z − μ<sub>k</sub>‖²)<sup>−1</sup></code>.</dd>
-          <dt>Pérdida</dt><dd>Reconstrucción (ECM) + estrés de MDS métrico (distancias del mapa = distancias del perfil) + 0,1 · KL(P‖Q), con P la distribución objetivo afilada de DEC, recalculada cada 3 épocas.</dd>
-          <dt>Entrenamiento</dt><dd>Preentreno 100 épocas · centroides iniciales por k-medias (30 inicios) · 120 épocas conjuntas, parada si cambian &lt; 0,1 % de etiquetas · Adam 1e-3 · lotes de 512.</dd>
-          <dt>Salida</dt><dd>Un punto por club. Estilos como regiones convexas alrededor de un centroide. Distancia euclídea directa.</dd>
-          <dt>Mejor para</dt><dd>Leer el mapa como un plano: cerca = parecido, con fronteras nítidas.</dd>
-          <dt>Cuidado con</dt><dd>Supone estilos de forma parecida (esféricos); la confianza de la neurona ganadora es baja cerca de las fronteras.</dd>
-        </dl>
-      </article>
-      <article class="spec">
-        <h3>Red 2 · VaDE <span class="muted">Variational Deep Embedding</span></h3>
-        <dl>
-          <dt>Idea</dt><dd>Autoencoder variacional cuya previa es una mezcla de 12 gaussianas en el mapa. Cada estilo es un elipsoide con su centro y su forma; cada club, una nube con su incertidumbre.</dd>
-          <dt>Arquitectura</dt><dd>Codificador <code>13 → 64 → 32 → (μ, log σ²) ∈ ℝ³</code> · decodificador <code>3 → 32 → 64 → 13</code> con varianza común · GELU · capa de salida de 12 neuronas: <code>γ<sub>k</sub> = π<sub>k</sub>N(z|μ<sub>k</sub>,σ²<sub>k</sub>) / Σ<sub>j</sub> π<sub>j</sub>N(z|μ<sub>j</sub>,σ²<sub>j</sub>)</code>.</dd>
-          <dt>Pérdida</dt><dd>−ELBO de VaDE (reconstrucción gaussiana + KL frente a la mezcla, reparametrización) + 13 · estrés de MDS métrico, con calentamiento β de 0,1 a 1 en 30 épocas.</dd>
-          <dt>Entrenamiento</dt><dd>Preentreno 100 épocas · mezcla inicial por EM (5 inicios) · 120 épocas con Adam 1e-3 y tasa coseno · la mezcla se reestima con un paso M amortiguado tras cada época (π uniforme, suelo de varianza, resiembra de componentes vacías) para evitar el colapso típico de VaDE.</dd>
-          <dt>Salida</dt><dd>Probabilidades calibradas por la forma de cada estilo. Estilos con tamaños más equilibrados.</dd>
-          <dt>Mejor para</dt><dd>Asignaciones con probabilidad interpretable y estilos de distinta amplitud (uno compacto y otro disperso).</dd>
-          <dt>Cuidado con</dt><dd>Más sensible a la inicialización; las fronteras entre elipsoides no coinciden con la distancia euclídea pura.</dd>
+          <dt>Entrada</dt><dd>13 rasgos de estilo por club (media por minutos de sus jugadores, vara EuroLeague A+B), transformados, estandarizados y sin la parte explicada por el nivel (<code>x − [1, L, L²]·B</code>).</dd>
+          <dt>Codificador</dt><dd><code>13 → 64 → 32 → (μ, log σ²) ∈ ℝ³</code>, GELU. μ es el punto del club en el mapa.</dd>
+          <dt>Salida</dt><dd>8 neuronas: probabilidad a posteriori de 8 gaussianas de covarianza completa en el mapa.</dd>
+          <dt>Decodificador</dt><dd><code>3 → 32 → 64 → 13</code>, varianza común a los 13 rasgos.</dd>
+          <dt>Pérdida</dt><dd>−ELBO de VaDE + 13 · estrés de MDS (distancia del mapa = distancia del perfil).</dd>
+          <dt>Entrenamiento</dt><dd>5 semillas · 25.000 plantillas remuestreadas · consenso por co-asociación · ajuste fino desde el consenso (40 épocas).</dd>
         </dl>
       </article>
     </div>
   </section>
 
-  <p class="note">Datos: traducciones a la vara EuroLeague 2025-26 del estudio de normalización (A+B; sólo A en 2026-27, marcada como provisional), temporada regular. Ritmo: z del ritmo del equipo dentro de su liga y temporada (no forma parte del estudio). Código: paquete <code>bbestilo</code> del repositorio, rama <code>claude/bold-euler-hubmhk</code>.</p>
+  <p class="note">Datos: equivalentes EuroLeague 2025-26 del estudio de normalización (A+B; sólo A en 2026-27, provisional), temporada regular, 8 ligas, 2020-21 a 2026-27. Ritmo: z del ritmo del equipo en su liga. Código: paquete <code>bbestilo</code>, rama <code>claude/bold-euler-hubmhk</code>.</p>
 </div>
+<div class="tip" id="tip" hidden></div>
 
 <script>
 "use strict";
-const HUES = ["#2a78d6", "#eb6834", "#0f8a6a", "#7a3b8f"];
-const SHAPES = ["circle", "square", "diamond"];
+const COL = ["#2a78d6", "#e0662c", "#0f8a6a", "#b98500", "#c94f86", "#5b8c12", "#6a4fd0", "#a33a2e"];
+const SYM = ["circle", "square", "diamond", "cross", "x", "circle-open", "square-open", "diamond-open"];
+const ENT_COL = ["#3a2a1c", "#6b4f38", "#8f6b4a", "#b08a64"];
+const ENT_LET = ["A", "B", "C", "D"];
 const INK = "#3a2a1c", MUTED = "#7a6450", LINE = "#e3d0b8", SURF = "#fcf9f5", C4 = "#f9f3eb";
 const LIGAS = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB" };
-const LIGA_CORTA = { euroleague: "EL", eurocup: "EC", acb: "ACB", nba: "NBA", gleague: "GL", lba: "LBA", bbl: "BBL", lnb: "LNB" };
-const POS = { E: "exterior", A: "alero", I: "interior" };
-const st = { red: "idec", temp: "2025-26", ligas: new Set(Object.keys(LIGAS)), color: "estilo", ocultos: new Set(),
-  dComp: "euroleague", dTemp: "2025-26", dClub: null, jug: null, minutos: null, sust: "" };
-let META, CLUBES, JUG, BYCLAVE, ROSTER, CR;
-
+const LC = { euroleague: "EL", eurocup: "EC", acb: "ACB", nba: "NBA", gleague: "GL", lba: "LBA", bbl: "BBL", lnb: "LNB" };
+const POS = { E: "Exteriores", A: "Aleros", I: "Interiores" };
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? "–" : x.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
-const pctTxt = (x) => (x == null || !isFinite(x)) ? "–" : Math.round(x * 100) + " %";
-const eName = (k) => "E" + String(k + 1).padStart(2, "0");
-const hue = (k) => HUES[k % 4];
-const shape = (k) => SHAPES[Math.floor(k / 4)];
-const tCorta = (t) => t.slice(2);
-function glyph(k, size = 12) {
-  const c = hue(k), s = shape(k), h = size / 2;
-  const body = s === "circle" ? `<circle cx="${h}" cy="${h}" r="${h - 1.5}"/>` : s === "square" ? `<rect x="1.8" y="1.8" width="${size - 3.6}" height="${size - 3.6}" rx="1"/>` : `<rect x="${h - (h - 2) / Math.SQRT2 * 1.0}" y="${h - (h - 2) / Math.SQRT2}" width="${(h - 2) * Math.SQRT2}" height="${(h - 2) * Math.SQRT2}" transform="rotate(45 ${h} ${h})"/>`;
-  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><g fill="${c}" stroke="${SURF}" stroke-width="1">${body}</g></svg>`;
-}
-function columnar(d) { return d.filas.map((f) => Object.fromEntries(d.columnas.map((c, i) => [c, f[i]]))); }
+const sg = (x, d = 2) => (x == null || !isFinite(x)) ? "–" : (x > 0 ? "+" : "") + fmt(x, d);
+const pct = (x, d = 0) => (x == null || !isFinite(x)) ? "–" : fmt(x * 100, d) + " %";
+const tC = (t) => t.slice(2);
+const pv = (p) => (p == null || !isFinite(p)) ? "–" : p < 0.001 ? "p < 0,001" : "p = " + fmt(p, 3);
+const cols = (d) => d.filas.map((f) => Object.fromEntries(d.columnas.map((c, i) => [c, f[i]])));
+const norm = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+let META, CL, JG, BY, ROSTER, CR, NE, TEMPS, ENT_T, DL = null;
 
-// ---------------------------------------------------------------- red en el navegador (mismo cálculo que bbestilo)
+const DEF = { temps: ["2025-26"], ligas: Object.keys(LIGAS), estilos: [0, 1, 2, 3, 4, 5, 6, 7], nMin: -3, nMax: 3,
+  capas: { clubes: true, jug: false, centros: true, elip: false, tray: true, ligas: false }, pos: ["E", "A", "I"], minJ: 400,
+  color: "estilo", tam: "fijo", etiq: "sel", formas: true, aTam: 4.5, aOp: 0.85,
+  ents: [{ t: "club", k: "euroleague:BAS", temp: "2025-26" }, { t: "liga", k: "euroleague", temp: "2025-26" }, { t: "club", k: "acb:3", temp: "2025-26" }],
+  jug: null, minutos: null, sust: "" };
+let st = JSON.parse(JSON.stringify(DEF));
+function guardar() { try { localStorage.setItem("atlas-estilos-v2", JSON.stringify({ ...st, jug: null, minutos: null, sust: "" })); } catch (e) { /* sin almacenamiento */ } }
+function recuperar() { try { const s = JSON.parse(localStorage.getItem("atlas-estilos-v2") || "null"); if (s && s.ents) st = { ...st, ...s, capas: { ...st.capas, ...s.capas } }; } catch (e) { /* sin almacenamiento */ } }
+
+// ---------------------------------------------------------------- red VaDE en el navegador (mismo cálculo que bbestilo)
 const gelu = (x) => 0.5 * x * (1 + Math.tanh(0.7978845608028654 * (x + 0.044715 * x * x * x)));
 function mlp(capas, x) {
   let h = x;
-  capas.forEach((c, li) => {
-    const out = c.b.slice();
-    for (let o = 0; o < out.length; o++) { const w = c.W[o]; let s = out[o]; for (let i = 0; i < h.length; i++) s += w[i] * h[i]; out[o] = s; }
-    h = li < capas.length - 1 ? out.map(gelu) : out;
-  });
+  capas.forEach((c, li) => { const o = c.b.slice(); for (let r = 0; r < o.length; r++) { const w = c.W[r]; let s = o[r]; for (let i = 0; i < h.length; i++) s += w[i] * h[i]; o[r] = s; } h = li < capas.length - 1 ? o.map(gelu) : o; });
   return h;
 }
-function softmax(v) { const m = Math.max(...v); const e = v.map((x) => Math.exp(x - m)); const s = e.reduce((a, b) => a + b, 0); return e.map((x) => x / s); }
-function redAplicar(red, x) {
-  const P = META.redes[red].pesos, z = mlp(P.capas, x);
-  let logits;
-  if (P.tipo === "idec") { const a = P.salida.alpha; logits = P.salida.centroides.map((c) => { let d2 = 0; c.forEach((v, i) => d2 += (z[i] - v) ** 2); return -(a + 1) / 2 * Math.log1p(d2 / a); }); }
-  else { logits = P.salida.mu.map((mu, k) => { const lv = P.salida.logvar[k]; let s = 0; mu.forEach((m, i) => s += (z[i] - m) ** 2 / Math.exp(lv[i]) + lv[i] + Math.log(2 * Math.PI)); return P.salida.log_pi[k] - 0.5 * s; }); }
+function softmax(v) { const m = Math.max(...v), e = v.map((x) => Math.exp(x - m)), s = e.reduce((a, b) => a + b, 0); return e.map((x) => x / s); }
+function red(x) {
+  const P = META.pesos, z = mlp(P.capas, x), S = P.salida;
+  const logits = S.mu.map((mu, k) => { const d = mu.map((m, i) => z[i] - m); let q = 0; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) q += d[i] * S.prec[k][i][j] * d[j]; return S.log_pi[k] - 0.5 * (q + S.logdet[k] + 3 * Math.log(2 * Math.PI)); });
   const M = P.mapa, xyz = [0, 1, 2].map((j) => z.reduce((s, zi, i) => s + (zi - M.centro[i]) * M.rot[i][j], 0) * M.escala);
   return { p: softmax(logits), xyz };
 }
-function transformar(v) {
-  return META.rasgos.map((r, k) => { const x = v[k]; if (r.transf === "raiz") return Math.sqrt(Math.max(0, x)); if (r.transf === "log1") return Math.log1p(Math.max(0, x)); if (r.transf === "proporcion") return Math.asin(Math.sqrt(Math.min(100, Math.max(0, x)) / 100)); return x; });
+function transformar(v) { return META.rasgos.map((r, k) => { const x = v[k]; if (r.transf === "raiz") return Math.sqrt(Math.max(0, x)); if (r.transf === "log1") return Math.log1p(Math.max(0, x)); return x; }); }
+function estd(t, e) { return t.map((x, k) => { const z = (x - e.media[k]) / e.sd[k]; return isFinite(z) ? z : 0; }); }
+function neutral(x, L, n) { const b = Array.from({ length: n.B.length }, (_, g) => L ** g); return x.map((v, k) => (v - b.reduce((s, bg, g) => s + bg * n.B[g][k], 0)) / n.sd[k]); }
+function nivelDe(Q, P) { let s = 0, c = 0; Q.forEach((q, i) => { const z = P.signo[i] * (q - P.media[i]) / P.sd[i]; if (q != null && isFinite(z)) { s += z; c++; } }); return c ? s / c : 0; }
+function medias(S, W, n) { return S.slice(0, n).map((s, i) => W[i] > 0 ? s / W[i] : NaN); }
+function vClub(S, W) { const n = CR.length, M = medias(S, W, n), u2 = W[n] > 0 ? S[n] / W[n] : NaN, iu = CR.indexOf("usg_pct"); return META.rasgos.map((r) => r.col === "uso_conc" ? u2 / M[iu] ** 2 : r.col === "cuota_interior" ? M[CR.indexOf("es_int")] : r.col === "cuota_exterior" ? M[CR.indexOf("es_ext")] : M[CR.indexOf(r.col)]); }
+function xClub(S, W, SQ, WQ) { const L = nivelDe(medias(SQ, WQ, SQ.length), META.nivel_club); return { x: neutral(estd(transformar(vClub(S, W)), META.escala_club), L, META.neutral_club), L }; }
+function xJug(j) {
+  const c = BY.get(j.clave), R = j.R.map((v) => v == null ? NaN : v), vc = vClub(c.S, c.W), M = medias(c.S, c.W, CR.length), iu = CR.indexOf("usg_pct");
+  const v = META.rasgos.map((r, k) => { const x = r.col === "uso_conc" ? (R[iu] / M[iu]) ** 2 : r.col === "cuota_interior" ? R[CR.indexOf("es_int")] : r.col === "cuota_exterior" ? R[CR.indexOf("es_ext")] : R[CR.indexOf(r.col)]; return isFinite(x) ? x : vc[k]; });
+  return neutral(estd(transformar(v), META.escala_jugador), j.nivel ?? 0, META.neutral_jugador);
 }
-function estandarizar(t, esc) { return t.map((x, k) => { const z = (x - esc.media[k]) / esc.sd[k]; return isFinite(z) ? z : 0; }); }
-function mediasClub(S, W) { return S.slice(0, CR.length).map((s, i) => W[i] > 0 ? s / W[i] : NaN); }
-function vectorClub(S, W) {
-  const M = mediasClub(S, W), u2 = W[CR.length] > 0 ? S[CR.length] / W[CR.length] : NaN, iu = CR.indexOf("usg_pct");
-  return META.rasgos.map((r) => r.col === "uso_conc" ? u2 / (M[iu] ** 2) : r.col === "cuota_interior" ? M[CR.indexOf("es_int")] : r.col === "cuota_exterior" ? M[CR.indexOf("es_ext")] : M[CR.indexOf(r.col)]);
-}
-function vectorJugador(Rj, club) {
-  const R = Rj.map((x) => x == null ? NaN : x);   // hueco = NaN (no 0): se rellena con el valor del club
-  const vc = vectorClub(club.S, club.W), M = mediasClub(club.S, club.W), iu = CR.indexOf("usg_pct");
-  return META.rasgos.map((r, k) => { let x = r.col === "uso_conc" ? (R[iu] / M[iu]) ** 2 : r.col === "cuota_interior" ? R[CR.indexOf("es_int")] : r.col === "cuota_exterior" ? R[CR.indexOf("es_ext")] : R[CR.indexOf(r.col)]; return (x == null || !isFinite(x)) ? vc[k] : x; });
-}
-const xClub = (v) => estandarizar(transformar(v), META.escala_club);
-const xJug = (v) => estandarizar(transformar(v), META.escala_jugador);
-function simular(dest, cand, m, sust) {
-  const n = CR.length, S = dest.S.slice(), W = dest.W.slice(), T = dest.min_total, iu = CR.indexOf("usg_pct"), ir = CR.indexOf("ritmo_rel");
-  const M = mediasClub(dest.S, dest.W), r = cand.R.map((x) => x == null ? NaN : x);
-  r[ir] = M[ir];
-  let Trest = T;
-  if (sust) {
-    const rs = sust.R.map((x) => x == null ? NaN : x), ws = sust.min;
+function simular(d, j, m, s) {
+  const n = CR.length, S = d.S.slice(), W = d.W.slice(), SQ = d.SQ.slice(), WQ = d.WQ.slice(), T = d.min_total, iu = CR.indexOf("usg_pct"), ir = CR.indexOf("ritmo_rel");
+  const r = j.R.map((x) => x == null ? NaN : x), q = j.Q.map((x) => x == null ? NaN : x); r[ir] = medias(d.S, d.W, n)[ir];
+  let Tr = T;
+  if (s) { const rs = s.R.map((x) => x == null ? NaN : x), qs = s.Q.map((x) => x == null ? NaN : x), ws = s.min;
     for (let i = 0; i < n; i++) if (isFinite(rs[i])) { S[i] -= ws * rs[i]; W[i] -= ws; }
     if (isFinite(rs[iu])) { S[n] -= ws * rs[iu] ** 2; W[n] -= ws; }
-    Trest = T - ws;
-  }
-  const f = (T - m) / Trest;
-  for (let i = 0; i <= n; i++) { S[i] *= f; W[i] *= f; }
+    qs.forEach((v, i) => { if (isFinite(v)) { SQ[i] -= ws * v; WQ[i] -= ws; } }); Tr = T - ws; }
+  const f = (T - m) / Tr;
+  for (let i = 0; i <= n; i++) { S[i] *= f; W[i] *= f; } for (let i = 0; i < SQ.length; i++) { SQ[i] *= f; WQ[i] *= f; }
   for (let i = 0; i < n; i++) if (isFinite(r[i])) { S[i] += m * r[i]; W[i] += m; }
   if (isFinite(r[iu])) { S[n] += m * r[iu] ** 2; W[n] += m; }
-  return vectorClub(S, W);
+  q.forEach((v, i) => { if (isFinite(v)) { SQ[i] += m * v; WQ[i] += m; } });
+  return xClub(S, W, SQ, WQ);
 }
-function percentil(q, v) {
-  if (!q || v == null) return null;
-  if (v <= q[0]) return 0; if (v >= q[100]) return 100;
-  let i = 0; while (q[i + 1] < v) i++;
-  return i + (v - q[i]) / Math.max(1e-9, q[i + 1] - q[i]);
-}
+function percentil(q, v) { if (!q || v == null) return null; if (v <= q[0]) return 0; if (v >= q[100]) return 100; let i = 0; while (q[i + 1] < v) i++; return i + (v - q[i]) / Math.max(1e-9, q[i + 1] - q[i]); }
 function js2(p, q) { const kl = (a, b) => a.reduce((s, x, i) => s + x * (Math.log2(x + 1e-12) - Math.log2(b[i] + 1e-12)), 0); const m = p.map((x, i) => (x + q[i]) / 2); return 0.5 * kl(p, m) + 0.5 * kl(q, m); }
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
-const xyzC = (c) => [c[st.red + "_x"], c[st.red + "_y"], c[st.red + "_z"]];
+const XYZ = (r) => [r.x, r.y, r.z];
+const eNom = (k) => META.estilos[k].nombre;
+const eId = (k) => META.estilos[k].id;
+const argmax = (v) => v.indexOf(Math.max(...v));
+function glyph(k, s = 12) { return `<span class="sw" style="background:${COL[k]};width:${s}px;height:${s}px"></span>`; }
+function chipE(k, p) { return `<span class="st">${glyph(k)}${esc(eNom(k))}${p != null ? ` <span class="muted num">${fmt(p, 2)}</span>` : ""}</span>`; }
+
+// ---------------------------------------------------------------- entidades
+function entidad(e, i) {
+  if (e.t === "club") {
+    const c = BY.get(`${e.k}:${e.temp}`); if (!c) return null;
+    return { i, t: "club", c, label: c.nombre_club, sub: `${LIGAS[c.liga]} ${c.temporada}${c.provisional ? " · provisional" : ""}`, xyz: XYZ(c), X: c.X, probs: c.probs, nivel: c.nivel, corto: `${c.nombre_club} ${LC[c.liga]} ${tC(c.temporada)}` };
+  }
+  const cs = CL.filter((c) => c.liga === e.k && (e.temp === "todas" ? !c.provisional : c.temporada === e.temp)); if (!cs.length) return null;
+  const m = (f) => [0, 1, 2].map((j) => cs.reduce((s, c) => s + f(c)[j], 0) / cs.length);
+  const probs = new Array(8).fill(0); cs.forEach((c) => probs[c.e] += 1 / cs.length);
+  return { i, t: "liga", cs, label: `${LIGAS[e.k]} (media)`, sub: `${e.temp === "todas" ? "2020-21 a 2025-26" : e.temp} · ${cs.length} clubes`, xyz: m(XYZ), X: META.rasgos.map((_, k) => cs.reduce((s, c) => s + c.X[k], 0) / cs.length), probs, nivel: cs.reduce((s, c) => s + c.nivel, 0) / cs.length, corto: `${LC[e.k]} ${e.temp === "todas" ? "20-26" : tC(e.temp)}` };
+}
+const ENTS = () => st.ents.map(entidad).filter(Boolean);
 
 // ---------------------------------------------------------------- carga
 async function cargar() {
   const [m, c, j] = await Promise.all(["estilos/meta.json", "estilos/clubes.json", "estilos/jugadores.json"].map((u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u); return r.json(); })));
-  META = m; CR = META.crudas; CLUBES = columnar(c); JUG = columnar(j);
-  BYCLAVE = new Map(CLUBES.map((x) => [x.clave, x]));
-  ROSTER = new Map();
-  JUG.forEach((x, i) => { x.i = i; if (!ROSTER.has(x.clave)) ROSTER.set(x.clave, []); ROSTER.get(x.clave).push(x); });
-  const alias = META.clubes_con_nombre.baskonia;
-  const temps = [...new Set(CLUBES.map((x) => x.temporada))].sort();
-  $("#temp").innerHTML = `<option value="todas">Todas</option>` + temps.map((t) => `<option value="${t}">${t}${META.temporadas_provisionales.includes(t) ? " (provisional)" : ""}</option>`).join("");
-  $("#temp").value = st.temp;
-  $("#dTemp").innerHTML = temps.map((t) => `<option value="${t}">${t}</option>`).join("");
-  $("#dTemp").value = st.dTemp;
-  $("#dComp").innerHTML = Object.entries(LIGAS).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
-  $("#dComp").value = st.dComp;
-  st.dClub = alias ? alias.claves.find((k) => k.startsWith(st.dComp + ":")) : null;
-  llenarClubes();
-  $("#ligas").innerHTML = Object.entries(LIGAS).map(([k, v]) => `<button class="chip" aria-pressed="true" data-liga="${k}">${v}<span class="n">${CLUBES.filter((x) => x.liga === k && x.temporada === st.temp).length}</span></button>`).join("");
-  // candidato de ejemplo: el jugador con más minutos de la EuroCup de la última temporada completa
-  const ej = JUG.filter((x) => x.liga === "eurocup" && x.temporada === "2025-26").sort((a, b) => b.min - a.min)[0];
-  if (ej) elegirJugador(ej.i, false);
+  META = m; CR = META.crudas; CL = cols(c); JG = cols(j);
+  BY = new Map(CL.map((x) => [x.clave, x]));
+  ROSTER = new Map(); JG.forEach((x, i) => { x.i = i; if (!ROSTER.has(x.clave)) ROSTER.set(x.clave, []); ROSTER.get(x.clave).push(x); });
+  TEMPS = [...new Set(CL.map((x) => x.temporada))].sort();
+  recuperar();
+  construirControles();
   enlazar();
   pintarTodo();
 }
-function llenarClubes() {
-  const lista = CLUBES.filter((x) => x.liga === st.dComp && x.temporada === st.dTemp).sort((a, b) => a.nombre_club.localeCompare(b.nombre_club));
-  $("#dClub").innerHTML = lista.map((x) => `<option value="${esc(x.clave_club)}">${esc(x.nombre_club)}</option>`).join("");
-  if (!lista.some((x) => x.clave_club === st.dClub)) {
-    const alias = META.clubes_con_nombre.baskonia, k = alias && alias.claves.find((c) => c.startsWith(st.dComp + ":"));
-    st.dClub = lista.some((x) => x.clave_club === k) ? k : (lista[0] && lista[0].clave_club);
-  }
-  $("#dClub").value = st.dClub;
-}
-const destino = () => BYCLAVE.get(`${st.dClub}:${st.dTemp}`);
 
 // ---------------------------------------------------------------- controles
+function seg(el, opts, val, cb) { el.innerHTML = opts.map(([v, t]) => `<button data-v="${v}" aria-pressed="${v === val}">${t}</button>`).join(""); el.onclick = (e) => { const b = e.target.closest("[data-v]"); if (!b) return; el.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); cb(b.dataset.v); }; }
+function construirControles() {
+  $("#fTemp").innerHTML = TEMPS.map((t) => `<button class="chip" data-t="${t}" aria-pressed="${st.temps.includes(t)}">${t}${META.temporadas_provisionales.includes(t) ? " *" : ""}</button>`).join("");
+  $("#fLiga").innerHTML = Object.entries(LIGAS).map(([k, v]) => `<button class="chip" data-l="${k}" aria-pressed="${st.ligas.includes(k)}">${v}</button>`).join("");
+  $("#fEst").innerHTML = META.estilos.map((s, k) => `<button class="chip" data-e="${k}" aria-pressed="${st.estilos.includes(k)}">${glyph(k)}${esc(s.nombre)}</button>`).join("");
+  $("#fPos").innerHTML = Object.entries(POS).map(([k, v]) => `<button class="chip" data-p="${k}" aria-pressed="${st.pos.includes(k)}">${v}</button>`).join("");
+  $("#nMin").value = st.nMin; $("#nMax").value = st.nMax; $("#minJ").value = st.minJ; $("#minJv").textContent = st.minJ; $("#aTam").value = st.aTam; $("#aOp").value = st.aOp; $("#cFormas").checked = st.formas;
+  Object.entries({ cClubes: "clubes", cJug: "jug", cCentros: "centros", cElip: "elip", cTray: "tray", cLigas: "ligas" }).forEach(([id, k]) => $("#" + id).checked = st.capas[k]);
+  seg($("#sColor"), [["estilo", "Estilo"], ["liga", "Liga"], ["nivel", "Nivel"], ["temporada", "Temporada"]], st.color, (v) => { st.color = v; cambio(); });
+  seg($("#sTam"), [["fijo", "Fijo"], ["nivel", "Nivel"], ["rob", "Robustez"]], st.tam, (v) => { st.tam = v; cambio(); });
+  seg($("#sEtiq"), [["no", "Ninguna"], ["sel", "Comparados"], ["todas", "Todos"]], st.etiq, (v) => { st.etiq = v; cambio(); });
+  $("#addLiga").innerHTML = Object.entries(LIGAS).map(([k, v]) => `<option value="${k}">${v}</option>`).join(""); $("#addLiga").value = "euroleague";
+  $("#addTemp").innerHTML = TEMPS.map((t) => `<option value="${t}">${t}</option>`).join("") + `<option value="todas">2020-21 a 2025-26</option>`; $("#addTemp").value = "2025-26";
+  llenarAddClub();
+  const ex = META.ejes.map((e, i) => `<b>Eje ${i + 1}</b>: ${e.positivo.length ? "más " + e.positivo.join(" y ") : ""}${e.positivo.length && e.negativo.length ? "; " : ""}${e.negativo.length ? "menos " + e.negativo.join(" y ") : ""}`).join(" · ");
+  $("#guia").innerHTML = `<p>Cada punto es un club en una competición y temporada (o un jugador). Dos puntos cerca juegan parecido a igual nivel; la distancia se mide en desviaciones típicas del perfil de estilo. Los ejes resumen los 13 rasgos: ${ex}.</p><p>El color es el estilo que asigna la red (la neurona ganadora de 8). Un club entre dos regiones tiene una asignación menos segura (p baja); míralo como una mezcla.</p>`;
+}
+function llenarAddClub() {
+  const l = $("#addLiga").value, t = $("#addTemp").value, tipo = $("#addTipo [aria-pressed=true]").dataset.t;
+  $("#addClub").hidden = tipo !== "club";
+  const lista = CL.filter((c) => c.liga === l && (t === "todas" ? c.temporada === "2025-26" : c.temporada === t)).sort((a, b) => a.nombre_club.localeCompare(b.nombre_club));
+  $("#addClub").innerHTML = lista.map((c) => `<option value="${esc(c.clave_club)}">${esc(c.nombre_club)}</option>`).join("");
+}
+function addEnt(e) { if (st.ents.some((x) => x.t === e.t && x.k === e.k && x.temp === e.temp)) return; if (st.ents.length >= 4) st.ents.pop(); st.ents.push(e); st.sust = ""; st.minutos = null; cambio(true); }
+function cambio(todo) { guardar(); if (todo) pintarTodo(); else { pintarMapa(); pintarLigas(); } }
 function enlazar() {
-  $("#redTabs").addEventListener("click", (e) => { const b = e.target.closest("[data-red]"); if (!b) return; st.red = b.dataset.red; $("#redTabs").querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", t === b)); st.ocultos.clear(); pintarTodo(); });
-  $("#colorTabs").addEventListener("click", (e) => { const b = e.target.closest("[data-color]"); if (!b) return; st.color = b.dataset.color; $("#colorTabs").querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", t === b)); pintarMapa(); });
-  $("#temp").addEventListener("change", (e) => { st.temp = e.target.value; pintarMapa(); });
-  $("#ligas").addEventListener("click", (e) => { const b = e.target.closest("[data-liga]"); if (!b) return; const l = b.dataset.liga; st.ligas.has(l) ? st.ligas.delete(l) : st.ligas.add(l); b.setAttribute("aria-pressed", st.ligas.has(l)); pintarMapa(); });
-  $("#leyenda").addEventListener("click", (e) => { const b = e.target.closest("[data-e]"); if (!b) return; const k = +b.dataset.e; st.ocultos.has(k) ? st.ocultos.delete(k) : st.ocultos.add(k); b.setAttribute("aria-pressed", !st.ocultos.has(k)); pintarMapa(); });
-  ["#verJug", "#verTray", "#verCentros"].forEach((s) => $(s).addEventListener("change", pintarMapa));
-  $("#dComp").addEventListener("change", (e) => { st.dComp = e.target.value; llenarClubes(); st.sust = ""; st.minutos = null; pintarTodo(); });
-  $("#dTemp").addEventListener("change", (e) => { st.dTemp = e.target.value; llenarClubes(); st.sust = ""; st.minutos = null; pintarTodo(); });
-  $("#dClub").addEventListener("change", (e) => { st.dClub = e.target.value; st.sust = ""; st.minutos = null; pintarTodo(); });
-  $("#buscar").addEventListener("input", sugerir);
-  $("#buscar").addEventListener("keydown", (e) => { if (e.key === "Enter") { const b = $("#sugs button"); if (b) b.click(); } if (e.key === "Escape") $("#sugs").hidden = true; });
-  $("#sugs").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (!b) return; elegirJugador(+b.dataset.i, true); });
-  $("#minutos").addEventListener("change", (e) => { st.minutos = Math.max(0, +e.target.value || 0); pintarFicha(); pintarMapa(); });
-  $("#minR").addEventListener("input", (e) => { st.minutos = +e.target.value; $("#minutos").value = st.minutos; pintarFicha(); pintarMapa(); });
-  $("#sust").addEventListener("change", (e) => { st.sust = e.target.value; st.minutos = null; pintarFicha(); pintarMapa(); });
+  const tog = (id, arr, key, conv = (x) => x) => $(id).addEventListener("click", (e) => { const b = e.target.closest(`[data-${key}]`); if (!b) return; const v = conv(b.dataset[key]); const a = st[arr]; const i = a.indexOf(v); i >= 0 ? a.splice(i, 1) : a.push(v); b.setAttribute("aria-pressed", a.includes(v)); cambio(); });
+  tog("#fTemp", "temps", "t"); tog("#fLiga", "ligas", "l"); tog("#fEst", "estilos", "e", Number); tog("#fPos", "pos", "p");
+  $("#tUlt").onclick = () => { st.temps = ["2025-26"]; construirControles(); cambio(); };
+  $("#tTodas").onclick = () => { st.temps = TEMPS.slice(); construirControles(); cambio(); };
+  $("#eTodos").onclick = () => { st.estilos = [0, 1, 2, 3, 4, 5, 6, 7]; construirControles(); cambio(); };
+  $("#eNing").onclick = () => { st.estilos = []; construirControles(); cambio(); };
+  $("#leyenda").onclick = (e) => { const b = e.target.closest("[data-e]"); if (!b) return; const k = +b.dataset.e, i = st.estilos.indexOf(k); i >= 0 ? st.estilos.splice(i, 1) : st.estilos.push(k); construirControles(); cambio(); };
+  $("#nMin").onchange = (e) => { st.nMin = +e.target.value; cambio(); }; $("#nMax").onchange = (e) => { st.nMax = +e.target.value; cambio(); };
+  $("#minJ").oninput = (e) => { st.minJ = +e.target.value; $("#minJv").textContent = st.minJ; cambio(); };
+  $("#aTam").oninput = (e) => { st.aTam = +e.target.value; cambio(); }; $("#aOp").oninput = (e) => { st.aOp = +e.target.value; cambio(); };
+  $("#cFormas").onchange = (e) => { st.formas = e.target.checked; cambio(); };
+  Object.entries({ cClubes: "clubes", cJug: "jug", cCentros: "centros", cElip: "elip", cTray: "tray", cLigas: "ligas" }).forEach(([id, k]) => $("#" + id).onchange = (e) => { st.capas[k] = e.target.checked; cambio(); });
+  $("#reset").onclick = () => { const ents = st.ents; st = JSON.parse(JSON.stringify(DEF)); st.ents = ents; construirControles(); cambio(true); Plotly.relayout("mapa", { "scene.camera": CAMS.persp }); };
+  $("#addTipo").onclick = (e) => { const b = e.target.closest("[data-t]"); if (!b) return; $("#addTipo").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); llenarAddClub(); };
+  $("#addLiga").onchange = llenarAddClub; $("#addTemp").onchange = llenarAddClub;
+  $("#addBtn").onclick = () => { const tipo = $("#addTipo [aria-pressed=true]").dataset.t, t = $("#addTemp").value; addEnt(tipo === "liga" ? { t: "liga", k: $("#addLiga").value, temp: t } : { t: "club", k: $("#addClub").value, temp: t === "todas" ? "2025-26" : t }); };
+  $("#ents").onclick = (e) => { const b = e.target.closest("[data-del]"); if (!b) return; st.ents.splice(+b.dataset.del, 1); st.sust = ""; cambio(true); };
+  $("#bClub").oninput = () => { const q = norm($("#bClub").value).trim(); const box = $("#sClub"); if (!q) { box.hidden = true; return; } const seen = new Set(); const res = CL.filter((c) => norm(c.nombre_club).includes(q) && !seen.has(c.clave) && seen.add(c.clave)).sort((a, b) => b.temporada.localeCompare(a.temporada)).slice(0, 25); box.innerHTML = res.map((c) => `<button data-c="${esc(c.clave)}"><span>${esc(c.nombre_club)}</span><small>${LC[c.liga]} ${tC(c.temporada)}</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados.</span>`; box.hidden = false; };
+  $("#sClub").onclick = (e) => { const b = e.target.closest("[data-c]"); if (!b) return; const c = BY.get(b.dataset.c); $("#sClub").hidden = true; $("#bClub").value = ""; if (!st.temps.includes(c.temporada)) st.temps.push(c.temporada); construirControles(); addEnt({ t: "club", k: c.clave_club, temp: c.temporada }); };
+  $("#bJug").oninput = () => { const q = norm($("#bJug").value).trim().split(/\s+/).filter(Boolean); const box = $("#sJug"); if (!q.length) { box.hidden = true; return; } const res = JG.filter((x) => { const n = norm(x.nombre); return q.every((p) => n.includes(p)); }).sort((a, b) => b.temporada.localeCompare(a.temporada) || b.min - a.min).slice(0, 30); box.innerHTML = res.map((x) => `<button data-i="${x.i}"><span>${esc(x.nombre)}</span><small>${LC[x.liga]} ${tC(x.temporada)} · ${esc(x.nombre_club)} · ${Math.round(x.min)}'</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados con ${META.min_jugador}+ minutos.</span>`; box.hidden = false; };
+  $("#sJug").onclick = (e) => { const b = e.target.closest("[data-i]"); if (!b) return; st.jug = +b.dataset.i; st.minutos = null; st.sust = ""; $("#bJug").value = JG[st.jug].nombre; $("#sJug").hidden = true; cambio(true); };
+  $("#ficha").addEventListener("click", (e) => { if (e.target.closest("#quitarJ")) { st.jug = null; $("#bJug").value = ""; cambio(true); } });
+  $("#ficha").addEventListener("change", (e) => { if (e.target.id === "minutos") { st.minutos = Math.max(0, +e.target.value || 0); pintarFicha(); pintarMapa(); } if (e.target.id === "sust") { st.sust = e.target.value; st.minutos = null; pintarFicha(); pintarMapa(); } });
+  $("#ficha").addEventListener("input", (e) => { if (e.target.id === "minR") { st.minutos = +e.target.value; pintarFicha(); pintarMapa(); } });
+  $("#cam").onclick = (e) => { const b = e.target.closest("[data-cam]"); if (!b) return; const c = b.dataset.cam; if (c === "rot") { girar(b); return; } $("#cam").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); Plotly.relayout("mapa", { "scene.camera": CAMS[c] }); };
+  $("#btnGuia").onclick = () => { const g = $("#guia"); g.hidden = !g.hidden; $("#btnGuia").setAttribute("aria-expanded", !g.hidden); };
+  $("#btnPdf").onclick = descargarPdf;
+  document.addEventListener("mousemove", (e) => { const t = e.target.closest?.("[data-tip]"), tip = $("#tip"); if (!t) { tip.hidden = true; return; } tip.innerHTML = t.dataset.tip; tip.hidden = false; tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + "px"; tip.style.top = (e.clientY + 14) + "px"; });
 }
-const norm = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-function sugerir() {
-  const q = norm($("#buscar").value).trim().split(/\s+/).filter(Boolean);
-  const box = $("#sugs");
-  if (!q.length) { box.hidden = true; return; }
-  const res = JUG.filter((x) => { const n = norm(x.nombre); return q.every((p) => n.includes(p)); }).sort((a, b) => b.temporada.localeCompare(a.temporada) || b.min - a.min).slice(0, 30);
-  box.innerHTML = res.length ? res.map((x) => `<button data-i="${x.i}"><span>${esc(x.nombre)}</span><small>${esc(LIGA_CORTA[x.liga])} ${tCorta(x.temporada)} · ${esc(x.nombre_club)} · ${Math.round(x.min)}'</small></button>`).join("") : `<span class="note" style="padding:6px 8px">Sin resultados con ${META.min_jugador}+ minutos.</span>`;
-  box.hidden = false;
+const CAMS = { persp: { eye: { x: 1.5, y: 1.4, z: 0.9 }, up: { x: 0, y: 0, z: 1 } }, xy: { eye: { x: 0, y: 0, z: 2.4 }, up: { x: 0, y: 1, z: 0 } }, xz: { eye: { x: 0, y: -2.4, z: 0 }, up: { x: 0, y: 0, z: 1 } }, yz: { eye: { x: 2.4, y: 0, z: 0 }, up: { x: 0, y: 0, z: 1 } } };
+let rotando = null;
+function girar(b) {
+  if (rotando) { cancelAnimationFrame(rotando); rotando = null; b.setAttribute("aria-pressed", "false"); return; }
+  b.setAttribute("aria-pressed", "true"); let a = 0;
+  const paso = () => { a += 0.006; Plotly.relayout("mapa", { "scene.camera.eye": { x: 2 * Math.cos(a), y: 2 * Math.sin(a), z: 0.8 } }); rotando = requestAnimationFrame(paso); };
+  rotando = requestAnimationFrame(paso);
 }
-function elegirJugador(i, pintar) {
-  st.jug = i; st.minutos = null; st.sust = "";
-  $("#buscar").value = JUG[i].nombre; $("#sugs").hidden = true;
-  if (pintar) { pintarFicha(); pintarMapa(); }
+async function descargarPdf() {
+  if (!DL) return; $("#pdfMsg").textContent = "Preparando…";
+  try { const r = await fetch("articulo/estilos_de_juego_baskonia.pdf"); if (!r.ok) throw new Error("no encontrado"); const blob = await r.blob();
+    await DL.save({ filename: "Estilos de juego - Baskonia (VaDE).pdf", data: blob }); $("#pdfMsg").textContent = "Descargado.";
+  } catch (e) { $("#pdfMsg").textContent = e && e.code === "declined" ? "" : "No se pudo descargar el PDF en esta vista."; }
 }
 
-// ---------------------------------------------------------------- encaje
-function encaje() {
-  const d = destino(), j = st.jug != null ? JUG[st.jug] : null;
-  if (!d || !j) return null;
-  const red = st.red, R = META.redes[red], ref = R.referencias;
-  const cj = BYCLAVE.get(j.clave);
-  const pd = redAplicar(red, xClub(vectorClub(d.S, d.W))), pj = redAplicar(red, xJug(vectorJugador(j.R, cj)));
-  const ed = pd.p.indexOf(Math.max(...pd.p)), ej = pj.p.indexOf(Math.max(...pj.p));
-  const Zd = xyzC(d), Zj = xyzC(j), Zcj = xyzC(cj);
-  const roster = (ROSTER.get(d.clave) || []).filter((x) => x.i !== j.i);
-  const w = roster.map((x) => x.min), W = w.reduce((a, b) => a + b, 0) || 1;
-  const cen = [0, 1, 2].map((k) => roster.reduce((s, x, i) => s + w[i] * xyzC(x)[k], 0) / W);
-  const disp = roster.reduce((s, x, i) => s + w[i] * dist(xyzC(x), cen), 0) / W;
-  const reparto = new Array(12).fill(0); roster.forEach((x, i) => reparto[x[red + "_e"]] += w[i] / W);
-  const cerca = roster.map((x) => ({ x, d: dist(xyzC(x), Zj) })).sort((a, b) => a.d - b.d).slice(0, 3);
-  const sust = st.sust ? roster.find((x) => String(x.i) === st.sust) : null;
-  const mDef = sust ? sust.min : j.min / cj.min_total * d.min_total;
-  const m = Math.min(st.minutos == null ? mDef : st.minutos, d.min_total * 0.6);
-  const ps = redAplicar(red, xClub(simular(d, j, m, sust)));
-  const es = ps.p.indexOf(Math.max(...ps.p));
-  return { d, j, cj, pd, pj, ed, ej, Zd, Zj, Zcj, ecj: cj[red + "_e"],
-    djc: dist(Zj, Zd), pjc: percentil(ref.jugador_su_club, dist(Zj, Zd)), dcc: dist(Zcj, Zd), pcc: percentil(ref.club_club, dist(Zcj, Zd)),
-    afin: pj.p[ed], sim: 1 - js2(pj.p, pd.p), roster, disp, pdisp: percentil(ref.dispersion, disp), reparto, cerca,
-    m, mDef, sust, ps, es, despl: dist(ps.xyz, Zd), pAct: ps.p[ed] };
-}
-function chip(k, p) { return `<span class="st">${glyph(k)}${eName(k)}${p != null ? ` <span class="muted">${fmt(p, 2)}</span>` : ""}</span>`; }
-function veredicto(e) {
-  // lectura en tres niveles a partir de percentiles y afinidad (los umbrales son orientativos)
-  const cerca = e.pjc != null && e.pjc <= 50, mismo = e.ej === e.ed || e.afin >= 0.2;
-  if (cerca && mismo) return ["pill-good", "Encaja con el estilo del club", "Está más cerca del club que la mitad de los jugadores lo están del suyo y comparte su estilo."];
-  if (e.pjc != null && e.pjc >= 80 && !mismo) return ["pill-bad", "Perfil alejado del estilo del club", "Está más lejos del club que el 80 % de los jugadores del suyo y su neurona dominante es otra."];
-  return ["pill-warn", "Encaje parcial", "Comparte parte del perfil; revisa qué rasgos le separan y quién perdería minutos."];
-}
-function pintarFicha() {
-  const e = encaje(), f = $("#ficha");
-  if (!e) { f.innerHTML = `<p class="note">Busca un jugador para ver su encaje.</p>`; $("#simCtl").hidden = true; return; }
-  $("#simCtl").hidden = false;
-  const opts = [`<option value="">Nadie (a prorrata)</option>`].concat(e.roster.sort((a, b) => b.min - a.min).map((x) => `<option value="${x.i}">${esc(x.nombre)} · ${Math.round(x.min)}'</option>`));
-  $("#sust").innerHTML = opts.join(""); $("#sust").value = st.sust;
-  $("#minutos").value = Math.round(e.m); $("#minR").max = Math.round(e.d.min_total * 0.6 / 10) * 10; $("#minR").value = Math.round(e.m);
-  const [cls, tit, txt] = veredicto(e);
-  const prov = (x) => x.provisional ? ` <span class="pill-warn">(provisional)</span>` : "";
-  const top = e.reparto.map((v, k) => [k, v]).filter((x) => x[1] > 0.005).sort((a, b) => b[1] - a[1]).slice(0, 4);
-  f.innerHTML = `
-    <div class="verdict"><b class="${cls}">${tit}</b>${txt}</div>
-    <div class="card">
-      <span class="label">Situación en el mapa · ${st.red.toUpperCase()}</span>
-      <div class="who">${glyph(e.ed, 14)}<b>${esc(e.d.nombre_club)}</b>${chip(e.ed, e.pd.p[e.ed])}<span class="meta">Destino · ${LIGAS[e.d.liga]} ${e.d.temporada}${prov(e.d)}</span></div>
-      <div class="who">${glyph(e.ej, 14)}<b>${esc(e.j.nombre)}</b>${chip(e.ej, e.pj.p[e.ej])}<span class="meta">${POS[e.j.pos3] || "posición s/d"} · ${esc(e.j.nombre_club)} · ${LIGA_CORTA[e.j.liga]} ${e.j.temporada} · ${Math.round(e.j.min)}' · datos ${e.j.fuente_norm}${prov(e.j)}</span></div>
-      <div class="who">${glyph(e.ecj, 14)}<b>${esc(e.cj.nombre_club)}</b>${chip(e.ecj, null)}<span class="meta">Su club actual</span></div>
-    </div>
-    <div class="card">
-      <span class="label">Distancias</span>
-      <dl class="kv">
-        <dt>Jugador → club destino</dt><dd>${fmt(e.djc)} · p${fmt(e.pjc, 0)}</dd>
-        <dt>Su club → club destino</dt><dd>${fmt(e.dcc)} · p${fmt(e.pcc, 0)}</dd>
-      </dl>
-      <p class="note" style="margin:0">El primer percentil compara con lo lejos que está cada jugador de su propio club; el segundo, con todas las parejas de clubes. Bajo = cerca.</p>
-    </div>
-    <div class="card">
-      <span class="label">Afinidad</span>
-      <dl class="kv">
-        <dt>Su salida en la neurona ${eName(e.ed)} del club</dt><dd>${fmt(e.afin)}</dd>
-        <dt>Similitud de las 12 salidas</dt><dd>${fmt(e.sim)}</dd>
-      </dl>
-      <div class="meter" aria-hidden="true"><i style="width:${Math.round(e.sim * 100)}%"></i></div>
-    </div>
-    <div class="card">
-      <span class="label">Plantilla del destino</span>
-      <dl class="kv">
-        <dt>Dispersión en el mapa (${e.roster.length} jugadores)</dt><dd>${fmt(e.disp)} · p${fmt(e.pdisp, 0)}</dd>
-        <dt>Minutos en el estilo del club</dt><dd>${pctTxt(e.reparto[e.ed])}</dd>
-        <dt>Minutos en el estilo del jugador</dt><dd>${pctTxt(e.reparto[e.ej])}</dd>
-      </dl>
-      <div class="chips">${top.map(([k, v]) => `<span class="st">${glyph(k)}${eName(k)} ${pctTxt(v)}</span>`).join("")}</div>
-      <p class="note" style="margin:0">Dispersión alta (percentil 80 o más) = plantilla «de una oveja de cada madre». Más parecidos al candidato: ${e.cerca.map((c) => `${esc(c.x.nombre)} (${eName(c.x[st.red + "_e"])}, ${fmt(c.d)})`).join(", ") || "–"}.</p>
-    </div>
-    <div class="card">
-      <span class="label">Simulación del fichaje</span>
-      <dl class="kv">
-        <dt>Minutos asignados</dt><dd>${Math.round(e.m)}'${e.sust ? "" : " a prorrata"}</dd>
-        <dt>Estilo del club con él</dt><dd>${eName(e.es)} · ${fmt(e.ps.p[e.es])}</dd>
-        <dt>Desplazamiento del club</dt><dd>${fmt(e.despl)}</dd>
-        <dt>Neurona ${eName(e.ed)}: antes → después</dt><dd>${fmt(e.pd.p[e.ed])} → ${fmt(e.pAct)}</dd>
-      </dl>
-      <p class="note" style="margin:0">${e.sust ? `Hereda los ${Math.round(e.sust.min)}' de ${esc(e.sust.nombre)}.` : `Sus minutos salen de todos a prorrata (por defecto, su cuota actual: ${Math.round(e.mDef)}').`} Toma el ritmo del club destino.</p>
-    </div>
-    <div class="card">
-      <span class="label">Nivel (capa aparte del estilo)</span>
-      <dl class="kv"><dt>Jugador / club destino (z con signo)</dt><dd>${fmt(e.j.nivel)} / ${fmt(e.d.nivel)}</dd></dl>
-    </div>`;
+// ---------------------------------------------------------------- resumen ejecutivo
+function pintarResumen() {
+  const ev = META.evaluacion, A = META.analisis || {};
+  const nTrain = CL.filter((c) => !c.provisional).length, nProv = CL.length - nTrain;
+  $("#kpis").innerHTML = [
+    [nTrain.toLocaleString("es-ES"), `clubes-temporada analizados (2020-21 a 2025-26) + ${nProv} de 2026-27`],
+    ["8", "estilos de juego, independientes del nivel"],
+    [pct(ev.salida_max_media), "seguridad media de la asignación (neurona ganadora)"],
+    [fmt(ev.estabilidad_mapa, 2), "estabilidad del mapa entre 5 redes (r de distancias)"],
+  ].map(([v, t]) => `<div class="kpi"><b class="num">${v}</b><span>${t}</span></div>`).join("");
+  const F = [];
+  if (A.barrido_k) F.push(`Los datos respaldan con claridad entre 4 y 6 estilos (BIC e ICL prefieren <b>${A.barrido_k.k_optimo_bic_rasgos}</b>; la estabilidad cae a partir de 6): 8 es una resolución más fina, útil para matizar, con fronteras menos estables. El estilo es un continuo.`);
+  if (A.neutralizacion) { const r2 = A.neutralizacion.r2_club, top = r2.map((v, k) => [v, k]).sort((a, b) => b[0] - a[0]).slice(0, 3); F.push(`El nivel explicaba el ${top.map(([v, k]) => `${Math.round(v * 100)} % de ${esc(META.rasgos[k].corto)}`).join(", ")} de los clubes. Neutralizado, el estilo sólo explica el ${pct(ev.eta2_nivel, 1)} del nivel (antes, ${pct(META.evaluacion_v1?.eta2_nivel ?? NaN, 0)}).`); }
+  if (A.exito) { const x = A.exito, sig = x.p_estilo_dado_nivel < 0.05, por = x.por_estilo.slice().sort((a, b) => b.resid - a.resid), id = (r) => META.estilos.findIndex((s) => s.id === r.estilo);
+    F.push(sig ? `A igual nivel, el estilo sí se asocia con ganar (η² parcial ${pct(x.eta2_parcial_estilo, 0)}, ${pv(x.p_estilo_dado_nivel)}): «${esc(eNom(id(por[0])))}» suma ${sg(por[0].resid)} σ de net rating y «${esc(eNom(id(por[por.length - 1])))}» resta ${fmt(Math.abs(por[por.length - 1].resid), 2)} σ. Parte es mecánica: pérdidas, rebote y tiros libres son factores de eficiencia.` : `A igual nivel, el estilo no se asocia con el net rating (${pv(x.p_estilo_dado_nivel)}): gana el nivel (r = ${fmt(x.r_nivel_net, 2)}).`); }
+  if (A.encaje) { const x = A.encaje["d_nivel~distancia"]; F.push(`Parecerse al estilo del nuevo club no mejora el rendimiento del jugador: en ${A.encaje.casos.toLocaleString("es-ES")} cambios de club, ${x.coef > 0 && x.p < 0.05 ? `los que llegan a clubes de estilo más distinto mejoran algo más (${sg(x.coef, 3)} de nivel por unidad de distancia, ${pv(x.p)}), compatible con fichajes de complementariedad` : `la distancia de estilo no predice su cambio de nivel (${pv(x.p)})`}.`); }
+  if (A.continuidad) F.push(`La continuidad sostiene la identidad: cada 10 puntos más de minutos que repiten en la plantilla multiplican por ${fmt(A.continuidad.or_mismo_estilo_por_10pp, 2)} la probabilidad de conservar el estilo (${pv(A.continuidad.p_logit)}). Baskonia está entre los clubes que más cambian de estilo de un año a otro.`);
+  $("#hallazgos").innerHTML = F.map((t, i) => `<li data-n="${i + 1}"><span>${t}</span></li>`).join("");
+  // Baskonia
+  const al = META.clubes_con_nombre.baskonia, claves = al ? al.claves : [];
+  const bk = (A.baskonia && A.baskonia.temporadas) || [];
+  const ult = (l) => [...bk].reverse().find((r) => r.liga === l && !r.provisional);
+  const lin = claves.map((k) => { const l = k.split(":")[0], r = ult(l); if (!r) return ""; const e = META.estilos.findIndex((s) => s.id === r.estilo);
+    return `<div style="display:grid;gap:4px"><span class="label">${LIGAS[l]} ${r.temporada}</span><div>${chipE(e, r.p)}</div><p class="note">Más parecidos: ${r.mas_parecidos.slice(0, 3).map((m) => `${esc(m.club)} (${LC[m.liga]}, ${fmt(m.d)})`).join(", ")}.</p></div>`; }).join("");
+  const tira = claves.map((k) => { const l = k.split(":")[0]; return `<div style="display:grid;gap:4px"><span class="note">${LIGAS[l]}</span><div class="strip">${TEMPS.map((t) => { const c = BY.get(`${k}:${t}`); return c ? `<div class="cell" data-tip="${esc(LIGAS[l])} ${t}: ${esc(eNom(c.e))} (p ${fmt(c.p)})${c.provisional ? " · provisional" : ""}"><i style="background:${COL[c.e]};${c.provisional ? "opacity:.45" : ""}"></i><small>${tC(t)}</small></div>` : ""; }).join("")}</div></div>`; }).join("");
+  $("#bask").innerHTML = `<h3>Saski Baskonia</h3>${lin}<span class="label">Trayectoria de estilos</span>${tira}`;
 }
 
 // ---------------------------------------------------------------- mapa
+const visible = (c) => st.ligas.includes(c.liga) && st.temps.includes(c.temporada) && st.estilos.includes(c.e) && c.nivel >= st.nMin && c.nivel <= st.nMax;
+function colorDe(r, tipo) {
+  if (st.color === "estilo") return COL[r.e];
+  if (st.color === "liga") return COL[Object.keys(LIGAS).indexOf(r.liga)];
+  if (st.color === "temporada") { const t = TEMPS.indexOf(r.temporada) / Math.max(1, TEMPS.length - 1); return `rgb(${Math.round(226 - t * 168)},${Math.round(200 - t * 158)},${Math.round(170 - t * 142)})`; }
+  return null;
+}
+function elipsoide(s, k) {
+  const C = s.cov_mapa, L = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  for (let i = 0; i < 3; i++) for (let j = 0; j <= i; j++) { let v = C[i][j]; for (let m = 0; m < j; m++) v -= L[i][m] * L[j][m]; L[i][j] = i === j ? Math.sqrt(Math.max(v, 1e-9)) : v / L[j][j]; }
+  const X = [], Y = [], Z = [];
+  for (let a = 0; a <= 12; a++) for (let b = 0; b < 20; b++) { const th = Math.PI * a / 12, ph = 2 * Math.PI * b / 20, u = [Math.sin(th) * Math.cos(ph), Math.sin(th) * Math.sin(ph), Math.cos(th)];
+    const p = [0, 1, 2].map((i) => s.centro[i] + L[i][0] * u[0] + L[i][1] * u[1] + L[i][2] * u[2]); X.push(p[0]); Y.push(p[1]); Z.push(p[2]); }
+  return { type: "mesh3d", x: X, y: Y, z: Z, alphahull: 0, opacity: 0.1, color: COL[k], hoverinfo: "skip", showlegend: false };
+}
 function pintarMapa() {
-  const red = st.red, R = META.redes[red], d = destino(), e = encaje();
-  $("#mapTitle").textContent = `Mapa 3D · ${red.toUpperCase()} · ${st.temp === "todas" ? "todas las temporadas" : st.temp}`;
-  const vis = CLUBES.filter((x) => st.ligas.has(x.liga) && (st.temp === "todas" || x.temporada === st.temp));
-  const hov = (x) => `<b>${esc(x.nombre_club)}</b><br>${LIGAS[x.liga]} ${x.temporada}${x.provisional ? " (provisional)" : ""}<br>${eName(x[red + "_e"])} · p ${fmt(x[red + "_p"])} · robustez ${pctTxt(x[red + "_rob"])}<br>nivel ${fmt(x.nivel)}`;
-  const traces = [];
-  const base = (arr, name, marker, extra = {}) => ({ type: "scatter3d", mode: "markers", name, x: arr.map((x) => x[red + "_x"]), y: arr.map((x) => x[red + "_y"]), z: arr.map((x) => x[red + "_z"]), text: arr.map(hov), hovertemplate: "%{text}<extra></extra>", marker, showlegend: false, ...extra });
-  if ($("#verJug").checked && st.temp !== "todas") {
-    const js = JUG.filter((x) => x.temporada === st.temp && st.ligas.has(x.liga) && !st.ocultos.has(x[red + "_e"]));
-    traces.push({ type: "scatter3d", mode: "markers", x: js.map((x) => x[red + "_x"]), y: js.map((x) => x[red + "_y"]), z: js.map((x) => x[red + "_z"]),
-      text: js.map((x) => `${esc(x.nombre)}<br>${esc(x.nombre_club)} · ${LIGA_CORTA[x.liga]}<br>${eName(x[red + "_e"])} · ${Math.round(x.min)}'`), hovertemplate: "%{text}<extra></extra>",
-      marker: { size: 2.2, color: js.map((x) => hue(x[red + "_e"])), opacity: 0.35 }, showlegend: false });
+  const ents = ENTS(), e = encaje();
+  $("#mapTitle").textContent = `Mapa 3D · ${st.temps.length === TEMPS.length ? "todas las temporadas" : st.temps.slice().sort().join(", ") || "sin temporadas"}`;
+  const hov = (c) => `<b>${esc(c.nombre_club)}</b><br>${LIGAS[c.liga]} ${c.temporada}${c.provisional ? " (provisional)" : ""}<br>${esc(eNom(c.e))} · p ${fmt(c.p)} · robustez ${pct(c.rob)}<br>nivel ${sg(c.nivel)}${c.net_z != null ? ` · net rating ${sg(c.net_z)} σ` : ""}<br><i>clic: añadir a la comparación</i>`;
+  const T = [];
+  const sz = (r) => st.tam === "nivel" ? Math.max(2, st.aTam * (1 + 0.45 * r.nivel)) : st.tam === "rob" ? Math.max(2, st.aTam * (0.5 + r.rob)) : st.aTam;
+  if (st.capas.clubes) {
+    const vis = CL.filter(visible);
+    if (st.color === "nivel") T.push({ type: "scatter3d", mode: st.etiq === "todas" ? "markers+text" : "markers", x: vis.map((c) => c.x), y: vis.map((c) => c.y), z: vis.map((c) => c.z), text: st.etiq === "todas" ? vis.map((c) => c.nombre_club) : vis.map(hov), hovertext: vis.map(hov), hoverinfo: "text", customdata: vis.map((c) => c.clave),
+      textfont: { size: 9, color: MUTED }, marker: { size: vis.map(sz), color: vis.map((c) => c.nivel), cmin: -1.5, cmax: 1.5, colorscale: [[0, "#efe0cd"], [0.5, "#b08a64"], [1, "#3a2a1c"]], symbol: st.formas ? vis.map((c) => SYM[c.e]) : "circle", opacity: st.aOp,
+        colorbar: { title: { text: "Nivel", font: { family: "IBM Plex Sans", color: INK, size: 12 } }, thickness: 10, len: 0.45, tickfont: { family: "IBM Plex Mono", color: MUTED, size: 10 } } }, showlegend: false });
+    else for (let k = 0; k < 8; k++) { const arr = vis.filter((c) => c.e === k); if (!arr.length) continue;
+      T.push({ type: "scatter3d", mode: st.etiq === "todas" ? "markers+text" : "markers", name: eNom(k), x: arr.map((c) => c.x), y: arr.map((c) => c.y), z: arr.map((c) => c.z), text: st.etiq === "todas" ? arr.map((c) => c.nombre_club) : arr.map(hov), hovertext: arr.map(hov), hoverinfo: "text", customdata: arr.map((c) => c.clave),
+        textfont: { size: 9, color: MUTED }, marker: { size: arr.map(sz), color: arr.map((c) => colorDe(c)), symbol: st.formas ? SYM[k] : "circle", opacity: st.aOp, line: { color: SURF, width: 0.5 } }, showlegend: false }); }
   }
-  if (st.color === "estilo") {
-    for (let k = 0; k < 12; k++) {
-      if (st.ocultos.has(k)) continue;
-      const arr = vis.filter((x) => x[red + "_e"] === k);
-      traces.push(base(arr, eName(k), { size: 4.5, color: hue(k), symbol: shape(k), opacity: 0.85, line: { color: SURF, width: 0.5 } }));
-    }
-  } else {
-    const arr = vis.filter((x) => !st.ocultos.has(x[red + "_e"]));
-    traces.push(base(arr, "nivel", { size: 4.5, color: arr.map((x) => x.nivel), cmin: -1.5, cmax: 1.5, colorscale: [[0, "#efe0cd"], [0.5, "#b08a64"], [1, "#3a2a1c"]],
-      symbol: arr.map((x) => shape(x[red + "_e"])), opacity: 0.9, colorbar: { title: { text: "Nivel", font: { family: "IBM Plex Sans", color: INK } }, thickness: 10, len: 0.5, tickfont: { family: "IBM Plex Mono", color: MUTED, size: 10 } } }));
+  if (st.capas.jug) {
+    const js = JG.filter((x) => st.temps.includes(x.temporada) && st.ligas.includes(x.liga) && st.estilos.includes(x.e) && st.pos.includes(x.pos3) && x.min >= st.minJ);
+    T.push({ type: "scatter3d", mode: "markers", x: js.map((x) => x.x), y: js.map((x) => x.y), z: js.map((x) => x.z), hovertext: js.map((x) => `${esc(x.nombre)}<br>${esc(x.nombre_club)} · ${LC[x.liga]} ${tC(x.temporada)}<br>${esc(eNom(x.e))} · ${Math.round(x.min)}'`), hoverinfo: "text",
+      marker: { size: 2.4, color: js.map((x) => st.color === "estilo" ? COL[x.e] : colorDe(x) || MUTED), opacity: 0.4 }, showlegend: false });
   }
-  if ($("#verCentros").checked) {
-    const est = R.estilos.filter((_, k) => !st.ocultos.has(k));
-    traces.push({ type: "scatter3d", mode: "markers+text", x: est.map((s) => s.x), y: est.map((s) => s.y), z: est.map((s) => s.z), text: est.map((s) => s.estilo),
-      textfont: { family: "IBM Plex Mono", size: 11, color: INK }, textposition: "top center", hovertext: est.map((s) => `${s.estilo}: ${s.descriptor}`), hoverinfo: "text",
-      marker: { size: 3, color: INK, symbol: "cross" }, showlegend: false });
-  }
-  if (d && $("#verTray").checked) {
-    const serie = CLUBES.filter((x) => x.clave_club === d.clave_club).sort((a, b) => a.temporada.localeCompare(b.temporada));
-    traces.push({ type: "scatter3d", mode: "lines+markers+text", x: serie.map((x) => x[red + "_x"]), y: serie.map((x) => x[red + "_y"]), z: serie.map((x) => x[red + "_z"]),
-      text: serie.map((x) => tCorta(x.temporada)), textposition: "middle right", textfont: { family: "IBM Plex Mono", size: 10, color: MUTED },
-      line: { color: "#6b4f38", width: 3, dash: "dash" }, marker: { size: 3, color: "#6b4f38" }, hovertext: serie.map(hov), hoverinfo: "text", showlegend: false });
-  }
+  if (st.capas.elip) META.estilos.forEach((s, k) => { if (st.estilos.includes(k)) T.push(elipsoide(s, k)); });
+  if (st.capas.centros) { const es = META.estilos.map((s, k) => ({ s, k })).filter((o) => st.estilos.includes(o.k));
+    T.push({ type: "scatter3d", mode: "markers+text", x: es.map((o) => o.s.centro[0]), y: es.map((o) => o.s.centro[1]), z: es.map((o) => o.s.centro[2]), text: es.map((o) => o.s.nombre), textposition: "top center", textfont: { family: "Barlow Condensed", size: 13, color: INK },
+      hovertext: es.map((o) => `<b>${esc(o.s.nombre)}</b><br>${esc(o.s.descriptor)}`), hoverinfo: "text", marker: { size: 6, color: es.map((o) => COL[o.k]), symbol: "diamond", line: { color: INK, width: 1 } }, showlegend: false }); }
+  if (st.capas.ligas) { const ls = Object.keys(LIGAS).filter((l) => st.ligas.includes(l)).map((l) => { const cs = CL.filter((c) => c.liga === l && st.temps.includes(c.temporada)); if (!cs.length) return null; return { l, p: [0, 1, 2].map((j) => cs.reduce((s, c) => s + XYZ(c)[j], 0) / cs.length) }; }).filter(Boolean);
+    T.push({ type: "scatter3d", mode: "markers+text", x: ls.map((o) => o.p[0]), y: ls.map((o) => o.p[1]), z: ls.map((o) => o.p[2]), text: ls.map((o) => LC[o.l]), textfont: { family: "IBM Plex Mono", size: 11, color: INK }, textposition: "bottom center", hovertext: ls.map((o) => `Centro de ${LIGAS[o.l]}`), hoverinfo: "text", marker: { size: 7, color: SURF, symbol: "square", line: { color: INK, width: 2 } }, showlegend: false }); }
+  if (st.capas.tray) ents.filter((x) => x.t === "club").forEach((x) => { const serie = CL.filter((c) => c.clave_club === x.c.clave_club).sort((a, b) => a.temporada.localeCompare(b.temporada));
+    T.push({ type: "scatter3d", mode: "lines+markers+text", x: serie.map((c) => c.x), y: serie.map((c) => c.y), z: serie.map((c) => c.z), text: serie.map((c) => tC(c.temporada)), textposition: "middle right", textfont: { family: "IBM Plex Mono", size: 9, color: MUTED },
+      line: { color: ENT_COL[x.i], width: 3, dash: "dash" }, marker: { size: 2.5, color: ENT_COL[x.i] }, hovertext: serie.map(hov), hoverinfo: "text", showlegend: false }); });
+  if (ents.length) T.push({ type: "scatter3d", mode: st.etiq === "no" ? "markers" : "markers+text", x: ents.map((x) => x.xyz[0]), y: ents.map((x) => x.xyz[1]), z: ents.map((x) => x.xyz[2]), text: ents.map((x) => `${ENT_LET[x.i]} · ${x.corto}`), textposition: "top center", textfont: { family: "IBM Plex Sans", size: 12, color: INK },
+    hovertext: ents.map((x) => `<b>${ENT_LET[x.i]} · ${esc(x.label)}</b><br>${esc(x.sub)}<br>${esc(eNom(argmax(x.probs)))}`), hoverinfo: "text", marker: { size: 12, color: ents.map((x) => ENT_COL[x.i]), symbol: ents.map((x) => x.t === "liga" ? "square" : "diamond"), line: { color: SURF, width: 2 } }, showlegend: false });
   if (e) {
-    const roster = e.roster;
-    traces.push({ type: "scatter3d", mode: "markers", x: roster.map((x) => x[red + "_x"]), y: roster.map((x) => x[red + "_y"]), z: roster.map((x) => x[red + "_z"]),
-      text: roster.map((x) => `${esc(x.nombre)} (plantilla destino)<br>${eName(x[red + "_e"])} · ${Math.round(x.min)}'`), hovertemplate: "%{text}<extra></extra>",
-      marker: { size: roster.map((x) => 3 + Math.sqrt(x.min) / 8), color: roster.map((x) => hue(x[red + "_e"])), symbol: "circle-open", line: { width: 2 } }, showlegend: false });
-    const pts = [[e.Zd, `${e.d.nombre_club} ${tCorta(e.d.temporada)}`, 11, "diamond"], [e.Zj, e.j.nombre, 9, "circle"], [e.Zcj, `${e.cj.nombre_club} ${tCorta(e.cj.temporada)}`, 7, "square"], [e.ps.xyz, "Destino con el fichaje", 8, "diamond-open"]];
-    traces.push({ type: "scatter3d", mode: "markers+text", x: pts.map((p) => p[0][0]), y: pts.map((p) => p[0][1]), z: pts.map((p) => p[0][2]), text: pts.map((p) => p[1]),
-      textposition: "top center", textfont: { family: "IBM Plex Sans", size: 12, color: INK }, hoverinfo: "text",
-      marker: { size: pts.map((p) => p[2]), symbol: pts.map((p) => p[3]), color: INK, line: { color: SURF, width: 1.5 } }, showlegend: false });
-    [[e.Zj, e.Zd], [e.Zcj, e.Zd], [e.Zd, e.ps.xyz]].forEach(([a, b], i) => traces.push({ type: "scatter3d", mode: "lines", x: [a[0], b[0]], y: [a[1], b[1]], z: [a[2], b[2]], hoverinfo: "skip",
-      line: { color: i === 2 ? "#6b4f38" : INK, width: i === 0 ? 4 : 2, dash: i === 1 ? "dot" : "solid" }, showlegend: false }));
+    const r = e.roster;
+    T.push({ type: "scatter3d", mode: "markers", x: r.map((x) => x.x), y: r.map((x) => x.y), z: r.map((x) => x.z), hovertext: r.map((x) => `${esc(x.nombre)} (plantilla de ${esc(e.d.nombre_club)})<br>${esc(eNom(x.e))} · ${Math.round(x.min)}'`), hoverinfo: "text", marker: { size: r.map((x) => 3 + Math.sqrt(x.min) / 8), color: r.map((x) => COL[x.e]), symbol: "circle-open", line: { width: 2 } }, showlegend: false });
+    const pts = [[e.Zj, `★ ${e.j.nombre}`, 10, "circle"], [e.Zcj, `${e.cj.nombre_club} ${tC(e.cj.temporada)}`, 7, "square-open"], [e.sim.xyz, `${ENT_LET[0]} con el fichaje`, 9, "diamond-open"]];
+    T.push({ type: "scatter3d", mode: "markers+text", x: pts.map((p) => p[0][0]), y: pts.map((p) => p[0][1]), z: pts.map((p) => p[0][2]), text: pts.map((p) => p[1]), textposition: "bottom center", textfont: { family: "IBM Plex Sans", size: 12, color: INK }, hoverinfo: "text", marker: { size: pts.map((p) => p[2]), symbol: pts.map((p) => p[3]), color: INK, line: { color: INK, width: 2 } }, showlegend: false });
+    [[e.Zj, e.Zd, 4, "solid"], [e.Zcj, e.Zd, 2, "dot"], [e.Zd, e.sim.xyz, 3, "solid"]].forEach(([a, b, w, d]) => T.push({ type: "scatter3d", mode: "lines", x: [a[0], b[0]], y: [a[1], b[1]], z: [a[2], b[2]], hoverinfo: "skip", line: { color: INK, width: w, dash: d }, showlegend: false }));
   }
-  const ax = (t) => ({ title: { text: t, font: { family: "Barlow Condensed", size: 14, color: MUTED } }, gridcolor: LINE, zerolinecolor: "#d6bf9f", showbackground: true, backgroundcolor: C4, tickfont: { family: "IBM Plex Mono", size: 10, color: MUTED } });
-  const layout = { uirevision: "mapa", margin: { l: 0, r: 0, t: 6, b: 0 }, paper_bgcolor: SURF, font: { family: "IBM Plex Sans", color: INK },
-    hoverlabel: { bgcolor: SURF, bordercolor: LINE, font: { family: "IBM Plex Sans", color: INK, size: 12 } },
-    scene: { xaxis: ax("Eje 1"), yaxis: ax("Eje 2"), zaxis: ax("Eje 3"), aspectmode: "data", camera: { eye: { x: 1.5, y: 1.4, z: 0.9 } } } };
-  Plotly.react("mapa", traces, layout, { displaylogo: false, responsive: true, modeBarButtonsToRemove: ["toImage"] });
-  $("#leyenda").innerHTML = R.estilos.map((s, k) => `<button class="lg" data-e="${k}" aria-pressed="${!st.ocultos.has(k)}" title="${esc(s.descriptor)}">${glyph(k)}${s.estilo}</button>`).join("");
+  const ax = (i) => { const e = META.ejes[i]; return { title: { text: `Eje ${i + 1}${e.positivo.length ? " · + " + e.positivo.join(", ") : ""}`, font: { family: "Barlow Condensed", size: 13, color: MUTED } }, gridcolor: LINE, zerolinecolor: "#d6bf9f", showbackground: true, backgroundcolor: C4, tickfont: { family: "IBM Plex Mono", size: 10, color: MUTED } }; };
+  Plotly.react("mapa", T, { uirevision: "mapa", margin: { l: 0, r: 0, t: 4, b: 0 }, paper_bgcolor: SURF, font: { family: "IBM Plex Sans", color: INK }, hoverlabel: { bgcolor: SURF, bordercolor: LINE, font: { family: "IBM Plex Sans", color: INK, size: 12 } },
+    scene: { xaxis: ax(0), yaxis: ax(1), zaxis: ax(2), aspectmode: "data", camera: CAMS.persp } }, { displaylogo: false, responsive: true, modeBarButtonsToRemove: ["toImage"] });
+  const div = $("#mapa"); if (!div._clic) { div._clic = true; div.on("plotly_click", (ev) => { const p = ev.points && ev.points[0]; const k = p && p.customdata; if (k && BY.has(k)) { const c = BY.get(k); addEnt({ t: "club", k: c.clave_club, temp: c.temporada }); } }); }
+  const n = (k) => CL.filter((c) => st.ligas.includes(c.liga) && st.temps.includes(c.temporada) && c.e === k).length;
+  $("#leyenda").innerHTML = META.estilos.map((s, k) => `<button class="lg" data-e="${k}" aria-pressed="${st.estilos.includes(k)}" data-tip="${esc(s.descriptor)}">${glyph(k)}${esc(s.nombre)} <span class="muted num">${n(k)}</span></button>`).join("");
 }
 
-// ---------------------------------------------------------------- tablas
+// ---------------------------------------------------------------- comparador y fichaje
+function pintarEnts() {
+  const ents = ENTS();
+  $("#ents").innerHTML = ents.map((x) => `<div class="ent"><span class="badge" style="background:${ENT_COL[x.i]}">${ENT_LET[x.i]}</span><div class="who"><b>${esc(x.label)}</b><small>${esc(x.sub)} · ${esc(eNom(argmax(x.probs)))}</small></div><button class="x" data-del="${x.i}" aria-label="Quitar ${esc(x.label)}">×</button></div>`).join("") || `<p class="note">Añade equipos o ligas para compararlos.</p>`;
+}
+function encaje() {
+  const ents = ENTS(), d = ents.find((x) => x.t === "club"); const j = st.jug != null ? JG[st.jug] : null;
+  if (!d || !j) return null;
+  const dc = d.c, cj = BY.get(j.clave), ref = META.referencias;
+  const pd = { p: dc.probs }, ed = dc.e, pj = red(xJug(j)), ej = argmax(pj.p);
+  const roster = (ROSTER.get(dc.clave) || []).filter((x) => x.i !== j.i), w = roster.map((x) => x.min), W = w.reduce((a, b) => a + b, 0) || 1;
+  const cen = [0, 1, 2].map((k) => roster.reduce((s, x, i) => s + w[i] * XYZ(x)[k], 0) / W);
+  const disp = roster.reduce((s, x, i) => s + w[i] * dist(XYZ(x), cen), 0) / W;
+  const rep = new Array(8).fill(0); roster.forEach((x, i) => rep[x.e] += w[i] / W);
+  const Zj = XYZ(j), Zd = XYZ(dc), Zcj = XYZ(cj);
+  const cerca = roster.map((x) => ({ x, d: dist(XYZ(x), Zj) })).sort((a, b) => a.d - b.d).slice(0, 3);
+  const sust = st.sust ? roster.find((x) => String(x.i) === st.sust) : null;
+  const mDef = sust ? sust.min : j.min / cj.min_total * dc.min_total, m = Math.min(st.minutos == null ? mDef : st.minutos, dc.min_total * 0.6);
+  const xs = simular(dc, j, m, sust), sim = red(xs.x), es = argmax(sim.p);
+  return { d: dc, j, cj, pd, ed, pj, ej, ecj: cj.e, Zj, Zd, Zcj, roster, disp, rep, cerca, sust, m, mDef, sim, es, Lsim: xs.L,
+    djc: dist(Zj, Zd), pjc: percentil(ref.jugador_su_club, dist(Zj, Zd)), dcc: dist(Zcj, Zd), pcc: percentil(ref.club_club, dist(Zcj, Zd)), pdisp: percentil(ref.dispersion, disp),
+    afin: pj.p[ed], simil: 1 - js2(pj.p, dc.probs), despl: dist(sim.xyz, Zd) };
+}
+function pintarFicha() {
+  const f = $("#ficha"), ents = ENTS();
+  if (st.jug == null) { f.innerHTML = `<p class="note">Sin jugador: el comparador muestra sólo equipos y ligas. Con un jugador verás su encaje en ${ents.find((x) => x.t === "club") ? `<b>${esc(ents.find((x) => x.t === "club").label)}</b>` : "el primer club de la lista"} y cómo cambiaría el club con él.</p>`; return; }
+  const e = encaje();
+  if (!e) { f.innerHTML = `<p class="note">Añade al menos un club a la comparación para ver el encaje.</p><button class="btn ghost sm" id="quitarJ">Quitar jugador</button>`; return; }
+  const cerca = e.pjc != null && e.pjc <= 50, mismo = e.ej === e.ed || e.afin >= 0.2;
+  const [cls, tit, txt] = cerca && mismo ? ["good", "Encaja con el estilo del club", "Más cerca del club que la mitad de los jugadores lo están del suyo, y comparte su estilo."] : (e.pjc >= 80 && !mismo ? ["bad", "Perfil alejado del estilo del club", "Más lejos del club que el 80 % de los jugadores del suyo, y con otro estilo dominante."] : ["warn", "Encaje parcial", "Comparte parte del perfil: revisa qué rasgos le separan y quién perdería minutos."]);
+  const opts = [`<option value="">Nadie (a prorrata)</option>`].concat(e.roster.slice().sort((a, b) => b.min - a.min).map((x) => `<option value="${x.i}" ${String(x.i) === st.sust ? "selected" : ""}>${esc(x.nombre)} · ${Math.round(x.min)}'</option>`));
+  const top = e.rep.map((v, k) => [k, v]).filter((x) => x[1] > 0.04).sort((a, b) => b[1] - a[1]).slice(0, 4);
+  f.innerHTML = `<div class="verdict"><b class="${cls}">${tit}</b>${txt}</div>
+    <dl class="kv">
+      <dt>${esc(e.j.nombre)} (${LC[e.j.liga]} ${tC(e.j.temporada)})</dt><dd>${esc(eNom(e.ej))} · ${fmt(e.pj.p[e.ej])}</dd>
+      <dt>Destino: ${esc(e.d.nombre_club)} ${LC[e.d.liga]} ${tC(e.d.temporada)}</dt><dd>${esc(eNom(e.ed))} · ${fmt(e.d.p)}</dd>
+      <dt>Su club: ${esc(e.cj.nombre_club)}</dt><dd>${esc(eNom(e.ecj))}</dd>
+      <dt>Distancia jugador → destino</dt><dd>${fmt(e.djc)} · p${fmt(e.pjc, 0)}</dd>
+      <dt>Distancia su club → destino</dt><dd>${fmt(e.dcc)} · p${fmt(e.pcc, 0)}</dd>
+      <dt>Afinidad con el estilo del destino</dt><dd>${fmt(e.afin)}</dd>
+      <dt>Similitud de las 8 salidas</dt><dd>${fmt(e.simil)}</dd>
+    </dl>
+    <div class="meter" aria-hidden="true"><i style="width:${Math.round(e.simil * 100)}%"></i></div>
+    <div class="card"><span class="label">Plantilla del destino</span>
+      <dl class="kv"><dt>Dispersión (${e.roster.length} jugadores)</dt><dd>${fmt(e.disp)} · p${fmt(e.pdisp, 0)}</dd><dt>Minutos en su estilo / en el del jugador</dt><dd>${pct(e.rep[e.ed])} / ${pct(e.rep[e.ej])}</dd></dl>
+      <div class="chips">${top.map(([k, v]) => `<span class="st">${glyph(k)}${esc(eNom(k))} ${pct(v)}</span>`).join("")}</div>
+      <p class="note">Percentil de dispersión 80 o más = plantilla «de una oveja de cada madre». Más parecidos al jugador: ${e.cerca.map((c) => `${esc(c.x.nombre)} (${fmt(c.d)})`).join(", ") || "–"}.</p></div>
+    <div class="card"><span class="label">Simulación del fichaje</span>
+      <div class="row2"><label class="note">Minutos<input type="number" id="minutos" min="0" step="10" value="${Math.round(e.m)}"></label><label class="note">Hereda los de<select id="sust">${opts.join("")}</select></label></div>
+      <input type="range" id="minR" min="0" max="${Math.round(e.d.min_total * 0.6 / 10) * 10}" step="10" value="${Math.round(e.m)}" aria-label="Minutos en el club">
+      <dl class="kv"><dt>Estilo del club con él</dt><dd>${esc(eNom(e.es))} · ${fmt(e.sim.p[e.es])}</dd><dt>Desplazamiento del club</dt><dd>${fmt(e.despl)}</dd><dt>Neurona «${esc(eNom(e.ed))}»</dt><dd>${fmt(e.d.probs[e.ed])} → ${fmt(e.sim.p[e.ed])}</dd><dt>Nivel del club</dt><dd>${sg(e.d.nivel)} → ${sg(e.Lsim)}</dd></dl>
+      <p class="note">${e.sust ? `Hereda los ${Math.round(e.sust.min)}' de ${esc(e.sust.nombre)}.` : `Sus minutos salen de todos a prorrata (por defecto, su cuota actual: ${Math.round(e.mDef)}').`} Toma el ritmo del club destino.</p></div>
+    <button class="btn ghost sm" id="quitarJ">Quitar jugador</button>`;
+}
+function itemsComp() {
+  const ents = ENTS().map((x) => ({ ...x, letra: ENT_LET[x.i], color: ENT_COL[x.i] }));
+  const e = encaje();
+  if (st.jug != null) { const j = JG[st.jug], r = red(xJug(j)); ents.push({ letra: "★", color: INK, label: j.nombre, corto: `${j.nombre} ${LC[j.liga]} ${tC(j.temporada)}`, xyz: XYZ(j), X: xJug(j), probs: r.p, t: "jug" }); if (e) ents.push({ letra: "+", color: "#a15c07", label: `${e.d.nombre_club} con el fichaje`, corto: `${e.d.nombre_club} + fichaje`, xyz: e.sim.xyz, X: simular(e.d, e.j, e.m, e.sust).x, probs: e.sim.p, t: "sim" }); }
+  return ents;
+}
+function pintarComparacion() {
+  const it = itemsComp();
+  if (!it.length) { ["#gPerfil", "#gReparto", "#gDist"].forEach((s) => $(s).innerHTML = `<p class="note">Añade equipos, ligas o un jugador.</p>`); return; }
+  // perfil: dot plot de 13 rasgos
+  const W = 640, rh = 26, x0 = 150, x1 = W - 16, H = META.rasgos.length * rh + 34, lim = 2.5, X = (v) => x0 + (Math.max(-lim, Math.min(lim, v)) + lim) / (2 * lim) * (x1 - x0);
+  let g = "";
+  [-2, -1, 0, 1, 2].forEach((v) => g += `<line x1="${X(v)}" x2="${X(v)}" y1="18" y2="${H - 8}" stroke="${v === 0 ? "#d6bf9f" : LINE}" stroke-width="${v === 0 ? 1.5 : 1}"/><text x="${X(v)}" y="12" text-anchor="middle" font-size="10" font-family="IBM Plex Mono" fill="${MUTED}">${v > 0 ? "+" + v : v}σ</text>`);
+  META.rasgos.forEach((r, k) => { const y = 24 + k * rh;
+    g += `<text x="${x0 - 8}" y="${y + 12}" text-anchor="end" font-size="12" font-family="IBM Plex Sans" fill="${INK}">${esc(r.corto)}</text><line x1="${x0}" x2="${x1}" y1="${y + 8}" y2="${y + 8}" stroke="${LINE}" stroke-dasharray="2 3"/>`;
+    it.forEach((o, n) => { const cy = y + 8 + (n - (it.length - 1) / 2) * 3.2, v = o.X[k];
+      g += `<g data-tip="${esc(o.label)} · ${esc(r.nombre)}: ${sg(v)} σ"><circle cx="${X(v)}" cy="${cy}" r="8" fill="${o.color}" stroke="${SURF}" stroke-width="2"/><text x="${X(v)}" y="${cy + 3.5}" text-anchor="middle" font-size="9.5" font-weight="700" font-family="Barlow Condensed" fill="${SURF}">${o.letra}</text></g>`; }); });
+  $("#gPerfil").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Perfil de estilo comparado">${g}</svg>` + `<div class="chips">${it.map((o) => `<span class="st"><span class="badge" style="background:${o.color};width:16px;height:16px;font-size:10px">${o.letra}</span>${esc(o.corto)}</span>`).join("")}</div>`;
+  // reparto: barras apiladas
+  const W2 = 520, bh = 22, H2 = it.length * (bh + 12) + 6, L2 = 64;
+  let h = "";
+  it.forEach((o, n) => { const y = 4 + n * (bh + 12); let x = L2; h += `<text x="${L2 - 8}" y="${y + 15}" text-anchor="end" font-size="12" font-weight="700" font-family="Barlow Condensed" fill="${INK}">${o.letra}</text>`;
+    o.probs.forEach((p, k) => { const w = p * (W2 - L2 - 4); if (w < 0.5) return; h += `<rect x="${x}" y="${y}" width="${Math.max(0, w - 2)}" height="${bh}" rx="3" fill="${COL[k]}" data-tip="${esc(o.label)} · ${esc(eNom(k))}: ${pct(p)}"/>`; if (w > 34) h += `<text x="${x + w / 2 - 1}" y="${y + 15}" text-anchor="middle" font-size="10.5" font-family="IBM Plex Mono" fill="${SURF}" pointer-events="none">${Math.round(p * 100)}</text>`; x += w; }); });
+  $("#gReparto").innerHTML = `<svg viewBox="0 0 ${W2} ${H2}" role="img" aria-label="Reparto entre estilos">${h}</svg>`;
+  // distancias
+  $("#gDist").innerHTML = `<table><thead><tr><th></th>${it.map((o) => `<th style="text-align:right">${o.letra}</th>`).join("")}</tr></thead><tbody>${it.map((a) => `<tr><td><b>${a.letra}</b> <span class="note">${esc(a.corto)}</span></td>${it.map((b) => { if (a === b) return `<td class="n muted">·</td>`; const d = dist(a.xyz, b.xyz); return `<td class="n" data-tip="${esc(a.label)} ↔ ${esc(b.label)}">${fmt(d)} <span class="muted">p${fmt(percentil(META.referencias.club_club, d), 0)}</span></td>`; }).join("")}</tr>`).join("")}</tbody></table>`;
+}
+
+// ---------------------------------------------------------------- ligas y temporadas
+function pintarLigas() {
+  const ligas = Object.keys(LIGAS).filter((l) => st.ligas.includes(l));
+  let t = `<table class="heat"><thead><tr><th>Liga</th>${META.estilos.map((s, k) => `<th style="text-align:center" data-tip="${esc(s.nombre)}">${glyph(k, 10)}</th>`).join("")}<th style="text-align:right">n</th></tr></thead><tbody>`;
+  ligas.forEach((l) => { const cs = CL.filter((c) => c.liga === l && st.temps.includes(c.temporada)); if (!cs.length) return;
+    t += `<tr><td>${LIGAS[l]}</td>${META.estilos.map((s, k) => { const v = cs.filter((c) => c.e === k).length / cs.length, a = Math.min(1, v / 0.5); return `<td class="h" style="background:rgba(107,79,56,${(a * 0.85).toFixed(2)});color:${a > 0.5 ? SURF : INK}" data-tip="${LIGAS[l]} · ${esc(s.nombre)}: ${pct(v)} (${cs.filter((c) => c.e === k).length} clubes)">${v ? Math.round(v * 100) : "·"}</td>`; }).join("")}<td class="n">${cs.length}</td></tr>`; });
+  $("#gHeat").innerHTML = t + `</tbody></table><p class="note">Columnas: ${META.estilos.map((s, k) => `${glyph(k, 9)} ${esc(s.nombre)}`).join(" · ")}</p>`;
+  const W = 520, bh = 20, H = TEMPS.length * (bh + 10) + 6, L = 60; let g = "";
+  TEMPS.forEach((tp, n) => { const cs = CL.filter((c) => c.temporada === tp && st.ligas.includes(c.liga)); if (!cs.length) return; const y = 4 + n * (bh + 10); let x = L;
+    g += `<text x="${L - 8}" y="${y + 14}" text-anchor="end" font-size="11" font-family="IBM Plex Mono" fill="${INK}">${tp}${META.temporadas_provisionales.includes(tp) ? "*" : ""}</text>`;
+    for (let k = 0; k < 8; k++) { const v = cs.filter((c) => c.e === k).length / cs.length, w = v * (W - L - 4); if (w < 0.5) continue; g += `<rect x="${x}" y="${y}" width="${Math.max(0, w - 2)}" height="${bh}" rx="3" fill="${COL[k]}" data-tip="${tp} · ${esc(eNom(k))}: ${pct(v)}"/>`; x += w; } });
+  $("#gTemp").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Estilo por temporada">${g}</svg><p class="note">* 2026-27 provisional (pocas jornadas, sólo algoritmo A).</p>`;
+}
+
+// ---------------------------------------------------------------- Baskonia, estilos, hallazgos, modelo
+function pintarTrayectoria() {
+  const bk = (META.analisis && META.analisis.baskonia && META.analisis.baskonia.temporadas) || [];
+  $("#trTabla").innerHTML = `<thead><tr><th>Temporada</th><th>Competición</th><th>Estilo</th><th style="text-align:right">Nivel</th><th>Clubes más parecidos esa temporada</th><th style="text-align:right">Cambio respecto al año anterior</th></tr></thead><tbody>` +
+    bk.map((r) => { const k = META.estilos.findIndex((s) => s.id === r.estilo); return `<tr><td class="num">${r.temporada}${r.provisional ? "*" : ""}</td><td>${LIGAS[r.liga]}</td><td>${chipE(k, r.p)}</td><td class="n">${sg(r.nivel)}</td><td class="note">${r.mas_parecidos.slice(0, 3).map((m) => `${esc(m.club)} (${LC[m.liga]}, ${fmt(m.d)})`).join(", ")}</td><td class="n">${r.desplazamiento != null ? `${fmt(r.desplazamiento)} <span class="muted">p${fmt(r.pct_desplazamiento, 0)}</span>` : "–"}</td></tr>`; }).join("") + `</tbody>`;
+}
 function barras(s) {
-  const W = 300, rh = 13, H = META.rasgos.length * rh + 6, x0 = 104, w2 = (W - x0 - 8) / 2, mid = x0 + w2, lim = 2;
+  const W = 320, rh = 14, H = META.rasgos.length * rh + 6, x0 = 96, w2 = (W - x0 - 8) / 2, mid = x0 + w2, lim = 2;
   let g = `<line x1="${mid}" x2="${mid}" y1="2" y2="${H - 2}" stroke="${LINE}"/>`;
-  META.rasgos.forEach((r, i) => {
-    const v = Math.max(-lim, Math.min(lim, s["z_" + r.col] || 0)), y = 3 + i * rh, w = Math.abs(v) / lim * w2;
-    g += `<text x="${x0 - 6}" y="${y + 9}" text-anchor="end" font-size="10" font-family="IBM Plex Sans" fill="${MUTED}">${esc(r.corto)}</text>`;
-    g += `<rect x="${v < 0 ? mid - w : mid}" y="${y + 2}" width="${Math.max(1, w)}" height="${rh - 4}" rx="2" fill="${Math.abs(v) >= 0.5 ? "#6b4f38" : "#d6bf9f"}"><title>${esc(r.nombre)}: ${fmt(s["z_" + r.col])} desv. típ.</title></rect>`;
-  });
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Perfil del estilo ${s.estilo}">${g}</svg>`;
+  META.rasgos.forEach((r, i) => { const v = Math.max(-lim, Math.min(lim, s.perfil[i] || 0)), y = 3 + i * rh, w = Math.abs(v) / lim * w2;
+    g += `<text x="${x0 - 6}" y="${y + 10}" text-anchor="end" font-size="10" font-family="IBM Plex Sans" fill="${MUTED}">${esc(r.corto)}</text><rect x="${v < 0 ? mid - w : mid}" y="${y + 2}" width="${Math.max(1, w)}" height="${rh - 4}" rx="2" fill="${Math.abs(v) >= 0.5 ? "#6b4f38" : "#d6bf9f"}" data-tip="${esc(r.nombre)}: ${sg(s.perfil[i])} σ"/>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Perfil de ${esc(s.nombre)}">${g}</svg>`;
 }
 function pintarEstilos() {
-  const R = META.redes[st.red];
-  $("#estTitle").textContent = `Los 12 estilos · ${st.red.toUpperCase()}`;
-  const ligaTop = (s) => { const e = Object.entries(s.ligas || {}).sort((a, b) => b[1] - a[1])[0]; return e ? `${LIGA_CORTA[e[0]]} ${Math.round(e[1] * 100)} %` : "–"; };
-  $("#estilos").innerHTML = R.estilos.map((s, k) => `<div class="sc"><header><span class="st">${glyph(k, 14)}${s.estilo}</span><span class="note">${s.clubes} clubes · nivel ${fmt(s.nivel_medio)} · ${ligaTop(s)}</span></header>
-    <div class="d">${esc(s.descriptor)}</div>${barras(s)}<div class="ex">${esc(s.ejemplos)}</div></div>`).join("");
+  $("#estilos").innerHTML = META.estilos.map((s, k) => { const ligas = Object.entries(s.ligas).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([l, v]) => `${LC[l]} ${Math.round(v * 100)} %`).join(" · ");
+    return `<div class="sc" style="--c:${COL[k]}"><header><h3>${esc(s.nombre)}</h3><span class="note num">${s.id}</span></header><p class="res">${esc(s.resumen || s.descriptor)}</p><p class="note">${s.clubes} clubes · nivel medio ${sg(s.nivel_medio)} · ${ligas}</p>${barras(s)}<p class="ex">${esc(s.ejemplos)}</p></div>`; }).join("");
 }
-function pintarTrayectoria() {
-  const d = destino(); if (!d) return;
-  const alias = Object.values(META.clubes_con_nombre).find((a) => a.claves.includes(d.clave_club));
-  const claves = alias ? alias.claves : [d.clave_club];
-  const red = st.red, temps = [...new Set(CLUBES.filter((x) => claves.includes(x.clave_club)).map((x) => x.temporada))].sort();
-  $("#trTitle").textContent = `Estilo de ${alias ? alias.nombre : d.nombre_club} por temporada · ${red.toUpperCase()}`;
-  const celda = (x) => x ? `<td>${chip(x[red + "_e"], x[red + "_p"])} <span class="note">rob. ${pctTxt(x[red + "_rob"])} · nivel ${fmt(x.nivel)}${x.provisional ? " · provisional" : ""}</span><div class="note">${esc(META.redes[red].estilos[x[red + "_e"]].descriptor)}</div></td>` : `<td class="muted">–</td>`;
-  $("#trTabla").innerHTML = `<thead><tr><th>Temporada</th>${claves.map((c) => `<th>${LIGAS[c.split(":")[0]]}</th>`).join("")}</tr></thead><tbody>` +
-    temps.map((t) => `<tr><td class="num" style="text-align:left">${t}</td>${claves.map((c) => celda(BYCLAVE.get(`${c}:${t}`))).join("")}</tr>`).join("") + `</tbody>`;
+function pintarHallazgos() {
+  const A = META.analisis; if (!A) { $("#facts").innerHTML = `<p class="note">Sin análisis.</p>`; return; }
+  const out = [];
+  if (A.exito) { const x = A.exito, por = x.por_estilo.slice().sort((a, b) => a.estilo.localeCompare(b.estilo)), W = 360, rh = 24, H = por.length * rh + 30, x0 = 120, lim = 0.8, X = (v) => x0 + (Math.max(-lim, Math.min(lim, v)) + lim) / (2 * lim) * (W - x0 - 10);
+    let g = `<line x1="${X(0)}" x2="${X(0)}" y1="4" y2="${H - 18}" stroke="#d6bf9f"/><text x="${X(-lim)}" y="${H - 4}" font-size="10" font-family="IBM Plex Mono" fill="${MUTED}">−${lim}σ</text><text x="${X(lim)}" y="${H - 4}" text-anchor="end" font-size="10" font-family="IBM Plex Mono" fill="${MUTED}">+${lim}σ</text>`;
+    por.forEach((r, i) => { const k = META.estilos.findIndex((s) => s.id === r.estilo), y = 8 + i * rh;
+      g += `<text x="${x0 - 6}" y="${y + 9}" text-anchor="end" font-size="11" font-family="IBM Plex Sans" fill="${INK}">${esc(eNom(k))}</text><line x1="${X(r.resid - r.ic95)}" x2="${X(r.resid + r.ic95)}" y1="${y + 5}" y2="${y + 5}" stroke="${COL[k]}" stroke-width="2"/><circle cx="${X(r.resid)}" cy="${y + 5}" r="5" fill="${COL[k]}" stroke="${SURF}" stroke-width="2" data-tip="${esc(eNom(k))}: ${sg(r.resid, 3)} σ (±${fmt(r.ic95, 3)}), n = ${r.n}"/>`; });
+    out.push(`<div class="fact"><h3>¿Hay estilos ganadores a igual nivel?</h3><p>Net rating del equipo (z en su liga y temporada) que no explica el nivel, por estilo, con IC 95 %. ${x.p_estilo_dado_nivel < 0.05 ? `El estilo añade información (F = ${fmt(x.f_estilo_dado_nivel, 1)}, ${pv(x.p_estilo_dado_nivel)}, η² parcial ${pct(x.eta2_parcial_estilo, 1)}).` : `El estilo no añade información significativa (${pv(x.p_estilo_dado_nivel)}).`} El nivel sólo explica el ${pct(x.r2_nivel, 0)} del net rating. Parte de la asociación es mecánica: pérdidas, rebote y tiros libres son factores de eficiencia.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net rating residual por estilo">${g}</svg></div>`); }
+  if (A.encaje) { const x = A.encaje, t = x.por_tercil, a = x["d_nivel~distancia"], b = x["d_cuota~distancia"];
+    out.push(`<div class="fact"><h3>¿Rinde mejor quien encaja en el estilo?</h3><p>${x.casos.toLocaleString("es-ES")} jugadores que cambiaron de club entre temporadas consecutivas (300+ minutos en ambas). Distancia entre su estilo y el del club al que llegan (antes de llegar) frente al cambio en su nivel normalizado y en su cuota de minutos, con controles de nivel inicial, edad, cambio de liga y nivel del club.</p>
+      <div class="tablebox"><table><thead><tr><th>Encaje</th><th style="text-align:right">n</th><th style="text-align:right">Distancia</th><th style="text-align:right">Δ nivel</th><th style="text-align:right">Δ cuota de minutos</th></tr></thead><tbody>${t.map((r) => `<tr><td>${r.tercil}</td><td class="n">${r.n}</td><td class="n">${fmt(r.distancia)}</td><td class="n">${sg(r.d_nivel, 3)}</td><td class="n">${sg(r.d_cuota * 100, 1)} pp</td></tr>`).join("")}</tbody></table></div>
+      <p class="note">Regresión: Δ nivel ${sg(a.coef, 3)} por unidad de distancia (IC 95 % ${sg(a.ic95[0], 3)} a ${sg(a.ic95[1], 3)}, ${pv(a.p)}); Δ cuota ${sg(b.coef * 100, 2)} pp (${pv(b.p)}). La relación no es monótona por terciles: el parecido de estilo no predice el rendimiento; sirve para decidir entre reforzar la identidad o cubrir un rasgo que falta.</p></div>`); }
+  if (A.continuidad) { const x = A.continuidad;
+    out.push(`<div class="fact"><h3>Plantilla que repite, estilo que se mantiene</h3><p>${x.parejas} pares de temporadas consecutivas del mismo club. Correlación de Spearman entre continuidad y desplazamiento en el mapa: ${fmt(x.spearman_continuidad_desplazamiento, 2)} (${pv(x.p_spearman)}).</p>
+      <div class="tablebox"><table><thead><tr><th>Continuidad</th><th style="text-align:right">Media</th><th style="text-align:right">Desplazamiento</th><th style="text-align:right">Mismo estilo</th></tr></thead><tbody>${x.por_cuartil.map((r) => `<tr><td>${r.cuartil}</td><td class="n">${pct(r.continuidad)}</td><td class="n">${fmt(r.desplazamiento)}</td><td class="n">${pct(r.mismo_estilo)}</td></tr>`).join("")}</tbody></table></div></div>`); }
+  if (A.barrido_k) { const x = A.barrido_k, W = 360, H = 150, L = 34, ks = x.k, Xk = (k) => L + (k - ks[0]) / (ks[ks.length - 1] - ks[0]) * (W - L - 10), mm = (a) => [Math.min(...a), Math.max(...a)];
+    const linea = (arr, color, dash) => { const [lo, hi] = mm(arr); return `<polyline fill="none" stroke="${color}" stroke-width="2" ${dash ? 'stroke-dasharray="4 3"' : ""} points="${arr.map((v, i) => `${Xk(ks[i])},${10 + (1 - (v - lo) / Math.max(1e-9, hi - lo)) * (H - 40)}`).join(" ")}"/>`; };
+    let g = `<line x1="${Xk(8)}" x2="${Xk(8)}" y1="6" y2="${H - 26}" stroke="#d6bf9f" stroke-dasharray="3 3"/>` + ks.map((k) => `<text x="${Xk(k)}" y="${H - 10}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono" fill="${MUTED}">${k}</text>`).join("") + linea(x.estabilidad_kmedias, "#6b4f38") + linea(x.bic_rasgos.map((v) => -v), "#2a78d6", true);
+    out.push(`<div class="fact"><h3>¿Cuántos estilos hay?</h3><p>Barrido de K = 2 a 14 sobre los 13 rasgos sin nivel: BIC (azul, invertido: arriba = mejor) y estabilidad por submuestreo de k-medias (marrón). Óptimo BIC: ${x.k_optimo_bic_rasgos}; ICL: ${x.k_optimo_icl_rasgos}; estabilidad con K = 8: ${fmt(x.estabilidad_kmedias[ks.indexOf(8)], 2)}.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Barrido de número de estilos">${g}</svg></div>`); }
+  if (A.ligas) { const x = A.ligas, D = x.distancias, cerca = (l) => Object.entries(D[l] || {}).filter(([m]) => m !== l).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([m, d]) => `${LIGAS[m]} (${fmt(d)})`).join(", ");
+    out.push(`<div class="fact"><h3>Ligas: cuánto se parecen</h3><p>Estilo × liga: χ² = ${fmt(x.chi2_liga, 0)}, V de Cramér = ${fmt(x.v_cramer_liga, 2)}, ${pv(x.p_liga)}. Estilo × temporada: V = ${fmt(x.v_cramer_temporada, 2)}${x.p_temporada < 0.05 ? ` (${pv(x.p_temporada)})` : ` (sin tendencia significativa, ${pv(x.p_temporada)})`}.</p><p>Más parecidas en estilo a la EuroLeague: ${cerca("euroleague")}. A la Liga Endesa: ${cerca("acb")}.</p></div>`); }
+  $("#facts").innerHTML = out.join("");
 }
-function pintarComparativa() {
-  const filas = META.comparativa;
-  const v = (x) => typeof x === "number" ? fmt(x, Math.abs(x) >= 100 ? 0 : 3) : esc(x ?? "–");
-  $("#comp").innerHTML = `<thead><tr><th>Métrica</th><th style="text-align:right">IDEC</th><th style="text-align:right">VaDE</th></tr></thead><tbody>` +
-    filas.map((f) => `<tr><td>${esc(f.nombre)}</td><td class="num${f.mejor === "idec" ? " win" : ""}">${v(f.idec)}</td><td class="num${f.mejor === "vade" ? " win" : ""}">${v(f.vade)}</td></tr>`).join("") + `</tbody>`;
-  const gana = (r) => filas.filter((f) => f.mejor === r).length;
-  const km = META.referencia_kmedias;
-  $("#compNota").textContent = `Gana IDEC en ${gana("idec")} métricas y VaDE en ${gana("vade")} (celda resaltada = mejor). Referencia sin red: k-medias con 12 grupos sobre los 13 rasgos da una silueta de ${fmt(km.silueta_rasgos, 3)}. Las pruebas de permutación entre estilos son optimistas por construcción (los grupos salen de los mismos datos); la replicabilidad entre periodos no lo es.`;
+function pintarModelo() {
+  const v = META.evaluacion, i = META.evaluacion_idec, o = META.evaluacion_v1 || {};
+  const filas = [["Estilos (neuronas de salida)", 8, 8, 12, null, 0], ["Nivel explicado por el estilo (η²)", v.eta2_nivel, i.eta2_nivel, o.eta2_nivel, "min", 3], ["Estilo ligado a la liga (NMI)", v.nmi_estilo_liga, i.nmi_estilo_liga, o.nmi_estilo_liga, "min", 3],
+    ["Seguridad media de la asignación", v.salida_max_media, i.salida_max_media, o.salida_max_media, "max", 2], ["Estabilidad de los estilos entre semillas (ARI)", v.ari_semillas_medio, i.ari_semillas_medio, o.ari_semillas_medio, "max", 2],
+    ["Estabilidad del mapa entre semillas", v.estabilidad_mapa, i.estabilidad_mapa, o.estabilidad_mapa, "max", 3], ["Reproducibilidad temporal (ARI)", v.ari_temporal_reserva, i.ari_temporal_reserva, o.ari_temporal_reserva, "max", 2],
+    ["Robustez al reparto de minutos", v.robustez_reparto_minutos, i.robustez_reparto_minutos, o.robustez_reparto_minutos, "max", 2], ["Fidelidad del mapa (trustworthiness)", v.trustworthiness_k10, i.trustworthiness_k10, o.trustworthiness_k10, "max", 3],
+    ["Silueta en los 13 rasgos", v.silueta_rasgos, i.silueta_rasgos, o.silueta_rasgos, "max", 3], ["Replicabilidad de perfiles (r)", v.replicabilidad?.correlacion_media, i.replicabilidad?.correlacion_media, o.replicabilidad?.correlacion_media, "max", 2],
+    ["Persistencia del estilo al año siguiente", v.persistencia?.mismo_estilo, i.persistencia?.mismo_estilo, o.persistencia?.mismo_estilo, null, 2]];
+  $("#tModelo").innerHTML = `<thead><tr><th>Métrica (997 clubes)</th><th style="text-align:right">VaDE v2</th><th style="text-align:right">IDEC v2</th><th style="text-align:right">VaDE v1</th></tr></thead><tbody>` +
+    filas.map(([n, a, b, c, best, d]) => { const w = best && a != null && b != null ? ((best === "max" ? a >= b : a <= b) ? 0 : 1) : -1; return `<tr><td>${n}</td><td class="n${w === 0 ? " win" : ""}">${fmt(a, d)}</td><td class="n${w === 1 ? " win" : ""}">${fmt(b, d)}</td><td class="n muted">${fmt(c, d)}</td></tr>`; }).join("") + `</tbody>`;
 }
-function pintarTodo() { pintarFicha(); pintarMapa(); pintarEstilos(); pintarTrayectoria(); pintarComparativa(); }
+function pintarTodo() { pintarResumen(); pintarEnts(); pintarFicha(); pintarMapa(); pintarComparacion(); pintarLigas(); pintarTrayectoria(); pintarEstilos(); pintarHallazgos(); pintarModelo(); }
 
 cargar().catch((err) => { $("#mapa").innerHTML = `<div class="loading">No se pudieron cargar los datos del mapa (${esc(err.message)}). Recarga la página.</div>`; });
+if (window.claude && window.claude.use) window.claude.use("downloads").then((d) => { if (d) { DL = d; $("#btnPdf").hidden = false; } }).catch(() => {});
 </script>

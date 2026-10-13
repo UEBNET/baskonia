@@ -155,11 +155,23 @@ def evaluar(red, redes: list, ari: np.ndarray, cj: Conjunto, red_reserva=None, s
     out["ari_semillas_medio"] = float(off.mean()) if len(off) else None
     out["ari_semillas_min"] = float(off.min()) if len(off) else None
     E = [predecir(r, X)[0].argmax(1) for r in redes]
+    # centralidad del modelo final: ARI medio con cada semilla (sin contarse a sí mismo si es una de ellas)
+    af = [adjusted_rand_score(lab, e_) for e_ in E]
+    af = [a for a in af if a < 0.9999]
+    out["ari_final_semillas_medio"] = float(np.mean(af)) if af else None
     # estabilidad del MAPA: correlación entre las distancias club-club de cada pareja de semillas
     iu = np.triu_indices(len(X), 1)
     D = [np.sqrt(((Zs[:, None] - Zs[None]) ** 2).sum(-1))[iu] for Zs in (predecir(r, X)[1] for r in redes)]
     cm = [np.corrcoef(D[i], D[j])[0, 1] for i in range(len(D)) for j in range(i + 1, len(D))]
     out["estabilidad_mapa"] = float(np.mean(cm)) if cm else None
+    # neutralidad del nivel: parte de la varianza del nivel que explican los estilos (η²) y relación
+    # de cada eje del mapa con el nivel
+    niv = cj.clubes.loc[sel, "nivel"].to_numpy(float)
+    medias_n = np.array([niv[lab == a].mean() if (lab == a).any() else 0 for a in range(C.N_ESTILOS)])
+    out["eta2_nivel"] = float(sum((lab == a).sum() * (medias_n[a] - niv.mean()) ** 2 for a in range(C.N_ESTILOS))
+                              / ((niv - niv.mean()) ** 2).sum())
+    out["corr_ejes_nivel"] = [float(np.corrcoef(Z[:, j], niv)[0, 1]) for j in range(Z.shape[1])]
+    out["nivel_por_estilo"] = medias_n.round(3).tolist()
     ligas = cj.clubes.loc[sel, "liga"].to_numpy()
     out["nmi_estilo_liga"] = float(normalized_mutual_info_score(ligas, lab))
     out["pureza_liga_media"] = float(np.mean([pd.Series(ligas[lab == a]).value_counts(normalize=True).iloc[0]
@@ -214,6 +226,7 @@ COMPARATIVA = [
     ("silueta_rasgos", "Silueta en los 13 rasgos", "max"),
     ("davies_bouldin_mapa", "Davies-Bouldin en el mapa (menos es mejor)", "min"),
     ("ari_semillas_medio", "Estabilidad de los estilos entre semillas (ARI medio)", "max"),
+    ("ari_final_semillas_medio", "Centralidad del modelo final (ARI medio con las semillas)", "max"),
     ("estabilidad_mapa", "Estabilidad del mapa entre semillas (r de distancias)", "max"),
     ("robustez_reparto_minutos", "Robustez al reparto de minutos", "max"),
     ("ari_temporal_reserva", "Reproducibilidad temporal (ARI, red sin 2024-26)", "max"),
@@ -221,7 +234,8 @@ COMPARATIVA = [
     ("continuidad_k10", "Fidelidad del mapa: continuidad", "max"),
     ("spearman_distancias", "Correlación distancias mapa / perfil", "max"),
     ("r2_medio", "R² medio de reconstrucción", "max"),
-    ("nmi_estilo_liga", "Información compartida estilo-liga (NMI; alto = estilos ligados a una liga)", None),
+    ("eta2_nivel", "Nivel explicado por el estilo (η²; menos = estilo independiente del nivel)", "min"),
+    ("nmi_estilo_liga", "Información compartida estilo-liga (NMI; menos = estilos que cruzan ligas)", "min"),
 ]
 
 

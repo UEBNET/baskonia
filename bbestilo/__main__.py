@@ -4,7 +4,9 @@
     python -m bbestilo evaluar                  # reevalúa las redes guardadas sin reentrenar
     python -m bbestilo encaje --jugador "Nombre" [--club baskonia] [--competicion euroleague]
                               [--temporada 2025-26] [--red idec|vade|ambas] [--minutos 600] [--sustituye "Nombre"]
+    python -m bbestilo analisis                 # análisis complementarios (data/modelos/estilos/analisis.json)
     python -m bbestilo exportar                 # JSON del mapa 3D (artifact/estilos/)
+    python -m bbestilo articulo [--fuentes D]   # artículo científico en PDF (docs/articulo/)
 
 Resultados en data/modelos/estilos/ (ver docs/estilos_de_juego.md).
 """
@@ -13,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -32,13 +35,19 @@ def entrenar(redes: list[str], semillas: list[int]) -> None:
     cj = datos.construir()
     print(f"Datos: {len(cj.clubes)} clubes-competición-temporada ({(~cj.clubes.provisional).sum()} de entrenamiento), "
           f"{len(cj.jugadores)} filas jugador-equipo", flush=True)
-    _json({"rasgos": [r.__dict__ for r in C.RASGOS], "nivel": C.NIVEL, "escala_club": cj.escala_club.a_dict(),
-           "escala_jugador": cj.escala_jugador.a_dict(), "temporadas_entreno": C.TEMPORADAS_ENTRENO,
+    _json({"rasgos": [r.__dict__ for r in C.RASGOS], "nivel": C.NIVEL, "n_estilos": C.N_ESTILOS,
+           "neutralizar_nivel": C.NEUTRALIZAR_NIVEL, "escala_club": cj.escala_club.a_dict(),
+           "escala_jugador": cj.escala_jugador.a_dict(), "nivel_club": cj.nivel_club.a_dict(),
+           "nivel_jugador": cj.nivel_jugador.a_dict(),
+           "neutral_club": cj.neutral_club.a_dict() if cj.neutral_club else None,
+           "neutral_jugador": cj.neutral_jugador.a_dict() if cj.neutral_jugador else None,
+           "temporadas_entreno": C.TEMPORADAS_ENTRENO,
            "temporadas_provisionales": C.TEMPORADAS_PROVISIONALES}, C.DIR_SALIDA / "escalas.json")
     for tipo in redes:
         print(f"[{tipo}] {len(semillas)} semillas…", flush=True)
-        i, todas, ari, regs = E.entrenar_semillas(tipo, cj, semillas, log=lambda m: print(m, flush=True))
-        red, semilla = todas[i], semillas[i]
+        res = E.entrenar_semillas(tipo, cj, semillas, log=lambda m: print(m, flush=True))
+        todas, red, i = res["redes"], res["final"], res["indice_base"]
+        semilla = semillas[i]
         print(f"[{tipo}] semilla final {semilla}; red de reserva (sin 2024-25 ni 2025-26)…", flush=True)
         M = E.muestras(cj, C.TEMPORADAS_ENTRENO[:4], semilla)
         reserva = E.ENTRENADORES[tipo](M, semilla)
@@ -49,7 +58,9 @@ def entrenar(redes: list[str], semillas: list[int]) -> None:
         E.guardar(reserva, tipo, semilla, d / "reserva.pt")
         for s, r in zip(semillas, todas):
             E.guardar(r, tipo, s, d / "semillas" / f"{s}.pt")
-        _json({"registro": regs[i]}, d / "registro.json")
+        _json({"registro": res["registro_final"], "consenso": res.get("consenso")}, d / "registro.json")
+        if "etiquetas_consenso" in res:
+            np.save(d / "consenso.npy", res["etiquetas_consenso"])
         print(f"[{tipo}] entrenada ({time.time() - t0:.0f} s)", flush=True)
     evaluar(redes, cj)
     print(f"Hecho en {time.time() - t0:.0f} s", flush=True)
@@ -107,9 +118,21 @@ def main(argv=None):
     f.add_argument("--red", default="ambas", choices=["idec", "vade", "ambas"])
     f.add_argument("--minutos", type=float, default=None, help="minutos que tendría en el club (por defecto, su cuota actual)")
     f.add_argument("--sustituye", default=None, help="jugador de la plantilla cuyos minutos hereda")
+    sub.add_parser("analisis", help="análisis complementarios (K, nivel, éxito, encaje, continuidad, ligas, Baskonia)")
+    ar = sub.add_parser("articulo", help="artículo científico en PDF (docs/articulo/)")
+    ar.add_argument("--fuentes", default=None, help="carpeta con fuentes woff/ttf y fuentes.css (opcional)")
     x = sub.add_parser("exportar", help="datos del mapa 3D para el Artifact")
     x.add_argument("--salida", default=str(C.RAIZ / "artifact" / "estilos"))
+    for sp in (e, v):
+        sp.add_argument("--estilos", type=int, default=C.N_ESTILOS, help="neuronas de salida (v2: 8; v1: 12)")
+        sp.add_argument("--sin-neutralizar", action="store_true", help="no quitar el nivel (como la v1)")
+        sp.add_argument("--salida", default=None, help="carpeta de resultados (por defecto data/modelos/estilos)")
     args = ap.parse_args(argv)
+    if args.orden in ("entrenar", "evaluar"):
+        C.N_ESTILOS = args.estilos
+        C.NEUTRALIZAR_NIVEL = not args.sin_neutralizar
+        if args.salida:
+            C.DIR_SALIDA = Path(args.salida).resolve()
 
     if args.orden == "entrenar":
         entrenar(args.redes, args.semillas)
@@ -120,6 +143,13 @@ def main(argv=None):
         redes = ["idec", "vade"] if args.red == "ambas" else [args.red]
         print(encaje.informe(args.jugador, args.club, args.competicion, args.temporada, redes,
                              args.minutos, args.sustituye, args.temporada_jugador))
+    elif args.orden == "analisis":
+        from . import analisis
+        analisis.main()
+        print("escrito", C.DIR_SALIDA / "analisis.json")
+    elif args.orden == "articulo":
+        from . import articulo
+        print("escrito", articulo.construir(Path(args.fuentes) if args.fuentes else None))
     elif args.orden == "exportar":
         from . import exportar
         exportar.main(args.salida)

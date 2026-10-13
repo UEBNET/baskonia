@@ -25,7 +25,7 @@ import pandas as pd
 import torch
 
 from . import config as C
-from .datos import Conjunto, _I, agregar, club_alias, construir
+from .datos import Conjunto, _I, _media_w, agregar, club_alias, construir
 from .entrenar import cargar
 from .resultados import nombre_estilo
 
@@ -91,23 +91,24 @@ def _pred(red, X):
 
 
 def simular(cj: Conjunto, clave_destino: str, idx_jugador: int, minutos: float | None = None,
-            sustituye: int | None = None) -> tuple[np.ndarray, float]:
-    """Vector de estilo (sin transformar) del club destino con el fichaje. `sustituye` es el índice
-    en cj.jugadores del jugador cuyos minutos hereda. Devuelve (vector, minutos asignados)."""
-    R, w, idx = cj.plantillas[clave_destino]
-    Rj, wj, idxj = cj.plantillas[cj.jugadores.at[idx_jugador, "clave"]]
-    fila = Rj[list(idxj).index(idx_jugador)].copy()
+            sustituye: int | None = None) -> tuple[np.ndarray, np.ndarray, float]:
+    """Vector de estilo (sin transformar) y medias de calidad del club destino con el fichaje.
+    `sustituye` es el índice en cj.jugadores del jugador cuyos minutos hereda.
+    Devuelve (vector, medias de calidad para el nivel, minutos asignados)."""
+    R, w, idx, Q = cj.plantillas[clave_destino]
+    Rj, wj, idxj, Qj = cj.plantillas[cj.jugadores.at[idx_jugador, "clave"]]
+    k = list(idxj).index(idx_jugador)
+    fila, q = Rj[k].copy(), Qj[k]
     ritmo_club = agregar(R, w[None])[0][C.COLS.index("ritmo_rel")]
     fila[_I["ritmo_rel"]] = ritmo_club
     T = w.sum()
     w = w.copy()
     if minutos is None:
-        cuota = wj[list(idxj).index(idx_jugador)] / wj.sum()
-        minutos = float(w[list(idx).index(sustituye)]) if sustituye is not None else float(cuota * T)
+        minutos = float(w[list(idx).index(sustituye)]) if sustituye is not None else float(wj[k] / wj.sum() * T)
     if sustituye is not None:
         w[list(idx).index(sustituye)] = 0.0
-    w = w * (T - minutos) / w.sum()
-    return agregar(np.vstack([R, fila]), np.append(w, minutos)[None])[0], minutos
+    W = np.append(w * (T - minutos) / w.sum(), minutos)[None]
+    return agregar(np.vstack([R, fila]), W)[0], _media_w(np.vstack([Q, q]), W)[0], minutos
 
 
 def encaje(red, cj: Conjunto, clave_destino: str, idx_jugador: int, minutos: float | None = None,
@@ -134,8 +135,8 @@ def encaje(red, cj: Conjunto, clave_destino: str, idx_jugador: int, minutos: flo
     dist_comp = np.linalg.norm(Zp - Zj[0], axis=1)
     cerca = pl.assign(d=dist_comp, estilo=[nombre_estilo(k) for k in Pp.argmax(1)]).sort_values("d").head(3)
     # simulación
-    V, mins = simular(cj, clave_destino, idx_jugador, minutos, sustituye)
-    Ps, Zs = _pred(red, cj.x_club(V[None]))
+    V, Qm, mins = simular(cj, clave_destino, idx_jugador, minutos, sustituye)
+    Ps, Zs = _pred(red, cj.x_club(V[None], Qm[None]))
     return {
         "red": red.nombre,
         "club": {"clave": clave_destino, "nombre": C_.at[clave_destino, "nombre_club"], "estilo": nombre_estilo(e_dest),

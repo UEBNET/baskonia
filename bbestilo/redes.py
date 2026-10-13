@@ -13,9 +13,10 @@ Red 1 · IDEC (Improved Deep Embedded Clustering; Xie et al. 2016, Guo et al. 20
 
 Red 2 · VaDE (Variational Deep Embedding; Jiang et al. 2017)
     codificador 13-64-32 → (μ_z, log σ²_z) en 3D · decodificador 3-32-64-13 con varianza común ·
-    previa de mezcla de 12 gaussianas p(z) = Σ π_k N(μ_k, diag σ²_k). La capa de salida da la
-    probabilidad a posteriori de cada componente: γ_k = π_k N(z | μ_k, σ²_k) / Σ_j π_j N(z | μ_j, σ²_j).
-    Probabilística: cada club es una nube (μ_z, σ_z); cada estilo, un elipsoide con su propia forma.
+    previa de mezcla de k gaussianas p(z) = Σ π_k N(μ_k, Σ_k) con covarianza completa (v2) o diagonal
+    (v1). La capa de salida da la probabilidad a posteriori de cada componente:
+    γ_k = π_k N(z | μ_k, Σ_k) / Σ_j π_j N(z | μ_j, Σ_j).
+    Probabilística: cada club es una nube (μ_z, σ_z); cada estilo, un elipsoide con su forma y orientación.
 
 Las activaciones ocultas son GELU (aproximación tanh), reproducible exactamente en el navegador.
 """
@@ -103,11 +104,15 @@ class RedIDEC(_Mapa):
 
 
 class RedVaDE(_Mapa):
+    """VaDE con previa de mezcla de k gaussianas en el mapa. covarianza = "completa" (v2: elipsoides con
+    orientación libre, matriz 3×3 por estilo) o "diag" (v1: ejes alineados). Los parámetros de la mezcla
+    no se aprenden por gradiente: los reestima un paso M tras cada época (ver entrenar._paso_m)."""
     nombre = "VaDE"
 
-    def __init__(self, d_in: int, ocultas=(64, 32), d_lat: int = 3, k: int = 12):
+    def __init__(self, d_in: int, ocultas=(64, 32), d_lat: int = 3, k: int = 12, covarianza: str = "diag"):
         super().__init__()
-        self.config = {"d_in": d_in, "ocultas": list(ocultas), "d_lat": d_lat, "k": k}
+        self.config = {"d_in": d_in, "ocultas": list(ocultas), "d_lat": d_lat, "k": k, "covarianza": covarianza}
+        self.covarianza = covarianza
         self.tronco = _mlp([d_in, *ocultas], activa_final=True)
         self.cab_mu = nn.Linear(ocultas[-1], d_lat)
         self.cab_logvar = nn.Linear(ocultas[-1], d_lat)
@@ -117,8 +122,13 @@ class RedVaDE(_Mapa):
         self.logvar_x = nn.Parameter(torch.zeros(1))
         self.pi_logits = nn.Parameter(torch.zeros(k))
         self.mu_c = nn.Parameter(torch.zeros(k, d_lat))
-        self.logvar_c = nn.Parameter(torch.zeros(k, d_lat))
+        if covarianza == "completa":
+            self.chol_c = nn.Parameter(torch.eye(d_lat).repeat(k, 1, 1))   # factor de Cholesky de Σ_k
+        else:
+            self.logvar_c = nn.Parameter(torch.zeros(k, d_lat))
         self._init_mapa(d_lat)
+
+    PARAMS_MEZCLA = ("pi_logits", "mu_c", "logvar_c", "chol_c")
 
     # --- codificador
     def posterior(self, x):
@@ -132,20 +142,31 @@ class RedVaDE(_Mapa):
         return self.dec(z)
 
     # --- previa de mezcla
-    def _gmm(self, separar: bool = False):
-        log_pi = F.log_softmax(self.pi_logits, 0)
-        mu, lv = self.mu_c, self.logvar_c.clamp(-6.0, 4.0)
-        if separar:
-            return log_pi.detach(), mu.detach(), lv.detach()
-        return log_pi, mu, lv
+    def _gmm(self):
+        """(log π, μ, precisión Σ⁻¹ (k, d, d), log|Σ|), siempre sin gradiente."""
+        log_pi = F.log_softmax(self.pi_logits, 0).detach()
+        mu = self.mu_c.detach()
+        if self.covarianza == "completa":
+            L = torch.tril(self.chol_c.detach())
+            eye = torch.eye(L.shape[-1]).expand_as(L)
+            Linv = torch.linalg.solve_triangular(L, eye, upper=False)
+            prec = Linv.transpose(-1, -2) @ Linv
+            logdet = 2 * torch.log(torch.diagonal(L, dim1=-2, dim2=-1).abs()).sum(-1)
+        else:
+            lv = self.logvar_c.detach().clamp(-6.0, 4.0)
+            prec = torch.diag_embed(torch.exp(-lv))
+            logdet = lv.sum(-1)
+        return log_pi, mu, prec, logdet
 
-    def logits(self, z, separar: bool = False):
-        log_pi, mu, lv = self._gmm(separar)
-        return log_pi[None] - 0.5 * (((z[:, None, :] - mu[None]) ** 2) / lv.exp()[None] + lv[None] + LOG2PI).sum(-1)
+    def logits(self, z, separar: bool = True):
+        log_pi, mu, prec, logdet = self._gmm()
+        d = z[:, None, :] - mu[None]
+        maha = torch.einsum("nki,kij,nkj->nk", d, prec, d)
+        return log_pi[None] - 0.5 * (maha + logdet[None] + z.shape[1] * LOG2PI)
 
-    def gamma(self, z, separar: bool = False):
-        """Capa de salida: 12 neuronas, probabilidad a posteriori de cada componente."""
-        return F.softmax(self.logits(z, separar), dim=1)
+    def gamma(self, z, separar: bool = True):
+        """Capa de salida: k neuronas, probabilidad a posteriori de cada componente."""
+        return F.softmax(self.logits(z), dim=1)
 
     def salida(self, x):
         return self.gamma(self.codificar(x))
@@ -153,23 +174,43 @@ class RedVaDE(_Mapa):
     def centros(self) -> torch.Tensor:
         return self.mu_c
 
+    def covarianzas(self) -> torch.Tensor:
+        if self.covarianza == "completa":
+            L = torch.tril(self.chol_c.detach())
+            return L @ L.transpose(-1, -2)
+        return torch.diag_embed(self.logvar_c.detach().exp())
+
+    def fijar_mezcla(self, mu: torch.Tensor, cov: torch.Tensor) -> None:
+        with torch.no_grad():
+            self.mu_c.copy_(mu)
+            self.pi_logits.zero_()
+            if self.covarianza == "completa":
+                self.chol_c.copy_(torch.linalg.cholesky(cov))
+            else:
+                self.logvar_c.copy_(torch.log(torch.diagonal(cov, dim1=-2, dim2=-1)))
+
     def permutar(self, orden: torch.Tensor) -> None:
         with torch.no_grad():
             self.mu_c.copy_(self.mu_c[orden])
-            self.logvar_c.copy_(self.logvar_c[orden])
             self.pi_logits.copy_(self.pi_logits[orden])
+            if self.covarianza == "completa":
+                self.chol_c.copy_(self.chol_c[orden])
+            else:
+                self.logvar_c.copy_(self.logvar_c[orden])
 
-    def perdida(self, x, beta: float = 1.0, separar: bool = False) -> torch.Tensor:
-        """−ELBO por muestra (VaDE, una muestra de Monte Carlo con reparametrización).
-        separar=True: la previa de mezcla no recibe gradiente (muestras auxiliares de jugadores)."""
+    def perdida(self, x, beta: float = 1.0, separar: bool = True) -> torch.Tensor:
+        """−ELBO por muestra (VaDE, una muestra de Monte Carlo con reparametrización). La mezcla entra
+        como constante (la reestima el paso M)."""
         mu_z, lv_z = self.posterior(x)
         z = mu_z + torch.randn_like(mu_z) * (0.5 * lv_z).exp()
         lvx = self.logvar_x.clamp(-6.0, 3.0)
         rec = 0.5 * (((x - self.dec(z)) ** 2) / lvx.exp() + lvx + LOG2PI).sum(1)
-        log_pi, mu_c, lv_c = self._gmm(separar)
-        g = F.softmax(self.logits(z, separar), dim=1)
-        kl_z = 0.5 * (lv_c[None] + (lv_z[:, None, :] - lv_c[None]).exp()
-                      + ((mu_z[:, None, :] - mu_c[None]) ** 2) / lv_c.exp()[None]).sum(-1)
+        log_pi, mu_c, prec, logdet = self._gmm()
+        g = F.softmax(self.logits(z), dim=1)
+        d = mu_z[:, None, :] - mu_c[None]
+        # E_q[−log p(z|c)] − constantes = ½ (log|Σ_c| + tr(Σ_c⁻¹ diag σ²_z) + (μ_z − μ_c)ᵀ Σ_c⁻¹ (μ_z − μ_c))
+        traza = torch.einsum("kjj,nj->nk", prec, lv_z.exp())
+        kl_z = 0.5 * (logdet[None] + traza + torch.einsum("nki,kij,nkj->nk", d, prec, d))
         kl = (g * kl_z).sum(1) - (g * (log_pi[None] - torch.log(g + 1e-10))).sum(1) - 0.5 * (1 + lv_z).sum(1)
         return rec + beta * kl
 

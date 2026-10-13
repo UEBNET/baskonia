@@ -250,23 +250,28 @@ mediana del 20 % por métrica (A 10,8 %, B 8,1 %) y gana a A en las 25 métricas
 Resultado principal: `data/modelos/algoritmo_A/traducciones/<temporada>.csv` (una fila por jugador-liga-
 temporada; columnas `<métrica>_el`, `_el_lo`, `_el_hi`, `_pct_el`, `_el_prox`) y `tipo_de_cambio.csv`.
 
-## 12. Estilos de juego: `bbestilo` (dos redes neuronales, 12 estilos y mapa 3D)
+## 12. Estilos de juego: `bbestilo` (VaDE, 8 estilos sin nivel y mapa 3D)
 
-Asigna a cada **club-competición-temporada** de las 8 ligas uno de **12 estilos de juego** y lo sitúa, junto con
+Asigna a cada **club-competición-temporada** de las 8 ligas uno de **8 estilos de juego** y lo sitúa, junto con
 sus jugadores, en un **mapa 3D**. Usa sólo los datos **normalizados A+B** (equivalentes EuroLeague de `bbmodel`),
-agregados por minutos, más el ritmo relativo a la liga. Dos redes con la misma entrada (13 rasgos), el mismo mapa
-(capa de 3 neuronas) y la misma salida (capa de 12 neuronas, una por estilo):
+agregados por minutos, más el ritmo relativo a la liga, y **neutraliza el nivel**: a cada rasgo se le quita la parte
+que explica un índice de calidad, para que el estilo diga cómo juega un equipo y no cuán bueno es.
 
-* **IDEC**: autoencoder con capa de agrupamiento de núcleo t de Student (centroides en el mapa).
-* **VaDE**: autoencoder variacional con previa de mezcla de 12 gaussianas (estilos como elipsoides).
+* **Red principal, VaDE**: autoencoder variacional con previa de mezcla de 8 gaussianas de covarianza completa en un
+  latente de 3 neuronas (el mapa); capa de salida de 8 neuronas; consenso de 5 semillas y ajuste fino.
+* **Contraste, IDEC**: autoencoder con capa de agrupamiento de núcleo t de Student, mismos datos.
+* La v1 (12 estilos, sin neutralizar) queda en `data/modelos/estilos/v1_12estilos/` (`--estilos 12 --sin-neutralizar`).
 
 ```bash
 pip install -r requirements-estilos.txt   # requirements.txt + torch (CPU)
-python -m bbestilo entrenar         # ≈ 40 min en 4 núcleos; 5 semillas por red; escribe data/modelos/estilos/
+python -m bbestilo entrenar         # ≈ 45 min en 4 núcleos; escribe data/modelos/estilos/
 python -m bbestilo evaluar          # reevalúa las redes guardadas sin reentrenar
+python -m bbestilo analisis         # K óptimo, nivel, éxito, efecto del encaje, continuidad, ligas, Baskonia
 python -m bbestilo encaje --jugador "Nombre" --club baskonia --competicion euroleague --temporada 2025-26
-python -m bbestilo exportar         # datos del mapa 3D (artifact/estilos/) para artifact/mapa-estilos.html
+python -m bbestilo exportar         # datos del Atlas de Estilos (artifact/estilos/)
+python -m bbestilo articulo         # artículo científico en PDF (docs/articulo/estilos_de_juego_baskonia.pdf)
 ```
 
-Especificación técnica de las dos redes, evaluación comparada y limitaciones: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md).
+Documentación técnica: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md). Artículo completo:
+[`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf).
 

@@ -249,23 +249,88 @@ def _escala(T: np.ndarray, w: np.ndarray | None = None) -> Escala:
     return Escala(mu, np.sqrt(np.maximum(var, 1e-12)))
 
 
+@dataclass
+class Nivel:
+    """Índice de nivel = media de los z con signo de las métricas de calidad disponibles (C.NIVEL)."""
+    media: np.ndarray
+    sd: np.ndarray
+    signo: np.ndarray
+
+    def indice(self, Q: np.ndarray) -> np.ndarray:
+        Z = self.signo * (np.atleast_2d(Q) - self.media) / self.sd
+        ok = np.isfinite(Z)
+        n = ok.sum(1)
+        return np.where(n > 0, np.where(ok, Z, 0.0).sum(1) / np.maximum(n, 1), 0.0)   # sin dato = nivel medio
+
+    def a_dict(self) -> dict:
+        return {"media": self.media.tolist(), "sd": self.sd.tolist(), "signo": self.signo.tolist()}
+
+
+def _ajustar_nivel(Q: np.ndarray, w: np.ndarray) -> Nivel:
+    esc = _escala(Q, w)
+    return Nivel(esc.media, esc.sd, np.array(list(C.NIVEL.values()), float))
+
+
+@dataclass
+class Neutralizador:
+    """Quita a cada rasgo (ya estandarizado) la parte explicada por el nivel: x − [1, L, L²]·B, y
+    reescala el residuo a desviación 1 para que los 13 rasgos sigan pesando lo mismo."""
+    B: np.ndarray        # (grado + 1, n_rasgos)
+    sd: np.ndarray       # desviación del residuo
+    r2: np.ndarray       # parte de cada rasgo explicada por el nivel (antes de neutralizar)
+
+    @staticmethod
+    def base(L: np.ndarray) -> np.ndarray:
+        L = np.asarray(L, float).reshape(-1)
+        return np.column_stack([L ** g for g in range(C.GRADO_NEUTRALIZACION + 1)])
+
+    def aplicar(self, X: np.ndarray, L: np.ndarray) -> np.ndarray:
+        return (X - self.base(L) @ self.B) / self.sd
+
+    def a_dict(self) -> dict:
+        return {"B": self.B.tolist(), "sd": self.sd.tolist(), "r2": self.r2.tolist()}
+
+
+def _ajustar_neutralizador(X: np.ndarray, L: np.ndarray, w: np.ndarray) -> Neutralizador:
+    F = Neutralizador.base(L)
+    sw = np.sqrt(w)[:, None]
+    B, *_ = np.linalg.lstsq(F * sw, X * sw, rcond=None)
+    res = X - F @ B
+    var_x = np.average((X - np.average(X, axis=0, weights=w)) ** 2, axis=0, weights=w)
+    var_r = np.average(res ** 2, axis=0, weights=w)
+    return Neutralizador(B, np.sqrt(np.maximum(var_r, 1e-12)), 1 - var_r / var_x)
+
+
 # ----------------------------------------------------------------------------- conjunto
 @dataclass
 class Conjunto:
     """Todo lo que necesitan las redes y el mapa."""
     clubes: pd.DataFrame                 # una fila por club-competición-temporada
     jugadores: pd.DataFrame              # una fila por jugador-equipo-temporada
-    plantillas: dict = field(default_factory=dict)   # clave_club -> (R crudas, minutos, índices en jugadores)
+    plantillas: dict = field(default_factory=dict)   # clave -> (R crudas, minutos, índices, Q calidad)
     escala_club: Escala | None = None
     escala_jugador: Escala | None = None
-    Xc: np.ndarray | None = None          # clubes, transformado y estandarizado con la escala de club
-    Xj: np.ndarray | None = None          # jugadores, con la escala de jugador
+    nivel_club: Nivel | None = None
+    nivel_jugador: Nivel | None = None
+    neutral_club: Neutralizador | None = None
+    neutral_jugador: Neutralizador | None = None
+    Xc: np.ndarray | None = None          # entrada de las redes (clubes): transformado, estandarizado y sin nivel
+    Xj: np.ndarray | None = None          # entrada de las redes (jugadores), con la escala de jugador
+    Xc_bruto: np.ndarray | None = None    # antes de neutralizar (diagnóstico)
+    Xj_bruto: np.ndarray | None = None
 
-    def x_club(self, V: np.ndarray) -> np.ndarray:
-        return self.escala_club.aplicar(transformar(V))
+    def x_club(self, V: np.ndarray, Qm: np.ndarray | None = None) -> np.ndarray:
+        """Entrada de la red para vectores de club V (sin transformar) con medias de calidad Qm."""
+        X = np.nan_to_num(self.escala_club.aplicar(transformar(np.atleast_2d(V))))
+        if self.neutral_club is not None:
+            X = self.neutral_club.aplicar(X, self.nivel_club.indice(Qm))
+        return X
 
-    def x_jugador(self, V: np.ndarray) -> np.ndarray:
-        return self.escala_jugador.aplicar(transformar(V))
+    def x_jugador(self, V: np.ndarray, Q: np.ndarray | None = None) -> np.ndarray:
+        X = np.nan_to_num(self.escala_jugador.aplicar(transformar(np.atleast_2d(V))))
+        if self.neutral_jugador is not None:
+            X = self.neutral_jugador.aplicar(X, self.nivel_jugador.indice(Q))
+        return X
 
 
 def _nombres_club(f: pd.DataFrame) -> pd.Series:
@@ -287,28 +352,32 @@ def construir(temporadas: list[str] | None = None) -> Conjunto:
     f = f.reset_index(drop=True)
 
     R_all = matriz_cruda(f)
-    filas_club, V_club, V_jug = [], [], np.full((len(f), len(C.COLS)), np.nan)
-    plantillas = {}
     nivel_cols = list(C.NIVEL)
+    Q_all = f[nivel_cols].to_numpy(float)
+    filas_club, V_club, Q_club = [], [], []
+    V_jug = np.full((len(f), len(C.COLS)), np.nan)
+    plantillas = {}
     for (liga, temp, clave), g in f.groupby(["liga", "temporada", "clave_club"], sort=True):
         idx = g.index.to_numpy()
-        R, w = R_all[idx], g["min"].to_numpy(float)
+        R, w, Q = R_all[idx], g["min"].to_numpy(float), Q_all[idx]
         v = agregar(R, w[None, :])[0]
         u_club = float(_media_w(R[:, [_I["usg_pct"]]], w[None, :])[0, 0])
         V_jug[idx] = vectores_jugador(R, v, u_club)
-        nivel = _media_w(g[nivel_cols].to_numpy(float), w[None, :])[0]
+        qm = _media_w(Q, w[None, :])[0]
         clave_t = f"{clave}:{temp}"
-        plantillas[clave_t] = (R, w, idx)
+        plantillas[clave_t] = (R, w, idx, Q)
         filas_club.append({"clave": clave_t, "clave_club": clave, "liga": liga, "temporada": temp,
-                           "club_id": clave.split(":", 1)[1], "equipo": g["equipo"].value_counts().index[0],
+                           "club_id": clave.split(":", 1)[1], "team_id": g["team_id"].iloc[0],
+                           "equipo": g["equipo"].value_counts().index[0],
                            "nombre_club": g["nombre_club"].iloc[0], "min_total": float(w.sum()),
                            "jugadores": int(len(g)), "usg_medio": u_club,
                            "cobertura_ab": float(w[(g["fuente_norm"] == "A+B").to_numpy()].sum() / w.sum()),
                            "provisional": temp in C.TEMPORADAS_PROVISIONALES,
-                           **{f"n_{c}": x for c, x in zip(nivel_cols, nivel)}})
+                           **{f"n_{c}": x for c, x in zip(nivel_cols, qm)}})
         V_club.append(v)
+        Q_club.append(qm)
     clubes = pd.DataFrame(filas_club)
-    V_club = np.array(V_club)
+    V_club, Q_club = np.array(V_club), np.array(Q_club)
     for k, c in enumerate(C.COLS):
         clubes[c] = V_club[:, k]
     jug = f[["liga", "temporada", "clave_club", "club_id", "nombre_club", "equipo", "player_id", "persona_id",
@@ -318,47 +387,38 @@ def construir(temporadas: list[str] | None = None) -> Conjunto:
         jug[c] = V_jug[:, k]
     jug["provisional"] = jug["temporada"].isin(C.TEMPORADAS_PROVISIONALES)
 
-    # Escalas: clubes reales de las temporadas de entrenamiento; jugadores con minutos suficientes
+    # Escalas, índices de nivel y neutralización: clubes reales de las temporadas de entrenamiento;
+    # jugadores con minutos suficientes (ponderados por minutos)
     ent_c = ~clubes["provisional"].to_numpy()
-    esc_c = _escala(transformar(V_club[ent_c]))
     ent_j = (~jug["provisional"] & (jug["min"] >= C.MIN_ESCALA_JUGADOR)).to_numpy()
-    esc_j = _escala(transformar(V_jug[ent_j]), jug.loc[ent_j, "min"].to_numpy(float))
-    cj = Conjunto(clubes, jug, plantillas, esc_c, esc_j)
-    cj.Xc = np.nan_to_num(cj.x_club(V_club))
-    cj.Xj = np.nan_to_num(cj.x_jugador(V_jug))
-    _nivel(cj)
+    wj = jug.loc[ent_j, "min"].to_numpy(float)
+    cj = Conjunto(clubes, jug, plantillas, _escala(transformar(V_club[ent_c])),
+                  _escala(transformar(V_jug[ent_j]), wj),
+                  _ajustar_nivel(Q_club[ent_c], np.ones(ent_c.sum())), _ajustar_nivel(Q_all[ent_j], wj))
+    clubes["nivel"] = cj.nivel_club.indice(Q_club)
+    jug["nivel"] = cj.nivel_jugador.indice(Q_all)
+    cj.Xc_bruto = cj.x_club(V_club)
+    cj.Xj_bruto = cj.x_jugador(V_jug)
+    if C.NEUTRALIZAR_NIVEL:
+        cj.neutral_club = _ajustar_neutralizador(cj.Xc_bruto[ent_c], clubes["nivel"].to_numpy()[ent_c],
+                                                 np.ones(ent_c.sum()))
+        cj.neutral_jugador = _ajustar_neutralizador(cj.Xj_bruto[ent_j], jug["nivel"].to_numpy()[ent_j], wj)
+    cj.Xc = cj.x_club(V_club, Q_club)
+    cj.Xj = cj.x_jugador(V_jug, Q_all)
     return cj
-
-
-def _nivel(cj: Conjunto) -> None:
-    """Índice de nivel (capa aparte, no define estilos): media de los z con signo de las métricas de
-    nivel disponibles. Clubes: z entre clubes reales; jugadores: z entre jugadores (ponderado por minutos)."""
-    for df, w in ((cj.clubes, None), (cj.jugadores, "min")):
-        cols = [f"n_{c}" if df is cj.clubes else c for c in C.NIVEL]
-        base = df[~df["provisional"]]
-        if w:
-            base = base[base["min"] >= C.MIN_ESCALA_JUGADOR]
-        Z = []
-        for c, s in zip(cols, C.NIVEL.values()):
-            x = base[c].astype(float)
-            pw = base[w].astype(float) if w else pd.Series(1.0, index=base.index)
-            ok = x.notna()
-            mu = np.average(x[ok], weights=pw[ok])
-            sd = np.sqrt(np.average((x[ok] - mu) ** 2, weights=pw[ok]))
-            Z.append(s * (df[c].astype(float) - mu) / sd)
-        df["nivel"] = pd.concat(Z, axis=1).mean(axis=1, skipna=True)
 
 
 def remuestrear(cj: Conjunto, n: int, rng: np.random.Generator, claves: list[str] | None = None):
     """Plantillas remuestreadas: minutos × Gamma(k, 1/k) (bootstrap bayesiano suave del reparto de
-    minutos). Devuelve (X estandarizado con la escala de club, índice del club de origen)."""
+    minutos). Devuelve (entrada de la red, índice del club de origen). El nivel se recalcula con el
+    nuevo reparto antes de neutralizar."""
     claves = claves or list(cj.clubes["clave"])
     pos = {c: i for i, c in enumerate(cj.clubes["clave"])}
     X, origen = [], []
     for c in claves:
-        R, w, _ = cj.plantillas[c]
-        G = rng.gamma(C.K_GAMMA, 1.0 / C.K_GAMMA, size=(n, len(w)))
-        X.append(np.nan_to_num(cj.x_club(agregar(R, G * w[None, :]))))
+        R, w, _, Q = cj.plantillas[c]
+        W = rng.gamma(C.K_GAMMA, 1.0 / C.K_GAMMA, size=(n, len(w))) * w[None, :]
+        X.append(cj.x_club(agregar(R, W), _media_w(Q, W)))
         origen.append(np.full(n, pos[c]))
     return np.vstack(X), np.concatenate(origen)
 

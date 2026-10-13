@@ -55,9 +55,10 @@ def test_agregar_ignora_huecos_y_uso_repartido_vale_uno():
 
 def _cj_sintetico():
     R, w = _plantilla(8)
+    Q = np.random.default_rng(3).normal(size=(8, len(C.NIVEL)))
     clubes = pd.DataFrame({"clave": ["x:1:2025-26"], "temporada": ["2025-26"], "provisional": [False]})
     jug = pd.DataFrame({"clave": ["x:1:2025-26"] * 8, "min": w})
-    cj = datos.Conjunto(clubes, jug, {"x:1:2025-26": (R, w, np.arange(8))})
+    cj = datos.Conjunto(clubes, jug, {"x:1:2025-26": (R, w, np.arange(8), Q)})
     cj.escala_club = datos.Escala(np.zeros(len(C.COLS)), np.ones(len(C.COLS)))
     cj.escala_jugador = cj.escala_club
     return cj
@@ -66,17 +67,36 @@ def _cj_sintetico():
 def test_simular_sin_minutos_o_sustituyendose_a_si_mismo_no_mueve_al_club():
     from bbestilo.encaje import simular
     cj = _cj_sintetico()
-    R, w, _ = cj.plantillas["x:1:2025-26"]
+    R, w, _, Q = cj.plantillas["x:1:2025-26"]
     club = datos.agregar(R, w[None])[0]
-    v0, _ = simular(cj, "x:1:2025-26", 3, minutos=0.0)
-    assert np.allclose(v0, club)
-    v1, m = simular(cj, "x:1:2025-26", 3, sustituye=3)
-    assert math.isclose(m, w[3]) and np.allclose(v1, club)
+    qm = datos._media_w(Q, w[None])[0]
+    v0, q0, _ = simular(cj, "x:1:2025-26", 3, minutos=0.0)
+    assert np.allclose(v0, club) and np.allclose(q0, qm)
+    v1, q1, m = simular(cj, "x:1:2025-26", 3, sustituye=3)
+    assert math.isclose(m, w[3]) and np.allclose(v1, club) and np.allclose(q1, qm)
 
 
-def test_las_dos_redes_terminan_en_12_neuronas_y_un_mapa_3d():
+def test_neutralizar_quita_la_relacion_con_el_nivel():
+    rng = np.random.default_rng(5)
+    L = rng.normal(size=400)
+    X = np.column_stack([2 * L + rng.normal(size=400), L ** 2 + rng.normal(size=400), rng.normal(size=400)])
+    n = datos._ajustar_neutralizador(X, L, np.ones(400))
+    Xn = n.aplicar(X, L)
+    for k in range(3):
+        assert abs(np.corrcoef(Xn[:, k], L)[0, 1]) < 1e-6 and abs(np.corrcoef(Xn[:, k], L ** 2)[0, 1]) < 1e-6
+    assert np.allclose(Xn.std(0), 1, atol=1e-6)
+    assert n.r2[0] > 0.7 and n.r2[2] < 0.05
+
+
+def test_indice_de_nivel_ignora_huecos():
+    niv = datos.Nivel(np.zeros(3), np.ones(3), np.array([1.0, 1.0, -1.0]))
+    assert np.allclose(niv.indice(np.array([[1.0, np.nan, -1.0], [np.nan] * 3])), [1.0, 0.0])
+
+
+def test_las_redes_terminan_en_n_estilos_neuronas_y_un_mapa_3d():
     x = torch.randn(5, len(C.COLS))
-    for red in (RedIDEC(len(C.COLS)), RedVaDE(len(C.COLS))):
+    for red in (RedIDEC(len(C.COLS), k=C.N_ESTILOS), RedVaDE(len(C.COLS), k=C.N_ESTILOS, covarianza="completa"),
+                RedVaDE(len(C.COLS), k=C.N_ESTILOS, covarianza="diag")):
         p = red.salida(x)
         assert p.shape == (5, C.N_ESTILOS)
         assert torch.allclose(p.sum(1), torch.ones(5), atol=1e-5)
@@ -124,8 +144,10 @@ def _red_desde_json(P, x):
         d2 = ((h - np.array(P["salida"]["centroides"])) ** 2).sum(1)
         logit = -(a + 1) / 2 * np.log1p(d2 / a)
     else:
-        mu, lv = np.array(P["salida"]["mu"]), np.array(P["salida"]["logvar"])
-        logit = np.array(P["salida"]["log_pi"]) - 0.5 * (((h - mu) ** 2) / np.exp(lv) + lv + np.log(2 * np.pi)).sum(1)
+        mu, prec = np.array(P["salida"]["mu"]), np.array(P["salida"]["prec"])
+        d = h - mu
+        maha = np.einsum("ki,kij,kj->k", d, prec, d)
+        logit = np.array(P["salida"]["log_pi"]) - 0.5 * (maha + np.array(P["salida"]["logdet"]) + 3 * np.log(2 * np.pi))
     p = np.exp(logit - logit.max())
     M = P["mapa"]
     return p / p.sum(), (h - np.array(M["centro"])) @ np.array(M["rot"]) * M["escala"]

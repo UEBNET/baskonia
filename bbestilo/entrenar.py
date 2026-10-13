@@ -35,7 +35,8 @@ HIPER = {
              "alpha": 1.0, "intervalo_p": 3, "tol": 0.001, "wd": 1e-5, "lambda_estres": 1.0},
     "vade": {"ocultas": [64, 32], "epocas_pre": 100, "epocas": 120, "lr": 1e-3, "lote": 512,
              "calentamiento": 30, "wd": 1e-5, "lambda_estres": 13.0, "amortiguacion": 0.5,
-             "suelo_var": 0.02, "min_cuota": 0.01},
+             "suelo_var": 0.02, "min_cuota": 0.01, "covarianza": "completa",
+             "epocas_afinado": 40, "lr_afinado": 3e-4, "paso_m_afinado": False},
 }
 
 
@@ -140,36 +141,66 @@ def entrenar_idec(M: Muestras, semilla: int, hp=None, registro=None) -> RedIDEC:
 
 
 @torch.no_grad()
+@torch.no_grad()
 def _paso_m(red: RedVaDE, Z: torch.Tensor, hp: dict, primero: bool = False) -> torch.Tensor:
     """Paso M de la mezcla sobre los latentes de los clubes (reales y remuestreados): medias y
-    varianzas ponderadas por γ, con amortiguación, suelo de varianza y resiembra de componentes
-    vacías. La previa de pesos es uniforme (π_k = 1/12): evita el colapso de VaDE en pocas
+    covarianzas ponderadas por γ, con amortiguación, suelo de varianza y resiembra de componentes
+    vacías. La previa de pesos es uniforme (π_k = 1/k): evita el colapso de VaDE en pocas
     componentes sin forzar que los estilos tengan el mismo tamaño."""
     g = red.gamma(Z)
     nk = g.sum(0)
     mu = (g.T @ Z) / nk[:, None].clamp_min(1e-9)
-    var = (g.T @ (Z ** 2)) / nk[:, None].clamp_min(1e-9) - mu ** 2
-    suelo = hp["suelo_var"] * Z.var(0).mean()
-    var = var.clamp_min(suelo)
+    d = Z[:, None, :] - mu[None]
+    cov = torch.einsum("nk,nki,nkj->kij", g, d, d) / nk[:, None, None].clamp_min(1e-9)
+    if red.covarianza != "completa":
+        cov = torch.diag_embed(torch.diagonal(cov, dim1=-2, dim2=-1))
+    eye = torch.eye(Z.shape[1])
+    cov = cov + hp["suelo_var"] * Z.var(0).mean() * eye
     a = 0.0 if primero else hp["amortiguacion"]
     mu_n = a * red.mu_c + (1 - a) * mu
-    lv_n = torch.log(a * red.logvar_c.exp() + (1 - a) * var)
+    cov_n = a * red.covarianzas() + (1 - a) * cov
     vacias = torch.nonzero(nk < hp["min_cuota"] * len(Z)).flatten()
     if len(vacias):
         peor = red.logits(Z).logsumexp(1).argsort()[: len(vacias)]   # los peor explicados
         mu_n[vacias] = Z[peor]
-        lv_n[vacias] = torch.log(var.median(0).values)
-    red.mu_c.copy_(mu_n)
-    red.logvar_c.copy_(lv_n)
-    red.pi_logits.zero_()
+        cov_n[vacias] = torch.diag_embed(torch.diagonal(cov, dim1=-2, dim2=-1).median(0).values)
+    red.fijar_mezcla(mu_n, cov_n)
     return nk
+
+
+def _bucle_vade(red: RedVaDE, M: Muestras, hp: dict, gen, epocas: int, lr: float, registro=None,
+                calentar: bool = True, primero_m: bool = True, paso_m: bool = True) -> None:
+    X, es_club, w = _todo(M)
+    params = [p for n, p in red.named_parameters() if n not in RedVaDE.PARAMS_MEZCLA]
+    opt = torch.optim.Adam(params, lr=lr, weight_decay=hp["wd"])
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, epocas)
+    Xclub = X[es_club]
+    for ep in range(epocas):
+        beta = min(1.0, 0.1 + 0.9 * ep / max(1, hp["calentamiento"])) if calentar else 1.0
+        tot = 0.0
+        for b in _lotes(len(X), hp["lote"], gen):
+            perd = red.perdida(X[b], beta)
+            loss = (w[b] * perd).sum() / w[b].sum() + hp["lambda_estres"] * estres(red.codificar(X[b]), X[b])
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            tot += loss.item()
+        sched.step()
+        if paso_m:
+            nk = _paso_m(red, red.codificar(Xclub).detach(), hp, primero=(primero_m and ep == 0))
+        else:
+            with torch.no_grad():
+                nk = red.gamma(red.codificar(Xclub)).sum(0)
+        if registro is not None and ep % 10 == 0:
+            registro.append({"epoca": ep, "perdida": tot, "cuota_min": float(nk.min() / nk.sum()),
+                             "cuota_max": float(nk.max() / nk.sum())})
 
 
 def entrenar_vade(M: Muestras, semilla: int, hp=None, registro=None) -> RedVaDE:
     hp = {**HIPER["vade"], **(hp or {})}
     torch.manual_seed(semilla)
     gen = torch.Generator().manual_seed(semilla)
-    red = RedVaDE(M.Xc.shape[1], hp["ocultas"], C.D_MAPA, C.N_ESTILOS)
+    red = RedVaDE(M.Xc.shape[1], hp["ocultas"], C.D_MAPA, C.N_ESTILOS, hp["covarianza"])
     X, es_club, w = _todo(M)
     _preentrenar(red, X, w, hp, gen)
     with torch.no_grad():
@@ -178,30 +209,46 @@ def entrenar_vade(M: Muestras, semilla: int, hp=None, registro=None) -> RedVaDE:
         Z = red.codificar(M.Xc).numpy()
         rec = red.reconstruir(red.codificar(X))
         red.logvar_x.copy_(torch.log(((rec - X) ** 2).mean() + 1e-3).reshape(1))
-    gmm = GaussianMixture(C.N_ESTILOS, covariance_type="diag", n_init=5, reg_covar=1e-3, random_state=semilla).fit(Z)
+    tipo_cov = "full" if hp["covarianza"] == "completa" else "diag"
+    gmm = GaussianMixture(C.N_ESTILOS, covariance_type=tipo_cov, n_init=5, reg_covar=1e-3, random_state=semilla).fit(Z)
+    cov = gmm.covariances_ if tipo_cov == "full" else np.stack([np.diag(c) for c in gmm.covariances_])
+    red.fijar_mezcla(torch.tensor(gmm.means_, dtype=torch.float32), torch.tensor(cov, dtype=torch.float32))
+    _bucle_vade(red, M, hp, gen, hp["epocas"], hp["lr"], registro)
+    return red
+
+
+def consenso(etiquetas_semillas: list[np.ndarray], k: int) -> np.ndarray:
+    """Partición de consenso: matriz de co-asociación (fracción de semillas que ponen juntos a dos
+    clubes) y agrupamiento jerárquico de enlace medio sobre 1 − co-asociación, cortado en k grupos."""
+    from scipy.cluster.hierarchy import fcluster, linkage
+    from scipy.spatial.distance import squareform
+    E = np.stack(etiquetas_semillas)
+    co = (E[:, :, None] == E[:, None, :]).mean(0)
+    D = squareform(1.0 - co, checks=False)
+    return fcluster(linkage(D, method="average"), k, criterion="maxclust") - 1
+
+
+def afinar_vade(red: RedVaDE, M: Muestras, etiq: np.ndarray, semilla: int, hp=None, registro=None) -> RedVaDE:
+    """Ajuste fino de la red base desde la partición de consenso: la mezcla se fija en la media y la
+    covarianza de cada grupo de consenso en el mapa de esa red y sólo se entrenan el codificador y el
+    decodificador (β = 1), de modo que el mapa se adapta a los estilos acordados por las semillas. Con el
+    paso M activo durante el ajuste, el modelo se alejaba del consenso (ARI 0,57 frente a 0,69)."""
+    hp = {**HIPER["vade"], **(hp or {})}
+    torch.manual_seed(semilla + 1000)
+    gen = torch.Generator().manual_seed(semilla + 1000)
     with torch.no_grad():
-        red.pi_logits.zero_()
-        red.mu_c.copy_(torch.tensor(gmm.means_, dtype=torch.float32))
-        red.logvar_c.copy_(torch.tensor(np.log(gmm.covariances_), dtype=torch.float32))
-    params = [p for n, p in red.named_parameters() if n not in ("pi_logits", "mu_c", "logvar_c")]
-    opt = torch.optim.Adam(params, lr=hp["lr"], weight_decay=hp["wd"])
-    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, hp["epocas"])
-    Xclub = X[es_club]
-    for ep in range(hp["epocas"]):
-        beta = min(1.0, 0.1 + 0.9 * ep / max(1, hp["calentamiento"]))
-        tot = 0.0
-        for b in _lotes(len(X), hp["lote"], gen):
-            perd = red.perdida(X[b], beta, separar=True)
-            loss = (w[b] * perd).sum() / w[b].sum() + hp["lambda_estres"] * estres(red.codificar(X[b]), X[b])
-            opt.zero_grad()
-            loss.backward()
-            opt.step()
-            tot += loss.item()
-        sched.step()
-        nk = _paso_m(red, red.codificar(Xclub).detach(), hp, primero=(ep == 0))
-        if registro is not None and ep % 10 == 0:
-            registro.append({"epoca": ep, "perdida": tot, "cuota_min": float(nk.min() / nk.sum()),
-                             "cuota_max": float(nk.max() / nk.sum())})
+        Z = red.codificar(M.Xc)
+        glob = torch.cov(Z.T) + 1e-3 * torch.eye(Z.shape[1])
+        mus, covs = [], []
+        for k in range(C.N_ESTILOS):
+            Zk = Z[torch.tensor(etiq == k)]
+            mus.append(Zk.mean(0) if len(Zk) else Z.mean(0))
+            covs.append(torch.cov(Zk.T) + hp["suelo_var"] * Z.var(0).mean() * torch.eye(Z.shape[1]) if len(Zk) >= 5 else glob)
+        red.fijar_mezcla(torch.stack(mus), torch.stack(covs))
+    red.train()
+    _bucle_vade(red, M, hp, gen, hp["epocas_afinado"], hp["lr_afinado"], registro, calentar=False, primero_m=False,
+                paso_m=hp.get("paso_m_afinado", True))
+    red.eval()
     return red
 
 
@@ -240,12 +287,14 @@ def etiquetas(red, X: torch.Tensor) -> np.ndarray:
     return red.salida(X).argmax(1).numpy()
 
 
-def entrenar_semillas(tipo: str, cj: Conjunto, semillas=None, temporadas=None, log=print):
-    """Entrena una red con varias semillas. Devuelve (índice de la semilla medoide, redes, matriz ARI,
-    registros). La medoide es la red cuyo reparto en estilos más se parece, en ARI medio, al de las demás."""
+def entrenar_semillas(tipo: str, cj: Conjunto, semillas=None, temporadas=None, log=print) -> dict:
+    """Entrena una red con varias semillas y elige el modelo final.
+    IDEC: la semilla medoide (mayor ARI medio con las demás).
+    VaDE: partición de CONSENSO de las semillas (co-asociación), la semilla más cercana a ese consenso
+    como base y un ajuste fino desde el consenso; el modelo final resume el acuerdo de todas las redes."""
     semillas = semillas or C.SEMILLAS
     temporadas = temporadas or C.TEMPORADAS_ENTRENO
-    redes, regs = [], []
+    redes, regs, Ms = [], [], []
     for s in semillas:
         M = muestras(cj, temporadas, s)
         reg: list = []
@@ -254,6 +303,7 @@ def entrenar_semillas(tipo: str, cj: Conjunto, semillas=None, temporadas=None, l
         orientar(red, M.Xc)
         redes.append(red)
         regs.append(reg)
+        Ms.append(M)
         tam = np.bincount(etiquetas(red, M.Xc), minlength=C.N_ESTILOS)
         log(f"  {tipo} semilla {s}: tamaños {tam.tolist()}")
     Xc = torch.tensor(cj.Xc[cj.clubes["temporada"].isin(temporadas).to_numpy()], dtype=torch.float32)
@@ -263,8 +313,26 @@ def entrenar_semillas(tipo: str, cj: Conjunto, semillas=None, temporadas=None, l
     for i in range(n):
         for j in range(i + 1, n):
             ari[i, j] = ari[j, i] = adjusted_rand_score(E[i], E[j])
-    medoide = int(np.argmax((ari.sum(1) - 1) / max(1, n - 1)))
-    return medoide, redes, ari, regs
+    out = {"redes": redes, "ari": ari, "regs": regs, "semillas": semillas}
+    if tipo == "vade" and n > 1:
+        cons = consenso(E, C.N_ESTILOS)
+        a_c = [adjusted_rand_score(e, cons) for e in E]
+        i = int(np.argmax(a_c))
+        log(f"  consenso: ARI de cada semilla con el consenso {np.round(a_c, 3).tolist()}; base = semilla {semillas[i]}")
+        base = crear(tipo, redes[i].config)
+        base.load_state_dict(redes[i].state_dict())
+        reg: list = []
+        final = afinar_vade(base, Ms[i], cons, semillas[i], registro=reg)
+        orientar(final, Ms[i].Xc)
+        a_f = adjusted_rand_score(etiquetas(final, Xc), cons)
+        log(f"  afinado desde el consenso: ARI con el consenso {a_f:.3f}")
+        out.update({"final": final, "indice_base": i, "registro_final": regs[i] + reg, "etiquetas_consenso": cons,
+                    "consenso": {"ari_semillas_consenso": a_c, "ari_final_consenso": a_f,
+                                 "ari_final_semillas": [adjusted_rand_score(etiquetas(final, Xc), e) for e in E]}})
+    else:
+        i = int(np.argmax((ari.sum(1) - 1) / max(1, n - 1)))
+        out.update({"final": redes[i], "indice_base": i, "registro_final": regs[i]})
+    return out
 
 
 def guardar(red, tipo: str, semilla: int, ruta) -> None:
@@ -289,8 +357,10 @@ def exportar_pesos(red, tipo: str) -> dict:
     else:
         capas = [(sd[f"tronco.{i}.weight"], sd[f"tronco.{i}.bias"]) for i in (0, 2)]
         capas.append((sd["cab_mu.weight"], sd["cab_mu.bias"]))
-        salida = {"log_pi": F.log_softmax(red.pi_logits, 0).detach().numpy().round(6).tolist(),
-                  "mu": sd["mu_c"], "logvar": red.logvar_c.clamp(-6, 4).detach().numpy().round(6).tolist()}
+        log_pi, mu, prec, logdet = red._gmm()
+        salida = {"log_pi": log_pi.numpy().round(6).tolist(), "mu": mu.numpy().round(6).tolist(),
+                  "prec": prec.numpy().round(6).tolist(), "logdet": logdet.numpy().round(6).tolist(),
+                  "cov": red.covarianzas().numpy().round(6).tolist()}
     return {"tipo": tipo, "activacion": "gelu_tanh",
             "capas": [{"W": W, "b": b} for W, b in capas],
             "salida": salida,

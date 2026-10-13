@@ -2,51 +2,51 @@
  "registro": [
   {
    "epoca": 3,
-   "cambio_etiquetas": 0.021063189953565598
+   "cambio_etiquetas": 0.02306920848786831
   },
   {
    "epoca": 6,
-   "cambio_etiquetas": 0.020060179755091667
+   "cambio_etiquetas": 0.02206619828939438
   },
   {
    "epoca": 9,
-   "cambio_etiquetas": 0.019057171419262886
+   "cambio_etiquetas": 0.021063189953565598
   },
   {
    "epoca": 12,
-   "cambio_etiquetas": 0.02306920848786831
+   "cambio_etiquetas": 0.015045135281980038
   },
   {
    "epoca": 15,
-   "cambio_etiquetas": 0.029087262228131294
+   "cambio_etiquetas": 0.020060179755091667
   },
   {
    "epoca": 18,
-   "cambio_etiquetas": 0.030090270563960075
+   "cambio_etiquetas": 0.018054163083434105
   },
   {
    "epoca": 21,
-   "cambio_etiquetas": 0.029087262228131294
+   "cambio_etiquetas": 0.02407221682369709
   },
   {
    "epoca": 24,
-   "cambio_etiquetas": 0.03410230576992035
+   "cambio_etiquetas": 0.02206619828939438
   },
   {
    "epoca": 27,
-   "cambio_etiquetas": 0.0260782353579998
+   "cambio_etiquetas": 0.028084252029657364
   },
   {
    "epoca": 30,
-   "cambio_etiquetas": 0.02306920848786831
+   "cambio_etiquetas": 0.020060179755091667
   },
   {
    "epoca": 33,
-   "cambio_etiquetas": 0.02306920848786831
+   "cambio_etiquetas": 0.0260782353579998
   },
   {
    "epoca": 36,
-   "cambio_etiquetas": 0.015045135281980038
+   "cambio_etiquetas": 0.02407221682369709
   },
   {
    "epoca": 39,
@@ -54,31 +54,31 @@
   },
   {
    "epoca": 42,
-   "cambio_etiquetas": 0.02206619828939438
+   "cambio_etiquetas": 0.019057171419262886
   },
   {
    "epoca": 45,
-   "cambio_etiquetas": 0.030090270563960075
+   "cambio_etiquetas": 0.018054163083434105
   },
   {
    "epoca": 48,
-   "cambio_etiquetas": 0.020060179755091667
+   "cambio_etiquetas": 0.016048144549131393
   },
   {
    "epoca": 51,
-   "cambio_etiquetas": 0.020060179755091667
+   "cambio_etiquetas": 0.02507522515952587
   },
   {
    "epoca": 54,
-   "cambio_etiquetas": 0.015045135281980038
+   "cambio_etiquetas": 0.017051152884960175
   },
   {
    "epoca": 57,
-   "cambio_etiquetas": 0.01103309914469719
+   "cambio_etiquetas": 0.02407221682369709
   },
   {
    "epoca": 60,
-   "cambio_etiquetas": 0.012036108411848545
+   "cambio_etiquetas": 0.021063189953565598
   },
   {
    "epoca": 63,
@@ -86,47 +86,47 @@
   },
   {
    "epoca": 66,
-   "cambio_etiquetas": 0.017051152884960175
+   "cambio_etiquetas": 0.01103309914469719
   },
   {
    "epoca": 69,
-   "cambio_etiquetas": 0.018054163083434105
+   "cambio_etiquetas": 0.012036108411848545
   },
   {
    "epoca": 72,
-   "cambio_etiquetas": 0.014042126014828682
+   "cambio_etiquetas": 0.02306920848786831
   },
   {
    "epoca": 75,
-   "cambio_etiquetas": 0.0130391176789999
+   "cambio_etiquetas": 0.016048144549131393
   },
   {
    "epoca": 78,
-   "cambio_etiquetas": 0.015045135281980038
+   "cambio_etiquetas": 0.007021063007414341
   },
   {
    "epoca": 81,
-   "cambio_etiquetas": 0.01103309914469719
+   "cambio_etiquetas": 0.017051152884960175
   },
   {
    "epoca": 84,
-   "cambio_etiquetas": 0.016048144549131393
+   "cambio_etiquetas": 0.01103309914469719
   },
   {
    "epoca": 87,
-   "cambio_etiquetas": 0.016048144549131393
+   "cambio_etiquetas": 0.018054163083434105
   },
   {
    "epoca": 90,
-   "cambio_etiquetas": 0.01103309914469719
+   "cambio_etiquetas": 0.0130391176789999
   },
   {
    "epoca": 93,
-   "cambio_etiquetas": 0.01103309914469719
+   "cambio_etiquetas": 0.008024072274565697
   },
   {
    "epoca": 96,
-   "cambio_etiquetas": 0.016048144549131393
+   "cambio_etiquetas": 0.008024072274565697
   },
   {
    "epoca": 99,
@@ -134,19 +134,19 @@
   },
   {
    "epoca": 102,
-   "cambio_etiquetas": 0.014042126014828682
+   "cambio_etiquetas": 0.007021063007414341
   },
   {
    "epoca": 105,
-   "cambio_etiquetas": 0.017051152884960175
+   "cambio_etiquetas": 0.010030089877545834
   },
   {
    "epoca": 108,
-   "cambio_etiquetas": 0.019057171419262886
+   "cambio_etiquetas": 0.017051152884960175
   },
   {
    "epoca": 111,
-   "cambio_etiquetas": 0.0130391176789999
+   "cambio_etiquetas": 0.008024072274565697
   },
   {
    "epoca": 114,
@@ -154,7 +154,8 @@
   },
   {
    "epoca": 117,
-   "cambio_etiquetas": 0.008024072274565697
+   "cambio_etiquetas": 0.019057171419262886
   }
- ]
+ ],
+ "consenso": null
 }

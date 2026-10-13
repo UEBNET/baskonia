@@ -1,19 +1,21 @@
 metrica,nombre,idec,vade,mejor
-entropia_reparto,"Equilibrio del reparto (entropía, 1 = igual)",0.9627835150609928,0.9700141984214373,vade
-tamano_min,Estilo más pequeño (clubes),29,33,vade
-salida_max_media,Confianza media de la neurona ganadora,0.38759586215019226,0.7448593378067017,vade
-silueta_mapa,Silueta en el mapa 3D,0.2732636630535126,0.21223202347755432,idec
-silueta_rasgos,Silueta en los 13 rasgos,0.04290637441981112,0.05655593633761251,vade
-davies_bouldin_mapa,Davies-Bouldin en el mapa (menos es mejor),1.0159640178213667,1.515157682982059,idec
-ari_semillas_medio,Estabilidad de los estilos entre semillas (ARI medio),0.4266558360687231,0.3841626635501822,idec
-estabilidad_mapa,Estabilidad del mapa entre semillas (r de distancias),0.91586877638956,0.9619274467599291,vade
-robustez_reparto_minutos,Robustez al reparto de minutos,0.4948595787362086,0.5156469408224674,vade
-ari_temporal_reserva,"Reproducibilidad temporal (ARI, red sin 2024-26)",0.2782044252362463,0.3745322243630713,vade
-trustworthiness_k10,Fidelidad del mapa: trustworthiness,0.925582759485793,0.9121502050726811,idec
-continuidad_k10,Fidelidad del mapa: continuidad,0.9210858249736473,0.9312109532877798,vade
-spearman_distancias,Correlación distancias mapa / perfil,0.810017502711076,0.8243935915391346,vade
-r2_medio,R² medio de reconstrucción,0.7105592716547616,0.6493546972602727,idec
-nmi_estilo_liga,Información compartida estilo-liga (NMI; alto = estilos ligados a una liga),0.31999535477498137,0.3878112192907071,
-pares_distintos,"Parejas de estilos distintas (permutación, Holm 5 %)",66/66,66/66,
-mahalanobis_min,Distancia de Mahalanobis mínima entre estilos,2.2170498221957162,2.2645942241396835,vade
-replicabilidad,Replicabilidad de perfiles 2020-23 / 2023-26 (r medio),0.9379290880274908,0.9187461561455246,idec
+entropia_reparto,"Equilibrio del reparto (entropía, 1 = igual)",0.9722907234526917,0.9784541350140382,vade
+tamano_min,Estilo más pequeño (clubes),79,47,idec
+salida_max_media,Confianza media de la neurona ganadora,0.431691437959671,0.7907959818840027,vade
+silueta_mapa,Silueta en el mapa 3D,0.26979073882102966,0.21296687424182892,idec
+silueta_rasgos,Silueta en los 13 rasgos,0.051058238548676214,0.02647791086609696,idec
+davies_bouldin_mapa,Davies-Bouldin en el mapa (menos es mejor),1.0521741010169383,1.2610453438171236,idec
+ari_semillas_medio,Estabilidad de los estilos entre semillas (ARI medio),0.31310214541205567,0.41334583496916755,vade
+ari_final_semillas_medio,Centralidad del modelo final (ARI medio con las semillas),0.37439764284795857,0.5020687687178669,vade
+estabilidad_mapa,Estabilidad del mapa entre semillas (r de distancias),0.837247990599663,0.9528194795971265,vade
+robustez_reparto_minutos,Robustez al reparto de minutos,0.5044884653961885,0.5478184553660983,vade
+ari_temporal_reserva,"Reproducibilidad temporal (ARI, red sin 2024-26)",0.48596015793119846,0.39639921383724386,idec
+trustworthiness_k10,Fidelidad del mapa: trustworthiness,0.8850472967552684,0.8743705390241023,idec
+continuidad_k10,Fidelidad del mapa: continuidad,0.8994071363351389,0.8961813612002589,idec
+spearman_distancias,Correlación distancias mapa / perfil,0.7119180704444624,0.6865294052061449,idec
+r2_medio,R² medio de reconstrucción,0.6033852986623285,0.5212800277228216,idec
+eta2_nivel,Nivel explicado por el estilo (η²; menos = estilo independiente del nivel),0.02126634075200971,0.008044955949410963,vade
+nmi_estilo_liga,Información compartida estilo-liga (NMI; menos = estilos que cruzan ligas),0.10436480110147535,0.07240367263097203,vade
+pares_distintos,"Parejas de estilos distintas (permutación, Holm 5 %)",28/28,28/28,
+mahalanobis_min,Distancia de Mahalanobis mínima entre estilos,2.2301992760411617,1.7149075816951298,idec
+replicabilidad,Replicabilidad de perfiles 2020-23 / 2023-26 (r medio),0.9351857635201117,0.885492914399817,idec

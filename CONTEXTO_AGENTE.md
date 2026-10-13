@@ -352,16 +352,16 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
 - Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
   `fecha_nacimiento`.
-- **Estilos de juego** (`bbestilo/`, `docs/estilos_de_juego.md`): 12 estilos por club-competición-temporada con dos
-  redes en PyTorch (IDEC y VaDE) sobre los equivalentes EuroLeague A+B agregados por minutos (13 rasgos: ritmo
-  relativo a la liga, 3PAr, FTr, AST%, TOV%, rebote ofensivo/defensivo, robos, tapones y faltas por 100 pos.,
-  concentración del uso y cuotas de minutos interior/exterior). Capa latente de 3 = mapa 3D compartido por clubes y
-  jugadores; capa final de 12 = estilos. Las métricas de calidad (PER, WS, ORtg…) quedan fuera, como capa de nivel.
-  `python -m bbestilo entrenar | evaluar | encaje | exportar`. Resultados en `data/modelos/estilos/`; mapa interactivo
-  `artifact/mapa-estilos.html` con datos `artifact/estilos/*.json`, publicado como Artifact «Atlas de Estilos»
-  (https://claude.ai/artifact/D2ULCYstYh4ykwSzExUPNU; republicar con `files` = `estilos/{meta,clubes,jugadores}.json`).
-  Recomendada: VaDE (mapa más estable, probabilidades interpretables); IDEC como contraste. Ojo: la vara EuroLeague
-  arrastra el nivel de liga a las métricas de estilo (2-3 estilos casi sólo NBA).
+- **Estilos de juego v2** (`bbestilo/`, `docs/estilos_de_juego.md`, artículo `docs/articulo/estilos_de_juego_baskonia.pdf`):
+  8 estilos por club-competición-temporada con una red **VaDE** (mezcla de 8 gaussianas de covarianza completa en un
+  latente 3D = mapa; consenso de 5 semillas y ajuste fino) e IDEC de contraste, sobre los equivalentes EuroLeague A+B
+  agregados por minutos (13 rasgos) **con el nivel neutralizado** (regresión de cada rasgo en [1, L, L²], L = índice de
+  calidad: PER, GmSc/40, WS/40, ORtg, DRtg, pts/100, TS%, eFG%). η² nivel-estilo 0,8 % (v1: 74 %). Nombres de estilos en
+  `config/estilos_v2.json`. `python -m bbestilo entrenar | evaluar | analisis | encaje | exportar | articulo`.
+  Atlas: Artifact «Atlas de Estilos» (https://claude.ai/artifact/D2ULCYstYh4ykwSzExUPNU; republicar con `files` =
+  `estilos/{meta,clubes,jugadores}.json` y `articulo/estilos_de_juego_baskonia.pdf`, capacidad `downloads`).
+  Hallazgos: los datos respaldan 4-6 estilos (BIC/ICL: 6); el encaje por similitud no predice el rendimiento del
+  fichaje; la continuidad de plantilla sí predice conservar el estilo. v1 en `data/modelos/estilos/v1_12estilos/`.
 
 ## 10. Historial
 
@@ -385,5 +385,5 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Algoritmo A (`bbmodel`) y cálculo de la evaluación de ligas en el repositorio; resultados en `data/modelos/algoritmo_A/`.
 - Algoritmo B, combinación A+B y pestaña «Normalización de ligas» (Artifact versión 17); A reajustado tras corregir el
   año de nacimiento por persona. `artifact/mesa-multiliga.html` = página publicada con la nueva pestaña.
-- Rama `claude/bold-euler-hubmhk`: estilos de juego (`bbestilo`), dos redes (IDEC y VaDE) con 12 neuronas de salida,
-  mapa 3D, encaje de fichajes y Artifact «Atlas de Estilos» (`artifact/mapa-estilos.html`).
+- Rama `claude/bold-euler-hubmhk`: estilos de juego (`bbestilo`). v1: IDEC y VaDE con 12 estilos. v2: 8 estilos, nivel
+  neutralizado, VaDE con covarianza completa y consenso, análisis complementarios, Atlas rediseñado y artículo en PDF.
