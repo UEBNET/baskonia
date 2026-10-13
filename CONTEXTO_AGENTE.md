@@ -352,6 +352,13 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
 - Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
   `fecha_nacimiento`.
+- **Estilos de juego** (`bbestilo/`, `docs/estilos_de_juego.md`): 12 estilos por club-competición-temporada con dos
+  redes en PyTorch (IDEC y VaDE) sobre los equivalentes EuroLeague A+B agregados por minutos (13 rasgos: ritmo
+  relativo a la liga, 3PAr, FTr, AST%, TOV%, rebote ofensivo/defensivo, robos, tapones y faltas por 100 pos.,
+  concentración del uso y cuotas de minutos interior/exterior). Capa latente de 3 = mapa 3D compartido por clubes y
+  jugadores; capa final de 12 = estilos. Las métricas de calidad (PER, WS, ORtg…) quedan fuera, como capa de nivel.
+  `python -m bbestilo entrenar | evaluar | encaje | exportar`. Resultados en `data/modelos/estilos/`; mapa interactivo
+  `artifact/mapa-estilos.html` con datos `artifact/estilos/*.json`.
 
 ## 10. Historial
 
@@ -375,3 +382,5 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Algoritmo A (`bbmodel`) y cálculo de la evaluación de ligas en el repositorio; resultados en `data/modelos/algoritmo_A/`.
 - Algoritmo B, combinación A+B y pestaña «Normalización de ligas» (Artifact versión 17); A reajustado tras corregir el
   año de nacimiento por persona. `artifact/mesa-multiliga.html` = página publicada con la nueva pestaña.
+- Rama `claude/bold-euler-hubmhk`: estilos de juego (`bbestilo`), dos redes (IDEC y VaDE) con 12 neuronas de salida,
+  mapa 3D, encaje de fichajes y Artifact «Atlas de Estilos» (`artifact/mapa-estilos.html`).

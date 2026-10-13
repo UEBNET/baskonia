@@ -1,0 +1,5 @@
+# Estilos de juego (bbestilo): redes IDEC y VaDE. Aparte de requirements.txt para no cargar la extracción
+# (EJECUTAR en GitHub Actions) con PyTorch. Índice de CPU: evita descargar las ruedas CUDA (varios GB).
+-r requirements.txt
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2

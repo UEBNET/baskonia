@@ -1,0 +1,160 @@
+"""Tests de bbestilo (sin datos reales: plantillas sintéticas y redes diminutas)."""
+import math
+
+import numpy as np
+import pandas as pd
+import pytest
+
+torch = pytest.importorskip("torch", reason="bbestilo necesita torch (requirements-estilos.txt)")
+
+from bbestilo import config as C  # noqa: E402
+from bbestilo import datos, entrenar  # noqa: E402
+from bbestilo.redes import RedIDEC, RedVaDE  # noqa: E402
+
+
+def _plantilla(n=10, seed=0):
+    rng = np.random.default_rng(seed)
+    R = np.column_stack([
+        np.full(n, 0.4),                       # ritmo_rel (igual para toda la plantilla)
+        rng.uniform(10, 60, n),                # fg3a_rate
+        rng.uniform(10, 50, n),                # fta_rate
+        rng.uniform(5, 35, n),                 # ast_pct
+        rng.uniform(8, 20, n),                 # tov_pct
+        rng.uniform(0.5, 6, n),                # oreb_p100
+        rng.uniform(2, 10, n),                 # dreb_p100
+        rng.uniform(0.5, 3, n),                # stl_p100
+        rng.uniform(0, 2.5, n),                # blk_p100
+        rng.uniform(3, 9, n),                  # pf_p100
+        rng.uniform(12, 30, n),                # usg_pct
+        (np.arange(n) % 3 == 0).astype(float),  # es_int
+        (np.arange(n) % 3 == 1).astype(float),  # es_ext
+    ])
+    w = rng.uniform(50, 900, n)
+    return R, w
+
+
+def test_club_es_la_media_ponderada_de_sus_jugadores():
+    R, w = _plantilla()
+    club = datos.agregar(R, w[None])[0]
+    u = R[:, datos._I["usg_pct"]]
+    jug = datos.vectores_jugador(R, club, float(np.average(u, weights=w)))
+    # TODOS los rasgos (también la concentración del uso y las cuotas por posición) son medias ponderadas exactas
+    assert np.allclose(np.average(jug, axis=0, weights=w), club)
+    assert club[C.COLS.index("uso_conc")] >= 1.0
+
+
+def test_agregar_ignora_huecos_y_uso_repartido_vale_uno():
+    R, w = _plantilla()
+    R[:, datos._I["usg_pct"]] = 20.0
+    R[0, datos._I["fg3a_rate"]] = np.nan
+    club = datos.agregar(R, w[None])[0]
+    assert math.isclose(club[C.COLS.index("uso_conc")], 1.0)
+    esperado = np.average(R[1:, datos._I["fg3a_rate"]], weights=w[1:])
+    assert math.isclose(club[C.COLS.index("fg3a_rate")], esperado)
+
+
+def _cj_sintetico():
+    R, w = _plantilla(8)
+    clubes = pd.DataFrame({"clave": ["x:1:2025-26"], "temporada": ["2025-26"], "provisional": [False]})
+    jug = pd.DataFrame({"clave": ["x:1:2025-26"] * 8, "min": w})
+    cj = datos.Conjunto(clubes, jug, {"x:1:2025-26": (R, w, np.arange(8))})
+    cj.escala_club = datos.Escala(np.zeros(len(C.COLS)), np.ones(len(C.COLS)))
+    cj.escala_jugador = cj.escala_club
+    return cj
+
+
+def test_simular_sin_minutos_o_sustituyendose_a_si_mismo_no_mueve_al_club():
+    from bbestilo.encaje import simular
+    cj = _cj_sintetico()
+    R, w, _ = cj.plantillas["x:1:2025-26"]
+    club = datos.agregar(R, w[None])[0]
+    v0, _ = simular(cj, "x:1:2025-26", 3, minutos=0.0)
+    assert np.allclose(v0, club)
+    v1, m = simular(cj, "x:1:2025-26", 3, sustituye=3)
+    assert math.isclose(m, w[3]) and np.allclose(v1, club)
+
+
+def test_las_dos_redes_terminan_en_12_neuronas_y_un_mapa_3d():
+    x = torch.randn(5, len(C.COLS))
+    for red in (RedIDEC(len(C.COLS)), RedVaDE(len(C.COLS))):
+        p = red.salida(x)
+        assert p.shape == (5, C.N_ESTILOS)
+        assert torch.allclose(p.sum(1), torch.ones(5), atol=1e-5)
+        assert red.mapa(x).shape == (5, C.D_MAPA)
+
+
+def _muestras(n=120, seed=0):
+    g = torch.Generator().manual_seed(seed)
+    centros = torch.randn(4, len(C.COLS), generator=g) * 2
+    X = centros[torch.arange(n) % 4] + 0.3 * torch.randn(n, len(C.COLS), generator=g)
+    return entrenar.Muestras(X, X + 0.05 * torch.randn(n, len(C.COLS), generator=g), X[:40], np.arange(n))
+
+
+def test_entrenamiento_rapido_y_orientacion_conserva_distancias():
+    M = _muestras()
+    for tipo in ("idec", "vade"):
+        red = entrenar.ENTRENADORES[tipo](M, 1, hp={"epocas_pre": 3, "epocas": 3, "lote": 64})
+        red.eval()
+        with torch.no_grad():
+            antes = torch.pdist(red.codificar(M.Xc))
+            etiq_antes = red.salida(M.Xc).argmax(1)
+        entrenar.orientar(red, M.Xc)
+        with torch.no_grad():
+            despues = torch.pdist(red.mapa(M.Xc))
+            etiq = red.salida(M.Xc).argmax(1)
+        ratio = despues / antes.clamp_min(1e-9)
+        assert torch.allclose(ratio, ratio.median().expand_as(ratio), rtol=1e-3)   # sólo rota y escala
+        # reordenar los estilos permuta las neuronas sin cambiar qué clubes van juntos
+        assert entrenar.adjusted_rand_score(etiq_antes.numpy(), etiq.numpy()) == 1.0
+
+
+def _gelu(x):
+    return 0.5 * x * (1 + np.tanh(0.7978845608028654 * (x + 0.044715 * x ** 3)))
+
+
+def _red_desde_json(P, x):
+    """Réplica en numpy del cálculo del navegador (artifact/mapa-estilos.html: mlp + redAplicar)."""
+    h = x
+    for i, c in enumerate(P["capas"]):
+        h = np.array(c["W"]) @ h + np.array(c["b"])
+        if i < len(P["capas"]) - 1:
+            h = _gelu(h)
+    if P["tipo"] == "idec":
+        a = P["salida"]["alpha"]
+        d2 = ((h - np.array(P["salida"]["centroides"])) ** 2).sum(1)
+        logit = -(a + 1) / 2 * np.log1p(d2 / a)
+    else:
+        mu, lv = np.array(P["salida"]["mu"]), np.array(P["salida"]["logvar"])
+        logit = np.array(P["salida"]["log_pi"]) - 0.5 * (((h - mu) ** 2) / np.exp(lv) + lv + np.log(2 * np.pi)).sum(1)
+    p = np.exp(logit - logit.max())
+    M = P["mapa"]
+    return p / p.sum(), (h - np.array(M["centro"])) @ np.array(M["rot"]) * M["escala"]
+
+
+def test_los_pesos_exportados_reproducen_la_red():
+    M = _muestras()
+    for tipo in ("idec", "vade"):
+        red = entrenar.ENTRENADORES[tipo](M, 2, hp={"epocas_pre": 2, "epocas": 2, "lote": 64})
+        red.eval()
+        entrenar.orientar(red, M.Xc)
+        P = entrenar.exportar_pesos(red, tipo)
+        x = M.Xc[:6]
+        with torch.no_grad():
+            p_t, z_t = red.salida(x).numpy(), red.mapa(x).numpy()
+        for i in range(6):
+            p, z = _red_desde_json(P, x[i].numpy().astype(float))
+            assert np.allclose(p, p_t[i], atol=2e-4) and np.allclose(z, z_t[i], atol=2e-4)
+
+
+def test_enlace_de_clubes_por_nombre_y_plantilla():
+    filas = []
+    for t, tid, nombre in [("2023-24", "1", "Umana Reyer Venezia"), ("2024-25", "9", "Reyer Venezia"),
+                           ("2023-24", "2", "Germani Brescia"), ("2024-25", "8", "Germani Basket Brescia")]:
+        for k in range(5):
+            filas.append({"liga": "lba", "temporada": t, "team_id": tid, "equipo": nombre, "nombre": f"Jugador {tid}{k} Apellido"})
+    f = pd.DataFrame(filas)
+    club = datos.enlazar_clubes(f)
+    par = dict(zip(f["temporada"] + f["equipo"], club))
+    assert par["2023-24Umana Reyer Venezia"] == par["2024-25Reyer Venezia"]
+    assert par["2023-24Germani Brescia"] == par["2024-25Germani Basket Brescia"]
+    assert par["2023-24Umana Reyer Venezia"] != par["2023-24Germani Brescia"]

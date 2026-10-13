@@ -1,0 +1,301 @@
+"""Entrenamiento de las dos redes (varias semillas) y elección del modelo final.
+
+Muestras de entrenamiento (temporadas 2020-21 a 2025-26):
+  * clubes reales: un vector por club-competición-temporada (escala de club);
+  * plantillas remuestreadas: BOOTSTRAP_POR_CLUB por club, con el reparto de minutos perturbado
+    (minutos × Gamma(4, 1/4)). Enseñan a la red que un estilo no depende de quién jugó 30 minutos
+    más o menos, y multiplican por 25 una muestra de unos 1.000 clubes;
+  * jugadores (auxiliares, peso 0,3; escala de jugador): sólo para que el codificador conozca la zona
+    del espacio donde caen los jugadores. NO definen los estilos (en IDEC no entran en la pérdida de
+    agrupamiento; en VaDE la previa de mezcla no recibe su gradiente).
+
+Por cada red se entrenan 5 semillas; el modelo final es la «semilla medoide» (la que más se parece,
+en ARI medio, a las demás), y la dispersión entre semillas mide la estabilidad.
+"""
+from __future__ import annotations
+
+import json
+from dataclasses import dataclass
+
+import numpy as np
+import torch
+import torch.nn.functional as F
+from sklearn.cluster import KMeans
+from sklearn.metrics import adjusted_rand_score
+from sklearn.mixture import GaussianMixture
+
+from . import config as C
+from .datos import Conjunto, remuestrear
+from .redes import RedIDEC, RedVaDE, crear
+
+torch.set_num_threads(max(1, torch.get_num_threads()))
+
+HIPER = {
+    "idec": {"ocultas": [64, 32], "epocas_pre": 100, "epocas": 120, "lr": 1e-3, "lote": 512, "gamma": 0.1,
+             "alpha": 1.0, "intervalo_p": 3, "tol": 0.001, "wd": 1e-5, "lambda_estres": 1.0},
+    "vade": {"ocultas": [64, 32], "epocas_pre": 100, "epocas": 120, "lr": 1e-3, "lote": 512,
+             "calentamiento": 30, "wd": 1e-5, "lambda_estres": 13.0, "amortiguacion": 0.5,
+             "suelo_var": 0.02, "min_cuota": 0.01},
+}
+
+
+@dataclass
+class Muestras:
+    Xc: torch.Tensor      # clubes reales (entrenamiento)
+    Xb: torch.Tensor      # plantillas remuestreadas
+    Xj: torch.Tensor      # jugadores (auxiliares)
+    idx_c: np.ndarray     # índices de los clubes reales en cj.clubes
+
+
+def muestras(cj: Conjunto, temporadas: list[str], semilla: int) -> Muestras:
+    rng = np.random.default_rng(semilla)
+    sel = cj.clubes["temporada"].isin(temporadas).to_numpy()
+    claves = list(cj.clubes.loc[sel, "clave"])
+    Xb, _ = remuestrear(cj, C.BOOTSTRAP_POR_CLUB, rng, claves)
+    js = (cj.jugadores["temporada"].isin(temporadas) & (cj.jugadores["min"] >= C.MIN_ESCALA_JUGADOR)).to_numpy()
+    t = lambda a: torch.tensor(a, dtype=torch.float32)
+    return Muestras(t(cj.Xc[sel]), t(Xb), t(cj.Xj[js]), np.flatnonzero(sel))
+
+
+def _lotes(n: int, lote: int, gen: torch.Generator):
+    perm = torch.randperm(n, generator=gen)
+    for i in range(0, n, lote):
+        yield perm[i:i + lote]
+
+
+def estres(z: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
+    """Estrés de MDS métrico entre las distancias del mapa y las de los 13 rasgos estandarizados:
+    Σ(d_z − d_x)² / Σ d_x². La escala es fija (1 unidad del mapa = 1 desviación típica del perfil),
+    así que la distancia en el mapa 3D se lee en las mismas unidades que el perfil de estilo y el
+    núcleo de la capa de salida trabaja siempre a la misma escala."""
+    dz, dx = torch.pdist(z), torch.pdist(x)
+    return ((dz - dx) ** 2).sum() / (dx * dx).sum().clamp_min(1e-9)
+
+
+def _preentrenar(red, X, w, hp, gen):
+    """Autoencoder determinista (codificador → decodificador): error cuadrático ponderado + estrés."""
+    opt = torch.optim.Adam(red.parameters(), lr=hp["lr"], weight_decay=hp["wd"])
+    for _ in range(hp["epocas_pre"]):
+        for b in _lotes(len(X), hp["lote"], gen):
+            z = red.codificar(X[b])
+            rec = red.reconstruir(z)
+            loss = (w[b] * ((rec - X[b]) ** 2).mean(1)).sum() / w[b].sum() + hp["lambda_estres"] * estres(z, X[b])
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+
+
+def _todo(M: Muestras):
+    X = torch.cat([M.Xc, M.Xb, M.Xj])
+    n_club = len(M.Xc) + len(M.Xb)
+    es_club = torch.zeros(len(X), dtype=torch.bool)
+    es_club[:n_club] = True
+    w = torch.where(es_club, torch.tensor(1.0), torch.tensor(C.PESO_JUGADORES))
+    return X, es_club, w
+
+
+def entrenar_idec(M: Muestras, semilla: int, hp=None, registro=None) -> RedIDEC:
+    hp = {**HIPER["idec"], **(hp or {})}
+    torch.manual_seed(semilla)
+    gen = torch.Generator().manual_seed(semilla)
+    red = RedIDEC(M.Xc.shape[1], hp["ocultas"], C.D_MAPA, C.N_ESTILOS, hp["alpha"])
+    X, es_club, w = _todo(M)
+    _preentrenar(red, X, w, hp, gen)
+    with torch.no_grad():
+        Z = red.codificar(M.Xc).numpy()
+    km = KMeans(C.N_ESTILOS, n_init=30, random_state=semilla).fit(Z)
+    with torch.no_grad():
+        red.centroides.copy_(torch.tensor(km.cluster_centers_, dtype=torch.float32))
+    opt = torch.optim.Adam(red.parameters(), lr=hp["lr"], weight_decay=hp["wd"])
+    Xclub = X[es_club]
+    P = None
+    previa = None
+    for ep in range(hp["epocas"]):
+        if ep % hp["intervalo_p"] == 0:
+            with torch.no_grad():
+                P = torch.zeros(len(X), C.N_ESTILOS)
+                P[es_club] = RedIDEC.objetivo(red.q(red.codificar(Xclub)))
+                etiq = red.salida(M.Xc).argmax(1)
+            if previa is not None:
+                cambio = (etiq != previa).float().mean().item()
+                if registro is not None:
+                    registro.append({"epoca": ep, "cambio_etiquetas": cambio})
+                if cambio < hp["tol"] and ep >= 30:
+                    break
+            previa = etiq
+        for b in _lotes(len(X), hp["lote"], gen):
+            z = red.codificar(X[b])
+            rec = ((red.reconstruir(z) - X[b]) ** 2).mean(1)
+            loss_rec = (w[b] * rec).sum() / w[b].sum()
+            c = es_club[b]
+            loss = loss_rec + hp["lambda_estres"] * estres(z, X[b])
+            if c.any():
+                q = red.q(z[c])
+                p = P[b][c]
+                loss = loss + hp["gamma"] * (p * (torch.log(p + 1e-10) - torch.log(q + 1e-10))).sum(1).mean()
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+    return red
+
+
+@torch.no_grad()
+def _paso_m(red: RedVaDE, Z: torch.Tensor, hp: dict, primero: bool = False) -> torch.Tensor:
+    """Paso M de la mezcla sobre los latentes de los clubes (reales y remuestreados): medias y
+    varianzas ponderadas por γ, con amortiguación, suelo de varianza y resiembra de componentes
+    vacías. La previa de pesos es uniforme (π_k = 1/12): evita el colapso de VaDE en pocas
+    componentes sin forzar que los estilos tengan el mismo tamaño."""
+    g = red.gamma(Z)
+    nk = g.sum(0)
+    mu = (g.T @ Z) / nk[:, None].clamp_min(1e-9)
+    var = (g.T @ (Z ** 2)) / nk[:, None].clamp_min(1e-9) - mu ** 2
+    suelo = hp["suelo_var"] * Z.var(0).mean()
+    var = var.clamp_min(suelo)
+    a = 0.0 if primero else hp["amortiguacion"]
+    mu_n = a * red.mu_c + (1 - a) * mu
+    lv_n = torch.log(a * red.logvar_c.exp() + (1 - a) * var)
+    vacias = torch.nonzero(nk < hp["min_cuota"] * len(Z)).flatten()
+    if len(vacias):
+        peor = red.logits(Z).logsumexp(1).argsort()[: len(vacias)]   # los peor explicados
+        mu_n[vacias] = Z[peor]
+        lv_n[vacias] = torch.log(var.median(0).values)
+    red.mu_c.copy_(mu_n)
+    red.logvar_c.copy_(lv_n)
+    red.pi_logits.zero_()
+    return nk
+
+
+def entrenar_vade(M: Muestras, semilla: int, hp=None, registro=None) -> RedVaDE:
+    hp = {**HIPER["vade"], **(hp or {})}
+    torch.manual_seed(semilla)
+    gen = torch.Generator().manual_seed(semilla)
+    red = RedVaDE(M.Xc.shape[1], hp["ocultas"], C.D_MAPA, C.N_ESTILOS)
+    X, es_club, w = _todo(M)
+    _preentrenar(red, X, w, hp, gen)
+    with torch.no_grad():
+        red.cab_logvar.bias.fill_(-4.0)
+        red.cab_logvar.weight.mul_(0.01)
+        Z = red.codificar(M.Xc).numpy()
+        rec = red.reconstruir(red.codificar(X))
+        red.logvar_x.copy_(torch.log(((rec - X) ** 2).mean() + 1e-3).reshape(1))
+    gmm = GaussianMixture(C.N_ESTILOS, covariance_type="diag", n_init=5, reg_covar=1e-3, random_state=semilla).fit(Z)
+    with torch.no_grad():
+        red.pi_logits.zero_()
+        red.mu_c.copy_(torch.tensor(gmm.means_, dtype=torch.float32))
+        red.logvar_c.copy_(torch.tensor(np.log(gmm.covariances_), dtype=torch.float32))
+    params = [p for n, p in red.named_parameters() if n not in ("pi_logits", "mu_c", "logvar_c")]
+    opt = torch.optim.Adam(params, lr=hp["lr"], weight_decay=hp["wd"])
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, hp["epocas"])
+    Xclub = X[es_club]
+    for ep in range(hp["epocas"]):
+        beta = min(1.0, 0.1 + 0.9 * ep / max(1, hp["calentamiento"]))
+        tot = 0.0
+        for b in _lotes(len(X), hp["lote"], gen):
+            perd = red.perdida(X[b], beta, separar=True)
+            loss = (w[b] * perd).sum() / w[b].sum() + hp["lambda_estres"] * estres(red.codificar(X[b]), X[b])
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            tot += loss.item()
+        sched.step()
+        nk = _paso_m(red, red.codificar(Xclub).detach(), hp, primero=(ep == 0))
+        if registro is not None and ep % 10 == 0:
+            registro.append({"epoca": ep, "perdida": tot, "cuota_min": float(nk.min() / nk.sum()),
+                             "cuota_max": float(nk.max() / nk.sum())})
+    return red
+
+
+ENTRENADORES = {"idec": entrenar_idec, "vade": entrenar_vade}
+
+
+@torch.no_grad()
+def orientar(red, Xc: torch.Tensor) -> None:
+    """Fija el mapa (centro, ejes principales con signo determinista, escala) y ordena los estilos
+    por su posición en el mapa (E01 = el más negativo en el eje 1)."""
+    Z = red.codificar(Xc)
+    centro = Z.mean(0)
+    Zc = Z - centro
+    _, S, Vt = torch.linalg.svd(Zc, full_matrices=False)
+    rot = Vt.T.clone()
+    coords = Zc @ rot
+    # signo: la correlación más fuerte de cada eje con un rasgo de entrada es positiva
+    Xs = (Xc - Xc.mean(0)) / Xc.std(0)
+    cs = (coords - coords.mean(0)) / coords.std(0)
+    corr = (cs.T @ Xs) / len(Xc)
+    for j in range(rot.shape[1]):
+        k = corr[j].abs().argmax()
+        if corr[j, k] < 0:
+            rot[:, j] = -rot[:, j]
+    escala = 1.0 / torch.sqrt((coords ** 2).sum(1).mean() / coords.shape[1])
+    red.mapa_centro.copy_(centro)
+    red.mapa_rot.copy_(rot)
+    red.mapa_escala.copy_(escala)
+    m = red.a_mapa(red.centros())
+    orden = torch.tensor(sorted(range(len(m)), key=lambda i: (round(float(m[i, 0]), 6), float(m[i, 1]))))
+    red.permutar(orden)
+
+
+@torch.no_grad()
+def etiquetas(red, X: torch.Tensor) -> np.ndarray:
+    return red.salida(X).argmax(1).numpy()
+
+
+def entrenar_semillas(tipo: str, cj: Conjunto, semillas=None, temporadas=None, log=print):
+    """Entrena una red con varias semillas. Devuelve (índice de la semilla medoide, redes, matriz ARI,
+    registros). La medoide es la red cuyo reparto en estilos más se parece, en ARI medio, al de las demás."""
+    semillas = semillas or C.SEMILLAS
+    temporadas = temporadas or C.TEMPORADAS_ENTRENO
+    redes, regs = [], []
+    for s in semillas:
+        M = muestras(cj, temporadas, s)
+        reg: list = []
+        red = ENTRENADORES[tipo](M, s, registro=reg)
+        red.eval()
+        orientar(red, M.Xc)
+        redes.append(red)
+        regs.append(reg)
+        tam = np.bincount(etiquetas(red, M.Xc), minlength=C.N_ESTILOS)
+        log(f"  {tipo} semilla {s}: tamaños {tam.tolist()}")
+    Xc = torch.tensor(cj.Xc[cj.clubes["temporada"].isin(temporadas).to_numpy()], dtype=torch.float32)
+    E = [etiquetas(r, Xc) for r in redes]
+    n = len(redes)
+    ari = np.ones((n, n))
+    for i in range(n):
+        for j in range(i + 1, n):
+            ari[i, j] = ari[j, i] = adjusted_rand_score(E[i], E[j])
+    medoide = int(np.argmax((ari.sum(1) - 1) / max(1, n - 1)))
+    return medoide, redes, ari, regs
+
+
+def guardar(red, tipo: str, semilla: int, ruta) -> None:
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"tipo": tipo, "config": red.config, "semilla": semilla, "estado": red.state_dict()}, ruta)
+
+
+def cargar(ruta):
+    d = torch.load(ruta, weights_only=False)
+    red = crear(d["tipo"], d["config"])
+    red.load_state_dict(d["estado"])
+    red.eval()
+    return red, d
+
+
+def exportar_pesos(red, tipo: str) -> dict:
+    """Pesos en JSON para ejecutar la red en el navegador (mapa 3D y simulación de fichajes)."""
+    sd = {k: v.detach().cpu().numpy().round(6).tolist() for k, v in red.state_dict().items()}
+    if tipo == "idec":
+        capas = [(sd[f"enc.{i}.weight"], sd[f"enc.{i}.bias"]) for i in (0, 2, 4)]
+        salida = {"centroides": sd["centroides"], "alpha": red.alpha}
+    else:
+        capas = [(sd[f"tronco.{i}.weight"], sd[f"tronco.{i}.bias"]) for i in (0, 2)]
+        capas.append((sd["cab_mu.weight"], sd["cab_mu.bias"]))
+        salida = {"log_pi": F.log_softmax(red.pi_logits, 0).detach().numpy().round(6).tolist(),
+                  "mu": sd["mu_c"], "logvar": red.logvar_c.clamp(-6, 4).detach().numpy().round(6).tolist()}
+    return {"tipo": tipo, "activacion": "gelu_tanh",
+            "capas": [{"W": W, "b": b} for W, b in capas],
+            "salida": salida,
+            "mapa": {"centro": sd["mapa_centro"], "rot": sd["mapa_rot"], "escala": float(sd["mapa_escala"])}}
+
+
+def resumen_json(obj) -> str:
+    return json.dumps(obj, ensure_ascii=False, indent=1)
