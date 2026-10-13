@@ -91,7 +91,10 @@ def dataframe(liga: str | None = None, temporada: str | None = None,
     cfg = config if isinstance(config, dict) else load_config(config)
     season = temporada or cfg.get("temporada_por_defecto")
     base = resolve_path(cfg, "procesado") / season
-    path = (base / "ligas" / f"{liga}.csv") if liga else (base / "todas_las_ligas.csv")
+    if not liga:
+        from .pipeline import read_season
+        return read_season(base)
+    path = base / "ligas" / f"{liga}.csv"
     if not path.exists():
         return pd.DataFrame()
     return pd.read_csv(path, low_memory=False, dtype={"player_id": str, "team_id": str, "dorsal": str,

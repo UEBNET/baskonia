@@ -89,8 +89,9 @@ EJECUTAR
       6. columnas rs_*/delta_* en las filas de playoffs
       7. finalize_columns(): reordena al esquema de 480 columnas (las ausentes quedan vacías)
       8. escribe data/processed/<temporada>/ligas/<liga>.csv
- └─► write_combined(): todas_las_ligas.{csv,json}, por_fase/<fase>.json, indice.json,
-     diccionario_columnas.{csv,json}, completitud.csv, informe_ejecucion.json
+ └─► write_combined(): indice.json, diccionario_columnas.csv, completitud.csv, informe_ejecucion.json
+     y data/processed/temporadas.json   (los datos quedan sólo en ligas/<liga>.csv)
+ └─► (para el Artifact, aparte) python -m bbstats artifact → data/artifact/<temporada>/<fase>.json
 ```
 
 Comandos:
@@ -162,14 +163,18 @@ Detalles operativos relevantes:
 
 | Fichero | Contenido | Formato |
 |---|---|---|
-| `todas_las_ligas.csv` | todas las ligas y fases | CSV, 480 columnas, 1 fila = jugador-equipo-fase |
-| `todas_las_ligas.json` | lo mismo | JSON columnar `{"columnas": [...], "filas": [[...]]}` (4 decimales) |
-| `por_fase/{regular,playoffs,total}.json` | una fase | JSON columnar |
-| `ligas/<liga>.csv` | una liga, todas sus fases | CSV |
+| `ligas/<liga>.csv` | **los datos**: una liga, todas sus fases | CSV, 480 columnas, 1 fila = jugador-equipo-fase, números con 4 decimales |
 | `indice.json` | ligas, filas por fase, fecha de extracción | JSON |
-| `diccionario_columnas.{csv,json}` | columna, grupo, origen, descripción | |
+| `diccionario_columnas.csv` | columna, grupo, origen, descripción | CSV |
 | `completitud.csv` | % de filas con dato por columna × (liga\|fase) | CSV |
-| `informe_ejecucion.json` | estado y notas de cada liga en la última ejecución | JSON |
+| `informe_ejecucion.json` | estado, notas y errores de cada liga en la última ejecución | JSON |
+| `../temporadas.json` | temporadas con datos, ligas y filas por fase | JSON |
+
+Desde la versión 1.2 los datos procesados se guardan **sólo como CSV por liga y temporada** (antes había además
+un CSV combinado y copias JSON: ~4 veces más espacio). Para tener todas las ligas juntas se concatenan los CSV
+(`bbstats.api.dataframe(temporada=T)` o `bbstats.pipeline.read_season(Path)`). Los JSON que lee el Artifact se
+generan aparte, sin versionar: `python -m bbstats artifact [--temporada T]` → `data/artifact/<T>/<fase>.json`
+(JSON columnar `{"columnas": [...], "filas": [[...]]}`), `indice.json`, `diccionario_columnas.json`, `temporadas.json`.
 
 ### 5.2 Volumen (filas jugador-equipo)
 
@@ -189,14 +194,16 @@ Detalles operativos relevantes:
 ```python
 import pandas as pd
 from bbstats.api import dataframe, diccionario
-df = dataframe(temporada="2025-26")            # lee data/processed/2025-26/todas_las_ligas.csv
+df = dataframe(temporada="2025-26")            # une data/processed/2025-26/ligas/*.csv
+acb = dataframe(liga="acb", temporada="2023-24")
+# Varias temporadas:
+hist = pd.concat([dataframe(temporada=t) for t in ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]])
 reg = df[df.fase == "regular"]
 po  = df[df.fase == "playoffs"]                 # incluye rs_* y delta_*
 dic = pd.DataFrame(diccionario())               # descripción de cada columna
 
-# JSON columnar (p.ej. para la web):
-from bbstats.pipeline import read_columnar_json
-rows = read_columnar_json("data/processed/2025-26/por_fase/playoffs.json")   # lista de dicts
+# CSV directo, sin bbstats:
+df = pd.read_csv("data/processed/2025-26/ligas/acb.csv", dtype={"player_id": str, "team_id": str})
 ```
 
 Claves:
@@ -279,8 +286,8 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 
 - URL: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (privado del propietario; se comparte desde su menú Compartir).
 - Código: `artifact/mesa-multiliga.html`. Datos publicados junto a la página como ficheros:
-  `datos/<temporada>/{indice,regular,playoffs,total}.json` (copias de `data/processed/<temporada>/por_fase/` e `indice.json`)
-  y `datos/diccionario_columnas.json`.
+  `datos/<temporada>/{indice,regular,playoffs,total}.json`, `datos/diccionario_columnas.json` y `datos/temporadas.json`,
+  generados con `python -m bbstats artifact` en `data/artifact/` (no versionado).
 - Funciones: selector de temporada (lista leída de `datos/temporadas.json`: 2026-27 … 2020-21); pestañas de fase **Temporada regular / Playoffs / Total**;
   filtros por liga, búsqueda y minutos mínimos; vistas (básico, tiro, por 40'/100, avanzada, ratings, on/off,
   playoffs vs regular, métricas oficiales, contexto de equipo); tabla ordenable; ficha del jugador con barras

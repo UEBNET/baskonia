@@ -6,7 +6,7 @@ columnas para todas las ligas**, listas para aplicar tus propios algoritmos.
 
 - Temporadas descargadas: **2025-26** (completa, con playoffs) y **2026-27** (hasta el 12-10-2026).
   La temporada por defecto es 2026-27; cualquier otra: `python ejecutar.py --temporada 2024-25`.
-- Datos reales en el repositorio: ver [¿Dónde están los JSON?](#3-dónde-están-los-json).
+- Datos reales en el repositorio: ver [¿Dónde están los datos?](#3-dónde-están-los-datos).
 - **Contexto para agentes de IA**: [`CONTEXTO_AGENTE.md`](CONTEXTO_AGENTE.md) explica todo el proceso operativo, el esquema, las fórmulas, las limitaciones y el Artifact asociado.
 
 **Jugadores (filas jugador-equipo) descargados:**
@@ -78,20 +78,20 @@ Todas las fuentes se han comprobado descargando datos reales (octubre de 2026).
 
 `reprocesar` regenera toda la salida desde los brutos sin volver a descargar.
 
-## 3. ¿Dónde están los JSON?
+## 3. ¿Dónde están los datos?
 
 En este repositorio, rama `claude/basketball-stats-extractor-jpas93`:
 
 | Ruta | Contenido |
 |---|---|
 | `data/raw/<liga>/<temporada>/<liga>_<temporada>_<YYYYmmddTHHMMSSZ>.json.gz` | **JSON original por liga y descarga**, con fecha, nunca se sobrescribe. Es JSON comprimido con gzip (los boxscores ocupan mucho); se abre con cualquier descompresor o con `RawStore.load()`. Contiene `meta` (fecha, peticiones hechas, errores) y `payload` (respuestas originales de la fuente). |
-| `data/processed/<temporada>/todas_las_ligas.json` / `.csv` | Todas las ligas y fases juntas |
-| `data/processed/<temporada>/por_fase/{regular,playoffs,total}.json` / `.csv` | Un fichero por fase (para el selector de pestañas) |
-| `data/processed/<temporada>/ligas/<liga>.json` / `.csv` | Una liga, todas sus fases |
+| `data/processed/<temporada>/ligas/<liga>.csv` | **Datos procesados: un CSV por liga y temporada**, todas sus fases (columna `fase`), 480 columnas, números con 4 decimales. Es la única copia de los datos procesados (sin duplicados combinados ni JSON, para ocupar menos). Todas las ligas juntas: `bbstats.api.dataframe(temporada=...)` |
 | `data/processed/<temporada>/indice.json` | Índice: ligas, filas por fase, fecha de extracción, rutas de ficheros |
-| `data/processed/<temporada>/diccionario_columnas.json` / `.csv` | Descripción de cada columna |
+| `data/processed/<temporada>/diccionario_columnas.csv` | Descripción de cada columna |
 | `data/processed/<temporada>/completitud.csv` | % de filas con dato por columna, liga y fase |
 | `data/processed/<temporada>/informe_ejecucion.json` | Estado de cada liga en la última ejecución |
+| `data/processed/temporadas.json` | Temporadas con datos, ligas y filas por fase |
+| `data/artifact/` (**no versionado**) | JSON columnar por temporada y fase para el Artifact; se genera con `python -m bbstats artifact [--temporada T]` |
 
 ## 4. Ejecutar (sólo cuando tú lo pides)
 
@@ -139,8 +139,8 @@ ORtg de la liga en playoffs, etc.). Además, en las filas de playoffs:
 Métricas con contexto: partidos, minutos, puntos, puntos/rebotes/asistencias por 40, TS%, eFG%,
 USG%, AST%, TOV%, REB%, PER, ORtg, DRtg, Net, Game Score, PIR, WS/40, PIE y on/off (BasketNews).
 
-Para el Artifact, el selector de fase puede leer `indice.json` y cargar `por_fase/<fase>.json`
-(o filtrar `todas_las_ligas.json` por la columna `fase`).
+Para el Artifact, `python -m bbstats artifact` genera `data/artifact/<temporada>/<fase>.json` (una fase por
+fichero, JSON columnar) a partir de los CSV; el selector de fase carga el de la fase elegida.
 
 ## 6. Esquema (480 columnas, idénticas en todas las ligas)
 
@@ -210,7 +210,7 @@ anterior y reutilización de partidos.
 ## 10. Artifact "Mesa Multiliga Baskonia"
 
 Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN
-(fuente en `artifact/mesa-multiliga.html`; los datos son los `por_fase/*.json` de cada temporada).
+(fuente en `artifact/mesa-multiliga.html`; los datos son los `data/artifact/<temporada>/<fase>.json` que genera `python -m bbstats artifact`).
 
 * Selector de temporada y pestañas de fase (Temporada regular / Playoffs / Total), filtros por liga,
   búsqueda, minutos mínimos y vistas de columnas (básico, tiro, por 40/100, avanzada, ratings,

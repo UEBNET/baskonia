@@ -46,10 +46,13 @@ jobs:
           else
             python -m bbstats ejecutar --temporada "$TEMPORADA" "${ARGS[@]}" || echo "Alguna liga terminó con error (ver informe)"
           fi
+      - name: JSON para el Artifact
+        run: python -m bbstats artifact
       - uses: actions/upload-artifact@v4
         with:
           name: estadisticas-${{ inputs.temporada }}-${{ github.run_number }}
           path: |
             data/processed
             data/raw
+            data/artifact
             config/sources.json

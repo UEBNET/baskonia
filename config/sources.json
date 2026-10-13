@@ -137,12 +137,16 @@
       "paso_busqueda": 40,
       "rangos_busqueda": [
         [
+          60000,
+          150000
+        ],
+        [
           1,
           40000
         ]
       ],
       "paso_rango": 100,
-      "_semillas": "Temporadas pasadas sin 'semillas': se buscan solas (bajando desde la temporada siguiente y, si no aparece la temporada regular, recorriendo 'rangos_busqueda' en saltos de 'paso_rango') y se guardan aquí. Numeración de la web: hasta la temporada regular 2024-25 ids bajos (2020-21 ≈ 25500); desde los playoffs 2024-25, ids ≥ 2003000.",
+      "_semillas": "Temporadas pasadas sin 'semillas': se buscan solas (bajando desde la temporada siguiente y, si no aparece la temporada regular, recorriendo 'rangos_busqueda' en saltos de 'paso_rango') y se guardan aquí. Numeración de la web: 2020-21 ≈ 25500, 2021-22 ≈ 26000, 2022-23 ≈ 27480 (playoffs ≈ 30500), 2023-24 ≈ 33200 (playoffs ≈ 34025), regular 2024-25 ≈ 110500 (copa ≈ 90000), playoffs 2024-25 ≈ 2003212, 2025-26 ≥ 2004000.",
       "ventana_busqueda": 3500,
       "paso_fino": 10
     },

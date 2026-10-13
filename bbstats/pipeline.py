@@ -121,14 +121,15 @@ def build_league_frame(parsed_by_phase: dict | ParsedLeague, liga: str, lcfg: di
     return df.drop(columns="_o").reset_index(drop=True)
 
 
-def _write_frame(df: pd.DataFrame, path_noext: Path, csv: bool = True, json_: bool = True) -> None:
-    """CSV (todas las columnas) y/o JSON columnar compacto: {"columnas": [...], "filas": [[...], ...]}.
-
-    El JSON no repite los nombres de columna en cada fila y redondea a 4 decimales (mismo
-    contenido, ~10 veces menos espacio): adecuado para cargarlo en un Artifact / web."""
+def _write_frame(df: pd.DataFrame, path_noext: Path, csv: bool = True, json_: bool = False) -> None:
+    """CSV (todas las columnas, números redondeados a 4 decimales) y, si se pide, JSON columnar
+    compacto {"columnas": [...], "filas": [[...], ...]} (sólo para el Artifact, no se versiona)."""
     path_noext.parent.mkdir(parents=True, exist_ok=True)
     if csv:
-        df.to_csv(path_noext.with_suffix(".csv"), index=False, encoding="utf-8", float_format="%.10g")
+        out = df.copy()
+        num = out.select_dtypes(include="number").columns
+        out[num] = out[num].round(4)
+        out.to_csv(path_noext.with_suffix(".csv"), index=False, encoding="utf-8", float_format="%.10g")
     if json_:
         write_columnar_json(df, path_noext.with_suffix(".json"))
 
@@ -222,7 +223,7 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
         if df.empty:
             res.estado = "sin_datos"
         out = out_dir / "ligas" / liga
-        _write_frame(df, out, json_=False)
+        _write_frame(df, out)
         res.archivo_salida = str(out.with_suffix(".csv"))
         comp = _completeness(df)
         res.columnas_con_datos = int((comp > 0).sum())
@@ -320,7 +321,7 @@ def write_seasons_index(processed_root: Path) -> Path:
             continue
         idx = json.loads(idx_path.read_text(encoding="utf-8"))
         seasons.append({"temporada": d.name, "generado": idx.get("generado"),
-                        "fases": [f for f in PHASES if f in idx.get("archivos", {})],
+                        "fases": idx.get("fases_con_datos") or [f for f in PHASES if f in idx.get("archivos", {})],
                         "ligas": {k: v.get("fases", {}) for k, v in idx.get("ligas", {}).items()}})
     out = processed_root / "temporadas.json"
     processed_root.mkdir(parents=True, exist_ok=True)
@@ -329,33 +330,28 @@ def write_seasons_index(processed_root: Path) -> Path:
     return out
 
 
-def write_combined(out_dir: Path, season: str | None = None) -> Path | None:
-    """Une el último procesado de TODAS las ligas de la temporada (aunque hoy alguna falle) y
-    escribe también un fichero por fase (para un selector regular / playoffs / total)."""
+def read_season(out_dir: Path) -> pd.DataFrame:
+    """Todas las ligas de una temporada (une los CSV de data/processed/<temporada>/ligas/)."""
     files = sorted((out_dir / "ligas").glob("*.csv")) if (out_dir / "ligas").exists() else []
-    out_dir.mkdir(parents=True, exist_ok=True)
-    dict_df = pd.DataFrame(dictionary_records())
-    dict_df.to_csv(out_dir / "diccionario_columnas.csv", index=False, encoding="utf-8")
-    (out_dir / "diccionario_columnas.json").write_text(json.dumps(dictionary_records(), ensure_ascii=False, indent=1),
-                                                       encoding="utf-8")
-    if not files:
-        return None
     frames = [pd.read_csv(f, dtype={"player_id": str, "team_id": str, "dorsal": str, "bn_player_id": str},
                           low_memory=False) for f in files]
     frames = [f for f in frames if not f.empty]
-    if not frames:
+    return finalize_columns(pd.concat(frames, ignore_index=True)) if frames else pd.DataFrame()
+
+
+def write_combined(out_dir: Path, season: str | None = None) -> Path | None:
+    """Índice de la temporada (ligas, filas por fase, fecha de extracción), diccionario de columnas y
+    completitud a partir del último CSV de cada liga (aunque hoy alguna falle). Los datos se guardan
+    sólo como CSV, uno por liga: data/processed/<temporada>/ligas/<liga>.csv."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(dictionary_records()).to_csv(out_dir / "diccionario_columnas.csv", index=False, encoding="utf-8")
+    df = read_season(out_dir)
+    if df.empty:
         return None
-    df = finalize_columns(pd.concat(frames, ignore_index=True))
-    _write_frame(df, out_dir / "todas_las_ligas")
-    index = {"temporada": season or (df["temporada"].iloc[0] if len(df) else None),
-             "generado": utc_now().isoformat(), "fases": PHASES, "ligas": {},
-             "formato_json": "columnar: {columnas: [...], filas: [[...]]}",
-             "archivos": {"todas": "todas_las_ligas.json", "diccionario": "diccionario_columnas.json"}}
-    for phase in PHASES:
-        sub = df[df["fase"] == phase]
-        if len(sub):
-            _write_frame(sub, out_dir / "por_fase" / phase, csv=False)
-            index["archivos"][phase] = f"por_fase/{phase}.json"
+    index = {"temporada": season or df["temporada"].iloc[0], "generado": utc_now().isoformat(),
+             "fases": PHASES, "fases_con_datos": [f for f in PHASES if (df["fase"] == f).any()], "ligas": {},
+             "formato": "CSV por liga (ligas/<liga>.csv), 1 fila = jugador-equipo-fase",
+             "archivos": {"diccionario": "diccionario_columnas.csv", "completitud": "completitud.csv"}}
     for (liga, phase), g in df.groupby(["liga", "fase"]):
         entry = index["ligas"].setdefault(liga, {"nombre": g["liga_nombre"].iloc[0], "archivo": f"ligas/{liga}.csv",
                                                  "fecha_extraccion": g["fecha_extraccion"].iloc[0], "fases": {}})
@@ -364,4 +360,31 @@ def write_combined(out_dir: Path, season: str | None = None) -> Path | None:
     comp = pd.DataFrame({f"{liga}|{phase}": _completeness(g) for (liga, phase), g in df.groupby(["liga", "fase"])})
     comp.index.name = "columna"
     comp.to_csv(out_dir / "completitud.csv", encoding="utf-8")
-    return out_dir / "todas_las_ligas.csv"
+    return out_dir / "ligas"
+
+
+def export_artifact(processed_root: Path, season: str, out_root: Path) -> list[Path]:
+    """Genera los ficheros que lee el Artifact (no se versionan): <out_root>/<temporada>/<fase>.json
+    (JSON columnar), <out_root>/<temporada>/indice.json, <out_root>/diccionario_columnas.json y
+    <out_root>/temporadas.json."""
+    src = processed_root / season
+    df = read_season(src)
+    if df.empty:
+        raise FileNotFoundError(f"No hay CSV procesados en {src / 'ligas'}")
+    dst = out_root / season
+    dst.mkdir(parents=True, exist_ok=True)
+    written = []
+    for phase in PHASES:
+        sub = df[df["fase"] == phase]
+        if len(sub):
+            write_columnar_json(sub, dst / f"{phase}.json")
+            written.append(dst / f"{phase}.json")
+    idx = json.loads((src / "indice.json").read_text(encoding="utf-8"))
+    idx["archivos"] = {**idx.get("archivos", {}), **{f: f"{f}.json" for f in idx.get("fases_con_datos", [])}}
+    (dst / "indice.json").write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_root / "diccionario_columnas.json").write_text(json.dumps(dictionary_records(), ensure_ascii=False),
+                                                        encoding="utf-8")
+    seasons = processed_root / "temporadas.json"
+    if seasons.exists():
+        (out_root / "temporadas.json").write_text(seasons.read_text(encoding="utf-8"), encoding="utf-8")
+    return written + [dst / "indice.json", out_root / "diccionario_columnas.json", out_root / "temporadas.json"]

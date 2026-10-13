@@ -7,6 +7,7 @@
     python -m bbstats historico --desde 2020-21 --hasta 2024-25 --ligas bbl
     python -m bbstats estado
     python -m bbstats servidor --puerto 8765            # API HTTP para el botón EJECUTAR
+    python -m bbstats artifact --temporada 2026-27      # JSON del Artifact en data/artifact/ (no versionado)
 """
 from __future__ import annotations
 
@@ -36,6 +37,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--sin-descarga", action="store_true", help="Reprocesar los brutos sin red")
     p.add_argument("--config")
     p.add_argument("--secuencial", action="store_true")
+    p = sub.add_parser("artifact", help="Genera los JSON que lee el Artifact a partir de los CSV procesados")
+    p.add_argument("--temporada", nargs="*", help="Temporadas (por defecto, todas las procesadas)")
+    p.add_argument("--salida", default="data/artifact", help="Carpeta de salida (no se versiona)")
+    p.add_argument("--config")
     p = sub.add_parser("estado")
     p.add_argument("--temporada")
     p.add_argument("--config")
@@ -63,6 +68,18 @@ def main(argv: list[str] | None = None) -> int:
             ok &= _summary(rep)
         print("\nHistórico terminado")
         return 0 if ok else 1
+    elif args.cmd == "artifact":
+        from pathlib import Path
+        from .config import load_config, resolve_path
+        from .pipeline import export_artifact
+        cfg = load_config(args.config)
+        root = resolve_path(cfg, "procesado")
+        seasons = args.temporada or sorted((d.name for d in root.glob("*-*") if (d / "indice.json").exists()),
+                                           reverse=True)
+        for t in seasons:
+            for f in export_artifact(root, t, Path(args.salida)):
+                print(f)
+        return 0
     elif args.cmd == "estado":
         print(json.dumps(api.estado(args.temporada, args.config), ensure_ascii=False, indent=2))
         return 0

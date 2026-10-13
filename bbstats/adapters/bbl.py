@@ -191,12 +191,22 @@ class BBLAdapter(BaseAdapter):
             window = int(self.cfg.get("ventana_busqueda", 3500))
             step = int(self.cfg.get("paso_fino", 10))
             known = set(found)
-            for gid in range(max(1, min(found) - window), max(found) + window + 1, step):
-                if gid in known:
-                    continue
-                gd = self._probe(http, gid)
-                if gd.get("seasonId") == year and gd.get("competition") == comp:
-                    found.append(gid)
+            # Una ventana por grupo de ids cercanos (una temporada puede repartirse entre numeraciones
+            # muy distantes, p.ej. 2024-25: regular ≈ 110500 y playoffs ≈ 2003212).
+            groups: list[list[int]] = []
+            for gid in sorted(known):
+                if groups and gid - groups[-1][-1] <= 2 * window:
+                    groups[-1].append(gid)
+                else:
+                    groups.append([gid])
+            for g in groups:
+                for gid in range(max(1, g[0] - window), g[-1] + window + 1, step):
+                    if gid in known:
+                        continue
+                    gd = self._probe(http, gid)
+                    if gd.get("seasonId") == year and gd.get("competition") == comp:
+                        found.append(gid)
+                        known.add(gid)
         return sorted(set(found))
 
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
