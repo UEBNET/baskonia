@@ -11,6 +11,7 @@ Formato columnar {"columnas": [...], "filas": [[...]]} para que pese poco.
 """
 from __future__ import annotations
 
+import ast
 import json
 from pathlib import Path
 
@@ -66,7 +67,7 @@ def main(salida: str) -> None:
         ref = referencias_distancia(red_guardada(red), cj)
         q = np.linspace(0, 100, 101)
         meta["redes"][red] = {"pesos": json.loads((rd / "pesos.json").read_text(encoding="utf-8")),
-                              "estilos": json.loads(est.drop(columns=["ligas"]).to_json(orient="records")),
+                              "estilos": json.loads(est.assign(ligas=est["ligas"].map(ast.literal_eval)).to_json(orient="records")),
                               "evaluacion": e,
                               # percentiles 0..100 de las distancias de referencia (encaje.referencias_distancia)
                               "referencias": {k: [_r(x, 4) for x in np.percentile(v, q)] for k, v in ref.items()}}

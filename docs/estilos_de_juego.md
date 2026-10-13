@@ -108,7 +108,76 @@ usar como color.
 
 ## 4. Resultados y comparativa
 
-_(Se completa con `data/modelos/estilos/comparativa.csv` tras el entrenamiento.)_
+Entrenamiento del 13-10-2026: 997 clubes-competición-temporada (2020-21 a 2025-26) + 120 provisionales de
+2026-27; 5 semillas por red (semilla final: IDEC 51, VaDE 37); 19 minutos en 4 núcleos. Mapa interactivo:
+Artifact «Atlas de Estilos» (https://claude.ai/artifact/D2ULCYstYh4ykwSzExUPNU, privado).
+
+| Métrica (997 clubes) | IDEC | VaDE | Mejor |
+|---|---|---|---|
+| Equilibrio del reparto (entropía, 1 = igual) | 0,963 | **0,970** | VaDE |
+| Estilo más pequeño (clubes) | 29 | **33** | VaDE |
+| Confianza media de la neurona ganadora | 0,39 | **0,74** | VaDE |
+| Silueta en el mapa 3D | **0,273** | 0,212 | IDEC |
+| Silueta en los 13 rasgos (k-medias directo: 0,094) | 0,043 | **0,057** | VaDE |
+| Davies-Bouldin en el mapa (menos es mejor) | **1,02** | 1,52 | IDEC |
+| Estabilidad de los estilos entre semillas (ARI medio) | **0,43** | 0,38 | IDEC |
+| Estabilidad del mapa entre semillas (r de distancias) | 0,916 | **0,962** | VaDE |
+| Robustez al reparto de minutos | 0,49 | **0,52** | VaDE |
+| Reproducibilidad temporal (ARI, red sin 2024-26) | 0,28 | **0,37** | VaDE |
+| Fidelidad del mapa: trustworthiness (k = 10) | **0,926** | 0,912 | IDEC |
+| Fidelidad del mapa: continuidad (k = 10) | 0,921 | **0,931** | VaDE |
+| Correlación de Spearman distancias mapa / perfil | 0,810 | **0,824** | VaDE |
+| R² medio de reconstrucción | **0,71** | 0,65 | IDEC |
+| Parejas de estilos distintas (permutación 9.999, Holm 5 %) | 66/66 | 66/66 | = |
+| Mahalanobis mínima / mediana entre estilos | 2,22 / 4,37 | 2,26 / 4,19 | ≈ |
+| Replicabilidad de perfiles 2020-23 / 2023-26 (r medio) | **0,94** | 0,92 | IDEC |
+| Persistencia del estilo de un club al año siguiente (azar) | 35 % (10 %) | **44 %** (10 %) | VaDE |
+| Minutos de la plantilla en el estilo de su club (azar) | **14 %** (8 %) | 12 % (8 %) | IDEC |
+| Información compartida estilo-liga (NMI) | 0,32 | 0,39 | — |
+
+**Lectura.**
+
+* **Los 12 estilos están matemática y estadísticamente diferenciados en las dos redes**: las 66 parejas
+  difieren tras corregir por comparaciones múltiples, la distancia de Mahalanobis mínima entre perfiles
+  medios es 2,2 desviaciones, y, lo más importante porque no es circular, el perfil de cada estilo se
+  replica entre 2020-23 y 2023-26 (r = 0,94 y 0,92).
+* **VaDE** gana en 10 de las 16 métricas comparables y en las que más importan para fichar: la
+  confianza de la asignación (0,74 frente a 0,39), la estabilidad del mapa entre semillas (0,96), la
+  reproducibilidad temporal y la persistencia. **IDEC** forma regiones más compactas en el mapa (silueta,
+  Davies-Bouldin), conserva mejor la vecindad local y reconstruye mejor el perfil.
+* **Recomendación**: VaDE como red principal (mapa más estable y probabilidades interpretables) e IDEC
+  como contraste: cuando las dos coinciden en que un jugador está cerca del club, la señal es sólida.
+* **Estilo continuo.** Con cualquier método la separación en los 13 rasgos es baja (k-medias directo:
+  0,094; las redes ceden algo de esa separación a cambio de un mapa 3D fiel y compartido con los
+  jugadores). La estabilidad de las etiquetas entre semillas es moderada (ARI 0,38-0,43), y la del mapa,
+  alta (0,92-0,96): **la distancia en el mapa es más fiable que la etiqueta**, sobre todo cerca de las
+  fronteras.
+* **El nivel de la liga se cuela en el estilo.** Aunque las métricas de calidad están fuera, la vara
+  EuroLeague traslada el nivel de cada liga a las métricas de estilo (un jugador NBA, traducido,
+  rebotea y asiste más y hace menos faltas). Por eso 2 estilos de VaDE (E11, E12) y 3 de IDEC
+  (E10-E12) son casi sólo NBA y el nivel medio de los estilos va de −0,9 a +1,5. Es coherente con
+  los datos normalizados, pero significa que «estilo» incluye en parte «nivel de liga».
+* **Qué define los estilos** (η², parte de la varianza de cada rasgo explicada por el estilo):
+  rebote defensivo 0,74-0,77, faltas 0,71-0,73, AST% 0,67-0,70, FTr 0,61-0,66, 3PAr 0,52-0,58; menos,
+  tapones, posiciones, pérdidas y robos (0,31-0,50); casi nada, la concentración del uso (0,10-0,15) y
+  el **ritmo (0,03)**: el ritmo está en el mapa, pero al ser relativo a cada liga pesa poco frente a
+  los rasgos que arrastran el nivel de la liga.
+
+**Saski Baskonia por temporada** (estilo · salida de la neurona ganadora):
+
+| Temporada | VaDE EuroLeague | VaDE ACB | IDEC EuroLeague | IDEC ACB |
+|---|---|---|---|---|
+| 2020-21 | E09 · 0,82 | E09 · 0,90 | E12 · 0,21 | E08 · 0,25 |
+| 2021-22 | E09 · 0,70 | E07 · 0,52 | E11 · 0,20 | E08 · 0,22 |
+| 2022-23 | E07 · 0,68 | E07 · 0,84 | E11 · 0,27 | E06 · 0,27 |
+| 2023-24 | E07 · 0,93 | E07 · 0,95 | E06 · 0,21 | E06 · 0,35 |
+| 2024-25 | E09 · 0,80 | E09 · 0,85 | E08 · 0,41 | E08 · 0,59 |
+| 2025-26 | E07 · 0,69 | E09 · 0,55 | E06 · 0,35 | E06 · 0,41 |
+| 2026-27 (provisional) | E01 · 0,98 | E01 · 0,95 | E06 · 0,60 | E06 · 0,63 |
+
+En VaDE, E07 = «TOV% ↓ · uso concentrado ↑ · 3PAr ↑» y E09 = «faltas ↓» (estilo con más clubes EuroLeague).
+El cambio de 2026-27 descansa en 3-4 jornadas, sólo algoritmo A y muy pocos minutos de interiores: hay que
+esperar.
 
 ## 5. Cómo se evalúa
 

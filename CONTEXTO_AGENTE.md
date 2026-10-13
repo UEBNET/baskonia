@@ -358,7 +358,10 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   concentración del uso y cuotas de minutos interior/exterior). Capa latente de 3 = mapa 3D compartido por clubes y
   jugadores; capa final de 12 = estilos. Las métricas de calidad (PER, WS, ORtg…) quedan fuera, como capa de nivel.
   `python -m bbestilo entrenar | evaluar | encaje | exportar`. Resultados en `data/modelos/estilos/`; mapa interactivo
-  `artifact/mapa-estilos.html` con datos `artifact/estilos/*.json`.
+  `artifact/mapa-estilos.html` con datos `artifact/estilos/*.json`, publicado como Artifact «Atlas de Estilos»
+  (https://claude.ai/artifact/D2ULCYstYh4ykwSzExUPNU; republicar con `files` = `estilos/{meta,clubes,jugadores}.json`).
+  Recomendada: VaDE (mapa más estable, probabilidades interpretables); IDEC como contraste. Ojo: la vara EuroLeague
+  arrastra el nivel de liga a las métricas de estilo (2-3 estilos casi sólo NBA).
 
 ## 10. Historial
 

@@ -56,7 +56,9 @@ input[type="range"] { accent-color: var(--accent-strong); width: 100%; }
 .lg svg { flex: none; }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 14px; min-width: 0; }
 .panel .row { display: grid; gap: 6px; }
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.two > * { min-width: 0; }
+.panel select, .panel input[type="number"], .panel input[type="search"] { width: 100%; min-width: 0; }
 .sugs { display: grid; gap: 2px; max-height: 190px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--c4); }
 .sugs button { all: unset; cursor: pointer; padding: 5px 8px; font-size: 13px; display: flex; justify-content: space-between; gap: 8px; }
 .sugs button:hover, .sugs button:focus-visible { background: var(--c1); }
@@ -193,7 +195,7 @@ td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-w
   <section class="block">
     <div>
       <h2 id="estTitle">Los 12 estilos</h2>
-      <p class="sub" style="margin-top:4px">Perfil medio de los clubes de cada estilo frente al club medio, en desviaciones típicas (barra a la derecha = más que la media). Los nombres son abstractos; la etiqueta resume sus rasgos más marcados.</p>
+      <p class="sub" style="margin-top:4px">Perfil medio de los clubes de cada estilo frente al club medio, en desviaciones típicas (barra a la derecha = más que la media). Los nombres son abstractos; la etiqueta resume sus rasgos más marcados. Junto al tamaño, el nivel medio y la liga con más clubes en el estilo: en la vara EuroLeague el nivel de cada liga se traslada a las métricas de estilo, y por eso algunos estilos reúnen casi sólo a clubes NBA.</p>
     </div>
     <div class="styles" id="estilos"></div>
   </section>
@@ -292,7 +294,8 @@ function vectorClub(S, W) {
   const M = mediasClub(S, W), u2 = W[CR.length] > 0 ? S[CR.length] / W[CR.length] : NaN, iu = CR.indexOf("usg_pct");
   return META.rasgos.map((r) => r.col === "uso_conc" ? u2 / (M[iu] ** 2) : r.col === "cuota_interior" ? M[CR.indexOf("es_int")] : r.col === "cuota_exterior" ? M[CR.indexOf("es_ext")] : M[CR.indexOf(r.col)]);
 }
-function vectorJugador(R, club) {
+function vectorJugador(Rj, club) {
+  const R = Rj.map((x) => x == null ? NaN : x);   // hueco = NaN (no 0): se rellena con el valor del club
   const vc = vectorClub(club.S, club.W), M = mediasClub(club.S, club.W), iu = CR.indexOf("usg_pct");
   return META.rasgos.map((r, k) => { let x = r.col === "uso_conc" ? (R[iu] / M[iu]) ** 2 : r.col === "cuota_interior" ? R[CR.indexOf("es_int")] : r.col === "cuota_exterior" ? R[CR.indexOf("es_ext")] : R[CR.indexOf(r.col)]; return (x == null || !isFinite(x)) ? vc[k] : x; });
 }
@@ -557,7 +560,8 @@ function barras(s) {
 function pintarEstilos() {
   const R = META.redes[st.red];
   $("#estTitle").textContent = `Los 12 estilos · ${st.red.toUpperCase()}`;
-  $("#estilos").innerHTML = R.estilos.map((s, k) => `<div class="sc"><header><span class="st">${glyph(k, 14)}${s.estilo}</span><span class="note">${s.clubes} clubes · nivel ${fmt(s.nivel_medio)}</span></header>
+  const ligaTop = (s) => { const e = Object.entries(s.ligas || {}).sort((a, b) => b[1] - a[1])[0]; return e ? `${LIGA_CORTA[e[0]]} ${Math.round(e[1] * 100)} %` : "–"; };
+  $("#estilos").innerHTML = R.estilos.map((s, k) => `<div class="sc"><header><span class="st">${glyph(k, 14)}${s.estilo}</span><span class="note">${s.clubes} clubes · nivel ${fmt(s.nivel_medio)} · ${ligaTop(s)}</span></header>
     <div class="d">${esc(s.descriptor)}</div>${barras(s)}<div class="ex">${esc(s.ejemplos)}</div></div>`).join("");
 }
 function pintarTrayectoria() {
