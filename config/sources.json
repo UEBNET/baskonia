@@ -122,6 +122,13 @@
         },
         "2026-27": {
           "semillas": []
+        },
+        "2023-24": {
+          "semillas": [
+            32767,
+            33192,
+            34024
+          ]
         }
       },
       "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
