@@ -225,7 +225,7 @@ Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM
 
 ---
 
-## 11. Modelos: `bbmodel` (algoritmo A)
+## 11. Modelos: `bbmodel` (algoritmos A y B)
 
 Traduce las métricas de cualquier jugador de las 8 ligas a su **equivalente en la EuroLeague** (entorno
 2025-26), con intervalo del 80 % y percentil EuroLeague por posición. Separa el entorno de cada liga de su
@@ -237,7 +237,15 @@ pip install -r requirements.txt
 python -m bbmodel ajustar            # ≈ 10-15 min; escribe data/modelos/algoritmo_A/
 python -m bbmodel validar            # examen fuera de muestra con cambios de liga reales
 python -m bbmodel evaluacion-ligas   # JSON de la pestaña «Evaluación de ligas» (en data/artifact/)
+python -m bbmodel ajustar-b          # algoritmo B (red neuronal, 5 redes); escribe data/modelos/algoritmo_B/
+python -m bbmodel validar-b          # examen fuera de muestra del B
+python -m bbmodel mesa-normalizacion # JSON de la pestaña «Normalización de ligas» (A, B y A+B, en data/artifact/normalizacion/)
 ```
+
+**Algoritmo B** ([`docs/algoritmo_B.md`](docs/algoritmo_B.md)): red neuronal multitarea que aprende un «ADN» de 8
+números por jugador y separa a la vez nivel, liga, temporada, posición y equipo. La estimación recomendada es la
+media **A+B**: en el examen fuera de muestra (412 cambios de liga) reduce el error frente a «mismo percentil» una
+mediana del 20 % por métrica (A 10,8 %, B 8,1 %) y gana a A en las 25 métricas.
 
 Resultado principal: `data/modelos/algoritmo_A/traducciones/<temporada>.csv` (una fila por jugador-liga-
 temporada; columnas `<métrica>_el`, `_el_lo`, `_el_hi`, `_pct_el`, `_el_prox`) y `tipo_de_cambio.csv`.

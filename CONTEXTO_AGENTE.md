@@ -340,6 +340,14 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   (`enlace.py`); traducción con intervalos (`modelo.py`); examen fuera de muestra (`validacion.py`).
   Resultados versionados en `data/modelos/algoritmo_A/`. Reajustar tras cada carga de datos:
   `python -m bbmodel ajustar`.
+- **Algoritmo B** (`docs/algoritmo_B.md`, `bbmodel/algoritmo_b.py`): red neuronal en numpy (ADN de 8 dimensiones por
+  jugador-temporada, capa oculta de 32 con desplazamiento por liga, entorno liga × temporada × posición, efecto de
+  equipo-temporada con varianza por bayes empírico, Laplace + conjunto de 5 redes). Hiperparámetros elegidos sólo con
+  el corte 2022 (no con el examen). Resultados en `data/modelos/algoritmo_B/`. `python -m bbmodel ajustar-b`.
+- **A+B** (`bbmodel/mesa_normalizacion.py`): media de A y B en escala transformada; es la estimación recomendada.
+  `python -m bbmodel mesa-normalizacion` genera `normalizacion/resumen.json` y `normalizacion/jugadores_<temp>.json`
+  para la pestaña «Normalización de ligas» (publicar en `datos/normalizacion/`).
+- Corrección (oct. 2026): `identidad.py` asigna el año de nacimiento por persona (mediana), no por nodo de liga.
 - **Evaluación de ligas** (`bbmodel/evaluacion_ligas.py`): genera `data/artifact/<temporada>/evaluacion_<fase>.json`
   para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
 - Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
@@ -365,3 +373,5 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   temporadas dinámico. La pestaña Evaluación usa `datos/<T>/evaluacion_<fase>.json`, que sólo existen para
   2025-26 y 2026-27 (los generó un script `compute_eval.py` que no está en este repositorio).
 - Algoritmo A (`bbmodel`) y cálculo de la evaluación de ligas en el repositorio; resultados en `data/modelos/algoritmo_A/`.
+- Algoritmo B, combinación A+B y pestaña «Normalización de ligas» (Artifact versión 17); A reajustado tras corregir el
+  año de nacimiento por persona. `artifact/mesa-multiliga.html` = página publicada con la nueva pestaña.

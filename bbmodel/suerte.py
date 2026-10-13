@@ -38,18 +38,24 @@ def _media_ponderada(y, w, grupos):
     return (num / den).reindex(g).to_numpy()
 
 
-def ajustar_metrica(t: pd.DataFrame, col: str, iter_: int = 4) -> tuple[pd.DataFrame, dict]:
-    """Devuelve (filas con z_obs, v_obs, z_post, v_post; parámetros estimados)."""
+def valor_y_exposicion(t: pd.DataFrame, col: str) -> tuple[np.ndarray, np.ndarray]:
+    """Métrica en escala transformada (recortada) y su exposición, fila a fila.
+    Muestras minúsculas dan valores imposibles (TS% de 795 con medio intento): se recortan a los
+    percentiles 0,5-99,5 de los jugadores con exposición suficiente; su peso ya es casi nulo."""
     m = CATALOGO[col]
     y = transformar(pd.to_numeric(t[col], errors="coerce"), m.transf)
-    # muestras minúsculas dan valores imposibles (TS% de 795 con medio intento): se recortan a los
-    # percentiles 0,5-99,5 de los jugadores con exposición suficiente; su peso ya es casi nulo.
-    n_ = pd.to_numeric(t[EXPOSICIONES[m.exposicion]], errors="coerce").to_numpy(float)
-    ref = y[np.isfinite(y) & (n_ >= MIN_EXPOSICION_AJUSTE[m.exposicion])]
+    n = pd.to_numeric(t[EXPOSICIONES[m.exposicion]], errors="coerce").to_numpy(float)
+    ref = y[np.isfinite(y) & (n >= MIN_EXPOSICION_AJUSTE[m.exposicion])]
     if len(ref):
         lo, hi = np.quantile(ref, [0.005, 0.995]); span = hi - lo
         y = np.clip(y, lo - 0.25 * span, hi + 0.25 * span)
-    n = pd.to_numeric(t[EXPOSICIONES[m.exposicion]], errors="coerce").to_numpy(float)
+    return y, n
+
+
+def ajustar_metrica(t: pd.DataFrame, col: str, iter_: int = 4) -> tuple[pd.DataFrame, dict]:
+    """Devuelve (filas con z_obs, v_obs, z_post, v_post; parámetros estimados)."""
+    m = CATALOGO[col]
+    y, n = valor_y_exposicion(t, col)
     ok = np.isfinite(y) & np.isfinite(n) & (n > 0) & t["pos3"].notna().to_numpy()
     d = t.loc[ok, ["liga", "temporada", "pos3"]].copy()
     d["y"] = y[ok]; d["n"] = n[ok]

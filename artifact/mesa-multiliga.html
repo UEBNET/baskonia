@@ -336,6 +336,70 @@ details.dcard summary { cursor: pointer; font: 700 16px var(--f-display); letter
 .ev-check { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); }
 .ev details summary { cursor: pointer; font: 600 13px var(--f-display); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-strong); }
 .ev details p { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
+
+/* normalización de ligas: barra de mando, nivel por liga (puntos con intervalo A y B), mapa de percentiles, importar, validación, explorador y resumen fijo */
+.nl { --nl-a: #2a78d6; --nl-b: #d0602a; --nl-ok: #2f7a4c; --nl-ko: #b0402c; }
+.nl-bar { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; }
+.nl-bar .cmd-group { min-width: 0; }
+.nl-key { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink); align-items: center; }
+.nl-key span { display: inline-flex; gap: 6px; align-items: center; }
+.nl-dotA { width: 11px; height: 11px; border-radius: 50%; background: var(--nl-a); display: inline-block; }
+.nl-dotB { width: 10px; height: 10px; border: 2px solid var(--nl-b); transform: rotate(45deg); display: inline-block; background: var(--c5); }
+.nl .ev-svgbox svg { min-width: 520px; }
+.nl svg text { fill: var(--ink); font-family: var(--f-data); font-size: 11px; }
+.nl svg .lab { font-family: var(--f-display); font-weight: 600; font-size: 13px; letter-spacing: .03em; }
+.nl svg .mut { fill: var(--muted); }
+.nl svg .ax { stroke: var(--line); }
+.nl svg .ax0 { stroke: var(--accent-strong); stroke-width: 1.5; }
+.nl-tbl td, .nl-tbl th { white-space: nowrap; }
+.nl-tbl td.c { text-align: center; }
+.nl-tbl td small { color: var(--muted); font-size: 10.5px; }
+.nl-pair { display: grid; gap: 1px; }
+.nl-pair b { font: 500 12.5px var(--f-data); }
+.nl-pair b.a { color: var(--ink); }
+.nl-pair b.a::before { content: "A "; color: var(--nl-a); font-weight: 700; }
+.nl-pair b.b::before { content: "B "; color: var(--nl-b); font-weight: 700; }
+.nl-chg { font: 500 11px var(--f-data); padding: 1px 5px; border-radius: 4px; display: inline-block; }
+.nl-chg.up { background: rgba(42,120,214,.16); }
+.nl-chg.down { background: rgba(208,96,42,.18); }
+.nl-imp { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.nl-impcard { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--c4); display: grid; gap: 6px; min-width: 0; }
+.nl-impcard h4 { margin: 0; font: 700 16px var(--f-display); letter-spacing: .04em; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.nl-impcard h4 small { font: 500 11px var(--f-data); color: var(--muted); letter-spacing: 0; }
+.nl-row { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 12.5px; }
+.nl-row > span:first-child { font: 600 12px var(--f-display); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.nl-row .val { font-family: var(--f-data); font-size: 12.5px; }
+.nl-row .val i { font-style: normal; color: var(--muted); }
+.nl-vbars { display: grid; gap: 4px; }
+.nl-vrow { display: grid; grid-template-columns: 150px minmax(0, 1fr) 128px; gap: 8px; align-items: center; font-size: 12.5px; }
+.nl-vrow .trk { position: relative; height: 18px; }
+.nl-vrow .trk i { position: absolute; height: 7px; border-radius: 0 3px 3px 0; left: 50%; }
+.nl-vrow .trk i.a { top: 1px; background: var(--nl-a); }
+.nl-vrow .trk i.b { top: 7px; background: var(--nl-b); }
+.nl-vrow .trk i.ab { top: 13px; background: var(--accent-strong); }
+.nl-vrow .trk i { height: 5px; }
+.nl-dotAB { width: 11px; height: 11px; border-radius: 2px; background: var(--accent-strong); display: inline-block; }
+.nl-vrow .trk i.neg { border-radius: 3px 0 0 3px; }
+.nl-vrow .trk u { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); }
+.nl-vrow em { font: 500 11.5px var(--f-data); font-style: normal; text-align: right; }
+.nl-explo .tablebox { max-height: 62vh; }
+.nl-explo td.rng { color: var(--muted); font-size: 11px; }
+.nl-badge { font: 600 10.5px var(--f-display); letter-spacing: .05em; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.nl-fin { display: grid; gap: 14px; background: var(--c2); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.nl-fin h2 { margin: 0; font: 700 32px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; text-wrap: balance; }
+.nl-fin > p { margin: 0; color: var(--muted); font-size: 13px; max-width: 95ch; }
+.nl-fin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 14px; }
+.nl-liga { background: var(--c5); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.nl-liga h3 { margin: 0; font: 700 22px/1 var(--f-display); letter-spacing: .03em; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.nl-liga h3 small { font: 600 11px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.nl-liga .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.nl-liga .kpis div { background: var(--c3); border-radius: 6px; padding: 5px 7px; display: grid; }
+.nl-liga .kpis span { font: 600 10.5px var(--f-display); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.nl-liga .kpis b { font: 500 14px var(--f-data); }
+.nl-liga p { margin: 0; font-size: 13px; line-height: 1.5; }
+.nl-liga ul { margin: 0; padding-left: 18px; font-size: 12.5px; display: grid; gap: 3px; }
+.nl-gen { background: var(--c5); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; }
+.nl-gen ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 13.5px; max-width: 100ch; }
 </style>
 
 <div class="wrap">
@@ -347,6 +411,7 @@ details.dcard summary { cursor: pointer; font: 700 16px var(--f-display); letter
       <button class="pagetab" role="tab" type="button" id="tab-tabla" data-page="tabla" aria-selected="true">Tabla de datos</button>
       <button class="pagetab" role="tab" type="button" id="tab-comparador" data-page="comparador" aria-selected="false">Comparador</button>
       <button class="pagetab" role="tab" type="button" id="tab-evaluacion" data-page="evaluacion" aria-selected="false">Evaluación de ligas</button>
+      <button class="pagetab" role="tab" type="button" id="tab-normalizacion" data-page="normalizacion" aria-selected="false">Normalización de ligas</button>
     </nav>
   </header>
 
@@ -546,6 +611,46 @@ details.dcard summary { cursor: pointer; font: 700 16px var(--f-display); letter
   </div>
 </section>
 
+  </div>
+
+  <div id="pageNorm" class="page nl ev" hidden>
+    <section class="ev-intro" aria-label="Qué muestra esta pestaña">
+      <span class="label">Normalización de ligas</span>
+      <p>Cada liga traducida a la vara de la EuroLeague 2025-26. <b>Algoritmo A</b> (estadístico): quita la suerte, mira el puesto del jugador en su liga y aplica un tipo de cambio por liga y métrica, aprendido de jugadores que han jugado en dos ligas. <b>Algoritmo B</b> (red neuronal): aprende el «ADN» de cada jugador separando a la vez nivel, liga, temporada y equipo, y lo expresa en la EuroLeague con un equipo medio. Los datos van de 2020-21 a 2026-27, temporada regular.</p>
+    </section>
+    <section class="nl-bar" aria-label="Opciones">
+      <div class="cmd-group" style="flex:1 1 260px;max-width:420px"><label class="label" for="nlMetric">Métrica</label><select id="nlMetric"></select></div>
+      <div class="nl-key"><span><i class="nl-dotA"></i>Algoritmo A</span><span><i class="nl-dotB"></i>Algoritmo B</span><span><i class="nl-dotAB"></i>A+B (media, recomendada)</span><span class="note">Líneas: intervalo del 95 % (A: bootstrap; B: dispersión entre redes)</span></div>
+    </section>
+    <div class="ev-grid2">
+      <article class="dcard" id="nlNivel"></article>
+      <article class="dcard" id="nlEquiv"></article>
+    </div>
+    <article class="dcard" id="nlImport"></article>
+    <article class="dcard" id="nlVal"></article>
+    <article class="dcard nl-explo" id="nlExplo">
+      <h2>Explorador de jugadores</h2>
+      <p class="hint">Valor en su liga y equivalente EuroLeague 2025-26: la estimación combinada A+B (recomendada) y cada algoritmo con su intervalo del 80 %, más el percentil entre los jugadores de EuroLeague de su posición.</p>
+      <div class="nl-bar">
+        <div class="cmd-group"><label class="label" for="nlTemp">Temporada</label><select id="nlTemp"></select></div>
+        <div class="cmd-group"><label class="label" for="nlLiga">Liga</label><select id="nlLiga"></select></div>
+        <div class="cmd-group"><label class="label" for="nlPos">Posición</label><select id="nlPos"><option value="">Todas</option><option value="E">Exterior</option><option value="A">Alero</option><option value="I">Interior</option></select></div>
+        <div class="cmd-group"><label class="label" for="nlMin">Minutos mínimos</label><input type="number" id="nlMin" min="0" step="50" value="400" style="width:100px"></div>
+        <div class="cmd-group"><label class="label" for="nlQ">Buscar</label><input type="search" id="nlQ" placeholder="Jugador o equipo"></div>
+        <div class="cmd-group"><label class="label" for="nlSort">Ordenar por</label><select id="nlSort"><option value="AB">Equivalente A+B</option><option value="B">Equivalente B</option><option value="A">Equivalente A</option><option value="obs">Valor en su liga</option><option value="dif">Diferencia A − B</option></select></div>
+      </div>
+      <div class="tablebox" id="nlTable"><div class="empty">Cargando…</div></div>
+      <div class="pager"><span id="nlCount"></span><span><button class="btn ghost" id="nlPrev" type="button">Anterior</button> <span id="nlPage"></span> <button class="btn ghost" id="nlNext" type="button">Siguiente</button></span></div>
+    </article>
+    <hr class="ev-sep">
+    <section class="nl-fin" aria-labelledby="nlFinT">
+      <span class="label">Resumen ejecutivo</span>
+      <h2 id="nlFinT">Todas las ligas, a la vara de la EuroLeague</h2>
+      <p>Cada liga se ha llevado a la escala de la EuroLeague 2025-26 con dos algoritmos que no comparten método. A estima un «tipo de cambio» por liga y métrica a partir de los jugadores que han jugado en dos ligas. B aprende el ADN de cada jugador separando nivel, liga, temporada y equipo. El nivel se mide en desviaciones típicas de la EuroLeague (−1 = un jugador medio de esa liga rinde como uno situado una desviación por debajo de la media EuroLeague). «Importables» son el 20 % alto de cada liga por Game Score/40 con al menos la mitad de minutos de un titular de esa liga.</p>
+      <div class="nl-gen"><ol><li><b>Solo la NBA está por encima de la EuroLeague.</b> Ordenadas por nivel medio en PER (media de A y B, en desviaciones típicas de la EuroLeague): NBA +0,70, ACB −0,43, G League −0,44, EuroCup −0,66, LNB −0,74, LBA −0,79 y BBL −1,14.</li><li><b>Dos métodos independientes llegan al mismo mapa.</b> A (estadístico, por percentiles) y B (red neuronal, por ADN de jugador) coinciden en el orden y en la magnitud: la mayor diferencia es de 0,36 desviaciones (LNB). Que dos caminos distintos lleguen al mismo sitio es la mejor prueba de que el nivel estimado es real y no un artefacto.</li><li><b>Regla práctica para el 20 % alto de cada liga</b> (percentil EuroLeague esperado en PER): NBA p97, Liga Endesa p75, G League p76, EuroCup p72, LNB p58, LBA p59, BBL p52. Como referencia, los mejores de la propia EuroLeague repiten en el p85: nadie mantiene su mejor temporada íntegra.</li><li><b>El volumen viaja mejor que la eficiencia.</b> Uso y puntos por posesión se conservan bastante; fuera de la NBA el TS% cae entre un 2 y un 11 % (máximo en la G League). Asistencias y tapones caen mucho desde la G League y la ACB (hasta un 25 % y un 37 %).</li><li><b>La defensa empeora al subir de liga.</b> El DRtg de los importables sube entre un 5 y un 9 % desde las ligas europeas. Parte es nivel del rival y parte es que el jugador pierde el entorno de un equipo dominante, que el algoritmo B separa explícitamente.</li><li><b>Usar la estimación combinada A+B.</b> En el examen fuera de muestra (412 cambios de liga reales de 2023-24 y 2024-25, 88 de ellos hacia la EuroLeague), A+B reduce el error cuadrático frente a «mismo percentil» una mediana del 20,0 % por métrica (A 10,8 %, B 8,1 %) y del 17,5 % en las llegadas a la EuroLeague. Supera a A en 25 de 25 métricas.</li><li><b>Dónde no fiarse del modelo.</b> La eficiencia de tiro (TS%, eFG%, T2%, ORtg) de quien llega a la EuroLeague sigue sin predecirse mejor que con el percentil; ahí manda el scouting. Y para las estrellas NBA la traducción es una extrapolación.</li></ol></div>
+      <div class="nl-fin-grid"><article class="nl-liga"><h3>EuroLeague<small>referencia</small></h3><div class="kpis"><div><span>Nivel</span><b>0 (ref.)</b></div><div><span>Puentes</span><b>1619 en total</b></div><div><span>Importables</span><b>38</b></div><div><span>P50 propio → EL</span><b>p51</b></div><div><span>P90 propio → EL</span><b>p85</b></div><div><span>Puentes con EL</span><b>—</b></div></div><p>Es la vara de medir: nivel 0 por definición. Sirve de control. Sus mejores jugadores también «bajan» a la temporada siguiente (PER 20,2 → 18,9, −6,8 %) solo por regresión a la media: parte de una gran temporada es suerte que no se repite. Ese descenso hay que restarlo al de cualquier otra liga para aislar lo que se debe al nivel.</p><p class="note">Qué esperar del 20 % alto de la liga (38 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 20,2 → 18,9 <small>(−6,8 %)</small></li><li><b>Game Score/40</b>: 17,8 → 16,7 <small>(−6,4 %)</small></li><li><b>Puntos/100</b>: 31,5 → 30,0 <small>(−4,7 %)</small></li><li><b>Uso %</b>: 24,5 → 23,7 <small>(−3,1 %)</small></li><li><b>TS %</b>: 62,6 → 61,4 <small>(−2,0 %)</small></li><li><b>AST %</b>: 18,1 → 17,3 <small>(−4,5 %)</small></li><li><b>DREB %</b>: 12,1 → 11,3 <small>(−5,9 %)</small></li><li><b>DRtg (menos es mejor)</b>: 116,0 → 117,6 <small>(+1,3 %)</small></li></ul></article><article class="nl-liga"><h3>NBA<small>hacia la EuroLeague</small></h3><div class="kpis"><div><span>Nivel A (PER)</span><b>+0,58 ± 0,12</b></div><div><span>Nivel B (PER)</span><b>+0,82 ± 0,07</b></div><div><span>Puesto</span><b>1.º de 8</b></div><div><span>P50 propio → EL</span><b>p72</b></div><div><span>P90 propio → EL</span><b>p97</b></div><div><span>Puentes con EL</span><b>67</b></div></div><p>Única liga por encima de la EuroLeague, y con margen. Un jugador del 20 % alto de la NBA (con minutos de rotación) sería de élite en Europa: percentil 97 en PER. El volumen crece (más tiros y más puntos por posesión) porque pasaría de opción secundaria a principal. Cuidado: solo 67 jugadores conectan la NBA con la EuroLeague, un grupo pequeño y de perfil concreto, así que para las estrellas la traducción es una extrapolación.</p><p class="note">Qué esperar del 20 % alto de la liga (66 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 20,1 → 22,5 <small>(+12,0 %)</small></li><li><b>Game Score/40</b>: 20,7 → 19,7 <small>(−5,2 %)</small></li><li><b>Puntos/100</b>: 30,8 → 38,1 <small>(+23,8 %)</small></li><li><b>Uso %</b>: 26,2 → 31,7 <small>(+21,0 %)</small></li><li><b>TS %</b>: 60,9 → 61,4 <small>(+0,9 %)</small></li><li><b>AST %</b>: 21,7 → 20,2 <small>(−6,9 %)</small></li><li><b>DREB %</b>: 16,4 → 15,6 <small>(−4,8 %)</small></li><li><b>DRtg (menos es mejor)</b>: 115,0 → 116,8 <small>(+1,5 %)</small></li></ul></article><article class="nl-liga"><h3>Liga Endesa (ACB)<small>hacia la EuroLeague</small></h3><div class="kpis"><div><span>Nivel A (PER)</span><b>−0,47 ± 0,07</b></div><div><span>Nivel B (PER)</span><b>−0,39 ± 0,05</b></div><div><span>Puesto</span><b>3.º de 8</b></div><div><span>P50 propio → EL</span><b>p33</b></div><div><span>P90 propio → EL</span><b>p74</b></div><div><span>Puentes con EL</span><b>506</b></div></div><p>La liga doméstica más cercana a la EuroLeague y la mejor medida: 506 puentes directos, la mayor cifra de todas. Un jugador del 20 % alto de la ACB queda en el percentil 75 de la EuroLeague. Su PER cae un 15,8 %; descontado el descenso de la propia EuroLeague (6,8 %), lo atribuible a la liga es del orden del 9 %. Es la traducción con menor incertidumbre de todas.</p><p class="note">Qué esperar del 20 % alto de la liga (35 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 20,8 → 17,5 <small>(−15,8 %)</small></li><li><b>Game Score/40</b>: 18,5 → 15,6 <small>(−15,8 %)</small></li><li><b>Puntos/100</b>: 30,0 → 27,4 <small>(−8,7 %)</small></li><li><b>Uso %</b>: 23,7 → 22,1 <small>(−6,5 %)</small></li><li><b>TS %</b>: 61,7 → 60,1 <small>(−2,5 %)</small></li><li><b>AST %</b>: 16,6 → 15,1 <small>(−9,3 %)</small></li><li><b>DREB %</b>: 16,2 → 14,2 <small>(−12,2 %)</small></li><li><b>DRtg (menos es mejor)</b>: 112,4 → 117,7 <small>(+4,7 %)</small></li></ul></article><article class="nl-liga"><h3>G League<small>hacia la EuroLeague</small></h3><div class="kpis"><div><span>Nivel A (PER)</span><b>−0,36 ± 0,11</b></div><div><span>Nivel B (PER)</span><b>−0,52 ± 0,05</b></div><div><span>Puesto</span><b>4.º de 8</b></div><div><span>P50 propio → EL</span><b>p34</b></div><div><span>P90 propio → EL</span><b>p73</b></div><div><span>Puentes con EL</span><b>53</b></div></div><p>Nivel parecido al de la ACB en la media, pero con un perfil muy distinto: la eficiencia no se sostiene en Europa. El TS% cae un 10,6 % y el Game Score/40 un 29,6 %. Lo que sí viaja es el volumen (puntos/100 −5,6 %, uso −2,9 %). Asistencias (−24,6 %) y rebote defensivo (−19,3 %) bajan mucho. Defensivamente empeora (DRtg 112,3 → 118,0).</p><p class="note">Qué esperar del 20 % alto de la liga (48 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 20,7 → 17,2 <small>(−16,9 %)</small></li><li><b>Game Score/40</b>: 21,5 → 15,1 <small>(−29,6 %)</small></li><li><b>Puntos/100</b>: 29,6 → 28,0 <small>(−5,6 %)</small></li><li><b>Uso %</b>: 24,1 → 23,4 <small>(−2,9 %)</small></li><li><b>TS %</b>: 67,0 → 59,8 <small>(−10,6 %)</small></li><li><b>AST %</b>: 15,3 → 11,5 <small>(−24,6 %)</small></li><li><b>DREB %</b>: 17,1 → 13,8 <small>(−19,3 %)</small></li><li><b>DRtg (menos es mejor)</b>: 112,3 → 118,0 <small>(+5,2 %)</small></li></ul></article><article class="nl-liga"><h3>EuroCup<small>hacia la EuroLeague</small></h3><div class="kpis"><div><span>Nivel A (PER)</span><b>−0,73 ± 0,13</b></div><div><span>Nivel B (PER)</span><b>−0,58 ± 0,05</b></div><div><span>Puesto</span><b>5.º de 8</b></div><div><span>P50 propio → EL</span><b>p30</b></div><div><span>P90 propio → EL</span><b>p69</b></div><div><span>Puentes con EL</span><b>170</b></div></div><p>Es la liga con las cifras brutas más altas de los importables (PER 22,7) y también una de las que más «se encogen»: un 23,2 %, hasta el percentil 72. Con pocos partidos por temporada, una gran temporada tiene más ruido y se encoge más al proyectarla. La eficiencia cae un 7,1 % y el DRtg sube un 8,0 %.</p><p class="note">Qué esperar del 20 % alto de la liga (25 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 22,7 → 17,5 <small>(−23,2 %)</small></li><li><b>Game Score/40</b>: 18,9 → 15,3 <small>(−19,0 %)</small></li><li><b>Puntos/100</b>: 30,0 → 26,1 <small>(−12,9 %)</small></li><li><b>Uso %</b>: 22,0 → 20,5 <small>(−6,8 %)</small></li><li><b>TS %</b>: 64,2 → 59,6 <small>(−7,1 %)</small></li><li><b>AST %</b>: 21,2 → 20,8 <small>(−2,2 %)</small></li><li><b>DREB %</b>: 12,7 → 10,7 <small>(−16,2 %)</small></li><li><b>DRtg (menos es mejor)</b>: 110,2 → 119,0 <small>(+8,0 %)</small></li></ul></article><article class="nl-liga"><h3>LNB (Francia)<small>hacia la EuroLeague</small></h3><div class="kpis"><div><span>Nivel A (PER)</span><b>−0,56 ± 0,14</b></div><div><span>Nivel B (PER)</span><b>−0,92 ± 0,04</b></div><div><span>Puesto</span><b>6.º de 8</b></div><div><span>P50 propio → EL</span><b>p21</b></div><div><span>P90 propio → EL</span><b>p59</b></div><div><span>Puentes con EL</span><b>299</b></div></div><p>Es la liga donde más difieren los dos algoritmos: A la ve más cerca de la EuroLeague que B. Por eso la estimación combinada tiene más incertidumbre aquí. El 20 % alto de Francia queda en el percentil 58. El PER cae un 24,9 % y las asistencias un 15,2 %. Atención: la fuente de la LNB no publica totales de los rivales, así que rebote en %, tapones en %, DRtg y Win Shares no se pueden traducir.</p><p class="note">Qué esperar del 20 % alto de la liga (26 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 20,2 → 15,2 <small>(−24,9 %)</small></li><li><b>Game Score/40</b>: 17,6 → 13,7 <small>(−22,0 %)</small></li><li><b>Puntos/100</b>: 30,1 → 25,9 <small>(−13,9 %)</small></li><li><b>Uso %</b>: 24,7 → 22,8 <small>(−7,6 %)</small></li><li><b>TS %</b>: 62,3 → 58,4 <small>(−6,4 %)</small></li><li><b>AST %</b>: 21,3 → 18,1 <small>(−15,2 %)</small></li></ul></article><article class="nl-liga"><h3>LBA (Italia)<small>hacia la EuroLeague</small></h3><div class="kpis"><div><span>Nivel A (PER)</span><b>−0,79 ± 0,12</b></div><div><span>Nivel B (PER)</span><b>−0,79 ± 0,05</b></div><div><span>Puesto</span><b>7.º de 8</b></div><div><span>P50 propio → EL</span><b>p22</b></div><div><span>P90 propio → EL</span><b>p59</b></div><div><span>Puentes con EL</span><b>256</b></div></div><p>Los dos algoritmos coinciden exactamente en el nivel de la LBA. El 20 % alto de Italia queda en torno a la mediana alta de la EuroLeague (percentil 59). El PER cae un 21,9 %. Rebote defensivo y robos son lo que peor viaja (rebote defensivo −12,2 %, robos −15,2 %).</p><p class="note">Qué esperar del 20 % alto de la liga (25 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 20,8 → 16,2 <small>(−21,9 %)</small></li><li><b>Game Score/40</b>: 17,6 → 14,1 <small>(−20,0 %)</small></li><li><b>Puntos/100</b>: 30,1 → 25,7 <small>(−14,4 %)</small></li><li><b>Uso %</b>: 23,4 → 21,9 <small>(−6,1 %)</small></li><li><b>TS %</b>: 63,1 → 60,1 <small>(−4,8 %)</small></li><li><b>AST %</b>: 13,1 → 12,8 <small>(−2,6 %)</small></li><li><b>DREB %</b>: 15,4 → 13,5 <small>(−12,2 %)</small></li><li><b>DRtg (menos es mejor)</b>: 113,0 → 118,7 <small>(+5,1 %)</small></li></ul></article><article class="nl-liga"><h3>BBL (Alemania)<small>hacia la EuroLeague</small></h3><div class="kpis"><div><span>Nivel A (PER)</span><b>−0,97 ± 0,14</b></div><div><span>Nivel B (PER)</span><b>−1,30 ± 0,07</b></div><div><span>Puesto</span><b>8.º de 8</b></div><div><span>P50 propio → EL</span><b>p14</b></div><div><span>P90 propio → EL</span><b>p54</b></div><div><span>Puentes con EL</span><b>268</b></div></div><p>La liga de menor nivel del panel según los dos algoritmos. El 20 % alto de la BBL queda en la mediana de la EuroLeague (percentil 52). Es la mayor caída de todas en PER (−27,5 %) y en defensa (DRtg 110,3 → 120,6, +9,3 %). Un dominador de la BBL es, de entrada, un jugador de rotación en la EuroLeague.</p><p class="note">Qué esperar del 20 % alto de la liga (31 jugadores, 2025-26): valor en su liga → equivalente EuroLeague A+B</p><ul><li><b>PER</b>: 20,4 → 14,8 <small>(−27,5 %)</small></li><li><b>Game Score/40</b>: 16,7 → 13,3 <small>(−20,9 %)</small></li><li><b>Puntos/100</b>: 29,8 → 25,4 <small>(−14,8 %)</small></li><li><b>Uso %</b>: 25,2 → 22,6 <small>(−10,7 %)</small></li><li><b>TS %</b>: 61,7 → 58,1 <small>(−5,8 %)</small></li><li><b>AST %</b>: 18,4 → 15,4 <small>(−16,2 %)</small></li><li><b>DREB %</b>: 12,3 → 11,0 <small>(−10,0 %)</small></li><li><b>DRtg (menos es mejor)</b>: 110,3 → 120,6 <small>(+9,3 %)</small></li></ul></article></div>
+      <p class="note">Intervalos de nivel: 95 % (A, bootstrap de jugadores; B, dispersión entre las 5 redes del conjunto, que infravalora la incertidumbre real). P50/P90 propio → EL: percentil EuroLeague mediano de los jugadores que están en ese percentil en su liga. Porcentajes: cambio del valor medio de los importables de 2025-26 al traducirlo a la EuroLeague con A+B. Todo se ha calculado con temporada regular 2020-21 a 2026-27.</p>
+    </section>
   </div>
 </div>
 <div class="tip" id="tip" role="tooltip" hidden></div>
@@ -1153,12 +1258,13 @@ function cmpSuggest() {
   ul.hidden = false; $("cmpQ").setAttribute("aria-expanded", "true");
 }
 function showPage(pg) {
-  st.pageTab = pg === "comparador" || pg === "evaluacion" ? pg : "tabla";
-  $("pageTabla").hidden = st.pageTab !== "tabla"; $("pageCmp").hidden = st.pageTab !== "comparador"; $("pageEval").hidden = st.pageTab !== "evaluacion";
-  $("tab-tabla").setAttribute("aria-selected", st.pageTab === "tabla"); $("tab-comparador").setAttribute("aria-selected", st.pageTab === "comparador"); $("tab-evaluacion").setAttribute("aria-selected", st.pageTab === "evaluacion");
+  st.pageTab = ["comparador", "evaluacion", "normalizacion"].includes(pg) ? pg : "tabla";
+  $("pageTabla").hidden = st.pageTab !== "tabla"; $("pageCmp").hidden = st.pageTab !== "comparador"; $("pageEval").hidden = st.pageTab !== "evaluacion"; $("pageNorm").hidden = st.pageTab !== "normalizacion";
+  $("tab-tabla").setAttribute("aria-selected", st.pageTab === "tabla"); $("tab-comparador").setAttribute("aria-selected", st.pageTab === "comparador"); $("tab-evaluacion").setAttribute("aria-selected", st.pageTab === "evaluacion"); $("tab-normalizacion").setAttribute("aria-selected", st.pageTab === "normalizacion");
   store.set("mm.page", st.pageTab);
   if (st.pageTab === "comparador" && current) { cmpExample(); renderCmp(); }
   if (st.pageTab === "evaluacion" && st.dictGroup) renderEval();
+  if (st.pageTab === "normalizacion") renderNorm();
 }
 function bindCmp() {
   document.querySelector(".pagetabs").addEventListener("click", (e) => { const b = e.target.closest("[data-page]"); if (b) showPage(b.dataset.page); });
@@ -1737,6 +1843,161 @@ function bindEval() {
   });
 }
 
+// ---------------------------------------------------------------------------- normalización de ligas (algoritmos A y B)
+// Datos: datos/normalizacion/resumen.json y datos/normalizacion/jugadores_<temporada>.json (python -m bbmodel mesa-normalizacion)
+const NL_ORDEN = ["nba", "euroleague", "gleague", "acb", "eurocup", "lnb", "lba", "bbl"];
+const nlSt = { R: null, metric: "per", temp: null, liga: "", pos: "", min: 400, q: "", sort: "AB", page: 0, jug: {} };
+try { const s = JSON.parse(store.get("mm.nl") || "null"); if (s && typeof s === "object") for (const k of ["metric", "liga", "pos", "sort"]) if (typeof s[k] === "string") nlSt[k] = s[k]; } catch {}
+const nlSave = () => store.set("mm.nl", JSON.stringify({ metric: nlSt.metric, liga: nlSt.liga, pos: nlSt.pos, sort: nlSt.sort }));
+const nlName = (c) => { const m = nlSt.R && nlSt.R.metricas.find((x) => x.col === c); return m ? m.nombre : c; };
+const nlSentido = (c) => { const m = nlSt.R && nlSt.R.metricas.find((x) => x.col === c); return m ? m.sentido : 1; };
+const nlDec = (c) => (/pct|rate|_p100|per$|ortg|drtg|game_score/.test(c) ? 1 : 3);
+
+async function renderNorm() {
+  if (st.pageTab !== "normalizacion") return;
+  if (!nlSt.R) {
+    try { nlSt.R = await getJSON("datos/normalizacion/resumen.json"); }
+    catch { $("nlNivel").innerHTML = `<div class="empty">No se encontraron los datos de normalización (datos/normalizacion/resumen.json).</div>`; return; }
+    const ms = nlSt.R.metricas;
+    const grupos = [...new Set(ms.map((m) => m.grupo))];
+    $("nlMetric").innerHTML = grupos.map((g) => `<optgroup label="${esc(g)}">${ms.filter((m) => m.grupo === g).map((m) => `<option value="${m.col}">${esc(m.nombre)}</option>`).join("")}</optgroup>`).join("");
+    if (!ms.some((m) => m.col === nlSt.metric)) nlSt.metric = "per";
+    $("nlMetric").value = nlSt.metric;
+    const temps = ["2025-26", "2026-27"];
+    $("nlTemp").innerHTML = temps.map((t) => `<option value="${t}">${t}${t === "2026-27" ? " (en curso)" : ""}</option>`).join("");
+    nlSt.temp = nlSt.temp || "2025-26"; $("nlTemp").value = nlSt.temp;
+    $("nlLiga").innerHTML = `<option value="">Todas menos EuroLeague</option><option value="*">Todas</option>` + NL_ORDEN.map((l) => `<option value="${l}">${esc(LEAGUES[l] || l)}</option>`).join("");
+    $("nlLiga").value = nlSt.liga; $("nlPos").value = nlSt.pos; $("nlSort").value = nlSt.sort;
+  }
+  nlNivel(); nlEquiv(); nlImport(); nlVal(); nlExplo();
+}
+
+// ---------------------------------------------------------------- nivel de cada liga
+function nlNivel() {
+  const R = nlSt.R, c = nlSt.metric, A = R.A.nivel[c] || {}, B = R.B.nivel[c] || {}, imp = R.importar[c] || {};
+  const ligas = NL_ORDEN.filter((l) => A[l] || B[l]);
+  const filas = ligas.map((l) => ({ l, a: A[l] ? A[l][0] : null, ase: A[l] ? A[l][1] : 0, b: B[l] ? B[l][0] : null, bse: B[l] ? B[l][1] : 0 }));
+  filas.sort((x, y) => ((y.a ?? y.b) + (y.b ?? y.a)) - ((x.a ?? x.b) + (x.b ?? x.a)));
+  const vals = filas.flatMap((f) => [f.a != null ? f.a - 1.96 * f.ase : null, f.a != null ? f.a + 1.96 * f.ase : null, f.b != null ? f.b - 1.96 * f.bse : null, f.b != null ? f.b + 1.96 * f.bse : null]).filter((v) => v != null);
+  const lo = Math.min(-0.2, ...vals), hi = Math.max(0.2, ...vals);
+  const W = 620, L0 = 112, R0 = 150, rowH = 34, H = filas.length * rowH + 34;
+  const x = (v) => L0 + (v - lo) / (hi - lo) * (W - L0 - R0);
+  const tk = evTicks(lo, hi, 6), tf = evTF(tk);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Nivel de cada liga en ${esc(nlName(c))}">`;
+  tk.forEach((t) => { if (t < lo || t > hi) return; s += `<line class="ax" x1="${x(t)}" x2="${x(t)}" y1="4" y2="${H - 24}"/><text class="mut" x="${x(t)}" y="${H - 8}" text-anchor="middle">${tf(t)}</text>`; });
+  s += `<line class="ax0" x1="${x(0)}" x2="${x(0)}" y1="4" y2="${H - 24}"/>`;
+  const dec = nlDec(c);
+  filas.forEach((f, i) => {
+    const y = 10 + i * rowH, ya = y + 6, yb = y + 18;
+    s += `<text class="lab" x="${L0 - 10}" y="${y + 16}" text-anchor="end">${esc(LEAGUES[f.l] || f.l)}</text>`;
+    if (f.a != null) s += `<g><title>Algoritmo A: ${evSig(f.a, 2)} (IC 95 % ${evN(f.a - 1.96 * f.ase, 2)} a ${evN(f.a + 1.96 * f.ase, 2)})</title><line x1="${x(f.a - 1.96 * f.ase)}" x2="${x(f.a + 1.96 * f.ase)}" y1="${ya}" y2="${ya}" stroke="var(--nl-a)" stroke-width="2"/><circle cx="${x(f.a)}" cy="${ya}" r="5.5" fill="var(--nl-a)" stroke="var(--c5)" stroke-width="2"/></g>`;
+    if (f.b != null) s += `<g><title>Algoritmo B: ${evSig(f.b, 2)} (± ${evN(1.96 * f.bse, 2)})</title><line x1="${x(f.b - 1.96 * f.bse)}" x2="${x(f.b + 1.96 * f.bse)}" y1="${yb}" y2="${yb}" stroke="var(--nl-b)" stroke-width="2"/><rect x="${x(f.b) - 4.5}" y="${yb - 4.5}" width="9" height="9" transform="rotate(45 ${x(f.b)} ${yb})" fill="var(--c5)" stroke="var(--nl-b)" stroke-width="2"/></g>`;
+    const im = imp[f.l];
+    s += `<text x="${W - R0 + 10}" y="${y + 9}" class="mut" style="font-size:10.5px">A ${f.a != null ? evSig(f.a, 2) : "–"} · B ${f.b != null ? evSig(f.b, 2) : "–"}</text>`;
+    if (im && f.l !== "euroleague") s += `<text x="${W - R0 + 10}" y="${y + 23}" style="font-size:10.5px">${evN(im.obs, dec)} → ${evN(im.A, dec)} / ${evN(im.B, dec)}</text>`;
+  });
+  s += `<text class="mut" x="${x(0) + 4}" y="12" style="font-size:10px">EuroLeague = 0</text></svg>`;
+  $("nlNivel").innerHTML = `<h2>Nivel de cada liga</h2>
+    <p class="hint">Dónde quedaría en la EuroLeague el jugador MEDIO de cada liga, en desviaciones típicas de los jugadores de EuroLeague de su posición (0 = jugador medio de EuroLeague). ${nlSentido(c) < 0 ? "En esta métrica menos es mejor: un valor positivo significa peor." : "Negativo = liga más floja en esta métrica."} A la derecha, la mediana de sus jugadores (300+ min, 2025-26): valor en su liga → equivalente EuroLeague según A / B.</p>
+    <div class="ev-svgbox">${s}</div>`;
+}
+
+// ---------------------------------------------------------------- equivalencia de percentiles
+function nlEquiv() {
+  const R = nlSt.R, c = nlSt.metric, E = R.equivalencias[c] || {};
+  const P = [10, 25, 50, 75, 90, 97];
+  const ligas = NL_ORDEN.filter((l) => E[l] && l !== "euroleague").concat(E.euroleague ? ["euroleague"] : []);
+  const cell = (v) => { if (v == null) return `<td class="c na">–</td>`; const bg = evSeqBg(v / 100); return `<td class="c" style="background:${bg};color:${evInk(bg)}">${evN(v, 0)}</td>`; };
+  const body = ligas.map((l) => `<tr><th class="txt" rowspan="3" style="vertical-align:middle;background:var(--c5)"><span class="evsw" style="background:${EV_COL[l]}"></span>${esc(LEAGUES[l] || l)}${l === "euroleague" ? "<br><small>(referencia)</small>" : ""}</th><td class="c"><small style="font-weight:700">A+B</small></td>${(E[l].AB || []).map(cell).join("")}</tr><tr><td class="c"><small style="color:var(--nl-a);font-weight:700">A</small></td>${E[l].A.map(cell).join("")}</tr><tr><td class="c"><small style="color:var(--nl-b);font-weight:700">B</small></td>${E[l].B.map(cell).join("")}</tr>`).join("");
+  $("nlEquiv").innerHTML = `<h2>Equivalencia de percentiles</h2>
+    <p class="hint">Un jugador que está en el percentil P de su liga (en su posición), ¿en qué percentil de la EuroLeague quedaría? Mediana de los jugadores de 2025-26 con 300+ minutos que están cerca de cada percentil. La fila de la EuroLeague es la referencia: no repite la cabecera porque al quitar la suerte también sus jugadores se acercan a la media (un P90 de la EuroLeague queda en torno al P85). Compara cada liga con esa fila.</p>
+    <div class="cmp-table"><table class="nl-tbl"><thead><tr><th class="txt">Liga</th><th></th>${P.map((p) => `<th class="c">P${p} en su liga</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+// ---------------------------------------------------------------- qué esperar al importar
+const NL_IMP = ["per", "pts_p100", "ts_pct", "usg_pct", "ast_pct", "dreb_pct", "blk_pct", "drtg"];
+function nlImport() {
+  const R = nlSt.R;
+  const ligas = NL_ORDEN.filter((l) => l !== "euroleague" && (R.importar.per || {})[l]).concat((R.importar.per || {}).euroleague ? ["euroleague"] : []);
+  const chg = (o, v, sentido) => { if (o == null || v == null || o === 0) return ""; const d = 100 * (v - o) / Math.abs(o); const good = sentido === 0 ? null : (sentido > 0 ? d > 0 : d < 0);
+    return `<span class="nl-chg ${good == null ? "" : good ? "up" : "down"}">${evSig(d, 0, " %")}</span>`; };
+  const cards = ligas.map((l) => {
+    const n = R.importar.per[l].n_top;
+    const rows = NL_IMP.filter((c) => (R.importar[c] || {})[l] && R.importar[c][l].obs_top != null).map((c) => {
+      const d = R.importar[c][l], dec = nlDec(c), sen = nlSentido(c);
+      return `<div class="nl-row"><span>${esc(LABELS[c] || nlName(c))}</span><span class="val">${evN(d.obs_top, dec)} <i>→</i> <b>${evN(d.AB_top, dec)}</b> <i>(A ${evN(d.A_top, dec)} · B ${evN(d.B_top, dec)})</i></span><span>${chg(d.obs_top, d.AB_top, sen)}</span></div>`;
+    }).join("");
+    const p = R.importar.game_score_p40 ? R.importar.game_score_p40[l] : null;
+    return `<div class="nl-impcard"${l === "euroleague" ? ' style="background:var(--c2)"' : ""}><h4>${esc(LEAGUES[l] || l)}${l === "euroleague" ? " (referencia)" : ""}<small>${n} jugadores · percentil EL en GmSc/40: ${p ? evN(p.pctAB_top, 0) : "–"}</small></h4>${rows}</div>`;
+  }).join("");
+  $("nlImport").innerHTML = `<h2>Qué esperar al importar a la EuroLeague</h2>
+    <p class="hint">Jugadores «importables» de cada liga: el 20 % mejor de su liga por Game Score/40 entre los que juegan de verdad (minutos ≥ la mitad del percentil 90 de su liga), en 2025-26. Mediana de su valor en su liga → equivalente EuroLeague con la estimación combinada <b>A+B</b> (entre paréntesis, cada algoritmo) y cambio porcentual (azul = mejora, naranja = empeora). Arriba, el percentil mediano que ocuparían entre los jugadores de EuroLeague de su posición. La tarjeta de la EuroLeague es la referencia: su 20 % mejor también baja algo al quitarle la suerte, así que la caída atribuible al nivel de cada liga es la diferencia con esa tarjeta.</p>
+    <div class="nl-imp">${cards}</div>`;
+}
+
+// ---------------------------------------------------------------- validación
+function nlVal() {
+  const R = nlSt.R, V = R.validacion;
+  const cols = R.metricas.map((m) => m.col).filter((c) => V[c]);
+  const mx = Math.max(50, ...cols.flatMap((c) => [Math.abs(V[c].todos.mejora_A || 0), Math.abs(V[c].todos.mejora_B || 0), Math.abs(V[c].todos.mejora_AB || 0)]));
+  const bar = (v, cls) => { if (v == null) return ""; const w = Math.min(50, Math.abs(v) / mx * 50); return `<i class="${cls}${v < 0 ? " neg" : ""}" style="width:${w}%;${v < 0 ? `left:${50 - w}%` : ""}"></i>`; };
+  const filas = cols.map((c) => { const t = V[c].todos;
+    return `<div class="nl-vrow"><span>${esc(nlName(c))}</span><span class="trk" title="Mejora frente a «mismo percentil»: A ${evSig(t.mejora_A, 0, " %")}, B ${evSig(t.mejora_B, 0, " %")}, A+B ${evSig(t.mejora_AB, 0, " %")}"><u></u>${bar(t.mejora_A, "a")}${bar(t.mejora_B, "b")}${bar(t.mejora_AB, "ab")}</span><em><span style="color:var(--nl-a)">${evSig(t.mejora_A, 0)}</span> · <span style="color:var(--nl-b)">${evSig(t.mejora_B, 0)}</span> · <b>${evSig(t.mejora_AB, 0)}</b> %</em></div>`; }).join("");
+  const tabla = cols.map((c) => { const t = V[c].todos, e = V[c].a_euroleague;
+    const best = Math.min(t.mae_mismo_numero, t.mae_mismo_percentil, t.mae_algoritmo_A, t.mae_algoritmo_B, t.mae_algoritmo_AB);
+    const f = (v) => `<td${v === best ? ' style="font-weight:700"' : ""}>${evN(v, nlDec(c) === 3 ? 3 : 2)}</td>`;
+    return `<tr><td class="txt">${esc(nlName(c))}</td><td>${t.casos}</td>${f(t.mae_mismo_numero)}${f(t.mae_mismo_percentil)}${f(t.mae_algoritmo_A)}${f(t.mae_algoritmo_B)}${f(t.mae_algoritmo_AB)}<td>${evSig(t.mejora_A, 0, " %")}</td><td>${evSig(t.mejora_B, 0, " %")}</td><td>${evSig(t.mejora_AB, 0, " %")}</td><td>${evN(100 * t.cob_A, 0)} %</td><td>${evN(100 * t.cob_B, 0)} %</td><td>${e ? evSig(e.mejora_AB, 0, " %") : "–"}</td></tr>`; }).join("");
+  $("nlVal").innerHTML = `<h2>Examen fuera de muestra</h2>
+    <p class="hint">Cada modelo se entrenó sólo con temporadas hasta t y predijo cómo rindieron en t+1 los ${R.validacion_n_jugadores} jugadores que cambiaron de liga (2023-24→24-25 y 2024-25→25-26; 300+ minutos en ambas). «Mejora» = reducción del error cuadrático frente a suponer que mantiene su percentil (lo habitual). Cobertura = % de casos dentro del intervalo del 80 % (ideal ≈ 80 %).</p>
+    <div class="nl-key"><span><i class="nl-dotA"></i>Algoritmo A</span><span><i class="nl-dotB"></i>Algoritmo B</span><span><i class="nl-dotAB"></i>A+B (media)</span><span class="note">Barras: mejora frente a «mismo percentil» (a la derecha = mejor)</span></div>
+    <div class="nl-vbars">${filas}</div>
+    <details><summary>Tabla completa (error absoluto medio en unidades de cada métrica)</summary>
+      <div class="cmp-table"><table class="nl-tbl"><thead><tr><th class="txt">Métrica</th><th>Casos</th><th>Error: mismo número</th><th>mismo percentil</th><th>A</th><th>B</th><th>A+B</th><th>Mejora A</th><th>Mejora B</th><th>Mejora A+B</th><th>Cobertura A</th><th>Cobertura B</th><th>Llegadas a EL: mejora A+B</th></tr></thead><tbody>${tabla}</tbody></table></div>
+      <p class="note">Llegadas a EL: ${R.validacion_n_a_euroleague} jugadores que entraron en la EuroLeague; mejora frente a «mismo percentil» en ese subconjunto. En negrita, el menor error de cada fila. La configuración de B se eligió con un corte anterior (2022-23 → 2023-24) que no forma parte de este examen.</p></details>`;
+}
+
+// ---------------------------------------------------------------- explorador
+async function nlExplo() {
+  const temp = nlSt.temp;
+  if (!nlSt.jug[temp]) {
+    $("nlTable").innerHTML = `<div class="empty">Cargando jugadores de ${esc(temp)}…</div>`;
+    try { const d = await getJSON(`datos/normalizacion/jugadores_${temp}.json`); const ix = {}; d.columnas.forEach((c, i) => (ix[c] = i)); nlSt.jug[temp] = { ix, filas: d.filas }; }
+    catch { $("nlTable").innerHTML = `<div class="empty">No hay datos de jugadores para ${esc(temp)}.</div>`; return; }
+  }
+  const { ix, filas } = nlSt.jug[temp]; const c = nlSt.metric;
+  if (!(`${c}_el_A` in ix)) { $("nlTable").innerHTML = `<div class="empty">${esc(nlName(c))} no está en el explorador. Elige PER, Game Score/40, Pts/100, USG%, TS%, T3%, AST%, TOV%, DREB%, OREB%, STL%, BLK%, DRtg o WS/40.</div>`; $("nlCount").textContent = ""; return; }
+  const q = norm(nlSt.q.trim()); const g = (r, k) => r[ix[k]];
+  let list = filas.filter((r) => (nlSt.liga === "*" || (nlSt.liga ? g(r, "liga") === nlSt.liga : g(r, "liga") !== "euroleague"))
+    && (!nlSt.pos || g(r, "pos3") === nlSt.pos) && (g(r, "min") ?? 0) >= nlSt.min
+    && (!q || norm(g(r, "nombre")).includes(q) || norm(g(r, "equipo")).includes(q)));
+  const sen = nlSentido(c) < 0 ? 1 : -1;
+  const key = { AB: (r) => g(r, `${c}_el_AB`), B: (r) => g(r, `${c}_el_B`), A: (r) => g(r, `${c}_el_A`), obs: (r) => g(r, c), dif: (r) => (g(r, `${c}_el_A`) ?? NaN) - (g(r, `${c}_el_B`) ?? NaN) }[nlSt.sort] || ((r) => g(r, `${c}_el_AB`));
+  list.sort((x, y) => { const a = key(x), b = key(y); if (a == null || !isFinite(a)) return 1; if (b == null || !isFinite(b)) return -1; return (a - b) * (nlSt.sort === "dif" ? -1 : sen); });
+  const pages = Math.max(1, Math.ceil(list.length / 50)); nlSt.page = Math.min(nlSt.page, pages - 1);
+  const dec = nlDec(c);
+  const rows = list.slice(nlSt.page * 50, nlSt.page * 50 + 50).map((r) => {
+    const est = g(r, "pos3_estimada");
+    return `<tr><td class="txt sticky name">${esc(g(r, "nombre"))}</td><td class="txt">${esc(g(r, "equipo"))}</td><td class="txt"><span class="lg">${esc(LEAGUE_ABBR[g(r, "liga")] || g(r, "liga"))}</span></td><td class="txt">${est ? "≈ " : ""}${esc({ E: "Ext", A: "Ale", I: "Int" }[g(r, "pos3")] || "–")}</td><td>${evN(g(r, "min"), 0)}</td>
+      <td>${evN(g(r, c), dec)}</td><td style="font-weight:700">${evN(g(r, `${c}_el_AB`), dec)}</td><td>${evN(g(r, `${c}_pct_el_AB`), 0)}</td>
+      <td style="color:var(--nl-a);font-weight:600">${evN(g(r, `${c}_el_A`), dec)}</td><td class="rng">${evN(g(r, `${c}_el_lo_A`), dec)}–${evN(g(r, `${c}_el_hi_A`), dec)}</td><td>${evN(g(r, `${c}_pct_el_A`), 0)}</td>
+      <td style="color:var(--nl-b);font-weight:600">${evN(g(r, `${c}_el_B`), dec)}</td><td class="rng">${evN(g(r, `${c}_el_lo_B`), dec)}–${evN(g(r, `${c}_el_hi_B`), dec)}</td><td>${evN(g(r, `${c}_pct_el_B`), 0)}</td></tr>`; }).join("");
+  $("nlTable").innerHTML = list.length ? `<table><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Equipo</th><th class="txt">Liga</th><th class="txt">Pos</th><th>Min</th><th>${esc(LABELS[c] || c)} en su liga</th><th>A+B: EL</th><th>A+B: pct EL</th><th>A: EL</th><th>A: 80 %</th><th>A: pct EL</th><th>B: EL</th><th>B: 80 %</th><th>B: pct EL</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">Ningún jugador cumple los filtros.</div>`;
+  $("nlCount").textContent = `${list.length.toLocaleString("es-ES")} jugadores · ${nlName(c)} · ${temp}`;
+  $("nlPage").textContent = `${nlSt.page + 1} / ${pages}`; $("nlPrev").disabled = nlSt.page === 0; $("nlNext").disabled = nlSt.page >= pages - 1;
+}
+
+function bindNorm() {
+  $("nlMetric").addEventListener("change", (e) => { nlSt.metric = e.target.value; nlSt.page = 0; nlSave(); renderNorm(); });
+  $("nlTemp").addEventListener("change", (e) => { nlSt.temp = e.target.value; nlSt.page = 0; nlExplo(); });
+  $("nlLiga").addEventListener("change", (e) => { nlSt.liga = e.target.value; nlSt.page = 0; nlSave(); nlExplo(); });
+  $("nlPos").addEventListener("change", (e) => { nlSt.pos = e.target.value; nlSt.page = 0; nlSave(); nlExplo(); });
+  $("nlSort").addEventListener("change", (e) => { nlSt.sort = e.target.value; nlSt.page = 0; nlSave(); nlExplo(); });
+  $("nlMin").addEventListener("input", (e) => { nlSt.min = Number(e.target.value) || 0; nlSt.page = 0; nlExplo(); });
+  $("nlQ").addEventListener("input", (e) => { nlSt.q = e.target.value; nlSt.page = 0; nlExplo(); });
+  $("nlPrev").addEventListener("click", () => { nlSt.page--; nlExplo(); });
+  $("nlNext").addEventListener("click", () => { nlSt.page++; nlExplo(); });
+}
+
 async function start() {
   const list = await getJSON("datos/temporadas.json").catch(() => null);
   if (list && Array.isArray(list.temporadas) && list.temporadas.length) SEASONS = list.temporadas.map((t) => t.temporada);
@@ -1748,8 +2009,8 @@ async function start() {
   st.posEst = store.get("mm.posEst") !== "0";
   try { const a = JSON.parse(store.get("mm.age") || "null"); if (a && typeof a === "object") st.age = { lo: typeof a.lo === "number" ? a.lo : null, hi: typeof a.hi === "number" ? a.hi : null }; } catch {}
   try { const c = JSON.parse(store.get("mm.cmp") || "[]"); if (Array.isArray(c)) cmpState.uids = c.filter((u) => typeof u === "string").slice(0, 3); } catch {}
-  renderSeasons(); renderPos(); bind(); bindCmp(); bindEval();
-  showPage(location.hash === "#comparador" ? "comparador" : location.hash === "#evaluacion" ? "evaluacion" : (store.get("mm.page") || "tabla"));
+  renderSeasons(); renderPos(); bind(); bindCmp(); bindEval(); bindNorm();
+  showPage(location.hash === "#comparador" ? "comparador" : location.hash === "#evaluacion" ? "evaluacion" : location.hash === "#normalizacion" ? "normalizacion" : (store.get("mm.page") || "tabla"));
   const [dict, ...idxs] = await Promise.all([getJSON("datos/diccionario_columnas.json").catch(() => []),
     ...SEASONS.map((s) => getJSON(`datos/${s}/indice.json`).catch(() => null))]);
   dict.forEach((d) => { st.dict[d.columna] = d.descripcion; (st.dictGroup ||= {})[d.columna] = d.grupo; });

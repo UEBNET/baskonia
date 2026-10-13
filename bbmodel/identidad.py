@@ -125,7 +125,10 @@ def resolver(tabla: pd.DataFrame, tolerancia_anios: float = 1.5, holgura_calenda
                 p["temporadas"].setdefault(temp, []).append((fila["liga"], frac))
 
     t["persona_id"] = t["nodo"].map(persona).astype(int)
+    # el año de nacimiento es de la PERSONA: si una liga lo publica (EuroLeague), vale también para
+    # sus filas en ligas que no lo publican (ACB). Mediana entre sus registros.
     t["anio_nac"] = t["nodo"].map(nodos["anio_nac"])
+    t["anio_nac"] = t.groupby("persona_id")["anio_nac"].transform("median")
     return t.drop(columns=["frac_gp"]), pd.DataFrame(ambiguos)
 
 
