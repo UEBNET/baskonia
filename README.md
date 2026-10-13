@@ -222,3 +222,23 @@ Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM
   descarga las ligas elegidas de **la temporada elegida (sólo esa)**, sube los datos a esta rama
   y republica los datos de esa temporada en el Artifact. La sesión de la Routine adjunta el
   repositorio con permiso de escritura (`add_repo`) antes de subir los datos.
+
+---
+
+## 11. Modelos: `bbmodel` (algoritmo A)
+
+Traduce las métricas de cualquier jugador de las 8 ligas a su **equivalente en la EuroLeague** (entorno
+2025-26), con intervalo del 80 % y percentil EuroLeague por posición. Separa el entorno de cada liga de su
+nivel, usando 4.336 jugadores puente entre ligas. Explicación completa, fórmulas y validación:
+[`docs/algoritmo_A.md`](docs/algoritmo_A.md).
+
+```bash
+pip install -r requirements.txt
+python -m bbmodel ajustar            # ≈ 10-15 min; escribe data/modelos/algoritmo_A/
+python -m bbmodel validar            # examen fuera de muestra con cambios de liga reales
+python -m bbmodel evaluacion-ligas   # JSON de la pestaña «Evaluación de ligas» (en data/artifact/)
+```
+
+Resultado principal: `data/modelos/algoritmo_A/traducciones/<temporada>.csv` (una fila por jugador-liga-
+temporada; columnas `<métrica>_el`, `_el_lo`, `_el_hi`, `_pct_el`, `_el_prox`) y `tipo_de_cambio.csv`.
+

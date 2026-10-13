@@ -332,6 +332,19 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 
 ---
 
+### 9.1 Modelos ya construidos (`bbmodel/`)
+- **Algoritmo A** (`docs/algoritmo_A.md`): traducción de 25 métricas de tasa a la EuroLeague 2025-26.
+  Identidad entre ligas por nombre + año de nacimiento + calendario (`bbmodel/identidad.py`); posición en
+  3 grupos E/A/I con regresión logística donde falta (`posicion.py`); bayes empírico por exposición
+  (`suerte.py`); tipo de cambio m, s por liga y métrica con EM sobre jugadores puente y deriva por edad
+  (`enlace.py`); traducción con intervalos (`modelo.py`); examen fuera de muestra (`validacion.py`).
+  Resultados versionados en `data/modelos/algoritmo_A/`. Reajustar tras cada carga de datos:
+  `python -m bbmodel ajustar`.
+- **Evaluación de ligas** (`bbmodel/evaluacion_ligas.py`): genera `data/artifact/<temporada>/evaluacion_<fase>.json`
+  para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
+- Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
+  `fecha_nacimiento`.
+
 ## 10. Historial
 
 - Commit 1 — arquitectura por capas, esquema, motor de métricas, tests.
@@ -351,3 +364,4 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   Comparador y Evaluación de ligas); `artifact/mesa-multiliga.html` es ahora esa versión con el selector de
   temporadas dinámico. La pestaña Evaluación usa `datos/<T>/evaluacion_<fase>.json`, que sólo existen para
   2025-26 y 2026-27 (los generó un script `compute_eval.py` que no está en este repositorio).
+- Algoritmo A (`bbmodel`) y cálculo de la evaluación de ligas en el repositorio; resultados en `data/modelos/algoritmo_A/`.
