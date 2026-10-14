@@ -75,6 +75,21 @@ class LBAAdapter(BaseAdapter):
                       and c.get("ctype_code") in PHASE_BY_TYPE]
             if comps and max(c.get("year") or 0 for c in comps) < year:
                 break
+        found = list({c["id"]: c for c in found}.values())  # la paginación de la API repite elementos
+        if any(c.get("ctype_code") == "RS" for c in found) and not any(c.get("ctype_code") == "PO" for c in found):
+            # ... y a cambio se salta otros (p.ej. los playoffs 2020-21, id 222): se prueban los ids vecinos.
+            for rs in [c for c in found if c.get("ctype_code") == "RS"]:
+                for cid in (rs["id"] + 1, rs["id"] - 1, rs["id"] + 2):
+                    try:
+                        comp = (self._get(http, "championships/get-championships-calendar-by-id", {"id": cid})
+                                .get("competition") or {})
+                    except FetchError:
+                        continue
+                    if comp.get("year") == year and comp.get("ctype_code") == "PO":
+                        found.append({**comp, "id": cid, "cserie_code": self.cfg.get("serie", "A1")})
+                        self.soft_fail(f"LBA {year}: playoffs (id {cid}) ausentes del listado de la API; "
+                                       f"localizados junto a la temporada regular")
+                        break
         return found
 
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
@@ -89,29 +104,37 @@ class LBAAdapter(BaseAdapter):
         for ch in champs:
             cid = ch["id"]
             first = self._get(http, "championships/get-championships-calendar-by-id", {"id": cid})
-            days = ((first.get("filters") or {}).get("days")) or []
+            filters = first.get("filters") or {}
+            serials = sorted({d["event_serial"] for d in filters.get("days") or []})
+            # En playoffs cada ronda (cuartos, semis, final) reutiliza los mismos números de jornada:
+            # hay que pedir cada jornada de cada fase (ph_id), como hace la web.
+            phases = [ph["id"] for ph in filters.get("phases") or []] or [None]
             calendars[str(cid)] = {}
-            for day in days:
-                try:
-                    doc = self._get(http, "championships/get-championships-calendar-by-id",
-                                    {"id": cid, "d": day["event_serial"]})
-                except FetchError as exc:
-                    self.soft_fail(str(exc))
-                    continue
-                calendars[str(cid)][str(day["event_serial"])] = doc
-                for m in doc.get("matches") or []:
-                    if str(m.get("game_status")) not in FINISHED:
-                        continue
-                    mid = str(m["id"])
-                    if mid in prev:
-                        scores[mid] = prev[mid]
-                        reused += 1
-                        continue
+            for ph in phases:
+                for serial in serials:
+                    params = {"id": cid, "d": serial, **({"ph_id": ph} if ph is not None else {})}
                     try:
-                        scores[mid] = self._get(http, "championships/get-championships-matches-scores-by-id",
-                                                {"id": mid})
+                        doc = self._get(http, "championships/get-championships-calendar-by-id", params)
                     except FetchError as exc:
                         self.soft_fail(str(exc))
+                        continue
+                    key = str(serial) if ph is None else f"ph{ph}-{serial}"
+                    calendars[str(cid)][key] = doc
+                    for m in doc.get("matches") or []:
+                        if str(m.get("game_status")) not in FINISHED:
+                            continue
+                        mid = str(m["id"])
+                        if mid in scores:
+                            continue
+                        if mid in prev:
+                            scores[mid] = prev[mid]
+                            reused += 1
+                            continue
+                        try:
+                            scores[mid] = self._get(http, "championships/get-championships-matches-scores-by-id",
+                                                    {"id": mid})
+                        except FetchError as exc:
+                            self.soft_fail(str(exc))
         if not scores:
             raise NoDataYet(f"LBA {season}: aún no hay partidos finalizados")
         return {"championships": champs, "calendars": calendars, "scores": scores, "reused_games": reused}

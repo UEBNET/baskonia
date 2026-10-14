@@ -1,0 +1,21 @@
+metrica,nombre,idec,vade,mejor
+entropia_reparto,"Equilibrio del reparto (entropía, 1 = igual)",0.9855587373273516,0.9960807902290527,vade
+tamano_min,Estilo más pequeño (clubes),124,127,vade
+salida_max_media,Confianza media de la neurona ganadora,0.49393731355667114,0.8088393211364746,vade
+silueta_mapa,Silueta en el mapa 3D,0.27881747484207153,0.27446165680885315,idec
+silueta_rasgos,Silueta en los 13 rasgos,0.04937137642867988,0.056240789656394036,vade
+davies_bouldin_mapa,Davies-Bouldin en el mapa (menos es mejor),1.0945843848122132,1.1738022734564513,idec
+ari_semillas_medio,Estabilidad de los estilos entre semillas (ARI medio),0.31986188753081446,0.5100179994627979,vade
+ari_final_semillas_medio,Centralidad del modelo final (ARI medio con las semillas),0.34783014757301056,0.5584018450062305,vade
+estabilidad_mapa,Estabilidad del mapa entre semillas (r de distancias),0.8403708369002085,0.9551567586848903,vade
+robustez_reparto_minutos,Robustez al reparto de minutos,0.5344533600802407,0.582221664994985,vade
+ari_temporal_reserva,"Reproducibilidad temporal (ARI, red sin 2024-26)",0.5912251353460023,0.5513828797493884,idec
+trustworthiness_k10,Fidelidad del mapa: trustworthiness,0.8918629551415326,0.869752507650307,idec
+continuidad_k10,Fidelidad del mapa: continuidad,0.8946997896389116,0.9023873454290533,vade
+spearman_distancias,Correlación distancias mapa / perfil,0.7016571625771577,0.7062264953587618,vade
+r2_medio,R² medio de reconstrucción,0.6186087344580546,0.5126924057157333,idec
+eta2_nivel,Nivel explicado por el estilo (η²; menos = estilo independiente del nivel),0.0015836803476194893,0.009450705224053802,idec
+nmi_estilo_liga,Información compartida estilo-liga (NMI; menos = estilos que cruzan ligas),0.06849393299490007,0.072553484315238,idec
+pares_distintos,"Parejas de estilos distintas (permutación, Holm 5 %)",15/15,15/15,
+mahalanobis_min,Distancia de Mahalanobis mínima entre estilos,2.2067348137306637,2.2048483648485266,idec
+replicabilidad,Replicabilidad de perfiles 2020-23 / 2023-26 (r medio),0.943101965372004,0.9164244848390974,idec

@@ -43,6 +43,9 @@ class BaseAdapter(ABC):
         self.league = league
         self.cfg = cfg
         self.errors: list[str] = []  # errores no fatales durante fetch (se guardan en meta)
+        # Valores descubiertos durante fetch que conviene guardar en config/sources.json para
+        # la liga (p.ej. ids semilla de la BBL). El pipeline los aplica tras una descarga correcta.
+        self.config_updates: dict = {}
 
     # ---------------------------------------------------------------- temporada
     def season_cfg(self, season: str) -> dict:

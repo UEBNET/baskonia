@@ -1,0 +1,21 @@
+metrica,nombre,vade,mejor
+entropia_reparto,"Equilibrio del reparto (entropía, 1 = igual)",0.996500983275167,vade
+tamano_min,Estilo más pequeño (clubes),139,vade
+salida_max_media,Confianza media de la neurona ganadora,0.8230562806129456,vade
+silueta_mapa,Silueta en el mapa 3D,0.25916340947151184,vade
+silueta_rasgos,Silueta en los 13 rasgos,0.047155523026262906,vade
+davies_bouldin_mapa,Davies-Bouldin en el mapa (menos es mejor),1.2384576276448593,vade
+ari_semillas_medio,Estabilidad de los estilos entre semillas (ARI medio),0.459522883185671,vade
+ari_final_semillas_medio,Centralidad del modelo final (ARI medio con las semillas),0.4871629546017133,vade
+estabilidad_mapa,Estabilidad del mapa entre semillas (r de distancias),0.944647979906754,vade
+robustez_reparto_minutos,Robustez al reparto de minutos,0.5958625877632898,vade
+ari_temporal_reserva,"Reproducibilidad temporal (ARI, red sin 2024-26)",0.44934667240939963,vade
+trustworthiness_k10,Fidelidad del mapa: trustworthiness,0.8700545855600423,vade
+continuidad_k10,Fidelidad del mapa: continuidad,0.904751953261721,vade
+spearman_distancias,Correlación distancias mapa / perfil,0.7036944516824566,vade
+r2_medio,R² medio de reconstrucción,0.5127825553979425,vade
+eta2_nivel,Nivel explicado por el estilo (η²; menos = estilo independiente del nivel),0.004306136795319447,vade
+nmi_estilo_liga,Información compartida estilo-liga (NMI; menos = estilos que cruzan ligas),0.07590986328298396,vade
+pares_distintos,"Parejas de estilos distintas (permutación, Holm 5 %)",15/15,
+mahalanobis_min,Distancia de Mahalanobis mínima entre estilos,1.96177502117997,vade
+replicabilidad,Replicabilidad de perfiles 2020-23 / 2023-26 (r medio),0.9120365207563474,vade

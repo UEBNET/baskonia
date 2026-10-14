@@ -1,0 +1,1415 @@
+{
+ "neutralizacion": {
+  "rasgos": [
+   "ritmo_rel",
+   "fg3a_rate",
+   "fta_rate",
+   "ast_pct",
+   "tov_pct",
+   "oreb_p100",
+   "uso_conc",
+   "dreb_p100",
+   "stl_p100",
+   "blk_p100",
+   "pf_p100",
+   "cuota_interior",
+   "cuota_exterior"
+  ],
+  "r2_club": [
+   0.0011,
+   0.1804,
+   0.5783,
+   0.6369,
+   0.3409,
+   0.0272,
+   0.0552,
+   0.7378,
+   0.1853,
+   0.3797,
+   0.7064,
+   0.0655,
+   0.0527
+  ],
+  "r2_jugador": [
+   0.0008,
+   0.2392,
+   0.4194,
+   0.0027,
+   0.0752,
+   0.1502,
+   0.0257,
+   0.3419,
+   0.01,
+   0.2745,
+   0.0389,
+   0.1716,
+   0.1049
+  ],
+  "corr_nivel_antes": [
+   -0.03145523608201084,
+   -0.4041025932828917,
+   0.7558855298869938,
+   0.7807107943881004,
+   -0.5837858272333165,
+   0.014957445517461596,
+   0.18647574113475893,
+   0.8473531810479189,
+   0.4148120435195788,
+   0.6122739374243303,
+   -0.8324357635504352,
+   0.25354898549849825,
+   -0.22676250436140433
+  ],
+  "corr_nivel_despues": [
+   9.07547250961807e-17,
+   1.5613716145579486e-16,
+   -4.527977682218052e-16,
+   -6.831000813691032e-16,
+   8.821749622252413e-16,
+   -1.2490972916463588e-16,
+   -1.3271658723742566e-16,
+   -1.4989167499756306e-15,
+   -4.879286295493594e-16,
+   -6.5577607811433775e-16,
+   7.387239451377292e-16,
+   -1.7370259211957182e-16,
+   -1.171028710918461e-17
+  ],
+  "nivel_por_liga": [
+   {
+    "liga": "acb",
+    "mean": 0.011,
+    "std": 0.549,
+    "size": 109
+   },
+   {
+    "liga": "bbl",
+    "mean": -0.976,
+    "std": 0.529,
+    "size": 107
+   },
+   {
+    "liga": "eurocup",
+    "mean": -0.429,
+    "std": 0.543,
+    "size": 124
+   },
+   {
+    "liga": "euroleague",
+    "mean": 0.736,
+    "std": 0.43,
+    "size": 110
+   },
+   {
+    "liga": "gleague",
+    "mean": -0.379,
+    "std": 0.376,
+    "size": 169
+   },
+   {
+    "liga": "lba",
+    "mean": -0.711,
+    "std": 0.455,
+    "size": 94
+   },
+   {
+    "liga": "lnb",
+    "mean": -0.56,
+    "std": 0.437,
+    "size": 104
+   },
+   {
+    "liga": "nba",
+    "mean": 1.348,
+    "std": 0.437,
+    "size": 180
+   }
+  ]
+ },
+ "barrido_k": {
+  "k": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14
+  ],
+  "bic_rasgos": [
+   36395.26737198675,
+   36226.17037438154,
+   36058.15406541237,
+   36015.34609573752,
+   35940.92951495026,
+   35951.116528481536,
+   35995.686223210054,
+   36035.885587549514,
+   36094.38336933005,
+   36128.08520299113,
+   36216.78409186699,
+   36321.91547838784,
+   36371.0139500516
+  ],
+  "icl_rasgos": [
+   36843.86536160338,
+   36921.0576700426,
+   36848.54218844879,
+   36865.74450024495,
+   36821.070147814455,
+   36839.1604292661,
+   36956.98194130299,
+   36978.41872068858,
+   37032.6464898573,
+   37056.31118048917,
+   37192.66746500572,
+   37260.88048175622,
+   37318.190015165026
+  ],
+  "bic_mapa": [
+   7804.070986675173,
+   7609.729425294439,
+   7498.765632430245,
+   7478.997670388042,
+   7495.532235296676,
+   7580.123163311083,
+   7588.285817170827,
+   7591.969665011741,
+   7662.925930397975,
+   7721.351427389738,
+   7775.763066063172,
+   7841.701889699833,
+   7892.6706334376595
+  ],
+  "icl_mapa": [
+   7860.092699932009,
+   7908.005914552252,
+   7941.997260848214,
+   8056.1303608177295,
+   8314.282235296676,
+   8456.920038311084,
+   8554.676014924733,
+   8708.665587863303,
+   8795.30263938235,
+   8833.007433249113,
+   8956.036991844423,
+   8986.081894582647,
+   9179.876932265784
+  ],
+  "silueta_kmedias": [
+   0.10961740445318469,
+   0.09365633607252834,
+   0.09317682971591143,
+   0.0938941137463532,
+   0.08420606817650406,
+   0.08613932241169234,
+   0.07802619155102035,
+   0.08331971503993547,
+   0.08453543076223063,
+   0.08384075654167185,
+   0.07987593364204533,
+   0.07613941212044274,
+   0.08076319568746163
+  ],
+  "estabilidad_kmedias": [
+   0.8110628695062214,
+   0.6067099029504719,
+   0.7728637205693436,
+   0.7211130893587004,
+   0.4169289629479097,
+   0.5044536771576722,
+   0.4133865499866058,
+   0.30421442590377945,
+   0.41989635313667273,
+   0.3711534221396568,
+   0.3758620628941182,
+   0.2924032258812861,
+   0.3460107969533428
+  ],
+  "k_optimo_bic_rasgos": 6,
+  "k_optimo_icl_rasgos": 6,
+  "k_optimo_bic_mapa": 5,
+  "k_optimo_icl_mapa": 2
+ },
+ "exito": {
+  "clubes": 997,
+  "r_nivel_net": 0.456,
+  "r2_nivel": 0.208,
+  "r2_estilo": 0.2109,
+  "r2_nivel_estilo": 0.4162,
+  "f_estilo_sin_control": 37.7632,
+  "p_estilo_sin_control": 0.0,
+  "f_estilo_dado_nivel": 50.347,
+  "p_estilo_dado_nivel": 0.0,
+  "eta2_parcial_estilo": 0.2629,
+  "por_estilo": [
+   {
+    "estilo": "E01",
+    "n": 113,
+    "net_z": 0.7847,
+    "resid": 0.7086,
+    "sd": 0.6561,
+    "nivel": 0.1304,
+    "ic95": 0.121
+   },
+   {
+    "estilo": "E02",
+    "n": 158,
+    "net_z": 0.2605,
+    "resid": 0.2672,
+    "sd": 0.6879,
+    "nivel": -0.0353,
+    "ic95": 0.1073
+   },
+   {
+    "estilo": "E03",
+    "n": 47,
+    "net_z": 0.2793,
+    "resid": 0.2796,
+    "sd": 0.7109,
+    "nivel": -0.0226,
+    "ic95": 0.2032
+   },
+   {
+    "estilo": "E04",
+    "n": 126,
+    "net_z": 0.2267,
+    "resid": 0.2845,
+    "sd": 0.7622,
+    "nivel": -0.1376,
+    "ic95": 0.1331
+   },
+   {
+    "estilo": "E05",
+    "n": 154,
+    "net_z": 0.0947,
+    "resid": 0.082,
+    "sd": 0.8028,
+    "nivel": 0.0035,
+    "ic95": 0.1268
+   },
+   {
+    "estilo": "E06",
+    "n": 108,
+    "net_z": -0.0594,
+    "resid": -0.0152,
+    "sd": 0.8697,
+    "nivel": -0.1105,
+    "ic95": 0.164
+   },
+   {
+    "estilo": "E07",
+    "n": 137,
+    "net_z": -0.4515,
+    "resid": -0.4249,
+    "sd": 0.7131,
+    "nivel": -0.0753,
+    "ic95": 0.1194
+   },
+   {
+    "estilo": "E08",
+    "n": 154,
+    "net_z": -0.7651,
+    "resid": -0.8056,
+    "sd": 0.8669,
+    "nivel": 0.0591,
+    "ic95": 0.1369
+   }
+  ]
+ },
+ "encaje": {
+  "casos": 2214,
+  "min_minutos": 300,
+  "d_nivel~distancia": {
+   "coef": 0.0376,
+   "ic95": [
+    0.0165,
+    0.0588
+   ],
+   "p": 0.000484,
+   "r2": 0.1809
+  },
+  "d_nivel~afinidad": {
+   "coef": -0.0665,
+   "ic95": [
+    -0.1313,
+    -0.0016
+   ],
+   "p": 0.044521,
+   "r2": 0.1781
+  },
+  "d_cuota~distancia": {
+   "coef": -0.0006,
+   "ic95": [
+    -0.0024,
+    0.0011
+   ],
+   "p": 0.476183,
+   "r2": 0.0256
+  },
+  "d_cuota~afinidad": {
+   "coef": 0.0004,
+   "ic95": [
+    -0.0048,
+    0.0057
+   ],
+   "p": 0.874053,
+   "r2": 0.0254
+  },
+  "por_tercil": [
+   {
+    "tercil": "cerca",
+    "n": 738,
+    "distancia": 1.3009999990463257,
+    "d_nivel": -0.0318,
+    "d_cuota": -0.0023
+   },
+   {
+    "tercil": "media",
+    "n": 738,
+    "distancia": 2.321899890899658,
+    "d_nivel": 0.0305,
+    "d_cuota": -0.0026
+   },
+   {
+    "tercil": "lejos",
+    "n": 738,
+    "distancia": 3.246299982070923,
+    "d_nivel": -0.006,
+    "d_cuota": -0.004
+   }
+  ],
+  "spearman_distancia_dnivel": 0.0233
+ },
+ "continuidad": {
+  "parejas": 757,
+  "continuidad_media": 0.4339,
+  "spearman_continuidad_desplazamiento": -0.314,
+  "p_spearman": 0.0,
+  "or_mismo_estilo_por_10pp": 1.1536,
+  "p_logit": 3.281e-05,
+  "por_cuartil": [
+   {
+    "cuartil": "Q1",
+    "n": 190,
+    "continuidad": 0.1488,
+    "desplazamiento": 1.9528,
+    "mismo_estilo": 0.2421
+   },
+   {
+    "cuartil": "Q2",
+    "n": 189,
+    "continuidad": 0.338,
+    "desplazamiento": 1.6294,
+    "mismo_estilo": 0.3175
+   },
+   {
+    "cuartil": "Q3",
+    "n": 189,
+    "continuidad": 0.5098,
+    "desplazamiento": 1.5549,
+    "mismo_estilo": 0.3386
+   },
+   {
+    "cuartil": "Q4",
+    "n": 189,
+    "continuidad": 0.7406,
+    "desplazamiento": 1.1855,
+    "mismo_estilo": 0.4286
+   }
+  ]
+ },
+ "ligas": {
+  "liga_x_estilo": {
+   "acb": {
+    "E01": 0.1193,
+    "E02": 0.0826,
+    "E03": 0.0642,
+    "E04": 0.0917,
+    "E05": 0.055,
+    "E06": 0.2385,
+    "E07": 0.156,
+    "E08": 0.1927
+   },
+   "bbl": {
+    "E01": 0.243,
+    "E02": 0.2617,
+    "E03": 0.0841,
+    "E04": 0.1121,
+    "E05": 0.0841,
+    "E06": 0.0841,
+    "E07": 0.0841,
+    "E08": 0.0467
+   },
+   "eurocup": {
+    "E01": 0.0968,
+    "E02": 0.1048,
+    "E03": 0.0565,
+    "E04": 0.2661,
+    "E05": 0.1048,
+    "E06": 0.1613,
+    "E07": 0.121,
+    "E08": 0.0887
+   },
+   "euroleague": {
+    "E01": 0.1545,
+    "E02": 0.2273,
+    "E03": 0.0545,
+    "E04": 0.0273,
+    "E05": 0.2091,
+    "E06": 0.1091,
+    "E07": 0.1636,
+    "E08": 0.0545
+   },
+   "gleague": {
+    "E01": 0.1598,
+    "E02": 0.3018,
+    "E03": 0.0355,
+    "E04": 0.1243,
+    "E05": 0.1953,
+    "E06": 0.071,
+    "E07": 0.0769,
+    "E08": 0.0355
+   },
+   "lba": {
+    "E01": 0.0213,
+    "E02": 0.1596,
+    "E03": 0.0319,
+    "E04": 0.1277,
+    "E05": 0.234,
+    "E06": 0.1277,
+    "E07": 0.2021,
+    "E08": 0.0957
+   },
+   "lnb": {
+    "E01": 0.0865,
+    "E02": 0.0288,
+    "E03": 0.0385,
+    "E04": 0.1442,
+    "E05": 0.1923,
+    "E06": 0.0673,
+    "E07": 0.1538,
+    "E08": 0.2885
+   },
+   "nba": {
+    "E01": 0.0389,
+    "E02": 0.0778,
+    "E03": 0.0278,
+    "E04": 0.1111,
+    "E05": 0.1556,
+    "E06": 0.0556,
+    "E07": 0.1667,
+    "E08": 0.3667
+   }
+  },
+  "liga_x_estilo_n": {
+   "acb": {
+    "E01": 13,
+    "E02": 9,
+    "E03": 7,
+    "E04": 10,
+    "E05": 6,
+    "E06": 26,
+    "E07": 17,
+    "E08": 21
+   },
+   "bbl": {
+    "E01": 26,
+    "E02": 28,
+    "E03": 9,
+    "E04": 12,
+    "E05": 9,
+    "E06": 9,
+    "E07": 9,
+    "E08": 5
+   },
+   "eurocup": {
+    "E01": 12,
+    "E02": 13,
+    "E03": 7,
+    "E04": 33,
+    "E05": 13,
+    "E06": 20,
+    "E07": 15,
+    "E08": 11
+   },
+   "euroleague": {
+    "E01": 17,
+    "E02": 25,
+    "E03": 6,
+    "E04": 3,
+    "E05": 23,
+    "E06": 12,
+    "E07": 18,
+    "E08": 6
+   },
+   "gleague": {
+    "E01": 27,
+    "E02": 51,
+    "E03": 6,
+    "E04": 21,
+    "E05": 33,
+    "E06": 12,
+    "E07": 13,
+    "E08": 6
+   },
+   "lba": {
+    "E01": 2,
+    "E02": 15,
+    "E03": 3,
+    "E04": 12,
+    "E05": 22,
+    "E06": 12,
+    "E07": 19,
+    "E08": 9
+   },
+   "lnb": {
+    "E01": 9,
+    "E02": 3,
+    "E03": 4,
+    "E04": 15,
+    "E05": 20,
+    "E06": 7,
+    "E07": 16,
+    "E08": 30
+   },
+   "nba": {
+    "E01": 7,
+    "E02": 14,
+    "E03": 5,
+    "E04": 20,
+    "E05": 28,
+    "E06": 10,
+    "E07": 30,
+    "E08": 66
+   }
+  },
+  "chi2_liga": 295.2709,
+  "p_liga": 0.0,
+  "v_cramer_liga": 0.2057,
+  "temporada_x_estilo": {
+   "2020-21": {
+    "E01": 0.1062,
+    "E02": 0.1312,
+    "E03": 0.05,
+    "E04": 0.1125,
+    "E05": 0.125,
+    "E06": 0.1125,
+    "E07": 0.1875,
+    "E08": 0.175
+   },
+   "2021-22": {
+    "E01": 0.1084,
+    "E02": 0.1627,
+    "E03": 0.0422,
+    "E04": 0.0964,
+    "E05": 0.1566,
+    "E06": 0.1084,
+    "E07": 0.1566,
+    "E08": 0.1687
+   },
+   "2022-23": {
+    "E01": 0.1548,
+    "E02": 0.1488,
+    "E03": 0.0357,
+    "E04": 0.0595,
+    "E05": 0.2083,
+    "E06": 0.0893,
+    "E07": 0.1429,
+    "E08": 0.1607
+   },
+   "2023-24": {
+    "E01": 0.0888,
+    "E02": 0.1775,
+    "E03": 0.0355,
+    "E04": 0.1775,
+    "E05": 0.1361,
+    "E06": 0.1006,
+    "E07": 0.142,
+    "E08": 0.142
+   },
+   "2024-25": {
+    "E01": 0.1145,
+    "E02": 0.1627,
+    "E03": 0.0843,
+    "E04": 0.1265,
+    "E05": 0.1265,
+    "E06": 0.1265,
+    "E07": 0.1145,
+    "E08": 0.1446
+   },
+   "2025-26": {
+    "E01": 0.1071,
+    "E02": 0.1667,
+    "E03": 0.0357,
+    "E04": 0.1845,
+    "E05": 0.1726,
+    "E06": 0.1131,
+    "E07": 0.0833,
+    "E08": 0.1369
+   }
+  },
+  "chi2_temporada": 42.5111,
+  "p_temporada": 0.17904849,
+  "v_cramer_temporada": 0.0923,
+  "centroides": {
+   "acb": {
+    "x": 0.23999999463558197,
+    "y": -0.21870000660419464,
+    "z": 0.08730000257492065
+   },
+   "bbl": {
+    "x": -0.7204999923706055,
+    "y": -0.35199999809265137,
+    "z": 0.08919999748468399
+   },
+   "eurocup": {
+    "x": -0.09709999710321426,
+    "y": 0.10279999673366547,
+    "z": 0.38280001282691956
+   },
+   "euroleague": {
+    "x": -0.34630000591278076,
+    "y": -0.18289999663829803,
+    "z": -0.23260000348091125
+   },
+   "gleague": {
+    "x": -0.5153999924659729,
+    "y": -0.1282999962568283,
+    "z": -0.05000000074505806
+   },
+   "lba": {
+    "x": 0.13269999623298645,
+    "y": -0.02800000086426735,
+    "z": -0.20069999992847443
+   },
+   "lnb": {
+    "x": 0.3659000098705292,
+    "y": 0.5181000232696533,
+    "z": -0.0738999992609024
+   },
+   "nba": {
+    "x": 0.7646999955177307,
+    "y": 0.2184000015258789,
+    "z": -0.032999999821186066
+   }
+  },
+  "distancias": {
+   "acb": {
+    "acb": 0.0,
+    "bbl": 0.9697999954223633,
+    "eurocup": 0.5516999959945679,
+    "euroleague": 0.6689000129699707,
+    "gleague": 0.7731000185012817,
+    "lba": 0.36169999837875366,
+    "lnb": 0.7645999789237976,
+    "nba": 0.6934000253677368
+   },
+   "bbl": {
+    "acb": 0.9697999954223633,
+    "bbl": 0.0,
+    "eurocup": 0.8256000280380249,
+    "euroleague": 0.5217000246047974,
+    "gleague": 0.33390000462532043,
+    "lba": 0.9575999975204468,
+    "lnb": 1.4013999700546265,
+    "nba": 1.5957000255584717
+   },
+   "eurocup": {
+    "acb": 0.5516999959945679,
+    "bbl": 0.8256000280380249,
+    "eurocup": 0.0,
+    "euroleague": 0.7228000164031982,
+    "gleague": 0.6448000073432922,
+    "lba": 0.6406000256538391,
+    "lnb": 0.7716000080108643,
+    "nba": 0.9639000296592712
+   },
+   "euroleague": {
+    "acb": 0.6689000129699707,
+    "bbl": 0.5217000246047974,
+    "eurocup": 0.7228000164031982,
+    "euroleague": 0.0,
+    "gleague": 0.2547000050544739,
+    "lba": 0.5044999718666077,
+    "lnb": 1.0118000507354736,
+    "nba": 1.1979999542236328
+   },
+   "gleague": {
+    "acb": 0.7731000185012817,
+    "bbl": 0.33390000462532043,
+    "eurocup": 0.6448000073432922,
+    "euroleague": 0.2547000050544739,
+    "gleague": 0.0,
+    "lba": 0.6729000210762024,
+    "lnb": 1.0931999683380127,
+    "nba": 1.326300024986267
+   },
+   "lba": {
+    "acb": 0.36169999837875366,
+    "bbl": 0.9575999975204468,
+    "eurocup": 0.6406000256538391,
+    "euroleague": 0.5044999718666077,
+    "gleague": 0.6729000210762024,
+    "lba": 0.0,
+    "lnb": 0.6071000099182129,
+    "nba": 0.6987000107765198
+   },
+   "lnb": {
+    "acb": 0.7645999789237976,
+    "bbl": 1.4013999700546265,
+    "eurocup": 0.7716000080108643,
+    "euroleague": 1.0118000507354736,
+    "gleague": 1.0931999683380127,
+    "lba": 0.6071000099182129,
+    "lnb": 0.0,
+    "nba": 0.5005000233650208
+   },
+   "nba": {
+    "acb": 0.6934000253677368,
+    "bbl": 1.5957000255584717,
+    "eurocup": 0.9639000296592712,
+    "euroleague": 1.1979999542236328,
+    "gleague": 1.326300024986267,
+    "lba": 0.6987000107765198,
+    "lnb": 0.5005000233650208,
+    "nba": 0.0
+   }
+  },
+  "dispersion_interna": {
+   "acb": 1.4894,
+   "bbl": 1.4367,
+   "eurocup": 1.4864,
+   "euroleague": 1.4474,
+   "gleague": 1.719,
+   "lba": 1.4608,
+   "lnb": 1.6048,
+   "nba": 1.5544
+  }
+ },
+ "baskonia": {
+  "temporadas": [
+   {
+    "clave": "euroleague:BAS:2020-21",
+    "liga": "euroleague",
+    "temporada": "2020-21",
+    "estilo": "E03",
+    "p": 0.8277,
+    "nivel": 0.9864,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Noblesville Boom",
+      "liga": "gleague",
+      "d": 0.2207
+     },
+     {
+      "club": "Dolomiti Energia Trentino",
+      "liga": "lba",
+      "d": 0.259
+     },
+     {
+      "club": "FC Bayern München Basketball",
+      "liga": "bbl",
+      "d": 0.366
+     },
+     {
+      "club": "RASTA Vechta",
+      "liga": "bbl",
+      "d": 0.4593
+     },
+     {
+      "club": "Birmingham Squadron",
+      "liga": "gleague",
+      "d": 0.5018
+     }
+    ]
+   },
+   {
+    "clave": "euroleague:BAS:2021-22",
+    "liga": "euroleague",
+    "temporada": "2021-22",
+    "estilo": "E07",
+    "p": 0.8079,
+    "nivel": 0.3585,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Milwaukee Bucks",
+      "liga": "nba",
+      "d": 0.2193
+     },
+     {
+      "club": "Monbus Obradoiro",
+      "liga": "acb",
+      "d": 0.2233
+     },
+     {
+      "club": "Kosner Baskonia",
+      "liga": "acb",
+      "d": 0.304
+     },
+     {
+      "club": "medi bayreuth",
+      "liga": "bbl",
+      "d": 0.3884
+     },
+     {
+      "club": "ALBA Berlin",
+      "liga": "euroleague",
+      "d": 0.4712
+     }
+    ],
+    "desplazamiento": 2.447,
+    "pct_desplazamiento": 81.9
+   },
+   {
+    "clave": "euroleague:BAS:2022-23",
+    "liga": "euroleague",
+    "temporada": "2022-23",
+    "estilo": "E01",
+    "p": 0.9332,
+    "nivel": 1.3213,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Kosner Baskonia",
+      "liga": "acb",
+      "d": 0.2668
+     },
+     {
+      "club": "BG Göttingen",
+      "liga": "bbl",
+      "d": 0.3424
+     },
+     {
+      "club": "La Laguna Tenerife",
+      "liga": "acb",
+      "d": 0.5969
+     },
+     {
+      "club": "BMA365 Bamberg Baskets",
+      "liga": "bbl",
+      "d": 0.6401
+     },
+     {
+      "club": "Maine Celtics",
+      "liga": "gleague",
+      "d": 0.7815
+     }
+    ],
+    "desplazamiento": 2.9529,
+    "pct_desplazamiento": 92.6
+   },
+   {
+    "clave": "euroleague:BAS:2023-24",
+    "liga": "euroleague",
+    "temporada": "2023-24",
+    "estilo": "E07",
+    "p": 0.8497,
+    "nivel": 0.7852,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Miami Heat",
+      "liga": "nba",
+      "d": 0.1043
+     },
+     {
+      "club": "Real Madrid",
+      "liga": "euroleague",
+      "d": 0.4017
+     },
+     {
+      "club": "FC Bayern Munich",
+      "liga": "euroleague",
+      "d": 0.4736
+     },
+     {
+      "club": "Kosner Baskonia",
+      "liga": "acb",
+      "d": 0.5485
+     },
+     {
+      "club": "Real Madrid",
+      "liga": "acb",
+      "d": 0.6065
+     }
+    ],
+    "desplazamiento": 2.9723,
+    "pct_desplazamiento": 93.1
+   },
+   {
+    "clave": "euroleague:BAS:2024-25",
+    "liga": "euroleague",
+    "temporada": "2024-25",
+    "estilo": "E06",
+    "p": 0.9852,
+    "nivel": 0.7191,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Santa Cruz Warriors",
+      "liga": "gleague",
+      "d": 0.3386
+     },
+     {
+      "club": "Kosner Baskonia",
+      "liga": "acb",
+      "d": 0.4488
+     },
+     {
+      "club": "BG Göttingen",
+      "liga": "bbl",
+      "d": 0.5023
+     },
+     {
+      "club": "Real Madrid",
+      "liga": "acb",
+      "d": 0.5826
+     },
+     {
+      "club": "Telekom Baskets Bonn",
+      "liga": "bbl",
+      "d": 0.6263
+     }
+    ],
+    "desplazamiento": 1.6942,
+    "pct_desplazamiento": 58.9
+   },
+   {
+    "clave": "euroleague:BAS:2025-26",
+    "liga": "euroleague",
+    "temporada": "2025-26",
+    "estilo": "E07",
+    "p": 0.9838,
+    "nivel": 0.396,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "FIATC Girona",
+      "liga": "acb",
+      "d": 0.4756
+     },
+     {
+      "club": "Pallacanestro Trieste",
+      "liga": "lba",
+      "d": 0.5668
+     },
+     {
+      "club": "Atlanta Hawks",
+      "liga": "nba",
+      "d": 0.7786
+     },
+     {
+      "club": "Miami Heat",
+      "liga": "nba",
+      "d": 0.8711
+     },
+     {
+      "club": "Gravelines-Dunkerque",
+      "liga": "lnb",
+      "d": 1.0623
+     }
+    ],
+    "desplazamiento": 2.3166,
+    "pct_desplazamiento": 78.5
+   },
+   {
+    "clave": "euroleague:BAS:2026-27",
+    "liga": "euroleague",
+    "temporada": "2026-27",
+    "estilo": "E07",
+    "p": 0.9835,
+    "nivel": 0.0197,
+    "provisional": true,
+    "mas_parecidos": [
+     {
+      "club": "iLERNA Lleida",
+      "liga": "acb",
+      "d": 1.0769
+     },
+     {
+      "club": "Virtus Bologna",
+      "liga": "euroleague",
+      "d": 1.2802
+     },
+     {
+      "club": "LDLC ASVEL Villeurbanne",
+      "liga": "euroleague",
+      "d": 1.3121
+     },
+     {
+      "club": "Río Breogán",
+      "liga": "acb",
+      "d": 1.3708
+     },
+     {
+      "club": "Kosner Baskonia",
+      "liga": "acb",
+      "d": 1.4143
+     }
+    ],
+    "desplazamiento": 0.997,
+    "pct_desplazamiento": 32.1
+   },
+   {
+    "clave": "acb:3:2020-21",
+    "liga": "acb",
+    "temporada": "2020-21",
+    "estilo": "E06",
+    "p": 0.5579,
+    "nivel": 0.4114,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Promitheas Patras",
+      "liga": "eurocup",
+      "d": 0.2679
+     },
+     {
+      "club": "Monbus Obradoiro",
+      "liga": "acb",
+      "d": 0.4005
+     },
+     {
+      "club": "Surne Bilbao",
+      "liga": "acb",
+      "d": 0.4012
+     },
+     {
+      "club": "Brescia Leonessa",
+      "liga": "eurocup",
+      "d": 0.4091
+     },
+     {
+      "club": "LDLC ASVEL Villeurbanne",
+      "liga": "euroleague",
+      "d": 0.4237
+     }
+    ]
+   },
+   {
+    "clave": "acb:3:2021-22",
+    "liga": "acb",
+    "temporada": "2021-22",
+    "estilo": "E07",
+    "p": 0.6524,
+    "nivel": 0.352,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Monbus Obradoiro",
+      "liga": "acb",
+      "d": 0.0854
+     },
+     {
+      "club": "Baskonia Vitoria-Gasteiz",
+      "liga": "euroleague",
+      "d": 0.304
+     },
+     {
+      "club": "ALBA BERLIN",
+      "liga": "bbl",
+      "d": 0.3659
+     },
+     {
+      "club": "Cleveland Charge",
+      "liga": "gleague",
+      "d": 0.421
+     },
+     {
+      "club": "Milwaukee Bucks",
+      "liga": "nba",
+      "d": 0.4645
+     }
+    ],
+    "desplazamiento": 0.9813,
+    "pct_desplazamiento": 31.2
+   },
+   {
+    "clave": "acb:3:2022-23",
+    "liga": "acb",
+    "temporada": "2022-23",
+    "estilo": "E01",
+    "p": 0.9182,
+    "nivel": 0.9392,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Baskonia Vitoria-Gasteiz",
+      "liga": "euroleague",
+      "d": 0.2668
+     },
+     {
+      "club": "BG Göttingen",
+      "liga": "bbl",
+      "d": 0.5411
+     },
+     {
+      "club": "BMA365 Bamberg Baskets",
+      "liga": "bbl",
+      "d": 0.6713
+     },
+     {
+      "club": "La Laguna Tenerife",
+      "liga": "acb",
+      "d": 0.768
+     },
+     {
+      "club": "Maine Celtics",
+      "liga": "gleague",
+      "d": 0.8081
+     }
+    ],
+    "desplazamiento": 2.841,
+    "pct_desplazamiento": 90.4
+   },
+   {
+    "clave": "acb:3:2023-24",
+    "liga": "acb",
+    "temporada": "2023-24",
+    "estilo": "E07",
+    "p": 0.8324,
+    "nivel": 0.4426,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Baskonia Vitoria-Gasteiz",
+      "liga": "euroleague",
+      "d": 0.5485
+     },
+     {
+      "club": "Miami Heat",
+      "liga": "nba",
+      "d": 0.5611
+     },
+     {
+      "club": "Real Madrid",
+      "liga": "euroleague",
+      "d": 0.5882
+     },
+     {
+      "club": "Real Madrid",
+      "liga": "acb",
+      "d": 0.7105
+     },
+     {
+      "club": "FC Bayern Munich",
+      "liga": "euroleague",
+      "d": 0.7242
+     }
+    ],
+    "desplazamiento": 2.769,
+    "pct_desplazamiento": 89.0
+   },
+   {
+    "clave": "acb:3:2024-25",
+    "liga": "acb",
+    "temporada": "2024-25",
+    "estilo": "E06",
+    "p": 0.9325,
+    "nivel": 0.2067,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "BG Göttingen",
+      "liga": "bbl",
+      "d": 0.2401
+     },
+     {
+      "club": "Real Madrid",
+      "liga": "acb",
+      "d": 0.2727
+     },
+     {
+      "club": "Baskonia Vitoria-Gasteiz",
+      "liga": "euroleague",
+      "d": 0.4488
+     },
+     {
+      "club": "Santa Cruz Warriors",
+      "liga": "gleague",
+      "d": 0.4806
+     },
+     {
+      "club": "Asisa Joventut",
+      "liga": "acb",
+      "d": 0.4823
+     }
+    ],
+    "desplazamiento": 1.6402,
+    "pct_desplazamiento": 57.1
+   },
+   {
+    "clave": "acb:3:2025-26",
+    "liga": "acb",
+    "temporada": "2025-26",
+    "estilo": "E05",
+    "p": 0.7893,
+    "nivel": 0.3992,
+    "provisional": false,
+    "mas_parecidos": [
+     {
+      "club": "Monaco",
+      "liga": "lnb",
+      "d": 0.3515
+     },
+     {
+      "club": "College Park Skyhawks",
+      "liga": "gleague",
+      "d": 0.4634
+     },
+     {
+      "club": "Golden State Warriors",
+      "liga": "nba",
+      "d": 0.4886
+     },
+     {
+      "club": "Phoenix Suns",
+      "liga": "nba",
+      "d": 0.5249
+     },
+     {
+      "club": "AS Monaco",
+      "liga": "euroleague",
+      "d": 0.5296
+     }
+    ],
+    "desplazamiento": 2.7808,
+    "pct_desplazamiento": 89.3
+   },
+   {
+    "clave": "acb:3:2026-27",
+    "liga": "acb",
+    "temporada": "2026-27",
+    "estilo": "E02",
+    "p": 0.9865,
+    "nivel": 0.0391,
+    "provisional": true,
+    "mas_parecidos": [
+     {
+      "club": "Pallacanestro Trieste",
+      "liga": "lba",
+      "d": 0.1277
+     },
+     {
+      "club": "Virtus Bologna",
+      "liga": "euroleague",
+      "d": 0.2765
+     },
+     {
+      "club": "MoraBanc Andorra",
+      "liga": "acb",
+      "d": 0.4656
+     },
+     {
+      "club": "Virtus Costa Bologna",
+      "liga": "lba",
+      "d": 0.4938
+     },
+     {
+      "club": "Kids&Us Manresa",
+      "liga": "eurocup",
+      "d": 0.5539
+     }
+    ],
+    "desplazamiento": 2.4834,
+    "pct_desplazamiento": 83.2
+   }
+  ],
+  "desplazamiento_mediano_clubes": 1.4459
+ },
+ "idec_exito": {
+  "clubes": 997,
+  "r_nivel_net": 0.456,
+  "r2_nivel": 0.208,
+  "r2_estilo": 0.1541,
+  "r2_nivel_estilo": 0.3864,
+  "f_estilo_sin_control": 25.7435,
+  "p_estilo_sin_control": 0.0,
+  "f_estilo_dado_nivel": 41.0487,
+  "p_estilo_dado_nivel": 0.0,
+  "eta2_parcial_estilo": 0.2253,
+  "por_estilo": [
+   {
+    "estilo": "E01",
+    "n": 218,
+    "net_z": 0.3975,
+    "resid": 0.3344,
+    "sd": 0.7884,
+    "nivel": 0.1044,
+    "ic95": 0.1047
+   },
+   {
+    "estilo": "E02",
+    "n": 91,
+    "net_z": 0.5309,
+    "resid": 0.5826,
+    "sd": 0.7539,
+    "nivel": -0.1253,
+    "ic95": 0.1549
+   },
+   {
+    "estilo": "E03",
+    "n": 85,
+    "net_z": -0.0247,
+    "resid": 0.0009,
+    "sd": 0.6745,
+    "nivel": -0.0732,
+    "ic95": 0.1434
+   },
+   {
+    "estilo": "E04",
+    "n": 103,
+    "net_z": 0.1825,
+    "resid": 0.2696,
+    "sd": 0.8044,
+    "nivel": -0.1963,
+    "ic95": 0.1554
+   },
+   {
+    "estilo": "E05",
+    "n": 79,
+    "net_z": -0.2901,
+    "resid": -0.2606,
+    "sd": 0.6658,
+    "nivel": -0.0809,
+    "ic95": 0.1468
+   },
+   {
+    "estilo": "E06",
+    "n": 147,
+    "net_z": -0.1533,
+    "resid": -0.1328,
+    "sd": 0.83,
+    "nivel": -0.063,
+    "ic95": 0.1342
+   },
+   {
+    "estilo": "E07",
+    "n": 120,
+    "net_z": 0.0387,
+    "resid": 0.1114,
+    "sd": 0.7211,
+    "nivel": -0.1675,
+    "ic95": 0.129
+   },
+   {
+    "estilo": "E08",
+    "n": 154,
+    "net_z": -0.7199,
+    "resid": -0.8248,
+    "sd": 0.9054,
+    "nivel": 0.1882,
+    "ic95": 0.143
+   }
+  ]
+ }
+}

@@ -38,8 +38,8 @@ def phase_of(comp: dict) -> str | None:
     abbrev = (comp.get("competition_abbrev") or "").upper()
     if not abbrev.startswith("PROA"):
         return None  # copas, all-star...
-    if "play" in name:
-        return "playoffs"  # play-in y playoffs
+    if "play" in name or "phase finale" in name or set(abbrev.split()[1:]) & {"PO", "PI"}:
+        return "playoffs"  # play-in y playoffs ("Phase Finale" / PROA PO en 2020-21)
     return "regular"
 
 

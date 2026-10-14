@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 # Los datos (data/raw y data/processed) SÍ se versionan: son el resultado de las ejecuciones.
 data/processed/*/informes/
+data/artifact/
+docs/articulo/_trabajo/

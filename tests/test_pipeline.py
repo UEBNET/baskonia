@@ -23,7 +23,8 @@ def _run(config, router, **kw):
 
 
 def _read(out: Path) -> pd.DataFrame:
-    return pd.read_csv(out / "todas_las_ligas.csv", low_memory=False, dtype={"player_id": str, "team_id": str})
+    from bbstats.pipeline import read_season
+    return read_season(out)
 
 
 @pytest.fixture
@@ -42,11 +43,18 @@ def test_all_leagues_ok_same_columns_and_phases(first_run):
     assert (counts["playoffs"] == N_PLAYERS).all(), counts  # los 4 equipos juegan playoffs en la liga sintética
     for liga in LEAGUES:
         assert list(pd.read_csv(out / "ligas" / f"{liga}.csv", nrows=1).columns) == COLUMN_NAMES
-    for f in ("diccionario_columnas.csv", "completitud.csv", "indice.json", "por_fase/regular.json",
-              "por_fase/playoffs.json", "por_fase/total.json", "todas_las_ligas.json"):
+    for f in ("diccionario_columnas.csv", "completitud.csv", "indice.json"):
         assert (out / f).exists(), f
-    from bbstats.pipeline import read_columnar_json
-    rows = read_columnar_json(out / "por_fase" / "playoffs.json")
+    # Sólo CSV por liga: sin copias combinadas ni JSON en data/processed
+    assert not list(out.rglob("*.json")) or {p.name for p in out.rglob("*.json")} <= {"indice.json",
+                                                                                      "informe_ejecucion.json"} | \
+        {p.name for p in (out / "informes").glob("*.json")}
+    assert not (out / "todas_las_ligas.csv").exists() and not (out / "por_fase").exists()
+    from bbstats.pipeline import export_artifact, read_columnar_json
+    art = out.parent.parent / "artifact"
+    export_artifact(out.parent, "2025-26", art)
+    assert (art / "diccionario_columnas.json").exists() and (art / "2025-26" / "indice.json").exists()
+    rows = read_columnar_json(art / "2025-26" / "playoffs.json")
     assert len(rows) == len(LEAGUES) * N_PLAYERS and set(rows[0]) == set(COLUMN_NAMES)
     assert all(r["fase"] == "playoffs" for r in rows)
     idx = json.loads((out / "indice.json").read_text())
@@ -92,7 +100,7 @@ def test_phase_context_columns(first_run, games):
     po = acb.loc["playoffs"]
     rs = acb.loc["regular"]
     np.testing.assert_allclose(po["rs_ts_pct"], rs.loc[po.index, "ts_pct"])
-    np.testing.assert_allclose(po["delta_ts_pct"], po["ts_pct"] - rs.loc[po.index, "ts_pct"], rtol=1e-6, atol=1e-6)
+    np.testing.assert_allclose(po["delta_ts_pct"], po["ts_pct"] - rs.loc[po.index, "ts_pct"], rtol=1e-6, atol=2e-4)  # CSV con 4 decimales
     assert acb.loc["regular"]["rs_ts_pct"].isna().all()  # sólo en filas de playoffs
     pl, _ = synth.season_totals(synth.by_phase(games, "playoffs"))
     assert po["gp"].sum() == sum(P["gp"] for P in pl.values())

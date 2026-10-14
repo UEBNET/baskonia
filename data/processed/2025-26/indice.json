@@ -1,7 +1,12 @@
 {
   "temporada": "2025-26",
-  "generado": "2026-10-12T11:51:55.589732+00:00",
+  "generado": "2026-10-13T07:53:24.171606+00:00",
   "fases": [
+    "regular",
+    "playoffs",
+    "total"
+  ],
+  "fases_con_datos": [
     "regular",
     "playoffs",
     "total"
@@ -60,7 +65,7 @@
     "lba": {
       "nombre": "LBA Serie A (Italia)",
       "archivo": "ligas/lba.csv",
-      "fecha_extraccion": "2026-10-12T11:15:42.488752+00:00",
+      "fecha_extraccion": "2026-10-13T07:51:32.293313+00:00",
       "fases": {
         "playoffs": 103,
         "regular": 265,
@@ -88,12 +93,9 @@
       }
     }
   },
-  "formato_json": "columnar: {columnas: [...], filas: [[...]]}",
+  "formato": "CSV por liga (ligas/<liga>.csv), 1 fila = jugador-equipo-fase",
   "archivos": {
-    "todas": "todas_las_ligas.json",
-    "diccionario": "diccionario_columnas.json",
-    "regular": "por_fase/regular.json",
-    "playoffs": "por_fase/playoffs.json",
-    "total": "por_fase/total.json"
+    "diccionario": "diccionario_columnas.csv",
+    "completitud": "completitud.csv"
   }
 }

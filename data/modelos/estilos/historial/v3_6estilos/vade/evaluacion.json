@@ -1,0 +1,179 @@
+{
+ "clubes": 997,
+ "tamanos": [
+  164,
+  189,
+  127,
+  168,
+  172,
+  177
+ ],
+ "tamano_min": 127,
+ "tamano_max": 189,
+ "entropia_reparto": 0.9960807902290527,
+ "salida_max_media": 0.8088393211364746,
+ "clubes_con_salida_max_05": 0.9538615847542627,
+ "silueta_mapa": 0.27446165680885315,
+ "silueta_rasgos": 0.056240789656394036,
+ "davies_bouldin_mapa": 1.1738022734564513,
+ "calinski_harabasz_mapa": 444.9735823709432,
+ "ari_semillas_medio": 0.5100179994627979,
+ "ari_semillas_min": 0.3367307936956624,
+ "ari_final_semillas_medio": 0.5584018450062305,
+ "estabilidad_mapa": 0.9551567586848903,
+ "eta2_nivel": 0.009450705224053802,
+ "corr_ejes_nivel": [
+  -0.01243871838215142,
+  0.001874897502852472,
+  0.003111367040234718
+ ],
+ "nivel_por_estilo": [
+  0.105,
+  -0.029,
+  -0.045,
+  -0.107,
+  -0.136,
+  0.075
+ ],
+ "nmi_estilo_liga": 0.072553484315238,
+ "pureza_liga_media": 0.27446934037539794,
+ "nmi_semillas_medio": 0.551556409682304,
+ "robustez_reparto_minutos": 0.582221664994985,
+ "ari_temporal_reserva": 0.5513828797493884,
+ "trustworthiness_k10": 0.869752507650307,
+ "continuidad_k10": 0.9023873454290533,
+ "estres_mapa": 0.0772430457680761,
+ "spearman_distancias": 0.7062264953587618,
+ "r2_reconstruccion": {
+  "ritmo_rel": 0.20744808324908293,
+  "fg3a_rate": 0.6437211574293475,
+  "fta_rate": 0.5549481073088673,
+  "ast_pct": 0.7187628478550754,
+  "tov_pct": 0.6441513420555632,
+  "oreb_p100": 0.581809811982996,
+  "uso_conc": 0.16866847576373822,
+  "dreb_p100": 0.6282752828733793,
+  "stl_p100": 0.4723028834434865,
+  "blk_p100": 0.3824530686038162,
+  "pf_p100": 0.660786353025409,
+  "cuota_interior": 0.49747383905047105,
+  "cuota_exterior": 0.5042000216633002
+ },
+ "r2_medio": 0.5126924057157333,
+ "diferenciacion": {
+  "pares": 15,
+  "pares_distintos_holm_05": 15,
+  "mahalanobis_min": 2.2048483648485266,
+  "mahalanobis_mediana": 3.2179832520522695,
+  "pareja_mas_cercana": [
+   2,
+   3
+  ],
+  "eta2_por_rasgo": {
+   "ritmo_rel": 0.05225636677858358,
+   "fg3a_rate": 0.33689820899334033,
+   "fta_rate": 0.3486958468608106,
+   "ast_pct": 0.41261733361492586,
+   "tov_pct": 0.36660593492078786,
+   "oreb_p100": 0.15016497291862654,
+   "uso_conc": 0.03063866899798635,
+   "dreb_p100": 0.4106908370618244,
+   "stl_p100": 0.29129955164765586,
+   "blk_p100": 0.1641806565581526,
+   "pf_p100": 0.3715221164590786,
+   "cuota_interior": 0.11104327641595614,
+   "cuota_exterior": 0.2898130401113899
+  },
+  "p_max_ajustado": 0.0015
+ },
+ "replicabilidad": {
+  "estilos_comparables": 6,
+  "correlacion_media": 0.9164244848390974,
+  "correlacion_min": 0.843438013715783
+ },
+ "persistencia": {
+  "parejas": 757,
+  "mismo_estilo": 0.36723910171730517,
+  "por_azar": 0.16889484904060223
+ },
+ "coherencia_plantillas": {
+  "cuota_minutos_en_estilo_del_club": 0.23306189373669364,
+  "por_azar": 0.16168045979528956,
+  "reparto_jugadores": [
+   0.1032,
+   0.1099,
+   0.2447,
+   0.3265,
+   0.1214,
+   0.0943
+  ]
+ },
+ "semilla_final": 37,
+ "semillas": [
+  11,
+  23,
+  37,
+  51,
+  73
+ ],
+ "ari_matriz": [
+  [
+   1.0,
+   0.3428,
+   0.6044,
+   0.5974,
+   0.5435
+  ],
+  [
+   0.3428,
+   1.0,
+   0.3367,
+   0.352,
+   0.3719
+  ],
+  [
+   0.6044,
+   0.3367,
+   1.0,
+   0.7229,
+   0.662
+  ],
+  [
+   0.5974,
+   0.352,
+   0.7229,
+   1.0,
+   0.5666
+  ],
+  [
+   0.5435,
+   0.3719,
+   0.662,
+   0.5666,
+   1.0
+  ]
+ ],
+ "hiperparametros": {
+  "ocultas": [
+   64,
+   32
+  ],
+  "epocas_pre": 100,
+  "epocas": 120,
+  "lr": 0.001,
+  "lote": 512,
+  "calentamiento": 30,
+  "wd": 1e-05,
+  "lambda_estres": 13.0,
+  "amortiguacion": 0.5,
+  "suelo_var": 0.02,
+  "min_cuota": 0.01,
+  "covarianza": "completa",
+  "epocas_afinado": 40,
+  "lr_afinado": 0.0003,
+  "paso_m_afinado": false,
+  "bootstrap_por_club": 24,
+  "k_gamma": 4.0,
+  "peso_jugadores": 0.3
+ }
+}
