@@ -1,9 +1,10 @@
 """Línea de comandos de los estilos de juego.
 
-    python -m bbestilo entrenar                 # entrena IDEC y VaDE (5 semillas), evalúa y guarda (≈40 min)
+    python -m bbestilo entrenar                 # entrena VaDE (10 semillas, consenso y ajuste fino), evalúa y guarda (≈25 min)
     python -m bbestilo evaluar                  # reevalúa las redes guardadas sin reentrenar
     python -m bbestilo encaje --jugador "Nombre" [--club baskonia] [--competicion euroleague]
-                              [--temporada 2025-26] [--red idec|vade|ambas] [--minutos 600] [--sustituye "Nombre"]
+                              [--temporada 2025-26] [--minutos 600] [--sustituye "Nombre"]
+    python -m bbestilo encaje --jugador "A" "B" [--minutos 900 700] [--baja "C" "D"]   # varios fichajes y bajas
     python -m bbestilo analisis                 # análisis complementarios (data/modelos/estilos/analisis.json)
     python -m bbestilo parecidos [--jugador "Nombre"]   # clubes que juegan como el tuyo y jugadores parecidos
     python -m bbestilo exportar                 # JSON del mapa 3D (artifact/estilos/)
@@ -94,31 +95,30 @@ def evaluar(redes: list[str], cj=None) -> None:
         R.tabla_jugadores(red, cj).to_csv(d / "jugadores.csv", index=False, float_format="%.4f")
         _json(ev[tipo], d / "evaluacion.json")
         print(f"[{tipo}] listo", flush=True)
-    if len(ev) == 2:
-        comp = V.tabla_comparativa(ev)
-        comp.to_csv(C.DIR_SALIDA / "comparativa.csv", index=False, float_format="%.4f")
-        _json({"referencia_kmedias": V.referencia_kmedias(cj), **ev}, C.DIR_SALIDA / "evaluacion.json")
-        with pd.option_context("display.width", 200, "display.max_colwidth", 60):
-            print(comp.to_string(index=False))
+    _json({"referencia_kmedias": V.referencia_kmedias(cj), **ev}, C.DIR_SALIDA / "evaluacion.json")
+    comp = V.tabla_comparativa(ev)
+    comp.to_csv(C.DIR_SALIDA / "comparativa.csv", index=False, float_format="%.4f")
+    with pd.option_context("display.width", 200, "display.max_colwidth", 60):
+        print(comp.to_string(index=False))
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="bbestilo", description="Estilos de juego por club y temporada (IDEC y VaDE)")
+    ap = argparse.ArgumentParser(prog="bbestilo", description="Estilos de juego por club y temporada (VaDE, 6 estilos)")
     sub = ap.add_subparsers(dest="orden", required=True)
-    e = sub.add_parser("entrenar", help="entrena, evalúa y guarda las dos redes")
-    e.add_argument("--redes", nargs="+", default=["idec", "vade"], choices=["idec", "vade"])
+    e = sub.add_parser("entrenar", help="entrena, evalúa y guarda la red VaDE")
+    e.add_argument("--redes", nargs="+", default=["vade"], choices=["vade"])
     e.add_argument("--semillas", nargs="+", type=int, default=C.SEMILLAS)
     v = sub.add_parser("evaluar", help="reevalúa las redes guardadas (sin reentrenar)")
-    v.add_argument("--redes", nargs="+", default=["idec", "vade"], choices=["idec", "vade"])
-    f = sub.add_parser("encaje", help="encaje de un jugador en un club (distancias, cohesión y simulación)")
-    f.add_argument("--jugador", required=True)
+    v.add_argument("--redes", nargs="+", default=["vade"], choices=["vade"])
+    f = sub.add_parser("encaje", help="encaje de uno o varios fichajes en un club (distancias, cohesión y simulación)")
+    f.add_argument("--jugador", required=True, nargs="+", help="uno o varios jugadores")
     f.add_argument("--club", default="baskonia")
     f.add_argument("--competicion", default="euroleague")
     f.add_argument("--temporada", default="2025-26")
     f.add_argument("--temporada-jugador", default=None, help="temporada del jugador (por defecto, la más reciente)")
-    f.add_argument("--red", default="ambas", choices=["idec", "vade", "ambas"])
-    f.add_argument("--minutos", type=float, default=None, help="minutos que tendría en el club (por defecto, su cuota actual)")
-    f.add_argument("--sustituye", default=None, help="jugador de la plantilla cuyos minutos hereda")
+    f.add_argument("--minutos", type=float, nargs="+", default=None, help="minutos de cada fichaje en el club (por defecto, su cuota actual)")
+    f.add_argument("--sustituye", default=None, help="(un fichaje) jugador de la plantilla cuyos minutos hereda")
+    f.add_argument("--baja", nargs="+", default=[], help="(varios fichajes) jugadores de la plantilla que salen")
     pa = sub.add_parser("parecidos", help="clubes que juegan como el tuyo y jugadores parecidos (scouting)")
     pa.add_argument("--club", default="baskonia")
     pa.add_argument("--competicion", default="euroleague")
@@ -132,7 +132,7 @@ def main(argv=None):
     x = sub.add_parser("exportar", help="datos del mapa 3D para el Artifact")
     x.add_argument("--salida", default=str(C.RAIZ / "artifact" / "estilos"))
     for sp in (e, v, an):
-        sp.add_argument("--estilos", type=int, default=C.N_ESTILOS, help="neuronas de salida (v2: 8; v1: 12)")
+        sp.add_argument("--estilos", type=int, default=C.N_ESTILOS, help="neuronas de salida (final: 6; v2: 8; v1: 12)")
         sp.add_argument("--sin-neutralizar", action="store_true", help="no quitar el nivel (como la v1)")
         sp.add_argument("--salida", default=None, help="carpeta de resultados (por defecto data/modelos/estilos)")
     args = ap.parse_args(argv)
@@ -148,9 +148,12 @@ def main(argv=None):
         evaluar(args.redes)
     elif args.orden == "encaje":
         from . import encaje
-        redes = ["idec", "vade"] if args.red == "ambas" else [args.red]
-        print(encaje.informe(args.jugador, args.club, args.competicion, args.temporada, redes,
-                             args.minutos, args.sustituye, args.temporada_jugador))
+        if len(args.jugador) == 1 and not args.baja:
+            print(encaje.informe(args.jugador[0], args.club, args.competicion, args.temporada, ["vade"],
+                                 args.minutos[0] if args.minutos else None, args.sustituye, args.temporada_jugador))
+        else:
+            print(encaje.informe_plantilla(args.jugador, args.club, args.competicion, args.temporada, args.minutos,
+                                           args.baja + ([args.sustituye] if args.sustituye else [])))
     elif args.orden == "parecidos":
         from . import similares
         print(similares.informe(args.club, args.competicion, args.temporada, args.jugador, args.alcance or None,

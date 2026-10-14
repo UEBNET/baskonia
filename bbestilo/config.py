@@ -13,7 +13,7 @@ CLUBES = RAIZ / "config" / "clubes.json"
 TEMPORADAS_ENTRENO = ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
 # Temporada en curso: B no la traduce (sólo 4 filas), se usa A y se marca como provisional.
 TEMPORADAS_PROVISIONALES = ["2026-27"]
-N_ESTILOS = 8           # v1 (12 estilos, sin neutralizar): data/modelos/estilos/v1_12estilos/
+N_ESTILOS = 6           # iteraciones anteriores (12 y 8 estilos): data/modelos/estilos/historial/
 D_MAPA = 3
 # Neutralización del nivel: a cada rasgo de estilo se le quita la parte que explica el índice de nivel
 # (regresión en 1, nivel y nivel², ajustada sobre la vara común A+B de todas las ligas a la vez).
@@ -60,7 +60,7 @@ NIVEL = {"per": 1, "game_score_p40": 1, "ws_per_40": 1, "ortg": 1, "drtg": -1, "
          "ts_pct": 1, "efg_pct": 1}
 
 # Hiperparámetros comunes
-SEMILLAS = [11, 23, 37, 51, 73]
+SEMILLAS = [11, 23, 37, 51, 73, 89, 97, 113, 131, 149]   # v1-v3: las 5 primeras
 BOOTSTRAP_POR_CLUB = 24     # plantillas remuestreadas por club-temporada para entrenar
 K_GAMMA = 4.0               # forma de la Gamma del remuestreo de minutos (CV = 1/sqrt(k) = 0,5)
 PESO_JUGADORES = 0.3        # peso de las muestras de jugador (auxiliares) en la pérdida

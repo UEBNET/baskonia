@@ -1,9 +1,9 @@
-"""Datos del Atlas de Estilos (artifact/estilos/), red VaDE v2 (8 estilos, nivel neutralizado).
+"""Datos del Atlas de Estilos (artifact/estilos/), modelo final: VaDE de 6 estilos con el nivel neutralizado.
 
-    estilos/meta.json        rasgos, escalas, índice de nivel y neutralizador, pesos de la red, los 8 estilos
+    estilos/meta.json        rasgos, escalas, índice de nivel y neutralizador, pesos de la red, los 6 estilos
                              (nombre, perfil, elipsoide en el mapa, ligas), nombres de los ejes, evaluación,
-                             comparativa con IDEC y con la v1, análisis complementarios y referencias
-    estilos/clubes.json      un registro por club-competición-temporada: mapa, estilo y 8 salidas, nivel,
+                             análisis complementarios, referencias y evolución de las iteraciones (historial/)
+    estilos/clubes.json      un registro por club-competición-temporada: mapa, estilo y 6 salidas, nivel,
                              entrada de la red y sumas ponderadas para simular fichajes en el navegador
     estilos/jugadores.json   un registro por jugador-equipo-temporada (100+ min): mapa, estilo, nivel y sus
                              filas «crudas» (estilo y calidad) para simular su fichaje
@@ -50,15 +50,50 @@ def _columnar(df: pd.DataFrame, dec: dict | None = None) -> dict:
     return {"columnas": list(df.columns), "filas": filas}
 
 
-MODELOS = {"k8": ("", "estilos_v2.json"), "k6": ("k6", "estilos_k6.json")}   # carpeta (bajo DIR_SALIDA) y nombres
+NOMBRES = "estilos.json"     # config/: nombre y resumen de cada estilo del modelo final
+DIR_HISTORIAL = C.DIR_SALIDA / "historial"
+ITERACIONES = [   # (id, carpeta en historial/ o "" = modelo final, red, etiqueta)
+    ("v1_vade", "v1_12estilos", "vade", "v1 · VaDE 12"),
+    ("v1_idec", "v1_12estilos", "idec", "v1 · IDEC 12"),
+    ("v2_vade", "v2_8estilos", "vade", "v2 · VaDE 8"),
+    ("v2_idec", "v2_8estilos", "idec", "v2 · IDEC 8"),
+    ("v3_vade", "v3_6estilos", "vade", "v3 · VaDE 6 (5 semillas)"),
+    ("final", "", "vade", "Final · VaDE 6 (10 semillas)"),
+]
 
 
-def nombres_estilos(archivo: str = "estilos_v2.json") -> dict:
+def nombres_estilos(archivo: str = NOMBRES) -> dict:
     p = C.RAIZ / "config" / archivo
     try:
         return {k: v for k, v in json.loads(p.read_text(encoding="utf-8")).items() if not k.startswith("_")}
     except FileNotFoundError:
         return {}
+
+
+def evaluacion_iteracion(carpeta: str, red: str) -> dict | None:
+    """Evaluación guardada de una iteración (historial/) o del modelo final (carpeta = "")."""
+    p = (DIR_HISTORIAL / carpeta if carpeta else C.DIR_SALIDA) / "evaluacion.json"
+    if not p.exists():
+        return None
+    return json.loads(p.read_text(encoding="utf-8")).get(red)
+
+
+def historial() -> list[dict]:
+    """Métricas clave de cada iteración para la tabla de evolución del modelo."""
+    claves = ["salida_max_media", "tamano_min", "eta2_nivel", "nmi_estilo_liga", "ari_semillas_medio",
+              "ari_final_semillas_medio", "estabilidad_mapa", "ari_temporal_reserva", "robustez_reparto_minutos",
+              "silueta_rasgos", "trustworthiness_k10"]
+    out = []
+    for id_, carpeta, red, etiqueta in ITERACIONES:
+        ev = evaluacion_iteracion(carpeta, red)
+        if ev is None:
+            continue
+        fila = {"id": id_, "etiqueta": etiqueta, "k": len(ev["tamanos"]), **{k: _r(ev.get(k)) for k in claves}}
+        fila["mahalanobis_min"] = _r(ev["diferenciacion"]["mahalanobis_min"])
+        fila["parejas"] = f'{ev["diferenciacion"]["pares_distintos_holm_05"]}/{ev["diferenciacion"]["pares"]}'
+        fila["replicabilidad"] = _r(ev["replicabilidad"]["correlacion_media"])
+        out.append(fila)
+    return out
 
 
 def ejes(Z: np.ndarray, X: np.ndarray) -> list[dict]:
@@ -73,17 +108,21 @@ def ejes(Z: np.ndarray, X: np.ndarray) -> list[dict]:
     return out
 
 
-def _modelo(cj, carpeta: Path, nombres: dict) -> tuple[dict, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """Bloque de meta de un modelo y sus predicciones (clubes y jugadores)."""
-    red = red_guardada(RED, carpeta)
-    rd = carpeta / RED
-    ev = json.loads((carpeta / "evaluacion.json").read_text(encoding="utf-8"))
-    comp = pd.read_csv(carpeta / "comparativa.csv")
-    an = carpeta / "analisis.json"
+def main(salida: str) -> None:
+    d = Path(salida)
+    d.mkdir(parents=True, exist_ok=True)
+    cj = conjunto()
+    red = red_guardada(RED)
+    rd = C.DIR_SALIDA / RED
+    ev = json.loads((C.DIR_SALIDA / "evaluacion.json").read_text(encoding="utf-8"))
+    an = C.DIR_SALIDA / "analisis.json"
     est = pd.read_csv(rd / "estilos.csv")
     pesos = json.loads((rd / "pesos.json").read_text(encoding="utf-8"))
+    rob = pd.read_csv(rd / "clubes.csv")
+    assert (rob["clave"].to_numpy() == cj.clubes["clave"].to_numpy()).all(), "clubes.csv no corresponde a los datos"
     P, Z = predecir(red, cj.Xc)
     sel = cj.clubes["temporada"].isin(C.TEMPORADAS_ENTRENO).to_numpy()
+    nombres = nombres_estilos()
     # elipsoides de los estilos en coordenadas del mapa: Σ_mapa = s² Rᵀ Σ R
     rot, esc = np.array(pesos["mapa"]["rot"]), pesos["mapa"]["escala"]
     estilos = []
@@ -95,52 +134,22 @@ def _modelo(cj, carpeta: Path, nombres: dict) -> tuple[dict, np.ndarray, np.ndar
                         "centro": [_r(fila["x"], 4), _r(fila["y"], 4), _r(fila["z"], 4)], "cov_mapa": [_lista(f, 5) for f in cm],
                         "perfil": [_r(fila[f"z_{c}"], 3) for c in C.COLS], "ligas": json.loads(fila["ligas"].replace("'", '"')),
                         "ejemplos": fila["ejemplos"]})
-    ref = referencias_distancia(red, cj)
-    bloque = {"n_estilos": len(est), "pesos": pesos, "estilos": estilos, "ejes": ejes(Z[sel], cj.Xc[sel]),
-              "evaluacion": {k: v for k, v in ev[RED].items() if k != "ari_matriz"},
-              "evaluacion_idec": {k: v for k, v in ev["idec"].items() if k != "ari_matriz"},
-              "referencia_kmedias": ev.get("referencia_kmedias"), "comparativa": json.loads(comp.to_json(orient="records")),
-              "analisis": json.loads(an.read_text(encoding="utf-8")) if an.exists() else None,
-              "referencias": {k: _lista(np.percentile(v, np.linspace(0, 100, 101)), 4) for k, v in ref.items()}}
-    m = (cj.jugadores["min"] >= C.MIN_JUGADOR).to_numpy()
-    Pj, Zj = predecir(red, cj.Xj[m])
-    rob = pd.read_csv(rd / "clubes.csv")
-    assert (rob["clave"].to_numpy() == cj.clubes["clave"].to_numpy()).all(), "clubes.csv no corresponde a los datos"
-    return bloque, P, Z, rob["robustez"].to_numpy(), Pj, Zj
-
-
-def comparar_modelos(cj, carpetas: dict) -> dict:
-    """Correspondencia entre las particiones de dos modelos sobre los clubes de entrenamiento."""
-    from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
-    sel = cj.clubes["temporada"].isin(C.TEMPORADAS_ENTRENO).to_numpy()
-    lab = {k: predecir(red_guardada(RED, d), cj.Xc[sel])[0].argmax(1) for k, d in carpetas.items()}
-    if len(lab) < 2:
-        return {}
-    (a, la), (b, lb) = list(lab.items())[:2]
-    tab = pd.crosstab(pd.Series(la, name=a), pd.Series(lb, name=b))
-    return {"modelos": [a, b], "ari": float(adjusted_rand_score(la, lb)), "nmi": float(normalized_mutual_info_score(la, lb)),
-            "tabla": tab.to_numpy().tolist(),
-            "pureza": float(tab.max(1).sum() / tab.to_numpy().sum())}
-
-
-def main(salida: str) -> None:
-    d = Path(salida)
-    d.mkdir(parents=True, exist_ok=True)
-    cj = conjunto()
-    carpetas = {k: C.DIR_SALIDA / sub for k, (sub, _) in MODELOS.items() if (C.DIR_SALIDA / sub / RED / "modelo.pt").exists()}
-    v1 = C.DIR_SALIDA / "v1_12estilos" / "evaluacion.json"
     from .similares import referencias as ref_parecido
-    meta = {"generado": date.today().isoformat(), "red": RED, "modelos": {}, "modelo_defecto": "k8",
+    meta = {"generado": date.today().isoformat(), "red": RED, "n_estilos": len(est),
             "rasgos": [r.__dict__ for r in C.RASGOS], "crudas": CRUDAS, "nivel_cols": list(C.NIVEL),
             "escala_club": cj.escala_club.a_dict(), "escala_jugador": cj.escala_jugador.a_dict(),
             "nivel_club": cj.nivel_club.a_dict(), "nivel_jugador": cj.nivel_jugador.a_dict(),
             "neutral_club": cj.neutral_club.a_dict(), "neutral_jugador": cj.neutral_jugador.a_dict(),
             "grado_neutralizacion": C.GRADO_NEUTRALIZACION,
             "temporadas_entreno": C.TEMPORADAS_ENTRENO, "temporadas_provisionales": C.TEMPORADAS_PROVISIONALES,
-            "min_jugador": C.MIN_JUGADOR,
-            "evaluacion_v1": (json.loads(v1.read_text(encoding="utf-8")).get("vade") if v1.exists() else None),
+            "min_jugador": C.MIN_JUGADOR, "pesos": pesos, "estilos": estilos, "ejes": ejes(Z[sel], cj.Xc[sel]),
+            "evaluacion": {k: v for k, v in ev[RED].items() if k != "ari_matriz"},
+            "referencia_kmedias": ev.get("referencia_kmedias"),
+            "analisis": json.loads(an.read_text(encoding="utf-8")) if an.exists() else None,
+            "referencias": {k: _lista(np.percentile(v, np.linspace(0, 100, 101)), 4)
+                            for k, v in referencias_distancia(red, cj).items()},
             "similitud": {k: _lista(v, 4) for k, v in ref_parecido(cj).items()},
-            "comparacion_modelos": comparar_modelos(cj, carpetas),
+            "historial": historial(),
             "clubes_con_nombre": {k: v for k, v in json.loads(C.CLUBES.read_text(encoding="utf-8")).items() if not k.startswith("_")}}
 
     # ---- clubes (comunes) y jugadores (comunes)
@@ -175,17 +184,15 @@ def main(salida: str) -> None:
     J["persona_id"] = J["persona_id"].where(J["persona_id"].notna(), J["liga"] + ":" + J["player_id"].astype(str))
     J = J.drop(columns=["player_id"])
 
-    # ---- cada modelo: su bloque de meta y sus columnas
-    dec = {"nivel": 3, "net_z": 3, "min": 0, "min_total": 0, "cobertura_ab": 3, "edad": 1}
-    for k, carpeta in carpetas.items():
-        bloque, P, Z, rob, Pj, Zj = _modelo(cj, carpeta, nombres_estilos(MODELOS[k][1]))
-        meta["modelos"][k] = bloque
-        c[f"{k}_x"], c[f"{k}_y"], c[f"{k}_z"] = Z[:, 0], Z[:, 1], Z[:, 2]
-        c[f"{k}_e"], c[f"{k}_p"], c[f"{k}_rob"] = P.argmax(1), P.max(1), rob
-        c[f"{k}_probs"] = [_lista(p, 3) for p in P]
-        J[f"{k}_x"], J[f"{k}_y"], J[f"{k}_z"] = Zj[:, 0], Zj[:, 1], Zj[:, 2]
-        J[f"{k}_e"], J[f"{k}_p"] = Pj.argmax(1), Pj.max(1)
-        dec.update({f"{k}_{x}": 3 for x in ("x", "y", "z", "p", "rob")})
+    # ---- modelo final
+    dec = {"nivel": 3, "net_z": 3, "min": 0, "min_total": 0, "cobertura_ab": 3, "edad": 1,
+           "x": 3, "y": 3, "z": 3, "p": 3, "rob": 3}
+    c["x"], c["y"], c["z"] = Z[:, 0], Z[:, 1], Z[:, 2]
+    c["e"], c["p"], c["rob"] = P.argmax(1), P.max(1), rob["robustez"].to_numpy()
+    c["probs"] = [_lista(p, 3) for p in P]
+    Pj, Zj = predecir(red, cj.Xj[m])
+    J["x"], J["y"], J["z"] = Zj[:, 0], Zj[:, 1], Zj[:, 2]
+    J["e"], J["p"] = Pj.argmax(1), Pj.max(1)
     for nombre, obj in (("meta.json", meta), ("clubes.json", _columnar(c, dec)), ("jugadores.json", _columnar(J, dec))):
         (d / nombre).write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=float), encoding="utf-8")
-    print("escrito", d, list(carpetas), {p.name: p.stat().st_size for p in d.glob("*.json")})
+    print("escrito", d, {p.name: p.stat().st_size for p in d.glob("*.json")})

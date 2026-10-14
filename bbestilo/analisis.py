@@ -291,6 +291,5 @@ def main() -> dict:
                       ("baskonia", lambda: baskonia(cj, red))):
         print(f"  {nombre}…", flush=True)
         out[nombre] = f()
-    out["idec_exito"] = exito(cj, red_guardada("idec"))
     (CF.DIR_SALIDA / "analisis.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
     return out

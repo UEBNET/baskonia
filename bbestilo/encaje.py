@@ -4,16 +4,17 @@ Para un club de destino (p. ej. Baskonia EuroLeague 2025-26) y un jugador (con s
 de su liga y temporada), y para cada red:
 
   1. Situación en el mapa: punto del club destino, del jugador y del club actual del jugador, y sus
-     estilos (neurona ganadora de la capa de 12).
+     estilos (neurona ganadora de la capa de salida).
   2. Distancias en el mapa (unidades = desviaciones típicas del perfil de estilo) con su percentil de
      referencia: jugador-club frente a lo lejos que está cada jugador de su propio club; club-club
      frente a todas las parejas de clubes.
   3. Afinidad: salida del jugador en la neurona del estilo del club y similitud entre las dos salidas
-     de 12 neuronas (1 − divergencia de Jensen-Shannon, en base 2).
+     de la capa de estilos (1 − divergencia de Jensen-Shannon, en base 2).
   4. Plantilla: reparto de minutos por estilo, dispersión de la plantilla en el mapa (media ponderada
      de la distancia a su centro) y su percentil entre todos los clubes, y los compañeros más parecidos.
   5. Simulación: el club se recalcula con el fichaje (agregación exacta por minutos). El jugador toma
      el ritmo de su nuevo equipo; sus minutos salen de todos a prorrata o del jugador al que sustituye.
+     `simular_plantilla` hace lo mismo con varios fichajes y bajas a la vez (informe_plantilla).
 """
 from __future__ import annotations
 
@@ -96,25 +97,50 @@ def _pred(red, X):
     return red.salida(x).numpy(), red.mapa(x).numpy()
 
 
+def simular_plantilla(cj: Conjunto, clave_destino: str, fichajes: list[tuple[int, float | None]],
+                      bajas: list[int] = ()) -> tuple[np.ndarray, np.ndarray, list[float]]:
+    """Vector de estilo (sin transformar) y medias de calidad del club destino con VARIOS fichajes y bajas.
+
+    fichajes = [(índice en cj.jugadores, minutos | None)]; None = su cuota de minutos actual en su equipo
+    aplicada a los minutos totales del destino. bajas = índices de jugadores de la plantilla que salen.
+    Los minutos totales del club no cambian: los que siguen se reescalan a prorrata para dejar sitio a
+    los fichajes (si las bajas liberan más minutos de los que ocupan los fichajes, los que siguen ganan
+    minutos). Cada fichaje toma el ritmo del club destino. Devuelve (vector, medias de calidad, minutos)."""
+    R, w, idx, Q = cj.plantillas[clave_destino]
+    pos = {int(i): k for k, i in enumerate(idx)}
+    T = w.sum()
+    ritmo_club = agregar(R, w[None])[0][C.COLS.index("ritmo_rel")]
+    w = w.copy()
+    for b in bajas:
+        if int(b) not in pos:
+            raise ValueError(f"{cj.jugadores.at[b, 'nombre']} no está en la plantilla de {clave_destino}")
+        w[pos[int(b)]] = 0.0
+    filas, qs, mins = [], [], []
+    for jx, m in fichajes:
+        Rj, wj, idxj, Qj = cj.plantillas[cj.jugadores.at[jx, "clave"]]
+        k = list(idxj).index(jx)
+        fila = Rj[k].copy()
+        fila[_I["ritmo_rel"]] = ritmo_club
+        filas.append(fila)
+        qs.append(Qj[k])
+        mins.append(float(wj[k] / wj.sum() * T) if m is None else float(m))
+    F = sum(mins)
+    if F >= T or w.sum() <= 0:
+        raise ValueError("Los fichajes no pueden ocupar todos los minutos del club")
+    W = np.concatenate([w * (T - F) / w.sum(), mins])[None]
+    return agregar(np.vstack([R, *filas]), W)[0], _media_w(np.vstack([Q, *qs]), W)[0], mins
+
+
 def simular(cj: Conjunto, clave_destino: str, idx_jugador: int, minutos: float | None = None,
             sustituye: int | None = None) -> tuple[np.ndarray, np.ndarray, float]:
-    """Vector de estilo (sin transformar) y medias de calidad del club destino con el fichaje.
-    `sustituye` es el índice en cj.jugadores del jugador cuyos minutos hereda.
-    Devuelve (vector, medias de calidad para el nivel, minutos asignados)."""
-    R, w, idx, Q = cj.plantillas[clave_destino]
-    Rj, wj, idxj, Qj = cj.plantillas[cj.jugadores.at[idx_jugador, "clave"]]
-    k = list(idxj).index(idx_jugador)
-    fila, q = Rj[k].copy(), Qj[k]
-    ritmo_club = agregar(R, w[None])[0][C.COLS.index("ritmo_rel")]
-    fila[_I["ritmo_rel"]] = ritmo_club
-    T = w.sum()
-    w = w.copy()
-    if minutos is None:
-        minutos = float(w[list(idx).index(sustituye)]) if sustituye is not None else float(wj[k] / wj.sum() * T)
-    if sustituye is not None:
-        w[list(idx).index(sustituye)] = 0.0
-    W = np.append(w * (T - minutos) / w.sum(), minutos)[None]
-    return agregar(np.vstack([R, fila]), W)[0], _media_w(np.vstack([Q, q]), W)[0], minutos
+    """Un solo fichaje. `sustituye` es el índice en cj.jugadores del jugador cuyos minutos hereda (sale de
+    la plantilla y, si no se dan minutos, el fichaje juega los suyos)."""
+    if minutos is None and sustituye is not None:
+        R, w, idx, Q = cj.plantillas[clave_destino]
+        minutos = float(w[list(idx).index(sustituye)])
+    V, Qm, mins = simular_plantilla(cj, clave_destino, [(idx_jugador, minutos)],
+                                    [sustituye] if sustituye is not None else [])
+    return V, Qm, mins[0]
 
 
 def encaje(red, cj: Conjunto, clave_destino: str, idx_jugador: int, minutos: float | None = None,
@@ -193,8 +219,43 @@ def referencias_distancia(red, cj: Conjunto) -> dict:
     return {"jugador_su_club": d_j, "club_club": d_cc, "dispersion": np.array(disp)}
 
 
+def informe_plantilla(jugadores: list[str], club: str = "baskonia", competicion: str = "euroleague",
+                      temporada: str = "2025-26", minutos: list[float] | None = None, bajas: list[str] = ()) -> str:
+    """Simulación de varios fichajes (y bajas) a la vez sobre el club destino."""
+    cj = conjunto()
+    red = red_guardada("vade")
+    destino = resolver_club(cj, club, competicion, temporada)
+    pl = cj.jugadores[cj.jugadores["clave"] == destino]
+    idx_bajas = []
+    for b in bajas:
+        cand = pl[pl["nombre"].map(_norm).map(lambda n: all(p in n for p in _norm(b).split()))]
+        if cand.empty:
+            raise ValueError(f"«{b}» no está en la plantilla de {destino}")
+        idx_bajas.append(int(cand["min"].idxmax()))
+    js = [resolver_jugador(cj, n) for n in jugadores]
+    mins = list(minutos or []) + [None] * (len(js) - len(minutos or []))
+    i_dest = list(cj.clubes["clave"]).index(destino)
+    P0, Z0 = _pred(red, cj.Xc[[i_dest]])
+    V, Qm, asignados = simular_plantilla(cj, destino, list(zip(js, mins)), idx_bajas)
+    P1, Z1 = _pred(red, cj.x_club(V[None], Qm[None]))
+    e0, e1 = int(P0[0].argmax()), int(P1[0].argmax())
+    nivel1 = float(cj.nivel_club.indice(Qm[None])[0])
+    out = [f"Club destino   {cj.clubes.at[i_dest, 'nombre_club']} ({destino}) · estilo {nombre_estilo(e0)} (p = {P0[0, e0]:.2f})"]
+    for jx, m in zip(js, asignados):
+        Pj, Zj = _pred(red, cj.Xj[[jx]])
+        out.append(f"Fichaje        {cj.jugadores.at[jx, 'nombre']} ({cj.jugadores.at[jx, 'equipo']}, {cj.jugadores.at[jx, 'liga']} "
+                   f"{cj.jugadores.at[jx, 'temporada']}) · {m:.0f} min · estilo {nombre_estilo(int(Pj[0].argmax()))} · "
+                   f"distancia al club {np.linalg.norm(Zj[0] - Z0[0]):.2f}")
+    for b in idx_bajas:
+        out.append(f"Baja           {cj.jugadores.at[b, 'nombre']} ({cj.jugadores.at[b, 'min']:.0f} min)")
+    out.append(f"Resultado      estilo {nombre_estilo(e1)} (p = {P1[0, e1]:.2f}) · el club se desplaza {np.linalg.norm(Z1[0] - Z0[0]):.2f}"
+               f" · su estilo actual pasa de p = {P0[0, e0]:.2f} a {P1[0, e0]:.2f}"
+               f" · nivel {cj.clubes.at[i_dest, 'nivel']:+.2f} → {nivel1:+.2f}")
+    return "\n".join(out)
+
+
 def informe(jugador: str, club: str = "baskonia", competicion: str = "euroleague", temporada: str = "2025-26",
-            redes=("idec", "vade"), minutos: float | None = None, sustituye: str | None = None,
+            redes=("vade",), minutos: float | None = None, sustituye: str | None = None,
             temporada_jugador: str | None = None) -> str:
     cj = conjunto()
     destino = resolver_club(cj, club, competicion, temporada)
@@ -217,7 +278,7 @@ def informe(jugador: str, club: str = "baskonia", competicion: str = "euroleague
         out.append(f"Su club        {r['club_jugador']['nombre']} · estilo {r['club_jugador']['estilo']} · mapa {r['club_jugador']['mapa']}")
         out.append(f"Distancias     jugador→club destino {d['jugador_club']:.2f} (percentil {d['pct_jugador_club']:.0f} de la distancia de cada jugador a su propio club)")
         out.append(f"               club del jugador→club destino {d['club_club']:.2f} (percentil {d['pct_club_club']:.0f} entre parejas de clubes)")
-        out.append(f"Afinidad       neurona del estilo del club en el jugador: {a['p_estilo_club']:.2f} · similitud de las 12 salidas: {a['similitud_salidas']:.2f}")
+        out.append(f"Afinidad       neurona del estilo del club en el jugador: {a['p_estilo_club']:.2f} · similitud de las salidas: {a['similitud_salidas']:.2f}")
         out.append(f"Plantilla      {pl['jugadores']} jugadores · dispersión {pl['dispersion']:.2f} (percentil {pl['pct_dispersion']:.0f}; alto = «una oveja de cada madre»)")
         out.append(f"               minutos en el estilo del club {pl['cuota_estilo_club']:.0%} · en el estilo del jugador {pl['cuota_estilo_jugador']:.0%}")
         out.append("               más parecidos al jugador: " + ", ".join(f"{n} ({e}, {x:.2f})" for n, e, x in pl["mas_parecidos"]))

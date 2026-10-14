@@ -352,20 +352,20 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
 - Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
   `fecha_nacimiento`.
-- **Estilos de juego v2** (`bbestilo/`, `docs/estilos_de_juego.md`, artículo `docs/articulo/estilos_de_juego_baskonia.pdf`):
-  8 estilos por club-competición-temporada con una red **VaDE** (mezcla de 8 gaussianas de covarianza completa en un
-  latente 3D = mapa; consenso de 5 semillas y ajuste fino) e IDEC de contraste, sobre los equivalentes EuroLeague A+B
-  agregados por minutos (13 rasgos) **con el nivel neutralizado** (regresión de cada rasgo en [1, L, L²], L = índice de
-  calidad: PER, GmSc/40, WS/40, ORtg, DRtg, pts/100, TS%, eFG%). η² nivel-estilo 0,8 % (v1: 74 %). Nombres de estilos en
-  `config/estilos_v2.json`. `python -m bbestilo entrenar | evaluar | analisis | encaje | exportar | articulo`.
-  Atlas: Artifact «Atlas de Estilos» (https://claude.ai/artifact/D2ULCYstYh4ykwSzExUPNU; republicar con `files` =
-  `estilos/{meta,clubes,jugadores}.json` y `articulo/estilos_de_juego_baskonia.pdf`, capacidad `downloads`).
-  Hallazgos: los datos respaldan 4-6 estilos (BIC/ICL: 6); el encaje por similitud no predice el rendimiento del
-  fichaje; la continuidad de plantilla sí predice conservar el estilo. v1 en `data/modelos/estilos/v1_12estilos/`.
-  Modelo de 6 estilos en `data/modelos/estilos/k6/` (nombres `config/estilos_k6.json`; mejor en estabilidad y
-  separación; el Atlas tiene selector, por defecto 8 = `modelo_defecto` en `exportar.py`). Buscador de parecidos
-  (`bbestilo/similares.py`, CLI `parecidos`, sección «Buscar parecidos» del Atlas): distancias en los 13 rasgos sin
-  nivel traducidas a percentil entre parejas reales.
+- **Estilos de juego** (`bbestilo/`, `docs/estilos_de_juego.md`, artículo `docs/articulo/estilos_de_juego_baskonia.pdf`):
+  modelo final = **VaDE de 6 estilos** por club-competición-temporada (mezcla de 6 gaussianas de covarianza completa en
+  un latente 3D = mapa; consenso de 10 semillas y ajuste fino con la mezcla fijada), sobre los equivalentes EuroLeague
+  A+B agregados por minutos (13 rasgos) **con el nivel neutralizado** (regresión de cada rasgo en [1, L, L²], L = índice
+  de calidad: PER, GmSc/40, WS/40, ORtg, DRtg, pts/100, TS%, eFG%). η² nivel-estilo 0,4 %. Sin IDEC (retirada).
+  Nombres de estilos en `config/estilos.json` (revisar si se reentrena). Iteraciones anteriores (v1 12 estilos, v2 8,
+  v3 6 con 5 semillas) sólo como métricas y asignaciones en `data/modelos/estilos/historial/` (la tabla de evolución
+  del Atlas y del artículo sale de ahí). `python -m bbestilo entrenar | evaluar | analisis | encaje | parecidos |
+  exportar | articulo`. Simulación de varios fichajes y bajas: `encaje.simular_plantilla` (CLI `encaje --jugador A B
+  --baja C`), igual que el JS del Atlas. Buscador de parecidos: `similares.py`.
+  Atlas: Artifact «Atlas de Estilos» (https://claude.ai/artifact/D2ULCYstYh4ykwSzExUPNU; cinco pestañas; republicar
+  con `files` = `estilos/{meta,clubes,jugadores}.json` y `articulo/estilos_de_juego_baskonia.pdf`, capacidad
+  `downloads`). Hallazgos: BIC/ICL eligen 6 estilos; el encaje por similitud no predice el rendimiento del fichaje;
+  la continuidad de plantilla predice conservar el estilo; Baskonia cambia mucho de estilo.
 
 ## 10. Historial
 
@@ -390,4 +390,5 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Algoritmo B, combinación A+B y pestaña «Normalización de ligas» (Artifact versión 17); A reajustado tras corregir el
   año de nacimiento por persona. `artifact/mesa-multiliga.html` = página publicada con la nueva pestaña.
 - Rama `claude/bold-euler-hubmhk`: estilos de juego (`bbestilo`). v1: IDEC y VaDE con 12 estilos. v2: 8 estilos, nivel
-  neutralizado, VaDE con covarianza completa y consenso, análisis complementarios, Atlas rediseñado y artículo en PDF. Después: modelo de 6 estilos y buscador de parecidos.
+  neutralizado, VaDE con covarianza completa y consenso, análisis complementarios, Atlas rediseñado y artículo en PDF. Después: modelo de 6 estilos y buscador de parecidos. Final: sólo VaDE de 6
+  estilos con 10 semillas, simulador de varios fichajes y bajas, Atlas en pestañas y artículo reescrito.

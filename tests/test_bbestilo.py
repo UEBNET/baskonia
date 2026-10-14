@@ -9,7 +9,7 @@ torch = pytest.importorskip("torch", reason="bbestilo necesita torch (requiremen
 
 from bbestilo import config as C  # noqa: E402
 from bbestilo import datos, entrenar  # noqa: E402
-from bbestilo.redes import RedIDEC, RedVaDE  # noqa: E402
+from bbestilo.redes import RedVaDE  # noqa: E402
 
 
 def _plantilla(n=10, seed=0):
@@ -76,6 +76,29 @@ def test_simular_sin_minutos_o_sustituyendose_a_si_mismo_no_mueve_al_club():
     assert math.isclose(m, w[3]) and np.allclose(v1, club) and np.allclose(q1, qm)
 
 
+def test_simular_plantilla_varios_fichajes_y_bajas():
+    from bbestilo.encaje import simular, simular_plantilla
+    cj = _cj_sintetico()
+    R, w, _, Q = cj.plantillas["x:1:2025-26"]
+    T = w.sum()
+    # dos «fichajes» (filas 1 y 2 de la propia plantilla, usadas como jugadores externos) y una baja (fila 0)
+    v, q, mins = simular_plantilla(cj, "x:1:2025-26", [(1, 300.0), (2, 200.0)], [0])
+    assert mins == [300.0, 200.0]
+    resto = w.copy()
+    resto[0] = 0.0
+    W = np.concatenate([resto * (T - 500) / resto.sum(), [300.0, 200.0]])
+    filas = np.vstack([R, R[1], R[2]])
+    filas[-2:, C.COLS.index("ritmo_rel")] = datos.agregar(R, w[None])[0][C.COLS.index("ritmo_rel")]
+    assert np.allclose(v, datos.agregar(filas, W[None])[0])
+    assert math.isclose(W.sum(), T)
+    # un solo fichaje que hereda los minutos de una baja = simular(..., sustituye=)
+    a = simular(cj, "x:1:2025-26", 4, sustituye=5)
+    b = simular_plantilla(cj, "x:1:2025-26", [(4, float(w[5]))], [5])
+    assert np.allclose(a[0], b[0]) and np.allclose(a[1], b[1])
+    with pytest.raises(ValueError):
+        simular_plantilla(cj, "x:1:2025-26", [(1, T)], [])
+
+
 def test_neutralizar_quita_la_relacion_con_el_nivel():
     rng = np.random.default_rng(5)
     L = rng.normal(size=400)
@@ -95,7 +118,7 @@ def test_indice_de_nivel_ignora_huecos():
 
 def test_las_redes_terminan_en_n_estilos_neuronas_y_un_mapa_3d():
     x = torch.randn(5, len(C.COLS))
-    for red in (RedIDEC(len(C.COLS), k=C.N_ESTILOS), RedVaDE(len(C.COLS), k=C.N_ESTILOS, covarianza="completa"),
+    for red in (RedVaDE(len(C.COLS), k=C.N_ESTILOS, covarianza="completa"),
                 RedVaDE(len(C.COLS), k=C.N_ESTILOS, covarianza="diag")):
         p = red.salida(x)
         assert p.shape == (5, C.N_ESTILOS)
@@ -112,7 +135,7 @@ def _muestras(n=120, seed=0):
 
 def test_entrenamiento_rapido_y_orientacion_conserva_distancias():
     M = _muestras()
-    for tipo in ("idec", "vade"):
+    for tipo in entrenar.ENTRENADORES:
         red = entrenar.ENTRENADORES[tipo](M, 1, hp={"epocas_pre": 3, "epocas": 3, "lote": 64})
         red.eval()
         with torch.no_grad():
@@ -139,15 +162,10 @@ def _red_desde_json(P, x):
         h = np.array(c["W"]) @ h + np.array(c["b"])
         if i < len(P["capas"]) - 1:
             h = _gelu(h)
-    if P["tipo"] == "idec":
-        a = P["salida"]["alpha"]
-        d2 = ((h - np.array(P["salida"]["centroides"])) ** 2).sum(1)
-        logit = -(a + 1) / 2 * np.log1p(d2 / a)
-    else:
-        mu, prec = np.array(P["salida"]["mu"]), np.array(P["salida"]["prec"])
-        d = h - mu
-        maha = np.einsum("ki,kij,kj->k", d, prec, d)
-        logit = np.array(P["salida"]["log_pi"]) - 0.5 * (maha + np.array(P["salida"]["logdet"]) + 3 * np.log(2 * np.pi))
+    mu, prec = np.array(P["salida"]["mu"]), np.array(P["salida"]["prec"])
+    d = h - mu
+    maha = np.einsum("ki,kij,kj->k", d, prec, d)
+    logit = np.array(P["salida"]["log_pi"]) - 0.5 * (maha + np.array(P["salida"]["logdet"]) + 3 * np.log(2 * np.pi))
     p = np.exp(logit - logit.max())
     M = P["mapa"]
     return p / p.sum(), (h - np.array(M["centro"])) @ np.array(M["rot"]) * M["escala"]
@@ -155,7 +173,7 @@ def _red_desde_json(P, x):
 
 def test_los_pesos_exportados_reproducen_la_red():
     M = _muestras()
-    for tipo in ("idec", "vade"):
+    for tipo in entrenar.ENTRENADORES:
         red = entrenar.ENTRENADORES[tipo](M, 2, hp={"epocas_pre": 2, "epocas": 2, "lote": 64})
         red.eval()
         entrenar.orientar(red, M.Xc)

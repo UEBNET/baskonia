@@ -1,16 +1,16 @@
-"""Evaluación y comparación de las dos redes.
+"""Evaluación de la red de estilos (y tabla comparativa entre redes o iteraciones).
 
 Todo se mide sobre los clubes reales de las temporadas de entrenamiento salvo donde se indica.
 Bloques:
   1. Reparto y confianza: tamaño de cada estilo, entropía del reparto, salida máxima media.
   2. Separación: silueta en el mapa 3D y en los 13 rasgos, Davies-Bouldin, Calinski-Harabasz.
-     Referencia: k-medias con 12 grupos directamente sobre los 13 rasgos (sin red).
-  3. Estabilidad: ARI entre las 5 semillas; robustez frente al reparto de minutos (plantillas
+     Referencia: k-medias con k grupos directamente sobre los 13 rasgos (sin red).
+  3. Estabilidad: ARI entre las semillas; robustez frente al reparto de minutos (plantillas
      remuestreadas que conservan el estilo); reproducibilidad temporal (red entrenada sin 2024-25 ni
      2025-26 frente a la red completa, sobre esos clubes).
   4. Fidelidad del mapa: trustworthiness y continuidad (k = 10), estrés y correlación de Spearman
      entre distancias del mapa y del perfil; R² de reconstrucción por rasgo.
-  5. Diferenciación estadística de los 12 estilos: distancia de Mahalanobis entre sus perfiles medios
+  5. Diferenciación estadística de los k estilos: distancia de Mahalanobis entre sus perfiles medios
      (covarianza intra-estilo común), prueba de permutación por pareja con corrección de Holm, η² por
      rasgo y replicabilidad de los perfiles entre 2020-23 y 2023-26. Las pruebas entre grupos formados
      con los mismos datos son optimistas por construcción; la replicabilidad temporal no lo es.
@@ -38,7 +38,7 @@ def _t(a) -> torch.Tensor:
 
 @torch.no_grad()
 def predecir(red, X: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """(probabilidades de las 12 neuronas, coordenadas en el mapa)."""
+    """(probabilidades de las k neuronas, coordenadas en el mapa)."""
     x = _t(X)
     return red.salida(x).numpy(), red.mapa(x).numpy()
 

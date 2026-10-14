@@ -1,22 +1,15 @@
-"""Las dos redes neuronales de estilos de juego.
+"""Red neuronal de estilos de juego: VaDE (Variational Deep Embedding; Jiang et al. 2017).
 
-Las dos comparten el mismo contrato:
-  * entrada: vector de estilo de 13 rasgos (transformado y estandarizado);
+  * entrada: vector de estilo de 13 rasgos (transformado, estandarizado y sin nivel);
   * una capa latente de 3 neuronas, que ES el mapa 3D (clubes y jugadores en el mismo espacio);
-  * una ÚLTIMA capa de 12 neuronas, una por estilo, cuyas salidas suman 1. El estilo asignado es la
+  * una ÚLTIMA capa de 6 neuronas, una por estilo, cuyas salidas suman 1. El estilo asignado es la
     neurona con mayor salida.
 
-Red 1 · IDEC (Improved Deep Embedded Clustering; Xie et al. 2016, Guo et al. 2017)
-    codificador 13-64-32-3 · decodificador 3-32-64-13 · capa de agrupamiento con 12 centroides
-    en el mapa y núcleo t de Student: q_k ∝ (1 + ‖z − μ_k‖²/α)^(−(α+1)/2).
-    Determinista: cada club es un punto; un estilo es una región alrededor de su centroide.
-
-Red 2 · VaDE (Variational Deep Embedding; Jiang et al. 2017)
-    codificador 13-64-32 → (μ_z, log σ²_z) en 3D · decodificador 3-32-64-13 con varianza común ·
-    previa de mezcla de k gaussianas p(z) = Σ π_k N(μ_k, Σ_k) con covarianza completa (v2) o diagonal
-    (v1). La capa de salida da la probabilidad a posteriori de cada componente:
-    γ_k = π_k N(z | μ_k, Σ_k) / Σ_j π_j N(z | μ_j, Σ_j).
-    Probabilística: cada club es una nube (μ_z, σ_z); cada estilo, un elipsoide con su forma y orientación.
+Codificador 13-64-32 → (μ_z, log σ²_z) en 3D · decodificador 3-32-64-13 con varianza común ·
+previa de mezcla de k gaussianas p(z) = Σ π_k N(μ_k, Σ_k) con covarianza completa. La capa de salida da
+la probabilidad a posteriori de cada componente: γ_k = π_k N(z | μ_k, Σ_k) / Σ_j π_j N(z | μ_j, Σ_j).
+Probabilística: cada club es una nube (μ_z, σ_z); cada estilo, un elipsoide con su forma y orientación.
+(Iteraciones anteriores con una IDEC de contraste y con 12 y 8 estilos: data/modelos/estilos/historial/.)
 
 Las activaciones ocultas son GELU (aproximación tanh), reproducible exactamente en el navegador.
 """
@@ -58,49 +51,6 @@ class _Mapa(nn.Module):
 
     def a_mapa(self, z: torch.Tensor) -> torch.Tensor:
         return (z - self.mapa_centro) @ self.mapa_rot * self.mapa_escala
-
-
-class RedIDEC(_Mapa):
-    nombre = "IDEC"
-
-    def __init__(self, d_in: int, ocultas=(64, 32), d_lat: int = 3, k: int = 12, alpha: float = 1.0):
-        super().__init__()
-        self.config = {"d_in": d_in, "ocultas": list(ocultas), "d_lat": d_lat, "k": k, "alpha": alpha}
-        self.enc = _mlp([d_in, *ocultas, d_lat])
-        self.dec = _mlp([d_lat, *reversed(ocultas), d_in])
-        self.centroides = nn.Parameter(torch.zeros(k, d_lat))
-        self.alpha = alpha
-        self._init_mapa(d_lat)
-
-    def codificar(self, x):
-        return self.enc(x)
-
-    def reconstruir(self, z):
-        return self.dec(z)
-
-    def logits(self, z):
-        d2 = ((z[:, None, :] - self.centroides[None]) ** 2).sum(-1)
-        return -(self.alpha + 1) / 2 * torch.log1p(d2 / self.alpha)
-
-    def q(self, z):
-        """Capa de salida: 12 neuronas, núcleo t de Student normalizado."""
-        return F.softmax(self.logits(z), dim=1)
-
-    def salida(self, x):
-        return self.q(self.codificar(x))
-
-    def centros(self) -> torch.Tensor:
-        return self.centroides
-
-    def permutar(self, orden: torch.Tensor) -> None:
-        with torch.no_grad():
-            self.centroides.copy_(self.centroides[orden])
-
-    @staticmethod
-    def objetivo(q: torch.Tensor) -> torch.Tensor:
-        """Distribución objetivo P de DEC: refuerza las asignaciones seguras y normaliza por tamaño."""
-        w = q ** 2 / q.sum(0, keepdim=True)
-        return w / w.sum(1, keepdim=True)
 
 
 class RedVaDE(_Mapa):
@@ -215,7 +165,7 @@ class RedVaDE(_Mapa):
         return rec + beta * kl
 
 
-REDES = {"idec": RedIDEC, "vade": RedVaDE}
+REDES = {"vade": RedVaDE}
 
 
 def crear(tipo: str, config: dict) -> _Mapa:
