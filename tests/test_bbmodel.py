@@ -54,3 +54,23 @@ def test_enlace_recupera_un_tipo_de_cambio_conocido():
         r = enlace.ajustar_metrica(pd.DataFrame(filas), n_boot=0)
         assert abs(r["m"]["acb"] + 0.6) < 0.1, (modo, r["m"])
         assert abs(r["s"]["acb"] - 0.8) < 0.1, (modo, r["s"])
+
+
+# ---------------------------------------------------------------- nacionalidad y dataset normalizado
+def test_nacionalidad_unifica_nombres_de_pais():
+    from bbmodel.nacionalidad import codigo, nombre_pais
+    assert codigo("United States of America") == codigo("USA") == codigo("US") == "US"
+    assert codigo("Congo, Democratic Republic of the") == codigo("DRC") == "CD"
+    assert codigo("Türkiye") == codigo("Turkey") == "TR"
+    assert codigo("España") == "ES" and codigo("") is None and codigo(None) is None
+    assert nombre_pais("US|GH") == "Estados Unidos / Ghana" and nombre_pais(float("nan")) is None
+
+
+def test_combinar_usa_a_cuando_falta_b():
+    import numpy as np
+    import pandas as pd
+    from bbmodel.dataset_normalizado import combinar
+    a = pd.Series([0.50, 0.40, np.nan])
+    b = pd.Series([0.60, np.nan, 0.30])
+    ab = combinar(a, b, "ts_pct")
+    assert 0.50 < ab[0] < 0.60 and ab[1] == 0.40 and ab[2] == 0.30

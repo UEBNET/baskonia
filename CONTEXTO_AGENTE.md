@@ -345,8 +345,18 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   equipo-temporada con varianza por bayes empírico, Laplace + conjunto de 5 redes). Hiperparámetros elegidos sólo con
   el corte 2022 (no con el examen). Resultados en `data/modelos/algoritmo_B/`. `python -m bbmodel ajustar-b`.
 - **A+B** (`bbmodel/mesa_normalizacion.py`): media de A y B en escala transformada; es la estimación recomendada.
-  `python -m bbmodel mesa-normalizacion` genera `normalizacion/resumen.json` y `normalizacion/jugadores_<temp>.json`
-  para la pestaña «Normalización de ligas» (publicar en `datos/normalizacion/`).
+  `python -m bbmodel mesa-normalizacion` genera `normalizacion/resumen.json` para la pestaña «Normalización de ligas»
+  (publicar en `datos/normalizacion/`).
+- **Dataset normalizado completo** (`bbmodel/dataset_normalizado.py`, `docs/datos_normalizados.md`):
+  `python -m bbmodel dataset-normalizado` escribe `data/modelos/normalizado/<temp>.csv` (todos los jugadores, todas las
+  ligas y temporadas, 25 métricas: `<m>` = A+B con A de respaldo, `_obs`, `_A`, `_B`, `_lo`, `_hi`, `_pctel`,
+  `fuente_norm`) y, en `--salida` (data/artifact), `normalizados/<temp>/regular.json` + `normalizados/indice.json`
+  (pestaña «Datos Normalizados»), `normalizacion/jugadores_<temp>.json` (explorador, todas las temporadas) y
+  `<temp>/nacionalidades.json` (nacionalidad de la «Tabla de datos», por player_uid). Publicar en `datos/` del Artifact.
+- **Nacionalidad** (`bbmodel/nacionalidad.py`, `data/modelos/nacionalidades.csv`): sólo LNB (todos), G League
+  (índice de jugadores) y BBL (máximo anotador de cada partido) la traen en los datos brutos; se propaga por persona
+  (persona_id) y por jugador de la misma liga; países en español. Cobertura ≈ 40 % EuroLeague, 47 % NBA, 53 % BBL.
+  En la BBL el player_id de la fuente cambia entre temporadas: el estudio usa «n:» + nombre (`nacionalidad.id_modelo`).
 - Corrección (oct. 2026): `identidad.py` asigna el año de nacimiento por persona (mediana), no por nodo de liga.
 - **Evaluación de ligas** (`bbmodel/evaluacion_ligas.py`): genera `data/artifact/<temporada>/evaluacion_<fase>.json`
   para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
@@ -392,3 +402,5 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Rama `claude/bold-euler-hubmhk`: estilos de juego (`bbestilo`). v1: IDEC y VaDE con 12 estilos. v2: 8 estilos, nivel
   neutralizado, VaDE con covarianza completa y consenso, análisis complementarios, Atlas rediseñado y artículo en PDF. Después: modelo de 6 estilos y buscador de parecidos. Final: sólo VaDE de 6
   estilos con 10 semillas, simulador de varios fichajes y bajas, Atlas en pestañas y artículo reescrito.
+- Mesa (versión 24): pestaña «Datos Normalizados» (dataset completo A+B), nacionalidad en las tablas, explorador de
+  normalización con todas las temporadas, Atlas como última pestaña y sin Comparador.
