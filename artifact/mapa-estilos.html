@@ -145,6 +145,14 @@ td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-w
 .spec dd { margin: 0; }
 .spec code { font-family: var(--f-data); font-size: 12px; background: var(--c4); padding: 1px 4px; border-radius: 4px; }
 @media (max-width: 560px) { .spec dl { grid-template-columns: minmax(0, 1fr); } }
+.busc { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 980px) { .busc { grid-template-columns: minmax(0, 1fr); } }
+.busc .ctl { display: grid; gap: 10px; align-content: start; border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: var(--c4); min-width: 0; }
+.busc .res { display: grid; gap: 14px; min-width: 0; }
+.bar { height: 7px; border-radius: 4px; background: var(--c2); overflow: hidden; min-width: 60px; }
+.bar i { display: block; height: 100%; background: var(--accent-strong); border-radius: 4px; }
+td .btn.sm { white-space: nowrap; }
+tr.ref td { background: var(--c4); }
 .tip { position: fixed; z-index: 30; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-size: 12px; box-shadow: 0 4px 14px rgba(58,42,28,.14); max-width: 280px; }
 .loading { padding: 60px 16px; text-align: center; color: var(--muted); }
 .howto { font-size: 13px; display: grid; gap: 6px; }
@@ -155,9 +163,10 @@ td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-w
   <header class="head">
     <div>
       <h1>Atlas de <span>Estilos</span></h1>
-      <p class="sub" style="margin-top:6px">Ocho estilos de juego por club, competición y temporada en las 8 ligas, calculados con una red neuronal VaDE sobre los datos normalizados a la vara EuroLeague (A+B) y con el nivel neutralizado: el estilo dice cómo juega un equipo, no cuán bueno es.</p>
+      <p class="sub" style="margin-top:6px"><span class="nEst">Ocho</span> estilos de juego por club, competición y temporada en las 8 ligas, calculados con una red neuronal VaDE sobre los datos normalizados a la vara EuroLeague (A+B) y con el nivel neutralizado: el estilo dice cómo juega un equipo, no cuán bueno es.</p>
     </div>
     <div class="acts">
+      <span class="label">Modelo</span><div class="seg" id="sModelo" aria-label="Modelo"></div>
       <button class="btn ghost" id="btnGuia" aria-expanded="false" aria-controls="guia">Cómo leer el mapa</button>
       <button class="btn" id="btnPdf" hidden>Descargar artículo (PDF)</button>
       <span class="note" id="pdfMsg" aria-live="polite"></span>
@@ -243,6 +252,36 @@ td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-w
     </aside>
   </div>
 
+  <section class="block" aria-labelledby="buT">
+    <div><h2 id="buT">Buscar parecidos</h2><p class="sub" style="margin-top:4px">Clubes que juegan como el de referencia y jugadores parecidos: a un jugador de la plantilla (por ejemplo, uno que se va) dentro de clubes de estilo parecido, o jugadores cuyo propio perfil encaja con el estilo del club. El parecido se mide en los 13 rasgos sin nivel (0-100: percentil entre parejas reales); el nivel se filtra aparte.</p></div>
+    <div class="busc">
+      <div class="ctl">
+        <span class="label">Club de referencia</span>
+        <div class="row2"><select id="bLiga" aria-label="Competición"></select><select id="bTemp" aria-label="Temporada"></select></div>
+        <select id="bClubSel" aria-label="Club"></select>
+        <span class="label">Buscar en temporadas</span><div class="chips" id="bTemps"></div>
+        <span class="label">Buscar en competiciones</span><div class="chips" id="bLigas"></div>
+        <span class="label">Jugadores</span>
+        <div class="seg" id="bModo"><button data-v="jugador" aria-pressed="true">Parecidos a un jugador</button><button data-v="club" aria-pressed="false">Que encajen con el club</button></div>
+        <div id="bRefBox" style="display:grid;gap:6px">
+          <select id="bRef" aria-label="Jugador de referencia"></select>
+          <input type="search" id="bRefQ" placeholder="o busca cualquier jugador como referencia" autocomplete="off"><div class="sugs" id="bRefS" hidden></div>
+        </div>
+        <div class="seg" id="bAlc"><button data-v="cerca" aria-pressed="true">En clubes parecidos</button><button data-v="todos" aria-pressed="false">En todos los clubes</button></div>
+        <label class="note" for="bN">Clubes parecidos considerados: <b id="bNv"></b></label><input type="range" id="bN" min="5" max="150" step="5">
+        <div class="chips" id="bPos"></div>
+        <div class="row2"><label class="note">Minutos mín.<input type="number" id="bMin" min="0" step="50"></label><label class="note">Edad máx.<input type="number" id="bEdad" min="16" max="45" placeholder="sin límite"></label></div>
+        <label class="note">Nivel mínimo (z)<input type="number" id="bNiv" step="0.1" placeholder="sin límite"></label>
+        <label class="note" for="bPeso">Peso del parecido del jugador frente al de su club: <b id="bPesov"></b></label><input type="range" id="bPeso" min="0.3" max="1" step="0.05">
+        <label class="tog"><input type="checkbox" id="bMapa" checked> Marcar los 10 primeros en el mapa</label>
+      </div>
+      <div class="res">
+        <div class="chart"><span class="label" id="bClubT">Clubes que juegan como…</span><div class="tablebox" id="bClubes"></div></div>
+        <div class="chart"><span class="label" id="bJugT">Jugadores</span><div class="tablebox" id="bRes"></div><p class="note">«Simular» lleva al jugador al simulador de fichajes con el club de referencia como destino. Un jugador con filas en dos competiciones aparece una vez.</p></div>
+      </div>
+    </div>
+  </section>
+
   <section class="block" aria-labelledby="cmpT">
     <div><h2 id="cmpT">Comparación detallada</h2><p class="sub" style="margin-top:4px">Perfil de estilo sin nivel (desviaciones típicas frente al club medio), reparto entre los 8 estilos y distancias en el mapa.</p></div>
     <div class="grid2">
@@ -255,7 +294,7 @@ td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-w
   </section>
 
   <section class="block" aria-labelledby="lgT">
-    <div><h2 id="lgT">Ligas y temporadas</h2><p class="sub" style="margin-top:4px">Reparto de los clubes de cada liga entre los 8 estilos (temporadas y ligas filtradas arriba) y evolución por temporada.</p></div>
+    <div><h2 id="lgT">Ligas y temporadas</h2><p class="sub" style="margin-top:4px">Reparto de los clubes de cada liga entre los <span class="kEst">8</span> estilos (temporadas y ligas filtradas arriba) y evolución por temporada.</p></div>
     <div class="grid2">
       <div class="chart"><span class="label">Estilo por liga (% de clubes)</span><div class="tablebox" id="gHeat"></div></div>
       <div class="chart"><span class="label">Estilo por temporada</span><div id="gTemp"></div></div>
@@ -268,7 +307,7 @@ td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-w
   </section>
 
   <section class="block" aria-labelledby="esT">
-    <div><h2 id="esT">Los 8 estilos</h2><p class="sub" style="margin-top:4px">Nombre interpretativo a partir del perfil medio (barra a la derecha = más que el club medio a igual nivel). El número del estilo es su orden en el eje 1 del mapa.</p></div>
+    <div><h2 id="esT">Los <span class="kEst">8</span> estilos</h2><p class="sub" style="margin-top:4px">Nombre interpretativo a partir del perfil medio (barra a la derecha = más que el club medio a igual nivel). El número del estilo es su orden en el eje 1 del mapa.</p></div>
     <div class="styles" id="estilos"></div>
   </section>
 
@@ -278,14 +317,14 @@ td.win { background: color-mix(in srgb, var(--good) 12%, var(--surface)); font-w
   </section>
 
   <section class="block" aria-labelledby="moT">
-    <div><h2 id="moT">El modelo</h2><p class="sub" style="margin-top:4px">VaDE v2 frente a la red de contraste (IDEC con los mismos datos) y a la versión anterior (VaDE con 12 estilos y sin neutralizar el nivel).</p></div>
+    <div><h2 id="moT">El modelo: 8 frente a 6 estilos</h2><p class="sub" style="margin-top:4px">Los dos VaDE (8 y 6 estilos, mismos datos y procedimiento), la red de contraste IDEC del modelo activo y la versión anterior (12 estilos, sin neutralizar el nivel). Celda resaltada = mejor de los dos VaDE.</p></div>
     <div class="grid2">
-      <div class="tablebox"><table id="tModelo"></table></div>
+      <div style="display:grid;gap:12px;align-content:start"><div class="tablebox"><table id="tModelo"></table></div><div id="corresp"></div></div>
       <article class="spec">
         <dl>
           <dt>Entrada</dt><dd>13 rasgos de estilo por club (media por minutos de sus jugadores, vara EuroLeague A+B), transformados, estandarizados y sin la parte explicada por el nivel (<code>x − [1, L, L²]·B</code>).</dd>
           <dt>Codificador</dt><dd><code>13 → 64 → 32 → (μ, log σ²) ∈ ℝ³</code>, GELU. μ es el punto del club en el mapa.</dd>
-          <dt>Salida</dt><dd>8 neuronas: probabilidad a posteriori de 8 gaussianas de covarianza completa en el mapa.</dd>
+          <dt>Salida</dt><dd><span class="kEst">8</span> neuronas: probabilidad a posteriori de <span class="kEst">8</span> gaussianas de covarianza completa en el mapa.</dd>
           <dt>Decodificador</dt><dd><code>3 → 32 → 64 → 13</code>, varianza común a los 13 rasgos.</dd>
           <dt>Pérdida</dt><dd>−ELBO de VaDE + 13 · estrés de MDS (distancia del mapa = distancia del perfil).</dd>
           <dt>Entrenamiento</dt><dd>5 semillas · 25.000 plantillas remuestreadas · consenso por co-asociación · ajuste fino desde el consenso (40 épocas).</dd>
@@ -317,16 +356,31 @@ const tC = (t) => t.slice(2);
 const pv = (p) => (p == null || !isFinite(p)) ? "–" : p < 0.001 ? "p < 0,001" : "p = " + fmt(p, 3);
 const cols = (d) => d.filas.map((f) => Object.fromEntries(d.columnas.map((c, i) => [c, f[i]])));
 const norm = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-let META, CL, JG, BY, ROSTER, CR, NE, TEMPS, ENT_T, DL = null;
+let META, CL, JG, BY, ROSTER, CR, NE, TEMPS, ENT_T, DL = null, KE = 8, XJ = null, BUSQ = [];
+const rango = (n) => Array.from({ length: n }, (_, i) => i);
 
-const DEF = { temps: ["2025-26"], ligas: Object.keys(LIGAS), estilos: [0, 1, 2, 3, 4, 5, 6, 7], nMin: -3, nMax: 3,
+const DEF = { modelo: "k8", temps: ["2025-26"], ligas: Object.keys(LIGAS), estilos: [0, 1, 2, 3, 4, 5, 6, 7], nMin: -3, nMax: 3,
   capas: { clubes: true, jug: false, centros: true, elip: false, tray: true, ligas: false }, pos: ["E", "A", "I"], minJ: 400,
   color: "estilo", tam: "fijo", etiq: "sel", formas: true, aTam: 4.5, aOp: 0.85,
   ents: [{ t: "club", k: "euroleague:BAS", temp: "2025-26" }, { t: "liga", k: "euroleague", temp: "2025-26" }, { t: "club", k: "acb:3", temp: "2025-26" }],
-  jug: null, minutos: null, sust: "" };
+  jug: null, minutos: null, sust: "",
+  bus: { liga: "euroleague", temp: "2025-26", club: "euroleague:BAS", temps: ["2025-26"], ligas: Object.keys(LIGAS), modo: "jugador", ref: null,
+    alc: "cerca", n: 30, pos: ["E", "A", "I"], min: 300, edad: "", niv: "", peso: 0.7, mapa: true } };
 let st = JSON.parse(JSON.stringify(DEF));
-function guardar() { try { localStorage.setItem("atlas-estilos-v2", JSON.stringify({ ...st, jug: null, minutos: null, sust: "" })); } catch (e) { /* sin almacenamiento */ } }
-function recuperar() { try { const s = JSON.parse(localStorage.getItem("atlas-estilos-v2") || "null"); if (s && s.ents) st = { ...st, ...s, capas: { ...st.capas, ...s.capas } }; } catch (e) { /* sin almacenamiento */ } }
+function guardar() { try { localStorage.setItem("atlas-estilos-v3", JSON.stringify({ ...st, jug: null, minutos: null, sust: "", bus: { ...st.bus, ref: null } })); } catch (e) { /* sin almacenamiento */ } }
+function recuperar() { try { const s = JSON.parse(localStorage.getItem("atlas-estilos-v3") || "null"); if (s && s.ents) st = { ...st, ...s, capas: { ...st.capas, ...s.capas }, bus: { ...st.bus, ...(s.bus || {}) } }; } catch (e) { /* sin almacenamiento */ } }
+// Modelo activo (8 o 6 estilos): los campos de trabajo (x, y, z, e, p, probs, rob) apuntan a los del modelo
+function usarModelo(k) {
+  if (!META.modelos[k]) k = META.modelo_defecto;
+  st.modelo = k; const M = META.modelos[k];
+  ["pesos", "estilos", "ejes", "evaluacion", "evaluacion_idec", "analisis", "referencias", "referencia_kmedias", "comparativa"].forEach((f) => META[f] = M[f]);
+  KE = M.n_estilos;
+  CL.forEach((c) => { c.x = c[k + "_x"]; c.y = c[k + "_y"]; c.z = c[k + "_z"]; c.e = c[k + "_e"]; c.p = c[k + "_p"]; c.probs = c[k + "_probs"]; c.rob = c[k + "_rob"]; });
+  JG.forEach((j) => { j.x = j[k + "_x"]; j.y = j[k + "_y"]; j.z = j[k + "_z"]; j.e = j[k + "_e"]; j.p = j[k + "_p"]; });
+  st.estilos = st.estilos.filter((e) => e < KE); if (!st.estilos.length) st.estilos = rango(KE);
+  document.querySelectorAll(".kEst").forEach((el) => el.textContent = KE);
+  document.querySelectorAll(".nEst").forEach((el) => el.textContent = KE === 8 ? "Ocho" : KE === 6 ? "Seis" : KE);
+}
 
 // ---------------------------------------------------------------- red VaDE en el navegador (mismo cálculo que bbestilo)
 const gelu = (x) => 0.5 * x * (1 + Math.tanh(0.7978845608028654 * (x + 0.044715 * x * x * x)));
@@ -387,7 +441,7 @@ function entidad(e, i) {
   }
   const cs = CL.filter((c) => c.liga === e.k && (e.temp === "todas" ? !c.provisional : c.temporada === e.temp)); if (!cs.length) return null;
   const m = (f) => [0, 1, 2].map((j) => cs.reduce((s, c) => s + f(c)[j], 0) / cs.length);
-  const probs = new Array(8).fill(0); cs.forEach((c) => probs[c.e] += 1 / cs.length);
+  const probs = new Array(KE).fill(0); cs.forEach((c) => probs[c.e] += 1 / cs.length);
   return { i, t: "liga", cs, label: `${LIGAS[e.k]} (media)`, sub: `${e.temp === "todas" ? "2020-21 a 2025-26" : e.temp} · ${cs.length} clubes`, xyz: m(XYZ), X: META.rasgos.map((_, k) => cs.reduce((s, c) => s + c.X[k], 0) / cs.length), probs, nivel: cs.reduce((s, c) => s + c.nivel, 0) / cs.length, corto: `${LC[e.k]} ${e.temp === "todas" ? "20-26" : tC(e.temp)}` };
 }
 const ENTS = () => st.ents.map(entidad).filter(Boolean);
@@ -400,7 +454,10 @@ async function cargar() {
   ROSTER = new Map(); JG.forEach((x, i) => { x.i = i; if (!ROSTER.has(x.clave)) ROSTER.set(x.clave, []); ROSTER.get(x.clave).push(x); });
   TEMPS = [...new Set(CL.map((x) => x.temporada))].sort();
   recuperar();
+  usarModelo(st.modelo || META.modelo_defecto);
+  seg($("#sModelo"), Object.keys(META.modelos).sort().reverse().map((k) => [k, `${META.modelos[k].n_estilos} estilos`]), st.modelo, (v) => { usarModelo(v); construirControles(); cambio(true); });
   construirControles();
+  construirBuscador();
   enlazar();
   pintarTodo();
 }
@@ -436,7 +493,7 @@ function enlazar() {
   tog("#fTemp", "temps", "t"); tog("#fLiga", "ligas", "l"); tog("#fEst", "estilos", "e", Number); tog("#fPos", "pos", "p");
   $("#tUlt").onclick = () => { st.temps = ["2025-26"]; construirControles(); cambio(); };
   $("#tTodas").onclick = () => { st.temps = TEMPS.slice(); construirControles(); cambio(); };
-  $("#eTodos").onclick = () => { st.estilos = [0, 1, 2, 3, 4, 5, 6, 7]; construirControles(); cambio(); };
+  $("#eTodos").onclick = () => { st.estilos = rango(KE); construirControles(); cambio(); };
   $("#eNing").onclick = () => { st.estilos = []; construirControles(); cambio(); };
   $("#leyenda").onclick = (e) => { const b = e.target.closest("[data-e]"); if (!b) return; const k = +b.dataset.e, i = st.estilos.indexOf(k); i >= 0 ? st.estilos.splice(i, 1) : st.estilos.push(k); construirControles(); cambio(); };
   $("#nMin").onchange = (e) => { st.nMin = +e.target.value; cambio(); }; $("#nMax").onchange = (e) => { st.nMax = +e.target.value; cambio(); };
@@ -482,12 +539,12 @@ function pintarResumen() {
   const nTrain = CL.filter((c) => !c.provisional).length, nProv = CL.length - nTrain;
   $("#kpis").innerHTML = [
     [nTrain.toLocaleString("es-ES"), `clubes-temporada analizados (2020-21 a 2025-26) + ${nProv} de 2026-27`],
-    ["8", "estilos de juego, independientes del nivel"],
+    [String(KE), "estilos de juego, independientes del nivel"],
     [pct(ev.salida_max_media), "seguridad media de la asignación (neurona ganadora)"],
     [fmt(ev.estabilidad_mapa, 2), "estabilidad del mapa entre 5 redes (r de distancias)"],
   ].map(([v, t]) => `<div class="kpi"><b class="num">${v}</b><span>${t}</span></div>`).join("");
   const F = [];
-  if (A.barrido_k) F.push(`Los datos respaldan con claridad entre 4 y 6 estilos (BIC e ICL prefieren <b>${A.barrido_k.k_optimo_bic_rasgos}</b>; la estabilidad cae a partir de 6): 8 es una resolución más fina, útil para matizar, con fronteras menos estables. El estilo es un continuo.`);
+  if (A.barrido_k) F.push(KE === 8 ? `Los datos respaldan con claridad entre 4 y 6 estilos (BIC e ICL prefieren <b>${A.barrido_k.k_optimo_bic_rasgos}</b>; la estabilidad cae a partir de 6): 8 es una resolución más fina, útil para matizar, con fronteras menos estables. Prueba el modelo de 6 en el selector.` : `Modelo de ${KE} estilos: es el número que prefieren el BIC y el ICL sobre los 13 rasgos (${A.barrido_k.k_optimo_bic_rasgos}). El estilo sigue siendo un continuo; el de 8 añade matices con fronteras menos estables.`);
   if (A.neutralizacion) { const r2 = A.neutralizacion.r2_club, top = r2.map((v, k) => [v, k]).sort((a, b) => b[0] - a[0]).slice(0, 3); F.push(`El nivel explicaba el ${top.map(([v, k]) => `${Math.round(v * 100)} % de ${esc(META.rasgos[k].corto)}`).join(", ")} de los clubes. Neutralizado, el estilo sólo explica el ${pct(ev.eta2_nivel, 1)} del nivel (antes, ${pct(META.evaluacion_v1?.eta2_nivel ?? NaN, 0)}).`); }
   if (A.exito) { const x = A.exito, sig = x.p_estilo_dado_nivel < 0.05, por = x.por_estilo.slice().sort((a, b) => b.resid - a.resid), id = (r) => META.estilos.findIndex((s) => s.id === r.estilo);
     F.push(sig ? `A igual nivel, el estilo sí se asocia con ganar (η² parcial ${pct(x.eta2_parcial_estilo, 0)}, ${pv(x.p_estilo_dado_nivel)}): «${esc(eNom(id(por[0])))}» suma ${sg(por[0].resid)} σ de net rating y «${esc(eNom(id(por[por.length - 1])))}» resta ${fmt(Math.abs(por[por.length - 1].resid), 2)} σ. Parte es mecánica: pérdidas, rebote y tiros libres son factores de eficiencia.` : `A igual nivel, el estilo no se asocia con el net rating (${pv(x.p_estilo_dado_nivel)}): gana el nivel (r = ${fmt(x.r_nivel_net, 2)}).`); }
@@ -531,7 +588,7 @@ function pintarMapa() {
     if (st.color === "nivel") T.push({ type: "scatter3d", mode: st.etiq === "todas" ? "markers+text" : "markers", x: vis.map((c) => c.x), y: vis.map((c) => c.y), z: vis.map((c) => c.z), text: st.etiq === "todas" ? vis.map((c) => c.nombre_club) : vis.map(hov), hovertext: vis.map(hov), hoverinfo: "text", customdata: vis.map((c) => c.clave),
       textfont: { size: 9, color: MUTED }, marker: { size: vis.map(sz), color: vis.map((c) => c.nivel), cmin: -1.5, cmax: 1.5, colorscale: [[0, "#efe0cd"], [0.5, "#b08a64"], [1, "#3a2a1c"]], symbol: st.formas ? vis.map((c) => SYM[c.e]) : "circle", opacity: st.aOp,
         colorbar: { title: { text: "Nivel", font: { family: "IBM Plex Sans", color: INK, size: 12 } }, thickness: 10, len: 0.45, tickfont: { family: "IBM Plex Mono", color: MUTED, size: 10 } } }, showlegend: false });
-    else for (let k = 0; k < 8; k++) { const arr = vis.filter((c) => c.e === k); if (!arr.length) continue;
+    else for (let k = 0; k < KE; k++) { const arr = vis.filter((c) => c.e === k); if (!arr.length) continue;
       T.push({ type: "scatter3d", mode: st.etiq === "todas" ? "markers+text" : "markers", name: eNom(k), x: arr.map((c) => c.x), y: arr.map((c) => c.y), z: arr.map((c) => c.z), text: st.etiq === "todas" ? arr.map((c) => c.nombre_club) : arr.map(hov), hovertext: arr.map(hov), hoverinfo: "text", customdata: arr.map((c) => c.clave),
         textfont: { size: 9, color: MUTED }, marker: { size: arr.map(sz), color: arr.map((c) => colorDe(c)), symbol: st.formas ? SYM[k] : "circle", opacity: st.aOp, line: { color: SURF, width: 0.5 } }, showlegend: false }); }
   }
@@ -551,6 +608,9 @@ function pintarMapa() {
       line: { color: ENT_COL[x.i], width: 3, dash: "dash" }, marker: { size: 2.5, color: ENT_COL[x.i] }, hovertext: serie.map(hov), hoverinfo: "text", showlegend: false }); });
   if (ents.length) T.push({ type: "scatter3d", mode: st.etiq === "no" ? "markers" : "markers+text", x: ents.map((x) => x.xyz[0]), y: ents.map((x) => x.xyz[1]), z: ents.map((x) => x.xyz[2]), text: ents.map((x) => `${ENT_LET[x.i]} · ${x.corto}`), textposition: "top center", textfont: { family: "IBM Plex Sans", size: 12, color: INK },
     hovertext: ents.map((x) => `<b>${ENT_LET[x.i]} · ${esc(x.label)}</b><br>${esc(x.sub)}<br>${esc(eNom(argmax(x.probs)))}`), hoverinfo: "text", marker: { size: 12, color: ents.map((x) => ENT_COL[x.i]), symbol: ents.map((x) => x.t === "liga" ? "square" : "diamond"), line: { color: SURF, width: 2 } }, showlegend: false });
+  if (st.bus.mapa && BUSQ.length) { const b = BUSQ.slice(0, 10).map((o) => o.j);
+    T.push({ type: "scatter3d", mode: "markers+text", x: b.map((x) => x.x), y: b.map((x) => x.y), z: b.map((x) => x.z), text: b.map((x, i) => `${i + 1}. ${x.nombre}`), textposition: "bottom center", textfont: { family: "IBM Plex Sans", size: 10, color: "#a15c07" },
+      hovertext: b.map((x, i) => `${i + 1}. ${esc(x.nombre)} · ${esc(x.nombre_club)} (${LC[x.liga]} ${tC(x.temporada)})`), hoverinfo: "text", marker: { size: 7, color: "#a15c07", symbol: "circle-open", line: { width: 3, color: "#a15c07" } }, showlegend: false }); }
   if (e) {
     const r = e.roster;
     T.push({ type: "scatter3d", mode: "markers", x: r.map((x) => x.x), y: r.map((x) => x.y), z: r.map((x) => x.z), hovertext: r.map((x) => `${esc(x.nombre)} (plantilla de ${esc(e.d.nombre_club)})<br>${esc(eNom(x.e))} · ${Math.round(x.min)}'`), hoverinfo: "text", marker: { size: r.map((x) => 3 + Math.sqrt(x.min) / 8), color: r.map((x) => COL[x.e]), symbol: "circle-open", line: { width: 2 } }, showlegend: false });
@@ -579,7 +639,7 @@ function encaje() {
   const roster = (ROSTER.get(dc.clave) || []).filter((x) => x.i !== j.i), w = roster.map((x) => x.min), W = w.reduce((a, b) => a + b, 0) || 1;
   const cen = [0, 1, 2].map((k) => roster.reduce((s, x, i) => s + w[i] * XYZ(x)[k], 0) / W);
   const disp = roster.reduce((s, x, i) => s + w[i] * dist(XYZ(x), cen), 0) / W;
-  const rep = new Array(8).fill(0); roster.forEach((x, i) => rep[x.e] += w[i] / W);
+  const rep = new Array(KE).fill(0); roster.forEach((x, i) => rep[x.e] += w[i] / W);
   const Zj = XYZ(j), Zd = XYZ(dc), Zcj = XYZ(cj);
   const cerca = roster.map((x) => ({ x, d: dist(XYZ(x), Zj) })).sort((a, b) => a.d - b.d).slice(0, 3);
   const sust = st.sust ? roster.find((x) => String(x.i) === st.sust) : null;
@@ -606,7 +666,7 @@ function pintarFicha() {
       <dt>Distancia jugador → destino</dt><dd>${fmt(e.djc)} · p${fmt(e.pjc, 0)}</dd>
       <dt>Distancia su club → destino</dt><dd>${fmt(e.dcc)} · p${fmt(e.pcc, 0)}</dd>
       <dt>Afinidad con el estilo del destino</dt><dd>${fmt(e.afin)}</dd>
-      <dt>Similitud de las 8 salidas</dt><dd>${fmt(e.simil)}</dd>
+      <dt>Similitud de las ${KE} salidas</dt><dd>${fmt(e.simil)}</dd>
     </dl>
     <div class="meter" aria-hidden="true"><i style="width:${Math.round(e.simil * 100)}%"></i></div>
     <div class="card"><span class="label">Plantilla del destino</span>
@@ -658,7 +718,7 @@ function pintarLigas() {
   const W = 520, bh = 20, H = TEMPS.length * (bh + 10) + 6, L = 60; let g = "";
   TEMPS.forEach((tp, n) => { const cs = CL.filter((c) => c.temporada === tp && st.ligas.includes(c.liga)); if (!cs.length) return; const y = 4 + n * (bh + 10); let x = L;
     g += `<text x="${L - 8}" y="${y + 14}" text-anchor="end" font-size="11" font-family="IBM Plex Mono" fill="${INK}">${tp}${META.temporadas_provisionales.includes(tp) ? "*" : ""}</text>`;
-    for (let k = 0; k < 8; k++) { const v = cs.filter((c) => c.e === k).length / cs.length, w = v * (W - L - 4); if (w < 0.5) continue; g += `<rect x="${x}" y="${y}" width="${Math.max(0, w - 2)}" height="${bh}" rx="3" fill="${COL[k]}" data-tip="${tp} · ${esc(eNom(k))}: ${pct(v)}"/>`; x += w; } });
+    for (let k = 0; k < KE; k++) { const v = cs.filter((c) => c.e === k).length / cs.length, w = v * (W - L - 4); if (w < 0.5) continue; g += `<rect x="${x}" y="${y}" width="${Math.max(0, w - 2)}" height="${bh}" rx="3" fill="${COL[k]}" data-tip="${tp} · ${esc(eNom(k))}: ${pct(v)}"/>`; x += w; } });
   $("#gTemp").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Estilo por temporada">${g}</svg><p class="note">* 2026-27 provisional (pocas jornadas, sólo algoritmo A).</p>`;
 }
 
@@ -696,24 +756,127 @@ function pintarHallazgos() {
       <div class="tablebox"><table><thead><tr><th>Continuidad</th><th style="text-align:right">Media</th><th style="text-align:right">Desplazamiento</th><th style="text-align:right">Mismo estilo</th></tr></thead><tbody>${x.por_cuartil.map((r) => `<tr><td>${r.cuartil}</td><td class="n">${pct(r.continuidad)}</td><td class="n">${fmt(r.desplazamiento)}</td><td class="n">${pct(r.mismo_estilo)}</td></tr>`).join("")}</tbody></table></div></div>`); }
   if (A.barrido_k) { const x = A.barrido_k, W = 360, H = 150, L = 34, ks = x.k, Xk = (k) => L + (k - ks[0]) / (ks[ks.length - 1] - ks[0]) * (W - L - 10), mm = (a) => [Math.min(...a), Math.max(...a)];
     const linea = (arr, color, dash) => { const [lo, hi] = mm(arr); return `<polyline fill="none" stroke="${color}" stroke-width="2" ${dash ? 'stroke-dasharray="4 3"' : ""} points="${arr.map((v, i) => `${Xk(ks[i])},${10 + (1 - (v - lo) / Math.max(1e-9, hi - lo)) * (H - 40)}`).join(" ")}"/>`; };
-    let g = `<line x1="${Xk(8)}" x2="${Xk(8)}" y1="6" y2="${H - 26}" stroke="#d6bf9f" stroke-dasharray="3 3"/>` + ks.map((k) => `<text x="${Xk(k)}" y="${H - 10}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono" fill="${MUTED}">${k}</text>`).join("") + linea(x.estabilidad_kmedias, "#6b4f38") + linea(x.bic_rasgos.map((v) => -v), "#2a78d6", true);
-    out.push(`<div class="fact"><h3>¿Cuántos estilos hay?</h3><p>Barrido de K = 2 a 14 sobre los 13 rasgos sin nivel: BIC (azul, invertido: arriba = mejor) y estabilidad por submuestreo de k-medias (marrón). Óptimo BIC: ${x.k_optimo_bic_rasgos}; ICL: ${x.k_optimo_icl_rasgos}; estabilidad con K = 8: ${fmt(x.estabilidad_kmedias[ks.indexOf(8)], 2)}.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Barrido de número de estilos">${g}</svg></div>`); }
+    let g = `<line x1="${Xk(KE)}" x2="${Xk(KE)}" y1="6" y2="${H - 26}" stroke="#d6bf9f" stroke-dasharray="3 3"/>` + ks.map((k) => `<text x="${Xk(k)}" y="${H - 10}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono" fill="${MUTED}">${k}</text>`).join("") + linea(x.estabilidad_kmedias, "#6b4f38") + linea(x.bic_rasgos.map((v) => -v), "#2a78d6", true);
+    out.push(`<div class="fact"><h3>¿Cuántos estilos hay?</h3><p>Barrido de K = 2 a 14 sobre los 13 rasgos sin nivel: BIC (azul, invertido: arriba = mejor) y estabilidad por submuestreo de k-medias (marrón). Óptimo BIC: ${x.k_optimo_bic_rasgos}; ICL: ${x.k_optimo_icl_rasgos}; estabilidad con K = 6: ${fmt(x.estabilidad_kmedias[ks.indexOf(6)], 2)}; con K = 8: ${fmt(x.estabilidad_kmedias[ks.indexOf(8)], 2)}.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Barrido de número de estilos">${g}</svg></div>`); }
   if (A.ligas) { const x = A.ligas, D = x.distancias, cerca = (l) => Object.entries(D[l] || {}).filter(([m]) => m !== l).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([m, d]) => `${LIGAS[m]} (${fmt(d)})`).join(", ");
     out.push(`<div class="fact"><h3>Ligas: cuánto se parecen</h3><p>Estilo × liga: χ² = ${fmt(x.chi2_liga, 0)}, V de Cramér = ${fmt(x.v_cramer_liga, 2)}, ${pv(x.p_liga)}. Estilo × temporada: V = ${fmt(x.v_cramer_temporada, 2)}${x.p_temporada < 0.05 ? ` (${pv(x.p_temporada)})` : ` (sin tendencia significativa, ${pv(x.p_temporada)})`}.</p><p>Más parecidas en estilo a la EuroLeague: ${cerca("euroleague")}. A la Liga Endesa: ${cerca("acb")}.</p></div>`); }
   $("#facts").innerHTML = out.join("");
 }
 function pintarModelo() {
-  const v = META.evaluacion, i = META.evaluacion_idec, o = META.evaluacion_v1 || {};
-  const filas = [["Estilos (neuronas de salida)", 8, 8, 12, null, 0], ["Nivel explicado por el estilo (η²)", v.eta2_nivel, i.eta2_nivel, o.eta2_nivel, "min", 3], ["Estilo ligado a la liga (NMI)", v.nmi_estilo_liga, i.nmi_estilo_liga, o.nmi_estilo_liga, "min", 3],
-    ["Seguridad media de la asignación", v.salida_max_media, i.salida_max_media, o.salida_max_media, "max", 2], ["Estabilidad de los estilos entre semillas (ARI)", v.ari_semillas_medio, i.ari_semillas_medio, o.ari_semillas_medio, "max", 2],
-    ["Estabilidad del mapa entre semillas", v.estabilidad_mapa, i.estabilidad_mapa, o.estabilidad_mapa, "max", 3], ["Reproducibilidad temporal (ARI)", v.ari_temporal_reserva, i.ari_temporal_reserva, o.ari_temporal_reserva, "max", 2],
-    ["Robustez al reparto de minutos", v.robustez_reparto_minutos, i.robustez_reparto_minutos, o.robustez_reparto_minutos, "max", 2], ["Fidelidad del mapa (trustworthiness)", v.trustworthiness_k10, i.trustworthiness_k10, o.trustworthiness_k10, "max", 3],
-    ["Silueta en los 13 rasgos", v.silueta_rasgos, i.silueta_rasgos, o.silueta_rasgos, "max", 3], ["Replicabilidad de perfiles (r)", v.replicabilidad?.correlacion_media, i.replicabilidad?.correlacion_media, o.replicabilidad?.correlacion_media, "max", 2],
-    ["Persistencia del estilo al año siguiente", v.persistencia?.mismo_estilo, i.persistencia?.mismo_estilo, o.persistencia?.mismo_estilo, null, 2]];
-  $("#tModelo").innerHTML = `<thead><tr><th>Métrica (997 clubes)</th><th style="text-align:right">VaDE v2</th><th style="text-align:right">IDEC v2</th><th style="text-align:right">VaDE v1</th></tr></thead><tbody>` +
-    filas.map(([n, a, b, c, best, d]) => { const w = best && a != null && b != null ? ((best === "max" ? a >= b : a <= b) ? 0 : 1) : -1; return `<tr><td>${n}</td><td class="n${w === 0 ? " win" : ""}">${fmt(a, d)}</td><td class="n${w === 1 ? " win" : ""}">${fmt(b, d)}</td><td class="n muted">${fmt(c, d)}</td></tr>`; }).join("") + `</tbody>`;
+  const M8 = META.modelos.k8, M6 = META.modelos.k6 || {}, v = M8.evaluacion, u = M6.evaluacion || {}, i = META.evaluacion_idec, o = META.evaluacion_v1 || {};
+  const g = (x, f) => f.split(".").reduce((a, k) => a == null ? null : a[k], x);
+  const filas = [["Estilos (neuronas de salida)", "n", null, 0], ["Nivel explicado por el estilo (η²)", "eta2_nivel", "min", 3], ["Estilo ligado a la liga (NMI)", "nmi_estilo_liga", "min", 3],
+    ["Seguridad media de la asignación", "salida_max_media", "max", 2], ["Estilo más pequeño (clubes)", "tamano_min", "max", 0], ["Equilibrio del reparto (entropía)", "entropia_reparto", "max", 3],
+    ["Estabilidad de los estilos entre semillas (ARI)", "ari_semillas_medio", "max", 2], ["Centralidad del modelo final (ARI)", "ari_final_semillas_medio", "max", 2],
+    ["Estabilidad del mapa entre semillas", "estabilidad_mapa", "max", 3], ["Reproducibilidad temporal (ARI)", "ari_temporal_reserva", "max", 2],
+    ["Robustez al reparto de minutos", "robustez_reparto_minutos", "max", 2], ["Fidelidad del mapa (trustworthiness)", "trustworthiness_k10", "max", 3],
+    ["Silueta en los 13 rasgos", "silueta_rasgos", "max", 3], ["Separación mínima entre estilos (Mahalanobis)", "diferenciacion.mahalanobis_min", "max", 2],
+    ["Replicabilidad de perfiles (r)", "replicabilidad.correlacion_media", "max", 2], ["Persistencia del estilo al año siguiente", "persistencia.mismo_estilo", null, 2]];
+  const val = (x, f, n) => f === "n" ? n : g(x, f);
+  $("#tModelo").innerHTML = `<thead><tr><th>Métrica (997 clubes)</th><th style="text-align:right">VaDE 8</th><th style="text-align:right">VaDE 6</th><th style="text-align:right">IDEC ${KE}</th><th style="text-align:right">VaDE v1 (12)</th></tr></thead><tbody>` +
+    filas.map(([nm, f, best, d]) => { const a = val(v, f, 8), b = val(u, f, 6), c = val(i, f, KE), e = val(o, f, 12); const w = best && a != null && b != null ? ((best === "max" ? a >= b : a <= b) ? 0 : 1) : -1;
+      return `<tr><td>${nm}</td><td class="n${w === 0 ? " win" : ""}">${fmt(a, d)}</td><td class="n${w === 1 ? " win" : ""}">${fmt(b, d)}</td><td class="n muted">${fmt(c, d)}</td><td class="n muted">${fmt(e, d)}</td></tr>`; }).join("") + `</tbody>`;
+  const cm = META.comparacion_modelos;
+  if (!cm || !cm.tabla || !META.modelos.k6) { $("#corresp").innerHTML = ""; return; }
+  const n8 = META.modelos.k8.estilos, n6 = META.modelos.k6.estilos, mx = Math.max(...cm.tabla.flat());
+  $("#corresp").innerHTML = `<span class="label">Correspondencia entre los dos modelos (clubes)</span><div class="tablebox"><table class="heat"><thead><tr><th>8 estilos ↓ · 6 estilos →</th>${n6.map((s) => `<th style="text-align:center;white-space:normal;min-width:64px">${esc(s.nombre)}</th>`).join("")}</tr></thead><tbody>` +
+    cm.tabla.map((r, k) => `<tr><td>${esc(n8[k].nombre)}</td>${r.map((x, j) => { const a = x / mx; return `<td class="h" style="background:rgba(107,79,56,${(a * 0.85).toFixed(2)});color:${a > 0.5 ? SURF : INK}" data-tip="${esc(n8[k].nombre)} → ${esc(n6[j].nombre)}: ${x} clubes">${x || "·"}</td>`; }).join("")}</tr>`).join("") +
+    `</tbody></table></div><p class="note">Acuerdo entre particiones: ARI ${fmt(cm.ari, 2)}, NMI ${fmt(cm.nmi, 2)}; el ${pct(cm.pureza)} de los clubes cae en el estilo de 6 al que va la mayoría de su estilo de 8.</p>`;
 }
-function pintarTodo() { pintarResumen(); pintarEnts(); pintarFicha(); pintarMapa(); pintarComparacion(); pintarLigas(); pintarTrayectoria(); pintarEstilos(); pintarHallazgos(); pintarModelo(); }
+
+// ---------------------------------------------------------------- buscar parecidos
+const parecido = (d, q) => 100 - (percentil(q, d) ?? 50);
+const d13 = (a, b) => { let s = 0; for (let k = 0; k < a.length; k++) s += (a[k] - b[k]) ** 2; return Math.sqrt(s); };
+function mismoClub(k) { for (const a of Object.values(META.clubes_con_nombre)) if (a.claves.includes(k)) return new Set(a.claves); return new Set([k]); }
+function xJugadores() { if (!XJ) XJ = JG.map(xJug); return XJ; }
+const refClub = () => BY.get(`${st.bus.club}:${st.bus.temp}`);
+function construirBuscador() {
+  const b = st.bus;
+  $("#bLiga").innerHTML = Object.entries(LIGAS).map(([k, v]) => `<option value="${k}">${v}</option>`).join(""); $("#bLiga").value = b.liga;
+  $("#bTemp").innerHTML = TEMPS.map((t) => `<option value="${t}">${t}</option>`).join(""); $("#bTemp").value = b.temp;
+  llenarBClub();
+  $("#bTemps").innerHTML = TEMPS.map((t) => `<button class="chip" data-t="${t}" aria-pressed="${b.temps.includes(t)}">${t}</button>`).join("");
+  $("#bLigas").innerHTML = Object.entries(LIGAS).map(([k, v]) => `<button class="chip" data-l="${k}" aria-pressed="${b.ligas.includes(k)}">${LC[k]}</button>`).join("");
+  $("#bPos").innerHTML = Object.entries(POS).map(([k, v]) => `<button class="chip" data-p="${k}" aria-pressed="${b.pos.includes(k)}">${v}</button>`).join("");
+  $("#bN").value = b.n; $("#bNv").textContent = b.n; $("#bMin").value = b.min; $("#bEdad").value = b.edad; $("#bNiv").value = b.niv; $("#bPeso").value = b.peso; $("#bPesov").textContent = fmt(b.peso, 2); $("#bMapa").checked = b.mapa;
+  $("#bModo").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.v === b.modo)); $("#bRefBox").hidden = b.modo !== "jugador";
+  $("#bAlc").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.v === b.alc)); $("#bN").disabled = b.alc !== "cerca";
+  llenarRef();
+  if (!enlazarBuscador.hecho) enlazarBuscador();
+}
+function llenarBClub() {
+  const b = st.bus, lista = CL.filter((c) => c.liga === b.liga && c.temporada === b.temp).sort((x, y) => x.nombre_club.localeCompare(y.nombre_club));
+  if (!lista.some((c) => c.clave_club === b.club)) { const al = META.clubes_con_nombre.baskonia, k = al && al.claves.find((c) => c.startsWith(b.liga + ":")); b.club = lista.some((c) => c.clave_club === k) ? k : (lista[0] && lista[0].clave_club); }
+  $("#bClubSel").innerHTML = lista.map((c) => `<option value="${esc(c.clave_club)}">${esc(c.nombre_club)}</option>`).join(""); $("#bClubSel").value = b.club;
+}
+function llenarRef() {
+  const c = refClub(), pl = c ? (ROSTER.get(c.clave) || []).slice().sort((a, b) => b.min - a.min) : [];
+  const fuera = st.bus.ref != null && !pl.some((x) => x.i === st.bus.ref);
+  if (st.bus.ref == null && pl.length) st.bus.ref = pl[0].i;
+  $("#bRef").innerHTML = (fuera ? [`<option value="${st.bus.ref}">★ ${esc(JG[st.bus.ref].nombre)} (${esc(JG[st.bus.ref].nombre_club)} ${LC[JG[st.bus.ref].liga]} ${tC(JG[st.bus.ref].temporada)})</option>`] : [])
+    .concat(pl.map((x) => `<option value="${x.i}">${esc(x.nombre)} · ${POS[x.pos3] || "s/d"} · ${Math.round(x.min)}'</option>`)).join("");
+  if (st.bus.ref != null) $("#bRef").value = st.bus.ref;
+}
+function enlazarBuscador() {
+  enlazarBuscador.hecho = true;
+  const b = () => st.bus, go = () => { guardar(); buscar(); pintarMapa(); };
+  $("#bLiga").onchange = (e) => { b().liga = e.target.value; b().ref = null; llenarBClub(); llenarRef(); go(); };
+  $("#bTemp").onchange = (e) => { b().temp = e.target.value; b().ref = null; if (!b().temps.includes(e.target.value)) b().temps = [e.target.value]; construirBuscador(); go(); };
+  $("#bClubSel").onchange = (e) => { b().club = e.target.value; b().ref = null; llenarRef(); go(); };
+  const tog = (id, key, data, conv = (x) => x) => $(id).onclick = (e) => { const t = e.target.closest(`[data-${data}]`); if (!t) return; const v = conv(t.dataset[data]), a = b()[key], i = a.indexOf(v); i >= 0 ? a.splice(i, 1) : a.push(v); t.setAttribute("aria-pressed", a.includes(v)); go(); };
+  tog("#bTemps", "temps", "t"); tog("#bLigas", "ligas", "l"); tog("#bPos", "pos", "p");
+  $("#bModo").onclick = (e) => { const t = e.target.closest("[data-v]"); if (!t) return; b().modo = t.dataset.v; if (b().modo === "club") b().pos = ["E", "A", "I"]; construirBuscador(); go(); };
+  $("#bAlc").onclick = (e) => { const t = e.target.closest("[data-v]"); if (!t) return; b().alc = t.dataset.v; construirBuscador(); go(); };
+  $("#bRef").onchange = (e) => { b().ref = +e.target.value; const j = JG[b().ref]; if (j && j.pos3) b().pos = [j.pos3]; construirBuscador(); go(); };
+  $("#bRefQ").oninput = () => { const q = norm($("#bRefQ").value).trim().split(/\s+/).filter(Boolean), box = $("#bRefS"); if (!q.length) { box.hidden = true; return; }
+    const res = JG.filter((x) => { const n = norm(x.nombre); return q.every((p) => n.includes(p)); }).sort((a, c) => c.temporada.localeCompare(a.temporada) || c.min - a.min).slice(0, 20);
+    box.innerHTML = res.map((x) => `<button data-i="${x.i}"><span>${esc(x.nombre)}</span><small>${LC[x.liga]} ${tC(x.temporada)} · ${esc(x.nombre_club)}</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados.</span>`; box.hidden = false; };
+  $("#bRefS").onclick = (e) => { const t = e.target.closest("[data-i]"); if (!t) return; b().ref = +t.dataset.i; const j = JG[b().ref]; if (j.pos3) b().pos = [j.pos3]; $("#bRefS").hidden = true; $("#bRefQ").value = ""; construirBuscador(); go(); };
+  $("#bN").oninput = (e) => { b().n = +e.target.value; $("#bNv").textContent = b().n; go(); };
+  $("#bMin").onchange = (e) => { b().min = Math.max(0, +e.target.value || 0); go(); };
+  $("#bEdad").onchange = (e) => { b().edad = e.target.value; go(); };
+  $("#bNiv").onchange = (e) => { b().niv = e.target.value; go(); };
+  $("#bPeso").oninput = (e) => { b().peso = +e.target.value; $("#bPesov").textContent = fmt(b().peso, 2); go(); };
+  $("#bMapa").onchange = (e) => { b().mapa = e.target.checked; go(); };
+  $("#bClubes").onclick = (e) => { const t = e.target.closest("[data-add]"); if (!t) return; const c = BY.get(t.dataset.add); addEnt({ t: "club", k: c.clave_club, temp: c.temporada }); };
+  $("#bRes").onclick = (e) => { const t = e.target.closest("[data-sim]"); if (!t) return; const j = JG[+t.dataset.sim];
+    st.ents = st.ents.filter((x) => !(x.t === "club" && x.k === st.bus.club && x.temp === st.bus.temp)); st.ents.unshift({ t: "club", k: st.bus.club, temp: st.bus.temp }); st.ents = st.ents.slice(0, 4);
+    st.jug = j.i; st.minutos = null; st.sust = ""; $("#bJug").value = j.nombre; cambio(true);
+    const box = document.querySelector(".side-r"); if (box) box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }); };
+}
+function buscar() {
+  const b = st.bus, c = refClub();
+  if (!c) { $("#bClubes").innerHTML = `<p class="note">Elige un club de referencia.</p>`; $("#bRes").innerHTML = ""; BUSQ = []; return; }
+  const propio = mismoClub(c.clave_club);
+  const cs = CL.filter((x) => b.temps.includes(x.temporada) && b.ligas.includes(x.liga) && !propio.has(x.clave_club)).map((x) => ({ c: x, d: d13(x.X, c.X) })).sort((a, z) => a.d - z.d);
+  cs.forEach((o) => o.par = parecido(o.d, META.similitud.club_club));
+  $("#bClubT").textContent = `Clubes que juegan como ${c.nombre_club} (${LC[c.liga]} ${c.temporada})`;
+  $("#bClubes").innerHTML = cs.length ? `<table><thead><tr><th>Club</th><th>Competición</th><th>Estilo</th><th style="text-align:right">Nivel</th><th style="text-align:right">Parecido</th><th></th></tr></thead><tbody>` +
+    cs.slice(0, 12).map((o) => `<tr><td><b>${esc(o.c.nombre_club)}</b></td><td class="note">${LIGAS[o.c.liga]} ${o.c.temporada}</td><td>${chipE(o.c.e)}</td><td class="n">${sg(o.c.nivel)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:60px"><i style="width:${o.par}%"></i></div>${fmt(o.par, 1)}</div></td><td><button class="btn ghost sm" data-add="${esc(o.c.clave)}">+ Comparar</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin clubes con estos filtros.</p>`;
+  const X = xJugadores(), cerca = b.alc === "cerca" ? new Set(cs.slice(0, b.n).map((o) => o.c.clave)) : null, parC = new Map(cs.map((o) => [o.c.clave, o.par]));
+  const rj = b.modo === "jugador" && b.ref != null ? JG[b.ref] : null;
+  if (b.modo === "jugador" && !rj) { $("#bRes").innerHTML = `<p class="note">Elige un jugador de referencia.</p>`; BUSQ = []; return; }
+  const refX = rj ? X[rj.i] : c.X, q = rj ? META.similitud.jug_jug : META.similitud.jug_club;
+  const edad = b.edad === "" ? null : +b.edad, niv = b.niv === "" ? null : +b.niv;
+  const vistos = new Map();
+  JG.forEach((j) => {
+    if (!b.temps.includes(j.temporada) || !b.ligas.includes(j.liga) || !b.pos.includes(j.pos3) || j.min < b.min) return;
+    if (edad != null && !(j.edad != null && j.edad <= edad)) return;
+    if (niv != null && !(j.nivel >= niv)) return;
+    const cj = BY.get(j.clave); if (!cj || propio.has(cj.clave_club)) return;
+    if (rj && (j.i === rj.i || j.persona_id === rj.persona_id)) return;
+    if (cerca && !cerca.has(j.clave)) return;
+    const pj = parecido(d13(X[j.i], refX), q), pc = parC.has(j.clave) ? parC.get(j.clave) : parecido(d13(cj.X, c.X), META.similitud.club_club), sc = b.peso * pj + (1 - b.peso) * pc;
+    const o = vistos.get(j.persona_id); if (!o || o.sc < sc) vistos.set(j.persona_id, { j, pj, pc, sc });
+  });
+  BUSQ = [...vistos.values()].sort((a, z) => z.sc - a.sc).slice(0, 25);
+  $("#bJugT").textContent = rj ? `Jugadores parecidos a ${rj.nombre} (${POS[rj.pos3] || "s/d"}, ${rj.nombre_club})${cerca ? ` en los ${b.n} clubes más parecidos` : ""}` : `Jugadores que encajan con el estilo de ${c.nombre_club}${cerca ? ` (en los ${b.n} clubes más parecidos)` : ""}`;
+  $("#bRes").innerHTML = BUSQ.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Club</th><th>Pos.</th><th style="text-align:right">Edad</th><th style="text-align:right">Min</th><th style="text-align:right">Nivel</th><th>Estilo</th><th style="text-align:right">Parecido jugador</th><th style="text-align:right">Parecido club</th><th style="text-align:right">Puntuación</th><th></th></tr></thead><tbody>` +
+    (rj ? `<tr class="ref"><td>ref.</td><td><b>${esc(rj.nombre)}</b></td><td class="note">${esc(rj.nombre_club)} · ${LC[rj.liga]} ${tC(rj.temporada)}</td><td>${rj.pos3 || "–"}</td><td class="n">${fmt(rj.edad, 0)}</td><td class="n">${Math.round(rj.min)}</td><td class="n">${sg(rj.nivel)}</td><td>${chipE(rj.e)}</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td></td></tr>` : "") +
+    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n">${sg(o.j.nivel)}</td><td>${chipE(o.j.e)}</td><td class="n">${fmt(o.pj, 1)}</td><td class="n">${fmt(o.pc, 1)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:56px"><i style="width:${o.sc}%"></i></div>${fmt(o.sc, 1)}</div></td><td><button class="btn ghost sm" data-sim="${o.j.i}">Simular</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
+}
+
+function pintarTodo() { pintarResumen(); pintarEnts(); pintarFicha(); buscar(); pintarMapa(); pintarComparacion(); pintarLigas(); pintarTrayectoria(); pintarEstilos(); pintarHallazgos(); pintarModelo(); }
 
 cargar().catch((err) => { $("#mapa").innerHTML = `<div class="loading">No se pudieron cargar los datos del mapa (${esc(err.message)}). Recarga la página.</div>`; });
 if (window.claude && window.claude.use) window.claude.use("downloads").then((d) => { if (d) { DL = d; $("#btnPdf").hidden = false; } }).catch(() => {});

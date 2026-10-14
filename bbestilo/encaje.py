@@ -18,6 +18,7 @@ de su liga y temporada), y para cada red:
 from __future__ import annotations
 
 import unicodedata
+from pathlib import Path
 from functools import lru_cache
 
 import numpy as np
@@ -35,9 +36,14 @@ def conjunto() -> Conjunto:
     return construir()
 
 
-@lru_cache(maxsize=4)
-def red_guardada(tipo: str):
-    return cargar(C.DIR_SALIDA / tipo / "modelo.pt")[0]
+def red_guardada(tipo: str, carpeta=None):
+    """Red guardada en <carpeta>/<tipo>/modelo.pt (por defecto, la carpeta de resultados activa)."""
+    return _red_guardada(tipo, str(carpeta or C.DIR_SALIDA))
+
+
+@lru_cache(maxsize=8)
+def _red_guardada(tipo: str, carpeta: str):
+    return cargar(Path(carpeta) / tipo / "modelo.pt")[0]
 
 
 def _norm(s: str) -> str:

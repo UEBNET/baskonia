@@ -77,6 +77,7 @@ caption, .tcap { font-family: 'IBM Plex Sans', sans-serif; font-size: 8.4pt; tex
 th { text-align: left; border-bottom: 1pt solid #3a2a1c; padding: 3pt 5pt; font-weight: 600; background: #f9f3eb; }
 td { border-bottom: .5pt solid #e3d0b8; padding: 2.6pt 5pt; vertical-align: top; }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.corr th { white-space: normal; font-size: 7.4pt; }
 figure { margin: 8pt 0 10pt; break-inside: avoid; text-align: center; }
 figcaption { font-family: 'IBM Plex Sans', sans-serif; font-size: 8.2pt; text-align: left; color: #3a2a1c; margin-top: 3pt; }
 .eq { font-family: 'IBM Plex Mono', monospace; font-size: 8.6pt; background: #fcf9f5; border: .5pt solid #e3d0b8; padding: 5pt 8pt; margin: 4pt 0 8pt; white-space: pre-wrap; break-inside: avoid; }
@@ -97,6 +98,13 @@ def _fuentes_css(fuentes: Path | None, d: Path) -> str:
         shutil.copy(f, d / "fuentes" / f.name)
     import re
     return re.sub(r"url\(https://fonts\.gstatic\.com/[^)]*/([^/)]+)\)", r"url(fuentes/\1)", css)
+
+
+def _campo(x: dict, ruta: str):
+    """x["a"]["b"] para ruta "a.b"."""
+    for k in ruta.split("."):
+        x = x[k]
+    return x
 
 
 def construir(fuentes: Path | None = None, chrome: str | None = None) -> Path:
@@ -209,6 +217,53 @@ def construir(fuentes: Path | None = None, chrome: str | None = None) -> Path:
                    for x, m in (("distancia", ed), ("afinidad", ea), ("distancia (Δ cuota de minutos)", ec))], {1, 3, 4})
     t_ter = tabla(["Tercil de distancia", "n", "Distancia media", "Δ nivel medio", "Δ cuota de minutos"],
                   [[r["tercil"], r["n"], n(r["distancia"]), n(r["d_nivel"], 3, True), n(100 * r["d_cuota"], 1, True) + " pp"] for r in enc["por_tercil"]], {1, 2, 3, 4})
+    # ---- modelo de 6 estilos (si existe)
+    R6 = R / "k6"
+    seis = ""
+    if (R6 / "evaluacion.json").exists():
+        V6 = json.loads((R6 / "evaluacion.json").read_text(encoding="utf-8"))["vade"]
+        A6 = json.loads((R6 / "analisis.json").read_text(encoding="utf-8")) if (R6 / "analisis.json").exists() else {}
+        est6 = pd.read_csv(R6 / "vade" / "estilos.csv")
+        p6 = C.RAIZ / "config" / "estilos_k6.json"
+        nom6 = {k: v for k, v in json.loads(p6.read_text(encoding="utf-8")).items() if not k.startswith("_")} if p6.exists() else {}
+        from .exportar import comparar_modelos
+        from .encaje import conjunto
+        cmp = comparar_modelos(conjunto(), {"k8": R, "k6": R6})
+        fil6 = [("Seguridad media de la asignación", "salida_max_media", 2), ("Estilo más pequeño (clubes)", "tamano_min", 0),
+                ("Nivel explicado por el estilo (η²)", "eta2_nivel", 3), ("Estilo ligado a la liga (NMI)", "nmi_estilo_liga", 3),
+                ("Estabilidad de los estilos entre semillas (ARI)", "ari_semillas_medio", 2),
+                ("Centralidad del modelo final (ARI)", "ari_final_semillas_medio", 2), ("Estabilidad del mapa (r)", "estabilidad_mapa", 3),
+                ("Reproducibilidad temporal (ARI)", "ari_temporal_reserva", 2), ("Robustez al reparto de minutos", "robustez_reparto_minutos", 2),
+                ("Trustworthiness (k = 10)", "trustworthiness_k10", 3), ("Silueta en los 13 rasgos", "silueta_rasgos", 3),
+                ("Mahalanobis mínima entre estilos", "diferenciacion.mahalanobis_min", 2),
+                ("Replicabilidad de perfiles (r)", "replicabilidad.correlacion_media", 2),
+                ("Persistencia del estilo", "persistencia.mismo_estilo", 2)]
+        g_ = _campo
+        t_6 = tabla(["Métrica (997 clubes)", "VaDE 8", "VaDE 6"],
+                    [[nm, n(g_(V, f), d), n(g_(V6, f), d)] for nm, f, d in fil6]
+                    + [["Parejas de estilos distintas (Holm)", f'{V["diferenciacion"]["pares_distintos_holm_05"]}/{V["diferenciacion"]["pares"]}',
+                        f'{V6["diferenciacion"]["pares_distintos_holm_05"]}/{V6["diferenciacion"]["pares"]}']], {1, 2})
+        n6 = [nom6.get(e_, {}).get("nombre", e_) for e_ in est6["estilo"]]
+        t_corr = tabla(["8 estilos ↓ · 6 estilos →"] + [e(x) for x in n6],
+                       [[e(nombre(est.iloc[k]["estilo"]))] + [str(v) if v else "·" for v in fila] for k, fila in enumerate(cmp["tabla"])],
+                       set(range(1, len(n6) + 1)), "corr")
+        t_est6 = tabla(["Estilo (6)", "Rasgos que lo definen", "Clubes", "Nivel"],
+                       [[f'{sw(k)}<b>{e(n6[k])}</b>', e(nom6.get(r["estilo"], {}).get("resumen", r["descriptor"])), int(r["clubes"]), n(r["nivel_medio"], 2, True)]
+                        for k, r in est6.iterrows()], {2, 3})
+        ex6 = A6.get("exito", {})
+        bk6 = [r for r in A6.get("baskonia", {}).get("temporadas", []) if r["liga"] == "euroleague" and not r["provisional"]]
+        mejor = [nm for nm, f, d in fil6 if f in ("salida_max_media", "ari_semillas_medio", "ari_final_semillas_medio", "estabilidad_mapa", "ari_temporal_reserva", "robustez_reparto_minutos", "silueta_rasgos") and g_(V6, f) > g_(V, f)]
+        seis = f"""
+<h3>4.9 Seis frente a ocho estilos</h3>
+<p>Como los criterios de información preferían seis estilos, se entrenó un segundo VaDE con seis neuronas de salida, mismos datos neutralizados y mismo procedimiento (cinco semillas, consenso y ajuste fino). La Tabla 10 compara los dos modelos. El de seis {"mejora en " + ", ".join(m.lower() for m in mejor) if mejor else "no mejora ninguna métrica de estabilidad"}; ambos mantienen el nivel fuera del estilo (η² {n(V6["eta2_nivel"], 3)} y {n(V["eta2_nivel"], 3)}).</p>
+<p class="tcap"><b>Tabla 10.</b> VaDE de 8 y de 6 estilos (mismos datos y procedimiento).</p>
+{t_6}
+<p>Las dos particiones son coherentes (ARI = {n(cmp["ari"], 2)}, NMI = {n(cmp["nmi"], 2)}): el {pc(cmp["pureza"])} de los clubes cae en el estilo de seis al que va la mayoría de su estilo de ocho (Tabla 11). La Tabla 12 describe los seis estilos. {"A igual nivel, el estilo de seis explica un η² parcial del " + pc(ex6.get("eta2_parcial_estilo"), 0) + " del net rating (" + p_txt(ex6.get("p_estilo_dado_nivel")) + ")." if ex6 else ""} {"Baskonia, en EuroLeague, queda en «" + e(nom6.get(bk6[-1]["estilo"], {}).get("nombre", bk6[-1]["estilo"])) + "» en " + bk6[-1]["temporada"] + "." if bk6 else ""}</p>
+<p class="tcap"><b>Tabla 11.</b> Correspondencia entre los estilos de 8 (filas) y de 6 (columnas): número de clubes de 2020-21 a 2025-26.</p>
+{t_corr}
+<p class="tcap"><b>Tabla 12.</b> Los seis estilos del modelo alternativo.</p>
+{t_est6}
+"""
     t_con = tabla(["Cuartil de continuidad", "n", "Continuidad media", "Desplazamiento en el mapa", "Conserva el estilo"],
                   [[r["cuartil"], r["n"], pc(r["continuidad"]), n(r["desplazamiento"]), pc(r["mismo_estilo"])] for r in con["por_cuartil"]], {1, 2, 3, 4})
 
@@ -326,6 +381,7 @@ estrés = Σ_(i&lt;j) ( ‖z_i − z_j‖ − ‖x_i − x_j‖ )² / Σ_(i&lt;j
 <p class="tcap"><b>Tabla 9.</b> Continuidad de plantilla, desplazamiento en el mapa y conservación del estilo, por cuartiles.</p>
 {t_con}
 
+{seis}
 <h2>5. Discusión</h2>
 <p><b>Lo esperado y lo obtenido.</b> Se esperaba que neutralizar el nivel deshiciera los estilos «de liga» de la v1 sin destruir la estructura del estilo, y así ha sido: la asociación estilo-nivel cae a un η² de {pc(eta_v2, 1)}, la información compartida entre estilo y liga baja de {n(nmi_v1, 2)} a {n(nmi_v2, 2)}, y los perfiles siguen siendo diferenciables y replicables. Se esperaba que ocho estilos dieran asignaciones más seguras que doce: la seguridad media del VaDE sube de {n(V1.get("salida_max_media"), 2)} a {n(V["salida_max_media"], 2)}, y la estabilidad del mapa se mantiene ({n(V["estabilidad_mapa"], 2)}; v1, {n(V1.get("estabilidad_mapa"), 2)}). No se esperaba encontrar un número natural de estilos, y los criterios de información lo confirman: el estilo de juego de los clubes, medido con estos 13 rasgos, es un continuo, con una resolución estable de cuatro a seis estilos. La recomendación práctica es leer la etiqueta junto con la probabilidad de la neurona ganadora y, sobre todo, la distancia en el mapa.</p>
 <p><b>Lo inesperado.</b> Dos resultados contradicen intuiciones habituales. Primero, a igual nivel individual el estilo sí se asocia con el net rating del equipo, con estilos que ganan sistemáticamente más («{e(nombre(mejor_ex["estilo"]))}») y otros que ganan menos («{e(nombre(peor_ex["estilo"]))}»). Segundo, parecerse al estilo del nuevo club no se traduce en mejor rendimiento del jugador: el encaje por similitud no es un predictor de rendimiento.</p>

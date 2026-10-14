@@ -260,6 +260,11 @@ que explica un índice de calidad, para que el estilo diga cómo juega un equipo
 * **Red principal, VaDE**: autoencoder variacional con previa de mezcla de 8 gaussianas de covarianza completa en un
   latente de 3 neuronas (el mapa); capa de salida de 8 neuronas; consenso de 5 semillas y ajuste fino.
 * **Contraste, IDEC**: autoencoder con capa de agrupamiento de núcleo t de Student, mismos datos.
+* **Modelo alternativo de 6 estilos** (`data/modelos/estilos/k6/`, `--estilos 6 --salida …/k6`): más estable y
+  separado que el de 8 (seguridad 0,81, ARI entre semillas 0,51, reproducibilidad temporal 0,55); el Atlas permite
+  elegir entre los dos.
+* **Buscador de parecidos**: clubes que juegan como el tuyo y jugadores parecidos a uno dado o que encajan con el
+  estilo de tu club, opcionalmente sólo en los clubes que juegan como el tuyo (13 rasgos sin nivel).
 * La v1 (12 estilos, sin neutralizar) queda en `data/modelos/estilos/v1_12estilos/` (`--estilos 12 --sin-neutralizar`).
 
 ```bash
@@ -268,6 +273,7 @@ python -m bbestilo entrenar         # ≈ 45 min en 4 núcleos; escribe data/mod
 python -m bbestilo evaluar          # reevalúa las redes guardadas sin reentrenar
 python -m bbestilo analisis         # K óptimo, nivel, éxito, efecto del encaje, continuidad, ligas, Baskonia
 python -m bbestilo encaje --jugador "Nombre" --club baskonia --competicion euroleague --temporada 2025-26
+python -m bbestilo parecidos --club baskonia --jugador "Nombre" --alcance 30
 python -m bbestilo exportar         # datos del Atlas de Estilos (artifact/estilos/)
 python -m bbestilo articulo         # artículo científico en PDF (docs/articulo/estilos_de_juego_baskonia.pdf)
 ```

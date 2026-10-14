@@ -5,6 +5,7 @@
     python -m bbestilo encaje --jugador "Nombre" [--club baskonia] [--competicion euroleague]
                               [--temporada 2025-26] [--red idec|vade|ambas] [--minutos 600] [--sustituye "Nombre"]
     python -m bbestilo analisis                 # análisis complementarios (data/modelos/estilos/analisis.json)
+    python -m bbestilo parecidos [--jugador "Nombre"]   # clubes que juegan como el tuyo y jugadores parecidos
     python -m bbestilo exportar                 # JSON del mapa 3D (artifact/estilos/)
     python -m bbestilo articulo [--fuentes D]   # artículo científico en PDF (docs/articulo/)
 
@@ -118,17 +119,24 @@ def main(argv=None):
     f.add_argument("--red", default="ambas", choices=["idec", "vade", "ambas"])
     f.add_argument("--minutos", type=float, default=None, help="minutos que tendría en el club (por defecto, su cuota actual)")
     f.add_argument("--sustituye", default=None, help="jugador de la plantilla cuyos minutos hereda")
-    sub.add_parser("analisis", help="análisis complementarios (K, nivel, éxito, encaje, continuidad, ligas, Baskonia)")
+    pa = sub.add_parser("parecidos", help="clubes que juegan como el tuyo y jugadores parecidos (scouting)")
+    pa.add_argument("--club", default="baskonia")
+    pa.add_argument("--competicion", default="euroleague")
+    pa.add_argument("--temporada", default="2025-26")
+    pa.add_argument("--jugador", default=None, help="jugador de referencia (si no, jugadores que encajan con el club)")
+    pa.add_argument("--alcance", type=int, default=30, help="buscar sólo en los N clubes más parecidos (0 = todos)")
+    pa.add_argument("--temporadas", nargs="+", default=None, help="temporadas donde buscar (por defecto, la del club)")
+    an = sub.add_parser("analisis", help="análisis complementarios (K, nivel, éxito, encaje, continuidad, ligas, Baskonia)")
     ar = sub.add_parser("articulo", help="artículo científico en PDF (docs/articulo/)")
     ar.add_argument("--fuentes", default=None, help="carpeta con fuentes woff/ttf y fuentes.css (opcional)")
     x = sub.add_parser("exportar", help="datos del mapa 3D para el Artifact")
     x.add_argument("--salida", default=str(C.RAIZ / "artifact" / "estilos"))
-    for sp in (e, v):
+    for sp in (e, v, an):
         sp.add_argument("--estilos", type=int, default=C.N_ESTILOS, help="neuronas de salida (v2: 8; v1: 12)")
         sp.add_argument("--sin-neutralizar", action="store_true", help="no quitar el nivel (como la v1)")
         sp.add_argument("--salida", default=None, help="carpeta de resultados (por defecto data/modelos/estilos)")
     args = ap.parse_args(argv)
-    if args.orden in ("entrenar", "evaluar"):
+    if args.orden in ("entrenar", "evaluar", "analisis"):
         C.N_ESTILOS = args.estilos
         C.NEUTRALIZAR_NIVEL = not args.sin_neutralizar
         if args.salida:
@@ -143,6 +151,10 @@ def main(argv=None):
         redes = ["idec", "vade"] if args.red == "ambas" else [args.red]
         print(encaje.informe(args.jugador, args.club, args.competicion, args.temporada, redes,
                              args.minutos, args.sustituye, args.temporada_jugador))
+    elif args.orden == "parecidos":
+        from . import similares
+        print(similares.informe(args.club, args.competicion, args.temporada, args.jugador, args.alcance or None,
+                                args.temporadas))
     elif args.orden == "analisis":
         from . import analisis
         analisis.main()

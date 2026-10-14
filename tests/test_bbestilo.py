@@ -180,3 +180,15 @@ def test_enlace_de_clubes_por_nombre_y_plantilla():
     assert par["2023-24Umana Reyer Venezia"] == par["2024-25Reyer Venezia"]
     assert par["2023-24Germani Brescia"] == par["2024-25Germani Basket Brescia"]
     assert par["2023-24Umana Reyer Venezia"] != par["2023-24Germani Brescia"]
+
+
+def test_parecido_es_100_menos_el_percentil_de_la_distancia():
+    from bbestilo.similares import parecido
+    q = np.linspace(0, 10, 101)          # distancias de referencia: percentil p ↔ distancia p/10
+    assert np.allclose(parecido(np.array([0.0, 5.0, 10.0, 20.0]), q), [100, 50, 0, 0])
+
+
+def test_mismo_club_agrupa_las_competiciones_de_un_club():
+    from bbestilo.similares import mismo_club
+    assert mismo_club("euroleague:BAS") == {"euroleague:BAS", "acb:3"}
+    assert mismo_club("lba:c001") == {"lba:c001"}

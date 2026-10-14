@@ -362,6 +362,10 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   `estilos/{meta,clubes,jugadores}.json` y `articulo/estilos_de_juego_baskonia.pdf`, capacidad `downloads`).
   Hallazgos: los datos respaldan 4-6 estilos (BIC/ICL: 6); el encaje por similitud no predice el rendimiento del
   fichaje; la continuidad de plantilla sí predice conservar el estilo. v1 en `data/modelos/estilos/v1_12estilos/`.
+  Modelo de 6 estilos en `data/modelos/estilos/k6/` (nombres `config/estilos_k6.json`; mejor en estabilidad y
+  separación; el Atlas tiene selector, por defecto 8 = `modelo_defecto` en `exportar.py`). Buscador de parecidos
+  (`bbestilo/similares.py`, CLI `parecidos`, sección «Buscar parecidos» del Atlas): distancias en los 13 rasgos sin
+  nivel traducidas a percentil entre parejas reales.
 
 ## 10. Historial
 
@@ -386,4 +390,4 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Algoritmo B, combinación A+B y pestaña «Normalización de ligas» (Artifact versión 17); A reajustado tras corregir el
   año de nacimiento por persona. `artifact/mesa-multiliga.html` = página publicada con la nueva pestaña.
 - Rama `claude/bold-euler-hubmhk`: estilos de juego (`bbestilo`). v1: IDEC y VaDE con 12 estilos. v2: 8 estilos, nivel
-  neutralizado, VaDE con covarianza completa y consenso, análisis complementarios, Atlas rediseñado y artículo en PDF.
+  neutralizado, VaDE con covarianza completa y consenso, análisis complementarios, Atlas rediseñado y artículo en PDF. Después: modelo de 6 estilos y buscador de parecidos.
