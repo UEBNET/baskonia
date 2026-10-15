@@ -5,6 +5,13 @@
   "_temporadas": "Histórico: de temporada_inicial a temporada_por_defecto (python -m bbstats historico). El botón EJECUTAR y 'python -m bbstats ejecutar --temporada X' actualizan una sola temporada.",
   "guardar_descubrimientos": true,
   "_guardar_descubrimientos": "Si es true, lo que una fuente descubre sola (p.ej. ids semilla de la BBL) se guarda aquí, en ligas.<liga>.temporadas.<t>.",
+  "quintetos": {
+    "activo": true,
+    "contraccion_posesiones": 300,
+    "rapm_lambda": 1500,
+    "excluir_si_dif_min_s": 120
+  },
+  "_quintetos": "Capa de quintetos y conexiones (jugada a jugada): se ejecuta en cada liga con 'pbp' definido. contraccion_posesiones = k de los ratings *_aj; rapm_lambda = regularización del RAPM; excluir_si_dif_min_s = partidos cuyo jugada a jugada difiere del boxscore oficial más de esos segundos no entran en quintetos/parejas/on-off (sí en asistencias y tiros).",
   "rutas": {
     "bruto": "data/raw",
     "procesado": "data/processed"
@@ -15,7 +22,9 @@
     "retries": 3,
     "delay_por_dominio": {
       "www.basketball-reference.com": 3.5,
-      "www.easycredit-bbl.de": 0.5
+      "www.easycredit-bbl.de": 0.5,
+      "live.euroleague.net": 0.4,
+      "api-live.euroleague.net": 0.4
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -39,7 +48,8 @@
         }
       },
       "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
-      "basketnews_league_id": 25
+      "basketnews_league_id": 25,
+      "pbp": "euroleague_live"
     },
     "acb": {
       "adaptador": "acb",
@@ -201,7 +211,8 @@
           "season_code": "U2025"
         }
       },
-      "estado_verificacion": "verificado con datos reales"
+      "estado_verificacion": "verificado con datos reales",
+      "pbp": "euroleague_live"
     }
   }
 }

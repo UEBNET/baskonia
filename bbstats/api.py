@@ -44,6 +44,30 @@ def ejecutar_temporadas(temporadas: list[str] | None = None, desde: str | None =
                        progreso=progreso)
 
 
+def quintetos(temporadas: list[str] | None = None, ligas: list[str] | None = None, descargar: bool = True,
+              config: dict | str | None = None, progreso: Callable[[str], None] | None = None) -> dict:
+    """Sólo la capa de quintetos y conexiones (jugada a jugada) para las temporadas y ligas indicadas.
+    Las ejecuciones normales (ejecutar, historico, botón EJECUTAR) ya la incluyen siempre."""
+    from .config import active_leagues
+    from .http import HttpClient
+    from .lineups.run import run_league
+    cfg = config if isinstance(config, dict) else load_config(config)
+    temporadas = temporadas or [cfg.get("temporada_por_defecto")]
+    ligas = ligas or [l for l in active_leagues(cfg) if cfg["ligas"][l].get("pbp")]
+    hcfg = cfg.get("http", {})
+    factory = lambda: HttpClient(delay_s=hcfg.get("delay_s", 1.0), timeout_s=hcfg.get("timeout_s", 30),  # noqa: E731
+                                 retries=hcfg.get("retries", 3), domain_delays=hcfg.get("delay_por_dominio", {}),
+                                 curl_domains=tuple(hcfg.get("dominios_curl", [])))
+    store = RawStore(resolve_path(cfg, "bruto"), compress=cfg.get("comprimir_bruto", False))
+    progress = progreso or print
+    out = {}
+    for t in temporadas:
+        for l in ligas:
+            out[f"{l}/{t}"] = run_league(l, cfg, t, descargar, store, resolve_path(cfg, "procesado") / t, progress,
+                                         factory)
+    return out
+
+
 def reprocesar(ligas: list[str] | None = None, temporada: str | None = None,
                config: dict | str | None = None, progreso: Callable[[str], None] | None = None) -> dict:
     """Recalcula toda la salida a partir del último JSON bruto de cada liga, sin red.

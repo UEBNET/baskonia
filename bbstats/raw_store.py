@@ -39,11 +39,13 @@ class RawStore:
     def _dir(self, league: str, season: str) -> Path:
         return self.root / league / season
 
-    def save(self, league: str, season: str, meta: dict, payload: Any) -> Path:
+    def save(self, league: str, season: str, meta: dict, payload: Any, kind: str = "") -> Path:
+        """`kind` distingue otros brutos de la misma liga y temporada en la misma carpeta
+        (p.ej. "pbp" → pbp_<liga>_<temporada>_<fecha>.json.gz, jugada a jugada por partido)."""
         d = self._dir(league, season)
         d.mkdir(parents=True, exist_ok=True)
         stamp = meta.get("fecha_extraccion_stamp") or utc_stamp()
-        name = f"{league}_{season}_{stamp}.json" + (".gz" if self.compress else "")
+        name = f"{kind + '_' if kind else ''}{league}_{season}_{stamp}.json" + (".gz" if self.compress else "")
         path = d / name
         n = 2
         while path.exists():  # nunca sobrescribir un bruto existente
@@ -62,16 +64,16 @@ class RawStore:
             pass
         return path
 
-    def list(self, league: str, season: str) -> list[Path]:
+    def list(self, league: str, season: str, kind: str = "") -> list[Path]:
         d = self._dir(league, season)
         if not d.exists():
             return []
-        files = [p for p in d.iterdir()
-                 if p.name.startswith(f"{league}_{season}_") and p.name.endswith((".json", ".json.gz"))]
+        prefix = f"{kind + '_' if kind else ''}{league}_{season}_"
+        files = [p for p in d.iterdir() if p.name.startswith(prefix) and p.name.endswith((".json", ".json.gz"))]
         return sorted(files, key=_snapshot_key)
 
-    def latest(self, league: str, season: str) -> Path | None:
-        files = self.list(league, season)
+    def latest(self, league: str, season: str, kind: str = "") -> Path | None:
+        files = self.list(league, season, kind)
         return files[-1] if files else None
 
     @staticmethod

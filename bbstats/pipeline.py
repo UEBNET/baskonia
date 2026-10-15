@@ -38,6 +38,7 @@ class LeagueResult:
     jugadores: int = 0
     equipos: int = 0
     filas_por_fase: dict = field(default_factory=dict)
+    quintetos: dict = field(default_factory=dict)
     archivo_bruto: str | None = None
     fecha_extraccion: str | None = None
     archivo_salida: str | None = None
@@ -229,6 +230,7 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
         res.columnas_con_datos = int((comp > 0).sum())
         res.columnas_vacias = [c for c in COLUMN_NAMES if comp.get(c, 0) == 0]
         progress(f"[{liga}] {res.jugadores} jugadores, {res.columnas_con_datos}/{len(COLUMN_NAMES)} columnas con datos")
+        res.quintetos = _run_lineups(liga, cfg, season, download, store, out_dir, progress, http_factory)
         return res, df
     except NoDataYet as exc:
         res.estado = "sin_datos"
@@ -244,6 +246,18 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
         return res, None
     finally:
         res.duracion_s = round(time.monotonic() - t0, 2)
+
+
+def _run_lineups(liga: str, cfg: dict, season: str, download: bool, store: RawStore, out_dir: Path,
+                 progress: Progress, http_factory: Callable[[], HttpClient]) -> dict:
+    """Capa de quintetos y conexiones (bbstats/lineups). Nunca hace fallar la liga: los errores se informan."""
+    try:
+        from .lineups.run import run_league
+        return run_league(liga, cfg, season, download, store, out_dir, progress, http_factory)
+    except Exception as exc:  # noqa: BLE001
+        log.debug(traceback.format_exc())
+        progress(f"[{liga}] quintetos: ERROR {type(exc).__name__}: {exc}")
+        return {"estado": "error", "errores": [f"{type(exc).__name__}: {exc}"]}
 
 
 def run(ligas: list[str] | None = None, temporada: str | None = None, descargar: bool = True,

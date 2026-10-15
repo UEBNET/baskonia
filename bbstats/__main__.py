@@ -37,6 +37,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--sin-descarga", action="store_true", help="Reprocesar los brutos sin red")
     p.add_argument("--config")
     p.add_argument("--secuencial", action="store_true")
+    p = sub.add_parser("quintetos", help="Sólo quintetos y conexiones (jugada a jugada); ejecutar/historico ya los incluyen")
+    p.add_argument("--ligas", nargs="*")
+    p.add_argument("--temporadas", nargs="*")
+    p.add_argument("--desde")
+    p.add_argument("--hasta")
+    p.add_argument("--sin-descarga", action="store_true")
+    p.add_argument("--config")
     p = sub.add_parser("artifact", help="Genera los JSON que lee el Artifact a partir de los CSV procesados")
     p.add_argument("--temporada", nargs="*", help="Temporadas (por defecto, todas las procesadas)")
     p.add_argument("--salida", default="data/artifact", help="Carpeta de salida (no se versiona)")
@@ -68,6 +75,17 @@ def main(argv: list[str] | None = None) -> int:
             ok &= _summary(rep)
         print("\nHistórico terminado")
         return 0 if ok else 1
+    elif args.cmd == "quintetos":
+        from .config import load_config, season_range
+        cfg = load_config(args.config)
+        temps = args.temporadas or (season_range(args.desde or cfg.get("temporada_inicial"), args.hasta or cfg.get("temporada_por_defecto"))
+                                    if (args.desde or args.hasta) else None)
+        out = api.quintetos(temporadas=temps, ligas=args.ligas or None, descargar=not args.sin_descarga, config=cfg,
+                            progreso=print)
+        print(json.dumps({k: {kk: v.get(kk) for kk in ("estado", "partidos", "partidos_nuevos", "quintetos", "validos_pct")}
+                          for k, v in out.items()}, ensure_ascii=False, indent=1))
+        print("Quintetos terminado")
+        return 0
     elif args.cmd == "artifact":
         from pathlib import Path
         from .config import load_config, resolve_path
