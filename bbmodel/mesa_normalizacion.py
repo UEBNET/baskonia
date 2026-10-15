@@ -4,7 +4,7 @@ Lee data/modelos/algoritmo_A y algoritmo_B y escribe en <salida> (por defecto da
 que el Artifact publica como datos/):
     normalizacion/resumen.json             nivel de cada liga, equivalencias de percentil, qué
                                            esperar al importar, validación y puentes
-    normalizacion/jugadores_<temp>.json    explorador: equivalentes EuroLeague por jugador (A y B)
+    (normalizacion/jugadores_<temp>.json, el explorador, lo escribe bbmodel.dataset_normalizado)
 Uso: python -m bbmodel mesa-normalizacion
 """
 from __future__ import annotations
@@ -171,10 +171,10 @@ def construir(temporada: str = "2025-26", min_min: float = 300) -> tuple[dict, d
 
 
 def main(salida: str = "data/artifact"):
-    out, jug = construir()
+    """Escribe resumen.json. Los jugadores del explorador (jugadores_<temp>.json, todas las temporadas y todos los
+    jugadores, A+B con A de respaldo) los escribe `python -m bbmodel dataset-normalizado`."""
+    out, _ = construir()
     d = Path(salida) / "normalizacion"
     d.mkdir(parents=True, exist_ok=True)
     (d / "resumen.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    for temp, j in jug.items():
-        (d / f"jugadores_{temp}.json").write_text(json.dumps(j, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    print("escrito", d, list(jug))
+    print("escrito", d / "resumen.json", "· explorador: python -m bbmodel dataset-normalizado")

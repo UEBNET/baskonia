@@ -6,6 +6,8 @@
     python -m bbmodel ajustar-b            # algoritmo B (red neuronal): ajuste final y traducciones
     python -m bbmodel validar-b            # algoritmo B: mismo examen que el A
     python -m bbmodel mesa-normalizacion   # JSON de la pestaña «Normalización de ligas»
+    python -m bbmodel nacionalidades       # nacionalidad de cada jugador (datos brutos + enlace por persona)
+    python -m bbmodel dataset-normalizado  # dataset completo A+B (todas las ligas, temporadas y jugadores)
 
 Resultados en data/modelos/algoritmo_A/:
     parametros.json             todos los parámetros (para reutilizar sin reajustar)
@@ -41,8 +43,19 @@ def main(argv=None):
     e.add_argument("--salida", default="data/artifact", help="misma carpeta que python -m bbstats artifact")
     mn = sub.add_parser("mesa-normalizacion", help="datos de la pestaña «Normalización de ligas» (A y B)")
     mn.add_argument("--salida", default="data/artifact")
+    sub.add_parser("nacionalidades", help="nacionalidad de cada jugador → data/modelos/nacionalidades.csv")
+    dn = sub.add_parser("dataset-normalizado", help="dataset completo de equivalentes EuroLeague (A+B) y JSON de la Mesa")
+    dn.add_argument("--salida", default="data/artifact", help="carpeta de los JSON de la Mesa (datos/)")
     args = ap.parse_args(argv)
 
+    if args.orden == "nacionalidades":
+        from . import nacionalidad
+        nacionalidad.main()
+        return
+    if args.orden == "dataset-normalizado":
+        from . import dataset_normalizado
+        dataset_normalizado.main(args.salida)
+        return
     if args.orden == "mesa-normalizacion":
         from . import mesa_normalizacion
         mesa_normalizacion.main(args.salida)

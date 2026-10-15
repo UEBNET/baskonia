@@ -345,13 +345,37 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   equipo-temporada con varianza por bayes empírico, Laplace + conjunto de 5 redes). Hiperparámetros elegidos sólo con
   el corte 2022 (no con el examen). Resultados en `data/modelos/algoritmo_B/`. `python -m bbmodel ajustar-b`.
 - **A+B** (`bbmodel/mesa_normalizacion.py`): media de A y B en escala transformada; es la estimación recomendada.
-  `python -m bbmodel mesa-normalizacion` genera `normalizacion/resumen.json` y `normalizacion/jugadores_<temp>.json`
-  para la pestaña «Normalización de ligas» (publicar en `datos/normalizacion/`).
+  `python -m bbmodel mesa-normalizacion` genera `normalizacion/resumen.json` para la pestaña «Normalización de ligas»
+  (publicar en `datos/normalizacion/`).
+- **Dataset normalizado completo** (`bbmodel/dataset_normalizado.py`, `docs/datos_normalizados.md`):
+  `python -m bbmodel dataset-normalizado` escribe `data/modelos/normalizado/<temp>.csv` (todos los jugadores, todas las
+  ligas y temporadas, 25 métricas: `<m>` = A+B con A de respaldo, `_obs`, `_A`, `_B`, `_lo`, `_hi`, `_pctel`,
+  `fuente_norm`) y, en `--salida` (data/artifact), `normalizados/<temp>/regular.json` + `normalizados/indice.json`
+  (pestaña «Datos Normalizados»), `normalizacion/jugadores_<temp>.json` (explorador, todas las temporadas) y
+  `<temp>/nacionalidades.json` (nacionalidad de la «Tabla de datos», por player_uid). Publicar en `datos/` del Artifact.
+- **Nacionalidad** (`bbmodel/nacionalidad.py`, `data/modelos/nacionalidades.csv`): sólo LNB (todos), G League
+  (índice de jugadores) y BBL (máximo anotador de cada partido) la traen en los datos brutos; se propaga por persona
+  (persona_id) y por jugador de la misma liga; países en español. Cobertura ≈ 40 % EuroLeague, 47 % NBA, 53 % BBL.
+  En la BBL el player_id de la fuente cambia entre temporadas: el estudio usa «n:» + nombre (`nacionalidad.id_modelo`).
 - Corrección (oct. 2026): `identidad.py` asigna el año de nacimiento por persona (mediana), no por nodo de liga.
 - **Evaluación de ligas** (`bbmodel/evaluacion_ligas.py`): genera `data/artifact/<temporada>/evaluacion_<fase>.json`
   para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
 - Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
   `fecha_nacimiento`.
+- **Estilos de juego** (`bbestilo/`, `docs/estilos_de_juego.md`, artículo `docs/articulo/estilos_de_juego_baskonia.pdf`):
+  modelo final = **VaDE de 6 estilos** por club-competición-temporada (mezcla de 6 gaussianas de covarianza completa en
+  un latente 3D = mapa; consenso de 10 semillas y ajuste fino con la mezcla fijada), sobre los equivalentes EuroLeague
+  A+B agregados por minutos (13 rasgos) **con el nivel neutralizado** (regresión de cada rasgo en [1, L, L²], L = índice
+  de calidad: PER, GmSc/40, WS/40, ORtg, DRtg, pts/100, TS%, eFG%). η² nivel-estilo 0,4 %. Sin IDEC (retirada).
+  Nombres de estilos en `config/estilos.json` (revisar si se reentrena). Iteraciones anteriores (v1 12 estilos, v2 8,
+  v3 6 con 5 semillas) sólo como métricas y asignaciones en `data/modelos/estilos/historial/` (la tabla de evolución
+  del Atlas y del artículo sale de ahí). `python -m bbestilo entrenar | evaluar | analisis | encaje | parecidos |
+  exportar | articulo`. Simulación de varios fichajes y bajas: `encaje.simular_plantilla` (CLI `encaje --jugador A B
+  --baja C`), igual que el JS del Atlas. Buscador de parecidos: `similares.py`.
+  Atlas: Artifact «Atlas de Estilos» (https://claude.ai/artifact/D2ULCYstYh4ykwSzExUPNU; cinco pestañas; republicar
+  con `files` = `estilos/{meta,clubes,jugadores}.json` y `articulo/estilos_de_juego_baskonia.pdf`, capacidad
+  `downloads`). Hallazgos: BIC/ICL eligen 6 estilos; el encaje por similitud no predice el rendimiento del fichaje;
+  la continuidad de plantilla predice conservar el estilo; Baskonia cambia mucho de estilo.
 
 ## 9b. Quintetos, parejas y conexiones (bbstats/lineups)
 
@@ -430,3 +454,8 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
 - Algoritmo A (`bbmodel`) y cálculo de la evaluación de ligas en el repositorio; resultados en `data/modelos/algoritmo_A/`.
 - Algoritmo B, combinación A+B y pestaña «Normalización de ligas» (Artifact versión 17); A reajustado tras corregir el
   año de nacimiento por persona. `artifact/mesa-multiliga.html` = página publicada con la nueva pestaña.
+- Rama `claude/bold-euler-hubmhk`: estilos de juego (`bbestilo`). v1: IDEC y VaDE con 12 estilos. v2: 8 estilos, nivel
+  neutralizado, VaDE con covarianza completa y consenso, análisis complementarios, Atlas rediseñado y artículo en PDF. Después: modelo de 6 estilos y buscador de parecidos. Final: sólo VaDE de 6
+  estilos con 10 semillas, simulador de varios fichajes y bajas, Atlas en pestañas y artículo reescrito.
+- Mesa (versión 24): pestaña «Datos Normalizados» (dataset completo A+B), nacionalidad en las tablas, explorador de
+  normalización con todas las temporadas, Atlas como última pestaña y sin Comparador.

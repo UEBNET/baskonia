@@ -216,7 +216,11 @@ Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM
 * Selector de temporada y pestañas de fase (Temporada regular / Playoffs / Total), filtros por liga,
   búsqueda, minutos mínimos y vistas de columnas (básico, tiro, por 40/100, avanzada, ratings,
   on/off, playoffs frente a regular, métricas oficiales, contexto de equipo). Ficha del jugador
-  con la comparación playoffs/regular.
+  con la comparación playoffs/regular. Columna y filtro de **nacionalidad** (`datos/<temporada>/nacionalidades.json`).
+* Pestañas: Tabla de datos · **Datos Normalizados** (la misma tabla con los equivalentes EuroLeague de
+  `datos/normalizados/<temporada>/regular.json`; vistas de tiro, creación, defensa, ratings, percentil EuroLeague y
+  valor en su liga; ficha con intervalo y algoritmos A y B) · Evaluación de ligas · Normalización de ligas ·
+  Atlas de Estilos (marco con `atlas/index.html`). La pestaña Comparador se retiró.
 * **EJECUTAR** lanza la Routine de Claude Code `EJECUTAR Mesa Multiliga Baskonia`
   (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda) mediante el conector Claude Code Remote:
   descarga las ligas elegidas de **la temporada elegida (sólo esa)**, sube los datos a esta rama
@@ -239,8 +243,16 @@ python -m bbmodel validar            # examen fuera de muestra con cambios de li
 python -m bbmodel evaluacion-ligas   # JSON de la pestaña «Evaluación de ligas» (en data/artifact/)
 python -m bbmodel ajustar-b          # algoritmo B (red neuronal, 5 redes); escribe data/modelos/algoritmo_B/
 python -m bbmodel validar-b          # examen fuera de muestra del B
-python -m bbmodel mesa-normalizacion # JSON de la pestaña «Normalización de ligas» (A, B y A+B, en data/artifact/normalizacion/)
+python -m bbmodel mesa-normalizacion # resumen de la pestaña «Normalización de ligas» (data/artifact/normalizacion/resumen.json)
+python -m bbmodel nacionalidades     # nacionalidad de cada jugador (data/modelos/nacionalidades.csv)
+python -m bbmodel dataset-normalizado # dataset completo de equivalentes EuroLeague (data/modelos/normalizado/) y sus JSON
 ```
+
+**Dataset normalizado completo** ([`docs/datos_normalizados.md`](docs/datos_normalizados.md)):
+`data/modelos/normalizado/<temporada>.csv` tiene el equivalente EuroLeague 2025-26 de **todos** los jugadores de
+las 8 ligas y las 7 temporadas (19.508 jugador-liga-temporada, temporada regular) en las 25 métricas, con el valor en
+su liga, A, B, A+B (sólo A donde B no traduce), intervalo del 80 % y percentil EuroLeague, más identidad y
+nacionalidad. Alimenta la pestaña **«Datos Normalizados»** de la Mesa y el explorador de «Normalización de ligas».
 
 **Algoritmo B** ([`docs/algoritmo_B.md`](docs/algoritmo_B.md)): red neuronal multitarea que aprende un «ADN» de 8
 números por jugador y separa a la vez nivel, liga, temporada, posición y equipo. La estimación recomendada es la
@@ -309,3 +321,32 @@ sólo los partidos nuevos (nunca se sobrescribe). Fuentes, cobertura y lagunas: 
 Configuración: `quintetos` en `config/sources.json` (`contraccion_posesiones`, `rapm_lambda`,
 `excluir_si_dif_min_s`, `guardar_cada_partidos`) y `pbp` (fuente) en cada liga. Las descargas largas se guardan
 en paquetes de 150 partidos: si se cortan, la siguiente ejecución sólo pide lo que falte.
+
+## 13. Estilos de juego: `bbestilo` (VaDE, 6 estilos sin nivel y mapa 3D)
+
+Asigna a cada **club-competición-temporada** de las 8 ligas uno de **6 estilos de juego** y lo sitúa, junto con
+sus jugadores, en un **mapa 3D**. Usa sólo los datos **normalizados A+B** (equivalentes EuroLeague de `bbmodel`),
+agregados por minutos, más el ritmo relativo a la liga, y **neutraliza el nivel**: a cada rasgo se le quita la parte
+que explica un índice de calidad, para que el estilo diga cómo juega un equipo y no cuán bueno es.
+
+* **Red: VaDE**, autoencoder variacional con previa de mezcla de 6 gaussianas de covarianza completa en un latente de
+  3 neuronas (el mapa); capa de salida de 6 neuronas; consenso de 10 semillas y ajuste fino.
+* **Simulación de fichajes y bajas** (uno o varios jugadores a la vez) y **buscador de parecidos** (clubes que juegan
+  como el tuyo, jugadores parecidos o que encajan con tu estilo).
+* Iteraciones anteriores (12 y 8 estilos, IDEC de contraste, 6 estilos con 5 semillas): métricas y asignaciones en
+  `data/modelos/estilos/historial/`; su evolución, en el artículo.
+
+```bash
+pip install -r requirements-estilos.txt   # requirements.txt + torch (CPU)
+python -m bbestilo entrenar         # ≈ 20 min en 4 núcleos; escribe data/modelos/estilos/
+python -m bbestilo evaluar          # reevalúa la red guardada sin reentrenar
+python -m bbestilo analisis         # K óptimo, nivel, éxito, efecto del encaje, continuidad, ligas, Baskonia
+python -m bbestilo encaje --jugador "A" "B" --baja "C" --club baskonia --competicion euroleague --temporada 2025-26
+python -m bbestilo parecidos --club baskonia --jugador "Nombre" --alcance 30
+python -m bbestilo exportar         # datos del Atlas de Estilos (artifact/estilos/)
+python -m bbestilo articulo         # artículo científico en PDF (docs/articulo/estilos_de_juego_baskonia.pdf)
+```
+
+Documentación técnica: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md). Artículo completo:
+[`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf).
+

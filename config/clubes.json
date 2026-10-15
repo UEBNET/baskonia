@@ -1,0 +1,7 @@
+{
+  "_descripcion": "Clubes con nombre propio en el mapa de estilos. 'claves' = <liga>:<club_id> de cada competición (club_id = team_id de la fuente; en LBA y LNB, que cambian de id cada temporada, el id enlazado por bbestilo).",
+  "baskonia": {
+    "nombre": "Saski Baskonia",
+    "claves": ["euroleague:BAS", "acb:3"]
+  }
+}

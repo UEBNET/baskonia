@@ -1,0 +1,19 @@
+{
+  "_descripcion": "Nombres interpretativos de los 8 estilos del modelo VaDE v2 guardado en data/modelos/estilos/vade/modelo.pt, puestos a partir de su perfil medio sin nivel (estilos.csv). Si se reentrena el modelo, revisar que cada 'descriptor' coincide con el de estilos.csv antes de reutilizar los nombres.",
+  "E01": {"nombre": "Estrella y presión", "descriptor": "Reb. def. ↓ · TOV% ↓ · FTr ↓ · AST% ↓",
+          "resumen": "Uso muy concentrado en pocos jugadores, triples y pocas pérdidas; defensa de presión (robos y faltas) a costa del rebote defensivo."},
+  "E02": {"nombre": "Perímetro pausado", "descriptor": "TOV% ↓ · FTr ↓ · 3PAr ↑ · Reb. def. ↓",
+          "resumen": "Ritmo bajo, mucho triple, pocos tiros libres y pocas pérdidas; quintetos pequeños y poco rebote."},
+  "E03": {"nombre": "Equilibrado", "descriptor": "perfil equilibrado",
+          "resumen": "Sin rasgos extremos: cerca del club medio en casi todo, con algo más de faltas y menos rebote defensivo."},
+  "E04": {"nombre": "Pintura física", "descriptor": "Faltas ↑ · Reb. of. ↑ · Interiores ↑ · 3PAr ↓",
+          "resumen": "Muchos minutos de interiores, rebote ofensivo, tapones y robos; muchas faltas, pocas asistencias y poco triple."},
+  "E05": {"nombre": "Exterior y riesgo", "descriptor": "Exteriores ↑ · TOV% ↑ · Robos ↑",
+          "resumen": "Muchos minutos de bases y escoltas, asistencias, robos y tiros libres; más pérdidas y menos rebote."},
+  "E06": {"nombre": "Tamaño y rebote", "descriptor": "Exteriores ↓ · Robos ↓ · Reb. def. ↑",
+          "resumen": "Pocos minutos de exteriores y dominio del rebote en los dos aros; defensa conservadora, con pocos robos y pocas faltas."},
+  "E07": {"nombre": "Ritmo y pase", "descriptor": "Faltas ↓ · Reb. of. ↓ · Robos ↓ · AST% ↑",
+          "resumen": "Ritmo alto, triples y asistencias; muy pocas faltas, poco rebote ofensivo y poca presión sobre el balón."},
+  "E08": {"nombre": "Ataque al aro", "descriptor": "Reb. def. ↑ · FTr ↑ · 3PAr ↓ · AST% ↑",
+          "resumen": "Penetración y tiros libres, muchas asistencias y rebote defensivo, poco triple; acepta más pérdidas."}
+}

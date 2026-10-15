@@ -1,0 +1,15 @@
+{
+  "_descripcion": "Nombres interpretativos de los 6 estilos del modelo VaDE de 6 estilos (data/modelos/estilos/k6/vade/modelo.pt), puestos a partir de su perfil medio sin nivel (k6/vade/estilos.csv). Si se reentrena, revisar que cada 'descriptor' coincide antes de reutilizarlos.",
+  "E01": {"nombre": "Perímetro y control", "descriptor": "Reb. def. ↓ · FTr ↓ · 3PAr ↑ · TOV% ↓",
+          "resumen": "Mucho triple, pocos tiros libres y pocas pérdidas, con el uso algo concentrado; poco rebote defensivo y pocos tapones."},
+  "E02": {"nombre": "Físico y presión", "descriptor": "Faltas ↑ · Robos ↑ · Reb. of. ↑",
+          "resumen": "Interiores, rebote ofensivo, robos y tapones; muchas faltas y poco triple."},
+  "E03": {"nombre": "Exterior y riesgo", "descriptor": "Exteriores ↑ · Robos ↑ · TOV% ↑ · AST% ↑",
+          "resumen": "Muchos minutos de bases y escoltas, asistencias y robos; más pérdidas y menos rebote."},
+  "E04": {"nombre": "Tamaño y control", "descriptor": "Exteriores ↓ · AST% ↓ · TOV% ↓ · Robos ↓",
+          "resumen": "Pocos minutos de exteriores, pocas asistencias y muy pocas pérdidas; defensa conservadora con buen rebote defensivo."},
+  "E05": {"nombre": "Pase y juego limpio", "descriptor": "Faltas ↓ · Robos ↓ · Reb. of. ↓",
+          "resumen": "Asistencias y triple, muy pocas faltas y poca presión; poco rebote ofensivo."},
+  "E06": {"nombre": "Ataque al aro", "descriptor": "Reb. def. ↑ · FTr ↑ · 3PAr ↓ · AST% ↑",
+          "resumen": "Penetración y tiros libres, muchas asistencias, rebote defensivo y tapones, poco triple y ritmo alto; acepta más pérdidas."}
+}

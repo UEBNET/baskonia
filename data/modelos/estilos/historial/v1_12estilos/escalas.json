@@ -1,0 +1,193 @@
+{
+ "rasgos": [
+  {
+   "col": "ritmo_rel",
+   "nombre": "Ritmo relativo a su liga",
+   "bloque": "Estructura",
+   "transf": "id",
+   "origen": "contexto",
+   "corto": "Ritmo"
+  },
+  {
+   "col": "fg3a_rate",
+   "nombre": "Triples / tiros de campo (3PAr)",
+   "bloque": "Ataque",
+   "transf": "id",
+   "origen": "A+B",
+   "corto": "3PAr"
+  },
+  {
+   "col": "fta_rate",
+   "nombre": "Tiros libres / tiros de campo (FTr)",
+   "bloque": "Ataque",
+   "transf": "raiz",
+   "origen": "A+B",
+   "corto": "FTr"
+  },
+  {
+   "col": "ast_pct",
+   "nombre": "AST%",
+   "bloque": "Ataque",
+   "transf": "log1",
+   "origen": "A+B",
+   "corto": "AST%"
+  },
+  {
+   "col": "tov_pct",
+   "nombre": "TOV%",
+   "bloque": "Ataque",
+   "transf": "log1",
+   "origen": "A+B",
+   "corto": "TOV%"
+  },
+  {
+   "col": "oreb_p100",
+   "nombre": "Rebotes ofensivos por 100 pos.",
+   "bloque": "Ataque",
+   "transf": "log1",
+   "origen": "A+B",
+   "corto": "Reb. of."
+  },
+  {
+   "col": "uso_conc",
+   "nombre": "Concentración del uso",
+   "bloque": "Estructura",
+   "transf": "log1",
+   "origen": "derivado A+B",
+   "corto": "Uso concentrado"
+  },
+  {
+   "col": "dreb_p100",
+   "nombre": "Rebotes defensivos por 100 pos.",
+   "bloque": "Defensa",
+   "transf": "log1",
+   "origen": "A+B",
+   "corto": "Reb. def."
+  },
+  {
+   "col": "stl_p100",
+   "nombre": "Robos por 100 pos.",
+   "bloque": "Defensa",
+   "transf": "raiz",
+   "origen": "A+B",
+   "corto": "Robos"
+  },
+  {
+   "col": "blk_p100",
+   "nombre": "Tapones por 100 pos.",
+   "bloque": "Defensa",
+   "transf": "raiz",
+   "origen": "A+B",
+   "corto": "Tapones"
+  },
+  {
+   "col": "pf_p100",
+   "nombre": "Faltas por 100 pos.",
+   "bloque": "Defensa",
+   "transf": "raiz",
+   "origen": "A+B",
+   "corto": "Faltas"
+  },
+  {
+   "col": "cuota_interior",
+   "nombre": "Minutos de interiores (4-5)",
+   "bloque": "Estructura",
+   "transf": "id",
+   "origen": "derivado A+B",
+   "corto": "Interiores"
+  },
+  {
+   "col": "cuota_exterior",
+   "nombre": "Minutos de exteriores (1-2)",
+   "bloque": "Estructura",
+   "transf": "id",
+   "origen": "derivado A+B",
+   "corto": "Exteriores"
+  }
+ ],
+ "nivel": {
+  "per": 1,
+  "game_score_p40": 1,
+  "ws_per_40": 1,
+  "ortg": 1,
+  "drtg": -1,
+  "pts_p100": 1,
+  "ts_pct": 1,
+  "efg_pct": 1
+ },
+ "escala_club": {
+  "media": [
+   -7.99872817039368e-16,
+   40.1813593363532,
+   5.346201769559827,
+   2.7173073801133545,
+   2.685133650840813,
+   1.2388989951477514,
+   0.7178266329512365,
+   1.903958237015121,
+   1.2865535146928928,
+   0.7920240317381111,
+   2.426873179517215,
+   0.33949237132638516,
+   0.47262530321928736
+  ],
+  "sd": [
+   0.9999999999999998,
+   3.7919825144765995,
+   0.269945348798875,
+   0.13041700269411668,
+   0.04922033316503495,
+   0.06771286277701678,
+   0.010799191422880331,
+   0.0747902362201427,
+   0.059244083510090216,
+   0.1116896487875297,
+   0.08938289709729505,
+   0.08309400428185303,
+   0.091356124827849
+  ]
+ },
+ "escala_jugador": {
+  "media": [
+   -0.0005357154501774375,
+   38.97417719056516,
+   5.399856117198526,
+   2.6376373261645982,
+   2.657574331850276,
+   1.147149377456197,
+   0.6955985153812171,
+   1.9036622159597836,
+   1.2883770820215277,
+   0.7367470081916637,
+   2.373779073218483,
+   0.3441441605310447,
+   0.4656413466625179
+  ],
+  "sd": [
+   0.9985446433882433,
+   18.764528359171415,
+   0.8492630501089986,
+   0.552733316107746,
+   0.18529493521010174,
+   0.4100517913205426,
+   0.22491058517819984,
+   0.2861720257276543,
+   0.1676798112431019,
+   0.4143019255845438,
+   0.2314588361292696,
+   0.47508836788899284,
+   0.49881808602018063
+  ]
+ },
+ "temporadas_entreno": [
+  "2020-21",
+  "2021-22",
+  "2022-23",
+  "2023-24",
+  "2024-25",
+  "2025-26"
+ ],
+ "temporadas_provisionales": [
+  "2026-27"
+ ]
+}
