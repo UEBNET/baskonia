@@ -131,16 +131,11 @@ class EuroleaguePBP(PBPSource):
                     evs.append(Event(kind="foul_drawn", **kw))
                 elif pt == "AS" and pid and tm:
                     markers.append((seq, tm, pid, t))
-        # Hay jugadas corregidas que la fuente inserta fuera de su sitio (numeración no correlativa). Se
-        # respeta el orden de la lista (los cambios a veces llevan el reloj con pequeños errores), salvo las
-        # jugadas cuyo reloj retrocede más de 20 s respecto a lo ya jugado: ésas se recolocan por tiempo.
-        items = [(e.t, e.order, 0, e) for e in evs] + [(m[3], m[0], 1, m) for m in markers]
-        items.sort(key=lambda it: it[1])
-        keyed, run_max = [], 0.0
-        for it in items:
-            run_max = max(run_max, it[0])
-            keyed.append(((it[0] if run_max - it[0] > 20 else run_max), it[1], it))
-        items = [k[2] for k in sorted(keyed, key=lambda k: (k[0], k[1]))]
+        # Se respeta el orden de la lista aunque la numeración (NUMBEROFPLAY) o el reloj no sean correlativos:
+        # recolocar por reloj las jugadas corregidas empeora la coincidencia con el +/- oficial (probado en
+        # EuroCup 2025-26 y 2026-27 y EuroLeague 2026-27).
+        items = sorted([(e.t, e.order, 0, e) for e in evs] + [(m[3], m[0], 1, m) for m in markers],
+                       key=lambda it: it[1])
         markers2 = []
         for i, (_, _, is_marker, obj) in enumerate(items, 1):
             if is_marker:

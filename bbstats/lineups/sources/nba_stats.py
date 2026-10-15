@@ -51,7 +51,8 @@ DASH_COMMON = {
 BREF_TEAM = {"BKN": "BRK", "CHA": "CHO", "PHX": "PHO"}
 _AST = re.compile(r"\(([^()]+?) \d+ AST\)")
 _SUB = re.compile(r"^SUB:\s*(.+?)\s+FOR\s+(.+?)\s*$")
-_REB = re.compile(r"\(Off:(\d+) Def:(\d+)\)")
+_OWN = re.compile(r"^(?:MISS )?(.+?) (?:REBOUND|STEAL|BLOCK|[A-Z.]*FOUL|Free Throw|\d+'|3PT)")
+_ABBR = re.compile(r"^([A-Za-z]{1,4})\.\s+(.+)$")
 _SUFFIX = {"jr", "sr", "ii", "iii", "iv", "v"}
 
 
@@ -76,12 +77,12 @@ def rows(doc: Any, index: int | str = 0) -> list[dict]:
     return [dict(zip(headers, r)) for r in rs[index].get("rowSet") or []]
 
 
-def norm_name(s: str | None) -> str:
+def norm_name(s: str | None, keep_suffix: bool = False) -> str:
     """'Nikola Jokić' -> 'nikola jokic'; quita puntos, guiones, apóstrofos y sufijos (Jr., III)."""
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()
     s = re.sub(r"[.'`’]", "", s)
     s = re.sub(r"[^a-z0-9]+", " ", s)
-    return " ".join(t for t in s.split() if t not in _SUFFIX)
+    return " ".join(t for t in s.split() if keep_suffix or t not in _SUFFIX)
 
 
 def _snake(k: str) -> str:
@@ -153,13 +154,14 @@ class _StatsV3PBP(PBPSource):
         raw = {"pbp": self._get(ctx, "playbyplayv3", {"GameID": gid, "StartPeriod": "0", "EndPeriod": "14"}),
                "box": self._get(ctx, "boxscoretraditionalv3", {"GameID": gid, **BOX_PARAMS}),
                "period_box": {}}
-        # quinteto al inicio de los periodos que el PBP no resuelve (1 petición por periodo dudoso)
+        # quinteto al inicio de los periodos que el PBP no resuelve (1 petición por periodo dudoso; el v3 no
+        # admite RangeType=2, el v2 sí: jugadores con minutos entre 0,5 y 5 s del periodo, en décimas de s)
         for per in self._unclear_periods(raw):
             t0 = int(elapsed(per, None, ctx.game_min, elapsed_in_period_s=0) * 10)
             try:
-                raw["period_box"][str(per)] = self._get(ctx, "boxscoretraditionalv3", {
+                raw["period_box"][str(per)] = self._get(ctx, "boxscoretraditionalv2", {
                     "GameID": gid, "StartPeriod": "0", "EndPeriod": "0", "RangeType": "2",
-                    "StartRange": str(t0 + 5), "EndRange": str(t0 + 15)})
+                    "StartRange": str(t0 + 5), "EndRange": str(t0 + 50)})
             except FetchError as exc:
                 ctx.errors.append(f"boxscore periodo {per} {gid}: {exc}")
         return raw
@@ -224,10 +226,14 @@ class _StatsV3PBP(PBPSource):
                 if p.get("position") and len(g.starters[tid]) < 5:
                     g.starters[tid].append(pid)
         res = _Resolver(box, acts)
-        unresolved = Counter()
+        unresolved: Counter = Counter()
+        unresolved_txt: list[str] = []
+        # Tiros libres: el +/- oficial los atribuye al quinteto que había al pitarse la falta (los cambios que
+        # el PBP lista entre la falta y el tiro libre cuentan después). Se recolocan justo tras su falta.
+        anchor: dict = {}
+        ins_since: set = set()
         on: dict[int, set] = {t.get("teamId"): set() for t in (ht, at)}
         score = {"h": 0, "v": 0}
-        side = {ht.get("teamId"): "h", at.get("teamId"): "v"}
         evs: list[Event] = []
         seq, period, last_t, last_miss_team = 0, 0, 0.0, None
         # quintetos de inicio de periodo dados por el boxscore por rangos: se anotan como cambios explícitos
@@ -236,8 +242,20 @@ class _StatsV3PBP(PBPSource):
         def add(kind: str, tid, pid=None, **kw) -> None:
             nonlocal seq
             seq += 1
-            evs.append(Event(order=seq, period=period, t=last_t, kind=kind, team=tmap.get(tid),
-                             player=pmap.get(pid) if pid is not None else None, **kw))
+            e = Event(order=seq, period=period, t=last_t, kind=kind, team=tmap.get(tid),
+                      player=pmap.get(pid) if pid is not None else None, **kw)
+            if (kind == "ft" and anchor and anchor["per"] == period and anchor["t"] == last_t
+                    and anchor["team"] != tid and pid not in ins_since):
+                evs.insert(anchor["pos"], e)
+                anchor["pos"] += 1
+                return
+            evs.append(e)
+            if kind == "foul":
+                anchor.clear()
+                anchor.update(per=period, t=last_t, team=tid, pos=len(evs))
+                ins_since.clear()
+            elif kind == "in":
+                ins_since.add(pid)
 
         for a in acts:
             per = int(a.get("period") or 0)
@@ -247,13 +265,15 @@ class _StatsV3PBP(PBPSource):
                 for t in on:
                     on[t] = set()
                 for tid, pids in (forced.get(per) or {}).items():
-                    for pid in pids:
+                    for pid in pids:  # "out"+"in" en el segundo 0: stints los toma como quinteto inicial
+                        add("out", tid, pid)
                         add("in", tid, pid)
                         on[tid].add(pid)
+                anchor.clear()
             rem = clock_to_seconds(a.get("clock"))
             if rem is not None and rem <= period_length(per, ctx.game_min) + 0.01:
                 last_t = max(last_t, elapsed(per, rem, ctx.game_min))
-            at_, sub = a.get("actionType") or "", a.get("subType") or ""
+            at_ = a.get("actionType") or ""
             desc = a.get("description") or ""
             tid, pid = a.get("teamId"), a.get("personId")
             if tid not in tmap:  # tiempos muertos de equipo, inicio/fin de periodo...
@@ -282,6 +302,7 @@ class _StatsV3PBP(PBPSource):
                     on[tid].add(pin)
                 else:
                     unresolved["entra"] += 1
+                    unresolved_txt.append(desc)
             elif at_ in ("Made Shot", "Missed Shot"):
                 made = at_ == "Made Shot"
                 v = 3 if (a.get("shotValue") == 3 or "3PT" in desc) else 2
@@ -291,6 +312,7 @@ class _StatsV3PBP(PBPSource):
                     ast = res.resolve(tid, m.group(1), on=on.get(tid), want_on=True, exclude=pid)
                     if ast is None:
                         unresolved["asistente"] += 1
+                        unresolved_txt.append(m.group(1))
                     else:
                         on[tid].add(ast)
                 x, y = a.get("xLegacy"), a.get("yLegacy")
@@ -318,8 +340,12 @@ class _StatsV3PBP(PBPSource):
                     add("stl", tid, pid)
                 elif "BLOCK" in desc:
                     add("blk", tid, pid)
+        for i, e in enumerate(evs, 1):
+            e.order = i
         g.events = evs
         g.notes += [f"{v} {k} sin identificar" for k, v in unresolved.items()]
+        if unresolved_txt:
+            g.notes.append("textos sin identificar: " + "; ".join(unresolved_txt[:5]))
         if forced:
             g.notes.append("quinteto de inicio de periodo del boxscore por rangos: "
                            + ",".join(str(p) for p in sorted(forced)))
@@ -328,15 +354,13 @@ class _StatsV3PBP(PBPSource):
     def _forced_starters(self, raw: dict, res: "_Resolver") -> dict[int, dict]:
         out: dict[int, dict] = {}
         for per, doc in (raw.get("period_box") or {}).items():
-            b = (doc or {}).get("boxScoreTraditional") or {}
-            sets = {}
-            for t in (b.get("homeTeam") or {}, b.get("awayTeam") or {}):
-                pids = [p["personId"] for p in t.get("players") or []
-                        if (p.get("statistics") or {}).get("minutes") and p["personId"] in res.roster.get(t.get("teamId"), {})]
-                if len(pids) == 5:
-                    sets[t.get("teamId")] = pids
-            if len(sets) == 2:
-                out[int(per)] = sets
+            sets: dict = defaultdict(list)
+            for r in rows(doc, "PlayerStats"):
+                tid, pid = r.get("TEAM_ID"), r.get("PLAYER_ID")
+                if r.get("MIN") not in (None, "", "0:00") and pid in res.roster.get(tid, {}):
+                    sets[tid].append(pid)
+            if len(sets) == 2 and all(len(v) == 5 for v in sets.values()):
+                out[int(per)] = dict(sets)
         return out
 
     # ---- tablas oficiales
@@ -440,22 +464,44 @@ class _Resolver:
                 for s in (fam, p.get("nameI"), f"{first} {fam}", f"{first[:1]}. {fam}"):
                     if s and s.strip(". "):
                         k[norm_name(s)].add(pid)
-        for a in acts:  # el nombre corto que usa el PBP para cada jugador
+                        k["=" + norm_name(s, True)].add(pid)
+        for a in acts:  # el nombre que usa el PBP para cada jugador (campos y texto de sus propias acciones)
             tid, pid = a.get("teamId"), a.get("personId")
             if tid in self.keys and pid in self.roster[tid]:
-                for s in (a.get("playerName"), a.get("playerNameI")):
+                names = [a.get("playerName"), a.get("playerNameI")]
+                desc = a.get("description") or ""
+                m = _SUB.match(desc) if a.get("actionType") == "Substitution" else _OWN.match(desc)
+                if m:  # "SUB: X FOR <él>" / "<él> REBOUND ..." (p.ej. Kanter en el texto, Freedom en el campo)
+                    names.append(m.group(2) if a.get("actionType") == "Substitution" else m.group(1))
+                for s in names:
                     if s:
                         self.keys[tid][norm_name(s)].add(pid)
+                        self.keys[tid]["=" + norm_name(s, True)].add(pid)
         self.mins = mins
 
-    def resolve(self, tid, text: str, on: set | None = None, want_on: bool = True, exclude=None) -> int | None:
+    def candidates(self, tid, text: str) -> set:
         k = self.keys.get(tid)
         if not k or not text:
-            return None
+            return set()
+        m = _ABBR.match(text.strip())
+        if m:  # "Jal. Williams" / "K. Williams": inicial(es) del nombre + apellido
+            pre, fam = norm_name(m.group(1)), norm_name(m.group(2))
+            c = {pid for pid, p in self.roster.get(tid, {}).items()
+                 if norm_name(p.get("familyName")) == fam and norm_name(p.get("firstName")).startswith(pre)}
+            if c:
+                return c
+        cands = set(k.get("=" + norm_name(text, True), ()))  # exacto: "Williams" ≠ "Williams III"
+        if len(cands) == 1:
+            return cands
         n = norm_name(text)
-        cands = set(k.get(n, ()))
-        if not cands:  # p.ej. "Jones Garcia" vs familyName "Jones-Garcia"; o sólo el último apellido
-            cands = {pid for key, ps in k.items() for pid in ps if key.endswith(" " + n) or n.endswith(" " + key)}
+        cands = cands or set(k.get(n, ()))
+        if not cands:  # "Jones Garcia" vs "Jones-Garcia", o sólo una parte del apellido
+            cands = {pid for key, ps in k.items() if key[:1] != "=" for pid in ps
+                     if key.endswith(" " + n) or n.endswith(" " + key)}
+        return cands
+
+    def resolve(self, tid, text: str, on: set | None = None, want_on: bool = True, exclude=None) -> int | None:
+        cands = self.candidates(tid, text)
         cands.discard(exclude)
         if len(cands) <= 1:
             return next(iter(cands), None)
@@ -560,6 +606,9 @@ class NbaPBP(_StatsV3PBP):
         n = len(g.players)
         ok = sum(not p.startswith("nba:") for p in g.players)
         g.notes.append(f"ids BR emparejados {ok}/{n}")
+        miss = [p["nombre"] for k, p in g.players.items() if k.startswith("nba:") and (g.box.get(k) or {}).get("sec")]
+        if miss:
+            g.notes.append("sin id BR (con minutos): " + ", ".join(miss))
         return g
 
     def player_map(self, box_players: list[dict], ctx: Ctx) -> dict[int, str]:
@@ -583,9 +632,10 @@ class NbaPBP(_StatsV3PBP):
         return raw
 
     def official_player_id(self, person_id, team: str, ctx: Ctx, raw: dict) -> str:
-        names = raw.get("_names")
+        cache = self.__dict__.setdefault("_names_cache", {})
+        names = cache.get(id(raw))
         if names is None:
-            names = raw["_names"] = {}
+            names = cache[id(raw)] = {}
             for r in rows(raw.get("playerindex")):
                 names[_int(r.get("PERSON_ID"))] = (r.get("PLAYER_FIRST_NAME") or "", r.get("PLAYER_LAST_NAME") or "")
             for data in (raw.get("tipos") or {}).values():  # respaldo: "Apellido, Nombre" del on/off

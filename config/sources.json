@@ -25,7 +25,10 @@
       "www.easycredit-bbl.de": 0.5,
       "live.euroleague.net": 0.4,
       "api-live.euroleague.net": 0.4,
-      "api2.acb.com": 0.5
+      "api2.acb.com": 0.5,
+      "stats.gleague.nba.com": 0.7,
+      "embed-api.eui.connect.sportradar.com": 0.4,
+      "api-prod.lnb.fr": 0.4
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -75,7 +78,8 @@
       "fase": "todas",
       "temporadas": {},
       "estado_verificacion": "verificado con datos reales (2025-26); 2026-27 aún sin partidos",
-      "fuente": "https://www.basketball-reference.com"
+      "fuente": "https://www.basketball-reference.com",
+      "pbp": "nba_stats"
     },
     "gleague": {
       "adaptador": "gleague",
@@ -103,7 +107,8 @@
       },
       "tiro_libre_unico": true,
       "coef_tl_posesion": 0.79,
-      "_coef_tl_posesion": "Calibrado con las posesiones oficiales de la G League 2025-26 (0,798 regular, 0,781 playoffs). Con 0,4 el ritmo salía un 6 % bajo y el ORtg un 6 % alto."
+      "_coef_tl_posesion": "Calibrado con las posesiones oficiales de la G League 2025-26 (0,798 regular, 0,781 playoffs). Con 0,4 el ritmo salía un 6 % bajo y el ORtg un 6 % alto.",
+      "pbp": "gleague_stats"
     },
     "lba": {
       "adaptador": "lba",
@@ -185,7 +190,8 @@
       "paso_rango": 100,
       "_semillas": "Temporadas pasadas sin 'semillas': se buscan solas (bajando desde la temporada siguiente y, si no aparece la temporada regular, recorriendo 'rangos_busqueda' en saltos de 'paso_rango') y se guardan aquí. Numeración de la web: 2020-21 ≈ 25500, 2021-22 ≈ 26000, 2022-23 ≈ 27480 (playoffs ≈ 30500), 2023-24 ≈ 33200 (playoffs ≈ 34025), regular 2024-25 ≈ 110500 (copa ≈ 90000), playoffs 2024-25 ≈ 2003212, 2025-26 ≥ 2004000.",
       "ventana_busqueda": 3500,
-      "paso_fino": 10
+      "paso_fino": 10,
+      "pbp": "bbl"
     },
     "lnb": {
       "adaptador": "lnb",
@@ -197,7 +203,8 @@
       "fuente": "https://lnb.fr (api-prod.lnb.fr, stats centre)",
       "temporadas": {},
       "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
-      "division": 1
+      "division": 1,
+      "pbp": "lnb"
     },
     "eurocup": {
       "adaptador": "euroleague",
