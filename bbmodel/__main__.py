@@ -97,6 +97,9 @@ def main(argv=None):
     print(f"  {info['registros']} registros, {info['personas']} personas, acierto de posición {info['posicion']['acierto_cv']:.0%}")
 
     if args.orden in ("ajustar-b", "validar-b"):
+        # Matrices pequeñas: con varios hilos de BLAS cada paso es ~14 veces más lento (sobresuscripción)
+        from threadpoolctl import threadpool_limits
+        threadpool_limits(1)
         from . import algoritmo_b as B
         if args.orden == "ajustar-b":
             cj = B.ConjuntoB(tabla, n_redes=args.redes, pasos=args.pasos)

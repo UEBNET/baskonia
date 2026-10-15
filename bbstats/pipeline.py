@@ -377,6 +377,77 @@ def write_combined(out_dir: Path, season: str | None = None) -> Path | None:
     return out_dir / "ligas"
 
 
+# Columnas de pista (capa de quintetos) que se añaden a los JSON del Artifact: (columna, origen, descripción)
+PISTA_ARTIFACT = [
+    ("q_min_on", "min_on", "Minutos en pista según el jugada a jugada"),
+    ("q_net_on", "net_rtg_on", "Net del equipo con él en pista (por 100 posesiones)"),
+    ("q_net_off", "net_rtg_off", "Net del equipo con él en el banquillo"),
+    ("q_onoff", "net_rtg_onoff", "On − Off del Net"),
+    ("q_onoff_aj", "net_rtg_aj_onoff", "On − Off del Net ajustado por muestra"),
+    ("q_onoff_suerte", "net_rtg_suerte_onoff", "On − Off del Net ajustado por suerte (triple y TL del rival a la media)"),
+    ("q_onoff_sin_basura", "net_rtg_onoff_sin_basura", "On − Off del Net sin minutos de la basura"),
+    ("q_rapm", "rapm", "RAPM: impacto en pista por 100 posesiones, aislado de compañeros y rivales (unidades de su liga)"),
+    ("q_orapm", "orapm", "RAPM ofensivo"),
+    ("q_drapm", "drapm", "RAPM defensivo (> 0 = mejor defensa)"),
+    ("q_titular", "titular_partidos", "Partidos en el quinteto inicial"),
+    ("q_cierra", "cierra_partidos", "Partidos en pista en el último tramo"),
+    ("q_relevos_pp", "relevos_por_partido", "Entradas a pista por partido"),
+    ("q_min_relevo", "min_por_relevo", "Minutos por entrada a pista"),
+    ("q_pct_min_q4", "pct_min_q4", "% de sus minutos en el último cuarto"),
+    ("q_clutch_min", "clutch_min", "Minutos en clutch (últimos 5 minutos, ±5 puntos)"),
+    ("q_clutch_net", "clutch_net_rtg", "Net en clutch"),
+    ("q_basura_min", "basura_min", "Minutos de la basura"),
+    ("q_quintetos", "quintetos_distintos", "Quintetos distintos en los que ha jugado"),
+    ("q_pct_asistidas", "pct_canastas_asistidas", "% de sus canastas que fueron asistidas"),
+    ("q_socios", "socios_asistencia", "Compañeros distintos a los que asiste"),
+    ("q_hhi_asist", "hhi_asistencias", "Concentración de sus asistencias (HHI 0-10.000)"),
+    ("q_pagerank", "pagerank_asistencias", "Centralidad en la red de pases de su equipo (PageRank)"),
+]
+ZONAS_ARTIFACT = [("aro", "en el aro (< 1,8 m)"), ("corta", "cortos (1,8-4,25 m)"), ("media", "de media distancia"),
+                  ("t3_esquina", "triples de esquina"), ("t3_frontal", "triples frontales")]
+
+
+def pista_artifact(df: pd.DataFrame, processed_root: Path, season: str) -> pd.DataFrame:
+    """Añade a las filas jugador-equipo-fase las columnas q_* de la capa de quintetos (on/off, RAPM, rotación,
+    red de pases) y, en temporada regular, el perfil de tiro por zonas y el contexto de nivel (data/modelos)."""
+    frames = []
+    for p in sorted((processed_root / season / "quintetos").glob("*/jugadores.csv")):
+        j = pd.read_csv(p, dtype={"team_id": str, "player_id": str})
+        frames.append(j[["liga", "fase", "team_id", "player_id"] + [o for _, o, _ in PISTA_ARTIFACT]])
+    if not frames:
+        return df
+    q = pd.concat(frames, ignore_index=True).rename(columns={o: c for c, o, _ in PISTA_ARTIFACT})
+    out = df.copy()
+    out["_tid"] = out["team_id"].astype(str)
+    out["_pid"] = out["player_id"].astype(str)
+    m = out.merge(q.rename(columns={"team_id": "_tid", "player_id": "_pid"}), on=["liga", "fase", "_tid", "_pid"], how="left")
+    # traspasados con una fila «A;B» (EuroLeague/EuroCup): la fila de pista de su equipo con más minutos
+    tr = m["_tid"].str.contains(";", na=False).to_numpy()
+    if tr.any():
+        qq = q.sort_values("q_min_on", ascending=False).drop_duplicates(["liga", "fase", "player_id"])
+        k = m.loc[tr, ["liga", "fase", "_pid"]].merge(qq.rename(columns={"player_id": "_pid"}), on=["liga", "fase", "_pid"], how="left")
+        for c, _, _ in PISTA_ARTIFACT:
+            m.loc[tr, c] = k[c].to_numpy()
+    modelos = processed_root.parent / "modelos"
+    pz = modelos / "pista" / f"{season}.csv"
+    if pz.exists():
+        z = pd.read_csv(pz, dtype={"team_id": str, "player_id": str})
+        g = z.groupby(["liga", "player_id"])[[f"fga_{n}" for n, _ in ZONAS_ARTIFACT] + ["fga_pbp"]].sum()
+        for n, _ in ZONAS_ARTIFACT:
+            g[f"q_pct_{n}"] = 100 * g[f"fga_{n}"] / g["fga_pbp"].where(g["fga_pbp"] > 0)
+        g = g[[f"q_pct_{n}" for n, _ in ZONAS_ARTIFACT]].reset_index().rename(columns={"player_id": "_pid"})
+        g["fase"] = "regular"
+        m = m.merge(g, on=["liga", "fase", "_pid"], how="left")
+    return m.drop(columns=["_tid", "_pid"])
+
+
+def pista_diccionario() -> list[dict]:
+    out = [{"columna": c, "grupo": "pista", "origen": "jugada a jugada", "descripcion": d} for c, _, d in PISTA_ARTIFACT]
+    out += [{"columna": f"q_pct_{n}", "grupo": "pista", "origen": "jugada a jugada",
+             "descripcion": f"% de sus tiros de campo {d} (temporada regular)"} for n, d in ZONAS_ARTIFACT]
+    return out
+
+
 def export_artifact(processed_root: Path, season: str, out_root: Path) -> list[Path]:
     """Genera los ficheros que lee el Artifact (no se versionan): <out_root>/<temporada>/<fase>.json
     (JSON columnar), <out_root>/<temporada>/indice.json, <out_root>/diccionario_columnas.json y
@@ -385,6 +456,7 @@ def export_artifact(processed_root: Path, season: str, out_root: Path) -> list[P
     df = read_season(src)
     if df.empty:
         raise FileNotFoundError(f"No hay CSV procesados en {src / 'ligas'}")
+    df = pista_artifact(df, processed_root, season)
     dst = out_root / season
     dst.mkdir(parents=True, exist_ok=True)
     written = []
@@ -396,7 +468,7 @@ def export_artifact(processed_root: Path, season: str, out_root: Path) -> list[P
     idx = json.loads((src / "indice.json").read_text(encoding="utf-8"))
     idx["archivos"] = {**idx.get("archivos", {}), **{f: f"{f}.json" for f in idx.get("fases_con_datos", [])}}
     (dst / "indice.json").write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
-    (out_root / "diccionario_columnas.json").write_text(json.dumps(dictionary_records(), ensure_ascii=False),
+    (out_root / "diccionario_columnas.json").write_text(json.dumps(dictionary_records() + pista_diccionario(), ensure_ascii=False),
                                                         encoding="utf-8")
     seasons = processed_root / "temporadas.json"
     if seasons.exists():

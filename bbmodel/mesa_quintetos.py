@@ -110,7 +110,7 @@ def exportar_liga(liga: str, temporada: str, extras: dict) -> dict | None:
     princ = (jug.sort_values("min_on", ascending=False).drop_duplicates("player_id").set_index("player_id")["team_id"])
     cat["team_id"] = cat["player_id"].map(princ)
     for nombre, df in extras.items():
-        if df.empty:
+        if nombre.startswith("_") or df.empty:
             continue
         m = df[(df["liga"] == liga) & (df["temporada"] == temporada)].drop(columns=["liga", "temporada"])
         m = m.drop_duplicates("player_id")
