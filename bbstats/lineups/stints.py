@@ -39,6 +39,15 @@ class GameResult:
                    and (b["sec"] > 0 or self.seconds.get(p, 0) > 0)]
         dif_pm = [abs(self.pm.get(p, 0.0) - b["pm"]) for p, b in g.box.items() if b.get("pm") is not None
                   and (b.get("sec") or 0) > 0]
+        # +/- oficial incoherente (la suma de cada equipo debe ser ±5 × la diferencia final, opuestas): algunas
+        # fuentes (G League) lo publican mal; entonces sólo se validan los minutos
+        tsum = Counter()
+        for p, b in g.box.items():
+            if b.get("pm") is not None and (g.players.get(p) or {}).get("team"):
+                tsum[g.players[p]["team"]] += b["pm"]
+        pm_ok = len(tsum) < 2 or (abs(sum(tsum.values())) < 0.5 and all(abs(v) % 5 < 0.5 for v in tsum.values()))
+        if not pm_ok:
+            dif_pm = []
         return {"game_id": g.game_id, "fase": g.phase, "tramos": len(self.segments),
                 "jugadores_box": len(g.box),
                 "dif_min_max_s": round(max(dif_sec), 1) if dif_sec else None,
@@ -50,7 +59,8 @@ class GameResult:
                 "valido": bool(g.has_lineups and (not dif_sec or max(dif_sec) <= 90)
                                and (not dif_pm or max(dif_pm) <= 3)),
                 "con_quintetos": g.has_lineups, "con_asistencias": g.has_assists, "con_coordenadas": g.has_shots,
-                "notas": " | ".join(g.notes)}
+                "pm_oficial_coherente": pm_ok,
+                "notas": " | ".join(g.notes + ([] if pm_ok else ["+/- oficial incoherente: validado sólo por minutos"]))}
 
 
 def _empty() -> dict:

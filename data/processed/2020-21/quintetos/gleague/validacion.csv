@@ -1,0 +1,143 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+2022000001,regular,37,26,0.3,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000002,regular,43,23,13.0,2.7,0.0,0.0,0,,True,True,True,True,True,,True
+2022000003,regular,30,27,160.0,18.0,2.0,2.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,False
+2022000004,regular,39,25,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000005,regular,24,28,12.0,1.2,0.0,0.0,0,,True,True,True,True,True,,True
+2022000006,regular,35,25,238.0,19.1,2.0,2.0,5,actua_fuera_de_pista=5,False,True,True,True,True,,False
+2022000007,regular,40,25,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+2022000008,regular,39,22,525.0,114.8,10.0,5.0,23,actua_fuera_de_pista=16;no_cinco_6=4;quinteto_periodo_arrastrado=1;sale_sin_estar=2,False,True,True,True,True,,False
+2022000009,regular,36,26,13.4,1.5,0.0,0.0,0,,True,True,True,True,True,,True
+2022000010,regular,33,23,13.2,3.8,0.0,0.0,0,,True,True,True,True,True,,True
+2022000011,regular,48,27,7.4,0.9,0.0,0.0,0,,True,True,True,True,True,,True
+2022000012,regular,41,21,6.2,0.7,1.0,2.0,0,,True,True,True,True,True,,True
+2022000013,regular,24,26,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000014,regular,34,27,319.0,22.9,7.0,2.0,9,actua_fuera_de_pista=5;no_cinco_6=2;quinteto_inicial_de_titulares=1;sale_sin_estar=1,False,True,True,True,True,,False
+2022000015,regular,29,27,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000016,regular,33,23,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000017,regular,33,26,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000018,regular,43,27,0.3,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000019,regular,33,28,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000020,regular,43,26,0.2,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000021,regular,34,22,235.0,26.2,17.0,2.0,3,actua_fuera_de_pista=3,False,True,True,True,True,,False
+2022000022,regular,35,24,0.5,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000023,regular,37,20,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000024,regular,49,24,0.5,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000025,regular,32,27,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000026,regular,29,24,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000027,regular,32,25,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000028,regular,33,25,274.0,28.9,11.0,2.0,6,actua_fuera_de_pista=4;añadido_por_actuar=1;no_cinco_4=1,False,True,True,True,True,,False
+2022000029,regular,40,23,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000030,regular,34,23,0.5,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000031,regular,41,26,0.5,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000032,regular,31,26,0.3,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000033,regular,39,25,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000034,regular,36,27,0.2,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000035,regular,39,26,0.0,0.0,1.0,2.0,0,,True,True,True,True,True,,True
+2022000036,regular,41,25,0.3,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000037,regular,38,25,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000038,regular,34,27,6.0,1.2,0.0,0.0,0,,True,True,True,True,True,,True
+2022000039,regular,34,22,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000040,regular,33,26,17.4,3.5,0.0,0.0,0,,True,True,True,True,True,,True
+2022000041,regular,25,26,720.0,48.6,,,12,actua_fuera_de_pista=8;no_cinco_6=2;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,False
+2022000042,regular,37,27,291.9,106.6,,,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,False
+2022000043,regular,30,21,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+2022000044,regular,37,28,257.0,24.2,7.0,3.0,10,actua_fuera_de_pista=3;no_cinco_4=1;no_cinco_6=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=2,False,True,True,True,True,,False
+2022000045,regular,43,24,0.4,0.1,1.0,4.0,0,,True,True,True,True,True,,True
+2022000046,regular,29,23,99.0,9.0,4.0,2.0,2,actua_fuera_de_pista=1;no_cinco_4=1,False,True,True,True,True,,True
+2022000047,regular,46,26,0.3,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000048,regular,30,25,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000049,regular,38,25,299.9,103.0,,,5,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2;sale_sin_estar=1,False,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,False
+2022000050,regular,37,23,0.9,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000051,regular,31,22,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000052,regular,33,26,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000053,regular,32,25,8.0,0.7,0.0,0.0,0,,True,True,True,True,True,,True
+2022000054,regular,44,23,0.7,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+2022000055,regular,46,23,360.2,180.1,,,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,False
+2022000056,regular,35,25,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000057,regular,40,23,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000058,regular,33,25,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000059,regular,34,30,346.2,117.8,3.0,6.0,6,actua_fuera_de_pista=3;añadido_por_actuar=1;no_cinco_4=1;quinteto_periodo_arrastrado=1,False,True,True,True,True,,False
+2022000060,regular,45,24,281.0,110.2,2.0,4.0,4,quinteto_periodo_arrastrado=2;sale_sin_estar=2,False,True,True,True,True,,False
+2022000061,regular,29,26,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000062,regular,31,27,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000063,regular,25,28,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000064,regular,38,23,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000065,regular,34,24,360.2,192.9,1.0,2.0,10,actua_fuera_de_pista=5;no_cinco_6=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2;sale_sin_estar=1,False,True,True,True,True,,False
+2022000066,regular,33,24,0.2,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000067,regular,36,25,0.2,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000068,regular,39,24,19.3,1.8,0.0,0.0,0,,True,True,True,True,True,,True
+2022000069,regular,38,25,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000070,regular,37,26,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000071,regular,36,23,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000072,regular,39,24,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000073,regular,31,24,0.2,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000074,regular,37,26,0.5,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000075,regular,36,26,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000076,regular,36,24,0.2,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000077,regular,25,25,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000078,regular,32,26,0.2,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000079,regular,33,27,16.6,1.6,0.0,0.0,0,,True,True,True,True,True,,True
+2022000080,regular,33,23,0.3,0.0,3.0,8.0,0,,True,True,True,True,True,,True
+2022000081,regular,40,23,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000082,regular,33,25,0.4,0.1,2.0,4.0,0,,True,True,True,True,True,,True
+2022000083,regular,32,26,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+2022000084,regular,36,25,0.5,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000085,regular,44,22,180.0,100.0,0.0,0.0,1,quinteto_periodo_arrastrado=1,False,True,True,True,True,,False
+2022000086,regular,32,25,0.2,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000087,regular,35,26,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000088,regular,30,24,0.1,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000089,regular,39,25,8.8,0.8,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000090,regular,35,25,397.0,37.9,17.0,3.0,10,actua_fuera_de_pista=8;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,True,,False
+2022000091,regular,38,25,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000092,regular,32,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000093,regular,37,21,18.1,1.9,0.0,0.0,0,,True,True,True,True,True,,True
+2022000094,regular,31,24,1119.0,236.2,8.0,4.0,31,actua_fuera_de_pista=25;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2;sale_sin_estar=3,False,True,True,True,True,,False
+2022000095,regular,32,24,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000096,regular,31,25,0.1,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000097,regular,36,25,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000098,regular,32,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000099,regular,45,26,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000100,regular,34,25,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000101,regular,31,25,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000102,regular,27,27,0.2,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000103,regular,36,21,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000104,regular,44,22,194.0,101.6,,,0,,False,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,False
+2022000105,regular,27,25,0.3,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000106,regular,29,23,180.3,100.0,0.0,0.0,0,,False,True,True,True,True,,False
+2022000107,regular,35,24,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000108,regular,25,26,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000109,regular,27,25,0.0,0.0,1.0,10.0,0,,True,True,True,True,True,,True
+2022000110,regular,30,22,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000111,regular,48,22,449.3,62.9,6.0,5.0,11,actua_fuera_de_pista=6;añadido_por_actuar=1;no_cinco_4=1;quinteto_periodo_arrastrado=1;sale_sin_estar=2,False,True,True,True,True,,False
+2022000112,regular,38,26,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000113,regular,33,24,0.5,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000114,regular,40,24,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000115,regular,26,23,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000116,regular,31,25,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000117,regular,33,24,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000118,regular,29,21,6.0,0.6,0.0,0.0,0,,True,True,True,True,True,,True
+2022000119,regular,34,25,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000120,regular,36,23,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000121,regular,40,24,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000122,regular,25,21,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000123,regular,30,25,0.4,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000124,regular,32,23,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000125,regular,31,27,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000126,regular,37,21,0.2,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000127,regular,32,26,0.5,0.2,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000128,regular,30,26,451.0,37.4,9.0,2.0,10,actua_fuera_de_pista=5;no_cinco_6=3;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,True,,False
+2022000129,regular,34,24,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000130,regular,26,21,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000131,regular,32,23,18.0,1.9,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2022000132,regular,30,25,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2022000133,regular,30,22,180.0,94.7,0.0,0.0,0,,False,True,True,True,True,,False
+2022000134,regular,33,24,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2022000135,regular,28,25,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+2042000101,playoffs,26,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2042000111,playoffs,35,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2042000121,playoffs,33,25,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2042000131,playoffs,37,25,10.0,1.0,0.0,0.0,0,,True,True,True,True,True,,True
+2042000201,playoffs,33,24,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+2042000211,playoffs,26,23,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2042000301,playoffs,34,24,0.0,0.0,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True

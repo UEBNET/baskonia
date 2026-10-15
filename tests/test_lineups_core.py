@@ -180,3 +180,13 @@ def test_rotation_and_team_tables():
     assert 2000 / 3 <= eq.loc["A", "hhi_minutos"] <= 2000          # 8 jugadores: entre 1/8 y 1/5
     exp = M.expected_net(rows, pd.Series({p: 0.0 for p in A + B}), 0.44, 2)
     assert (exp["net_esperado"] == 0).all()
+
+
+def test_incoherent_official_plus_minus_is_ignored():
+    g = _game()
+    for p in A[:3]:
+        g.box[p]["pm"] += 7            # la suma del equipo deja de ser ±5 × diferencia
+    v = build(g, 40).validation()
+    assert v["valido"] and not v["pm_oficial_coherente"] and "incoherente" in v["notas"]
+    v2 = build(_game(), 40).validation()
+    assert v2["pm_oficial_coherente"]
