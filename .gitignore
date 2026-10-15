@@ -4,3 +4,9 @@ __pycache__/
 .venv/
 # Los datos (data/raw y data/processed) SÍ se versionan: son el resultado de las ejecuciones.
 data/processed/*/informes/
+# Intranet de Basket Basko: los brutos, la caché y las muestras contienen datos personales (licencias,
+# menores de edad). No se versionan; sólo data/basketbasko/processed si se decide publicarlo (repo privado).
+data/basketbasko/raw/
+data/basketbasko/cache/
+data/basketbasko/explorar/
+.env

@@ -1,0 +1,15 @@
+{
+  "_comentario": "Configuración del extractor de la intranet clubes.basketbasko.com. Las credenciales NUNCA van aquí: se leen de las variables de entorno BB_USUARIO y BB_PASSWORD.",
+  "federacion": "esf",
+  "url_esb": "https://esb.optimalwayconsulting.com/esf/1/56ucdmDSGUHgPV993DB9xmjCA66qLfGj",
+  "url_stats": "https://msstats.optimalwayconsulting.com/v1",
+  "origen_web": "https://clubes.basketbasko.com",
+  "pausa_s": 1.5,
+  "max_peticiones": 1500,
+  "temporada_id": null,
+  "equipos": [],
+  "incluir_jugadores": true,
+  "incluir_partidos": true,
+  "incluir_rivales": false,
+  "directorio_datos": "data/basketbasko"
+}

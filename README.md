@@ -1,5 +1,7 @@
 # baskonia · `bbstats` — extractor multi-liga de estadísticas de baloncesto
 
+> **Intranet de Basket Basko** (clubes.basketbasko.com): extracción periódica de las estadísticas del club y dashboard → ver [BASKETBASKO.md](BASKETBASKO.md).
+
 Extrae, guarda en bruto, normaliza y enriquece las estadísticas de **todos los jugadores** de
 8 competiciones, separadas por **fase (temporada regular / playoffs / total)**, con **las mismas
 columnas para todas las ligas**, listas para aplicar tus propios algoritmos.

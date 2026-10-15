@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard del club</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1b1f24;--muted:#5d6670;--line:#e3e6ea;--accent:#1f5fbf;--pos:#1a7f45;--neg:#b42318}
+@media (prefers-color-scheme:dark){:root{--bg:#121417;--card:#1b1e23;--ink:#e8eaed;--muted:#9aa3ad;--line:#2b3037;--accent:#6ea2f0;--pos:#4cc184;--neg:#f07a6e}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1200px;margin:0 auto;padding:20px 16px 48px}h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:28px 0 10px}
+.muted{color:var(--muted);font-size:13px}.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}.kpi b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}.team h3{margin:0 0 2px;font-size:15px}
+.rec{font-variant-numeric:tabular-nums;margin:8px 0}.w{color:var(--pos);font-weight:600}.l{color:var(--neg);font-weight:600}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:4px 0 10px}.bar i{display:block;height:100%;background:var(--accent)}
+ol{margin:4px 0 0;padding-left:20px}li{font-size:13px}.tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{position:sticky;top:0;background:var(--card);cursor:pointer;user-select:none}th:nth-child(-n+2),td:nth-child(-n+2){text-align:left}
+select,input{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.err{color:var(--neg);font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<h1 id="title">Dashboard del club</h1>
+<div class="muted" id="fecha"></div>
+<div class="kpis" id="kpis"></div>
+<h2>Equipos</h2>
+<div class="teams" id="teams"></div>
+<h2>Jugadores (promedios por partido)</h2>
+<div class="controls"><select id="fteam"><option value="">Todos los equipos</option></select><input id="fname" placeholder="Buscar jugador"></div>
+<div class="tablewrap"><table id="tbl"></table></div>
+<div id="errs"></div>
+</main>
+<script>
+const DATA = /*__DATA__*/null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const R = DATA.resumen, C = R.club || {};
+$("fecha").textContent = "Extracción: " + (R.fecha_extraccion || "–") + " · generado " + (R.generado || "");
+const pct = C.partidos ? Math.round(100 * C.ganados / C.partidos) + "%" : "–";
+$("kpis").innerHTML = [["Equipos", C.equipos], ["Partidos", C.partidos], ["Victorias", C.ganados], ["% victorias", pct], ["Jugadores", C.jugadores]]
+  .map(([k, v]) => `<div class="card kpi"><span class="muted">${k}</span><b>${esc(v ?? "–")}</b></div>`).join("");
+$("teams").innerHTML = (R.equipos || []).map(e => {
+  const p = e.partidos ? 100 * (e.ganados || 0) / e.partidos : 0;
+  const list = (a, t) => a && a.length ? `<div class="muted">${t}</div><ol>${a.map(x => `<li>${esc(x.jugador)} — ${esc(x.valor)}</li>`).join("")}</ol>` : "";
+  return `<div class="card team"><h3>${esc(e.equipo)}</h3><div class="muted">${esc(e.competicion)}</div>
+  <div class="rec"><span class="w">${e.ganados ?? "–"} G</span> · <span class="l">${e.perdidos ?? "–"} P</span> · ${e.partidos} PJ</div>
+  <div class="bar"><i style="width:${p}%"></i></div>
+  <div class="muted">Puntos a favor / en contra por partido: <b>${e.pts_favor_pp ?? "–"}</b> / <b>${e.pts_contra_pp ?? "–"}</b></div>
+  ${list(e.maximos_anotadores, "Máximos anotadores (pts/p)")}${list(e.mejor_valoracion, "Mejor valoración (val/p)")}</div>`;
+}).join("") || '<div class="muted">Sin equipos.</div>';
+const J = DATA.jugadores || [];
+const cols = J.length ? Object.keys(J[0]).filter(c => c !== "propio") : [];
+const ordered = ["jugador", "equipo", "dorsal", ...cols.filter(c => !["jugador", "equipo", "dorsal"].includes(c))];
+[...new Set(J.map(j => j.equipo))].sort().forEach(t => $("fteam").insertAdjacentHTML("beforeend", `<option>${esc(t)}</option>`));
+let sortCol = ordered.find(c => /^avg_(pts|points)$/i.test(c)) || "jugador", dir = -1;
+function draw() {
+  const t = $("fteam").value, q = $("fname").value.toLowerCase();
+  const rows = J.filter(j => (!t || j.equipo === t) && (!q || String(j.jugador).toLowerCase().includes(q)))
+    .sort((a, b) => { const x = a[sortCol], y = b[sortCol]; return (typeof x === "number" && typeof y === "number" ? x - y : String(x ?? "").localeCompare(String(y ?? ""))) * dir; });
+  const fmt = v => typeof v === "number" ? (Number.isInteger(v) ? v : v.toFixed(1)) : esc(v);
+  $("tbl").innerHTML = `<thead><tr>${ordered.map(c => `<th data-c="${esc(c)}">${esc(c.replace(/^avg_/, ""))}${c === sortCol ? (dir > 0 ? " ▲" : " ▼") : ""}</th>`).join("")}</tr></thead>
+  <tbody>${rows.map(r => `<tr>${ordered.map(c => `<td>${fmt(r[c])}</td>`).join("")}</tr>`).join("")}</tbody>`;
+  $("tbl").querySelectorAll("th").forEach(th => th.onclick = () => { const c = th.dataset.c; dir = c === sortCol ? -dir : -1; sortCol = c; draw(); });
+}
+$("fteam").onchange = draw; $("fname").oninput = draw; draw();
+if ((R.errores || []).length) $("errs").innerHTML = `<h2>Avisos de la extracción</h2>` + R.errores.map(e => `<div class="err">${esc(e)}</div>`).join("");
+</script>
+</body>
+</html>
