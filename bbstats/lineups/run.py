@@ -72,6 +72,15 @@ def run_league(liga: str, cfg: dict, season: str, download: bool, store: RawStor
     main_payload = RawStore.load(main_path)["payload"] if main_path else None
     ctx = Ctx(league=liga, season=season, cfg=lcfg, main_payload=main_payload)
     stored, official = load_games(store, liga, season)
+    if src.uses_main_raw:
+        # el jugada a jugada viene en el bruto principal (se actualiza con la ejecución normal de la liga)
+        download = False
+        for ref in (src.games(ctx) if main_payload else []):
+            if ref.get("final") and str(ref["game_id"]) not in stored:
+                try:
+                    stored[str(ref["game_id"])] = {"ref": ref, "docs": src.fetch(ctx, ref)}
+                except Exception as exc:  # noqa: BLE001
+                    ctx.errors.append(f"{ref['game_id']}: {type(exc).__name__}: {exc}")
     if download:
         ctx.http = http_factory()
         new: dict[str, dict] = {}
@@ -139,8 +148,11 @@ def run_league(liga: str, cfg: dict, season: str, download: bool, store: RawStor
                             cfg, lcfg)
     rep.update(written)
     rep["estado"] = "ok" if results else "sin_datos"
-    progress(f"[{liga}] quintetos: {rep['partidos']} partidos, {rep.get('quintetos', 0)} quintetos, "
-             f"{rep.get('validos_pct', 0)} % partidos validados")
+    if rep.get("partidos_con_quintetos"):
+        progress(f"[{liga}] quintetos: {rep['partidos']} partidos, {rep.get('quintetos', 0)} quintetos, "
+                 f"{rep.get('validos_pct', 0)} % de los partidos con cambios validados")
+    else:
+        progress(f"[{liga}] quintetos: {rep['partidos']} partidos sin cambios en la fuente (sólo tiros y asistencias)")
     return rep
 
 
@@ -273,7 +285,7 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
         if rows:
             pd.DataFrame(rows).assign(liga=liga, temporada=season).to_csv(out / f"{name}_oficial.csv", index=False,
                                                                           encoding="utf-8")
-    ok = val["valido"].mean() * 100 if not val.empty and val["con_quintetos"].any() else 0
+    ok = val.loc[val["con_quintetos"].astype(bool), "valido"].mean() * 100 if not val.empty and val["con_quintetos"].any() else 0
     return {"quintetos": int((cat["quintetos"]["fase"] == "total").sum()) if not cat["quintetos"].empty else 0,
             "parejas": int((cat["parejas"]["fase"] == "total").sum()) if not cat["parejas"].empty else 0,
             "validos_pct": round(float(ok), 1),

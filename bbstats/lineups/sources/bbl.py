@@ -60,6 +60,7 @@ def _games_of(payload) -> dict:
 class BblPBP(PBPSource):
     name = "bbl_web"
     version = "1.0"
+    uses_main_raw = True
 
     def games(self, ctx: Ctx) -> list[dict]:
         out = []
@@ -77,6 +78,8 @@ class BblPBP(PBPSource):
         doc = _games_of(ctx.main_payload).get(str(ref["game_id"])) or {}
         if (doc.get("initialGameStats") or {}).get("actions") is not None and doc.get("initialGameData"):
             return {"initialGameData": doc["initialGameData"], "initialGameStats": doc["initialGameStats"]}
+        if ctx.http is None:
+            raise ValueError("el bruto principal no tiene las acciones de este partido")
         html = ctx.http.get_text(f"{SITE}/spiele/{ref['game_id']}")
         m = _NEXT.search(html or "")
         pp = ((json.loads(m.group(1)).get("props") or {}).get("pageProps") or {}) if m else {}

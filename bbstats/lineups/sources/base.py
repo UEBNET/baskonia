@@ -42,6 +42,9 @@ class Ctx:
 class PBPSource:
     name = "base"
     version = "1.0"
+    # True si el jugada a jugada ya viene dentro del bruto principal de la liga (BBL): no se descarga ni se
+    # guarda un paquete pbp aparte; se lee de ahí en cada ejecución.
+    uses_main_raw = False
 
     def games(self, ctx: Ctx) -> list[dict]:
         raise NotImplementedError
