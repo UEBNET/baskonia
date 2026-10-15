@@ -163,10 +163,13 @@ def _round(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _write(df: pd.DataFrame, cols: list, path: Path) -> None:
+    """CSV (comprimido si el nombre acaba en .gz: quintetos, tríos y parejas, las tablas grandes)."""
     names = [c if isinstance(c, str) else c[0] for c in cols]
     out = df.reindex(columns=names) if not df.empty else pd.DataFrame(columns=names)
     path.parent.mkdir(parents=True, exist_ok=True)
     _round(out).to_csv(path, index=False, encoding="utf-8", float_format="%.10g")
+    other = path.with_suffix("") if path.suffix == ".gz" else path.with_name(path.name + ".gz")
+    other.unlink(missing_ok=True)   # sin restos del formato anterior
 
 
 def write_outputs(liga: str, season: str, results: list, official: dict, src: PBPSource, ctx: Ctx,
@@ -267,9 +270,9 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
                                              jugadores=t["unidad"].map(nm)))
     cat = {k_: (pd.concat(v, ignore_index=True) if v else pd.DataFrame()) for k_, v in tables.items()}
     _write(cat["quintetos"].sort_values(["fase", "min"], ascending=[True, False]) if not cat["quintetos"].empty else cat["quintetos"],
-           LINEUP_COLS, out / "quintetos.csv")
-    _write(cat["trios"], TRIO_COLS, out / "trios.csv")
-    _write(cat["parejas"], PAIR_COLS, out / "parejas.csv")
+           LINEUP_COLS, out / "quintetos.csv.gz")
+    _write(cat["trios"], TRIO_COLS, out / "trios.csv.gz")
+    _write(cat["parejas"], PAIR_COLS, out / "parejas.csv.gz")
     _write(cat["jugadores"], PLAYER_COLS, out / "jugadores.csv")
     _write(cat["asistencias"], ASSIST_COLS, out / "asistencias.csv")
     _write(cat["equipos"], TEAM_COLS, out / "equipos.csv")

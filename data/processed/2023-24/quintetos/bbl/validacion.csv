@@ -1,0 +1,337 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,notas,usado_en_quintetos
+32767,regular,38,22,5.0,0.8,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 14 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+32768,regular,40,23,12.0,1.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 8 completados, 0 sin completar | 25 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+32769,regular,43,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 9 completados, 0 sin completar | 17 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+32771,regular,41,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+32774,regular,43,23,20.0,1.8,0.0,0,0,,True,True,True,True,,True
+32772,regular,48,23,14.0,4.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+32773,regular,39,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33192,regular,44,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33193,regular,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33194,regular,39,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33195,regular,49,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 14 completados, 0 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33196,regular,41,22,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
+33197,regular,38,24,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+33198,regular,49,22,21.0,2.2,0.0,0,0,,True,True,True,True,,True
+33199,regular,50,20,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 10 completados, 0 sin completar | 23 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+32770,regular,39,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33201,regular,41,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33202,regular,47,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 3 completados, 0 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33203,regular,37,20,5.0,0.6,0.0,0,0,,True,True,True,True,,True
+33204,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33205,regular,43,20,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 8 completados, 0 sin completar | 10 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33206,regular,44,20,6.0,0.7,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+33207,regular,44,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33208,regular,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33210,regular,50,21,0.0,0.0,0.0,0,2,no_cinco_4=2,True,True,True,True,"cambios con jugador nulo: 0 completados, 2 sin completar",True
+33211,regular,33,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33212,regular,40,23,6.0,0.5,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
+33213,regular,44,21,89.0,6.8,1.0,1,24,añadido_por_actuar=2;no_cinco_4=22,True,True,True,True,"cambios con jugador nulo: 10 completados, 5 sin completar | 12 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33214,regular,49,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33216,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 28 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33218,regular,40,21,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33215,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33217,regular,38,22,425.0,28.8,6.0,2,20,actua_fuera_de_pista=3;añadido_por_actuar=1;no_cinco_4=15;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 4 completados, 3 sin completar",False
+33219,regular,44,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 8 completados, 0 sin completar | 22 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33220,regular,31,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33221,regular,39,24,5.0,0.4,0.0,0,0,,True,True,True,True,,True
+33222,regular,51,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33223,regular,51,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 9 completados, 0 sin completar | 19 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33224,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33225,regular,44,21,194.0,17.0,3.0,1,22,añadido_por_actuar=1;no_cinco_4=21,False,True,True,True,"cambios con jugador nulo: 3 completados, 4 sin completar",False
+33227,regular,40,20,366.0,30.9,3.0,2,29,añadido_por_actuar=2;no_cinco_4=24;quinteto_periodo_arrastrado=2;sale_sin_estar=1,False,True,True,True,"cambios con jugador nulo: 1 completados, 4 sin completar",False
+33226,regular,43,23,83.0,13.3,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 9 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33228,regular,42,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33229,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 14 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33230,regular,39,20,462.0,23.1,21.0,1,5,añadido_por_actuar=1;no_cinco_4=3;quinteto_inicial_incompleto=1,False,True,True,True,"cambios con jugador nulo: 3 completados, 0 sin completar",False
+33231,regular,29,21,10.0,1.2,0.0,0,0,,True,True,True,True,,True
+33232,regular,42,22,13.0,1.2,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 12 completados, 0 sin completar | 52 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33234,regular,34,22,174.0,15.8,0.0,0,3,actua_fuera_de_pista=3,False,True,True,True,,False
+33233,regular,36,22,136.0,6.2,0.0,0,17,añadido_por_actuar=1;no_cinco_4=15;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 1 completados, 4 sin completar",False
+33236,regular,36,22,24.0,2.4,0.0,0,0,,True,True,True,True,,True
+33235,regular,32,22,94.0,5.0,1.0,1,18,añadido_por_actuar=2;no_cinco_4=16,False,True,True,True,"cambios con jugador nulo: 2 completados, 4 sin completar",True
+33238,regular,35,21,67.0,9.4,0.0,0,15,añadido_por_actuar=1;no_cinco_4=13;quinteto_periodo_arrastrado=1,True,True,True,True,"cambios con jugador nulo: 2 completados, 3 sin completar",True
+33239,regular,59,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 9 completados, 0 sin completar | 10 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33241,regular,42,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33240,regular,39,22,174.0,19.8,11.0,3,25,añadido_por_actuar=1;no_cinco_4=24,False,True,True,True,"cambios con jugador nulo: 4 completados, 4 sin completar",False
+33242,regular,34,21,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33243,regular,56,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33244,regular,28,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33245,regular,48,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33237,regular,35,20,0.0,0.0,0.0,0,21,no_cinco_4=21,True,True,True,True,"cambios con jugador nulo: 0 completados, 4 sin completar",True
+33246,regular,39,22,105.0,5.8,0.0,0,13,actua_fuera_de_pista=1;añadido_por_actuar=1;no_cinco_4=11,False,True,True,True,"cambios con jugador nulo: 1 completados, 2 sin completar",True
+33247,regular,43,21,163.0,9.8,1.0,1,13,actua_fuera_de_pista=1;no_cinco_4=12,False,True,True,True,"cambios con jugador nulo: 2 completados, 3 sin completar",False
+33248,regular,49,22,16.0,1.6,0.0,0,0,,True,True,True,True,,True
+33249,regular,39,22,82.0,8.2,0.0,0,0,,True,True,True,True,,True
+33251,regular,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 3 completados, 0 sin completar | 14 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33252,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33253,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33254,regular,27,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33250,regular,41,21,1200.0,134.2,5.0,4,27,actua_fuera_de_pista=2;añadido_por_actuar=2;no_cinco_4=9;no_cinco_6=4;no_cinco_7=5;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=2;sale_sin_estar=2,False,True,True,True,"cambios con jugador nulo: 11 completados, 4 sin completar | 24 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33255,regular,54,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33256,regular,38,20,620.0,81.1,10.0,4,33,actua_fuera_de_pista=4;añadido_por_actuar=2;no_cinco_4=24;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,"cambios con jugador nulo: 6 completados, 2 sin completar",False
+33257,regular,38,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 8 completados, 0 sin completar | 13 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33259,regular,40,23,11.0,1.0,0.0,0,4,no_cinco_4=4,True,True,True,True,"cambios con jugador nulo: 5 completados, 2 sin completar | 6 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33260,regular,46,20,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 10 completados, 0 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33263,regular,40,24,11.0,1.3,0.0,0,0,,True,True,True,True,,True
+33262,regular,38,20,406.0,137.1,3.0,7,21,actua_fuera_de_pista=16;quinteto_periodo_arrastrado=1;sale_sin_estar=4,False,True,True,True,,False
+33261,regular,40,23,22.0,2.2,0.0,0,0,,True,True,True,True,,True
+33258,regular,27,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33200,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 10 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33209,regular,41,23,31.0,1.6,1.0,1,15,añadido_por_actuar=1;no_cinco_4=13;quinteto_periodo_arrastrado=1,True,True,True,True,"cambios con jugador nulo: 11 completados, 0 sin completar | 23 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33264,regular,38,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33265,regular,41,24,11.0,1.1,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 10 completados, 0 sin completar | 16 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33266,regular,44,23,21.0,2.1,0.0,0,0,,True,True,True,True,,True
+33267,regular,44,20,213.0,29.2,6.0,4,42,añadido_por_actuar=3;no_cinco_4=36;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=2,False,True,True,True,"cambios con jugador nulo: 5 completados, 1 sin completar",False
+33268,regular,37,21,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 18 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33269,regular,34,21,207.0,17.7,5.0,1,7,añadido_por_actuar=1;no_cinco_4=5;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 1 completados, 1 sin completar",False
+33270,regular,36,20,427.0,74.4,7.0,5,14,actua_fuera_de_pista=9;no_cinco_6=1;quinteto_periodo_arrastrado=1;sale_sin_estar=3,False,True,True,True,,False
+33271,regular,44,20,3.0,0.3,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 3 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33377,regular,47,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33273,regular,45,21,10.0,2.5,0.0,0,11,actua_fuera_de_pista=1;no_cinco_4=10,True,True,True,True,"cambios con jugador nulo: 0 completados, 2 sin completar",True
+33274,regular,35,20,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+33275,regular,46,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 3 completados, 0 sin completar | 3 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33276,regular,46,21,592.0,31.2,9.0,1,25,añadido_por_actuar=6;no_cinco_4=19,False,True,True,True,"cambios con jugador nulo: 7 completados, 7 sin completar | 38 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33281,regular,38,21,2.0,0.3,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar",True
+33280,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33278,regular,43,22,120.0,7.3,6.0,1,9,actua_fuera_de_pista=1;no_cinco_4=8,False,True,True,True,"cambios con jugador nulo: 1 completados, 2 sin completar",True
+33277,regular,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33279,regular,42,22,1048.0,80.5,8.0,3,28,actua_fuera_de_pista=3;añadido_por_actuar=2;no_cinco_4=20;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,"cambios con jugador nulo: 8 completados, 2 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33288,regular,40,22,20.0,2.1,0.0,0,0,,True,True,True,True,,True
+33282,regular,40,22,421.0,20.0,6.0,1,18,añadido_por_actuar=4;no_cinco_4=14,False,True,True,True,"cambios con jugador nulo: 10 completados, 7 sin completar | 29 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33283,regular,43,22,197.0,9.8,6.0,1,12,añadido_por_actuar=1;no_cinco_4=11,False,True,True,True,"cambios con jugador nulo: 6 completados, 3 sin completar | 8 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33284,regular,44,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33285,regular,33,20,2.0,0.4,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar | 1 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33286,regular,42,20,447.0,54.3,7.0,2,21,añadido_por_actuar=1;no_cinco_4=18;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 3 completados, 3 sin completar",False
+33287,regular,40,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33292,regular,40,22,65.0,6.5,4.0,2,19,añadido_por_actuar=1;no_cinco_4=18,False,True,True,True,"cambios con jugador nulo: 3 completados, 4 sin completar",True
+33293,regular,44,21,309.0,20.6,6.0,3,30,añadido_por_actuar=5;no_cinco_4=22;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=2,False,True,True,True,"cambios con jugador nulo: 7 completados, 0 sin completar",False
+33294,regular,32,21,180.0,10.0,2.0,1,0,,False,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar",False
+33295,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33296,regular,38,22,1517.0,165.8,4.0,6,34,actua_fuera_de_pista=7;añadido_por_actuar=9;no_cinco_4=17;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 16 completados, 9 sin completar | 70 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33297,regular,39,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar | 1 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33298,regular,46,22,12.0,1.3,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 7 completados, 0 sin completar | 22 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33300,regular,39,21,10.0,1.1,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar",True
+33301,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33302,regular,39,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 3 completados, 0 sin completar | 13 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33303,regular,39,22,5.0,0.6,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 10 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33304,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33305,regular,39,23,556.0,25.3,14.0,1,26,añadido_por_actuar=5;no_cinco_4=21,False,True,True,True,"cambios con jugador nulo: 8 completados, 5 sin completar | 44 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33306,regular,39,23,94.0,4.7,2.0,1,3,no_cinco_4=3,False,True,True,True,"cambios con jugador nulo: 1 completados, 1 sin completar",True
+33307,regular,56,21,574.0,47.6,4.0,3,36,añadido_por_actuar=1;no_cinco_4=34;quinteto_inicial_incompleto=1,False,True,True,True,"cambios con jugador nulo: 3 completados, 4 sin completar",False
+33308,regular,49,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33299,regular,38,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33309,regular,46,22,1177.0,58.9,18.0,1,19,añadido_por_actuar=7;no_cinco_4=12,False,True,True,True,"cambios con jugador nulo: 9 completados, 7 sin completar | 44 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33310,regular,42,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 21 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33311,regular,50,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33312,regular,37,21,243.0,18.3,6.0,1,30,añadido_por_actuar=1;no_cinco_4=28;quinteto_inicial_incompleto=1,False,True,True,True,"cambios con jugador nulo: 5 completados, 4 sin completar",False
+33313,regular,48,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33314,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 20 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33316,regular,36,22,135.0,10.3,4.0,1,8,añadido_por_actuar=1;no_cinco_4=7,False,True,True,True,"cambios con jugador nulo: 1 completados, 1 sin completar",False
+33315,regular,34,20,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar",True
+33317,regular,37,19,5.0,0.6,0.0,0,13,no_cinco_4=13,True,True,True,True,"cambios con jugador nulo: 0 completados, 3 sin completar",True
+33318,regular,36,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33319,regular,64,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33320,regular,45,21,0.0,0.0,0.0,0,5,no_cinco_4=5,True,True,True,True,"cambios con jugador nulo: 0 completados, 3 sin completar",True
+33321,regular,46,20,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 14 completados, 0 sin completar | 35 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33322,regular,46,22,379.0,40.2,8.0,3,13,añadido_por_actuar=1;no_cinco_4=8;no_cinco_6=3;quinteto_inicial_incompleto=1,False,True,True,True,"cambios con jugador nulo: 6 completados, 1 sin completar",False
+33324,regular,39,22,181.0,16.4,2.0,2,4,no_cinco_4=4,False,True,True,True,"cambios con jugador nulo: 2 completados, 2 sin completar",False
+33325,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 8 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33326,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33323,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 2 completados, 0 sin completar | 29 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33327,regular,38,22,14.0,1.4,0.0,0,0,,True,True,True,True,,True
+33328,regular,46,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33329,regular,34,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33331,regular,47,21,545.0,48.9,1.0,2,25,añadido_por_actuar=2;no_cinco_4=21;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 5 completados, 2 sin completar",False
+33332,regular,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 25 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33334,regular,37,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+33333,regular,38,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33335,regular,48,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33330,regular,35,20,938.0,53.3,1.0,1,19,añadido_por_actuar=4;no_cinco_4=14;sale_sin_estar=1,False,True,True,True,"cambios con jugador nulo: 5 completados, 5 sin completar | 45 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33336,regular,29,22,3.0,0.3,2.0,10,0,,True,True,True,True,,True
+33337,regular,42,24,17.0,1.5,0.0,0,0,,True,True,True,True,,True
+33340,regular,47,21,172.0,15.5,5.0,2,32,añadido_por_actuar=2;no_cinco_4=29;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 2 completados, 4 sin completar",False
+33341,regular,33,20,756.0,42.0,17.0,1,22,añadido_por_actuar=5;no_cinco_4=17,False,True,True,True,"cambios con jugador nulo: 7 completados, 5 sin completar | 59 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33338,regular,58,23,240.0,23.0,3.0,1,6,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,,False
+33339,regular,42,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 20 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33343,regular,36,23,201.0,19.6,6.0,3,28,añadido_por_actuar=4;no_cinco_4=20;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=2;sale_sin_estar=1,False,True,True,True,"cambios con jugador nulo: 4 completados, 3 sin completar",False
+33344,regular,26,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33342,regular,44,23,8.0,2.4,0.0,0,0,,True,True,True,True,,True
+33345,regular,46,23,98.0,8.2,3.0,2,20,añadido_por_actuar=2;no_cinco_4=17;quinteto_inicial_incompleto=1,False,True,True,True,"cambios con jugador nulo: 5 completados, 1 sin completar",True
+33348,regular,46,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33349,regular,43,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33346,regular,44,22,205.0,27.9,5.0,5,34,actua_fuera_de_pista=4;añadido_por_actuar=2;no_cinco_4=28,False,True,True,True,"cambios con jugador nulo: 12 completados, 6 sin completar | 3 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33347,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33350,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33352,regular,41,21,106.0,5.3,3.0,1,7,añadido_por_actuar=2;no_cinco_4=5,False,True,True,True,"cambios con jugador nulo: 7 completados, 2 sin completar | 21 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33351,regular,40,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33353,regular,48,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar",True
+33354,regular,41,21,862.0,47.9,11.0,1,22,añadido_por_actuar=5;no_cinco_4=16;quinteto_inicial_incompleto=1,False,True,True,True,"cambios con jugador nulo: 7 completados, 6 sin completar | 59 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33359,regular,31,21,13.0,1.2,0.0,0,0,,True,True,True,True,,True
+33355,regular,43,21,6.0,0.6,0.0,0,0,,True,True,True,True,,True
+33356,regular,57,20,117.0,15.4,2.0,5,81,añadido_por_actuar=4;no_cinco_4=75;quinteto_periodo_arrastrado=2,False,True,True,True,"cambios con jugador nulo: 6 completados, 9 sin completar",True
+33357,regular,50,22,17.0,3.6,0.0,0,0,,True,True,True,True,,True
+33358,regular,48,21,292.0,24.6,1.0,1,6,actua_fuera_de_pista=2;no_cinco_6=2;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,,False
+33360,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 22 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33361,regular,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33362,regular,33,24,16.0,1.6,0.0,0,0,,True,True,True,True,,True
+33364,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33363,regular,48,23,5.0,0.5,0.0,0,0,,True,True,True,True,,True
+33366,regular,39,23,15.0,1.5,0.0,0,0,,True,True,True,True,,True
+33367,regular,31,21,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 23 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33371,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 2 completados, 0 sin completar | 10 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33370,regular,40,22,17.0,4.9,0.0,0,0,,True,True,True,True,,True
+33365,regular,40,22,128.0,14.4,5.0,2,26,añadido_por_actuar=3;no_cinco_4=23,False,True,True,True,"cambios con jugador nulo: 4 completados, 4 sin completar",False
+33368,regular,42,21,135.0,12.9,2.0,2,34,añadido_por_actuar=2;no_cinco_3=1;no_cinco_4=30;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 3 completados, 3 sin completar | 9 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33369,regular,40,23,2.0,0.2,0.0,0,0,,True,True,True,True,,True
+33290,regular,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 7 completados, 0 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33372,regular,41,20,333.0,34.5,2.0,2,29,añadido_por_actuar=3;no_cinco_4=24;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 4 completados, 4 sin completar",False
+33373,regular,32,23,5.0,0.6,0.0,0,0,,True,True,True,True,,True
+33375,regular,34,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33374,regular,45,22,314.0,26.2,5.0,5,32,actua_fuera_de_pista=1;añadido_por_actuar=4;no_cinco_4=26;quinteto_periodo_arrastrado=1,False,True,True,True,"cambios con jugador nulo: 8 completados, 3 sin completar",False
+33376,regular,58,23,9.0,1.8,0.0,0,0,,True,True,True,True,,True
+33378,regular,38,21,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 14 completados, 0 sin completar | 21 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33406,regular,24,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33379,regular,40,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33381,regular,41,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 21 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33383,regular,28,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33384,regular,45,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33382,regular,47,23,305.0,32.4,6.0,2,29,añadido_por_actuar=2;no_cinco_4=26;sale_sin_estar=1,False,True,True,True,"cambios con jugador nulo: 10 completados, 5 sin completar | 7 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",False
+33388,regular,37,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33385,regular,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 7 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33387,regular,35,23,1.0,0.2,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
+33386,regular,46,24,5.0,0.5,0.0,0,0,,True,True,True,True,,True
+33389,regular,40,23,10.0,1.1,0.0,0,0,,True,True,True,True,,True
+32775,regular,33,21,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 10 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33390,regular,49,22,123.0,11.2,3.0,1,22,actua_fuera_de_pista=1;añadido_por_actuar=3;no_cinco_4=18,False,True,True,True,"cambios con jugador nulo: 3 completados, 3 sin completar",False
+33392,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33393,regular,35,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,"cambios con jugador nulo: 2 completados, 0 sin completar | 9 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33391,regular,36,23,4.0,0.4,0.0,0,0,,True,True,True,True,,True
+33394,regular,39,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 4 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33397,regular,35,21,15.0,2.2,0.0,0,0,,True,True,True,True,,True
+33396,regular,43,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 9 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33395,regular,33,24,305.0,29.0,5.0,2,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,,False
+33399,regular,45,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+33400,regular,46,24,1.0,0.1,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 18 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33401,regular,35,22,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+33403,regular,37,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 6 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33404,regular,42,22,11.0,1.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 9 completados, 0 sin completar | 26 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33380,regular,48,24,300.0,79.0,1.0,6,12,actua_fuera_de_pista=10;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,,False
+33407,regular,46,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+33405,regular,38,24,9.0,1.5,0.0,0,0,,True,True,True,True,,True
+33398,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33402,regular,38,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33408,regular,39,22,2.0,0.2,0.0,0,0,,True,True,True,True,,True
+33409,regular,45,24,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+33410,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33416,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33412,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 7 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33413,regular,46,23,8.0,1.2,0.0,0,0,,True,True,True,True,,True
+33411,regular,48,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33414,regular,45,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar",True
+33415,regular,45,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33417,regular,40,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33418,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 7 completados, 0 sin completar | 14 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33419,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33420,regular,44,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33421,regular,42,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33422,regular,29,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33425,regular,44,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33423,regular,38,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33424,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 23 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33427,regular,40,22,7.0,0.8,0.0,0,0,,True,True,True,True,,True
+33430,regular,51,22,18.0,1.7,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+33428,regular,43,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 13 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33429,regular,55,23,16.0,1.7,0.0,0,0,,True,True,True,True,,True
+33426,regular,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33431,regular,33,23,8.0,0.8,0.0,0,0,,True,True,True,True,,True
+33432,regular,47,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 17 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33434,regular,34,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33435,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33291,regular,47,23,2.0,0.2,0.0,0,2,actua_fuera_de_pista=1;sale_sin_estar=1,True,True,True,True,,True
+33433,regular,54,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33437,regular,44,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33438,regular,41,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33439,regular,43,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33440,regular,37,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33436,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 11 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33441,regular,27,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33443,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 12 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33442,regular,54,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33289,regular,38,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33444,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 3 completados, 0 sin completar | 3 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33445,regular,54,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33448,regular,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33446,regular,39,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 8 completados, 0 sin completar | 20 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33447,regular,54,23,11.0,1.0,0.0,0,0,,True,True,True,True,,True
+33449,regular,39,22,12.0,2.5,0.0,0,0,,True,True,True,True,,True
+33450,regular,31,22,8.0,0.9,0.0,0,0,,True,True,True,True,,True
+33452,regular,53,22,5.0,1.8,0.0,0,0,,True,True,True,True,,True
+33451,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33454,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 7 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33455,regular,51,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33457,regular,47,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+33453,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 22 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33456,regular,28,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33458,regular,40,23,313.0,38.3,3.0,3,5,actua_fuera_de_pista=1;no_cinco_4=1;quinteto_periodo_arrastrado=1;sale_sin_estar=2,False,True,True,True,,False
+33459,regular,61,24,14.0,1.4,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 8 completados, 0 sin completar | 6 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33460,regular,42,22,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+33461,regular,61,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33463,regular,37,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 1 completados, 0 sin completar | 1 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33464,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 7 completados, 0 sin completar | 19 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33462,regular,50,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33465,regular,32,22,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 11 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33467,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33468,regular,38,24,18.0,1.8,0.0,0,0,,True,True,True,True,,True
+33469,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 14 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33470,regular,35,24,2.0,0.2,0.0,0,0,,True,True,True,True,,True
+33466,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33472,regular,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33474,regular,29,23,2.0,0.2,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 15 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33471,regular,37,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+33473,regular,47,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33478,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33475,regular,43,22,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+33477,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 5 completados, 0 sin completar | 12 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33479,regular,40,23,12.0,1.0,0.0,0,0,,True,True,True,True,,True
+33476,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 4 completados, 0 sin completar | 23 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33272,regular,32,24,9.0,0.8,0.0,0,0,,True,True,True,True,,True
+33480,regular,43,22,1.0,0.2,0.0,0,0,,True,True,True,True,,True
+33481,regular,25,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33482,regular,27,24,9.0,0.8,0.0,0,0,,True,True,True,True,,True
+33483,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 8 completados, 0 sin completar | 17 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33484,regular,47,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 6 completados, 0 sin completar | 14 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33485,regular,39,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+33486,regular,40,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33487,regular,37,23,0.0,0.0,0.0,0,0,,True,True,True,True,"cambios con jugador nulo: 7 completados, 0 sin completar | 10 acciones nulas asignadas al jugador del boxscore ausente del jugada a jugada",True
+33488,regular,40,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+33490,playoffs,49,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33489,playoffs,42,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+33491,playoffs,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34026,playoffs,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34024,playoffs,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34025,playoffs,33,23,10.0,1.0,0.0,0,0,,True,True,True,True,,True
+34027,playoffs,53,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34028,playoffs,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34029,playoffs,53,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34030,playoffs,41,24,8.0,3.5,0.0,0,0,,True,True,True,True,,True
+34031,playoffs,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34032,playoffs,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34033,playoffs,53,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34034,playoffs,47,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34035,playoffs,37,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34036,playoffs,52,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34038,playoffs,37,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34039,playoffs,47,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34044,playoffs,47,23,9.0,1.0,0.0,0,0,,True,True,True,True,,True
+34049,playoffs,28,22,77.0,12.7,0.0,0,0,,True,True,True,True,,True
+34045,playoffs,37,23,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+34050,playoffs,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34052,playoffs,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34047,playoffs,44,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34048,playoffs,38,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34046,playoffs,34,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34054,playoffs,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34056,playoffs,38,24,7.0,1.2,0.0,0,0,,True,True,True,True,,True
+34057,playoffs,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+34059,playoffs,38,24,4.0,2.5,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True

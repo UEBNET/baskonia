@@ -1,0 +1,25 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,notas,usado_en_quintetos
+25602,regular,44,24,35.0,16.1,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25603,regular,36,24,52.0,21.5,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25605,regular,47,24,26.0,11.3,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25600,regular,35,24,32.0,11.3,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25601,regular,39,24,33.0,16.4,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25607,regular,32,22,39.0,15.7,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25604,regular,38,24,32.0,16.1,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25606,regular,60,24,40.0,17.4,2.0,1,1,actua_fuera_de_pista=1,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25371,regular,43,24,31.0,14.0,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25373,regular,41,24,33.0,18.2,0.0,0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25369,regular,39,24,29.0,17.5,0.0,0,0,,True,True,True,True,1/40 asistencias sin enlazar | boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25374,regular,47,22,44.0,13.1,0.0,0,7,actua_fuera_de_pista=6;quinteto_inicial_de_titulares=1,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25372,regular,38,24,31.0,15.1,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25368,regular,44,24,32.0,15.9,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25375,regular,43,24,29.0,18.3,3.0,2,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25370,regular,40,24,27.0,16.3,0.0,0,7,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25383,regular,49,24,31.0,17.7,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25381,regular,47,23,36.0,19.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25376,regular,36,24,29.0,15.6,0.0,0,0,,True,True,True,True,acciones no catalogadas: x1 | boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25382,regular,46,24,36.0,19.3,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25380,regular,42,24,35.0,16.0,2.0,1,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25379,regular,39,23,36.0,14.2,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25378,regular,43,24,38.0,17.0,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
+25377,regular,38,24,33.0,16.1,0.0,0,0,,True,True,True,True,boxscore en minutos enteros: la validación de minutos tiene un margen de ±30 s,True
