@@ -58,8 +58,56 @@ ITERACIONES = [   # (id, carpeta en historial/ o "" = modelo final, red, etiquet
     ("v2_vade", "v2_8estilos", "vade", "v2 · VaDE 8"),
     ("v2_idec", "v2_8estilos", "idec", "v2 · IDEC 8"),
     ("v3_vade", "v3_6estilos", "vade", "v3 · VaDE 6 (5 semillas)"),
-    ("final", "", "vade", "Final · VaDE 6 (10 semillas)"),
+    ("v4_vade", "v4_6estilos_box", "vade", "v4 · VaDE 6 (13 rasgos de caja)"),
+    ("final", "", "vade", "Final · VaDE 6 (17 rasgos con jugada a jugada)"),
 ]
+# Métricas normalizadas de cada jugador que el Atlas proyecta al contexto del equipo de destino
+CLAVE_CTX = ["usg_pct", "pts_p100", "ts_pct", "efg_pct", "ast_pct", "tov_pct", "dreb_pct", "drtg", "per",
+             "ws_per_40", "rapm", "pct_asistidas", "pct_t3_esquina"]
+
+
+def _normalizados() -> pd.DataFrame:
+    """Dataset normalizado (bbmodel) indexado por (liga, temporada, id del modelo)."""
+    from bbmodel.nacionalidad import id_modelo
+    fr = []
+    for p in sorted((C.RAIZ / "data" / "modelos" / "normalizado").glob("*.csv")):
+        n = pd.read_csv(p, dtype={"player_id": str}, low_memory=False)
+        n["pid_modelo"] = id_modelo(n["liga"], n["player_id"], n["nombre"])
+        fr.append(n)
+    n = pd.concat(fr, ignore_index=True)
+    return n.drop_duplicates(["liga", "temporada", "pid_modelo"]).set_index(["liga", "temporada", "pid_modelo"])
+
+
+def contexto_meta() -> dict | None:
+    """Sensibilidad al contexto (bbmodel/contexto.py) de las métricas clave y contexto de referencia."""
+    ps = C.RAIZ / "data" / "modelos" / "contexto" / "sensibilidad.csv"
+    pa = C.RAIZ / "data" / "modelos" / "algoritmo_A" / "parametros.json"
+    if not ps.exists() or not pa.exists():
+        return None
+    from bbmodel.metricas import CATALOGO
+    sens = pd.read_csv(ps).set_index("metrica")
+    par = json.loads(pa.read_text(encoding="utf-8"))["metricas"]
+    mets = []
+    for c in CLAVE_CTX:
+        if c not in sens.index or c not in par:
+            continue
+        r = sens.loc[c]
+        t2 = par[c]["suerte"]["tau2"]
+        claro = abs(r["beta_comp"]) > 2 * r["beta_comp_se"]
+        mets.append({"col": c, "nombre": CATALOGO[c].nombre, "transf": CATALOGO[c].transf, "sentido": CATALOGO[c].sentido,
+                     "beta": _r(r["beta_comp"] if claro else 0.0, 4), "beta_estimado": _r(r["beta_comp"], 4),
+                     "se": _r(r["beta_comp_se"], 4), "claro": bool(claro),
+                     "tau": {p_: _r(np.sqrt(t2.get(f"euroleague|{p_}", np.nan)), 5) for p_ in ("E", "A", "I")}})
+    ctx = pd.concat([pd.read_csv(p) for p in sorted((C.RAIZ / "data" / "modelos" / "contexto").glob("20*.csv"))])
+    ref = (ctx[ctx["liga"] == "euroleague"].groupby("temporada")["ctx_plantilla_ref"].first().round(4).to_dict())
+    todas = pd.read_csv(ps)
+    return {"metricas": mets, "ref_euroleague": ref,
+            "sensibilidad": [{k: (_r(v, 4) if isinstance(v, (float, np.floating)) else v) for k, v in fila.items()}
+                             for fila in todas.to_dict("records")],
+            "nota": "Proyección al contexto del destino: en la escala transformada de cada métrica, "
+                    "x_destino = T⁻¹(T(x_normalizado) + τ_pos · β · (Δ contexto)), con Δ contexto = nivel medio de los "
+                    "compañeros en el destino (ponderado por minutos, sin él) − contexto de su equipo de origen. "
+                    "β sólo se aplica si es claro (|β| > 2 errores típicos)."}
 
 
 def nombres_estilos(archivo: str = NOMBRES) -> dict:
@@ -181,6 +229,24 @@ def main(salida: str) -> None:
             pos_R[i], pos_Q[i] = R[k], Q[k]
     J["R"] = [_lista(pos_R[i], 3) for i in J.index]
     J["Q"] = [_lista(pos_Q[i], 3) for i in J.index]
+    # ---- pista, contexto y valores observados (brutos) desde el dataset normalizado
+    N = _normalizados()
+    kN = pd.MultiIndex.from_frame(cj.jugadores.loc[m, ["liga", "temporada", "player_id"]])
+    NN = N.reindex(kN)
+    for c, d_ in (("L", "L"), ("ctx_plantilla_dev", "ctx_plantilla_dev"), ("ctx_comp", "ctx_comp"),
+                  ("rapm", "rapm_el"), ("orapm", "orapm_el"), ("drapm", "drapm_el"), ("rapm_pctel", "rapm_pct")):
+        J[d_] = NN[c].to_numpy(float) if c in NN else np.nan
+    J["M"] = [_lista(v, 3) for v in NN[[c for c in CLAVE_CTX]].to_numpy(float)]
+    obs_r, obs_q = [], []
+    for i, (_, fila) in zip(J.index, NN.iterrows()):
+        R0 = pos_R[i].copy()
+        for c in C.METRICAS_ESTILO:
+            v = fila.get(f"{c}_obs", np.nan)
+            R0[_I[c]] = v if v is not None else np.nan
+        obs_r.append(_lista(R0, 3))
+        obs_q.append(_lista([fila.get(f"{c}_obs", np.nan) for c in C.NIVEL], 3))
+    brutos = {"columnas": ["Rb", "Qb"], "nota": "Valores observados en su propia liga, alineados por índice con jugadores.json",
+              "filas": [[r, q] for r, q in zip(obs_r, obs_q)]}
     J["persona_id"] = J["persona_id"].where(J["persona_id"].notna(), J["liga"] + ":" + J["player_id"].astype(str))
     J = J.drop(columns=["player_id"])
 
@@ -193,6 +259,12 @@ def main(salida: str) -> None:
     Pj, Zj = predecir(red, cj.Xj[m])
     J["x"], J["y"], J["z"] = Zj[:, 0], Zj[:, 1], Zj[:, 2]
     J["e"], J["p"] = Pj.argmax(1), Pj.max(1)
-    for nombre, obj in (("meta.json", meta), ("clubes.json", _columnar(c, dec)), ("jugadores.json", _columnar(J, dec))):
+    meta["contexto"] = contexto_meta()
+    meta["clave_ctx"] = CLAVE_CTX
+    pi = C.DIR_SALIDA / "interacciones.json"
+    meta["interacciones"] = json.loads(pi.read_text(encoding="utf-8")) if pi.exists() else None
+    dec.update({"L": 3, "ctx_plantilla_dev": 3, "ctx_comp": 3, "rapm_el": 2, "orapm_el": 2, "drapm_el": 2, "rapm_pct": 1})
+    for nombre, obj in (("meta.json", meta), ("clubes.json", _columnar(c, dec)), ("jugadores.json", _columnar(J, dec)),
+                        ("brutos.json", brutos)):
         (d / nombre).write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=float), encoding="utf-8")
     print("escrito", d, {p.name: p.stat().st_size for p in d.glob("*.json")})
