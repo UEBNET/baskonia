@@ -174,7 +174,31 @@ def main(salida: str = "data/artifact"):
     """Escribe resumen.json. Los jugadores del explorador (jugadores_<temp>.json, todas las temporadas y todos los
     jugadores, A+B con A de respaldo) los escribe `python -m bbmodel dataset-normalizado`."""
     out, _ = construir()
+    out["contexto"] = bloque_contexto()
     d = Path(salida) / "normalizacion"
     d.mkdir(parents=True, exist_ok=True)
     (d / "resumen.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print("escrito", d / "resumen.json", "· explorador: python -m bbmodel dataset-normalizado")
+
+
+def bloque_contexto() -> dict | None:
+    """Contexto de nivel (bbmodel/contexto.py) para la pestaña: sensibilidad de cada métrica al nivel de los
+    compañeros y de los rivales, y nivel medio de jugadores, compañeros y rivales por liga y temporada."""
+    raiz = Path(__file__).resolve().parent.parent / "data" / "modelos" / "contexto"
+    if not (raiz / "sensibilidad.csv").exists():
+        return None
+    sens = pd.read_csv(raiz / "sensibilidad.csv")
+    pj = pd.read_csv(raiz / "por_jugador_liga.csv")
+    pj = pj[pj["min"] >= 300]
+    liga = []
+    for (l, t), g in pj.groupby(["liga", "temporada"]):
+        w = g["min"].to_numpy(float)
+        f = lambda c: r(float(np.average(g[c].fillna(g[c].mean()), weights=w)), 3) if g[c].notna().any() else None  # noqa: E731
+        liga.append({"liga": l, "temporada": t, "jugadores": int(len(g)), "L": f("L"), "ctx_comp": f("ctx_comp"),
+                     "ctx_riv": f("ctx_riv"), "ctx_plantilla": f("ctx_plantilla")})
+    return {"sensibilidad": [{k: (r(v, 4) if isinstance(v, (float, np.floating)) else v) for k, v in x.items()}
+                             for x in sens.to_dict("records")],
+            "por_liga": liga,
+            "nota": "β = cambio de la capacidad en la vara EuroLeague (desviaciones típicas de los jugadores de EuroLeague de "
+                    "su posición) por cada unidad de nivel medio de los compañeros (contexto de plantilla) y de los rivales, "
+                    "dentro de la misma persona (efecto fijo). El nivel L es el índice del Atlas (0 = jugador medio)."}

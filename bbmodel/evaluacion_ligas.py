@@ -40,9 +40,10 @@ QS = np.linspace(0, 1, 21)
 MIN_N = 10        # jugadores mínimos por liga para cuantiles y pares
 MIN_N_TEAM = 8    # equipos mínimos por liga
 
+from bbstats.pipeline import pista_artifact, pista_diccionario  # noqa: E402
 from bbstats.schema import dictionary_records  # noqa: E402
 
-DIC = dictionary_records()
+DIC = dictionary_records() + pista_diccionario()   # + columnas de pista (q_*: on/off, RAPM, rotación, zonas)
 GRUPO = {d["columna"]: d["grupo"] for d in DIC}
 DESC = {d["columna"]: d["descripcion"] for d in DIC}
 ORDEN = [d["columna"] for d in DIC]
@@ -72,6 +73,8 @@ def load(season, phase):
     df = pd.concat([pd.read_csv(f, low_memory=False, dtype={"player_id": str, "team_id": str}) for f in files],
                    ignore_index=True)
     df = df[df["fase"] == phase].reset_index(drop=True)
+    if len(df):
+        df = pista_artifact(df, DATA, season)
     return df if len(df) else None
 
 
