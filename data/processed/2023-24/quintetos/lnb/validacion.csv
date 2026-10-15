@@ -1,0 +1,330 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,notas,usado_en_quintetos
+2b64d1e7-1f10-11ee-9a78-3d5d91f98cd8,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+2b4bb6f0-1f10-11ee-a71c-3d5d91f98cd8,regular,43,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+2b5959e8-1f10-11ee-bded-3d5d91f98cd8,regular,38,20,19.0,3.7,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
+2b6e256d-1f10-11ee-9a37-3d5d91f98cd8,regular,36,21,16.0,2.6,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+3ec8d842-1f10-11ee-8110-db190750bdda,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+2b77d33d-1f10-11ee-bf94-3d5d91f98cd8,regular,33,23,2.0,0.2,0.0,0,0,,True,True,True,True,,True
+3ed41a6b-1f10-11ee-a976-db190750bdda,regular,39,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+3eddb097-1f10-11ee-870a-db190750bdda,regular,34,22,2.0,0.2,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+3ebb3506-1f10-11ee-b153-db190750bdda,regular,49,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+3f340043-1f10-11ee-a0a0-db190750bdda,regular,42,24,7.0,0.7,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,1 asistencias sin enlazar,True
+3ee8cf86-1f10-11ee-ac97-db190750bdda,regular,31,22,9.0,0.9,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,6 asistencias sin enlazar,True
+3f13532d-1f10-11ee-8917-db190750bdda,regular,37,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,1 asistencias sin enlazar,True
+3f28159f-1f10-11ee-93e5-db190750bdda,regular,26,22,14.0,1.3,0.0,0,0,,True,True,True,True,,True
+3f4a6f60-1f10-11ee-878e-db190750bdda,regular,48,23,3.0,0.7,0.0,0,7,actua_fuera_de_pista=5;quinteto_inicial_incompleto=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
+3f0827de-1f10-11ee-bfc8-db190750bdda,regular,49,23,8.0,0.8,0.0,0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+3f1ce107-1f10-11ee-a6d8-db190750bdda,regular,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+3efd6c09-1f10-11ee-8dfc-db190750bdda,regular,41,23,45.0,8.1,0.0,0,24,actua_fuera_de_pista=20;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=2,True,True,True,True,,True
+3f3f8b4d-1f10-11ee-bbe9-db190750bdda,regular,39,22,25.0,5.0,0.0,0,0,,True,True,True,True,,True
+3f8d3176-1f10-11ee-bb56-db190750bdda,regular,35,22,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+3f554cee-1f10-11ee-af60-db190750bdda,regular,38,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+3f9785df-1f10-11ee-9913-db190750bdda,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+3fa393d0-1f10-11ee-962a-db190750bdda,regular,28,22,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
+3f780ae6-1f10-11ee-87aa-db190750bdda,regular,38,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+3f62f5b5-1f10-11ee-bbd2-db190750bdda,regular,32,22,17.0,1.8,0.0,0,0,,True,True,True,True,,True
+3f82f39e-1f10-11ee-a9d1-db190750bdda,regular,35,22,1.0,0.1,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+3faed344-1f10-11ee-8c43-db190750bdda,regular,38,24,6.0,0.8,0.0,0,1,sale_sin_estar=1,True,True,True,True,1 asistencias sin enlazar,True
+3fc3d971-1f10-11ee-921b-db190750bdda,regular,38,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+3fb8d1db-1f10-11ee-a9e0-db190750bdda,regular,33,22,5.0,0.5,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+3fe64a48-1f10-11ee-a7f2-db190750bdda,regular,43,22,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+3ff0f0a9-1f10-11ee-abd3-db190750bdda,regular,47,24,3.0,0.2,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,,True
+4009548d-1f10-11ee-bccb-db190750bdda,regular,35,22,17.0,2.8,0.0,0,0,,True,True,True,True,,True
+3fda61af-1f10-11ee-bc9c-db190750bdda,regular,34,22,6.0,0.6,0.0,0,0,,True,True,True,True,,True
+3ffdca4c-1f10-11ee-849a-db190750bdda,regular,48,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+405ba819-1f10-11ee-8f0a-db190750bdda,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4028d279-1f10-11ee-b35a-db190750bdda,regular,38,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+40332e2e-1f10-11ee-a9b9-db190750bdda,regular,33,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4071a129-1f10-11ee-9f39-db190750bdda,regular,33,23,2.0,0.2,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
+40517f96-1f10-11ee-904c-db190750bdda,regular,37,22,10.0,1.1,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+401e772b-1f10-11ee-b389-db190750bdda,regular,29,21,14.0,1.6,0.0,0,0,,True,True,True,True,,True
+4047619f-1f10-11ee-aecd-db190750bdda,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
+40668b27-1f10-11ee-b8b0-db190750bdda,regular,38,21,22.0,4.3,0.0,0,0,,True,True,True,True,,True
+403d40b0-1f10-11ee-ab44-db190750bdda,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+40a41dec-1f10-11ee-87d8-db190750bdda,regular,34,21,0.0,0.0,0.0,0,8,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+407b68e6-1f10-11ee-acc1-db190750bdda,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+408f894a-1f10-11ee-9328-db190750bdda,regular,37,21,28.0,6.1,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4099bb44-1f10-11ee-abbc-db190750bdda,regular,38,24,2.0,0.2,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+40cd5b81-1f10-11ee-b51f-db190750bdda,regular,38,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
+40adf26b-1f10-11ee-b0d2-db190750bdda,regular,40,23,6.0,0.6,0.0,0,0,,True,True,True,True,,True
+40b94bbf-1f10-11ee-9286-db190750bdda,regular,29,23,9.0,0.8,0.0,0,0,,True,True,True,True,,True
+408563b3-1f10-11ee-890b-db190750bdda,regular,33,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
+40c33428-1f10-11ee-b2db-db190750bdda,regular,32,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,2 asistencias sin enlazar,True
+3f6dc96b-1f10-11ee-8c5f-db190750bdda,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+41e32ae5-1f10-11ee-846a-e5b34c9599b5,regular,44,22,33.0,4.1,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+41cfe5c7-1f10-11ee-bf68-e5b34c9599b5,regular,24,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+41aee24e-1f10-11ee-a708-e5b34c9599b5,regular,32,21,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+41bbae8a-1f10-11ee-a653-e5b34c9599b5,regular,39,24,14.0,2.4,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+41ec908d-1f10-11ee-ba4c-e5b34c9599b5,regular,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+41f62df5-1f10-11ee-b431-e5b34c9599b5,regular,42,21,5.0,0.6,0.0,0,0,,True,True,True,True,,True
+40d7fc1f-1f10-11ee-a2ad-db190750bdda,regular,35,23,4.0,1.6,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+41c50557-1f10-11ee-9c62-e5b34c9599b5,regular,38,23,44.0,4.0,0.0,0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+41d98cc5-1f10-11ee-b0b4-e5b34c9599b5,regular,30,23,8.0,0.7,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
+41ff9960-1f10-11ee-85d3-e5b34c9599b5,regular,39,21,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,1 asistencias sin enlazar,True
+42164f79-1f10-11ee-a1ea-e5b34c9599b5,regular,43,22,48.0,11.7,0.0,0,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4209dfd8-1f10-11ee-a4b3-e5b34c9599b5,regular,32,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+421f8d7f-1f10-11ee-bd08-e5b34c9599b5,regular,41,24,2.0,0.6,0.0,0,0,,True,True,True,True,,True
+423dbe35-1f10-11ee-9273-e5b34c9599b5,regular,36,23,6.0,0.5,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
+4250614a-1f10-11ee-b0e9-e5b34c9599b5,regular,30,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+4232da18-1f10-11ee-bd41-e5b34c9599b5,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+424775da-1f10-11ee-83cf-e5b34c9599b5,regular,36,24,3.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
+42295aa4-1f10-11ee-ad04-e5b34c9599b5,regular,34,21,10.0,2.6,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,1 asistencias sin enlazar,True
+428c264d-1f10-11ee-bbce-e5b34c9599b5,regular,33,22,132.0,10.3,2.0,1,10,añadido_por_actuar=2;no_cinco_4=3;sale_sin_estar=5,False,True,True,True,,False
+4259a90b-1f10-11ee-9ca7-e5b34c9599b5,regular,37,20,6.0,0.7,0.0,0,15,actua_fuera_de_pista=1;no_cinco_3=1;no_cinco_4=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2;sale_sin_estar=9,True,True,True,True,2 asistencias sin enlazar,True
+427897c7-1f10-11ee-8313-e5b34c9599b5,regular,43,24,526.0,35.8,1.0,2,31,añadido_por_actuar=2;no_cinco_4=9;quinteto_periodo_arrastrado=1;sale_sin_estar=19,False,True,True,True,,False
+4299d3fb-1f10-11ee-8ff4-e5b34c9599b5,regular,40,22,46.0,2.4,0.0,0,11,actua_fuera_de_pista=1;añadido_por_actuar=1;no_cinco_4=2;quinteto_periodo_arrastrado=1;sale_sin_estar=6,True,True,True,True,,True
+42a5eccb-1f10-11ee-b375-e5b34c9599b5,regular,38,23,0.0,0.0,0.0,0,11,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1;sale_sin_estar=9,True,True,True,True,1 asistencias sin enlazar,True
+42b3875d-1f10-11ee-87e7-e5b34c9599b5,regular,41,23,13.0,1.9,0.0,0,12,actua_fuera_de_pista=1;no_cinco_4=1;quinteto_periodo_arrastrado=1;sale_sin_estar=9,True,True,True,True,,True
+426e6984-1f10-11ee-bd3b-e5b34c9599b5,regular,46,23,359.0,18.6,4.0,1,10,no_cinco_4=1;quinteto_inicial_de_titulares=1;sale_sin_estar=8,False,True,True,True,,False
+42826946-1f10-11ee-b386-e5b34c9599b5,regular,42,24,5.0,1.1,0.0,0,11,sale_sin_estar=11,True,True,True,True,1 asistencias sin enlazar,True
+42be09f2-1f10-11ee-87db-e5b34c9599b5,regular,42,24,0.0,0.0,0.0,0,6,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=3,True,True,True,True,,True
+42c88f9d-1f10-11ee-86b5-e5b34c9599b5,regular,31,21,3.0,0.9,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+42d69ac1-1f10-11ee-af05-e5b34c9599b5,regular,33,22,0.0,0.0,0.0,0,6,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=2,True,True,True,True,1 asistencias sin enlazar,True
+42fb1e3d-1f10-11ee-8217-e5b34c9599b5,regular,36,22,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+431693f7-1f10-11ee-b17d-e5b34c9599b5,regular,35,20,8.0,1.8,0.0,0,0,,True,True,True,True,,True
+42f1dece-1f10-11ee-bf3f-e5b34c9599b5,regular,29,24,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+43041a5b-1f10-11ee-ae6a-e5b34c9599b5,regular,27,22,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
+430cfefc-1f10-11ee-ab9e-e5b34c9599b5,regular,41,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+42e4a912-1f10-11ee-a939-e5b34c9599b5,regular,33,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
+40143cf7-1f10-11ee-a59c-db190750bdda,regular,36,22,6.0,0.6,0.0,0,0,,True,True,True,True,,True
+4263b370-1f10-11ee-aeaa-e5b34c9599b5,regular,35,20,12.0,2.3,0.0,0,0,,True,True,True,True,,True
+433c0f80-1f10-11ee-8221-e5b34c9599b5,regular,24,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+43208afb-1f10-11ee-9129-e5b34c9599b5,regular,26,21,8.0,1.2,0.0,0,0,,True,True,True,True,,True
+43298e9d-1f10-11ee-a4a7-e5b34c9599b5,regular,34,20,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
+435c9e36-1f10-11ee-9f64-e5b34c9599b5,regular,31,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4365f5d6-1f10-11ee-a2e9-e5b34c9599b5,regular,33,22,7.0,1.3,0.0,0,0,,True,True,True,True,,True
+436f8752-1f10-11ee-8c62-e5b34c9599b5,regular,38,21,9.0,0.9,0.0,0,0,,True,True,True,True,,True
+434ee46c-1f10-11ee-b957-e5b34c9599b5,regular,34,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4345bb3a-1f10-11ee-8b33-e5b34c9599b5,regular,39,22,7.0,1.4,0.0,0,0,,True,True,True,True,,True
+433296fa-1f10-11ee-8502-e5b34c9599b5,regular,41,23,12.0,1.2,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+3fcea9a1-1f10-11ee-a687-db190750bdda,regular,35,23,5.0,2.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4394347c-1f10-11ee-88ba-e5b34c9599b5,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+43786ef0-1f10-11ee-bd9c-e5b34c9599b5,regular,36,22,4.0,0.4,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+438afe24-1f10-11ee-8fab-e5b34c9599b5,regular,45,22,7.0,1.3,0.0,0,8,actua_fuera_de_pista=7;sale_sin_estar=1,True,True,True,True,,True
+4476f57e-1f10-11ee-814c-715c06c41e61,regular,34,23,13.0,2.5,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
+447f0cd1-1f10-11ee-b5f4-715c06c41e61,regular,36,22,20.0,4.4,0.0,0,0,,True,True,True,True,,True
+446b806e-1f10-11ee-b0d2-715c06c41e61,regular,31,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+439d7273-1f10-11ee-aa96-e5b34c9599b5,regular,39,23,1.0,0.4,0.0,0,0,,True,True,True,True,,True
+43a76c80-1f10-11ee-8588-e5b34c9599b5,regular,28,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+438251dd-1f10-11ee-8815-e5b34c9599b5,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+44bd11de-1f10-11ee-b0c0-715c06c41e61,regular,38,24,0.0,0.0,0.0,0,1,no_cinco_4=1,True,True,True,True,,True
+44a6baad-1f10-11ee-9b6e-715c06c41e61,regular,36,21,2.0,0.3,0.0,0,7,actua_fuera_de_pista=4;no_cinco_4=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+44b5d930-1f10-11ee-b066-715c06c41e61,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+44c42d3d-1f10-11ee-957c-715c06c41e61,regular,43,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+44869bcc-1f10-11ee-ab63-715c06c41e61,regular,29,23,35.0,3.7,0.0,0,0,,True,True,True,True,,True
+448df946-1f10-11ee-a449-715c06c41e61,regular,29,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+44ae8ea9-1f10-11ee-8938-715c06c41e61,regular,24,23,0.0,0.0,0.0,0,2,quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+44963bec-1f10-11ee-b235-715c06c41e61,regular,38,24,9.0,0.9,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+45bfb820-1f10-11ee-9542-715c06c41e61,regular,30,21,4.0,0.6,0.0,0,0,,True,True,True,True,,True
+449f9993-1f10-11ee-bc11-715c06c41e61,regular,29,21,18.0,1.8,0.0,0,0,,True,True,True,True,,True
+44d5f3cc-1f10-11ee-a7f6-715c06c41e61,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+44e5e2dc-1f10-11ee-bd04-715c06c41e61,regular,39,22,0.0,0.0,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
+44ded268-1f10-11ee-8cd7-715c06c41e61,regular,42,21,0.0,0.0,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
+44fccf4c-1f10-11ee-9b88-715c06c41e61,regular,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4505652f-1f10-11ee-bf44-715c06c41e61,regular,38,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+450d5a2d-1f10-11ee-ab25-715c06c41e61,regular,31,24,29.0,3.2,0.0,0,5,actua_fuera_de_pista=3;sale_sin_estar=2,True,True,True,True,,True
+44ce5c26-1f10-11ee-922b-715c06c41e61,regular,34,21,59.0,3.0,1.0,1,3,añadido_por_actuar=1;no_cinco_4=2,True,True,True,True,,True
+44ed6da7-1f10-11ee-8a7f-715c06c41e61,regular,30,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+44f4d97e-1f10-11ee-9254-715c06c41e61,regular,38,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;sale_sin_estar=1,True,True,True,True,,True
+4554aef1-1f10-11ee-802f-715c06c41e61,regular,28,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+45153101-1f10-11ee-a71c-715c06c41e61,regular,35,20,0.0,0.0,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
+45240931-1f10-11ee-bce8-715c06c41e61,regular,30,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+452c92e0-1f10-11ee-b64c-715c06c41e61,regular,40,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+454c1ced-1f10-11ee-a33e-715c06c41e61,regular,36,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+451ca6d6-1f10-11ee-8981-715c06c41e61,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+453497bb-1f10-11ee-836c-715c06c41e61,regular,35,20,7.0,0.8,0.0,0,4,actua_fuera_de_pista=3;sale_sin_estar=1,True,True,True,True,,True
+453c4583-1f10-11ee-ba32-715c06c41e61,regular,25,23,0.0,0.0,0.0,0,2,quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+45437242-1f10-11ee-8eea-715c06c41e61,regular,45,23,0.0,0.0,0.0,0,2,sale_sin_estar=2,True,True,True,True,,True
+455d3b0c-1f10-11ee-a90a-715c06c41e61,regular,32,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+457157f7-1f10-11ee-959a-715c06c41e61,regular,36,23,4.0,0.9,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+45799dd2-1f10-11ee-aeed-715c06c41e61,regular,38,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+45977c13-1f10-11ee-a548-715c06c41e61,regular,25,21,17.0,3.8,0.0,0,0,,True,True,True,True,,True
+459f4f59-1f10-11ee-88a3-715c06c41e61,regular,38,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+45681366-1f10-11ee-bbab-715c06c41e61,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4590916a-1f10-11ee-92a6-715c06c41e61,regular,24,12,0.0,0.0,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
+4581c30a-1f10-11ee-8b4d-715c06c41e61,regular,26,20,5.0,0.6,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
+45892d4f-1f10-11ee-9058-715c06c41e61,regular,40,23,4.0,1.9,0.0,0,0,,True,True,True,True,,True
+45c7d469-1f10-11ee-ae7c-715c06c41e61,regular,26,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+45e568fe-1f10-11ee-9775-715c06c41e61,regular,48,21,0.0,0.0,0.0,0,7,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+45cfddd0-1f10-11ee-a0d4-715c06c41e61,regular,39,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+45af6872-1f10-11ee-9670-715c06c41e61,regular,45,21,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+45de0f73-1f10-11ee-9f23-715c06c41e61,regular,33,22,1.0,0.1,0.0,0,2,quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+45edad57-1f10-11ee-a55a-715c06c41e61,regular,32,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+45b7d76b-1f10-11ee-b1bc-715c06c41e61,regular,41,23,0.0,0.0,0.0,0,5,actua_fuera_de_pista=1;sale_sin_estar=4,True,True,True,True,,True
+46fc4c45-1f10-11ee-8f03-2dfe2ecd8c53,regular,46,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+45a75571-1f10-11ee-ac1d-715c06c41e61,regular,30,20,3.0,1.0,0.0,0,2,quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+46e0fc64-1f10-11ee-81e3-2dfe2ecd8c53,regular,35,22,3.0,0.3,0.0,0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+46c0a806-1f10-11ee-9339-2dfe2ecd8c53,regular,37,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+46cee8ac-1f10-11ee-8207-2dfe2ecd8c53,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+45f59e20-1f10-11ee-9390-715c06c41e61,regular,41,21,0.0,0.0,0.0,0,2,sale_sin_estar=2,True,True,True,True,,True
+46f38c46-1f10-11ee-9c64-2dfe2ecd8c53,regular,28,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4733d4d6-1f10-11ee-bc6f-2dfe2ecd8c53,regular,38,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
+470560ed-1f10-11ee-ada7-2dfe2ecd8c53,regular,43,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+470f1b7d-1f10-11ee-873b-2dfe2ecd8c53,regular,36,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+474717bd-1f10-11ee-8c25-2dfe2ecd8c53,regular,34,20,5.0,0.6,0.0,0,0,,True,True,True,True,,True
+475082ec-1f10-11ee-984d-2dfe2ecd8c53,regular,35,20,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+473de821-1f10-11ee-aa60-2dfe2ecd8c53,regular,40,23,9.0,1.7,0.0,0,2,sale_sin_estar=2,True,True,True,True,,True
+4721c075-1f10-11ee-9c70-2dfe2ecd8c53,regular,39,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+47192c51-1f10-11ee-b2db-2dfe2ecd8c53,regular,36,22,380.0,20.0,9.0,1,4,actua_fuera_de_pista=1;no_cinco_4=1;quinteto_inicial_de_titulares=1;sale_sin_estar=1,False,True,True,True,,False
+472af860-1f10-11ee-83ee-2dfe2ecd8c53,regular,37,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+479979f1-1f10-11ee-9cc8-2dfe2ecd8c53,regular,34,21,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+476be207-1f10-11ee-93b1-2dfe2ecd8c53,regular,36,23,6.0,0.8,0.0,0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+47751b29-1f10-11ee-bcb1-2dfe2ecd8c53,regular,34,23,1.0,0.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+47a2aa05-1f10-11ee-b3fb-2dfe2ecd8c53,regular,36,21,8.0,1.4,0.0,0,0,,True,True,True,True,,True
+4762854f-1f10-11ee-8ac7-2dfe2ecd8c53,regular,33,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+47596ca1-1f10-11ee-a13d-2dfe2ecd8c53,regular,28,22,8.0,0.8,0.0,0,0,,True,True,True,True,,True
+477dabf7-1f10-11ee-9fdd-2dfe2ecd8c53,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+47864660-1f10-11ee-8375-2dfe2ecd8c53,regular,29,23,8.0,0.8,0.0,0,0,,True,True,True,True,,True
+47b71ff2-1f10-11ee-9115-2dfe2ecd8c53,regular,31,22,11.0,1.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+47d7887b-1f10-11ee-8d22-2dfe2ecd8c53,regular,34,21,3.0,0.3,0.0,0,5,actua_fuera_de_pista=4;quinteto_inicial_de_titulares=1,True,True,True,True,,True
+47fe27a0-1f10-11ee-a1e3-2dfe2ecd8c53,regular,45,22,45.0,11.3,0.0,0,2,actua_fuera_de_pista=1;sale_sin_estar=1,True,True,True,True,,True
+47c05acf-1f10-11ee-ab0f-2dfe2ecd8c53,regular,32,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+47c9b7e4-1f10-11ee-be93-2dfe2ecd8c53,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+47e20660-1f10-11ee-808e-2dfe2ecd8c53,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+47ac4849-1f10-11ee-9d0e-2dfe2ecd8c53,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+47ebdc77-1f10-11ee-a7e9-2dfe2ecd8c53,regular,31,22,5.0,0.7,0.0,0,0,,True,True,True,True,,True
+4810d7cd-1f10-11ee-a7d0-2dfe2ecd8c53,regular,35,20,9.0,0.9,0.0,0,2,actua_fuera_de_pista=1;sale_sin_estar=1,True,True,True,True,,True
+48079d8b-1f10-11ee-8735-2dfe2ecd8c53,regular,34,22,0.0,0.0,0.0,0,8,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+48242593-1f10-11ee-ac2e-2dfe2ecd8c53,regular,35,24,22.0,4.4,0.0,0,0,,True,True,True,True,,True
+482d8bae-1f10-11ee-a5b8-2dfe2ecd8c53,regular,40,22,6.0,0.6,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4841a441-1f10-11ee-82d7-2dfe2ecd8c53,regular,35,23,0.0,0.0,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
+48539f59-1f10-11ee-b52c-2dfe2ecd8c53,regular,40,21,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;sale_sin_estar=1,True,True,True,True,,True
+484ac18a-1f10-11ee-873b-2dfe2ecd8c53,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+483864c8-1f10-11ee-b3b7-2dfe2ecd8c53,regular,23,21,1.0,0.3,0.0,0,0,,True,True,True,True,,True
+481a11a9-1f10-11ee-866a-2dfe2ecd8c53,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+46ea74cd-1f10-11ee-b9a7-2dfe2ecd8c53,regular,34,24,4.0,0.7,0.0,0,0,,True,True,True,True,,True
+488cd43c-1f10-11ee-ae76-2dfe2ecd8c53,regular,29,20,14.0,1.6,0.0,0,0,,True,True,True,True,,True
+485d95bc-1f10-11ee-aba4-2dfe2ecd8c53,regular,31,22,0.0,0.0,0.0,0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+486696f2-1f10-11ee-b20a-2dfe2ecd8c53,regular,41,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4968a43d-1f10-11ee-a479-d35f4ac15818,regular,29,21,2.0,0.2,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
+49755e93-1f10-11ee-883b-d35f4ac15818,regular,36,22,11.0,1.3,0.0,0,0,,True,True,True,True,,True
+486fc930-1f10-11ee-93fd-2dfe2ecd8c53,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+48833c5d-1f10-11ee-959a-2dfe2ecd8c53,regular,24,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+48793f76-1f10-11ee-98b8-2dfe2ecd8c53,regular,40,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+489674be-1f10-11ee-9650-2dfe2ecd8c53,regular,43,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+49bfeacd-1f10-11ee-9b92-d35f4ac15818,regular,27,21,1.0,0.2,0.0,0,0,,True,True,True,True,,True
+49ca39b8-1f10-11ee-b477-d35f4ac15818,regular,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+49878682-1f10-11ee-8ba9-d35f4ac15818,regular,27,21,2.0,0.4,0.0,0,0,,True,True,True,True,,True
+49b50da3-1f10-11ee-88d3-d35f4ac15818,regular,41,20,4.0,0.4,0.0,0,0,,True,True,True,True,,True
+49d2dc53-1f10-11ee-baf5-d35f4ac15818,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+49935d6f-1f10-11ee-acc4-d35f4ac15818,regular,37,22,28.0,3.3,0.0,0,0,,True,True,True,True,,True
+499fdcb3-1f10-11ee-98c9-d35f4ac15818,regular,40,23,8.0,0.9,0.0,0,0,,True,True,True,True,,True
+497e565c-1f10-11ee-a637-d35f4ac15818,regular,49,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+49aa251a-1f10-11ee-bae9-d35f4ac15818,regular,41,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+46d86bae-1f10-11ee-9525-2dfe2ecd8c53,regular,42,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
+49f8ea74-1f10-11ee-989f-d35f4ac15818,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+49db2d83-1f10-11ee-9d80-d35f4ac15818,regular,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
+4a051761-1f10-11ee-9440-d35f4ac15818,regular,29,22,9.0,0.9,0.0,0,0,,True,True,True,True,,True
+4a183c51-1f10-11ee-be97-d35f4ac15818,regular,39,22,4.0,0.4,0.0,0,0,,True,True,True,True,,True
+4a29b132-1f10-11ee-b8d4-d35f4ac15818,regular,31,21,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+49e48b96-1f10-11ee-bb58-d35f4ac15818,regular,35,21,7.0,2.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4a21500c-1f10-11ee-9d5b-d35f4ac15818,regular,37,21,14.0,1.8,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
+49ee9451-1f10-11ee-a2e4-d35f4ac15818,regular,27,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4a0e760d-1f10-11ee-bdbb-d35f4ac15818,regular,32,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+45d6de3a-1f10-11ee-a76e-715c06c41e61,regular,29,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+47f4d4a9-1f10-11ee-b49f-2dfe2ecd8c53,regular,31,24,3.0,0.4,0.0,0,0,,True,True,True,True,,True
+478eda92-1f10-11ee-a1b5-2dfe2ecd8c53,regular,32,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4a4d4ad1-1f10-11ee-aef5-d35f4ac15818,regular,37,22,13.0,4.0,0.0,0,0,,True,True,True,True,,True
+4a321d75-1f10-11ee-bbb8-d35f4ac15818,regular,29,20,19.0,4.8,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
+4a67a682-1f10-11ee-b8fd-d35f4ac15818,regular,38,23,0.0,0.0,0.0,0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
+4a705790-1f10-11ee-978d-d35f4ac15818,regular,39,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+4a78ab70-1f10-11ee-9277-d35f4ac15818,regular,36,23,1.0,0.2,0.0,0,0,,True,True,True,True,,True
+4a3af951-1f10-11ee-a9ae-d35f4ac15818,regular,41,21,8.0,1.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4a566f93-1f10-11ee-8a3c-d35f4ac15818,regular,29,22,3.0,1.1,0.0,0,0,,True,True,True,True,,True
+4a5ea199-1f10-11ee-b9ba-d35f4ac15818,regular,36,22,18.0,1.7,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4a4442a2-1f10-11ee-8b62-d35f4ac15818,regular,34,22,3.0,0.3,0.0,0,0,,True,True,True,True,,True
+4c026d27-1f10-11ee-b55f-2dfe2ecd8c53,regular,33,20,6.0,1.0,0.0,0,0,,True,True,True,True,,True
+4a9bdd6b-1f10-11ee-a103-d35f4ac15818,regular,49,23,15.0,1.4,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4a822262-1f10-11ee-bf83-d35f4ac15818,regular,37,23,8.0,0.8,0.0,0,0,,True,True,True,True,,True
+4aa484a5-1f10-11ee-9a0b-d35f4ac15818,regular,29,21,11.0,1.2,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4ab6715c-1f10-11ee-979a-d35f4ac15818,regular,30,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4abf9963-1f10-11ee-973a-d35f4ac15818,regular,34,22,12.0,1.1,0.0,0,0,,True,True,True,True,,True
+4ac83d4c-1f10-11ee-a6a9-d35f4ac15818,regular,31,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4a92aa87-1f10-11ee-b3fc-d35f4ac15818,regular,38,22,5.0,0.9,0.0,0,0,,True,True,True,True,,True
+4a8a2aca-1f10-11ee-b906-d35f4ac15818,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4aacb5df-1f10-11ee-80ce-d35f4ac15818,regular,35,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4af4cb90-1f10-11ee-8043-d35f4ac15818,regular,31,21,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4ad9bc32-1f10-11ee-9515-d35f4ac15818,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4ae36670-1f10-11ee-a149-d35f4ac15818,regular,37,21,15.0,2.3,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+4afdbf8f-1f10-11ee-8838-d35f4ac15818,regular,39,21,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
+4b18d4ae-1f10-11ee-993c-d35f4ac15818,regular,36,22,13.0,1.3,0.0,0,0,,True,True,True,True,,True
+4aec489a-1f10-11ee-b453-d35f4ac15818,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4b0ffe83-1f10-11ee-8601-d35f4ac15818,regular,25,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4ad0ad52-1f10-11ee-979d-d35f4ac15818,regular,37,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4b06f9b2-1f10-11ee-90b4-d35f4ac15818,regular,34,22,4.0,0.7,0.0,0,0,,True,True,True,True,,True
+4d200a54-1f10-11ee-a634-2dfe2ecd8c53,regular,28,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4c173aef-1f10-11ee-9c91-2dfe2ecd8c53,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4c0ca0d2-1f10-11ee-a2a7-2dfe2ecd8c53,regular,30,22,0.0,0.0,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4c3655ea-1f10-11ee-8c7e-2dfe2ecd8c53,regular,33,22,7.0,0.9,0.0,0,0,,True,True,True,True,,True
+4b3216b6-1f10-11ee-a81d-d35f4ac15818,regular,32,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+4b212396-1f10-11ee-9a9a-d35f4ac15818,regular,43,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4c2ad310-1f10-11ee-8af0-2dfe2ecd8c53,regular,35,24,18.0,1.7,0.0,0,0,,True,True,True,True,,True
+4b297596-1f10-11ee-a4ec-d35f4ac15818,regular,33,21,273.0,15.8,4.0,1,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;sale_sin_estar=1,False,True,True,True,,False
+4cd1714e-1f10-11ee-a373-2dfe2ecd8c53,regular,27,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4c4987f6-1f10-11ee-b2e4-2dfe2ecd8c53,regular,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4c531950-1f10-11ee-ab70-2dfe2ecd8c53,regular,24,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4c5d313e-1f10-11ee-be11-2dfe2ecd8c53,regular,36,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4c685ea1-1f10-11ee-97ba-2dfe2ecd8c53,regular,33,21,2.0,0.9,0.0,0,0,,True,True,True,True,,True
+4c84d3b3-1f10-11ee-b0c6-2dfe2ecd8c53,regular,32,21,4.0,0.8,0.0,0,0,,True,True,True,True,,True
+4c8f1b05-1f10-11ee-b7d9-2dfe2ecd8c53,regular,35,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4c7b3963-1f10-11ee-90a5-2dfe2ecd8c53,regular,31,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4c400e9c-1f10-11ee-99ca-2dfe2ecd8c53,regular,33,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4c71c0fb-1f10-11ee-bc92-2dfe2ecd8c53,regular,45,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4c996018-1f10-11ee-811d-2dfe2ecd8c53,regular,45,22,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4cb54a4f-1f10-11ee-b64a-2dfe2ecd8c53,regular,27,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4ce6d0b4-1f10-11ee-937e-2dfe2ecd8c53,regular,40,22,12.0,1.1,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+4ca3666b-1f10-11ee-9732-2dfe2ecd8c53,regular,41,22,4.0,0.6,0.0,0,0,,True,True,True,True,,True
+4cac80b5-1f10-11ee-847a-2dfe2ecd8c53,regular,34,21,7.0,1.9,0.0,0,0,,True,True,True,True,,True
+4cbe7d4d-1f10-11ee-bda1-2dfe2ecd8c53,regular,29,22,12.0,1.1,0.0,0,0,,True,True,True,True,,True
+4cc7aa21-1f10-11ee-98d7-2dfe2ecd8c53,regular,50,23,2.0,0.2,0.0,0,0,,True,True,True,True,,True
+4cdbf26c-1f10-11ee-8574-2dfe2ecd8c53,regular,33,22,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4d0d0551-1f10-11ee-b391-2dfe2ecd8c53,regular,30,21,9.0,1.1,0.0,0,0,,True,True,True,True,,True
+4d16bb52-1f10-11ee-9c85-2dfe2ecd8c53,regular,41,22,5.0,0.5,0.0,0,0,,True,True,True,True,,True
+4c20acd1-1f10-11ee-ae09-2dfe2ecd8c53,regular,37,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4cf0db29-1f10-11ee-903d-2dfe2ecd8c53,regular,33,21,14.0,4.3,0.0,0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,,True
+4cfabfa9-1f10-11ee-a0cb-2dfe2ecd8c53,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4d0397f6-1f10-11ee-a607-2dfe2ecd8c53,regular,27,22,0.0,0.0,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4d293dfe-1f10-11ee-b4f9-2dfe2ecd8c53,regular,26,23,4.0,0.4,0.0,0,0,,True,True,True,True,,True
+4d343f00-1f10-11ee-86cc-2dfe2ecd8c53,regular,37,21,8.0,0.8,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+4d3f22c8-1f10-11ee-a763-2dfe2ecd8c53,regular,44,22,6.0,1.0,0.0,0,0,,True,True,True,True,,True
+4d8cbbfd-1f10-11ee-aa3b-2dfe2ecd8c53,regular,35,23,19.0,2.2,0.0,0,0,,True,True,True,True,,True
+4d498932-1f10-11ee-a89c-2dfe2ecd8c53,regular,32,22,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4d56a78c-1f10-11ee-9bbd-2dfe2ecd8c53,regular,23,22,0.0,0.0,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,,True
+4d817b6c-1f10-11ee-946a-2dfe2ecd8c53,regular,34,21,0.0,0.0,0.0,0,1,quinteto_inicial_de_titulares=1,True,True,True,True,,True
+4d96dbcf-1f10-11ee-a506-2dfe2ecd8c53,regular,40,21,18.0,1.9,0.0,0,0,,True,True,True,True,,True
+4da17b1f-1f10-11ee-829f-2dfe2ecd8c53,regular,55,21,1.0,0.1,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
+4d779dd2-1f10-11ee-a593-2dfe2ecd8c53,regular,30,22,4.0,0.4,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
+4d60cccd-1f10-11ee-9548-2dfe2ecd8c53,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4d6c3110-1f10-11ee-85f0-2dfe2ecd8c53,regular,30,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4daba0fa-1f10-11ee-a593-2dfe2ecd8c53,regular,29,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4db53c5c-1f10-11ee-a1d1-2dfe2ecd8c53,regular,30,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4dbf9fe0-1f10-11ee-9e99-2dfe2ecd8c53,regular,39,22,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+4dca9eb2-1f10-11ee-bc20-2dfe2ecd8c53,regular,37,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+4dd43d34-1f10-11ee-a50f-2dfe2ecd8c53,regular,42,22,12.0,6.0,0.0,0,7,actua_fuera_de_pista=5;quinteto_periodo_arrastrado=2,True,True,True,True,,True
+4dddea4d-1f10-11ee-b3a0-2dfe2ecd8c53,regular,37,24,12.0,1.3,0.0,0,0,,True,True,True,True,,True
+4de887e5-1f10-11ee-8d6b-2dfe2ecd8c53,regular,22,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4df231d4-1f10-11ee-a649-2dfe2ecd8c53,regular,31,22,5.0,0.5,0.0,0,0,,True,True,True,True,,True
+5e4a6970-1f10-11ee-9b10-ab6fe808b772,regular,41,22,5.0,0.5,0.0,0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,,True
+63c56354-0fdb-11ef-8b33-b5f7aad4e579,playoffs,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+dda9970b-0fda-11ef-b4f4-a39950c3d7e5,playoffs,27,21,4.0,0.7,0.0,0,2,sale_sin_estar=2,True,True,True,True,,True
+20d0180a-0fdc-11ef-b667-3dbf4f3ea085,playoffs,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+28e2bad7-0fdb-11ef-90ba-6d58fce462a2,playoffs,40,22,14.0,2.7,0.0,0,0,,True,True,True,True,,True
+02d9c895-0fdd-11ef-b112-ebd12c36a512,playoffs,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+4cad188c-0fdd-11ef-b559-fdcadfb7860d,playoffs,46,24,30.0,3.7,0.0,0,0,,True,True,True,True,,True
+c5f80472-0fdc-11ef-b4ca-2bd982a46743,playoffs,36,20,3.0,1.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+d837f243-0fdd-11ef-aa04-fdcadfb7860d,playoffs,42,22,23.0,2.3,0.0,0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,,True
+f4e06e2e-1560-11ef-94c5-ab612bef498a,playoffs,42,22,35.0,3.8,0.0,0,0,,True,True,True,True,,True
+41ac3f2e-1561-11ef-9185-ad677b80e466,playoffs,39,24,6.0,0.6,0.0,0,0,,True,True,True,True,,True
+1c18b53f-17bb-11ef-b102-db92b3a50c9b,playoffs,40,21,7.0,0.9,0.0,0,0,,True,True,True,True,,True
+5cdd976e-17bc-11ef-a3c4-37825b577ad5,playoffs,43,24,12.0,1.1,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+b77f8ea6-17bc-11ef-b56c-99a69eb3486f,playoffs,42,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
+6150988d-17bb-11ef-aa18-8372087ce5a3,playoffs,33,21,12.0,1.2,0.0,0,0,,True,True,True,True,,True
+c6ee6694-17bb-11ef-94cf-4b82c43b238f,playoffs,31,23,5.0,0.5,0.0,0,0,,True,True,True,True,,True
+1ce9bb93-17bd-11ef-b09a-ab04d7b4d903,playoffs,50,24,48.0,5.4,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
+15c0bff2-1ac9-11ef-aa18-e5411d46e171,playoffs,39,24,1.0,0.2,0.0,0,0,,True,True,True,True,,True
+7f1b6102-1ac9-11ef-a475-b10c7f5244e0,playoffs,54,24,5.0,1.0,0.0,0,0,,True,True,True,True,,True
+d41b3e10-1ecb-11ef-9b1d-25f3afb5cc68,playoffs,42,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+fb9de7d6-2114-11ef-9832-4b52f3e2b6a4,playoffs,37,23,4.0,0.8,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
+87312acb-2115-11ef-9e70-eb06af566c6a,playoffs,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+f6ed9858-2115-11ef-8e88-f97a98534673,playoffs,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+86bb8102-2432-11ef-b88f-0b2204a72f0c,playoffs,30,24,5.0,0.4,0.0,0,0,,True,True,True,True,,True
