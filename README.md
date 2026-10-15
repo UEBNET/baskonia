@@ -250,3 +250,25 @@ mediana del 20 % por métrica (A 10,8 %, B 8,1 %) y gana a A en las 25 métricas
 Resultado principal: `data/modelos/algoritmo_A/traducciones/<temporada>.csv` (una fila por jugador-liga-
 temporada; columnas `<métrica>_el`, `_el_lo`, `_el_hi`, `_pct_el`, `_el_prox`) y `tipo_de_cambio.csv`.
 
+
+## 12. Quintetos, parejas y conexiones (jugada a jugada)
+
+Desde la versión 1.3 cada ejecución (`ejecutar`, `historico`, botón EJECUTAR, GitHub Actions) incluye
+**siempre** una capa adicional por liga: descarga el jugada a jugada de los partidos terminados que falten,
+reconstruye quién está en pista en cada momento y calcula métricas de unidades y conexiones con las mismas
+fórmulas en todas las ligas. Sólo esta capa: `python -m bbstats quintetos [--temporadas …] [--ligas …] [--sin-descarga]`.
+
+| Fichero (`data/processed/<temporada>/quintetos/<liga>/`) | Contenido |
+|---|---|
+| `quintetos.csv`, `trios.csv`, `parejas.csv` | Una fila por unidad y fase: minutos, posesiones, puntos a favor/en contra, +/-, ORtg/DRtg/Net (y ajustados por muestra `*_aj`), ritmo, cuatro factores a favor y del rival, perfil de tiro, % asistidas, robos/tapones. Quintetos: suma de RAPM y **sinergia**. Parejas: con/sin (WOWY) y **sinergia**, asistencias entre ambos |
+| `jugadores.csv` | On/off completo (on, off y on−off de ratings y factores), clutch, **RAPM** (ORAPM/DRAPM), red de asistencias (dadas, recibidas, % canastas asistidas, socios, concentración HHI, PageRank) |
+| `asistencias.csv` | Conexiones pasador → anotador: asistencias (de 2, de 3, en tiros libres), puntos generados, minutos juntos, por 40 min, cuotas |
+| `tiros.csv.gz` | Cada tiro con coordenadas de la fuente, asistente y los dos quintetos en pista |
+| `tramos.csv.gz` | Tramos (10 jugadores fijos): base para cualquier cálculo nuevo |
+| `validacion.csv` | Por partido: diferencias de minutos y +/- frente al boxscore oficial, anomalías y si entra en los quintetos |
+| `*_oficial.csv` | NBA y G League: tablas oficiales de quintetos/parejas/on-off para contrastar |
+
+Bruto: `data/raw/<liga>/<temporada>/pbp_<liga>_<temporada>_<fecha>.json.gz`, un paquete por ejecución con
+sólo los partidos nuevos (nunca se sobrescribe). Fuentes, cobertura y lagunas: `docs/INVESTIGACION_QUINTETOS.md`.
+Configuración: `quintetos` en `config/sources.json` (`contraccion_posesiones`, `rapm_lambda`,
+`excluir_si_dif_min_s`) y `pbp` (fuente) en cada liga.

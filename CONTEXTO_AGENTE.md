@@ -353,6 +353,37 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
   `fecha_nacimiento`.
 
+## 9b. Quintetos, parejas y conexiones (bbstats/lineups)
+
+Capa añadida en la versión 1.3, ejecutada en cada actualización de cada liga (ver README §12).
+
+**Proceso:** fuente jugada a jugada por liga (`bbstats/lineups/sources/*`) → modelo común de eventos
+(`model.py`: tiempo transcurrido, tiros con valor y asistente, cambios entra/sale, rebotes, pérdidas, robos,
+tapones, faltas) → tramos (`stints.py`): quinteto inicial de cada periodo deducido de quién actúa primero
+(si no salen 5, titulares o quinteto arrastrado), cambios aplicados en el orden de la fuente, validación por
+partido contra minutos y +/- oficiales (`validacion.csv`; los partidos con más de 120 s de desajuste no entran
+en quintetos/on-off) → métricas (`metrics.py`).
+
+**Métricas** (todas por fase regular/playoffs/total y por equipo):
+- Unidades (quintetos, tríos, parejas): `min`, `poss_of/poss_def/poss`, `pts_for/against`, `plus_minus`,
+  `pm_por40`, `ortg/drtg/net_rtg`, **`*_aj`** (contracción bayesiana: (pts + k·PPP_liga)/(poss + k)·100,
+  k = 300 posesiones → usar para comparar unidades con pocos minutos), `ritmo`, cuatro factores a favor y del
+  rival (`efg_pct`, `tov_pct`, `oreb_pct/dreb_pct`, `ft_rate`), `ts_pct`, `fg3a_rate`, `fg2/fg3/ft_pct`,
+  `ast_pct`, `stl_pct`, `blk_pct`, `pf_por100`, `min_pct_equipo`.
+- Quintetos: `rapm_suma` (suma del RAPM de los 5) y `sinergia` = net_rtg_aj − rapm_suma.
+- Parejas (WOWY): minutos y Net de A sin B, B sin A y ninguno; `sinergia` = Net_aj(A+B) − [Net_aj(A sin B) +
+  Net_aj(B sin A) − Net_aj(ninguno)]; asistencias entre ambos y por 40 minutos juntos.
+- Jugadores: on/off (`*_on`, `*_off`, `*_onoff`), `quintetos_distintos`, clutch (últimos 5 min, ±5 puntos),
+  **RAPM** (ridge ponderado por posesiones sobre los tramos, λ = 1500; `orapm`, `drapm` > 0 = mejor defensa,
+  `rapm`, `rapm_poss`), red de asistencias (`ast_dadas`, `ast_recibidas`, `pct_canastas_asistidas`,
+  `socios_asistencia`, `hhi_asistencias`, `receptor_principal`, `asistente_principal`, `pagerank_asistencias`).
+- Conexiones (`asistencias.csv`): pasador → anotador con tipo de canasta, puntos, minutos juntos y cuotas.
+
+**Uso en modelos:** unir por `player_id`/`team_id` con los datos de jugadores; filtrar unidades por `poss`
+(p.ej. ≥ 100) o usar `*_aj`; el RAPM de una temporada es ruidoso (combinar temporadas o usarlo como prior);
+`tramos.csv.gz` permite reconstruir cualquier métrica nueva (p.ej. RAPM multi-temporada, lineups vs rival).
+Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
+
 ## 10. Historial
 
 - Commit 1 — arquitectura por capas, esquema, motor de métricas, tests.
