@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-10-13T07:51:32.157644+00:00",
+  "generado": "2026-10-15T09:05:57.576051+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -14,7 +14,7 @@
     "acb": {
       "nombre": "Liga Endesa (ACB)",
       "archivo": "ligas/acb.csv",
-      "fecha_extraccion": "2026-10-12T11:48:02.015277+00:00",
+      "fecha_extraccion": "2026-10-15T08:55:26.813214+00:00",
       "fases": {
         "regular": 237,
         "total": 237
@@ -23,7 +23,7 @@
     "bbl": {
       "nombre": "easyCredit BBL (Alemania)",
       "archivo": "ligas/bbl.csv",
-      "fecha_extraccion": "2026-10-12T11:48:02.026024+00:00",
+      "fecha_extraccion": "2026-10-15T08:55:27.059827+00:00",
       "fases": {
         "regular": 237,
         "total": 237
@@ -32,25 +32,25 @@
     "eurocup": {
       "nombre": "BKT EuroCup",
       "archivo": "ligas/eurocup.csv",
-      "fecha_extraccion": "2026-10-12T11:48:02.024946+00:00",
+      "fecha_extraccion": "2026-10-15T08:55:26.548235+00:00",
       "fases": {
-        "regular": 367,
-        "total": 367
+        "regular": 385,
+        "total": 385
       }
     },
     "euroleague": {
       "nombre": "Turkish Airlines EuroLeague",
       "archivo": "ligas/euroleague.csv",
-      "fecha_extraccion": "2026-10-12T11:48:02.015707+00:00",
+      "fecha_extraccion": "2026-10-15T08:55:26.816077+00:00",
       "fases": {
-        "regular": 263,
-        "total": 263
+        "regular": 269,
+        "total": 269
       }
     },
     "lba": {
       "nombre": "LBA Serie A (Italia)",
       "archivo": "ligas/lba.csv",
-      "fecha_extraccion": "2026-10-13T07:50:01.807615+00:00",
+      "fecha_extraccion": "2026-10-15T08:55:26.121159+00:00",
       "fases": {
         "regular": 210,
         "total": 210
@@ -59,7 +59,7 @@
     "lnb": {
       "nombre": "LNB Betclic ÉLITE (Francia)",
       "archivo": "ligas/lnb.csv",
-      "fecha_extraccion": "2026-10-12T11:48:02.023856+00:00",
+      "fecha_extraccion": "2026-10-15T08:55:26.249732+00:00",
       "fases": {
         "regular": 179,
         "total": 179
