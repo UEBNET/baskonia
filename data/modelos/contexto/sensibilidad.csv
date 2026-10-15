@@ -1,0 +1,34 @@
+metrica,nombre,grupo,sentido,beta_comp,beta_comp_se,beta_riv,beta_riv_se,r2_dentro,filas,personas
+pts_p100,Puntos por 100 posesiones,Anotación,1,-0.28157,0.02524,0.03744,0.10205,0.05769,8904,2280
+ts_pct,TS%,Anotación,1,-0.04388,0.02829,-0.19728,0.1104,0.00826,8904,2280
+efg_pct,eFG%,Anotación,1,-0.10643,0.02515,-0.39637,0.09822,0.01122,8904,2280
+fg2_pct,T2%,Anotación,1,0.04461,0.02853,-0.25484,0.12884,0.0093,8898,2280
+fg3_pct,T3%,Anotación,1,-0.1106,0.02846,-0.39134,0.11759,0.00785,8511,2204
+ft_pct,TL%,Anotación,1,-0.09175,0.02561,0.06825,0.09686,0.00755,8903,2280
+fg3a_rate,Triples / tiros de campo (3PAr),Anotación,0,0.13772,0.02827,-0.12946,0.10358,0.02125,8904,2280
+fta_rate,Tiros libres / tiros de campo (FTr),Anotación,1,-0.16101,0.02214,-0.30981,0.10207,0.01111,8904,2280
+usg_pct,USG%,Uso y creación,0,-0.40201,0.02352,0.04187,0.09758,0.07483,8851,2270
+ast_pct,AST%,Uso y creación,1,-0.34793,0.01992,0.07127,0.089,0.05472,8904,2280
+tov_pct,TOV%,Uso y creación,-1,-0.11321,0.02821,-0.12209,0.12327,0.00531,8851,2270
+oreb_pct,OREB%,Rebote,1,0.14702,0.02871,-0.32165,0.13416,0.01926,7934,2060
+dreb_pct,DREB%,Rebote,1,-0.23567,0.03202,-0.42287,0.12928,0.02189,7934,2060
+oreb_p100,Rebotes ofensivos por 100 pos.,Rebote,1,0.03357,0.02908,-0.27865,0.1062,0.01433,8904,2280
+dreb_p100,Rebotes defensivos por 100 pos.,Rebote,1,-0.14168,0.02653,-0.49716,0.11053,0.01484,8904,2280
+stl_pct,STL%,Defensa,1,-0.06946,0.02853,-0.25514,0.10972,0.00718,8904,2280
+blk_pct,BLK%,Defensa,1,0.04116,0.02249,-0.29927,0.08621,0.02148,7934,2060
+stl_p100,Robos por 100 pos.,Defensa,1,-0.06295,0.02311,-0.24125,0.1095,0.00702,8904,2280
+blk_p100,Tapones por 100 pos.,Defensa,1,0.02221,0.02802,-0.29193,0.11093,0.01817,8904,2280
+pf_p100,Faltas por 100 pos.,Defensa,-1,0.26872,0.02838,-0.29524,0.1405,0.03135,8851,2270
+drtg,DRtg individual,Defensa,-1,-0.84926,0.03666,0.84818,0.12438,0.15147,7934,2060
+per,PER,Global,1,-0.18872,0.02568,-0.19439,0.0957,0.0445,8851,2270
+ortg,ORtg individual,Global,1,0.13612,0.02791,-0.18487,0.09705,0.01738,7934,2060
+game_score_p40,Game Score por 40',Global,1,-0.20048,0.0259,-0.092,0.10497,0.04654,8851,2270
+ws_per_40,Win Shares por 40',Global,1,0.4322,0.0275,-0.39556,0.10053,0.08567,7934,2060
+pct_aro,"% de tiros en el aro (< 1,8 m)",Pista,0,0.00351,0.02104,-0.12781,0.12437,0.02837,8730,2246
+pct_corta,"% de tiros cortos (1,8-4,25 m)",Pista,0,-0.17854,0.01975,0.18264,0.10113,0.00974,8730,2246
+pct_media,% de tiros de media distancia,Pista,0,-0.183,0.02311,0.2962,0.10071,0.02342,8730,2246
+pct_t3_esquina,% de tiros que son triples de esquina,Pista,0,0.32881,0.02654,-0.02724,0.10372,0.03297,8730,2246
+pct_asistidas,% de sus canastas que son asistidas,Pista,0,0.30966,0.01986,0.01996,0.10357,0.04112,8730,2246
+rapm,RAPM (impacto en pista por 100 pos.),Pista,1,0.39747,0.03652,0.14987,0.16073,0.03575,8248,2158
+orapm,RAPM ofensivo,Pista,1,0.35876,0.03492,0.67964,0.17666,0.02633,8248,2158
+drapm,RAPM defensivo (> 0 = mejor defensa),Pista,1,0.22157,0.03331,-0.60347,0.18973,0.01423,8248,2158
