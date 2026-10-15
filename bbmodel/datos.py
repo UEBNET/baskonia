@@ -17,8 +17,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from . import pista
 from .identidad import clave_nombre
-from .metricas import CATALOGO, EXPOSICIONES
+from .metricas import CATALOGO, EXPOSICIONES, METRICAS_PISTA
 
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_PROCESADOS = RAIZ / "data" / "processed"
@@ -27,7 +28,7 @@ DIR_PROCESADOS = RAIZ / "data" / "processed"
 COLS_ID = ["liga", "temporada", "player_id", "nombre", "posicion", "edad", "fecha_nacimiento", "altura_cm",
            "nacionalidad", "team_id", "equipo", "gp", "min", "team_gp", "team_pace", "minutos_partido"]
 # Totales que se suman entre equipos (para exposiciones y para recalcular)
-COLS_SUMA = ["gp", "min", "fga", "fta", "fg3a", "fg2a", "tov", "poss_on_court"]
+COLS_SUMA = ["gp", "min", "fga", "fta", "fg3a", "fg2a", "tov", "poss_on_court"] + pista.CONTEOS + ["poss_on", "min_on"]
 
 
 def temporadas_disponibles(dir_procesados: Path = DIR_PROCESADOS) -> list[str]:
@@ -38,8 +39,8 @@ def cargar_filas(fase: str = "regular", temporadas: list[str] | None = None,
                  dir_procesados: Path = DIR_PROCESADOS) -> pd.DataFrame:
     """Lee todos los CSV (liga x temporada) y devuelve las filas de una fase."""
     temporadas = temporadas or temporadas_disponibles(dir_procesados)
-    metricas = sorted({m.col for m in CATALOGO.values()})
-    usar = sorted(set(COLS_ID + COLS_SUMA + metricas))
+    metricas = sorted({m.col for m in CATALOGO.values()} - set(METRICAS_PISTA))
+    usar = sorted(set(COLS_ID + COLS_SUMA + metricas) - set(pista.PISTA_COLS))
     frames = []
     for t in temporadas:
         for f in sorted(glob.glob(str(Path(dir_procesados) / t / "ligas" / "*.csv"))):
@@ -50,6 +51,8 @@ def cargar_filas(fase: str = "regular", temporadas: list[str] | None = None,
     for c in usar:
         if c not in df:
             df[c] = np.nan
+    # rasgos de pista (jugada a jugada): perfil de tiro, canastas asistidas y RAPM, por jugador-equipo
+    df = pista.porcentajes(pista.unir_a_filas(df, pista.cargar(temporadas)))
     return df
 
 

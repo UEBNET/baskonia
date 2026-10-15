@@ -28,7 +28,8 @@ import pandas as pd
 
 from .metricas import CATALOGO, EXPOSICIONES, transformar
 
-MIN_EXPOSICION_AJUSTE = {"min": 100, "pos": 200, "tsa": 40, "fga": 40, "fg3a": 25, "fg2a": 25, "fta": 15, "plays": 50}
+MIN_EXPOSICION_AJUSTE = {"min": 100, "pos": 200, "tsa": 40, "fga": 40, "fg3a": 25, "fg2a": 25, "fta": 15, "plays": 50,
+                         "fga_pbp": 40, "fgm_pbp": 20, "rposs": 300}
 
 
 def _media_ponderada(y, w, grupos):

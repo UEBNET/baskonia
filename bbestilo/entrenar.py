@@ -30,7 +30,7 @@ torch.set_num_threads(max(1, torch.get_num_threads()))
 
 HIPER = {
     "vade": {"ocultas": [64, 32], "epocas_pre": 100, "epocas": 120, "lr": 1e-3, "lote": 512,
-             "calentamiento": 30, "wd": 1e-5, "lambda_estres": 13.0, "amortiguacion": 0.5,
+             "calentamiento": 30, "wd": 1e-5, "lambda_estres": float(len(C.COLS)), "amortiguacion": 0.5,
              "suelo_var": 0.02, "min_cuota": 0.01, "covarianza": "completa",
              "epocas_afinado": 40, "lr_afinado": 3e-4, "paso_m_afinado": False},
 }

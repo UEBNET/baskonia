@@ -23,7 +23,9 @@ import numpy as np
 
 # columna del CSV que mide la exposición de cada tipo
 EXPOSICIONES = {"min": "min", "pos": "poss_on_court", "tsa": "tsa", "fga": "fga", "fg3a": "fg3a",
-                "fg2a": "fg2a", "fta": "fta", "plays": "plays"}
+                "fg2a": "fg2a", "fta": "fta", "plays": "plays",
+                # jugada a jugada (bbmodel/pista.py): tiros con coordenadas, canastas y posesiones en pista
+                "fga_pbp": "fga_pbp", "fgm_pbp": "fgm_pbp", "rposs": "poss_on"}
 
 
 @dataclass(frozen=True)
@@ -67,7 +69,17 @@ _M = [
     Metrica("ortg", "ORtg individual", "Global", "min", "id", 1),
     Metrica("game_score_p40", "Game Score por 40'", "Global", "min", "id", 1),
     Metrica("ws_per_40", "Win Shares por 40'", "Global", "min", "id", 1),
+    # jugada a jugada (pista.py): perfil de tiro por zonas, dependencia del pase e impacto en pista
+    Metrica("pct_aro", "% de tiros en el aro (< 1,8 m)", "Pista", "fga_pbp", "proporcion", 0),
+    Metrica("pct_corta", "% de tiros cortos (1,8-4,25 m)", "Pista", "fga_pbp", "proporcion", 0),
+    Metrica("pct_media", "% de tiros de media distancia", "Pista", "fga_pbp", "proporcion", 0),
+    Metrica("pct_t3_esquina", "% de tiros que son triples de esquina", "Pista", "fga_pbp", "proporcion", 0),
+    Metrica("pct_asistidas", "% de sus canastas que son asistidas", "Pista", "fgm_pbp", "proporcion", 0),
+    Metrica("rapm", "RAPM (impacto en pista por 100 pos.)", "Pista", "rposs", "id", 1),
+    Metrica("orapm", "RAPM ofensivo", "Pista", "rposs", "id", 1),
+    Metrica("drapm", "RAPM defensivo (> 0 = mejor defensa)", "Pista", "rposs", "id", 1),
 ]
+METRICAS_PISTA = [m.col for m in _M if m.grupo == "Pista"]
 # PIE no se incluye: es una cuota de los eventos de todo el partido (crece con los minutos), no una
 # tasa, y no cumple el modelo de ruido «varianza ∝ 1/exposición».
 CATALOGO: dict[str, Metrica] = {m.col: m for m in _M}

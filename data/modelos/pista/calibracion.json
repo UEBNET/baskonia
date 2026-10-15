@@ -1,0 +1,744 @@
+{
+ "acb|2020-21": {
+  "acierto": 0.9985,
+  "aro": [
+   0.0009440875401251355,
+   0.0005006705221275597
+  ],
+  "escala": [
+   0.0010350326226035746,
+   0.0010563113356051677
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bbl|2020-21": {
+  "acierto": 0.9971,
+  "aro": [
+   140.09709739917884,
+   40.305874751277926
+  ],
+  "escala": [
+   0.057771962664175835,
+   0.06257125756292467
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "eurocup|2020-21": {
+  "acierto": 0.993,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "euroleague|2020-21": {
+  "acierto": 0.9941,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gleague|2020-21": {
+  "acierto": 0.9993,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "lba|2020-21": {
+  "acierto": 0.9988,
+  "aro": [
+   9.183523514914741,
+   50.363276629189045
+  ],
+  "escala": [
+   0.34173307741833725,
+   0.16193654953964784
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "nba|2020-21": {
+  "acierto": 0.9988,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "acb|2021-22": {
+  "acierto": 0.9978,
+  "aro": [
+   0.0010653024481351353,
+   0.00047818350610496525
+  ],
+  "escala": [
+   0.0010332685689602168,
+   0.00106028756495965
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bbl|2021-22": {
+  "acierto": 0.9967,
+  "aro": [
+   140.1364886355724,
+   39.54733742542818
+  ],
+  "escala": [
+   0.05782226308517743,
+   0.0621503969555475
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "eurocup|2021-22": {
+  "acierto": 0.9955,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "euroleague|2021-22": {
+  "acierto": 0.994,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gleague|2021-22": {
+  "acierto": 0.9992,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "lba|2021-22": {
+  "acierto": 0.9931,
+  "aro": [
+   9.205097269036198,
+   50.538491646343374
+  ],
+  "escala": [
+   0.3436161654582237,
+   0.1615303384675404
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "lnb|2021-22": {
+  "acierto": 0.9981,
+  "aro": [
+   8.38811644834868,
+   50.18544033800511
+  ],
+  "escala": [
+   0.3255473956526235,
+   0.1596729265746802
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "nba|2021-22": {
+  "acierto": 0.9989,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "acb|2022-23": {
+  "acierto": 0.9976,
+  "aro": [
+   0.0009191796969016377,
+   0.00043439001399709926
+  ],
+  "escala": [
+   0.0010356092836271552,
+   0.001057898964220934
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bbl|2022-23": {
+  "acierto": 0.9969,
+  "aro": [
+   140.1933816649834,
+   41.550436090867606
+  ],
+  "escala": [
+   0.058253748314004365,
+   0.06325289852364448
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "eurocup|2022-23": {
+  "acierto": 0.9944,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "euroleague|2022-23": {
+  "acierto": 0.9943,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gleague|2022-23": {
+  "acierto": 0.9992,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "lba|2022-23": {
+  "acierto": 0.9924,
+  "aro": [
+   9.14227237815871,
+   50.59361421622273
+  ],
+  "escala": [
+   0.34271149549196567,
+   0.16105956828409793
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "lnb|2022-23": {
+  "acierto": 0.9985,
+  "aro": [
+   8.449240761251183,
+   50.095325255886344
+  ],
+  "escala": [
+   0.32788687809108563,
+   0.1599616657540849
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "nba|2022-23": {
+  "acierto": 0.9992,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "acb|2023-24": {
+  "acierto": 0.9973,
+  "aro": [
+   0.000949389508698176,
+   0.0005450450683819298
+  ],
+  "escala": [
+   0.001032057995831893,
+   0.0010594359715169453
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bbl|2023-24": {
+  "acierto": 0.9966,
+  "aro": [
+   139.9687321457058,
+   41.62926634245881
+  ],
+  "escala": [
+   0.0581383860642824,
+   0.06347579001305027
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "eurocup|2023-24": {
+  "acierto": 0.9943,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "euroleague|2023-24": {
+  "acierto": 0.9953,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gleague|2023-24": {
+  "acierto": 0.9994,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "lba|2023-24": {
+  "acierto": 0.9913,
+  "aro": [
+   8.784844474484638,
+   50.60288184629151
+  ],
+  "escala": [
+   0.3368794551657057,
+   0.1600630527283101
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "lnb|2023-24": {
+  "acierto": 0.9979,
+  "aro": [
+   8.42070076315174,
+   50.05392227934348
+  ],
+  "escala": [
+   0.32799701608992793,
+   0.1610891874228608
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "nba|2023-24": {
+  "acierto": 0.9999,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "acb|2024-25": {
+  "acierto": 0.9975,
+  "aro": [
+   0.0010426294163226866,
+   0.0004692958748173518
+  ],
+  "escala": [
+   0.001035020997127459,
+   0.0010596852582258568
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bbl|2024-25": {
+  "acierto": 0.9976,
+  "aro": [
+   140.2241054420905,
+   43.37712557544695
+  ],
+  "escala": [
+   0.058158951890747025,
+   0.0646644361086666
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "eurocup|2024-25": {
+  "acierto": 0.9945,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "euroleague|2024-25": {
+  "acierto": 0.9961,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gleague|2024-25": {
+  "acierto": 0.9991,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "lba|2024-25": {
+  "acierto": 0.9908,
+  "aro": [
+   8.217660164402252,
+   50.643293009475315
+  ],
+  "escala": [
+   0.32758180475290005,
+   0.16003792221780072
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "lnb|2024-25": {
+  "acierto": 0.9982,
+  "aro": [
+   8.481337953401521,
+   50.237655556713776
+  ],
+  "escala": [
+   0.32817677485380614,
+   0.16080156721757904
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "nba|2024-25": {
+  "acierto": 1.0,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "acb|2025-26": {
+  "acierto": 0.9969,
+  "aro": [
+   0.0007326939516847657,
+   0.000711728142259232
+  ],
+  "escala": [
+   0.001040322611584685,
+   0.001061935503416758
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bbl|2025-26": {
+  "acierto": 0.9965,
+  "aro": [
+   140.02326720429585,
+   40.87972894442923
+  ],
+  "escala": [
+   0.057945587093198,
+   0.0629618624338949
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "eurocup|2025-26": {
+  "acierto": 0.995,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "euroleague|2025-26": {
+  "acierto": 0.9962,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gleague|2025-26": {
+  "acierto": 0.999,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "lba|2025-26": {
+  "acierto": 0.9907,
+  "aro": [
+   8.99040757816922,
+   50.611821336268235
+  ],
+  "escala": [
+   0.3420028265389721,
+   0.16107761230215664
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "lnb|2025-26": {
+  "acierto": 0.9985,
+  "aro": [
+   8.4854694734621,
+   50.140830578446916
+  ],
+  "escala": [
+   0.33142437853286827,
+   0.16067184702478504
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "nba|2025-26": {
+  "acierto": 1.0,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.03048,
+   0.03048
+  ],
+  "eje_largo": "y",
+  "regla": "nba",
+  "pista_completa": null
+ },
+ "acb|2026-27": {
+  "acierto": 0.9975,
+  "aro": [
+   0.0006104080837424306,
+   0.0005408639520753668
+  ],
+  "escala": [
+   0.0010429272002338169,
+   0.001065030141794006
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bbl|2026-27": {
+  "acierto": 0.996,
+  "aro": [
+   139.34879258406363,
+   43.21729082150453
+  ],
+  "escala": [
+   0.05880559824142282,
+   0.06426464796033507
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "eurocup|2026-27": {
+  "acierto": 0.9961,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "euroleague|2026-27": {
+  "acierto": 0.9969,
+  "aro": [
+   0.0,
+   0.0
+  ],
+  "escala": [
+   0.01,
+   0.01
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "lba|2026-27": {
+  "acierto": 0.9904,
+  "aro": [
+   10.32489490155655,
+   50.02230390826246
+  ],
+  "escala": [
+   0.3741554301582886,
+   0.1630184478598902
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "lnb|2026-27": {
+  "acierto": 0.9977,
+  "aro": [
+   9.189318532433994,
+   49.828481190305304
+  ],
+  "escala": [
+   0.3372346802329349,
+   0.1616930499122482
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ }
+}

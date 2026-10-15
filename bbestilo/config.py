@@ -49,11 +49,16 @@ RASGOS = [
     Rasgo("pf_p100", "Faltas por 100 pos.", "Defensa", "raiz", "A+B", "Faltas"),
     Rasgo("cuota_interior", "Minutos de interiores (4-5)", "Estructura", "id", "derivado A+B", "Interiores"),
     Rasgo("cuota_exterior", "Minutos de exteriores (1-2)", "Estructura", "id", "derivado A+B", "Exteriores"),
+    # jugada a jugada (bbmodel/pista.py, normalizados A+B como el resto): dónde tira y cómo llega a la canasta
+    Rasgo("pct_aro", "% de tiros en el aro (< 1,8 m)", "Tiro", "proporcion", "A+B (jugada a jugada)", "Aro"),
+    Rasgo("pct_media", "% de tiros de media distancia", "Tiro", "proporcion", "A+B (jugada a jugada)", "Media dist."),
+    Rasgo("pct_t3_esquina", "% de tiros que son triples de esquina", "Tiro", "proporcion", "A+B (jugada a jugada)", "Triple esquina"),
+    Rasgo("pct_asistidas", "% de canastas propias asistidas", "Ataque", "proporcion", "A+B (jugada a jugada)", "Asistidas"),
 ]
 COLS = [r.col for r in RASGOS]
 # Métricas normalizadas que entran en el vector (las demás columnas del vector se derivan).
 METRICAS_ESTILO = ["fg3a_rate", "fta_rate", "ast_pct", "tov_pct", "oreb_p100", "dreb_p100", "stl_p100",
-                   "blk_p100", "pf_p100", "usg_pct"]
+                   "blk_p100", "pf_p100", "usg_pct", "pct_aro", "pct_media", "pct_t3_esquina", "pct_asistidas"]
 # Capa de NIVEL: miden cuánto se rinde, no cómo se juega. No definen los estilos; se muestran aparte.
 # sentido: +1 más es mejor, -1 menos es mejor.
 NIVEL = {"per": 1, "game_score_p40": 1, "ws_per_40": 1, "ortg": 1, "drtg": -1, "pts_p100": 1,

@@ -8,6 +8,10 @@
     python -m bbmodel mesa-normalizacion   # JSON de la pestaña «Normalización de ligas»
     python -m bbmodel nacionalidades       # nacionalidad de cada jugador (datos brutos + enlace por persona)
     python -m bbmodel dataset-normalizado  # dataset completo A+B (todas las ligas, temporadas y jugadores)
+    python -m bbmodel pista                # rasgos de pista: zonas de tiro, canastas asistidas, RAPM (jugada a jugada)
+    python -m bbmodel contexto             # nivel de compañeros y rivales en pista y sensibilidad de cada métrica
+    python -m bbmodel interacciones        # efectos X → Y entre compañeros (cuota de tiro, eFG%, asistidas…)
+    python -m bbmodel mesa-quintetos       # datos de la pestaña «Quintetos y conexiones»
 
 Resultados en data/modelos/algoritmo_A/:
     parametros.json             todos los parámetros (para reutilizar sin reajustar)
@@ -44,10 +48,32 @@ def main(argv=None):
     mn = sub.add_parser("mesa-normalizacion", help="datos de la pestaña «Normalización de ligas» (A y B)")
     mn.add_argument("--salida", default="data/artifact")
     sub.add_parser("nacionalidades", help="nacionalidad de cada jugador → data/modelos/nacionalidades.csv")
+    mq = sub.add_parser("mesa-quintetos", help="datos de la pestaña «Quintetos y conexiones» (JSON comprimidos)")
+    mq.add_argument("--salida", default="data/artifact")
+    sub.add_parser("pista", help="rasgos de pista (zonas de tiro, canastas asistidas, RAPM) → data/modelos/pista/")
+    cx = sub.add_parser("contexto", help="contexto de nivel (compañeros y rivales) y sensibilidad de cada métrica")
+    cx.add_argument("--bootstrap", type=int, default=50)
+    sub.add_parser("interacciones", help="efectos X → Y entre compañeros → data/modelos/interacciones/")
     dn = sub.add_parser("dataset-normalizado", help="dataset completo de equivalentes EuroLeague (A+B) y JSON de la Mesa")
     dn.add_argument("--salida", default="data/artifact", help="carpeta de los JSON de la Mesa (datos/)")
     args = ap.parse_args(argv)
 
+    if args.orden == "mesa-quintetos":
+        from . import mesa_quintetos
+        mesa_quintetos.main(args.salida)
+        return
+    if args.orden == "pista":
+        from . import pista
+        pista.construir()
+        return
+    if args.orden == "contexto":
+        from . import contexto
+        contexto.main(args.bootstrap)
+        return
+    if args.orden == "interacciones":
+        from . import interacciones
+        interacciones.construir()
+        return
     if args.orden == "nacionalidades":
         from . import nacionalidad
         nacionalidad.main()

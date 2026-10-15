@@ -106,7 +106,41 @@ def construir(temporada: str) -> pd.DataFrame:
              "pos3", "pos3_estimada", "edad", "anio_nac", "fecha_nacimiento", "nacionalidad", "nacionalidad_fuente",
              "altura_cm", "gp", "min", "min_pg", "fuente_norm"]
     ident = [c for c in ident if c in out]
-    return out[ident + list(cols)].drop_duplicates(["liga", "player_id"])
+    out = out[ident + list(cols)].drop_duplicates(["liga", "player_id"])
+    return anadir_contexto(out, temporada)
+
+
+CTX = RAIZ / "data" / "modelos" / "contexto"
+CTX_COLS = ["L", "ctx_comp", "ctx_riv", "ctx_plantilla", "ctx_plantilla_dev"]
+
+
+def anadir_contexto(out: pd.DataFrame, temporada: str) -> pd.DataFrame:
+    """Contexto de nivel (bbmodel/contexto.py) y valores sin contexto `<m>_ctx`: lo que marcaría con compañeros de
+    nivel EuroLeague medio, para las métricas cuya sensibilidad al contexto es clara (|β| > 2 errores típicos).
+    Se resta β · desviación del contexto de plantilla en la escala transformada (τ de la EuroLeague de su posición)."""
+    pj, ps = CTX / "por_jugador_liga.csv", CTX / "sensibilidad.csv"
+    if not pj.exists() or not ps.exists():
+        return out
+    c = pd.read_csv(pj, dtype={"player_id": str})
+    c = c[c["temporada"] == temporada][["liga", "player_id"] + CTX_COLS].rename(columns={"player_id": "pid_modelo"})
+    out = out.copy()
+    out["pid_modelo"] = out["player_id"]
+    from .nacionalidad import id_modelo
+    out["pid_modelo"] = id_modelo(out["liga"], out["player_id"], out["nombre"])
+    out = out.merge(c, on=["liga", "pid_modelo"], how="left").drop(columns=["pid_modelo"])
+    sens = pd.read_csv(ps)
+    params = json.loads((RAIZ / "data" / "modelos" / "algoritmo_A" / "parametros.json").read_text(encoding="utf-8"))["metricas"]
+    dev = out["ctx_plantilla_dev"].fillna(0.0).to_numpy(float)
+    nuevas = {}
+    for r in sens.itertuples():
+        if r.metrica not in out or abs(r.beta_comp) <= 2 * r.beta_comp_se or r.metrica not in params:
+            continue
+        tr = CATALOGO[r.metrica].transf
+        tau2 = params[r.metrica]["suerte"]["tau2"]
+        tau = out["pos3"].map(lambda p: np.sqrt(tau2.get(f"euroleague|{p}", np.nan)) if isinstance(p, str) else np.nan)
+        y = transformar(pd.to_numeric(out[r.metrica], errors="coerce"), tr)
+        nuevas[f"{r.metrica}_ctx"] = destransformar(y - tau.to_numpy(float) * r.beta_comp * dev, tr)
+    return pd.concat([out, pd.DataFrame(nuevas, index=out.index)], axis=1)
 
 
 def _columnar(df: pd.DataFrame, dec: int = 3) -> dict:

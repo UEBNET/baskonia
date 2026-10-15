@@ -1,11 +1,11 @@
 """Red neuronal de estilos de juego: VaDE (Variational Deep Embedding; Jiang et al. 2017).
 
-  * entrada: vector de estilo de 13 rasgos (transformado, estandarizado y sin nivel);
+  * entrada: vector de estilo de 17 rasgos (13 de caja + 4 del jugada a jugada; transformado, estandarizado y sin nivel);
   * una capa latente de 3 neuronas, que ES el mapa 3D (clubes y jugadores en el mismo espacio);
   * una ÚLTIMA capa de 6 neuronas, una por estilo, cuyas salidas suman 1. El estilo asignado es la
     neurona con mayor salida.
 
-Codificador 13-64-32 → (μ_z, log σ²_z) en 3D · decodificador 3-32-64-13 con varianza común ·
+Codificador 17-64-32 → (μ_z, log σ²_z) en 3D · decodificador 3-32-64-17 con varianza común ·
 previa de mezcla de k gaussianas p(z) = Σ π_k N(μ_k, Σ_k) con covarianza completa. La capa de salida da
 la probabilidad a posteriori de cada componente: γ_k = π_k N(z | μ_k, Σ_k) / Σ_j π_j N(z | μ_j, Σ_j).
 Probabilística: cada club es una nube (μ_z, σ_z); cada estilo, un elipsoide con su forma y orientación.
@@ -67,7 +67,7 @@ class RedVaDE(_Mapa):
         self.cab_mu = nn.Linear(ocultas[-1], d_lat)
         self.cab_logvar = nn.Linear(ocultas[-1], d_lat)
         self.dec = _mlp([d_lat, *reversed(ocultas), d_in])
-        # varianza de reconstrucción COMÚN a los 13 rasgos: con una por rasgo la red puede declarar
+        # varianza de reconstrucción COMÚN a todos los rasgos: con una por rasgo la red puede declarar
         # «ruido» un rasgo difícil (p. ej. el ritmo) y dejar de representarlo en el mapa
         self.logvar_x = nn.Parameter(torch.zeros(1))
         self.pi_logits = nn.Parameter(torch.zeros(k))

@@ -26,6 +26,10 @@ def _plantilla(n=10, seed=0):
         rng.uniform(0, 2.5, n),                # blk_p100
         rng.uniform(3, 9, n),                  # pf_p100
         rng.uniform(12, 30, n),                # usg_pct
+        rng.uniform(15, 55, n),                # pct_aro
+        rng.uniform(0, 20, n),                 # pct_media
+        rng.uniform(0, 20, n),                 # pct_t3_esquina
+        rng.uniform(30, 90, n),                # pct_asistidas
         (np.arange(n) % 3 == 0).astype(float),  # es_int
         (np.arange(n) % 3 == 1).astype(float),  # es_ext
     ])
