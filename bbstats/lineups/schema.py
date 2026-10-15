@@ -9,6 +9,8 @@ ID_UNIT = [("liga", "Código de liga"), ("temporada", "Temporada"), ("fase", "re
 RATES = [
     ("gp", "Partidos en los que la unidad estuvo en pista"), ("tramos", "Tramos (intervalos sin cambios) jugados"),
     ("min", "Minutos juntos en pista"), ("min_pct_equipo", "% de los minutos del equipo"),
+    ("min_clutch", "Minutos en clutch (últimos 5 min del último cuarto o prórroga, ±5 puntos)"),
+    ("min_basura", "Minutos de la basura (4.º cuarto, ≤ 2 titulares en pista y diferencia ≥ 25/20/10 según el reloj)"),
     ("poss_of", "Posesiones ofensivas estimadas (TCI − RO + PER + c·TLI)"), ("poss_def", "Posesiones defensivas"),
     ("poss", "Posesiones (media de ataque y defensa)"),
     ("pts_for", "Puntos a favor"), ("pts_against", "Puntos en contra"), ("plus_minus", "+/-"),
@@ -17,6 +19,9 @@ RATES = [
     ("net_rtg", "Rating neto (ORtg − DRtg)"),
     ("ortg_aj", "ORtg ajustado por muestra (contracción bayesiana hacia la media de la liga, k posesiones)"),
     ("drtg_aj", "DRtg ajustado por muestra"), ("net_rtg_aj", "Net ajustado por muestra (comparable entre unidades con pocos minutos)"),
+    ("drtg_suerte", "DRtg ajustado por suerte: % de triples y de tiros libres del rival sustituidos por la media de la liga"),
+    ("net_rtg_suerte", "Net ajustado por suerte (ORtg − DRtg_suerte)"),
+    ("net_rtg_suerte_aj", "Net ajustado por suerte y por muestra"),
     ("ritmo", "Posesiones por partido completo (40 o 48 minutos)"),
     ("efg_pct", "eFG% a favor"), ("opp_efg_pct", "eFG% del rival"), ("ts_pct", "TS% a favor"), ("opp_ts_pct", "TS% del rival"),
     ("tov_pct", "Pérdidas por 100 jugadas"), ("opp_tov_pct", "Pérdidas forzadas al rival por 100 jugadas"),
@@ -43,18 +48,25 @@ PAIR_EXTRA = [("jugador_a_id", "Id jugador A"), ("jugador_a", "Jugador A"), ("ju
               ("min_ninguno", "Minutos del equipo sin ninguno de los dos"), ("net_rtg_ninguno", "Net sin ninguno"),
               ("net_rtg_aj_ninguno", "Net_aj sin ninguno"),
               ("sinergia", "Net_aj juntos − (Net_aj A sin B + Net_aj B sin A − Net_aj ninguno): > 0 = se potencian"),
+              ("pct_min_a_con_b", "% de los minutos de A que juega con B"),
+              ("pct_min_b_con_a", "% de los minutos de B que juega con A"),
+              ("net_esperado", "Net esperado según el RAPM de los 10 jugadores en pista cuando la pareja está junta"),
+              ("sinergia_rapm", "Sinergia frente al RAPM: poss/(poss+k)·(Net − Net esperado)"),
               ("ast_a_a_b", "Asistencias de A a B"), ("ast_b_a_a", "Asistencias de B a A"),
               ("ast_por40_juntos", "Asistencias entre ambos por 40 minutos juntos")]
 
+TRIO_EXTRA = [("net_esperado", "Net esperado según el RAPM de los 10 jugadores en pista cuando el trío está junto"),
+              ("sinergia_rapm", "Sinergia frente al RAPM: poss/(poss+k)·(Net − Net esperado)")]
+
 LINEUP_COLS = ID_UNIT + RATES + LINEUP_EXTRA
-TRIO_COLS = ID_UNIT + RATES
+TRIO_COLS = ID_UNIT + RATES + TRIO_EXTRA
 PAIR_COLS = ID_UNIT[:6] + PAIR_EXTRA[:4] + RATES + PAIR_EXTRA[4:]
 
-_ONOFF_BASE = ["min", "poss", "pts_for", "pts_against", "plus_minus", "pm_por40", "ortg", "drtg", "net_rtg",
-               "ortg_aj", "drtg_aj", "net_rtg_aj", "ritmo", "efg_pct", "opp_efg_pct", "ts_pct", "opp_ts_pct",
+ONOFF_BASE = ["min", "poss", "pts_for", "pts_against", "plus_minus", "pm_por40", "ortg", "drtg", "net_rtg",
+               "ortg_aj", "drtg_aj", "net_rtg_aj", "net_rtg_suerte", "net_rtg_suerte_aj", "ritmo", "efg_pct", "opp_efg_pct", "ts_pct", "opp_ts_pct",
                "tov_pct", "opp_tov_pct", "oreb_pct", "dreb_pct", "ft_rate", "opp_ft_rate", "fg3a_rate",
                "opp_fg3a_rate", "ast_pct"]
-_ONOFF_DIFF = ["ortg", "drtg", "net_rtg", "net_rtg_aj", "ritmo", "efg_pct", "opp_efg_pct", "ts_pct", "opp_ts_pct",
+ONOFF_DIFF = ["ortg", "drtg", "net_rtg", "net_rtg_aj", "net_rtg_suerte", "net_rtg_suerte_aj", "ritmo", "efg_pct", "opp_efg_pct", "ts_pct", "opp_ts_pct",
                "tov_pct", "opp_tov_pct", "oreb_pct", "dreb_pct", "ft_rate", "opp_ft_rate", "fg3a_rate", "ast_pct"]
 _RATE_DESC = dict(RATES)
 
@@ -62,11 +74,23 @@ PLAYER_COLS = ([("liga", "Código de liga"), ("temporada", "Temporada"), ("fase"
                 ("team_id", "Id del equipo"), ("equipo", "Equipo"), ("player_id", "Id del jugador (mismo que en los datos de jugadores)"),
                 ("nombre", "Jugador"), ("gp", "Partidos con minutos en el jugada a jugada"), ("tramos", "Tramos jugados"),
                 ("min_pct_equipo", "% de los minutos del equipo en pista"),
-                ("quintetos_distintos", "Quintetos distintos en los que ha jugado")]
-               + [(f"{c}_on", f"Con el jugador en pista: {_RATE_DESC.get(c, c)}") for c in _ONOFF_BASE]
-               + [(f"{c}_off", f"Con el jugador en el banquillo: {_RATE_DESC.get(c, c)}") for c in _ONOFF_BASE]
-               + [(f"{c}_onoff", f"On − Off: {_RATE_DESC.get(c, c)}") for c in _ONOFF_DIFF]
+                ("quintetos_distintos", "Quintetos distintos en los que ha jugado"),
+                ("titular_partidos", "Partidos en el quinteto inicial (según el jugada a jugada)"),
+                ("cierra_partidos", "Partidos en pista en el último tramo del partido"),
+                ("relevos", "Veces que entra a pista (relevos o turnos)"),
+                ("relevos_por_partido", "Relevos por partido"), ("min_por_partido", "Minutos por partido"),
+                ("min_por_relevo", "Duración media de cada relevo (minutos)"),
+                ("pct_min_q1", "% de sus minutos en el 1.er cuarto"), ("pct_min_q2", "% en el 2.º cuarto"),
+                ("pct_min_q3", "% en el 3.er cuarto"), ("pct_min_q4", "% en el 4.º cuarto"),
+                ("pct_min_prorroga", "% en prórrogas")]
+               + [(f"{c}_on", f"Con el jugador en pista: {_RATE_DESC.get(c, c)}") for c in ONOFF_BASE]
+               + [(f"{c}_off", f"Con el jugador en el banquillo: {_RATE_DESC.get(c, c)}") for c in ONOFF_BASE]
+               + [(f"{c}_onoff", f"On − Off: {_RATE_DESC.get(c, c)}") for c in ONOFF_DIFF]
                + [("clutch_min", "Minutos en clutch (últimos 5 min del último cuarto o prórroga, ±5 puntos)"),
+                  ("basura_min", "Minutos de la basura"),
+                  ("net_rtg_on_sin_basura", "Net en pista sin minutos de la basura"),
+                  ("net_rtg_onoff_sin_basura", "On − Off del Net sin minutos de la basura"),
+                  ("net_rtg_aj_onoff_sin_basura", "On − Off del Net_aj sin minutos de la basura"),
                   ("clutch_plus_minus", "+/- en clutch"), ("clutch_net_rtg", "Net en clutch"), ("clutch_net_rtg_aj", "Net_aj en clutch"),
                   ("orapm", "RAPM ofensivo (puntos por 100 posesiones sobre la media, ajustado por compañeros y rivales)"),
                   ("drapm", "RAPM defensivo (> 0 = mejor defensa)"), ("rapm", "RAPM total (ORAPM + DRAPM)"),
@@ -89,11 +113,37 @@ ASSIST_COLS = [("liga", "Código de liga"), ("temporada", "Temporada"), ("fase",
                ("pct_asistidas_receptor", "% de las canastas asistidas del anotador que vienen de este pasador"),
                ("min_juntos", "Minutos juntos en pista"), ("ast_por40_juntos", "Asistencias por 40 minutos juntos")]
 
+TEAM_COLS = [("liga", "Código de liga"), ("temporada", "Temporada"), ("fase", "regular | playoffs | total"),
+             ("team_id", "Id del equipo"), ("equipo", "Equipo"), ("gp", "Partidos con quintetos"),
+             ("min", "Minutos"), ("poss", "Posesiones"), ("ortg", "Rating ofensivo"), ("drtg", "Rating defensivo"),
+             ("net_rtg", "Rating neto"), ("net_rtg_aj", "Net ajustado por muestra"),
+             ("drtg_suerte", "DRtg ajustado por suerte"), ("net_rtg_suerte", "Net ajustado por suerte"),
+             ("ritmo", "Posesiones por partido"), ("efg_pct", "eFG%"), ("opp_efg_pct", "eFG% del rival"),
+             ("tov_pct", "TOV%"), ("opp_tov_pct", "TOV% del rival"), ("oreb_pct", "OREB%"), ("dreb_pct", "DREB%"),
+             ("ft_rate", "FTr"), ("opp_ft_rate", "FTr del rival"),
+             ("min_clutch", "Minutos en clutch"), ("clutch_net_rtg", "Net en clutch"),
+             ("min_basura", "Minutos de la basura"),
+             ("quintetos_distintos", "Quintetos distintos utilizados"),
+             ("quintetos_100_poss", "Quintetos con ≥ 100 posesiones"),
+             ("quinteto_principal", "Quinteto con más minutos"),
+             ("min_pct_quinteto_principal", "% de los minutos del equipo del quinteto principal"),
+             ("net_rtg_quinteto_principal", "Net del quinteto principal"),
+             ("min_pct_top5_quintetos", "% de los minutos de los 5 quintetos más usados (estabilidad)"),
+             ("quinteto_titular_habitual", "Quinteto inicial más repetido"),
+             ("partidos_quinteto_titular", "Partidos que salió el quinteto inicial habitual"),
+             ("quintetos_titulares_distintos", "Quintetos iniciales distintos"),
+             ("net_rtg_quinteto_titular", "Net del quinteto inicial habitual"),
+             ("jugadores_usados", "Jugadores con minutos"),
+             ("jugadores_rotacion", "Jugadores con ≥ 25 % de los minutos del equipo"),
+             ("hhi_minutos", "Concentración de los minutos (HHI 0–10.000; 2.000 = 5 jugadores con todo)"),
+             ("hhi_pagerank_asistencias", "Concentración de la red de asistencias (HHI del PageRank; alto = juego "
+                                          "centralizado en pocos jugadores)")]
+
 SHOT_COLS = ["liga", "temporada", "fase", "game_id", "periodo", "t", "team_id", "player_id", "nombre", "tipo", "anotado",
              "puntos", "asistente_id", "asistente", "x", "y", "quinteto", "quinteto_rival", "margen_previo"]
 
 FILES = {"quintetos": LINEUP_COLS, "trios": TRIO_COLS, "parejas": PAIR_COLS, "jugadores": PLAYER_COLS,
-         "asistencias": ASSIST_COLS}
+         "asistencias": ASSIST_COLS, "equipos": TEAM_COLS}
 
 
 def dictionary_records() -> list[dict]:

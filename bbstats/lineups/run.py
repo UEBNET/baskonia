@@ -6,7 +6,8 @@ Para cada liga y temporada:
   2. Si hay descarga, pide a la fuente la lista de partidos y descarga los terminados que falten.
   3. Interpreta todos los partidos (modelo común), reconstruye tramos y valida contra el boxscore oficial.
   4. Escribe data/processed/<temporada>/quintetos/<liga>/: quintetos, trios, parejas, jugadores (on/off,
-     clutch, RAPM, red de asistencias), asistencias (pasador → anotador), validacion (CSV) y tramos y tiros
+     clutch, basura, rotación, RAPM, red de asistencias), asistencias (pasador → anotador), equipos (estructura
+     de quintetos y rotación), validacion (CSV) y tramos y tiros
      (CSV comprimido), más *_oficial.csv cuando la fuente publica tablas oficiales (NBA, G League).
 """
 from __future__ import annotations
@@ -25,7 +26,7 @@ from ..http import HttpClient
 from ..raw_store import RawStore
 from ..utils import utc_now, utc_stamp
 from . import metrics as M
-from .schema import ASSIST_COLS, LINEUP_COLS, PAIR_COLS, PLAYER_COLS, SHOT_COLS, TRIO_COLS
+from .schema import ASSIST_COLS, LINEUP_COLS, PAIR_COLS, PLAYER_COLS, SHOT_COLS, TEAM_COLS, TRIO_COLS
 from .sources.base import Ctx, PBPSource
 from .stints import build
 
@@ -182,7 +183,7 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
     fgm = pd.Series(fgm, dtype=float)
     rows_all = M.team_rows(seg) if not seg.empty else pd.DataFrame()
     nm = lambda ids: " / ".join(names.get(p) or p for p in ids.split("|"))  # noqa: E731
-    tables = {"quintetos": [], "trios": [], "parejas": [], "jugadores": [], "asistencias": []}
+    tables = {"quintetos": [], "trios": [], "parejas": [], "jugadores": [], "asistencias": [], "equipos": []}
     for fase in M.PHASES:
         rows = rows_all if fase == "total" or rows_all.empty else rows_all[rows_all["fase"] == fase]
         ast_f = assists if fase == "total" or assists.empty else assists[assists["fase"] == fase]
@@ -203,6 +204,11 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
                 q5["sinergia"] = w * (q5["net_rtg"] - q5["net_esperado"])
             q3 = M.unit_table(rows, 3, lg, game_min, coef, k)
             pair = M.unit_table(rows, 2, lg, game_min, coef, k)
+            for size, t in ((3, q3), (2, pair)):
+                if not t.empty:
+                    exp = M.expected_net(rows, rmap, coef, size).set_index(["team_id", "unidad"])["net_esperado"]
+                    t["net_esperado"] = exp.reindex(pd.MultiIndex.from_frame(t[["team_id", "unidad"]])).values
+                    t["sinergia_rapm"] = t["poss"] / (t["poss"] + k) * (t["net_rtg"] - t["net_esperado"])
             sums_on = M.on_sums(rows)
             if not pair.empty:
                 pair = pd.concat([pair, M.wowy_pairs(rows, pair, sums_on, lg, game_min, coef, k)], axis=1)
@@ -210,16 +216,23 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
                 pair["jugador_a_id"], pair["jugador_b_id"] = ab[0], ab[1]
                 pair["jugador_a"] = ab[0].map(lambda p: names.get(p) or p)
                 pair["jugador_b"] = ab[1].map(lambda p: names.get(p) or p)
+                on_min = sums_on.set_index(["team_id", "player_id"])["sec"] / 60
+                for x, y_ in (("a", ab[0]), ("b", ab[1])):
+                    pm_ = on_min.reindex(pd.MultiIndex.from_arrays([pair["team_id"], y_])).values
+                    pair[f"pct_min_{x}_con_{'b' if x == 'a' else 'a'}"] = 100 * M._div(pair["min"], pm_)
             pl = M.onoff_table(rows, lg, game_min, coef, k)
             if not rp.empty and not pl.empty:
                 pl = pl.merge(rp, on="player_id", how="left")
+            rot = M.rotation_table(rows)
+            if not rot.empty and not pl.empty:
+                pl = pl.merge(rot, on=["team_id", "player_id"], how="left")
         else:
             pl = pd.DataFrame()
         con, net = M.assist_tables(ast_f, fgm, pair[["team_id", "unidad", "min"]] if not pair.empty else pd.DataFrame())
         if not net.empty:
             pl = net if pl.empty else pl.merge(net, on=["team_id", "player_id"], how="outer")
         if not pl.empty:
-            pl = pl.assign(**ident, equipo=pl["team_id"].map(lambda x: teams.get(x, x)),
+            pl = pl.copy().assign(**ident, equipo=pl["team_id"].map(lambda x: teams.get(x, x)),
                            nombre=pl["player_id"].map(lambda p: names.get(p) or p))
             tables["jugadores"].append(pl)
         if not con.empty:
@@ -232,6 +245,10 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
                              pasador=con["pasador_id"].map(lambda p: names.get(p) or p),
                              receptor=con["receptor_id"].map(lambda p: names.get(p) or p))
             tables["asistencias"].append(con)
+        if not rows.empty:
+            eq = M.team_table(rows, q5, pl, lg, game_min, coef, k, names)
+            if not eq.empty:
+                tables["equipos"].append(eq.assign(**ident, equipo=eq["team_id"].map(lambda x: teams.get(x, x))))
         for name, t in (("quintetos", q5), ("trios", q3), ("parejas", pair)):
             if not t.empty:
                 tables[name].append(t.assign(**ident, equipo=t["team_id"].map(lambda x: teams.get(x, x)),
@@ -243,6 +260,7 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
     _write(cat["parejas"], PAIR_COLS, out / "parejas.csv")
     _write(cat["jugadores"], PLAYER_COLS, out / "jugadores.csv")
     _write(cat["asistencias"], ASSIST_COLS, out / "asistencias.csv")
+    _write(cat["equipos"], TEAM_COLS, out / "equipos.csv")
     val.to_csv(out / "validacion.csv", index=False, encoding="utf-8")
     if not seg.empty:
         _round(seg.assign(liga=liga, temporada=season)).to_csv(out / "tramos.csv.gz", index=False, encoding="utf-8",

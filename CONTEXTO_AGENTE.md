@@ -369,15 +369,39 @@ en quintetos/on-off) → métricas (`metrics.py`).
   `pm_por40`, `ortg/drtg/net_rtg`, **`*_aj`** (contracción bayesiana: (pts + k·PPP_liga)/(poss + k)·100,
   k = 300 posesiones → usar para comparar unidades con pocos minutos), `ritmo`, cuatro factores a favor y del
   rival (`efg_pct`, `tov_pct`, `oreb_pct/dreb_pct`, `ft_rate`), `ts_pct`, `fg3a_rate`, `fg2/fg3/ft_pct`,
-  `ast_pct`, `stl_pct`, `blk_pct`, `pf_por100`, `min_pct_equipo`.
-- Quintetos: `rapm_suma` (suma del RAPM de los 5) y `sinergia` = net_rtg_aj − rapm_suma.
+  `ast_pct`, `stl_pct`, `blk_pct`, `pf_por100`, `min_pct_equipo`, `min_clutch`, `min_basura`, y **suerte**:
+  `drtg_suerte`, `net_rtg_suerte(_aj)` (puntos del rival con su % de triples y de TL sustituido por la media de
+  la liga).
+- Net esperado (`metrics.expected_net`): en cada tramo Σ RAPM de los 5 propios − Σ RAPM de los 5 rivales,
+  ponderado por posesiones sobre los tramos de la unidad. Quintetos: `rapm_suma`, `net_esperado` y
+  `sinergia` = poss/(poss+k)·(net_rtg − net_esperado). Tríos y parejas: `net_esperado` y `sinergia_rapm` (igual).
+  (La versión anterior, net_rtg_aj − rapm_suma, ignoraba a los rivales y salía siempre negativa.)
 - Parejas (WOWY): minutos y Net de A sin B, B sin A y ninguno; `sinergia` = Net_aj(A+B) − [Net_aj(A sin B) +
-  Net_aj(B sin A) − Net_aj(ninguno)]; asistencias entre ambos y por 40 minutos juntos.
-- Jugadores: on/off (`*_on`, `*_off`, `*_onoff`), `quintetos_distintos`, clutch (últimos 5 min, ±5 puntos),
+  Net_aj(B sin A) − Net_aj(ninguno)]; `pct_min_a_con_b`/`pct_min_b_con_a`; asistencias entre ambos y por 40
+  minutos juntos.
+- Basura (`stints._garbage`): 4.º cuarto, ≤ 2 titulares del partido en pista entre ambos equipos y diferencia
+  ≥ 25 / 20 / 10 en el primer cuarto / segundo cuarto / segunda mitad del periodo (Cleaning the Glass escalado;
+  sin la regla de "fin de la basura"). Marca `basura` en `tramos.csv.gz`.
+- Jugadores: on/off (`*_on`, `*_off`, `*_onoff`), on/off sin basura (`net_rtg_on_sin_basura`,
+  `net_rtg_onoff_sin_basura`, `net_rtg_aj_onoff_sin_basura`, `basura_min`), `quintetos_distintos`, rotación
+  (`titular_partidos`, `cierra_partidos`, `relevos`, `relevos_por_partido`, `min_por_partido`, `min_por_relevo`,
+  `pct_min_q1..q4`, `pct_min_prorroga`), clutch (últimos 5 min, ±5 puntos),
   **RAPM** (ridge ponderado por posesiones sobre los tramos, λ = 1500; `orapm`, `drapm` > 0 = mejor defensa,
   `rapm`, `rapm_poss`), red de asistencias (`ast_dadas`, `ast_recibidas`, `pct_canastas_asistidas`,
   `socios_asistencia`, `hhi_asistencias`, `receptor_principal`, `asistente_principal`, `pagerank_asistencias`).
 - Conexiones (`asistencias.csv`): pasador → anotador con tipo de canasta, puntos, minutos juntos y cuotas.
+- Equipos (`equipos.csv`): ratings, suerte, clutch, basura, quintetos distintos y con ≥ 100 posesiones,
+  quinteto principal (y su % de minutos y Net), estabilidad (`min_pct_top5_quintetos`), quinteto titular
+  habitual (partidos y Net), `jugadores_rotacion` (≥ 25 % de los minutos), `hhi_minutos`,
+  `hhi_pagerank_asistencias`.
+
+**Fuentes jugada a jugada** (`config.ligas.<liga>.pbp`): EuroLeague/EuroCup `euroleague_live` (orden de la lista,
+sin recolocar por reloj: es lo que mejor cuadra con el +/- oficial), ACB `acb`, LBA `lba`, BBL `bbl` (acciones
+ya incluidas en el bruto principal; 2020-23 sin cambios completos → sólo tiros y asistencias), LNB `lnb`
+(Sportradar embed + api-prod.lnb.fr), G League `gleague_stats` y NBA `nba_stats` (playbyplayv3 en el host de la
+G League; tiros libres recolocados tras su falta porque el +/- oficial de la NBA los atribuye al quinteto de la
+falta; en ACB/EuroLeague/LBA ese cambio empeora la validación, no aplicarlo). Descarga incremental con paquetes
+de `guardar_cada_partidos` (150).
 
 **Uso en modelos:** unir por `player_id`/`team_id` con los datos de jugadores; filtrar unidades por `poss`
 (p.ej. ≥ 100) o usar `*_aj`; el RAPM de una temporada es ruidoso (combinar temporadas o usarlo como prior);

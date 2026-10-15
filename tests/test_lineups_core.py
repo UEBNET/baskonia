@@ -146,3 +146,37 @@ def test_assist_network():
     assert con["ast"].sum() == len(ast)
     assert net["pagerank_asistencias"].groupby(net["team_id"]).sum().round(6).eq(1).all()
     assert (net["pct_canastas_asistidas"].dropna() <= 100).all()
+
+
+def test_garbage_time_rule():
+    from bbstats.lineups.stints import _garbage
+    assert _garbage(4, 0.9, 26, 2) and not _garbage(4, 0.9, 24, 2)
+    assert _garbage(4, 0.6, -20, 0) and _garbage(4, 0.3, 10, 1)
+    assert not _garbage(4, 0.3, 30, 3)          # demasiados titulares en pista
+    assert not _garbage(3, 0.1, 40, 0) and not _garbage(5, 0.1, 40, 0)
+
+
+def test_luck_adjustment_is_neutral_for_the_whole_league():
+    results, rows, lg = _tables([_game(str(i), seed=i) for i in range(6)])
+    s = rows[M.SUM_COLS].sum().to_frame().T
+    m = M.rate_metrics(s, lg, 40, 0.44, 300)
+    assert m["drtg_suerte"].iloc[0] == pytest.approx(m["drtg"].iloc[0])
+    assert m["min_clutch"].iloc[0] >= 0 and m["min_basura"].iloc[0] >= 0
+
+
+def test_rotation_and_team_tables():
+    games = [_game(str(i), seed=i) for i in range(6)]
+    results, rows, lg = _tables(games)
+    rot = M.rotation_table(rows).set_index("player_id")
+    assert (rot.loc[A[:5], "titular_partidos"] == 6).all() and rot.loc["a5", "titular_partidos"] == 0
+    pct = rot[[c for c in rot.columns if c.startswith("pct_min_")]].sum(axis=1)
+    assert np.allclose(pct, 100)
+    assert (rot["relevos_por_partido"] >= 1).all()
+    q5 = M.unit_table(rows, 5, lg, 40, 0.44, 300)
+    pl = M.onoff_table(rows, lg, 40, 0.44, 300)
+    eq = M.team_table(rows, q5, pl, lg, 40, 0.44, 300, {}).set_index("team_id")
+    assert eq.loc["A", "partidos_quinteto_titular"] == 6 and eq.loc["A", "quintetos_titulares_distintos"] == 1
+    assert eq.loc["A", "net_rtg"] == pytest.approx(-eq.loc["B", "net_rtg"], abs=1e-9)
+    assert 2000 / 3 <= eq.loc["A", "hhi_minutos"] <= 2000          # 8 jugadores: entre 1/8 y 1/5
+    exp = M.expected_net(rows, pd.Series({p: 0.0 for p in A + B}), 0.44, 2)
+    assert (exp["net_esperado"] == 0).all()

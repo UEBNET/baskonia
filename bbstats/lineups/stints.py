@@ -91,6 +91,16 @@ def _period_starters(evs: list[Event], teams: list[str]) -> dict[str, list[str]]
     return {t: [p for p, k in first[t].items() if k != "in"] for t in teams}
 
 
+def _garbage(period: int, frac_left: float, margin: int, starters_on: int) -> bool:
+    """Minutos de la basura (criterio de Cleaning the Glass escalado a la duración del periodo): último cuarto,
+    como mucho 2 titulares en pista entre los dos equipos y diferencia >= 25 en el primer cuarto del periodo
+    (12:00-9:00 en la NBA), >= 20 en el segundo (9:00-6:00) y >= 10 en la segunda mitad (< 6:00)."""
+    if period != 4 or starters_on > 2:
+        return False
+    m = abs(margin)
+    return m >= 25 if frac_left > 0.75 else (m >= 20 if frac_left > 0.5 else m >= 10)
+
+
 def build(game: Game, game_min: float = 40) -> GameResult:
     res = GameResult(game=game)
     teams = list(game.teams)
@@ -105,6 +115,7 @@ def build(game: Game, game_min: float = 40) -> GameResult:
     score = {a: 0, b: 0}
     on = {t: set() for t in teams}
     last_t = 0.0
+    first_five: dict[str, set] = {a: set(), b: set()}   # titulares reales: quinteto al empezar el partido
 
     # tiros y asistencias (no dependen de saber quién está en pista)
     def lineup_of(t: str) -> str:
@@ -127,6 +138,8 @@ def build(game: Game, game_min: float = 40) -> GameResult:
                 else:
                     on[t] = set(cand[t][:5])
                     res.anomalies["quinteto_inicial_incompleto"] += 1
+            if per == min(by_period):
+                first_five.update({t: set(on[t]) for t in teams})
         seg = {"t0": p0, "st": {a: _empty(), b: _empty()}, "margin": score[a] - score[b]}
         last_t = max(last_t, p0)
 
@@ -139,10 +152,13 @@ def build(game: Game, game_min: float = 40) -> GameResult:
             la, lb = sorted(on[a]), sorted(on[b])
             rem = p1 - seg["t0"]
             clutch = per >= 4 and rem <= 300 and abs(seg["margin"]) <= 5
+            basura = _garbage(per, rem / period_length(per, game_min), seg["margin"],
+                              len(set(la) & first_five[a]) + len(set(lb) & first_five[b]))
             res.segments.append({"game_id": game.game_id, "fase": game.phase, "periodo": per,
                                  "t0": round(seg["t0"], 1), "t1": round(t_end, 1), "sec": round(sec, 1),
                                  "team_a": a, "team_b": b, "quinteto_a": "|".join(la), "quinteto_b": "|".join(lb),
                                  "n_a": len(la), "n_b": len(lb), "margen_inicio": seg["margin"], "clutch": clutch,
+                                 "basura": basura,
                                  **{f"a_{k}": v for k, v in seg["st"][a].items()},
                                  **{f"b_{k}": v for k, v in seg["st"][b].items()}})
             for p in la:

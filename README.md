@@ -260,15 +260,32 @@ fórmulas en todas las ligas. Sólo esta capa: `python -m bbstats quintetos [--t
 
 | Fichero (`data/processed/<temporada>/quintetos/<liga>/`) | Contenido |
 |---|---|
-| `quintetos.csv`, `trios.csv`, `parejas.csv` | Una fila por unidad y fase: minutos, posesiones, puntos a favor/en contra, +/-, ORtg/DRtg/Net (y ajustados por muestra `*_aj`), ritmo, cuatro factores a favor y del rival, perfil de tiro, % asistidas, robos/tapones. Quintetos: suma de RAPM y **sinergia**. Parejas: con/sin (WOWY) y **sinergia**, asistencias entre ambos |
-| `jugadores.csv` | On/off completo (on, off y on−off de ratings y factores), clutch, **RAPM** (ORAPM/DRAPM), red de asistencias (dadas, recibidas, % canastas asistidas, socios, concentración HHI, PageRank) |
+| `quintetos.csv`, `trios.csv`, `parejas.csv` | Una fila por unidad y fase: minutos (y de ellos en clutch y en la basura), posesiones, puntos a favor/en contra, +/-, ORtg/DRtg/Net, ajustados por muestra (`*_aj`) y por suerte (`*_suerte`), ritmo, cuatro factores a favor y del rival, perfil de tiro, % asistidas, robos/tapones/faltas. Quintetos: suma de RAPM, net esperado y **sinergia**. Tríos y parejas: net esperado y `sinergia_rapm`. Parejas además: con/sin (WOWY) y su **sinergia**, % de los minutos de cada uno que juegan juntos, asistencias entre ambos |
+| `jugadores.csv` | On/off completo (on, off y on−off de ratings, suerte y factores), on/off sin minutos de la basura, clutch, **RAPM** (ORAPM/DRAPM), rotación (titularidades, partidos cerrados, relevos, minutos por relevo, reparto por cuartos), red de asistencias (dadas, recibidas, % canastas asistidas, socios, concentración HHI, PageRank) |
+| `equipos.csv` | Estructura de cada equipo: ratings (también por suerte y en clutch), quintetos distintos, quinteto principal y titular habitual con su Net, estabilidad (% de minutos de los 5 quintetos más usados), jugadores de rotación, concentración de minutos y de la red de asistencias |
 | `asistencias.csv` | Conexiones pasador → anotador: asistencias (de 2, de 3, en tiros libres), puntos generados, minutos juntos, por 40 min, cuotas |
-| `tiros.csv.gz` | Cada tiro con coordenadas de la fuente, asistente y los dos quintetos en pista |
-| `tramos.csv.gz` | Tramos (10 jugadores fijos): base para cualquier cálculo nuevo |
+| `tiros.csv.gz` | Cada tiro con coordenadas de la fuente, asistente, los dos quintetos en pista y el marcador previo |
+| `tramos.csv.gz` | Tramos (10 jugadores fijos) con marcas de clutch y basura: base para cualquier cálculo nuevo |
 | `validacion.csv` | Por partido: diferencias de minutos y +/- frente al boxscore oficial, anomalías y si entra en los quintetos |
 | `*_oficial.csv` | NBA y G League: tablas oficiales de quintetos/parejas/on-off para contrastar |
+
+Catálogo de métricas (mismas fórmulas en todas las ligas; descripción de cada columna en el diccionario):
+
+| Familia | Métricas | Para qué |
+|---|---|---|
+| Eficiencia | ORtg, DRtg, Net, +/- por 40, ritmo | Rendimiento por 100 posesiones de cualquier unidad |
+| Muestra | `*_aj` (contracción bayesiana hacia la media de la liga, k = 300 posesiones) | Comparar unidades con pocos minutos sin que dominen los extremos |
+| Suerte | `drtg_suerte`, `net_rtg_suerte(_aj)`: % de triples y tiros libres del rival → media de la liga | Separar defensa de acierto ajeno (estilo Cleaning the Glass) |
+| Cuatro factores | eFG%, TOV%, OREB%/DREB%, FTr, a favor y del rival; TS%, T2%, T3%, TL%, 3PAr, % asistidas, STL%, BLK% | Por qué funciona (o no) una unidad |
+| Contexto | minutos clutch (últimos 5', ±5) y de la basura (4.º cuarto, ≤ 2 titulares, ±25/20/10 según reloj) | Filtrar o ponderar minutos sin valor competitivo |
+| On/off | on, off y on−off de todo lo anterior; sin basura | Impacto bruto de un jugador en su equipo |
+| RAPM | ORAPM, DRAPM, RAPM (ridge ponderado por posesiones, λ = 1500) | Impacto aislado de compañeros y rivales |
+| Sinergia | quintetos: poss/(poss+k)·(Net − Net esperado por RAPM de los 10 en pista); tríos y parejas: `sinergia_rapm` igual; parejas: WOWY Net(A+B) − [Net(A sin B) + Net(B sin A) − Net(ninguno)] | Qué combinaciones rinden más que la suma de sus piezas |
+| Conexiones | pasador → anotador, asistencias por 40 juntos, PageRank, HHI, socios, % de minutos juntos | Redes de juego y dependencias |
+| Rotación | titularidades, cierres, relevos, minutos por relevo, % de minutos por cuarto; por equipo: quintetos distintos, estabilidad, rotación, HHI de minutos | Uso del entrenador y profundidad |
 
 Bruto: `data/raw/<liga>/<temporada>/pbp_<liga>_<temporada>_<fecha>.json.gz`, un paquete por ejecución con
 sólo los partidos nuevos (nunca se sobrescribe). Fuentes, cobertura y lagunas: `docs/INVESTIGACION_QUINTETOS.md`.
 Configuración: `quintetos` en `config/sources.json` (`contraccion_posesiones`, `rapm_lambda`,
-`excluir_si_dif_min_s`) y `pbp` (fuente) en cada liga.
+`excluir_si_dif_min_s`, `guardar_cada_partidos`) y `pbp` (fuente) en cada liga. Las descargas largas se guardan
+en paquetes de 150 partidos: si se cortan, la siguiente ejecución sólo pide lo que falte.
