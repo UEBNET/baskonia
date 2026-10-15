@@ -30,8 +30,11 @@ RATES = [
     ("pf_por100", "Faltas cometidas por 100 posesiones del rival"), ("opp_pf_por100", "Faltas recibidas por 100 posesiones propias"),
 ]
 
-LINEUP_EXTRA = [("rapm_suma", "Suma del RAPM de los 5 jugadores (rendimiento esperado del quinteto)"),
-                ("sinergia", "Net_aj del quinteto − suma del RAPM de sus jugadores (> 0: rinde más que sus piezas)")]
+LINEUP_EXTRA = [("rapm_suma", "Suma del RAPM de los 5 jugadores"),
+                ("net_esperado", "Net esperado según el RAPM: Σ RAPM propios − Σ RAPM de los rivales que tuvo enfrente "
+                                 "(ponderado por posesiones)"),
+                ("sinergia", "(Net − Net esperado) contraído hacia 0 por la muestra: poss/(poss+k)·(Net − esperado). "
+                             "> 0 = el quinteto rinde más que la suma de sus jugadores")]
 
 PAIR_EXTRA = [("jugador_a_id", "Id jugador A"), ("jugador_a", "Jugador A"), ("jugador_b_id", "Id jugador B"),
               ("jugador_b", "Jugador B"),

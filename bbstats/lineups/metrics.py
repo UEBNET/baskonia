@@ -309,3 +309,24 @@ def _pagerank(W: np.ndarray, d: float = 0.85, it: int = 100) -> np.ndarray:
     for _ in range(it):
         r = (1 - d) / n + d * r @ P
     return r / r.sum()
+
+
+def expected_net(rows: pd.DataFrame, rmap: pd.Series, coef: float) -> pd.DataFrame:
+    """Net esperado de cada quinteto según el RAPM: Σ RAPM propios − Σ RAPM de los rivales que tuvo enfrente,
+    ponderado por las posesiones de cada tramo."""
+    full = rows[(rows["quinteto"].str.count(r"\|") == 4) & (rows["quinteto_rival"].str.count(r"\|") == 4)]
+    if full.empty or rmap.empty:
+        return pd.DataFrame(columns=["team_id", "unidad", "net_esperado"])
+    val = lambda q: sum(rmap.get(p, 0.0) for p in q.split("|"))  # noqa: E731
+    cache: dict = {}
+    def v(q):
+        if q not in cache:
+            cache[q] = val(q)
+        return cache[q]
+    poss = ((full["f_fga"] - full["f_oreb"] + full["f_tov"] + coef * full["f_fta"])
+            + (full["o_fga"] - full["o_oreb"] + full["o_tov"] + coef * full["o_fta"])) / 2
+    d = pd.DataFrame({"team_id": full["team_id"], "unidad": full["quinteto"], "w": poss.clip(lower=0),
+                      "e": full["quinteto"].map(v) - full["quinteto_rival"].map(v)})
+    d["we"] = d["w"] * d["e"]
+    g = d.groupby(["team_id", "unidad"])[["we", "w"]].sum()
+    return pd.DataFrame({"net_esperado": g["we"] / g["w"].where(g["w"] > 0)}).reset_index()

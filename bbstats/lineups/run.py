@@ -182,7 +182,10 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
             q5 = M.unit_table(rows, 5, lg, game_min, coef, k)
             if not q5.empty:
                 q5["rapm_suma"] = q5["unidad"].map(lambda u: sum(rmap.get(p, np.nan) for p in u.split("|")))
-                q5["sinergia"] = q5["net_rtg_aj"] - q5["rapm_suma"]
+                exp = M.expected_net(rows, rmap, coef)
+                q5 = q5.merge(exp, on=["team_id", "unidad"], how="left")
+                w = q5["poss"] / (q5["poss"] + k)
+                q5["sinergia"] = w * (q5["net_rtg"] - q5["net_esperado"])
             q3 = M.unit_table(rows, 3, lg, game_min, coef, k)
             pair = M.unit_table(rows, 2, lg, game_min, coef, k)
             sums_on = M.on_sums(rows)
