@@ -284,6 +284,26 @@ Catálogo de métricas (mismas fórmulas en todas las ligas; descripción de cad
 | Conexiones | pasador → anotador, asistencias por 40 juntos, PageRank, HHI, socios, % de minutos juntos | Redes de juego y dependencias |
 | Rotación | titularidades, cierres, relevos, minutos por relevo, % de minutos por cuarto; por equipo: quintetos distintos, estabilidad, rotación, HHI de minutos | Uso del entrenador y profundidad |
 
+Cobertura (15-10-2026): partidos con quintetos · % validados (minutos ±90 s y +/- ±3 frente al boxscore
+oficial; en la G League, cuyo +/- oficial a menudo no cuadra, sólo minutos en esos partidos). Los partidos
+con más de 120 s de desajuste quedan fuera de quintetos y on/off, pero sí cuentan para tiros y asistencias.
+
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| euroleague | 328 · 91 % | 299 · 94 % | 328 · 94 % | 331 · 96 % | 330 · 95 % | 402 · 95 % | 50 · 96 % |
+| eurocup | 185 · 93 % | 189 · 94 % | 195 · 93 % | 195 · 94 % | 196 · 96 % | 195 · 91 % | 47 · 96 % |
+| acb | 360 · 99 % | 327 · 99 % | 325 · 99 % | 326 · 100 % | 325 · 100 % | 327 · 100 % | 27 · 100 % |
+| nba | 1165 · 98 % | 1317 · 98 % | 1314 · 97 % | 1312 · 98 % | 1314 · 97 % | 1315 · 98 % | — |
+| gleague | 142 · 84 % | 671 · 86 % | 763 · 87 % | 789 · 93 % | 789 · 93 % | 791 · 92 % | — |
+| lba | 209 · 95 % | 266 · 98 % | 268 · 99 % | 268 · 100 % | 266 · 100 % | 240 · 100 % | 24 · 100 % |
+| bbl | 334 · sólo tiros/asist. | 329 · sólo tiros/asist. | 329 · sólo tiros/asist. | 336 · 84 % | 304 · 98 % | 338 · 96 % | 43 · 95 % |
+| lnb | 313 · sin jugada a jugada | 328 · 99 % | 325 · 98 % | 329 · 98 % | 266 · 100 % | 266 · 97 % | 24 · 96 % |
+
+- BBL 2020-21 a 2022-23: la fuente no anota los cambios con jugador → sólo tiros, asistencias y red de pases.
+- LNB 2020-21: la fuente no publica jugada a jugada (columnas en blanco).
+- EuroLeague 2021-22: 299 de 327 partidos (los anulados tras la exclusión de los equipos rusos no están en la fuente).
+- Ids de jugador y equipo iguales a los de `data/processed/<temporada>/ligas/<liga>.csv` (99–100 % en todas).
+
 Bruto: `data/raw/<liga>/<temporada>/pbp_<liga>_<temporada>_<fecha>.json.gz`, un paquete por ejecución con
 sólo los partidos nuevos (nunca se sobrescribe). Fuentes, cobertura y lagunas: `docs/INVESTIGACION_QUINTETOS.md`.
 Configuración: `quintetos` en `config/sources.json` (`contraccion_posesiones`, `rapm_lambda`,

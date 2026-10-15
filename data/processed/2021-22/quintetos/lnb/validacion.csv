@@ -1,329 +1,329 @@
-game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,notas,usado_en_quintetos
-7ab2daee-f5da-11eb-b3fd-a23ac5ab90da,regular,31,23,49.0,25.8,0.0,0,9,actua_fuera_de_pista=8;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7abe8164-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7aacf750-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,6.0,0.6,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,2 asistencias sin enlazar,True
-7ac9067a-f5da-11eb-b3fd-a23ac5ab90da,regular,36,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7ab8ade8-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
-7ace7312-f5da-11eb-b3fd-a23ac5ab90da,regular,30,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7ad3fddc-f5da-11eb-b3fd-a23ac5ab90da,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7ad914a2-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,13.0,1.4,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-7ac3b378-f5da-11eb-b3fd-a23ac5ab90da,regular,40,21,23.0,4.8,0.0,0,0,,True,True,True,True,,True
-7ae36894-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,6.0,0.6,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-7b067cc6-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7b0bbc68-f5da-11eb-b3fd-a23ac5ab90da,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7b1d2426-f5da-11eb-b3fd-a23ac5ab90da,regular,30,23,26.0,2.5,0.0,0,3,sale_sin_estar=3,True,True,True,True,,True
-7addc63c-f5da-11eb-b3fd-a23ac5ab90da,regular,28,24,11.0,1.8,0.0,0,0,,True,True,True,True,,True
-7b0116f0-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7b1099c2-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,1.0,0.1,0.0,0,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7b273664-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7b2be9de-f5da-11eb-b3fd-a23ac5ab90da,regular,30,23,11.0,2.4,0.0,0,0,,True,True,True,True,,True
-7b31278c-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,70.0,22.1,2.0,1,5,actua_fuera_de_pista=2;añadido_por_actuar=1;no_cinco_4=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7b3d67cc-f5da-11eb-b3fd-a23ac5ab90da,regular,38,21,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-7b42a930-f5da-11eb-b3fd-a23ac5ab90da,regular,41,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7b47b574-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-7b4d12ee-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7b222840-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,2.0,0.2,0.0,0,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7b36ad88-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,5.0,0.6,0.0,0,0,,True,True,True,True,,True
-7b674b96-f5da-11eb-b3fd-a23ac5ab90da,regular,24,20,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7b70f074-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,6.0,0.9,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
-7b7af254-f5da-11eb-b3fd-a23ac5ab90da,regular,25,22,0.0,0.0,0.0,0,1,quinteto_inicial_de_titulares=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7b57c82e-f5da-11eb-b3fd-a23ac5ab90da,regular,27,22,16.0,1.7,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7b5d39d0-f5da-11eb-b3fd-a23ac5ab90da,regular,27,20,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-7b623534-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,35.0,4.1,1.0,2,6,añadido_por_actuar=2;no_cinco_0=1;sale_sin_estar=3,True,True,True,True,1 asistencias sin enlazar,True
-7b6c1626-f5da-11eb-b3fd-a23ac5ab90da,regular,41,22,2.0,0.2,0.0,0,0,,True,True,True,True,,True
-7b52340e-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7b75cdb0-f5da-11eb-b3fd-a23ac5ab90da,regular,41,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7b855e60-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,11.0,4.0,0.0,0,6,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=3,True,True,True,True,,True
-7b8009a6-f5da-11eb-b3fd-a23ac5ab90da,regular,27,23,0.0,0.0,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7ba1bede-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,24.0,1.9,0.0,0,6,actua_fuera_de_pista=2;no_cinco_4=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
-7b8ae2cc-f5da-11eb-b3fd-a23ac5ab90da,regular,29,21,33.0,15.7,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7b90050e-f5da-11eb-b3fd-a23ac5ab90da,regular,35,22,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,2 asistencias sin enlazar,True
-7b9c9b48-f5da-11eb-b3fd-a23ac5ab90da,regular,27,20,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7b95d9c0-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,22.0,2.2,0.0,0,0,,True,True,True,True,3 asistencias sin enlazar,True
-7ba80de8-f5da-11eb-b3fd-a23ac5ab90da,regular,23,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,1 asistencias sin enlazar,True
-7badd570-f5da-11eb-b3fd-a23ac5ab90da,regular,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7afa3010-f5da-11eb-b3fd-a23ac5ab90da,regular,34,20,0.0,0.0,0.0,0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
-7bc2b882-f5da-11eb-b3fd-a23ac5ab90da,regular,23,18,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7c8b80fa-f5da-11eb-b3fd-a23ac5ab90da,regular,31,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7bb83466-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,2.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
-7bc7b42c-f5da-11eb-b3fd-a23ac5ab90da,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7c855ad6-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,6.0,1.3,0.0,0,1,sale_sin_estar=1,True,True,True,True,,True
-7c91e256-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,8.0,1.4,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-7bbd82a4-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,38.0,7.7,0.0,0,0,,True,True,True,True,,True
-7bb2afa0-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7c7c8b72-f5da-11eb-b3fd-a23ac5ab90da,regular,35,23,1.0,0.1,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7b15ef26-f5da-11eb-b3fd-a23ac5ab90da,regular,32,22,4.0,0.4,0.0,0,0,,True,True,True,True,,True
-7ca4b41c-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7cc90772-f5da-11eb-b3fd-a23ac5ab90da,regular,27,22,0.0,0.0,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
-7c9daffa-f5da-11eb-b3fd-a23ac5ab90da,regular,28,24,27.0,3.6,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7cab3418-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,16.0,1.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7cb0ce5a-f5da-11eb-b3fd-a23ac5ab90da,regular,35,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7cbca086-f5da-11eb-b3fd-a23ac5ab90da,regular,23,20,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7cc37500-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,34.0,4.1,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7cb6b04a-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,2.0,0.2,0.0,0,0,,True,True,True,True,,True
-7c978210-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,7.0,3.3,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-7ce2709a-f5da-11eb-b3fd-a23ac5ab90da,regular,31,21,2.0,0.5,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7cf21c98-f5da-11eb-b3fd-a23ac5ab90da,regular,37,21,3.0,0.4,0.0,0,7,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7cd702f0-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7cdc9ac6-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
-7cebe85a-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,11.0,1.1,0.0,0,0,,True,True,True,True,,True
-7d0023ce-f5da-11eb-b3fd-a23ac5ab90da,regular,28,20,2.0,0.2,0.0,0,0,,True,True,True,True,,True
-7cd137f8-f5da-11eb-b3fd-a23ac5ab90da,regular,28,21,21.0,3.0,0.0,0,0,,True,True,True,True,,True
-7cf95706-f5da-11eb-b3fd-a23ac5ab90da,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7d074bd6-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,12.0,1.3,0.0,0,5,actua_fuera_de_pista=5,True,True,True,True,,True
-7d414bce-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
-7d3b756e-f5da-11eb-b3fd-a23ac5ab90da,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7d474aec-f5da-11eb-b3fd-a23ac5ab90da,regular,47,22,14.0,1.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7d14ba96-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,4.0,0.4,0.0,0,0,,True,True,True,True,,True
-7d2820a4-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,0.0,0.0,0.0,0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7d0dd6f4-f5da-11eb-b3fd-a23ac5ab90da,regular,26,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7d2e8976-f5da-11eb-b3fd-a23ac5ab90da,regular,37,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-7d34ca84-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,24.0,7.1,0.0,0,0,,True,True,True,True,,True
-7d4cb306-f5da-11eb-b3fd-a23ac5ab90da,regular,31,21,117.0,65.0,0.0,0,14,actua_fuera_de_pista=11;quinteto_periodo_arrastrado=3,False,True,True,True,,True
-7d5d00d0-f5da-11eb-b3fd-a23ac5ab90da,regular,27,23,3.0,0.9,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7d576d0a-f5da-11eb-b3fd-a23ac5ab90da,regular,28,21,60.0,22.7,0.0,0,0,,True,True,True,True,,True
-7d68e710-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,27.0,2.5,0.0,0,0,,True,True,True,True,,True
-7d703dbc-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-7d79222e-f5da-11eb-b3fd-a23ac5ab90da,regular,26,22,5.0,0.3,0.0,0,0,,True,True,True,True,,True
-7d7ea32a-f5da-11eb-b3fd-a23ac5ab90da,regular,24,20,37.0,17.4,0.0,0,4,quinteto_periodo_arrastrado=2;sale_sin_estar=2,True,True,True,True,,True
-7d521030-f5da-11eb-b3fd-a23ac5ab90da,regular,22,20,15.0,2.0,0.0,0,0,,True,True,True,True,,True
-7ea9f57e-f5da-11eb-b3fd-a23ac5ab90da,regular,38,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7d90b61e-f5da-11eb-b3fd-a23ac5ab90da,regular,24,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7d9c7af8-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7da32178-f5da-11eb-b3fd-a23ac5ab90da,regular,27,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 1 asistencias sin enlazar,True
-7daea70a-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7d8a9a7c-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,0.0,0.0,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-7d852dda-f5da-11eb-b3fd-a23ac5ab90da,regular,30,20,10.0,1.1,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-7d96711c-f5da-11eb-b3fd-a23ac5ab90da,regular,33,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7da93270-f5da-11eb-b3fd-a23ac5ab90da,regular,30,22,10.0,1.2,0.0,0,0,,True,True,True,True,,True
-7db418f2-f5da-11eb-b3fd-a23ac5ab90da,regular,46,21,25.0,4.3,0.0,0,0,,True,True,True,True,,True
-7e85a584-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7e8b2b58-f5da-11eb-b3fd-a23ac5ab90da,regular,39,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7ea45240-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7e723d82-f5da-11eb-b3fd-a23ac5ab90da,regular,25,23,46.0,9.0,0.0,0,0,,True,True,True,True,,True
-7e7f8d02-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,15.0,1.8,0.0,0,0,,True,True,True,True,,True
-7e9e0048-f5da-11eb-b3fd-a23ac5ab90da,regular,32,21,11.0,1.2,0.0,0,8,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-7e79a6b2-f5da-11eb-b3fd-a23ac5ab90da,regular,32,24,12.0,1.1,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7db94a8e-f5da-11eb-b3fd-a23ac5ab90da,regular,38,21,4.0,0.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7ec0e8d8-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,15.0,3.5,0.0,0,0,,True,True,True,True,,True
-7ecc4bba-f5da-11eb-b3fd-a23ac5ab90da,regular,27,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7ed1fbe6-f5da-11eb-b3fd-a23ac5ab90da,regular,27,21,18.0,1.8,0.0,0,0,,True,True,True,True,,True
-7ed76ec8-f5da-11eb-b3fd-a23ac5ab90da,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7eaf41d2-f5da-11eb-b3fd-a23ac5ab90da,regular,34,19,3.0,0.6,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7eb56b16-f5da-11eb-b3fd-a23ac5ab90da,regular,43,22,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-7ebb2970-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-7ee93d38-f5da-11eb-b3fd-a23ac5ab90da,regular,27,19,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7eddbe0e-f5da-11eb-b3fd-a23ac5ab90da,regular,39,19,16.0,1.9,0.0,0,0,,True,True,True,True,,True
-7ee3733a-f5da-11eb-b3fd-a23ac5ab90da,regular,31,22,21.0,2.1,0.0,0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-7eeee1fc-f5da-11eb-b3fd-a23ac5ab90da,regular,38,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7efbfacc-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7f0272d0-f5da-11eb-b3fd-a23ac5ab90da,regular,36,21,22.0,2.6,0.0,0,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7f085290-f5da-11eb-b3fd-a23ac5ab90da,regular,29,18,7.0,0.9,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-7f46d934-f5da-11eb-b3fd-a23ac5ab90da,regular,37,18,86.0,52.8,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7f2fb7d6-f5da-11eb-b3fd-a23ac5ab90da,regular,33,20,16.0,1.9,0.0,0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-7f3bbfa4-f5da-11eb-b3fd-a23ac5ab90da,regular,36,20,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7f158384-f5da-11eb-b3fd-a23ac5ab90da,regular,32,21,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7f1b6cea-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,7.0,1.1,0.0,0,3,actua_fuera_de_pista=2;sale_sin_estar=1,True,True,True,True,1 asistencias sin enlazar,True
-7f2108ee-f5da-11eb-b3fd-a23ac5ab90da,regular,38,22,27.0,9.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,2 asistencias sin enlazar,True
-7f35fe3e-f5da-11eb-b3fd-a23ac5ab90da,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7f58605a-f5da-11eb-b3fd-a23ac5ab90da,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7f6513b8-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 2 asistencias sin enlazar,True
-7f7f5ae8-f5da-11eb-b3fd-a23ac5ab90da,regular,22,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7f524846-f5da-11eb-b3fd-a23ac5ab90da,regular,37,21,80.0,9.6,0.0,0,0,,True,True,True,True,,True
-7f6c793c-f5da-11eb-b3fd-a23ac5ab90da,regular,32,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-7f78d128-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,2.0,0.2,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7f85a678-f5da-11eb-b3fd-a23ac5ab90da,regular,35,22,80.0,13.7,0.0,0,0,,True,True,True,True,,True
-7f72d494-f5da-11eb-b3fd-a23ac5ab90da,regular,31,21,0.0,0.0,0.0,0,0,,True,True,True,True,3 asistencias sin enlazar,True
-7f5eb4aa-f5da-11eb-b3fd-a23ac5ab90da,regular,30,22,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-7ec6b98e-f5da-11eb-b3fd-a23ac5ab90da,regular,23,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-8072f284-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,21,13.0,2.7,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7fa023e0-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,0.0,0.0,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-80678ee4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-7f93cb5e-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,22.0,2.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-7f8dc4de-f5da-11eb-b3fd-a23ac5ab90da,regular,36,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-806c97e0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,7.0,1.4,0.0,0,0,,True,True,True,True,,True
-7f99cce8-f5da-11eb-b3fd-a23ac5ab90da,regular,27,22,4.0,0.4,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7fadac18-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-8083131c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-809c9210-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,22,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-80888de2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,25,17.0,1.6,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
-808db24a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-8092b47a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-809782f2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,20,18.0,2.2,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
-80a15444-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,21,28.0,5.8,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-807dd582-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-8078b0b6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7f418b46-f5da-11eb-b3fd-a23ac5ab90da,regular,28,20,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-80bac8d4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,20,1.0,0.1,0.0,0,8,actua_fuera_de_pista=7;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-80cf7a18-f5da-11eb-8ac7-6a9b0f2b47ef,regular,24,21,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,4 asistencias sin enlazar,True
-80b05e08-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,58.0,25.1,0.0,0,0,,True,True,True,True,,True
-80b54cec-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,25,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-80ca524a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,25,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-80c01c30-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,37.0,9.5,0.0,0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,2 asistencias sin enlazar,True
-80a62140-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,21,4.0,0.5,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-80ab3afe-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,23,3.0,0.7,0.0,0,0,,True,True,True,True,,True
-80c5538a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-80de7e78-f5da-11eb-8ac7-6a9b0f2b47ef,regular,25,23,21.0,4.2,0.0,0,4,actua_fuera_de_pista=4,True,True,True,True,,True
-80e37df6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-80fe71c4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,22,11.0,1.2,0.0,0,0,,True,True,True,True,,True
-80f9559a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,21,16.0,4.9,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-80d44bb0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,39.0,20.5,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-80ed5394-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-80d93940-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,24,8.0,1.4,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-80f2b05a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,10.0,3.9,0.0,0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-80e87842-f5da-11eb-8ac7-6a9b0f2b47ef,regular,44,23,20.0,3.5,0.0,0,0,,True,True,True,True,,True
-82ad83fc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7d62f71a-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,1.0,0.2,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7e919cc2-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,4.0,0.4,0.0,0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-7d208d26-f5da-11eb-b3fd-a23ac5ab90da,regular,37,20,9.0,1.8,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-7fa604a4-f5da-11eb-b3fd-a23ac5ab90da,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-828d5eba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7ef515ae-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,0.0,0.0,0.0,0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-7f0eaa78-f5da-11eb-b3fd-a23ac5ab90da,regular,33,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-811933ec-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,20,7.0,0.9,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
-8132c9ba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,46,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-81036a30-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-810dc4e4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,41,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-8123a138-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,22,2.0,0.2,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-8128f75a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,5.0,0.6,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-811e7abe-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
-810866d4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,27,4.0,1.2,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-7f284fdc-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,4.0,1.2,0.0,0,0,,True,True,True,True,,True
-812dd1a8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,23,117.0,11.7,7.0,2,9,actua_fuera_de_pista=3;añadido_por_actuar=2;no_cinco_0=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-8147e57a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,20,11.0,2.0,0.0,0,6,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=2,True,True,True,True,2 asistencias sin enlazar,True
-8164aa0c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-813d05ba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,20,6.0,2.1,0.0,0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,,True
-8153f824-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,25,3.0,0.3,0.0,0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 1 asistencias sin enlazar,True
-8142b5c8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-815a249c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,23,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-815f494a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,0.0,0.0,0.0,0,9,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-8138077c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,43.0,17.0,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
-814d81ba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,23,5.0,0.6,0.0,0,6,actua_fuera_de_pista=1;no_cinco_6=3;sale_sin_estar=2,True,True,True,True,,True
-8259b98e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,51,22,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-816a93e0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-816fcf90-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-8237678a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias sin enlazar,True
-8246f4fc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,2.0,0.2,0.0,0,5,quinteto_periodo_arrastrado=2;sale_sin_estar=3,True,True,True,True,1 asistencias sin enlazar,True
-8253b480-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-824d0c0c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,49.0,20.4,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-823df3ca-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-822edda4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,21,8.0,0.8,0.0,0,6,actua_fuera_de_pista=4;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-822317e4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-8270ed66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,22,10.0,4.8,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-8264ca54-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-826b02f2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,24,20,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-827d5e66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,19,0.0,0.0,0.0,0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-8287a98e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,24,15.0,1.4,0.0,0,0,,True,True,True,True,,True
-8292710c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,2 asistencias sin enlazar,True
-82978bce-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,8.0,0.9,0.0,0,4,no_cinco_6=1;quinteto_periodo_arrastrado=1;sale_sin_estar=2,True,True,True,True,1 asistencias sin enlazar,True
-829cfd0c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,600.0,303.2,0.0,0,7,actua_fuera_de_pista=5;quinteto_periodo_arrastrado=2,False,True,True,True,,False
-82a27516-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-82b2e73e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,20,15.0,1.7,0.0,0,0,,True,True,True,True,,True
-82a8112e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-82c29c10-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,23,41.0,11.7,0.0,0,5,actua_fuera_de_pista=3;sale_sin_estar=2,True,True,True,True,1 asistencias sin enlazar,True
-82cd45fc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,24,7.0,1.7,0.0,0,0,,True,True,True,True,,True
-82c830bc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,41.0,6.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-82d2a452-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,20,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-82d7ff38-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,22,6.0,0.6,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-82e276ac-f5da-11eb-8ac7-6a9b0f2b47ef,regular,42,21,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-82e78048-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,21,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-82dd474a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-82bd77da-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,3.0,1.5,0.0,0,0,,True,True,True,True,,True
-825f08da-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,613.0,68.7,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,False,True,True,True,,False
-82b7ff76-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-82f21594-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-82f722b4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,8.0,0.7,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-83145366-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-82fcc23c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,21,10.0,1.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-8308f6c4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,21,3.0,0.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-82ecc058-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,6.0,0.6,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-831b259c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,23,28.0,2.7,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-8302392e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,42,21,0.0,0.0,0.0,0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-830f010e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,23,5.0,1.3,0.0,0,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
-83297778-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,24,26.0,2.2,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-83342236-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,23,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-833a50a2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-8340593e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,20,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-83fe6f50-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,24,6.0,0.6,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-84049772-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias sin enlazar,True
-8322228e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,20,28.0,15.6,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-832ec87c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,6.0,0.6,0.0,0,0,,True,True,True,True,,True
-841569da-f5da-11eb-8ac7-6a9b0f2b47ef,regular,25,21,9.0,1.1,0.0,0,0,,True,True,True,True,,True
-841b90a8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,41,23,50.0,9.3,0.0,0,0,,True,True,True,True,,True
-843857a6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,21,18.0,1.9,0.0,0,0,,True,True,True,True,,True
-84101f70-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,22,13.0,3.9,0.0,0,0,,True,True,True,True,,True
-8425eb5c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-842b98ea-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 1 asistencias sin enlazar,True
-84313c14-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,20,21.0,2.2,0.0,0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-840a7f66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-843d8064-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,33.0,17.4,0.0,0,0,,True,True,True,True,,True
-8442a9d6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-8447e9aa-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,23,8.0,2.5,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-84625b96-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,20,4.0,0.5,0.0,0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-847055e8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,7.0,2.2,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-8479aa08-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,20,4.0,1.3,0.0,0,0,,True,True,True,True,,True
-844db218-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-847feb70-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-82825e16-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-8420d5a4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-8276ef22-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-8459af14-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,22,38.0,3.8,0.0,0,0,,True,True,True,True,,True
-84917a20-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,4.0,0.9,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-848535d0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,21,5.0,0.5,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,,True
-848b7544-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,4.0,0.8,0.0,0,0,,True,True,True,True,,True
-84acdca2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,21,6.0,0.6,0.0,0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-84a26c22-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,23,15.0,1.5,0.0,0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,,True
-84a7a1ce-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,21,12.0,1.2,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-849c5418-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-8496bab2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-84b2426e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-84b79106-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-84c341cc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,23,0.0,0.0,0.0,0,0,,True,True,True,True,2 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-84d4a9bc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,23,16.0,1.7,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-84da9f2a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,8.0,0.8,0.0,0,0,,True,True,True,True,,True
-84e0cc7e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-84ce293e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,23,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-84bd8278-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,22,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-84532a04-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,23,3.0,0.5,0.0,0,0,,True,True,True,True,,True
-84e64c9e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-84ec32a8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-84f67d12-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-84fd0e66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,23,3.0,0.3,0.0,0,0,,True,True,True,True,,True
-8504e1f4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,22,4.0,0.4,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-8512835e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,20,51.0,9.1,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-8518104e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-84f161ce-f5da-11eb-8ac7-6a9b0f2b47ef,regular,24,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-850be81e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,24,1.0,0.2,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-83468cc8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,21,2.0,0.2,0.0,0,0,,True,True,True,True,,True
-84c86d3c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,20.0,2.6,0.0,0,0,,True,True,True,True,,True
-851dbc2e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,18.0,2.0,0.0,0,0,,True,True,True,True,,True
-852444ae-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-852a1e10-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,23,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias sin enlazar,True
-85666118-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias sin enlazar,True
-856ba22c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,22,1.0,0.1,0.0,0,5,actua_fuera_de_pista=2;no_cinco_1=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
-85782308-f5da-11eb-8ac7-6a9b0f2b47ef,regular,43,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-857dfe9a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,20,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-85832cda-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,23,0.0,0.0,0.0,0,4,actua_fuera_de_pista=4,True,True,True,True,,True
-85885b6a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-9fccd9a8-d62c-11ec-bfbe-3bf1ce75c53d,playoffs,33,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-f2bc8a05-d62c-11ec-9982-852dbacb0f50,playoffs,38,23,11.0,1.5,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
-38b35b9a-d62d-11ec-b281-25db739a4385,playoffs,39,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-7f6b5c03-d62d-11ec-a192-4146f53dce46,playoffs,30,20,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-8f7458e5-d62e-11ec-9736-cf3d7d7245b6,playoffs,29,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-fe9a1a11-d62d-11ec-911a-3bf1ce75c53d,playoffs,23,23,1.0,0.4,0.0,0,0,,True,True,True,True,,True
-18d30904-d62f-11ec-afbe-8fa18da8fcee,playoffs,25,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-d5371cf9-d62e-11ec-9ca7-ebca378b485f,playoffs,55,22,19.0,3.8,0.0,0,2,sale_sin_estar=2,True,True,True,True,1 asistencias sin enlazar,True
-a1aecbdb-ddfb-11ec-bcd3-37fe9188aa7d,playoffs,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-9bff14cb-de9f-11ec-a786-67ca8a580b36,playoffs,55,22,0.0,0.0,0.0,0,4,actua_fuera_de_pista=3;sale_sin_estar=1,True,True,True,True,,True
-e6e4aaf7-df8b-11ec-b358-c771bf982db0,playoffs,32,22,4.0,0.7,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-8927f41c-e057-11ec-82c4-6303de77fcd3,playoffs,30,23,3.0,1.3,0.0,0,4,actua_fuera_de_pista=2;sale_sin_estar=2,True,True,True,True,,True
-6bcbde5f-df8d-11ec-8de8-8b071369f295,playoffs,31,22,12.0,1.3,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,3 asistencias sin enlazar,True
-efb40792-e057-11ec-83cf-4dacfb178c75,playoffs,41,23,5.0,2.8,0.0,0,10,actua_fuera_de_pista=4;no_cinco_6=2;quinteto_periodo_arrastrado=1;sale_sin_estar=3,True,True,True,True,,True
-cd2df848-df8d-11ec-ae26-c7b29c4b3251,playoffs,31,23,9.0,0.9,0.0,0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,,True
-7876c316-e058-11ec-99f1-1de0546d5470,playoffs,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-fb8f2929-e69f-11ec-b6ed-ede2abbf3b3c,playoffs,31,23,14.0,2.0,0.0,0,0,,True,True,True,True,,True
-5b27f71e-e832-11ec-aa82-a394496afa39,playoffs,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-178d7bfc-e833-11ec-8ef4-8f0204cf2e42,playoffs,27,23,17.0,1.5,0.0,0,0,,True,True,True,True,,True
-b504a6d3-e833-11ec-9a29-cdea4f7a7ebe,playoffs,34,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-640bc626-ee7f-11ec-9c50-01452047a1c1,playoffs,38,23,3.0,0.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-42ac89bd-f26c-11ec-a8c1-79e2fd7b64d3,playoffs,44,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+7ab2daee-f5da-11eb-b3fd-a23ac5ab90da,regular,31,23,49.0,25.8,0.0,0.0,9,actua_fuera_de_pista=8;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7abe8164-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7aacf750-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,6.0,0.6,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,2 asistencias sin enlazar,True
+7ac9067a-f5da-11eb-b3fd-a23ac5ab90da,regular,36,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7ab8ade8-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
+7ace7312-f5da-11eb-b3fd-a23ac5ab90da,regular,30,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7ad3fddc-f5da-11eb-b3fd-a23ac5ab90da,regular,31,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7ad914a2-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,13.0,1.4,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+7ac3b378-f5da-11eb-b3fd-a23ac5ab90da,regular,40,21,23.0,4.8,0.0,0.0,0,,True,True,True,True,True,,True
+7ae36894-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,6.0,0.6,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+7b067cc6-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7b0bbc68-f5da-11eb-b3fd-a23ac5ab90da,regular,31,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7b1d2426-f5da-11eb-b3fd-a23ac5ab90da,regular,30,23,26.0,2.5,0.0,0.0,3,sale_sin_estar=3,True,True,True,True,True,,True
+7addc63c-f5da-11eb-b3fd-a23ac5ab90da,regular,28,24,11.0,1.8,0.0,0.0,0,,True,True,True,True,True,,True
+7b0116f0-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7b1099c2-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,1.0,0.1,0.0,0.0,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7b273664-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7b2be9de-f5da-11eb-b3fd-a23ac5ab90da,regular,30,23,11.0,2.4,0.0,0.0,0,,True,True,True,True,True,,True
+7b31278c-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,70.0,22.1,,,5,actua_fuera_de_pista=2;añadido_por_actuar=1;no_cinco_4=1;quinteto_periodo_arrastrado=1,True,True,True,True,False,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | +/- oficial incoherente: validado sólo por minutos,True
+7b3d67cc-f5da-11eb-b3fd-a23ac5ab90da,regular,38,21,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+7b42a930-f5da-11eb-b3fd-a23ac5ab90da,regular,41,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7b47b574-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+7b4d12ee-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7b222840-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,2.0,0.2,0.0,0.0,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7b36ad88-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,5.0,0.6,0.0,0.0,0,,True,True,True,True,True,,True
+7b674b96-f5da-11eb-b3fd-a23ac5ab90da,regular,24,20,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7b70f074-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,6.0,0.9,0.0,0.0,0,,True,True,True,True,True,2 asistencias sin enlazar,True
+7b7af254-f5da-11eb-b3fd-a23ac5ab90da,regular,25,22,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7b57c82e-f5da-11eb-b3fd-a23ac5ab90da,regular,27,22,16.0,1.7,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7b5d39d0-f5da-11eb-b3fd-a23ac5ab90da,regular,27,20,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+7b623534-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,35.0,4.1,,,6,añadido_por_actuar=2;no_cinco_0=1;sale_sin_estar=3,True,True,True,True,False,1 asistencias sin enlazar | +/- oficial incoherente: validado sólo por minutos,True
+7b6c1626-f5da-11eb-b3fd-a23ac5ab90da,regular,41,22,2.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+7b52340e-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7b75cdb0-f5da-11eb-b3fd-a23ac5ab90da,regular,41,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7b855e60-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,11.0,4.0,0.0,0.0,6,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=3,True,True,True,True,True,,True
+7b8009a6-f5da-11eb-b3fd-a23ac5ab90da,regular,27,23,0.0,0.0,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7ba1bede-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,24.0,1.9,0.0,0.0,6,actua_fuera_de_pista=2;no_cinco_4=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,True,,True
+7b8ae2cc-f5da-11eb-b3fd-a23ac5ab90da,regular,29,21,33.0,15.7,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7b90050e-f5da-11eb-b3fd-a23ac5ab90da,regular,35,22,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,2 asistencias sin enlazar,True
+7b9c9b48-f5da-11eb-b3fd-a23ac5ab90da,regular,27,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7b95d9c0-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,22.0,2.2,0.0,0.0,0,,True,True,True,True,True,3 asistencias sin enlazar,True
+7ba80de8-f5da-11eb-b3fd-a23ac5ab90da,regular,23,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,1 asistencias sin enlazar,True
+7badd570-f5da-11eb-b3fd-a23ac5ab90da,regular,35,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7afa3010-f5da-11eb-b3fd-a23ac5ab90da,regular,34,20,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 asistencias sin enlazar,True
+7bc2b882-f5da-11eb-b3fd-a23ac5ab90da,regular,23,18,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7c8b80fa-f5da-11eb-b3fd-a23ac5ab90da,regular,31,24,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7bb83466-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,2.0,0.5,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias sin enlazar,True
+7bc7b42c-f5da-11eb-b3fd-a23ac5ab90da,regular,34,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7c855ad6-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,6.0,1.3,0.0,0.0,1,sale_sin_estar=1,True,True,True,True,True,,True
+7c91e256-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,8.0,1.4,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+7bbd82a4-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,38.0,7.7,0.0,0.0,0,,True,True,True,True,True,,True
+7bb2afa0-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7c7c8b72-f5da-11eb-b3fd-a23ac5ab90da,regular,35,23,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7b15ef26-f5da-11eb-b3fd-a23ac5ab90da,regular,32,22,4.0,0.4,0.0,0.0,0,,True,True,True,True,True,,True
+7ca4b41c-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7cc90772-f5da-11eb-b3fd-a23ac5ab90da,regular,27,22,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,True,,True
+7c9daffa-f5da-11eb-b3fd-a23ac5ab90da,regular,28,24,27.0,3.6,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7cab3418-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,16.0,1.5,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7cb0ce5a-f5da-11eb-b3fd-a23ac5ab90da,regular,35,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7cbca086-f5da-11eb-b3fd-a23ac5ab90da,regular,23,20,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7cc37500-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,34.0,4.1,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7cb6b04a-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,2.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+7c978210-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,7.0,3.3,0.0,0.0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+7ce2709a-f5da-11eb-b3fd-a23ac5ab90da,regular,31,21,2.0,0.5,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7cf21c98-f5da-11eb-b3fd-a23ac5ab90da,regular,37,21,3.0,0.4,0.0,0.0,7,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7cd702f0-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7cdc9ac6-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,2.0,0.2,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias sin enlazar,True
+7cebe85a-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,11.0,1.1,0.0,0.0,0,,True,True,True,True,True,,True
+7d0023ce-f5da-11eb-b3fd-a23ac5ab90da,regular,28,20,2.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+7cd137f8-f5da-11eb-b3fd-a23ac5ab90da,regular,28,21,21.0,3.0,0.0,0.0,0,,True,True,True,True,True,,True
+7cf95706-f5da-11eb-b3fd-a23ac5ab90da,regular,33,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7d074bd6-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,12.0,1.3,0.0,0.0,5,actua_fuera_de_pista=5,True,True,True,True,True,,True
+7d414bce-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
+7d3b756e-f5da-11eb-b3fd-a23ac5ab90da,regular,30,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7d474aec-f5da-11eb-b3fd-a23ac5ab90da,regular,47,22,14.0,1.3,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7d14ba96-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,4.0,0.4,0.0,0.0,0,,True,True,True,True,True,,True
+7d2820a4-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7d0dd6f4-f5da-11eb-b3fd-a23ac5ab90da,regular,26,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7d2e8976-f5da-11eb-b3fd-a23ac5ab90da,regular,37,23,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+7d34ca84-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,24.0,7.1,0.0,0.0,0,,True,True,True,True,True,,True
+7d4cb306-f5da-11eb-b3fd-a23ac5ab90da,regular,31,21,117.0,65.0,0.0,0.0,14,actua_fuera_de_pista=11;quinteto_periodo_arrastrado=3,False,True,True,True,True,,True
+7d5d00d0-f5da-11eb-b3fd-a23ac5ab90da,regular,27,23,3.0,0.9,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7d576d0a-f5da-11eb-b3fd-a23ac5ab90da,regular,28,21,60.0,22.7,0.0,0.0,0,,True,True,True,True,True,,True
+7d68e710-f5da-11eb-b3fd-a23ac5ab90da,regular,36,22,27.0,2.5,0.0,0.0,0,,True,True,True,True,True,,True
+7d703dbc-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+7d79222e-f5da-11eb-b3fd-a23ac5ab90da,regular,26,22,5.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
+7d7ea32a-f5da-11eb-b3fd-a23ac5ab90da,regular,24,20,37.0,17.4,0.0,0.0,4,quinteto_periodo_arrastrado=2;sale_sin_estar=2,True,True,True,True,True,,True
+7d521030-f5da-11eb-b3fd-a23ac5ab90da,regular,22,20,15.0,2.0,0.0,0.0,0,,True,True,True,True,True,,True
+7ea9f57e-f5da-11eb-b3fd-a23ac5ab90da,regular,38,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7d90b61e-f5da-11eb-b3fd-a23ac5ab90da,regular,24,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7d9c7af8-f5da-11eb-b3fd-a23ac5ab90da,regular,32,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7da32178-f5da-11eb-b3fd-a23ac5ab90da,regular,27,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 1 asistencias sin enlazar,True
+7daea70a-f5da-11eb-b3fd-a23ac5ab90da,regular,28,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7d8a9a7c-f5da-11eb-b3fd-a23ac5ab90da,regular,34,21,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+7d852dda-f5da-11eb-b3fd-a23ac5ab90da,regular,30,20,10.0,1.1,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+7d96711c-f5da-11eb-b3fd-a23ac5ab90da,regular,33,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7da93270-f5da-11eb-b3fd-a23ac5ab90da,regular,30,22,10.0,1.2,0.0,0.0,0,,True,True,True,True,True,,True
+7db418f2-f5da-11eb-b3fd-a23ac5ab90da,regular,46,21,25.0,4.3,0.0,0.0,0,,True,True,True,True,True,,True
+7e85a584-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7e8b2b58-f5da-11eb-b3fd-a23ac5ab90da,regular,39,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7ea45240-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7e723d82-f5da-11eb-b3fd-a23ac5ab90da,regular,25,23,46.0,9.0,0.0,0.0,0,,True,True,True,True,True,,True
+7e7f8d02-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,15.0,1.8,0.0,0.0,0,,True,True,True,True,True,,True
+7e9e0048-f5da-11eb-b3fd-a23ac5ab90da,regular,32,21,11.0,1.2,0.0,0.0,8,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+7e79a6b2-f5da-11eb-b3fd-a23ac5ab90da,regular,32,24,12.0,1.1,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7db94a8e-f5da-11eb-b3fd-a23ac5ab90da,regular,38,21,4.0,0.4,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7ec0e8d8-f5da-11eb-b3fd-a23ac5ab90da,regular,30,21,15.0,3.5,0.0,0.0,0,,True,True,True,True,True,,True
+7ecc4bba-f5da-11eb-b3fd-a23ac5ab90da,regular,27,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7ed1fbe6-f5da-11eb-b3fd-a23ac5ab90da,regular,27,21,18.0,1.8,0.0,0.0,0,,True,True,True,True,True,,True
+7ed76ec8-f5da-11eb-b3fd-a23ac5ab90da,regular,29,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7eaf41d2-f5da-11eb-b3fd-a23ac5ab90da,regular,34,19,3.0,0.6,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7eb56b16-f5da-11eb-b3fd-a23ac5ab90da,regular,43,22,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+7ebb2970-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+7ee93d38-f5da-11eb-b3fd-a23ac5ab90da,regular,27,19,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7eddbe0e-f5da-11eb-b3fd-a23ac5ab90da,regular,39,19,16.0,1.9,0.0,0.0,0,,True,True,True,True,True,,True
+7ee3733a-f5da-11eb-b3fd-a23ac5ab90da,regular,31,22,21.0,2.1,0.0,0.0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+7eeee1fc-f5da-11eb-b3fd-a23ac5ab90da,regular,38,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7efbfacc-f5da-11eb-b3fd-a23ac5ab90da,regular,32,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7f0272d0-f5da-11eb-b3fd-a23ac5ab90da,regular,36,21,22.0,2.6,0.0,0.0,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7f085290-f5da-11eb-b3fd-a23ac5ab90da,regular,29,18,7.0,0.9,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+7f46d934-f5da-11eb-b3fd-a23ac5ab90da,regular,37,18,86.0,52.8,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7f2fb7d6-f5da-11eb-b3fd-a23ac5ab90da,regular,33,20,16.0,1.9,0.0,0.0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+7f3bbfa4-f5da-11eb-b3fd-a23ac5ab90da,regular,36,20,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7f158384-f5da-11eb-b3fd-a23ac5ab90da,regular,32,21,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7f1b6cea-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,7.0,1.1,0.0,0.0,3,actua_fuera_de_pista=2;sale_sin_estar=1,True,True,True,True,True,1 asistencias sin enlazar,True
+7f2108ee-f5da-11eb-b3fd-a23ac5ab90da,regular,38,22,27.0,9.0,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,2 asistencias sin enlazar,True
+7f35fe3e-f5da-11eb-b3fd-a23ac5ab90da,regular,29,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7f58605a-f5da-11eb-b3fd-a23ac5ab90da,regular,36,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7f6513b8-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 2 asistencias sin enlazar,True
+7f7f5ae8-f5da-11eb-b3fd-a23ac5ab90da,regular,22,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7f524846-f5da-11eb-b3fd-a23ac5ab90da,regular,37,21,80.0,9.6,0.0,0.0,0,,True,True,True,True,True,,True
+7f6c793c-f5da-11eb-b3fd-a23ac5ab90da,regular,32,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+7f78d128-f5da-11eb-b3fd-a23ac5ab90da,regular,35,21,2.0,0.2,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7f85a678-f5da-11eb-b3fd-a23ac5ab90da,regular,35,22,80.0,13.7,0.0,0.0,0,,True,True,True,True,True,,True
+7f72d494-f5da-11eb-b3fd-a23ac5ab90da,regular,31,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3 asistencias sin enlazar,True
+7f5eb4aa-f5da-11eb-b3fd-a23ac5ab90da,regular,30,22,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+7ec6b98e-f5da-11eb-b3fd-a23ac5ab90da,regular,23,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+8072f284-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,21,13.0,2.7,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7fa023e0-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+80678ee4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+7f93cb5e-f5da-11eb-b3fd-a23ac5ab90da,regular,29,22,22.0,2.3,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+7f8dc4de-f5da-11eb-b3fd-a23ac5ab90da,regular,36,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+806c97e0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,7.0,1.4,0.0,0.0,0,,True,True,True,True,True,,True
+7f99cce8-f5da-11eb-b3fd-a23ac5ab90da,regular,27,22,4.0,0.4,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7fadac18-f5da-11eb-b3fd-a23ac5ab90da,regular,28,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+8083131c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+809c9210-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,22,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+80888de2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,25,17.0,1.6,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias sin enlazar,True
+808db24a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+8092b47a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+809782f2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,20,18.0,2.2,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+80a15444-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,21,28.0,5.8,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+807dd582-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+8078b0b6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7f418b46-f5da-11eb-b3fd-a23ac5ab90da,regular,28,20,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+80bac8d4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,20,1.0,0.1,0.0,0.0,8,actua_fuera_de_pista=7;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+80cf7a18-f5da-11eb-8ac7-6a9b0f2b47ef,regular,24,21,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,4 asistencias sin enlazar,True
+80b05e08-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,58.0,25.1,0.0,0.0,0,,True,True,True,True,True,,True
+80b54cec-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,25,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+80ca524a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,25,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+80c01c30-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,37.0,9.5,0.0,0.0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,True,2 asistencias sin enlazar,True
+80a62140-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,21,4.0,0.5,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+80ab3afe-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,23,3.0,0.7,0.0,0.0,0,,True,True,True,True,True,,True
+80c5538a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+80de7e78-f5da-11eb-8ac7-6a9b0f2b47ef,regular,25,23,21.0,4.2,0.0,0.0,4,actua_fuera_de_pista=4,True,True,True,True,True,,True
+80e37df6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+80fe71c4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,22,11.0,1.2,0.0,0.0,0,,True,True,True,True,True,,True
+80f9559a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,21,16.0,4.9,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+80d44bb0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,39.0,20.5,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+80ed5394-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+80d93940-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,24,8.0,1.4,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+80f2b05a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,10.0,3.9,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+80e87842-f5da-11eb-8ac7-6a9b0f2b47ef,regular,44,23,20.0,3.5,0.0,0.0,0,,True,True,True,True,True,,True
+82ad83fc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7d62f71a-f5da-11eb-b3fd-a23ac5ab90da,regular,37,22,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7e919cc2-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,4.0,0.4,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+7d208d26-f5da-11eb-b3fd-a23ac5ab90da,regular,37,20,9.0,1.8,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+7fa604a4-f5da-11eb-b3fd-a23ac5ab90da,regular,32,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+828d5eba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7ef515ae-f5da-11eb-b3fd-a23ac5ab90da,regular,33,22,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+7f0eaa78-f5da-11eb-b3fd-a23ac5ab90da,regular,33,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+811933ec-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,20,7.0,0.9,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
+8132c9ba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,46,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+81036a30-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+810dc4e4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,41,24,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+8123a138-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,22,2.0,0.2,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+8128f75a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,5.0,0.6,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+811e7abe-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 asistencias sin enlazar,True
+810866d4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,27,4.0,1.2,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+7f284fdc-f5da-11eb-b3fd-a23ac5ab90da,regular,29,23,4.0,1.2,0.0,0.0,0,,True,True,True,True,True,,True
+812dd1a8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,23,117.0,11.7,,,9,actua_fuera_de_pista=3;añadido_por_actuar=2;no_cinco_0=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,False,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | +/- oficial incoherente: validado sólo por minutos,True
+8147e57a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,20,11.0,2.0,0.0,0.0,6,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=2,True,True,True,True,True,2 asistencias sin enlazar,True
+8164aa0c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+813d05ba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,20,6.0,2.1,0.0,0.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,True,,True
+8153f824-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,25,3.0,0.3,0.0,0.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 1 asistencias sin enlazar,True
+8142b5c8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+815a249c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,23,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+815f494a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,0.0,0.0,0.0,0.0,9,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+8138077c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,43.0,17.0,0.0,0.0,0,,True,True,True,True,True,2 asistencias sin enlazar,True
+814d81ba-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,23,5.0,0.6,0.0,0.0,6,actua_fuera_de_pista=1;no_cinco_6=3;sale_sin_estar=2,True,True,True,True,True,,True
+8259b98e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,51,22,1.0,0.1,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+816a93e0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+816fcf90-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+8237678a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias sin enlazar,True
+8246f4fc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,2.0,0.2,0.0,0.0,5,quinteto_periodo_arrastrado=2;sale_sin_estar=3,True,True,True,True,True,1 asistencias sin enlazar,True
+8253b480-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+824d0c0c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,49.0,20.4,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+823df3ca-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+822edda4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,21,8.0,0.8,0.0,0.0,6,actua_fuera_de_pista=4;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+822317e4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+8270ed66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,22,10.0,4.8,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+8264ca54-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+826b02f2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,24,20,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+827d5e66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,19,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+8287a98e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,24,15.0,1.4,0.0,0.0,0,,True,True,True,True,True,,True
+8292710c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,2 asistencias sin enlazar,True
+82978bce-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,8.0,0.9,,,4,no_cinco_6=1;quinteto_periodo_arrastrado=1;sale_sin_estar=2,True,True,True,True,False,1 asistencias sin enlazar | +/- oficial incoherente: validado sólo por minutos,True
+829cfd0c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,600.0,303.2,0.0,0.0,7,actua_fuera_de_pista=5;quinteto_periodo_arrastrado=2,False,True,True,True,True,,False
+82a27516-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+82b2e73e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,20,15.0,1.7,0.0,0.0,0,,True,True,True,True,True,,True
+82a8112e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+82c29c10-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,23,41.0,11.7,0.0,0.0,5,actua_fuera_de_pista=3;sale_sin_estar=2,True,True,True,True,True,1 asistencias sin enlazar,True
+82cd45fc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,24,7.0,1.7,0.0,0.0,0,,True,True,True,True,True,,True
+82c830bc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,41.0,6.4,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+82d2a452-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,20,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+82d7ff38-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,22,6.0,0.6,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+82e276ac-f5da-11eb-8ac7-6a9b0f2b47ef,regular,42,21,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+82e78048-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,21,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+82dd474a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+82bd77da-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,3.0,1.5,0.0,0.0,0,,True,True,True,True,True,,True
+825f08da-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,613.0,68.7,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,False,True,True,True,True,,False
+82b7ff76-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+82f21594-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+82f722b4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,8.0,0.7,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+83145366-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+82fcc23c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,21,10.0,1.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+8308f6c4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,21,3.0,0.3,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+82ecc058-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,6.0,0.6,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+831b259c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,23,28.0,2.7,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+8302392e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,42,21,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+830f010e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,23,5.0,1.3,0.0,0.0,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 asistencias sin enlazar,True
+83297778-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,24,26.0,2.2,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+83342236-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,23,1.0,0.1,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+833a50a2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+8340593e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,20,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+83fe6f50-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,24,6.0,0.6,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+84049772-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 asistencias sin enlazar,True
+8322228e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,20,28.0,15.6,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+832ec87c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,6.0,0.6,0.0,0.0,0,,True,True,True,True,True,,True
+841569da-f5da-11eb-8ac7-6a9b0f2b47ef,regular,25,21,9.0,1.1,0.0,0.0,0,,True,True,True,True,True,,True
+841b90a8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,41,23,50.0,9.3,0.0,0.0,0,,True,True,True,True,True,,True
+843857a6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,21,18.0,1.9,0.0,0.0,0,,True,True,True,True,True,,True
+84101f70-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,22,13.0,3.9,0.0,0.0,0,,True,True,True,True,True,,True
+8425eb5c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+842b98ea-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar) | 1 asistencias sin enlazar,True
+84313c14-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,20,21.0,2.2,0.0,0.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+840a7f66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+843d8064-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,33.0,17.4,0.0,0.0,0,,True,True,True,True,True,,True
+8442a9d6-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+8447e9aa-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,23,8.0,2.5,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+84625b96-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,20,4.0,0.5,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+847055e8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,23,7.0,2.2,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+8479aa08-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,20,4.0,1.3,0.0,0.0,0,,True,True,True,True,True,,True
+844db218-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+847feb70-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+82825e16-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+8420d5a4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+8276ef22-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+8459af14-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,22,38.0,3.8,0.0,0.0,0,,True,True,True,True,True,,True
+84917a20-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,4.0,0.9,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+848535d0-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,21,5.0,0.5,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+848b7544-f5da-11eb-8ac7-6a9b0f2b47ef,regular,35,23,4.0,0.8,0.0,0.0,0,,True,True,True,True,True,,True
+84acdca2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,21,6.0,0.6,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+84a26c22-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,23,15.0,1.5,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,,True
+84a7a1ce-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,21,12.0,1.2,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+849c5418-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+8496bab2-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+84b2426e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+84b79106-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+84c341cc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+84d4a9bc-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,23,16.0,1.7,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+84da9f2a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,31,21,8.0,0.8,0.0,0.0,0,,True,True,True,True,True,,True
+84e0cc7e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,24,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+84ce293e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,23,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+84bd8278-f5da-11eb-8ac7-6a9b0f2b47ef,regular,30,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+84532a04-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,23,3.0,0.5,0.0,0.0,0,,True,True,True,True,True,,True
+84e64c9e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+84ec32a8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,29,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+84f67d12-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+84fd0e66-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,23,3.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
+8504e1f4-f5da-11eb-8ac7-6a9b0f2b47ef,regular,36,22,4.0,0.4,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+8512835e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,20,51.0,9.1,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+8518104e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+84f161ce-f5da-11eb-8ac7-6a9b0f2b47ef,regular,24,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+850be81e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,39,24,1.0,0.2,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+83468cc8-f5da-11eb-8ac7-6a9b0f2b47ef,regular,38,21,2.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+84c86d3c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,23,20.0,2.6,0.0,0.0,0,,True,True,True,True,True,,True
+851dbc2e-f5da-11eb-8ac7-6a9b0f2b47ef,regular,28,21,18.0,2.0,0.0,0.0,0,,True,True,True,True,True,,True
+852444ae-f5da-11eb-8ac7-6a9b0f2b47ef,regular,27,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+852a1e10-f5da-11eb-8ac7-6a9b0f2b47ef,regular,34,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2 asistencias sin enlazar,True
+85666118-f5da-11eb-8ac7-6a9b0f2b47ef,regular,32,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+856ba22c-f5da-11eb-8ac7-6a9b0f2b47ef,regular,40,22,1.0,0.1,0.0,0.0,5,actua_fuera_de_pista=2;no_cinco_1=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,True,1 jugadores sin id de lnb.fr (se usa el uuid de Sportradar),True
+85782308-f5da-11eb-8ac7-6a9b0f2b47ef,regular,43,24,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+857dfe9a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,37,20,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+85832cda-f5da-11eb-8ac7-6a9b0f2b47ef,regular,33,23,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=4,True,True,True,True,True,,True
+85885b6a-f5da-11eb-8ac7-6a9b0f2b47ef,regular,26,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+9fccd9a8-d62c-11ec-bfbe-3bf1ce75c53d,playoffs,33,23,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+f2bc8a05-d62c-11ec-9982-852dbacb0f50,playoffs,38,23,11.0,1.5,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
+38b35b9a-d62d-11ec-b281-25db739a4385,playoffs,39,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+7f6b5c03-d62d-11ec-a192-4146f53dce46,playoffs,30,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+8f7458e5-d62e-11ec-9736-cf3d7d7245b6,playoffs,29,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+fe9a1a11-d62d-11ec-911a-3bf1ce75c53d,playoffs,23,23,1.0,0.4,0.0,0.0,0,,True,True,True,True,True,,True
+18d30904-d62f-11ec-afbe-8fa18da8fcee,playoffs,25,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+d5371cf9-d62e-11ec-9ca7-ebca378b485f,playoffs,55,22,19.0,3.8,0.0,0.0,2,sale_sin_estar=2,True,True,True,True,True,1 asistencias sin enlazar,True
+a1aecbdb-ddfb-11ec-bcd3-37fe9188aa7d,playoffs,30,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+9bff14cb-de9f-11ec-a786-67ca8a580b36,playoffs,55,22,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=3;sale_sin_estar=1,True,True,True,True,True,,True
+e6e4aaf7-df8b-11ec-b358-c771bf982db0,playoffs,32,22,4.0,0.7,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+8927f41c-e057-11ec-82c4-6303de77fcd3,playoffs,30,23,3.0,1.3,0.0,0.0,4,actua_fuera_de_pista=2;sale_sin_estar=2,True,True,True,True,True,,True
+6bcbde5f-df8d-11ec-8de8-8b071369f295,playoffs,31,22,12.0,1.3,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,3 asistencias sin enlazar,True
+efb40792-e057-11ec-83cf-4dacfb178c75,playoffs,41,23,5.0,2.8,,,10,actua_fuera_de_pista=4;no_cinco_6=2;quinteto_periodo_arrastrado=1;sale_sin_estar=3,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+cd2df848-df8d-11ec-ae26-c7b29c4b3251,playoffs,31,23,9.0,0.9,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+7876c316-e058-11ec-99f1-1de0546d5470,playoffs,32,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+fb8f2929-e69f-11ec-b6ed-ede2abbf3b3c,playoffs,31,23,14.0,2.0,0.0,0.0,0,,True,True,True,True,True,,True
+5b27f71e-e832-11ec-aa82-a394496afa39,playoffs,32,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+178d7bfc-e833-11ec-8ef4-8f0204cf2e42,playoffs,27,23,17.0,1.5,0.0,0.0,0,,True,True,True,True,True,,True
+b504a6d3-e833-11ec-9a29-cdea4f7a7ebe,playoffs,34,24,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+640bc626-ee7f-11ec-9c50-01452047a1c1,playoffs,38,23,3.0,0.3,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+42ac89bd-f26c-11ec-a8c1-79e2fd7b64d3,playoffs,44,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True

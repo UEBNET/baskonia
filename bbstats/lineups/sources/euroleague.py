@@ -4,7 +4,7 @@
   PBP:       https://live.euroleague.net/api/PlayByPlay?gamecode=N&seasoncode=E2024
   Boxscore:  https://live.euroleague.net/api/Boxscore?...   (titulares IsStarter, Minutes, Plusminus)
   Tiros:     https://live.euroleague.net/api/Points?...      (COORD_X/COORD_Y; NUM_ANOT = NUMBEROFPLAY)
-Ids: jugador "P004007" -> "004007" (igual que en los datos principales); equipo = código de club.
+Ids: jugador "P004007" -> "004007", "PKIR" -> "KIR" (igual que en los datos principales); equipo = código de club.
 Asistencias: evento AS sin enlace -> se enlaza al último tiro anotado del mismo equipo.
 """
 from __future__ import annotations
@@ -25,7 +25,7 @@ def _pid(v) -> str | None:
     s = (v or "").strip()
     if not s:
         return None
-    return s[1:] if s[:1] == "P" and s[1:].isdigit() else s
+    return s[1:] if s[:1] == "P" and len(s) > 1 else s   # como el adaptador principal: "P004007" -> "004007", "PKIR" -> "KIR"
 
 
 def _tid(v) -> str | None:
