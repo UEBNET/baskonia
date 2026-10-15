@@ -73,8 +73,28 @@ def run_league(liga: str, cfg: dict, season: str, download: bool, store: RawStor
     stored, official = load_games(store, liga, season)
     if download:
         ctx.http = http_factory()
-        now = utc_now()
         new: dict[str, dict] = {}
+        n_new = 0
+        block = int(qcfg.get("guardar_cada_partidos", 150))
+
+        def flush(off_raw: dict | None = None) -> None:
+            """Guarda los partidos pendientes (y las tablas oficiales) en un paquete nuevo: si la ejecución se
+            corta, lo ya descargado no se pierde y la siguiente sólo pide lo que falte."""
+            nonlocal new, official
+            if not new and not off_raw:
+                return
+            now = utc_now()
+            meta = {"liga": liga, "temporada": season, "tipo": "pbp", "fuente": src.name,
+                    "version_fuente": src.version, "version_bbstats": __version__,
+                    "fecha_extraccion": now.isoformat(), "fecha_extraccion_stamp": utc_stamp(now),
+                    "partidos": sorted(new), "peticiones": len(ctx.http.request_log()), "errores": ctx.errors}
+            path = store.save(liga, season, meta, {"games": new, "oficial": off_raw or {}}, kind="pbp")
+            progress(f"[{liga}] quintetos: bruto guardado en {path.name} ({len(new)} partidos)")
+            stored.update(new)
+            new = {}
+            if off_raw:
+                official = off_raw
+
         try:
             refs = src.games(ctx)
             todo = [r for r in refs if r.get("final") and str(r["game_id"]) not in stored]
@@ -85,25 +105,20 @@ def run_league(liga: str, cfg: dict, season: str, download: bool, store: RawStor
             for i, ref in enumerate(todo, 1):
                 try:
                     new[str(ref["game_id"])] = {"ref": ref, "docs": src.fetch(ctx, ref)}
+                    n_new += 1
                 except Exception as exc:  # noqa: BLE001 - un partido caído no detiene el resto
                     ctx.errors.append(f"{ref['game_id']}: {type(exc).__name__}: {exc}")
                 if i % 50 == 0:
                     progress(f"[{liga}] quintetos: {i}/{len(todo)} partidos descargados")
-            off_raw = src.official(ctx) if new or not official else {}
+                if block and len(new) >= block:
+                    flush()
+            # tablas oficiales: sólo si la temporada ya tiene partidos (y se refrescan cuando llegan nuevos)
+            off_raw = src.official(ctx) if (n_new or stored or new) and (n_new or not official) else {}
         except Exception as exc:  # noqa: BLE001
             ctx.errors.append(f"Lista de partidos: {type(exc).__name__}: {exc}")
             off_raw = {}
-        if new or off_raw:
-            meta = {"liga": liga, "temporada": season, "tipo": "pbp", "fuente": src.name,
-                    "version_fuente": src.version, "version_bbstats": __version__,
-                    "fecha_extraccion": now.isoformat(), "fecha_extraccion_stamp": utc_stamp(now),
-                    "partidos": sorted(new), "peticiones": len(ctx.http.request_log()), "errores": ctx.errors}
-            path = store.save(liga, season, meta, {"games": new, "oficial": off_raw}, kind="pbp")
-            progress(f"[{liga}] quintetos: bruto guardado en {path.name} ({len(new)} partidos)")
-            stored.update(new)
-            if off_raw:
-                official = off_raw
-        rep["partidos_nuevos"] = len(new)
+        flush(off_raw)
+        rep["partidos_nuevos"] = n_new
     rep["errores"] = list(ctx.errors)
     if not stored:
         rep["estado"] = "sin_datos"
