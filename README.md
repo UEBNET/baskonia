@@ -301,7 +301,7 @@ con más de 120 s de desajuste quedan fuera de quintetos y on/off, pero sí cuen
 
 - BBL 2020-21 a 2022-23: la fuente no anota los cambios con jugador → sólo tiros, asistencias y red de pases.
 - LNB 2020-21: la fuente no publica jugada a jugada (columnas en blanco).
-- EuroLeague 2021-22: 299 de 327 partidos (los anulados tras la exclusión de los equipos rusos no están en la fuente).
+- EuroLeague 2021-22: 299 de 327 partidos; la fuente no marca los otros 28 como jugados (probablemente los afectados por la exclusión de los equipos rusos; sin verificar).
 - Ids de jugador y equipo iguales a los de `data/processed/<temporada>/ligas/<liga>.csv` (99–100 % en todas).
 
 Bruto: `data/raw/<liga>/<temporada>/pbp_<liga>_<temporada>_<fecha>.json.gz`, un paquete por ejecución con
