@@ -1,327 +1,327 @@
-game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,notas,usado_en_quintetos
-103773,regular,48,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103774,regular,47,24,2.0,0.5,0.0,0,0,,True,True,True,True,,True
-103775,regular,36,24,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103776,regular,43,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103777,regular,31,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
-103778,regular,43,24,2.0,0.7,0.0,0,0,,True,True,True,True,,True
-103779,regular,35,24,2.0,0.6,0.0,0,0,,True,True,True,True,,True
-103781,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,2/34 asistencias sin enlazar,True
-103789,regular,30,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-103782,regular,33,24,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-103783,regular,35,24,12.0,1.0,0.0,0,0,,True,True,True,True,,True
-103784,regular,45,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,playType no catalogados: 171x1,True
-103785,regular,33,24,5.0,0.5,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,playType no catalogados: 200x1,True
-103786,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103787,regular,47,24,5.0,0.4,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103788,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103771,regular,42,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103772,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103770,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103754,regular,43,24,9.0,2.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103769,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103755,regular,36,24,1.0,0.2,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103756,regular,49,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103757,regular,37,23,2.0,0.2,0.0,0,0,,True,True,True,True,,True
-103758,regular,50,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103759,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta) | playType no catalogados: 200x1,True
-103760,regular,38,24,20.0,1.8,0.0,0,0,,True,True,True,True,,True
-103767,regular,38,24,2.0,0.2,0.0,0,0,,True,True,True,True,,True
-103768,regular,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103766,regular,46,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103562,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103765,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103764,regular,34,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1/33 asistencias sin enlazar | playType no catalogados: 200x1,True
-103762,regular,35,24,4.0,0.4,0.0,0,0,,True,True,True,True,,True
-103763,regular,45,24,2.0,0.2,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103761,regular,38,24,2.0,0.3,0.0,0,0,,True,True,True,True,,True
-103752,regular,37,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103753,regular,34,24,4.0,1.0,0.0,0,0,,True,True,True,True,,True
-103732,regular,38,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103751,regular,52,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103729,regular,40,24,1.0,0.4,0.0,0,0,,True,True,True,True,2/39 asistencias sin enlazar,True
-103730,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,playType no catalogados: 200x1,True
-103727,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103728,regular,25,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103726,regular,33,24,8.0,0.7,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,2/35 asistencias sin enlazar,True
-103724,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,playType no catalogados: 200x1,True
-103725,regular,40,22,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103722,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103723,regular,44,23,1.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,playType no catalogados: 200x1,True
-103721,regular,27,24,2.0,0.5,0.0,0,0,,True,True,True,True,,True
-103720,regular,36,24,6.0,0.5,0.0,0,0,,True,True,True,True,,True
-103718,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103719,regular,42,24,4.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103717,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103716,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103731,regular,39,24,5.0,0.5,0.0,0,0,,True,True,True,True,,True
-103733,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103750,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103734,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103749,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103747,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103748,regular,52,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103746,regular,37,24,1.0,0.2,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103744,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103745,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103742,regular,27,24,9.0,1.1,0.0,0,0,,True,True,True,True,1/26 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103743,regular,51,24,1.0,0.7,0.0,0,0,,True,True,True,True,,True
-103740,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103741,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103738,regular,36,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-103739,regular,34,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103737,regular,44,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103735,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103736,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103780,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103791,regular,50,24,18.0,1.8,0.0,0,0,,True,True,True,True,,True
-103857,regular,34,22,0.0,0.0,0.0,0,2,quinteto_periodo_arrastrado=2,True,True,True,True,,True
-103792,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103844,regular,32,24,16.0,1.5,0.0,0,0,,True,True,True,True,,True
-103845,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103843,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103842,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103839,regular,33,24,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103840,regular,46,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-103836,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103837,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103838,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,2/33 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103835,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103841,regular,39,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103834,regular,25,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103832,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103833,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103831,regular,33,24,1.0,0.1,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103846,regular,32,23,12.0,1.0,0.0,0,0,,True,True,True,True,1/36 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103567,regular,35,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103847,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103849,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,1/53 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103865,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103864,regular,49,24,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103862,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103863,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103860,regular,53,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103861,regular,43,24,1.0,0.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103859,regular,30,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103866,regular,37,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103856,regular,26,24,13.0,1.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,playType no catalogados: 200x1,True
-103858,regular,36,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-103855,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103853,regular,40,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103854,regular,26,24,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-103851,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103852,regular,40,24,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-103830,regular,37,24,15.0,3.0,0.0,0,0,,True,True,True,True,,True
-103850,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103828,regular,41,24,2.0,0.2,0.0,0,0,,True,True,True,True,,True
-103829,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103809,regular,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103806,regular,44,24,0.0,0.0,0.0,0,0,,True,True,True,True,1/30 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103807,regular,31,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103804,regular,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103805,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103802,regular,38,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103803,regular,46,24,5.0,0.9,0.0,0,0,,True,True,True,True,,True
-103801,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103799,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103800,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103798,regular,46,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-103797,regular,38,24,24.0,4.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103796,regular,44,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103795,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103794,regular,35,24,16.0,1.5,0.0,0,0,,True,True,True,True,,True
-103793,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103810,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103827,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,playType no catalogados: 549x1,True
-103808,regular,43,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta) | playType no catalogados: 200x1,True
-103811,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103825,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103826,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103823,regular,44,23,0.0,0.0,0.0,0,4,actua_fuera_de_pista=4,True,True,True,True,playType no catalogados: 200x2,True
-103824,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103822,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103820,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103821,regular,42,23,16.0,1.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103819,regular,28,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,playType no catalogados: 200x1,True
-103817,regular,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103818,regular,44,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103815,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103816,regular,32,24,15.0,3.6,0.0,0,0,,True,True,True,True,,True
-103813,regular,33,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103814,regular,36,24,3.0,1.4,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103715,regular,37,24,1.0,0.2,0.0,0,0,,True,True,True,True,3 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103812,regular,31,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,playType no catalogados: 200x1,True
-103714,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103703,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103713,regular,38,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103614,regular,36,23,2.0,0.7,0.0,0,0,,True,True,True,True,,True
-103615,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103612,regular,25,23,0.0,0.0,0.0,0,0,,True,True,True,True,playType no catalogados: 549x1,True
-103613,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103610,regular,39,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-103611,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103609,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103607,regular,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103608,regular,37,24,16.0,2.9,0.0,0,0,,True,True,True,True,,True
-103605,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103606,regular,45,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103604,regular,35,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,playType no catalogados: 549x1,True
-103616,regular,30,24,2.0,0.2,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103601,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103602,regular,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103603,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103618,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103635,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103619,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103634,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103633,regular,38,23,0.0,0.0,0.0,0,0,,True,True,True,True,playType no catalogados: 200x1,True
-103632,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103630,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103631,regular,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103629,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103627,regular,35,24,1.0,0.5,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103628,regular,31,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103625,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103626,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103624,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103623,regular,36,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103621,regular,32,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103620,regular,34,24,2.0,0.3,0.0,0,0,,True,True,True,True,,True
-103622,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103600,regular,36,24,9.0,0.8,0.0,0,0,,True,True,True,True,1/33 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103617,regular,32,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103579,regular,42,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,playType no catalogados: 200x1,True
-103599,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103573,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103577,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103575,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103576,regular,31,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-103574,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103571,regular,26,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103572,regular,49,23,4.0,0.8,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103569,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103570,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103568,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103848,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,1/35 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103566,regular,37,24,10.0,1.0,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103564,regular,32,23,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-103565,regular,27,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103563,regular,34,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,,True
-103578,regular,47,24,1.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103580,regular,30,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,,True
-103597,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103581,regular,33,24,2.0,0.4,0.0,0,0,,True,True,True,True,,True
-103596,regular,36,24,0.0,0.0,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103594,regular,38,24,14.0,1.5,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103595,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103593,regular,43,23,15.0,1.4,0.0,0,0,,True,True,True,True,,True
-103591,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103592,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103589,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103590,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103587,regular,34,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103588,regular,29,23,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-103585,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103586,regular,42,24,22.0,4.4,0.0,0,0,,True,True,True,True,,True
-103584,regular,32,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,,True
-103582,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103583,regular,51,24,0.0,0.0,0.0,0,0,,True,True,True,True,1/29 asistencias sin enlazar,True
-103598,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103636,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103637,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103638,regular,46,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103690,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103691,regular,34,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103689,regular,46,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103687,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103688,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103685,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103686,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103684,regular,42,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103683,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103681,regular,48,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103682,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103680,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103679,regular,27,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103692,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103677,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103678,regular,32,24,1.0,0.3,0.0,0,0,,True,True,True,True,,True
-103693,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103694,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103695,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103711,regular,37,23,1.0,0.1,0.0,0,0,,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103710,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103708,regular,43,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103709,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103707,regular,35,24,60.0,5.0,0.0,0,0,,True,True,True,True,,True
-103706,regular,23,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103705,regular,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103702,regular,35,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-103712,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103701,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103704,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103699,regular,37,23,0.0,0.0,0.0,0,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,True,playType no catalogados: 171x1,True
-103700,regular,48,24,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-103697,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103698,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103676,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103696,regular,33,24,1.0,0.3,0.0,0,0,,True,True,True,True,,True
-103674,regular,39,24,16.0,1.3,0.0,0,0,,True,True,True,True,,True
-103675,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103655,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,2/41 asistencias sin enlazar,True
-103652,regular,39,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103650,regular,37,24,2.0,0.8,0.0,0,0,,True,True,True,True,2/36 asistencias sin enlazar,True
-103651,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103653,regular,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103649,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103646,regular,32,24,1.0,0.1,0.0,0,0,,True,True,True,True,,True
-103645,regular,29,24,1.0,0.2,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,playType no catalogados: 200x2,True
-103647,regular,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103648,regular,40,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103644,regular,40,24,1.0,0.2,0.0,0,0,,True,True,True,True,,True
-103642,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103673,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103639,regular,23,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103643,regular,44,24,2.0,0.2,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103640,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103654,regular,50,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103656,regular,40,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103641,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103657,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103672,regular,45,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,1/36 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103670,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103669,regular,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103671,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103668,regular,33,24,7.0,1.8,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103667,regular,36,24,2.0,0.2,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103666,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103665,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-103658,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103659,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103660,regular,37,24,1.0,0.3,0.0,0,0,,True,True,True,True,,True
-103661,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103662,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103663,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103664,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-103790,regular,30,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-103867,regular,31,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-104022,playoffs,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104023,playoffs,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-104024,playoffs,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-104025,playoffs,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104026,playoffs,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-104027,playoffs,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104028,playoffs,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-104029,playoffs,46,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-104032,playoffs,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-104037,playoffs,29,24,25.0,2.3,0.0,0,0,,True,True,True,True,,True
-104038,playoffs,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-104039,playoffs,32,24,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,,True
-104040,playoffs,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104041,playoffs,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104042,playoffs,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta) | playType no catalogados: 200x1,True
-104043,playoffs,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104045,playoffs,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
-104047,playoffs,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104048,playoffs,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
-104049,playoffs,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,,True
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+103773,regular,48,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103774,regular,47,24,2.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103775,regular,36,24,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103776,regular,43,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103777,regular,31,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
+103778,regular,43,24,2.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+103779,regular,35,24,2.0,0.6,0.0,0,0,,True,True,True,True,True,,True
+103781,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2/34 asistencias sin enlazar,True
+103789,regular,30,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103782,regular,33,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103783,regular,35,24,12.0,1.0,0.0,0,0,,True,True,True,True,True,,True
+103784,regular,45,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,playType no catalogados: 171x1,True
+103785,regular,33,24,5.0,0.5,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,playType no catalogados: 200x1,True
+103786,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103787,regular,47,24,5.0,0.4,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103788,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103771,regular,42,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103772,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103770,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103754,regular,43,24,9.0,2.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103769,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103755,regular,36,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103756,regular,49,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103757,regular,37,23,2.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103758,regular,50,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103759,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta) | playType no catalogados: 200x1,True
+103760,regular,38,24,20.0,1.8,0.0,0,0,,True,True,True,True,True,,True
+103767,regular,38,24,2.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103768,regular,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103766,regular,46,22,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103562,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103765,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103764,regular,34,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/33 asistencias sin enlazar | playType no catalogados: 200x1,True
+103762,regular,35,24,4.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+103763,regular,45,24,2.0,0.2,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103761,regular,38,24,2.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103752,regular,37,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103753,regular,34,24,4.0,1.0,0.0,0,0,,True,True,True,True,True,,True
+103732,regular,38,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103751,regular,52,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103729,regular,40,24,1.0,0.4,0.0,0,0,,True,True,True,True,True,2/39 asistencias sin enlazar,True
+103730,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,playType no catalogados: 200x1,True
+103727,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103728,regular,25,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103726,regular,33,24,8.0,0.7,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,2/35 asistencias sin enlazar,True
+103724,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,playType no catalogados: 200x1,True
+103725,regular,40,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103722,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103723,regular,44,23,1.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,playType no catalogados: 200x1,True
+103721,regular,27,24,2.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103720,regular,36,24,6.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103718,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103719,regular,42,24,4.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103717,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103716,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103731,regular,39,24,5.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103733,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103750,regular,33,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103734,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103749,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103747,regular,29,21,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103748,regular,52,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103746,regular,37,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103744,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103745,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103742,regular,27,24,9.0,1.1,0.0,0,0,,True,True,True,True,True,1/26 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103743,regular,51,24,1.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+103740,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103741,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103738,regular,36,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103739,regular,34,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103737,regular,44,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103735,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103736,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103780,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103791,regular,50,24,18.0,1.8,0.0,0,0,,True,True,True,True,True,,True
+103857,regular,34,22,0.0,0.0,0.0,0,2,quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+103792,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103844,regular,32,24,16.0,1.5,0.0,0,0,,True,True,True,True,True,,True
+103845,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103843,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103842,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103839,regular,33,24,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103840,regular,46,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+103836,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103837,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103838,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2/33 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103835,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103841,regular,39,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103834,regular,25,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103832,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103833,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103831,regular,33,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103846,regular,32,23,12.0,1.0,0.0,0,0,,True,True,True,True,True,1/36 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103567,regular,35,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103847,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103849,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1/53 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103865,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103864,regular,49,24,1.0,0.1,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103862,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103863,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103860,regular,53,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103861,regular,43,24,1.0,0.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103859,regular,30,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103866,regular,37,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103856,regular,26,24,13.0,1.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,playType no catalogados: 200x1,True
+103858,regular,36,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103855,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103853,regular,40,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103854,regular,26,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103851,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103852,regular,40,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103830,regular,37,24,15.0,3.0,0.0,0,0,,True,True,True,True,True,,True
+103850,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103828,regular,41,24,2.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103829,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103809,regular,29,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103806,regular,44,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1/30 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103807,regular,31,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103804,regular,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103805,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103802,regular,38,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103803,regular,46,24,5.0,0.9,0.0,0,0,,True,True,True,True,True,,True
+103801,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103799,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103800,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103798,regular,46,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+103797,regular,38,24,24.0,4.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103796,regular,44,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103795,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103794,regular,35,24,16.0,1.5,0.0,0,0,,True,True,True,True,True,,True
+103793,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103810,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103827,regular,33,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,playType no catalogados: 549x1,True
+103808,regular,43,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta) | playType no catalogados: 200x1,True
+103811,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103825,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103826,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103823,regular,44,23,0.0,0.0,0.0,0,4,actua_fuera_de_pista=4,True,True,True,True,True,playType no catalogados: 200x2,True
+103824,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103822,regular,46,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103820,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103821,regular,42,23,16.0,1.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103819,regular,28,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,playType no catalogados: 200x1,True
+103817,regular,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103818,regular,44,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103815,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103816,regular,32,24,15.0,3.6,0.0,0,0,,True,True,True,True,True,,True
+103813,regular,33,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103814,regular,36,24,3.0,1.4,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103715,regular,37,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,3 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103812,regular,31,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,playType no catalogados: 200x1,True
+103714,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103703,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103713,regular,38,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103614,regular,36,23,2.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+103615,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103612,regular,25,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,playType no catalogados: 549x1,True
+103613,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103610,regular,39,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+103611,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103609,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103607,regular,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103608,regular,37,24,16.0,2.9,0.0,0,0,,True,True,True,True,True,,True
+103605,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103606,regular,45,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103604,regular,35,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,playType no catalogados: 549x1,True
+103616,regular,30,24,2.0,0.2,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103601,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103602,regular,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103603,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103618,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103635,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103619,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103634,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103633,regular,38,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,playType no catalogados: 200x1,True
+103632,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103630,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103631,regular,29,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103629,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103627,regular,35,24,1.0,0.5,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103628,regular,31,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103625,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103626,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103624,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103623,regular,36,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103621,regular,32,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103620,regular,34,24,2.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103622,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103600,regular,36,24,9.0,0.8,0.0,0,0,,True,True,True,True,True,1/33 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103617,regular,32,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103579,regular,42,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,playType no catalogados: 200x1,True
+103599,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103573,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103577,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103575,regular,31,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103576,regular,31,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+103574,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103571,regular,26,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103572,regular,49,23,4.0,0.8,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103569,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103570,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103568,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103848,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1/35 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103566,regular,37,24,10.0,1.0,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103564,regular,32,23,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103565,regular,27,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103563,regular,34,24,0.0,0.0,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+103578,regular,47,24,1.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103580,regular,30,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+103597,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103581,regular,33,24,2.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+103596,regular,36,24,0.0,0.0,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103594,regular,38,24,14.0,1.5,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103595,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103593,regular,43,23,15.0,1.4,0.0,0,0,,True,True,True,True,True,,True
+103591,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103592,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103589,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103590,regular,31,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103587,regular,34,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103588,regular,29,23,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103585,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103586,regular,42,24,22.0,4.4,0.0,0,0,,True,True,True,True,True,,True
+103584,regular,32,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
+103582,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103583,regular,51,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1/29 asistencias sin enlazar,True
+103598,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103636,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103637,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103638,regular,46,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103690,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103691,regular,34,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103689,regular,46,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103687,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103688,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103685,regular,32,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103686,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103684,regular,42,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103683,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103681,regular,48,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103682,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103680,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103679,regular,27,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103692,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103677,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103678,regular,32,24,1.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103693,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103694,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103695,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103711,regular,37,23,1.0,0.1,0.0,0,0,,True,True,True,True,True,2 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103710,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103708,regular,43,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103709,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103707,regular,35,24,60.0,5.0,0.0,0,0,,True,True,True,True,True,,True
+103706,regular,23,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103705,regular,35,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103702,regular,35,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103712,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103701,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103704,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103699,regular,37,23,0.0,0.0,0.0,0,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,True,True,playType no catalogados: 171x1,True
+103700,regular,48,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103697,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103698,regular,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103676,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103696,regular,33,24,1.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103674,regular,39,24,16.0,1.3,0.0,0,0,,True,True,True,True,True,,True
+103675,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103655,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,2/41 asistencias sin enlazar,True
+103652,regular,39,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103650,regular,37,24,2.0,0.8,0.0,0,0,,True,True,True,True,True,2/36 asistencias sin enlazar,True
+103651,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103653,regular,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103649,regular,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103646,regular,32,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103645,regular,29,24,1.0,0.2,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,True,playType no catalogados: 200x2,True
+103647,regular,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103648,regular,40,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103644,regular,40,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103642,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103673,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103639,regular,23,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103643,regular,44,24,2.0,0.2,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103640,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103654,regular,50,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103656,regular,40,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103641,regular,26,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103657,regular,41,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103672,regular,45,23,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/36 asistencias sin enlazar | 1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103670,regular,37,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103669,regular,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103671,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103668,regular,33,24,7.0,1.8,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103667,regular,36,24,2.0,0.2,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103666,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103665,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+103658,regular,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103659,regular,30,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103660,regular,37,24,1.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103661,regular,36,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103662,regular,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103663,regular,33,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103664,regular,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+103790,regular,30,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103867,regular,31,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+104022,playoffs,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104023,playoffs,38,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+104024,playoffs,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+104025,playoffs,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104026,playoffs,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+104027,playoffs,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104028,playoffs,36,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+104029,playoffs,46,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+104032,playoffs,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+104037,playoffs,29,24,25.0,2.3,0.0,0,0,,True,True,True,True,True,,True
+104038,playoffs,40,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+104039,playoffs,32,24,2.0,0.2,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+104040,playoffs,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104041,playoffs,34,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104042,playoffs,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta) | playType no catalogados: 200x1,True
+104043,playoffs,39,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104045,playoffs,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1 asistencias a tiros libres sin ninguno anotado (la ACB las cuenta),True
+104047,playoffs,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104048,playoffs,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+104049,playoffs,30,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
