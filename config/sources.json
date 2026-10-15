@@ -24,7 +24,8 @@
       "www.basketball-reference.com": 3.5,
       "www.easycredit-bbl.de": 0.5,
       "live.euroleague.net": 0.4,
-      "api-live.euroleague.net": 0.4
+      "api-live.euroleague.net": 0.4,
+      "api2.acb.com": 0.5
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -62,7 +63,8 @@
       "fuente": "https://acb.com (api2.acb.com)",
       "temporadas": {},
       "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
-      "basketnews_league_id": 41
+      "basketnews_league_id": 41,
+      "pbp": "acb"
     },
     "nba": {
       "adaptador": "bref_nba",
@@ -113,7 +115,8 @@
       "fuente": "https://www.legabasket.it (API pública de la web)",
       "temporadas": {},
       "estado_verificacion": "verificado con datos reales (2025-26 y 2026-27)",
-      "serie": "A1"
+      "serie": "A1",
+      "pbp": "lba"
     },
     "bbl": {
       "adaptador": "bbl",
