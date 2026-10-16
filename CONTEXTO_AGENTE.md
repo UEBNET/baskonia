@@ -382,7 +382,7 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 
 ## 9a. Jugada a jugada en los modelos (oct. 2026; `docs/contexto_y_quimica.md`)
 
-- `bbmodel/zonas.py`: calibración de coordenadas de tiro por fuente con la línea de triple (97-100 % de acierto).
+- `bbmodel/zonas.py`: calibración de coordenadas de tiro por fuente con la línea de triple (99-100 % de acierto).
 - `bbmodel/pista.py` → `data/modelos/pista/<temp>.csv`: zonas, canastas asistidas y RAPM por jugador-equipo; se unen en
   `datos.cargar_filas`, así que A y B traducen 33 métricas (25 de caja + 8 de pista, grupo «Pista» del catálogo).
   B debe correr con un hilo de BLAS (`threadpool_limits(1)` en `__main__`; con varios es ~14 veces más lento).

@@ -25,7 +25,7 @@ EuroCup), décimas de pie desde el aro (NBA, G League), milímetros con los ejes
 pista completa con dos canastas (LBA, LNB) o unidades propias (BBL). `zonas.py` ajusta, por liga y temporada, la
 posición del aro y la escala para que la línea de triple oficial (FIBA: arco de 6,75 m y esquinas a 6,60 m; NBA:
 7,24 m y 6,71 m) separe lo mejor posible los tiros que la propia fuente anota como de 2 y de 3. Acierto de la
-separación en las 53 ligas-temporada con tiros: **97-100 %** (`data/modelos/pista/calibracion.json`). Zonas: aro
+separación en las 53 ligas-temporada con tiros: **99-100 %** (`data/modelos/pista/calibracion.json`). Zonas: aro
 (< 1,8 m), corta (1,8-4,25 m), media distancia, triple de esquina y triple frontal. Acierto medio en el aro:
 62-68 % según la liga.
 
@@ -100,6 +100,6 @@ sobre p_X ⊗ p_Y con el nivel de X, el de Y y su interacción como controles; e
 ## 6. Limitaciones
 
 Asociaciones, no causas (selección de minutos y rivales); el RAPM de una temporada es ruidoso y arrastra parte del
-contexto; las zonas dependen de la calidad de las coordenadas de cada fuente (calibración ≥ 97 %); el contexto se
+contexto; las zonas dependen de la calidad de las coordenadas de cada fuente (calibración ≥ 99 %); el contexto se
 mide con un índice de nivel de caja; sin quintetos en BBL 2020-23 (sólo tiros y asistencias) ni jugada a jugada en
 LNB 2020-21; NBA y G League 2026-27 sin empezar.
