@@ -600,6 +600,74 @@ body, .dcard, .insight, .fpanel, .command, .tablebox, .ev-tablebox, .panel, .sub
 .pagetab.ro { color: color-mix(in srgb, var(--muted) 85%, var(--bg)); }
 .ro-k { margin-left: 8px; color: var(--faint); opacity: .8; letter-spacing: .14em; }
 
+/* ------------------------------------------------------------------ pista y conexiones (capa jugada a jugada) */
+/* zonas de tiro: dos familias (tiros de 2 en champán, triples en azul) para leer distancia y valor a la vez */
+:root { --z-aro: var(--accent); --z-corta: color-mix(in srgb, var(--accent) 64%, var(--surface)); --z-media: color-mix(in srgb, var(--accent) 34%, var(--surface));
+  --z-t3e: var(--nl-a); --z-t3f: color-mix(in srgb, var(--nl-a) 48%, var(--surface)); --lv-me: var(--accent); --lv-comp: var(--nl-a); --lv-riv: var(--nl-b); --lv-pl: var(--neutral); }
+.panel [data-tip], .nl [data-tip], .ev [data-tip] { cursor: help; }
+.pz { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; min-width: 0; }
+.pz-head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; justify-content: space-between; }
+.pz-head .label { color: var(--accent); }
+.pz-head .note { font-size: 11.5px; }
+.pz h3 { margin: 2px 0 0; font: 700 10.5px/1.3 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.kv b.up, .nrm-table td.up, .pz-line b.up { color: var(--good); }
+.kv b.down, .nrm-table td.down, .pz-line b.down { color: var(--bad); }
+.kv small { font: 500 10px var(--f-data); color: var(--muted); }
+.pz-line { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.45; }
+.pz-line > span { white-space: nowrap; }
+.pz-line b { font: 600 12.5px var(--f-data); color: var(--ink); }
+.zstack { display: flex; gap: 2px; height: 12px; border-radius: 4px; overflow: hidden; background: var(--surface-3); }
+.zstack i { display: block; min-width: 0; height: 100%; }
+.zstack.ref { height: 5px; opacity: .75; margin-top: -4px; }
+.zstack-lab { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); }
+.zlegend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--muted); }
+.zlegend span { display: inline-flex; gap: 5px; align-items: center; white-space: nowrap; }
+.zlegend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
+.zlegend b { font: 600 11.5px var(--f-data); color: var(--ink); }
+.z-aro { background: var(--z-aro); } .z-corta { background: var(--z-corta); } .z-media { background: var(--z-media); } .z-t3e { background: var(--z-t3e); } .z-t3f { background: var(--z-t3f); }
+.howto { margin: 0; font-size: 12px; line-height: 1.5; color: var(--muted); border-left: 2px solid var(--accent-line); padding: 1px 0 1px 10px; }
+.howto b { color: var(--ink-2); font-weight: 600; }
+.qbtn { justify-self: start; display: inline-flex; gap: 8px; align-items: center; }
+.qbtn svg { width: 14px; height: 14px; flex: none; }
+/* nivel del jugador frente a compañeros y rivales */
+.lvl { display: grid; gap: 5px; }
+.lvl-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 44px; gap: 8px; align-items: center; font-size: 12px; color: var(--ink-2); }
+.lvl-row > span { line-height: 1.2; }
+.lvl-row em { font: 600 12px var(--f-data); font-style: normal; text-align: right; color: var(--ink); }
+.lvl-trk { position: relative; height: 16px; }
+.lvl-trk::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 2px; border-radius: 1px; background: var(--surface-3); }
+.lvl-trk u { position: absolute; top: 1px; bottom: 1px; width: 1px; background: var(--faint); }
+.lvl-trk .avg { position: absolute; top: 3px; bottom: 3px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--ink-2); opacity: .55; }
+.lvl-trk .stem { position: absolute; top: 7px; height: 2px; opacity: .5; }
+.lvl-trk .dot { position: absolute; top: 3px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; box-shadow: 0 0 0 2px var(--surface); }
+.lvl-axis .lvl-trk::before { display: none; }
+.lvl-axis .lvl-trk b { position: absolute; transform: translateX(-50%); font: 500 10px var(--f-data); color: var(--muted); top: 1px; white-space: nowrap; }
+.nrm-table.ctxt table { min-width: 0; }
+.nrm-table td.dlt { font-size: 11px; color: var(--muted); }
+/* sensibilidad β por métrica (Normalización de ligas) */
+.bt { display: grid; gap: 2px; overflow-x: auto; }
+.bt-row { display: grid; grid-template-columns: minmax(130px, 210px) minmax(240px, 1fr) 92px; gap: 10px; align-items: center; min-height: 22px; font-size: 12.5px; color: var(--ink-2); }
+.bt-row .nm small { color: var(--faint); font-size: 10.5px; }
+.bt-row em { font: 600 12px var(--f-data); font-style: normal; text-align: right; white-space: nowrap; }
+.bt-row em small { font-weight: 500; color: var(--muted); font-size: 10.5px; }
+.bt-row.weak { opacity: .42; }
+.bt-trk { position: relative; height: 18px; }
+.bt-trk u { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
+.bt-trk u.z { background: var(--ink-2); width: 1.5px; }
+.bt-trk .ci { position: absolute; top: 8px; height: 2px; border-radius: 1px; }
+.bt-trk .ci::before, .bt-trk .ci::after { content: ""; position: absolute; top: -3px; width: 1.5px; height: 8px; background: inherit; }
+.bt-trk .ci::before { left: 0; } .bt-trk .ci::after { right: 0; }
+.bt-trk .pt { position: absolute; top: 4px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; box-shadow: 0 0 0 2px var(--surface); }
+.bt-axis .bt-trk b { position: absolute; transform: translateX(-50%); font: 500 10.5px var(--f-data); color: var(--muted); top: 2px; white-space: nowrap; }
+:root[data-theme="dark"] { --z-corta: color-mix(in srgb, var(--accent) 70%, var(--surface)); --z-media: color-mix(in srgb, var(--accent) 48%, var(--surface)); --z-t3f: color-mix(in srgb, var(--nl-a) 55%, var(--surface)); }
+.ctx-lt td.c { text-align: center; min-width: 64px; }
+.ctx-lt td.c.thin { opacity: .45; }
+.ctx-lt td.txt small { color: var(--muted); font-size: 11px; }
+.nl-val td { white-space: nowrap; }
+.nl-val td.best { font-weight: 700; color: var(--accent); }
+@media (max-width: 1560px) { .pagetab { padding-inline: 10px; letter-spacing: .09em; } .pagetab::after { left: 10px; right: 10px; } .ro-sep { margin-inline: 4px; } }
+@media (max-width: 520px) { .lvl-row { grid-template-columns: 84px minmax(0, 1fr) 40px; } .bt-row { grid-template-columns: 92px minmax(0, 1fr) 46px; gap: 6px; font-size: 12px; } .bt-row em small { display: none; } .bt-row .nm small { display: none; } }
+
 </style>
 
 <div class="wrap">
@@ -612,6 +680,7 @@ body, .dcard, .insight, .fpanel, .command, .tablebox, .ev-tablebox, .panel, .sub
     <nav class="pagetabs" role="tablist" aria-label="Secciones">
       <button class="pagetab" role="tab" type="button" id="tab-tabla" data-page="tabla" aria-selected="true">Datos Brutos</button>
       <button class="pagetab" role="tab" type="button" id="tab-normalizados" data-page="normalizados" aria-selected="false">Datos Normalizados</button>
+      <button class="pagetab" role="tab" type="button" id="tab-quintetos" data-page="quintetos" aria-selected="false">Quintetos y conexiones</button>
       <button class="pagetab" role="tab" type="button" id="tab-atlas" data-page="atlas" aria-selected="false">Atlas de Estilos</button>
       <span class="ro-sep" aria-hidden="true"></span><span class="ro-tag">Solo lectura</span>
       <button class="pagetab ro" role="tab" type="button" id="tab-evaluacion" data-page="evaluacion" aria-selected="false">Evaluación de ligas</button>
@@ -821,6 +890,10 @@ body, .dcard, .insight, .fpanel, .command, .tablebox, .ev-tablebox, .panel, .sub
     </section>
   </div>
 
+  <div id="pageQuintetos" class="page" hidden>
+    <iframe id="quintetosFrame" class="atlas-frame" title="Quintetos y conexiones" loading="lazy"></iframe>
+  </div>
+
   <div id="pageAtlas" class="page" hidden>
     <iframe id="atlasFrame" title="Atlas de Estilos" class="atlas-frame" loading="lazy"></iframe>
   </div>
@@ -849,19 +922,21 @@ body, .dcard, .insight, .fpanel, .command, .tablebox, .ev-tablebox, .panel, .sub
       <button class="subtab" role="tab" type="button" data-sub="ficha"><i>02</i>Por competición</button>
       <button class="subtab" role="tab" type="button" data-sub="mapa"><i>03</i>Mapa de métricas</button>
       <button class="subtab" role="tab" type="button" data-sub="jugadores"><i>04</i>Jugadores traducidos</button>
+      <button class="subtab" role="tab" type="button" data-sub="contexto"><i>05</i>Contexto de nivel</button>
     </nav>
 
     <section class="subpage" data-subpage="nl:resumen" aria-label="Resumen">
       <section class="dcard" aria-labelledby="nlRankT">
         <div class="nl-head"><h2 id="nlRankT">Parecido con la EuroLeague</h2><span class="nl-hint2">Barra más corta = más parecida · pulsa una liga para abrir su ficha</span></div>
-        <p class="take">El parecido mide las 25 métricas a la vez: la distancia media (en desviaciones típicas de la EuroLeague) entre el jugador medio de cada liga y el de la EuroLeague, con la estimación combinada de A y B.</p>
+        <p class="take">El parecido mide las <span id="nlNMet">33</span> métricas a la vez: la distancia media (en desviaciones típicas de la EuroLeague) entre el jugador medio de cada liga y el de la EuroLeague, con la estimación combinada de A y B.</p>
         <div class="nl-rank" id="nlRank" role="list"><div class="empty">Cargando…</div></div>
         <details class="more"><summary>Cómo leer el ranking</summary><p class="note" id="nlRankNote"></p></details>
       </section>
-      <div class="insights"><article class="insight"><span class="num">01</span><h3>Solo la NBA está por encima de la EuroLeague</h3><p>Ordenadas por nivel medio en PER (media de A y B, en desviaciones típicas de la EuroLeague): NBA +0,70, ACB −0,43, G League −0,44, EuroCup −0,66, LNB −0,74, LBA −0,79 y BBL −1,14.</p></article><article class="insight"><span class="num">02</span><h3>Dos métodos independientes llegan al mismo mapa</h3><p>A (estadístico, por percentiles) y B (red neuronal, por ADN de jugador) coinciden en el orden y en la magnitud: la mayor diferencia es de 0,36 desviaciones (LNB). Que dos caminos distintos lleguen al mismo sitio es la mejor prueba de que el nivel estimado es real y no un artefacto.</p></article><article class="insight"><span class="num">03</span><h3>Regla práctica para el 20 % alto de cada liga</h3><p>(percentil EuroLeague esperado en PER): NBA p97, Liga Endesa p75, G League p76, EuroCup p72, LNB p58, LBA p59, BBL p52. Como referencia, los mejores de la propia EuroLeague repiten en el p85: nadie mantiene su mejor temporada íntegra.</p></article><article class="insight"><span class="num">04</span><h3>El volumen viaja mejor que la eficiencia</h3><p>Uso y puntos por posesión se conservan bastante; fuera de la NBA el TS% cae entre un 2 y un 11 % (máximo en la G League). Asistencias y tapones caen mucho desde la G League y la ACB (hasta un 25 % y un 37 %).</p></article><article class="insight"><span class="num">05</span><h3>La defensa empeora al subir de liga</h3><p>El DRtg de los importables sube entre un 5 y un 9 % desde las ligas europeas. Parte es nivel del rival y parte es que el jugador pierde el entorno de un equipo dominante, que el algoritmo B separa explícitamente.</p></article><article class="insight"><span class="num">06</span><h3>Usar la estimación combinada A+B</h3><p>En el examen fuera de muestra (412 cambios de liga reales de 2023-24 y 2024-25, 88 de ellos hacia la EuroLeague), A+B reduce el error cuadrático frente a «mismo percentil» una mediana del 20,0 % por métrica (A 10,8 %, B 8,1 %) y del 17,5 % en las llegadas a la EuroLeague. Supera a A en 25 de 25 métricas.</p></article><article class="insight"><span class="num">07</span><h3>Dónde no fiarse del modelo</h3><p>La eficiencia de tiro (TS%, eFG%, T2%, ORtg) de quien llega a la EuroLeague sigue sin predecirse mejor que con el percentil; ahí manda el scouting. Y para las estrellas NBA la traducción es una extrapolación.</p></article></div>
+      <div class="insights" id="nlInsights"><article class="insight"><span class="num">01</span><h3>Solo la NBA está por encima de la EuroLeague</h3><p>Ordenadas por nivel medio en PER (media de A y B, en desviaciones típicas de la EuroLeague): NBA +0,70, ACB −0,43, G League −0,44, EuroCup −0,66, LNB −0,74, LBA −0,79 y BBL −1,14.</p></article><article class="insight"><span class="num">02</span><h3>Dos métodos independientes llegan al mismo mapa</h3><p>A (estadístico, por percentiles) y B (red neuronal, por ADN de jugador) coinciden en el orden y en la magnitud: la mayor diferencia es de 0,36 desviaciones (LNB). Que dos caminos distintos lleguen al mismo sitio es la mejor prueba de que el nivel estimado es real y no un artefacto.</p></article><article class="insight"><span class="num">03</span><h3>Regla práctica para el 20 % alto de cada liga</h3><p>(percentil EuroLeague esperado en PER): NBA p97, Liga Endesa p75, G League p76, EuroCup p72, LNB p58, LBA p59, BBL p52. Como referencia, los mejores de la propia EuroLeague repiten en el p85: nadie mantiene su mejor temporada íntegra.</p></article><article class="insight"><span class="num">04</span><h3>El volumen viaja mejor que la eficiencia</h3><p>Uso y puntos por posesión se conservan bastante; fuera de la NBA el TS% cae entre un 2 y un 11 % (máximo en la G League). Asistencias y tapones caen mucho desde la G League y la ACB (hasta un 25 % y un 37 %).</p></article><article class="insight"><span class="num">05</span><h3>La defensa empeora al subir de liga</h3><p>El DRtg de los importables sube entre un 5 y un 9 % desde las ligas europeas. Parte es nivel del rival y parte es que el jugador pierde el entorno de un equipo dominante, que el algoritmo B separa explícitamente.</p></article><article class="insight"><span class="num">06</span><h3>Usar la estimación combinada A+B</h3><p>En el examen fuera de muestra (412 cambios de liga reales de 2023-24 y 2024-25, 88 de ellos hacia la EuroLeague), A+B reduce el error cuadrático frente a «mismo percentil» una mediana del 20,0 % por métrica (A 10,8 %, B 8,1 %) y del 17,5 % en las llegadas a la EuroLeague. Supera a A en 25 de 25 métricas.</p></article><article class="insight"><span class="num">07</span><h3>Dónde no fiarse del modelo</h3><p>La eficiencia de tiro (TS%, eFG%, T2%, ORtg) de quien llega a la EuroLeague sigue sin predecirse mejor que con el percentil; ahí manda el scouting. Y para las estrellas NBA la traducción es una extrapolación.</p></article></div>
       <details class="dcard box"><summary>Cómo se ha calculado</summary>
         <p class="take" style="margin-top:10px">Cada liga se ha llevado a la escala de la EuroLeague 2025-26 con dos algoritmos que no comparten método. A estima un «tipo de cambio» por liga y métrica a partir de los jugadores que han jugado en dos ligas. B aprende el ADN de cada jugador separando nivel, liga, temporada y equipo. El nivel se mide en desviaciones típicas de la EuroLeague (−1 = un jugador medio de esa liga rinde como uno situado una desviación por debajo de la media EuroLeague). «Importables» son el 20 % alto de cada liga por Game Score/40 con al menos la mitad de minutos de un titular de esa liga.</p>
         <p class="note">Intervalos de nivel: 95 % (A, bootstrap de jugadores; B, dispersión entre las 5 redes del conjunto, que infravalora la incertidumbre real). P50/P90 propio → EL: percentil EuroLeague mediano de los jugadores que están en ese percentil en su liga. Porcentajes: cambio del valor medio de los importables de 2025-26 al traducirlo a la EuroLeague con A+B. Todo se ha calculado con temporada regular 2020-21 a 2026-27.</p>
+        <div id="nlValid"></div>
       </details>
     </section>
 
@@ -897,6 +972,18 @@ body, .dcard, .insight, .fpanel, .command, .tablebox, .ev-tablebox, .panel, .sub
         <div class="pager"><span id="nlCount"></span><span><button class="btn ghost" id="nlPrev" type="button">Anterior</button> <span id="nlPage"></span> <button class="btn ghost" id="nlNext" type="button">Siguiente</button></span></div>
       </article>
     </section>
+
+    <section class="subpage" data-subpage="nl:contexto" aria-label="Contexto de nivel" hidden>
+      <div class="sec-head" style="padding-top:0"><div>
+        <span class="kicker">Contexto de nivel</span>
+        <h2 class="sec-title">Con quién y contra quién juega</h2>
+        <p class="sec-lead">No es lo mismo promediar 15 puntos al lado del MVP de la EuroLeague que en un equipo de la zona baja de la BBL. La capa jugada a jugada mide el nivel de los compañeros y de los rivales con los que cada jugador comparte pista, y cuánto mueve ese entorno cada métrica ya normalizada.</p>
+      </div></div>
+      <section class="dcard" id="nlCtxBeta" aria-live="polite"><div class="empty">Cargando…</div></section>
+      <section class="dcard" id="nlCtxLigas"></section>
+      <div class="insights cols3" id="nlCtxWhy"></div>
+      <section class="dcard" id="nlRapm"></section>
+    </section>
   </div>
 </div>
 
@@ -917,6 +1004,7 @@ const VIEWS_RAW = {
   avanzada: { name: "Avanzada", cols: ["usg_pct","ast_pct","tov_pct","oreb_pct","dreb_pct","reb_pct","stl_pct","blk_pct","ast_to","ast_ratio","pts_share","min_pct"] },
   ratings:  { name: "Ratings", cols: ["per","ortg","drtg","net_rtg","floor_pct","stop_pct","ows","dws","ws","ws_per_40","pie","game_score_pg","eff_pg"] },
   onoff:    { name: "On/Off (BasketNews)", cols: ["bn_min_on","bn_netrtg_on","bn_netrtg_off","bn_netrtg_onoff","bn_ortg_onoff","bn_drtg_onoff","bn_ortg_ind","bn_drtg_ind","bn_stops_pg","bn_stop_pct","bn_created_pts_pg","bn_usg_pct"] },
+  pista:    { name: "Pista y conexiones", cols: ["q_min_on","q_net_on","q_onoff","q_onoff_aj","q_rapm","q_orapm","q_drapm","q_titular","q_cierra","q_clutch_net","q_pct_asistidas","q_pagerank","q_pct_aro","q_pct_t3_esquina"] },
   contexto: { name: "Playoffs vs regular", phase: "playoffs", cols: ["gp","rs_gp","min_pg","delta_min_pg","pts_pg","rs_pts_pg","delta_pts_pg","delta_ts_pct","delta_usg_pct","delta_per","delta_ortg","delta_drtg","delta_net_rtg","delta_ws_per_40"] },
   fuente:   { name: "Métricas oficiales", cols: ["src_per","src_bpm","src_obpm","src_dbpm","src_vorp","src_ws","src_ws48","src_ortg","src_drtg","src_usg_pct","src_ts_pct","src_pie","src_on_off_pm100","src_avg_shot_dist"] },
   equipo:   { name: "Contexto de equipo", cols: ["team_gp","team_w","team_l","team_pace","team_ortg","team_drtg","team_netrtg","lg_pace","lg_ortg","calidad_contexto"] },
@@ -924,7 +1012,27 @@ const VIEWS_RAW = {
 // Vistas de la pestaña «Datos Normalizados» (equivalentes EuroLeague; *_pctel = percentil EL, *_obs = valor en su liga)
 const NORM_M = ["pts_p100", "ts_pct", "efg_pct", "fg2_pct", "fg3_pct", "ft_pct", "fg3a_rate", "fta_rate", "usg_pct", "ast_pct", "tov_pct",
   "oreb_pct", "dreb_pct", "oreb_p100", "dreb_p100", "stl_pct", "blk_pct", "stl_p100", "blk_p100", "pf_p100", "drtg", "per", "ortg",
-  "game_score_p40", "ws_per_40"];
+  "game_score_p40", "ws_per_40",
+  "pct_aro", "pct_corta", "pct_media", "pct_t3_esquina", "pct_asistidas", "rapm", "orapm", "drapm"]; // las 8 últimas: capa jugada a jugada
+// Contexto de nivel (bbmodel/contexto.py): L = nivel del jugador en la vara EuroLeague (0 = jugador medio);
+// ctx_* = nivel medio de compañeros en pista, rivales en pista y plantilla; <m>_ctx = valor neutro de contexto.
+const NORM_CTX = ["L", "ctx_comp", "ctx_riv", "ctx_plantilla", "ctx_plantilla_dev"];
+const NORM_PISTA = ["pct_aro", "pct_corta", "pct_media", "pct_t3_esquina", "pct_asistidas", "rapm", "orapm", "drapm"];
+const NORM_DESC = {
+  pct_aro: "% de sus tiros de campo en el aro (< 1,8 m), del jugada a jugada",
+  pct_corta: "% de sus tiros de campo cortos (de 1,8 a 4,25 m)",
+  pct_media: "% de sus tiros de campo de media distancia (de 4,25 m a la línea de triple)",
+  pct_t3_esquina: "% de sus tiros de campo que son triples desde la esquina",
+  pct_asistidas: "% de sus canastas que llegan tras una asistencia",
+  rapm: "RAPM: impacto en pista por 100 posesiones, aislado de compañeros y rivales (> 0 = el equipo es mejor con él)",
+  orapm: "RAPM ofensivo: la parte de su impacto que se ve en el ataque del equipo",
+  drapm: "RAPM defensivo: la parte de su impacto en la defensa (> 0 = el rival anota menos con él)",
+  L: "Nivel L: índice del Atlas en la vara EuroLeague (media de los z de PER, GmSc/40, WS/40, ORtg, DRtg, Pts/100, TS% y eFG% normalizados). 0 = jugador medio; +1 = una desviación típica mejor",
+  ctx_comp: "Nivel medio (L) de los compañeros con los que comparte pista, ponderado por los segundos compartidos",
+  ctx_riv: "Nivel medio (L) de los rivales que tiene enfrente mientras está en pista",
+  ctx_plantilla: "Nivel medio (L) de sus compañeros de plantilla, ponderado por sus minutos (sin contarle a él)",
+  ctx_plantilla_dev: "Contexto de plantilla menos el de un jugador medio de su liga y temporada (> 0 = juega en una plantilla mejor que la media de su liga)" };
+const NORM_CTX_KEY = ["usg_pct", "pts_p100", "ast_pct", "per", "ws_per_40", "drtg", "rapm", "pct_asistidas", "pct_t3_esquina", "fg3a_rate"];
 const NORM_CLAVE = ["per", "game_score_p40", "ws_per_40", "pts_p100", "ts_pct", "usg_pct", "ast_pct", "tov_pct", "oreb_pct", "dreb_pct", "stl_pct", "blk_pct", "ortg", "drtg"];
 const VIEWS_NORM = {
   basico:      { name: "Básico", cols: ["gp", "min", "min_pg", "per", "game_score_p40", "ws_per_40", "pts_p100", "ts_pct", "usg_pct", "ortg", "drtg", "fuente_norm"] },
@@ -934,6 +1042,8 @@ const VIEWS_NORM = {
   ratings:     { name: "Ratings", cols: ["per", "ortg", "drtg", "game_score_p40", "ws_per_40"] },
   percentiles: { name: "Percentil EuroLeague", cols: NORM_CLAVE.map((m) => m + "_pctel") },
   liga:        { name: "Valor en su liga", cols: NORM_CLAVE.map((m) => m + "_obs") },
+  pista:       { name: "Pista (jugada a jugada)", cols: NORM_PISTA },
+  contexto:    { name: "Contexto de nivel", cols: [...NORM_CTX, "usg_pct_ctx", "pts_p100_ctx", "ast_pct_ctx", "per_ctx", "ws_per_40_ctx", "drtg_ctx", "rapm_ctx"] },
 };
 let VIEWS = VIEWS_RAW;
 const LABELS = { gp:"PJ", gs:"Tit", min_pg:"Min", pts_pg:"Pts", reb_pg:"Reb", ast_pg:"Ast", stl_pg:"Rob", blk_pg:"Tap", tov_pg:"Pér", pf_pg:"Falt", pir_pg:"Val", plus_minus_pg:"+/-",
@@ -947,15 +1057,25 @@ const LABELS = { gp:"PJ", gs:"Tit", min_pg:"Min", pts_pg:"Pts", reb_pg:"Reb", as
   team_gp:"PJ eq.", team_w:"V", team_l:"D", team_pace:"Ritmo", team_ortg:"ORtg eq.", team_drtg:"DRtg eq.", team_netrtg:"Net eq.", lg_pace:"Ritmo liga", lg_ortg:"ORtg liga", calidad_contexto:"Contexto" };
 Object.assign(LABELS, { oreb_p100: "OReb/100", dreb_p100: "DReb/100", stl_p100: "Rob/100", blk_p100: "Tap/100", pf_p100: "Falt/100",
   game_score_p40: "GmSc/40", min: "Min tot.", fuente_norm: "Algoritmo", nacionalidad: "Nac." });
-NORM_M.forEach((m) => { LABELS[m + "_pctel"] = (LABELS[m] || m) + " p.EL"; LABELS[m + "_obs"] = (LABELS[m] || m) + " liga"; });
+Object.assign(LABELS, { q_min_on: "Min pista", q_net_on: "Net on", q_net_off: "Net off", q_onoff: "On−off", q_onoff_aj: "On−off aj.", q_onoff_suerte: "On−off suerte",
+  q_onoff_sin_basura: "On−off s/basura", q_rapm: "RAPM", q_orapm: "ORAPM", q_drapm: "DRAPM", q_titular: "Titular", q_cierra: "Cierra", q_relevos_pp: "Relevos/P",
+  q_min_relevo: "Min/relevo", q_pct_min_q4: "% min 4.º", q_clutch_min: "Min clutch", q_clutch_net: "Net clutch", q_basura_min: "Min basura", q_quintetos: "Quintetos",
+  q_pct_asistidas: "% asistidas", q_socios: "Socios pase", q_hhi_asist: "HHI asist.", q_pagerank: "PageRank", q_pct_aro: "% aro", q_pct_corta: "% corta",
+  q_pct_media: "% media", q_pct_t3_esquina: "% T3 esq.", q_pct_t3_frontal: "% T3 front.",
+  pct_aro: "% aro", pct_corta: "% corta", pct_media: "% media", pct_t3_esquina: "% T3 esq.", pct_asistidas: "% asistidas", rapm: "RAPM", orapm: "ORAPM", drapm: "DRAPM",
+  L: "Nivel L", ctx_comp: "Nivel comp.", ctx_riv: "Nivel rivales", ctx_plantilla: "Nivel plantilla", ctx_plantilla_dev: "Plantilla − liga" });
+NORM_M.forEach((m) => { LABELS[m + "_pctel"] = (LABELS[m] || m) + " p.EL"; LABELS[m + "_obs"] = (LABELS[m] || m) + " liga"; LABELS[m + "_ctx"] = (LABELS[m] || m) + " neutro"; });
 const NAC_FUENTE = { "propia": "publicada por la propia liga", "misma liga": "publicada por esta liga en otra temporada", "otra liga": "publicada por otra liga (mismo jugador)" };
+const descOf = (m) => st.dict[m] || NORM_DESC[m] || "";
 function colDesc(c) {
   if (st.src !== "norm") return st.dict[c] || c;
-  const m = c.replace(/_(pctel|obs)$/, "");
+  if (NORM_DESC[c] && !NORM_M.includes(c)) return NORM_DESC[c];
+  const m = c.replace(/_(pctel|obs|ctx)$/, "");
   if (!NORM_M.includes(m)) return st.dict[c] || (c === "fuente_norm" ? "Algoritmos usados: A+B, o sólo A cuando B no traduce al jugador" : c);
-  const d = st.dict[m] ? ` — ${st.dict[m]}` : "";
+  const d = descOf(m) ? ` — ${descOf(m)}` : "";
   if (c.endsWith("_pctel")) return `Percentil entre los jugadores de la EuroLeague de su posición (A+B)${d}`;
   if (c.endsWith("_obs")) return `Valor observado en su liga${d}`;
+  if (c.endsWith("_ctx")) return `Valor neutro de contexto: lo que marcaría con compañeros de nivel medio (equivalente EuroLeague sin el efecto de su plantilla)${d}`;
   return `Equivalente EuroLeague 2025-26 (A+B; sólo A donde B no traduce)${d}`;
 }
 const PAGE = 50;
@@ -969,7 +1089,11 @@ const LEAGUE_ABBR = { euroleague: "EL", eurocup: "EC", acb: "ACB", nba: "NBA", g
 const HEAT_DIR = { tov_pg: -1, pf_pg: -1, tov_p40: -1, tov_pct: -1, drtg: -1, team_drtg: -1, src_drtg: -1, bn_drtg_ind: -1, bn_drtg_onoff: -1, delta_drtg: -1, team_l: -1,
   usg_pct: 0, bn_usg_pct: 0, src_usg_pct: 0, delta_usg_pct: 0, fg3a_rate: 0, src_avg_shot_dist: 0, team_pace: 0, lg_pace: 0, lg_ortg: 0, calidad_contexto: 0 };
 Object.assign(HEAT_DIR, { pf_p100: -1, fuente_norm: 0 });
-NORM_M.forEach((m) => { if (HEAT_DIR[m] != null) { HEAT_DIR[m + "_pctel"] = HEAT_DIR[m]; HEAT_DIR[m + "_obs"] = HEAT_DIR[m]; } });
+// capa jugada a jugada: el perfil de tiro, la red de pases y la rotación describen el rol, no lo juzgan
+Object.assign(HEAT_DIR, { q_net_off: -1, q_pct_asistidas: 0, q_pagerank: 0, q_hhi_asist: 0, q_socios: 0, q_quintetos: 0, q_relevos_pp: 0, q_min_relevo: 0, q_pct_min_q4: 0,
+  q_basura_min: 0, q_pct_aro: 0, q_pct_corta: 0, q_pct_media: 0, q_pct_t3_esquina: 0, q_pct_t3_frontal: 0,
+  pct_aro: 0, pct_corta: 0, pct_media: 0, pct_t3_esquina: 0, pct_asistidas: 0, ctx_comp: 0, ctx_riv: 0, ctx_plantilla: 0, ctx_plantilla_dev: 0 });
+NORM_M.forEach((m) => { if (HEAT_DIR[m] != null) { HEAT_DIR[m + "_pctel"] = HEAT_DIR[m]; HEAT_DIR[m + "_obs"] = HEAT_DIR[m]; HEAT_DIR[m + "_ctx"] = HEAT_DIR[m]; } });
 const HEAT = { good: [46, 150, 100], bad: [212, 92, 74], mid: [255, 255, 255], max: 0.5 };
 function heatBg(t) {
   const to = t >= 0.5 ? HEAT.good : HEAT.bad, k = Math.min(1, Math.abs(t - 0.5) * 2) * HEAT.max;
@@ -1096,9 +1220,16 @@ function posTitle(r, idx) {
   if (est === 2) return `La fuente indica "${raw}". Base/Escolta o Alero/Alapívot elegido por perfil estadístico.`;
   return raw && String(raw) !== POS[r[idx.pos_rep] - 1] ? `Fuente: ${raw}` : "Posición oficial";
 }
+// Con signo (+/−): diferencias de rating, RAPM y niveles de contexto
+const SIGNED_COL = /^q_(net_on|net_off|onoff|onoff_aj|onoff_suerte|onoff_sin_basura|rapm|orapm|drapm|clutch_net)$|^(rapm|orapm|drapm)(_obs|_A|_B|_lo|_hi|_ctx)?$|^(L|ctx_comp|ctx_riv|ctx_plantilla|ctx_plantilla_dev)$/;
+function fmtSigned(v, d) { const r = +v.toFixed(d); return (r > 0 ? "+" : r < 0 ? "−" : "") + fmtNum(Math.abs(r), d); }
 function fmt(col, v) {
   if (v === null || v === undefined || v === "") return "–";
   if (typeof v !== "number") return esc(v);
+  if (SIGNED_COL.test(col)) return fmtSigned(v, /^(L|ctx_)/.test(col) ? 2 : 1);
+  if (/^q_(titular|cierra|quintetos|socios|hhi_asist)$/.test(col)) return Math.round(v).toLocaleString("es-ES");
+  if (col === "q_pagerank") return fmtNum(v, 3);
+  if (/^q_/.test(col)) return fmtNum(v, 1);
   if (/^(gp|gs|rs_gp|team_gp|team_w|team_l|min|pts|reb|ast)$/.test(col)) return Math.round(v).toLocaleString("es-ES");
   const d = /pct|rate|_pg$|_p40|_p36|_p100|ratio|share|^delta_|^rs_|ortg|drtg|net|pace|per$|pie|^bn_|^src_|ws/.test(col) ? 1 : 2;
   return v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -1350,7 +1481,128 @@ function renderTable() {
 }
 
 // ---------------------------------------------------------------------------- ficha
-function panelNorm(g) {
+// ---------------------------------------------------------------------------- capa jugada a jugada (pista y conexiones) en las fichas
+const ZONAS_Q = [["aro", "Aro", "z-aro", "a menos de 1,8 m del aro"], ["corta", "Corta", "z-corta", "de 1,8 a 4,25 m"], ["media", "Media", "z-media", "de 4,25 m a la línea de triple"],
+  ["t3_esquina", "T3 esquina", "z-t3e", "triple desde la esquina, el más corto"], ["t3_frontal", "T3 frontal", "z-t3f", "triple frontal o de 45°"]];
+const ICON_Q = `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 4h9L8 12Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="3.5" cy="4" r="2.1" fill="currentColor"/><circle cx="12.5" cy="4" r="2.1" fill="currentColor"/><circle cx="8" cy="12" r="2.1" fill="currentColor"/></svg>`;
+let resumenP = null; // datos/normalizacion/resumen.json, compartido por la ficha normalizada y la pestaña de normalización
+const getResumen = () => (resumenP ||= getJSON("datos/normalizacion/resumen.json").catch((e) => { resumenP = null; throw e; }));
+const sgnCls = (v, dir = 1) => (v == null || Math.abs(v) < 0.05 || dir === 0 ? "" : v * dir > 0 ? "up" : "down");
+const ordinal = (k) => `${k}.º`;
+function qButton(p) {
+  const q = new URLSearchParams(Object.entries(p).filter(([, v]) => v != null && v !== "").map(([k, v]) => [k, String(v)])).toString();
+  return `<button class="btn ghost qbtn" type="button" data-q="${esc(q)}" title="Abre la pestaña «Quintetos y conexiones» en este jugador">${ICON_Q}Ver quintetos y conexiones</button>`;
+}
+function zoneBar(vals, cls, label) {
+  const tot = vals.reduce((s, v) => s + (v > 0 ? v : 0), 0) || 1;
+  return `<div class="zstack ${cls || ""}" role="img" aria-label="${esc(label + ": " + ZONAS_Q.map(([, n], i) => `${n} ${fmtNum(vals[i] || 0, 0)} %`).join(", "))}">${ZONAS_Q.map(([, n, c, d], i) => vals[i] > 0
+    ? `<i class="${c}" style="flex:${(vals[i] / tot).toFixed(4)}" data-tip="${esc(`<b>${label}</b> · ${n} (${d}): ${fmtNum(vals[i], 1)} % de los tiros de campo`)}"></i>` : "").join("")}</div>`;
+}
+// Ficha de Datos Brutos: on/off, RAPM, rotación, clutch, perfil de tiro y red de pases (columnas q_*)
+function panelPista(g) {
+  if (g("q_min_on") == null) return "";
+  const { idx, rows } = current, liga = g("liga"), team = g("team_id");
+  const tile = (lab, c, sub, tip, dir = 1) => `<div data-tip="${esc(tip)}"><span>${lab}</span><b class="${sgnCls(g(c), dir)}">${fmt(c, g(c))}</b>${sub ? `<small>${sub}</small>` : ""}</div>`;
+  const kv = `<div class="kv">
+    ${tile("Net on", "q_net_on", "con él", "<b>Net on</b>: diferencia de puntos por 100 posesiones de su equipo mientras él está en pista.")}
+    ${tile("Net off", "q_net_off", "sin él", "<b>Net off</b>: lo mismo con él en el banquillo.", 0)}
+    ${tile("On−off", "q_onoff", g("q_onoff_aj") != null ? "aj. " + fmt("q_onoff_aj", g("q_onoff_aj")) : "", `<b>On − off</b>: cuánto mejor (o peor) es su equipo con él que sin él. «aj.» = encogido hacia 0 según los minutos de muestra.${g("q_onoff_suerte") != null ? ` Sin la suerte del rival en triples y tiros libres: ${fmt("q_onoff_suerte", g("q_onoff_suerte"))}.` : ""}${g("q_onoff_sin_basura") != null ? ` Sin minutos de la basura: ${fmt("q_onoff_sin_basura", g("q_onoff_sin_basura"))}.` : ""}`)}
+    ${tile("RAPM", "q_rapm", "por 100 pos.", "<b>RAPM</b>: su impacto aislado de los otros nueve jugadores en pista (regresión ridge sobre todos los tramos de quinteto). En puntos por 100 posesiones de su liga; 0 = jugador medio.")}
+    ${tile("ORAPM", "q_orapm", "ataque", "<b>RAPM ofensivo</b>: la parte de su impacto que se ve en los puntos que anota su equipo.")}
+    ${tile("DRAPM", "q_drapm", "defensa", "<b>RAPM defensivo</b>: la parte que se ve en los puntos que encaja su equipo (> 0 = el rival anota menos con él).")}</div>`;
+  const B = (c, v = g(c), cls = "") => `<b class="${cls}">${fmt(c, v)}</b>`;
+  const rot = [g("q_titular") != null ? `<span>Titular ${B("q_titular")} de ${B("gp")} PJ</span>` : "", g("q_cierra") != null ? `<span>Cierra ${B("q_cierra")} partidos</span>` : "",
+    g("q_relevos_pp") != null ? `<span>${B("q_relevos_pp")} entradas por partido</span>` : "", g("q_min_relevo") != null ? `<span>${B("q_min_relevo")} min por entrada</span>` : "",
+    g("q_pct_min_q4") != null ? `<span>${B("q_pct_min_q4")} % de sus minutos en el 4.º cuarto</span>` : "", g("q_quintetos") != null ? `<span>${B("q_quintetos")} quintetos distintos</span>` : ""].filter(Boolean).join("");
+  const cm = g("q_clutch_min");
+  const cl = [cm != null ? `<span data-tip="${esc("<b>Clutch</b>: últimos 5 minutos con el marcador a ±5 puntos.")}">Clutch ${B("q_clutch_min")} min · Net ${B("q_clutch_net", g("q_clutch_net"), sgnCls(g("q_clutch_net")))}${cm < 30 ? ' <span class="note">(muestra corta)</span>' : ""}</span>` : "",
+    g("q_basura_min") != null ? `<span data-tip="${esc("<b>Basura</b>: minutos con el partido ya decidido; no cuentan para juzgar el on/off.")}">Basura ${B("q_basura_min")} min</span>` : ""].filter(Boolean).join("");
+  // perfil de tiro frente a la media de su liga (jugadores con 100+ minutos, ponderada por minutos)
+  const zc = ZONAS_Q.map(([k]) => "q_pct_" + k), zv = zc.map((c) => g(c));
+  let zonas;
+  if (zv.some((v) => v != null)) {
+    const acc = zc.map(() => 0); let w = 0;
+    for (const r of rows) { if (r[idx.liga] !== liga || (r[idx.min] ?? 0) < 100 || r[idx[zc[0]]] == null) continue; const m = r[idx.min]; w += m; zc.forEach((c, i) => (acc[i] += (r[idx[c]] || 0) * m)); }
+    const lg = w ? acc.map((s) => s / w) : null;
+    zonas = `<h3>Desde dónde tira</h3>${zoneBar(zv, "", "Él")}${lg ? zoneBar(lg, "ref", "Media de su liga") : ""}
+      <div class="zstack-lab"><span>Barra gruesa: él</span>${lg ? `<span>fina: media de ${esc(LEAGUE_ABBR[liga] || liga)} (100+ min)</span>` : ""}</div>
+      <div class="zlegend">${ZONAS_Q.map(([, n, c, d], i) => `<span title="${esc(d)}"><i class="${c}"></i>${n} <b>${zv[i] == null ? "–" : fmtNum(zv[i], 0) + " %"}</b></span>`).join("")}</div>`;
+  } else zonas = `<div class="note">${st.phase === "regular" ? "Sin coordenadas de tiro para esta liga y temporada." : "El perfil de tiro por zonas se calcula sólo con la temporada regular."}</div>`;
+  // red de pases: PageRank dentro de su equipo
+  let pr = "";
+  if (g("q_pagerank") != null) {
+    const mates = rows.filter((r) => r[idx.liga] === liga && r[idx.team_id] === team && r[idx.q_pagerank] != null).map((r) => r[idx.q_pagerank]).sort((a, b) => b - a);
+    pr = `<span data-tip="${esc("<b>PageRank</b>: centralidad en la red de pases de su equipo (quién recibe balones de quien recibe muchos). Suma 1 entre todo el equipo; más alto = el balón pasa más por él.")}">PageRank ${B("q_pagerank")}${mates.length > 1 ? ` · ${ordinal(mates.indexOf(g("q_pagerank")) + 1)} de ${mates.length} en su equipo` : ""}</span>`;
+  }
+  const pases = [g("q_pct_asistidas") != null ? `<span data-tip="${esc("<b>% asistidas</b>: canastas suyas que llegan tras un pase. Alto = finalizador o tirador de recepción; bajo = se crea su tiro.")}">${B("q_pct_asistidas")} % de sus canastas, asistidas</span>` : "",
+    g("q_socios") != null ? `<span data-tip="${esc("<b>Socios</b>: compañeros distintos a los que asiste. <b>HHI</b>: concentración de esas asistencias (10.000 = todas al mismo).")}">Asiste a ${B("q_socios")} compañeros${g("q_hhi_asist") != null ? ` (HHI ${B("q_hhi_asist")})` : ""}</span>` : "", pr].filter(Boolean).join("");
+  return `<section class="pz" aria-label="Pista y conexiones">
+    <div class="pz-head"><span class="label">Pista y conexiones</span><span class="note">jugada a jugada · ${fmt("q_min_on", g("q_min_on"))} min en pista</span></div>
+    ${kv}
+    <p class="howto"><b>Cómo se lee.</b> On/off compara a su equipo con él y sin él (puntos por 100 posesiones); el RAPM reparte ese saldo entre los diez de la pista para aislar lo suyo. Verde = su equipo mejora con él. Unidades de su liga.</p>
+    ${rot ? `<h3>Rotación</h3><div class="pz-line">${rot}</div>` : ""}
+    ${cl ? `<div class="pz-line">${cl}</div>` : ""}
+    ${zonas}
+    ${pases ? `<h3>Conexiones</h3><div class="pz-line">${pases}</div>` : ""}
+    ${qButton({ tab: "jugadores", t: st.season, l: liga, f: st.phase, e: team, j: g("player_id") })}
+  </section>`;
+}
+// formato de las métricas normalizadas en la ficha (WS/40 necesita 3 decimales para verse)
+const fmtM = (m, v) => (v == null ? "–" : /ws_per_40/.test(m) ? fmtNum(v, 3) : fmt(m, v));
+// Ficha normalizada: nivel del jugador frente a compañeros y rivales, y valores neutros de contexto
+function ctxBlock(g, R) {
+  const L = g("L"), comp = g("ctx_comp"), riv = g("ctx_riv"), pla = g("ctx_plantilla"), dev = g("ctx_plantilla_dev");
+  if (L == null && comp == null && pla == null) return "";
+  const pl = R && R.contexto ? (R.contexto.por_liga || []).find((x) => x.liga === g("liga") && x.temporada === g("temporada")) : null;
+  const items = [["Él", "nivel L", L, "--lv-me", pl && pl.L, "L"], ["Compañeros", "en pista", comp, "--lv-comp", pl && pl.ctx_comp, "ctx_comp"],
+    ["Rivales", "en pista", riv, "--lv-riv", pl && pl.ctx_riv, "ctx_riv"], ["Plantilla", "por minutos", pla, "--lv-pl", pl && pl.ctx_plantilla, "ctx_plantilla"]];
+  const all = items.flatMap((x) => [x[2], x[4]]).filter((v) => v != null);
+  const M = Math.max(1, Math.ceil(Math.max(...all.map(Math.abs)) * 2) / 2);
+  const x = (v) => 50 + (Math.max(-M, Math.min(M, v)) / M) * 50;
+  const ticks = []; for (let t = -M; t <= M + 1e-9; t += 0.5) ticks.push(+t.toFixed(2));
+  const grid = `<u style="left:50%"></u>`;
+  const rowsH = items.map(([n, sub, v, col, avg, c]) => {
+    if (v == null) return `<div class="lvl-row"><span>${n} <small class="note">${sub}</small></span><div class="lvl-trk">${grid}</div><em class="note">–</em></div>`;
+    const a = x(Math.min(0, v)), b = x(Math.max(0, v));
+    return `<div class="lvl-row" data-tip="${esc(`<b>${n} ${sub}</b>: ${fmt(c, v)}${avg != null ? ` · media de su liga y temporada ${fmt(c, avg)}` : ""}<br>${NORM_DESC[c]}`)}"><span>${n} <small class="note">${sub}</small></span>
+      <div class="lvl-trk">${grid}<i class="stem" style="left:${a}%;width:${Math.max(0.5, b - a)}%;background:var(${col})"></i>${avg != null ? `<i class="avg" style="left:${x(avg)}%"></i>` : ""}<i class="dot" style="left:${x(v)}%;background:var(${col})"></i></div>
+      <em>${fmt(c, v)}</em></div>`;
+  }).join("");
+  const axis = `<div class="lvl-row lvl-axis"><span></span><div class="lvl-trk">${ticks.map((t) => `<b style="left:${x(t)}%">${t === 0 ? "0 medio" : fmtSigned(t, 1)}</b>`).join("")}</div><span></span></div>`;
+  // lectura en lenguaje llano
+  const s = (v) => fmtSigned(v, 2), lgN = LEAGUES[g("liga")] || g("liga"), parts = [];
+  if (L != null && comp != null) {
+    const d = L - comp;
+    parts.push(d > 0.3 ? `Es claramente mejor que los compañeros con los que comparte pista (${s(L)} frente a ${s(comp)}): carga con más responsabilidad de la que tendría en un equipo de más nivel.`
+      : d < -0.3 ? `Juega rodeado de compañeros mejores que él (${s(comp)} frente a su ${s(L)}): parte de sus números se apoya en ellos.`
+      : `Su nivel (${s(L)}) es parecido al de los compañeros con los que comparte pista (${s(comp)}).`);
+  }
+  if (dev != null) parts.push(Math.abs(dev) < 0.05 ? `Su plantilla está en la media de la ${esc(lgN)}: el entorno apenas mueve sus números.`
+    : `Su plantilla está ${fmtNum(Math.abs(dev), 2)} ${dev > 0 ? "por encima" : "por debajo"} de la media de la ${esc(lgN)}.`);
+  // valores neutros de contexto
+  const sens = {}; ((R && R.contexto && R.contexto.sensibilidad) || []).forEach((x2) => (sens[x2.metrica] = x2));
+  const sentido = (m) => (sens[m] ? sens[m].sentido : HEAT_DIR[m] === -1 ? -1 : HEAT_DIR[m] === 0 ? 0 : 1);
+  const ms = NORM_CTX_KEY.filter((m) => g(m) != null && g(m + "_ctx") != null);
+  const rel = (m) => Math.abs(g(m + "_ctx") - g(m)) / (Math.abs(g(m)) || 1);
+  if (ms.length && dev != null && Math.abs(dev) >= 0.05) {
+    const pick = [...new Set([ms.includes("usg_pct") ? "usg_pct" : null, ...ms.slice().sort((a, b) => rel(b) - rel(a))].filter(Boolean))].slice(0, 3).filter((m) => rel(m) > 0.003);
+    if (pick.length) parts.push(`Con compañeros de nivel EuroLeague medio, ${pick.map((m, i) => `${i ? "" : "su "}${esc(LABELS[m] || m)} sería <b>${fmtM(m, g(m + "_ctx"))}</b> (ahora ${fmtM(m, g(m))})`).join(", ")}.`);
+  }
+  const tbl = ms.length ? `<div class="nrm-table ctxt"><table><thead><tr><th>Métrica</th><th title="Equivalente EuroLeague A+B">Normalizado</th><th title="Lo que marcaría con compañeros de nivel medio">Neutro</th><th title="Neutro − normalizado">Δ</th></tr></thead><tbody>${ms.map((m) => {
+    const v = g(m), n = g(m + "_ctx"), d = n - v, b = sens[m];
+    const tip = `<b>${esc(LABELS[m] || m)}</b>: ${esc(descOf(m))}${b ? `<br>β compañeros = ${fmtSigned(b.beta_comp, 2)} ± ${fmtNum(2 * b.beta_comp_se, 2)}: si el nivel medio de su plantilla sube 1, su capacidad en esta métrica ${b.beta_comp > 0 ? "sube" : "baja"} ${fmtNum(Math.abs(b.beta_comp), 2)} desviaciones típicas EuroLeague.` : ""}`;
+    return `<tr data-tip="${esc(tip)}"><td>${esc(LABELS[m] || m)}</td><td>${fmtM(m, v)}</td><td class="el">${fmtM(m, n)}</td><td class="${sgnCls(Math.abs(d) < 1e-9 ? null : d, sentido(m))}">${/ws_per_40/.test(m) ? fmtSigned(d, 3) : fmtSigned(d, 1)}</td></tr>`;
+  }).join("")}</tbody></table></div>` : "";
+  return `<section class="pz" aria-label="Contexto de nivel">
+    <div class="pz-head"><span class="label">Contexto de nivel</span><span class="note">escala L · vara EuroLeague</span></div>
+    <div class="lvl">${rowsH}${axis}</div>
+    <div class="zlegend"><span><i style="background:var(--ink-2);opacity:.55;width:3px"></i>raya: media de su liga y temporada</span><span>0 = jugador medio · ±1 = una desviación típica</span></div>
+    ${parts.length ? `<p class="nl-scout" style="font-size:12.5px;padding:8px 12px"><span class="label">Lectura</span>${parts.join(" ")}</p>` : ""}
+    ${tbl}
+    ${tbl ? `<p class="howto"><b>Cómo se lee.</b> «Neutro» quita a su equivalente EuroLeague la parte que se debe a su plantilla (β de cada métrica × lo que su plantilla se aparta de la media de su liga). Verde: su entorno le resta y con compañeros medios rendiría mejor; rojo: su entorno le suma.</p>` : ""}
+  </section>`;
+}
+function panelNorm(g, R) {
   const head = `<div><span class="label">${esc(LEAGUES[g("liga")] || g("liga"))} · ${esc(g("equipo"))} · ${esc(g("temporada"))}</span><h2>${esc(g("nombre"))}</h2>
     <div class="note">${[g("pos_rep") ? (g("pos_est") ? "≈ " : "") + POS[g("pos_rep") - 1] : null, g("edad_rep") != null ? g("edad_rep") + " años" : null,
       g("nacionalidad") ? `${g("nacionalidad")}${g("nacionalidad_fuente") === "otra liga" ? " (dato de otra liga)" : ""}` : null,
@@ -1359,13 +1611,17 @@ function panelNorm(g) {
   const kv = `<div class="kv">${tiles.map(([l, c]) => `<div><span>${l} EL</span><b>${fmt(c, g(c))}</b></div>`).join("")}</div>`;
   const grupos = [["Anotación y tiro", ["pts_p100", "ts_pct", "efg_pct", "fg2_pct", "fg3_pct", "ft_pct", "fg3a_rate", "fta_rate"]],
     ["Creación y rebote", ["usg_pct", "ast_pct", "tov_pct", "oreb_pct", "dreb_pct", "oreb_p100", "dreb_p100"]],
-    ["Defensa", ["stl_pct", "blk_pct", "stl_p100", "blk_p100", "pf_p100", "drtg"]], ["Ratings", ["per", "ortg", "game_score_p40", "ws_per_40"]]];
-  const filas = grupos.map(([n, ms]) => `<tr class="grp"><td colspan="7">${n}</td></tr>` + ms.map((m) => {
-    const p = g(m + "_pctel");
-    return `<tr><td title="${esc(st.dict[m] || m)}">${esc(LABELS[m] || m)}</td><td>${fmt(m, g(m + "_obs"))}</td><td class="el">${fmt(m, g(m))}</td><td>${g(m + "_lo") == null ? "–" : fmt(m, g(m + "_lo")) + "–" + fmt(m, g(m + "_hi"))}</td><td>${p == null ? "–" : Math.round(p)}</td><td>${fmt(m, g(m + "_A"))}</td><td>${fmt(m, g(m + "_B"))}</td></tr>`;
-  }).join("")).join("");
-  return head + kv + `<div class="nrm-table"><table><thead><tr><th>Métrica</th><th title="Valor observado en su liga">Su liga</th><th title="Equivalente EuroLeague A+B">EL</th><th title="Intervalo del 80 %">Interv. 80 %</th><th title="Percentil entre los jugadores de EuroLeague de su posición">p.EL</th><th>A</th><th>B</th></tr></thead><tbody>${filas}</tbody></table></div>
-    <div class="note">Algoritmos: ${esc(g("fuente_norm") || "–")}${g("fuente_norm") === "A" ? " (B no traduce a este jugador: menos de 150 minutos o temporada en curso)" : ""}. EL = equivalente EuroLeague 2025-26; A y B son los dos algoritmos del estudio de normalización.</div>
+    ["Defensa", ["stl_pct", "blk_pct", "stl_p100", "blk_p100", "pf_p100", "drtg"]], ["Ratings", ["per", "ortg", "game_score_p40", "ws_per_40"]],
+    ["Pista (jugada a jugada)", NORM_PISTA]];
+  const filas = grupos.map(([n, ms]) => { ms = ms.filter((m) => !NORM_PISTA.includes(m) || g(m) != null || g(m + "_obs") != null); if (!ms.length) return "";
+    return `<tr class="grp"><td colspan="7">${n}</td></tr>` + ms.map((m) => {
+    const p = g(m + "_pctel"), sep = SIGNED_COL.test(m) ? " a " : "–";
+    return `<tr><td title="${esc(descOf(m) || m)}">${esc(LABELS[m] || m)}</td><td>${fmt(m, g(m + "_obs"))}</td><td class="el">${fmt(m, g(m))}</td><td>${g(m + "_lo") == null ? "–" : fmt(m, g(m + "_lo")) + sep + fmt(m, g(m + "_hi"))}</td><td>${p == null ? "–" : Math.round(p)}</td><td>${fmt(m, g(m + "_A"))}</td><td>${fmt(m, g(m + "_B"))}</td></tr>`;
+  }).join(""); }).join("");
+  const pista = NORM_PISTA.some((m) => g(m) != null) ? "" : `<div class="note">Sin datos jugada a jugada para esta liga y temporada (BBL 2020-23 y LNB 2020-21 no tienen quintetos): la fila «Pista» no se traduce.</div>`;
+  return head + kv + ctxBlock(g, R) + `<div class="nrm-table"><table><thead><tr><th>Métrica</th><th title="Valor observado en su liga">Su liga</th><th title="Equivalente EuroLeague A+B">EL</th><th title="Intervalo del 80 %">Interv. 80 %</th><th title="Percentil entre los jugadores de EuroLeague de su posición">p.EL</th><th>A</th><th>B</th></tr></thead><tbody>${filas}</tbody></table></div>
+    <div class="note">Algoritmos: ${esc(g("fuente_norm") || "–")}${g("fuente_norm") === "A" ? " (B no traduce a este jugador: menos de 150 minutos o temporada en curso)" : ""}. EL = equivalente EuroLeague 2025-26; A y B son los dos algoritmos del estudio de normalización.</div>${pista}
+    ${qButton({ tab: "jugadores", t: g("temporada"), l: g("liga"), f: "regular", e: g("team_id"), j: g("player_id") })}
     <button class="btn ghost" type="button" id="closePanel">Cerrar ficha</button>`;
 }
 async function renderPanel(uid) {
@@ -1375,7 +1631,10 @@ async function renderPanel(uid) {
   const row = rows.find((r) => r[idx.player_uid] + "|" + r[idx.team_id] === uid);
   if (!row) { panel.hidden = true; return; }
   const g = (c) => (c in idx ? row[idx[c]] : null);
-  if (st.src === "norm") { panel.innerHTML = panelNorm(g); panel.hidden = false; $("main").classList.add("with-panel"); return; }
+  if (st.src === "norm") {
+    let R = null; try { R = await getResumen(); } catch { R = null; }
+    if (st.sel !== uid || st.src !== "norm") return;
+    panel.innerHTML = panelNorm(g, R); panel.hidden = false; $("main").classList.add("with-panel"); return; }
   const tiles = [["Min/P", "min_pg"], ["Pts/P", "pts_pg"], ["TS%", "ts_pct"], ["USG%", "usg_pct"], ["PER", "per"], ["Net", "net_rtg"], ["ORtg", "ortg"], ["DRtg", "drtg"], ["WS/40", "ws_per_40"]];
   let html = `<div><span class="label">${esc(LEAGUES[g("liga")] || g("liga"))} · ${esc(g("equipo"))}</span><h2>${esc(g("nombre"))}</h2>
     <div class="note">${[g("pos_rep") ? (g("pos_est") ? "≈ " : "") + POS[g("pos_rep") - 1] + (g("posicion") && String(g("posicion")) !== POS[g("pos_rep") - 1] ? ` (fuente: ${g("posicion")})` : "") : null, g("altura_cm") ? Math.round(g("altura_cm")) + " cm" : null, g("edad_rep") != null ? g("edad_rep") + " años" : null, g("nacionalidad")].filter(Boolean).map(esc).join(" · ")}</div></div>
@@ -1395,8 +1654,9 @@ async function renderPanel(uid) {
       ${rowsHtml || '<div class="note">Sin datos de temporada regular para este jugador y equipo.</div>'}</div>`;
   }
   if (g("bn_netrtg_onoff") != null) {
-    html += `<div class="kv"><div><span>Net on</span><b>${fmt("bn_netrtg_on", g("bn_netrtg_on"))}</b></div><div><span>Net off</span><b>${fmt("bn_netrtg_off", g("bn_netrtg_off"))}</b></div><div><span>On-off</span><b>${fmt("bn_netrtg_onoff", g("bn_netrtg_onoff"))}</b></div></div>`;
+    html += `<span class="label">On/off de BasketNews</span><div class="kv"><div><span>Net on</span><b>${fmt("bn_netrtg_on", g("bn_netrtg_on"))}</b></div><div><span>Net off</span><b>${fmt("bn_netrtg_off", g("bn_netrtg_off"))}</b></div><div><span>On-off</span><b>${fmt("bn_netrtg_onoff", g("bn_netrtg_onoff"))}</b></div></div>`;
   }
+  html += panelPista(g);
   html += `<div class="note">Contexto: ${esc(g("calidad_contexto"))}. Fuente: ${esc(g("fuente"))}.</div><button class="btn ghost" type="button" id="closePanel">Cerrar ficha</button>`;
   panel.innerHTML = html; panel.hidden = false; $("main").classList.add("with-panel");
 }
@@ -1608,11 +1868,13 @@ function cmpSuggest() {
 }
 function showPage(pg) {
   // la pestaña Comparador se retiró de la navegación; su vista queda oculta
-  st.pageTab = ["evaluacion", "normalizacion", "atlas", "normalizados", "claves"].includes(pg) ? pg : "tabla";
+  st.pageTab = ["evaluacion", "normalizacion", "atlas", "normalizados", "claves", "quintetos"].includes(pg) ? pg : "tabla";
   $("pageTabla").hidden = st.pageTab !== "tabla" && st.pageTab !== "normalizados";
   $("tab-normalizados").setAttribute("aria-selected", st.pageTab === "normalizados");
   if (st.pageTab === "tabla" || st.pageTab === "normalizados") setSource(st.pageTab === "normalizados" ? "norm" : "raw"); $("pageCmp").hidden = true; $("pageAtlas").hidden = st.pageTab !== "atlas"; $("tab-atlas").setAttribute("aria-selected", st.pageTab === "atlas");
   if (st.pageTab === "atlas" && !$("atlasFrame").src) $("atlasFrame").src = "atlas/index.html";
+  $("pageQuintetos").hidden = st.pageTab !== "quintetos"; $("tab-quintetos").setAttribute("aria-selected", st.pageTab === "quintetos");
+  if (st.pageTab === "quintetos" && !$("quintetosFrame").src) $("quintetosFrame").src = "quintetos/index.html" + (st.quintetosHash ? "#" + st.quintetosHash : "");
   $("pageClaves").hidden = st.pageTab !== "claves"; $("tab-claves").setAttribute("aria-selected", st.pageTab === "claves");
   if (st.pageTab === "claves" && !$("clavesFrame").src) $("clavesFrame").src = "atlas/index.html?vista=claves" + (st.clavesSub ? "#" + st.clavesSub : ""); $("pageEval").hidden = st.pageTab !== "evaluacion"; $("pageNorm").hidden = st.pageTab !== "normalizacion";
   $("tab-tabla").setAttribute("aria-selected", st.pageTab === "tabla"); $("tab-evaluacion").setAttribute("aria-selected", st.pageTab === "evaluacion"); $("tab-normalizacion").setAttribute("aria-selected", st.pageTab === "normalizacion");
@@ -1621,6 +1883,20 @@ function showPage(pg) {
   if (st.pageTab === "comparador" && current) { cmpExample(); renderCmp(); }
   if (st.pageTab === "evaluacion" && st.dictGroup) renderEval();
   if (st.pageTab === "normalizacion") renderNorm();
+}
+// «Ver quintetos y conexiones»: abre la pestaña en el jugador. Si el marco ya está cargado se le pide por mensaje
+// ({irQuintetos: {tab, t, l, f, e, j}}); si no, se carga con el enlace profundo en el hash (#tab=…&t=…&l=…&f=…&e=…&j=…).
+function quintetosHash(p) {
+  const h = new URLSearchParams();
+  ["tab", "t", "l", "f", "e", "j"].forEach((k) => { if (p[k] != null && p[k] !== "") h.set(k, p[k]); });
+  return h.toString();
+}
+function irQuintetos(p) {
+  const f = $("quintetosFrame");
+  st.quintetosHash = quintetosHash(p);
+  if (f.src && f.dataset.loaded === "1") { try { f.contentWindow.postMessage({ irQuintetos: p }, "*"); } catch {} }
+  else { f.dataset.loaded = ""; f.src = "quintetos/index.html#" + st.quintetosHash; }
+  showPage("quintetos"); scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 }
 function bindCmp() {
   document.querySelector(".pagetabs").addEventListener("click", (e) => { const b = e.target.closest("[data-page]"); if (b) showPage(b.dataset.page); });
@@ -1640,9 +1916,13 @@ function bindCmp() {
   const tip = $("tip");
   const place = (e) => { const w = tip.offsetWidth, h = tip.offsetHeight; let x = e.clientX + 14, y = e.clientY + 14;
     if (x + w > innerWidth - 8) x = e.clientX - w - 14; if (y + h > innerHeight - 8) y = e.clientY - h - 14; tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px"; };
-  $("pageCmp").addEventListener("mouseover", (e) => { const t = e.target.closest("[data-tip]"); if (!t) return; tip.innerHTML = t.getAttribute("data-tip"); tip.hidden = false; place(e); });
-  $("pageCmp").addEventListener("mousemove", (e) => { if (!tip.hidden) place(e); });
-  $("pageCmp").addEventListener("mouseout", (e) => { const t = e.target.closest("[data-tip]"); if (t && !t.contains(e.relatedTarget)) tip.hidden = true; });
+  // ayudas emergentes (data-tip) en toda la página: comparador, fichas y apartados de pista y contexto
+  document.addEventListener("mouseover", (e) => { const t = e.target.closest && e.target.closest("[data-tip]"); if (!t) return; tip.innerHTML = t.getAttribute("data-tip"); tip.hidden = false; place(e); });
+  document.addEventListener("mousemove", (e) => { if (!tip.hidden) place(e); });
+  document.addEventListener("mouseout", (e) => { const t = e.target.closest && e.target.closest("[data-tip]"); if (t && !t.contains(e.relatedTarget)) tip.hidden = true; });
+  addEventListener("scroll", () => { tip.hidden = true; }, { passive: true });
+  $("quintetosFrame").addEventListener("load", (e) => { e.target.dataset.loaded = "1"; });
+  $("panel").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) irQuintetos(Object.fromEntries(new URLSearchParams(b.dataset.q))); });
   $("panel").addEventListener("click", (e) => { const b = e.target.closest("#addCmp"); if (!b) return; const msg = cmpAdd(b.dataset.uid); b.textContent = msg || "Añadido al comparador ✓"; });
 }
 
@@ -1743,7 +2023,12 @@ const EV_LABELS = {"liga": "liga", "liga_nombre": "liga_nombre", "pais": "pais",
 const EV_COL = { euroleague: "#3b7fe0", eurocup: "#e8702f", acb: "#1fae7e", lba: "#e3a51a", bbl: "#e27aa8", lnb: "#5fae3a", nba: "#7b68ee", gleague: "#e5504f" };
 const EV_GROUPS = { identidad: "Físico y edad", totales: "Totales de temporada", por_partido: "Por partido", por_36: "Por 36 minutos", por_40: "Por 40 minutos",
   por_100_pos: "Por 100 posesiones", tiro: "Tiro", ratios: "Ratios de uso y rol", ratings: "Ratings", contexto_equipo: "Totales de equipo", contexto_rival: "Totales de rivales",
-  contexto_liga: "Ritmo y eficiencia de equipo", metricas_fuente: "Métricas oficiales de la fuente (src_)", basketnews: "BasketNews (bn_)", contexto_fase: "Playoffs frente a regular" };
+  contexto_liga: "Ritmo y eficiencia de equipo", metricas_fuente: "Métricas oficiales de la fuente (src_)", basketnews: "BasketNews (bn_)", contexto_fase: "Playoffs frente a regular",
+  pista: "Pista y conexiones · jugada a jugada" };
+// Etiquetas y presentación del grupo «pista» (columnas q_*, capa de quintetos)
+Object.assign(EV_LABELS, Object.fromEntries(Object.keys(LABELS).filter((c) => c.startsWith("q_")).map((c) => [c, LABELS[c]])));
+const EV_GROUP_INTRO = {
+  pista: "Columnas q_ de la capa jugada a jugada: on/off y RAPM (impacto en pista, en puntos por 100 posesiones de cada liga), rotación (titularidades, cierres, entradas a pista), clutch, red de pases y perfil de tiro por zonas. Sólo se comparan entre las ligas y temporadas que tienen quintetos: faltan BBL 2020-23 y LNB 2020-21, y NBA y G League 2026-27 aún no han empezado. On/off y RAPM se centran en 0 dentro de cada liga, así que sus medias comparan el reparto, no el nivel; para el nivel está la Normalización de ligas." };
 const EV_GORDER = Object.keys(EV_GROUPS);
 const EV_FAC = { e: ["eFG%", "acierto de campo"], pft: ["Pts/TL", "puntos por tiro libre intentado"], a: ["TL/100", "tiros libres por 100 posesiones"],
   t: ["Pér/100", "pérdidas por 100 posesiones"], o: ["OREB/100", "rebotes ofensivos por 100 posesiones"], r: ["Resto", "desajuste entre la fórmula de posesiones y la identidad simple"] };
@@ -1754,7 +2039,7 @@ const EV_PW = {
   ks: ["KS D", "Distancia máxima entre las dos funciones de distribución acumulada (Kolmogórov-Smirnov), entre 0 y 1."],
   w1: ["W₁ / σ", "Distancia de Wasserstein-1 (coste mínimo de transportar una distribución sobre la otra) dividida por la σ combinada."],
   js: ["JSD", "Divergencia de Jensen-Shannon entre histogramas de 20 intervalos, en bits, entre 0 y 1."] };
-const EV_SIGNED = /net|plus_minus|onoff|on_off|bpm|vorp|^delta_|_diff/;
+const EV_SIGNED = /net|plus_minus|onoff|on_off|bpm|vorp|rapm|^delta_|_diff/;
 const EV_BASES = { pts: "Puntos", reb: "Rebotes", ast: "Asistencias", stl: "Robos", blk: "Tapones", tov: "Pérdidas", fga: "Tiros de campo intentados", fta: "Tiros libres intentados",
   fg3a: "Triples intentados", oreb: "Rebotes ofensivos", dreb: "Rebotes defensivos", pf: "Faltas" };
 const EV_POS = ["Base", "Escolta", "Alero", "Alapívot", "Pívot"];
@@ -1870,6 +2155,7 @@ function evMetric() {
   box.innerHTML = `
     <div class="ev-mhead"><h2>${esc(evLab(m.c))}<code>${esc(m.c)}</code></h2><span class="ev-badge">${esc(kind)}</span></div>
     ${st.dict[m.c] ? `<p class="take">${esc(st.dict[m.c])}</p>` : ""}
+    ${EV_GROUP_INTRO[GRUPO_OF(m.c)] ? `<p class="howto"><b>${esc(EV_GROUPS[GRUPO_OF(m.c)])}.</b> ${esc(EV_GROUP_INTRO[GRUPO_OF(m.c)])}${(() => { const sin = evSt.avail.filter((i) => !m.l[i] || m.l[i].m == null).map((i) => evName(D.ligas[i])); return sin.length ? ` Sin dato en esta selección: ${esc(sin.join(", "))}.` : ""; })()}</p>` : ""}
     <div class="ev-kpis">${kpis.map(([a, b, c]) => `<div class="ev-kpi"><span>${a}</span><b>${b}</b><small>${c}</small></div>`).join("")}${vdHtml}</div>
     <div class="ev-grid2">
       <div style="display:grid;gap:6px;min-width:0"><h3 class="ev-h3">Media de cada liga</h3><p class="ev-sub">Media ponderada por minutos y, a la derecha, diferencia frente a ${R}.</p><div class="ev-svgbox">${evMeansSvg(m, ri)}</div></div>
@@ -1999,7 +2285,7 @@ function evMatrix() {
   const by = { eta2: (m) => -(m.eta2 ?? -1), eps2: (m) => -((m.kw || [])[2] ?? -1), maxabs: (m) => -maxabs(m), orden: (m) => order[m.c], nombre: (m) => evLab(m.c) };
   const key = by[evSt.sort] || by.eta2;
   list = list.slice().sort((a, b) => { const x = key(a), y = key(b); return typeof x === "string" ? x.localeCompare(y, "es") : x - y; });
-  $("evMxHint").textContent = `${list.length} de ${D.metricas.length} métricas${evSt.hideTot && !evSt.group ? " (sin totales de temporada, que dependen del calendario)" : ""}. Cada celda dice cuánto se aleja la media de esa liga de ${evName(evSt.ref)} (Δ %); en la columna de la referencia, su valor. Pulsa una fila para verla a fondo.`;
+  $("evMxHint").textContent = `${list.length} de ${D.metricas.length} métricas${evSt.hideTot && !evSt.group ? " (sin totales de temporada, que dependen del calendario)" : ""}. Cada celda dice cuánto se aleja la media de esa liga de ${evName(evSt.ref)} (Δ %); en la columna de la referencia, su valor. Pulsa una fila para verla a fondo.${EV_GROUP_INTRO[evSt.group] ? " " + EV_GROUP_INTRO[evSt.group] : ""}`;
   const ligas = evSt.avail;
   const head = `<tr><th class="sticky txt">Métrica</th><th class="txt">Grupo</th><th title="Varianza explicada por la liga (ponderada por minutos)">η²</th><th title="Tamaño del efecto de Kruskal-Wallis">ε²</th>${ligas.map((i) => `<th title="${esc(evName(D.ligas[i]))}"><span class="evsw" style="background:${EV_COL[D.ligas[i]]}"></span>${evAb(D.ligas[i])}</th>`).join("")}</tr>`;
   const rows = list.map((m) => {
@@ -2180,6 +2466,7 @@ async function evQual() {
   items.push(`<b>LNB:</b> la fuente no publica totales de los rivales, así que faltan ORtg y DRtg individuales, WS, OREB%/DREB%/REB% y BLK%.`);
   items.push(`<b>Posición:</b> EuroLeague, EuroCup y LBA no la publican y la G League sólo da G/F/C; se estima por perfil estadístico (centroide más cercano), como en Datos Brutos.`);
   items.push(`<b>Métricas de una sola fuente:</b> src_* (oficiales de Basketball-Reference, G League o EuroLeague) y bn_* (BasketNews, sólo EuroLeague y Liga Endesa) sólo se comparan entre las ligas que las tienen; cada fuente usa su propia definición.`);
+  items.push(`<b>Pista y conexiones (q_*):</b> salen del jugada a jugada reconstruido en quintetos. BBL 2020-21 a 2022-23 y LNB 2020-21 no tienen quintetos, y NBA y G League 2026-27 no han empezado: en esas selecciones la columna queda vacía y no entra en la comparación. El perfil de tiro por zonas sólo existe en temporada regular. On/off y RAPM están centrados en 0 dentro de cada liga.`);
   items.push(`<b>Totales:</b> los conteos de temporada dependen del calendario (82 partidos en la NBA, 34 en la Liga Endesa); sus Δ% miden calendario, no rendimiento.`);
   items.push(`<b>Valoración (PIR):</b> vacía en la NBA (sin faltas recibidas) y en la BBL (sin tapones recibidos).`);
   box.innerHTML = `<details><summary>Calidad de los datos · ${items.length} avisos que afectan a la comparación</summary><ul class="ev-find" style="margin-top:12px">${items.map((x) => `<li>${x}</li>`).join("")}</ul></details>`;
@@ -2207,7 +2494,8 @@ function bindEval() {
 // Datos: datos/normalizacion/resumen.json y datos/normalizacion/jugadores_<temporada>.json (python -m bbmodel mesa-normalizacion)
 // Parecido con la EuroLeague: d(l) = sqrt( (1/|M|) · Σ_m nivel_AB(l, m)² ), con nivel_AB = media de A y B, en σ de la EuroLeague de su posición.
 const NL_EXP = ["per", "game_score_p40", "pts_p100", "ts_pct", "usg_pct", "fg3_pct", "ast_pct", "tov_pct", "dreb_pct", "oreb_pct", "stl_pct", "blk_pct", "drtg", "ws_per_40"];
-const NL_SHORT = { game_score_p40: "GmSc/40", pts_p100: "Pts/100", ws_per_40: "WS/40", oreb_p100: "OREB/100", dreb_p100: "DREB/100", stl_p100: "Rob/100", blk_p100: "Tap/100", pf_p100: "Falt/100", fg2_pct: "T2%", fg3_pct: "T3%", ft_pct: "TL%" };
+const NL_SHORT = { game_score_p40: "GmSc/40", pts_p100: "Pts/100", ws_per_40: "WS/40", oreb_p100: "OREB/100", dreb_p100: "DREB/100", stl_p100: "Rob/100", blk_p100: "Tap/100", pf_p100: "Falt/100", fg2_pct: "T2%", fg3_pct: "T3%", ft_pct: "TL%",
+  pct_aro: "% aro", pct_corta: "% corta", pct_media: "% media", pct_t3_esquina: "% T3 esq.", pct_asistidas: "% asist.", rapm: "RAPM", orapm: "ORAPM", drapm: "DRAPM" };
 const NL_P = [10, 25, 50, 75, 90, 97];
 // Lectura y niveles A/B de cada liga (resumen fijo 2025-26), que se muestran en su ficha
 const NL_TXT = {"euroleague": {"nombre": "EuroLeague", "kpis": [["Nivel", "0 (ref.)"], ["Puentes", "1619 en total"], ["Importables", "38"], ["P50 propio → EL", "p51"], ["P90 propio → EL", "p85"], ["Puentes con EL", "—"]], "texto": "Es la vara de medir: nivel 0 por definición. Sirve de control. Sus mejores jugadores también «bajan» a la temporada siguiente (PER 20,2 → 18,9, −6,8 %) solo por regresión a la media: parte de una gran temporada es suerte que no se repite. Ese descenso hay que restarlo al de cualquier otra liga para aislar lo que se debe al nivel."}, "nba": {"nombre": "NBA", "kpis": [["Nivel A (PER)", "+0,58 ± 0,12"], ["Nivel B (PER)", "+0,82 ± 0,07"], ["Puesto", "1.º de 8"], ["P50 propio → EL", "p72"], ["P90 propio → EL", "p97"], ["Puentes con EL", "67"]], "texto": "Única liga por encima de la EuroLeague, y con margen. Un jugador del 20 % alto de la NBA (con minutos de rotación) sería de élite en Europa: percentil 97 en PER. El volumen crece (más tiros y más puntos por posesión) porque pasaría de opción secundaria a principal. Cuidado: solo 67 jugadores conectan la NBA con la EuroLeague, un grupo pequeño y de perfil concreto, así que para las estrellas la traducción es una extrapolación."}, "acb": {"nombre": "Liga Endesa (ACB)", "kpis": [["Nivel A (PER)", "−0,47 ± 0,07"], ["Nivel B (PER)", "−0,39 ± 0,05"], ["Puesto", "3.º de 8"], ["P50 propio → EL", "p33"], ["P90 propio → EL", "p74"], ["Puentes con EL", "506"]], "texto": "La liga doméstica más cercana a la EuroLeague y la mejor medida: 506 puentes directos, la mayor cifra de todas. Un jugador del 20 % alto de la ACB queda en el percentil 75 de la EuroLeague. Su PER cae un 15,8 %; descontado el descenso de la propia EuroLeague (6,8 %), lo atribuible a la liga es del orden del 9 %. Es la traducción con menor incertidumbre de todas."}, "gleague": {"nombre": "G League", "kpis": [["Nivel A (PER)", "−0,36 ± 0,11"], ["Nivel B (PER)", "−0,52 ± 0,05"], ["Puesto", "4.º de 8"], ["P50 propio → EL", "p34"], ["P90 propio → EL", "p73"], ["Puentes con EL", "53"]], "texto": "Nivel parecido al de la ACB en la media, pero con un perfil muy distinto: la eficiencia no se sostiene en Europa. El TS% cae un 10,6 % y el Game Score/40 un 29,6 %. Lo que sí viaja es el volumen (puntos/100 −5,6 %, uso −2,9 %). Asistencias (−24,6 %) y rebote defensivo (−19,3 %) bajan mucho. Defensivamente empeora (DRtg 112,3 → 118,0)."}, "eurocup": {"nombre": "EuroCup", "kpis": [["Nivel A (PER)", "−0,73 ± 0,13"], ["Nivel B (PER)", "−0,58 ± 0,05"], ["Puesto", "5.º de 8"], ["P50 propio → EL", "p30"], ["P90 propio → EL", "p69"], ["Puentes con EL", "170"]], "texto": "Es la liga con las cifras brutas más altas de los importables (PER 22,7) y también una de las que más «se encogen»: un 23,2 %, hasta el percentil 72. Con pocos partidos por temporada, una gran temporada tiene más ruido y se encoge más al proyectarla. La eficiencia cae un 7,1 % y el DRtg sube un 8,0 %."}, "lnb": {"nombre": "LNB (Francia)", "kpis": [["Nivel A (PER)", "−0,56 ± 0,14"], ["Nivel B (PER)", "−0,92 ± 0,04"], ["Puesto", "6.º de 8"], ["P50 propio → EL", "p21"], ["P90 propio → EL", "p59"], ["Puentes con EL", "299"]], "texto": "Es la liga donde más difieren los dos algoritmos: A la ve más cerca de la EuroLeague que B. Por eso la estimación combinada tiene más incertidumbre aquí. El 20 % alto de Francia queda en el percentil 58. El PER cae un 24,9 % y las asistencias un 15,2 %. Atención: la fuente de la LNB no publica totales de los rivales, así que rebote en %, tapones en %, DRtg y Win Shares no se pueden traducir."}, "lba": {"nombre": "LBA (Italia)", "kpis": [["Nivel A (PER)", "−0,79 ± 0,12"], ["Nivel B (PER)", "−0,79 ± 0,05"], ["Puesto", "7.º de 8"], ["P50 propio → EL", "p22"], ["P90 propio → EL", "p59"], ["Puentes con EL", "256"]], "texto": "Los dos algoritmos coinciden exactamente en el nivel de la LBA. El 20 % alto de Italia queda en torno a la mediana alta de la EuroLeague (percentil 59). El PER cae un 21,9 %. Rebote defensivo y robos son lo que peor viaja (rebote defensivo −12,2 %, robos −15,2 %)."}, "bbl": {"nombre": "BBL (Alemania)", "kpis": [["Nivel A (PER)", "−0,97 ± 0,14"], ["Nivel B (PER)", "−1,30 ± 0,07"], ["Puesto", "8.º de 8"], ["P50 propio → EL", "p14"], ["P90 propio → EL", "p54"], ["Puentes con EL", "268"]], "texto": "La liga de menor nivel del panel según los dos algoritmos. El 20 % alto de la BBL queda en la mediana de la EuroLeague (percentil 52). Es la mayor caída de todas en PER (−27,5 %) y en defensa (DRtg 110,3 → 120,6, +9,3 %). Un dominador de la BBL es, de entrada, un jugador de rotación en la EuroLeague."}};
@@ -2219,7 +2507,7 @@ const nlMeta = (c) => (nlSt.R && nlSt.R.metricas.find((x) => x.col === c)) || { 
 const nlName = (c) => nlMeta(c).nombre;
 const nlShort = (c) => NL_SHORT[c] || LABELS[c] || nlName(c);
 const nlSentido = (c) => nlMeta(c).sentido;
-const nlDec = (c) => (/pct|rate|_p100|per$|ortg|drtg|game_score/.test(c) ? 1 : 3);
+const nlDec = (c) => (/rapm/.test(c) ? 2 : /pct|rate|_p100|per$|ortg|drtg|game_score/.test(c) ? 1 : 3);
 const nlLg = (l) => LEAGUES[l] || l;
 function nlMix(rgb, k) { const c = TH.nlBase.map((w, i) => Math.round(w + (rgb[i] - w) * Math.max(0, Math.min(1, k)))); return `rgb(${c[0]},${c[1]},${c[2]})`; }
 function nlTone(v, sentido) { // color de una desviación frente a la EuroLeague
@@ -2258,7 +2546,7 @@ function nlPrepare() {
 async function renderNorm() {
   if (st.pageTab !== "normalizacion") return;
   if (!nlSt.R) {
-    try { nlSt.R = await getJSON("datos/normalizacion/resumen.json"); }
+    try { nlSt.R = await getResumen(); }
     catch { $("nlRank").innerHTML = `<div class="empty">No se encontraron los datos de normalización (datos/normalizacion/resumen.json).</div>`; return; }
     nlPrepare();
     const temps = [...SEASONS].sort();
@@ -2267,6 +2555,8 @@ async function renderNorm() {
     $("nlPos").value = nlSt.pos;
   }
   nlRank(); nlMap(); nlFicha(); nlLigaSelect(); nlExplo();
+  try { nlInsights(); } catch (e) { console.warn("conclusiones", e); }
+  nlValid(); nlContexto();
 }
 function nlSelect(l, scroll) {
   if (!nlSt.info[l]) return;
@@ -2327,8 +2617,8 @@ function nlFicha() {
     ? [["Papel", "Referencia", "nivel 0 por definición"], ["Puentes con otras ligas", f.puentes.toLocaleString("es-ES"), "jugadores compartidos"], ["Importables", f.nTop ?? "–", "20 % alto, 2025-26"],
        ["Su P50 / P90 → EL", `${pp(f.p50)} / ${pp(f.p90)}`, "percentil EuroLeague esperado"], ["20 % alto → EL", pp(f.top), "percentil esperado en PER"]]
     : [["Parecido", `${pos + 1}.º de ${nlSt.rank.length}`, `distancia A+B ${evN(f.d, 2)} σ`],
-       ["Nivel PER (A+B)", `${evSig(f.per.AB, 2)} σ`, kv("Nivel A (PER)") ? `A ${kv("Nivel A (PER)")} · B ${kv("Nivel B (PER)")}` : ""],
-       ["Puesto por nivel", kv("Puesto") || "–", "por nivel en PER, de las 8 ligas"],
+       ["Nivel PER (A+B)", `${evSig(f.per.AB, 2)} σ`, f.per.A != null ? `A ${evSig(f.per.A, 2)} ± ${evN(1.96 * f.per.ase, 2)} · B ${f.per.B != null ? `${evSig(f.per.B, 2)} ± ${evN(1.96 * f.per.bse, 2)}` : "–"}` : (kv("Nivel A (PER)") ? `A ${kv("Nivel A (PER)")} · B ${kv("Nivel B (PER)")}` : "")],
+       ["Puesto por nivel", (() => { const o = R.ligas.filter((x) => nlSt.info[x] && nlSt.info[x].per.AB != null).sort((a, b) => nlSt.info[b].per.AB - nlSt.info[a].per.AB); const k = o.indexOf(l); return k >= 0 ? `${k + 1}.º de ${o.length}` : kv("Puesto") || "–"; })(), "por nivel en PER, EuroLeague incluida"],
        ["Puentes con EL", f.puentes.toLocaleString("es-ES"), "jugadores que han jugado en las dos"],
        ["Su P50 / P90 → EL", `${pp(f.p50)} / ${pp(f.p90)}`, "percentil EuroLeague esperado"],
        ["20 % alto → EL", pp(f.top), "percentil esperado en PER"]];
@@ -2391,6 +2681,124 @@ function nlEqTable(l) {
     <div class="cmp-table"><table class="nl-tbl"><thead><tr><th class="txt">Métrica</th>${NL_P.map((p) => `<th class="c">P${p}</th>`).join("")}</tr></thead><tbody>${ms.map((m) => `<tr><td class="txt">${esc(nlShort(m.col))}${m.sentido < 0 ? "↓" : ""}</td>${NL_P.map((_, k) => cell(m, k)).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 
+// ---------------------------------------------------------------- conclusiones del resumen, recalculadas con el resumen vigente
+function nlInsights() {
+  const R = nlSt.R, I = nlSt.info, others = R.ligas.filter((l) => l !== "euroleague" && I[l]);
+  const lv = (l) => I[l].per.AB, s2 = (v) => evSig(v, 2), nm = (l) => esc(nlLg(l)), ins = [];
+  const byLv = others.filter((l) => lv(l) != null).sort((a, b) => lv(b) - lv(a)), above = byLv.filter((l) => lv(l) > 0);
+  ins.push([above.length === 1 ? `Solo la ${nm(above[0])} está por encima de la EuroLeague` : above.length ? `${above.length} ligas por encima de la EuroLeague` : "Ninguna liga por encima de la EuroLeague",
+    `Ordenadas por nivel medio en PER (media de A y B, en desviaciones típicas de la EuroLeague): ${byLv.map((l) => `${nm(l)} ${s2(lv(l))}`).join(", ")}.`]);
+  const dif = others.filter((l) => I[l].per.A != null && I[l].per.B != null).map((l) => [l, Math.abs(I[l].per.A - I[l].per.B)]).sort((a, b) => b[1] - a[1]);
+  const ordA = others.slice().sort((a, b) => (I[b].per.A ?? -9) - (I[a].per.A ?? -9)).join(), ordB = others.slice().sort((a, b) => (I[b].per.B ?? -9) - (I[a].per.B ?? -9)).join();
+  if (dif.length) ins.push(["Dos métodos independientes llegan al mismo mapa", `A (estadístico, por percentiles) y B (red neuronal, por ADN de jugador) coinciden ${ordA === ordB ? "en el orden" : "casi por completo en el orden"} y en la magnitud: la mayor diferencia en PER es de ${evN(dif[0][1], 2)} desviaciones (${nm(dif[0][0])}). Que dos caminos distintos lleguen al mismo sitio es la mejor prueba de que el nivel estimado es real y no un artefacto.`]);
+  const top = others.filter((l) => I[l].top != null).sort((a, b) => I[b].top - I[a].top);
+  ins.push(["Regla práctica para el 20 % alto de cada liga", `(percentil EuroLeague esperado en PER): ${top.map((l) => `${nm(l)} p${evN(I[l].top, 0)}`).join(", ")}. Como referencia, los mejores de la propia EuroLeague repiten en el p${evN(I.euroleague.top, 0)}: nadie mantiene su mejor temporada íntegra.`]);
+  const chg = (c, l) => { const d = (R.importar[c] || {})[l]; return d && d.obs_top && d.AB_top != null ? (100 * (d.AB_top - d.obs_top)) / Math.abs(d.obs_top) : null; };
+  const rng = (c, ls) => { const v = ls.map((l) => [l, chg(c, l)]).filter((x) => x[1] != null).sort((a, b) => a[1] - b[1]); return v.length ? v : null; };
+  const nonNba = others.filter((l) => l !== "nba"), ts = rng("ts_pct", nonNba), ast = rng("ast_pct", others), blk = rng("blk_pct", others);
+  if (ts && ast && blk) ins.push(["El volumen viaja mejor que la eficiencia", `Uso y puntos por posesión se conservan bastante; fuera de la NBA el TS% de los importables cambia entre un ${evSig(ts[ts.length - 1][1], 0, " %")} y un ${evSig(ts[0][1], 0, " %")} (${nm(ts[0][0])}). Las asistencias caen hasta un ${evN(Math.abs(Math.min(0, ast[0][1])), 0)} % (${nm(ast[0][0])}) y los tapones hasta un ${evN(Math.abs(Math.min(0, blk[0][1])), 0)} % (${nm(blk[0][0])}).`]);
+  const dr = rng("drtg", ["acb", "eurocup", "lba", "bbl", "lnb"].filter((l) => I[l]));
+  if (dr) ins.push([dr[0][1] > 0 ? "La defensa empeora al subir de liga" : "La defensa cambia al subir de liga", `El DRtg de los importables ${dr[0][1] > 0 ? "sube" : "cambia"} entre un ${evSig(dr[0][1], 0, " %")} y un ${evSig(dr[dr.length - 1][1], 0, " %")} desde las ligas europeas. Parte es nivel del rival y parte es que el jugador pierde el entorno de un equipo dominante, que el algoritmo B separa explícitamente y que ahora mide también el contexto de nivel (apartado 05).`]);
+  const V = R.validacion || {}, ms = Object.keys(V).filter((m) => V[m] && V[m].todos), med = (a) => { const v = a.filter((x) => x != null).sort((x, y) => x - y); return v.length ? (v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2) : null; };
+  if (ms.length) {
+    const t = (k, g) => med(ms.map((m) => (V[m][g] || {})[k])), beat = ms.filter((m) => V[m].todos.mejora_AB_vs_A > 0).length;
+    ins.push(["Usar la estimación combinada A+B", `En el examen fuera de muestra (${R.validacion_n_jugadores ?? "–"} cambios de liga reales de 2023-24 y 2024-25, ${R.validacion_n_a_euroleague ?? "–"} de ellos hacia la EuroLeague), A+B reduce el error frente a «mismo percentil» una mediana del ${evN(t("mejora_AB", "todos"), 1)} % por métrica (A ${evN(t("mejora_A", "todos"), 1)} %, B ${evN(t("mejora_B", "todos"), 1)} %) y del ${evN(t("mejora_AB", "a_euroleague"), 1)} % en las llegadas a la EuroLeague. Supera a A en ${beat} de ${ms.length} métricas.`]);
+    const weak = ms.filter((m) => V[m].a_euroleague && V[m].a_euroleague.mejora_AB < 0).map((m) => esc(nlShort(m)));
+    ins.push(["Dónde no fiarse del modelo", weak.length ? `En ${weak.join(", ")}, lo que rinde quien llega a la EuroLeague sigue sin predecirse mejor que con el percentil; ahí manda el scouting. Y para las estrellas NBA la traducción es una extrapolación.` : "Todas las métricas mejoran al percentil en las llegadas a la EuroLeague, pero para las estrellas NBA la traducción sigue siendo una extrapolación."]);
+  }
+  $("nlInsights").innerHTML = ins.map(([h, p], k) => `<article class="insight"><span class="num">${String(k + 1).padStart(2, "0")}</span><h3>${h}</h3><p>${p}</p></article>`).join("");
+  $("nlNMet").textContent = R.metricas.length;
+}
+function nlValid() {
+  const R = nlSt.R, V = R.validacion || {}, ms = R.metricas.filter((m) => V[m.col] && V[m.col].todos);
+  if (!ms.length) { $("nlValid").innerHTML = ""; return; }
+  const c = (v) => `<td style="color:${v == null ? "var(--muted)" : v < 0 ? "var(--bad)" : "var(--ink)"}">${v == null ? "–" : evSig(v, 1, " %")}</td>`;
+  let g0 = "";
+  const body = ms.map((m) => { const a = V[m.col].todos, b = V[m.col].a_euroleague || {}; const gr = m.grupo !== g0 ? `<tr class="grp"><th colspan="9">${esc(m.grupo)}</th></tr>` : ""; g0 = m.grupo;
+    return gr + `<tr><td class="txt" title="${esc(m.nombre)}">${esc(nlShort(m.col))}</td><td>${a.casos}</td><td>${evN(a.mae_mismo_percentil)}</td><td>${evN(a.mae_algoritmo_A)}</td><td>${evN(a.mae_algoritmo_B)}</td><td><b>${evN(a.mae_algoritmo_AB)}</b></td>${c(a.mejora_AB)}${c(b.mejora_AB)}<td class="rng">${evN(100 * (a.cob_A ?? NaN), 0)} / ${evN(100 * (a.cob_B ?? NaN), 0)} %</td></tr>`; }).join("");
+  $("nlValid").innerHTML = `<h3 class="ev-h3" style="margin-top:14px">Examen fuera de muestra, métrica a métrica (${ms.length})</h3>
+    <p class="ev-sub">Error absoluto medio al predecir la temporada siguiente de quien cambia de liga, en unidades de la métrica. «Mejora» = reducción del error de A+B frente a «mismo percentil». Cobertura = parte de los casos que cae dentro del intervalo del 80 %.</p>
+    <div class="cmp-table nl-val"><table><thead><tr><th class="txt">Métrica</th><th>Casos</th><th>Mismo pct.</th><th>A</th><th>B</th><th>A+B</th><th>Mejora</th><th title="Sólo los que llegan a la EuroLeague">→ EL</th><th>Cobertura A / B</th></tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+// ---------------------------------------------------------------- contexto de nivel: con quién y contra quién juega
+function nlCtxBeta() {
+  const R = nlSt.R, C = R.contexto, box = $("nlCtxBeta");
+  if (!C || !(C.sensibilidad || []).length) { box.innerHTML = `<h2>Sensibilidad al contexto</h2><div class="empty">El resumen de normalización aún no incluye el contexto de nivel.</div>`; return; }
+  const k = nlSt.ctxK === "riv" ? "riv" : "comp", S = C.sensibilidad.filter((x) => x["beta_" + k] != null).slice().sort((a, b) => b["beta_" + k] - a["beta_" + k]);
+  const M = Math.max(0.5, Math.ceil(Math.max(...S.map((x) => Math.abs(x["beta_" + k]) + 2 * (x["beta_" + k + "_se"] || 0))) * 4) / 4);
+  const x = (v) => 50 + (Math.max(-M, Math.min(M, v)) / M) * 50, ticks = []; for (let t = -M; t <= M + 1e-9; t += M > 1 ? 0.5 : 0.25) ticks.push(+t.toFixed(2));
+  const grid = ticks.map((t) => `<u class="${t === 0 ? "z" : ""}" style="left:${x(t)}%"></u>`).join("");
+  const col = (b, sn) => (sn === 0 ? "var(--neutral)" : b * sn > 0 ? "var(--good)" : "var(--bad)");
+  const quien = k === "comp" ? "tus compañeros de plantilla" : "los rivales";
+  const rows = S.map((r) => { const b = r["beta_" + k], se = r["beta_" + k + "_se"] || 0, weak = Math.abs(b) <= 2 * se, c = col(b, r.sentido);
+    const lect = `${weak ? "Efecto poco claro (el intervalo cruza el 0). " : ""}Si el nivel medio de ${quien} sube 0,3 (de una plantilla media a una de cabeza de su liga), su ${esc(r.nombre)} en la vara EuroLeague cambia ${evSig(0.3 * b, 2)} σ${r.sentido === 0 ? " (estilo, sin juicio)" : b * r.sentido > 0 ? " (mejor)" : " (peor)"}.`;
+    return `<div class="bt-row${weak ? " weak" : ""}" data-tip="${esc(`<b>${esc(r.nombre)}</b> · β ${k === "comp" ? "compañeros" : "rivales"} = ${evSig(b, 2)} ± ${evN(2 * se, 2)} (2 errores típicos)<br>${lect}<br>R² dentro de jugador ${evN(r.r2_dentro, 3)} · ${(r.filas || 0).toLocaleString("es-ES")} temporadas de ${(r.personas || 0).toLocaleString("es-ES")} jugadores`)}">
+      <span class="nm">${esc(nlShort(r.metrica))}${r.sentido < 0 ? " <small>menos es mejor</small>" : r.sentido === 0 ? " <small>estilo</small>" : ""}</span>
+      <div class="bt-trk">${grid}<i class="ci" style="left:${x(b - 2 * se)}%;width:${Math.max(0.4, x(b + 2 * se) - x(b - 2 * se))}%;background:${c}"></i><i class="pt" style="left:${x(b)}%;background:${c}"></i></div>
+      <em style="color:${weak ? "var(--muted)" : c}">${evSig(b, 2)}<small> ±${evN(2 * se, 2)}</small></em></div>`; }).join("");
+  const axis = `<div class="bt-row bt-axis"><span></span><div class="bt-trk">${ticks.map((t) => `<b style="left:${x(t)}%">${t === 0 ? "0" : evSig(t, 2)}</b>`).join("")}</div><span></span></div>`;
+  const B = Object.fromEntries(C.sensibilidad.map((r) => [r.metrica, r])), bv = (m) => (B[m] ? evSig(B[m].beta_comp, 2) : "–");
+  const u = B.usg_pct ? B.usg_pct.beta_comp : null;
+  box.innerHTML = `<div class="card-head"><h2>Cuánto mueve el entorno cada métrica</h2>
+      <div class="seg" role="group" aria-label="Entorno"><button type="button" class="nl-segb" data-ctxk="comp" aria-pressed="${k === "comp"}">Compañeros</button><button type="button" class="nl-segb" data-ctxk="riv" aria-pressed="${k === "riv"}">Rivales</button></div></div>
+    <p class="take">β = cuánto cambia la capacidad del jugador en la vara EuroLeague (en desviaciones típicas de los jugadores de EuroLeague de su posición) por cada unidad de nivel medio de ${k === "comp" ? "sus compañeros de plantilla" : "los rivales que tiene enfrente"}. Se mide dentro de la misma persona (el mismo jugador en entornos distintos), así que no se mezcla con su propio talento. Bigote = ±2 errores típicos; en gris claro, los efectos poco claros.</p>
+    <div class="nl-key"><span><i class="nl-sw" style="background:var(--good)"></i>mejores ${k === "comp" ? "compañeros" : "rivales"} → mejor</span><span><i class="nl-sw" style="background:var(--bad)"></i>→ peor</span><span><i class="nl-sw" style="background:var(--neutral)"></i>cambia el estilo, sin juicio</span><span style="opacity:.6"><i class="nl-sw" style="background:var(--muted)"></i>poco claro (|β| ≤ 2 errores)</span></div>
+    <div class="bt">${axis}${rows}</div>
+    <p class="howto"><b>Cómo se lee.</b> ${k === "comp" ? `A la izquierda del 0, lo que se reparte cuando llegan compañeros mejores: hay menos balones para todos (USG% ${bv("usg_pct")}, AST% ${bv("ast_pct")}). A la derecha, lo que regalan: tiros liberados y canastas asistidas (triples de esquina ${bv("pct_t3_esquina")}, % asistidas ${bv("pct_asistidas")}) y victorias (WS/40 ${bv("ws_per_40")}). El DRtg (${bv("drtg")}) baja, es decir, mejora: se defiende mejor rodeado de buenos defensores.${u != null ? ` Para la escala: dentro de una liga, la plantilla de un equipo de cabeza está unas +0,3 por encima de la media y la de uno de la zona baja unas −0,3 (percentiles 90 y 10 en 2025-26). Pasar de la zona baja a la alta (≈ 0,6) cambia el USG% en ${evN(Math.abs(u), 2)} × 0,6 ≈ ${evSig(0.6 * u, 2)} desviaciones típicas EuroLeague.` : ""}` : "Contra rivales mejores bajan casi todas las tasas de éxito (eFG%, T3%, rebote) y sube el DRtg individual (peor). Es el efecto que ya recoge el tipo de cambio entre ligas; dentro de una liga, los rivales se reparten de forma bastante pareja, por eso sus errores son mayores."}</p>
+    <details class="more"><summary>Cómo se calcula</summary><p>${esc(C.nota || "")} Regresión con efecto fijo de persona y tramos de edad, pesos 1/varianza, error típico por bootstrap de personas. Se usa el contexto de plantilla (compañeros ponderados por minutos) y no el de pista, porque el de pista mezcla el rol: quien mejora pasa a jugar con los titulares y su contexto sube por su propio nivel. Los valores «neutros» de Datos Normalizados (<code>_ctx</code>) sólo se calculan para las métricas con |β| > 2 errores típicos.</p></details>`;
+}
+function nlCtxLigas() {
+  const R = nlSt.R, C = R.contexto, box = $("nlCtxLigas");
+  if (!C || !(C.por_liga || []).length) { box.innerHTML = ""; return; }
+  const P = C.por_liga, med = nlSt.ctxMed || "L", temps = [...new Set(P.map((p) => p.temporada))].sort();
+  const MED = [["L", "Jugador medio", "nivel L medio de sus jugadores (ponderado por minutos)"], ["ctx_comp", "Compañeros en pista", "nivel medio de los compañeros con los que se comparte pista"], ["ctx_riv", "Rivales en pista", "nivel medio de los rivales en pista"], ["ctx_plantilla", "Plantilla", "nivel medio de la plantilla, ponderado por minutos"]];
+  const cell = {}; P.forEach((p) => ((cell[p.liga] ||= {})[p.temporada] = p));
+  const mean = (l) => { const v = Object.values(cell[l]).filter((p) => p[med] != null && p.jugadores >= 20); return v.length ? v.reduce((s, p) => s + p[med], 0) / v.length : null; };
+  const ligas = Object.keys(cell).sort((a, b) => (mean(b) ?? -9) - (mean(a) ?? -9));
+  const td = (p) => { if (!p || p[med] == null) return `<td class="c na">–</td>`; const bg = evDivBg(p[med] / 0.8), thin = p.jugadores < 20;
+    return `<td class="c${thin ? " thin" : ""}" style="background:${bg};color:${evInk(bg)}" data-tip="${esc(`<b>${esc(nlLg(p.liga))} ${p.temporada}</b> · ${p.jugadores} jugadores${thin ? " (muestra mínima)" : ""}<br>Jugador medio ${evSig(p.L, 2)} · compañeros en pista ${evSig(p.ctx_comp, 2)} · rivales ${evSig(p.ctx_riv, 2)} · plantilla ${evSig(p.ctx_plantilla, 2)}`)}">${evSig(p[med], 2)}</td>`; };
+  const body = ligas.map((l) => `<tr><td class="txt"><span class="evsw" style="background:${EV_COL[l]}"></span>${esc(nlLg(l))}</td>${temps.map((t) => td(cell[l][t])).join("")}<td class="c"><b>${evSig(mean(l), 2)}</b></td></tr>`).join("");
+  const el = mean("euroleague"), nba = mean("nba"), bbl = mean("bbl");
+  box.innerHTML = `<div class="card-head"><h2>Nivel de cada liga, temporada a temporada</h2>
+      <div class="seg" role="group" aria-label="Medida">${MED.map(([kk, n]) => `<button type="button" class="nl-segb" data-ctxmed="${kk}" aria-pressed="${kk === med}">${n}</button>`).join("")}</div></div>
+    <p class="take">${esc(MED.find((m) => m[0] === med)[2])}, en la escala L del Atlas (vara EuroLeague, 0 = jugador medio del conjunto de ligas). Azul = por encima de 0, naranja = por debajo. Filas por nivel medio.</p>
+    <div class="cmp-table ctx-lt"><table><thead><tr><th class="txt">Liga</th>${temps.map((t) => `<th class="c">${t}</th>`).join("")}<th class="c">Media</th></tr></thead><tbody>${body}</tbody></table></div>
+    <p class="note">${el != null && nba != null && bbl != null ? `Entre ligas, las tres medidas casi coinciden (EuroLeague ${evSig(el, 2)}, NBA ${evSig(nba, 2)}, BBL ${evSig(bbl, 2)}): cada liga juega contra sí misma. Esa diferencia ENTRE ligas ya la recoge el tipo de cambio de A y B; el contexto sólo corrige lo que un jugador se aparta DENTRO de su liga. ` : ""}Celdas atenuadas: menos de 20 jugadores (EuroCup 2020-21). En BBL 2020-23 y LNB 2020-21, sin quintetos, compañeros y rivales en pista salen del contexto de plantilla.</p>`;
+}
+function nlCtxWhy() {
+  const C = nlSt.R.contexto;
+  $("nlCtxWhy").innerHTML = !C ? "" : [
+    ["Por qué importa para normalizar", "A y B traducen los números de un jugador de su liga a la EuroLeague con los jugadores puente, que cambian de liga y de compañeros a la vez. Pero dentro de una liga no es lo mismo el sexto hombre del líder que la estrella del colista: el primero tira menos y recibe más tiros liberados. El contexto de nivel quita esa parte para que dos jugadores de la misma liga se comparen en igualdad."],
+    ["Valor neutro: lo que haría en un entorno medio", "En Datos Normalizados, cada métrica sensible tiene su versión «neutra» (<code>_ctx</code>): el equivalente EuroLeague menos β × lo que su plantilla se aparta de la media de su liga. Si su plantilla es mejor que la media, su USG% neutro sube y su % de canastas asistidas baja. La ficha del jugador lo explica en una frase."],
+    ["Cómo lo usa el Atlas para simular un fichaje", "Para proyectar a un jugador en una plantilla concreta de la EuroLeague se parte de su valor neutro y se le suma β × (nivel de la plantilla de destino − media): un base que llega a un equipo de cabeza pierde algo de uso y de asistencias, y gana triples de esquina y canastas asistidas. Así la proyección depende de con quién va a jugar, no sólo de la liga de la que viene."],
+  ].map(([h, p], k) => `<article class="insight"><span class="num">${String(k + 1).padStart(2, "0")}</span><h3>${h}</h3><p>${p}</p></article>`).join("");
+}
+function nlRapm() {
+  const R = nlSt.R, box = $("nlRapm"), m = nlSt.rapmM || "rapm";
+  if (!R.A.nivel[m]) { box.innerHTML = ""; return; }
+  const ligas = [...nlSt.rank, "euroleague"].filter((l) => (R.A.nivel[m] || {})[l]);
+  const V = (R.validacion[m] || {}), Vt = V.todos || {}, Ve = V.a_euroleague || {};
+  const rows = ligas.map((l) => {
+    const a = R.A.nivel[m][l], b = (R.B.nivel[m] || {})[l], v = nlLevel(m, l), im = (R.importar[m] || {})[l], ref = l === "euroleague";
+    return `<tr${ref ? ' style="font-weight:600"' : ""}><td class="txt"><span class="evsw" style="background:${EV_COL[l]}"></span>${esc(nlLg(l))}</td>
+      <td>${ref ? "0 (ref.)" : `${evSig(a[0], 2)} <small class="rng">± ${evN(1.96 * a[1], 2)}</small>`}</td><td>${ref ? "1" : `${evN(a[2], 2)} <small class="rng">± ${evN(1.96 * a[3], 2)}</small>`}</td>
+      <td>${b && !ref ? `${evSig(b[0], 2)} <small class="rng">± ${evN(1.96 * b[1], 2)}</small>` : ref ? "0" : "–"}</td><td style="color:${nlToneVar(v.AB, 1)}"><b>${ref ? "0" : evSig(v.AB, 2)}</b></td>
+      <td>${im ? `${evSig(im.obs_top, 2)} → <b>${evSig(im.AB_top, 2)}</b>` : "–"}</td><td>${im && im.pctAB_top != null ? "p" + evN(im.pctAB_top, 0) : "–"}</td><td>${a[4] ?? "–"}</td></tr>`; }).join("");
+  const kpi = (lab, val, sub) => `<div class="ev-kpi"><span>${lab}</span><b>${val}</b><small>${sub}</small></div>`;
+  box.innerHTML = `<div class="card-head"><h2>Impacto en pista (RAPM) traducido a la EuroLeague</h2>
+      <div class="seg" role="group" aria-label="Variante">${[["rapm", "RAPM"], ["orapm", "Ofensivo"], ["drapm", "Defensivo"]].map(([k, n]) => `<button type="button" class="nl-segb" data-rapm="${k}" aria-pressed="${k === m}">${n}</button>`).join("")}</div></div>
+    <p class="take"><b>Qué es.</b> El RAPM (plus-minus ajustado y regularizado) reparte el saldo de puntos de cada tramo de quinteto entre los diez jugadores en pista: una regresión con un coeficiente por jugador, controlando a la vez a los otros nueve, y una penalización (ridge) que encoge hacia 0 a quien juega poco. Se lee en puntos por 100 posesiones frente a un jugador medio de su liga; el ofensivo y el defensivo son las dos mitades.</p>
+    <p class="take"><b>Por qué hay que traducirlo.</b> Cada liga lo mide en sus propias unidades y se centra en su propio jugador medio: un +3 en la BBL no vale un +3 en la EuroLeague. Se traduce igual que el resto de métricas, con el tipo de cambio de los jugadores puente: <b>nivel</b> (dónde queda el jugador medio de esa liga en la vara EuroLeague, en σ) y <b>escala</b> (cuántas σ EuroLeague vale una σ de su liga; mayor que 1 = sus diferencias valen más).</p>
+    <div class="cmp-table"><table><thead><tr><th class="txt">Liga</th><th title="Algoritmo A: nivel ± IC 95 %">Nivel A</th><th title="Algoritmo A: escala ± IC 95 %">Escala A</th><th title="Algoritmo B: nivel ± IC 95 %">Nivel B</th><th title="Media de A y B">Nivel A+B</th><th title="20 % alto 2025-26: mediana en su liga → equivalente EuroLeague A+B">20 % alto: su liga → EL</th><th title="Percentil EuroLeague esperado del 20 % alto">p.EL</th><th title="Jugadores puente de A">Puentes</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${Vt.casos ? `<h3 class="ev-h3">Examen fuera de muestra</h3><div class="ev-kpis">
+      ${kpi("Error · mismo número", evN(Vt.mae_mismo_numero, 2), "copiar el RAPM de su liga tal cual")}${kpi("Error · mismo percentil", evN(Vt.mae_mismo_percentil, 2), "mantener su percentil")}
+      ${kpi("Error · A+B", evN(Vt.mae_algoritmo_AB, 2), `A ${evN(Vt.mae_algoritmo_A, 2)} · B ${evN(Vt.mae_algoritmo_B, 2)}`)}${kpi("Mejora A+B", evSig(Vt.mejora_AB, 1, " %"), `${Vt.casos} cambios de liga`)}
+      ${Ve.casos ? kpi("Mejora hacia la EL", evSig(Ve.mejora_AB, 1, " %"), `${Ve.casos} llegadas a la EuroLeague`) : ""}${kpi("Cobertura 80 %", `${evN(100 * Vt.cob_A, 0)} / ${evN(100 * Vt.cob_B, 0)} %`, "A / B dentro del intervalo")}</div>
+      <p class="note">Error absoluto medio al predecir el ${esc(nlName(m))} de la temporada siguiente de quien cambia de liga (puntos por 100 posesiones de la liga de destino). El RAPM es ruidoso de un año a otro; aun así, A+B reduce el error un ${evN(100 * (1 - Vt.mae_algoritmo_AB / Vt.mae_mismo_numero), 0)} % frente a copiar el número y un ${evN(Vt.mejora_AB, 0)} % frente a mantener el percentil.</p>` : ""}`;
+}
+function nlContexto() { if (!nlSt.R) return; nlCtxBeta(); nlCtxLigas(); nlCtxWhy(); nlRapm(); }
+
 // ---------------------------------------------------------------- explorador de jugadores
 function nlLigaSelect() {
   $("nlLiga").innerHTML = `<option value="">Todas menos EuroLeague</option><option value="*">Todas</option>` + [...nlSt.rank, "euroleague"].map((l, k) => `<option value="${l}">${l === "euroleague" ? "EuroLeague (ref.)" : `${k + 1}. ${esc(nlLg(l))}`}</option>`).join("");
@@ -2444,12 +2852,15 @@ function bindNorm() {
   $("nlTable").addEventListener("click", (e) => { const b = e.target.closest("[data-nlsort]"); if (!b) return; const c = b.dataset.nlsort;
     if (nlSt.sortCol === c) { const cur = nlSt.sortDir || (c === "min" ? -1 : nlSentido(c) < 0 ? 1 : -1); nlSt.sortDir = -cur; } else { nlSt.sortCol = c; nlSt.sortDir = 0; }
     nlSt.page = 0; nlSave(); nlExplo(); });
+  $("nlCtxBeta").addEventListener("click", (e) => { const b = e.target.closest("[data-ctxk]"); if (b) { nlSt.ctxK = b.dataset.ctxk; nlCtxBeta(); } });
+  $("nlCtxLigas").addEventListener("click", (e) => { const b = e.target.closest("[data-ctxmed]"); if (b) { nlSt.ctxMed = b.dataset.ctxmed; nlCtxLigas(); } });
+  $("nlRapm").addEventListener("click", (e) => { const b = e.target.closest("[data-rapm]"); if (b) { nlSt.rapmM = b.dataset.rapm; nlRapm(); } });
   $("nlPrev").addEventListener("click", () => { nlSt.page--; nlExplo(); });
   $("nlNext").addEventListener("click", () => { nlSt.page++; nlExplo(); });
 }
 
 // ---------------------------------------------------------------------------- subpestañas de Evaluación y Normalización
-const SUBS = { ev: ["resumen", "metrica", "matriz", "porque"], nl: ["resumen", "ficha", "mapa", "jugadores"] };
+const SUBS = { ev: ["resumen", "metrica", "matriz", "porque"], nl: ["resumen", "ficha", "mapa", "jugadores", "contexto"] };
 function setSub(g, k, scroll) {
   if (!SUBS[g].includes(k)) k = SUBS[g][0];
   store.set("mm.sub." + g, k);
@@ -2490,8 +2901,8 @@ function applyTheme(t, rerender) {
   if (current) { renderTable(); if (st.sel) renderPanel(st.sel); }
   if (st.pageTab === "comparador" && current) renderCmp();
   if (evSt.D) renderEval();
-  if (nlSt.R) { nlRank(); nlMap(); nlFicha(); nlExplo(); }
-  ["atlasFrame", "clavesFrame"].forEach((id) => { const fr = $(id); if (fr.src) { try { fr.contentWindow.location.reload(); } catch { fr.src = fr.src; } } });
+  if (nlSt.R) { nlRank(); nlMap(); nlFicha(); nlExplo(); nlContexto(); }
+  ["atlasFrame", "clavesFrame", "quintetosFrame"].forEach((id) => { const fr = $(id); if (fr.src) { try { fr.contentWindow.location.reload(); } catch { fr.src = fr.src; } } });
 }
 
 async function start() {
@@ -2509,7 +2920,10 @@ async function start() {
   document.querySelector(".theme-sw").addEventListener("click", (e) => { const b = e.target.closest("[data-theme-set]"); if (b) applyTheme(b.dataset.themeSet, true); });
   renderSeasons(); renderPos(); bind(); bindCmp(); bindEval(); bindNorm(); bindSubs();
   st.nac = store.get("mm.nac") || "";
-  showPage(location.hash === "#normalizados" ? "normalizados" : location.hash === "#atlas" ? "atlas" : location.hash === "#claves" ? "claves" : location.hash === "#evaluacion" ? "evaluacion" : location.hash === "#normalizacion" ? "normalizacion" : (store.get("mm.page") || "tabla"));
+  // #quintetos admite un enlace profundo: #quintetos&tab=jugadores&t=2025-26&l=euroleague&f=regular&e=BAS&j=012080
+  const hp = location.hash.replace(/^#/, "").split("&")[0];
+  if (hp === "quintetos" && location.hash.includes("&")) st.quintetosHash = location.hash.slice(location.hash.indexOf("&") + 1);
+  showPage(["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos"].includes(hp) ? hp : (store.get("mm.page") || "tabla"));
   const [dict, idxN, ...idxs] = await Promise.all([getJSON("datos/diccionario_columnas.json").catch(() => []),
     getJSON("datos/normalizados/indice.json").catch(() => null),
     ...SEASONS.map((s) => getJSON(`datos/${s}/indice.json`).catch(() => null))]);
@@ -2522,7 +2936,7 @@ async function start() {
 }
 window.addEventListener("message", (e) => {
   const d = e.data || {};
-  ["atlasFrame", "clavesFrame"].forEach((id) => { if (e.source === $(id).contentWindow && d.atlasAlto) $(id).style.height = Math.max(600, Math.ceil(d.atlasAlto) + 4) + "px"; });
+  ["atlasFrame", "clavesFrame", "quintetosFrame"].forEach((id) => { if (e.source === $(id).contentWindow && d.atlasAlto) $(id).style.height = Math.max(600, Math.ceil(d.atlasAlto) + 4) + "px"; });
   // «¿Cómo se lee?» desde el Atlas: abre Claves del estilo en el apartado pedido
   if (d.irClaves) { st.clavesSub = d.irClaves; const f = $("clavesFrame"); if (f.src) f.contentWindow.postMessage({ irA: d.irClaves }, "*"); showPage("claves"); scrollTo({ top: 0, behavior: "smooth" }); }
 });

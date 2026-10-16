@@ -209,7 +209,8 @@ def modelo_estilos(ef: pd.DataFrame, jug: pd.DataFrame, n_boot: int = 60, semill
     ok = np.isfinite(PX).all(1) & np.isfinite(PY).all(1) & np.isfinite(LX) & np.isfinite(LY)
     d = d[ok].reset_index(drop=True); PX, PY, LX, LY = PX[ok], PY[ok], LX[ok], LY[ok]
     # nivel centrado en el jugador medio de la muestra (las celdas se leen «a igual nivel medio»)
-    LX = LX - np.nanmean(LY); LY = LY - np.nanmean(LY)
+    centro = float(np.nanmean(LY))
+    LX = LX - centro; LY = LY - centro
     X = _diseno(PX, PY, LX, LY)
     grupos = (d["liga"] + "|" + d["temporada"] + "|" + d["team_id"]).to_numpy()
     ug = np.unique(grupos)
@@ -220,6 +221,9 @@ def modelo_estilos(ef: pd.DataFrame, jug: pd.DataFrame, n_boot: int = 60, semill
         el = rng.choice(ug, len(ug), replace=True)
         boots_idx.append(np.concatenate([pos[g] for g in el]))
     out = {"estilos": [c[2:] for c in pcols], "efectos": {}, "n_parejas": int(len(d)),
+           "nivel_centro": round(centro, 4),
+           "formula": "Δ_Y = p_X · M · p_Y + nivel_x·(L_X − c) + nivel_y·(L_Y − c) + (L_X − c)·(nivel_x_por_estilo_y · p_Y), "
+                      "c = nivel_centro",
            "nota": "Celda (s, t): cambio medio del jugador Y de estilo t cuando comparte pista con un X de estilo s, "
                    "frente a cuando X no está, a igual nivel (centrado en el nivel medio de la muestra)."}
     for k, (nombre, desc, _) in EFECTOS.items():
@@ -290,7 +294,10 @@ def sinergia_estilos(jug: pd.DataFrame, n_boot: int = 60, semilla: int = 5, ridg
     M = np.zeros((K, K)); Ms = np.zeros((K, K))
     M[iu] = b[:len(iu[0])]; Ms[iu] = se[:len(iu[0])]
     M = M + np.triu(M, 1).T; Ms = Ms + np.triu(Ms, 1).T
-    return {"estilos": [c[2:] for c in pcols], "n_parejas": int(len(d)), "matriz": np.round(M, 3).tolist(),
+    return {"estilos": [c[2:] for c in pcols], "n_parejas": int(len(d)), "nivel_centro": round(float(Lm), 4),
+            "constante": "sin constante: la matriz recoge el nivel medio de cada combinación de estilos",
+            "formula": "sinergia = p_A · S · p_B + nivel_suma·((L_A − c) + (L_B − c)) + diferencia_nivel·|L_A − L_B|",
+            "matriz": np.round(M, 3).tolist(),
             "matriz_se": np.round(Ms, 3).tolist(), "nivel_suma": round(float(b[-2]), 3),
             "nivel_suma_se": round(float(se[-2]), 3), "diferencia_nivel": round(float(b[-1]), 3),
             "diferencia_nivel_se": round(float(se[-1]), 3),

@@ -890,6 +890,8 @@
   }
  },
  "n_parejas": 122289,
+ "nivel_centro": -0.1488,
+ "formula": "Δ_Y = p_X · M · p_Y + nivel_x·(L_X − c) + nivel_y·(L_Y − c) + (L_X − c)·(nivel_x_por_estilo_y · p_Y), c = nivel_centro",
  "nota": "Celda (s, t): cambio medio del jugador Y de estilo t cuando comparte pista con un X de estilo s, frente a cuando X no está, a igual nivel (centrado en el nivel medio de la muestra).",
  "sinergia": {
   "estilos": [
@@ -901,6 +903,9 @@
    "E06"
   ],
   "n_parejas": 61641,
+  "nivel_centro": -0.1499,
+  "constante": "sin constante: la matriz recoge el nivel medio de cada combinación de estilos",
+  "formula": "sinergia = p_A · S · p_B + nivel_suma·((L_A − c) + (L_B − c)) + diferencia_nivel·|L_A − L_B|",
   "matriz": [
    [
     -0.984,
