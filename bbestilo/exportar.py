@@ -233,18 +233,18 @@ def main(salida: str) -> None:
     N = _normalizados()
     kN = pd.MultiIndex.from_frame(cj.jugadores.loc[m, ["liga", "temporada", "player_id"]])
     NN = N.reindex(kN)
-    for c, d_ in (("L", "L"), ("ctx_plantilla_dev", "ctx_plantilla_dev"), ("ctx_comp", "ctx_comp"),
-                  ("rapm", "rapm_el"), ("orapm", "orapm_el"), ("drapm", "drapm_el"), ("rapm_pctel", "rapm_pct")):
-        J[d_] = NN[c].to_numpy(float) if c in NN else np.nan
-    J["M"] = [_lista(v, 3) for v in NN[[c for c in CLAVE_CTX]].to_numpy(float)]
+    for col_n, col_j in (("L", "L"), ("ctx_plantilla_dev", "ctx_plantilla_dev"), ("ctx_comp", "ctx_comp"),
+                         ("rapm", "rapm_el"), ("orapm", "orapm_el"), ("drapm", "drapm_el"), ("rapm_pctel", "rapm_pct")):
+        J[col_j] = NN[col_n].to_numpy(float) if col_n in NN else np.nan
+    J["M"] = [_lista(v, 3) for v in NN[list(CLAVE_CTX)].to_numpy(float)]
     obs_r, obs_q = [], []
     for i, (_, fila) in zip(J.index, NN.iterrows()):
         R0 = pos_R[i].copy()
-        for c in C.METRICAS_ESTILO:
-            v = fila.get(f"{c}_obs", np.nan)
-            R0[_I[c]] = v if v is not None else np.nan
+        for met in C.METRICAS_ESTILO:
+            v = fila.get(f"{met}_obs", np.nan)
+            R0[_I[met]] = v if v is not None else np.nan
         obs_r.append(_lista(R0, 3))
-        obs_q.append(_lista([fila.get(f"{c}_obs", np.nan) for c in C.NIVEL], 3))
+        obs_q.append(_lista([fila.get(f"{met}_obs", np.nan) for met in C.NIVEL], 3))
     brutos = {"columnas": ["Rb", "Qb"], "nota": "Valores observados en su propia liga, alineados por índice con jugadores.json",
               "filas": [[r, q] for r, q in zip(obs_r, obs_q)]}
     J["persona_id"] = J["persona_id"].where(J["persona_id"].notna(), J["liga"] + ":" + J["player_id"].astype(str))
