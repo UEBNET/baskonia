@@ -372,7 +372,7 @@ table.brk td.n b { font-weight: 700; }
 .ctxhead { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; font-size: 13px; }
 .ctxhead b { font: 600 15px var(--f-data); }
 table.ctxt td, table.ctxt th { padding: 6px 7px; }
-table.ctxt td.who { min-width: 210px; max-width: 360px; }
+table.ctxt td.who { min-width: 300px; width: 34%; }
 table.ctxt td.who b { font-size: 13px; }
 table.ctxt td.who .ex { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; white-space: normal; }
 table.ctxt td.cv { font: 500 12px var(--f-data); white-space: nowrap; text-align: right; }
@@ -383,7 +383,8 @@ table.ctxt td.cv .ar { font-size: 10px; margin-left: 2px; }
 .ctxchips .chip { font-size: 11.5px; padding: 3px 8px; }
 .tagctx { display: inline-block; font: 600 10.5px var(--f-data); border-radius: 999px; padding: 1px 6px; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; }
 .qmx td.q { padding: 7px 2px; min-width: 44px; font-size: 11.5px; }
-table.qhm.qmx { min-width: 0; }
+table.qhm.qmx { min-width: 0; width: auto; }
+table.qhm.qmx td.q { min-width: 46px; width: 52px; }
 .qmx th.ch { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; height: 110px; text-align: left; vertical-align: bottom; padding: 4px 0; font-weight: 500; }
 .pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 10px; }
 .pairs ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
@@ -1977,7 +1978,8 @@ const hayQ = () => !!(META.interacciones && META.interacciones.efectos && META.i
 const hayC = () => !!(META.contexto && META.contexto.metricas);
 const Lof = (j) => (j.L != null && isFinite(j.L)) ? j.L : (j.nivel ?? 0);
 const rapmOk = (j) => j.rapm_el != null && isFinite(j.rapm_el);
-const ape = (n) => { const s = String(n || ""); if (s.includes(",")) { const a = s.split(",")[0].trim(); return a.charAt(0) + a.slice(1).toLowerCase(); } const p = s.trim().split(/\s+/); return p.length > 1 ? p.slice(1).join(" ") : s; };
+const tit = (s) => s === s.toUpperCase() ? s.toLowerCase().replace(/(^|[\s\-'’.])(\p{L})/gu, (m, a, b) => a + b.toUpperCase()) : s;
+const ape = (n) => { const s = String(n || ""); if (s.includes(",")) return tit(s.split(",")[0].trim()); const p = s.trim().split(/\s+/); return tit(p.length > 1 ? p.slice(1).join(" ") : s); };
 const PJ = new Map();
 function pJ(j) { let v = PJ.get(j.i); if (!v) { v = red(XJ ? XJ[j.i] : xJug(j)).p; PJ.set(j.i, v); } return v; }
 function efecto(k, pX, LX, pY, LY) {
@@ -2036,8 +2038,8 @@ function flechaM(m, x, y) {
 function fraseCtx(j, P) {
   const d = P.d; if (!isFinite(d)) return "";
   if (Math.abs(d) < 0.05) return "Tendría compañeros de un nivel parecido al de su equipo: sus cifras apenas cambiarían.";
-  const t = (col, verbo) => { const o = P.out[col]; if (!o || o.x == null) return null; const f = flechaM(o.m, o.x, o.y); if (f.ar === "=") return null; return `${verbo} ${o.y > o.x ? (col === "drtg" ? "empeoraría" : "subiría") : (col === "drtg" ? "mejoraría" : "bajaría")} de ${fmtM(col, o.x)} a ${fmtM(col, o.y)}`; };
-  const partes = [t("usg_pct", "su USG%"), t("pts_p100", "sus puntos/100"), t("pct_asistidas", "su % de canastas asistidas"), t("drtg", "su DRtg")].filter(Boolean).slice(0, 3);
+  const t = (col, verbo, pl) => { const o = P.out[col]; if (!o || o.x == null) return null; const f = flechaM(o.m, o.x, o.y); if (f.ar === "=") return null; const v = o.y > o.x ? (col === "drtg" ? "empeoraría" : "subiría") : (col === "drtg" ? "mejoraría" : "bajaría"); return `${verbo} ${pl ? v.replace(/ía$/, "ían") : v} de ${fmtM(col, o.x)} a ${fmtM(col, o.y)}`; };
+  const partes = [t("usg_pct", "su USG%"), t("pts_p100", "sus puntos por 100 posesiones", true), t("pct_asistidas", "su % de canastas asistidas"), t("drtg", "su DRtg")].filter(Boolean).slice(0, 3);
   return `Jugaría con compañeros ${fmt(Math.abs(d), 2)} ${d > 0 ? "mejores" : "peores"} que en su equipo${partes.length ? ": " + partes.join(", ") : ""}.`;
 }
 // ---- mapas de calor
@@ -2184,7 +2186,7 @@ function pintarCQ(pre, filas, cfg, o) {
       <div class="ctxchips" role="group" aria-label="Métricas">${Object.entries(CTXN).map(([c, [n]]) => `<button class="chip" data-cm="${c}" aria-pressed="${sel.includes(c)}">${esc(n)}</button>`).join("")}</div>
       <div class="tablebox"><table class="ctxt"><thead><tr><th>Jugador · de dónde viene</th><th style="text-align:right" data-tip="Compañeros en el destino (sobre la plantilla media de la Euroliga) − compañeros en su equipo (sobre la media de su liga)">Δ compañeros</th>${sel.map((c) => { const m = META.contexto.metricas.find((x) => x.col === c); return `<th style="text-align:right" data-tip="${esc(m ? `${m.nombre}: β = ${sg(m.beta_estimado, 2)} σ por punto de nivel de los compañeros (±${fmt(2 * m.se, 2)})${m.claro ? "" : " · no es claro: no se aplica"}` : "")}">${esc(CTXN[c][0])}${m && !m.claro ? " ∅" : ""}</th>`; }).join("")}</tr></thead><tbody>` +
       filasP.map(({ x, P }) => { const j = x.j;
-        return `<tr><td class="who"><b>${x.n != null ? `${x.n}. ` : ""}${esc(j.nombre)}</b> <span class="tagctx">${esc(x.tag || "")}</span><span class="ex">${esc(j.nombre_club)} ${LC[j.liga]} ${tC(j.temporada)} · su equipo: compañeros <b>${sg(j.ctx_plantilla_dev)}</b> sobre su liga · en pista, L medio <b>${sg(j.ctx_comp)}</b></span><span class="ex">${esc(fraseCtx(j, P))}</span></td>
+        return `<tr><td class="who"><b>${x.n != null ? `${x.n}. ` : ""}${esc(j.nombre)}</b> <span class="tagctx">${esc(x.tag || "")}</span><span class="ex">${esc(j.nombre_club)} ${LC[j.liga]} ${tC(j.temporada)} · <span data-tip="Contexto de plantilla: nivel de sus compañeros (por minutos) frente a la media de su liga">compañeros <b>${sg(j.ctx_plantilla_dev)}</b> vs su liga</span> · <span data-tip="Nivel L medio de los compañeros con los que compartió pista (por segundos)">en pista L <b>${sg(j.ctx_comp)}</b></span> · L propio <b>${sg(Lof(j))}</b></span><span class="ex">${esc(fraseCtx(j, P))}</span></td>
           <td class="cv"><b class="${Math.abs(P.d) < 0.1 ? "muted" : "nt"}">${sg(P.d)}</b></td>` +
           sel.map((c) => { const r = P.out[c]; if (!r || r.x == null) return `<td class="cv muted">–</td>`; const f = flechaM(r.m, r.x, r.y);
             return `<td class="cv" data-tip="${esc(`${r.m.nombre}: ${fmtM(c, r.x)} en su equipo → ${fmtM(c, r.y)} en este (${sg(r.dz, 2)} σ)`)}"><span class="a">${fmtM(c, r.x)}</span> → <span class="b ${f.cls}">${fmtM(c, r.y)}</span><span class="ar ${f.cls}">${f.ar}</span></td>`; }).join("") + `</tr>`; }).join("") +
@@ -2230,12 +2232,12 @@ function pistaPos(sel) {
   return { t, w };
 }
 function svgCascada(sel, q) {
-  const W = 640, H = 250, top = 22, bot = 54, n = sel.length + 2, bw = (W - 40) / n, items = [];
+  const W = 640, H = 260, top = 30, bot = 54, n = sel.length + 2, bw = (W - 40) / n, items = [];
   let run = 0; sel.forEach((x) => { const v = rapmOk(x.j) ? x.j.rapm_el : 0; items.push({ lab: ape(x.j.nombre), v, a: run, b: run + v, col: COL[argmax(pJ(x.j))], falta: !rapmOk(x.j), tip: `${esc(x.j.nombre)}: RAPM-EL ${rapmOk(x.j) ? sg(x.j.rapm_el, 2) : "sin dato (cuenta 0)"}` }); run += v; });
   items.push({ lab: "Química", v: q.quim, a: run, b: run + q.quim, col: SIM, tip: `Química de las ${q.pares.length} parejas: ${sg(q.quim, 2)} pts/100` }); run += q.quim;
   items.push({ lab: "Net previsto", v: run, a: 0, b: run, col: INK, total: true, tip: `Net previsto: ${sg(run, 2)} pts/100 frente a un quinteto medio de la Euroliga` });
   const vals = items.flatMap((i) => [i.a, i.b]).concat([0]), lo = Math.min(...vals) - 0.5, hi = Math.max(...vals) + 0.5, Y = (v) => top + (hi - v) / (hi - lo) * (H - top - bot);
-  let g = `<line x1="16" x2="${W - 8}" y1="${Y(0)}" y2="${Y(0)}" stroke="${DK ? "#3a4659" : "#d6cec0"}" stroke-width="1.5"/><text x="16" y="${Y(0) - 4}" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">quinteto medio EL</text>`;
+  let g = `<line x1="16" x2="${W - 8}" y1="${Y(0)}" y2="${Y(0)}" stroke="${DK ? "#3a4659" : "#d6cec0"}" stroke-width="1.5"/><line x1="${W - 196}" x2="${W - 178}" y1="9" y2="9" stroke="${DK ? "#3a4659" : "#d6cec0"}" stroke-width="1.5"/><text x="${W - 172}" y="12" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">0 = quinteto medio de la Euroliga</text>`;
   items.forEach((it, i) => { const x = 24 + i * bw, y1 = Y(Math.max(it.a, it.b)), y2 = Y(Math.min(it.a, it.b)), h = Math.max(1.5, y2 - y1);
     g += `<g data-tip="${esc(it.tip)}"><rect x="${x + 6}" y="${y1}" width="${bw - 12}" height="${h}" rx="4" fill="${it.col}" opacity="${it.falta ? 0.3 : it.total ? 1 : 0.85}"${it.falta ? ` stroke="${MUTED}" stroke-dasharray="3 2"` : ""}/>` +
       (i < items.length - 1 ? `<line x1="${x + bw - 6}" x2="${x + bw + 6}" y1="${Y(it.b)}" y2="${Y(it.b)}" stroke="${MUTED}" stroke-dasharray="2 2"/>` : "") +
@@ -2248,7 +2250,7 @@ function pintarQ5(pre, act, cfg, o) {
   const antesSel = o.antes && o.antes.length >= 5 ? o.antes.slice().sort((a, b) => b.w - a.w).slice(0, 5) : null, qa = antesSel ? quinteto(antesSel) : null;
   const auto = !(cfg.q5 && cfg.q5.length) && !(cfg.q5x && cfg.q5x.length);
   el.innerHTML = `<div class="q5g"><div style="display:grid;gap:8px">
-      <div class="bignet"><span><b class="${q.total >= 0 ? "up" : "dn"}">${sg(q.total, 1)}</b> <span class="note">pts/100 frente a un quinteto medio de la Euroliga</span></span>${qa ? `<span class="note">Quinteto de partida (${esc(antesSel.map((x) => ape(x.j.nombre)).join(", "))}): <b>${sg(qa.total, 1)}</b> → ${q.total - qa.total >= 0 ? "+" : ""}${fmt(q.total - qa.total, 1)}</span>` : ""}</div>
+      <div class="bignet"><span><b class="${q.total >= 0 ? "up" : "dn"}">${sg(q.total, 1)}</b> <span class="note">pts/100 frente a un quinteto medio de la Euroliga</span></span>${qa ? `<span class="note">Quinteto de partida (${esc(antesSel.map((x) => ape(x.j.nombre)).join(", "))}): <strong class="num">${sg(qa.total, 1)}</strong> · diferencia <strong class="num ${q.total - qa.total >= 0 ? "up" : "dn"}">${sg(q.total - qa.total, 1)}</strong></span>` : ""}</div>
       ${svgCascada(sel, q)}
       <p class="note">Impacto individual Σ RAPM-EL = <b>${sg(q.ind, 1)}</b> (ataque ${sg(q.of, 1)} · defensa ${sg(q.de, 1)}) + química de las 10 parejas = <b>${sg(q.quim, 1)}</b>. Barras de color = estilo de cada jugador.</p>
       ${q.falta.length ? `<div class="hint warn"><b>Parcial:</b> ${esc(q.falta.map((x) => x.j.nombre).join(", "))} sin RAPM (no hay jugada a jugada de su liga y temporada): ${q.falta.length === 1 ? "cuenta" : "cuentan"} como 0, un jugador medio.</div>` : ""}
