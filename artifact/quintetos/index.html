@@ -440,7 +440,14 @@ const CACHE = new Map();
 async function bajarJSON(url) {
   const r = await fetch(url, { cache: "no-cache" });
   if (!r.ok) throw new Error(`HTTP ${r.status} al pedir ${url}`);
-  const buf = await r.arrayBuffer(), u8 = new Uint8Array(buf);
+  let buf = await r.arrayBuffer(), u8 = new Uint8Array(buf);
+  // gzip en base64 ("H4sI…"): el Artifact sólo sirve tipos de texto
+  if (u8.length > 3 && u8[0] === 0x48 && u8[1] === 0x34 && u8[2] === 0x73 && u8[3] === 0x49) {
+    const bin = atob(new TextDecoder("ascii").decode(u8).trim());
+    u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    buf = u8.buffer;
+  }
   if (u8.length > 1 && u8[0] === 0x1f && u8[1] === 0x8b) {
     if (typeof DecompressionStream === "undefined") throw new Error("este navegador no sabe descomprimir gzip (DecompressionStream)");
     return JSON.parse(await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
@@ -449,7 +456,7 @@ async function bajarJSON(url) {
 }
 function cargarLiga(t, l) {
   const k = `${t}/${l}`;
-  if (!CACHE.has(k)) { const p = bajarJSON(`datos/${t}/${l}.json.gz`).then(prep); p.catch(() => CACHE.delete(k)); CACHE.set(k, p); p.then((d) => { p.listo = d; }); }
+  if (!CACHE.has(k)) { const p = bajarJSON(`datos/${t}/${l}.gz.txt`).then(prep); p.catch(() => CACHE.delete(k)); CACHE.set(k, p); p.then((d) => { p.listo = d; }); }
   return CACHE.get(k);
 }
 function objs(tab) {

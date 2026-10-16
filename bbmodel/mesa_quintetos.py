@@ -1,7 +1,7 @@
 """Datos de la pestaña «Quintetos y conexiones» de la Mesa (y del apartado «Conexiones» de la ficha).
 
-Un fichero por liga y temporada, JSON comprimido con gzip: <salida>/quintetos/datos/<temp>/<liga>.json.gz
-(la página lo descomprime en el navegador). Índice: <salida>/quintetos/datos/indice.json.
+Un fichero por liga y temporada, JSON comprimido con gzip y en base64 (el Artifact sólo sirve tipos de texto):
+<salida>/quintetos/datos/<temp>/<liga>.gz.txt (la página lo decodifica y descomprime en el navegador). Índice: <salida>/quintetos/datos/indice.json.
 
 Contenido (tablas en formato columnar {"c": [columnas], "f": [[fila], ...]}; jugadores por índice):
   jugadores      id, nombre, equipo, posición del estudio y, si existen, nivel L, contexto, estilo VaDE y RAPM
@@ -19,6 +19,7 @@ Contenido (tablas en formato columnar {"c": [columnas], "f": [[fila], ...]}; jug
 from __future__ import annotations
 
 import glob
+import base64
 import gzip
 import json
 from datetime import datetime, timezone
@@ -242,10 +243,10 @@ def main(salida: str = "data/artifact") -> None:
             d = exportar_liga(ldir.name, temp, ex)
             if not d:
                 continue
-            p = raiz / temp / f"{ldir.name}.json.gz"
+            p = raiz / temp / f"{ldir.name}.gz.txt"
             p.parent.mkdir(parents=True, exist_ok=True)
             data = json.dumps(d, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
-            p.write_bytes(gzip.compress(data, 9))
+            p.write_bytes(base64.b64encode(gzip.compress(data, 9)))
             indice["temporadas"].setdefault(temp, {})[ldir.name] = {
                 "nombre": NOMBRES_LIGA.get(ldir.name, ldir.name), "bytes": p.stat().st_size,
                 "quintetos": bool(d.get("quintetos")), "cobertura": d.get("cobertura")}
