@@ -332,6 +332,77 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
 .kpi b { font: 600 26px var(--f-data); }
 .findings li::before { font: 700 11px var(--f-data); }
 
+/* ===== química de estilos, contexto y quinteto ===== */
+tr.nuevo td:first-child::after { content: "nuevo"; font: 600 9px var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--accent-strong); border: 1px solid currentColor; border-radius: 999px; padding: 0 5px; margin-left: 6px; vertical-align: 2px; }
+.qctl { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.qgrid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .qgrid { grid-template-columns: minmax(0, 1fr); } }
+table.qhm { border-collapse: separate; border-spacing: 3px; width: 100%; min-width: 460px; }
+table.qhm th { background: transparent; padding: 4px; text-transform: none; letter-spacing: 0; font: 600 11.5px var(--f-body); color: var(--ink); white-space: normal; vertical-align: bottom; text-align: center; }
+table.qhm th.rh { text-align: right; white-space: nowrap; vertical-align: middle; }
+table.qhm th .sw { margin-right: 4px; vertical-align: -1px; }
+table.qhm td.q { text-align: center; font: 600 12.5px var(--f-data); border-radius: 7px; padding: 10px 3px; border: 0; color: var(--ink); min-width: 52px; }
+table.qhm td.q.ns { opacity: .5; background-image: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--muted) 22%, transparent) 5px 6px) !important; font-weight: 500; }
+table.qhm td.q.diag { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 35%, transparent); }
+table.qhm td.q.dk { color: #fff; }
+table.qhm td.mean { font: 500 11.5px var(--f-data); color: var(--muted); text-align: center; border: 0; padding: 4px; }
+table.qhm caption { caption-side: top; text-align: left; font: 500 11.5px var(--f-body); color: var(--muted); padding-bottom: 4px; }
+.axis-x { font: 600 10.5px var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--accent-strong); }
+.qlee { display: grid; gap: 8px; }
+.qlee .it { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; background: var(--c4); font-size: 13px; display: grid; gap: 4px; }
+.qlee .it b.t { font: 600 13px var(--f-body); }
+.qpick { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 10px; }
+.pcard { display: grid; gap: 6px; border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; background: var(--surface); }
+.pcard .nm { font: 600 14px var(--f-body); }
+.pcard .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font: 500 12px var(--f-data); color: var(--muted); }
+.pcard .meta b { color: var(--ink); font-weight: 600; }
+.mbars { display: grid; gap: 2px; }
+.mbars .r { display: grid; grid-template-columns: 128px minmax(0, 1fr) 38px; gap: 6px; align-items: center; font-size: 11.5px; }
+.mbars .r span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-flex; align-items: center; gap: 4px; }
+.mbars .r i { display: block; height: 8px; border-radius: 4px; }
+.mbars .r em { font: 500 11px var(--f-data); color: var(--muted); font-style: normal; text-align: right; }
+.mbars .track { background: var(--c2); border-radius: 4px; height: 8px; overflow: hidden; }
+.calc { display: grid; gap: 12px; }
+.dirs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 12px; }
+.dirbox { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--c4); display: grid; gap: 6px; align-content: start; min-width: 0; }
+.dirbox h3 { font: 600 14px var(--f-body); letter-spacing: 0; }
+table.brk td, table.brk th { padding: 4px 6px; font-size: 12.5px; }
+table.brk td.n b { font-weight: 700; }
+.up { color: var(--good); } .dn { color: var(--bad); } .nt { color: var(--accent-strong); }
+.ctxhead { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; font-size: 13px; }
+.ctxhead b { font: 600 15px var(--f-data); }
+table.ctxt td, table.ctxt th { padding: 6px 7px; }
+table.ctxt td.who { min-width: 210px; max-width: 360px; }
+table.ctxt td.who b { font-size: 13px; }
+table.ctxt td.who .ex { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; white-space: normal; }
+table.ctxt td.cv { font: 500 12px var(--f-data); white-space: nowrap; text-align: right; }
+table.ctxt td.cv .a { color: var(--muted); }
+table.ctxt td.cv .b { font-weight: 700; }
+table.ctxt td.cv .ar { font-size: 10px; margin-left: 2px; }
+.ctxchips { display: flex; flex-wrap: wrap; gap: 4px; }
+.ctxchips .chip { font-size: 11.5px; padding: 3px 8px; }
+.tagctx { display: inline-block; font: 600 10.5px var(--f-data); border-radius: 999px; padding: 1px 6px; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; }
+.qmx td.q { padding: 7px 2px; min-width: 44px; font-size: 11.5px; }
+table.qhm.qmx { min-width: 0; }
+.qmx th.ch { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; height: 110px; text-align: left; vertical-align: bottom; padding: 4px 0; font-weight: 500; }
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 10px; }
+.pairs ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.pairs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 12.5px; border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; background: var(--surface); }
+.pairs li small { display: block; color: var(--muted); font-size: 11.5px; }
+.q5ed { display: flex; flex-wrap: wrap; gap: 5px; }
+.q5ed .chip b { font: 700 10px var(--f-data); color: var(--muted); }
+.hint { font-size: 12.5px; border-radius: 8px; padding: 6px 10px; border: 1px solid var(--line); background: var(--c4); }
+.hint.warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 8%, var(--surface)); color: var(--ink); }
+.q5g { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+@media (max-width: 1000px) { .q5g { grid-template-columns: minmax(0, 1fr); } }
+.q5g svg { width: 100%; height: auto; display: block; }
+.bignet { display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: baseline; }
+.bignet b { font: 600 26px var(--f-data); }
+details.mas > summary { cursor: pointer; font: 600 12px var(--f-body); color: var(--accent-strong); list-style: none; }
+details.mas > summary::-webkit-details-marker { display: none; }
+details.mas[open] > summary { margin-bottom: 6px; }
+.esrow { display: inline-flex; gap: 3px; align-items: center; }
+
 </style>
 </head>
 <body>
@@ -342,9 +413,9 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
     <div>
       <span class="kicker">Atlas de estilos</span>
       <h1>¿Cómo juega cada equipo?</h1>
-      <p class="sub">El estilo describe <b>cómo</b> juega un equipo, no <b>cuánto</b> vale: dos equipos cerca en el mapa juegan parecido, tengan el nivel que tengan. 6 estilos · 8 ligas · temporadas 2020-21 a 2026-27.</p>
+      <p class="sub" id="cabSub">El estilo describe <b>cómo</b> juega un equipo, no <b>cuánto</b> vale: dos equipos cerca en el mapa juegan parecido, tengan el nivel que tengan. Ahora, además, <b>con quién</b>: cómo se influyen los estilos de los jugadores que comparten pista y cuánto pesa el nivel de los compañeros.</p>
     </div>
-    <div class="acts"><button class="btn ghost" type="button" data-claves="lectura">¿Cómo se lee? · Claves del estilo</button></div>
+    <div class="acts"><button class="btn ghost" type="button" data-ir="quimica">Química de estilos</button><button class="btn ghost" type="button" data-claves="lectura">¿Cómo se lee? · Claves del estilo</button></div>
   </header>
 
   <details class="cheat only-atlas" id="cheat">
@@ -357,10 +428,12 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
     <button role="tab" class="only-atlas" id="t-simulador" aria-controls="p-simulador" aria-selected="false">Simular fichajes<small>¿Qué pasa si ficho a…?</small></button>
     <button role="tab" class="only-atlas" id="t-equipo" aria-controls="p-equipo" aria-selected="false">Simular equipo completo<small>¿Cómo jugaría esta plantilla?</small></button>
     <button role="tab" class="only-atlas" id="t-parecidos" aria-controls="p-parecidos" aria-selected="false">Buscar parecidos<small>¿Quién juega como…?</small></button>
+    <button role="tab" class="only-atlas" id="t-quimica" aria-controls="p-quimica" aria-selected="false">Química de estilos<small>¿Cómo se influyen?</small></button>
     <button role="tab" class="only-claves" id="t-resumen" aria-controls="p-resumen" aria-selected="false">Resumen<small>lo esencial</small></button>
     <button role="tab" class="only-claves" id="t-lectura" aria-controls="p-lectura" aria-selected="false">Cómo leer el Atlas<small>traductor de cada cifra</small></button>
     <button role="tab" class="only-claves" id="t-estilos" aria-controls="p-estilos" aria-selected="false">Los 6 estilos<small>qué hace cada uno</small></button>
     <button role="tab" class="only-claves" id="t-ligas" aria-controls="p-ligas" aria-selected="false">Ligas y temporadas<small>reparto y Baskonia</small></button>
+    <button role="tab" class="only-claves" id="t-quimicac" aria-controls="p-quimicac" aria-selected="false">Química y contexto<small>cómo se influyen</small></button>
     <button role="tab" class="only-claves" id="t-modelo" aria-controls="p-modelo" aria-selected="false">Hallazgos y modelo<small>pruebas y método</small></button>
   </nav>
   <div class="loading" id="cargando">Cargando la red y los datos…</div>
@@ -368,7 +441,7 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
   <!-- ============================================================ claves · resumen -->
   <div class="panel only-claves" role="tabpanel" id="p-resumen" aria-labelledby="t-resumen" hidden>
     <section class="block">
-      <div><h2>Lo esencial</h2><p class="sub" style="margin-top:4px">Qué es el Atlas, cuánto abarca y qué ha encontrado, en cuatro cifras y cinco ideas.</p></div>
+      <div><h2>Lo esencial</h2><p class="sub" style="margin-top:4px" id="resSub">Qué es el Atlas, cuánto abarca y qué ha encontrado.</p></div>
       <div class="exec">
         <div style="display:grid;gap:12px;align-content:start"><div class="kpis" id="kpis"></div><ol class="findings" id="hallazgos"></ol></div>
         <div class="bask" id="bask"></div>
@@ -377,9 +450,11 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
     <section class="block">
       <div><h2>Estilo y nivel: dos cosas distintas</h2></div>
       <div class="idea2">
-        <div class="idea"><h3>Estilo = cómo juegas</h3><p>Ritmo, peso del triple, tiros libres, rebote, robos, faltas, pase, cuántos minutos juegan interiores y exteriores… Son 13 rasgos de juego. El Atlas los resume en un mapa y en 6 estilos.</p></div>
+        <div class="idea"><h3>Estilo = cómo juegas</h3><p id="ideaEstilo">Ritmo, peso del triple, tiros libres, rebote, robos, faltas, pase, cuántos minutos juegan interiores y exteriores y, del jugada a jugada, desde dónde se tira y cuántas canastas llegan de pase. El Atlas los resume en un mapa y en 6 estilos.</p></div>
         <div class="idea"><h3>Nivel = cuánto vales</h3><p>Es un índice aparte: 0 es el club medio y +1, uno muy superior. Antes de calcular el estilo se le quita lo que explica el nivel, así que un equipo modesto y un grande pueden compartir estilo.</p></div>
-        <div class="idea"><h3>Para qué sirve</h3><p>Para saber si un fichaje <b>refuerza tu identidad</b> o <b>cubre un rasgo que te falta</b>, y para encontrar equipos y jugadores que ya juegan como tú. No sirve para predecir cuánto rendirá un jugador.</p></div>
+        <div class="idea"><h3>Para qué sirve</h3><p>Para saber si un fichaje <b>refuerza tu identidad</b> o <b>cubre un rasgo que te falta</b>, para encontrar equipos y jugadores que ya juegan como tú y, con la química de estilos y el contexto de nivel, para estimar <b>cómo cambiarían sus números a tu lado</b> y qué quinteto suma más.</p></div>
+        <div class="idea"><h3>Química = con quién juegas</h3><p id="ideaQuimica"></p></div>
+        <div class="idea"><h3>Contexto = el nivel de tus compañeros</h3><p id="ideaContexto"></p></div>
       </div>
     </section>
   </div>
@@ -396,23 +471,31 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
       <div class="tablebox"><table class="glos">
         <thead><tr><th>En el Atlas</th><th>Qué significa</th><th>Cómo leerlo</th><th>Ejemplo</th></tr></thead>
         <tbody>
-          <tr><td>Estilo</td><td>El grupo de juego al que el modelo asigna al club o al jugador (uno de 6).</td><td>Mira la chuleta: describe qué hace más y qué hace menos cada estilo.</td><td class="ej">Ritmo y juego limpio</td></tr>
-          <tr><td>Claridad del estilo</td><td>Con qué seguridad pertenece a ese estilo: la salida ganadora de la red, de 0 a 100 % (técnicamente, «seguridad de la asignación»).</td><td>80 % o más: muy definido · 60-80: definido · 40-60: mixto · menos de 40: difuso, a caballo entre dos.</td><td class="ej">96 % · muy definido</td></tr>
-          <tr><td>Nivel</td><td>Índice de calidad aparte del estilo, en desviaciones típicas (z): 0 = club medio.</td><td>Se traduce a un puesto aproximado en una clasificación de 100 clubes, suponiendo un reparto normal.</td><td class="ej">+0,40 ≈ puesto 34 de 100</td></tr>
-          <tr><td>Parecido (0-100)</td><td>Distancia en el mapa convertida en percentil frente a todas las parejas reales de clubes o jugadores.</td><td>100 = idénticos · 50 = como dos clubes cualesquiera · 0 = opuestos.</td><td class="ej">Parecido 67</td></tr>
-          <tr><td>Cambio de estilo</td><td>Cuánto se mueve el club en el mapa al aplicar fichajes y bajas, comparado con la distancia entre todas las parejas de clubes.</td><td>Ligero (&lt; p20) · Moderado (p20-50) · Fuerte (p50-80) · Radical (p80+).</td><td class="ej">Moderado · p45</td></tr>
-          <tr><td>Cercanía al club</td><td>Lo cerca que está el estilo de un jugador del de su nuevo club (100 − percentil de distancia frente a lo lejos que suele estar un jugador de su propio club).</td><td>Más de 50: más cerca que el jugador típico de su propio equipo.</td><td class="ej">Cercanía 4</td></tr>
-          <tr><td>Comparte estilo</td><td>Probabilidad de que el modelo meta al jugador en el estilo del club (técnicamente, «afinidad»).</td><td>20 % o más ya cuenta como compatible.</td><td class="ej">0 %</td></tr>
-          <tr><td>Parecido de perfil</td><td>Coincidencia entre el reparto del jugador entre los 6 estilos y el del club (1 − divergencia de Jensen-Shannon).</td><td>100 % = mismo reparto · 0 % = nada en común.</td><td class="ej">0 %</td></tr>
-          <tr><td>Encaje</td><td>Veredicto: <b>Encaja</b> si está cerca (cercanía ≥ 50) y comparte estilo; <b>Alejado</b> si está muy lejos (cercanía ≤ 20) y no lo comparte; <b>Parcial</b> en el resto.</td><td>Un fichaje «Alejado» no es malo: cambia la identidad del equipo.</td><td class="ej">Alejado</td></tr>
-          <tr><td>Variedad de la plantilla</td><td>Dispersión de los jugadores del club en el mapa, ponderada por minutos, en percentil frente a todas las plantillas.</td><td>Muy homogénea (&lt; p33) · Normal (p33-66) · Variada (p66-80) · Muy variada (p80+, «un poco de todo»).</td><td class="ej">Normal · p51</td></tr>
-          <tr><td>Rasgos (perfil)</td><td>Los 13 rasgos de juego frente a un club medio de su mismo nivel, en desviaciones típicas.</td><td>±1 = claramente más o menos · ±2 = muy marcado.</td><td class="ej">Triples +1,2</td></tr>
-          <tr><td>Robustez</td><td>Proporción de remuestreos de minutos de la plantilla en la que el club conserva su estilo.</td><td>Alta = el estilo no depende de quién juegue cada noche.</td><td class="ej">85 %</td></tr>
+          <tr><td>Estilo</td><td>El grupo de juego al que el modelo asigna al club o al jugador (uno de 6).</td><td>Mira la chuleta: describe qué hace más y qué hace menos cada estilo.</td><td class="ej" data-ej="estilo">–</td></tr>
+          <tr><td>Claridad del estilo</td><td>Con qué seguridad pertenece a ese estilo: la salida ganadora de la red, de 0 a 100 % (técnicamente, «seguridad de la asignación»).</td><td>80 % o más: muy definido · 60-80: definido · 40-60: mixto · menos de 40: difuso, a caballo entre dos.</td><td class="ej" data-ej="claridad">–</td></tr>
+          <tr><td>Nivel (club)</td><td>Índice de calidad aparte del estilo, en desviaciones típicas (z): 0 = club medio.</td><td>Se traduce a un puesto aproximado en una clasificación de 100 clubes, suponiendo un reparto normal.</td><td class="ej" data-ej="nivel">–</td></tr>
+          <tr><td>Parecido (0-100)</td><td>Distancia en el mapa convertida en percentil frente a todas las parejas reales de clubes o jugadores.</td><td>100 = idénticos · 50 = como dos clubes cualesquiera · 0 = opuestos.</td><td class="ej" data-ej="parecido">–</td></tr>
+          <tr><td>Cambio de estilo</td><td>Cuánto se mueve el club en el mapa al aplicar fichajes y bajas (o de una temporada a otra), comparado con la distancia entre todas las parejas de clubes.</td><td>Ligero (&lt; p20) · Moderado (p20-50) · Fuerte (p50-80) · Radical (p80+).</td><td class="ej" data-ej="cambio">–</td></tr>
+          <tr><td>Cercanía al club</td><td>Lo cerca que está el estilo de un jugador del de su nuevo club (100 − percentil de distancia frente a lo lejos que suele estar un jugador de su propio club).</td><td>Más de 50: más cerca que el jugador típico de su propio equipo.</td><td class="ej" data-ej="cercania">–</td></tr>
+          <tr><td>Comparte estilo</td><td>Probabilidad de que el modelo meta al jugador en el estilo del club (técnicamente, «afinidad»).</td><td>20 % o más ya cuenta como compatible.</td><td class="ej" data-ej="afin">–</td></tr>
+          <tr><td>Parecido de perfil</td><td>Coincidencia entre el reparto del jugador entre los 6 estilos y el del club (1 − divergencia de Jensen-Shannon).</td><td>100 % = mismo reparto · 0 % = nada en común.</td><td class="ej" data-ej="simil">–</td></tr>
+          <tr><td>Encaje</td><td>Veredicto: <b>Encaja</b> si está cerca (cercanía ≥ 50) y comparte estilo; <b>Alejado</b> si está muy lejos (cercanía ≤ 20) y no lo comparte; <b>Parcial</b> en el resto.</td><td>Un fichaje «Alejado» no es malo: cambia la identidad del equipo.</td><td class="ej" data-ej="encaje">–</td></tr>
+          <tr><td>Variedad de la plantilla</td><td>Dispersión de los jugadores del club en el mapa, ponderada por minutos, en percentil frente a todas las plantillas.</td><td>Muy homogénea (&lt; p33) · Normal (p33-66) · Variada (p66-80) · Muy variada (p80+, «un poco de todo»).</td><td class="ej" data-ej="variedad">–</td></tr>
+          <tr><td>Rasgos (perfil)</td><td id="glRasgos">Los rasgos de juego frente a un club medio de su mismo nivel, en desviaciones típicas.</td><td>±1 = claramente más o menos · ±2 = muy marcado.</td><td class="ej" data-ej="rasgo">–</td></tr>
+          <tr><td>Robustez</td><td>Proporción de remuestreos de minutos de la plantilla en la que el club conserva su estilo.</td><td>Alta = el estilo no depende de quién juegue cada noche.</td><td class="ej" data-ej="rob">–</td></tr>
           <tr><td>Valores brutos / normalizados</td><td>En «Simular equipo completo», cada jugador puede entrar con lo que hizo en su liga (brutos) o con su equivalente estimado en la Euroliga (normalizados). En jugadores de la Euroliga, el normalizado está además estabilizado por muestra.</td><td>Normalizados = misma escala que los clubes del mapa: es la lectura homogénea. Brutos = «cómo jugaba allí»; con brutos de ligas más flojas el nivel sale inflado.</td><td class="ej">N · Euroliga</td></tr>
-          <tr><td>Ranking frente a la Euroliga</td><td>Puesto que ocuparía tu equipo, por nivel, entre los clubes de la última Euroliga completa.</td><td>Solo mide nivel, no estilo. Un equipo de 5 jugadores escalado a 200' sale más alto de lo real: completa la rotación.</td><td class="ej">6.º de 21</td></tr>
+          <tr><td>Ranking frente a la Euroliga</td><td>Puesto que ocuparía tu equipo, por nivel de caja o por RAPM-EL, entre los clubes de la última Euroliga completa.</td><td>Solo mide nivel, no estilo. Un equipo de 5 jugadores escalado a 200' sale más alto de lo real: completa la rotación.</td><td class="ej" data-ej="ranking">–</td></tr>
           <tr><td>Aporte al nivel</td><td>Cambio del nivel del equipo si se quita a ese jugador y sus minutos se reparten entre el resto.</td><td>Positivo = sube el nivel del equipo. Depende de los demás: un jugador medio resta en un equipo fuerte.</td><td class="ej">+0,25</td></tr>
           <tr><td>Peso en el estilo</td><td>Cuánto se movería el equipo en el mapa sin ese jugador, con la misma escala que «Cambio de estilo».</td><td>Ligero = prescindible para el estilo · Fuerte o Radical = es quien lo define.</td><td class="ej">Radical</td></tr>
           <tr><td>Minutos (simulador)</td><td>Minutos de toda la temporada, no por partido. Un partido son unos 200 minutos de equipo (5 × 40; 240 en la NBA y la G League).</td><td>Minutos por partido ≈ minutos de la casilla ÷ partidos. El simulador lo muestra al lado.</td><td class="ej">950' ≈ 25' por partido</td></tr>
+          <tr class="nuevo"><td>Nivel del jugador (L)</td><td>Índice de nivel individual en la vara Euroliga: media de los z de 8 métricas de rendimiento normalizadas (A+B). 0 = jugador medio de las 8 ligas (ponderado por minutos). Es la escala con la que se mide el nivel de los compañeros.</td><td>+1 = muy por encima de la media · el jugador medio de la Euroliga ronda <span data-ej="Lel">–</span>.</td><td class="ej" data-ej="L">–</td></tr>
+          <tr class="nuevo"><td>RAPM-EL</td><td>Impacto en pista del jugada a jugada: puntos por 100 posesiones que su equipo gana o pierde con él en pista frente a un jugador medio, a igualdad de compañeros y rivales (regresión ridge de todos los quintetos), traducido a la Euroliga. Se separa en ataque (O) y defensa (D).</td><td>0 = jugador medio · +2 = muy bueno · +4 o más = élite. Ruidoso con pocos minutos. Vacío donde no hay jugada a jugada (BBL 2020-23, parte de la LNB).</td><td class="ej" data-ej="rapm">–</td></tr>
+          <tr class="nuevo"><td>Contexto de plantilla</td><td>Cuánto mejores (o peores) que la media de su liga eran sus compañeros de plantilla, en nivel L y ponderado por minutos (sin él).</td><td>«No es lo mismo coincidir con el MVP que en la BBL»: +0,3 = rodeado de buenos jugadores; −0,3 = de jugadores flojos para su liga.</td><td class="ej" data-ej="ctx">–</td></tr>
+          <tr class="nuevo"><td>Compañeros en pista</td><td>Nivel L medio de los compañeros con los que realmente compartió pista, ponderado por segundos (jugada a jugada).</td><td>Mayor que el de plantilla = jugaba con los titulares; menor = con la segunda unidad.</td><td class="ej" data-ej="comp">–</td></tr>
+          <tr class="nuevo"><td>Proyección al contexto</td><td>Cómo cambiarían sus métricas normalizadas a Euroliga si jugara con los compañeros del equipo simulado: <code>x′ = T⁻¹(T(x) + τ·β·Δ)</code>, con Δ = (nivel medio de sus compañeros en el destino − plantilla media de la Euroliga) − su contexto de plantilla.</td><td>β = desviaciones típicas que se mueve la métrica por cada punto de nivel de los compañeros (sólo si es claro). Con mejores compañeros: menos uso y más canastas asistidas.</td><td class="ej" data-ej="proy">–</td></tr>
+          <tr class="nuevo"><td>Efecto X → Y</td><td>Cambio previsto en un jugador Y cuando comparte pista con X (frente a cuando X está en el banquillo), según sus estilos y sus niveles. Cinco resultados: cuota de tiro, eFG%, % asistidas, % en el aro y puntos/100.</td><td>Fila = el compañero (X), columna = el jugador afectado (Y). En puntos porcentuales (pp) o puntos/100.</td><td class="ej" data-ej="dir">–</td></tr>
+          <tr class="nuevo"><td>Sinergia de pareja</td><td>Net de la pareja (pts/100) por encima de lo que esperaba el RAPM de los diez en pista, según los estilos y niveles de los dos. En plantillas y quintetos se mide frente a una pareja media de la Euroliga.</td><td>&gt; +0,5 buena química · ±0,5 neutra · &lt; −0,5 mala química.</td><td class="ej" data-ej="sin">–</td></tr>
+          <tr class="nuevo"><td>Net previsto del quinteto</td><td>Σ RAPM-EL de los cinco + Σ de la química de sus 10 parejas, frente a un quinteto medio de la Euroliga.</td><td>+5 o más = quinteto de cabeza de Euroliga · 0 = medio · negativo = por debajo.</td><td class="ej" data-ej="q5">–</td></tr>
         </tbody></table></div>
     </section>
     <section class="block">
@@ -422,6 +505,9 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
         <div class="scale"><h3>Parecido (0-100)</h3><table><tbody><tr><td>80-100</td><td><b>Muy parecidos</b></td></tr><tr><td>60-80</td><td><b>Parecidos</b></td></tr><tr><td>40-60</td><td><b>Como dos cualesquiera</b></td></tr><tr><td>20-40</td><td><b>Distintos</b></td></tr><tr><td>0-20</td><td><b>Muy distintos</b></td></tr></tbody></table></div>
         <div class="scale"><h3>Nivel → puesto aproximado</h3><table><tbody><tr><td>+1,0</td><td>≈ puesto 16 de 100</td></tr><tr><td>+0,5</td><td>≈ puesto 31</td></tr><tr><td>0</td><td>≈ puesto 50 (medio)</td></tr><tr><td>−0,5</td><td>≈ puesto 69</td></tr><tr><td>−1,0</td><td>≈ puesto 84</td></tr></tbody></table></div>
         <div class="scale"><h3>Claridad del estilo</h3><table><tbody><tr><td>80-100 %</td><td><b>Muy definido</b></td></tr><tr><td>60-80 %</td><td><b>Definido</b></td></tr><tr><td>40-60 %</td><td><b>Mixto</b>: mira el segundo estilo</td></tr><tr><td>&lt; 40 %</td><td><b>Difuso</b></td></tr></tbody></table></div>
+        <div class="scale"><h3>RAPM-EL (pts/100)</h3><table><tbody><tr><td>+4 o más</td><td><b>Élite</b></td></tr><tr><td>+2 a +4</td><td><b>Muy bueno</b></td></tr><tr><td>0 a +2</td><td><b>Por encima de la media</b></td></tr><tr><td>−2 a 0</td><td><b>Por debajo</b></td></tr><tr><td>&lt; −2</td><td><b>Resta claramente</b></td></tr></tbody></table><p class="note" id="escRapm"></p></div>
+        <div class="scale"><h3>Química (pts/100)</h3><table><tbody><tr><td>&gt; +0,5</td><td><b>Buena</b>: suman más juntos</td></tr><tr><td>±0,5</td><td><b>Neutra</b></td></tr><tr><td>&lt; −0,5</td><td><b>Mala</b>: se pisan</td></tr></tbody></table><p class="note">Por pareja. En un quinteto se suman las 10 parejas.</p></div>
+        <div class="scale"><h3>Δ contexto (nivel de compañeros)</h3><table><tbody><tr><td>+0,3 o más</td><td><b>Mucho mejor rodeado</b></td></tr><tr><td>+0,1 a +0,3</td><td><b>Mejor rodeado</b></td></tr><tr><td>±0,1</td><td><b>Igual</b></td></tr><tr><td>−0,1 a −0,3</td><td><b>Peor rodeado</b></td></tr><tr><td>−0,3 o menos</td><td><b>Mucho peor</b></td></tr></tbody></table></div>
       </div>
     </section>
   </div>
@@ -429,7 +515,7 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
   <!-- ============================================================ claves · los 6 estilos -->
   <div class="panel only-claves" role="tabpanel" id="p-estilos" aria-labelledby="t-estilos" hidden>
     <section class="block">
-      <div><h2>Los 6 estilos</h2><p class="sub" style="margin-top:4px">Cada tarjeta resume un estilo: qué lo define, cuántos clubes lo juegan, en qué ligas abunda y ejemplos reales. Las barras son sus 13 rasgos frente a un club medio de su mismo nivel: a la derecha, más; a la izquierda, menos (en dorado, las diferencias claras, de media desviación típica o más). El código (E01…E06) es su orden en el eje 1 del mapa.</p></div>
+      <div><h2>Los 6 estilos</h2><p class="sub" style="margin-top:4px">Cada tarjeta resume un estilo: qué lo define, cuántos clubes lo juegan, en qué ligas abunda y ejemplos reales. Las barras son sus <span class="nRasgos">17</span> rasgos (los de jugada a jugada, marcados con ▸) frente a un club medio de su mismo nivel: a la derecha, más; a la izquierda, menos (en dorado, las diferencias claras, de media desviación típica o más). El código (E01…E06) es su orden en el eje 1 del mapa.</p></div>
       <div class="styles" id="estilos"></div>
     </section>
   </div>
@@ -500,7 +586,7 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
     </div>
 
     <section class="block" aria-labelledby="cmpT">
-      <div><h2 id="cmpT">¿En qué se diferencian?</h2><p class="sub" style="margin-top:4px">Los 13 rasgos de juego de cada equipo comparado frente a un club medio de su mismo nivel, y a qué estilo pertenece cada uno.</p></div>
+      <div><h2 id="cmpT">¿En qué se diferencian?</h2><p class="sub" style="margin-top:4px">Los <span class="nRasgos">17</span> rasgos de juego de cada equipo comparado frente a un club medio de su mismo nivel, y a qué estilo pertenece cada uno.</p></div>
       <div class="grid2">
         <div class="chart"><span class="label">Rasgos de juego</span><p class="note">A la derecha del centro, lo hace más que un club medio de su nivel; a la izquierda, menos. ±1 = claramente · ±2 = muy marcado.</p><div id="gPerfil"></div></div>
         <div class="chart"><span class="label">¿A qué estilo pertenece?</span><p class="note">Una barra de un solo color = estilo muy definido; varios colores = estilo mixto. El número es la claridad (%).</p><div id="gReparto"></div></div>
@@ -544,6 +630,15 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
         </div>
       </div>
     </section>
+    <section class="block" aria-labelledby="sCQT">
+      <div><h2 id="sCQT">Contexto, química y quinteto</h2><p class="sub" style="margin-top:4px">Con la plantilla simulada (los que siguen con sus minutos reescalados y los fichajes con los suyos): cómo cambiarían los números de cada jugador al cambiar de compañeros, cómo se entienden sus estilos por parejas y qué rendiría el quinteto previsto. Todo en la vara Euroliga.</p></div>
+      <div class="lvlhead"><h3>Rendimiento en este contexto</h3><p class="note">Sus métricas normalizadas a Euroliga «en su equipo» y proyectadas «en este equipo» según el nivel de los compañeros que tendría. No es lo mismo coincidir con el MVP de la Euroliga que con jugadores de la BBL.</p></div>
+      <div id="sCtx"></div>
+      <div class="lvlhead"><h3>Química de la plantilla</h3><p class="note">Sinergia prevista de cada pareja según sus estilos y niveles, frente a una pareja media de la Euroliga (o el efecto dirigido X → Y que elijas).</p></div>
+      <div id="sQui"></div>
+      <div class="lvlhead"><h3>Quinteto previsto</h3><p class="note">Net esperado frente a un quinteto medio de la Euroliga = impacto individual (Σ RAPM-EL) + química de sus 10 parejas.</p></div>
+      <div id="sQ5"></div>
+    </section>
   </div>
 
   <!-- ============================================================ 2b · simular equipo completo -->
@@ -580,13 +675,22 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
           </div>
           <div class="lvlhead"><h3 id="eqNT">Mapa de nivel</h3><p class="note">Cuánto vale la plantilla, aparte de cómo juega: media de 8 métricas de rendimiento ponderada por minutos (0 = club medio de las 8 ligas). El estilo ya descuenta el nivel, así que son dos lecturas independientes.</p></div>
           <div class="lvl3">
-            <div class="lvlbox"><h3 id="eRankT">Ranking frente a la Euroliga</h3><div id="eRank"></div></div>
+            <div class="lvlbox"><h3 id="eRankT">Ranking frente a la Euroliga</h3><div class="seg mini" id="eRkModo"><button data-v="nivel" aria-pressed="true">Nivel de caja</button><button data-v="rapm" aria-pressed="false">RAPM-EL (impacto en pista)</button></div><div id="eRank"></div></div>
             <div class="lvlbox"><h3>Aporte de cada jugador al nivel</h3><p class="note">Cuánto cambiaría el nivel del equipo si quitas a ese jugador y sus minutos se reparten entre el resto. A la derecha, sube el nivel; a la izquierda, lo baja.</p><div id="eAporte"></div></div>
           </div>
           <div class="lvlhead"><h3 id="eqJT">Jugador a jugador</h3></div>
           <div class="tablebox" id="eJugT"></div>
         </div>
       </div>
+    </section>
+    <section class="block" aria-labelledby="eCQT">
+      <div><h2 id="eCQT">Contexto, química y quinteto</h2><p class="sub" style="margin-top:4px">Con tu equipo y sus minutos por partido: cómo cambiarían los números de cada jugador con estos compañeros, cómo se entienden sus estilos por parejas y qué rendiría el quinteto previsto. Todo en la vara Euroliga (los valores brutos no cambian la química ni el contexto: se calculan siempre con los normalizados).</p></div>
+      <div class="lvlhead"><h3>Rendimiento en este contexto</h3><p class="note">Sus métricas normalizadas a Euroliga «en su equipo» y proyectadas «en este equipo» según el nivel de los compañeros que tendría.</p></div>
+      <div id="eCtx"></div>
+      <div class="lvlhead"><h3>Química de la plantilla</h3><p class="note">Sinergia prevista de cada pareja según sus estilos y niveles, frente a una pareja media de la Euroliga (o el efecto dirigido X → Y que elijas).</p></div>
+      <div id="eQui"></div>
+      <div class="lvlhead"><h3>Quinteto previsto</h3><p class="note">Net esperado frente a un quinteto medio de la Euroliga = impacto individual (Σ RAPM-EL) + química de sus 10 parejas.</p></div>
+      <div id="eQ5"></div>
     </section>
     <section class="block" aria-labelledby="eqMT">
       <div><h2 id="eqMT">Mapa de estilos</h2></div>
@@ -674,7 +778,8 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
           <span class="label">Buscar en temporadas</span><div class="chips" id="bTemps"></div>
           <span class="label">Buscar en ligas</span><div class="chips" id="bLigas"></div>
           <span class="label">¿Qué buscas?</span>
-          <div class="seg" id="bModo"><button data-v="jugador" aria-pressed="true">Sustituto de un jugador</button><button data-v="club" aria-pressed="false">Encaje con el club</button></div>
+          <div class="seg" id="bModo"><button data-v="jugador" aria-pressed="true">Sustituto de un jugador</button><button data-v="club" aria-pressed="false">Encaje con el club</button><button data-v="quimica" aria-pressed="false">Encajan con mi plantilla</button></div>
+          <p class="note" id="bQuiNota" hidden>Ordena por la química prevista con el núcleo de tu club (los 5 con más minutos) más su impacto individual (RAPM-EL). Explica qué parejas de estilos suman.</p>
           <div id="bRefBox" style="display:grid;gap:6px">
             <select id="bRef" aria-label="Jugador de referencia"></select>
             <input type="search" id="bRefQ" placeholder="o busca cualquier jugador como referencia" autocomplete="off"><div class="sugs" id="bRefS" hidden></div>
@@ -684,7 +789,7 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
           <div class="chips" id="bPos"></div>
           <div class="row2"><label class="note">Minutos mín.<input type="number" id="bMin" min="0" step="50"></label><label class="note">Edad máx.<input type="number" id="bEdad" min="16" max="45" placeholder="sin límite"></label></div>
           <label class="note">Nivel mínimo (0 = medio · +1 ≈ top 16 %)<input type="number" id="bNiv" step="0.1" placeholder="sin límite"></label>
-          <label class="note" for="bPeso">¿Qué priorizar? <b id="bPesov"></b></label><input type="range" id="bPeso" min="0.3" max="1" step="0.05" aria-describedby="bPesoEj"><div class="note" id="bPesoEj" style="display:flex;justify-content:space-between;gap:6px;margin-top:-4px;font-size:11px;white-space:nowrap"><span>Primar adaptación (0,3)</span><span>Perfil concreto (1)</span></div>
+          <label class="note" for="bPeso">¿Qué priorizar? <b id="bPesov"></b></label><input type="range" id="bPeso" min="0.3" max="1" step="0.05" aria-describedby="bPesoEj"><div class="note" id="bPesoEj" style="display:flex;justify-content:space-between;gap:6px;margin-top:-4px;font-size:11px;white-space:nowrap"><span id="bPesoA">Primar adaptación (0,3)</span><span id="bPesoB">Perfil concreto (1)</span></div>
           <label class="tog"><input type="checkbox" id="bMapa" checked> Marcar los 10 primeros en el mapa de «Comparar clubes»</label>
         </div>
         <div class="res">
@@ -692,6 +797,46 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
           <div class="chart"><span class="label" id="bJugT">Jugadores</span><div class="tablebox" id="bRes"></div><p class="note">«+ Simular» añade el jugador al escenario de fichajes del club de referencia. Un jugador con filas en dos competiciones aparece una vez.</p></div>
         </div>
       </div>
+    </section>
+  </div>
+
+  <!-- ============================================================ 3b · química de estilos -->
+  <div class="panel only-atlas" role="tabpanel" id="p-quimica" aria-labelledby="t-quimica" hidden>
+    <section class="block" aria-labelledby="quT">
+      <div><h2 id="quT">Química de estilos: cómo el estilo de X cambia el juego de Y</h2><p class="sub" style="margin-top:4px" id="quSub">Del jugada a jugada de las 8 ligas: cada vez que dos compañeros comparten pista se compara al jugador Y con X en pista y con X en el banquillo. Una regresión sobre el estilo de los dos (las 6 probabilidades de la red VaDE) y su nivel separa qué parte del cambio se debe al estilo y qué parte al nivel del compañero.</p></div>
+      <ol class="how">
+        <li><span><b>Fila = el compañero (X)</b>, columna = el jugador afectado (Y). La celda dice cuánto cambia Y cuando X entra en pista, a igual nivel.</span></li>
+        <li><span><b>Elige el resultado</b>: cuánto tira Y (cuota de tiro), con qué acierto (eFG%), cuántas de sus canastas llegan de pase, cuántos tiros hace en el aro y cuántos puntos anota por 100 posesiones.</span></li>
+        <li><span><b>Celdas tenues y rayadas</b>: diferencia no distinguible del ruido (menos de 2 errores típicos). Pasa el ratón para ver parejas reales de ese cruce.</span></li>
+      </ol>
+      <div class="qctl"><span class="label">Resultado</span><div class="seg" id="qEf"></div><span class="label">Ver</span><div class="seg" id="qModo"><button data-v="valor" aria-pressed="true">Valor</button><button data-v="contraste" aria-pressed="false">Contraste por columna</button></div></div>
+      <div class="qgrid">
+        <div class="chart"><div class="tablebox" id="qHeat"></div><p class="note" id="qHeatNota"></p></div>
+        <div class="chart"><span class="label">Qué dice la matriz</span><div id="qLee"></div></div>
+      </div>
+    </section>
+    <section class="block" aria-labelledby="qmT">
+      <div><h2 id="qmT">Efecto del nivel del compañero («efecto MVP»)</h2><p class="sub" style="margin-top:4px">Además del estilo, importa lo bueno que sea el compañero. Cada barra es el cambio en Y por cada punto más de nivel (L) de X, con su intervalo de ±2 errores típicos.</p></div>
+      <div class="grid2">
+        <div class="chart"><span class="label">Un compañero un punto mejor…</span><div id="qMvp"></div></div>
+        <div class="chart"><span class="label" id="qMvpET">…según el estilo del jugador afectado</span><div id="qMvpE"></div></div>
+      </div>
+      <p class="note" id="qMvpNota"></p>
+    </section>
+    <section class="block" aria-labelledby="qsT">
+      <div><h2 id="qsT">Sinergia de pareja</h2><p class="sub" style="margin-top:4px">Net de cada pareja (puntos por 100 posesiones) por encima de lo que esperaba el RAPM de los diez jugadores en pista, según el estilo de los dos y a igual nivel. Es simétrica: no hay «quién afecta a quién».</p></div>
+      <div class="grid2">
+        <div class="chart"><div class="tablebox" id="qSin"></div><p class="note" id="qSinNota"></p></div>
+        <div class="chart"><span class="label">Mejores y peores combinaciones de estilos</span><div id="qRank"></div></div>
+      </div>
+    </section>
+    <section class="block" aria-labelledby="qcT">
+      <div><h2 id="qcT">Calculadora de química</h2><p class="sub" style="margin-top:4px">Elige dos jugadores de cualquier liga y temporada: efectos previstos en las dos direcciones y sinergia de la pareja, separando lo que pone el estilo y lo que pone el nivel. Usa su reparto completo entre los 6 estilos, no sólo el ganador.</p></div>
+      <div class="qpick">
+        <div class="adder"><span class="label">Jugador A</span><input type="search" id="qA" placeholder="Buscar jugador" autocomplete="off"><div class="sugs" id="qAS" hidden></div><div id="qAI"></div></div>
+        <div class="adder"><span class="label">Jugador B</span><input type="search" id="qB" placeholder="Buscar jugador" autocomplete="off"><div class="sugs" id="qBS" hidden></div><div id="qBI"></div></div>
+      </div>
+      <div id="qCalc"></div>
     </section>
   </div>
 
@@ -710,6 +855,21 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
     </section>
   </div>
 
+  <!-- ============================================================ claves · química y contexto -->
+  <div class="panel only-claves" role="tabpanel" id="p-quimicac" aria-labelledby="t-quimicac" hidden>
+    <section class="block" aria-labelledby="qcvT">
+      <div><h2 id="qcvT">Química y contexto: cómo se influyen los estilos</h2><p class="sub" style="margin-top:4px">El estilo de un jugador no actúa solo: cambia el juego de quienes comparten pista con él, y el nivel de esos compañeros cambia sus propios números. Estas son las regularidades que aparecen en el jugada a jugada de las 8 ligas. En el Atlas, la pestaña «Química de estilos» permite explorarlas y los simuladores las aplican a cualquier plantilla.</p></div>
+      <div class="facts" id="qcFacts"></div>
+    </section>
+    <section class="block" aria-labelledby="qcxT">
+      <div><h2 id="qcxT">Contexto de nivel: cuánto cambian los números con mejores compañeros</h2><p class="sub" style="margin-top:4px" id="qcxSub"></p></div>
+      <div class="grid2">
+        <div class="chart"><span class="label">β por métrica (desviaciones típicas por punto de nivel de los compañeros, ±2 errores)</span><div id="qcBeta"></div></div>
+        <div class="chart"><span class="label">Cómo se proyecta un jugador a otro equipo</span><div class="note howto" id="qcForm"></div></div>
+      </div>
+    </section>
+  </div>
+
   <!-- ============================================================ 5 · hallazgos y modelo -->
   <div class="panel only-claves" role="tabpanel" id="p-modelo" aria-labelledby="t-modelo" hidden>
     <section class="block" aria-labelledby="haT">
@@ -718,18 +878,20 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
       <div class="facts" id="facts"></div>
     </section>
     <section class="block" aria-labelledby="moT">
-      <div><h2 id="moT">Cómo se llegó al modelo final</h2><p class="sub" style="margin-top:4px">Cuatro iteraciones con los mismos 997 clubes de 2020-21 a 2025-26. Fila resaltada = modelo en uso.</p></div>
+      <div><h2 id="moT">Cómo se llegó al modelo final</h2><p class="sub" style="margin-top:4px" id="moSub">Iteraciones con los mismos clubes de 2020-21 a 2025-26. Fila resaltada = modelo en uso.</p></div>
       <ol class="steps" id="pasos"></ol>
       <div class="tablebox"><table id="tModelo"></table></div>
       <div class="grid2">
         <article class="spec">
           <dl>
-            <dt>Entrada</dt><dd>13 rasgos de estilo por club (media por minutos de sus jugadores, vara EuroLeague A+B), transformados, estandarizados y sin la parte explicada por el nivel (<code>x − [1, L, L²]·B</code>).</dd>
-            <dt>Codificador</dt><dd><code>13 → 64 → 32 → (μ, log σ²) ∈ ℝ³</code>, GELU. μ es el punto del club en el mapa.</dd>
-            <dt>Salida</dt><dd>6 neuronas: probabilidad a posteriori de 6 gaussianas de covarianza completa en el mapa.</dd>
-            <dt>Decodificador</dt><dd><code>3 → 32 → 64 → 13</code>, varianza común a los 13 rasgos.</dd>
-            <dt>Pérdida</dt><dd>−ELBO de VaDE + 13 · estrés de MDS (distancia del mapa = distancia del perfil).</dd>
-            <dt>Entrenamiento</dt><dd>10 semillas · 24 plantillas remuestreadas por club · consenso por co-asociación · ajuste fino desde el consenso (40 épocas) con la mezcla fijada.</dd>
+            <dt>Entrada</dt><dd id="spEnt"></dd>
+            <dt>Codificador</dt><dd id="spCod"></dd>
+            <dt>Salida</dt><dd id="spSal"></dd>
+            <dt>Decodificador</dt><dd id="spDec"></dd>
+            <dt>Pérdida</dt><dd id="spPer"></dd>
+            <dt>Entrenamiento</dt><dd id="spTre"></dd>
+            <dt>Química</dt><dd id="spQui"></dd>
+            <dt>Contexto</dt><dd id="spCtx"></dd>
           </dl>
         </article>
         <div class="chart" id="mLeer"></div>
@@ -737,7 +899,7 @@ table.glos td.ej { font: 500 12.5px var(--f-data); color: var(--accent-strong); 
     </section>
   </div>
 
-  <p class="note only-claves">Datos: equivalentes EuroLeague 2025-26 del estudio de normalización (A+B; sólo A en 2026-27, provisional), temporada regular, 8 ligas, 2020-21 a 2026-27. Ritmo: z del ritmo del equipo en su liga. Código: paquete <code>bbestilo</code>, rama <code>claude/bold-euler-hubmhk</code>.</p>
+  <p class="note only-claves">Datos: equivalentes EuroLeague 2025-26 del estudio de normalización (A+B; sólo A en 2026-27, provisional), temporada regular, 8 ligas, 2020-21 a 2026-27. Ritmo: z del ritmo del equipo en su liga. Rasgos de tiro y asistencias, química de estilos, RAPM y contexto en pista: jugada a jugada (quintetos) de cada liga, donde existe. Código: paquetes <code>bbestilo</code> y <code>bbmodel</code>.</p>
 </div>
 <div class="tip" id="tip" hidden></div>
 
@@ -753,7 +915,7 @@ const LIGAS = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa"
 const LC = { euroleague: "EL", eurocup: "EC", acb: "ACB", nba: "NBA", gleague: "GL", lba: "LBA", bbl: "BBL", lnb: "LNB" };
 const POS = { E: "Exteriores", A: "Aleros", I: "Interiores" };
 const VISTA = document.documentElement.dataset.vista === "claves" ? "claves" : "atlas";
-const TABS = VISTA === "claves" ? ["resumen", "lectura", "estilos", "ligas", "modelo"] : ["comparar", "simulador", "equipo", "parecidos"];
+const TABS = VISTA === "claves" ? ["resumen", "lectura", "estilos", "ligas", "quimicac", "modelo"] : ["comparar", "simulador", "equipo", "parecidos", "quimica"];
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? "–" : x.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -771,9 +933,10 @@ const DEF = { tab: "comparar", temps: ["2025-26"], ligas: Object.keys(LIGAS), es
   capas: { clubes: true, jug: false, centros: true, elip: false, tray: true, ligas: false }, pos: ["E", "A", "I"], minJ: 400,
   color: "estilo", tam: "fijo", etiq: "sel", formas: true, aTam: 4.5, aOp: 0.85,
   ents: [{ t: "club", k: "euroleague:BAS", temp: "2025-26" }, { t: "liga", k: "euroleague", temp: "2025-26" }, { t: "club", k: "acb:3", temp: "2025-26" }],
-  sim: { liga: "euroleague", temp: "2025-26", club: "euroleague:BAS", fich: [], bajas: [], ejemplo: true, otros: false },
+  sim: { liga: "euroleague", temp: "2025-26", club: "euroleague:BAS", fich: [], bajas: [], ejemplo: true, otros: false, q5: null, q5x: [], quiEf: "sin" },
   escenarios: [],
-  eq: { liga: "euroleague", temp: null, club: "euroleague:BAS", jug: [], ejemplo: true }, equipos: [],
+  eq: { liga: "euroleague", temp: null, club: "euroleague:BAS", jug: [], ejemplo: true, q5: null, q5x: [], quiEf: "sin", rk: "nivel" }, equipos: [],
+  ctxMets: null, qui: { ef: "cuota_tiro", modo: "valor", a: null, b: null },
   em: { temps: null, ligas: ["euroleague"], estilos: null, nMin: -3, nMax: 3, capas: { jugEq: true, clubes: true, jug: false, centros: true, elip: false, tray: true, ligas: false },
     pos: ["E", "A", "I"], minJ: 400, color: "estilo", tam: "fijo", etiq: "sel", formas: true, aTam: 4.5, aOp: 0.6, ents: [] },
   bus: { liga: "euroleague", temp: "2025-26", club: "euroleague:BAS", temps: ["2025-26"], ligas: Object.keys(LIGAS), modo: "jugador", ref: null,
@@ -781,7 +944,7 @@ const DEF = { tab: "comparar", temps: ["2025-26"], ligas: Object.keys(LIGAS), es
 let st = JSON.parse(JSON.stringify(DEF));
 const CLAVE_LS = "atlas-estilos-v4";
 function guardar() { if (VISTA === "claves") { try { localStorage.setItem("atlas-claves-tab", st.tab); } catch (e) { /* */ } return; } try { localStorage.setItem(CLAVE_LS, JSON.stringify({ ...st, bus: { ...st.bus, ref: null } })); } catch (e) { /* sin almacenamiento */ } }
-function recuperar() { try { const s = JSON.parse(localStorage.getItem(CLAVE_LS) || "null"); if (s && s.ents) st = { ...st, ...s, capas: { ...st.capas, ...s.capas }, sim: { ...st.sim, ...(s.sim || {}) }, eq: { ...st.eq, ...(s.eq || {}) }, em: { ...st.em, ...(s.em || {}), capas: { ...st.em.capas, ...((s.em || {}).capas || {}) } }, bus: { ...st.bus, ...(s.bus || {}) } }; } catch (e) { /* sin almacenamiento */ } }
+function recuperar() { try { const s = JSON.parse(localStorage.getItem(CLAVE_LS) || "null"); if (s && s.ents) st = { ...st, ...s, capas: { ...st.capas, ...s.capas }, sim: { ...st.sim, ...(s.sim || {}) }, eq: { ...st.eq, ...(s.eq || {}) }, em: { ...st.em, ...(s.em || {}), capas: { ...st.em.capas, ...((s.em || {}).capas || {}) } }, bus: { ...st.bus, ...(s.bus || {}) }, qui: { ...st.qui, ...(s.qui || {}) } }; } catch (e) { /* sin almacenamiento */ } }
 
 // ---------------------------------------------------------------- red VaDE en el navegador (mismo cálculo que bbestilo)
 const gelu = (x) => 0.5 * x * (1 + Math.tanh(0.7978845608028654 * (x + 0.044715 * x * x * x)));
@@ -797,7 +960,10 @@ function red(x) {
   const M = P.mapa, xyz = [0, 1, 2].map((j) => z.reduce((s, zi, i) => s + (zi - M.centro[i]) * M.rot[i][j], 0) * M.escala);
   return { p: softmax(logits), xyz };
 }
-function transformar(v) { return META.rasgos.map((r, k) => { const x = v[k]; if (r.transf === "raiz") return Math.sqrt(Math.max(0, x)); if (r.transf === "log1") return Math.log1p(Math.max(0, x)); return x; }); }
+// transformaciones de bbmodel.metricas: id · raiz · log1 · proporcion (arcoseno de la raíz de p, p en 0-100)
+function TR(x, t) { if (x == null || !isFinite(x)) return NaN; if (t === "raiz") return Math.sqrt(Math.max(0, x)); if (t === "log1") return Math.log1p(Math.max(0, x)); if (t === "proporcion") return Math.asin(Math.sqrt(Math.min(100, Math.max(0, x)) / 100)); return x; }
+function TRinv(y, t) { if (y == null || !isFinite(y)) return NaN; if (t === "raiz") return Math.max(0, y) ** 2; if (t === "log1") return Math.expm1(Math.max(0, y)); if (t === "proporcion") return 100 * Math.sin(Math.min(Math.PI / 2, Math.max(0, y))) ** 2; return y; }
+function transformar(v) { return META.rasgos.map((r, k) => { const x = v[k]; return isFinite(x) ? TR(x, r.transf) : x; }); }
 function estd(t, e) { return t.map((x, k) => { const z = (x - e.media[k]) / e.sd[k]; return isFinite(z) ? z : 0; }); }
 function neutral(x, L, n) { const b = Array.from({ length: n.B.length }, (_, g) => L ** g); return x.map((v, k) => (v - b.reduce((s, bg, g) => s + bg * n.B[g][k], 0)) / n.sd[k]); }
 function nivelDe(Q, P) { let s = 0, c = 0; Q.forEach((q, i) => { const z = P.signo[i] * (q - P.media[i]) / P.sd[i]; if (q != null && isFinite(z)) { s += z; c++; } }); return c ? s / c : 0; }
@@ -834,7 +1000,9 @@ const XYZ = (r) => [r.x, r.y, r.z];
 const eNom = (k) => META.estilos[k].nombre;
 // ---- lectura llana de las cifras (mismas escalas que «Claves del estilo · Cómo leer el Atlas»)
 const LLANO = { "Ritmo": "Ritmo", "3PAr": "Triples", "FTr": "Tiros libres", "AST%": "Asistencias", "TOV%": "Pérdidas", "Reb. of.": "Rebote ofensivo", "Uso concentrado": "Uso concentrado",
-  "Reb. def.": "Rebote defensivo", "Robos": "Robos", "Tapones": "Tapones", "Faltas": "Faltas", "Interiores": "Min. interiores", "Exteriores": "Min. exteriores" };
+  "Reb. def.": "Rebote defensivo", "Robos": "Robos", "Tapones": "Tapones", "Faltas": "Faltas", "Interiores": "Min. interiores", "Exteriores": "Min. exteriores",
+  "Aro": "Tiros en el aro", "Media dist.": "Media distancia", "Triple esquina": "Triples de esquina", "Asistidas": "Canastas asistidas" };
+const esPbp = (r) => /jugada/.test(r.origen || "");
 const llano = (corto) => LLANO[corto] || corto;
 function Phi(z) { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989423 * Math.exp(-z * z / 2), p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return z > 0 ? 1 - p : p; }
 const puesto = (z) => (z == null || !isFinite(z)) ? "–" : Math.min(100, Math.max(1, Math.round(100 * (1 - Phi(z)))));
@@ -897,6 +1065,7 @@ function irA(t, guardarHash = true) {
   if (t === "comparar") { pintarMapa(); Plotly.Plots.resize("mapa"); }
   if (t === "simulador") pintarSim();
   if (t === "equipo") pintarEq();
+  if (t === "quimica") pintarQuimica();
 }
 
 // ---------------------------------------------------------------- controles del comparador
@@ -919,7 +1088,7 @@ function construirControles() {
   const ejeTxt = META.ejes.map((e, i) => `<span><b>Eje ${i + 1}</b>: ${e.negativo.length ? "← más " + e.negativo.map(llano).join(" y ").toLowerCase() : ""}${e.negativo.length && e.positivo.length ? " · " : ""}${e.positivo.length ? "más " + e.positivo.map(llano).join(" y ").toLowerCase() + " →" : ""}</span>`).join("");
   $("#ejesTxt").innerHTML = ejeTxt; $("#ejesClaves").innerHTML = `<span class="label">Qué representa cada eje</span>` + ejeTxt;
   pintarChuleta();
-  $("#guia").innerHTML = `<p>Cada punto es un club en una competición y temporada (o un jugador). Dos puntos cerca juegan parecido a igual nivel; la distancia se mide en desviaciones típicas del perfil de estilo. Los ejes resumen los 13 rasgos: ${ex}.</p><p>El color es el estilo que asigna la red (la neurona ganadora de ${KE}). Un club entre dos regiones tiene un estilo menos claro (claridad baja): míralo como una mezcla de los dos.</p>`;
+  $("#guia").innerHTML = `<p>Cada punto es un club en una competición y temporada (o un jugador). Dos puntos cerca juegan parecido a igual nivel; la distancia se mide en desviaciones típicas del perfil de estilo. Los ejes resumen los ${META.rasgos.length} rasgos (${META.rasgos.filter(esPbp).length} de ellos del jugada a jugada): ${ex}.</p><p>El color es el estilo que asigna la red (la neurona ganadora de ${KE}). Un club entre dos regiones tiene un estilo menos claro (claridad baja): míralo como una mezcla de los dos.</p>`;
 }
 function pintarChuleta() {
   const top = (s, sgn) => META.rasgos.map((r, i) => ({ r, v: s.perfil[i] || 0 })).filter((o) => o.v * sgn >= 0.5).sort((a, b) => sgn * (b.v - a.v)).slice(0, 3).map((o) => esc(llano(o.r.corto)).toLowerCase());
@@ -985,18 +1154,25 @@ function pintarResumen() {
   const nTrain = CL.filter((c) => !c.provisional).length, nProv = CL.length - nTrain, nSem = (ev.semillas || []).length || 10;
   $("#kpis").innerHTML = [
     [nTrain.toLocaleString("es-ES"), `clubes-temporada analizados (2020-21 a 2025-26) + ${nProv} de 2026-27`],
-    [String(KE), "estilos de juego, independientes del nivel"],
+    [String(KE), `estilos de juego, independientes del nivel, a partir de ${META.rasgos.length} rasgos (${META.rasgos.filter(esPbp).length} del jugada a jugada)`],
     [pct(ev.salida_max_media), "claridad media con la que se asigna el estilo"],
     [fmt(ev.estabilidad_mapa, 2), `estabilidad del mapa entre ${nSem} entrenamientos (1 = idénticos)`],
   ].map(([v, t]) => `<div class="kpi"><b class="num">${v}</b><span>${t}</span></div>`).join("");
   const F = [];
-  if (A.barrido_k) F.push(`Seis estilos es lo que piden los datos: el BIC y el ICL sobre los 13 rasgos eligen ${A.barrido_k.k_optimo_bic_rasgos}, y el modelo de 6 es más estable que los de 12 y 8 que se probaron antes (ver «Hallazgos y modelo»).`);
+  if (A.barrido_k) { const x = A.barrido_k, ic = x.k_optimo_icl_rasgos, bi = x.k_optimo_bic_rasgos;
+    F.push(`${KE} estilos es lo que piden los datos: el ICL sobre los ${META.rasgos.length} rasgos elige ${ic}${bi !== ic ? ` (el BIC, que no penaliza los grupos solapados, llegaría a ${bi})` : ""}, y el modelo de ${KE} es más estable que los de 12 y 8 que se probaron antes (ver «Hallazgos y modelo»).`); }
   F.push(`El estilo no mide calidad: sólo explica el ${pct(ev.eta2_nivel, 1)} del nivel del club${v1 ? ` (en la primera versión, sin neutralizar, el ${pct(v1.eta2_nivel, 0)})` : ""}, y apenas depende de la liga (NMI ${fmt(ev.nmi_estilo_liga, 2)}).`);
   if (A.exito) { const x = A.exito, sig = x.p_estilo_dado_nivel < 0.05, por = x.por_estilo.slice().sort((a, b) => b.resid - a.resid), id = (r) => META.estilos.findIndex((s) => s.id === r.estilo);
     F.push(sig ? `A igual nivel, el estilo sí se asocia con ganar (η² parcial ${pct(x.eta2_parcial_estilo, 0)}, ${pv(x.p_estilo_dado_nivel)}): «${esc(eNom(id(por[0])))}» suma ${sg(por[0].resid)} σ de net rating y «${esc(eNom(id(por[por.length - 1])))}» resta ${fmt(Math.abs(por[por.length - 1].resid), 2)} σ.` : `A igual nivel, el estilo no se asocia con el net rating (${pv(x.p_estilo_dado_nivel)}).`); }
   if (A.encaje) { const x = A.encaje["d_nivel~distancia"]; F.push(`Parecerse al estilo del nuevo club no mejora el rendimiento del jugador (${A.encaje.casos.toLocaleString("es-ES")} cambios de club; ${x.coef > 0 && x.p < 0.05 ? `quien llega a un estilo más distinto mejora algo más, ${pv(x.p)}` : `sin efecto, ${pv(x.p)}`}): el encaje sirve para decidir entre reforzar la identidad o cubrir un rasgo, no para predecir rendimiento.`); }
   if (A.continuidad) F.push(`La continuidad sostiene la identidad: cada 10 puntos más de minutos que repiten multiplican por ${fmt(A.continuidad.or_mismo_estilo_por_10pp, 2)} la probabilidad de conservar el estilo (${pv(A.continuidad.p_logit)}).`);
+  if (hayQ()) { const I = META.interacciones, E = I.efectos, S = I.sinergia.matriz; let mx = [0, 0], mn = [0, 0]; for (let a = 0; a < KE; a++) for (let b = a; b < KE; b++) { if (S[a][b] > S[mx[0]][mx[1]]) mx = [a, b]; if (S[a][b] < S[mn[0]][mn[1]]) mn = [a, b]; }
+    const nP = (q) => q[0] === q[1] ? `dos «${esc(eNom(q[0]))}»` : `«${esc(eNom(q[0]))}» con «${esc(eNom(q[1]))}»`;
+    F.push(`Los estilos se influyen: un compañero un punto de nivel mejor quita ${fmt(Math.abs(E.cuota_tiro.nivel_x), 2)} pp de cuota de tiro pero sube ${fmt(E.efg.nivel_x, 2)} pp el eFG% y ${fmt(E.pct_asistidas.nivel_x, 2)} pp las canastas asistidas («efecto MVP»); por estilos, ${nP(mx)} suman ${sg(S[mx[0]][mx[1]], 1)} pts/100 sobre lo que espera su RAPM y ${nP(mn)}, ${sg(S[mn[0]][mn[1]], 1)} (pestaña «Química y contexto»).`); }
+  if (hayC()) { const m = (c) => META.contexto.metricas.find((x) => x.col === c);
+    F.push(`El entorno de nivel pesa: con compañeros un punto mejores, el mismo jugador baja su USG% (${sg(m("usg_pct").beta, 2)} σ) y su AST% (${sg(m("ast_pct").beta, 2)} σ) y sube sus Win Shares (${sg(m("ws_per_40").beta, 2)} σ). Los simuladores proyectan cada fichaje a los compañeros que tendría.`); }
   $("#hallazgos").innerHTML = F.map((t, i) => `<li data-n="${i + 1}"><span>${t}</span></li>`).join("");
+  $("#resSub").textContent = `Qué es el Atlas, cuánto abarca y qué ha encontrado, en cuatro cifras y ${F.length} ideas.`;
   const al = META.clubes_con_nombre.baskonia, claves = al ? al.claves : [];
   const bk = (A.baskonia && A.baskonia.temporadas) || [];
   const ult = (l) => [...bk].reverse().find((r) => r.liga === l && !r.provisional);
@@ -1048,7 +1224,7 @@ function pintarMapa() {
   }
   if (st.capas.jug) {
     const js = JG.filter((x) => st.temps.includes(x.temporada) && st.ligas.includes(x.liga) && st.estilos.includes(x.e) && st.pos.includes(x.pos3) && x.min >= st.minJ);
-    T.push({ type: "scatter3d", mode: "markers", x: js.map((x) => x.x), y: js.map((x) => x.y), z: js.map((x) => x.z), hovertext: js.map((x) => `${esc(x.nombre)}<br>${esc(x.nombre_club)} · ${LC[x.liga]} ${tC(x.temporada)}<br>${esc(eNom(x.e))} · ${Math.round(x.min)}'`), hoverinfo: "text",
+    T.push({ type: "scatter3d", mode: "markers", x: js.map((x) => x.x), y: js.map((x) => x.y), z: js.map((x) => x.z), hovertext: js.map((x) => hovJug(x)), hoverinfo: "text",
       marker: { size: 2.4, color: js.map((x) => st.color === "estilo" ? COL[x.e] : colorDe(x) || MUTED), opacity: 0.4 }, showlegend: false });
   }
   if (st.capas.elip) META.estilos.forEach((s, k) => { if (st.estilos.includes(k)) T.push(elipsoide(s, k)); });
@@ -1062,7 +1238,7 @@ function pintarMapa() {
     hovertext: ents.map((x) => `<b>${ENT_LET[x.i]} · ${esc(x.label)}</b><br>${esc(x.sub)}<br>${esc(eNom(argmax(x.probs)))}`), hoverinfo: "text", marker: { size: 12, color: ents.map((x) => ENT_COL[x.i]), symbol: ents.map((x) => x.t === "liga" ? "square" : "diamond"), line: { color: SURF, width: 2 } }, showlegend: false });
   if (st.bus.mapa && BUSQ.length) { const b = BUSQ.slice(0, 10).map((o) => o.j);
     T.push({ type: "scatter3d", mode: "markers+text", x: b.map((x) => x.x), y: b.map((x) => x.y), z: b.map((x) => x.z), text: b.map((x, i) => `${i + 1}. ${x.nombre}`), textposition: "bottom center", textfont: { family: "Barlow", size: 10, color: SIM },
-      hovertext: b.map((x, i) => `${i + 1}. ${esc(x.nombre)} · ${esc(x.nombre_club)} (${LC[x.liga]} ${tC(x.temporada)})`), hoverinfo: "text", marker: { size: 7, color: SIM, symbol: "circle-open", line: { width: 3, color: SIM } }, showlegend: false }); }
+      hovertext: b.map((x, i) => hovJug(x, `<br><i>Puesto ${i + 1} en «Buscar parecidos»</i>`)), hoverinfo: "text", marker: { size: 7, color: SIM, symbol: "circle-open", line: { width: 3, color: SIM } }, showlegend: false }); }
   Plotly.react("mapa", T, { ...LAYOUT("mapa"), scene: { ...ejes3d(), camera: CAMS.persp } }, CFG);
   const div = $("#mapa"); if (!div._clic) { div._clic = true; div.on("plotly_click", (ev) => { const p = ev.points && ev.points[0]; const k = p && p.customdata; if (k && BY.has(k)) { const c = BY.get(k); addEnt({ t: "club", k: c.clave_club, temp: c.temporada }); } }); }
   const n = (k) => CL.filter((c) => st.ligas.includes(c.liga) && st.temps.includes(c.temporada) && c.e === k).length;
@@ -1075,10 +1251,10 @@ function svgPerfil(it) {
   let g = "";
   [-2, -1, 0, 1, 2].forEach((v) => g += `<line x1="${X(v)}" x2="${X(v)}" y1="18" y2="${H - 8}" stroke="${v === 0 ? (DK ? "#3a4659" : "#d6cec0") : LINE}" stroke-width="${v === 0 ? 1.5 : 1}"/><text x="${X(v)}" y="12" text-anchor="middle" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${v === 0 ? "club medio" : v > 0 ? "+" + v : "−" + Math.abs(v)}</text>`);
   META.rasgos.forEach((r, k) => { const y = 24 + k * rh;
-    g += `<text x="${x0 - 8}" y="${y + 12}" text-anchor="end" font-size="12" font-family="Barlow, system-ui, sans-serif" fill="${INK}">${esc(llano(r.corto))}</text><line x1="${x0}" x2="${x1}" y1="${y + 8}" y2="${y + 8}" stroke="${LINE}" stroke-dasharray="2 3"/>`;
+    g += `<text x="${x0 - 8}" y="${y + 12}" text-anchor="end" font-size="12" font-family="Barlow, system-ui, sans-serif" fill="${INK}">${esPbp(r) ? "▸ " : ""}${esc(llano(r.corto))}</text><line x1="${x0}" x2="${x1}" y1="${y + 8}" y2="${y + 8}" stroke="${LINE}" stroke-dasharray="2 3"/>`;
     it.forEach((o, n) => { const cy = y + 8 + (n - (it.length - 1) / 2) * 3.2, v = o.X[k];
       g += `<g data-tip="${esc(o.label)} · ${esc(r.nombre)}: ${sg(v)} (${Math.abs(v) >= 2 ? "muy marcado" : Math.abs(v) >= 1 ? "claramente" : Math.abs(v) >= 0.5 ? "algo" : "como un club medio"}${Math.abs(v) >= 0.5 ? (v > 0 ? " más" : " menos") : ""})"><circle cx="${X(v)}" cy="${cy}" r="8" fill="${o.color}" stroke="${SURF}" stroke-width="2"/><text x="${X(v)}" y="${cy + 3.5}" text-anchor="middle" font-size="9.5" font-weight="700" font-family="Barlow Condensed, Arial Narrow, sans-serif" fill="${SURF}">${o.letra}</text></g>`; }); });
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Perfil de estilo comparado">${g}</svg><div class="chips">${it.map((o) => `<span class="st"><span class="badge" style="background:${o.color};width:16px;height:16px;font-size:10px">${o.letra}</span>${esc(o.corto)}</span>`).join("")}</div>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Perfil de estilo comparado">${g}</svg><p class="note">▸ = rasgo del jugada a jugada (zonas de tiro y canastas asistidas).</p><div class="chips">${it.map((o) => `<span class="st"><span class="badge" style="background:${o.color};width:16px;height:16px;font-size:10px">${o.letra}</span>${esc(o.corto)}</span>`).join("")}</div>`;
 }
 function svgReparto(it) {
   const W = 520, bh = 22, H = it.length * (bh + 12) + 6, L = 64;
@@ -1227,12 +1403,14 @@ function pintarSim(sinControles = false) {
   $("#sMin").innerHTML = svgReparto([{ letra: "Hoy", label: "Plantilla hoy", probs: ca.rep }].concat(cd ? [{ letra: "Con", label: "Plantilla con el escenario", probs: cd.rep }] : [])) +
     `<dl class="kv"><dt data-tip="Dispersión de los jugadores en el mapa, ponderada por minutos (${fmt(ca.disp)}${cd ? ` → ${fmt(cd.disp)}` : ""}).">Variedad de perfiles en la plantilla</dt><dd>${variedad(ca.pdisp)} · p${fmt(ca.pdisp, 0)}${cd ? ` → ${variedad(cd.pdisp)} · p${fmt(cd.pdisp, 0)}` : ""}</dd></dl><p class="note">«Muy variada» (p80 o más) = un poco de todo; «muy homogénea» = todos juegan parecido.</p>`;
   // tabla de encaje de cada fichaje
-  $("#sTabla").innerHTML = fich.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Su estilo</th><th style="text-align:right">Minutos</th><th style="text-align:right" data-tip="0-100: 100 = juega exactamente como el club; 50 = tan lejos como un jugador típico de su propio club">Cercanía</th><th style="text-align:right" data-tip="Probabilidad de que el modelo lo meta en el estilo del club">Comparte estilo</th><th style="text-align:right" data-tip="Coincidencia de su reparto entre los 6 estilos con el del club">Parecido</th><th style="text-align:right">Nivel</th><th>Encaje</th></tr></thead><tbody>` +
-    fich.map((o, n) => { const [cls, t] = veredicto(o, antes.e); return `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${chipE(o.e, o.pj[o.e])}</td><td class="n">${Math.round(o.m)}' <span class="muted">${mppTxt(o.m).replace(" por partido", "/p")}</span></td><td class="n" data-tip="Distancia al club en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})"><span class="par p${parBanda(100 - (o.pd ?? 50))[0]}">${Math.round(100 - (o.pd ?? 50))}</span></td><td class="n">${pct(o.afin)}</td><td class="n">${pct(o.simil)}</td><td class="n" data-tip="≈ puesto ${puesto(o.j.nivel)} de 100 entre los jugadores">${sg(o.j.nivel)}</td><td><span class="pill ${cls}">${t}</span></td></tr>`; }).join("") +
+  $("#sTabla").innerHTML = fich.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Su estilo</th><th style="text-align:right">Minutos</th><th style="text-align:right" data-tip="0-100: 100 = juega exactamente como el club; 50 = tan lejos como un jugador típico de su propio club">Cercanía</th><th style="text-align:right" data-tip="Probabilidad de que el modelo lo meta en el estilo del club">Comparte estilo</th><th style="text-align:right" data-tip="Coincidencia de su reparto entre los 6 estilos con el del club">Parecido</th><th style="text-align:right" data-tip="Nivel de caja (0 = jugador medio)">Nivel</th><th style="text-align:right" data-tip="Impacto en pista del jugada a jugada traducido a la Euroliga (pts/100)">RAPM-EL</th><th>Encaje</th></tr></thead><tbody>` +
+    fich.map((o, n) => { const [cls, t] = veredicto(o, antes.e); return `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${chipE(o.e, o.pj[o.e])}</td><td class="n">${Math.round(o.m)}' <span class="muted">${mppTxt(o.m).replace(" por partido", "/p")}</span></td><td class="n" data-tip="Distancia al club en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})"><span class="par p${parBanda(100 - (o.pd ?? 50))[0]}">${Math.round(100 - (o.pd ?? 50))}</span></td><td class="n">${pct(o.afin)}</td><td class="n">${pct(o.simil)}</td><td class="n" data-tip="≈ puesto ${puesto(o.j.nivel)} de 100 entre los jugadores · L (vara Euroliga) ${sg(Lof(o.j))}">${sg(o.j.nivel)}</td><td class="n" data-tip="${rapmOk(o.j) ? `Ataque ${sg(o.j.orapm_el, 1)} · defensa ${sg(o.j.drapm_el, 1)} · percentil ${fmt(o.j.rapm_pct, 0)}` : "Sin jugada a jugada de su liga y temporada"}">${rapmOk(o.j) ? sg(o.j.rapm_el, 1) : "–"}</td><td><span class="pill ${cls}">${t}</span></td></tr>`; }).join("") +
     `</tbody></table><p class="note"><b>Encaja</b>: cerca del club y comparte su estilo. <b>Alejado</b>: muy lejos y de otro estilo; cambiará la identidad del equipo, que puede ser justo lo que buscas. <b>Parcial</b>: el resto. Cercanía 0-100 (100 = juega como el club, 50 = como un jugador típico respecto a su propio equipo).</p>` : `<p class="note">Añade fichajes para ver su encaje.</p>`;
   // perfil
   const P = [{ letra: "H", color: MUTED, label: `${d.nombre_club} hoy`, corto: `${d.nombre_club} hoy`, X: antes.X }].concat(despues ? [{ letra: "+", color: SIM, label: "Con los cambios", corto: "Con los cambios", X: despues.X }] : []).concat(fich.map((o, n) => ({ letra: String(n + 1), color: FICH_COL[n % FICH_COL.length], label: o.j.nombre, corto: o.j.nombre, X: o.X })));
   $("#sPerfil").innerHTML = svgPerfil(P);
+  const filasCQ = roster.filter((x) => !st.sim.bajas.includes(jKey(x))).map((x) => ({ j: x, w: x.min * f, tag: "sigue" })).concat(fich.map((o, n) => ({ j: o.j, w: o.m, tag: "fichaje", n: n + 1 })));
+  pintarCQ("s", filasCQ, st.sim, { temp: d.temporada, antes: roster.map((x) => ({ j: x, w: x.min, tag: "plantilla" })) });
   pintarSimMapa(s, filasDesp);
 }
 function pintarSimMapa(s, filasDesp) {
@@ -1241,10 +1419,10 @@ function pintarSimMapa(s, filasDesp) {
   if (st.sim.otros) { const cs = CL.filter((c) => c.liga === d.liga && c.temporada === d.temporada && c.clave !== d.clave);
     T.push({ type: "scatter3d", mode: "markers", x: cs.map((c) => c.x), y: cs.map((c) => c.y), z: cs.map((c) => c.z), hovertext: cs.map((c) => hovClub(c, "")), hoverinfo: "text", marker: { size: 4, color: cs.map((c) => COL[c.e]), opacity: 0.35, symbol: cs.map((c) => SYM[c.e]) }, showlegend: false }); }
   const sigue = roster.filter((x) => !st.sim.bajas.includes(jKey(x))), sale = roster.filter((x) => st.sim.bajas.includes(jKey(x)));
-  T.push({ type: "scatter3d", mode: "markers", x: sigue.map((x) => x.x), y: sigue.map((x) => x.y), z: sigue.map((x) => x.z), hovertext: sigue.map((x) => `${esc(x.nombre)} (sigue)<br>${esc(eNom(x.e))} · ${Math.round(x.min)}' → ${Math.round(x.min * f)}'`), hoverinfo: "text", marker: { size: sigue.map((x) => 3 + Math.sqrt(x.min * f) / 7), color: sigue.map((x) => COL[x.e]), symbol: "circle-open", line: { width: 2 } }, showlegend: false });
-  if (sale.length) T.push({ type: "scatter3d", mode: "markers+text", x: sale.map((x) => x.x), y: sale.map((x) => x.y), z: sale.map((x) => x.z), text: sale.map((x) => x.nombre.split(",")[0]), textposition: "bottom center", textfont: { size: 10, color: MUTED }, hovertext: sale.map((x) => `${esc(x.nombre)} (baja)<br>${esc(eNom(x.e))} · ${Math.round(x.min)}'`), hoverinfo: "text", marker: { size: 6, color: MUTED, symbol: "x" }, showlegend: false });
+  T.push({ type: "scatter3d", mode: "markers", x: sigue.map((x) => x.x), y: sigue.map((x) => x.y), z: sigue.map((x) => x.z), hovertext: sigue.map((x) => hovJug(x, `<br><i>Sigue: ${Math.round(x.min)}' → ${Math.round(x.min * f)}'</i>`)), hoverinfo: "text", marker: { size: sigue.map((x) => 3 + Math.sqrt(x.min * f) / 7), color: sigue.map((x) => COL[x.e]), symbol: "circle-open", line: { width: 2 } }, showlegend: false });
+  if (sale.length) T.push({ type: "scatter3d", mode: "markers+text", x: sale.map((x) => x.x), y: sale.map((x) => x.y), z: sale.map((x) => x.z), text: sale.map((x) => x.nombre.split(",")[0]), textposition: "bottom center", textfont: { size: 10, color: MUTED }, hovertext: sale.map((x) => hovJug(x, "<br><i>Baja</i>")), hoverinfo: "text", marker: { size: 6, color: MUTED, symbol: "x" }, showlegend: false });
   if (fich.length) T.push({ type: "scatter3d", mode: "markers+text", x: fich.map((o) => o.xyz[0]), y: fich.map((o) => o.xyz[1]), z: fich.map((o) => o.xyz[2]), text: fich.map((o, n) => `${n + 1}. ${o.j.nombre.split(",")[0]}`), textposition: "top center", textfont: { family: "Barlow", size: 11, color: INK },
-    hovertext: fich.map((o, n) => `<b>${n + 1}. ${esc(o.j.nombre)}</b> (fichaje)<br>${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}<br>${esc(eNom(o.e))} · ${Math.round(o.m)}'`), hoverinfo: "text", marker: { size: 9, color: fich.map((o) => COL[o.e]), symbol: "diamond", line: { color: INK, width: 2 } }, showlegend: false });
+    hovertext: fich.map((o, n) => hovJug(o.j, `<br><i>Fichaje n.º ${n + 1}: ${Math.round(o.m)}' con el club</i>`)), hoverinfo: "text", marker: { size: 9, color: fich.map((o) => COL[o.e]), symbol: "diamond", line: { color: INK, width: 2 } }, showlegend: false });
   fich.forEach((o) => T.push({ type: "scatter3d", mode: "lines", x: [o.xyz[0], antes.xyz[0]], y: [o.xyz[1], antes.xyz[1]], z: [o.xyz[2], antes.xyz[2]], hoverinfo: "skip", line: { color: MUTED, width: 2, dash: "dot" }, showlegend: false }));
   const pts = [[antes.xyz, `${d.nombre_club} hoy`, "square", INK]].concat(despues ? [[despues.xyz, "Con los cambios", "diamond", SIM]] : []);
   T.push({ type: "scatter3d", mode: "markers+text", x: pts.map((p) => p[0][0]), y: pts.map((p) => p[0][1]), z: pts.map((p) => p[0][2]), text: pts.map((p) => p[1]), textposition: "bottom center", textfont: { family: "Barlow", size: 12, color: INK }, hoverinfo: "text", hovertext: pts.map((p) => p[1]), marker: { size: 11, symbol: pts.map((p) => p[2]), color: pts.map((p) => p[3]), line: { color: SURF, width: 2 } }, showlegend: false });
@@ -1276,7 +1454,7 @@ function barras(s) {
   const W = 320, rh = 14, H = META.rasgos.length * rh + 6, x0 = 104, w2 = (W - x0 - 8) / 2, mid = x0 + w2, lim = 2;
   let g = `<line x1="${mid}" x2="${mid}" y1="2" y2="${H - 2}" stroke="${LINE}"/>`;
   META.rasgos.forEach((r, i) => { const v = Math.max(-lim, Math.min(lim, s.perfil[i] || 0)), y = 3 + i * rh, w = Math.abs(v) / lim * w2;
-    g += `<text x="${x0 - 6}" y="${y + 10}" text-anchor="end" font-size="10" font-family="Barlow, system-ui, sans-serif" fill="${MUTED}">${esc(llano(r.corto))}</text><rect x="${v < 0 ? mid - w : mid}" y="${y + 2}" width="${Math.max(1, w)}" height="${rh - 4}" rx="2" fill="${Math.abs(v) >= 0.5 ? (DK ? "#d6b373" : "#9a7130") : (DK ? "#3a4659" : "#d6cec0")}" data-tip="${esc(r.nombre)}: ${sg(s.perfil[i])} σ"/>`; });
+    g += `<text x="${x0 - 6}" y="${y + 10}" text-anchor="end" font-size="10" font-family="Barlow, system-ui, sans-serif" fill="${MUTED}">${esPbp(r) ? "▸ " : ""}${esc(llano(r.corto))}</text><rect x="${v < 0 ? mid - w : mid}" y="${y + 2}" width="${Math.max(1, w)}" height="${rh - 4}" rx="2" fill="${Math.abs(v) >= 0.5 ? (DK ? "#d6b373" : "#9a7130") : (DK ? "#3a4659" : "#d6cec0")}" data-tip="${esc(r.nombre)}: ${sg(s.perfil[i])} σ"/>`; });
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Perfil de ${esc(s.nombre)}">${g}</svg>`;
 }
 function pintarEstilos() {
@@ -1290,7 +1468,7 @@ function pintarHallazgos() {
     let g = `<line x1="${X(0)}" x2="${X(0)}" y1="4" y2="${H - 18}" stroke="${DK ? "#3a4659" : "#d6cec0"}"/><text x="${X(-lim)}" y="${H - 4}" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">−${lim}σ</text><text x="${X(lim)}" y="${H - 4}" text-anchor="end" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">+${lim}σ</text>`;
     por.forEach((r, i) => { const k = META.estilos.findIndex((s) => s.id === r.estilo), y = 8 + i * rh;
       g += `<text x="${x0 - 6}" y="${y + 9}" text-anchor="end" font-size="11" font-family="Barlow, system-ui, sans-serif" fill="${INK}">${esc(eNom(k))}</text><line x1="${X(r.resid - r.ic95)}" x2="${X(r.resid + r.ic95)}" y1="${y + 5}" y2="${y + 5}" stroke="${COL[k]}" stroke-width="2"/><circle cx="${X(r.resid)}" cy="${y + 5}" r="5" fill="${COL[k]}" stroke="${SURF}" stroke-width="2" data-tip="${esc(eNom(k))}: ${sg(r.resid, 3)} σ (±${fmt(r.ic95, 3)}), n = ${r.n}"/>`; });
-    out.push(`<div class="fact"><h3>¿Hay estilos ganadores a igual nivel?</h3><p>Net rating del equipo (z en su liga y temporada) que no explica el nivel, por estilo, con IC 95 %. ${x.p_estilo_dado_nivel < 0.05 ? `El estilo añade información (F = ${fmt(x.f_estilo_dado_nivel, 1)}, ${pv(x.p_estilo_dado_nivel)}, η² parcial ${pct(x.eta2_parcial_estilo, 1)}).` : `El estilo no añade información significativa (${pv(x.p_estilo_dado_nivel)}).`} El nivel sólo explica el ${pct(x.r2_nivel, 0)} del net rating. Parte de la asociación es mecánica: pérdidas, rebote y tiros libres son factores de eficiencia.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net rating residual por estilo">${g}</svg></div>`); }
+    out.push(`<div class="fact"><h3>¿Hay estilos ganadores a igual nivel?</h3><p>Net rating del equipo (z en su liga y temporada) que no explica el nivel, por estilo, con IC 95 %. ${x.p_estilo_dado_nivel < 0.05 ? `El estilo añade información (F = ${fmt(x.f_estilo_dado_nivel, 1)}, ${pv(x.p_estilo_dado_nivel)}, η² parcial ${pct(x.eta2_parcial_estilo, 1)}).` : `El estilo no añade información significativa (${pv(x.p_estilo_dado_nivel)}).`} El nivel sólo explica el ${pct(x.r2_nivel, 0)} del net rating. Parte de la asociación es mecánica: el triple de esquina, el tiro en el aro, las pérdidas y el rebote son factores de eficiencia.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net rating residual por estilo">${g}</svg></div>`); }
   if (A.encaje) { const x = A.encaje, t = x.por_tercil, a = x["d_nivel~distancia"], b = x["d_cuota~distancia"];
     out.push(`<div class="fact"><h3>¿Rinde mejor quien encaja en el estilo?</h3><p>${x.casos.toLocaleString("es-ES")} jugadores que cambiaron de club entre temporadas consecutivas (300+ minutos en ambas). Distancia entre su estilo y el del club al que llegan (antes de llegar) frente al cambio en su nivel normalizado y en su cuota de minutos, con controles de nivel inicial, edad, cambio de liga y nivel del club.</p>
       <div class="tablebox"><table><thead><tr><th>Encaje</th><th style="text-align:right">n</th><th style="text-align:right">Distancia</th><th style="text-align:right">Δ nivel</th><th style="text-align:right">Δ cuota de minutos</th></tr></thead><tbody>${t.map((r) => `<tr><td>${r.tercil}</td><td class="n">${r.n}</td><td class="n">${fmt(r.distancia)}</td><td class="n">${sg(r.d_nivel, 3)}</td><td class="n">${sg(r.d_cuota * 100, 1)} pp</td></tr>`).join("")}</tbody></table></div>
@@ -1301,7 +1479,7 @@ function pintarHallazgos() {
   if (A.barrido_k) { const x = A.barrido_k, W = 360, H = 150, L = 34, ks = x.k, Xk = (k) => L + (k - ks[0]) / (ks[ks.length - 1] - ks[0]) * (W - L - 10), mm = (a) => [Math.min(...a), Math.max(...a)];
     const linea = (arr, color, dash) => { const [lo, hi] = mm(arr); return `<polyline fill="none" stroke="${color}" stroke-width="2" ${dash ? 'stroke-dasharray="4 3"' : ""} points="${arr.map((v, i) => `${Xk(ks[i])},${10 + (1 - (v - lo) / Math.max(1e-9, hi - lo)) * (H - 40)}`).join(" ")}"/>`; };
     let g = `<line x1="${Xk(KE)}" x2="${Xk(KE)}" y1="6" y2="${H - 26}" stroke="${DK ? "#3a4659" : "#d6cec0"}" stroke-dasharray="3 3"/>` + ks.map((k) => `<text x="${Xk(k)}" y="${H - 10}" text-anchor="middle" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${k}</text>`).join("") + linea(x.estabilidad_kmedias, (DK ? "#d6b373" : "#9a7130")) + linea(x.bic_rasgos.map((v) => -v), "#3b7fe0", true);
-    out.push(`<div class="fact"><h3>¿Cuántos estilos hay?</h3><p>Barrido de K = 2 a 14 sobre los 13 rasgos sin nivel: BIC (azul, invertido: arriba = mejor) y estabilidad por submuestreo de k-medias (marrón). Óptimo BIC: ${x.k_optimo_bic_rasgos}; ICL: ${x.k_optimo_icl_rasgos}; estabilidad con K = 6: ${fmt(x.estabilidad_kmedias[ks.indexOf(6)], 2)}; con K = 8: ${fmt(x.estabilidad_kmedias[ks.indexOf(8)], 2)}. La línea discontinua vertical marca el modelo en uso.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Barrido de número de estilos">${g}</svg></div>`); }
+    out.push(`<div class="fact"><h3>¿Cuántos estilos hay?</h3><p>Barrido de K = ${ks[0]} a ${ks[ks.length - 1]} sobre los ${META.rasgos.length} rasgos sin nivel: BIC (azul, invertido: arriba = mejor) y estabilidad por submuestreo de k-medias (marrón). Óptimo BIC: ${x.k_optimo_bic_rasgos}; ICL (que penaliza los grupos solapados y es el criterio de elección): ${x.k_optimo_icl_rasgos}; estabilidad con K = 6: ${fmt(x.estabilidad_kmedias[ks.indexOf(6)], 2)}; con K = 8: ${fmt(x.estabilidad_kmedias[ks.indexOf(8)], 2)}. La línea discontinua vertical marca el modelo en uso.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Barrido de número de estilos">${g}</svg></div>`); }
   if (A.ligas) { const x = A.ligas, D = x.distancias, cerca = (l) => Object.entries(D[l] || {}).filter(([m]) => m !== l).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([m, d]) => `${LIGAS[m]} (${fmt(d)})`).join(", ");
     out.push(`<div class="fact"><h3>Ligas: cuánto se parecen</h3><p>Estilo × liga: χ² = ${fmt(x.chi2_liga, 0)}, V de Cramér = ${fmt(x.v_cramer_liga, 2)}, ${pv(x.p_liga)}. Estilo × temporada: V = ${fmt(x.v_cramer_temporada, 2)}${x.p_temporada < 0.05 ? ` (${pv(x.p_temporada)})` : ` (sin tendencia significativa, ${pv(x.p_temporada)})`}.</p><p>Más parecidas en estilo a la EuroLeague: ${cerca("euroleague")}. A la Liga Endesa: ${cerca("acb")}.</p></div>`); }
   $("#facts").innerHTML = out.join("");
@@ -1310,17 +1488,31 @@ const PASOS = {
   v1_vade: ["v1 · 12 estilos", "IDEC y VaDE en pie de igualdad, 5 semillas, sin tratar el nivel. La vara EuroLeague arrastraba la calidad de cada liga: estilos «de liga» y nivel muy ligado al estilo."],
   v2_vade: ["v2 · 8 estilos", "Nivel neutralizado antes de entrenar, VaDE con covarianza completa, consenso de 5 semillas y ajuste fino. Estilos ya independientes del nivel, pero el BIC y la estabilidad pedían menos."],
   v3_vade: ["v3 · 6 estilos", "Mismo procedimiento con 6 neuronas de salida: mejor en estabilidad y separación que el de 8. La IDEC queda como contraste."],
-  final: ["Final · 6 estilos, sólo VaDE", "Se retira la IDEC y el consenso pasa de 5 a 10 semillas: la partición de la v3 no se sostenía frente a redes nuevas y la final es la más representativa de las diez. Es el modelo de este Atlas."],
+  v4_vade: ["v4 · 6 estilos, sólo VaDE", "Se retira la IDEC y el consenso pasa de 5 a 10 semillas. Con 13 rasgos de la estadística de caja: fue el modelo publicado hasta esta versión."],
+  final: ["Final · 6 estilos con jugada a jugada", "Se añaden los rasgos del jugada a jugada (tiros en el aro, media distancia, triples de esquina y canastas asistidas), también normalizados a la Euroliga y sin nivel. El ICL vuelve a elegir 6 estilos, pero son otros (ARI ≈ 0,14 con los de la v4): dónde se tira y cuánto se juega de pase separan mejor los estilos. Es el modelo de este Atlas."],
 };
 function pintarModelo() {
-  const H = META.historial || [], ev = META.evaluacion;
-  $("#pasos").innerHTML = ["v1_vade", "v2_vade", "v3_vade", "final"].map((id) => { const h = H.find((x) => x.id === id), [t, txt] = PASOS[id];
-    return `<li class="${id === "final" ? "fin" : ""}"><b>${t}</b><span>${txt}</span>${h ? `<span class="note">η² nivel ${fmt(h.eta2_nivel, 3)} · seguridad ${fmt(h.salida_max_media, 2)} · ARI semillas ${fmt(h.ari_semillas_medio, 2)}</span>` : ""}</li>`; }).join("");
+  const H = META.historial || [], ev = META.evaluacion, hp = ev.hiperparametros || {}, ids = ["v1_vade", "v2_vade", "v3_vade", "v4_vade", "final"].filter((id) => H.some((x) => x.id === id) || id === "final");
+  const v4 = H.find((x) => x.id === "v4_vade"), fin = H.find((x) => x.id === "final");
+  const dif = v4 && fin ? `Frente a la v4: mapa ${fmt(v4.estabilidad_mapa, 3)} → ${fmt(fin.estabilidad_mapa, 3)}, replicabilidad ${fmt(v4.replicabilidad, 2)} → ${fmt(fin.replicabilidad, 2)}, Mahalanobis mín. ${fmt(v4.mahalanobis_min, 2)} → ${fmt(fin.mahalanobis_min, 2)}, ARI temporal ${fmt(v4.ari_temporal_reserva, 2)} → ${fmt(fin.ari_temporal_reserva, 2)}, seguridad ${fmt(v4.salida_max_media, 2)} → ${fmt(fin.salida_max_media, 2)}, η² nivel ${fmt(v4.eta2_nivel, 3)} → ${fmt(fin.eta2_nivel, 3)}.` : "";
+  $("#pasos").innerHTML = ids.map((id) => { const h = H.find((x) => x.id === id), [t, txt] = PASOS[id];
+    return `<li class="${id === "final" ? "fin" : ""}"><b>${t}</b><span>${txt}</span>${id === "final" && dif ? `<span class="note">${dif}</span>` : ""}${h ? `<span class="note">η² nivel ${fmt(h.eta2_nivel, 3)} · seguridad ${fmt(h.salida_max_media, 2)} · ARI semillas ${fmt(h.ari_semillas_medio, 2)}</span>` : ""}</li>`; }).join("");
+  $("#moSub").textContent = `${ids.length} iteraciones de la VaDE (con la IDEC como contraste en las primeras) sobre los mismos ${(ev.clubes || 0).toLocaleString("es-ES")} clubes de 2020-21 a 2025-26. Fila resaltada = modelo en uso.`;
+  const n = META.rasgos.length, pb = META.rasgos.filter(esPbp), oc = hp.ocultas || [64, 32], gN = META.grado_neutralizacion || 2;
+  $("#spEnt").innerHTML = `${n} rasgos de estilo por club (media por minutos de sus jugadores, vara EuroLeague A+B): ${n - pb.length} de la estadística de caja y ${pb.length} del jugada a jugada (${pb.map((r) => esc(r.nombre.toLowerCase())).join("; ")}). Transformados (raíz, logaritmo o arcoseno de la raíz en los porcentajes), estandarizados y sin la parte explicada por el nivel (<code>x − [${rango(gN + 1).map((g) => g === 0 ? "1" : g === 1 ? "L" : "L" + "²³⁴"[g - 2]).join(", ")}]·B</code>).`;
+  $("#spCod").innerHTML = `<code>${n} → ${oc.join(" → ")} → (μ, log σ²) ∈ ℝ³</code>, GELU. μ es el punto del club en el mapa.`;
+  $("#spSal").innerHTML = `${KE} neuronas: probabilidad a posteriori de ${KE} gaussianas de covarianza ${esc(hp.covarianza || "completa")} en el mapa.`;
+  $("#spDec").innerHTML = `<code>3 → ${oc.slice().reverse().join(" → ")} → ${n}</code>, varianza común a los ${n} rasgos.`;
+  $("#spPer").innerHTML = `−ELBO de VaDE + ${fmt(hp.lambda_estres ?? n, 0)} · estrés de MDS (distancia del mapa = distancia del perfil).`;
+  $("#spTre").innerHTML = `${(ev.semillas || []).length || 10} semillas · ${hp.bootstrap_por_club ?? 24} plantillas remuestreadas por club${hp.peso_jugadores ? ` · jugadores con peso ${fmt(hp.peso_jugadores, 1)}` : ""} · consenso por co-asociación · ajuste fino desde el consenso (${hp.epocas_afinado ?? 40} épocas) con la mezcla fijada.`;
+  const I = META.interacciones, C = META.contexto;
+  $("#spQui").innerHTML = I ? `Efectos X → Y de ${I.n_parejas.toLocaleString("es-ES")} parejas dirigidas (Y con X en pista frente a Y sin X, jugada a jugada) sobre <code>p_X ⊗ p_Y</code> y el nivel de los dos; sinergia de ${I.sinergia.n_parejas.toLocaleString("es-ES")} parejas frente al RAPM. Mínimos cuadrados ponderados con ridge; errores por remuestreo de equipos (bbmodel/interacciones.py).` : "–";
+  $("#spCtx").innerHTML = C ? `β de ${C.metricas.length} métricas con efecto fijo de persona sobre el nivel de los compañeros de plantilla; proyección <code>x′ = T⁻¹(T(x) + τ·β·Δ)</code> (bbmodel/contexto.py).` : "–";
   const cols_ = [["Estilos", "k", 0], ["Seguridad", "salida_max_media", 2], ["η² nivel", "eta2_nivel", 3], ["NMI liga", "nmi_estilo_liga", 3], ["ARI semillas", "ari_semillas_medio", 2], ["Centralidad", "ari_final_semillas_medio", 2],
     ["Mapa (r)", "estabilidad_mapa", 3], ["Temporal (ARI)", "ari_temporal_reserva", 2], ["Robustez", "robustez_reparto_minutos", 2], ["Silueta", "silueta_rasgos", 3], ["Mahalanobis mín.", "mahalanobis_min", 2], ["Parejas distintas", "parejas", null], ["Replicabilidad", "replicabilidad", 2]];
   $("#tModelo").innerHTML = `<thead><tr><th>Iteración</th>${cols_.map(([n]) => `<th style="text-align:right">${n}</th>`).join("")}</tr></thead><tbody>` +
     H.map((h) => `<tr class="${h.id === "final" ? "fin" : ""}"><td>${esc(h.etiqueta)}</td>${cols_.map(([, f, d]) => `<td class="n">${d == null ? esc(h[f]) : fmt(h[f], d)}</td>`).join("")}</tr>`).join("") + `</tbody>`;
-  $("#mLeer").innerHTML = `<span class="label">Cómo leer la tabla</span><dl class="kv"><dt>Seguridad</dt><dd>salida media de la neurona ganadora</dd><dt>η² nivel · NMI liga</dt><dd>menos = estilo independiente del nivel y de la liga</dd><dt>ARI semillas · Centralidad</dt><dd>acuerdo entre redes entrenadas con semillas distintas</dd><dt>Temporal</dt><dd>red sin 2024-26 frente a la completa</dd><dt>Robustez</dt><dd>estilo conservado al perturbar los minutos</dd><dt>Replicabilidad</dt><dd>perfiles 2020-23 frente a 2023-26</dd></dl><p class="note">Referencia sin red (k-medias directo sobre los rasgos, k = ${KE}): silueta ${fmt(META.referencia_kmedias?.silueta_rasgos, 3)}. El modelo final cede algo de separación a cambio de estabilidad y seguridad.</p>`;
+  $("#mLeer").innerHTML = `<span class="label">Cómo leer la tabla</span><dl class="kv"><dt>Seguridad</dt><dd>salida media de la neurona ganadora</dd><dt>η² nivel · NMI liga</dt><dd>menos = estilo independiente del nivel y de la liga</dd><dt>ARI semillas · Centralidad</dt><dd>acuerdo entre redes entrenadas con semillas distintas</dd><dt>Temporal</dt><dd>red sin 2024-26 frente a la completa</dd><dt>Robustez</dt><dd>estilo conservado al perturbar los minutos</dd><dt>Replicabilidad</dt><dd>perfiles 2020-23 frente a 2023-26</dd></dl><p class="note">Referencia sin red (k-medias directo sobre los rasgos, k = ${KE}): silueta ${fmt(META.referencia_kmedias?.silueta_rasgos, 3)} frente a ${fmt(ev.silueta_rasgos, 3)} del modelo final. ${(META.referencia_kmedias?.silueta_rasgos ?? 0) > ev.silueta_rasgos ? "El modelo final cede algo de separación a cambio de estabilidad, seguridad y un mapa continuo." : "El modelo final separa tanto o más que el k-medias directo y además es estable."}</p>`;
 }
 
 // ---------------------------------------------------------------- buscar parecidos
@@ -1337,7 +1529,8 @@ function construirBuscador() {
   $("#bLigas").innerHTML = Object.entries(LIGAS).map(([k]) => `<button class="chip" data-l="${k}" aria-pressed="${b.ligas.includes(k)}">${LC[k]}</button>`).join("");
   $("#bPos").innerHTML = Object.entries(POS).map(([k, v]) => `<button class="chip" data-p="${k}" aria-pressed="${b.pos.includes(k)}">${v}</button>`).join("");
   $("#bN").value = b.n; $("#bNv").textContent = b.n; $("#bMin").value = b.min; $("#bEdad").value = b.edad; $("#bNiv").value = b.niv; $("#bPeso").value = b.peso; $("#bPesov").textContent = fmt(b.peso, 2); $("#bMapa").checked = b.mapa;
-  $("#bModo").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.v === b.modo)); $("#bRefBox").hidden = b.modo !== "jugador";
+  $("#bModo").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.v === b.modo)); $("#bRefBox").hidden = b.modo !== "jugador"; $("#bQuiNota").hidden = b.modo !== "quimica";
+  $("#bPesoA").textContent = b.modo === "quimica" ? "Primar química (0,3)" : "Primar adaptación (0,3)"; $("#bPesoB").textContent = b.modo === "quimica" ? "Química + impacto (1)" : "Perfil concreto (1)";
   $("#bAlc").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.v === b.alc)); $("#bN").disabled = b.alc !== "cerca";
   llenarRef();
   if (!enlazarBuscador.hecho) enlazarBuscador();
@@ -1363,7 +1556,7 @@ function enlazarBuscador() {
   $("#bClubSel").onchange = (e) => { b().club = e.target.value; b().ref = null; llenarRef(); go(); };
   const tog = (id, key, data, conv = (x) => x) => $(id).onclick = (e) => { const t = e.target.closest(`[data-${data}]`); if (!t) return; const v = conv(t.dataset[data]), a = b()[key], i = a.indexOf(v); i >= 0 ? a.splice(i, 1) : a.push(v); t.setAttribute("aria-pressed", a.includes(v)); go(); };
   tog("#bTemps", "temps", "t"); tog("#bLigas", "ligas", "l"); tog("#bPos", "pos", "p");
-  $("#bModo").onclick = (e) => { const t = e.target.closest("[data-v]"); if (!t) return; b().modo = t.dataset.v; if (b().modo === "club") b().pos = ["E", "A", "I"]; construirBuscador(); go(); };
+  $("#bModo").onclick = (e) => { const t = e.target.closest("[data-v]"); if (!t) return; b().modo = t.dataset.v; if (b().modo !== "jugador") b().pos = ["E", "A", "I"]; construirBuscador(); go(); };
   $("#bAlc").onclick = (e) => { const t = e.target.closest("[data-v]"); if (!t) return; b().alc = t.dataset.v; construirBuscador(); go(); };
   $("#bRef").onchange = (e) => { b().ref = +e.target.value; const j = JG[b().ref]; if (j && j.pos3) b().pos = [j.pos3]; construirBuscador(); go(); };
   $("#bRefQ").oninput = () => { const q = norm($("#bRefQ").value).trim().split(/\s+/).filter(Boolean), box = $("#bRefS"); if (!q.length) { box.hidden = true; return; }
@@ -1382,6 +1575,32 @@ function enlazarBuscador() {
     if (st.sim.club !== st.bus.club || st.sim.temp !== st.bus.temp) { st.sim.liga = st.bus.liga; st.sim.temp = st.bus.temp; st.sim.club = st.bus.club; st.sim.bajas = []; st.sim.fich = []; st.sim.ejemplo = false; construirSimulador(); }
     addFichaje(j); t.textContent = "En el escenario"; t.disabled = true; };
 }
+// «Encajan con mi plantilla»: química prevista con el núcleo del club (5 con más minutos) + impacto individual
+function buscarQuimica(c, propio, cerca) {
+  const b = st.bus;
+  if (!hayQ()) { $("#bRes").innerHTML = `<p class="note">Sin datos de química en esta versión.</p>`; BUSQ = []; return; }
+  const nucleo = (ROSTER.get(c.clave) || []).slice().sort((x, y) => y.min - x.min).slice(0, 5), ref = synRef();
+  if (nucleo.length < 2) { $("#bRes").innerHTML = `<p class="note">El club no tiene suficientes jugadores con minutos.</p>`; BUSQ = []; return; }
+  xJugadores();
+  const pn = nucleo.map((k) => ({ k, p: pJ(k), L: Lof(k) })), edad = b.edad === "" ? null : +b.edad, niv = b.niv === "" ? null : +b.niv, vistos = new Map();
+  JG.forEach((j) => {
+    if (!b.temps.includes(j.temporada) || !b.ligas.includes(j.liga) || !b.pos.includes(j.pos3) || j.min < b.min) return;
+    if (edad != null && !(j.edad != null && j.edad <= edad)) return;
+    if (niv != null && !(j.nivel >= niv)) return;
+    const cj = BY.get(j.clave); if (!cj || propio.has(cj.clave_club)) return;
+    if (cerca && !cerca.has(j.clave)) return;
+    const p = pJ(j), L = Lof(j); let Q = 0, est = 0, nv = 0; const pares = pn.map((o) => { const r = sinergia(p, L, o.p, o.L), v = r.total - ref; Q += v; est += r.estilo; nv += r.nivel + r.dif; return { o, v, r }; });
+    const R = rapmOk(j) ? j.rapm_el : 0, ap = R + 0.8 * Q, sc = b.peso * R + 0.8 * Q;
+    const prev = vistos.get(j.persona_id); if (!prev || prev.sc < sc) vistos.set(j.persona_id, { j, Q, est, nv, R, ap, sc, pares });
+  });
+  BUSQ = [...vistos.values()].sort((x, y) => y.sc - x.sc).slice(0, 25);
+  $("#bJugT").textContent = `Jugadores que encajan con el núcleo de ${c.nombre_club} (${nucleo.map((k) => ape(k.nombre)).join(", ")})${cerca ? ` en los ${b.n} clubes más parecidos` : ""}`;
+  const enEsc = new Set(st.sim.club === b.club && st.sim.temp === b.temp ? st.sim.fich.map((f) => f.k) : []);
+  const porque = (o) => { const pr = o.pares.slice().sort((x, y) => y.v - x.v), m = pr[0], w = pr[pr.length - 1], eJ = argmax(pJ(o.j)), e1 = argmax(m.o.p), e2 = argmax(w.o.p);
+    return `Su estilo («${esc(eNom(eJ))}» ${pct(pJ(o.j)[eJ])}) suma más con ${esc(ape(m.o.k.nombre))} («${esc(eNom(e1))}», ${sg(m.v, 2)}) y menos con ${esc(ape(w.o.k.nombre))} («${esc(eNom(e2))}», ${sg(w.v, 2)}).`; };
+  $("#bRes").innerHTML = BUSQ.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Club</th><th>Pos.</th><th style="text-align:right">Edad</th><th style="text-align:right">Min</th><th style="text-align:right" data-tip="Nivel L en la vara Euroliga (0 = jugador medio)">L</th><th style="text-align:right" data-tip="Impacto en pista traducido a la Euroliga (pts/100)">RAPM-EL</th><th>Estilo</th><th style="text-align:right" data-tip="Suma de la química prevista con los 5 del núcleo, frente a una pareja media de la Euroliga (pts/100)">Química con el núcleo</th><th style="text-align:right" data-tip="RAPM-EL + 4/5 de la química con el núcleo: lo que añadiría al entrar en el quinteto en lugar de uno de los cinco (sin contar al que sale)">Aporte previsto</th><th style="min-width:220px">Por qué</th><th></th></tr></thead><tbody>` +
+    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n">${sg(Lof(o.j))}</td><td class="n">${rapmOk(o.j) ? sg(o.j.rapm_el, 1) : `<span class="muted" data-tip="Sin jugada a jugada: cuenta como 0">–</span>`}</td><td>${chipE(argmax(pJ(o.j)), Math.max(...pJ(o.j)))}</td><td class="n" data-tip="Por estilo ${sg(o.est, 2)} · por nivel ${sg(o.nv, 2)} · menos 5 parejas medias de la Euroliga ${sg(-5 * synRef(), 2)}"><b class="${o.Q >= 0 ? "up" : "dn"}">${sg(o.Q, 2)}</b></td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:56px"><i style="width:${Math.max(0, Math.min(100, 50 + o.ap * 8))}%"></i></div>${sg(o.ap, 1)}</div></td><td class="note" style="white-space:normal">${porque(o)}</td><td>${enEsc.has(jKey(o.j)) ? `<span class="note">En el escenario</span>` : `<button class="btn ghost sm" data-sim="${o.j.i}">+ Simular</button>`} <button class="btn ghost sm" data-eq="${o.j.i}" data-tip="Añadir a «Simular equipo completo»">+ Equipo</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
+}
 function buscar() {
   const b = st.bus, c = refClub();
   if (!c) { $("#bClubes").innerHTML = `<p class="note">Elige un club de referencia.</p>`; $("#bRes").innerHTML = ""; BUSQ = []; return; }
@@ -1394,6 +1613,7 @@ function buscar() {
   const X = xJugadores(), cerca = b.alc === "cerca" ? new Set(cs.slice(0, b.n).map((o) => o.c.clave)) : null, parC = new Map(cs.map((o) => [o.c.clave, o.par]));
   const rj = b.modo === "jugador" && b.ref != null ? JG[b.ref] : null;
   if (b.modo === "jugador" && !rj) { $("#bRes").innerHTML = `<p class="note">Elige un jugador de referencia.</p>`; BUSQ = []; return; }
+  if (b.modo === "quimica") { buscarQuimica(c, propio, cerca); if (st.tab === "comparar") pintarMapa(); return; }
   const refX = rj ? X[rj.i] : c.X, q = rj ? META.similitud.jug_jug : META.similitud.jug_club;
   const edad = b.edad === "" ? null : +b.edad, niv = b.niv === "" ? null : +b.niv;
   const vistos = new Map();
@@ -1410,9 +1630,9 @@ function buscar() {
   BUSQ = [...vistos.values()].sort((a, z) => z.sc - a.sc).slice(0, 25);
   $("#bJugT").textContent = rj ? `Sustitutos de ${rj.nombre} (${POS[rj.pos3] || "s/d"}, ${rj.nombre_club})${cerca ? ` en los ${b.n} clubes más parecidos` : ""}` : `Jugadores que encajan con el estilo de ${c.nombre_club}${cerca ? ` (en los ${b.n} clubes más parecidos)` : ""}`;
   const enEsc = new Set(st.sim.club === b.club && st.sim.temp === b.temp ? st.sim.fich.map((f) => f.k) : []);
-  $("#bRes").innerHTML = BUSQ.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Club</th><th>Pos.</th><th style="text-align:right">Edad</th><th style="text-align:right">Min</th><th style="text-align:right">Nivel</th><th>Estilo</th><th style="text-align:right">Parecido jugador</th><th style="text-align:right">Parecido club</th><th style="text-align:right">Puntuación</th><th></th></tr></thead><tbody>` +
-    (rj ? `<tr class="ref"><td>ref.</td><td><b>${esc(rj.nombre)}</b></td><td class="note">${esc(rj.nombre_club)} · ${LC[rj.liga]} ${tC(rj.temporada)}</td><td>${rj.pos3 || "–"}</td><td class="n">${fmt(rj.edad, 0)}</td><td class="n">${Math.round(rj.min)}</td><td class="n">${sg(rj.nivel)}</td><td>${chipE(rj.e)}</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td></td></tr>` : "") +
-    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n" data-tip="≈ puesto ${puesto(o.j.nivel)} de 100 entre los jugadores">${sg(o.j.nivel)}</td><td>${chipE(o.j.e)}</td><td class="n">${fmt(o.pj, 1)}</td><td class="n">${fmt(o.pc, 1)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:56px"><i style="width:${o.sc}%"></i></div>${fmt(o.sc, 1)}</div></td><td>${enEsc.has(jKey(o.j)) ? `<span class="note">En el escenario</span>` : `<button class="btn ghost sm" data-sim="${o.j.i}">+ Simular</button>`} <button class="btn ghost sm" data-eq="${o.j.i}" data-tip="Añadir a «Simular equipo completo»">+ Equipo</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
+  $("#bRes").innerHTML = BUSQ.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Club</th><th>Pos.</th><th style="text-align:right">Edad</th><th style="text-align:right">Min</th><th style="text-align:right">Nivel</th><th style="text-align:right" data-tip="Impacto en pista traducido a la Euroliga (pts/100)">RAPM-EL</th><th>Estilo</th><th style="text-align:right">Parecido jugador</th><th style="text-align:right">Parecido club</th><th style="text-align:right">Puntuación</th><th></th></tr></thead><tbody>` +
+    (rj ? `<tr class="ref"><td>ref.</td><td><b>${esc(rj.nombre)}</b></td><td class="note">${esc(rj.nombre_club)} · ${LC[rj.liga]} ${tC(rj.temporada)}</td><td>${rj.pos3 || "–"}</td><td class="n">${fmt(rj.edad, 0)}</td><td class="n">${Math.round(rj.min)}</td><td class="n">${sg(rj.nivel)}</td><td class="n">${rapmOk(rj) ? sg(rj.rapm_el, 1) : "–"}</td><td>${chipE(rj.e)}</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td></td></tr>` : "") +
+    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n" data-tip="≈ puesto ${puesto(o.j.nivel)} de 100 entre los jugadores">${sg(o.j.nivel)}</td><td class="n">${rapmOk(o.j) ? sg(o.j.rapm_el, 1) : "–"}</td><td>${chipE(o.j.e)}</td><td class="n">${fmt(o.pj, 1)}</td><td class="n">${fmt(o.pc, 1)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:56px"><i style="width:${o.sc}%"></i></div>${fmt(o.sc, 1)}</div></td><td>${enEsc.has(jKey(o.j)) ? `<span class="note">En el escenario</span>` : `<button class="btn ghost sm" data-sim="${o.j.i}">+ Simular</button>`} <button class="btn ghost sm" data-eq="${o.j.i}" data-tip="Añadir a «Simular equipo completo»">+ Equipo</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
   if (st.tab === "comparar") pintarMapa();
 }
 
@@ -1452,6 +1672,7 @@ function acumular(filas) {
   return { S, W, SQ, WQ };
 }
 function equipoDe(filas) { const A = acumular(filas); if (!(A.W[1] > 0)) return null; const xs = xClub(A.S, A.W, A.SQ, A.WQ), r = red(xs.x); return { p: r.p, xyz: r.xyz, e: argmax(r.p), L: xs.L, X: xs.x, Q: medias(A.SQ, A.WQ, A.SQ.length) }; }
+function rapmEquipo(filas) { let s = 0, w = 0; filas.forEach((o) => { if (rapmOk(o.j) && o.w > 0) { s += o.w * o.j.rapm_el; w += o.w; } }); return w ? 5 * s / w : null; }
 const elClubs = () => { const t = ultCompleta(); return CL.filter((c) => c.liga === "euroleague" && c.temporada === t).sort((a, b) => b.nivel - a.nivel); };
 function eqEstado() {
   const d = eqRef();
@@ -1509,6 +1730,7 @@ function construirEquipo() {
   jg.addEventListener("input", (e) => { const n = e.target.dataset.rng; if (n == null) return; st.eq.jug[+n].m = +e.target.value; const c = $(`#eJug [data-min="${n}"]`); if (c) c.value = e.target.value; st.eq.ejemplo = false; guardar(); pintarEq(true); });
   $("#eTot").onclick = (e) => { if (!e.target.closest("#eAjustar")) return; const s = eqEstado(); if (!(s.M > 0)) return; s.jug.forEach((o) => { o.f.m = Math.round(o.m * s.k * 10) / 10; }); editar(); };
   $("#eBanner").addEventListener("click", (e) => { if (e.target.closest("#eQuitarEj")) { st.eq.jug = []; editar(); } });
+  $("#eRkModo").onclick = (e) => { const b = e.target.closest("[data-v]"); if (!b) return; st.eq.rk = b.dataset.v; guardar(); pintarEq(true); };
   $("#eGuardar").onclick = () => { const d = eqRef(), nombre = $("#eNombre").value.trim() || `${d ? d.nombre_club + " " + tC(d.temporada) : "Equipo"} · ${st.eq.jug.length} jugadores`;
     st.equipos = (st.equipos || []).filter((x) => x.nombre !== nombre); st.equipos.unshift({ nombre, eq: JSON.parse(JSON.stringify({ ...st.eq, ejemplo: false })) }); st.equipos = st.equipos.slice(0, 12); $("#eNombre").value = ""; guardar(); pintarEqGuardados(); };
   $("#eEsc").onclick = (e) => { const c = e.target.closest("[data-cargar]"), b = e.target.closest("[data-borrar]");
@@ -1519,6 +1741,14 @@ function pintarEqGuardados() {
   $("#eEsc").innerHTML = (st.equipos || []).map((x, i) => `<li><span title="${esc(x.nombre)}">${esc(x.nombre)}</span><button class="btn ghost sm" data-cargar="${i}">Cargar</button><button class="x" data-borrar="${i}" aria-label="Borrar ${esc(x.nombre)}">×</button></li>`).join("") || `<li style="grid-template-columns:1fr"><span class="note">Ninguno todavía.</span></li>`;
 }
 const EQ_COL = (n) => FICH_COL[n % FICH_COL.length];
+// cuánto cambia la plantilla real de Baskonia (Euroliga, última completa) sólo por usar sus brutos: se calcula, no se escribe a mano
+let BRUTO_EJ = null;
+function ejemploBrutosEL() {
+  if (BRUTO_EJ != null) return BRUTO_EJ; const c = elBaskonia(); if (!c || !BR) return ".";
+  const ro = ROSTER.get(c.clave) || [], fn = (m) => equipoDe(ro.map((j) => ({ ...valsJ(j, m), w: j.min }))), a = fn("n"), b = fn("b");
+  BRUTO_EJ = a && b ? `: solo con este cambio, la plantilla real de ${esc(c.nombre_club)} ${c.temporada} pasaría de «${esc(eNom(a.e))}» (nivel ${sg(a.L)}) a ${a.e === b.e ? "seguir en el mismo estilo" : `«${esc(eNom(b.e))}»`} (nivel ${sg(b.L)}).` : ".";
+  return BRUTO_EJ;
+}
 function pintarEqTot(s) {
   const M = s.M, cls = Math.abs(M - 200) < 0.5 ? "ok" : M > 200 ? "over" : "under";
   $("#eTot").className = "etot " + cls;
@@ -1550,7 +1780,7 @@ function pintarEq(soloRes = false) {
   const brutosFuera = jug.filter((o) => o.modo === "b" && o.j.liga !== "euroleague"), brutosEL = jug.filter((o) => o.modo === "b" && o.j.liga === "euroleague"), prov = jug.filter((o) => o.j.provisional);
   $("#eBanner").innerHTML = (st.eq.ejemplo && jug.length ? `<div class="banner"><span><b>Ejemplo:</b> siguen los 5 jugadores con más minutos de ${esc(d ? d.nombre_club : "")} ${d ? d.temporada : ""}. Añade fichajes, cambia minutos o marca a otros.</span><button class="btn ghost sm" id="eQuitarEj">Empezar vacío</button></div>` : "") +
     (brutosFuera.length ? `<div class="provis"><span><b>Valores brutos de otras ligas:</b> ${brutosFuera.map((o) => esc(o.j.nombre)).join(", ")} ${brutosFuera.length === 1 ? "cuenta" : "cuentan"} con lo que hizo en su liga, sin convertir a Euroliga. El estilo se lee como «cómo jugaba allí» y el nivel puede quedar inflado o desinflado.</span></div>` : "") +
-    (brutosEL.length ? `<div class="provis"><span><b>Valores brutos de la Euroliga:</b> ${brutosEL.map((o) => esc(o.j.nombre)).join(", ")} ${brutosEL.length === 1 ? "usa" : "usan"} sus cifras tal cual, sin estabilizar por muestra. Los clubes del mapa y del ranking están calculados con valores normalizados, así que la comparación deja de ser homogénea: solo con este cambio, la plantilla real de Baskonia 2025-26 pasaría de «Ritmo y juego limpio» (+0,40) a «Ataque al aro» (+0,15).</span></div>` : "") +
+    (brutosEL.length ? `<div class="provis"><span><b>Valores brutos de la Euroliga:</b> ${brutosEL.map((o) => esc(o.j.nombre)).join(", ")} ${brutosEL.length === 1 ? "usa" : "usan"} sus cifras tal cual, sin estabilizar por muestra. Los clubes del mapa y del ranking están calculados con valores normalizados, así que la comparación deja de ser homogénea${ejemploBrutosEL()}</span></div>` : "") +
     (prov.length ? `<div class="provis"><span><b>Temporada en curso:</b> ${prov.map((o) => esc(o.j.nombre)).join(", ")} ${prov.length === 1 ? "usa" : "usan"} datos de 2026-27 con poca muestra.</span></div>` : "");
   // resultado
   const caja = (tit, r, cls) => `<div class="state ${cls}"><span class="label">${tit}</span><b class="big">${glyph(r.e, 14)} ${esc(eNom(r.e))}</b><dl class="kv"><dt data-tip="Con qué seguridad asigna el modelo este estilo (salida de la red).">Claridad del estilo</dt><dd>${pct(r.p[r.e])} · ${claridad(r.p[r.e])}</dd><dt data-tip="Índice de nivel: 0 = club medio. Puesto aproximado en una clasificación de 100 clubes.">Nivel de la plantilla</dt><dd>${sg(r.L)} · ≈ puesto ${puesto(r.L)} de 100</dd></dl></div>`;
@@ -1575,29 +1805,40 @@ function pintarEq(soloRes = false) {
   $("#eMin").innerHTML = mi.length ? svgReparto(mi) + `<p class="note">P = club de partida · + = tu equipo. Cada barra reparte los minutos según el estilo propio de cada jugador.</p>` : "";
   pintarEqNivel(s, EL, tEL);
   pintarEqTabla(s);
+  const deP = new Set(ro.map(jKey));
+  pintarCQ("e", jug.map((o, n) => ({ j: o.j, w: o.w, tag: deP.has(jKey(o.j)) ? "de la plantilla" : "nuevo", n: n + 1 })), st.eq, { temp: d ? d.temporada : ultCompleta(), antes: ro.map((j) => ({ j, w: j.min })) });
   const P = (antes ? [{ letra: "P", color: MUTED, label: "Club de partida", corto: d ? `${d.nombre_club} ${tC(d.temporada)}` : "Club de partida", X: antes.X }] : []).concat(eq ? [{ letra: "+", color: SIM, label: "Tu equipo", corto: "Tu equipo", X: eq.X }] : []);
   $("#ePerfil").innerHTML = P.length ? svgPerfil(P) : "";
-  $("#eNota").innerHTML = `<b>Cómo se calcula:</b> el equipo es la media de los 13 rasgos de sus jugadores ponderada por minutos, igual que un club real; la red asigna el estilo y el nivel sale aparte de 8 métricas de rendimiento. Con los jugadores de un club y sus minutos reales se reproduce el estilo y el nivel de ese club. <b>Límite:</b> no modela química ni quintetos: dos jugadores que juntos rinden más (o menos) que por separado cuentan igual.`;
+  $("#eNota").innerHTML = `<b>Cómo se calcula:</b> el equipo es la media de los ${META.rasgos.length} rasgos de sus jugadores ponderada por minutos (${META.rasgos.filter(esPbp).length} de ellos del jugada a jugada), igual que un club real; la red asigna el estilo y el nivel sale aparte de 8 métricas de rendimiento. Con los jugadores de un club y sus minutos reales se reproduce el estilo y el nivel de ese club. <b>Química y quintetos:</b> el estilo y el nivel de esta sección no los incluyen; los efectos de pareja del jugada a jugada, el contexto de nivel y el quinteto previsto están en «Contexto, química y quinteto».`;
   pintarEqMapa(s);
 }
 function pintarEqNivel(s, EL, tEL) {
   const { d, jug, eq, antes } = s;
   $("#eRankT").textContent = `Ranking frente a la Euroliga ${tEL}`;
   if (!eq) { $("#eRank").innerHTML = $("#eAporte").innerHTML = $("#eDesg").innerHTML = `<p class="note">Añade jugadores.</p>`; return; }
-  // ranking: clubes de la Euroliga por nivel con tu equipo (y el club de partida) intercalados
-  const filas = EL.map((c) => ({ t: d && c.clave === d.clave ? "ref" : "el", nom: c.nombre_club, L: c.nivel, e: c.e }));
-  filas.push({ t: "eq", nom: "Tu equipo", L: eq.L, e: eq.e });
-  if (d && antes && !EL.some((c) => c.clave === d.clave)) filas.push({ t: "ref", nom: `${d.nombre_club} ${LC[d.liga]} ${tC(d.temporada)}`, L: antes.L, e: antes.e, fuera: true });
+  // ranking: clubes de la Euroliga por nivel de caja o por RAPM-EL, con tu equipo (y el club de partida) intercalados
+  const rkm = st.eq.rk === "rapm" ? "rapm" : "nivel", R = rkm === "rapm";
+  $("#eRkModo").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.v === rkm));
+  const ro0 = d ? (ROSTER.get(d.clave) || []) : [];
+  const vEL = (c) => R ? rapmEquipo((ROSTER.get(c.clave) || []).map((j) => ({ j, w: j.min }))) : c.nivel;
+  const vEq = R ? rapmEquipo(jug.map((o) => ({ j: o.j, w: o.w }))) : eq.L, vAn = antes ? (R ? rapmEquipo(ro0.map((j) => ({ j, w: j.min }))) : antes.L) : null;
+  const filas = EL.map((c) => ({ t: d && c.clave === d.clave ? "ref" : "el", nom: c.nombre_club, L: vEL(c), e: c.e })).filter((f) => f.L != null);
+  if (vEq != null) filas.push({ t: "eq", nom: "Tu equipo", L: vEq, e: eq.e });
+  if (d && antes && vAn != null && !EL.some((c) => c.clave === d.clave)) filas.push({ t: "ref", nom: `${d.nombre_club} ${LC[d.liga]} ${tC(d.temporada)}`, L: vAn, e: antes.e, fuera: true });
   filas.sort((a, b) => b.L - a.L);
-  const lo = Math.min(-0.5, ...filas.map((f) => f.L)) - 0.1, hi = Math.max(1, ...filas.map((f) => f.L)) + 0.1, W = 560, x0 = 190, x1 = W - 54, rh = 19, H = filas.length * rh + 26, X = (v) => x0 + (v - lo) / (hi - lo) * (x1 - x0);
+  const lo = Math.min(R ? -2 : -0.5, ...filas.map((f) => f.L)) - (R ? 0.4 : 0.1), hi = Math.max(R ? 2 : 1, ...filas.map((f) => f.L)) + (R ? 0.4 : 0.1), W = 560, x0 = 190, x1 = W - 54, rh = 19, H = filas.length * rh + 26, X = (v) => x0 + (v - lo) / (hi - lo) * (x1 - x0);
   let g = ""; let pos = 0;
-  [-1, -0.5, 0, 0.5, 1, 1.5].filter((v) => v >= lo && v <= hi).forEach((v) => g += `<line x1="${X(v)}" x2="${X(v)}" y1="14" y2="${H - 4}" stroke="${v === 0 ? (DK ? "#3a4659" : "#d6cec0") : LINE}"/><text x="${X(v)}" y="10" text-anchor="middle" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${v === 0 ? "club medio" : sg(v, 1)}</text>`);
+  const ticks = R ? rango(13).map((i) => -12 + 2 * i) : [-1, -0.5, 0, 0.5, 1, 1.5];
+  ticks.filter((v) => v >= lo && v <= hi).forEach((v) => g += `<line x1="${X(v)}" x2="${X(v)}" y1="14" y2="${H - 4}" stroke="${v === 0 ? (DK ? "#3a4659" : "#d6cec0") : LINE}"/><text x="${X(v)}" y="10" text-anchor="middle" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${v === 0 ? (R ? "medio" : "club medio") : sg(v, R ? 0 : 1)}</text>`);
   filas.forEach((f, i) => { const y = 18 + i * rh, col = f.t === "eq" ? SIM : f.t === "ref" ? INK : (DK ? "#5d6a80" : "#b9b2a5"); if (!f.fuera) pos++;
     const peso = f.t === "el" ? 400 : 700;
-    g += `<g data-tip="${esc(f.nom)} · nivel ${sg(f.L)} (≈ puesto ${puesto(f.L)} de 100)">${f.t !== "el" ? `<rect x="0" y="${y - 1}" width="${W}" height="${rh - 2}" rx="4" fill="${f.t === "eq" ? SIM : INK}" opacity="${DK ? 0.14 : 0.07}"/>` : ""}<text x="6" y="${y + 12}" font-size="11" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${f.fuera ? "–" : f.t === "eq" ? pos + "." : pos + "."}</text><text x="30" y="${y + 12}" font-size="12" font-weight="${peso}" font-family="Barlow, system-ui, sans-serif" fill="${INK}">${esc(f.nom.length > 26 ? f.nom.slice(0, 25) + "…" : f.nom)}</text>
-      <line x1="${X(Math.max(lo, Math.min(0, f.L)))}" x2="${X(Math.max(0, f.L))}" y1="${y + 8}" y2="${y + 8}" stroke="${col}" stroke-width="${f.t === "el" ? 3 : 5}" stroke-linecap="round" opacity="${f.t === "el" ? 0.8 : 1}"/><circle cx="${X(f.L)}" cy="${y + 8}" r="${f.t === "el" ? 3.5 : 5.5}" fill="${f.t === "el" ? COL[f.e] : col}" stroke="${SURF}" stroke-width="1.5"/><text x="${x1 + 8}" y="${y + 12}" font-size="11" font-family="Manrope, system-ui, sans-serif" fill="${f.t === "el" ? MUTED : INK}" font-weight="${peso}">${sg(f.L)}</text></g>`; });
-  const rkE = EL.filter((c) => c.nivel > eq.L).length + 1;
-  $("#eRank").innerHTML = `<div class="kpi3"><span><b>${rkE}.º</b> <span class="note">de ${EL.length + 1} en la Euroliga ${tEL}</span></span><span><b>${puesto(eq.L)}</b> <span class="note">≈ puesto de 100 entre todos los clubes</span></span></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Ranking de nivel frente a la Euroliga">${g}</svg><p class="note">En dorado, tu equipo; resaltado en oscuro, el club de partida${d && !EL.some((c) => c.clave === d.clave) ? " (no es de esta Euroliga: aparece como referencia, sin puesto)" : ""}. El color del punto de cada club es su estilo.</p>`;
+    g += `<g data-tip="${esc(f.nom)} · ${R ? `RAPM-EL de la rotación ${sg(f.L, 1)} pts/100 (5 × media por minutos)` : `nivel ${sg(f.L)} (≈ puesto ${puesto(f.L)} de 100)`}">${f.t !== "el" ? `<rect x="0" y="${y - 1}" width="${W}" height="${rh - 2}" rx="4" fill="${f.t === "eq" ? SIM : INK}" opacity="${DK ? 0.14 : 0.07}"/>` : ""}<text x="6" y="${y + 12}" font-size="11" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${f.fuera ? "–" : pos + "."}</text><text x="30" y="${y + 12}" font-size="12" font-weight="${peso}" font-family="Barlow, system-ui, sans-serif" fill="${INK}">${esc(f.nom.length > 26 ? f.nom.slice(0, 25) + "…" : f.nom)}</text>
+      <line x1="${X(Math.max(lo, Math.min(0, f.L)))}" x2="${X(Math.max(0, f.L))}" y1="${y + 8}" y2="${y + 8}" stroke="${col}" stroke-width="${f.t === "el" ? 3 : 5}" stroke-linecap="round" opacity="${f.t === "el" ? 0.8 : 1}"/><circle cx="${X(f.L)}" cy="${y + 8}" r="${f.t === "el" ? 3.5 : 5.5}" fill="${f.t === "el" ? COL[f.e] : col}" stroke="${SURF}" stroke-width="1.5"/><text x="${x1 + 8}" y="${y + 12}" font-size="11" font-family="Manrope, system-ui, sans-serif" fill="${f.t === "el" ? MUTED : INK}" font-weight="${peso}">${sg(f.L, R ? 1 : 2)}</text></g>`; });
+  const nEL = filas.filter((f) => f.t !== "eq" && !f.fuera).length, rkE = vEq != null ? filas.filter((f) => f.t !== "eq" && !f.fuera && f.L > vEq).length + 1 : null;
+  const sinR = R ? jug.filter((o) => !rapmOk(o.j)) : [];
+  $("#eRank").innerHTML = (R ? `<div class="kpi3"><span><b>${rkE ?? "–"}.º</b> <span class="note">de ${nEL + 1} en la Euroliga ${tEL} por RAPM-EL</span></span><span><b>${sg(vEq, 1)}</b> <span class="note">pts/100 esperados con quintetos medios de la rotación</span></span></div>` :
+    `<div class="kpi3"><span><b>${rkE}.º</b> <span class="note">de ${EL.length + 1} en la Euroliga ${tEL}</span></span><span><b>${puesto(eq.L)}</b> <span class="note">≈ puesto de 100 entre todos los clubes</span></span></div>`) +
+    `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Ranking frente a la Euroliga">${g}</svg><p class="note">En dorado, tu equipo; resaltado en oscuro, el club de partida${d && !EL.some((c) => c.clave === d.clave) ? " (no es de esta Euroliga: aparece como referencia, sin puesto)" : ""}. El color del punto de cada club es su estilo.${R ? ` <b>RAPM-EL</b>: 5 × la media del RAPM-EL de la plantilla ponderada por minutos, el Net que darían quintetos medios de la rotación sin contar la química.${sinR.length ? ` Sin RAPM (fuera del cálculo): ${esc(sinR.map((o) => ape(o.j.nombre)).join(", "))}.` : ""}` : ""}</p>`;
   // aporte de cada jugador
   const ap = jug.filter((o) => o.aporte != null).slice().sort((a, b) => b.aporte - a.aporte);
   if (!ap.length) $("#eAporte").innerHTML = `<p class="note">Hacen falta al menos dos jugadores.</p>`;
@@ -1621,9 +1862,9 @@ function pintarEqNivel(s, EL, tEL) {
 function pintarEqTabla(s) {
   const { jug, eq } = s;
   if (!jug.length) { $("#eJugT").innerHTML = `<p class="note">Añade jugadores.</p>`; return; }
-  $("#eJugT").innerHTML = `<table><thead><tr><th>#</th><th>Jugador</th><th>Valores</th><th style="text-align:right">Min/p</th><th style="text-align:right" data-tip="Parte de los minutos del equipo (una vez escalado a 200')">% min</th><th>Su estilo</th><th style="text-align:right" data-tip="Nivel individual (0 = jugador medio) con los valores elegidos">Nivel</th><th style="text-align:right" data-tip="Cambio del nivel del equipo si se quita">Aporte nivel</th><th data-tip="Cuánto se movería el estilo del equipo sin él (misma escala que «Cambio de estilo»)">Peso en el estilo</th><th style="text-align:right" data-tip="0-100: 100 = juega exactamente como el equipo; 50 = tan lejos como un jugador típico de su propio club">Cercanía</th></tr></thead><tbody>` +
+  $("#eJugT").innerHTML = `<table><thead><tr><th>#</th><th>Jugador</th><th>Valores</th><th style="text-align:right">Min/p</th><th style="text-align:right" data-tip="Parte de los minutos del equipo (una vez escalado a 200')">% min</th><th>Su estilo</th><th style="text-align:right" data-tip="Nivel individual (0 = jugador medio) con los valores elegidos">Nivel</th><th style="text-align:right" data-tip="Impacto en pista del jugada a jugada traducido a la Euroliga (pts/100); no cambia con brutos/normalizados">RAPM-EL</th><th style="text-align:right" data-tip="Cambio del nivel del equipo si se quita">Aporte nivel</th><th data-tip="Cuánto se movería el estilo del equipo sin él (misma escala que «Cambio de estilo»)">Peso en el estilo</th><th style="text-align:right" data-tip="0-100: 100 = juega exactamente como el equipo; 50 = tan lejos como un jugador típico de su propio club">Cercanía</th></tr></thead><tbody>` +
     jug.map((o, n) => { const bk = o.pm != null ? banda(o.pm) : null;
-      return `<tr><td class="n"><span class="badge" style="background:${EQ_COL(n)};width:18px;height:18px;font-size:10px">${n + 1}</span></td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${o.modo === "b" ? "Brutos" : "Norm. EL"}</td><td class="n">${fmt(o.m, 1)}'</td><td class="n">${fmt(o.w / 2, 0)} %</td><td>${chipE(o.pos.e, o.pos.p[o.pos.e])}</td><td class="n" data-tip="≈ puesto ${puesto(o.niv)} de 100 entre los jugadores">${sg(o.niv)}</td><td class="n">${o.aporte != null ? `<span class="${o.aporte >= 0 ? "good" : "bad"}">${sg(o.aporte)}</span>` : "–"}</td><td>${bk != null ? `<span data-tip="Sin él, el equipo se movería ${fmt(o.mueve)} en el mapa (percentil ${fmt(o.pm, 0)})">${CAMBIO[bk][0]}</span>` : "–"}</td><td class="n" data-tip="Distancia al equipo en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})">${o.pd != null ? `<span class="par p${parBanda(100 - o.pd)[0]}">${Math.round(100 - o.pd)}</span>` : "–"}</td></tr>`; }).join("") +
+      return `<tr><td class="n"><span class="badge" style="background:${EQ_COL(n)};width:18px;height:18px;font-size:10px">${n + 1}</span></td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${o.modo === "b" ? "Brutos" : "Norm. EL"}</td><td class="n">${fmt(o.m, 1)}'</td><td class="n">${fmt(o.w / 2, 0)} %</td><td>${chipE(o.pos.e, o.pos.p[o.pos.e])}</td><td class="n" data-tip="≈ puesto ${puesto(o.niv)} de 100 entre los jugadores · L (vara Euroliga) ${sg(Lof(o.j))}">${sg(o.niv)}</td><td class="n" data-tip="${rapmOk(o.j) ? `Ataque ${sg(o.j.orapm_el, 1)} · defensa ${sg(o.j.drapm_el, 1)} · percentil ${fmt(o.j.rapm_pct, 0)}` : "Sin jugada a jugada de su liga y temporada"}">${rapmOk(o.j) ? sg(o.j.rapm_el, 1) : "–"}</td><td class="n">${o.aporte != null ? `<span class="${o.aporte >= 0 ? "good" : "bad"}">${sg(o.aporte)}</span>` : "–"}</td><td>${bk != null ? `<span data-tip="Sin él, el equipo se movería ${fmt(o.mueve)} en el mapa (percentil ${fmt(o.pm, 0)})">${CAMBIO[bk][0]}</span>` : "–"}</td><td class="n" data-tip="Distancia al equipo en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})">${o.pd != null ? `<span class="par p${parBanda(100 - o.pd)[0]}">${Math.round(100 - o.pd)}</span>` : "–"}</td></tr>`; }).join("") +
     `</tbody></table><p class="note"><b>Peso en el estilo</b>: Ligero = sin él el equipo jugaría casi igual; Fuerte o Radical = es quien define el estilo. <b>Cercanía</b> alta = juega como el equipo; baja = aporta algo distinto.</p>`;
 }
 const EM_ENTS = () => st.em.ents.map(entidad).filter(Boolean);
@@ -1694,7 +1935,7 @@ function pintarEqMapa(s) {
       T.push({ type: "scatter3d", mode: S.etiq === "todas" ? "markers+text" : "markers", x: arr.map((c) => c.x), y: arr.map((c) => c.y), z: arr.map((c) => c.z), text: arr.map((c) => c.nombre_club), hovertext: arr.map(hov), hoverinfo: "text", customdata: arr.map((c) => c.clave),
         textfont: { size: 9, color: MUTED }, marker: { size: arr.map(sz), color: arr.map(colorEM), symbol: S.formas ? SYM[k] : "circle", opacity: S.aOp, line: { color: SURF, width: 0.5 } }, showlegend: false }); } }
   if (S.capas.jug) { const js = JG.filter((x) => S.temps.includes(x.temporada) && S.ligas.includes(x.liga) && S.estilos.includes(x.e) && S.pos.includes(x.pos3) && x.min >= S.minJ);
-    T.push({ type: "scatter3d", mode: "markers", x: js.map((x) => x.x), y: js.map((x) => x.y), z: js.map((x) => x.z), hovertext: js.map((x) => `${esc(x.nombre)}<br>${esc(x.nombre_club)} · ${LC[x.liga]} ${tC(x.temporada)}<br>${esc(eNom(x.e))} · ${Math.round(x.min)}'`), hoverinfo: "text",
+    T.push({ type: "scatter3d", mode: "markers", x: js.map((x) => x.x), y: js.map((x) => x.y), z: js.map((x) => x.z), hovertext: js.map((x) => hovJug(x)), hoverinfo: "text",
       marker: { size: 2.4, color: js.map((x) => S.color === "estilo" ? COL[x.e] : colorEM(x) || MUTED), opacity: 0.4 }, showlegend: false }); }
   if (S.capas.elip) META.estilos.forEach((e, k) => { if (S.estilos.includes(k)) T.push(elipsoide(e, k)); });
   if (S.capas.centros) T.push(trazaCentros(true, S.estilos));
@@ -1706,7 +1947,7 @@ function pintarEqMapa(s) {
   if (ents.length) T.push({ type: "scatter3d", mode: S.etiq === "no" ? "markers" : "markers+text", x: ents.map((x) => x.xyz[0]), y: ents.map((x) => x.xyz[1]), z: ents.map((x) => x.xyz[2]), text: ents.map((x) => `${ENT_LET[x.i]} · ${x.corto}`), textposition: "top center", textfont: { family: "Barlow", size: 12, color: INK },
     hovertext: ents.map((x) => `<b>${ENT_LET[x.i]} · ${esc(x.label)}</b><br>${esc(x.sub)}<br>${esc(eNom(argmax(x.probs)))}`), hoverinfo: "text", marker: { size: 11, color: ents.map((x) => ENT_COL[x.i]), symbol: ents.map((x) => x.t === "liga" ? "square" : "diamond"), line: { color: SURF, width: 2 } }, showlegend: false });
   if (S.capas.jugEq && jug.length) T.push({ type: "scatter3d", mode: S.etiq === "no" ? "markers" : "markers+text", x: jug.map((o) => o.pos.xyz[0]), y: jug.map((o) => o.pos.xyz[1]), z: jug.map((o) => o.pos.xyz[2]), text: jug.map((o, n) => `${n + 1}`), textposition: "top center", textfont: { family: "Manrope", size: 10, color: MUTED },
-    hovertext: jug.map((o, n) => `<b>${n + 1}. ${esc(o.j.nombre)}</b><br>${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)} · ${o.modo === "b" ? "brutos" : "normalizados EL"}<br>${esc(eNom(o.pos.e))} · ${fmt(o.m, 1)}'/p`), hoverinfo: "text",
+    hovertext: jug.map((o, n) => hovJug(o.j, `<br><i>n.º ${n + 1} · ${fmt(o.m, 1)}'/p · ${o.modo === "b" ? "brutos" : "normalizados EL"}${o.modo === "b" ? " · estilo con brutos: " + esc(eNom(o.pos.e)) : ""}</i>`)), hoverinfo: "text",
     marker: { size: jug.map((o) => 4 + o.w / 5), color: jug.map((o) => COL[o.pos.e]), symbol: jug.map((o) => deRef.has(jKey(o.j)) ? "circle-open" : "circle"), line: { width: 2, color: jug.map((o) => COL[o.pos.e]) }, opacity: 0.9 }, showlegend: false });
   const pts = (antes ? [[antes.xyz, d ? `${d.nombre_club} ${tC(d.temporada)}` : "Club de partida", "square", INK]] : []).concat(eq ? [[eq.xyz, "Tu equipo", "diamond", SIM]] : []);
   if (pts.length) T.push({ type: "scatter3d", mode: "markers+text", x: pts.map((p) => p[0][0]), y: pts.map((p) => p[0][1]), z: pts.map((p) => p[0][2]), text: pts.map((p) => p[1]), textposition: "bottom center", textfont: { family: "Barlow", size: 12, color: INK }, hoverinfo: "text", hovertext: pts.map((p) => p[1]), marker: { size: 12, symbol: pts.map((p) => p[2]), color: pts.map((p) => p[3]), line: { color: SURF, width: 2 } }, showlegend: false });
@@ -1719,7 +1960,402 @@ function pintarEqMapa(s) {
   const refs = (antes ? [{ letra: "P", label: d ? `${d.nombre_club} ${tC(d.temporada)}` : "Club de partida", xyz: antes.xyz }] : []).concat(ents.map((x) => ({ letra: ENT_LET[x.i], label: `${x.label} · ${x.sub}`, xyz: x.xyz })));
   $("#mDist").innerHTML = eq && refs.length ? `<table><tbody>${refs.map((o) => { const dd = dist(o.xyz, eq.xyz), pc = percentil(META.referencias.club_club, dd), v = 100 - (pc ?? 50), [k, t] = parBanda(v); return `<tr><td><b>${esc(o.letra)}</b></td><td>${esc(o.label)}</td><td class="n" data-tip="${t}. Distancia ${fmt(dd)} en el mapa (más lejos que el ${fmt(pc, 0)} % de las parejas de clubes)."><span class="par p${k}">${Math.round(v)}</span></td></tr>`; }).join("")}</tbody></table>` : `<p class="note">Marca equipos para compararlos con el tuyo.</p>`;
 }
-function pintarTodo() { pintarResumen(); pintarEnts(); pintarComparacion(); buscar(); pintarLigas(); pintarTrayectoria(); pintarEstilos(); pintarHallazgos(); pintarModelo(); pintarSim(); pintarMapa(); }
+
+// ================================================================ química de estilos, contexto de nivel y quinteto
+// Interacciones X → Y (bbmodel/interacciones.py): Δ_Y = p_Xᵀ M p_Y + nivel_x·(L_X − c) + nivel_y·(L_Y − c) + (L_X − c)·(nivel_x_por_estilo_y · p_Y)
+// Sinergia de pareja (simétrica): p_Aᵀ S p_B + nivel_suma·((L_A − c) + (L_B − c)) + diferencia_nivel·|L_A − L_B|
+// Contexto (bbmodel/contexto.py): x_dest = T⁻¹(T(x) + τ_pos·β·Δ), Δ = (L medio de los compañeros del destino − plantilla media de la Euroliga) − contexto de plantilla de origen
+const EFX = {
+  cuota_tiro: { u: "pp", s: 0, corto: "Cuota de tiro", mas: "tira más", menos: "tira menos", lim: 2 },
+  efg: { u: "pp", s: 1, corto: "eFG%", mas: "acierta más", menos: "acierta menos", lim: 1.2 },
+  pct_asistidas: { u: "pp", s: 0, corto: "% asistidas", mas: "más canastas de pase", menos: "menos canastas de pase", lim: 3.5 },
+  pct_aro: { u: "pp", s: 0, corto: "% en el aro", mas: "más tiros en el aro", menos: "menos tiros en el aro", lim: 2 },
+  pts100: { u: "pts", s: 1, corto: "Puntos/100", mas: "anota más", menos: "anota menos", lim: 2 },
+};
+const EFK = () => Object.keys(EFX).filter((k) => META.interacciones && META.interacciones.efectos[k]);
+const hayQ = () => !!(META.interacciones && META.interacciones.efectos && META.interacciones.sinergia);
+const hayC = () => !!(META.contexto && META.contexto.metricas);
+const Lof = (j) => (j.L != null && isFinite(j.L)) ? j.L : (j.nivel ?? 0);
+const rapmOk = (j) => j.rapm_el != null && isFinite(j.rapm_el);
+const ape = (n) => { const s = String(n || ""); if (s.includes(",")) { const a = s.split(",")[0].trim(); return a.charAt(0) + a.slice(1).toLowerCase(); } const p = s.trim().split(/\s+/); return p.length > 1 ? p.slice(1).join(" ") : s; };
+const PJ = new Map();
+function pJ(j) { let v = PJ.get(j.i); if (!v) { v = red(XJ ? XJ[j.i] : xJug(j)).p; PJ.set(j.i, v); } return v; }
+function efecto(k, pX, LX, pY, LY) {
+  const I = META.interacciones, e = I.efectos[k], c = I.nivel_centro, M = e.matriz, K = M.length;
+  let est = 0; for (let s = 0; s < K; s++) for (let t = 0; t < K; t++) est += pX[s] * M[s][t] * pY[t];
+  const dx = LX - c, dy = LY - c, xe = e.nivel_x_por_estilo_y.reduce((a, v, t) => a + v * pY[t], 0);
+  const nivX = e.nivel_x * dx + dx * xe, nivY = e.nivel_y * dy;
+  return { total: est + nivX + nivY, estilo: est, nivX, nivY };
+}
+function sinergia(pA, LA, pB, LB) {
+  const S = META.interacciones.sinergia, c = S.nivel_centro, M = S.matriz, K = M.length;
+  let est = 0; for (let s = 0; s < K; s++) for (let t = 0; t < K; t++) est += pA[s] * M[s][t] * pB[t];
+  const niv = S.nivel_suma * ((LA - c) + (LB - c)), dif = S.diferencia_nivel * Math.abs(LA - LB);
+  return { total: est + niv + dif, estilo: est, nivel: niv, dif };
+}
+const sinJ = (a, b) => sinergia(pJ(a), Lof(a), pJ(b), Lof(b));
+// sinergia de una pareja media de la Euroliga (última temporada completa, parejas de cada plantilla ponderadas por minutos)
+let SYNREF = null;
+function synRef() {
+  if (SYNREF != null) return SYNREF;
+  const t = ultCompleta(); let s = 0, w = 0;
+  CL.filter((c) => c.liga === "euroleague" && c.temporada === t).forEach((c) => { const ro = ROSTER.get(c.clave) || [];
+    for (let a = 0; a < ro.length; a++) for (let b = a + 1; b < ro.length; b++) { const ww = ro[a].min * ro[b].min; s += ww * sinJ(ro[a], ro[b]).total; w += ww; } });
+  SYNREF = w ? s / w : 0; return SYNREF;
+}
+// índice de química de una plantilla: media de la sinergia (frente a la pareja media de la Euroliga) ponderada por minutos de los dos
+function quimicaPlantilla(filas) {
+  const ref = synRef(), pares = []; let s = 0, w = 0;
+  for (let a = 0; a < filas.length; a++) for (let b = a + 1; b < filas.length; b++) { const A = filas[a], B = filas[b]; if (!(A.w > 0 && B.w > 0)) continue;
+    const r = sinJ(A.j, B.j), ww = A.w * B.w, v = r.total - ref; s += ww * v; w += ww; pares.push({ A, B, v, r, ww }); }
+  return { idx: w ? s / w : null, pares };
+}
+// nivel medio de los jugadores de cada liga (L, por minutos) en la última temporada completa: para poner palabras a «un punto de nivel»
+let LLIGA = null;
+function nivelLigas() { if (LLIGA) return LLIGA; const t = ultCompleta(), acc = {}; JG.forEach((j) => { if (j.temporada !== t || j.L == null) return; const a = acc[j.liga] || (acc[j.liga] = [0, 0]); a[0] += j.min * j.L; a[1] += j.min; }); LLIGA = Object.fromEntries(Object.entries(acc).map(([l, a]) => [l, a[0] / a[1]])); return LLIGA; }
+// ---- contexto
+const CTXN = { usg_pct: ["USG%", 1], pts_p100: ["Pts/100", 1], ts_pct: ["TS%", 1], efg_pct: ["eFG%", 1], ast_pct: ["AST%", 1], tov_pct: ["TOV%", 1], dreb_pct: ["DREB%", 1], drtg: ["DRtg", 1], per: ["PER", 1], ws_per_40: ["WS/40", 3], rapm: ["RAPM-EL", 2], pct_asistidas: ["% asistidas", 1], pct_t3_esquina: ["% triple esquina", 1] };
+const CTX_DEF = ["usg_pct", "pts_p100", "efg_pct", "ast_pct", "drtg", "rapm"];
+const refEL = (temp) => { const r = (META.contexto && META.contexto.ref_euroleague) || {}; return r[temp] ?? r[ultCompleta()] ?? 0; };
+function devDestino(filas, j, temp) { let s = 0, w = 0; filas.forEach((o) => { if (o.j === j || !(o.w > 0)) return; s += o.w * Lof(o.j); w += o.w; }); return w ? s / w - refEL(temp) : NaN; }
+function proyectar(j, dev) {
+  const C = META.contexto, d = isFinite(dev) ? dev - (j.ctx_plantilla_dev ?? 0) : 0, Ms = META.clave_ctx;
+  const out = {}; C.metricas.forEach((m) => { const i = Ms.indexOf(m.col), x = j.M ? j.M[i] : null;
+    const tau = m.tau[j.pos3] ?? ((m.tau.E + m.tau.A + m.tau.I) / 3);
+    if (x == null || !isFinite(x)) { out[m.col] = { m, x: null, y: null }; return; }
+    const y = TRinv(TR(x, m.transf) + tau * m.beta * d, m.transf); out[m.col] = { m, x, y, dz: m.beta * d }; });
+  return { d, out };
+}
+const fmtM = (col, v) => { const [, dd] = CTXN[col] || [col, 1]; return col === "rapm" ? sg(v, dd) : fmt(v, dd); };
+function flechaM(m, x, y) {
+  const dif = y - x, tol = m.col === "ws_per_40" ? 0.0015 : m.col === "rapm" ? 0.05 : 0.05;
+  if (Math.abs(dif) < tol) return { cls: "muted", ar: "=" };
+  const cls = m.sentido === 0 ? "nt" : (dif * m.sentido > 0 ? "up" : "dn");
+  return { cls, ar: dif > 0 ? "▲" : "▼" };
+}
+function fraseCtx(j, P) {
+  const d = P.d; if (!isFinite(d)) return "";
+  if (Math.abs(d) < 0.05) return "Tendría compañeros de un nivel parecido al de su equipo: sus cifras apenas cambiarían.";
+  const t = (col, verbo) => { const o = P.out[col]; if (!o || o.x == null) return null; const f = flechaM(o.m, o.x, o.y); if (f.ar === "=") return null; return `${verbo} ${o.y > o.x ? (col === "drtg" ? "empeoraría" : "subiría") : (col === "drtg" ? "mejoraría" : "bajaría")} de ${fmtM(col, o.x)} a ${fmtM(col, o.y)}`; };
+  const partes = [t("usg_pct", "su USG%"), t("pts_p100", "sus puntos/100"), t("pct_asistidas", "su % de canastas asistidas"), t("drtg", "su DRtg")].filter(Boolean).slice(0, 3);
+  return `Jugaría con compañeros ${fmt(Math.abs(d), 2)} ${d > 0 ? "mejores" : "peores"} que en su equipo${partes.length ? ": " + partes.join(", ") : ""}.`;
+}
+// ---- mapas de calor
+function colorCelda(v, lim, s) {
+  const a = Math.min(1, Math.abs(v) / lim), base = v >= 0 ? (s ? "var(--good)" : "var(--accent-strong)") : (s ? "var(--bad)" : "var(--e1)");
+  return { bg: `color-mix(in srgb, ${base} ${Math.round(a * 80)}%, var(--surface))`, dk: a > 0.62 };
+}
+const corto = (k) => { const n = eNom(k); return n.length > 16 ? n.replace(" y ", " y ") : n; };
+function tablaHeat(M, SE, o) {
+  const K = M.length, lim = o.lim, rows = o.rows || rango(K).map((k) => `${glyph(k, 9)}${esc(eNom(k))}`), colsH = o.cols || rango(K).map((k) => `${glyph(k, 9)}<br>${esc(corto(k))}`);
+  let h = `<table class="qhm${o.cls ? " " + o.cls : ""}">${o.caption ? `<caption>${o.caption}</caption>` : ""}<thead><tr><th class="rh">${o.esquina || ""}</th>${colsH.map((c) => `<th${o.chV ? ' class="ch"' : ""}>${c}</th>`).join("")}${o.media ? `<th style="font-weight:500;color:var(--muted)">media</th>` : ""}</tr></thead><tbody>`;
+  M.forEach((fila, s) => { h += `<tr><th class="rh">${rows[s]}</th>`;
+    fila.forEach((v, t) => { if (v == null || !isFinite(v)) { h += `<td class="q" style="background:var(--c2)">·</td>`; return; }
+      const se = SE ? SE[s][t] : null, ns = se != null && Math.abs(v) < 2 * se, c = colorCelda(v, lim, o.s);
+      h += `<td class="q${ns ? " ns" : ""}${o.diag && s === t ? " diag" : ""}${c.dk && !ns ? " dk" : ""}" style="background:${c.bg}" data-tip="${esc(o.tip ? o.tip(s, t, v, se) : "")}">${o.fmtv ? o.fmtv(v) : sg(v, 1)}</td>`; });
+    if (o.media) { const m = fila.filter(isFinite).reduce((a, b) => a + b, 0) / fila.filter(isFinite).length; h += `<td class="mean">${sg(m, 2)}</td>`; }
+    h += `</tr>`; });
+  if (o.media) { h += `<tr><th class="rh" style="font-weight:500;color:var(--muted)">media</th>${rango(M[0].length).map((t) => { const col = M.map((f) => f[t]).filter(isFinite); return `<td class="mean">${sg(col.reduce((a, b) => a + b, 0) / col.length, 2)}</td>`; }).join("")}<td></td></tr>`; }
+  return h + `</tbody></table>`;
+}
+// ---- gráfico de barras con intervalo (bosque)
+function svgBosque(items, o = {}) {
+  const W = o.W || 520, x0 = o.x0 || 190, rh = 24, H = items.length * rh + 28, vals = items.flatMap((it) => [it.v - 2 * (it.se || 0), it.v + 2 * (it.se || 0)]);
+  const lim = o.lim || Math.max(0.2, ...vals.map(Math.abs)) * 1.08, X = (v) => x0 + (Math.max(-lim, Math.min(lim, v)) + lim) / (2 * lim) * (W - x0 - 54);
+  let g = `<line x1="${X(0)}" x2="${X(0)}" y1="4" y2="${H - 20}" stroke="${DK ? "#3a4659" : "#d6cec0"}" stroke-width="1.5"/><text x="${X(-lim)}" y="${H - 6}" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${sg(-lim, 1)}</text><text x="${X(lim)}" y="${H - 6}" text-anchor="end" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${sg(lim, 1)}</text><text x="${X(0)}" y="${H - 6}" text-anchor="middle" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">0</text>`;
+  items.forEach((it, i) => { const y = 6 + i * rh, ns = it.se != null && Math.abs(it.v) < 2 * it.se, col = it.color || (it.v >= 0 ? (it.s === 0 ? (DK ? "#d6b373" : "#9a7130") : "var(--good)") : (it.s === 0 ? "var(--e1)" : "var(--bad)"));
+    g += `<g data-tip="${esc(it.tip || "")}" opacity="${ns ? 0.45 : 1}"><text x="${x0 - 8}" y="${y + 12}" text-anchor="end" font-size="12" font-family="Barlow, system-ui, sans-serif" fill="${INK}">${esc(it.label)}</text>`;
+    if (it.se != null) g += `<line x1="${X(it.v - 2 * it.se)}" x2="${X(it.v + 2 * it.se)}" y1="${y + 8}" y2="${y + 8}" stroke="${col}" stroke-width="2" opacity=".7"/>`;
+    g += `<rect x="${Math.min(X(0), X(it.v))}" y="${y + 3}" width="${Math.max(1.5, Math.abs(X(it.v) - X(0)))}" height="10" rx="3" fill="${col}" opacity="${it.se != null ? 0.35 : 0.85}"/><circle cx="${X(it.v)}" cy="${y + 8}" r="4.5" fill="${col}" stroke="${SURF}" stroke-width="1.5"/><text x="${W - 4}" y="${y + 12}" text-anchor="end" font-size="11" font-family="Manrope, system-ui, sans-serif" fill="${INK}" font-weight="600">${o.fmtv ? o.fmtv(it.v) : sg(it.v, 2)}</text></g>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.aria || "Efectos con intervalo")}">${g}</svg>`;
+}
+function mbars(p) { return `<div class="mbars">${p.map((v, k) => `<div class="r"><span>${glyph(k, 8)}${esc(eNom(k))}</span><div class="track"><i style="width:${Math.round(v * 100)}%;background:${COL[k]}"></i></div><em>${Math.round(v * 100)} %</em></div>`).join("")}</div>`; }
+const hovJug = (x, extra = "") => `<b>${esc(x.nombre)}</b><br>${esc(x.nombre_club)} · ${LC[x.liga]} ${tC(x.temporada)} · ${POS[x.pos3] || "s/d"} · ${Math.round(x.min)}'<br>${esc(eNom(x.e))} (claridad ${pct(x.p)})<br>Nivel L ${sg(Lof(x))}${rapmOk(x) ? ` · RAPM-EL ${sg(x.rapm_el, 1)} (p${fmt(x.rapm_pct, 0)})` : " · sin RAPM"}${x.ctx_plantilla_dev != null ? `<br>Compañeros ${sg(x.ctx_plantilla_dev)} vs su liga · en pista L ${sg(x.ctx_comp)}` : ""}${extra}`;
+
+// ---------------------------------------------------------------- pestaña «Química de estilos»
+function construirQuimica() {
+  if (construirQuimica.hecho || !hayQ()) return; construirQuimica.hecho = true;
+  const Q = st.qui;
+  seg($("#qEf"), EFK().map((k) => [k, EFX[k].corto]), Q.ef, (v) => { st.qui.ef = v; guardar(); pintarQuimica(); });
+  $("#qModo").onclick = (e) => { const b = e.target.closest("[data-v]"); if (!b) return; st.qui.modo = b.dataset.v; guardar(); pintarQuimica(); };
+  const picker = (inp, box, campo) => {
+    $(inp).oninput = () => { const q = norm($(inp).value).trim().split(/\s+/).filter(Boolean), bx = $(box); if (!q.length) { bx.hidden = true; return; }
+      const res = JG.filter((x) => { const n = norm(x.nombre); return q.every((p) => n.includes(p)); }).sort((a, b) => b.temporada.localeCompare(a.temporada) || b.min - a.min).slice(0, 30);
+      bx.innerHTML = res.map((x) => `<button data-k="${esc(jKey(x))}"><span>${esc(x.nombre)}</span><small>${LC[x.liga]} ${tC(x.temporada)} · ${esc(x.nombre_club)} · ${Math.round(x.min)}'</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados.</span>`; bx.hidden = false; };
+    $(box).onclick = (e) => { const b = e.target.closest("[data-k]"); if (!b) return; $(box).hidden = true; $(inp).value = ""; st.qui[campo] = b.dataset.k; guardar(); pintarCalc(); };
+  };
+  picker("#qA", "#qAS", "a"); picker("#qB", "#qBS", "b");
+}
+function ejemplosTxt(s, t) {
+  const ex = (META.interacciones.ejemplos && META.interacciones.ejemplos[s] && META.interacciones.ejemplos[s][t]) || [];
+  return ex.length ? `<br><b>Parejas reales</b> (X → Y, minutos juntos, cambio en Y):` + ex.map((x) => `<br>· ${esc(ape(x.x))} → ${esc(ape(x.y))} (${LC[x.liga] || x.liga} ${tC(x.temporada)}, ${x.min}'): eFG ${sg(x.d_efg, 1)} · cuota ${sg(x.d_cuota_tiro, 1)}`).join("") : "<br><span>Sin parejas nítidas de este cruce.</span>";
+}
+function pintarQuimica() {
+  if (VISTA !== "atlas" || $("#p-quimica").hidden || !META) return;
+  if (!hayQ()) { $("#qHeat").innerHTML = `<p class="note">Sin datos de interacciones en esta versión.</p>`; return; }
+  construirQuimica();
+  const I = META.interacciones, Q = st.qui, k = EFK().includes(Q.ef) ? Q.ef : EFK()[0], e = I.efectos[k], fx = EFX[k], modo = Q.modo === "contraste" ? "contraste" : "valor";
+  $("#qEf").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === k));
+  $("#qModo").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === modo));
+  const M = modo === "contraste" ? e.contraste : e.matriz, u = fx.u;
+  const lim = Math.max(fx.lim, ...M.flat().map(Math.abs)) * 0.9;
+  $("#qHeat").innerHTML = tablaHeat(M, e.matriz_se, { lim, s: fx.s, media: modo === "valor", diag: true, esquina: `<span class="axis-x">X ↓ · Y →</span>`,
+    caption: `${esc(e.nombre)}: ${esc(e.descripcion)}. ${modo === "valor" ? `Cambio en Y (${u}) cuando X comparte pista con él, a igual nivel.` : "Cada celda menos la media de su columna: qué compañero le va mejor (o peor) a cada estilo."}`,
+    tip: (s, t, v, se) => `<b>X «${esc(eNom(s))}» → Y «${esc(eNom(t))}»</b><br>${modo === "valor" ? `Con X en pista, Y ${v >= 0 ? fx.mas : fx.menos}: ${sg(v, 2)} ${u}` : `${sg(v, 2)} ${u} frente a la media de los compañeros de un «${esc(eNom(t))}»`} (±${fmt(2 * se, 2)}, 2 errores típicos)${Math.abs(v) < 2 * se ? "<br><i>No se distingue del ruido.</i>" : ""}${ejemplosTxt(s, t)}` });
+  $("#qHeatNota").innerHTML = `Filas: el estilo del compañero <b>X</b>. Columnas: el estilo del jugador afectado <b>Y</b>. ${modo === "valor" ? `La columna «media» resume qué hace cada estilo con todos sus compañeros; la fila «media», cómo le va a cada estilo con cualquier compañero.` : ""} Basado en ${e.n.toLocaleString("es-ES")} parejas dirigidas (X, Y) de un mismo equipo con al menos 60 minutos juntos y 30 por separado; error por remuestreo de equipos. El nivel se controla aparte (ver «efecto MVP»).`;
+  // lectura automática
+  const mf = e.matriz.map((f) => f.reduce((a, b) => a + b, 0) / f.length), orden = rango(KE).sort((a, b) => mf[b] - mf[a]);
+  const mejorPara = rango(KE).map((t) => { const col = e.contraste.map((f) => f[t]); const s = argmax(col); return { t, s, v: col[s], w: argmax(col.map((v) => -v)), vw: Math.min(...col) }; });
+  const diag = rango(KE).map((s) => e.matriz[s][s]), dm = diag.reduce((a, b) => a + b, 0) / KE;
+  $("#qLee").innerHTML = `<div class="qlee">
+    <div class="it"><b class="t">Con todos sus compañeros</b><span>${glyph(orden[0], 9)} «${esc(eNom(orden[0]))}» es el compañero con el que los demás ${fx.mas} (${sg(mf[orden[0]], 2)} ${u} de media); ${glyph(orden[KE - 1], 9)} «${esc(eNom(orden[KE - 1]))}», aquel con el que ${fx.menos} (${sg(mf[orden[KE - 1]], 2)} ${u}).</span></div>
+    <div class="it"><b class="t">Mejor socio para cada estilo</b><span>${mejorPara.map((o) => `${glyph(o.t, 9)} a un «${esc(eNom(o.t))}» le va mejor con un «${esc(eNom(o.s))}» (${sg(o.v, 1)} sobre su media) y peor con un «${esc(eNom(o.w))}» (${sg(o.vw, 1)})`).join(";<br>")}.</span></div>
+    <div class="it"><b class="t">Dos del mismo estilo</b><span>En la diagonal (mismo estilo los dos) el cambio medio es ${sg(dm, 2)} ${u}${Math.abs(dm) > 0.3 ? (dm * (fx.s || 1) < 0 ? ": juntos se estorban" : ": juntos se potencian") : ": ni se estorban ni se potencian de forma clara"}.</span></div>
+    <div class="it"><b class="t">El nivel, aparte</b><span>Además del estilo, un compañero un punto mejor cambia ${esc(e.nombre.toLowerCase())} de Y en ${sg(e.nivel_x, 2)} ${u} (±${fmt(2 * e.nivel_x_se, 2)}). Ver la sección siguiente.</span></div></div>`;
+  pintarMvp(k);
+  pintarSinergiaEstilos();
+  pintarCalc();
+}
+function pintarMvp(k) {
+  const I = META.interacciones, LL = nivelLigas();
+  const items = EFK().map((kk) => { const e = I.efectos[kk], fx = EFX[kk]; return { label: fx.corto, v: e.nivel_x, se: e.nivel_x_se, s: fx.s, tip: `Un compañero un punto de nivel mejor: ${esc(e.nombre)} de Y ${sg(e.nivel_x, 2)} ${fx.u} (±${fmt(2 * e.nivel_x_se, 2)}). ${esc(e.descripcion)}.` }; });
+  $("#qMvp").innerHTML = svgBosque(items, { aria: "Efecto del nivel del compañero", fmtv: (v) => sg(v, 2) });
+  const e = I.efectos[k], fx = EFX[k];
+  $("#qMvpET").textContent = `…según el estilo del jugador afectado (${e.nombre})`;
+  $("#qMvpE").innerHTML = svgBosque(rango(KE).map((t) => { const v = e.nivel_x + e.nivel_x_por_estilo_y[t], se = Math.hypot(e.nivel_x_se, e.nivel_x_por_estilo_y_se[t]); return { label: eNom(t), v, se, color: COL[t], tip: `Y «${esc(eNom(t))}»: con un compañero un punto mejor, ${esc(e.nombre)} ${sg(v, 2)} ${fx.u} (±${fmt(2 * se, 2)})` }; }), { aria: "Efecto del nivel por estilo", fmtv: (v) => sg(v, 2) });
+  const g = (kk) => I.efectos[kk] ? I.efectos[kk].nivel_x : null, lig = Object.entries(LL).sort((a, b) => a[1] - b[1]), lo = lig[0], hi = lig[lig.length - 1];
+  $("#qMvpNota").innerHTML = `<b>Lectura:</b> con un compañero un punto de nivel mejor${lo && hi ? ` (un punto ≈ la distancia entre el jugador medio de la ${LIGAS[lo[0]]}, ${sg(lo[1])}, y el de la ${LIGAS[hi[0]]}, ${sg(hi[1])}; el de la Euroliga está en ${sg(LL.euroleague)})` : ""}, el jugador ${g("cuota_tiro") < 0 ? "tira menos" : "tira más"} (${sg(g("cuota_tiro"), 2)} pp de la cuota de tiro) pero ${g("efg") > 0 ? "con mejor acierto" : "con peor acierto"} (${sg(g("efg"), 2)} pp de eFG%) y ${g("pct_asistidas") > 0 ? "más canastas de pase" : "menos canastas de pase"} (${sg(g("pct_asistidas"), 2)} pp); en conjunto ${g("pts100") < 0 ? "anota menos" : "anota más"} por 100 posesiones (${sg(g("pts100"), 2)}). Es el «efecto MVP»: al lado de una estrella se tira menos y mejor. Por eso no es lo mismo promediar 15 puntos con el MVP de la Euroliga que en la BBL.`;
+}
+function pintarSinergiaEstilos() {
+  const S = META.interacciones.sinergia, M = S.matriz, SE = S.matriz_se;
+  const lim = Math.max(0.6, ...M.flat().map(Math.abs)) * 0.9;
+  $("#qSin").innerHTML = tablaHeat(M, SE, { lim, s: 1, diag: true, esquina: `<span class="axis-x">A ↓ · B →</span>`, caption: "Sinergia frente al RAPM (pts/100), a igual nivel. Simétrica.",
+    tip: (s, t, v, se) => `<b>«${esc(eNom(s))}» + «${esc(eNom(t))}»</b><br>Juntos, ${sg(v, 2)} pts/100 sobre lo que espera el RAPM (±${fmt(2 * se, 2)})${Math.abs(v) < 2 * se ? "<br><i>No se distingue del ruido.</i>" : ""}`, fmtv: (v) => sg(v, 2) });
+  $("#qSinNota").innerHTML = `${S.n_parejas.toLocaleString("es-ES")} parejas con 60+ minutos juntos. El nivel también cuenta: por cada punto de nivel de cada jugador, ${sg(S.nivel_suma, 2)} pts/100 (±${fmt(2 * S.nivel_suma_se, 2)}); la diferencia de nivel entre los dos, ${sg(S.diferencia_nivel, 2)} por punto (±${fmt(2 * S.diferencia_nivel_se, 2)}${Math.abs(S.diferencia_nivel) < 2 * S.diferencia_nivel_se ? ", no significativa" : ""}).`;
+  const pares = []; for (let a = 0; a < KE; a++) for (let b = a; b < KE; b++) pares.push({ a, b, v: M[a][b], se: SE[a][b] });
+  pares.sort((x, y) => y.v - x.v);
+  const li = (o) => `<li data-tip="±${fmt(2 * o.se, 2)} (2 errores típicos)${Math.abs(o.v) < 2 * o.se ? " · no significativa" : ""}"><span><span class="esrow">${glyph(o.a, 10)}${glyph(o.b, 10)}</span> ${esc(eNom(o.a))} ${o.a === o.b ? "(los dos)" : "+ " + esc(eNom(o.b))}${Math.abs(o.v) < 2 * o.se ? ` <small>no significativa</small>` : ""}</span><b class="num ${o.v >= 0 ? "up" : "dn"}">${sg(o.v, 2)}</b></li>`;
+  $("#qRank").innerHTML = `<div class="pairs"><div><span class="label">Suman más</span><ol>${pares.slice(0, 5).map(li).join("")}</ol></div><div><span class="label">Suman menos</span><ol>${pares.slice(-5).reverse().map(li).join("")}</ol></div></div><p class="note">En pts/100 por encima (o por debajo) de lo que el RAPM de los diez en pista esperaba para la pareja, a igual nivel. Una plantilla suma la química de todas sus parejas que comparten pista.</p>`;
+}
+function tarjetaJug(j) {
+  if (!j) return `<p class="note">Elige un jugador.</p>`;
+  return `<div class="pcard"><span class="nm">${esc(j.nombre)}</span><span class="note">${esc(j.nombre_club)} · ${LIGAS[j.liga]} ${j.temporada} · ${POS[j.pos3] || "s/d"} · ${Math.round(j.min)}'</span>
+    <div class="meta"><span>Nivel L <b>${sg(Lof(j))}</b></span><span>RAPM-EL <b>${rapmOk(j) ? sg(j.rapm_el, 1) : "–"}</b>${rapmOk(j) ? ` (O ${sg(j.orapm_el, 1)} · D ${sg(j.drapm_el, 1)} · p${fmt(j.rapm_pct, 0)})` : " sin jugada a jugada"}</span><span>Compañeros <b>${sg(j.ctx_plantilla_dev)}</b> vs su liga</span></div>${mbars(pJ(j))}</div>`;
+}
+function calcDefecto() {
+  if (st.qui.a && JK.has(st.qui.a) && st.qui.b && JK.has(st.qui.b)) return;
+  const al = META.clubes_con_nombre.baskonia, k = al && al.claves[0], c = BY.get(`${k}:${ultCompleta()}`), ro = c ? (ROSTER.get(c.clave) || []).slice().sort((a, b) => b.min - a.min) : JG.slice(0, 2);
+  if (!st.qui.a || !JK.has(st.qui.a)) st.qui.a = ro[0] ? jKey(ro[0]) : null;
+  if (!st.qui.b || !JK.has(st.qui.b)) st.qui.b = ro[1] ? jKey(ro[1]) : null;
+}
+function pintarCalc() {
+  if (!hayQ()) return; calcDefecto();
+  const A = JK.get(st.qui.a), B = JK.get(st.qui.b);
+  $("#qAI").innerHTML = tarjetaJug(A); $("#qBI").innerHTML = tarjetaJug(B);
+  if (!A || !B) { $("#qCalc").innerHTML = `<p class="note">Elige dos jugadores.</p>`; return; }
+  const pA = pJ(A), pB = pJ(B), LA = Lof(A), LB = Lof(B), c = META.interacciones.nivel_centro;
+  const dir = (X, Y, pX, pY, LX, LY) => `<div class="dirbox"><h3>${esc(ape(X.nombre))} → ${esc(ape(Y.nombre))}</h3><p class="note">Cómo cambia ${esc(ape(Y.nombre))} cuando ${esc(ape(X.nombre))} comparte pista con él.</p><div class="tablebox"><table class="brk"><thead><tr><th>Resultado</th><th style="text-align:right">Total</th><th style="text-align:right" data-tip="p_Xᵀ M p_Y: lo que pone la combinación de estilos">Estilo</th><th style="text-align:right" data-tip="nivel_x·(L_X − c) + (L_X − c)·(nivel_x_por_estilo_y · p_Y): lo que pone el nivel del compañero">Nivel de ${esc(ape(X.nombre))}</th><th style="text-align:right" data-tip="nivel_y·(L_Y − c): cómo cambia con cualquier compañero un jugador de su nivel">Nivel propio</th></tr></thead><tbody>${EFK().map((k) => { const r = efecto(k, pX, LX, pY, LY), fx = EFX[k], cl = (v) => Math.abs(v) < 0.05 ? "muted" : fx.s ? (v > 0 ? "up" : "dn") : "nt";
+    return `<tr><td>${esc(fx.corto)} <span class="note">${fx.u}</span></td><td class="n"><b class="${cl(r.total)}">${sg(r.total, 2)}</b></td><td class="n">${sg(r.estilo, 2)}</td><td class="n">${sg(r.nivX, 2)}</td><td class="n muted">${sg(r.nivY, 2)}</td></tr>`; }).join("")}</tbody></table></div></div>`;
+  const s = sinergia(pA, LA, pB, LB), ref = synRef(), S = META.interacciones.sinergia.matriz;
+  const cont = []; for (let a = 0; a < KE; a++) for (let b = 0; b < KE; b++) cont.push({ a, b, v: pA[a] * pB[b] * S[a][b], pa: pA[a], pb: pB[b] });
+  cont.sort((x, y) => Math.abs(y.v) - Math.abs(x.v));
+  const veredict = (v) => v > 0.5 ? ["good", "Buena química"] : v < -0.5 ? ["bad", "Mala química"] : ["warn", "Química neutra"];
+  const [cls, txt] = veredict(s.total - ref);
+  $("#qCalc").innerHTML = `<div class="calc"><div class="dirs">${dir(A, B, pA, pB, LA, LB)}${dir(B, A, pB, pA, LB, LA)}</div>
+    <div class="dirbox"><h3>Sinergia de la pareja</h3><div class="bignet"><span><b class="${s.total - ref >= 0 ? "up" : "dn"}">${sg(s.total - ref, 2)}</b> <span class="note">pts/100 frente a una pareja media de la Euroliga</span></span><span class="pill ${cls}">${txt}</span><span class="note">Sinergia frente al RAPM: ${sg(s.total, 2)} (la pareja media de la Euroliga ${ultCompleta()}: ${sg(ref, 2)})</span></div>
+      <div class="tablebox"><table class="brk"><tbody><tr><td>Por estilo (p_Aᵀ S p_B)</td><td class="n"><b>${sg(s.estilo, 2)}</b></td></tr><tr><td>Por nivel (${sg(META.interacciones.sinergia.nivel_suma, 2)} × [(L_A − c) + (L_B − c)] = ${sg(META.interacciones.sinergia.nivel_suma, 2)} × ${sg(LA - c + LB - c, 2)})</td><td class="n"><b>${sg(s.nivel, 2)}</b></td></tr><tr><td>Por diferencia de nivel (|L_A − L_B| = ${fmt(Math.abs(LA - LB), 2)})</td><td class="n"><b>${sg(s.dif, 2)}</b></td></tr><tr><td>Menos la pareja media de la Euroliga</td><td class="n">${sg(-ref, 2)}</td></tr></tbody></table></div>
+      <span class="label">De dónde sale la parte de estilo</span><div class="tablebox"><table class="brk"><thead><tr><th>${esc(ape(A.nombre))}</th><th>${esc(ape(B.nombre))}</th><th style="text-align:right">Peso (p_A·p_B)</th><th style="text-align:right">Celda S</th><th style="text-align:right">Aporte</th></tr></thead><tbody>${cont.slice(0, 4).map((o) => `<tr><td>${glyph(o.a, 9)} ${esc(eNom(o.a))} <span class="muted">${pct(o.pa)}</span></td><td>${glyph(o.b, 9)} ${esc(eNom(o.b))} <span class="muted">${pct(o.pb)}</span></td><td class="n">${pct(o.pa * o.pb)}</td><td class="n">${sg(S[o.a][o.b], 2)}</td><td class="n"><b>${sg(o.v, 2)}</b></td></tr>`).join("")}</tbody></table></div>
+      <p class="note">Un jugador no es de un solo estilo: la red le da una probabilidad para cada uno y la química combina todas. c = ${fmt(c, 2)} es el nivel medio de la muestra.</p></div></div>`;
+}
+
+// ---------------------------------------------------------------- contexto, química y quinteto de una plantilla simulada
+// filas: [{ j, w, tag, n }] (w = minutos, en cualquier escala); cfg: st.sim o st.eq; o: { temp, antes: filas del club de partida }
+function pintarCQ(pre, filas, cfg, o) {
+  const elC = $(`#${pre}Ctx`), elQ = $(`#${pre}Qui`), el5 = $(`#${pre}Q5`); if (!elC) return;
+  if (!enlazarCQ[pre]) enlazarCQ(pre, cfg);
+  const act = filas.filter((x) => x.w > 0).sort((a, b) => b.w - a.w);
+  if (act.length < 2) { elC.innerHTML = elQ.innerHTML = el5.innerHTML = `<p class="note">Hacen falta al menos dos jugadores con minutos.</p>`; return; }
+  // contexto
+  if (hayC()) {
+    const temp = o.temp, ref = refEL(temp), sel = (st.ctxMets || CTX_DEF).filter((c) => CTXN[c]);
+    const Lm = (() => { let s = 0, w = 0; act.forEach((x) => { s += x.w * Lof(x.j); w += x.w; }); return s / w; })();
+    const filasP = act.map((x) => { const dev = devDestino(act, x.j, temp), P = proyectar(x.j, dev); return { x, dev, P }; });
+    elC.innerHTML = `<div class="ctxhead"><span>Nivel medio de esta plantilla (L, por minutos): <b>${sg(Lm)}</b></span><span>Plantilla media de la Euroliga ${esc(temp)}: <b>${sg(ref)}</b></span><span class="note">Cada jugador se compara con sus compañeros (sin él).</span></div>
+      <div class="ctxchips" role="group" aria-label="Métricas">${Object.entries(CTXN).map(([c, [n]]) => `<button class="chip" data-cm="${c}" aria-pressed="${sel.includes(c)}">${esc(n)}</button>`).join("")}</div>
+      <div class="tablebox"><table class="ctxt"><thead><tr><th>Jugador · de dónde viene</th><th style="text-align:right" data-tip="Compañeros en el destino (sobre la plantilla media de la Euroliga) − compañeros en su equipo (sobre la media de su liga)">Δ compañeros</th>${sel.map((c) => { const m = META.contexto.metricas.find((x) => x.col === c); return `<th style="text-align:right" data-tip="${esc(m ? `${m.nombre}: β = ${sg(m.beta_estimado, 2)} σ por punto de nivel de los compañeros (±${fmt(2 * m.se, 2)})${m.claro ? "" : " · no es claro: no se aplica"}` : "")}">${esc(CTXN[c][0])}${m && !m.claro ? " ∅" : ""}</th>`; }).join("")}</tr></thead><tbody>` +
+      filasP.map(({ x, P }) => { const j = x.j;
+        return `<tr><td class="who"><b>${x.n != null ? `${x.n}. ` : ""}${esc(j.nombre)}</b> <span class="tagctx">${esc(x.tag || "")}</span><span class="ex">${esc(j.nombre_club)} ${LC[j.liga]} ${tC(j.temporada)} · su equipo: compañeros <b>${sg(j.ctx_plantilla_dev)}</b> sobre su liga · en pista, L medio <b>${sg(j.ctx_comp)}</b></span><span class="ex">${esc(fraseCtx(j, P))}</span></td>
+          <td class="cv"><b class="${Math.abs(P.d) < 0.1 ? "muted" : "nt"}">${sg(P.d)}</b></td>` +
+          sel.map((c) => { const r = P.out[c]; if (!r || r.x == null) return `<td class="cv muted">–</td>`; const f = flechaM(r.m, r.x, r.y);
+            return `<td class="cv" data-tip="${esc(`${r.m.nombre}: ${fmtM(c, r.x)} en su equipo → ${fmtM(c, r.y)} en este (${sg(r.dz, 2)} σ)`)}"><span class="a">${fmtM(c, r.x)}</span> → <span class="b ${f.cls}">${fmtM(c, r.y)}</span><span class="ar ${f.cls}">${f.ar}</span></td>`; }).join("") + `</tr>`; }).join("") +
+      `</tbody></table></div><p class="note"><b>En su equipo</b>: su valor normalizado a Euroliga, con los compañeros que tuvo. <b>En este equipo</b>: proyectado con los de esta plantilla, <code>T⁻¹(T(x) + τ·β·Δ)</code>. Verde/rojo = mejor/peor; dorado = ni mejor ni peor (uso, % asistidas, triples de esquina). ∅ = la métrica no depende claramente de los compañeros. Parte del β del RAPM es el propio RAPM arrastrando contexto de equipo: tómalo como cota alta.</p>`;
+  } else elC.innerHTML = `<p class="note">Sin datos de contexto en esta versión.</p>`;
+  if (!hayQ()) { elQ.innerHTML = el5.innerHTML = `<p class="note">Sin datos de química en esta versión.</p>`; return; }
+  // química de la plantilla
+  const top = act.slice(0, 12), ef = cfg.quiEf && (cfg.quiEf === "sin" || EFK().includes(cfg.quiEf)) ? cfg.quiEf : "sin", ref = synRef();
+  const qp = quimicaPlantilla(act), qa = o.antes && o.antes.length > 1 ? quimicaPlantilla(o.antes) : null;
+  const nom = (x) => `${x.n != null ? x.n + ". " : ""}${esc(ape(x.j.nombre))}`;
+  let M; if (ef === "sin") M = top.map((A) => top.map((B) => A === B ? null : sinJ(A.j, B.j).total - ref));
+  else M = top.map((X) => top.map((Y) => X === Y ? null : efecto(ef, pJ(X.j), Lof(X.j), pJ(Y.j), Lof(Y.j)).total));
+  const fx = EFX[ef], lim = ef === "sin" ? Math.max(0.6, ...M.flat().filter(isFinite).map(Math.abs)) : Math.max(fx.lim * 0.6, ...M.flat().filter(isFinite).map(Math.abs));
+  const rows = top.map((x) => `${glyph(argmax(pJ(x.j)), 9)}${nom(x)}`), cols_ = top.map((x) => `${glyph(argmax(pJ(x.j)), 8)} ${esc(ape(x.j.nombre))}`);
+  const mejores = qp.pares.slice().sort((a, b) => b.v - a.v), peores = mejores.slice().reverse();
+  const liP = (p) => { const eA = argmax(pJ(p.A.j)), eB = argmax(pJ(p.B.j)); return `<li data-tip="Por estilo ${sg(p.r.estilo, 2)} · por nivel ${sg(p.r.nivel + p.r.dif, 2)} · menos pareja media EL ${sg(-ref, 2)}"><span>${esc(ape(p.A.j.nombre))} + ${esc(ape(p.B.j.nombre))}<small>${glyph(eA, 8)} ${esc(eNom(eA))} + ${glyph(eB, 8)} ${esc(eNom(eB))}</small></span><b class="num ${p.v >= 0 ? "up" : "dn"}">${sg(p.v, 2)}</b></li>`; };
+  elQ.innerHTML = `<div class="ctxhead"><span>Química de la plantilla: <b class="${qp.idx >= 0 ? "up" : "dn"}">${sg(qp.idx, 2)}</b> pts/100 por pareja</span>${qa ? `<span>Club de partida: <b>${sg(qa.idx, 2)}</b></span>` : ""}<span class="note">Media de todas las parejas ponderada por los minutos de los dos, frente a una pareja media de la Euroliga (0).</span></div>
+    <div class="seg mini" data-qef-grupo="${pre}"><button data-qef="sin" aria-pressed="${ef === "sin"}">Sinergia de pareja</button>${EFK().map((k) => `<button data-qef="${k}" aria-pressed="${ef === k}">X → Y · ${esc(EFX[k].corto)}</button>`).join("")}</div>
+    <div class="tablebox">${tablaHeat(M, null, { lim, s: ef === "sin" ? 1 : fx.s, rows, cols: cols_, chV: true, cls: "qmx", esquina: ef === "sin" ? "" : `<span class="axis-x">X ↓ · Y →</span>`, fmtv: (v) => sg(v, 1),
+      caption: ef === "sin" ? `Sinergia prevista de cada pareja (pts/100) frente a una pareja media de la Euroliga. Ordenados por minutos${act.length > 12 ? "; los 12 primeros" : ""}.` : `${esc(META.interacciones.efectos[ef].nombre)} (${fx.u}): cómo cambia Y (columna) cuando X (fila) comparte pista con él.`,
+      tip: (s, t, v) => ef === "sin" ? `${esc(top[s].j.nombre)} + ${esc(top[t].j.nombre)}: ${sg(v, 2)} pts/100 frente a una pareja media de la Euroliga` : `Con ${esc(top[s].j.nombre)} en pista, ${esc(top[t].j.nombre)} ${v >= 0 ? fx.mas : fx.menos}: ${sg(v, 2)} ${fx.u}` })}</div>
+    <div class="pairs"><div><span class="label">Las 3 parejas que más suman</span><ol>${mejores.slice(0, 3).map(liP).join("")}</ol></div><div><span class="label">Las 3 que menos</span><ol>${peores.slice(0, 3).map(liP).join("")}</ol></div></div>`;
+  // quinteto
+  pintarQ5(pre, act, cfg, o);
+}
+function quinteto(sel) {
+  const ref = synRef(), pares = []; let quim = 0;
+  for (let a = 0; a < sel.length; a++) for (let b = a + 1; b < sel.length; b++) { const r = sinJ(sel[a].j, sel[b].j), v = r.total - ref; quim += v; pares.push({ A: sel[a], B: sel[b], v, r }); }
+  const ind = sel.reduce((s, x) => s + (rapmOk(x.j) ? x.j.rapm_el : 0), 0), falta = sel.filter((x) => !rapmOk(x.j));
+  const of = sel.reduce((s, x) => s + (x.j.orapm_el ?? 0), 0), de = sel.reduce((s, x) => s + (x.j.drapm_el ?? 0), 0);
+  return { ind, quim, total: ind + quim, pares, falta, of, de };
+}
+function q5Elegidos(act, cfg) {
+  const keys = (cfg.q5 || []).filter((k) => act.some((x) => jKey(x.j) === k)), sel = keys.map((k) => act.find((x) => jKey(x.j) === k)), fuera = new Set(cfg.q5x || []);
+  for (const x of act) { if (sel.length >= 5) break; if (!sel.includes(x) && !fuera.has(jKey(x.j))) sel.push(x); }
+  for (const x of act) { if (sel.length >= 5) break; if (!sel.includes(x)) sel.push(x); }
+  return sel.slice(0, 5);
+}
+function pistaPos(sel) {
+  const n = { E: 0, A: 0, I: 0, s: 0 }; sel.forEach((x) => n[x.j.pos3 in n ? x.j.pos3 : "s"]++);
+  const t = `${n.E} exterior${n.E === 1 ? "" : "es"} · ${n.A} alero${n.A === 1 ? "" : "s"} · ${n.I} interior${n.I === 1 ? "" : "es"}${n.s ? ` · ${n.s} sin posición` : ""}`;
+  const w = n.I === 0 ? "Sin interiores: quinteto muy pequeño, sufrirá en el rebote." : n.I >= 3 ? "Tres o más interiores: quinteto muy grande, poco espacio." : n.E === 0 ? "Sin bases ni escoltas: ¿quién sube el balón?" : n.E >= 4 ? "Cuatro o más exteriores: quinteto muy pequeño." : null;
+  return { t, w };
+}
+function svgCascada(sel, q) {
+  const W = 640, H = 250, top = 22, bot = 54, n = sel.length + 2, bw = (W - 40) / n, items = [];
+  let run = 0; sel.forEach((x) => { const v = rapmOk(x.j) ? x.j.rapm_el : 0; items.push({ lab: ape(x.j.nombre), v, a: run, b: run + v, col: COL[argmax(pJ(x.j))], falta: !rapmOk(x.j), tip: `${esc(x.j.nombre)}: RAPM-EL ${rapmOk(x.j) ? sg(x.j.rapm_el, 2) : "sin dato (cuenta 0)"}` }); run += v; });
+  items.push({ lab: "Química", v: q.quim, a: run, b: run + q.quim, col: SIM, tip: `Química de las ${q.pares.length} parejas: ${sg(q.quim, 2)} pts/100` }); run += q.quim;
+  items.push({ lab: "Net previsto", v: run, a: 0, b: run, col: INK, total: true, tip: `Net previsto: ${sg(run, 2)} pts/100 frente a un quinteto medio de la Euroliga` });
+  const vals = items.flatMap((i) => [i.a, i.b]).concat([0]), lo = Math.min(...vals) - 0.5, hi = Math.max(...vals) + 0.5, Y = (v) => top + (hi - v) / (hi - lo) * (H - top - bot);
+  let g = `<line x1="16" x2="${W - 8}" y1="${Y(0)}" y2="${Y(0)}" stroke="${DK ? "#3a4659" : "#d6cec0"}" stroke-width="1.5"/><text x="16" y="${Y(0) - 4}" font-size="10" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">quinteto medio EL</text>`;
+  items.forEach((it, i) => { const x = 24 + i * bw, y1 = Y(Math.max(it.a, it.b)), y2 = Y(Math.min(it.a, it.b)), h = Math.max(1.5, y2 - y1);
+    g += `<g data-tip="${esc(it.tip)}"><rect x="${x + 6}" y="${y1}" width="${bw - 12}" height="${h}" rx="4" fill="${it.col}" opacity="${it.falta ? 0.3 : it.total ? 1 : 0.85}"${it.falta ? ` stroke="${MUTED}" stroke-dasharray="3 2"` : ""}/>` +
+      (i < items.length - 1 ? `<line x1="${x + bw - 6}" x2="${x + bw + 6}" y1="${Y(it.b)}" y2="${Y(it.b)}" stroke="${MUTED}" stroke-dasharray="2 2"/>` : "") +
+      `<text x="${x + bw / 2}" y="${(it.v >= 0 ? y1 - 5 : y2 + 13)}" text-anchor="middle" font-size="11.5" font-weight="700" font-family="Manrope, system-ui, sans-serif" fill="${INK}">${sg(it.v, 1)}</text>` +
+      `<text x="${x + bw / 2}" y="${H - bot + 18}" text-anchor="middle" font-size="11.5" font-family="Barlow, system-ui, sans-serif" fill="${INK}" font-weight="${it.total || it.lab === "Química" ? 700 : 500}">${esc(it.lab.length > 13 ? it.lab.slice(0, 12) + "…" : it.lab)}</text>${it.falta ? `<text x="${x + bw / 2}" y="${H - bot + 32}" text-anchor="middle" font-size="10" font-family="Barlow, system-ui, sans-serif" fill="${MUTED}">sin RAPM</text>` : ""}</g>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net previsto del quinteto: impacto individual más química">${g}</svg>`;
+}
+function pintarQ5(pre, act, cfg, o) {
+  const el = $(`#${pre}Q5`), sel = q5Elegidos(act, cfg), q = quinteto(sel), pos = pistaPos(sel);
+  const antesSel = o.antes && o.antes.length >= 5 ? o.antes.slice().sort((a, b) => b.w - a.w).slice(0, 5) : null, qa = antesSel ? quinteto(antesSel) : null;
+  const auto = !(cfg.q5 && cfg.q5.length) && !(cfg.q5x && cfg.q5x.length);
+  el.innerHTML = `<div class="q5g"><div style="display:grid;gap:8px">
+      <div class="bignet"><span><b class="${q.total >= 0 ? "up" : "dn"}">${sg(q.total, 1)}</b> <span class="note">pts/100 frente a un quinteto medio de la Euroliga</span></span>${qa ? `<span class="note">Quinteto de partida (${esc(antesSel.map((x) => ape(x.j.nombre)).join(", "))}): <b>${sg(qa.total, 1)}</b> → ${q.total - qa.total >= 0 ? "+" : ""}${fmt(q.total - qa.total, 1)}</span>` : ""}</div>
+      ${svgCascada(sel, q)}
+      <p class="note">Impacto individual Σ RAPM-EL = <b>${sg(q.ind, 1)}</b> (ataque ${sg(q.of, 1)} · defensa ${sg(q.de, 1)}) + química de las 10 parejas = <b>${sg(q.quim, 1)}</b>. Barras de color = estilo de cada jugador.</p>
+      ${q.falta.length ? `<div class="hint warn"><b>Parcial:</b> ${esc(q.falta.map((x) => x.j.nombre).join(", "))} sin RAPM (no hay jugada a jugada de su liga y temporada): ${q.falta.length === 1 ? "cuenta" : "cuentan"} como 0, un jugador medio.</div>` : ""}
+    </div><div style="display:grid;gap:8px;align-content:start">
+      <span class="label">Elige el quinteto ${auto ? "(ahora: los 5 con más minutos)" : ""}</span>
+      <div class="q5ed" data-q5grupo="${pre}">${act.slice(0, 16).map((x) => `<button class="chip" data-q5="${esc(jKey(x.j))}" aria-pressed="${sel.includes(x)}">${glyph(argmax(pJ(x.j)), 8)}${esc(ape(x.j.nombre))} <b>${x.j.pos3 || "?"}</b></button>`).join("")}</div>
+      ${auto ? "" : `<button class="btn ghost sm" data-q5auto="${pre}" style="justify-self:start">Volver a los 5 con más minutos</button>`}
+      <div class="hint${pos.w ? " warn" : ""}">${pos.t}${pos.w ? ` · ${pos.w}` : " · posiciones equilibradas"}</div>
+      <details class="mas"><summary>Ver las 10 parejas</summary><div class="tablebox"><table class="brk"><thead><tr><th>Pareja</th><th style="text-align:right">Estilo</th><th style="text-align:right">Nivel</th><th style="text-align:right">Química</th></tr></thead><tbody>${q.pares.slice().sort((a, b) => b.v - a.v).map((p) => `<tr><td>${esc(ape(p.A.j.nombre))} + ${esc(ape(p.B.j.nombre))}</td><td class="n">${sg(p.r.estilo, 2)}</td><td class="n">${sg(p.r.nivel + p.r.dif, 2)}</td><td class="n"><b class="${p.v >= 0 ? "up" : "dn"}">${sg(p.v, 2)}</b></td></tr>`).join("")}</tbody></table></div><p class="note">Química = sinergia prevista − la de una pareja media de la Euroliga (${sg(synRef(), 2)}). Cuidado: sumar las 10 parejas supone que la química es aditiva; tómalo como orden de magnitud.</p></details>
+    </div></div>`;
+}
+function enlazarCQ(pre, cfg0) {
+  enlazarCQ[pre] = true;
+  const cfg = () => pre === "s" ? st.sim : st.eq, repintar = () => { guardar(); pre === "s" ? pintarSim(true) : pintarEq(true); };
+  $(`#${pre}Ctx`).addEventListener("click", (e) => { const b = e.target.closest("[data-cm]"); if (!b) return; const a = (st.ctxMets = (st.ctxMets || CTX_DEF).slice()), c = b.dataset.cm, i = a.indexOf(c); i >= 0 ? a.splice(i, 1) : a.push(c); repintar(); });
+  $(`#${pre}Qui`).addEventListener("click", (e) => { const b = e.target.closest("[data-qef]"); if (!b) return; cfg().quiEf = b.dataset.qef; repintar(); });
+  $(`#${pre}Q5`).addEventListener("click", (e) => { const a = e.target.closest("[data-q5auto]"); if (a) { cfg().q5 = null; cfg().q5x = []; repintar(); return; }
+    const b = e.target.closest("[data-q5]"); if (!b) return; const k = b.dataset.q5, cur = Array.from($(`#${pre}Q5`).querySelectorAll("[data-q5][aria-pressed=true]")).map((x) => x.dataset.q5), C = cfg();
+    let x = (C.q5x || []).filter((y) => y !== k), nv;
+    if (cur.includes(k)) { nv = cur.filter((y) => y !== k); x.push(k); } else { nv = cur.concat(k); if (nv.length > 5) { x.push(nv[0]); nv = nv.slice(nv.length - 5); } }
+    C.q5 = nv; C.q5x = x.slice(-16); repintar(); });
+}
+
+// ---------------------------------------------------------------- Claves · química y contexto (todo calculado de meta)
+const elBaskonia = () => { const al = META.clubes_con_nombre.baskonia, k = al && al.claves.find((c) => c.startsWith("euroleague:")); return k ? BY.get(`${k}:${ultCompleta()}`) : null; };
+function quimicaClubes(liga, temp) { return CL.filter((c) => c.liga === liga && c.temporada === temp).map((c) => ({ c, q: quimicaPlantilla((ROSTER.get(c.clave) || []).map((j) => ({ j, w: j.min }))).idx })).filter((o) => o.q != null).sort((a, b) => b.q - a.q); }
+function svgBarrasEstilo(vals, o = {}) {
+  return svgBosque(rango(KE).map((k) => ({ label: eNom(k), v: vals[k], se: o.se ? o.se[k] : null, color: COL[k], tip: o.tip ? o.tip(k) : "" })), { aria: o.aria, fmtv: (v) => sg(v, 2), W: 460, x0: 150 });
+}
+function pintarClavesQuimica() {
+  if (VISTA !== "claves") return;
+  if (!hayQ()) { $("#qcFacts").innerHTML = `<p class="note">Sin datos de interacciones en esta versión.</p>`; return; }
+  const I = META.interacciones, E = I.efectos, S = I.sinergia, LL = nivelLigas(), out = [];
+  const media = (M) => M.map((f) => f.reduce((a, b) => a + b, 0) / f.length);
+  const seMedia = (SE) => SE.map((f) => Math.sqrt(f.reduce((a, b) => a + b * b, 0)) / f.length);
+  // 1 · efecto MVP
+  const g = (k) => E[k] ? E[k].nivel_x : null;
+  out.push(`<div class="fact"><h3>El «efecto MVP»: al lado de un compañero mejor se tira menos y mejor</h3><p>Con un compañero un punto de nivel mejor (≈ del jugador medio de la ${LIGAS.bbl}, ${sg(LL.bbl)}, al de la ${LIGAS.nba}, ${sg(LL.nba)}), el jugador ${g("cuota_tiro") < 0 ? "pierde" : "gana"} ${fmt(Math.abs(g("cuota_tiro")), 2)} pp de cuota de tiro, ${g("efg") > 0 ? "gana" : "pierde"} ${fmt(Math.abs(g("efg")), 2)} pp de eFG% y ${g("pct_asistidas") > 0 ? "recibe más" : "recibe menos"} canastas de pase (${sg(g("pct_asistidas"), 2)} pp); sus puntos por 100 posesiones ${g("pts100") < 0 ? "bajan" : "suben"} ${fmt(Math.abs(g("pts100")), 2)}. Sus números dependen de con quién juega.</p>${svgBosque(EFK().map((k) => ({ label: EFX[k].corto, v: E[k].nivel_x, se: E[k].nivel_x_se, s: EFX[k].s, tip: `${esc(E[k].nombre)}: ${sg(E[k].nivel_x, 2)} ±${fmt(2 * E[k].nivel_x_se, 2)}` })), { W: 460, x0: 120, aria: "Efecto del nivel del compañero" })}</div>`);
+  // 2 · quién da y quién quita tiros
+  if (E.cuota_tiro) { const m = media(E.cuota_tiro.matriz), se = seMedia(E.cuota_tiro.matriz_se), o = rango(KE).sort((a, b) => m[b] - m[a]);
+    out.push(`<div class="fact"><h3>Quién da tiros y quién los quita</h3><p>Cambio medio de la cuota de tiro de sus compañeros (pp) cuando juega cada estilo, a igual nivel. Con un «${esc(eNom(o[0]))}» o un «${esc(eNom(o[1]))}» en pista, los demás tiran más (${sg(m[o[0]], 2)} y ${sg(m[o[1]], 2)}); un «${esc(eNom(o[KE - 1]))}» se queda los tiros (${sg(m[o[KE - 1]], 2)}).</p>${svgBarrasEstilo(m, { se, aria: "Cuota de tiro de los compañeros por estilo" })}</div>`); }
+  // 3 · espaciado y acierto
+  if (E.efg) { const m = media(E.efg.matriz), se = seMedia(E.efg.matriz_se), o = rango(KE).sort((a, b) => m[a] - m[b]), ar = E.pct_aro ? media(E.pct_aro.matriz) : null;
+    out.push(`<div class="fact"><h3>El espacio: quién mejora el acierto de los demás</h3><p>Cambio medio del eFG% de sus compañeros (pp). Un «${esc(eNom(o[0]))}» les baja el acierto (${sg(m[o[0]], 2)})${ar ? ` y les quita tiros en el aro (${sg(ar[o[0]], 2)} pp)` : ""}: ocupa la zona. Con un «${esc(eNom(o[KE - 1]))}» los demás aciertan más (${sg(m[o[KE - 1]], 2)}).</p>${svgBarrasEstilo(m, { se, aria: "eFG% de los compañeros por estilo" })}</div>`); }
+  // 4 · parejas
+  const pares = []; for (let a = 0; a < KE; a++) for (let b = a; b < KE; b++) pares.push({ a, b, v: S.matriz[a][b], se: S.matriz_se[a][b] });
+  pares.sort((x, y) => y.v - x.v);
+  const nP = (o) => o.a === o.b ? `dos «${esc(eNom(o.a))}»` : `«${esc(eNom(o.a))}» + «${esc(eNom(o.b))}»`;
+  out.push(`<div class="fact"><h3>Parejas que suman y parejas que se pisan</h3><p>Net de la pareja por encima de lo que esperaba el RAPM (pts/100), a igual nivel: ${nP(pares[0])} ${sg(pares[0].v, 1)}, ${nP(pares[1])} ${sg(pares[1].v, 1)}; en el otro extremo, ${nP(pares[pares.length - 1])} ${sg(pares[pares.length - 1].v, 1)}${pares[pares.length - 1].a === pares[pares.length - 1].b ? ": dos creadores se quitan el balón" : ""}. Además, cada punto de nivel de cada uno añade ${sg(S.nivel_suma, 2)}.</p><div class="tablebox">${tablaHeat(S.matriz, S.matriz_se, { lim: Math.max(0.6, ...S.matriz.flat().map(Math.abs)) * 0.9, s: 1, diag: true, fmtv: (v) => sg(v, 1), tip: (s, t, v, se) => `${esc(eNom(s))} + ${esc(eNom(t))}: ${sg(v, 2)} (±${fmt(2 * se, 2)})` })}</div></div>`);
+  // 5 · química de las plantillas de la Euroliga
+  const t = ultCompleta(), qs = quimicaClubes("euroleague", t), bk = elBaskonia(), ib = bk ? qs.findIndex((o) => o.c.clave === bk.clave) : -1;
+  if (qs.length) { const W = 460, rh = 17, H = qs.length * rh + 8, x0 = 170, lim = Math.max(0.3, ...qs.map((o) => Math.abs(o.q))), X = (v) => x0 + (v + lim) / (2 * lim) * (W - x0 - 46);
+    let gg = `<line x1="${X(0)}" x2="${X(0)}" y1="0" y2="${H}" stroke="${DK ? "#3a4659" : "#d6cec0"}"/>`;
+    qs.forEach((o, i) => { const y = 4 + i * rh, es = bk && o.c.clave === bk.clave; gg += `<g data-tip="${esc(o.c.nombre_club)}: ${sg(o.q, 2)} pts/100 por pareja"><text x="${x0 - 6}" y="${y + 11}" text-anchor="end" font-size="11" font-weight="${es ? 700 : 400}" font-family="Barlow, system-ui, sans-serif" fill="${INK}">${esc(o.c.nombre_club.length > 26 ? o.c.nombre_club.slice(0, 25) + "…" : o.c.nombre_club)}</text><rect x="${Math.min(X(0), X(o.q))}" y="${y + 2}" width="${Math.max(1, Math.abs(X(o.q) - X(0)))}" height="${rh - 6}" rx="3" fill="${es ? SIM : COL[o.c.e]}" opacity="${es ? 1 : 0.75}"/><text x="${W - 4}" y="${y + 11}" text-anchor="end" font-size="10.5" font-family="Manrope, system-ui, sans-serif" fill="${MUTED}">${sg(o.q, 2)}</text></g>`; });
+    out.push(`<div class="fact"><h3>Química de las plantillas de la Euroliga ${t}</h3><p>Media de la sinergia prevista de todas las parejas de cada plantilla (ponderada por los minutos de los dos), frente a una pareja media de la Euroliga. ${ib >= 0 ? `${esc(bk.nombre_club)} es ${ib + 1}.º de ${qs.length} (${sg(qs[ib].q, 2)}).` : ""} El color es el estilo del club.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Química de las plantillas de la Euroliga">${gg}</svg></div>`); }
+  $("#qcFacts").innerHTML = out.join("");
+  // contexto
+  if (!hayC()) { $("#qcBeta").innerHTML = `<p class="note">Sin datos de contexto.</p>`; return; }
+  const C = META.contexto, ms = C.metricas;
+  const mb = (c) => ms.find((m) => m.col === c);
+  $("#qcxSub").innerHTML = `Cada métrica normalizada se compara para un mismo jugador en entornos distintos (efecto fijo de persona): β es cuánto se mueve, en desviaciones típicas de la Euroliga, por cada punto de nivel de sus compañeros de plantilla sobre la media de su liga. Con mejores compañeros, el USG% ${mb("usg_pct").beta < 0 ? "baja" : "sube"} (${sg(mb("usg_pct").beta, 2)} σ), el AST% ${mb("ast_pct").beta < 0 ? "baja" : "sube"} (${sg(mb("ast_pct").beta, 2)}), los puntos/100 ${mb("pts_p100").beta < 0 ? "bajan" : "suben"} (${sg(mb("pts_p100").beta, 2)}), el DRtg individual ${mb("drtg").beta < 0 ? "mejora" : "empeora"} (${sg(mb("drtg").beta, 2)}), las Win Shares suben (${sg(mb("ws_per_40").beta, 2)}) y crecen las canastas asistidas (${sg(mb("pct_asistidas").beta, 2)}) y los triples de esquina (${sg(mb("pct_t3_esquina").beta, 2)}).`;
+  $("#qcBeta").innerHTML = svgBosque(ms.map((m) => ({ label: m.nombre.length > 28 ? (CTXN[m.col] || [m.nombre])[0] : m.nombre, v: m.beta_estimado, se: m.se, s: m.sentido === 0 ? 0 : 1, color: m.sentido === 0 ? null : (m.beta_estimado * m.sentido >= 0 ? "var(--good)" : "var(--bad)"), tip: `${esc(m.nombre)}: β ${sg(m.beta_estimado, 3)} ± ${fmt(2 * m.se, 3)}${m.claro ? "" : " · no es claro: el Atlas no lo aplica"}` })), { W: 520, x0: 200, aria: "Sensibilidad de cada métrica al nivel de los compañeros" }) +
+    `<p class="note">Verde = cambio a mejor; rojo = a peor; dorado/azul = ni mejor ni peor (uso, asistidas, triples de esquina). Honestidad: parte del β positivo del RAPM es el propio RAPM arrastrando contexto de equipo (con compañeros mejores, el ridge le atribuye algo del éxito colectivo), así que su proyección es una cota alta.</p>`;
+  // ejemplo real: el jugador de la BBL con más minutos, proyectado a la plantilla de Baskonia
+  const ej = JG.filter((j) => j.liga === "bbl" && j.temporada === t && j.M && j.M[0] != null).sort((a, b) => b.min - a.min)[0];
+  let ejTxt = "";
+  if (ej && bk) { const ro = (ROSTER.get(bk.clave) || []).map((j) => ({ j, w: j.min })).concat([{ j: ej, w: ej.min }]), dev = devDestino(ro, ej, t), P = proyectar(ej, dev), u = P.out.usg_pct, pp = P.out.pts_p100, rr = P.out.rapm;
+    ejTxt = `<p><b>Ejemplo:</b> ${esc(ej.nombre)} (${esc(ej.nombre_club)}, ${LIGAS.bbl} ${t}) tenía compañeros ${sg(ej.ctx_plantilla_dev)} sobre la media de su liga. En la plantilla de ${esc(bk.nombre_club)} ${t} los tendría ${sg(dev)} sobre la plantilla media de la Euroliga: Δ = ${sg(P.d)}. Su USG% normalizado pasaría de ${fmtM("usg_pct", u.x)} a ${fmtM("usg_pct", u.y)}, sus puntos/100 de ${fmtM("pts_p100", pp.x)} a ${fmtM("pts_p100", pp.y)}${rr && rr.x != null ? ` y su RAPM-EL de ${fmtM("rapm", rr.x)} a ${fmtM("rapm", rr.y)}` : ""}.</p>`; }
+  $("#qcForm").innerHTML = `<p>1. <b>Nivel de los compañeros en el destino</b>: media de L de los otros jugadores de la plantilla simulada, ponderada por sus minutos, menos la plantilla media de la Euroliga de esa temporada (${sg(refEL(t))} en ${t}).</p><p>2. <b>Δ</b> = eso menos su contexto de plantilla de origen (cuánto mejores que la media de su liga eran sus compañeros). La diferencia entre ligas ya la recoge la normalización A+B; aquí sólo cuenta el entorno dentro de la liga.</p><p>3. En la escala transformada de cada métrica (raíz, logaritmo o arcoseno de la raíz para porcentajes): <code>x′ = T⁻¹(T(x) + τ_pos · β · Δ)</code>, con τ la dispersión real entre jugadores de la Euroliga de su puesto (E/A/I). β sólo se aplica si es claro (|β| &gt; 2 errores típicos).</p>${ejTxt}<p class="note">${esc(C.nota)}</p>`;
+}
+// ---------------------------------------------------------------- Claves · ejemplos del traductor, cifras de la cabecera y especificación del modelo
+function pintarLectura() {
+  if (VISTA !== "claves") return;
+  document.querySelectorAll(".nRasgos").forEach((e) => e.textContent = META.rasgos.length);
+  const nPbp = META.rasgos.filter((r) => /jugada/.test(r.origen || "")).length, nCaja = META.rasgos.length - nPbp;
+  $("#ideaEstilo").innerHTML = `Ritmo, peso del triple, tiros libres, rebote, robos, faltas, pase, cuántos minutos juegan interiores y exteriores… y, del jugada a jugada, desde dónde se tira (aro, media distancia, triple de esquina) y cuántas canastas llegan de pase. Son ${META.rasgos.length} rasgos de juego (${nCaja} de la estadística de caja y ${nPbp} del jugada a jugada). El Atlas los resume en un mapa y en ${KE} estilos.`;
+  $("#glRasgos").textContent = `Los ${META.rasgos.length} rasgos de juego (${nPbp} de ellos del jugada a jugada: tiros en el aro, media distancia, triples de esquina y canastas asistidas) frente a un club medio de su mismo nivel, en desviaciones típicas.`;
+  const LL = nivelLigas();
+  if (hayQ()) { const E = META.interacciones.efectos, S = META.interacciones.sinergia.matriz; let mx = [0, 0], mn = [0, 0]; for (let a = 0; a < KE; a++) for (let b = a; b < KE; b++) { if (S[a][b] > S[mx[0]][mx[1]]) mx = [a, b]; if (S[a][b] < S[mn[0]][mn[1]]) mn = [a, b]; }
+    const nP = (p) => p[0] === p[1] ? `dos «${esc(eNom(p[0]))}»` : `«${esc(eNom(p[0]))}» con «${esc(eNom(p[1]))}»`;
+    $("#ideaQuimica").innerHTML = `El estilo de un jugador cambia el de sus compañeros: un compañero mejor quita tiros (${sg(E.cuota_tiro.nivel_x, 2)} pp) pero mejora el acierto (${sg(E.efg.nivel_x, 2)} pp). Por estilos, ${nP(mx)} suman ${sg(S[mx[0]][mx[1]], 1)} pts/100 sobre lo que espera su RAPM y ${nP(mn)}, ${sg(S[mn[0]][mn[1]], 1)}.`; }
+  if (hayC()) { const m = (c) => META.contexto.metricas.find((x) => x.col === c);
+    $("#ideaContexto").innerHTML = `No es lo mismo jugar con el MVP de la Euroliga que en la BBL (jugador medio: ${sg(LL.euroleague)} frente a ${sg(LL.bbl)} de nivel L). Con compañeros un punto mejores, el USG% de un jugador baja ${fmt(Math.abs(m("usg_pct").beta), 2)} σ y su % de canastas asistidas sube ${fmt(m("pct_asistidas").beta, 2)} σ: el Atlas corrige sus números por ese entorno antes de proyectarlos a tu plantilla.`; }
+  // ejemplos del traductor, con datos reales de Baskonia (Euroliga, última temporada completa)
+  const c = elBaskonia(), set = (k, h) => document.querySelectorAll(`[data-ej="${k}"]`).forEach((e) => e.innerHTML = h);
+  if (c) { const t = ultCompleta(), ro = (ROSTER.get(c.clave) || []).slice().sort((a, b) => b.min - a.min), j = ro[0];
+    set("estilo", esc(eNom(c.e))); set("claridad", `${pct(c.p)} · ${claridad(c.p)}`); set("nivel", `${sg(c.nivel)} ≈ puesto ${puesto(c.nivel)} de 100`);
+    const al = META.clubes_con_nombre.baskonia, kacb = al && al.claves.find((k) => k.startsWith("acb:")), cacb = kacb && BY.get(`${kacb}:${t}`);
+    if (cacb) { const pc = percentil(META.referencias.club_club, dist(XYZ(c), XYZ(cacb))); set("parecido", `Parecido ${Math.round(100 - (pc ?? 50))} <span class="muted">(con su versión ACB)</span>`); }
+    const bt = (META.analisis && META.analisis.baskonia && META.analisis.baskonia.temporadas || []).filter((r) => r.liga === "euroleague" && r.temporada === t)[0];
+    if (bt && bt.pct_desplazamiento != null) set("cambio", `${CAMBIO[banda(bt.pct_desplazamiento)][0]} · p${fmt(bt.pct_desplazamiento, 0)}`);
+    if (j) { const xj = red(xJug(j)), d = dist(XYZ(j), XYZ(c)), pd = percentil(META.referencias.jugador_su_club, d), o = { pd, e: argmax(xj.p), afin: xj.p[c.e] }, [, ver] = veredicto(o, c.e);
+      set("cercania", `Cercanía ${Math.round(100 - (pd ?? 50))} <span class="muted">(${esc(ape(j.nombre))})</span>`); set("afin", pct(xj.p[c.e])); set("simil", pct(1 - js2(xj.p, c.probs))); set("encaje", ver);
+      set("L", `${sg(Lof(j))} <span class="muted">(${esc(ape(j.nombre))})</span>`); set("rapm", rapmOk(j) ? `${sg(j.rapm_el, 1)} · p${fmt(j.rapm_pct, 0)}` : "–");
+      set("ctx", sg(j.ctx_plantilla_dev)); set("comp", sg(j.ctx_comp));
+      if (hayC()) { const P = proyectar(j, devDestino(ro.map((x) => ({ j: x, w: x.min })), j, t) + 0.3); const u = P.out.usg_pct; if (u && u.x != null) set("proy", `USG% ${fmtM("usg_pct", u.x)} → ${fmtM("usg_pct", u.y)} <span class="muted">(+0,3)</span>`); }
+      if (hayQ() && ro[1]) { const r = efecto("cuota_tiro", pJ(j), Lof(j), pJ(ro[1]), Lof(ro[1])), s = sinJ(j, ro[1]).total - synRef(); set("dir", `${sg(r.total, 1)} pp de cuota`); set("sin", sg(s, 2));
+        const q = quinteto(ro.slice(0, 5).map((x) => ({ j: x, w: x.min }))); set("q5", `${sg(q.total, 1)} <span class="muted">(titulares)</span>`); } }
+    const comp = composicion(ro.map((x) => ({ w: x.min, e: x.e, xyz: XYZ(x) }))); set("variedad", `${variedad(comp.pdisp)} · p${fmt(comp.pdisp, 0)}`);
+    const kx = argmax(c.X.map(Math.abs)); set("rasgo", `${esc(llano(META.rasgos[kx].corto))} ${sg(c.X[kx], 1)}`); set("rob", pct(c.rob));
+    const EL = CL.filter((x) => x.liga === "euroleague" && x.temporada === t).sort((a, b) => b.nivel - a.nivel); set("ranking", `${EL.findIndex((x) => x.clave === c.clave) + 1}.º de ${EL.length}`); }
+  set("Lel", sg(LL.euroleague));
+  const r = JG.filter((j) => rapmOk(j) && j.min >= 300).map((j) => j.rapm_el).sort((a, b) => a - b);
+  if (r.length) $("#escRapm").textContent = `Con 300+ minutos: mediana ${sg(r[Math.floor(r.length / 2)], 1)}; el 10 % mejor, ${sg(r[Math.floor(r.length * 0.9)], 1)} o más.`;
+}
+
+function pintarTodo() { pintarResumen(); pintarEnts(); pintarComparacion(); buscar(); pintarLigas(); pintarTrayectoria(); pintarEstilos(); pintarHallazgos(); pintarModelo(); pintarSim(); pintarMapa(); pintarClavesQuimica(); pintarLectura(); }
 
 window.addEventListener("message", (e) => { if (e.data && e.data.irA && TABS.includes(e.data.irA) && META) irA(e.data.irA); });
 document.addEventListener("click", (e) => { const a = e.target.closest("[data-claves]"); if (!a) return; e.preventDefault();

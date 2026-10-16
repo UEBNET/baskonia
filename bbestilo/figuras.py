@@ -60,14 +60,15 @@ def arquitectura(d: Path) -> str:
     def flecha(x0, y0, x1, y1):
         ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=8, color=MUTED, lw=0.9))
 
-    caja(0.5, 13, 10, 11, "x", "13 rasgos\nsin nivel")
+    nr = len(C.RASGOS)
+    caja(0.5, 13, 10, 11, "x", f"{nr} rasgos\nsin nivel")
     caja(14, 13, 9, 11, "64", "GELU")
     caja(26.5, 13, 9, 11, "32", "GELU")
     caja(39.5, 22, 10, 8, "μ_z", "mapa 3D")
     caja(39.5, 7, 10, 8, "log σ²_z", "3")
     caja(53.5, 13, 8, 11, "z", "μ + σ·ε")
     caja(66, 22, 33, 11, f"Capa de salida: {C.N_ESTILOS} neuronas", "γ_k = π_k N_k(z) / Σ_j π_j N_j(z)", fc=KRAFT, fs=8)
-    caja(66, 3, 33, 13, "Decodificador", "3 → 32 → 64 → 13", fs=8)
+    caja(66, 3, 33, 13, "Decodificador", f"3 → 32 → 64 → {nr}", fs=8)
     for a, b in [((10.5, 18.5), (14, 18.5)), ((23, 18.5), (26.5, 18.5)), ((35.5, 20), (39.5, 25)), ((35.5, 17), (39.5, 11)),
                  ((49.5, 26), (53.5, 20)), ((49.5, 11), (53.5, 16)), ((61.5, 20.5), (66, 27)), ((61.5, 16.5), (66, 10))]:
         flecha(*a, *b)
@@ -144,20 +145,28 @@ def neutralizacion(d: Path, neu: dict) -> str:
 
 
 def barrido(d: Path, b: dict) -> str:
+    """Barrido de K previo al entrenamiento (barrido.py → barrido_k.json; si no existe, el de analisis.json)."""
     k = np.array(b["k"])
+    nr = len(b.get("rasgos", C.COLS))
+    previo = "bic_diag" in b
+    series = ((("bic_diag", f"BIC (diagonal, {nr} rasgos)", "#2a78d6"), ("icl_diag", f"ICL (diagonal, {nr} rasgos)", "#6a4fd0"))
+              if previo else (("bic_rasgos", f"BIC ({nr} rasgos)", "#2a78d6"), ("icl_rasgos", f"ICL ({nr} rasgos)", "#6a4fd0"),
+                              ("bic_mapa", "BIC (mapa 3D)", "#0f8a6a")))
     fig, ax = plt.subplots(1, 2, figsize=(7.0, 2.3))
-    for c, lab, col in (("bic_rasgos", "BIC (13 rasgos)", "#2a78d6"), ("icl_rasgos", "ICL (13 rasgos)", "#6a4fd0"), ("bic_mapa", "BIC (mapa 3D)", "#0f8a6a")):
+    for c, lab, col in series:
         v = np.array(b[c])
         ax[0].plot(k, (v - v.min()) / (v.max() - v.min()), marker="o", ms=2.5, lw=1.2, color=col, label=lab)
+        ax[0].scatter(k[int(np.argmin(v))], 0, s=40, facecolor="none", edgecolor=col, lw=1.2, zorder=4)
     ax[0].axvline(C.N_ESTILOS, color=MUTED, ls=":", lw=1)
     ax[0].set_xlabel("K")
     ax[0].set_ylabel("criterio normalizado (menos = mejor)")
     ax[0].legend(frameon=False, fontsize=6.5)
-    ax[1].plot(k, b["estabilidad_kmedias"], marker="o", ms=2.5, color=INK, label="estabilidad (ARI submuestreo)")
-    ax[1].plot(k, b["silueta_kmedias"], marker="s", ms=2.5, color="#e0662c", label="silueta")
+    ax[1].plot(k, b["estabilidad" if previo else "estabilidad_kmedias"], marker="o", ms=2.5, color=INK, label="estabilidad de k-medias (ARI, submuestras del 80 %)")
+    ax[1].plot(k, b["silueta" if previo else "silueta_kmedias"], marker="s", ms=2.5, color="#e0662c", label="silueta de k-medias")
     ax[1].axvline(C.N_ESTILOS, color=MUTED, ls=":", lw=1)
     ax[1].set_xlabel("K")
-    ax[1].legend(frameon=False, fontsize=6.5)
+    ax[1].set_ylim(0, 1.05)
+    ax[1].legend(frameon=False, fontsize=6.5, loc="upper right")
     fig.tight_layout()
     return _guardar(fig, d / "fig_barrido_k.png")
 
@@ -212,7 +221,8 @@ def entrenamiento(d: Path, reg: dict) -> str:
 
 # ---------------------------------------------------------------- iteraciones del modelo
 ITER = [("v1_12estilos", "vade", "v1 VaDE 12"), ("v1_12estilos", "idec", "v1 IDEC 12"), ("v2_8estilos", "vade", "v2 VaDE 8"),
-        ("v2_8estilos", "idec", "v2 IDEC 8"), ("v3_6estilos", "vade", "v3 VaDE 6"), ("", "vade", "Final VaDE 6")]
+        ("v2_8estilos", "idec", "v2 IDEC 8"), ("v3_6estilos", "vade", "v3 VaDE 6"), ("v4_6estilos_box", "vade", "v4 VaDE 6 (caja)"),
+        ("", "vade", "Final VaDE 6 (17)")]
 
 
 def _ev_iter(carpeta: str, red: str) -> dict | None:
@@ -225,7 +235,7 @@ def iteraciones(d: Path) -> str:
     met = [("eta2_nivel", "η² nivel ← estilo", "menos es mejor"), ("nmi_estilo_liga", "NMI estilo-liga", "menos es mejor"),
            ("salida_max_media", "Seguridad de la asignación", ""), ("ari_semillas_medio", "ARI entre semillas", ""),
            ("estabilidad_mapa", "Estabilidad del mapa (r)", ""), ("ari_temporal_reserva", "Reproducibilidad temporal (ARI)", ""),
-           ("robustez_reparto_minutos", "Robustez al reparto de minutos", ""), ("silueta_rasgos", "Silueta en los 13 rasgos", "")]
+           ("robustez_reparto_minutos", "Robustez al reparto de minutos", ""), ("silueta_rasgos", "Silueta en los rasgos", "13 rasgos; final: 17")]
     evs = [(_ev_iter(c, r), r, lab) for c, r, lab in ITER]
     evs = [x for x in evs if x[0] is not None]
     fig, axs = plt.subplots(2, 4, figsize=(7.2, 3.6), sharex=True)
@@ -278,12 +288,14 @@ def mapas_iteraciones(d: Path) -> str:
     return _guardar(fig, d / "fig_mapas_iteraciones.png")
 
 
-def correspondencia(d: Path, nombres: dict) -> str | None:
-    """Clubes de cada estilo de la v2 (8) en cada estilo del modelo final."""
-    p8 = C.DIR_SALIDA / "historial" / "v2_8estilos" / "vade" / "clubes.csv"
+def correspondencia(d: Path, nombres: dict, carpeta: str = "v4_6estilos_box",
+                    etiqueta: str = "v4 (6 estilos, 13 rasgos de caja)") -> str | None:
+    """Clubes de cada estilo de una iteración anterior (por defecto la v4) en cada estilo del modelo final."""
+    p8 = C.DIR_SALIDA / "historial" / carpeta / "vade" / "clubes.csv"
     if not p8.exists():
         return None
-    n8 = json.loads((C.DIR_SALIDA / "historial" / "v2_8estilos" / "nombres.json").read_text(encoding="utf-8"))
+    pn = C.DIR_SALIDA / "historial" / carpeta / "nombres.json"
+    n8 = json.loads(pn.read_text(encoding="utf-8")) if pn.exists() else {}
     a = pd.read_csv(p8)[["clave", "estilo", "provisional"]]
     b = pd.read_csv(C.DIR_SALIDA / "vade" / "clubes.csv")[["clave", "estilo"]]
     m = a[~a["provisional"]].merge(b, on="clave", suffixes=("_8", "_f"))
@@ -297,8 +309,8 @@ def correspondencia(d: Path, nombres: dict) -> str | None:
         for j in range(M.shape[1]):
             if M[i, j]:
                 ax.text(j, i, str(M[i, j]), ha="center", va="center", fontsize=6.8, color="white" if M[i, j] > 0.55 * M.max() else INK)
-    ax.set_xlabel(f"Modelo final ({C.N_ESTILOS} estilos)", fontsize=7.5)
-    ax.set_ylabel("v2 (8 estilos)", fontsize=7.5)
+    ax.set_xlabel(f"Modelo final ({C.N_ESTILOS} estilos, {len(C.RASGOS)} rasgos)", fontsize=7.5)
+    ax.set_ylabel(etiqueta, fontsize=7.5)
     ax.spines[:].set_visible(False)
     return _guardar(fig, d / "fig_correspondencia.png")
 
@@ -378,6 +390,105 @@ def simulacion(d: Path, ej: dict, estilos: pd.DataFrame, nombres: dict) -> str:
     return _guardar(fig, d / "fig_simulacion.png")
 
 
+# ---------------------------------------------------------------- contexto de nivel y química de estilos
+def sensibilidad(d: Path, sens: pd.DataFrame) -> str:
+    """β de cada métrica normalizada al nivel de los compañeros (efecto fijo de persona), ± 2 errores típicos;
+    en hueco, el β del nivel de los rivales. En negrita, las métricas que entran en el vector de estilo."""
+    s = sens.sort_values("beta_comp").reset_index(drop=True)
+    fig, ax = plt.subplots(figsize=(6.6, 0.12 * len(s) + 0.7))
+    y = np.arange(len(s))
+    sig = (s["beta_comp"].abs() > 2 * s["beta_comp_se"]).to_numpy()
+    ax.axvline(0, color=MUTED, lw=0.8)
+    ax.errorbar(s["beta_riv"], y + 0.22, xerr=2 * s["beta_riv_se"], fmt="o", ms=3, mfc="white", mec="#e0662c", ecolor="#e9b89c",
+                elinewidth=0.8, capsize=0, lw=0, label="nivel de los rivales")
+    for i, r in s.iterrows():
+        col = INK if sig[i] else "#c9ad8c"
+        ax.errorbar(r.beta_comp, i - 0.12, xerr=2 * r.beta_comp_se, fmt="o", ms=3.6, color=col, ecolor=col, elinewidth=1.1, capsize=1.5)
+    ax.errorbar([], [], xerr=[], fmt="o", ms=3.6, color=INK, label="nivel de los compañeros (claro: |β| > 2 e.t.)")
+    ax.errorbar([], [], xerr=[], fmt="o", ms=3.6, color="#c9ad8c", label="nivel de los compañeros (no claro)")
+    ax.set_yticks(y, s["nombre"], fontsize=6.3)
+    for t, m in zip(ax.get_yticklabels(), s["metrica"]):
+        if m in C.METRICAS_ESTILO:
+            t.set_fontweight("bold")
+            t.set_color(INK)
+    ax.set_ylim(-0.8, len(s) - 0.2)
+    ax.grid(axis="x", color=LINE, lw=0.5)
+    ax.set_xlabel("β: desviaciones típicas de capacidad (vara EuroLeague) por unidad de nivel del entorno · ± 2 e.t.", fontsize=7)
+    ax.tick_params(axis="x", labelsize=6.5)
+    ax.legend(frameon=False, fontsize=6.3, loc="lower center", bbox_to_anchor=(0.45, 1.0), ncol=3, handletextpad=0.3, columnspacing=1.0)
+    return _guardar(fig, d / "fig_sensibilidad.png")
+
+
+def _matriz_estilos(ax, M, SE, nombres_e: list[str], lim: float, titulo: str, ylab: bool = True, unidad: str = "{:+.1f}"):
+    im = ax.imshow(M, cmap="BrBG", vmin=-lim, vmax=lim, aspect="auto")
+    K = len(M)
+    for i in range(K):
+        for j in range(K):
+            t = abs(M[i, j]) / SE[i, j] if SE[i, j] > 0 else 0
+            claro = t > 2
+            ax.text(j, i, unidad.format(M[i, j]).replace(".", ",") + ("*" if claro else ""), ha="center", va="center",
+                    fontsize=6.4 if claro else 5.9, fontweight="semibold" if claro else "normal",
+                    color=("white" if abs(M[i, j]) > 0.62 * lim else INK) if claro else MUTED)
+    ax.set_xticks(range(K), nombres_e, rotation=35, ha="right", fontsize=6.4)
+    ax.set_yticks(range(K), nombres_e if ylab else [""] * K, fontsize=6.4)
+    for k, t in enumerate(ax.get_xticklabels()):
+        t.set_color(COL[k])
+    for k, t in enumerate(ax.get_yticklabels()):
+        t.set_color(COL[k])
+    ax.set_title(titulo, fontsize=7.8)
+    ax.spines[:].set_visible(False)
+    return im
+
+
+def quimica(d: Path, inter: dict, nombres: dict) -> str | None:
+    """Matrices estilo × estilo de dos efectos X → Y (eFG% y cuota de tiro), a igual nivel; * = |coef| > 2 e.t."""
+    ef = inter.get("efectos") or {}
+    if "efg" not in ef or "cuota_tiro" not in ef:
+        return None
+    ne = [nombres.get(e, e) for e in inter["estilos"]]
+    fig, axs = plt.subplots(1, 2, figsize=(7.2, 3.2))
+    for ax, (k, tit), yl in zip(axs, (("efg", "eFG% de Y (puntos porcentuales)"), ("cuota_tiro", "Cuota de tiro de Y (puntos porcentuales)")), (True, False)):
+        M, SE = np.array(ef[k]["matriz"]), np.array(ef[k]["matriz_se"])
+        lim = max(1.0, float(np.abs(M).max()))
+        im = _matriz_estilos(ax, M, SE, ne, lim, tit, yl)
+        fig.colorbar(im, ax=ax, fraction=0.045, pad=0.02).ax.tick_params(labelsize=6)
+    axs[0].set_ylabel("X: compañero que entra en pista", fontsize=7)
+    for ax in axs:
+        ax.set_xlabel("Y: jugador cuyo juego cambia", fontsize=7)
+    fig.tight_layout(w_pad=1.0)
+    return _guardar(fig, d / "fig_quimica.png")
+
+
+def sinergia(d: Path, inter: dict, nombres: dict) -> str | None:
+    """Sinergia de pareja frente al RAPM (puntos por 100 posesiones) por estilo × estilo, a igual nivel."""
+    s = inter.get("sinergia")
+    if not s:
+        return None
+    M, SE = np.array(s["matriz"]), np.array(s["matriz_se"])
+    ne = [nombres.get(e, e) for e in s["estilos"]]
+    K = len(M)
+    fig, ax = plt.subplots(figsize=(4.9, 3.3))
+    lim = max(1.0, float(np.abs(M).max()))
+    im = ax.imshow(np.where(np.tril(np.ones((K, K))) > 0, M, np.nan), cmap="BrBG", vmin=-lim, vmax=lim, aspect="auto")
+    for i in range(K):
+        for j in range(i + 1):
+            claro = abs(M[i, j]) > 2 * SE[i, j]
+            ax.text(j, i - 0.12, f"{M[i, j]:+.2f}".replace(".", ",") + ("*" if claro else ""), ha="center", va="center",
+                    fontsize=6.6 if claro else 6.1, fontweight="semibold" if claro else "normal",
+                    color=("white" if abs(M[i, j]) > 0.62 * lim else INK) if claro else MUTED)
+            ax.text(j, i + 0.24, f"± {SE[i, j]:.2f}".replace(".", ","), ha="center", va="center", fontsize=5.0,
+                    color=("white" if claro and abs(M[i, j]) > 0.62 * lim else MUTED))
+    ax.set_xticks(range(K), ne, rotation=35, ha="right", fontsize=6.6)
+    ax.set_yticks(range(K), ne, fontsize=6.6)
+    for k, t in enumerate(ax.get_xticklabels()):
+        t.set_color(COL[k])
+    for k, t in enumerate(ax.get_yticklabels()):
+        t.set_color(COL[k])
+    ax.spines[:].set_visible(False)
+    fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02).set_label("puntos por 100 posesiones", fontsize=6.8)
+    return _guardar(fig, d / "fig_sinergia.png")
+
+
 def todas(d: Path, fuentes: Path | None = None, ejemplo: dict | None = None) -> dict:
     estilo_mpl(fuentes)
     d.mkdir(parents=True, exist_ok=True)
@@ -393,13 +504,23 @@ def todas(d: Path, fuentes: Path | None = None, ejemplo: dict | None = None) -> 
         nombres = {k: v["nombre"] for k, v in json.loads(p.read_text(encoding="utf-8")).items() if not k.startswith("_")}
     claves = json.loads(C.CLUBES.read_text(encoding="utf-8"))["baskonia"]["claves"]
     reg = json.loads((R / "vade" / "registro.json").read_text(encoding="utf-8"))
+    pb = R / "barrido_k.json"
+    bk = json.loads(pb.read_text(encoding="utf-8")) if pb.exists() else an["barrido_k"]
     out = {"arquitectura": arquitectura(d), "mapa": mapa(d, cl, est, nombres), "perfiles": perfiles(d, est, nombres),
            "liga_estilo": liga_estilo(d, an["ligas"]["liga_x_estilo"], [nombres.get(e, e) for e in est["estilo"]]),
-           "neutralizacion": neutralizacion(d, an["neutralizacion"]), "barrido": barrido(d, an["barrido_k"]),
+           "neutralizacion": neutralizacion(d, an["neutralizacion"]), "barrido": barrido(d, bk),
            "exito": exito(d, an["exito"], nombres), "baskonia": baskonia(d, cl, est, claves),
            "entrenamiento": entrenamiento(d, reg), "iteraciones": iteraciones(d), "mapas_iter": mapas_iteraciones(d),
            "correspondencia": correspondencia(d, nombres),
            "ari_semillas": ari_semillas(d, ev, ev["semillas"], reg.get("consenso") or {})}
+    ps = C.RAIZ / "data" / "modelos" / "contexto" / "sensibilidad.csv"
+    if ps.exists():
+        out["sensibilidad"] = sensibilidad(d, pd.read_csv(ps))
+    pi = R / "interacciones.json"
+    if pi.exists():
+        inter = json.loads(pi.read_text(encoding="utf-8"))
+        out["quimica"] = quimica(d, inter, nombres)
+        out["sinergia"] = sinergia(d, inter, nombres)
     if ejemplo:
         out["simulacion"] = simulacion(d, ejemplo, est, nombres)
     return out
