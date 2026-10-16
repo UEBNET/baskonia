@@ -228,3 +228,13 @@ El orden de nivel que sale en las métricas globales es NBA > EuroLeague > G Lea
   temporada; aquí se usa la fecha de nacimiento.
 * **LNB.** Sin totales de rivales: no hay traducción de ORtg, DRtg, WS, OREB%, DREB% ni BLK%.
   Se usan las versiones por 100 posesiones.
+
+## Métricas de pista (oct. 2026)
+
+El catálogo pasa de 25 a **33 métricas**: se añaden 8 del jugada a jugada (grupo «Pista» de `bbmodel/metricas.py`;
+datos de `bbmodel/pista.py`): % de tiros en el aro, cortos, de media distancia y triples de esquina (exposición:
+tiros con coordenadas), % de canastas propias asistidas (exposición: canastas) y RAPM, ORAPM y DRAPM (exposición:
+posesiones en pista). Examen fuera de muestra (412 cambios de liga), mejora de A+B frente a «mismo percentil»: RAPM
++46 %, ORAPM +49 %, DRAPM +40 %, zonas y asistidas +16-23 %; A+B gana a A en las 33. Las 25 métricas de caja no
+cambian en A (cada métrica se ajusta aparte) y se mueven ±2 puntos en B. Detalle, contexto de nivel y química de
+estilos: [`contexto_y_quimica.md`](contexto_y_quimica.md).
