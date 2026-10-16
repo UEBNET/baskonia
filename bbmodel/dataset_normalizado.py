@@ -87,6 +87,12 @@ def construir(temporada: str) -> pd.DataFrame:
         cols[f"{c}_lo"] = combinar(lo_a, lo_b, c)
         cols[f"{c}_hi"] = combinar(hi_a, hi_b, c)
         cols[f"{c}_pctel"] = pd.concat([p_a, p_b], axis=1).mean(axis=1)
+        if CATALOGO[c].grupo == "Pista":
+            # sin jugada a jugada observado (LNB 2020-21; RAPM de la BBL 2020-23) no se inventa el dato: en blanco
+            # (la red B sí lo estima a partir del resto de su perfil; queda en <m>_B)
+            sin_obs = pd.to_numeric(m[c], errors="coerce").isna()
+            for k in (c, f"{c}_lo", f"{c}_hi", f"{c}_pctel"):
+                cols[k] = cols[k].where(~sin_obs)
         cols[f"{c}_obs"] = m[c]
         cols[f"{c}_A"] = A
         cols[f"{c}_B"] = B
