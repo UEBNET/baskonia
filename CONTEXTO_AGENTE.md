@@ -365,8 +365,11 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 - **Estilos de juego** (`bbestilo/`, `docs/estilos_de_juego.md`, artículo `docs/articulo/estilos_de_juego_baskonia.pdf`):
   modelo final = **VaDE de 6 estilos** por club-competición-temporada (mezcla de 6 gaussianas de covarianza completa en
   un latente 3D = mapa; consenso de 10 semillas y ajuste fino con la mezcla fijada), sobre los equivalentes EuroLeague
-  A+B agregados por minutos (13 rasgos) **con el nivel neutralizado** (regresión de cada rasgo en [1, L, L²], L = índice
-  de calidad: PER, GmSc/40, WS/40, ORtg, DRtg, pts/100, TS%, eFG%). η² nivel-estilo 0,4 %. Sin IDEC (retirada).
+  A+B agregados por minutos (17 rasgos: 13 de caja + 4 del jugada a jugada: % aro, % media, % triple de esquina,
+  % canastas asistidas) **con el nivel neutralizado** (regresión de cada rasgo en [1, L, L²], L = índice
+  de calidad: PER, GmSc/40, WS/40, ORtg, DRtg, pts/100, TS%, eFG%). η² nivel-estilo 1,4 %. Sin IDEC (retirada).
+  Estilos (oct. 2026): Creación individual, Pintura física, Pausado y seguro, Lejos del aro, Exterior y presión,
+  Circulación y triple; el modelo anterior de 13 rasgos está en historial/v4_6estilos_box (ARI 0,14 con el nuevo).
   Nombres de estilos en `config/estilos.json` (revisar si se reentrena). Iteraciones anteriores (v1 12 estilos, v2 8,
   v3 6 con 5 semillas) sólo como métricas y asignaciones en `data/modelos/estilos/historial/` (la tabla de evolución
   del Atlas y del artículo sale de ahí). `python -m bbestilo entrenar | evaluar | analisis | encaje | parecidos |
@@ -376,6 +379,20 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   con `files` = `estilos/{meta,clubes,jugadores}.json` y `articulo/estilos_de_juego_baskonia.pdf`, capacidad
   `downloads`). Hallazgos: BIC/ICL eligen 6 estilos; el encaje por similitud no predice el rendimiento del fichaje;
   la continuidad de plantilla predice conservar el estilo; Baskonia cambia mucho de estilo.
+
+## 9a. Jugada a jugada en los modelos (oct. 2026; `docs/contexto_y_quimica.md`)
+
+- `bbmodel/zonas.py`: calibración de coordenadas de tiro por fuente con la línea de triple (97-100 % de acierto).
+- `bbmodel/pista.py` → `data/modelos/pista/<temp>.csv`: zonas, canastas asistidas y RAPM por jugador-equipo; se unen en
+  `datos.cargar_filas`, así que A y B traducen 33 métricas (25 de caja + 8 de pista, grupo «Pista» del catálogo).
+  B debe correr con un hilo de BLAS (`threadpool_limits(1)` en `__main__`; con varios es ~14 veces más lento).
+- `bbmodel/contexto.py` → `data/modelos/contexto/`: nivel L, contexto en pista (tramos) y de plantilla, y sensibilidad
+  β de cada métrica (efecto fijo de persona). El dataset normalizado añade L, ctx_* y `<m>_ctx`; las métricas de
+  pista quedan en blanco donde no hay jugada a jugada observado.
+- `bbmodel/interacciones.py` → `data/modelos/interacciones/efectos_<temp>.csv.gz` (X → Y) y `bbestilo/quimica.py` →
+  `data/modelos/estilos/interacciones.json` (matrices estilo × estilo con centros y fórmulas para el navegador).
+- `bbmodel/mesa_quintetos.py` → `data/artifact/quintetos/datos/<temp>/<liga>.json.gz` (pestaña «Quintetos y
+  conexiones», `artifact/quintetos/index.html`). `bbstats artifact` añade columnas `q_*` (grupo «pista») a los JSON.
 
 ## 9b. Quintetos, parejas y conexiones (bbstats/lineups)
 

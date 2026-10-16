@@ -322,23 +322,30 @@ Configuración: `quintetos` en `config/sources.json` (`contraccion_posesiones`, 
 `excluir_si_dif_min_s`, `guardar_cada_partidos`) y `pbp` (fuente) en cada liga. Las descargas largas se guardan
 en paquetes de 150 partidos: si se cortan, la siguiente ejecución sólo pide lo que falte.
 
-## 13. Estilos de juego: `bbestilo` (VaDE, 6 estilos sin nivel y mapa 3D)
+## 13. Estilos de juego: `bbestilo` (VaDE, 6 estilos sin nivel, 17 rasgos con jugada a jugada y mapa 3D)
 
 Asigna a cada **club-competición-temporada** de las 8 ligas uno de **6 estilos de juego** y lo sitúa, junto con
 sus jugadores, en un **mapa 3D**. Usa sólo los datos **normalizados A+B** (equivalentes EuroLeague de `bbmodel`),
-agregados por minutos, más el ritmo relativo a la liga, y **neutraliza el nivel**: a cada rasgo se le quita la parte
+agregados por minutos, más el ritmo relativo a la liga: 13 rasgos de caja y 4 del jugada a jugada (% de tiros en el aro,
+de media distancia y de triples de esquina, % de canastas asistidas). **Neutraliza el nivel**: a cada rasgo se le quita la parte
 que explica un índice de calidad, para que el estilo diga cómo juega un equipo y no cuán bueno es.
 
 * **Red: VaDE**, autoencoder variacional con previa de mezcla de 6 gaussianas de covarianza completa en un latente de
   3 neuronas (el mapa); capa de salida de 6 neuronas; consenso de 10 semillas y ajuste fino.
 * **Simulación de fichajes y bajas** (uno o varios jugadores a la vez) y **buscador de parecidos** (clubes que juegan
   como el tuyo, jugadores parecidos o que encajan con tu estilo).
-* Iteraciones anteriores (12 y 8 estilos, IDEC de contraste, 6 estilos con 5 semillas): métricas y asignaciones en
-  `data/modelos/estilos/historial/`; su evolución, en el artículo.
+* **Química de estilos y contexto de nivel** (`docs/contexto_y_quimica.md`): cómo cambia el juego de un jugador según
+  el estilo y el nivel del compañero con el que comparte pista (efectos X → Y del jugada a jugada, matrices estilo ×
+  estilo) y proyección de cualquier jugador al contexto de una plantilla de la EuroLeague. Estilos: Creación individual,
+  Pintura física, Pausado y seguro, Lejos del aro, Exterior y presión, Circulación y triple.
+* Iteraciones anteriores (12 y 8 estilos, IDEC de contraste, 6 estilos con 5 y con 10 semillas sólo con rasgos de caja):
+  métricas y asignaciones en `data/modelos/estilos/historial/`; su evolución, en el artículo.
 
 ```bash
 pip install -r requirements-estilos.txt   # requirements.txt + torch (CPU)
-python -m bbestilo entrenar         # ≈ 20 min en 4 núcleos; escribe data/modelos/estilos/
+python -m bbestilo barrido          # número de estilos antes de entrenar
+python -m bbestilo entrenar         # ≈ 60 min en 4 núcleos; escribe data/modelos/estilos/
+python -m bbestilo quimica          # química de estilos (efectos X → Y y sinergia por estilo × estilo)
 python -m bbestilo evaluar          # reevalúa la red guardada sin reentrenar
 python -m bbestilo analisis         # K óptimo, nivel, éxito, efecto del encaje, continuidad, ligas, Baskonia
 python -m bbestilo encaje --jugador "A" "B" --baja "C" --club baskonia --competicion euroleague --temporada 2025-26
