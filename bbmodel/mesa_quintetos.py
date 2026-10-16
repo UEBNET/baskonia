@@ -131,6 +131,7 @@ def exportar_liga(liga: str, temporada: str, extras: dict) -> dict | None:
     on_cols = ["j", "team_id"] + [c for c in J_COLS if c in on] + [c for c in on.columns if c.startswith(("fga_", "fgm_"))]
     on_cols = list(dict.fromkeys(on_cols))
     out = {"liga": liga, "nombre_liga": NOMBRES_LIGA.get(liga, liga), "temporada": temporada,
+           "estilos_nombres": extras.get("_estilos_nombres"),
            "equipos_nombre": equipos_nombre, "jugadores": cat_tab,
            "on_off": _tabla(on, on_cols, {"pagerank_asistencias": 4}),
            "equipos": _tabla(eqp, list(eqp.columns)) if not eqp.empty else None}
@@ -172,11 +173,25 @@ def exportar_liga(liga: str, temporada: str, extras: dict) -> dict | None:
 def extras_globales() -> dict:
     """Tablas opcionales por jugador-liga-temporada (si los modelos ya se han ejecutado)."""
     ex = {}
+    # los modelos usan en la BBL el id «n:<nombre>»; el jugada a jugada, el de la fuente: tabla de paso
+    mapa = None
+    fr_ctx = [pd.read_csv(p, dtype={"player_id": str, "pid_modelo": str}, usecols=["liga", "temporada", "player_id", "pid_modelo", "min"])
+              for p in sorted(glob.glob(str(DIR_MOD / "contexto" / "20*.csv")))]
+    if fr_ctx:
+        mapa = (pd.concat(fr_ctx, ignore_index=True).sort_values("min", ascending=False)
+                .drop_duplicates(["liga", "temporada", "player_id"])[["liga", "temporada", "player_id", "pid_modelo"]])
+
+    def a_fuente(df: pd.DataFrame) -> pd.DataFrame:
+        if mapa is None:
+            return df
+        d = df.rename(columns={"player_id": "pid_modelo"}).merge(mapa, on=["liga", "temporada", "pid_modelo"], how="inner")
+        return d.drop(columns=["pid_modelo"])
+
     ctx = DIR_MOD / "contexto" / "por_jugador_liga.csv"
     if ctx.exists():
         c = pd.read_csv(ctx, dtype={"player_id": str})
-        ex["contexto"] = c[["liga", "temporada", "player_id", "L", "ctx_comp", "ctx_riv", "ctx_plantilla",
-                            "ctx_comp_dev", "ctx_plantilla_dev"]]
+        ex["contexto"] = a_fuente(c[["liga", "temporada", "player_id", "L", "ctx_comp", "ctx_riv", "ctx_plantilla",
+                                     "ctx_comp_dev", "ctx_plantilla_dev"]])
     zonas = []
     for p in sorted(glob.glob(str(DIR_MOD / "pista" / "*.csv"))):
         z = pd.read_csv(p, dtype={"team_id": str, "player_id": str})
@@ -191,8 +206,8 @@ def extras_globales() -> dict:
     if est.exists():
         e = pd.read_csv(est, dtype={"player_id": str})
         e = e.sort_values("min", ascending=False).drop_duplicates(["liga", "temporada", "player_id"])
-        ex["estilo"] = e[["liga", "temporada", "player_id", "estilo", "p_estilo", "x", "y", "z"]].rename(
-            columns={"x": "mx", "y": "my", "z": "mz"})
+        ex["estilo"] = a_fuente(e[["liga", "temporada", "player_id", "estilo", "p_estilo", "x", "y", "z"]].rename(
+            columns={"x": "mx", "y": "my", "z": "mz"}))
     norm = sorted(glob.glob(str(DIR_MOD / "normalizado" / "*.csv")))
     if norm:
         cols = ["liga", "temporada", "player_id", "pos3", "edad", "rapm", "orapm", "drapm", "rapm_pctel"]
@@ -203,7 +218,16 @@ def extras_globales() -> dict:
             n = n[keep].rename(columns={"rapm": "rapm_el", "orapm": "orapm_el", "drapm": "drapm_el", "rapm_pctel": "rapm_pct_el"})
             fr.append(n)
         ex["normalizado"] = pd.concat(fr, ignore_index=True)
+    cfg = RAIZ / "config" / "estilos.json"
+    if cfg.exists():
+        cfg_d = {k: v for k, v in json.loads(cfg.read_text(encoding="utf-8")).items() if not k.startswith("_")}
+        ex["_estilos_nombres"] = {k: {"nombre": v["nombre"], "resumen": v.get("resumen", ""), "color": COLORES_ESTILO[i % 6]}
+                                  for i, (k, v) in enumerate(sorted(cfg_d.items()))}
     return ex
+
+
+# mismos colores que el Atlas de Estilos (E01…E06)
+COLORES_ESTILO = ["#3b7fe0", "#e8702f", "#1fae7e", "#e3a51a", "#e27aa8", "#7b68ee"]
 
 
 def main(salida: str = "data/artifact") -> None:

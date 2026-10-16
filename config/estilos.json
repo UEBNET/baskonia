@@ -1,15 +1,33 @@
 {
-  "_descripcion": "Nombres interpretativos de los 6 estilos del modelo final (VaDE, 10 semillas; data/modelos/estilos/vade/modelo.pt), puestos a partir de su perfil medio sin nivel (vade/estilos.csv). Si se reentrena, revisar que cada perfil coincide antes de reutilizarlos. Nombres de iteraciones anteriores: data/modelos/estilos/historial/*/nombres.json.",
-  "E01": {"nombre": "Perímetro y presión", "descriptor": "Reb. def. ↓ · Interiores ↓ · FTr ↓ · Exteriores ↑",
-          "resumen": "Quintetos pequeños: muchos minutos de exteriores, mucho triple, robos y uso concentrado; pocas pérdidas y pocos tiros libres, muy poco rebote defensivo."},
-  "E02": {"nombre": "Pausado y seguro", "descriptor": "AST% ↓ · TOV% ↓ · FTr ↓",
-          "resumen": "Ritmo bajo, muy pocas pérdidas y pocas asistencias; triple y pocos tiros libres, pocos robos y pocos minutos de bases."},
-  "E03": {"nombre": "Pintura física", "descriptor": "Faltas ↑ · Reb. of. ↑ · AST% ↓",
-          "resumen": "Interiores, rebote ofensivo y muchas faltas; ritmo bajo, pocas asistencias y poco rebote defensivo."},
-  "E04": {"nombre": "Exterior y riesgo", "descriptor": "Exteriores ↑ · TOV% ↑ · Faltas ↑ · FTr ↑",
-          "resumen": "Muchos minutos de bases y escoltas, robos, tiros libres y asistencias; más pérdidas y faltas, poco triple."},
-  "E05": {"nombre": "Ritmo y juego limpio", "descriptor": "Faltas ↓ · Robos ↓ · Exteriores ↓",
-          "resumen": "Ritmo alto, muy pocas faltas y poca presión; buen rebote defensivo y algo más de triple, pocos minutos de bases."},
-  "E06": {"nombre": "Ataque al aro", "descriptor": "Reb. def. ↑ · AST% ↑ · FTr ↑ · TOV% ↑",
-          "resumen": "Penetración y tiros libres, muchas asistencias, rebote defensivo y tapones; muy poco triple, ritmo alto y más pérdidas."}
+ "_descripcion": "Nombres interpretativos de los 6 estilos del modelo final (VaDE con 17 rasgos: 13 de caja + 4 del jugada a jugada, 10 semillas; data/modelos/estilos/vade/modelo.pt), puestos a partir de su perfil medio sin nivel (vade/estilos.csv). Si se reentrena, revisar que cada perfil coincide antes de reutilizarlos. Nombres de iteraciones anteriores: data/modelos/estilos/historial/*/nombres.json.",
+ "E01": {
+  "nombre": "Creación individual",
+  "descriptor": "Triple esquina ↓ · 3PAr ↓ · Reb. def. ↑ · Asistidas ↓",
+  "resumen": "Ataque que se fabrica sus tiros: poco triple (casi ningún triple de esquina), mucha media distancia, tiros libres y canastas sin asistencia; manda en el rebote defensivo y tapona."
+ },
+ "E02": {
+  "nombre": "Pintura física",
+  "descriptor": "Aro ↑ · FTr ↑ · Reb. of. ↑ · Faltas ↑",
+  "resumen": "Juego en la pintura: muchos tiros en el aro y tiros libres, rebote ofensivo, interiores, faltas y robos; poco triple y más pérdidas."
+ },
+ "E03": {
+  "nombre": "Pausado y seguro",
+  "descriptor": "TOV% ↓ · Exteriores ↓ · AST% ↓ · Robos ↓",
+  "resumen": "Muy pocas pérdidas, pocas asistencias y pocos minutos de bases; ritmo algo bajo, defensa conservadora (pocos robos y faltas) y rebote; muchas de sus canastas llegan de pase."
+ },
+ "E04": {
+  "nombre": "Lejos del aro",
+  "descriptor": "Aro ↓ · Reb. of. ↓ · Media dist. ↑ · FTr ↓",
+  "resumen": "Muy pocos tiros cerca de la canasta: media distancia y triple, poco rebote ofensivo y pocos tiros libres; ritmo bajo y juego limpio (pocas faltas y pérdidas)."
+ },
+ "E05": {
+  "nombre": "Exterior y presión",
+  "descriptor": "Exteriores ↑ · Robos ↑ · Interiores ↓ · Reb. def. ↓",
+  "resumen": "Muchos minutos de bases y escoltas: ritmo alto, presión y robos, asistencias y creación propia (pocas canastas asistidas); poco rebote, más pérdidas y faltas."
+ },
+ "E06": {
+  "nombre": "Circulación y triple",
+  "descriptor": "Triple esquina ↑ · Asistidas ↑ · 3PAr ↑ · Media dist. ↓",
+  "resumen": "Mucho triple, sobre todo de esquina, y canastas asistidas; casi nada de media distancia y pocos tiros libres; poco rebote defensivo y pocos tapones."
+ }
 }

@@ -401,6 +401,13 @@ const ESTILOS = {
   E06: ["Ataque al aro", "Penetración, tiros libres, asistencias, rebote defensivo y tapones; poco triple."],
 };
 const ECOL = { E01: "var(--e1)", E02: "var(--e2)", E03: "var(--e3)", E04: "var(--e4)", E05: "var(--e5)", E06: "var(--e6)" };
+// nombres y colores de los estilos: los del fichero (estilos_nombres) mandan sobre los del Atlas incrustados aquí
+const estInfo = (id) => (D && D.estN && D.estN[id]) || null;
+const estNombre = (id) => (estInfo(id) && estInfo(id).nombre) || (ESTILOS[id] && ESTILOS[id][0]) || id;
+const estDesc = (id) => (estInfo(id) && (estInfo(id).descripcion || estInfo(id).resumen || estInfo(id).descriptor)) || (ESTILOS[id] && ESTILOS[id][1]) || "";
+const estCol = (id) => (estInfo(id) && /^(#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)|hsla?\([\d\s.,%deg]+\))$/i.test(String(estInfo(id).color || "").trim()) ? String(estInfo(id).color).trim() : ECOL[id]) || "var(--e0)";
+const estConocido = (id) => !!id && (!!estInfo(id) || !!ESTILOS[id]);
+const estIds = () => (D && D.estN ? Object.keys(D.estN).sort() : Object.keys(ESTILOS));
 const POSN = { E: "Exterior (base o escolta)", A: "Alero", I: "Interior" };
 const POSO = { E: 0, A: 1, I: 2 };
 const SIN_DATOS = { // por qué falta una liga-temporada
@@ -465,6 +472,7 @@ function prep(raw) {
   D.equipos = Object.keys(D.eqn).sort((a, b) => D.eqn[a].localeCompare(D.eqn[b], "es"));
   D.tv = new Map();
   D.campos = new Set(raw.jugadores && raw.jugadores.c);
+  D.estN = raw.estilos_nombres && typeof raw.estilos_nombres === "object" ? raw.estilos_nombres : null;
   return D;
 }
 const J = (i) => (D && D.J[i]) || { nm: "?", sur: "?", i: -1 };
@@ -526,15 +534,34 @@ function umbral(vals, n, max, paso = 5, min = 0) { const a = vals.filter(ok).sor
 // Estado (hash + localStorage)
 // =====================================================================================================
 const S = { tab: "equipo", t: null, l: "euroleague", f: "regular", e: null, q: null, p: null, j: null, x: null, ap: null, ui: {} };
-const HK = { tab: "tab", t: "t", l: "liga", f: "fase", e: "eq", q: "q", p: "p", j: "j", x: "x", ap: "c" };
+// Claves del hash (enlace compartible): tab, t (temporada), l (liga), f (fase), e (equipo), j (jugador) y, además,
+// q (quinteto), p (pareja), x (jugador de la red) y c (concepto de «Aprende»). La Mesa enlaza con #tab=…&t=…&l=…&f=…&e=…&j=…
+const HK = { tab: "tab", t: "t", l: "l", f: "f", e: "e", q: "q", p: "p", j: "j", x: "x", ap: "c" };
+// aplica un enlace {tab, t, l, f, e, j} (del hash o de la página contenedora); los valores desconocidos se ignoran
+function aplicarEnlace(o) {
+  if (!o || typeof o !== "object") return;
+  const v = (k, ...alias) => { for (const n of [k, ...alias]) if (o[n] != null && String(o[n]).trim() !== "") return String(o[n]).trim(); return null; };
+  const tab = v("tab"), t = v("t", "temporada"), l = v("l", "liga"), f = v("f", "fase"), e = v("e", "eq", "equipo"), j = v("j", "jugador");
+  const ligaConocida = (x) => LIGAS.includes(x) || (IDX && Object.values(IDX.temporadas || {}).some((ls) => ls && ls[x]));
+  if (t && (!IDX || (IDX.temporadas && IDX.temporadas[t])) && /^\d{4}-\d{2}$/.test(t)) { if (t !== S.t) S.q = S.p = S.x = null; S.t = t; }
+  if (l && ligaConocida(l)) { if (l !== S.l) { S.q = S.p = S.j = S.x = null; } S.l = l; }
+  if (f && FASES.some((x) => x[0] === f)) S.f = f;
+  if (e) { if (e !== S.e) S.q = S.p = S.x = null; S.e = e; }
+  if (j) { S.j = j; S.jSinEquipo = !e; if (!tab) S.tab = "jugadores"; }
+  if (tab && TABS.includes(tab)) S.tab = tab;
+  if (j && S.tab === "conexiones") S.x = j;
+}
 function leerEstado() {
   let g = {}; try { g = JSON.parse(store.get("mm.quintetos") || "{}") || {}; } catch (e) { g = {}; }
   ["tab", "t", "l", "f", "e"].forEach((k) => { if (g[k]) S[k] = g[k]; });
   if (g.ui && typeof g.ui === "object") S.ui = g.ui;
   const h = new URLSearchParams(location.hash.replace(/^#/, ""));
-  const tieneHash = Array.from(h.keys()).length > 0;
-  if (tieneHash) { ["q", "p", "j", "x", "ap"].forEach((k) => { S[k] = null; }); }
-  Object.entries(HK).forEach(([k, hk]) => { if (h.has(hk)) S[k] = h.get(hk); });
+  if (Array.from(h.keys()).length) {
+    ["q", "p", "j", "x", "ap"].forEach((k) => { S[k] = null; });
+    const o = {}; h.forEach((val, k) => { o[k] = val; });
+    aplicarEnlace(o);
+    ["q", "p", "x"].forEach((k) => { if (o[k]) S[k] = o[k]; }); if (o.c) S.ap = o.c;
+  }
   if (!TABS.includes(S.tab)) S.tab = "equipo";
 }
 function guardar() {
@@ -617,9 +644,17 @@ async function aplicar() {
   if (tok !== TOKEN) return;
   D = d;
   if (!D.fases.includes(S.f)) S.f = D.fases.includes("regular") ? "regular" : D.fases[0] || "regular";
+  // jugador del enlace: si no se dio equipo, se abre en el suyo (el de más minutos en la fase)
+  const jx = S.j != null ? jIdx(S.j) : -1;
+  if (S.j != null && jx < 0) S.j = null;
+  if (S.jSinEquipo && jx >= 0) {
+    const rj = D.on.filter((r) => r.j === jx && r.fase === S.f).sort((a, b) => (b.min_on || 0) - (a.min_on || 0))[0] || D.on.find((r) => r.j === jx);
+    const eq = (rj && rj.team_id) || J(jx).team_id; if (D.eqn[eq]) { if (eq !== S.e) S.q = S.p = null; S.e = eq; }
+  }
+  S.jSinEquipo = false;
   if (!D.eqn[S.e]) {
     S.e = D.eqn.BAS && D.liga === "euroleague" ? "BAS" : (D.equipos.find((e) => /baskonia/.test(norm(D.eqn[e]))) || D.equipos[0]);
-    S.q = S.p = S.j = S.x = null;
+    S.q = S.p = S.x = null; if (jx < 0) S.j = null;
   }
   pintarMando();
   pintar();
@@ -663,10 +698,10 @@ function vacioFase(T) {
     otras.length ? `<div class="row" style="justify-content:center">${otras.map((fz) => `<button class="btn ghost" type="button" data-a="fase" data-v="${fz}">Ver ${FNOM[fz]}</button>`).join("")}</div>` : "");
 }
 function chipEstilo(j) {
-  const o = J(j); if (!o.estilo || !ESTILOS[o.estilo]) return "";
-  return `<span class="pill" ${tipA(`<b>Estilo ${esc(o.estilo)} · ${esc(ESTILOS[o.estilo][0])}</b><br>${esc(ESTILOS[o.estilo][1])}${ok(o.p_estilo) ? `<br>Claridad del estilo: ${fp(100 * o.p_estilo, 0)}` : ""}<br><span style="opacity:.75">Estilos del Atlas de Estilos.</span>`)}><i class="sw" style="background:${ECOL[o.estilo]}"></i>${esc(ESTILOS[o.estilo][0])}</span>`;
+  const o = J(j); if (!estConocido(o.estilo)) return "";
+  return `<span class="pill" ${tipA(`<b>Estilo ${esc(o.estilo)} · ${esc(estNombre(o.estilo))}</b><br>${esc(estDesc(o.estilo))}${ok(o.p_estilo) ? `<br>Claridad del estilo: ${fp(100 * o.p_estilo, 0)}` : ""}<br><span style="opacity:.75">Estilos del Atlas de Estilos.</span>`)}><i class="sw" style="background:${estCol(o.estilo)}"></i>${esc(estNombre(o.estilo))}</span>`;
 }
-const colJug = (j) => { const o = J(j); return (o.estilo && ECOL[o.estilo]) || "var(--e0)"; };
+const colJug = (j) => { const o = J(j); return estConocido(o.estilo) ? estCol(o.estilo) : "var(--e0)"; };
 const btnJ = (j, T, txt) => `<button class="pl" type="button" data-a="j" data-v="${esc(pid(j))}">${esc(txt || sn(j, T))}</button>`;
 const nombresQ = (u, T, sep = " · ") => u.map((j) => esc(sn(j, T))).join(sep);
 function ordenarPos(u, T) { return u.slice().sort((a, b) => (POSO[J(a).pos3] ?? 3) - (POSO[J(b).pos3] ?? 3) || ((T && T.by.get(b) ? T.by.get(b).min_on : 0) - (T && T.by.get(a) ? T.by.get(a).min_on : 0))); }
@@ -742,7 +777,7 @@ function pistaQuinteto(u, T, opts = {}) {
   const nodos = js.map((j, k) => {
     const [x, y] = slots[k] || [160, 125], o = J(j), r = T && T.by.get(j);
     const sub = opts.sub ? opts.sub(j, r) : "";
-    const tip = `<b>${esc(o.nm)}</b>${o.pos3 ? ` · ${esc(POSN[o.pos3])}` : ""}${o.estilo && ESTILOS[o.estilo] ? `<br>Estilo: ${esc(ESTILOS[o.estilo][0])}` : ""}` +
+    const tip = `<b>${esc(o.nm)}</b>${o.pos3 ? ` · ${esc(POSN[o.pos3])}` : ""}${estConocido(o.estilo) ? `<br>Estilo: ${esc(estNombre(o.estilo))}` : ""}` +
       (r ? `<br>${fm(r.min_on)} en ${esc(FNOM[S.f])} · RAPM ${fs(r.rapm, 1)}<br>On−off ${fs(r.net_rtg_onoff, 1)}` : "") + "<br><i>Clic: ficha del jugador</i>";
     const lx = x;
     return `<g class="hit" data-a="j" data-v="${esc(pid(j))}" ${tipA(tip)} tabindex="0" role="button" aria-label="${esc(o.nm)}">` +
@@ -1266,7 +1301,7 @@ R.conexiones = (el) => {
     <div class="dcard"><div class="cardhead"><h2>Red de asistencias · ${esc(T.nombre)}</h2><span class="note">${fi(sum(T.A, (a) => a.ast))} asistencias entre ${redNodos(T).length} jugadores · ${esc(FNOM[S.f])}</span></div>
       <div class="toolbar"><div class="slider"><span>Mostrar enlaces de</span><input type="range" min="2" max="${maxA}" step="1" value="${thr}" data-ui="nThr:${S.l}" aria-label="Mínimo de asistencias por enlace"><output>${fi(thr)}+ asist.</output></div></div>
       <div class="chartbox" id="nRed"></div>
-      <div class="legend">${Object.entries(ESTILOS).map(([k, v]) => `<span><i class="sw" style="background:${ECOL[k]}"></i>${esc(v[0])}</span>`).join("")}<span><i class="sw" style="background:var(--e0)"></i>Sin estilo</span></div>
+      <div class="legend">${estIds().map((k) => `<span><i class="sw" style="background:${estCol(k)}"></i>${esc(estNombre(k))}</span>`).join("")}<span><i class="sw" style="background:var(--e0)"></i>Sin estilo</span></div>
       <div class="legend"><span><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="var(--accent)" stroke-width="3"/></svg>asistencias que da el jugador elegido</span><span><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="${rgbS(PAL.pos)}" stroke-width="3"/></svg>asistencias que recibe</span><span>Tamaño del círculo = PageRank · grosor = asistencias</span></div>
       ${aprende("Cada flecha va del <b>pasador</b> al <b>anotador</b>; cuanto más gruesa, más asistencias. Los jugadores se ordenan en el círculo de exteriores (arriba) a interiores. Pasa el ratón por un jugador para aislar sus conexiones; haz clic para fijarlo y ver sus listas a la derecha.", "red")}
     </div>
@@ -1359,6 +1394,20 @@ function nEfectos(T, x, efo) {
 // =====================================================================================================
 // 5 · JUGADORES
 // =====================================================================================================
+// campos opcionales del catálogo (modelos de nivel y RAPM traducido): se muestran solo si vienen en el fichero
+const CAMPOS_PERFIL = [
+  ["L", "Nivel", "Índice de nivel del jugador en la vara EuroLeague (z: 0 = jugador medio; +1 = muy superior)", 2],
+  ["ctx_comp", "Nivel compañeros", "Nivel medio (L) de los 4 compañeros con los que comparte pista, ponderado por el tiempo", 2],
+  ["ctx_comp_dev", "Compañeros vs. media", "Nivel de sus compañeros en pista menos el de un jugador medio de su liga y temporada: > 0 = juega rodeado de mejores", 2],
+  ["ctx_riv", "Nivel rivales", "Nivel medio (L) de los 5 rivales que tiene enfrente", 2],
+  ["ctx_plantilla", "Nivel plantilla", "Nivel medio de sus compañeros de plantilla, ponderado por minutos (sin él)", 2],
+  ["ctx_plantilla_dev", "Plantilla vs. media", "Nivel de su plantilla menos el de un jugador medio de su liga y temporada", 2],
+  ["rapm_el", "RAPM EL", "RAPM traducido a la escala de la EuroLeague (puntos por 100 posesiones)", 1],
+  ["orapm_el", "ORAPM EL", "Parte ofensiva del RAPM en escala EuroLeague", 1],
+  ["drapm_el", "DRAPM EL", "Parte defensiva del RAPM en escala EuroLeague (> 0 = mejor defensa)", 1],
+  ["rapm_pct_el", "Percentil RAPM EL", "Percentil de su RAPM traducido entre los jugadores de la EuroLeague", 0],
+];
+const fmtPerfil = (k, v) => (!ok(v) ? "–" : k === "rapm_pct_el" ? fp(v > 1 ? v : 100 * v, 0) : fs(v, k.startsWith("ctx") || k === "L" ? 2 : 1));
 const zonaPct = (r, k) => { const t = sum(ZONAS, (z) => r["fga_" + z[0]]); return t ? (100 * (r["fga_" + k] || 0)) / t : null; };
 const efgZ = (r) => { const fga = sum(ZONAS, (z) => r["fga_" + z[0]]); if (!fga) return null; const fgm = sum(ZONAS, (z) => r["fgm_" + z[0]]), t3 = (r.fgm_t3_esquina || 0) + (r.fgm_t3_frontal || 0); return (100 * (fgm + 0.5 * t3)) / fga; };
 function jFilas(T) {
@@ -1376,7 +1425,7 @@ R.jugadores = (el) => {
   if (!T.ros.length && ui("jScope", "eq") === "eq") { el.innerHTML = vacioFase(T); return; }
   const def = D.hasQ ? ["imp"] : ["pas", "tiro"];
   const grupos = ui(D.hasQ ? "jGrupos" : "jGruposSQ", def);
-  const hayPerfil = ["L", "ctx_comp", "ctx_riv", "ctx_plantilla", "rapm_el"].some((k) => D.campos.has(k));
+  const hayPerfil = CAMPOS_PERFIL.some(([k]) => D.campos.has(k));
   const G = [["imp", "Impacto"], ["rot", "Rotación"], ["pas", "Pases"], ["tiro", "Tiro"]].concat(hayPerfil ? [["per", "Nivel y contexto"]] : []);
   const liga = ui("jScope", "eq") === "liga";
   el.innerHTML = `
@@ -1401,7 +1450,7 @@ function jTabla(T, grupos, liga) {
   ].concat(liga ? [{ k: "eq", l: "Equipo", txt: 1, get: (r) => D.eqn[r.team_id] || r.team_id, fmt: (v) => esc(v) }] : [])
     .concat([
       { k: "pos", l: "Pos.", txt: 1, get: (r) => J(r.j).pos3 || "", tip: "E exterior · A alero · I interior" },
-      { k: "est", l: "Estilo", txt: 1, get: (r) => J(r.j).estilo || "", fmt: (v) => (v && ESTILOS[v] ? `<span ${tipA(esc(ESTILOS[v][0]))}><i class="sw" style="background:${ECOL[v]}"></i> ${esc(v)}</span>` : "–"), tip: "Estilo de juego del Atlas de Estilos" },
+      { k: "est", l: "Estilo", txt: 1, get: (r) => J(r.j).estilo || "", fmt: (v) => (estConocido(v) ? `<span ${tipA(`<b>${esc(estNombre(v))}</b><br>${esc(estDesc(v))}`)}><i class="sw" style="background:${estCol(v)}"></i> ${esc(v)}</span>` : "–"), tip: "Estilo de juego del Atlas de Estilos" },
       { k: "edad", l: "Edad", d: 0, get: (r) => J(r.j).edad },
       N("gp", "PJ", "", 0, "Partidos con minutos"), N("min_on", "Min", "", 0, "Minutos en pista"),
       N("min_pct_equipo", "% min", "", 1, "% de los minutos del equipo"),
@@ -1430,7 +1479,7 @@ function jTabla(T, grupos, liga) {
       N("fga", "Tiros", "tiro", 0, "Tiros de campo con coordenadas", { get: (r) => sum(ZONAS, (z) => r["fga_" + z[0]]) || null }),
       N("efgz", "eFG%", "tiro", 1, "Acierto efectivo (con los tiros con coordenadas)", { get: efgZ }),
     ].concat(ZONAS.map(([k, n, d]) => N("z_" + k, "% " + n, "tiro", 0, `% de sus tiros ${d}`, { get: (r) => zonaPct(r, k), css: (v) => cellCss(seqC(v, 60, 0.7)) }))) : [])
-    .concat(grupos.includes("per") ? [["L", "Nivel", "Nivel del jugador en escala EuroLeague (0 = jugador medio)"], ["ctx_comp", "Nivel compañeros", "Nivel medio de los compañeros con los que comparte pista"], ["ctx_riv", "Nivel rivales", "Nivel medio de los rivales que tiene enfrente"], ["ctx_plantilla", "Nivel plantilla", "Nivel medio de su plantilla"]].filter(([k]) => D.campos.has(k)).map(([k, l, tip]) => ({ k, l, g: "per", d: 2, tip, get: (r) => J(r.j)[k] })) : []);
+    .concat(grupos.includes("per") ? CAMPOS_PERFIL.filter(([k]) => D.campos.has(k)).map(([k, l, tip]) => ({ k: "per_" + k, l, g: "per", tip, get: (r) => J(r.j)[k], fmt: (v) => fmtPerfil(k, v) })) : []);
   const rows = jFilas(T), s = jSelRow(T);
   $("#jTabla").innerHTML = tabla("tJ", cols, rows, { sort: D.hasQ ? "min_on" : "ast_dadas", act: "j", key: (r) => pid(r.j), sel: s && pid(s.j), per: liga ? 30 : Infinity, aria: "Jugadores", maxH: "70vh" });
 }
@@ -1442,7 +1491,7 @@ function jFicha(T0) {
     ["On−off", r.net_rtg_onoff, "Net del equipo con él en pista menos sin él"], ["On−off ajustado", r.net_rtg_aj_onoff, "Los dos Net ajustados por muestra (k = 300)"],
     ["On−off sin suerte", r.net_rtg_suerte_onoff, "Neutralizando el acierto rival en triples y tiros libres"], ["On−off sin basura", r.net_rtg_onoff_sin_basura, "Quitando los minutos con el partido decidido"],
     ["RAPM", r.rapm, "Impacto ajustado por compañeros y rivales"], ["ORAPM", r.orapm, "Parte ofensiva del RAPM"], ["DRAPM", r.drapm, "Parte defensiva del RAPM (> 0 = mejor)"],
-  ].concat(ok(o.rapm_el) ? [["RAPM EuroLeague", o.rapm_el, "RAPM traducido a la escala de la EuroLeague"]] : []).filter((x) => ok(x[1])).map(([lab, v, tip]) => ({ lab, v, tip: `<b>${esc(lab)}</b>: ${esc(tip)}` }));
+  ].concat([["rapm_el", "RAPM EuroLeague", "RAPM traducido a la escala de la EuroLeague"], ["orapm_el", "ORAPM EuroLeague", "Parte ofensiva, en escala EuroLeague"], ["drapm_el", "DRAPM EuroLeague", "Parte defensiva, en escala EuroLeague (> 0 = mejor)"]].filter(([k]) => ok(o[k])).map(([k, lab, tip]) => [lab, o[k], tip])).filter((x) => ok(x[1])).map(([lab, v, tip]) => ({ lab, v, tip: `<b>${esc(lab)}</b>: ${esc(tip)}` }));
   const gp = r.gp || 1, ql = D.qlen;
   const cuartos = ["pct_min_q1", "pct_min_q2", "pct_min_q3", "pct_min_q4"].map((k, i) => { const v = ((r.min_on || 0) * (r[k] || 0)) / 100 / gp;
     return `<div class="link" ${tipA(`${f(v, 1)} de ${ql} minutos por partido en el ${i + 1}.º cuarto (${fp(r[k], 0)} de sus minutos)`)}><span class="who">${i + 1}.º cuarto</span><span class="bar"><i style="width:${(100 * v) / ql}%;background:var(--accent)"></i></span><span class="n">${f(v, 1)}'</span><span class="n">${fp(r[k], 0)}</span></div>`; }).join("");
@@ -1453,7 +1502,7 @@ function jFicha(T0) {
   const da = T.A.filter((a) => a.p === j).sort((a, b) => b.ast - a.ast).slice(0, 3), re = T.A.filter((a) => a.r === j).sort((a, b) => b.ast - a.ast).slice(0, 3);
   const ef = T.E.filter((e) => e.xi === j && Math.min(e.fga_con, e.fga_sin) >= 40 && ok(e.d_pts100)).sort((a, b) => b.d_pts100 - a.d_pts100);
   const efIn = T.E.filter((e) => e.yi === j && Math.min(e.fga_con, e.fga_sin) >= 40 && ok(e.d_pts100)).sort((a, b) => b.d_pts100 - a.d_pts100);
-  const ctx = [["L", "Nivel", "Índice de nivel en escala EuroLeague (0 = jugador medio)"], ["ctx_comp", "Compañeros", "Nivel medio de los compañeros con los que comparte pista"], ["ctx_riv", "Rivales", "Nivel medio de los rivales que tiene enfrente"], ["ctx_plantilla", "Plantilla", "Nivel medio de su plantilla"], ["rapm_pct_el", "Percentil RAPM EL", "Percentil de su RAPM en la EuroLeague"]].filter(([k]) => ok(o[k]));
+  const ctx = CAMPOS_PERFIL.filter(([k]) => !/^(rapm_el|orapm_el|drapm_el)$/.test(k) && ok(o[k]));
   const equipoTxt = r.team_id !== S.e ? ` · ${esc(D.eqn[r.team_id] || r.team_id)}` : "";
   box.innerHTML = `<div class="cardhead"><h2>${esc(o.nm)}</h2>${chipEstilo(j)}</div>
     <div class="row note"><span>${o.pos3 ? esc(POSN[o.pos3]) : "Posición desconocida"}${ok(o.edad) ? ` · ${fi(o.edad)} años` : ""}${equipoTxt}</span><span class="pill acc">${fi(r.gp)} PJ · ${fm(r.min_on)}${ok(r.min_pct_equipo) ? ` · ${fp(r.min_pct_equipo, 0)} del equipo` : ""}</span></div>
@@ -1472,7 +1521,8 @@ function jFicha(T0) {
       ${ef.length ? `<p class="note">Con él en pista, quien más gana es <b>${esc(sn(ef[0].yi, T))}</b> (${fs(ef[0].d_pts100)}) y quien más pierde, <b>${esc(sn(ef[ef.length - 1].yi, T))}</b> (${fs(ef[ef.length - 1].d_pts100)}).</p>` : ""}
       ${efIn.length ? `<p class="note">Él produce más con <b>${esc(sn(efIn[0].xi, T))}</b> (${fs(efIn[0].d_pts100)}) y menos con <b>${esc(sn(efIn[efIn.length - 1].xi, T))}</b> (${fs(efIn[efIn.length - 1].d_pts100)}).</p>` : ""}
       <button class="btn ghost sm" type="button" data-a="nx" data-v="${esc(pid(j))}" data-ir="conexiones" data-ancla="nEfectos">Ver todos los efectos →</button></div>` : ""}
-    ${ctx.length ? `<div class="stack" style="gap:4px"><div class="label">Nivel y contexto</div><div class="kv">${ctx.map(([k, l, tip]) => `<div ${tipA(tip)}><span>${l}</span><b>${k === "rapm_pct_el" ? fp(o[k] > 1 ? o[k] : 100 * o[k], 0) : fs(o[k], 2)}</b></div>`).join("")}</div></div>` : ""}`;
+    ${ctx.length ? `<div class="stack" style="gap:4px"><div class="label">Nivel y contexto</div><div class="kv">${ctx.map(([k, l, tip]) => `<div ${tipA(tip)}><span>${l}</span><b class="${k === "rapm_pct_el" ? "" : signCls(o[k])}">${fmtPerfil(k, o[k])}</b></div>`).join("")}</div>
+      ${aprende("El <b>nivel</b> (L) resume la calidad del jugador en la vara de la EuroLeague; los <b>contextos</b> dicen si juega rodeado de compañeros mejores o peores y contra rivales más o menos fuertes. Un jugador con muy buen on/off y compañeros muy por encima de la media puede estar «inflado» por su entorno.", "onoff")}</div>` : ""}`;
 }
 
 // =====================================================================================================
@@ -1588,11 +1638,13 @@ function diagMuestra(T) {
 }
 function diagWowy(p, T) {
   if (!p) return "";
-  const A = sn(p.a, T), B = sn(p.b, T), W = 360, H = 190, c = (x, y, t, v, mi, k) => `<g ${tipA(`${t}: Net ajustado ${fs(v)} en ${fm(mi)}`)}><rect x="${x}" y="${y}" width="130" height="62" rx="8" fill="${rgbS(divC(v, 15, false, 0.8))}"/><text x="${x + 65}" y="${y + 24}" text-anchor="middle" font-size="11.5" class="lab" fill="${lum(divC(v, 15, false, 0.8)) > 0.32 ? "#141922" : "#f3f1ec"}">${esc(k)}</text><text x="${x + 65}" y="${y + 45}" text-anchor="middle" font-size="15" font-weight="700" fill="${lum(divC(v, 15, false, 0.8)) > 0.32 ? "#141922" : "#f3f1ec"}">${fs(v)}</text></g>`;
-  let g = `<text class="lab" x="160" y="14" text-anchor="middle" font-size="11.5" fill="var(--muted)">${esc(B)} en pista · en el banquillo</text>`;
-  g += `<text class="lab" transform="translate(16 120) rotate(-90)" text-anchor="middle" font-size="11.5" fill="var(--muted)">${esc(A)}: pista · banquillo</text>`;
-  g += c(28, 24, "Juntos", p.net_rtg_aj, p.min, "Juntos") + c(166, 24, `${A} sin ${B}`, p.net_rtg_aj_a_sin_b, p.min_a_sin_b, trunc(`Solo ${A}`, 19)) + c(28, 92, `${B} sin ${A}`, p.net_rtg_aj_b_sin_a, p.min_b_sin_a, trunc(`Solo ${B}`, 19)) + c(166, 92, "Ninguno", p.net_rtg_aj_ninguno, p.min_ninguno, "Ninguno");
-  g += `<text class="lab" x="28" y="178" font-size="11" fill="var(--ink-2)">Sinergia = Juntos − (A sin B + B sin A − Ninguno) = ${fs(p.sinergia)}</text>`;
+  const A = sn(p.a, T), B = sn(p.b, T), W = 430, H = 196, X0 = 124, X1 = 268, Y0 = 30, Y1 = 100;
+  const c = (x, y, t, v, mi, k) => { const col = divC(v, 15, false, 0.8), ink = lum(col) > 0.32 ? "#141922" : "#f3f1ec";
+    return `<g ${tipA(`${esc(t)}: Net ajustado ${fs(v)} en ${fm(mi)}`)}><rect x="${x}" y="${y}" width="136" height="62" rx="8" fill="${rgbS(col)}" stroke="var(--line-2)"/><text x="${x + 68}" y="${y + 24}" text-anchor="middle" font-size="11.5" class="lab" fill="${ink}">${esc(k)} · ${fm(mi)}</text><text x="${x + 68}" y="${y + 46}" text-anchor="middle" font-size="16" font-weight="700" fill="${ink}">${fs(v)}</text></g>`; };
+  let g = `<text class="lab" x="${X0 + 68}" y="18" text-anchor="middle" font-size="11.5" fill="var(--muted)">${esc(trunc(B, 14))} en pista</text><text class="lab" x="${X1 + 68}" y="18" text-anchor="middle" font-size="11.5" fill="var(--muted)">${esc(trunc(B, 14))} en el banquillo</text>`;
+  [[Y0, "en pista"], [Y1, "en el banquillo"]].forEach(([y, t]) => { g += `<text class="lab" x="${X0 - 10}" y="${y + 28}" text-anchor="end" font-size="11.5" fill="var(--ink-2)" font-weight="600">${esc(trunc(A, 15))}</text><text class="lab" x="${X0 - 10}" y="${y + 43}" text-anchor="end" font-size="11" fill="var(--muted)">${t}</text>`; });
+  g += c(X0, Y0, "Juntos", p.net_rtg_aj, p.min, "Juntos") + c(X1, Y0, `${A} sin ${B}`, p.net_rtg_aj_a_sin_b, p.min_a_sin_b, `Solo ${trunc(A, 9)}`) + c(X0, Y1, `${B} sin ${A}`, p.net_rtg_aj_b_sin_a, p.min_b_sin_a, `Solo ${trunc(B, 9)}`) + c(X1, Y1, "Ninguno", p.net_rtg_aj_ninguno, p.min_ninguno, "Ninguno");
+  g += `<text class="lab" x="${X0}" y="186" font-size="11.5" fill="var(--ink-2)">Sinergia = Juntos − (Solo A + Solo B − Ninguno) = <tspan font-weight="700">${fs(p.sinergia)}</tspan></text>`;
   return `<svg class="diag" viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px" role="img" aria-label="Las cuatro situaciones WOWY">${g}</svg>`;
 }
 function diagClutch() {
@@ -1785,7 +1837,13 @@ function aplicarTema(t) {
 }
 window.addEventListener("storage", (e) => { if (e.key === "mm.theme") aplicarTema(e.newValue); });
 try { if (parent && parent !== window && parent.document) new MutationObserver(() => aplicarTema(parent.document.documentElement.dataset.theme)).observe(parent.document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); } catch (e) { /* marco de otro origen */ }
-window.addEventListener("message", (e) => { const d = e.data || {}; if (d.tema) aplicarTema(d.tema); if (d.irA && TABS.includes(d.irA) && D) irTab(d.irA); });
+window.addEventListener("message", (e) => {
+  const d = e.data || {};
+  if (d.tema) aplicarTema(d.tema);
+  if (d.irA && TABS.includes(d.irA) && D) irTab(d.irA);
+  // enlace desde la Mesa: {irQuintetos: {tab, t, l, f, e, j}} — se aplica sin recargar (carga la liga si hace falta)
+  if (d.irQuintetos && typeof d.irQuintetos === "object") { S.ap = null; aplicarEnlace(d.irQuintetos); if (IDX) aplicar().then(() => { if (d.irQuintetos.j && S.tab === "jugadores") requestAnimationFrame(() => verFicha("#jFicha")); }); }
+});
 let tmRes = null;
 window.addEventListener("resize", () => { clearTimeout(tmRes); tmRes = setTimeout(() => { if (D && Math.abs(window.innerWidth - ultimoAncho) > 24) pintar(); }, 180); });
 
