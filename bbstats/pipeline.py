@@ -187,7 +187,13 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
                         "fuente": adapter.source_url, "fecha_extraccion": now.isoformat(),
                         "fecha_extraccion_stamp": utc_stamp(now), "peticiones": http.request_log(),
                         "errores": adapter.errors}
-                raw_path = store.save(liga, season, meta, payload)
+                if (isinstance(payload, dict) and payload.get("incremental") and not payload.get("games")
+                        and prev_path is not None and not adapter.config_updates):
+                    # bruto incremental sin partidos nuevos: no se guarda un paquete vacío
+                    raw_path = prev_path
+                    res.notas.append("sin partidos nuevos: se reutiliza el bruto anterior")
+                else:
+                    raw_path = store.save(liga, season, meta, payload)
                 if isinstance(payload, dict) and payload.get("incremental"):
                     payload = store.load_season(liga, season)[1]["payload"]   # todos los paquetes
                 res.estado = "ok"
