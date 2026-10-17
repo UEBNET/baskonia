@@ -18,7 +18,7 @@ Range de los primeros bytes: nombre del equipo local) aceptando los partidos de 
 También acepta la configuración antigua (genérica): `temporadas.<t>.match_ids` y `temporadas.<t>.discovery`
 (páginas de calendario + regex de ids).
 
-Ids: jugador = apellido|nombre internacionales normalizados (el data.json no trae personId); equipo = nombre
+Ids: jugador = apellido-nombre internacionales normalizados (sin '|', que separa jugadores en las unidades) (el data.json no trae personId); equipo = nombre
 del equipo normalizado (o `alias_equipos` de la config).
 Bruto INCREMENTAL (como fiba_web): cada ejecución guarda sólo los partidos nuevos; los paquetes se unen al leer.
 """
@@ -28,6 +28,7 @@ import json
 import re
 import time
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from ..http import FetchError, HttpClient
@@ -58,12 +59,17 @@ def norm(s: Any) -> str:
     return re.sub(r"[^a-z0-9]+", " ", s).strip()
 
 
+_SUFFIX = {"jr", "sr", "ii", "iii", "iv"}
+
+
 def player_key(p: dict) -> str:
-    """Id de jugador: apellido|nombre internacionales normalizados (el data.json no trae personId)."""
-    fam = p.get("internationalFamilyName") or p.get("familyName") or ""
-    first = p.get("internationalFirstName") or p.get("firstName") or ""
-    k = f"{norm(fam)}|{norm(first)}"
-    return k if k != "|" else norm(p.get("name") or p.get("scoreboardName"))
+    """Id de jugador: apellido (sin espacios ni sufijos Jr/II…) - primer nombre, internacionales y normalizados
+    (el data.json no trae personId y cada club teclea los nombres del rival a su manera)."""
+    fam = norm(p.get("internationalFamilyName") or p.get("familyName") or "").split()
+    fam = "".join(t for t in fam if t not in _SUFFIX)          # "Mc Collum II" = "McCollum"
+    first = (norm(p.get("internationalFirstName") or p.get("firstName") or "").split() or [""])[0]
+    k = f"{fam}-{first}"                                        # "Christian Angelo" = "Christian"
+    return k if k != "-" else norm(p.get("name") or p.get("scoreboardName")).replace(" ", "-")
 
 
 def _team_name(t: dict) -> str:
@@ -252,6 +258,41 @@ def compress_ids(ids: list[int], max_gap: int = 3) -> tuple[list, list[int]]:
     return out, excl
 
 
+def _roster(t: dict) -> set:
+    pl = t.get("pl") if isinstance(t, dict) else None
+    return {player_key(p) for p in (pl or {}).values()} if isinstance(pl, dict) else set()
+
+
+def league_rosters(docs) -> dict[str, set]:
+    """{nombre normalizado: jugadores} de los partidos ya aceptados de la liga."""
+    rosters: dict[str, set] = {}
+    for d in docs:
+        for k in ("1", "2"):
+            t = ((d or {}).get("tm") or {}).get(k) or {}
+            rosters.setdefault(norm(_team_name(t)), set()).update(_roster(t))
+    return rosters
+
+
+def member(doc: dict, known: set, rosters: dict[str, set]) -> bool:
+    """¿Es un partido de la liga? Cada equipo tiene que compartir >= 4 jugadores con un equipo ya visto de la
+    liga o, si aún no hay plantillas suficientes, llamarse como uno conocido. (El mismo nombre de club lo usan
+    sus equipos femenino, filial o de cantera; los ids de otras ligas se intercalan con los de ésta.)
+    Si lo es, aprende el nombre y la plantilla."""
+    tm = (doc or {}).get("tm") or {}
+    sides = []
+    for k in ("1", "2"):
+        t = tm.get(k) or {}
+        n, r = norm(_team_name(t)), _roster(t)
+        ok = any(len(r & rr) >= 4 for rr in rosters.values()) or (n in known and len(rosters.get(n, ())) < 8)
+        if not ok:
+            return False
+        sides.append((n, r))
+    for n, r in sides:
+        known.add(n)
+        rosters.setdefault(n, set()).update(r)
+    return True
+
+
 class FibaLiveStatsAdapter(BaseAdapter):
     """Partidos de una liga en FIBA LiveStats.
 
@@ -263,8 +304,9 @@ class FibaLiveStatsAdapter(BaseAdapter):
                  liga cuando aún no hay `partidos` de esa fase (descubrimiento; el resultado se guarda en
                  `partidos` y `excluir`)
       en_curso   true: en cada ejecución se busca además hacia delante desde el último id conocido
-                 (`avance_busqueda` ids, por defecto 8000) para recoger las jornadas creadas después;
-                 los ids >= `playoffs_desde` son de playoffs
+                 (`avance_busqueda` ids, por defecto 20000, en paralelo) para recoger las jornadas creadas después;
+                 los ids >= `playoffs_desde` son de playoffs (con `regular_completa`, los posteriores al último
+                 id de la temporada regular configurada)
     Fase de playoffs: sólo partidos entre equipos del top `plazas_playoffs` de la temporada regular (los
     play-outs y partidos de clasificación de fin de temporada quedan fuera).
     """
@@ -300,11 +342,15 @@ class FibaLiveStatsAdapter(BaseAdapter):
     def _url(self, mid: Any) -> str:
         return self.cfg.get("data_url", DEFAULT_DATA_URL).format(match_id=mid)
 
-    def _head(self, http: HttpClient, mid: int) -> str | None:
-        """Nombre (normalizado) del equipo local leyendo sólo los primeros bytes del data.json."""
+    def _head(self, http: HttpClient, mid: int, fast: bool = False) -> str | None:
+        """Nombre (normalizado) del equipo local leyendo sólo los primeros bytes del data.json (`fast`: sin la
+        pausa de cortesía ni el registro de peticiones, para las búsquedas en paralelo)."""
         try:
-            resp = http.get(self._url(mid), headers={"Range": "bytes=0-450"}, ok_status=(403, 404, 416))
-        except FetchError:
+            if fast and hasattr(http, "session"):
+                resp = http.session.get(self._url(mid), headers={"Range": "bytes=0-450"}, timeout=20)
+            else:
+                resp = http.get(self._url(mid), headers={"Range": "bytes=0-450"}, ok_status=(403, 404, 416))
+        except Exception:  # noqa: BLE001 - un id caído es un id sin partido
             return None
         if resp.status_code not in (200, 206):
             return None
@@ -325,30 +371,33 @@ class FibaLiveStatsAdapter(BaseAdapter):
             return None, None
         return (doc if isinstance(doc, dict) and doc.get("tm") else None), resp.headers.get("Last-Modified")
 
-    def _scan(self, http: HttpClient, ids, known: set, docs: dict, dates: dict, stop_after: int | None = None) -> list[int]:
+    def _scan(self, http: HttpClient, ids, known: set, docs: dict, dates: dict, stop_after: int | None = None,
+              base_docs: dict | None = None) -> list[int]:
         """Partidos de la liga entre `ids`: local con nombre conocido y visitante conocido (o con al menos 4
         jugadores de un equipo conocido). Aprende las variantes de nombre. `stop_after` = parar tras ese número
         de ids seguidos sin partido de la liga."""
         found, miss = [], 0
-        rosters: dict[str, set] = {}
-        for d in docs.values():
-            for t in ((d.get("tm") or {}).get(k) or {} for k in ("1", "2")):
-                rosters.setdefault(norm(_team_name(t)), set()).update(player_key(p) for p in (t.get("pl") or {}).values())
+        rosters = league_rosters(list((base_docs or {}).values()) + list(docs.values()))
+        ids = list(ids)
+        heads: dict[int, str | None] = {}
+        workers = int(self.cfg.get("hilos_busqueda", 8))
+        with ThreadPoolExecutor(max_workers=workers) as ex:      # cabeceras de 450 bytes, en paralelo
+            for i in range(0, len(ids), 2000):
+                chunk = ids[i:i + 2000]
+                heads.update(zip(chunk, ex.map(lambda m: self._head(http, m, fast=True), chunk)))
+                if stop_after and i >= stop_after and not any(heads.get(m) in known for m in ids[max(0, i - stop_after):i]):
+                    break
         for mid in ids:
-            h = self._head(http, mid)
+            if mid not in heads:
+                break
+            h = heads[mid]
             if h and h in known:
                 doc, lm = self._doc(http, mid)
-                if doc:
-                    t2 = (doc.get("tm") or {}).get("2") or {}
-                    n2 = norm(_team_name(t2))
-                    r2 = {player_key(p) for p in (t2.get("pl") or {}).values()}
-                    if n2 in known or any(len(r2 & r) >= 4 for r in rosters.values()):
-                        known.add(n2)
-                        rosters.setdefault(n2, set()).update(r2)
-                        docs[str(mid)], dates[str(mid)] = doc, lm
-                        found.append(mid)
-                        miss = 0
-                        continue
+                if doc and member(doc, known, rosters):
+                    docs[str(mid)], dates[str(mid)] = doc, lm
+                    found.append(mid)
+                    miss = 0
+                    continue
             miss += 1
             if stop_after and miss > stop_after:
                 break
@@ -371,14 +420,22 @@ class FibaLiveStatsAdapter(BaseAdapter):
             if ph in partidos:
                 continue
             ids = [i for a, b in wins for i in range(int(a), int(b) + 1)]
-            new[ph] = self._scan(http, ids, known, self._probe_docs, self._probe_dates)
+            new[ph] = self._scan(http, ids, known, self._probe_docs, self._probe_dates, base_docs=prev_games)
         if sc.get("en_curso"):
             last = max([i for v in out.values() for i in v] + [i for v in new.values() for i in v] + [0])
             if last:
-                ids = range(last + 1, last + 1 + int(self.cfg.get("avance_busqueda", 8000)))
+                ids = range(last + 1, last + 1 + int(self.cfg.get("avance_busqueda", 20000)))
                 po = int(sc.get("playoffs_desde") or 0)
+                if not po and sc.get("regular_completa") and out.get("regular"):
+                    po = max(out["regular"]) + 1      # la temporada regular entera ya está creada en la fuente
+                n_reg = len(out.get("regular", []))
+                reg_done = n_reg and sum(1 for i in out.get("regular", []) if _is_final(prev_games.get(str(i)))) >= \
+                    n_reg - int(sc.get("tolerancia_regular", 4))
                 for mid in self._scan(http, ids, known, self._probe_docs, self._probe_dates,
-                                      stop_after=int(self.cfg.get("avance_busqueda", 8000))):
+                                      stop_after=int(self.cfg.get("avance_busqueda", 20000)),
+                                      base_docs=prev_games):
+                    if po and mid >= po and not reg_done:
+                        continue      # creado tras la liga regular pero antes de que acabe: supercopa, copa…
                     new.setdefault("playoffs" if po and mid >= po else "regular", []).append(mid)
         if any(new.values()):
             upd_p, all_excl = {}, set(expand_ids(sc.get("excluir") or []))
@@ -399,6 +456,9 @@ class FibaLiveStatsAdapter(BaseAdapter):
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
         self._probe_docs: dict[str, dict] = {}
         self._probe_dates: dict[str, str | None] = {}
+        sc = self.season_cfg(season)
+        if sc.get("sin_datos"):
+            raise NoDataYet(f"{self.league} {season}: {sc.get('motivo') or 'sin datos en la fuente'}")
         prev_games = (previous_payload or {}).get("games", {}) if isinstance(previous_payload, dict) else {}
         pages: dict[str, str] = {}
         by_phase = self._season_ids(season, http, prev_games)
@@ -414,13 +474,20 @@ class FibaLiveStatsAdapter(BaseAdapter):
         dates: dict[str, str | None] = {}
         reused = n_new = 0
         phases = {str(i): ph for ph, ids in by_phase.items() for i in ids}
+        guard, rejected = None, []
+        if sc.get("en_curso") or self.cfg.get("verificar_equipos"):
+            known = {norm(n) for n in sc.get("equipos") or []}
+            guard = (known, league_rosters(prev_games.values()))
         for mid in sorted(phases, key=int):
             if mid in prev_games and _is_final(prev_games[mid]):
                 reused += 1
                 continue
             doc, lm = (self._probe_docs[mid], self._probe_dates.get(mid)) if mid in self._probe_docs \
                 else self._doc(http, mid)
-            if not doc:
+            if not doc or (not _is_final(doc) and not doc.get("pbp")):
+                continue      # aún sin jugar (los ids de las jornadas futuras ya existen en la fuente)
+            if guard is not None and mid not in self._probe_docs and not member(doc, *guard):
+                rejected.append((mid, doc, lm))   # temporada en curso: ¿id de otra liga intercalada? (se repasa)
                 continue
             if mid in prev_games and json.dumps(prev_games[mid], sort_keys=True) == json.dumps(doc, sort_keys=True):
                 reused += 1
@@ -431,6 +498,20 @@ class FibaLiveStatsAdapter(BaseAdapter):
                 self.save_partial(season, {"claves_incrementales": ["games", "fechas"], "fases": phases,
                                            "fechas": dates, "games": new})
                 new, dates = {}, {}
+        for _ in range(3):     # segunda vuelta: con las plantillas ya aprendidas entran las variantes de nombre
+            again = []
+            for mid, doc, lm in rejected:
+                if member(doc, *guard):
+                    new[mid], dates[mid] = doc, lm
+                    n_new += 1
+                else:
+                    again.append((mid, doc, lm))
+            if len(again) == len(rejected):
+                break
+            rejected = again
+        if rejected:
+            self.soft_fail(f"{len(rejected)} ids del rango no son de la liga (otras competiciones intercaladas): "
+                           f"{[m for m, _, _ in rejected][:20]}")
         if not n_new and not prev_games:
             raise NoDataYet(f"{self.league} {season}: aún no hay partidos disponibles")
         return {"incremental": True, "claves_incrementales": ["games", "fechas"], "fases": phases,

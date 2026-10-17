@@ -16,7 +16,7 @@ JSON de datos de la página (`page`): el mismo documento sirve al boxscore y al 
 Orden: el de la lista de cada periodo cuando la fuente trae `order` (desde 2025-26); antes, reloj y número
 de acción (Id), porque la lista mezcla acciones de un mismo segundo (asistencia antes de su canasta).
 Rebotes sin texto (2020-21): ofensivo si el último tiro fallado era del mismo equipo.
-Coordenadas: x, y del tiro en unidades de la web (media pista de 0-280 × 0-~260, el aro hacia x≈140, y≈25:
+Coordenadas: x, y del tiro en unidades de la web (media pista de 0-280 × 0-~260, el aro hacia x≈140, y≈44:
 se calibran en bbmodel/zonas.py).
 """
 from __future__ import annotations
@@ -78,7 +78,7 @@ class FibaWebPBP(PBPSource):
         teams = [_s((gm.get(k) or {}).get("organisationId")) for k in ("teamA", "teamB")]
         g = Game(game_id=str(ref["game_id"]), phase=ref.get("phase", "regular"), teams=[t for t in teams if t],
                  date=ref.get("date") or gm.get("gameDateTimeUTC"),
-                 coord_system="fiba.basketball x/y (media pista, unidades de la web; aro ≈ (140, 25))")
+                 coord_system="fiba.basketball x/y (media pista, unidades de la web; aro ≈ (140, 44))")
         g.team_names = {teams[i]: (gm.get(k) or {}).get("shortName") for i, k in enumerate(("teamA", "teamB"))}
         names = {}
         for rk, tid in (("playersTeamA", teams[0]), ("playersTeamB", teams[1])):

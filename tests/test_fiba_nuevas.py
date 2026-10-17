@@ -83,15 +83,15 @@ def test_livestats_box_and_lineups():
     g = parse_fiba_game("101", doc, "regular")
     a = g["teams"][0]
     assert g["final"] and a["team_id"] == "equipo-alfa" and a["totals"]["pts"] == 6
-    assert {p["player_id"] for p in a["players"]} >= {"alfa1|ana1", "alfa6|ana6"}
-    assert next(p for p in a["players"] if p["player_id"] == "alfa5|ana5")["min"] == 15
+    assert {p["player_id"] for p in a["players"]} >= {"alfa1-ana1", "alfa6-ana6"}
+    assert next(p for p in a["players"] if p["player_id"] == "alfa5-ana5")["min"] == 15
     ctx = Ctx("gbl", "2026-27", {"minutos_partido": 40}, main_payload={"games": {"101": doc}})
     src = FibaLiveStatsPBP()
     ref = src.games(ctx)[0]
     assert ref["phase"] == "regular" and ref["teams"] == ["equipo-alfa", "equipo-beta"]
     game = src.parse(src.fetch(ctx, ref), ref, ctx)
-    shot = next(e for e in game.events if e.kind == "shot" and e.player == "alfa1|ana1")
-    assert shot.assister == "alfa2|ana2" and shot.x == 10.0
+    shot = next(e for e in game.events if e.kind == "shot" and e.player == "alfa1-ana1")
+    assert shot.assister == "alfa2-ana2" and shot.x == 10.0
     v = build(game, 40).validation()
     assert v["con_quintetos"] and v["valido"] and v["dif_min_max_s"] == 0 and v["dif_pm_max"] == 0
 

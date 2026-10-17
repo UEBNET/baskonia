@@ -82,12 +82,13 @@ INICIAL = {
     "lba": (Sistema("lba", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
     "lnb": (Sistema("lnb", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
     "bbl": (Sistema("bbl", "fiba", "y", (140.0, 30.0), (0.0536, 0.0536)), True),
-    # fiba.basketball (BCL, FIBA Europe Cup): media pista, x lateral 0-280, y a lo largo desde el fondo
-    "bcl": (Sistema("bcl", "fiba", "y", (140.0, 30.0), (0.0536, 0.0536)), True),
-    "fec": (Sistema("fec", "fiba", "y", (140.0, 30.0), (0.0536, 0.0536)), True),
+    # fiba.basketball (BCL, FIBA Europe Cup): media pista, x lateral 0-280, y a lo largo desde el fondo (aro ≈ (140, 44));
+    # calibración oct. 2026: 99,6-99,9 % de acierto 2/3 en BCL, FEC, BSL y GBL
+    "bcl": (Sistema("bcl", "fiba", "y", (139.6, 44.0), (0.058, 0.063)), True),
+    "fec": (Sistema("fec", "fiba", "y", (139.6, 44.0), (0.058, 0.063)), True),
     # FIBA LiveStats (BSL, GBL): % de la pista completa (x a lo largo 0-100 = 28 m, y lateral 0-100 = 15 m)
-    "bsl": (Sistema("bsl", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
-    "gbl": (Sistema("gbl", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
+    "bsl": (Sistema("bsl", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
+    "gbl": (Sistema("gbl", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
 }
 
 
