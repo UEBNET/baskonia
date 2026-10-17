@@ -28,7 +28,7 @@ import json
 import re
 import time
 import unicodedata
-from typing import Any, Callable
+from typing import Any
 
 from ..http import FetchError, HttpClient
 from ..normalize import map_counting
@@ -43,29 +43,127 @@ _EXTRA = {"sPointsInThePaint": "pts_paint", "sPointsSecondChance": "pts_2ndchanc
           "sPointsFastBreak": "pts_fastbreak", "sPointsFromTurnovers": "pts_off_tov"}
 
 
+_GREEK = {"α": "a", "β": "v", "γ": "g", "δ": "d", "ε": "e", "ζ": "z", "η": "i", "θ": "th", "ι": "i", "κ": "k",
+          "λ": "l", "μ": "m", "ν": "n", "ξ": "x", "ο": "o", "π": "p", "ρ": "r", "σ": "s", "ς": "s", "τ": "t",
+          "υ": "y", "φ": "f", "χ": "ch", "ψ": "ps", "ω": "o"}
+_TR = {"ı": "i", "ş": "s", "ğ": "g", "ç": "c", "ö": "o", "ü": "u", "İ": "i"}
+
+
 def norm(s: Any) -> str:
-    """Texto sin acentos, en minúsculas y con espacios simples (para comparar nombres)."""
-    s = unicodedata.normalize("NFKD", str(s or "")).encode("ascii", "ignore").decode("ascii")
-    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
-
-
-def greek_norm(s: Any) -> str:
-    """Como norm() pero conservando letras griegas sin tildes (los nombres griegos no tienen forma ASCII)."""
-    s = "".join(c for c in unicodedata.normalize("NFKD", str(s or "")) if not unicodedata.combining(c))
-    return re.sub(r"[^0-9a-zα-ω]+", " ", s.lower()).strip()
-
-
-def team_key(t: dict, aliases: dict | None = None) -> str:
-    name = t.get("name") or t.get("nameInternational") or t.get("shortName") or t.get("code") or ""
-    k = greek_norm(name)
-    return (aliases or {}).get(k, k)
+    """Texto comparable: minúsculas sin acentos, griego transliterado, sólo letras/cifras y espacios."""
+    s = "".join(_TR.get(c, c) for c in str(s or ""))
+    s = "".join(c for c in unicodedata.normalize("NFKD", s.lower()) if not unicodedata.combining(c))
+    s = "".join(_GREEK.get(c, c) for c in s)
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
+    return re.sub(r"[^a-z0-9]+", " ", s).strip()
 
 
 def player_key(p: dict) -> str:
+    """Id de jugador: apellido|nombre internacionales normalizados (el data.json no trae personId)."""
     fam = p.get("internationalFamilyName") or p.get("familyName") or ""
     first = p.get("internationalFirstName") or p.get("firstName") or ""
-    k = f"{greek_norm(fam)}|{greek_norm(first)}"
-    return k if k != "|" else greek_norm(p.get("name") or p.get("scoreboardName"))
+    k = f"{norm(fam)}|{norm(first)}"
+    return k if k != "|" else norm(p.get("name") or p.get("scoreboardName"))
+
+
+def _team_name(t: dict) -> str:
+    return t.get("name") or t.get("nameInternational") or t.get("shortName") or t.get("code") or ""
+
+
+def season_teams(docs: dict, aliases: dict | None = None, min_common: int = 4) -> dict[tuple[str, str], tuple[str, str]]:
+    """Equipo de cada lado de cada partido de una temporada: {(id, "1"|"2"): (team_id, nombre)}.
+
+    En LiveStats cada club introduce el nombre del rival a su manera ("Δόξα Λευκάδας" / "DOXA LEFKADAS
+    ELABET") y los patrocinadores cambian a mitad de temporada, así que las variantes se unen por PLANTILLA:
+    dos nombres son el mismo equipo si comparten al menos `min_common` jugadores (o el mismo nombre
+    normalizado, o un alias de la config). team_id = nombre normalizado más usado como local; nombre = el
+    nombre local más usado."""
+    aliases = {norm(k): norm(v) for k, v in (aliases or {}).items()}
+    sides: list[tuple[tuple[str, str], str, str, set]] = []
+    for mid, doc in (docs or {}).items():
+        tm = (doc or {}).get("tm") or {}
+        for k in ("1", "2"):
+            t = tm.get(k) or {}
+            raw = _team_name(t)
+            n = norm(raw)
+            n = aliases.get(n, n)
+            roster = {player_key(p) for p in (t.get("pl") or {}).values()
+                      if (parse_minutes(p.get("sMinutes")) or 0) > 0}
+            sides.append(((str(mid), k), n, raw, roster))
+    parent: dict[str, str] = {}
+
+    def find(x):
+        parent.setdefault(x, x)
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    rosters: dict[str, set] = {}
+    for _, n, _, r in sides:
+        find(n)
+        rosters.setdefault(n, set()).update(r)
+    names = sorted(rosters)
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            if len(rosters[a] & rosters[b]) >= min_common and find(a) != find(b):
+                parent[find(b)] = find(a)
+    home: dict[str, dict[str, int]] = {}
+    raw_home: dict[str, dict[str, int]] = {}
+    for (mid, k), n, raw, _ in sides:
+        c = find(n)
+        w = 2 if k == "1" else 1      # el nombre que pone el propio club (local) vale más
+        home.setdefault(c, {})[n] = home.setdefault(c, {}).get(n, 0) + w
+        raw_home.setdefault(c, {})[raw] = raw_home.setdefault(c, {}).get(raw, 0) + w
+    canon = {c: max(v, key=lambda x: (v[x], x)) for c, v in home.items()}
+    disp = {c: max(v, key=lambda x: (v[x], x)) for c, v in raw_home.items()}
+    return {key: (canon[find(n)].replace(" ", "-"), disp[find(n)].strip()) for key, n, _, _ in sides}
+
+
+def standings(games: dict[str, tuple[str, str, float, float]]) -> list[str]:
+    """Clasificación (victorias, diferencia) de partidos {id: (equipo1, equipo2, pts1, pts2)}."""
+    w: dict[str, list] = {}
+    for a, b, p1, p2 in games.values():
+        for t in (a, b):
+            w.setdefault(t, [0, 0.0])
+        if p1 is None or p2 is None:
+            continue
+        w[a][0] += p1 > p2
+        w[b][0] += p2 > p1
+        w[a][1] += p1 - p2
+        w[b][1] += p2 - p1
+    return sorted(w, key=lambda t: (-w[t][0], -w[t][1]))
+
+
+def phase_map(payload: dict, docs: dict, teams: dict, cfg: dict, season: str) -> dict[str, str | None]:
+    """Fase de cada partido: la de la config (`partidos` por fase); los de playoffs se quedan en "playoffs"
+    sólo si sus dos equipos acabaron la temporada regular entre los `plazas_playoffs` primeros (si no son
+    play-outs o partidos de clasificación: "excluida"). Ids de `excluir` -> None."""
+    sc = ((cfg.get("temporadas") or {}).get(season) or {})
+    excl = {str(i) for i in expand_ids(sc.get("excluir") or [])}
+    fases = dict((payload or {}).get("fases") or {})
+    for ph, items in (sc.get("partidos") or {}).items():
+        for i in expand_ids(items):
+            fases.setdefault(str(i), ph)
+    out: dict[str, str | None] = {}
+    res = {}
+    for mid, doc in (docs or {}).items():
+        if mid in excl:
+            out[mid] = None
+            continue
+        out[mid] = fases.get(mid, "regular")
+        tm = (doc or {}).get("tm") or {}
+        t1, t2 = teams.get((mid, "1")), teams.get((mid, "2"))
+        if t1 and t2:
+            res[mid] = (t1[0], t2[0], to_float((tm.get("1") or {}).get("score")),
+                        to_float((tm.get("2") or {}).get("score")))
+    n = int(cfg.get("plazas_playoffs") or 0)
+    if n:
+        top = set(standings({m: r for m, r in res.items() if out.get(m) == "regular"})[:n])
+        for mid, r in res.items():
+            if out.get(mid) == "playoffs" and not (r[0] in top and r[1] in top):
+                out[mid] = "excluida"
+    return out
 
 
 def _is_final(doc: Any) -> bool:
@@ -86,12 +184,14 @@ def _is_final(doc: Any) -> bool:
     return s1 is not None and s2 is not None and s1 != s2 and period >= 4 and clock in {"00:00", "0:00", "00:00:00"}
 
 
-def parse_fiba_game(match_id: str, doc: dict, phase: str = "regular", aliases: dict | None = None) -> dict:
-    """data.json de FIBA LiveStats -> formato estándar de partido (ver boxscore.py)."""
+def parse_fiba_game(match_id: str, doc: dict, phase: str = "regular",
+                    teams: tuple | None = None) -> dict:
+    """data.json de FIBA LiveStats -> formato estándar de partido (ver boxscore.py).
+    `teams` = ((team_id, nombre) local, (team_id, nombre) visitante) de season_teams (si no, el nombre)."""
     sides = []
-    for k in ("1", "2"):
+    for idx, k in enumerate(("1", "2")):
         t = (doc.get("tm") or {}).get(k) or {}
-        name = t.get("name") or t.get("nameInternational") or t.get("shortName")
+        name = _team_name(t)
         code = t.get("code") or t.get("shortName")
         tot_rec = {key[4:]: v for key, v in t.items() if key.startswith("tot_")}
         totals = map_counting(tot_rec)
@@ -105,7 +205,7 @@ def parse_fiba_game(match_id: str, doc: dict, phase: str = "regular", aliases: d
             first = p.get("firstName") or p.get("internationalFirstName") or ""
             family = p.get("familyName") or p.get("internationalFamilyName") or ""
             full = f"{first} {family}".strip() or p.get("name")
-            pid = p.get("personId") or p.get("playerId") or player_key(p)
+            pid = p.get("personId") or player_key(p)
             line = {"player_id": str(pid), "name": full,
                     "dorsal": p.get("shirtNumber"), "posicion": p.get("playingPosition") or None,
                     "starter": bool(to_float(p.get("starter")) or 0),
@@ -116,8 +216,8 @@ def parse_fiba_game(match_id: str, doc: dict, phase: str = "regular", aliases: d
             if p.get("sMinutes") is not None:
                 line["min"] = parse_minutes(p.get("sMinutes"))
             players.append(line)
-        sides.append({"team_id": team_key(t, aliases) or code or name, "name": name, "code": code,
-                      "totals": totals, "players": players})
+        tid, tname = (teams[idx] if teams and teams[idx] else (norm(name).replace(" ", "-") or code, name))
+        sides.append({"team_id": tid, "name": tname, "code": code, "totals": totals, "players": players})
     return {"game_id": str(match_id), "phase": phase, "date": doc.get("matchDate") or doc.get("date"),
             "final": _is_final(doc), "teams": sides}
 
@@ -134,7 +234,7 @@ def expand_ids(items: list) -> list[int]:
 
 
 def compress_ids(ids: list[int], max_gap: int = 3) -> tuple[list, list[int]]:
-    """Ids ordenados -> (rangos/ids sueltos, ids de los rangos que NO están en la lista = excluir)."""
+    """Ids -> (rangos [desde, hasta] e ids sueltos, ids de dentro de los rangos que NO están = excluir)."""
     ids = sorted(set(int(i) for i in ids))
     out, excl = [], []
     i = 0
@@ -152,42 +252,22 @@ def compress_ids(ids: list[int], max_gap: int = 3) -> tuple[list, list[int]]:
     return out, excl
 
 
-def discover_block(seed: int, probe: Callable[[int], tuple[str, str] | None], max_gap: int = 30,
-                   max_span: int = 6000, min_games_team: int = 3, learn_teams: int = 6) -> list[int]:
-    """Ids del bloque de partidos de una liga alrededor de `seed`.
-
-    probe(id) -> (equipo local, equipo visitante) normalizados, o None si el id no existe o no es accesible.
-    Desde la semilla, en cada sentido: mientras se conocen menos de `learn_teams` equipos se aceptan los ids
-    CONTIGUOS (así se aprenden los equipos del bloque); después, los partidos con algún equipo ya conocido.
-    Se para tras `max_gap` ids seguidos no aceptados. Al final se descartan los partidos con algún equipo de
-    menos de `min_games_team` partidos (ids ajenos colados en los bordes del bloque)."""
-    first = probe(seed)
-    if not first:
-        return []
-    teams = {first[0], first[1]}
-    accepted: dict[int, tuple[str, str]] = {seed: first}
-    for step in (1, -1):
-        gap, cur, streak = 0, seed, True
-        while gap <= max_gap and abs(cur - seed) < max_span:
-            cur += step
-            r = probe(cur)
-            ok = bool(r) and ((streak and len(teams) < learn_teams) or r[0] in teams or r[1] in teams)
-            if ok:
-                accepted[cur] = r
-                teams.update(r)
-                gap = 0
-            else:
-                gap += 1
-                streak = False
-    count: dict[str, int] = {}
-    for a, b in accepted.values():
-        count[a] = count.get(a, 0) + 1
-        count[b] = count.get(b, 0) + 1
-    return sorted(i for i, (a, b) in accepted.items()
-                  if count[a] >= min_games_team and count[b] >= min_games_team)
-
-
 class FibaLiveStatsAdapter(BaseAdapter):
+    """Partidos de una liga en FIBA LiveStats.
+
+    Config por temporada (`temporadas.<t>`):
+      partidos   {"regular": [...], "playoffs": [...]}: ids o rangos [desde, hasta] (lo que se descarga)
+      excluir    ids de esos rangos que no son de la liga (o no existen)
+      equipos    nombres (locales) de los equipos de la liga, para el descubrimiento
+      ventanas   {"regular": [[desde, hasta]], "playoffs": [...]}: rangos de ids donde BUSCAR partidos de la
+                 liga cuando aún no hay `partidos` de esa fase (descubrimiento; el resultado se guarda en
+                 `partidos` y `excluir`)
+      en_curso   true: en cada ejecución se busca además hacia delante desde el último id conocido
+                 (`avance_busqueda` ids, por defecto 8000) para recoger las jornadas creadas después;
+                 los ids >= `playoffs_desde` son de playoffs
+    Fase de playoffs: sólo partidos entre equipos del top `plazas_playoffs` de la temporada regular (los
+    play-outs y partidos de clasificación de fin de temporada quedan fuera).
+    """
     name = "fiba_livestats"
     version = "2.0"
 
@@ -220,114 +300,155 @@ class FibaLiveStatsAdapter(BaseAdapter):
     def _url(self, mid: Any) -> str:
         return self.cfg.get("data_url", DEFAULT_DATA_URL).format(match_id=mid)
 
-    def _probe_factory(self, http: HttpClient, cache: dict) -> Callable[[int], tuple[str, str] | None]:
-        aliases = self.cfg.get("alias_equipos") or {}
+    def _head(self, http: HttpClient, mid: int) -> str | None:
+        """Nombre (normalizado) del equipo local leyendo sólo los primeros bytes del data.json."""
+        try:
+            resp = http.get(self._url(mid), headers={"Range": "bytes=0-450"}, ok_status=(403, 404, 416))
+        except FetchError:
+            return None
+        if resp.status_code not in (200, 206):
+            return None
+        m = _NAME.search(resp.text)
+        return norm(json.loads(f'"{m.group(1)}"')) if m else None
 
-        def probe(mid: int):
-            if mid in cache:
-                return cache[mid]
-            try:
-                resp = http.get(self._url(mid), ok_status=(403, 404))
-            except FetchError:
-                cache[mid] = None
-                return None
-            if resp.status_code != 200:
-                cache[mid] = None
-                return None
-            try:
-                doc = resp.json()
-                t1, t2 = (doc.get("tm") or {}).get("1") or {}, (doc.get("tm") or {}).get("2") or {}
-                cache[mid] = (team_key(t1, aliases), team_key(t2, aliases)) if t1 and t2 else None
-                cache[("doc", mid)] = doc
-            except ValueError:
-                cache[mid] = None
-            return cache[mid]
-        return probe
+    def _doc(self, http: HttpClient, mid: Any) -> tuple[dict | None, str | None]:
+        try:
+            resp = http.get(self._url(mid), ok_status=(403, 404))
+        except FetchError as exc:
+            self.soft_fail(f"{mid}: {exc}")
+            return None, None
+        if resp.status_code != 200:
+            return None, None
+        try:
+            doc = resp.json()
+        except ValueError:
+            return None, None
+        return (doc if isinstance(doc, dict) and doc.get("tm") else None), resp.headers.get("Last-Modified")
 
-    def _season_ids(self, season: str, http: HttpClient | None) -> dict[str, list[int]]:
-        """{fase: [ids]} de la config; las fases con `semillas` y sin `partidos` se descubren (y se guardan)."""
+    def _scan(self, http: HttpClient, ids, known: set, docs: dict, dates: dict, stop_after: int | None = None) -> list[int]:
+        """Partidos de la liga entre `ids`: local con nombre conocido y visitante conocido (o con al menos 4
+        jugadores de un equipo conocido). Aprende las variantes de nombre. `stop_after` = parar tras ese número
+        de ids seguidos sin partido de la liga."""
+        found, miss = [], 0
+        rosters: dict[str, set] = {}
+        for d in docs.values():
+            for t in ((d.get("tm") or {}).get(k) or {} for k in ("1", "2")):
+                rosters.setdefault(norm(_team_name(t)), set()).update(player_key(p) for p in (t.get("pl") or {}).values())
+        for mid in ids:
+            h = self._head(http, mid)
+            if h and h in known:
+                doc, lm = self._doc(http, mid)
+                if doc:
+                    t2 = (doc.get("tm") or {}).get("2") or {}
+                    n2 = norm(_team_name(t2))
+                    r2 = {player_key(p) for p in (t2.get("pl") or {}).values()}
+                    if n2 in known or any(len(r2 & r) >= 4 for r in rosters.values()):
+                        known.add(n2)
+                        rosters.setdefault(n2, set()).update(r2)
+                        docs[str(mid)], dates[str(mid)] = doc, lm
+                        found.append(mid)
+                        miss = 0
+                        continue
+            miss += 1
+            if stop_after and miss > stop_after:
+                break
+        return found
+
+    def _season_ids(self, season: str, http: HttpClient | None, prev_games: dict) -> dict[str, list[int]]:
+        """{fase: [ids]} de la config; descubre las fases sin `partidos` en sus `ventanas` y, si la temporada
+        está `en_curso`, busca hacia delante. Lo descubierto se guarda en config (config_updates)."""
         sc = self.season_cfg(season)
-        partidos = dict(sc.get("partidos") or {})
+        partidos = {ph: list(v) for ph, v in (sc.get("partidos") or {}).items()}
         excl = set(expand_ids(sc.get("excluir") or []))
         out = {ph: [i for i in expand_ids(v) if i not in excl] for ph, v in partidos.items()}
-        seeds = sc.get("semillas") or {}
-        found = {}
-        for ph, ss in seeds.items():
-            if ph in partidos or not ss or http is None:
+        if http is None or not (sc.get("equipos") or prev_games):
+            return out
+        known = {norm(n) for n in sc.get("equipos") or []}
+        for d in prev_games.values():
+            known.update(norm(_team_name((d.get("tm") or {}).get(k) or {})) for k in ("1", "2"))
+        new: dict[str, list[int]] = {}
+        for ph, wins in (sc.get("ventanas") or {}).items():
+            if ph in partidos:
                 continue
-            cache: dict = {}
-            probe = self._probe_factory(http, cache)
-            ids: set[int] = set()
-            for s in ss:
-                if s not in ids:
-                    ids.update(discover_block(int(s), probe, int(self.cfg.get("max_huecos", 30))))
-            self._probe_docs.update({str(k[1]): v for k, v in cache.items() if isinstance(k, tuple)})
-            if ids:
-                rng, ex = compress_ids(sorted(ids))
-                found[ph] = (rng, ex)
-                out[ph] = sorted(ids)
-        if found:
-            excl_all = sorted(set(expand_ids(sc.get("excluir") or [])) | {x for _, ex in found.values() for x in ex})
-            upd = {"partidos": {**partidos, **{ph: r for ph, (r, _) in found.items()}}}
-            if excl_all:
-                upd["excluir"], _ = compress_ids(excl_all, 0)
+            ids = [i for a, b in wins for i in range(int(a), int(b) + 1)]
+            new[ph] = self._scan(http, ids, known, self._probe_docs, self._probe_dates)
+        if sc.get("en_curso"):
+            last = max([i for v in out.values() for i in v] + [i for v in new.values() for i in v] + [0])
+            if last:
+                ids = range(last + 1, last + 1 + int(self.cfg.get("avance_busqueda", 8000)))
+                po = int(sc.get("playoffs_desde") or 0)
+                for mid in self._scan(http, ids, known, self._probe_docs, self._probe_dates,
+                                      stop_after=int(self.cfg.get("avance_busqueda", 8000))):
+                    new.setdefault("playoffs" if po and mid >= po else "regular", []).append(mid)
+        if any(new.values()):
+            upd_p, all_excl = {}, set(expand_ids(sc.get("excluir") or []))
+            for ph, ids in new.items():
+                if not ids:
+                    continue
+                allids = sorted(set(ids) | set(out.get(ph, [])))
+                rng, ex = compress_ids(allids)
+                upd_p[ph] = rng
+                all_excl |= set(ex)
+                out[ph] = allids
+            upd = {"partidos": {**partidos, **upd_p}}
+            if all_excl:
+                upd["excluir"] = compress_ids(sorted(all_excl), 0)[0]
             self.config_updates = {"temporadas": {season: upd}}
         return out
 
     def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
         self._probe_docs: dict[str, dict] = {}
+        self._probe_dates: dict[str, str | None] = {}
+        prev_games = (previous_payload or {}).get("games", {}) if isinstance(previous_payload, dict) else {}
         pages: dict[str, str] = {}
-        by_phase = self._season_ids(season, http)
+        by_phase = self._season_ids(season, http, prev_games)
         legacy = self.discover_ids(season, http, pages)
         if legacy:
             by_phase.setdefault("regular", []).extend(int(x) for x in legacy if str(x).isdigit())
         if not any(by_phase.values()):
             raise NoDataYet(
                 f"{self.league} {season}: no hay ids de partido. Configura 'temporadas.{season}.partidos' "
-                f"(o 'semillas') en config/sources.json")
-        prev_games = (previous_payload or {}).get("games", {}) if isinstance(previous_payload, dict) else {}
+                f"(o 'equipos' + 'ventanas') en config/sources.json")
         block = int(self.cfg.get("partidos_por_paquete", 400))
         new: dict[str, Any] = {}
+        dates: dict[str, str | None] = {}
         reused = n_new = 0
         phases = {str(i): ph for ph, ids in by_phase.items() for i in ids}
         for mid in sorted(phases, key=int):
             if mid in prev_games and _is_final(prev_games[mid]):
                 reused += 1
                 continue
-            doc = self._probe_docs.get(mid)
-            if doc is None:
-                try:
-                    resp = http.get(self._url(mid), ok_status=(403, 404))
-                    doc = resp.json() if resp.status_code == 200 else None
-                    if doc is None:
-                        self.soft_fail(f"{mid}: HTTP {resp.status_code}")
-                except (FetchError, ValueError) as exc:
-                    self.soft_fail(f"{mid}: {exc}")
-            if not isinstance(doc, dict) or not doc.get("tm"):
+            doc, lm = (self._probe_docs[mid], self._probe_dates.get(mid)) if mid in self._probe_docs \
+                else self._doc(http, mid)
+            if not doc:
                 continue
-            new[mid] = doc
+            if mid in prev_games and json.dumps(prev_games[mid], sort_keys=True) == json.dumps(doc, sort_keys=True):
+                reused += 1
+                continue
+            new[mid], dates[mid] = doc, lm
             n_new += 1
             if len(new) >= block:
-                self.save_partial(season, {"fases": phases, "games": new})
-                new = {}
+                self.save_partial(season, {"claves_incrementales": ["games", "fechas"], "fases": phases,
+                                           "fechas": dates, "games": new})
+                new, dates = {}, {}
         if not n_new and not prev_games:
-            raise NoDataYet(f"{self.league} {season}: no se pudo descargar ningún partido")
-        return {"incremental": True, "fases": phases, "discovery_pages": pages, "games": new,
-                "reused_games": reused, "partidos_nuevos": n_new}
+            raise NoDataYet(f"{self.league} {season}: aún no hay partidos disponibles")
+        return {"incremental": True, "claves_incrementales": ["games", "fechas"], "fases": phases,
+                "fechas": dates, "discovery_pages": pages, "games": new, "reused_games": reused,
+                "partidos_nuevos": n_new}
 
     def parse(self, payload: Any, season: str) -> dict[str, ParsedLeague]:
-        phases = payload.get("fases") or {}
-        aliases = self.cfg.get("alias_equipos") or {}
-        excl = {str(i) for i in expand_ids(self.season_cfg(season).get("excluir") or [])}
+        docs = {k: v for k, v in (payload.get("games") or {}).items() if isinstance(v, dict) and v.get("tm")}
+        teams = season_teams(docs, self.cfg.get("alias_equipos"))
+        phases = phase_map(payload, docs, teams, self.cfg, season)
         games = []
-        for mid, doc in sorted((payload.get("games") or {}).items(), key=lambda kv: int(kv[0]) if kv[0].isdigit() else 0):
-            if not isinstance(doc, dict) or mid in excl:
-                continue
-            ph = phases.get(mid, "regular") if phases else "regular"
+        for mid in sorted(docs, key=lambda k: int(k) if k.isdigit() else 0):
+            ph = phases.get(mid)
             if ph not in ("regular", "playoffs"):
                 continue
-            games.append(parse_fiba_game(mid, doc, ph, aliases))
+            games.append(parse_fiba_game(mid, docs[mid], ph, (teams.get((mid, "1")), teams.get((mid, "2")))))
         if not games:
             raise AdapterError(f"{self.league}: el bruto no contiene partidos")
-        return aggregate_by_phase(games, [f"{len(games)} boxscores FIBA LiveStats; "
-                                          f"{payload.get('reused_games', 0)} reutilizados"])
+        n_excl = sum(1 for v in phases.values() if v == "excluida")
+        return aggregate_by_phase(games, [f"{len(games)} boxscores FIBA LiveStats; {n_excl} de play-out/"
+                                          f"clasificación excluidos; {payload.get('reused_games', 0)} reutilizados"])

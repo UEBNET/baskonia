@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-17T10:12:37.962495+00:00",
+  "generado": "2026-10-17T10:30:01.519585+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
@@ -45,7 +45,7 @@
     },
     {
       "temporada": "2025-26",
-      "generado": "2026-10-13T07:53:24.171606+00:00",
+      "generado": "2026-10-17T10:30:01.317492+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -62,6 +62,11 @@
           "regular": 331,
           "total": 331
         },
+        "bcl": {
+          "playoffs": 287,
+          "regular": 493,
+          "total": 501
+        },
         "eurocup": {
           "playoffs": 131,
           "regular": 315,
@@ -71,6 +76,11 @@
           "playoffs": 124,
           "regular": 335,
           "total": 335
+        },
+        "fec": {
+          "playoffs": 106,
+          "regular": 572,
+          "total": 578
         },
         "gleague": {
           "playoffs": 160,

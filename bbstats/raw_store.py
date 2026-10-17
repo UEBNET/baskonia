@@ -82,7 +82,8 @@ class RawStore:
         Si el payload es INCREMENTAL (`payload["incremental"] = True`: cada paquete guarda sólo los partidos
         descargados en esa ejecución, troceado para que ningún fichero pase de ~40 MB), se unen los
         `games` de todos los paquetes incrementales de la temporada, del más antiguo al más reciente
-        (un partido repetido se queda con la versión más reciente). El resto de claves son las del último."""
+        (un partido repetido se queda con la versión más reciente); igual con las demás claves de
+        `claves_incrementales` (por defecto sólo "games"). El resto de claves son las del último."""
         files = self.list(league, season)
         if not files:
             return None, None
@@ -90,13 +91,16 @@ class RawStore:
         payload = doc.get("payload")
         if not (isinstance(payload, dict) and payload.get("incremental")):
             return files[-1], doc
-        games: dict = {}
+        keys = payload.get("claves_incrementales") or ["games"]
+        acc: dict = {k: {} for k in keys}
         for p in files[:-1]:
             prev = self.load(p).get("payload")
             if isinstance(prev, dict) and prev.get("incremental"):
-                games.update(prev.get("games") or {})
-        games.update(payload.get("games") or {})
-        merged = {**payload, "games": games, "paquetes": [p.name for p in files]}
+                for k in keys:
+                    acc[k].update(prev.get(k) or {})
+        for k in keys:
+            acc[k].update(payload.get(k) or {})
+        merged = {**payload, **acc, "paquetes": [p.name for p in files]}
         return files[-1], {"meta": doc.get("meta") or {}, "payload": merged}
 
     @staticmethod

@@ -359,3 +359,67 @@ Escalas de lectura ±100 (Euroliga = 0) del Atlas y de Quintetos: `python -m bbm
 Documentación técnica: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md). Artículo completo:
 [`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf).
 
+
+## 14. Entrenadores por partido y tramos de entrenador
+
+`python -m bbstats entrenadores [--temporada T …] [--ligas …] [--sin-descarga]` (módulo `bbstats/entrenadores.py`)
+asigna a cada partido y equipo su **entrenador principal** y agrupa los partidos en **tramos
+club-temporada-entrenador** (cada destitución o interino es un tramo propio, para darle después su estilo de juego).
+
+| Fichero | Contenido |
+|---|---|
+| `data/processed/<t>/entrenadores/<liga>_partidos.csv` | Una fila por partido × equipo: `game_id` (el mismo de `quintetos/<liga>/tramos.csv.gz`), `fecha`, `fase`, `equipo_id`/`equipo` (los de `ligas/<liga>.csv` y quintetos), `rival_id`, `local`, puntos y `resultado` (V/D), `entrenador`, `entrenador_id`, `entrenador_id_fuente`, `fuente`, `metodo`, `imputado`, `validacion_vd` (NBA) |
+| `data/processed/<t>/entrenadores/<liga>_tramos.csv` | Una fila por club-temporada-entrenador: `orden` (1, 2, 3… por su primer partido), partidos (total, regular, playoffs, otras), `n_imputados`, primer y último partido, V-D (total, regular, playoffs), `n_tramos_consecutivos` (> 1 si vuelve tras un interino), `interino` (heurístico), `entrenadores_equipo`, `partidos_ids` (lista con `;`) |
+| `data/processed/entrenadores.csv` | Tabla global: `entrenador_id`, nombre, ligas, temporadas, clubes (`liga:temporada:equipo`), partidos, grafías vistas e ids de fuente |
+| `data/processed/entrenadores_cobertura.csv` | Liga × temporada: partidos, % con entrenador, % observado, % imputado, clubes, clubes con más de uno |
+| `config/entrenadores_alias.json` | Variantes de escritura → id canónico (p.ej. «IVANOVIC, DUSKO», «Dusko Ivanović»; «Chus Mateo», «MATEO, JESUS») |
+
+**Ids**: `entrenador_id` = slug del nombre (sin acentos, «APELLIDO, NOMBRE» → `nombre-apellido`) pasado por el
+alias: es el mismo en todas las ligas y temporadas (Pablo Laso en ACB, EuroLeague y BBL; Tiago Splitter en LNB,
+EuroLeague y NBA; Tuomas Iisalo en BBL, LNB, EuroCup y NBA). El id propio de cada fuente queda en `entrenador_id_fuente`.
+
+**Fuentes** (primero lo que ya está en los brutos; si no, una fuente pública guardada como
+`data/raw/<liga>/<t>/entrenadores_<liga>_<t>_<fecha>.json.gz`, nunca sobrescrita):
+
+| Liga | Fuente del entrenador | `metodo` |
+|---|---|---|
+| EuroLeague, EuroCup | Boxscore de live.euroleague.net (`Stats[].Coach`) en el bruto pbp | `partido` |
+| ACB | `teamBoxscores[].headCoach` (bruto principal y pbp) | `partido` |
+| LBA | `coaches_extra` de matches-scores-by-id (con id y fechas de contrato) | `partido` |
+| BBL | quién habla en la rueda de prensa de cada partido (`coachComments[].seasonCoach`) + `headCoachName` (entrenador final de la temporada, no por partido) | `rueda_prensa`, `rueda_prensa_no_principal` (ayudante en ≥ 2 partidos seguidos o entre dos principales = interino) |
+| NBA | Basketball-Reference, página de equipo-temporada: «Coach: A (a-b), B (c-d)» en orden → partidos de temporada regular por fecha; se comprueba el V-D de cada bloque (196/196 coinciden); playoffs = último entrenador | `orden_vd`, `temporada_ultimo` |
+| G League | stats.gleague.nba.com `commonteamroster` (Coaches, «Head Coach»): un entrenador por equipo-temporada, sin fechas | `temporada` |
+| LNB | api-prod.lnb.fr `altrstats/getCoachingStaff` {teamExternalId, year} (HEAD_COACH con fechas desde/hasta) | `temporada`, `temporada_fechas` |
+
+Huecos: un partido sin entrenador entre dos del mismo entrenador recibe ese entrenador (`metodo = tramo`,
+`imputado = 1`); al principio o al final de la temporada, el más cercano (`tramo_borde`); entre dos distintos queda vacío.
+
+Cobertura (17-10-2026): % de filas partido-equipo con entrenador (entre paréntesis, observado sin imputar) ·
+clubes con más de un entrenador / clubes.
+
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| acb | 99.9 (99.6) · 5/19 | 99.5 (99.1) · 9/18 | 100.0 (100.0) · 3/18 | 100.0 (100.0) · 5/18 | 99.8 (99.5) · 4/18 | 99.8 (99.8) · 6/18 | 100.0 (100.0) · 0/18 |
+| bbl | 98.8 (90.4) · 4/18 | 100.0 (87.5) · 6/18 | 100.0 (90.1) · 4/18 | 100.0 (66.4) · 2/18 | 100.0 (98.2) · 6/17 | 100.0 (97.9) · 6/18 | 100.0 (100.0) · 0/18 |
+| eurocup | 100.0 (100.0) · 11/24 | 100.0 (100.0) · 10/20 | 100.0 (99.5) · 5/20 | 100.0 (100.0) · 8/20 | 100.0 (100.0) · 5/20 | 100.0 (100.0) · 2/20 | 100.0 (100.0) · 0/32 |
+| euroleague | 100.0 (100.0) · 10/18 | 100.0 (99.8) · 8/18 | 100.0 (100.0) · 6/18 | 100.0 (100.0) · 7/18 | 100.0 (100.0) · 6/18 | 100.0 (100.0) · 10/20 | 100.0 (100.0) · 0/20 |
+| gleague | 94.4 · 0/18 | 96.1 · 0/30 | 73.0 · 0/30 | 83.7 · 0/31 | 58.0 · 0/31 | 47.9 · 0/31 | — |
+| lba | 100.0 · 5/15 | 100.0 · 6/16 | 100.0 · 4/16 | 100.0 · 5/16 | 100.0 · 7/16 | 100.0 · 7/15 | 100.0 · 0/16 |
+| lnb | 100.0 (100.0) · 3/18 | 99.4 (99.4) · 3/18 | 99.8 (99.8) · 2/18 | 99.2 (95.6) · 4/18 | 99.8 (99.8) · 2/16 | 99.8 (99.8) · 1/16 | 100.0 (100.0) · 0/16 |
+| nba | 100.0 · 2/30 | 100.0 · 1/30 | 100.0 · 2/30 | 100.0 · 3/30 | 100.0 · 4/30 | 100.0 · 2/30 | — |
+
+Lagunas: G League sólo un entrenador por equipo-temporada y sin él para los equipos cuya ficha no lo trae (no
+detecta cambios a mitad de temporada); NBA y LNB son listas de temporada repartidas por orden o por fechas, no el
+banquillo de cada partido (una baja puntual de un partido no aparece); en EuroLeague/EuroCup/ACB/LBA sí aparecen
+los sustitutos de un partido (enfermedad, sanción). Unir con quintetos:
+
+```python
+q = pd.read_csv("data/processed/2025-26/quintetos/acb/tramos.csv.gz", dtype={"game_id": str, "team_a": str})
+e = pd.read_csv("data/processed/2025-26/entrenadores/acb_partidos.csv", dtype=str)
+q = q.merge(e[["game_id", "equipo_id", "entrenador_id"]], left_on=["game_id", "team_a"],
+            right_on=["game_id", "equipo_id"], how="left")      # (y lo mismo con team_b para el rival)
+```
+
+Ligas nuevas: registrar un lector en `bbstats.entrenadores.EXTRACTORES` (`registrar(liga_o_fuente_pbp, Extractor(...))`);
+para FIBA LiveStats hay `extractor_fiba_livestats(doc)` (data.json: `tm["1"]["coach"]`, `coachDetails`) y el lector
+genérico `lector_fiba_livestats`, registrado con la clave `fiba_livestats`.

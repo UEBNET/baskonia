@@ -56,6 +56,7 @@ baskonia/
 │   ├── raw_store.py          ← almacén bruto (JSON gz con fecha, nunca se sobrescribe)
 │   ├── http.py               ← cliente HTTP: reintentos, pausas por dominio, transporte curl
 │   ├── api.py                ← API Python: ejecutar(), reprocesar(), estado(), datos(), dataframe(), diccionario()
+│   ├── entrenadores.py       ← entrenadores por partido, tramos club-temporada-entrenador (§9c)
 │   ├── server.py             ← API HTTP mínima (POST /api/ejecutar, GET /api/datos…)
 │   └── __main__.py           ← CLI: python -m bbstats {ejecutar|reprocesar|estado|servidor}
 ├── data/
@@ -449,6 +450,23 @@ de `guardar_cada_partidos` (150).
 `tramos.csv.gz` permite reconstruir cualquier métrica nueva (p.ej. RAPM multi-temporada, lineups vs rival).
 Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
 
+## 9c. Entrenadores (bbstats/entrenadores.py)
+
+`python -m bbstats entrenadores [--temporada T …] [--ligas …] [--sin-descarga]` (README §14).
+- **Salida**: `data/processed/<t>/entrenadores/<liga>_partidos.csv` (partido × equipo: `game_id` = el de
+  `quintetos/<liga>/tramos.csv.gz`, `equipo_id` = `team_id` de ligas/quintetos, `entrenador_id`, `resultado`, `metodo`,
+  `imputado`), `<liga>_tramos.csv` (club-temporada-entrenador: `orden`, partidos por fase, fechas, V-D, `interino`
+  heurístico, `partidos_ids`), `data/processed/entrenadores.csv` (global) y `entrenadores_cobertura.csv`.
+- **Id**: slug del nombre normalizado + `config/entrenadores_alias.json` → el mismo en todas las ligas (106 de 448
+  entrenadores aparecen en más de una liga). Leer los CSV con `dtype=str` (ids NBA con ceros a la izquierda).
+- **Fuentes**: EuroLeague/EuroCup, ACB y LBA traen el entrenador en cada boxscore (≈ 100 % observado, incluidos
+  sustitutos de un partido); BBL, por quién habla en la rueda de prensa (66–98 % observado, resto imputado por tramo);
+  NBA, Basketball-Reference «Coach: A (a-b), B (c-d)» repartido por orden de partidos (V-D comprobado en los 196
+  tramos); LNB, `getCoachingStaff` de api-prod.lnb.fr con fechas; G League, `commonteamroster` (un entrenador por
+  temporada, 48–96 % de cobertura según temporada, sin cambios a mitad de temporada).
+- **Uso**: tramo de entrenador = unidad para estilos por entrenador; filtrar por `n_partidos` (los interinos de 1–5
+  partidos son ruido) y tener en cuenta `metodo` (por partido > por orden/fechas > temporada > imputado).
+
 ## 10. Historial
 
 - Commit 1 — arquitectura por capas, esquema, motor de métricas, tests.
@@ -476,3 +494,5 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
   estilos con 10 semillas, simulador de varios fichajes y bajas, Atlas en pestañas y artículo reescrito.
 - Mesa (versión 24): pestaña «Datos Normalizados» (dataset completo A+B), nacionalidad en las tablas, explorador de
   normalización con todas las temporadas, Atlas como última pestaña y sin Comparador.
+- Entrenadores (oct. 2026): `bbstats/entrenadores.py`, entrenador por partido y tramos de entrenador en las 8 ligas,
+  2020-21 a 2026-27 (§9c).

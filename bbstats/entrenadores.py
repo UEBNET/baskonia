@@ -135,12 +135,12 @@ class Alias:
 
 
 def _mejor_nombre(variantes: list[str]) -> str:
-    """Entre las grafías de una persona, la más informativa: con acentos y mayúsculas/minúsculas mezcladas."""
+    """Entre las grafías de una persona: mayúsculas/minúsculas mezcladas, con acentos, la más frecuente, la más corta."""
     def score(v: str) -> tuple:
         mixed = any(c.islower() for c in v) and any(c.isupper() for c in v)
-        return (mixed, sum(ord(c) > 127 for c in v), len(v))
+        return (mixed, any(ord(c) > 127 for c in v))
     cnt = Counter(variantes)
-    return max(cnt, key=lambda v: (score(v), cnt[v]))
+    return max(cnt, key=lambda v: (score(v), cnt[v], -len(v)))
 
 
 # =============================================================================================== FIBA LiveStats
@@ -868,6 +868,7 @@ def run_league(liga: str, temporada: str, cfg: dict, store: RawStore, out_dir: P
     df["entrenador_id"] = clave.map(alias.id_de)
     vacio = df["entrenador_id"].isna()
     df.loc[vacio, ["entrenador", "entrenador_id_fuente", "fuente", "metodo"]] = None
+    df["entrenador"] = [alias.nombres.get(i) or n for i, n in zip(df["entrenador_id"], df["entrenador"])]
     df = imputar(df)
     names = _ligas_nombres(resolve_path(cfg, "procesado"), temporada, liga)
     df["equipo"] = [names.get(t) or e for t, e in zip(df["equipo_id"], df["equipo"])]
