@@ -103,3 +103,29 @@ Asociaciones, no causas (selección de minutos y rivales); el RAPM de una tempor
 contexto; las zonas dependen de la calidad de las coordenadas de cada fuente (calibración ≥ 99 %); el contexto se
 mide con un índice de nivel de caja; sin quintetos en BBL 2020-23 (sólo tiros y asistencias) ni jugada a jugada en
 LNB 2020-21; NBA y G League 2026-27 sin empezar.
+
+## 7. Escalas de lectura ±100 (Atlas de Estilos y Quintetos y conexiones)
+
+> Código: `bbmodel/escalas.py` (`python -m bbmodel escalas`; también lo llaman `bbestilo exportar` y `bbmodel mesa-quintetos`) ·
+> Bloque `escalas` en `data/artifact/atlas/estilos/meta.json` y `data/artifact/quintetos/datos/indice.json` (idéntico) ·
+> En las páginas: bloque JS compartido `ESC` (mismo código en las dos) y sección «Cómo se calculan las escalas» (Claves del
+> estilo · Cómo leer el Atlas) y concepto «Escalas ±100» (Quintetos · Aprende).
+
+Las pestañas interactivas leen todas las cifras de nivel e impacto con una sola regla; los vectores de estilo, la red y los
+modelos no cambian (la escala es sólo una forma de leerlos y el valor original sigue en el tooltip y con «Cifras: Originales»):
+
+    S = 100 · tanh(z / 2),   z = (valor − referencia) / DT
+
+* 0 = media de la Euroliga; ±46 = 1 DT; ±76 = 2 DT; ±91 = 3 DT; nunca pasa de ±100 (casi lineal en el centro).
+* **Nivel** (L de jugador, plantillas, nivel conjunto de quintetos/tríos/parejas, compañeros y rivales, clubes): referencia =
+  media de L de los jugadores de la Euroliga de cada temporada (por minutos); DT = la de L en todas las ligas (0,833). Medias
+  2025-26: NBA +21, Liga Endesa −24, G League −31, EuroCup −36, LBA −41, LNB −43, BBL −51. El índice de nivel de club se pasa a
+  L con la recta ajustada en los clubes reales (L ≈ −0,206 + 0,551 · índice, r = 0,999) y se lee igual.
+* **Impacto** (Net de equipo, quintetos, tríos y parejas; on/off; RAPM en su liga y traducido; sinergias; efectos X → Y): DT de
+  la familia en la Euroliga (temporadas completas, ponderada por posesiones o minutos; Net de unidades con muestra suficiente);
+  referencia 0 en Net, sinergia y efectos y la media de la Euroliga en on/off y RAPM de jugador. Las previsiones del Atlas
+  (química, quinteto previsto) usan la familia observada equivalente. Diferencias: `100 · tanh(Δ / (2 · DT))`.
+* **Estilo**: afinidad = probabilidad de cada estilo × 100; rasgos frente al club medio de la Euroliga de la temporada
+  (`z = (x − media EL) / DT entre clubes`); los cambios de estilo se dibujan como flechas y se resumen en puntos de afinidad
+  («E05 → E06: +34 Circulación y triple · −28 Exterior y presión»).
+* Percentiles junto a cada cifra: en su liga y en la Euroliga (cuantiles de cada familia en el bloque `escalas`).

@@ -409,6 +409,7 @@ details.mas[open] > summary { margin-bottom: 6px; }
 .esc { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; cursor: help; }
 .esc.up { color: var(--good); } .esc.dn { color: var(--bad); } .esc.na { color: var(--muted); font-weight: 400; cursor: default; }
 .esc .escp { font-weight: 500; color: var(--muted); font-size: .85em; margin-left: 2px; }
+.kpi b > .esc, .kv b > .esc, .kv dd .esc, .bignet b > .esc, .kpi3 b > .esc, b > .esc { font: inherit; letter-spacing: inherit; text-transform: none; }
 .escbar { display: inline-block; position: relative; width: 56px; height: 8px; border-radius: 4px; background: var(--line); vertical-align: middle; margin-left: 6px; }
 .escbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); }
 .escbar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
@@ -954,19 +955,21 @@ const ESC = (() => {
     orapm: { nombre: "ORAPM", unidad: "pts/100 (vara Euroliga)", dt: 0.8334, ref_defecto: 0.1464, d: 1 },
     drapm: { nombre: "DRAPM", unidad: "pts/100 (vara Euroliga)", dt: 0.6745, ref_defecto: 0.1105, d: 1 },
     rapm_liga: { nombre: "RAPM en su liga", unidad: "pts/100", dt: 2.0813, ref_defecto: 0.3052, d: 1 },
-    onoff: { nombre: "On/off", unidad: "pts/100", dt: 6.1926, ref_defecto: 0.7455, d: 1 },
-    net_equipo: { nombre: "Net de equipo", unidad: "pts/100", dt: 5.8865, ref_defecto: 0, d: 1 },
-    net_quinteto: { nombre: "Net de quinteto", unidad: "pts/100", dt: 2.8785, ref_defecto: 0, d: 1 },
-    net_trio: { nombre: "Net de trío", unidad: "pts/100", dt: 4.8206, ref_defecto: 0, d: 1 },
-    net_pareja: { nombre: "Net de pareja", unidad: "pts/100", dt: 5.4915, ref_defecto: 0, d: 1 },
-    sinergia_quinteto: { nombre: "Sinergia de quinteto", unidad: "pts/100", dt: 2.4453, ref_defecto: 0, d: 1 },
-    sinergia_pareja: { nombre: "Sinergia de pareja (WOWY)", unidad: "pts/100", dt: 9.289, ref_defecto: 0, d: 1 },
-    sinergia_rapm: { nombre: "Sinergia frente al RAPM", unidad: "pts/100", dt: 3.5249, ref_defecto: 0, d: 1 },
-    d_cuota_tiro: { nombre: "Efecto X → Y: cuota de tiro", unidad: "pp", dt: 3.3965, ref_defecto: 0, d: 1 },
-    d_efg: { nombre: "Efecto X → Y: eFG%", unidad: "pp", dt: 10.6053, ref_defecto: 0, d: 1 },
-    d_pct_asistidas: { nombre: "Efecto X → Y: % asistidas", unidad: "pp", dt: 12.9423, ref_defecto: 0, d: 1 },
-    d_pct_aro: { nombre: "Efecto X → Y: % en el aro", unidad: "pp", dt: 8.254, ref_defecto: 0, d: 1 },
-    d_pts100: { nombre: "Efecto X → Y: puntos/100", unidad: "pts/100", dt: 5.2466, ref_defecto: 0, d: 1 },
+    orapm_liga: { nombre: "ORAPM en su liga", unidad: "pts/100", dt: 1.5028, ref_defecto: 0.1643, d: 1 },
+    drapm_liga: { nombre: "DRAPM en su liga", unidad: "pts/100", dt: 1.3795, ref_defecto: 0.1409, d: 1 },
+    onoff: { nombre: "On/off", unidad: "pts/100", dt: 7.8673, ref_defecto: 1.1486, d: 1 },
+    net_equipo: { nombre: "Net de equipo", unidad: "pts/100", dt: 5.8865, ref_defecto: 0.0, d: 1 },
+    net_quinteto: { nombre: "Net de quinteto", unidad: "pts/100", dt: 5.4513, ref_defecto: 0.0, d: 1 },
+    net_trio: { nombre: "Net de trío", unidad: "pts/100", dt: 5.7045, ref_defecto: 0.0, d: 1 },
+    net_pareja: { nombre: "Net de pareja", unidad: "pts/100", dt: 5.5363, ref_defecto: 0.0, d: 1 },
+    sinergia_quinteto: { nombre: "Sinergia de quinteto", unidad: "pts/100", dt: 3.9096, ref_defecto: 0.0, d: 1 },
+    sinergia_pareja: { nombre: "Sinergia de pareja (WOWY)", unidad: "pts/100", dt: 9.5533, ref_defecto: 0.0, d: 1 },
+    sinergia_rapm: { nombre: "Sinergia frente al RAPM", unidad: "pts/100", dt: 2.9407, ref_defecto: 0.0, d: 1 },
+    d_cuota_tiro: { nombre: "Efecto X → Y: cuota de tiro", unidad: "pp", dt: 3.3965, ref_defecto: 0.0, d: 1 },
+    d_efg: { nombre: "Efecto X → Y: eFG%", unidad: "pp", dt: 10.6053, ref_defecto: 0.0, d: 1 },
+    d_pct_asistidas: { nombre: "Efecto X → Y: % asistidas", unidad: "pp", dt: 12.9423, ref_defecto: 0.0, d: 1 },
+    d_pct_aro: { nombre: "Efecto X → Y: % en el aro", unidad: "pp", dt: 8.254, ref_defecto: 0.0, d: 1 },
+    d_pts100: { nombre: "Efecto X → Y: puntos/100", unidad: "pts/100", dt: 5.2466, ref_defecto: 0.0, d: 1 },
     z: { nombre: "Desviaciones típicas", unidad: "σ", dt: 1, ref_defecto: 0, d: 2 },
   } };
   const LIGAS_INFO = { euroleague: ["EuroLeague", "EL"], eurocup: ["EuroCup", "EC"], acb: ["Liga Endesa", "ACB"], nba: ["NBA", "NBA"], gleague: ["G League", "GL"],
@@ -1157,8 +1160,10 @@ function cambioTxt(pa, pb, ea, eb, n = 3) {
 const cambioLinea = (tit, pa, pb, ea, eb, extra = "") => `<div class="cb"><span class="ctx">${tit}</span>${cambioTxt(pa, pb, ea, eb)}${extra}</div>`;
 // flecha 3D (cono en la punta) para los cambios de estilo en el mapa
 const flecha = (a, b, color, size = 0.32) => ({ type: "cone", x: [b[0]], y: [b[1]], z: [b[2]], u: [b[0] - a[0]], v: [b[1] - a[1]], w: [b[2] - a[2]], anchor: "tip", sizemode: "absolute", sizeref: size, colorscale: [[0, color], [1, color]], showscale: false, hoverinfo: "skip", lighting: { ambient: 0.9 } });
-// entrenadores (cuando lleguen: campo «entrenadores» de cada club-temporada, una etapa por entrenador con su propio estilo)
-const entrenadores = (c) => Array.isArray(c && c.entrenadores) ? c.entrenadores.filter((e) => e && e.nombre) : [];
+// entrenadores (cuando lleguen: campo «entrenadores» de cada club-temporada, una etapa por entrenador y en orden, con su propio estilo):
+// [{ nombre|entrenador, id|entrenador_id, partidos|n_partidos, desde|primer_partido, hasta|ultimo_partido, interino, probs (6), e, x, y, z, X }]
+// (mismos campos que data/processed/<temp>/entrenadores/<liga>_tramos.csv más el estilo de la etapa). Sin el campo, todo esto se oculta.
+const entrenadores = (c) => Array.isArray(c && c.entrenadores) ? c.entrenadores.map((e) => e && ({ ...e, nombre: e.nombre || e.entrenador, id: e.id || e.entrenador_id, partidos: e.partidos ?? e.n_partidos, desde: e.desde || e.primer_partido, hasta: e.hasta || e.ultimo_partido })).filter((e) => e && e.nombre).sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0)) : [];
 const hayEntrenadores = () => CL.some((c) => entrenadores(c).length);
 // ---- lectura llana de las cifras (mismas escalas que «Claves del estilo · Cómo leer el Atlas»)
 const LLANO = { "Ritmo": "Ritmo", "3PAr": "Triples", "FTr": "Tiros libres", "AST%": "Asistencias", "TOV%": "Pérdidas", "Reb. of.": "Rebote ofensivo", "Uso concentrado": "Uso concentrado",
@@ -1471,7 +1476,7 @@ function pintarCambiosCmp() {
 function pintarEnts() {
   const ents = ENTS();
   $("#ents").innerHTML = ents.map((x) => { const en = x.t === "club" ? entrenadores(x.c) : [], nv = x.t === "club" ? nivClubHtml(x.c.nivel, x.c.temporada, x.c.liga) : ESC.html("nivel", Lclub(x.nivel), x.tp, { raw: `índice de nivel de club ${sg(x.nivel)} (media)` });
-    return `<div class="ent"><span class="badge" style="background:${ENT_COL[x.i]}">${ENT_LET[x.i]}</span><div class="who"><b>${esc(x.label)}</b><small>${esc(x.sub)} · ${esc(eNom(argmax(x.probs)))} · nivel ${nv}</small>${en.length ? `<small>${en.map((e, i) => `${i ? " → " : "Entrenador: "}${esc(e.nombre)}${e.partidos ? ` (${e.partidos} PJ)` : ""}${Array.isArray(e.probs) ? ` ${glyph(e.e != null ? e.e : argmax(e.probs), 8)}` : ""}`).join("")}</small>` : ""}</div><button class="x" data-del="${x.i}" aria-label="Quitar ${esc(x.label)}">×</button></div>`; }).join("") || `<p class="note">Añade equipos o ligas para compararlos.</p>`;
+    return `<div class="ent"><span class="badge" style="background:${ENT_COL[x.i]}">${ENT_LET[x.i]}</span><div class="who"><b>${esc(x.label)}</b><small>${esc(x.sub)} · ${esc(eNom(argmax(x.probs)))}</small><small>Nivel ${nv} <span class="muted">(Euroliga = 0)</span></small>${en.length ? `<small>${en.map((e, i) => `${i ? " → " : "Entrenador: "}${esc(e.nombre)}${e.partidos ? ` (${e.partidos} PJ)` : ""}${Array.isArray(e.probs) ? ` ${glyph(e.e != null ? e.e : argmax(e.probs), 8)}` : ""}`).join("")}</small>` : ""}</div><button class="x" data-del="${x.i}" aria-label="Quitar ${esc(x.label)}">×</button></div>`; }).join("") || `<p class="note">Añade equipos o ligas para compararlos.</p>`;
   pintarCambiosCmp();
 }
 function pintarComparacion() {
@@ -2594,7 +2599,7 @@ function pintarEscalas() {
   const el = $("#escalasClaves"); if (!el) return;
   const F = ESC.familias(), tz = [0.25, 0.5, 1, 2, 3], t = ultCompleta(), N = F.nivel;
   const USO = { nivel: "Nivel de jugadores (L), clubes y plantillas, nivel conjunto de quintetos y parejas, compañeros y rivales", rapm: "Impacto (RAPM traducido a la Euroliga)", orapm: "Impacto en ataque", drapm: "Impacto en defensa",
-    rapm_liga: "RAPM en su liga (Quintetos)", onoff: "On/off de jugadores (Quintetos)", net_equipo: "Net de equipo (Quintetos)", net_quinteto: "Net de quintetos, Net previsto del quinteto y aportes al quinteto", net_trio: "Net de tríos (Quintetos)", net_pareja: "Net de parejas (Quintetos)",
+    rapm_liga: "RAPM en su liga (Quintetos)", orapm_liga: "ORAPM en su liga (Quintetos)", drapm_liga: "DRAPM en su liga (Quintetos)", onoff: "On/off de jugadores (Quintetos)", net_equipo: "Net de equipo (Quintetos)", net_quinteto: "Net de quintetos, Net previsto del quinteto y aportes al quinteto", net_trio: "Net de tríos (Quintetos)", net_pareja: "Net de parejas (Quintetos)",
     sinergia_quinteto: "Sinergia de quintetos (Quintetos)", sinergia_pareja: "Sinergia WOWY de parejas (Quintetos)", sinergia_rapm: "Química de estilos, sinergia de pareja prevista y observada frente al RAPM",
     d_cuota_tiro: "Efectos X → Y: cuota de tiro", d_efg: "Efectos X → Y: eFG%", d_pct_asistidas: "Efectos X → Y: % de canastas asistidas", d_pct_aro: "Efectos X → Y: % de tiros en el aro", d_pts100: "Efectos X → Y: puntos/100", z: "Cifras ya estandarizadas (rasgos, desglose de métricas, net rating en su liga)" };
   const refTxt = (k, f) => k === "nivel" ? `media de L de la Euroliga de cada temporada (${t}: ${sg(ESC.ref("nivel", t))})` : f.ref ? `media de la Euroliga por minutos (${t}: ${sg(ESC.ref(k, t), 2)})` : Math.abs(ESC.ref(k)) > 1e-9 ? `media de la Euroliga por minutos (${sg(ESC.ref(k), 2)})` : "0 (la media de la Euroliga es 0 por construcción)";

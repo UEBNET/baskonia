@@ -121,31 +121,39 @@ def calcular() -> dict:
     q = _leer_el("quintetos.csv.gz")
     if len(q):
         q = q[q["fase"] == "regular"]
-        fam["net_quinteto"] = _familia("Net de quinteto", "pts/100 (ajustado por muestra)", q["net_rtg_aj"], q["poss"],
-                                       "quintetos de la Euroliga, temporada regular, ponderado por posesiones")
-        fam["sinergia_quinteto"] = _familia("Sinergia de quinteto", "pts/100 sobre lo esperado por el RAPM", q["sinergia"], q["poss"],
-                                            "quintetos de la Euroliga, temporada regular, ponderado por posesiones")
+        qq = q[q["poss"] >= 100]  # la dispersión «real» de los quintetos: los de muestra suficiente, Net ajustado
+        fam["net_quinteto"] = _familia("Net de quinteto", "pts/100", qq["net_rtg_aj"], qq["poss"],
+                                       "quintetos de la Euroliga con 100+ posesiones, temporada regular, Net ajustado, ponderado por posesiones")
+        fam["sinergia_quinteto"] = _familia("Sinergia de quinteto", "pts/100 sobre lo esperado por el RAPM", qq["sinergia"], qq["poss"],
+                                            "quintetos de la Euroliga con 100+ posesiones, temporada regular, ponderado por posesiones")
     t = _leer_el("trios.csv.gz")
     if len(t):
         t = t[t["fase"] == "regular"]
-        fam["net_trio"] = _familia("Net de trío", "pts/100 (ajustado por muestra)", t["net_rtg_aj"], t["poss"],
-                                   "tríos de la Euroliga, temporada regular, ponderado por posesiones")
+        tt = t[t["poss"] >= 300]
+        fam["net_trio"] = _familia("Net de trío", "pts/100", tt["net_rtg_aj"], tt["poss"],
+                                   "tríos de la Euroliga con 300+ posesiones, temporada regular, Net ajustado, ponderado por posesiones")
     pa = _leer_el("parejas.csv.gz")
     if len(pa):
         pa = pa[pa["fase"] == "regular"]
-        fam["net_pareja"] = _familia("Net de pareja", "pts/100 (ajustado por muestra)", pa["net_rtg_aj"], pa["poss"],
-                                     "parejas de la Euroliga, temporada regular, ponderado por posesiones")
-        fam["sinergia_pareja"] = _familia("Sinergia de pareja (WOWY)", "pts/100", pa["sinergia"], pa["poss"],
-                                          "parejas de la Euroliga, temporada regular, ponderado por posesiones")
-        fam["sinergia_rapm"] = _familia("Sinergia frente al RAPM", "pts/100", pa["sinergia_rapm"], pa["poss"],
-                                        "parejas y tríos de la Euroliga, temporada regular, ponderado por posesiones")
+        pp = pa[pa["poss"] >= 500]
+        fam["net_pareja"] = _familia("Net de pareja", "pts/100", pp["net_rtg_aj"], pp["poss"],
+                                     "parejas de la Euroliga con 500+ posesiones, temporada regular, Net ajustado, ponderado por posesiones")
+        fam["sinergia_pareja"] = _familia("Sinergia de pareja (WOWY)", "pts/100", pp["sinergia"], pp["poss"],
+                                          "parejas de la Euroliga con 500+ posesiones, temporada regular, ponderado por posesiones")
+        fam["sinergia_rapm"] = _familia("Sinergia frente al RAPM", "pts/100", pp["sinergia_rapm"], pp["poss"],
+                                        "parejas de la Euroliga con 500+ posesiones, temporada regular, ponderado por posesiones")
     j = _leer_el("jugadores.csv")
     if len(j):
         j = j[j["fase"] == "regular"]
-        fam["onoff"] = _familia("On/off", "pts/100 (ajustado por muestra)", j["net_rtg_aj_onoff"], j["poss_on"],
-                                "jugadores de la Euroliga, temporada regular, ponderado por posesiones en pista", ref=None)
+        jj = j[j["poss_on"] >= 500]
+        fam["onoff"] = _familia("On/off", "pts/100", jj["net_rtg_onoff"], jj["poss_on"],
+                                "jugadores de la Euroliga con 500+ posesiones en pista, temporada regular, ponderado por posesiones", ref=None)
         fam["rapm_liga"] = _familia("RAPM en su liga", "pts/100", j["rapm"], j["poss_on"],
                                     "jugadores de la Euroliga, temporada regular (RAPM sin traducir)", ref=None)
+        fam["orapm_liga"] = _familia("ORAPM en su liga", "pts/100", j["orapm"], j["poss_on"],
+                                     "jugadores de la Euroliga, temporada regular (RAPM sin traducir)", ref=None)
+        fam["drapm_liga"] = _familia("DRAPM en su liga", "pts/100", j["drapm"], j["poss_on"],
+                                     "jugadores de la Euroliga, temporada regular (RAPM sin traducir)", ref=None)
     e = _leer_el("equipos.csv")
     if len(e):
         e = e[e["fase"] == "regular"]

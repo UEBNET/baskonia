@@ -291,6 +291,28 @@ svg .hit:focus-visible > :first-child { stroke: var(--accent); stroke-width: 3; 
 .tip b { color: inherit; }
 .tip hr { border: 0; border-top: 1px solid rgba(255,255,255,.18); margin: 5px 0; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+/* Escalas ±100 (bloque compartido: idéntico en el Atlas de Estilos y en Quintetos y conexiones) */
+.esc { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; cursor: help; }
+.esc.up { color: var(--good); } .esc.dn { color: var(--bad); } .esc.na { color: var(--muted); font-weight: 400; cursor: default; }
+.esc .escp { font-weight: 500; color: var(--muted); font-size: .85em; margin-left: 2px; }
+.kpi b > .esc, .kv b > .esc, .kv dd .esc, .bignet b > .esc, .kpi3 b > .esc, b > .esc { font: inherit; letter-spacing: inherit; text-transform: none; }
+.escbar { display: inline-block; position: relative; width: 56px; height: 8px; border-radius: 4px; background: var(--line); vertical-align: middle; margin-left: 6px; }
+.escbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); }
+.escbar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.escbar i.p { background: var(--good); } .escbar i.n { background: var(--bad); }
+.escbar.neu i.p { background: var(--accent-strong); } .escbar.neu i.n { background: var(--muted); }
+.escsw { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.escsw .seg button { font-size: 12px; }
+.cambios { display: grid; gap: 6px; padding: 4px 12px 10px; }
+.cambios .cb { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; font-size: 12.5px; line-height: 1.35; }
+.cambios .cb .de { font-weight: 700; white-space: nowrap; }
+.cambios .cb .mv { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cambios .cb .mv.up { color: var(--good); } .cambios .cb .mv.dn { color: var(--bad); }
+.cambios .cb .ctx { color: var(--muted); }
+.esctab { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.esctab th, .esctab td { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.esctab td.n, .esctab th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.escform { font: 600 15px var(--f-data); padding: 8px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); display: inline-block; }
 </style>
 </head>
 <body>
@@ -299,9 +321,10 @@ svg .hit:focus-visible > :first-child { stroke: var(--accent); stroke-width: 3; 
     <div>
       <span class="kicker">Quintetos y conexiones</span>
       <h1>¿Quién juega con quién, y cuánto rinden juntos?</h1>
-      <p class="sub">Quintetos, parejas, tríos, impacto en pista y red de pases de cada equipo, reconstruidos del jugada a jugada. <b>Todas las cifras son por 100 posesiones</b> y se pueden leer con el modo aprendizaje activado.</p>
+      <p class="sub">Quintetos, parejas, tríos, impacto en pista y red de pases de cada equipo, reconstruidos del jugada a jugada. <b>Las cifras de rendimiento se leen en una escala de −100 a +100</b> (0 = la media; la vara es la Euroliga) y su valor original por 100 posesiones aparece al pasar el ratón. Cómo se calcula, en «Aprende».</p>
     </div>
-    <button class="switch" type="button" id="btnAprende" aria-pressed="true" data-tip="Muestra u oculta los recuadros «¿Cómo se lee?» junto a cada gráfico."><i></i>Modo aprendizaje</button>
+    <div class="row" style="gap:10px;align-items:center;flex-wrap:wrap"><span class="escsw" data-tip="Escala ±100: 0 = media de la Euroliga (nivel) o unidad media (net, sinergia, efectos), con la dispersión de la Euroliga como vara. Pasa el ratón por cualquier cifra para ver su valor original y su percentil. «Originales» muestra los pts/100 tal cual."><span>Cifras</span><span class="seg" id="escModo" role="group" aria-label="Cifras"><button class="segb" type="button" data-v="escala" aria-pressed="true">Escala ±100</button><button class="segb" type="button" data-v="original" aria-pressed="false">Originales</button></span></span>
+    <button class="switch" type="button" id="btnAprende" aria-pressed="true" data-tip="Muestra u oculta los recuadros «¿Cómo se lee?» junto a cada gráfico."><i></i>Modo aprendizaje</button></div>
   </header>
 
   <section class="command" aria-label="Selección">
@@ -339,6 +362,93 @@ svg .hit:focus-visible > :first-child { stroke: var(--accent); stroke-width: 3; 
 <script>
 "use strict";
 // =====================================================================================================
+// Escalas ±100 (bloque compartido: idéntico en «Atlas de Estilos» y «Quintetos y conexiones»)
+//   S = 100 · tanh(z / 2),  z = (valor − referencia Euroliga) / DT de la familia
+//   0 = media de la Euroliga · ±46 = 1 DT · ±76 = 2 DT · ±91 = 3 DT · nunca pasa de ±100.
+//   Constantes: bloque «escalas» de los datos (bbmodel/escalas.py); si falta, las de abajo (2026-10).
+//   Ligas: nombres y colores de todas las competiciones conocidas (también las nuevas), sin listas fijas.
+// =====================================================================================================
+const ESC = (() => {
+  const DEF = { formula: "S = 100·tanh(z/2), z = (valor − referencia) / DT", referencia: "euroleague", factor: 2, familias: {
+    nivel: { nombre: "Nivel", unidad: "índice L", dt: 0.8331, ref_defecto: 0.1839, ref: { "2020-21": 0.1548, "2021-22": 0.1625, "2022-23": 0.2296, "2023-24": 0.2226, "2024-25": 0.1794, "2025-26": 0.1587, "2026-27": 0.0739 }, d: 2 },
+    rapm: { nombre: "RAPM", unidad: "pts/100 (vara Euroliga)", dt: 1.2426, ref_defecto: 0.2582, d: 1 },
+    orapm: { nombre: "ORAPM", unidad: "pts/100 (vara Euroliga)", dt: 0.8334, ref_defecto: 0.1464, d: 1 },
+    drapm: { nombre: "DRAPM", unidad: "pts/100 (vara Euroliga)", dt: 0.6745, ref_defecto: 0.1105, d: 1 },
+    rapm_liga: { nombre: "RAPM en su liga", unidad: "pts/100", dt: 2.0813, ref_defecto: 0.3052, d: 1 },
+    orapm_liga: { nombre: "ORAPM en su liga", unidad: "pts/100", dt: 1.5028, ref_defecto: 0.1643, d: 1 },
+    drapm_liga: { nombre: "DRAPM en su liga", unidad: "pts/100", dt: 1.3795, ref_defecto: 0.1409, d: 1 },
+    onoff: { nombre: "On/off", unidad: "pts/100", dt: 7.8673, ref_defecto: 1.1486, d: 1 },
+    net_equipo: { nombre: "Net de equipo", unidad: "pts/100", dt: 5.8865, ref_defecto: 0.0, d: 1 },
+    net_quinteto: { nombre: "Net de quinteto", unidad: "pts/100", dt: 5.4513, ref_defecto: 0.0, d: 1 },
+    net_trio: { nombre: "Net de trío", unidad: "pts/100", dt: 5.7045, ref_defecto: 0.0, d: 1 },
+    net_pareja: { nombre: "Net de pareja", unidad: "pts/100", dt: 5.5363, ref_defecto: 0.0, d: 1 },
+    sinergia_quinteto: { nombre: "Sinergia de quinteto", unidad: "pts/100", dt: 3.9096, ref_defecto: 0.0, d: 1 },
+    sinergia_pareja: { nombre: "Sinergia de pareja (WOWY)", unidad: "pts/100", dt: 9.5533, ref_defecto: 0.0, d: 1 },
+    sinergia_rapm: { nombre: "Sinergia frente al RAPM", unidad: "pts/100", dt: 2.9407, ref_defecto: 0.0, d: 1 },
+    d_cuota_tiro: { nombre: "Efecto X → Y: cuota de tiro", unidad: "pp", dt: 3.3965, ref_defecto: 0.0, d: 1 },
+    d_efg: { nombre: "Efecto X → Y: eFG%", unidad: "pp", dt: 10.6053, ref_defecto: 0.0, d: 1 },
+    d_pct_asistidas: { nombre: "Efecto X → Y: % asistidas", unidad: "pp", dt: 12.9423, ref_defecto: 0.0, d: 1 },
+    d_pct_aro: { nombre: "Efecto X → Y: % en el aro", unidad: "pp", dt: 8.254, ref_defecto: 0.0, d: 1 },
+    d_pts100: { nombre: "Efecto X → Y: puntos/100", unidad: "pts/100", dt: 5.2466, ref_defecto: 0.0, d: 1 },
+    z: { nombre: "Desviaciones típicas", unidad: "σ", dt: 1, ref_defecto: 0, d: 2 },
+  } };
+  const LIGAS_INFO = { euroleague: ["EuroLeague", "EL"], eurocup: ["EuroCup", "EC"], acb: ["Liga Endesa", "ACB"], nba: ["NBA", "NBA"], gleague: ["G League", "GL"],
+    lba: ["LBA", "LBA"], bbl: ["BBL", "BBL"], lnb: ["LNB", "LNB"], bcl: ["Basketball Champions League", "BCL"], fec: ["FIBA Europe Cup", "FEC"],
+    bsl: ["Basketbol Süper Ligi", "BSL"], gbl: ["Greek Basket League", "GBL"] };
+  const LIGA_COL = ["#3b7fe0", "#e8702f", "#1fae7e", "#e3a51a", "#e27aa8", "#7b68ee", "#5fae3a", "#e5504f", "#2fb3c4", "#b0793a", "#9b59b6", "#7a8a99"];
+  let E = DEF, modo = "escala";
+  try { if (localStorage.getItem("mm.escala") === "original") modo = "original"; } catch (e) { /* sin almacenamiento */ }
+  const okn = (v) => typeof v === "number" && isFinite(v);
+  const he = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const num = (v, d) => okn(v) ? Math.abs(v).toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "–";
+  const sgn = (v, d) => { if (!okn(v)) return "–"; const r = Number(v.toFixed(d)); return (r > 0 ? "+" : r < 0 ? "−" : "±") + num(r, d); };
+  function usar(b) { if (b && b.familias) E = { ...DEF, ...b, familias: { ...DEF.familias, ...Object.fromEntries(Object.entries(b.familias).map(([k, f]) => [k, { ...(DEF.familias[k] || {}), ...f }])) } }; }
+  const fam = (k) => E.familias[k] || DEF.familias[k] || DEF.familias.z;
+  function ref(k, t) { const f = fam(k), r = f.ref && t ? f.ref[t] : null; return okn(r) ? r : okn(f.ref_defecto) ? f.ref_defecto : 0; }
+  function z(k, v, t) { const f = fam(k); return okn(v) && f.dt > 0 ? (v - ref(k, t)) / f.dt : null; }
+  const S = (k, v, t) => { const q = z(k, v, t); return q == null ? null : 100 * Math.tanh(q / (E.factor || 2)); };
+  // diferencia (o desviación respecto a otra media) en puntos de escala: sin referencia
+  const dS = (k, dv) => { const f = fam(k); return okn(dv) && f.dt > 0 ? 100 * Math.tanh(dv / f.dt / (E.factor || 2)) : null; };
+  const inv = (k, s, t) => ref(k, t) + (E.factor || 2) * fam(k).dt * Math.atanh(Math.max(-0.999, Math.min(0.999, s / 100)));
+  // percentil (0-100) en una lista de cuantiles 0..100
+  function pq(q, v) { if (!q || !q.length || !okn(v)) return null; const n = q.length - 1; if (v <= q[0]) return 0; if (v >= q[n]) return 100; let i = 0; while (i < n - 1 && q[i + 1] < v) i++; return (100 / n) * (i + (v - q[i]) / Math.max(1e-9, q[i + 1] - q[i])); }
+  function pEL(k, v, t) { const f = fam(k), q = Array.isArray(f.q_el) ? f.q_el : f.q_el ? (f.q_el[t] || f.q_el[Object.keys(f.q_el).filter((x) => !/2026-27/.test(x)).sort().pop()]) : null; return pq(q, v); }
+  // percentil de v dentro de una muestra (opcionalmente ponderada): [[valor, peso], ...] ya ordenada o no
+  function pDe(vals, v) { if (!vals || !vals.length || !okn(v)) return null; let a = 0, w = 0; vals.forEach((x) => { const [y, p] = Array.isArray(x) ? x : [x, 1]; if (!okn(y)) return; w += p; if (y < v) a += p; else if (y === v) a += p / 2; }); return w ? 100 * a / w : null; }
+  const txt = (s) => { if (!okn(s)) return "–"; const r = Math.round(s); return (r > 0 ? "+" : r < 0 ? "−" : "±") + Math.abs(r); };
+  const cls = (s, dir = 1) => !okn(s) || dir === 0 || Math.abs(s) < 5 ? "" : s * dir > 0 ? "up" : "dn";
+  const palabra = (s) => !okn(s) ? "" : s >= 60 ? "muy por encima" : s >= 25 ? "por encima" : s >= 8 ? "algo por encima" : s > -8 ? "en la media" : s > -25 ? "algo por debajo" : s > -60 ? "por debajo" : "muy por debajo";
+  const pctTxt = (p) => okn(p) ? `p${Math.round(p)}` : "";
+  const raw = (k, v) => `${sgn(v, fam(k).d ?? 1)}${fam(k).unidad && k !== "z" ? " " + fam(k).unidad : k === "z" ? " σ" : ""}`;
+  // texto del tooltip: valor en la escala, valor original y percentiles
+  function tip(k, v, t, o = {}) {
+    const f = fam(k), s = o.S != null ? o.S : S(k, v, t), p = o.pEL !== undefined ? o.pEL : pEL(k, v, t);
+    return `<b>${he(o.nombre || f.nombre)}: ${txt(s)}</b> <span style="opacity:.75">(escala ±100, Euroliga = 0${s != null ? " · " + palabra(s) : ""})</span><br>Valor original: <b>${he(o.raw || raw(k, v))}</b>` +
+      (okn(p) ? `<br>Percentil en la Euroliga${t ? " " + he(t) : ""}: ${Math.round(p)}` : "") + (okn(o.pLiga) ? `<br>Percentil en su liga: ${Math.round(o.pLiga)}` : "") + (o.extra ? `<br>${o.extra}` : "");
+  }
+  // cifra lista para pintar: escala (o valor original si así se ha elegido) con el otro en el tooltip
+  function html(k, v, t, o = {}) {
+    if (!okn(v)) return `<span class="esc na">–</span>`;
+    const s = o.S != null ? o.S : S(k, v, t), dir = o.dir ?? 1, c = o.sinColor ? "" : cls(s, dir);
+    const vis = modo === "original" ? (o.rawTxt || sgn(v, fam(k).d ?? 1)) : txt(s);
+    return `<span class="esc ${c}" data-tip="${he(tip(k, v, t, { ...o, S: s }))}">${vis}${o.pct && okn(o.pct) ? ` <small class="escp">${pctTxt(o.pct)}</small>` : ""}</span>`;
+  }
+  // barra divergente −100…+100 (HTML)
+  function barra(s, o = {}) { if (!okn(s)) return ""; const w = Math.min(100, Math.abs(s)) / 2; return `<span class="escbar${o.neutral ? " neu" : ""}" aria-hidden="true"><i style="${s >= 0 ? `left:50%;width:${w}%` : `right:50%;width:${w}%`}" class="${s >= 0 ? "p" : "n"}"></i></span>`; }
+  const setModo = (m) => { modo = m === "original" ? "original" : "escala"; try { localStorage.setItem("mm.escala", modo); } catch (e) { /* sin almacenamiento */ } };
+  // ligas: nombres, abreviaturas, colores y orden (las conocidas primero; las desconocidas, por código)
+  const ligaNom = (l) => (LIGAS_INFO[l] || [String(l || "?").toUpperCase()])[0];
+  const ligaCorto = (l) => (LIGAS_INFO[l] || [0, String(l || "?").toUpperCase()])[1];
+  const ordenLigas = (ls) => [...new Set(ls)].filter(Boolean).sort((a, b) => { const ia = Object.keys(LIGAS_INFO).indexOf(a), ib = Object.keys(LIGAS_INFO).indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || String(a).localeCompare(String(b)); });
+  const ligaCol = (l) => { const i = Object.keys(LIGAS_INFO).indexOf(l); return LIGA_COL[(i < 0 ? 11 : i) % LIGA_COL.length]; };
+  // media de nivel de cada liga en la escala (tabla de conversión)
+  function ligasNivel(t) { const f = fam("nivel"), L = (f.ligas || {})[t] || {}; return ordenLigas(Object.keys(L)).map((l) => ({ l, L: L[l], S: S("nivel", L[l], t) })); }
+  // cambio de afinidad entre dos repartos de estilo (p, 0-1): [{k, d}] de mayor a menor |d| en puntos (0-100)
+  function cambioAfinidad(pa, pb, min = 3) { return pa.map((p, k) => ({ k, d: 100 * ((pb[k] || 0) - p) })).filter((o) => Math.abs(o.d) >= min).sort((a, b) => Math.abs(b.d) - Math.abs(a.d)); }
+  return { DEF, usar, fam, ref, z, S, dS, inv, pq, pEL, pDe, txt, cls, palabra, pctTxt, raw, sgn, tip, html, barra, get modo() { return modo; }, setModo, familias: () => E.familias, formula: () => E.formula || DEF.formula,
+    LIGAS_INFO, ligaNom, ligaCorto, ordenLigas, ligaCol, ligasNivel, cambioAfinidad, he };
+})();
+// =====================================================================================================
 // Utilidades
 // =====================================================================================================
 const $ = (s, r = document) => r.querySelector(s);
@@ -357,6 +467,19 @@ const norm = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toL
 const ord = (n) => `${n}.º`;
 const trunc = (s, n) => { s = String(s ?? ""); return s.length > n ? s.slice(0, Math.max(1, n - 1)).trimEnd() + "…" : s; };
 const pick = (o, k) => (o && ok(o[k]) ? o[k] : null);
+// --------------------------------------------------------------------------------- escalas ±100 en esta página (sobre ESC)
+const nS = (fam, v) => ESC.S(fam, v, D && D.temp);
+const nv = (fam, v, o = {}) => ESC.html(fam, v, D && D.temp, o);
+const nvd = (fam, v, o = {}) => ESC.html(fam, v, D && D.temp, { S: ESC.dS(fam, v), ...o }); // diferencias sin referencia
+const nbar = (fam, v) => (ok(v) ? dbar(nS(fam, v), 100) : "");
+const nTxt = (fam, v) => (ESC.modo === "original" ? fs(v) : ESC.txt(nS(fam, v)));
+// barras horizontales en la escala: cada item con su familia (it.fam) o la común
+const escItems = (items, fam) => items.map((it) => { const fm_ = it.fam || fam; return ok(it.v) ? { ...it, v: nS(fm_, it.v), txt: nTxt(fm_, it.v), tip: (it.tip ? it.tip + "<hr>" : "") + ESC.tip(fm_, it.v, D.temp) } : it; });
+// nivel conjunto de una unidad (quinteto, trío, pareja): media simple de L de sus jugadores, en la escala de Nivel
+function nivelConjunto(u) { const Ls = u.map((j) => J(j).L).filter(ok); return Ls.length === u.length && Ls.length ? Ls.reduce((a, b) => a + b, 0) / Ls.length : null; }
+function nivelEquipo(eq) { let s = 0, w = 0; D.on.filter((r) => r.team_id === eq && r.fase === "regular").forEach((r) => { const L = J(r.j).L; if (ok(L) && r.min_on > 0) { s += L * r.min_on; w += r.min_on; } }); return w ? s / w : null; }
+const nivHtml = (L, extra = "") => nv("nivel", L, { raw: `L ${fs(L, 2)}`, extra });
+
 const signCls = (v, dir = 1) => (!ok(v) || dir === 0 || Math.abs(v) < 0.05 ? "" : v * dir > 0 ? "good" : "bad");
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } } };
 const ancho = (el, def = 640) => Math.max(280, Math.floor((el && el.clientWidth) || def));
@@ -387,8 +510,9 @@ function cellCss(c, alpha = 1) {
 const solidC = (v, neutral = false) => (v >= 0 ? (neutral ? rgbS(PAL.pos) : "var(--good)") : (neutral ? rgbS(PAL.neg) : "var(--bad)"));
 
 // --------------------------------------------------------------------------------- catálogos
-const LIGAS = ["euroleague", "eurocup", "acb", "nba", "gleague", "lba", "bbl", "lnb"];
-const LNOM = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB" };
+// ligas: las del índice de datos (sin lista fija); nombres del bloque ESC, también para las nuevas (bcl, fec, bsl, gbl…)
+let LIGAS = [];
+const LNOM = new Proxy({}, { get: (o, l) => (typeof l === "string" ? ESC.ligaNom(l) : undefined) });
 const FASES = [["regular", "Regular"], ["playoffs", "Playoffs"], ["total", "Total"]];
 const FNOM = { regular: "temporada regular", playoffs: "playoffs", total: "toda la temporada" };
 const TABS = ["equipo", "quintetos", "parejas", "conexiones", "jugadores", "liga", "aprende"];
@@ -549,7 +673,7 @@ function aplicarEnlace(o) {
   if (!o || typeof o !== "object") return;
   const v = (k, ...alias) => { for (const n of [k, ...alias]) if (o[n] != null && String(o[n]).trim() !== "") return String(o[n]).trim(); return null; };
   const tab = v("tab"), t = v("t", "temporada"), l = v("l", "liga"), f = v("f", "fase"), e = v("e", "eq", "equipo"), j = v("j", "jugador");
-  const ligaConocida = (x) => LIGAS.includes(x) || (IDX && Object.values(IDX.temporadas || {}).some((ls) => ls && ls[x]));
+  const ligaConocida = (x) => !IDX ? /^[a-z][a-z0-9_]{1,15}$/.test(x) : LIGAS.includes(x) || Object.values(IDX.temporadas || {}).some((ls) => ls && ls[x]);
   if (t && (!IDX || (IDX.temporadas && IDX.temporadas[t])) && /^\d{4}-\d{2}$/.test(t)) { if (t !== S.t) S.q = S.p = S.x = null; S.t = t; }
   if (l && ligaConocida(l)) { if (l !== S.l) { S.q = S.p = S.j = S.x = null; } S.l = l; }
   if (f && FASES.some((x) => x[0] === f)) S.f = f;
@@ -785,7 +909,7 @@ function pistaQuinteto(u, T, opts = {}) {
     const [x, y] = slots[k] || [160, 125], o = J(j), r = T && T.by.get(j);
     const sub = opts.sub ? opts.sub(j, r) : "";
     const tip = `<b>${esc(o.nm)}</b>${o.pos3 ? ` · ${esc(POSN[o.pos3])}` : ""}${estConocido(o.estilo) ? `<br>Estilo: ${esc(estNombre(o.estilo))}` : ""}` +
-      (r ? `<br>${fm(r.min_on)} en ${esc(FNOM[S.f])} · RAPM ${fs(r.rapm, 1)}<br>On−off ${fs(r.net_rtg_onoff, 1)}` : "") + "<br><i>Clic: ficha del jugador</i>";
+      (r ? `<br>${fm(r.min_on)} en ${esc(FNOM[S.f])} · RAPM ${ESC.txt(nS("rapm_liga", r.rapm))} (${fs(r.rapm, 1)})<br>On−off ${ESC.txt(nS("onoff", r.net_rtg_onoff))} (${fs(r.net_rtg_onoff, 1)})` : "") + (ok(o.L) ? `<br>Nivel ${ESC.txt(nS("nivel", o.L))} (Euroliga = 0)` : "") + "<br><i>Clic: ficha del jugador</i>";
     const lx = x;
     return `<g class="hit" data-a="j" data-v="${esc(pid(j))}" ${tipA(tip)} tabindex="0" role="button" aria-label="${esc(o.nm)}">` +
       `<circle cx="${x}" cy="${y}" r="17" fill="${colJug(j)}" stroke="var(--surface)" stroke-width="2.5"/>` +
@@ -888,37 +1012,39 @@ function qPorNombres(txt, T) {
 function filaQ(q, T, k = "net_rtg_aj", sc = 20) {
   const v = q[k];
   return `<button class="lrow" type="button" data-a="q" data-v="${esc(qKey(q))}" ${tipA(`<b>${nombresQ(ordenarPos(q.u, T), T)}</b><br>${fm(q.min)} · ${fi(q.poss)} posesiones · ${fi(q.gp)} partidos<br>Net ${fs(q.net_rtg)} · ajustado ${fs(q.net_rtg_aj)}<br>ORtg ${f(q.ortg)} · DRtg ${f(q.drtg)}<br><i>Clic: ficha del quinteto</i>`)}>` +
-    `<span class="who">${nombresQ(ordenarPos(q.u, T), T)}<small>${fm(q.min)} · ${fi(q.poss)} pos. · Net bruto ${fs(q.net_rtg)}</small></span>${dbar(v, sc)}<span class="v ${signCls(v)}">${fs(v)}</span></button>`;
+    `<span class="who">${nombresQ(ordenarPos(q.u, T), T)}<small>${fm(q.min)} · ${fi(q.poss)} pos. · Net bruto ${fs(q.net_rtg)}</small></span>${nbar("net_quinteto", v)}<span class="v">${nv("net_quinteto", v)}</span></button>`;
 }
 function filaP(p, T, k = "sinergia", sc = 15) {
   const v = p[k];
   return `<button class="lrow" type="button" data-a="p" data-v="${esc(pid(p.a) + "," + pid(p.b))}" ${tipA(`<b>${esc(J(p.a).nm)} + ${esc(J(p.b).nm)}</b><br>${fm(p.min)} juntos · Net aj. ${fs(p.net_rtg_aj)}<br>Sinergia WOWY ${fs(p.sinergia)} · frente al RAPM ${fs(p.sinergia_rapm)}<br><i>Clic: análisis de la pareja</i>`)}>` +
-    `<span class="who">${esc(sn(p.a, T))} + ${esc(sn(p.b, T))}<small>${fm(p.min)} juntos · Net aj. ${fs(p.net_rtg_aj)}</small></span>${dbar(v, sc)}<span class="v ${signCls(v)}">${fs(v)}</span></button>`;
+    `<span class="who">${esc(sn(p.a, T))} + ${esc(sn(p.b, T))}<small>${fm(p.min)} juntos · Net aj. ${fs(p.net_rtg_aj)}</small></span>${nbar(k === "sinergia_rapm" ? "sinergia_rapm" : "sinergia_pareja", v)}<span class="v">${nv(k === "sinergia_rapm" ? "sinergia_rapm" : "sinergia_pareja", v)}</span></button>`;
 }
 R.equipo = (el) => {
   if (!D.hasQ) { el.innerHTML = vacioSinQuintetos(); return; }
   const T = TV(); if (!T.row || !T.ros.length) { el.innerHTML = vacioFase(T); return; }
   const r = T.row, lg = T.lg, n = lg.length;
-  const kpi = (lab, v, d, k, dir, tip, extra = "") => { const rk = rango(lg, k, v, dir);
-    return `<div class="kpi" ${tipA(tip)}><span>${lab}</span><b class="${k.startsWith("net") || k === "clutch_net_rtg" ? signCls(v) : ""}">${k.startsWith("net") || k === "clutch_net_rtg" ? fs(v, d) : f(v, d)}</b><small>${rk ? `${ord(rk)} de ${n}` : ""}${extra}</small></div>`; };
+  const kpi = (lab, v, d, k, dir, tip, extra = "") => { const rk = rango(lg, k, v, dir), net = k.startsWith("net") || k === "clutch_net_rtg";
+    return `<div class="kpi" ${net ? "" : tipA(tip)}><span ${net ? tipA(tip) : ""}>${lab}</span><b>${net ? nv("net_equipo", v, { nombre: lab }) : f(v, d)}</b><small>${rk ? `${ord(rk)} de ${n}` : ""}${extra}</small></div>`; };
+  const Leq = nivelEquipo(S.e);
   const suerte = ok(r.net_rtg) && ok(r.net_rtg_suerte) ? r.net_rtg - r.net_rtg_suerte : null;
-  const kpis = kpi("Net", r.net_rtg, 1, "net_rtg", 1, "<b>Rating neto</b>: puntos anotados menos recibidos por cada 100 posesiones. 0 = equipo medio; +5 es muy bueno.") +
+  const kpis = kpi("Net", r.net_rtg, 1, "net_rtg", 1, "<b>Rating neto</b>: puntos anotados menos recibidos por cada 100 posesiones, en la escala ±100 (0 = equipo medio; la vara es la dispersión de los equipos de la Euroliga). Pasa el ratón por la cifra para ver el valor original.") +
     kpi("Net sin suerte", r.net_rtg_suerte, 1, "net_rtg_suerte", 1, `<b>Net ajustado por suerte</b>: el mismo Net, pero suponiendo que los rivales metieran triples y tiros libres al % medio de la liga (lo que menos controla la defensa).${ok(suerte) ? `<br>Diferencia: ${fs(suerte)} = ${suerte >= 0 ? "suerte a favor" : "mala suerte"}.` : ""}`, ok(suerte) ? ` · suerte ${fs(suerte)}` : "") +
     kpi("ORtg", r.ortg, 1, "ortg", 1, "<b>Rating ofensivo</b>: puntos anotados por 100 posesiones.") +
     kpi("DRtg", r.drtg, 1, "drtg", -1, "<b>Rating defensivo</b>: puntos recibidos por 100 posesiones. Más bajo es mejor (el puesto ya lo tiene en cuenta).") +
     kpi("Ritmo", r.ritmo, 1, "ritmo", 1, `<b>Ritmo</b>: posesiones por partido de ${D.qlen * 4} minutos. Puesto 1 = el más rápido.`) +
-    kpi("Net en clutch", r.clutch_net_rtg, 1, "clutch_net_rtg", 1, "<b>Clutch</b>: últimos 5 minutos del último cuarto o de la prórroga con el marcador a 5 puntos o menos.", ` · ${fm(r.min_clutch)}`);
+    kpi("Net en clutch", r.clutch_net_rtg, 1, "clutch_net_rtg", 1, "<b>Clutch</b>: últimos 5 minutos del último cuarto o de la prórroga con el marcador a 5 puntos o menos.", ` · ${fm(r.min_clutch)}`) +
+    (ok(Leq) ? `<div class="kpi"><span ${tipA("<b>Nivel de la plantilla</b>: media del nivel L de sus jugadores ponderada por minutos, en la escala ±100 (0 = media de la Euroliga de esa temporada).")}>Nivel</span><b>${nivHtml(Leq)}</b><small>Euroliga = 0</small></div>` : "");
   // lectura rápida
   const ins = [];
-  if (ok(suerte) && Math.abs(suerte) >= 1) ins.push(`Su Net es <b>${fs(r.net_rtg)}</b>; si los rivales hubieran tirado triples y libres al promedio de la liga sería <b>${fs(r.net_rtg_suerte)}</b>: ${suerte < 0 ? `han tenido <b>mala suerte</b> (los rivales les han acertado más de lo normal, ${fs(-suerte)} por 100 posesiones)` : `les ha <b>sonreído la suerte</b> (los rivales han fallado más de lo normal, ${fs(suerte)} por 100 posesiones)`}.`);
+  if (ok(suerte) && Math.abs(suerte) >= 1) ins.push(`Su Net es <b>${fs(r.net_rtg)}</b> por 100 posesiones (${nv("net_equipo", r.net_rtg)} en la escala); si los rivales hubieran tirado triples y libres al promedio de la liga sería <b>${fs(r.net_rtg_suerte)}</b>: ${suerte < 0 ? `han tenido <b>mala suerte</b> (los rivales les han acertado más de lo normal, ${fs(-suerte)} por 100 posesiones)` : `les ha <b>sonreído la suerte</b> (los rivales han fallado más de lo normal, ${fs(suerte)} por 100 posesiones)`}.`);
   const rkE = rango(lg, "min_pct_top5_quintetos", r.min_pct_top5_quintetos, 1);
   if (ok(r.min_pct_top5_quintetos)) ins.push(`Sus 5 quintetos más usados juegan el <b>${fp(r.min_pct_top5_quintetos)}</b> de los minutos (${ord(rkE)} más estable de ${n}): ${rkE <= n / 3 ? "rotación <b>muy estable</b>, con unidades reconocibles" : rkE > (2 * n) / 3 ? "rotación <b>muy cambiante</b>: casi ningún quinteto se repite" : "estabilidad <b>intermedia</b>"}. Usa <b>${fi(r.jugadores_rotacion)}</b> jugadores de rotación.`);
   const thrQ = umbral(T.Q.map((q) => q.poss), 8, 120, 5, 15);
   const qs = T.Q.filter((q) => q.poss >= thrQ).sort((a, b) => b.net_rtg_aj - a.net_rtg_aj);
-  if (qs.length) ins.push(`Su mejor quinteto con ${fi(thrQ)}+ posesiones es <b>${nombresQ(ordenarPos(qs[0].u, T), T)}</b>: Net ajustado <b>${fs(qs[0].net_rtg_aj)}</b> en ${fm(qs[0].min)}.`);
+  if (qs.length) ins.push(`Su mejor quinteto con ${fi(thrQ)}+ posesiones es <b>${nombresQ(ordenarPos(qs[0].u, T), T)}</b>: Net ajustado <b>${nv("net_quinteto", qs[0].net_rtg_aj)}</b> en la escala (${fs(qs[0].net_rtg_aj)} por 100 posesiones) en ${fm(qs[0].min)}.`);
   const thrP = umbral(T.P.map((p) => p.min), 12, 250, 10, 60);
   const ps = T.P.filter((p) => p.min >= thrP && ok(p.sinergia)).sort((a, b) => b.sinergia - a.sinergia);
-  if (ps.length) ins.push(`La pareja que más se potencia es <b>${esc(sn(ps[0].a, T))} + ${esc(sn(ps[0].b, T))}</b>: juntos rinden <b>${fs(ps[0].sinergia)}</b> por 100 posesiones por encima de lo que suman por separado (${fm(ps[0].min)} juntos).`);
+  if (ps.length) ins.push(`La pareja que más se potencia es <b>${esc(sn(ps[0].a, T))} + ${esc(sn(ps[0].b, T))}</b>: juntos rinden <b>${fs(ps[0].sinergia)}</b> por 100 posesiones por encima de lo que suman por separado (${nv("sinergia_pareja", ps[0].sinergia)} en la escala; ${fm(ps[0].min)} juntos).`);
   const hub = T.ros.filter((x) => ok(x.pagerank_asistencias)).sort((a, b) => b.pagerank_asistencias - a.pagerank_asistencias)[0];
   const dist = T.ros.filter((x) => ok(x.ast_dadas)).sort((a, b) => b.ast_dadas - a.ast_dadas)[0];
   if (hub && dist) ins.push(`<b>${esc(sn(dist.j, T))}</b> es quien más asiste (${fi(dist.ast_dadas)}) y <b>${esc(sn(hub.j, T))}</b> el destino principal de la red de pases (PageRank ${fp(100 * hub.pagerank_asistencias)}).`);
@@ -930,13 +1056,13 @@ R.equipo = (el) => {
     const q = m.q;
     return `<div class="dcard"><div class="cardhead"><h2 ${tipA(tip)}>${titulo}</h2>${q ? `<button class="btn ghost sm" type="button" data-a="q" data-v="${esc(qKey(q))}">Ver ficha →</button>` : ""}</div>
       ${pistaQuinteto(m.u, T, { sub: (j, rr) => (rr ? `${fm(rr.min_on)}` : "") })}
-      <div class="kv">${extra}${q ? `<div><span>Minutos</span><b>${fm(q.min)}</b></div><div><span>Net ajustado</span><b class="${signCls(q.net_rtg_aj)}">${fs(q.net_rtg_aj)}</b></div><div><span>ORtg / DRtg</span><b>${f(q.ortg, 0)} / ${f(q.drtg, 0)}</b></div>` : `<div><span>Minutos</span><b>&lt; 10'</b></div>`}</div></div>`;
+      <div class="kv">${extra}${q ? `<div><span>Minutos</span><b>${fm(q.min)}</b></div><div><span>Net ajustado</span><b>${nv("net_quinteto", q.net_rtg_aj)}</b></div><div><span>ORtg / DRtg</span><b>${f(q.ortg, 0)} / ${f(q.drtg, 0)}</b></div>` : `<div><span>Minutos</span><b>&lt; 10'</b></div>`}${ok(nivelConjunto(m.u)) ? `<div ${tipA("Nivel conjunto: media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de la Euroliga)")}><span>Nivel conjunto</span><b>${nivHtml(nivelConjunto(m.u))}</b></div>` : ""}</div></div>`;
   };
   const tit = tarjetaQ("Quinteto titular habitual", r.quinteto_titular_habitual,
-    `<div ${tipA("Partidos que empezó este quinteto y quintetos iniciales distintos usados")}><span>Partidos de titular</span><b>${fi(r.partidos_quinteto_titular)} de ${fi(r.gp)}</b></div><div><span>Net (bruto)</span><b class="${signCls(r.net_rtg_quinteto_titular)}">${fs(r.net_rtg_quinteto_titular)}</b></div>`,
+    `<div ${tipA("Partidos que empezó este quinteto y quintetos iniciales distintos usados")}><span>Partidos de titular</span><b>${fi(r.partidos_quinteto_titular)} de ${fi(r.gp)}</b></div><div><span>Net (bruto)</span><b>${nv("net_quinteto", r.net_rtg_quinteto_titular)}</b></div>`,
     `El quinteto inicial más repetido. El equipo usó <b>${fi(r.quintetos_titulares_distintos)}</b> quintetos iniciales distintos en ${fi(r.gp)} partidos.`);
   const pri = tarjetaQ("Quinteto principal", r.quinteto_principal,
-    `<div ${tipA("% de los minutos del equipo que jugó este quinteto")}><span>% de minutos</span><b>${fp(r.min_pct_quinteto_principal)}</b></div><div><span>Net (bruto)</span><b class="${signCls(r.net_rtg_quinteto_principal)}">${fs(r.net_rtg_quinteto_principal)}</b></div>`,
+    `<div ${tipA("% de los minutos del equipo que jugó este quinteto")}><span>% de minutos</span><b>${fp(r.min_pct_quinteto_principal)}</b></div><div><span>Net (bruto)</span><b>${nv("net_quinteto", r.net_rtg_quinteto_principal)}</b></div>`,
     "El quinteto que más minutos ha jugado junto, empiece o no los partidos.");
 
   // estructura de rotación
@@ -983,7 +1109,7 @@ R.equipo = (el) => {
   el.innerHTML = `
   <div class="dcard"><div class="cardhead"><h2>${esc(T.nombre)} · ${esc(FNOM[S.f])}</h2><span class="note">${fi(r.gp)} partidos · ${fi(r.poss)} posesiones · puestos entre los ${n} equipos de ${esc(D.nombreLiga)}</span></div>
     <div class="kpis">${kpis}</div>
-    ${aprende("Todo está expresado <b>por 100 posesiones</b> para que equipos rápidos y lentos sean comparables. <b>Net</b> = ORtg − DRtg. El <b>Net sin suerte</b> neutraliza el acierto rival en triples y tiros libres, que la defensa controla poco: si el Net real es mucho peor que el «sin suerte», el equipo ha sido algo desafortunado.", "suerte")}
+    ${aprende("Todo está expresado <b>por 100 posesiones</b> para que equipos rápidos y lentos sean comparables. <b>Net</b> = ORtg − DRtg. El <b>Net sin suerte</b> neutraliza el acierto rival en triples y tiros libres, que la defensa controla poco: si el Net real es mucho peor que el «sin suerte», el equipo ha sido algo desafortunado. Las cifras de Net se leen en la escala ±100 (0 = equipo medio; ±46 = una desviación típica de los equipos de la Euroliga); el valor por 100 posesiones, al pasar el ratón.", "escalas")}
   </div>
   <div class="dcard"><h2>Lectura rápida</h2><ol class="insights">${ins.map((t, i) => `<li data-n="${i + 1}"><span>${t}</span></li>`).join("")}</ol></div>
   <div class="g2">${tit}${pri}</div>
@@ -997,7 +1123,7 @@ R.equipo = (el) => {
   <div class="g3">
     <div class="dcard"><div class="cardhead"><h2>Mejores y peores quintetos</h2></div>
       <div class="slider"><span>Mínimo de posesiones</span><input type="range" min="0" max="${Math.ceil(maxPoss)}" step="5" value="${thrU}" data-ui="eqThrQ" aria-label="Mínimo de posesiones"><output>${fi(thrU)}</output></div>
-      <div class="label">Los 5 mejores (Net ajustado)</div><div class="lrows">${top.map((q) => filaQ(q, T)).join("") || '<p class="note">Ningún quinteto llega al mínimo.</p>'}</div>
+      <div class="label">Los 5 mejores (Net ajustado, escala ±100)</div><div class="lrows">${top.map((q) => filaQ(q, T)).join("") || '<p class="note">Ningún quinteto llega al mínimo.</p>'}</div>
       ${bot.length ? `<div class="label">Los peores</div><div class="lrows">${bot.map((q) => filaQ(q, T)).join("")}</div>` : ""}
       ${aprende("Se ordena por <b>Net ajustado por muestra</b>: un quinteto con 30 posesiones y +40 de Net no es mejor que uno con 300 y +10. El ajuste acerca cada Net a la media en proporción a lo poco que se ha visto (k = 300 posesiones).", "muestra")}</div>
     <div class="dcard"><h2>Parejas que más suman</h2><p class="hint">Sinergia WOWY con ${fi(thrP)}+ minutos juntos${T.pf !== S.f ? " (total de la temporada: en playoffs no se calculan parejas)" : ""}.</p>
@@ -1052,7 +1178,7 @@ R.quintetos = (el) => {
   <div class="gside">
     <div class="dcard"><h2>Ataque frente a defensa</h2><p class="hint">Cada burbuja es un quinteto: a la derecha, mejor ataque; arriba, mejor defensa (el eje está invertido). Tamaño = minutos; color = Net ajustado.</p>
       <div class="chartbox" id="qScatter"></div>
-      <div class="legend"><span><i class="ramp" style="background:${rampa("div")}"></i>Net ajustado −12 … +12</span><span><svg width="14" height="14"><rect x="2" y="2" width="10" height="10" fill="var(--accent)" transform="rotate(45 7 7)"/></svg>Equipo</span><span><svg width="18" height="8"><line x1="0" y1="4" x2="18" y2="4" stroke="var(--faint)" stroke-dasharray="4 3"/></svg>Media de la liga</span></div>
+      <div class="legend"><span><i class="ramp" style="background:${rampa("div")}"></i>Net ajustado ${nTxt("net_quinteto", -12)} … ${nTxt("net_quinteto", 12)}</span><span><svg width="14" height="14"><rect x="2" y="2" width="10" height="10" fill="var(--accent)" transform="rotate(45 7 7)"/></svg>Equipo</span><span><svg width="18" height="8"><line x1="0" y1="4" x2="18" y2="4" stroke="var(--faint)" stroke-dasharray="4 3"/></svg>Media de la liga</span></div>
       ${aprende("La <b>diagonal</b> es Net = 0: por encima de ella, el quinteto anota más de lo que recibe. Las líneas discontinuas marcan la media de la liga y dividen el gráfico en cuatro <b>cuadrantes</b>. Un quinteto arriba a la derecha es bueno en los dos lados; abajo a la izquierda, malo en los dos.", "ratings")}
     </div>
     <div class="dcard" id="qFicha"></div>
@@ -1073,16 +1199,17 @@ function qTabla(T) {
     N("poss", "Pos.", "uso", 0, "Posesiones (media de ataque y defensa)"),
     N("ortg", "ORtg", "efi", 1, "Puntos anotados por 100 posesiones", { css: (v) => tinte(v, tr.ortg, 1, 12) }),
     N("drtg", "DRtg", "efi", 1, "Puntos recibidos por 100 posesiones (menos es mejor)", { css: (v) => tinte(v, tr.drtg, -1, 12) }),
-    N("net_rtg", "Net", "efi", 1, "ORtg − DRtg (bruto)", { fmt: (v) => fs(v), css: (v) => tinte(v, tr.net_rtg, 1, 15) }),
-    N("net_rtg_aj", "Net aj.", "efi", 1, "Net ajustado por muestra (k = 300 posesiones): el recomendado para comparar", { fmt: (v) => `<b class="${signCls(v)}">${fs(v)}</b>${dbar(v, 20)}` }),
-    N("net_rtg_suerte", "Net suerte", "efi", 1, "Net con el acierto rival en triples y tiros libres llevado a la media de la liga", { fmt: (v) => fs(v) }),
+    N("net_rtg", "Net", "efi", 1, "ORtg − DRtg (bruto), escala ±100", { fmt: (v) => nv("net_quinteto", v, { nombre: "Net bruto", sinColor: true }), css: (v) => tinte(v, tr.net_rtg, 1, 15) }),
+    N("net_rtg_aj", "Net aj.", "efi", 1, "Net ajustado por muestra (k = 300 posesiones), escala ±100: el recomendado para comparar", { fmt: (v) => `<b>${nv("net_quinteto", v, { nombre: "Net ajustado" })}</b>${nbar("net_quinteto", v)}` }),
+    N("net_rtg_suerte", "Net suerte", "efi", 1, "Net con el acierto rival en triples y tiros libres llevado a la media de la liga, escala ±100", { fmt: (v) => nv("net_quinteto", v, { nombre: "Net sin suerte", sinColor: true }) }),
     N("plus_minus", "+/−", "efi", 0, "Diferencia de puntos total en sus minutos", { fmt: (v) => fs(v, 0) }),
   ].concat(FF.map(([k, l, dir, sc, tip]) => N(k, l, "ff", 1, tip, { css: (v) => tinte(v, tr[k], dir, sc) })))
     .concat([N("fg3a_rate", "% T3", "ff", 1, "% de los tiros de campo que son triples"), N("ast_pct", "% asist.", "ff", 1, "% de canastas asistidas"),
       N("ritmo", "Ritmo", "ctx", 1, "Posesiones por partido completo"), N("min_clutch", "Min clutch", "ctx", 1, "Minutos en clutch (últimos 5 min, ±5)"),
-      N("min_basura", "Min basura", "ctx", 1, "Minutos de la basura (partido decidido)"), N("rapm_suma", "Σ RAPM", "ctx", 1, "Suma del RAPM de los cinco jugadores", { fmt: (v) => fs(v) }),
-      N("net_esperado", "Net esperado", "ctx", 1, "Net que predice el RAPM de los 10 jugadores en pista", { fmt: (v) => fs(v) }),
-      N("sinergia", "Sinergia", "ctx", 1, "(Net − esperado) contraída por la muestra: > 0 = rinde más que la suma de sus piezas", { fmt: (v) => `<b class="${signCls(v)}">${fs(v)}</b>` })]);
+      N("min_basura", "Min basura", "ctx", 1, "Minutos de la basura (partido decidido)"), N("rapm_suma", "Σ RAPM", "ctx", 1, "Suma del RAPM de los cinco jugadores (pts/100, valor original)", { fmt: (v) => fs(v) }),
+      N("nivel_q", "Nivel conjunto", "ctx", 0, "Media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de la Euroliga)", { get: (q) => nivelConjunto(q.u), fmt: (v) => (ok(v) ? nivHtml(v) : "–") }),
+      N("net_esperado", "Net esperado", "ctx", 1, "Net que predice el RAPM de los 10 jugadores en pista, escala ±100", { fmt: (v) => nv("net_quinteto", v, { nombre: "Net esperado", sinColor: true }) }),
+      N("sinergia", "Sinergia", "ctx", 1, "(Net − esperado) contraída por la muestra, escala ±100: > 0 = rinde más que la suma de sus piezas", { fmt: (v) => `<b>${nv("sinergia_quinteto", v)}</b>` })]);
   const vis = cols.filter((c) => !c.g || grupos.includes(c.g));
   $("#qTabla").innerHTML = tabla("tQ", vis, rows, { sort: "min", act: "q", key: qKey, sel: sel && qKey(sel), grupos: { "": "", uso: "Uso", efi: "Eficiencia", ff: "Cuatro factores y tiro", ctx: "Contexto" }, aria: "Quintetos", vacio: "Ningún quinteto cumple el filtro. Baja el mínimo de posesiones." ,
     rowTip: (q) => `<b>${esc(ordenarPos(q.u, T).map((j) => J(j).nm).join(" · "))}</b>` });
@@ -1117,7 +1244,7 @@ function qScatter(T) {
   const rs = rows.slice().sort((a, b) => b.min - a.min);
   rs.forEach((q) => {
     const r = 4 + 15 * Math.sqrt(q.min / maxMin), isSel = sel && q.k === sel.k;
-    g += `<g class="hit" data-a="q" data-v="${esc(qKey(q))}" data-k="${q.k}" tabindex="0" role="button" aria-label="${esc(nombresQ(q.u, T))}" ${tipA(`<b>${nombresQ(ordenarPos(q.u, T), T)}</b><br>ORtg ${f(q.ortg)} · DRtg ${f(q.drtg)}<br>Net ${fs(q.net_rtg)} · ajustado <b>${fs(q.net_rtg_aj)}</b><br>${fm(q.min)} · ${fi(q.poss)} posesiones`)}>` +
+    g += `<g class="hit" data-a="q" data-v="${esc(qKey(q))}" data-k="${q.k}" tabindex="0" role="button" aria-label="${esc(nombresQ(q.u, T))}" ${tipA(`<b>${nombresQ(ordenarPos(q.u, T), T)}</b><br>ORtg ${f(q.ortg)} · DRtg ${f(q.drtg)}<br>Net ajustado <b>${ESC.txt(nS("net_quinteto", q.net_rtg_aj))}</b> en la escala (${fs(q.net_rtg_aj)} pts/100; bruto ${fs(q.net_rtg)})<br>${fm(q.min)} · ${fi(q.poss)} posesiones`)}>` +
       `<circle cx="${x(q.ortg)}" cy="${y(q.drtg)}" r="${r}" fill="${rgbS(mixA(PAL.mid, q.net_rtg_aj >= 0 ? PAL.good : PAL.bad, 0.3 + 0.65 * clamp(Math.abs(q.net_rtg_aj) / 12, 0, 1)))}" stroke="${isSel ? "var(--ink)" : "var(--ink-2)"}" stroke-opacity="${isSel ? 1 : 0.35}" stroke-width="${isSel ? 2.6 : 1}" fill-opacity=".9"/></g>`;
   });
   g += `<g ${tipA(`<b>${esc(T.nombre)}</b> (todo el equipo)<br>ORtg ${f(T.row.ortg)} · DRtg ${f(T.row.drtg)}`)}><rect x="${x(T.row.ortg) - 6}" y="${y(T.row.drtg) - 6}" width="12" height="12" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" transform="rotate(45 ${x(T.row.ortg)} ${y(T.row.drtg)})"/></g>`;
@@ -1129,29 +1256,31 @@ function qFicha(T) {
   const tr = T.row, lgA = T.lgAvg, u = ordenarPos(q.u, T);
   const w = q.poss / (q.poss + 300);
   const W = Math.min(400, ancho(box, 380) - 36);
-  const items = [
+  const items = escItems([
     { lab: "Net real", v: q.net_rtg, tip: "ORtg − DRtg en sus minutos, sin corregir nada" },
     { lab: "Net ajustado", v: q.net_rtg_aj, tip: `Net acercado a la media según la muestra: pesa lo visto ${fp(100 * w, 0)} (= ${fi(q.poss)} / (${fi(q.poss)} + 300))` },
     { lab: "Net esperado (RAPM)", v: q.net_esperado, tip: "Lo que «debería» hacer por el RAPM de sus 5 jugadores menos el de los 5 rivales que tuvo enfrente", color: "var(--muted)" },
-    { lab: "Sinergia", v: q.sinergia, tip: "(Net real − esperado) × peso de la muestra. > 0 = rinde más que la suma de sus piezas", color: ok(q.sinergia) ? (q.sinergia >= 0 ? "var(--good)" : "var(--bad)") : null },
-  ];
+    { lab: "Sinergia", fam: "sinergia_quinteto", v: q.sinergia, tip: "(Net real − esperado) × peso de la muestra. > 0 = rinde más que la suma de sus piezas", color: ok(q.sinergia) ? (q.sinergia >= 0 ? "var(--good)" : "var(--bad)") : null },
+  ], "net_quinteto");
+  const Lq = nivelConjunto(q.u), Le = nivelEquipo(S.e);
   const ffRow = ([k, l, dir, sc, tip]) => { const v = q[k], t = tr[k], dd = ok(v) && ok(t) ? v - t : null;
     return `<tr ${tipA(`<b>${esc(l)}</b>: ${esc(tip)}`)}><td class="txt">${esc(l)}${dir < 0 ? " ↓" : ""}</td><td>${f(v)}</td><td class="muted">${f(t)}</td><td style="${tinte(v, t, dir, sc)}"><b>${fs(dd)}</b></td></tr>`; };
   const sin = q.sinergia, esp = q.net_esperado;
   box.innerHTML = `<div class="cardhead"><h2>Ficha del quinteto</h2><span class="pill acc">${fm(q.min)} · ${fi(q.poss)} pos. · ${fi(q.gp)} PJ</span></div>
     <div class="note">${u.map((j) => btnJ(j, T, J(j).nm)).join(" · ")}</div>
-    ${pistaQuinteto(q.u, T, { sub: (j, r) => (r ? `RAPM ${fs(r.rapm, 1)}` : "") })}
+    ${pistaQuinteto(q.u, T, { sub: (j, r) => (r && ok(r.rapm) ? `RAPM ${nTxt("rapm_liga", r.rapm)}` : "") })}
     ${avisoMuestra(q.poss)}
     <div class="stack" style="gap:2px"><div class="label">Frente a su equipo y a la liga</div>${puntos("ORtg", [["Quinteto", q.ortg, "q"], ["Equipo", tr.ortg, "e"], ["Liga", lgA.ortg, "l"]], 1)}${puntos("DRtg", [["Quinteto", q.drtg, "q"], ["Equipo", tr.drtg, "e"], ["Liga", lgA.drtg, "l"]], -1)}${puntos("Net", [["Quinteto", q.net_rtg, "q"], ["Equipo", tr.net_rtg, "e"], ["Liga", 0, "l"]], 1)}${leyendaPuntos()}</div>
-    <div class="stack" style="gap:6px"><div class="label">Real frente a esperado</div>${barras(items, { W, sc: Math.max(10, ...items.map((i) => Math.abs(i.v || 0))), aria: "Net real, ajustado, esperado y sinergia", lw: 140 })}
-      <p class="note">${ok(esp) ? `Por el RAPM de sus cinco jugadores y de los rivales que tuvo delante, se esperaba un Net de <b>${fs(esp)}</b>; ha hecho <b>${fs(q.net_rtg)}</b>. Con ${fi(q.poss)} posesiones esa diferencia pesa un ${fp(100 * w, 0)}, así que la sinergia es <b class="${signCls(sin)}">${fs(sin)}</b>: ${!ok(sin) ? "" : sin > 2 ? "juntos funcionan <b>mejor</b> de lo que dicen sus piezas." : sin < -2 ? "juntos funcionan <b>peor</b> de lo que dicen sus piezas." : "rinden más o menos lo esperado."}` : "Sin RAPM para calcular el Net esperado."}</p>
+    ${ok(Lq) ? `<div class="kv"><div ${tipA("Media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de la Euroliga de la temporada)")}><span>Nivel conjunto</span><b>${nivHtml(Lq)}</b></div>${ok(Le) ? `<div ${tipA("Nivel de toda la plantilla (media por minutos)")}><span>Nivel del equipo</span><b>${nivHtml(Le)}</b></div><div ${tipA("Puntos de la escala de Nivel que el quinteto está por encima (o por debajo) de su equipo")}><span>Frente al equipo</span><b>${(() => { const d_ = nS("nivel", Lq) - nS("nivel", Le); return `${d_ >= 0 ? "+" : "−"}${Math.abs(Math.round(d_))}`; })()}</b></div>` : ""}</div>` : ""}
+    <div class="stack" style="gap:6px"><div class="label">Real frente a esperado (escala ±100)</div>${barras(items, { W, sc: 100, aria: "Net real, ajustado, esperado y sinergia", lw: 140 })}
+      <p class="note">${ok(esp) ? `Por el RAPM de sus cinco jugadores y de los rivales que tuvo delante, se esperaba un Net de <b>${fs(esp)}</b> por 100 posesiones; ha hecho <b>${fs(q.net_rtg)}</b>. Con ${fi(q.poss)} posesiones esa diferencia pesa un ${fp(100 * w, 0)}, así que la sinergia es <b class="${signCls(sin)}">${fs(sin)}</b> (${nv("sinergia_quinteto", sin)} en la escala): ${!ok(sin) ? "" : sin > 2 ? "juntos funcionan <b>mejor</b> de lo que dicen sus piezas." : sin < -2 ? "juntos funcionan <b>peor</b> de lo que dicen sus piezas." : "rinden más o menos lo esperado."}` : "Sin RAPM para calcular el Net esperado."}</p>
       ${aprende("Si la sinergia es grande y la muestra decente, el encaje entre ellos aporta algo que no se ve en cada jugador por separado (o les resta). Ojo: el RAPM también es una estimación con error.", "sinergia")}</div>
     <div class="stack" style="gap:6px"><div class="label">Cuatro factores frente al equipo</div>
       <div class="tablebox flat"><table class="ptable" aria-label="Cuatro factores"><thead><tr><th class="txt">Factor</th><th>Quinteto</th><th>Equipo</th><th>Dif.</th></tr></thead><tbody>
       <tr><td class="txt label" colspan="4" style="color:var(--accent)">En ataque</td></tr>${FF.slice(0, 4).map(ffRow).join("")}
       <tr><td class="txt label" colspan="4" style="color:var(--accent)">En defensa</td></tr>${FF.slice(4).map(ffRow).join("")}</tbody></table></div>
       ${aprende("Los <b>cuatro factores</b> de Dean Oliver explican casi todo el Net: tirar bien (eFG%), no perderla, rebotear y llegar al tiro libre; y lo mismo para el rival. La diferencia en verde es favorable para el quinteto aunque el número baje (p. ej., menos pérdidas).", "factores")}</div>
-    <div class="kv"><div ${tipA("Minutos en clutch: últimos 5 minutos con ±5")}><span>Min clutch</span><b>${f(q.min_clutch, 1)}</b></div><div ${tipA("Minutos con el partido ya decidido")}><span>Min basura</span><b>${f(q.min_basura, 1)}</b></div><div><span>Ritmo</span><b>${f(q.ritmo)}</b></div><div><span>% triples</span><b>${fp(q.fg3a_rate, 0)}</b></div><div><span>% asistidas</span><b>${fp(q.ast_pct, 0)}</b></div><div ${tipA("Suma del RAPM de los cinco")}><span>Σ RAPM</span><b>${fs(q.rapm_suma)}</b></div></div>
+    <div class="kv"><div ${tipA("Minutos en clutch: últimos 5 minutos con ±5")}><span>Min clutch</span><b>${f(q.min_clutch, 1)}</b></div><div ${tipA("Minutos con el partido ya decidido")}><span>Min basura</span><b>${f(q.min_basura, 1)}</b></div><div><span>Ritmo</span><b>${f(q.ritmo)}</b></div><div><span>% triples</span><b>${fp(q.fg3a_rate, 0)}</b></div><div><span>% asistidas</span><b>${fp(q.ast_pct, 0)}</b></div><div ${tipA("Suma del RAPM de los cinco (pts/100, valor original)")}><span>Σ RAPM</span><b>${fs(q.rapm_suma)}</b></div></div>
     ${q.min_basura > 0.2 * q.min ? `<div class="warnbox">El ${fp((100 * q.min_basura) / q.min, 0)} de sus minutos fueron de la basura: sus cifras dicen poco de su valor real.</div>` : ""}`;
 }
 
@@ -1161,9 +1290,9 @@ function qFicha(T) {
 const PMET = {
   min: { lab: "Minutos juntos", tipo: "seq", d: 0, get: (pp) => parV(pp, "min"), tip: "Minutos que han coincidido en pista." },
   pct: { lab: "% de minutos juntos", tipo: "seq", d: 0, get: (pp) => parV(pp, "pct_min_a_con_b"), tip: "Fila → columna: % de los minutos del jugador de la fila que juega con el de la columna (no es simétrico)." },
-  net: { lab: "Net juntos (aj.)", tipo: "div", sc: 15, d: 0, get: (pp) => parV(pp, "net_rtg_aj"), tip: "Net ajustado por muestra del equipo con los dos en pista." },
-  sinergia: { lab: "Sinergia WOWY", tipo: "div", sc: 12, d: 0, get: (pp) => parV(pp, "sinergia"), tip: "Net juntos − (A sin B + B sin A − ninguno). > 0 = se potencian." },
-  sinergia_rapm: { lab: "Sinergia frente al RAPM", tipo: "div", sc: 8, d: 0, get: (pp) => parV(pp, "sinergia_rapm"), tip: "(Net juntos − Net esperado por el RAPM de los 10 en pista) × peso de la muestra." },
+  net: { lab: "Net juntos (aj.)", tipo: "div", fam: "net_pareja", sc: 15, d: 0, get: (pp) => parV(pp, "net_rtg_aj"), tip: "Net ajustado por muestra del equipo con los dos en pista (escala ±100)." },
+  sinergia: { lab: "Sinergia WOWY", tipo: "div", fam: "sinergia_pareja", sc: 12, d: 0, get: (pp) => parV(pp, "sinergia"), tip: "Net juntos − (A sin B + B sin A − ninguno), escala ±100. > 0 = se potencian." },
+  sinergia_rapm: { lab: "Sinergia frente al RAPM", tipo: "div", fam: "sinergia_rapm", sc: 8, d: 0, get: (pp) => parV(pp, "sinergia_rapm"), tip: "(Net juntos − Net esperado por el RAPM de los 10 en pista) × peso de la muestra, escala ±100." },
   ast: { lab: "Asistencias", tipo: "seq", d: 0, get: (pp) => parV(pp, "ast_a_a_b"), tip: "Fila → columna: asistencias del jugador de la fila al de la columna." },
 };
 function pSel(T) {
@@ -1203,7 +1332,7 @@ function pMatriz(T, met) {
   const box = $("#pMatriz"); if (!box) return;
   const M = PMET[met], js = pJugadores(T), N = js.length, sel = pSel(T);
   const vals = []; js.forEach((a) => js.forEach((b) => { if (a !== b) { const v = M.get(pareja(T, a, b)); if (ok(v)) vals.push(v); } }));
-  const max = M.tipo === "seq" ? (met === "pct" ? 100 : Math.max(1, ...vals)) : M.sc;
+  const max = M.tipo === "seq" ? (met === "pct" ? 100 : Math.max(1, ...vals)) : 80;
   const W = ancho(box.parentElement, 600) - 36, LW = 108, TH = 96, cs = clamp(Math.floor((W - LW - 6) / N), 26, 42), SW = LW + N * cs + 46, SH = TH + N * cs + 4;
   let g = "";
   js.forEach((j, i) => {
@@ -1214,19 +1343,19 @@ function pMatriz(T, met) {
   js.forEach((a, i) => js.forEach((b, k) => {
     const x = LW + k * cs, y = TH + i * cs;
     if (a === b) { g += `<rect x="${x + 1}" y="${y + 1}" width="${cs - 2}" height="${cs - 2}" rx="3" fill="var(--surface-3)"/>`; return; }
-    const pp = pareja(T, a, b), v = M.get(pp);
+    const pp = pareja(T, a, b), v0 = M.get(pp), v = M.fam && ok(v0) ? nS(M.fam, v0) : v0;
     const isSel = sel && sel.a === a && sel.b === b;
     if (!pp) { g += `<rect x="${x + 1}" y="${y + 1}" width="${cs - 2}" height="${cs - 2}" rx="3" fill="none" stroke="var(--line)" stroke-dasharray="2 2" ${tipA(`${esc(J(a).nm)} + ${esc(J(b).nm)}: menos de 40 minutos juntos`)}/>`; return; }
     const minj = parV(pp, "min"), c = M.tipo === "div" ? divC(v, max, false, 0.95) : seqC(v, max, 0.92);
     const alpha = M.tipo === "div" ? 0.28 + 0.72 * clamp(minj / 250, 0, 1) : 1;
     const ink = c && lum(c) > 0.32 ? "#141922" : "#f3f1ec";
-    const tip = `<b>${esc(J(a).nm)} + ${esc(J(b).nm)}</b><br>${esc(M.lab)}: <b>${M.tipo === "div" ? fs(v) : met === "pct" ? fp(v, 0) : f(v, M.d)}</b><hr>${fm(minj)} juntos (${fp(parV(pp, "pct_min_a_con_b"), 0)} de los de ${esc(sn(a, T))})<br>Net aj. juntos ${fs(parV(pp, "net_rtg_aj"))}<br>Sinergia WOWY ${fs(parV(pp, "sinergia"))} · RAPM ${fs(parV(pp, "sinergia_rapm"))}<br>Asistencias ${esc(sn(a, T))} → ${esc(sn(b, T))}: ${fi(parV(pp, "ast_a_a_b"))}${minj < 120 ? "<br><b>Pocos minutos: poco fiable</b>" : ""}`;
+    const tip = `<b>${esc(J(a).nm)} + ${esc(J(b).nm)}</b><br>${esc(M.lab)}: <b>${M.tipo === "div" ? `${ESC.txt(v)}</b> en la escala (${fs(v0)} pts/100)<b>` : met === "pct" ? fp(v, 0) : f(v, M.d)}</b>${ok(nivelConjunto([a, b])) ? `<br>Nivel conjunto ${ESC.txt(nS("nivel", nivelConjunto([a, b])))}` : ""}<hr>${fm(minj)} juntos (${fp(parV(pp, "pct_min_a_con_b"), 0)} de los de ${esc(sn(a, T))})<br>Net aj. juntos ${fs(parV(pp, "net_rtg_aj"))}<br>Sinergia WOWY ${fs(parV(pp, "sinergia"))} · RAPM ${fs(parV(pp, "sinergia_rapm"))}<br>Asistencias ${esc(sn(a, T))} → ${esc(sn(b, T))}: ${fi(parV(pp, "ast_a_a_b"))}${minj < 120 ? "<br><b>Pocos minutos: poco fiable</b>" : ""}`;
     g += `<g class="hit" data-a="p" data-v="${esc(pid(a) + "," + pid(b))}" tabindex="0" role="button" aria-label="${esc(J(a).nm)} y ${esc(J(b).nm)}" ${tipA(tip)}><rect x="${x + 1}" y="${y + 1}" width="${cs - 2}" height="${cs - 2}" rx="3" fill="${c ? rgbS(c) : "var(--surface-2)"}" fill-opacity="${alpha.toFixed(2)}" stroke="${isSel ? "var(--ink)" : "none"}" stroke-width="2.2"/>` +
-      (cs >= 26 && ok(v) ? `<text x="${x + cs / 2}" y="${y + cs / 2 + 3.5}" text-anchor="middle" font-size="${cs >= 34 ? 10.5 : 9.5}" font-weight="600" fill="${alpha < 0.6 ? "var(--ink)" : ink}" style="pointer-events:none">${M.tipo === "div" ? fs(v, 0).replace("±", "") : f(v, 0)}</text>` : "") + `</g>`;
+      (cs >= 26 && ok(v) ? `<text x="${x + cs / 2}" y="${y + cs / 2 + 3.5}" text-anchor="middle" font-size="${cs >= 34 ? 10.5 : 9.5}" font-weight="600" fill="${alpha < 0.6 ? "var(--ink)" : ink}" style="pointer-events:none">${M.tipo === "div" ? (ESC.modo === "original" ? fs(v0, 0) : ESC.txt(v)).replace("±", "") : f(v, 0)}</text>` : "") + `</g>`;
   }));
   box.innerHTML = `<svg viewBox="0 0 ${SW} ${SH}" width="${SW}" height="${SH}" style="max-width:none" role="img" aria-label="Matriz de parejas: ${esc(M.lab)}">${g}</svg>`;
   $("#pLeyenda").innerHTML = M.tipo === "div"
-    ? `<span><i class="ramp" style="background:${rampa("div")}"></i>${fs(-max, 0)} … ${fs(max, 0)}</span><span><svg width="34" height="12"><rect x="0" y="0" width="16" height="12" rx="2" fill="${rgbS(divC(max, max, false, 0.95))}" opacity=".3"/><rect x="18" y="0" width="16" height="12" rx="2" fill="${rgbS(divC(max, max, false, 0.95))}"/></svg>pálido = pocos minutos (menos fiable)</span><span><svg width="14" height="12"><rect x="1" y="1" width="12" height="10" rx="2" fill="none" stroke="var(--line-2)" stroke-dasharray="2 2"/></svg>&lt; 40 min juntos</span>`
+    ? `<span><i class="ramp" style="background:${rampa("div")}"></i>escala ${ESC.txt(-max)} … ${ESC.txt(max)}</span><span><svg width="34" height="12"><rect x="0" y="0" width="16" height="12" rx="2" fill="${rgbS(divC(max, max, false, 0.95))}" opacity=".3"/><rect x="18" y="0" width="16" height="12" rx="2" fill="${rgbS(divC(max, max, false, 0.95))}"/></svg>pálido = pocos minutos (menos fiable)</span><span><svg width="14" height="12"><rect x="1" y="1" width="12" height="10" rx="2" fill="none" stroke="var(--line-2)" stroke-dasharray="2 2"/></svg>&lt; 40 min juntos</span>`
     : `<span><i class="ramp" style="background:${rampa("seq")}"></i>0 … ${f(max, 0)}${met === "pct" ? " %" : ""}</span><span><svg width="14" height="12"><rect x="1" y="1" width="12" height="10" rx="2" fill="none" stroke="var(--line-2)" stroke-dasharray="2 2"/></svg>&lt; 40 min juntos</span>`;
 }
 function pFicha(T) {
@@ -1234,31 +1363,33 @@ function pFicha(T) {
   const s = pSel(T); if (!s) { box.innerHTML = `<p class="note">Elige una pareja.</p>`; return; }
   const { a, b, pp } = s, v = (k) => parV(pp, k);
   const A = sn(a, T), B = sn(b, T), W = Math.min(400, ancho(box, 380) - 36);
-  const items = [
+  const items = escItems([
     { lab: "Juntos", sub: `${fm(v("min"))} en pista`, v: v("net_rtg_aj"), tip: `${esc(A)} y ${esc(B)} en pista: Net ajustado ${fs(v("net_rtg_aj"))} en ${fm(v("min"))}` },
     { lab: `Solo ${A}`, sub: `${fm(v("min_a_sin_b"))} sin ${B}`, v: v("net_rtg_aj_a_sin_b"), tip: `${esc(A)} en pista y ${esc(B)} en el banquillo`, color: "var(--muted)" },
     { lab: `Solo ${B}`, sub: `${fm(v("min_b_sin_a"))} sin ${A}`, v: v("net_rtg_aj_b_sin_a"), tip: `${esc(B)} en pista y ${esc(A)} en el banquillo`, color: "var(--muted)" },
     { lab: "Ninguno", sub: `${fm(v("min_ninguno"))} en el banquillo`, v: v("net_rtg_aj_ninguno"), tip: "Los dos en el banquillo", color: "var(--faint)" },
-  ];
+  ], "net_pareja");
+  const Lp = nivelConjunto([a, b]);
   const sg = v("sinergia"), esperado = ok(v("net_rtg_aj_a_sin_b")) && ok(v("net_rtg_aj_b_sin_a")) && ok(v("net_rtg_aj_ninguno")) ? v("net_rtg_aj_a_sin_b") + v("net_rtg_aj_b_sin_a") - v("net_rtg_aj_ninguno") : null;
-  const lectura = !ok(sg) ? "" : Math.abs(sg) < 1.5 ? `Juntos rinden <b>más o menos lo que suman por separado</b> (sinergia ${fs(sg)}).` : `Juntos rinden <b class="${signCls(sg)}">${f(Math.abs(sg))} puntos por 100 posesiones ${sg > 0 ? "mejor" : "peor"}</b> de lo que suman por separado.`;
+  const lectura = !ok(sg) ? "" : Math.abs(sg) < 1.5 ? `Juntos rinden <b>más o menos lo que suman por separado</b> (sinergia ${fs(sg)}).` : `Juntos rinden <b class="${signCls(sg)}">${f(Math.abs(sg))} puntos por 100 posesiones ${sg > 0 ? "mejor" : "peor"}</b> de lo que suman por separado (${nv("sinergia_pareja", sg)} en la escala).`;
   box.innerHTML = `<div class="cardhead"><h2>${btnJ(a, T)} + ${btnJ(b, T)}</h2><span class="pill acc">${fm(v("min"))} juntos</span></div>
-    <div class="kv"><div ${tipA(`% de los minutos de ${esc(A)} que juega con ${esc(B)}`)}><span>% min. ${esc(trunc(A, 12))}</span><b>${fp(v("pct_min_a_con_b"), 0)}</b></div><div ${tipA(`% de los minutos de ${esc(B)} que juega con ${esc(A)}`)}><span>% min. ${esc(trunc(B, 12))}</span><b>${fp(v("pct_min_b_con_a"), 0)}</b></div><div><span>Asist. ${esc(trunc(A, 10))} → ${esc(trunc(B, 10))}</span><b>${fi(v("ast_a_a_b"))}</b></div><div><span>Asist. ${esc(trunc(B, 10))} → ${esc(trunc(A, 10))}</span><b>${fi(v("ast_b_a_a"))}</b></div><div><span>ORtg / DRtg</span><b>${f(v("ortg"), 0)} / ${f(v("drtg"), 0)}</b></div><div><span>Net bruto</span><b class="${signCls(v("net_rtg"))}">${fs(v("net_rtg"))}</b></div></div>
+    <div class="kv"><div ${tipA(`% de los minutos de ${esc(A)} que juega con ${esc(B)}`)}><span>% min. ${esc(trunc(A, 12))}</span><b>${fp(v("pct_min_a_con_b"), 0)}</b></div><div ${tipA(`% de los minutos de ${esc(B)} que juega con ${esc(A)}`)}><span>% min. ${esc(trunc(B, 12))}</span><b>${fp(v("pct_min_b_con_a"), 0)}</b></div><div><span>Asist. ${esc(trunc(A, 10))} → ${esc(trunc(B, 10))}</span><b>${fi(v("ast_a_a_b"))}</b></div><div><span>Asist. ${esc(trunc(B, 10))} → ${esc(trunc(A, 10))}</span><b>${fi(v("ast_b_a_a"))}</b></div><div><span>ORtg / DRtg</span><b>${f(v("ortg"), 0)} / ${f(v("drtg"), 0)}</b></div><div><span>Net bruto</span><b>${nv("net_pareja", v("net_rtg"))}</b></div>${ok(Lp) ? `<div ${tipA("Nivel conjunto de la pareja: media del nivel L de los dos, escala ±100 (0 = jugador medio de la Euroliga)")}><span>Nivel conjunto</span><b>${nivHtml(Lp)}</b></div>` : ""}</div>
     ${avisoMuestra(v("poss"))}
-    <div class="stack" style="gap:6px"><div class="label">Con y sin el otro (WOWY) · Net ajustado</div>${barras(items, { W, sc: Math.max(10, ...items.map((i) => Math.abs(i.v || 0))), aria: "Net con y sin cada jugador", lw: 165 })}
-      <div class="formula" ${tipA("Modelo aditivo: si no hubiera química, el Net juntos sería lo que aporta A solo más lo que aporta B solo, partiendo de la base «ninguno»")}>Sinergia = ${fs(v("net_rtg_aj"))} − (${fs(v("net_rtg_aj_a_sin_b"))} + ${fs(v("net_rtg_aj_b_sin_a"))} − ${fs(v("net_rtg_aj_ninguno"))}) = <b class="${signCls(sg)}">${fs(sg)}</b></div>
+    <div class="stack" style="gap:6px"><div class="label">Con y sin el otro (WOWY) · Net ajustado, escala ±100</div>${barras(items, { W, sc: 100, aria: "Net con y sin cada jugador", lw: 165 })}
+      <div class="formula" ${tipA("Modelo aditivo (valores originales, pts/100): si no hubiera química, el Net juntos sería lo que aporta A solo más lo que aporta B solo, partiendo de la base «ninguno»")}>Sinergia = ${fs(v("net_rtg_aj"))} − (${fs(v("net_rtg_aj_a_sin_b"))} + ${fs(v("net_rtg_aj_b_sin_a"))} − ${fs(v("net_rtg_aj_ninguno"))}) = <b class="${signCls(sg)}">${fs(sg)}</b></div>
       <p>${lectura}${ok(esperado) ? ` Si no hubiera química, juntos se esperaría un Net de ${fs(esperado)}.` : ""}</p>
       ${aprende(`<b>WOWY</b> («with or without you») compara cuatro situaciones del mismo equipo. «${esc(A)} sin ${esc(B)}» mide lo que aporta ${esc(A)} solo; «ninguno» es la base. Cuidado: si casi siempre juegan juntos, las situaciones «sin» tienen pocos minutos y el cálculo se vuelve inestable.`, "wowy")}</div>
     <div class="stack" style="gap:6px"><div class="label">Frente al RAPM</div>
-      <p class="note">Con la calidad (RAPM) de los 10 jugadores que estaban en pista cuando coincidían, se esperaba un Net de <b>${fs(v("net_esperado"))}</b>; han hecho <b>${fs(v("net_rtg"))}</b>. Sinergia frente al RAPM, contraída por la muestra: <b class="${signCls(v("sinergia_rapm"))}">${fs(v("sinergia_rapm"))}</b>.</p></div>`;
+      <p class="note">Con la calidad (RAPM) de los 10 jugadores que estaban en pista cuando coincidían, se esperaba un Net de <b>${fs(v("net_esperado"))}</b> por 100 posesiones; han hecho <b>${fs(v("net_rtg"))}</b>. Sinergia frente al RAPM, contraída por la muestra: <b>${nv("sinergia_rapm", v("sinergia_rapm"))}</b> en la escala (${fs(v("sinergia_rapm"))}).</p></div>`;
 }
 function pTrios(T) {
   const cols = [
     { k: "nom", l: "Trío", txt: 1, cls: "name", get: (t) => nombresQ(ordenarPos(t.u, T), T), fmt: (v) => v },
     { k: "min", l: "Min", d: 0, tip: "Minutos juntos" }, { k: "poss", l: "Pos.", d: 0 },
-    { k: "net_rtg", l: "Net", fmt: (v) => fs(v) }, { k: "net_rtg_aj", l: "Net aj.", tip: "Net ajustado por muestra", fmt: (v) => `<b class="${signCls(v)}">${fs(v)}</b>${dbar(v, 15)}` },
-    { k: "net_esperado", l: "Esperado", tip: "Net esperado por el RAPM de los 10 en pista", fmt: (v) => fs(v) },
-    { k: "sinergia_rapm", l: "Sinergia", tip: "Sinergia frente al RAPM (contraída por la muestra)", fmt: (v) => `<b class="${signCls(v)}">${fs(v)}</b>` },
+    { k: "net_rtg", l: "Net", tip: "Net bruto, escala ±100", fmt: (v) => nv("net_trio", v, { sinColor: true }) }, { k: "net_rtg_aj", l: "Net aj.", tip: "Net ajustado por muestra, escala ±100", fmt: (v) => `<b>${nv("net_trio", v)}</b>${nbar("net_trio", v)}` },
+    { k: "nivel_t", l: "Nivel", tip: "Nivel conjunto (media de L de los tres), escala ±100", get: (t) => nivelConjunto(t.u), fmt: (v) => (ok(v) ? nivHtml(v) : "–") },
+    { k: "net_esperado", l: "Esperado", tip: "Net esperado por el RAPM de los 10 en pista, escala ±100", fmt: (v) => nv("net_trio", v, { sinColor: true }) },
+    { k: "sinergia_rapm", l: "Sinergia", tip: "Sinergia frente al RAPM (contraída por la muestra), escala ±100", fmt: (v) => `<b>${nv("sinergia_rapm", v)}</b>` },
     { k: "ortg", l: "ORtg" }, { k: "drtg", l: "DRtg" },
   ];
   $("#pTrios").innerHTML = tabla("tT", cols, T.T3, { sort: "min", act: "trio", key: (t) => t.u.map((j) => J(j).sur).join(" "), per: 10, aria: "Tríos", vacio: "Sin tríos en esta fase." });
@@ -1267,9 +1398,10 @@ function pTabla(T) {
   const s = pSel(T);
   const cols = [
     { k: "nom", l: "Pareja", txt: 1, cls: "name", get: (p) => `${sn(p.a, T)} + ${sn(p.b, T)}`, fmt: (v) => esc(v) },
-    { k: "min", l: "Min", d: 0 }, { k: "net_rtg_aj", l: "Net aj.", fmt: (v) => fs(v) },
-    { k: "sinergia", l: "Sinergia", tip: "Sinergia WOWY", fmt: (v) => `<b class="${signCls(v)}">${fs(v)}</b>${dbar(v, 12)}` },
-    { k: "sinergia_rapm", l: "Sin. RAPM", tip: "Sinergia frente al RAPM", fmt: (v) => fs(v) },
+    { k: "min", l: "Min", d: 0 }, { k: "net_rtg_aj", l: "Net aj.", tip: "Net ajustado juntos, escala ±100", fmt: (v) => nv("net_pareja", v, { sinColor: true }) },
+    { k: "nivel_p", l: "Nivel", tip: "Nivel conjunto (media de L de los dos), escala ±100", get: (p) => nivelConjunto([p.a, p.b]), fmt: (v) => (ok(v) ? nivHtml(v) : "–") },
+    { k: "sinergia", l: "Sinergia", tip: "Sinergia WOWY, escala ±100", fmt: (v) => `<b>${nv("sinergia_pareja", v)}</b>${nbar("sinergia_pareja", v)}` },
+    { k: "sinergia_rapm", l: "Sin. RAPM", tip: "Sinergia frente al RAPM, escala ±100", fmt: (v) => nv("sinergia_rapm", v, { sinColor: true }) },
     { k: "ast", l: "Asist.", d: 0, tip: "Asistencias entre ambos (en los dos sentidos)", get: (p) => (p.ast_a_a_b || 0) + (p.ast_b_a_a || 0) },
   ];
   $("#pTabla").innerHTML = tabla("tP", cols, T.P, { sort: "min", act: "p", key: (p) => pid(p.a) + "," + pid(p.b), sel: s && pid(s.pp.flip ? s.pp.p.a : s.a) + "," + pid(s.pp.flip ? s.pp.p.b : s.b), per: 12, aria: "Parejas" });
@@ -1386,14 +1518,14 @@ function nEfectos(T, x, efo) {
   const [lab, desc, neutral, uni] = EFO[efo];
   const W = Math.min(560, ancho(box, 560) / (window.innerWidth > 860 ? 2 : 1) - 8);
   const item = (e, j, sentido) => { const n = Math.min(e.fga_con || 0, e.fga_sin || 0), corto = n < 40;
-    return { lab: sn(j, T), v: e[efo], fade: corto, badge: corto, a: "j", val: pid(j),
-      tip: `<b>${sentido}</b><br>${esc(lab)}: <b>${fs(e[efo], 1)} ${uni}</b> (${esc(desc)})<hr>${fi(e.fga_con)} tiros de Y con X en pista · ${fi(e.fga_sin)} sin X<br>${fm((e.sec_con || 0) / 60)} juntos${corto ? "<br><b>Muestra corta</b>: tómalo con cautela" : ""}<br><i>Clic: ficha del jugador</i>` }; };
+    return { lab: sn(j, T), v: nS(efo, e[efo]), txt: nTxt(efo, e[efo]), fade: corto, badge: corto, a: "j", val: pid(j),
+      tip: `<b>${sentido}</b><br>${esc(lab)}: <b>${ESC.txt(nS(efo, e[efo]))}</b> en la escala ±100 (${fs(e[efo], 1)} ${uni}; ${esc(desc)})<hr>${fi(e.fga_con)} tiros de Y con X en pista · ${fi(e.fga_sin)} sin X<br>${fm((e.sec_con || 0) / 60)} juntos${corto ? "<br><b>Muestra corta</b>: tómalo con cautela" : ""}<br><i>Clic: ficha del jugador</i>` }; };
   const sale = T.E.filter((e) => e.xi === x).sort((a, b) => (b[efo] ?? -1e9) - (a[efo] ?? -1e9)).map((e) => item(e, e.yi, `Con ${esc(sn(x, T))} en pista, ${esc(sn(e.yi, T))}…`));
   const entra = T.E.filter((e) => e.yi === x).sort((a, b) => (b[efo] ?? -1e9) - (a[efo] ?? -1e9)).map((e) => item(e, e.xi, `Con ${esc(sn(e.xi, T))} en pista, ${esc(sn(x, T))}…`));
-  const sc = Math.max(1, ...sale.concat(entra).map((i) => Math.abs(i.v || 0)));
+  const sc = 100;
   const mejor = sale.filter((i) => !i.fade && ok(i.v)).slice(0, 1)[0], peor = sale.filter((i) => !i.fade && ok(i.v)).slice(-1)[0];
   box.innerHTML = `<div class="stack"><h3>Cuando ${esc(sn(x, T))} está en pista, sus compañeros…</h3>${barras(sale, { W, sc, neutral, unidad: uni, aria: `Efecto de ${J(x).nm} en sus compañeros`, vacio: "Ningún compañero con 60+ minutos juntos." })}
-      ${mejor && peor && mejor !== peor ? `<p class="note">Con él, <b>${esc(mejor.lab)}</b> es quien más ${neutral ? "aumenta" : "mejora"} su ${esc(lab)} (${fs(mejor.v)} ${uni}) y <b>${esc(peor.lab)}</b> quien más ${neutral ? "lo reduce" : "empeora"} (${fs(peor.v)} ${uni}).</p>` : ""}</div>
+      ${mejor && peor && mejor !== peor ? `<p class="note">Con él, <b>${esc(mejor.lab)}</b> es quien más ${neutral ? "aumenta" : "mejora"} su ${esc(lab)} (${mejor.txt}) y <b>${esc(peor.lab)}</b> quien más ${neutral ? "lo reduce" : "empeora"} (${peor.txt}).</p>` : ""}</div>
     <div class="stack"><h3>Y ${esc(sn(x, T))}, según quién le acompañe…</h3>${barras(entra, { W, sc, neutral, unidad: uni, aria: `Efecto de cada compañero en ${J(x).nm}`, vacio: "Sin datos suficientes." })}
       <p class="note">Barra a la derecha: ${esc(sn(x, T))} ${neutral ? "tiene más" : "rinde mejor en"} ${esc(lab)} cuando ese compañero está en pista.</p></div>`;
 }
@@ -1403,18 +1535,19 @@ function nEfectos(T, x, efo) {
 // =====================================================================================================
 // campos opcionales del catálogo (modelos de nivel y RAPM traducido): se muestran solo si vienen en el fichero
 const CAMPOS_PERFIL = [
-  ["L", "Nivel", "Índice de nivel del jugador en la vara EuroLeague (z: 0 = jugador medio; +1 = muy superior)", 2],
-  ["ctx_comp", "Nivel compañeros", "Nivel medio (L) de los 4 compañeros con los que comparte pista, ponderado por el tiempo", 2],
-  ["ctx_comp_dev", "Compañeros vs. media", "Nivel de sus compañeros en pista menos el de un jugador medio de su liga y temporada: > 0 = juega rodeado de mejores", 2],
-  ["ctx_riv", "Nivel rivales", "Nivel medio (L) de los 5 rivales que tiene enfrente", 2],
-  ["ctx_plantilla", "Nivel plantilla", "Nivel medio de sus compañeros de plantilla, ponderado por minutos (sin él)", 2],
-  ["ctx_plantilla_dev", "Plantilla vs. media", "Nivel de su plantilla menos el de un jugador medio de su liga y temporada", 2],
-  ["rapm_el", "RAPM EL", "RAPM traducido a la escala de la EuroLeague (puntos por 100 posesiones)", 1],
-  ["orapm_el", "ORAPM EL", "Parte ofensiva del RAPM en escala EuroLeague", 1],
-  ["drapm_el", "DRAPM EL", "Parte defensiva del RAPM en escala EuroLeague (> 0 = mejor defensa)", 1],
+  ["L", "Nivel", "Nivel del jugador (índice L en la vara EuroLeague), escala ±100: 0 = jugador medio de la Euroliga de la temporada", 2],
+  ["ctx_comp", "Nivel compañeros", "Nivel medio (L) de los 4 compañeros con los que comparte pista, ponderado por el tiempo; escala ±100 (Euroliga = 0)", 2],
+  ["ctx_comp_dev", "Compañeros vs. media", "Nivel de sus compañeros en pista menos el de un jugador medio de su liga y temporada, en puntos de la escala de Nivel: > 0 = juega rodeado de mejores", 2],
+  ["ctx_riv", "Nivel rivales", "Nivel medio (L) de los 5 rivales que tiene enfrente; escala ±100 (Euroliga = 0)", 2],
+  ["ctx_plantilla", "Nivel plantilla", "Nivel medio de sus compañeros de plantilla, ponderado por minutos (sin él); escala ±100", 2],
+  ["ctx_plantilla_dev", "Plantilla vs. media", "Nivel de su plantilla menos el de un jugador medio de su liga y temporada, en puntos de la escala de Nivel", 2],
+  ["rapm_el", "RAPM EL", "RAPM traducido a la EuroLeague, escala ±100 (0 = jugador medio de la Euroliga)", 1],
+  ["orapm_el", "ORAPM EL", "Parte ofensiva del RAPM traducido, escala ±100", 1],
+  ["drapm_el", "DRAPM EL", "Parte defensiva del RAPM traducido, escala ±100 (> 0 = mejor defensa)", 1],
   ["rapm_pct_el", "Percentil RAPM EL", "Percentil de su RAPM traducido entre los jugadores de la EuroLeague", 0],
 ];
-const fmtPerfil = (k, v) => (!ok(v) ? "–" : k === "rapm_pct_el" ? fp(v > 1 ? v : 100 * v, 0) : fs(v, k.startsWith("ctx") || k === "L" ? 2 : 1));
+const FAM_PERFIL = { L: "nivel", ctx_comp: "nivel", ctx_riv: "nivel", ctx_plantilla: "nivel", rapm_el: "rapm", orapm_el: "orapm", drapm_el: "drapm" };
+const fmtPerfil = (k, v) => (!ok(v) ? "–" : k === "rapm_pct_el" ? fp(v > 1 ? v : 100 * v, 0) : /_dev$/.test(k) ? nvd("nivel", v, { nombre: "Compañeros sobre la media de su liga", raw: `${fs(v, 2)} de L` }) : FAM_PERFIL[k] ? nv(FAM_PERFIL[k], v, k === "L" || k.startsWith("ctx") ? { raw: `L ${fs(v, 2)}` } : {}) : fs(v, 1));
 const zonaPct = (r, k) => { const t = sum(ZONAS, (z) => r["fga_" + z[0]]); return t ? (100 * (r["fga_" + k] || 0)) / t : null; };
 const efgZ = (r) => { const fga = sum(ZONAS, (z) => r["fga_" + z[0]]); if (!fga) return null; const fgm = sum(ZONAS, (z) => r["fgm_" + z[0]]), t3 = (r.fgm_t3_esquina || 0) + (r.fgm_t3_frontal || 0); return (100 * (fgm + 0.5 * t3)) / fga; };
 function jFilas(T) {
@@ -1451,7 +1584,7 @@ R.jugadores = (el) => {
 };
 function jTabla(T, grupos, liga) {
   const N = (k, l, g, d, tip, extra = {}) => Object.assign({ k, l, g, d, tip }, extra);
-  const sgn = (sc) => ({ fmt: (v) => `<span class="${signCls(v)}">${fs(v)}</span>`, css: (v) => (ok(v) ? cellCss(divC(v, sc, false, 0.5)) : "") });
+  const sgn = (fam) => ({ fmt: (v) => nv(fam, v, { sinColor: true }), css: (v) => (ok(v) ? cellCss(divC(nS(fam, v), 100, false, 0.5)) : "") });
   const cols = [
     { k: "nom", l: "Jugador", txt: 1, cls: "name", get: (r) => J(r.j).nm, fmt: (v) => esc(v) },
   ].concat(liga ? [{ k: "eq", l: "Equipo", txt: 1, get: (r) => D.eqn[r.team_id] || r.team_id, fmt: (v) => esc(v) }] : [])
@@ -1463,17 +1596,17 @@ function jTabla(T, grupos, liga) {
       N("min_pct_equipo", "% min", "", 1, "% de los minutos del equipo"),
     ])
     .concat(grupos.includes("imp") ? [
-      N("net_rtg_on", "Net on", "imp", 1, "Net del equipo con él en pista", { fmt: (v) => fs(v) }), N("net_rtg_off", "Net off", "imp", 1, "Net del equipo con él en el banquillo", { fmt: (v) => fs(v) }),
-      N("net_rtg_onoff", "On−off", "imp", 1, "Net on − Net off", sgn(12)), N("net_rtg_aj_onoff", "On−off aj.", "imp", 1, "On−off con los dos Net ajustados por muestra", sgn(12)),
-      N("net_rtg_suerte_onoff", "On−off suerte", "imp", 1, "On−off neutralizando el acierto rival en triples y libres", sgn(12)),
-      N("net_rtg_onoff_sin_basura", "On−off sin basura", "imp", 1, "On−off quitando los minutos de la basura", sgn(12)),
-      N("rapm", "RAPM", "imp", 1, "Impacto ajustado (ridge) por 100 posesiones sobre un jugador medio, en unidades de su liga", sgn(4)),
-      N("orapm", "ORAPM", "imp", 1, "Parte ofensiva del RAPM", sgn(3)), N("drapm", "DRAPM", "imp", 1, "Parte defensiva del RAPM (> 0 = mejor defensa)", sgn(3)),
-    ].concat(D.campos.has("rapm_el") ? [{ k: "rapm_el", l: "RAPM EL", g: "imp", get: (r) => J(r.j).rapm_el, tip: "RAPM traducido a la escala de la EuroLeague", ...sgn(4) }] : []) : [])
+      N("net_rtg_on", "Net on", "imp", 1, "Net del equipo con él en pista, escala ±100", { fmt: (v) => nv("net_equipo", v, { sinColor: true }) }), N("net_rtg_off", "Net off", "imp", 1, "Net del equipo con él en el banquillo, escala ±100", { fmt: (v) => nv("net_equipo", v, { sinColor: true }) }),
+      N("net_rtg_onoff", "On−off", "imp", 1, "Net on − Net off, escala ±100", sgn("onoff")), N("net_rtg_aj_onoff", "On−off aj.", "imp", 1, "On−off con los dos Net ajustados por muestra, escala ±100", sgn("onoff")),
+      N("net_rtg_suerte_onoff", "On−off suerte", "imp", 1, "On−off neutralizando el acierto rival en triples y libres, escala ±100", sgn("onoff")),
+      N("net_rtg_onoff_sin_basura", "On−off sin basura", "imp", 1, "On−off quitando los minutos de la basura, escala ±100", sgn("onoff")),
+      N("rapm", "RAPM", "imp", 1, "Impacto ajustado (ridge) sobre un jugador medio, en unidades de su liga; escala ±100", sgn("rapm_liga")),
+      N("orapm", "ORAPM", "imp", 1, "Parte ofensiva del RAPM, escala ±100", sgn("orapm_liga")), N("drapm", "DRAPM", "imp", 1, "Parte defensiva del RAPM (> 0 = mejor defensa), escala ±100", sgn("drapm_liga")),
+    ].concat(D.campos.has("rapm_el") ? [{ k: "rapm_el", l: "RAPM EL", g: "imp", get: (r) => J(r.j).rapm_el, tip: "RAPM traducido a la EuroLeague, escala ±100 (0 = jugador medio de la Euroliga)", ...sgn("rapm") }] : []) : [])
     .concat(grupos.includes("rot") ? [
       N("titular_partidos", "Titular", "rot", 0, "Partidos de titular"), N("cierra_partidos", "Cierra", "rot", 0, "Partidos en pista en el último tramo"),
       N("relevos_por_partido", "Relevos/p", "rot", 1, "Entradas a pista por partido"), N("min_por_relevo", "Min/relevo", "rot", 1, "Duración media de cada turno"),
-      N("clutch_min", "Min clutch", "rot", 0, "Minutos en clutch"), N("clutch_net_rtg", "Net clutch", "rot", 1, "Net del equipo en clutch con él en pista", { fmt: (v) => fs(v) }),
+      N("clutch_min", "Min clutch", "rot", 0, "Minutos en clutch"), N("clutch_net_rtg", "Net clutch", "rot", 1, "Net del equipo en clutch con él en pista, escala ±100", { fmt: (v) => nv("net_equipo", v, { sinColor: true }) }),
       N("basura_min", "Min basura", "rot", 0, "Minutos de la basura"), N("quintetos_distintos", "Quintetos", "rot", 0, "Quintetos distintos en los que ha jugado"),
     ] : [])
     .concat(grupos.includes("pas") ? [
@@ -1494,18 +1627,18 @@ function jFicha(T0) {
   const box = $("#jFicha"); if (!box) return;
   const r = jSelRow(T0); if (!r) { box.innerHTML = `<p class="note">Elige un jugador.</p>`; return; }
   const j = r.j, o = J(j), T = r.team_id === T0.eq ? T0 : TV(r.team_id, S.f), W = Math.min(400, ancho(box, 380) - 36);
-  const imp = [
-    ["On−off", r.net_rtg_onoff, "Net del equipo con él en pista menos sin él"], ["On−off ajustado", r.net_rtg_aj_onoff, "Los dos Net ajustados por muestra (k = 300)"],
-    ["On−off sin suerte", r.net_rtg_suerte_onoff, "Neutralizando el acierto rival en triples y tiros libres"], ["On−off sin basura", r.net_rtg_onoff_sin_basura, "Quitando los minutos con el partido decidido"],
-    ["RAPM", r.rapm, "Impacto ajustado por compañeros y rivales"], ["ORAPM", r.orapm, "Parte ofensiva del RAPM"], ["DRAPM", r.drapm, "Parte defensiva del RAPM (> 0 = mejor)"],
-  ].concat([["rapm_el", "RAPM EuroLeague", "RAPM traducido a la escala de la EuroLeague"], ["orapm_el", "ORAPM EuroLeague", "Parte ofensiva, en escala EuroLeague"], ["drapm_el", "DRAPM EuroLeague", "Parte defensiva, en escala EuroLeague (> 0 = mejor)"]].filter(([k]) => ok(o[k])).map(([k, lab, tip]) => [lab, o[k], tip])).filter((x) => ok(x[1])).map(([lab, v, tip]) => ({ lab, v, tip: `<b>${esc(lab)}</b>: ${esc(tip)}` }));
+  const imp = escItems([
+    ["On−off", r.net_rtg_onoff, "Net del equipo con él en pista menos sin él", "onoff"], ["On−off ajustado", r.net_rtg_aj_onoff, "Los dos Net ajustados por muestra (k = 300)", "onoff"],
+    ["On−off sin suerte", r.net_rtg_suerte_onoff, "Neutralizando el acierto rival en triples y tiros libres", "onoff"], ["On−off sin basura", r.net_rtg_onoff_sin_basura, "Quitando los minutos con el partido decidido", "onoff"],
+    ["RAPM", r.rapm, "Impacto ajustado por compañeros y rivales", "rapm_liga"], ["ORAPM", r.orapm, "Parte ofensiva del RAPM", "orapm_liga"], ["DRAPM", r.drapm, "Parte defensiva del RAPM (> 0 = mejor)", "drapm_liga"],
+  ].concat([["rapm_el", "RAPM EuroLeague", "RAPM traducido a la EuroLeague", "rapm"], ["orapm_el", "ORAPM EuroLeague", "Parte ofensiva, traducida a la EuroLeague", "orapm"], ["drapm_el", "DRAPM EuroLeague", "Parte defensiva, traducida a la EuroLeague (> 0 = mejor)", "drapm"]].filter(([k]) => ok(o[k])).map(([k, lab, tip, fam]) => [lab, o[k], tip, fam])).filter((x) => ok(x[1])).map(([lab, v, tip, fam]) => ({ lab, v, fam, tip: `<b>${esc(lab)}</b>: ${esc(tip)}` })));
   const gp = r.gp || 1, ql = D.qlen;
   const cuartos = ["pct_min_q1", "pct_min_q2", "pct_min_q3", "pct_min_q4"].map((k, i) => { const v = ((r.min_on || 0) * (r[k] || 0)) / 100 / gp;
     return `<div class="link" ${tipA(`${f(v, 1)} de ${ql} minutos por partido en el ${i + 1}.º cuarto (${fp(r[k], 0)} de sus minutos)`)}><span class="who">${i + 1}.º cuarto</span><span class="bar"><i style="width:${(100 * v) / ql}%;background:var(--accent)"></i></span><span class="n">${f(v, 1)}'</span><span class="n">${fp(r[k], 0)}</span></div>`; }).join("");
   const thrP = 60;
   const socios = T.P.filter((p) => (p.a === j || p.b === j)).map((p) => ({ p, o: p.a === j ? p.b : p.a })).sort((a, b) => b.p.min - a.p.min);
   const best = socios.filter((s) => s.p.min >= thrP && ok(s.p.sinergia)).sort((a, b) => b.p.sinergia - a.p.sinergia);
-  const filaS = (s) => `<button class="lrow" type="button" data-a="p" data-v="${esc(pid(j) + "," + pid(s.o))}"><span class="who">${esc(sn(s.o, T))}<small>${fm(s.p.min)} juntos · ${fp(s.p.a === j ? s.p.pct_min_a_con_b : s.p.pct_min_b_con_a, 0)} de sus minutos</small></span>${dbar(s.p.sinergia, 12)}<span class="v ${signCls(s.p.sinergia)}">${fs(s.p.sinergia)}</span></button>`;
+  const filaS = (s) => `<button class="lrow" type="button" data-a="p" data-v="${esc(pid(j) + "," + pid(s.o))}"><span class="who">${esc(sn(s.o, T))}<small>${fm(s.p.min)} juntos · ${fp(s.p.a === j ? s.p.pct_min_a_con_b : s.p.pct_min_b_con_a, 0)} de sus minutos</small></span>${nbar("sinergia_pareja", s.p.sinergia)}<span class="v">${nv("sinergia_pareja", s.p.sinergia)}</span></button>`;
   const da = T.A.filter((a) => a.p === j).sort((a, b) => b.ast - a.ast).slice(0, 3), re = T.A.filter((a) => a.r === j).sort((a, b) => b.ast - a.ast).slice(0, 3);
   const ef = T.E.filter((e) => e.xi === j && Math.min(e.fga_con, e.fga_sin) >= 40 && ok(e.d_pts100)).sort((a, b) => b.d_pts100 - a.d_pts100);
   const efIn = T.E.filter((e) => e.yi === j && Math.min(e.fga_con, e.fga_sin) >= 40 && ok(e.d_pts100)).sort((a, b) => b.d_pts100 - a.d_pts100);
@@ -1513,22 +1646,22 @@ function jFicha(T0) {
   const equipoTxt = r.team_id !== S.e ? ` · ${esc(D.eqn[r.team_id] || r.team_id)}` : "";
   box.innerHTML = `<div class="cardhead"><h2>${esc(o.nm)}</h2>${chipEstilo(j)}</div>
     <div class="row note"><span>${o.pos3 ? esc(POSN[o.pos3]) : "Posición desconocida"}${ok(o.edad) ? ` · ${fi(o.edad)} años` : ""}${equipoTxt}</span><span class="pill acc">${fi(r.gp)} PJ · ${fm(r.min_on)}${ok(r.min_pct_equipo) ? ` · ${fp(r.min_pct_equipo, 0)} del equipo` : ""}</span></div>
-    ${imp.length ? `<div class="stack" style="gap:6px"><div class="label">Impacto (por 100 posesiones)</div>${barras(imp, { W, sc: Math.max(6, ...imp.map((i) => Math.abs(i.v))), aria: "Impacto del jugador", lw: 130 })}
-      <p class="note">Con él en pista el equipo hace <b class="${signCls(r.net_rtg_on)}">${fs(r.net_rtg_on)}</b>; sin él, <b class="${signCls(r.net_rtg_off)}">${fs(r.net_rtg_off)}</b>.${ok(r.rapm) && ok(r.net_rtg_onoff) && Math.sign(r.rapm) !== Math.sign(r.net_rtg_onoff) && Math.abs(r.net_rtg_onoff) > 3 ? " El on/off y el RAPM no coinciden en el signo: parte de su on/off se debe a con quién o contra quién juega." : ""}</p>
+    ${imp.length ? `<div class="stack" style="gap:6px"><div class="label">Impacto (escala ±100; valor por 100 posesiones al pasar el ratón)</div>${barras(imp, { W, sc: 100, aria: "Impacto del jugador", lw: 130 })}
+      <p class="note">Con él en pista el equipo hace <b class="${signCls(r.net_rtg_on)}">${fs(r.net_rtg_on)}</b> por 100 posesiones; sin él, <b class="${signCls(r.net_rtg_off)}">${fs(r.net_rtg_off)}</b>.${ok(r.rapm) && ok(r.net_rtg_onoff) && Math.sign(r.rapm) !== Math.sign(r.net_rtg_onoff) && Math.abs(r.net_rtg_onoff) > 3 ? " El on/off y el RAPM no coinciden en el signo: parte de su on/off se debe a con quién o contra quién juega." : ""}</p>
       ${aprende("Las barras de <b>on/off</b> miden la diferencia del equipo con y sin él; el <b>RAPM</b> estima su aporte individual descontando a los otros 9 en pista. Si discrepan, cree antes al RAPM, aunque con menos de ~1.000 posesiones los dos son ruidosos.", "rapm")}</div>` : ""}
     ${D.hasQ && ok(r.min_on) ? `<div class="stack" style="gap:4px"><div class="label">Cuándo juega</div>${cuartos}
-      <div class="kv"><div><span>Titular</span><b>${fi(r.titular_partidos)}/${fi(r.gp)}</b></div><div ${tipA("Partidos en los que estaba en pista en el último tramo")}><span>Cierra</span><b>${fi(r.cierra_partidos)}/${fi(r.gp)}</b></div><div><span>Relevos/p</span><b>${f(r.relevos_por_partido, 1)}</b></div><div><span>Min/relevo</span><b>${f(r.min_por_relevo, 1)}</b></div><div ${tipA("Minutos en clutch y Net del equipo en ellos")}><span>Clutch</span><b>${fm(r.clutch_min)} · ${fs(r.clutch_net_rtg, 0)}</b></div><div><span>Basura</span><b>${fm(r.basura_min)}</b></div></div></div>` : ""}
+      <div class="kv"><div><span>Titular</span><b>${fi(r.titular_partidos)}/${fi(r.gp)}</b></div><div ${tipA("Partidos en los que estaba en pista en el último tramo")}><span>Cierra</span><b>${fi(r.cierra_partidos)}/${fi(r.gp)}</b></div><div><span>Relevos/p</span><b>${f(r.relevos_por_partido, 1)}</b></div><div><span>Min/relevo</span><b>${f(r.min_por_relevo, 1)}</b></div><div ${tipA("Minutos en clutch y Net del equipo en ellos (escala ±100)")}><span>Clutch</span><b>${fm(r.clutch_min)} · ${nv("net_equipo", r.clutch_net_rtg, { sinColor: true })}</b></div><div><span>Basura</span><b>${fm(r.basura_min)}</b></div></div></div>` : ""}
     <div class="stack" style="gap:6px"><div class="label">Dónde tira</div>${zonasSVG(r, null, o.nm)}</div>
     ${socios.length ? `<div class="stack" style="gap:5px"><div class="label">Socios con más minutos</div><div class="lrows">${socios.slice(0, 4).map(filaS).join("")}</div>
       ${best.length > 1 ? `<div class="label">Mejor y peor encaje (sinergia WOWY, ${thrP}+ min)</div><div class="lrows">${filaS(best[0])}${filaS(best[best.length - 1])}</div>` : ""}</div>` : ""}
     ${da.length || re.length ? `<div class="stack" style="gap:4px"><div class="label">Pases</div>${(() => { const mx = Math.max(1, ...da.map((a) => a.ast), ...re.map((a) => a.ast)); const fila = (j2, a, col) => `<div class="link"><span class="who">${btnJ(j2, T)}</span><span class="bar"><i style="width:${(100 * a.ast) / mx}%;background:${col}"></i></span><span class="n">${fi(a.ast)}</span><span></span></div>`;
         return (da.length ? `<p class="note">Asiste sobre todo a…</p>${da.map((a) => fila(a.r, a, "var(--accent)")).join("")}` : "") + (re.length ? `<p class="note">Le asisten sobre todo…</p>${re.map((a) => fila(a.p, a, rgbS(PAL.pos))).join("")}` : ""); })()}
       <button class="btn ghost sm" type="button" data-a="nx" data-v="${esc(pid(j))}" data-ir="conexiones">Ver en la red →</button></div>` : ""}
-    ${ef.length || efIn.length ? `<div class="stack" style="gap:4px"><div class="label">Efectos en puntos/100 (muestras de 40+ tiros)</div>
-      ${ef.length ? `<p class="note">Con él en pista, quien más gana es <b>${esc(sn(ef[0].yi, T))}</b> (${fs(ef[0].d_pts100)}) y quien más pierde, <b>${esc(sn(ef[ef.length - 1].yi, T))}</b> (${fs(ef[ef.length - 1].d_pts100)}).</p>` : ""}
-      ${efIn.length ? `<p class="note">Él produce más con <b>${esc(sn(efIn[0].xi, T))}</b> (${fs(efIn[0].d_pts100)}) y menos con <b>${esc(sn(efIn[efIn.length - 1].xi, T))}</b> (${fs(efIn[efIn.length - 1].d_pts100)}).</p>` : ""}
+    ${ef.length || efIn.length ? `<div class="stack" style="gap:4px"><div class="label">Efectos en puntos/100 (escala ±100; muestras de 40+ tiros)</div>
+      ${ef.length ? `<p class="note">Con él en pista, quien más gana es <b>${esc(sn(ef[0].yi, T))}</b> (${nv("d_pts100", ef[0].d_pts100)}) y quien más pierde, <b>${esc(sn(ef[ef.length - 1].yi, T))}</b> (${nv("d_pts100", ef[ef.length - 1].d_pts100)}).</p>` : ""}
+      ${efIn.length ? `<p class="note">Él produce más con <b>${esc(sn(efIn[0].xi, T))}</b> (${nv("d_pts100", efIn[0].d_pts100)}) y menos con <b>${esc(sn(efIn[efIn.length - 1].xi, T))}</b> (${nv("d_pts100", efIn[efIn.length - 1].d_pts100)}).</p>` : ""}
       <button class="btn ghost sm" type="button" data-a="nx" data-v="${esc(pid(j))}" data-ir="conexiones" data-ancla="nEfectos">Ver todos los efectos →</button></div>` : ""}
-    ${ctx.length ? `<div class="stack" style="gap:4px"><div class="label">Nivel y contexto</div><div class="kv">${ctx.map(([k, l, tip]) => `<div ${tipA(tip)}><span>${l}</span><b class="${k === "rapm_pct_el" ? "" : signCls(o[k])}">${fmtPerfil(k, o[k])}</b></div>`).join("")}</div>
+    ${ctx.length ? `<div class="stack" style="gap:4px"><div class="label">Nivel y contexto</div><div class="kv">${ctx.map(([k, l, tip]) => `<div ${tipA(tip)}><span>${l}</span><b>${fmtPerfil(k, o[k])}</b></div>`).join("")}</div>
       ${aprende("El <b>nivel</b> (L) resume la calidad del jugador en la vara de la EuroLeague; los <b>contextos</b> dicen si juega rodeado de compañeros mejores o peores y contra rivales más o menos fuertes. Un jugador con muy buen on/off y compañeros muy por encima de la media puede estar «inflado» por su entorno.", "onoff")}</div>` : ""}`;
 }
 
@@ -1562,22 +1695,22 @@ R.liga = (el) => {
   const nomQ = (q) => ordenarPos(q.u, null).map((j) => J(j).sur).join(" · ");
   const maxQp = Math.ceil(Math.max(50, ...Qf.map((q) => q.poss || 0))), maxPm = Math.ceil(Math.max(100, ...Pf.map((p) => p.min || 0))), maxJm = Math.ceil(Math.max(200, ...Of.map((r) => r.min_on || 0)));
   const sld = (key, v, max, step, lab, unit = "") => `<div class="slider"><span>${lab}</span><input type="range" min="0" max="${max}" step="${step}" value="${Math.min(v, max)}" data-ui="${key}" aria-label="${esc(lab)}"><output>${fi(v)}${unit}</output></div>`;
-  const filaL = (a, v, html, val, sub, tip) => `<tr class="clk ${val.split("|")[0] === S.e ? "sel" : ""}" tabindex="0" data-a="${a}" data-v="${esc(val)}" ${tipA(tip)}><td class="txt name sticky">${html}</td><td class="txt">${esc(corto(val.split("|")[0]))}</td>${sub}<td><b class="${signCls(v)}">${fs(v)}</b>${dbar(v, 15)}</td></tr>`;
+  const filaL = (a, v, html, val, sub, tip, fam) => `<tr class="clk ${val.split("|")[0] === S.e ? "sel" : ""}" tabindex="0" data-a="${a}" data-v="${esc(val)}" ${tipA(tip)}><td class="txt name sticky">${html}</td><td class="txt">${esc(corto(val.split("|")[0]))}</td>${sub}<td><b class="${signCls(v)}">${nTxt(fam, v)}</b>${nbar(fam, v)}</td></tr>`;
   const xk = XLIGA[ui("lX", "min_pct_top5_quintetos")] ? ui("lX", "min_pct_top5_quintetos") : "min_pct_top5_quintetos", yk = ui("lY", "net_rtg") === "net_rtg_suerte" ? "net_rtg_suerte" : "net_rtg";
   el.innerHTML = `
   <div class="dcard"><div class="cardhead"><h2>${esc(D.nombreLiga)} ${esc(D.temp)} · ${esc(FNOM[fz])}</h2><span class="note">Clic en cualquier fila para abrirla con su equipo.</span></div>
     <div class="kpis"><div class="kpi"><span>Equipos</span><b>${fi(lg.length)}</b></div><div class="kpi"><span>Quintetos (10+ min)</span><b>${fi(Qf.length)}</b></div><div class="kpi"><span>Parejas (40+ min)</span><b>${fi(Pf.length)}</b></div><div class="kpi" ${tipA("Puntos por 100 posesiones del equipo medio")}><span>ORtg medio</span><b>${f(TV().lgAvg.ortg)}</b></div><div class="kpi" ${tipA(`Posesiones por partido de ${D.qlen * 4} minutos`)}><span>Ritmo medio</span><b>${f(TV().lgAvg.ritmo)}</b></div></div></div>
   <div class="g2">
     <div class="dcard"><h2>Mejores quintetos de la liga</h2>${sld(`lQ:${S.l}`, tq, maxQp, 10, "Mínimo de posesiones")}
-      <div class="tablebox flat"><table aria-label="Mejores quintetos"><thead><tr><th class="txt sticky">Quinteto</th><th class="txt">Equipo</th><th>Min</th><th ${tipA("Net ajustado por muestra")}>Net aj.</th></tr></thead><tbody>${qTop.map((q) => filaL("lq", q.net_rtg_aj, esc(nomQ(q)), `${q.team_id}|${qKey(q)}`, `<td>${fm(q.min)}</td>`, `${esc(D.eqn[q.team_id])}<br>${fi(q.poss)} posesiones · Net bruto ${fs(q.net_rtg)}`)).join("") || `<tr><td colspan="4" class="txt muted">Ninguno llega al mínimo.</td></tr>`}</tbody></table></div>
+      <div class="tablebox flat"><table aria-label="Mejores quintetos"><thead><tr><th class="txt sticky">Quinteto</th><th class="txt">Equipo</th><th>Min</th><th ${tipA("Net ajustado por muestra, escala ±100")}>Net aj.</th></tr></thead><tbody>${qTop.map((q) => filaL("lq", q.net_rtg_aj, esc(nomQ(q)), `${q.team_id}|${qKey(q)}`, `<td>${fm(q.min)}</td>`, `${esc(D.eqn[q.team_id])}<br>${fi(q.poss)} posesiones · Net ajustado ${fs(q.net_rtg_aj)} pts/100 (bruto ${fs(q.net_rtg)})${ok(nivelConjunto(q.u)) ? `<br>Nivel conjunto ${ESC.txt(nS("nivel", nivelConjunto(q.u)))}` : ""}`, "net_quinteto")).join("") || `<tr><td colspan="4" class="txt muted">Ninguno llega al mínimo.</td></tr>`}</tbody></table></div>
       ${aprende("Con el Net ajustado, un quinteto necesita muchas posesiones para destacar de verdad: es una clasificación prudente.", "muestra")}</div>
     <div class="dcard"><h2>Parejas con más sinergia</h2>${sld(`lP:${S.l}`, tp, maxPm, 10, "Mínimo de minutos juntos", "'")}
       ${fz === "playoffs" ? `<p class="note">En playoffs se usa toda la temporada.</p>` : ""}
-      <div class="tablebox flat"><table aria-label="Parejas con más sinergia"><thead><tr><th class="txt sticky">Pareja</th><th class="txt">Equipo</th><th>Min</th><th ${tipA("Sinergia WOWY")}>Sinergia</th></tr></thead><tbody>${pTop.map((p) => filaL("lp", p.sinergia, `${esc(J(p.a).sur)} + ${esc(J(p.b).sur)}`, `${p.team_id}|${pid(p.a)},${pid(p.b)}`, `<td>${fm(p.min)}</td>`, `${esc(J(p.a).nm)} + ${esc(J(p.b).nm)}<br>${esc(D.eqn[p.team_id])}<br>Net aj. juntos ${fs(p.net_rtg_aj)}`)).join("") || `<tr><td colspan="4" class="txt muted">Ninguna llega al mínimo.</td></tr>`}</tbody></table></div></div>
+      <div class="tablebox flat"><table aria-label="Parejas con más sinergia"><thead><tr><th class="txt sticky">Pareja</th><th class="txt">Equipo</th><th>Min</th><th ${tipA("Sinergia WOWY, escala ±100")}>Sinergia</th></tr></thead><tbody>${pTop.map((p) => filaL("lp", p.sinergia, `${esc(J(p.a).sur)} + ${esc(J(p.b).sur)}`, `${p.team_id}|${pid(p.a)},${pid(p.b)}`, `<td>${fm(p.min)}</td>`, `${esc(J(p.a).nm)} + ${esc(J(p.b).nm)}<br>${esc(D.eqn[p.team_id])}<br>Sinergia ${fs(p.sinergia)} pts/100 · Net aj. juntos ${fs(p.net_rtg_aj)}`, "sinergia_pareja")).join("") || `<tr><td colspan="4" class="txt muted">Ninguna llega al mínimo.</td></tr>`}</tbody></table></div></div>
   </div>
   <div class="dcard"><h2>RAPM: los que más y menos aportan</h2>${sld(`lJ:${S.l}`, tj, maxJm, 25, "Mínimo de minutos", "'")}
-    <div class="g2">${[["Los 10 mejores", jTop], ["Los 10 peores", jBot]].map(([t, rows]) => `<div class="stack"><h3>${t}</h3><div class="tablebox flat"><table aria-label="${t}"><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Equipo</th><th ${tipA("RAPM ofensivo")}>ORAPM</th><th ${tipA("RAPM defensivo (> 0 = mejor)")}>DRAPM</th><th>RAPM</th></tr></thead><tbody>${rows.map((r) => filaL("lj", r.rapm, esc(J(r.j).nm), `${r.team_id}|${pid(r.j)}`, `<td>${fs(r.orapm)}</td><td>${fs(r.drapm)}</td>`, `${esc(J(r.j).nm)} · ${esc(D.eqn[r.team_id])}<br>${fm(r.min_on)} · on−off ${fs(r.net_rtg_onoff)}`)).join("")}</tbody></table></div></div>`).join("")}</div>
-    ${aprende("El RAPM está en <b>unidades de su liga</b>: +3 en la ACB no equivale a +3 en la NBA. Un RAPM de +3 significa que, con él en lugar de un jugador medio, el equipo gana unos 3 puntos por cada 100 posesiones.", "rapm")}</div>
+    <div class="g2">${[["Los 10 mejores", jTop], ["Los 10 peores", jBot]].map(([t, rows]) => `<div class="stack"><h3>${t}</h3><div class="tablebox flat"><table aria-label="${t}"><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Equipo</th><th ${tipA("RAPM ofensivo, escala ±100")}>ORAPM</th><th ${tipA("RAPM defensivo (> 0 = mejor), escala ±100")}>DRAPM</th><th ${tipA("RAPM, escala ±100")}>RAPM</th></tr></thead><tbody>${rows.map((r) => filaL("lj", r.rapm, esc(J(r.j).nm), `${r.team_id}|${pid(r.j)}`, `<td>${nv("orapm_liga", r.orapm, { sinColor: true })}</td><td>${nv("drapm_liga", r.drapm, { sinColor: true })}</td>`, `${esc(J(r.j).nm)} · ${esc(D.eqn[r.team_id])}<br>${fm(r.min_on)} · RAPM ${fs(r.rapm)} pts/100 · on−off ${fs(r.net_rtg_onoff)}`, "rapm_liga")).join("")}</tbody></table></div></div>`).join("")}</div>
+    ${aprende("El RAPM está en <b>unidades de su liga</b>: +3 en la ACB no equivale a +3 en la NBA (para comparar entre ligas usa el «RAPM EL» de la pestaña Jugadores, traducido a la Euroliga). La escala ±100 usa como vara la dispersión del RAPM en la Euroliga; el valor original, en puntos por 100 posesiones, al pasar el ratón.", "escalas")}</div>
   <div class="dcard"><div class="cardhead"><h2>Equipos: estructura frente a rendimiento</h2>
       <div class="row"><select data-set-sel="lX" aria-label="Eje horizontal">${Object.entries(XLIGA).map(([k, v]) => `<option value="${k}" ${k === xk ? "selected" : ""}>${esc(v[0])}</option>`).join("")}</select>
       <div class="seg" role="group" aria-label="Eje vertical"><button class="segb" type="button" data-set="lY" data-v="net_rtg" aria-pressed="${yk === "net_rtg"}">Net</button><button class="segb" type="button" data-set="lY" data-v="net_rtg_suerte" aria-pressed="${yk === "net_rtg_suerte"}">Net sin suerte</button></div></div></div>
@@ -1674,6 +1807,9 @@ function diagRed() {
   return `<svg class="diag" viewBox="0 0 ${W} ${H + 10}" width="100%" style="max-width:${W}px" role="img" aria-label="Ejemplo de red de asistencias">${g}</svg>`;
 }
 const CONCEPTOS = [
+  { id: "escalas", t: "Escalas ±100 (cómo se leen las cifras)", def: "Las cifras de rendimiento de esta página (Net, on/off, RAPM, sinergia, efectos X → Y, nivel) se leen en una misma escala de <b>−100 a +100</b>. 0 es la media; la vara es la dispersión de esa cifra en la Euroliga, así que ±46 es una desviación típica y ±76, dos. El nivel (L) usa la Euroliga de esa temporada como 0, de modo que las medias de las ligas se leen directamente. Los valores originales no cambian: aparecen al pasar el ratón y con el selector «Originales».", diag: diagEscalas,
+    form: "S = 100 · tanh(z / 2) · z = (valor − referencia) / DT", lee: "+60 o más: muy por encima · +25: por encima · ±8: en la media · −25: por debajo · −60 o menos: muy por debajo. Junto a cada cifra, su percentil en la Euroliga. Diferencias (por ejemplo, «compañeros sobre su liga»): 100 · tanh(Δ / (2 · DT)).", cu: "La escala es una forma de leer, no un modelo nuevo: comprime los extremos (de +80 a +90 hay más distancia real que de 0 a +10). Para sumar o restar (por ejemplo, el desglose de una sinergia) usa los valores originales.",
+    ej: (T) => T && T.row ? `El Net de ${nomEq()} es ${fs(T.row.net_rtg)} por 100 posesiones: en la escala, <b>${ESC.txt(nS("net_equipo", T.row.net_rtg))}</b>${ok(nivelEquipo(S.e)) ? `; su nivel, <b>${ESC.txt(nS("nivel", nivelEquipo(S.e)))}</b> (L ${fs(nivelEquipo(S.e), 2)})` : ""}.` : "" },
   { id: "tramo", t: "Tramo y quinteto", def: "El partido se parte en <b>tramos</b>: intervalos en los que no cambia ninguno de los 10 jugadores en pista. Cada tramo tiene su tiempo, sus posesiones y su marcador. Un quinteto, un trío o una pareja suma todos los tramos en los que coincide.", diag: diagTramos,
     form: "Estadística de una unidad = Σ de los tramos en los que está en pista", lee: "Los quintetos son la unidad básica: todo lo demás (parejas, on/off, RAPM) se construye sumando tramos.", cu: "Si el jugada a jugada no registra bien un cambio, el tramo queda mal asignado. Por eso se valida cada partido (ver «Validación»).",
     ej: (T) => T && `${nomEq()} ha usado <b>${fi(T.row.quintetos_distintos)}</b> quintetos distintos; solo ${fi(T.Q.length)} llegan a 10 minutos juntos.` },
@@ -1726,6 +1862,14 @@ const CONCEPTOS = [
     form: "Muestra · contexto · colinealidad · calidad del jugada a jugada", lee: "Úsalos para hacer preguntas (¿por qué este quinteto funciona?) y contrástalos con vídeo y con el conocimiento del equipo.", cu: "1) Los quintetos tienen poca muestra; los tríos y parejas, algo más. 2) Todo es asociación: el rival, el marcador y el momento influyen. 3) Jugadores que siempre juegan juntos no se pueden separar bien (colinealidad), ni con RAPM. 4) Las ligas difieren en cómo registran asistencias y cambios. 5) En la temporada en curso las cifras cambian cada jornada.",
     ej: (T) => T && `Ningún quinteto de ${nomEq()} supera las ${fi(Math.max(...T.Q.map((q) => q.poss)))} posesiones en ${esc(FNOM[S.f])}: cualquier Net de quinteto lleva un error de varios puntos.` },
 ];
+function diagEscalas() {
+  const F = ESC.familias(), t = D ? D.temp : null, N = F.nivel || {}, temps = Object.keys(N.ligas || {}).sort(), ligas = ESC.ordenLigas(temps.flatMap((x) => Object.keys(N.ligas[x] || {})));
+  const fams = ["nivel", "net_equipo", "net_quinteto", "net_trio", "net_pareja", "onoff", "rapm_liga", "orapm_liga", "drapm_liga", "rapm", "sinergia_quinteto", "sinergia_pareja", "sinergia_rapm", "d_cuota_tiro", "d_efg", "d_pct_asistidas", "d_pct_aro", "d_pts100"].filter((k) => F[k]);
+  return `<div class="stack" style="gap:10px"><div class="tablebox flat"><table class="esctab" aria-label="Escala frente a desviaciones típicas"><thead><tr><th class="txt">Desviaciones típicas (z)</th>${[0.25, 0.5, 1, 2, 3].map((z) => `<th>${f(z, 2)}</th>`).join("")}</tr></thead><tbody><tr><td class="txt">Escala</td>${[0.25, 0.5, 1, 2, 3].map((z) => `<td>${ESC.txt(100 * Math.tanh(z / 2))}</td>`).join("")}</tr></tbody></table></div>
+    <div class="label">Nivel medio de cada liga (escala de Nivel, Euroliga = 0)</div><div class="tablebox flat"><table class="esctab" aria-label="Nivel medio de cada liga"><thead><tr><th class="txt">Liga</th>${temps.map((x) => `<th>${x}</th>`).join("")}</tr></thead><tbody>${ligas.map((l) => `<tr><td class="txt">${esc(ESC.ligaNom(l))}</td>${temps.map((x) => { const L = (N.ligas[x] || {})[l]; return `<td ${L != null ? tipA(`L ${fs(L, 2)} · referencia ${fs(ESC.ref("nivel", x), 2)}`) : ""}>${L != null ? ESC.txt(ESC.S("nivel", L, x)) : "–"}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>
+    <div class="label">Constantes de cada familia</div><div class="tablebox flat"><table class="esctab" aria-label="Constantes de las escalas"><thead><tr><th class="txt">Familia</th><th class="txt">Unidad</th><th>Referencia (0)</th><th>DT</th><th>+46 equivale a</th></tr></thead><tbody>${fams.map((k) => { const fa = F[k]; return `<tr><td class="txt"><b>${esc(fa.nombre)}</b></td><td class="txt">${esc(fa.unidad || "")}</td><td>${fs(ESC.ref(k, t), 2)}</td><td>${f(fa.dt, 3)}</td><td>${fs(ESC.ref(k, t) + fa.dt, 2)}</td></tr>`; }).join("")}</tbody></table></div>
+    <p class="note">Referencia del nivel: media de L de los jugadores de la Euroliga de cada temporada, ponderada por minutos; su DT es la de L en todas las ligas. Resto: DT de la familia en la Euroliga (temporadas completas, ponderada por minutos o posesiones); referencia 0 en Net, sinergia y efectos (la unidad media) y la media de la Euroliga en on/off y RAPM de jugador. Constantes calculadas por <code>bbmodel/escalas.py</code>${IDX && IDX.escalas ? ` (${esc(String(IDX.escalas.generado || "").slice(0, 10))})` : " (valores por defecto de la página)"}; son las mismas que usa el Atlas de Estilos.</p></div>`;
+}
 R.aprende = (el) => {
   const T = ejT(), sel = S.ap;
   el.innerHTML = `<div class="ap"><nav aria-label="Conceptos">${CONCEPTOS.map((c, i) => `<button type="button" data-a="ap" data-v="${c.id}" class="${c.id === sel ? "on" : ""}"><i>${i + 1}</i>${esc(c.t)}</button>`).join("")}</nav>
@@ -1756,6 +1900,7 @@ function repintaTabla(id) {
 function repintarConFoco(sel) { pintar(); const e = sel && $(sel); if (e) e.focus({ preventScroll: true }); }
 function limpiarSel() { S.q = S.p = S.j = S.x = null; }
 
+$("#escModo").addEventListener("click", (e) => { const b = e.target.closest("[data-v]"); if (!b) return; ESC.setModo(b.dataset.v); $$("#escModo button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); if (D) pintar(); });
 $("#selTemp").addEventListener("change", (e) => { S.t = e.target.value; limpiarSel(); aplicar(); });
 $("#chipsLiga").addEventListener("click", (e) => { const b = e.target.closest("[data-liga]"); if (!b || b.disabled || b.dataset.liga === S.l) return; S.l = b.dataset.liga; limpiarSel(); aplicar(); });
 $("#segFase").addEventListener("click", (e) => { const b = e.target.closest("[data-fase]"); if (!b || b.disabled) return; S.f = b.dataset.fase; pintarMando(); pintar(); });
@@ -1861,6 +2006,8 @@ window.addEventListener("resize", () => { clearTimeout(tmRes); tmRes = setTimeou
   try { IDX = await bajarJSON("datos/indice.json"); }
   catch (err) { console.error(err); mostrarEstado(`<div class="empty"><b>No se encontró el índice de datos</b><p>${esc(err.message)}. Esta página espera la carpeta <code>datos/</code> a su lado (generada con <code>python -m bbmodel mesa-quintetos</code>).</p></div>`, false); return; }
   if (!IDX || !IDX.temporadas || !Object.keys(IDX.temporadas).length) { mostrarEstado(`<div class="empty"><b>El índice está vacío</b><p>No hay ligas ni temporadas exportadas.</p></div>`, false); return; }
+  ESC.usar(IDX.escalas); LIGAS = ESC.ordenLigas(Object.values(IDX.temporadas).flatMap((x) => Object.keys(x || {})));
+  $("#escModo").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === ESC.modo)));
   aplicar();
 })();
 </script>

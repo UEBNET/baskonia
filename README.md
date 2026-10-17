@@ -354,6 +354,8 @@ python -m bbestilo exportar         # datos del Atlas de Estilos (artifact/estil
 python -m bbestilo articulo         # artículo científico en PDF (docs/articulo/estilos_de_juego_baskonia.pdf)
 ```
 
+Escalas de lectura ±100 (Euroliga = 0) del Atlas y de Quintetos: `python -m bbmodel escalas`, explicadas en [`docs/contexto_y_quimica.md`](docs/contexto_y_quimica.md) §7.
+
 Documentación técnica: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md). Artículo completo:
 [`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf).
 
