@@ -251,4 +251,9 @@ def main(salida: str = "data/artifact") -> None:
                 "nombre": NOMBRES_LIGA.get(ldir.name, ldir.name), "bytes": p.stat().st_size,
                 "quintetos": bool(d.get("quintetos")), "cobertura": d.get("cobertura")}
             print(f"{temp} {ldir.name}: {p.stat().st_size / 1024:.0f} KB ({len(data) / 1024:.0f} KB sin comprimir)")
+    try:  # escalas de lectura ±100 (mismo bloque que el Atlas; bbmodel/escalas.py)
+        from .escalas import calcular as _escalas
+        indice["escalas"] = _escalas()
+    except Exception as e:  # noqa: BLE001
+        print(f"escalas: no se pudieron calcular ({e})")
     (raiz / "indice.json").write_text(json.dumps(indice, ensure_ascii=False, indent=1), encoding="utf-8")

@@ -263,6 +263,11 @@ def main(salida: str) -> None:
     meta["clave_ctx"] = CLAVE_CTX
     pi = C.DIR_SALIDA / "interacciones.json"
     meta["interacciones"] = json.loads(pi.read_text(encoding="utf-8")) if pi.exists() else None
+    try:  # escalas de lectura ±100 (Euroliga = 0), mismo bloque que Quintetos: bbmodel/escalas.py
+        from bbmodel.escalas import calcular as _escalas
+        meta["escalas"] = _escalas()
+    except Exception as e:  # noqa: BLE001
+        print(f"escalas: no se pudieron calcular ({e})")
     dec.update({"L": 3, "ctx_plantilla_dev": 3, "ctx_comp": 3, "rapm_el": 2, "orapm_el": 2, "drapm_el": 2, "rapm_pct": 1})
     for nombre, obj in (("meta.json", meta), ("clubes.json", _columnar(c, dec)), ("jugadores.json", _columnar(J, dec)),
                         ("brutos.json", brutos)):

@@ -12,6 +12,7 @@
     python -m bbmodel contexto             # nivel de compañeros y rivales en pista y sensibilidad de cada métrica
     python -m bbmodel interacciones        # efectos X → Y entre compañeros (cuota de tiro, eFG%, asistidas…)
     python -m bbmodel mesa-quintetos       # datos de la pestaña «Quintetos y conexiones»
+    python -m bbmodel escalas              # escalas ±100 (Euroliga = 0) para el Atlas y Quintetos
 
 Resultados en data/modelos/algoritmo_A/:
     parametros.json             todos los parámetros (para reutilizar sin reajustar)
@@ -50,6 +51,8 @@ def main(argv=None):
     sub.add_parser("nacionalidades", help="nacionalidad de cada jugador → data/modelos/nacionalidades.csv")
     mq = sub.add_parser("mesa-quintetos", help="datos de la pestaña «Quintetos y conexiones» (JSON comprimidos)")
     mq.add_argument("--salida", default="data/artifact")
+    es = sub.add_parser("escalas", help="escalas de lectura ±100 (referencia Euroliga) → meta.json del Atlas e indice.json de Quintetos")
+    es.add_argument("--salida", default="data/artifact")
     sub.add_parser("pista", help="rasgos de pista (zonas de tiro, canastas asistidas, RAPM) → data/modelos/pista/")
     cx = sub.add_parser("contexto", help="contexto de nivel (compañeros y rivales) y sensibilidad de cada métrica")
     cx.add_argument("--bootstrap", type=int, default=50)
@@ -61,6 +64,10 @@ def main(argv=None):
     if args.orden == "mesa-quintetos":
         from . import mesa_quintetos
         mesa_quintetos.main(args.salida)
+        return
+    if args.orden == "escalas":
+        from . import escalas
+        escalas.escribir(args.salida)
         return
     if args.orden == "pista":
         from . import pista
