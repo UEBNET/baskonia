@@ -9,6 +9,7 @@
     python -m bbestilo parecidos [--jugador "Nombre"]   # clubes que juegan como el tuyo y jugadores parecidos
     python -m bbestilo barrido                  # número de estilos (BIC/ICL, k-medias) antes de entrenar
     python -m bbestilo quimica                  # química de estilos: efectos X → Y y sinergia por estilo × estilo
+    python -m bbestilo entrenadores             # estilo de cada tramo club-temporada-entrenador
     python -m bbestilo exportar                 # JSON del mapa 3D (artifact/estilos/)
     python -m bbestilo articulo [--fuentes D]   # artículo científico en PDF (docs/articulo/)
 
@@ -131,6 +132,7 @@ def main(argv=None):
     an = sub.add_parser("analisis", help="análisis complementarios (K, nivel, éxito, encaje, continuidad, ligas, Baskonia)")
     ar = sub.add_parser("articulo", help="artículo científico en PDF (docs/articulo/)")
     ar.add_argument("--fuentes", default=None, help="carpeta con fuentes woff/ttf y fuentes.css (opcional)")
+    sub.add_parser("entrenadores", help="estilo de cada tramo club-temporada-entrenador (entrenadores.csv)")
     sub.add_parser("quimica", help="química de estilos: efectos X → Y y sinergia por estilo × estilo (interacciones.json)")
     sub.add_parser("barrido", help="número de estilos (BIC/ICL y k-medias) antes de entrenar")
     x = sub.add_parser("exportar", help="datos del mapa 3D para el Artifact")
@@ -169,6 +171,9 @@ def main(argv=None):
     elif args.orden == "articulo":
         from . import articulo
         print("escrito", articulo.construir(Path(args.fuentes) if args.fuentes else None))
+    elif args.orden == "entrenadores":
+        from . import entrenadores
+        entrenadores.main()
     elif args.orden == "quimica":
         from . import quimica
         quimica.main()

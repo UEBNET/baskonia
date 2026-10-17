@@ -256,6 +256,22 @@ def main(salida: str) -> None:
     c["x"], c["y"], c["z"] = Z[:, 0], Z[:, 1], Z[:, 2]
     c["e"], c["p"], c["rob"] = P.argmax(1), P.max(1), rob["robustez"].to_numpy()
     c["probs"] = [_lista(p, 3) for p in P]
+    # ---- etapas de entrenador (club-temporada-entrenador), cada una con su estilo (entrenadores.py)
+    from . import entrenadores as ENT
+    te = ENT.construir(cj, red, log=lambda *_: None)
+    if len(te):
+        te.to_csv(ENT.SALIDA, index=False)
+        pk = [f"p{k}" for k in range(P.shape[1])]
+        por_club = {}
+        for _, t in te.sort_values(["clave", "orden"]).iterrows():
+            por_club.setdefault(t["clave"], []).append({
+                "orden": int(t["orden"]), "entrenador_id": t["entrenador_id"], "entrenador": t["entrenador"],
+                "n_partidos": int(t["n_partidos"]), "n_regular": int(t["n_regular"]), "n_playoffs": int(t["n_playoffs"]),
+                "primer_partido": t["primer_partido"], "ultimo_partido": t["ultimo_partido"],
+                "victorias": int(t["victorias"]), "derrotas": int(t["derrotas"]), "interino": int(t["interino"]),
+                "metodo": t["metodo"], "nivel": _r(t["nivel"], 3), "e": int(t["e"]), "p": _r(t["p"], 3),
+                "probs": _lista(t[pk].to_numpy(float), 3), "x": _r(t["x"], 3), "y": _r(t["y"], 3), "z": _r(t["z"], 3)})
+        c["entrenadores"] = [por_club.get(k) for k in c["clave"]]
     Pj, Zj = predecir(red, cj.Xj[m])
     J["x"], J["y"], J["z"] = Zj[:, 0], Zj[:, 1], Zj[:, 2]
     J["e"], J["p"] = Pj.argmax(1), Pj.max(1)
