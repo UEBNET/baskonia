@@ -1,9 +1,9 @@
 {
-  "generado": "2026-10-15T09:05:57.611126+00:00",
+  "generado": "2026-10-17T10:12:37.962495+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
-      "generado": "2026-10-15T09:05:57.576051+00:00",
+      "generado": "2026-10-17T10:12:37.860187+00:00",
       "fases": [
         "regular",
         "total"
@@ -17,6 +17,10 @@
           "regular": 237,
           "total": 237
         },
+        "bcl": {
+          "regular": 394,
+          "total": 394
+        },
         "eurocup": {
           "regular": 385,
           "total": 385
@@ -24,6 +28,10 @@
         "euroleague": {
           "regular": 269,
           "total": 269
+        },
+        "fec": {
+          "regular": 590,
+          "total": 590
         },
         "lba": {
           "regular": 210,

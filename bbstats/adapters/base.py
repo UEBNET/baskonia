@@ -46,6 +46,9 @@ class BaseAdapter(ABC):
         # Valores descubiertos durante fetch que conviene guardar en config/sources.json para
         # la liga (p.ej. ids semilla de la BBL). El pipeline los aplica tras una descarga correcta.
         self.config_updates: dict = {}
+        # Almacén bruto (lo fija el pipeline antes de fetch). Los adaptadores INCREMENTALES lo usan para
+        # guardar paquetes parciales durante la descarga (ningún fichero > ~40 MB y nada se pierde si se corta).
+        self.store = None
 
     # ---------------------------------------------------------------- temporada
     def season_cfg(self, season: str) -> dict:
@@ -72,3 +75,17 @@ class BaseAdapter(ABC):
     # ---------------------------------------------------------------- helpers
     def soft_fail(self, msg: str) -> None:
         self.errors.append(msg)
+
+    def save_partial(self, season: str, payload: dict) -> str | None:
+        """Guarda un paquete parcial incremental (payload con "incremental": True y sólo los partidos
+        nuevos). Devuelve la ruta o None si no hay almacén (tests, ejecución sin pipeline)."""
+        if self.store is None:
+            return None
+        from .. import __version__
+        from ..utils import utc_now, utc_stamp
+        now = utc_now()
+        meta = {"liga": self.league, "temporada": season, "adaptador": self.name, "tipo": "parcial",
+                "version_adaptador": self.version, "version_bbstats": __version__, "fuente": self.source_url,
+                "fecha_extraccion": now.isoformat(), "fecha_extraccion_stamp": utc_stamp(now),
+                "partidos": len(payload.get("games") or {}), "errores": list(self.errors)}
+        return str(self.store.save(self.league, season, meta, {**payload, "incremental": True}))

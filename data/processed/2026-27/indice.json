@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-10-15T09:05:57.576051+00:00",
+  "generado": "2026-10-17T10:12:37.860187+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -29,6 +29,15 @@
         "total": 237
       }
     },
+    "bcl": {
+      "nombre": "Basketball Champions League",
+      "archivo": "ligas/bcl.csv",
+      "fecha_extraccion": "2026-10-17T10:07:25.545485+00:00",
+      "fases": {
+        "regular": 394,
+        "total": 394
+      }
+    },
     "eurocup": {
       "nombre": "BKT EuroCup",
       "archivo": "ligas/eurocup.csv",
@@ -45,6 +54,15 @@
       "fases": {
         "regular": 269,
         "total": 269
+      }
+    },
+    "fec": {
+      "nombre": "FIBA Europe Cup",
+      "archivo": "ligas/fec.csv",
+      "fecha_extraccion": "2026-10-17T10:07:25.416964+00:00",
+      "fases": {
+        "regular": 590,
+        "total": 590
       }
     },
     "lba": {

@@ -1,0 +1,33 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+eurocup,2026-27,BUR,Tofas Bursa,1,massimo-cancellieri,Massimo Cancellieri,3,3,0,0,0,2026-09-29,2026-10-14,3,0,3,0,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),11;27;42
+eurocup,2026-27,NIN,NINERS Chemnitz,1,rodrigo-pastore,Rodrigo Pastore,3,3,0,0,0,2026-09-29,2026-10-13,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),11;26;44
+eurocup,2026-27,KLA,Neptunas Klaipeda,1,gediminas-petrauskas,Gediminas Petrauskas,3,3,0,0,0,2026-09-29,2026-10-13,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),12;26;43
+eurocup,2026-27,TRN,Dolomiti Energia Trento,1,alessandro-rossi,Alessandro Rossi,3,3,0,0,0,2026-09-29,2026-10-13,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),12;25;44
+eurocup,2026-27,JER,Hapoel  Midtown Jerusalem,1,sasa-obradovic,Sasa Obradovic,3,3,0,0,0,2026-09-29,2026-10-14,3,0,3,0,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),2;20;33
+eurocup,2026-27,RTK,Rostock Seawolves,1,przemyslaw-frasunkiewicz,Przemyslaw Frasunkiewicz,3,3,0,0,0,2026-09-29,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),2;19;35
+eurocup,2026-27,LEM,Le Mans Sarthe Basket,1,guillaume-vizade,Guillaume Vizade,3,3,0,0,0,2026-09-29,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),4;18;35
+eurocup,2026-27,ARI,Aris Thessaloniki,1,vassilis-spanoulis,Vassilis Spanoulis,3,3,0,0,0,2026-09-29,2026-10-14,3,0,3,0,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),4;17;36
+eurocup,2026-27,VNC,Umana Reyer Venice,1,neven-spahija,Neven Spahija,3,3,0,0,0,2026-09-29,2026-10-14,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),7;23;38
+eurocup,2026-27,FRA,Skyliners Frankfurt,1,klaus-perwas,Klaus Perwas,2,2,0,0,0,2026-09-29,2026-10-06,1,1,1,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),7;22
+eurocup,2026-27,BGS,Recoletas Salud San Pablo Burgos,1,porfi-fisac,Porfi Fisac,3,3,0,0,0,2026-09-30,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),1;17;33
+eurocup,2026-27,LJU,KK Cedevita Olimpija,1,zvezdan-mitrovic,Zvezdan Mitrovic,3,3,0,0,0,2026-09-30,2026-10-14,0,3,0,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),1;20;34
+eurocup,2026-27,NAP,Napoli Basketball,1,jasmin-repesa,Jasmin Repesa,3,3,0,0,0,2026-09-30,2026-10-14,3,0,3,0,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),10;28;41
+eurocup,2026-27,BOU,JL Bourg,1,frederic-fauthoux,Frederic Fauthoux,3,3,0,0,0,2026-09-30,2026-10-13,0,3,0,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),10;27;43
+eurocup,2026-27,LKB,Lietkabelis Panevezys ,1,nenad-canak,Nenad Canak,3,3,0,0,0,2026-09-30,2026-10-13,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),13;29;45
+eurocup,2026-27,BOS,Bosna Sarajevo,1,dario-gjergja,Dario Gjergja,3,3,0,0,0,2026-09-30,2026-10-14,0,3,0,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),13;32;46
+eurocup,2026-27,PAO,PAOK Thessaloniki,1,andrea-trinchieri,Andrea Trinchieri,3,3,0,0,0,2026-09-30,2026-10-13,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),14;32;45
+eurocup,2026-27,MAN,Kids&Us Manresa ,1,diego-ocampo,Diego Ocampo,3,3,0,0,0,2026-09-30,2026-10-13,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),14;31;47
+eurocup,2026-27,ULM,ratiopharm ulm,1,ty-harrelson,Ty Harrelson,3,3,0,0,0,2026-09-30,2026-10-14,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),15;31;46
+eurocup,2026-27,BLK,Balkan Botevgrad,1,bogdan-karaicic,Bogdan Karaicic,3,3,0,0,0,2026-09-30,2026-10-13,0,3,0,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),15;30;48
+eurocup,2026-27,BAH,Bahcesehir Koleji Istanbul,1,sasa-djordjevic,Sasa Djordjevic,3,3,0,0,0,2026-09-30,2026-10-13,3,0,3,0,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),16;30;47
+eurocup,2026-27,BCR,ROMA BASKETBALL,1,alessandro-magro,Alessandro Magro,3,3,0,0,0,2026-09-30,2026-10-13,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),16;29;48
+eurocup,2026-27,RIG,Riga Zelli,1,rokas-kondratavicius,Rokas Kondratavicius,3,3,0,0,0,2026-09-30,2026-10-14,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;19;34
+eurocup,2026-27,TRT,Baglietto Derthona Tortona,1,mario-fioretti,Mario Fioretti,3,3,0,0,0,2026-09-30,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;18;36
+eurocup,2026-27,TNF,La Laguna Tenerife,1,jaka-lakovic,Jaka Lakovic,3,3,0,0,0,2026-09-30,2026-10-14,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),5;21;37
+eurocup,2026-27,TTK,Turk Telekom Ankara,1,erdem-can,Erdem Can,3,3,0,0,0,2026-09-30,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),5;24;38
+eurocup,2026-27,MRO,MAXIMA ROMA,1,matteo-cotelli,Matteo Cotelli,3,3,0,0,0,2026-09-30,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;24;37
+eurocup,2026-27,CLU,U-BT Cluj-Napoca,1,mihai-silvasan,Mihai Silvasan,3,3,0,0,0,2026-09-30,2026-10-14,2,1,2,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;23;39
+eurocup,2026-27,SIA,Siauliai,1,darius-songaila,Darius Songaila,3,3,0,0,0,2026-09-30,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;22;39
+eurocup,2026-27,LLI,London Lions,1,tautvydas-sabonis,Tautvydas Sabonis,2,2,0,0,0,2026-09-30,2026-10-06,1,1,1,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;21
+eurocup,2026-27,WRO,WKS Slask Wroclaw,1,danny-franco,Danny Franco,3,3,0,0,0,2026-09-30,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),9;25;41
+eurocup,2026-27,BUD,KK Buducnost,1,andrej-zakelj,Andrej Zakelj,3,3,0,0,0,2026-09-30,2026-10-14,1,2,1,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),9;28;42

@@ -169,9 +169,10 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
     raw_path: Path | None = None
     try:
         if download:
-            prev_path = store.latest(liga, season)
-            prev_payload = RawStore.load(prev_path)["payload"] if prev_path else None
+            prev_path, prev_doc = store.load_season(liga, season)
+            prev_payload = prev_doc["payload"] if prev_doc else None
             http = http_factory()
+            adapter.store = store   # adaptadores incrementales: guardan paquetes parciales durante la descarga
             progress(f"[{liga}] descargando...")
             now = utc_now()
             try:
@@ -187,6 +188,8 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
                         "fecha_extraccion_stamp": utc_stamp(now), "peticiones": http.request_log(),
                         "errores": adapter.errors}
                 raw_path = store.save(liga, season, meta, payload)
+                if isinstance(payload, dict) and payload.get("incremental"):
+                    payload = store.load_season(liga, season)[1]["payload"]   # todos los paquetes
                 res.estado = "ok"
                 if adapter.config_updates:
                     saved = update_league_config(cfg, liga, adapter.config_updates)
@@ -202,14 +205,13 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
                 res.errores.append(f"Descarga fallida: {exc}")
                 progress(f"[{liga}] descarga fallida; se reprocesa el último bruto disponible")
                 raw_path, payload = prev_path, prev_payload
-                meta = RawStore.load(prev_path)["meta"]
+                meta = prev_doc["meta"]
                 res.estado = "ok_bruto_anterior"
             res.errores.extend(adapter.errors)
         else:
-            raw_path = store.latest(liga, season)
+            raw_path, doc = store.load_season(liga, season)
             if raw_path is None:
                 raise NoDataYet(f"No hay JSON bruto para {liga} {season} (ejecuta primero con descarga)")
-            doc = RawStore.load(raw_path)
             payload, meta = doc["payload"], doc["meta"]
             res.estado = "ok"
         progress(f"[{liga}] procesando {raw_path.name}")

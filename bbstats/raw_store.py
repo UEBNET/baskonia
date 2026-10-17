@@ -76,6 +76,29 @@ class RawStore:
         files = self.list(league, season, kind)
         return files[-1] if files else None
 
+    def load_season(self, league: str, season: str) -> tuple[Path | None, dict | None]:
+        """Último bruto principal de la liga y temporada: (ruta, documento {"meta", "payload"}).
+
+        Si el payload es INCREMENTAL (`payload["incremental"] = True`: cada paquete guarda sólo los partidos
+        descargados en esa ejecución, troceado para que ningún fichero pase de ~40 MB), se unen los
+        `games` de todos los paquetes incrementales de la temporada, del más antiguo al más reciente
+        (un partido repetido se queda con la versión más reciente). El resto de claves son las del último."""
+        files = self.list(league, season)
+        if not files:
+            return None, None
+        doc = self.load(files[-1])
+        payload = doc.get("payload")
+        if not (isinstance(payload, dict) and payload.get("incremental")):
+            return files[-1], doc
+        games: dict = {}
+        for p in files[:-1]:
+            prev = self.load(p).get("payload")
+            if isinstance(prev, dict) and prev.get("incremental"):
+                games.update(prev.get("games") or {})
+        games.update(payload.get("games") or {})
+        merged = {**payload, "games": games, "paquetes": [p.name for p in files]}
+        return files[-1], {"meta": doc.get("meta") or {}, "payload": merged}
+
     @staticmethod
     def load(path: str | Path) -> dict:
         p = Path(path)

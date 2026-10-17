@@ -1,0 +1,19 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+acb,2026-27,4,Surne Bilbao,1,jaume-ponsarnau,Jaume Ponsarnau,3,3,0,0,0,2026-09-26,2026-10-11,2,1,2,1,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105375;105388;105400
+acb,2026-27,10,Kids&Us Manresa,1,diego-ocampo,Diego Ocampo,3,3,0,0,0,2026-09-26,2026-10-11,0,3,0,3,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105375;105386;105397
+acb,2026-27,22,MoraBanc Andorra,1,zan-tabak,Zan Tabak,3,3,0,0,0,2026-09-26,2026-10-14,0,3,0,3,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105376;105394;105384
+acb,2026-27,57,Monbus Obradoiro,1,diego-epifanio,Diego Epifanio,3,3,0,0,0,2026-09-26,2026-10-11,2,1,2,1,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105376;105389;105396
+acb,2026-27,2,Barça,1,aleksander-sekulic,Aleksander Sekulic,3,3,0,0,0,2026-09-26,2026-10-11,2,1,2,1,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105377;105392;105401
+acb,2026-27,657,Leyma Coruña,1,carles-marco,Carles Marco,3,3,0,0,0,2026-09-26,2026-10-10,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105377;105388;105393
+acb,2026-27,25,Río Breogán,1,luis-casimiro,Luis Casimiro,3,3,0,0,0,2026-09-27,2026-10-10,3,0,3,0,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105378;105386;105395
+acb,2026-27,8,Asisa Joventut,1,daniel-miret,Daniel Miret,3,3,0,0,0,2026-09-27,2026-10-14,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105378;105399;105384
+acb,2026-27,549,Recoletas Salud San Pablo Burgos,1,porfirio-fisac,Porfirio Fisac,3,3,0,0,0,2026-09-27,2026-10-11,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105379;105387;105400
+acb,2026-27,3,Kosner Baskonia,1,paolo-galbiati,Paolo Galbiati,3,3,0,0,0,2026-09-27,2026-10-11,3,0,3,0,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105379;105391;105399
+acb,2026-27,28,La Laguna Tenerife,1,jaka-lakovic,Jaka Lakovic,3,3,0,0,0,2026-09-27,2026-10-11,2,1,2,1,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105380;105385;105398
+acb,2026-27,16,Casademont Zaragoza,1,gonzalo-garcia-de-vitoria,Gonzalo García de Vitoria,3,3,0,0,0,2026-09-27,2026-10-10,2,1,2,1,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105380;105390;105393
+acb,2026-27,591,FIATC Girona,1,moncho-fernandez,Moncho Fernández,3,3,0,0,0,2026-09-27,2026-10-10,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105381;105391;105395
+acb,2026-27,12,UCAM Murcia,1,sito-alonso,Sito Alonso,3,3,0,0,0,2026-09-27,2026-10-11,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105381;105392;105398
+acb,2026-27,13,Valencia Basket,1,xavier-albert,Xavier Albert,3,3,0,0,0,2026-09-27,2026-10-11,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105382;105390;105401
+acb,2026-27,658,iLERNA Lleida,1,gerard-encuentra,Gerard Encuentra,3,3,0,0,0,2026-09-27,2026-10-11,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105382;105387;105396
+acb,2026-27,9,Real Madrid,1,pedro-martinez,Pedro Martínez,3,3,0,0,0,2026-09-27,2026-10-11,3,0,3,0,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105383;105389;105397
+acb,2026-27,14,Unicaja,1,txus-vidorreta,Txus Vidorreta,3,3,0,0,0,2026-09-27,2026-10-10,1,2,1,2,0,0,1,0,1,,api2.acb.com Result/boxscores (headCoach),105383;105385;105394

@@ -28,7 +28,9 @@
       "api2.acb.com": 0.5,
       "stats.gleague.nba.com": 0.7,
       "embed-api.eui.connect.sportradar.com": 0.4,
-      "api-prod.lnb.fr": 0.4
+      "api-prod.lnb.fr": 0.4,
+      "www.fiba.basketball": 0.3,
+      "fibalivestats.dcd.shared.geniussports.com": 0.2
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -223,6 +225,92 @@
       },
       "estado_verificacion": "verificado con datos reales",
       "pbp": "euroleague_live"
+    },
+    "bcl": {
+      "adaptador": "fiba_web",
+      "nombre": "Basketball Champions League",
+      "activa": true,
+      "pais": "Europa",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://www.fiba.basketball (datos de las páginas públicas de calendario y de partido)",
+      "rondas_excluidas": [
+        "Q",
+        "QT"
+      ],
+      "_rondas": "Fases: rondas de grupo (roundType G: Regular Season, Round of 16 / Second Round) = regular; eliminatorias (Play-ins, cuartos, semifinales, final, 3.er puesto) = playoffs; rondas de clasificación (rondas_excluidas) fuera. Temporadas sin competition_id: se descubre en /en/events/<slug_evento>/games y se guarda aquí.",
+      "partidos_por_paquete": 400,
+      "estado_verificacion": "verificado con datos reales (2020-21 a 2026-27)",
+      "pbp": "fiba_web",
+      "ruta_historia": "112-fiba-mens-european-club-competitions-tier-1",
+      "slug_evento": "basketball-champions-league-{yy1}-{yy2}",
+      "codigo_competicion": "BCL",
+      "temporadas": {
+        "2020-21": {
+          "competition_id": 208247
+        },
+        "2021-22": {
+          "competition_id": 208407
+        },
+        "2022-23": {
+          "competition_id": 208494
+        },
+        "2023-24": {
+          "competition_id": 208737
+        },
+        "2024-25": {
+          "competition_id": 208850
+        },
+        "2025-26": {
+          "competition_id": 208962
+        },
+        "2026-27": {
+          "competition_id": 209123
+        }
+      }
+    },
+    "fec": {
+      "adaptador": "fiba_web",
+      "nombre": "FIBA Europe Cup",
+      "activa": true,
+      "pais": "Europa",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://www.fiba.basketball (datos de las páginas públicas de calendario y de partido)",
+      "rondas_excluidas": [
+        "Q",
+        "QT"
+      ],
+      "_rondas": "Fases: rondas de grupo (roundType G: Regular Season, Round of 16 / Second Round) = regular; eliminatorias (Play-ins, cuartos, semifinales, final, 3.er puesto) = playoffs; rondas de clasificación (rondas_excluidas) fuera. Temporadas sin competition_id: se descubre en /en/events/<slug_evento>/games y se guarda aquí.",
+      "partidos_por_paquete": 400,
+      "estado_verificacion": "verificado con datos reales (2020-21 a 2026-27)",
+      "pbp": "fiba_web",
+      "ruta_historia": "212-fiba-mens-european-club-competitions-tier-2",
+      "slug_evento": "fiba-europe-cup-{yy1}-{yy2}",
+      "codigo_competicion": "ECM2",
+      "temporadas": {
+        "2020-21": {
+          "competition_id": 208294
+        },
+        "2021-22": {
+          "competition_id": 208436
+        },
+        "2022-23": {
+          "competition_id": 208500
+        },
+        "2023-24": {
+          "competition_id": 208765
+        },
+        "2024-25": {
+          "competition_id": 208857
+        },
+        "2025-26": {
+          "competition_id": 208980
+        },
+        "2026-27": {
+          "competition_id": 209129
+        }
+      }
     }
   }
 }

@@ -8,6 +8,7 @@
     python -m bbstats estado
     python -m bbstats servidor --puerto 8765            # API HTTP para el botón EJECUTAR
     python -m bbstats artifact --temporada 2026-27      # JSON del Artifact en data/artifact/ (no versionado)
+    python -m bbstats entrenadores [--temporada T ...] [--ligas acb nba] [--sin-descarga]
 """
 from __future__ import annotations
 
@@ -43,6 +44,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--desde")
     p.add_argument("--hasta")
     p.add_argument("--sin-descarga", action="store_true")
+    p.add_argument("--config")
+    p = sub.add_parser("entrenadores", help="Entrenadores por partido, tramos club-temporada-entrenador y tabla global")
+    p.add_argument("--temporada", nargs="*", help="Temporadas (por defecto, temporada_inicial .. temporada_por_defecto)")
+    p.add_argument("--ligas", nargs="*")
+    p.add_argument("--sin-descarga", action="store_true", help="Sólo brutos guardados, sin red")
     p.add_argument("--config")
     p = sub.add_parser("artifact", help="Genera los JSON que lee el Artifact a partir de los CSV procesados")
     p.add_argument("--temporada", nargs="*", help="Temporadas (por defecto, todas las procesadas)")
@@ -86,6 +92,12 @@ def main(argv: list[str] | None = None) -> int:
                           for k, v in out.items()}, ensure_ascii=False, indent=1))
         print("Quintetos terminado")
         return 0
+    elif args.cmd == "entrenadores":
+        from .entrenadores import ejecutar as ejecutar_entrenadores
+        out = ejecutar_entrenadores(temporadas=args.temporada or None, ligas=args.ligas or None,
+                                    descargar=not args.sin_descarga, config=args.config, progreso=print)
+        print("Entrenadores terminado")
+        return 0 if all(v.get("estado") != "error" for v in out.values()) else 1
     elif args.cmd == "artifact":
         from pathlib import Path
         from .config import load_config, resolve_path

@@ -40,6 +40,8 @@ SOURCES = {
     "lnb": ("lnb", "LnbPBP"),
     "gleague_stats": ("nba_stats", "GLeaguePBP"),
     "nba_stats": ("nba_stats", "NbaPBP"),
+    "fiba_web": ("fiba_web", "FibaWebPBP"),
+    "fiba_livestats": ("fiba_livestats", "FibaLiveStatsPBP"),
 }
 
 
@@ -68,8 +70,8 @@ def run_league(liga: str, cfg: dict, season: str, download: bool, store: RawStor
     if not src_name or not qcfg.get("activo", True):
         return rep
     src = make_source(src_name)
-    main_path = store.latest(liga, season)
-    main_payload = RawStore.load(main_path)["payload"] if main_path else None
+    main_path, main_doc = store.load_season(liga, season)
+    main_payload = main_doc["payload"] if main_doc else None
     ctx = Ctx(league=liga, season=season, cfg=lcfg, main_payload=main_payload)
     stored, official = load_games(store, liga, season)
     if src.uses_main_raw:

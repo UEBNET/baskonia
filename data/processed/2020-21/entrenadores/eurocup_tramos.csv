@@ -1,0 +1,48 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+eurocup,2020-21,BBU,Frutti Extra Bursaspor,1,tutku-acik,Tutku Acik,6,6,0,0,0,2020-09-29,2020-11-11,0,6,0,6,0,0,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),10;34;46;72;22;84
+eurocup,2020-21,BBU,Frutti Extra Bursaspor,2,dusan-alimpijevic,Dusan Alimpijevic,4,4,0,0,0,2020-12-09,2020-12-29,3,1,3,1,0,0,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),108;58;120;96
+eurocup,2020-21,TRN,Dolomiti Energia Trento,1,nicola-brienza,Nicola Brienza,13,10,3,0,0,2020-09-29,2021-01-26,7,6,6,4,1,2,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),10;24;35;47;72;82;60;95;107;118;124;131;139
+eurocup,2020-21,TRN,Dolomiti Energia Trento,2,emanuele-molin,Emanuele Molin,3,0,3,0,0,2021-02-02,2021-03-10,2,1,0,0,2,1,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),147;156;163
+eurocup,2020-21,MAL,Unicaja Malaga,1,luis-casimiro,Luis Casimiro,11,9,2,0,0,2020-09-29,2021-01-19,7,4,7,2,0,2,2,0,3,,live.euroleague.net Boxscore (Stats[].Coach),4;16;28;40;52;78;90;102;114;121;129
+eurocup,2020-21,MAL,Unicaja Malaga,2,luis-casimiro-palomo-cardenas,Luis Casimiro Palomo Cardenas,1,1,0,0,0,2020-11-03,2020-11-03,0,1,0,1,0,0,1,1,3,,live.euroleague.net Boxscore (Stats[].Coach),66
+eurocup,2020-21,MAL,Unicaja Malaga,3,fotis-katsikaris,Fotis Katsikaris,4,0,4,0,0,2021-01-27,2021-03-09,1,3,0,0,1,3,1,1,3,,live.euroleague.net Boxscore (Stats[].Coach),138;146;153;161
+eurocup,2020-21,PAI,Boulogne Metropolitans 92,1,jure-zdovc,Jure Zdovc,12,4,8,0,0,2020-09-29,2021-03-26,6,6,2,2,4,4,2,0,5,,live.euroleague.net Boxscore (Stats[].Coach),4;101;76;112;123;132;139;147;155;164;170;174
+eurocup,2020-21,PAI,Boulogne Metropolitans 92,2,jean-paul-besson,Jean-Paul Besson,1,1,0,0,0,2020-10-06,2020-10-06,0,1,0,1,0,0,1,1,5,,live.euroleague.net Boxscore (Stats[].Coach),18
+eurocup,2020-21,PAI,Boulogne Metropolitans 92,3,sanya-giffa,Sanya Giffa,2,2,0,0,0,2020-10-14,2020-10-28,2,0,2,0,0,0,2,1,5,,live.euroleague.net Boxscore (Stats[].Coach),29;54
+eurocup,2020-21,PAI,Boulogne Metropolitans 92,4,sacha-giffa,Sacha Giffa,1,1,0,0,0,2020-10-20,2020-10-20,1,0,1,0,0,0,1,1,5,,live.euroleague.net Boxscore (Stats[].Coach),41
+eurocup,2020-21,PAI,Boulogne Metropolitans 92,5,jurij-zdovc,Jurij Zdovc,2,2,0,0,0,2020-11-03,2020-11-17,2,0,2,0,0,0,1,1,5,,live.euroleague.net Boxscore (Stats[].Coach),66;89
+eurocup,2020-21,BUD,KK Buducnost,1,petar-mijovic,Petar Mijovic,13,10,3,0,0,2020-09-29,2021-01-26,6,7,5,5,1,2,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),5;18;28;42;53;90;65;100;76;113;126;134;142
+eurocup,2020-21,BUD,KK Buducnost,2,dejan-milojevic,Dejan Milojevic,6,0,6,0,0,2021-02-03,2021-03-31,3,3,0,0,3,3,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),150;158;166;169;173;177
+eurocup,2020-21,BRE,Brescia Leonessa,1,vincenzo-esposito,Vincenzo Esposito,8,8,0,0,0,2020-09-29,2020-11-20,2,6,2,6,0,0,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),5;17;30;40;54;77;88;65
+eurocup,2020-21,BRE,Brescia Leonessa,2,maurizio-buscaglia,Maurizio Buscaglia,2,2,0,0,0,2020-12-09,2020-12-15,0,2,0,2,0,0,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),102;112
+eurocup,2020-21,BAH,Bahcesehir Koleji Istanbul,1,zafer-aktas,Zafer Aktas,8,8,0,0,0,2020-09-30,2020-11-17,1,7,1,7,0,0,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),1;13;25;37;49;63;75;87
+eurocup,2020-21,BAH,Bahcesehir Koleji Istanbul,2,erhan-ernak,Erhan Ernak,2,2,0,0,0,2020-12-09,2020-12-15,1,1,1,1,0,0,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),99;111
+eurocup,2020-21,BOU,JL Bourg,1,savo-vucevic,Savo Vucevic,15,9,6,0,0,2020-09-30,2021-03-09,5,10,5,4,0,6,2,0,2,,live.euroleague.net Boxscore (Stats[].Coach),1;15;63;38;86;26;98;109;73;126;133;141;149;158;165
+eurocup,2020-21,BOU,JL Bourg,2,slobodan-savovic,Slobodan Savovic,1,1,0,0,0,2020-10-28,2020-10-28,1,0,1,0,0,0,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),51
+eurocup,2020-21,PAT,Promitheas Patras,1,gerasimos-giatras,Gerasimos Giatras,5,5,0,0,0,2020-09-30,2020-11-11,2,3,2,3,0,0,2,1,2,,live.euroleague.net Boxscore (Stats[].Coach),11;34;48;71;82
+eurocup,2020-21,PAT,Promitheas Patras,2,makis-giatras,Makis Giatras,5,5,0,0,0,2020-10-06,2020-12-29,0,5,0,5,0,0,2,1,2,,live.euroleague.net Boxscore (Stats[].Coach),24;106;59;119;96
+eurocup,2020-21,CAN,Club Baloncesto Gran Canaria,1,porfirio-fisac,Porfirio Fisac,3,3,0,0,0,2020-09-30,2020-11-04,3,0,3,0,0,0,2,1,2,,live.euroleague.net Boxscore (Stats[].Coach),11;23;71
+eurocup,2020-21,CAN,Club Baloncesto Gran Canaria,2,porfi-fisac,Porfi Fisac,17,7,10,0,0,2020-10-13,2021-04-09,10,7,5,2,5,5,2,1,2,,live.euroleague.net Boxscore (Stats[].Coach),36;46;83;60;94;108;118;127;135;144;152;159;167;170;174;179;181
+eurocup,2020-21,NTR,Nanterre 92,1,pascal-donnadieu,Pascal Donnadieu,13,7,6,0,0,2020-09-30,2021-03-09,4,9,2,5,2,4,2,0,3,,live.euroleague.net Boxscore (Stats[].Coach),12;23;35;48;106;58;120;122;130;138;146;154;162
+eurocup,2020-21,NTR,Nanterre 92,2,franck-le-goff,Franck Le Goff,1,1,0,0,0,2020-11-04,2020-11-04,0,1,0,1,0,0,1,1,3,,live.euroleague.net Boxscore (Stats[].Coach),70
+eurocup,2020-21,NTR,Nanterre 92,3,philippe-da-silva,Philippe Da Silva,2,2,0,0,0,2020-11-11,2020-11-18,2,0,2,0,0,0,1,1,3,,live.euroleague.net Boxscore (Stats[].Coach),83;95
+eurocup,2020-21,LJU,KK Cedevita Olimpija,1,jurica-golemac,Jurica Golemac,16,10,6,0,0,2020-09-30,2021-03-09,10,6,7,3,3,3,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),12;36;47;70;22;84;94;107;59;119;125;134;141;149;157;166
+eurocup,2020-21,JOV,Club Joventut Badalona,1,carles-duran,Carles Duran,17,9,8,0,0,2020-09-30,2021-03-26,11,6,7,2,4,4,2,0,2,,live.euroleague.net Boxscore (Stats[].Coach),2;15;39;50;87;62;97;110;73;121;130;137;145;153;162;171;175
+eurocup,2020-21,JOV,Club Joventut Badalona,2,carlos-duran-ortega,Carlos Duran Ortega,1,1,0,0,0,2020-10-14,2020-10-14,1,0,1,0,0,0,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),25
+eurocup,2020-21,PAR,Partizan Mozzart Bet Belgrade,1,vlado-scepanovic,Vlado Scepanovic,5,5,0,0,0,2020-09-30,2020-10-28,2,3,2,3,0,0,1,0,3,,live.euroleague.net Boxscore (Stats[].Coach),2;14;27;37;51
+eurocup,2020-21,PAR,Partizan Mozzart Bet Belgrade,2,saso-filipovski,Saso Filipovski,10,5,5,0,0,2020-11-17,2021-03-03,6,4,4,1,2,3,1,0,3,,live.euroleague.net Boxscore (Stats[].Coach),85;62;99;109;74;124;132;140;148;156
+eurocup,2020-21,PAR,Partizan Mozzart Bet Belgrade,3,aleksandar-matovic,Aleksandar Matovic,1,0,1,0,0,2021-03-10,2021-03-10,0,1,0,0,0,1,1,1,3,,live.euroleague.net Boxscore (Stats[].Coach),164
+eurocup,2020-21,VNC,Umana Reyer Venice,1,walter-de-raffaele,Walter De Raffaele,10,10,0,0,0,2020-09-30,2020-12-29,2,8,2,8,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;14;39;49;61;86;26;97;111;74
+eurocup,2020-21,UNK,UNICS Kazan,1,dimitris-priftis,Dimitris Priftis,24,10,14,0,0,2020-09-30,2021-04-30,15,9,6,4,9,5,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;13;27;50;61;75;85;38;98;110;128;135;143;151;160;167;172;176;178;180;182;183;184;185
+eurocup,2020-21,ULM,ratiopharm ulm,1,jaka-lakovic,Jaka Lakovic,10,10,0,0,0,2020-09-30,2020-12-16,4,6,4,6,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;17;29;42;52;64;77;89;100;114
+eurocup,2020-21,MBA,Mornar Bar,1,mihailo-pavicevic,Mihailo Pavicevic,16,10,6,0,0,2020-09-30,2021-03-10,6,10,5,5,1,5,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;16;30;41;53;64;78;88;101;113;127;136;143;151;159;168
+eurocup,2020-21,LKB,Lietkabelis Panevezys ,1,nenad-canak,Nenad Canak,9,9,0,0,0,2020-09-30,2020-12-18,2,7,2,7,0,0,2,0,2,,live.euroleague.net Boxscore (Stats[].Coach),7;31;43;55;93;69;105;117;81
+eurocup,2020-21,LKB,Lietkabelis Panevezys ,2,canak-nenad,Canak Nenad,1,1,0,0,0,2020-10-07,2020-10-07,0,1,0,1,0,0,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),19
+eurocup,2020-21,VIR,Virtus Bologna,1,aleksandar-djordjevic,Aleksandar Djordjevic,1,1,0,0,0,2020-09-30,2020-09-30,1,0,1,0,0,0,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),7
+eurocup,2020-21,VIR,Virtus Bologna,2,sasa-djordjevic,Sasa Djordjevic,20,9,11,0,0,2020-10-07,2021-04-14,18,2,9,0,9,2,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),21;32;44;57;79;69;104;115;92;125;133;142;150;157;165;171;175;180;182;183
+eurocup,2020-21,TIV,Lokomotiv Kuban,1,evgeny-pashutin,Evgeny Pashutin,19,10,9,0,0,2020-09-30,2021-03-31,12,7,8,2,4,5,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;21;31;45;56;68;79;93;103;116;123;131;140;148;155;163;172;176;178
+eurocup,2020-21,ANT,Telenet Giants Antwerp,1,christophe-beghin,Christophe Beghin,10,10,0,0,0,2020-09-30,2020-12-16,1,9,1,9,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;20;33;43;57;68;91;80;105;115
+eurocup,2020-21,ANR,MoraBanc Andorra,1,ibon-navarro,Ibon Navarro,16,10,6,0,0,2020-09-30,2021-03-10,6,10,3,7,3,3,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),9;20;32;45;55;80;103;117;92;67;128;136;144;152;160;168
+eurocup,2020-21,MCO,AS Monaco,1,zvezdan-mitrovic,Zvezdan Mitrovic,20,8,12,0,0,2020-09-30,2021-04-30,14,6,4,4,10,2,4,1,3,,live.euroleague.net Boxscore (Stats[].Coach),9;33;44;56;104;116;81;67;122;129;137;145;154;169;173;177;179;181;184;185
+eurocup,2020-21,MCO,AS Monaco,2,mitrovic-zvezdan,Mitrovic Zvezdan,1,1,0,0,0,2020-10-07,2020-10-07,1,0,1,0,0,0,1,1,3,,live.euroleague.net Boxscore (Stats[].Coach),19
+eurocup,2020-21,MCO,AS Monaco,3,mirko-ocokoljic,Mirko Ocokoljic,2,1,1,0,0,2020-11-17,2021-03-09,2,0,1,0,1,0,2,1,3,,live.euroleague.net Boxscore (Stats[].Coach),91;161
