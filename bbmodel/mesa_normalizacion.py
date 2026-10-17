@@ -21,7 +21,7 @@ from .metricas import CATALOGO, destransformar, transformar
 RAIZ = Path(__file__).resolve().parent.parent
 DA = RAIZ / "data" / "modelos" / "algoritmo_A"
 DB = RAIZ / "data" / "modelos" / "algoritmo_B"
-LIGAS = ["nba", "gleague", "acb", "eurocup", "lba", "bbl", "lnb", "euroleague"]
+LIGAS = ["nba", "gleague", "acb", "eurocup", "lba", "bbl", "lnb", "bcl", "fec", "bsl", "gbl", "euroleague"]
 CLAVE = ["per", "game_score_p40", "ws_per_40", "pts_p100", "usg_pct", "ts_pct", "efg_pct", "fg3_pct", "fg3a_rate",
          "fta_rate", "ast_pct", "tov_pct", "oreb_pct", "dreb_pct", "stl_pct", "blk_pct", "drtg"]
 EXPLORADOR = ["per", "game_score_p40", "pts_p100", "usg_pct", "ts_pct", "fg3_pct", "ast_pct", "tov_pct", "dreb_pct",

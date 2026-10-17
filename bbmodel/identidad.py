@@ -29,8 +29,8 @@ import pandas as pd
 
 SUFIJOS = {"jr", "sr", "ii", "iii", "iv"}
 # ligas que se juegan a la vez con otras (un jugador puede estar en ambas en la misma temporada)
-EUROPA_COPAS = {"euroleague", "eurocup"}
-NACIONALES = {"acb", "lba", "bbl", "lnb"}
+EUROPA_COPAS = {"euroleague", "eurocup", "bcl", "fec"}
+NACIONALES = {"acb", "lba", "bbl", "lnb", "bsl", "gbl"}
 CONCURRENTES = {frozenset({a, b}) for a in EUROPA_COPAS for b in NACIONALES} | {frozenset({"nba", "gleague"})}
 
 

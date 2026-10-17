@@ -181,3 +181,27 @@ class FibaWebPBP(PBPSource):
         if left:
             g.notes.append(f"{left}/{len(markers)} asistencias sin enlazar")
         return g
+
+
+# ------------------------------------------------------------------ entrenadores (bbstats/entrenadores.py)
+def docs_principal(main_payload, game_id: str) -> dict | None:
+    """Documentos del partido sacados del bruto principal (para el registro de entrenadores)."""
+    doc = _games_of(main_payload).get(str(game_id))
+    return {"page": doc.get("page"), "staff": doc.get("staff")} if doc else None
+
+
+def lector_entrenadores(item: dict, lc) -> dict | None:
+    """Entrenador principal de cada equipo (staffA/staffB: function "Head Coach", personId de FIBA)."""
+    docs, ref = item.get("docs") or {}, item.get("ref") or {}
+    page, staff = docs.get("page") or {}, docs.get("staff") or {}
+    gm = page.get("game") or {}
+    lados = []
+    for key, sk, score in (("teamA", "staffA", "teamAScore"), ("teamB", "staffB", "teamBScore")):
+        t = gm.get(key) or {}
+        head = next((s for s in staff.get(sk) or [] if s.get("isHeadCoach") or s.get("function") == "Head Coach"), None)
+        lados.append({"equipo_id": _s(t.get("organisationId")), "equipo": t.get("shortName") or t.get("officialName"),
+                      "puntos": to_float(gm.get(score)),
+                      "entrenador": f"{head.get('firstName') or ''} {head.get('lastName') or ''}".strip() if head else None,
+                      "entrenador_id_fuente": head.get("personId") if head else None})
+    return {"fecha": ref.get("date") or gm.get("gameDateTimeUTC"), "fase": ref.get("phase"), "lados": lados,
+            "local_primero": True}

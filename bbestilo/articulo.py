@@ -125,7 +125,9 @@ CENTRALIDAD_V3 = {"nuevas": 0.35, "consenso": 0.41, "todas": 0.46}
 UNIDADES_PISTA = {"euroleague": "cm desde el aro", "eurocup": "cm desde el aro", "acb": "mm desde el aro, ejes cambiados",
                   "nba": "décimas de pie desde el aro", "gleague": "décimas de pie desde el aro",
                   "lba": "% de la pista completa (28 × 15 m)", "lnb": "% de la pista completa (28 × 15 m)",
-                  "bbl": "unidades propias, media pista"}
+                  "bbl": "unidades propias, media pista",
+                  "bcl": "unidades de fiba.basketball, media pista", "fec": "unidades de fiba.basketball, media pista",
+                  "bsl": "% de la pista completa (28 × 15 m)", "gbl": "% de la pista completa (28 × 15 m)"}
 
 
 def _leer_json(p: Path):

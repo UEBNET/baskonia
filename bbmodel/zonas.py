@@ -1,4 +1,4 @@
-"""Zonas de tiro a partir de las coordenadas del jugada a jugada (las 8 ligas).
+"""Zonas de tiro a partir de las coordenadas del jugada a jugada (las 12 ligas).
 
 Cada fuente usa su propio sistema de coordenadas:
   * EuroLeague / EuroCup: centímetros, x lateral, y a lo largo desde el aro (aro en 0, 0).
@@ -6,6 +6,8 @@ Cada fuente usa su propio sistema de coordenadas:
   * ACB: milímetros, x a lo largo desde el aro, y lateral.
   * LBA / LNB: porcentaje de la pista completa (x a lo largo, 0-100 = 28 m; y lateral, 0-100 = 15 m).
   * BBL: unidades propias, media pista; se ajustan aro y escala.
+  * BCL / FIBA Europe Cup (fiba.basketball): media pista, x lateral 0-280, y a lo largo (como la BBL).
+  * BSL / GBL (FIBA LiveStats): porcentaje de la pista completa, como LBA / LNB.
 En todas se ajustan (o se comprueban) la posición del aro y la escala con la línea de triple oficial:
 el ajuste es el que mejor separa los tiros de 2 de los de 3 que anota la propia fuente. La tasa de
 acierto de esa separación queda como medida de calidad de la calibración.
@@ -80,6 +82,12 @@ INICIAL = {
     "lba": (Sistema("lba", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
     "lnb": (Sistema("lnb", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
     "bbl": (Sistema("bbl", "fiba", "y", (140.0, 30.0), (0.0536, 0.0536)), True),
+    # fiba.basketball (BCL, FIBA Europe Cup): media pista, x lateral 0-280, y a lo largo desde el fondo
+    "bcl": (Sistema("bcl", "fiba", "y", (140.0, 30.0), (0.0536, 0.0536)), True),
+    "fec": (Sistema("fec", "fiba", "y", (140.0, 30.0), (0.0536, 0.0536)), True),
+    # FIBA LiveStats (BSL, GBL): % de la pista completa (x a lo largo 0-100 = 28 m, y lateral 0-100 = 15 m)
+    "bsl": (Sistema("bsl", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
+    "gbl": (Sistema("gbl", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
 }
 
 

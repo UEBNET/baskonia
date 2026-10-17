@@ -681,6 +681,13 @@ registrar("gleague", Extractor(_lector_statsv3, "stats.gleague.nba.com commontea
                                complemento=_complemento_gleague))
 registrar("lnb", Extractor(_lector_lnb, "api-prod.lnb.fr getCoachingStaff", complemento=_complemento_lnb))
 registrar("fiba_livestats", Extractor(lector_fiba_livestats, "FIBA LiveStats data.json (tm[].coach)"))
+# Ligas nuevas (bcl, fec: fiba.basketball; bsl, gbl: FIBA LiveStats con el data.json en el bruto principal)
+from .lineups.sources import fiba_livestats as _fls, fiba_web as _fweb  # noqa: E402
+registrar("fiba_web", Extractor(_fweb.lector_entrenadores, "fiba.basketball staffA/staffB (Head Coach)",
+                                docs_principal=_fweb.docs_principal))
+for _liga in ("bsl", "gbl"):
+    registrar(_liga, Extractor(lector_fiba_livestats, "FIBA LiveStats data.json (tm[].coach)",
+                               docs_principal=_fls.docs_principal))
 
 
 # =============================================================================================== núcleo puro

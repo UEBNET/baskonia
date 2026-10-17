@@ -38,7 +38,7 @@ from .boxscore import aggregate_by_phase
 
 DEFAULT_DATA_URL = "https://fibalivestats.dcd.shared.geniussports.com/data/{match_id}/data.json"
 DEFAULT_ID_REGEX = r"fibalivestats\.dcd\.shared\.geniussports\.com/(?:u/[A-Za-z0-9]+/|data/)(\d{5,8})"
-_NAME = re.compile(r'"name":"((?:[^"\\]|\\.)*)"')
+_NAME = re.compile(r'"name":\s*"((?:[^"\\]|\\.)*)"')
 _EXTRA = {"sPointsInThePaint": "pts_paint", "sPointsSecondChance": "pts_2ndchance",
           "sPointsFastBreak": "pts_fastbreak", "sPointsFromTurnovers": "pts_off_tov"}
 
@@ -406,7 +406,7 @@ class FibaLiveStatsAdapter(BaseAdapter):
         if legacy:
             by_phase.setdefault("regular", []).extend(int(x) for x in legacy if str(x).isdigit())
         if not any(by_phase.values()):
-            raise NoDataYet(
+            raise AdapterError(
                 f"{self.league} {season}: no hay ids de partido. Configura 'temporadas.{season}.partidos' "
                 f"(o 'equipos' + 'ventanas') en config/sources.json")
         block = int(self.cfg.get("partidos_por_paquete", 400))

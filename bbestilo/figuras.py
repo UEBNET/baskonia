@@ -24,7 +24,8 @@ from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 SEQ = LinearSegmentedColormap.from_list("kraft", ["#ffffff", "#efe0cd", "#c9ad8c", "#8f6b4a", "#3a2a1c"])
 INK, MUTED, LINE, KRAFT = "#3a2a1c", "#7a6450", "#e3d0b8", "#f9f3eb"
 LIGAS = {"euroleague": "EuroLeague", "eurocup": "EuroCup", "acb": "Liga Endesa", "nba": "NBA", "gleague": "G League",
-         "lba": "LBA", "bbl": "BBL", "lnb": "LNB"}
+         "lba": "LBA", "bbl": "BBL", "lnb": "LNB", "bcl": "BCL", "fec": "FIBA Europe Cup",
+                "bsl": "BSL", "gbl": "GBL"}
 
 
 def estilo_mpl(fuentes: Path | None = None) -> None:

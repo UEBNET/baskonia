@@ -40,7 +40,7 @@ from . import config as C
 # Columnas «crudas» por jugador-equipo (escala EuroLeague) a partir de las que se calcula el vector
 CRUDAS = ["ritmo_rel"] + C.METRICAS_ESTILO + ["es_int", "es_ext"]
 _I = {c: i for i, c in enumerate(CRUDAS)}
-LIGAS_ID_INESTABLE = {"lba", "lnb"}   # cambian de team_id cada temporada
+LIGAS_ID_INESTABLE = {"lba", "lnb", "bsl", "gbl"}   # cambian de team_id cada temporada
 
 
 # ----------------------------------------------------------------------------- carga

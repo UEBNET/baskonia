@@ -149,3 +149,9 @@ class FibaLiveStatsPBP(PBPSource):
         if left:
             g.notes.append(f"{left}/{len(assists)} asistencias sin enlazar")
         return g
+
+
+def docs_principal(main_payload, game_id: str) -> dict | None:
+    """data.json del partido sacado del bruto principal (para el registro de entrenadores)."""
+    doc = _games_of(main_payload).get(str(game_id))
+    return {"data": doc} if doc else None

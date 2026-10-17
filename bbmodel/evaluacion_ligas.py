@@ -31,7 +31,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 DATA = RAIZ / "data" / "processed"
 RNG = np.random.default_rng(20261012)
 
-LIGAS = ["euroleague", "eurocup", "acb", "lba", "bbl", "lnb", "nba", "gleague"]
+LIGAS = ["euroleague", "eurocup", "acb", "lba", "bbl", "lnb", "nba", "gleague", "bcl", "fec", "bsl", "gbl"]
 PARES = list(itertools.combinations(range(len(LIGAS)), 2))
 # minutos mínimos para entrar en la población de jugadores, por fase (la temporada en curso usa 30)
 UMBRAL = {"regular": 200, "playoffs": 60, "total": 200}
