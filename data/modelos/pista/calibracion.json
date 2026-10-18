@@ -27,6 +27,34 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "bcl|2020-21": {
+  "acierto": 0.9976,
+  "aro": [
+   139.37670776806738,
+   43.56212551591578
+  ],
+  "escala": [
+   0.05750803265415231,
+   0.0624635513764328
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bsl|2020-21": {
+  "acierto": 0.9983,
+  "aro": [
+   8.552436049046383,
+   50.34200480296459
+  ],
+  "escala": [
+   0.3286657868067676,
+   0.16136695900410877
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
  "eurocup|2020-21": {
   "acierto": 0.993,
   "aro": [
@@ -54,6 +82,34 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "fec|2020-21": {
+  "acierto": 0.998,
+  "aro": [
+   139.82671469106052,
+   46.22443655410437
+  ],
+  "escala": [
+   0.057266667840026625,
+   0.06445668386572685
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gbl|2020-21": {
+  "acierto": 0.9987,
+  "aro": [
+   8.996917542125875,
+   50.57236243306182
+  ],
+  "escala": [
+   0.3329695764409384,
+   0.16083244200304922
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "gleague|2020-21": {
   "acierto": 0.9993,
@@ -125,6 +181,20 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "bcl|2021-22": {
+  "acierto": 0.998,
+  "aro": [
+   138.96788861315747,
+   41.14313428701571
+  ],
+  "escala": [
+   0.0573890730776138,
+   0.061557140527739904
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
  "eurocup|2021-22": {
   "acierto": 0.9955,
   "aro": [
@@ -152,6 +222,34 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "fec|2021-22": {
+  "acierto": 0.9981,
+  "aro": [
+   139.97908358458142,
+   43.54113473798137
+  ],
+  "escala": [
+   0.057549453894012594,
+   0.0632267012083223
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gbl|2021-22": {
+  "acierto": 0.9979,
+  "aro": [
+   7.417101293233731,
+   50.701063432060906
+  ],
+  "escala": [
+   0.30917274436186026,
+   0.15926631316959947
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "gleague|2021-22": {
   "acierto": 0.9992,
@@ -237,6 +335,20 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "bcl|2022-23": {
+  "acierto": 0.9972,
+  "aro": [
+   139.48888492064327,
+   45.095539651427856
+  ],
+  "escala": [
+   0.05762749295411322,
+   0.06366901745143594
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
  "eurocup|2022-23": {
   "acierto": 0.9944,
   "aro": [
@@ -264,6 +376,34 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "fec|2022-23": {
+  "acierto": 0.996,
+  "aro": [
+   139.50945454854755,
+   43.45179932853415
+  ],
+  "escala": [
+   0.05804809921983387,
+   0.06269665209733039
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gbl|2022-23": {
+  "acierto": 0.9963,
+  "aro": [
+   7.432110350866054,
+   50.41349778477272
+  ],
+  "escala": [
+   0.307945433757896,
+   0.15854585935029833
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "gleague|2022-23": {
   "acierto": 0.9992,
@@ -349,6 +489,20 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "bcl|2023-24": {
+  "acierto": 0.9982,
+  "aro": [
+   139.70154727085946,
+   44.474164489659145
+  ],
+  "escala": [
+   0.0579110871928547,
+   0.06303872695327208
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
  "eurocup|2023-24": {
   "acierto": 0.9943,
   "aro": [
@@ -376,6 +530,34 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "fec|2023-24": {
+  "acierto": 0.9977,
+  "aro": [
+   139.65011947939104,
+   40.87525385733848
+  ],
+  "escala": [
+   0.05743851398887982,
+   0.06140607845688825
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gbl|2023-24": {
+  "acierto": 0.9979,
+  "aro": [
+   7.793072238529484,
+   50.653230263873915
+  ],
+  "escala": [
+   0.3135378239629191,
+   0.15897439750709688
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "gleague|2023-24": {
   "acierto": 0.9994,
@@ -461,6 +643,20 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "bcl|2024-25": {
+  "acierto": 0.9985,
+  "aro": [
+   139.54477742261332,
+   46.117776874986035
+  ],
+  "escala": [
+   0.058113630480845294,
+   0.06489285671462038
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
  "eurocup|2024-25": {
   "acierto": 0.9945,
   "aro": [
@@ -488,6 +684,34 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "fec|2024-25": {
+  "acierto": 0.9977,
+  "aro": [
+   139.64114074525978,
+   43.81678655536949
+  ],
+  "escala": [
+   0.057629779039194994,
+   0.06315984326530347
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gbl|2024-25": {
+  "acierto": 0.9979,
+  "aro": [
+   8.902427739574891,
+   50.658288628150025
+  ],
+  "escala": [
+   0.3324217848346767,
+   0.16182533619273307
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "gleague|2024-25": {
   "acierto": 0.9991,
@@ -573,6 +797,34 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "bcl|2025-26": {
+  "acierto": 0.9977,
+  "aro": [
+   139.67154961046447,
+   42.33894041666076
+  ],
+  "escala": [
+   0.05774126454047891,
+   0.06234392386325733
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bsl|2025-26": {
+  "acierto": 0.9981,
+  "aro": [
+   8.321041364956345,
+   50.44856133838046
+  ],
+  "escala": [
+   0.32651492948498173,
+   0.16161426288336325
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
  "eurocup|2025-26": {
   "acierto": 0.995,
   "aro": [
@@ -600,6 +852,34 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "fec|2025-26": {
+  "acierto": 0.9977,
+  "aro": [
+   139.58321573948632,
+   43.66467618652373
+  ],
+  "escala": [
+   0.05781741524769498,
+   0.06331634251983555
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gbl|2025-26": {
+  "acierto": 0.9969,
+  "aro": [
+   7.799154043850997,
+   50.30524427233413
+  ],
+  "escala": [
+   0.31619859775745285,
+   0.1594238078830745
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "gleague|2025-26": {
   "acierto": 0.999,
@@ -685,6 +965,34 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "bcl|2026-27": {
+  "acierto": 0.9968,
+  "aro": [
+   139.3022249434394,
+   44.98932970222434
+  ],
+  "escala": [
+   0.05812191494589578,
+   0.0645141516215641
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "bsl|2026-27": {
+  "acierto": 0.9982,
+  "aro": [
+   8.402456752498738,
+   50.42443581545909
+  ],
+  "escala": [
+   0.32144508019542245,
+   0.16249489511343554
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
  "eurocup|2026-27": {
   "acierto": 0.9961,
   "aro": [
@@ -712,6 +1020,34 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "fec|2026-27": {
+  "acierto": 0.9984,
+  "aro": [
+   139.76947678103858,
+   44.416184675963464
+  ],
+  "escala": [
+   0.05763187774249987,
+   0.06408696364977692
+  ],
+  "eje_largo": "y",
+  "regla": "fiba",
+  "pista_completa": null
+ },
+ "gbl|2026-27": {
+  "acierto": 0.9987,
+  "aro": [
+   8.491014211536914,
+   50.704990022609906
+  ],
+  "escala": [
+   0.32963167097050206,
+   0.15876802677688656
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "lba|2026-27": {
   "acierto": 0.9904,
