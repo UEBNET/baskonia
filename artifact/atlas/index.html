@@ -940,6 +940,20 @@ details.mas[open] > summary { margin-bottom: 6px; }
 <div class="tip" id="tip" hidden></div>
 
 <script>
+// JSON publicado comprimido: <ruta>.gz.txt = gzip en base64 (el Artifact sólo sirve tipos de texto y hay un límite de
+// tamaño); si no existe (servidor local) se lee el .json tal cual.
+async function _jsonDe(r) {
+  const txt = (await r.text()).trim();
+  if (!txt.startsWith("H4sI")) return JSON.parse(txt);
+  const bin = atob(txt), u8 = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  if (typeof DecompressionStream === "undefined") throw new Error("este navegador no sabe descomprimir gzip (DecompressionStream)");
+  return JSON.parse(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
+}
+async function cargarJSON(path) {
+  try { const r = await fetch(path + ".gz.txt"); if (r.ok) return await _jsonDe(r); } catch (e) { /* sin versión comprimida */ }
+  const r = await fetch(path); if (!r.ok) throw new Error(path + " → " + r.status); return _jsonDe(r);
+}
 "use strict";
 // =====================================================================================================
 // Escalas ±100 (bloque compartido: idéntico en «Atlas de Estilos» y «Quintetos y conexiones»)
@@ -1199,7 +1213,7 @@ const ENTS = () => st.ents.map(entidad).filter(Boolean);
 
 // ---------------------------------------------------------------- carga
 async function cargar() {
-  const [m, c, j] = await Promise.all(["estilos/meta.json", "estilos/clubes.json", "estilos/jugadores.json"].map((u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u); return r.json(); })));
+  const [m, c, j] = await Promise.all(["estilos/meta.json", "estilos/clubes.json", "estilos/jugadores.json"].map((u) => cargarJSON(u)));
   META = m; CR = META.crudas; CL = cols(c); JG = cols(j); KE = META.n_estilos;
   BY = new Map(CL.map((x) => [x.clave, x]));
   prepararLigas(CL.map((x) => x.liga)); ESC.usar(META.escalas);
@@ -1860,7 +1874,7 @@ let BR = null, BRP = null, PERS = null;
 const USOB = new Map(), CJ = new Map();
 const NIV_TXT = { per: ["PER", 1], game_score_p40: ["Game Score por 40'", 1], ws_per_40: ["Win Shares por 40'", 3], ortg: ["Rating ofensivo", 1], drtg: ["Rating defensivo", 1], pts_p100: ["Puntos por 100 posesiones", 1], ts_pct: ["Tiro verdadero (TS%)", 1], efg_pct: ["Tiro efectivo (eFG%)", 1] };
 const ultCompleta = () => TEMPS.filter((t) => !META.temporadas_provisionales.includes(t)).pop();
-function cargarBrutos() { if (!BRP) BRP = fetch("estilos/brutos.json").then((r) => { if (!r.ok) throw new Error("brutos.json"); return r.json(); }).then((d) => { BR = d.filas; }); return BRP; }
+function cargarBrutos() { if (!BRP) BRP = cargarJSON("estilos/brutos.json").then((d) => { BR = d.filas; }); return BRP; }
 const eqRef = () => BY.get(`${st.eq.club}:${st.eq.temp}`);
 const modoDef = () => "n"; // el mapa, los clubes y el ranking están en valores normalizados: es el punto de partida homogéneo
 const partidosClub = (c) => c.min_total / durPartido(c.liga);

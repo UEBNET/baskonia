@@ -1116,7 +1116,21 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 // ---------------------------------------------------------------------------- datos
-async function getJSON(path) { const r = await fetch(path); if (!r.ok) throw new Error(path + " → " + r.status); return r.json(); }
+// JSON publicado comprimido: <ruta>.gz.txt = gzip en base64 (el Artifact sólo sirve tipos de texto y hay un límite de
+// tamaño); si no existe (servidor local) se lee el .json tal cual.
+async function _jsonDe(r) {
+  const txt = (await r.text()).trim();
+  if (!txt.startsWith("H4sI")) return JSON.parse(txt);
+  const bin = atob(txt), u8 = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  if (typeof DecompressionStream === "undefined") throw new Error("este navegador no sabe descomprimir gzip (DecompressionStream)");
+  return JSON.parse(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
+}
+async function cargarJSON(path) {
+  try { const r = await fetch(path + ".gz.txt"); if (r.ok) return await _jsonDe(r); } catch (e) { /* sin versión comprimida */ }
+  const r = await fetch(path); if (!r.ok) throw new Error(path + " → " + r.status); return _jsonDe(r);
+}
+async function getJSON(path) { return cargarJSON(path); }
 // Fuente de la tabla: datos brutos («Tabla de datos») o normalizados («Datos Normalizados»). Cada una guarda su vista,
 // orden, fase y filtros por métrica; temporada, ligas, minutos, posición, edad y nacionalidad son comunes.
 const SRC_DEF = { raw: { view: "basico", sort: { col: "pts_pg", dir: -1 }, phase: "regular", mf: [] },
