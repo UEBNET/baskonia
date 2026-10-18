@@ -481,17 +481,32 @@ sólo los partidos nuevos (`"incremental": true`), troceados en paquetes de `par
 
 **Cobertura** (17-10-2026). Filas jugador-equipo (regular / playoffs):
 
-TABLA_FILAS
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| bcl | 467 / 96 | 465 / 277 | 491 / 275 | 479 / 257 | 482 / 253 | 493 / 287 | 394 / – |
+| fec | 260 / 189 | 422 / 316 | 431 / 330 | 503 / 98 | 562 / 105 | 572 / 106 | 590 / – |
+| bsl | 295 / 105 | sin datos | sin datos | sin datos | sin datos | 332 / 102 | 246 / – |
+| gbl | 229 / 100 | 255 / 86 | 228 / 106 | 232 / 113 | 239 / 98 | 249 / 107 | 190 / – |
 
 Partidos (regular + playoffs) y jugada a jugada (partidos · % con cambios validados contra minutos y +/- oficiales):
 
-TABLA_PARTIDOS
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| bcl | 132 + 8 | 135 + 34 | 141 + 34 | 141 + 35 | 144 + 33 | 144 + 32 | 24 + 0 |
+| fec | 30 + 16 | 141 + 29 | 141 + 32 | 148 + 14 | 168 + 14 | 168 + 14 | 47 + 0 |
+| bsl | 199 + 20 | — | — | — | — | 239 + 22 | 26 + 0 |
+| gbl | 131 + 27 | 156 + 14 | 130 + 24 | 132 + 27 | 127 + 19 | 155 + 18 | 19 + 0 |
 
-TABLA_PBP
+| Liga | 2020-21 | 2021-22 | 2022-23 | 2023-24 | 2024-25 | 2025-26 | 2026-27 |
+|---|---|---|---|---|---|---|---|
+| bcl | 152 · 82 % | 172 · 96 % | 179 · 95 % | 179 · 96 % | 177 · 100 % | 176 · 99 % | 24 · 100 % |
+| fec | 46 · 100 % | 173 · 95 % | 176 · 96 % | 164 · 98 % | 182 · 99 % | 182 · 100 % | 47 · 100 % |
+| bsl | 219 · 100 % | — | — | — | — | 261 · 96 % | 26 · 92 % |
+| gbl | 158 · 98 % | 170 · 99 % | 154 · 95 % | 159 · 94 % | 146 · 92 % | 173 · 90 % | 19 · 95 % |
 
 Lagunas: BSL 2021-22 a 2024-25 no están en FIBA LiveStats (muestreo de todos los ids de esas temporadas, 1 de cada 20,
 sin partidos de la BSL) y no hay otra fuente accesible: sin datos. BSL 2020-21: faltan partidos de 3 equipos y la Copa
 no se puede separar (las fechas de esa temporada en la fuente no son fiables). GBL: 1-5 partidos por temporada con el
-data.json cortado a mitad (no se agregan). BCL 2025-26: algún partido de playoffs con el boxscore incompleto en la
+data.json cortado a mitad (no se agregan). BCL 2020-21 (burbujas por la COVID): la mitad de los partidos (76 de 152) no anota los cambios → sólo tiros y asistencias, y de los que sí, 82 % validados; FIBA Europe Cup 2020-21: 16 de 46 sin cambios. BCL 2025-26: algún partido de playoffs con el boxscore incompleto en la
 fuente (Trapani, excluido de la competición). Calibración de coordenadas (`bbmodel/zonas.py`): 99,6-99,9 % de tiros de
 2 y 3 separados por la línea en las cuatro ligas.

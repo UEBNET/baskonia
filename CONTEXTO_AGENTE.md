@@ -526,7 +526,7 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
 - **Coordenadas** (`bbmodel/zonas.py`): BCL/FEC media pista (x lateral 0-280, aro ≈ (140, 44)); BSL/GBL % de la pista
   completa como LBA/LNB. Acierto de la calibración 99,6-99,9 %.
 - **Lagunas**: BSL 2021-22 a 2024-25 sin datos (no están en FIBA LiveStats); BSL 2020-21 incompleta (199 de 240
-  partidos de liga, Copa no separable); GBL: 1-5 partidos por temporada con el data.json cortado (no se agregan).
+  partidos de liga, Copa no separable); GBL: 1-5 partidos por temporada con el data.json cortado (no se agregan); BCL 2020-21: 76 de 152 partidos sin cambios en el jugada a jugada (sólo tiros/asistencias).
 - Pendiente de la sesión principal: reentrenar A/B, contexto, interacciones y estilos (las listas de ligas de
   `bbmodel`/`bbestilo` ya incluyen las 4); `bbstats/entrenadores._partidos` lee sólo el último bruto principal
   (`store.latest`): con brutos incrementales debería usar `store.load_season()` para ver todos los partidos.
