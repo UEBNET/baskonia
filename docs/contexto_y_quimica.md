@@ -18,7 +18,7 @@ python -m bbestilo analisis && python -m bbestilo quimica && python -m bbestilo 
 python -m bbmodel mesa-quintetos   # datos de la pestaña «Quintetos y conexiones»
 ```
 
-## 1. Zonas de tiro con coordenadas de 8 fuentes distintas
+## 1. Zonas de tiro con coordenadas de 12 ligas (10 fuentes distintas)
 
 Cada fuente publica las coordenadas de los tiros en su propio sistema: centímetros desde el aro (EuroLeague,
 EuroCup), décimas de pie desde el aro (NBA, G League), milímetros con los ejes cambiados (ACB), porcentaje de la

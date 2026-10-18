@@ -49,12 +49,33 @@ python -m bbestilo articulo     # PDF
   acuerdo entre semillas, reproducibilidad temporal, separación y replicabilidad, y sigue siendo neutral al nivel
   (η² 0,014). La partición cambia mucho (ARI 0,14 con la v4): dónde tira un equipo y cuánto depende del pase
   redefinen los estilos, por eso tienen nombres nuevos.
+* **v5 → final: 12 ligas y entrenadores.** Entran la Basketball Champions League, la FIBA Europe Cup, la Basketbol
+  Süper Ligi y la Greek Basket League (1.490 clubes de entrenamiento, antes 997; el modelo de 8 ligas queda en
+  `historial/v5_6estilos_8ligas/`). El barrido mantiene 6 estilos: el ICL diagonal mejora sólo un 0,5 % hasta 9, pero
+  la estabilidad de k-medias cae de 0,67 (6) a 0,44 (9). Con 12 ligas el consenso de enlace medio dejaba un grupito
+  de 32 clubes raros y fundía «Pintura física» con «Exterior y presión»; el consenso tiene ahora un **suelo de tamaño**
+  (`C.MIN_CUOTA_ESTILO` = 5 % de los clubes: si un grupo queda por debajo se corta más fino y sus clubes pasan al
+  grupo grande con más co-asociación; `python -m bbestilo reconsensuar` lo rehace con las semillas guardadas). Con el
+  suelo: estilo más pequeño 136 clubes, entropía del reparto 0,98, 15/15 parejas de estilos distintas, η² del nivel
+  0,012 y replicabilidad 0,96. Los seis perfiles coinciden con los del modelo de 8 ligas (r 0,78-0,99) y conservan
+  sus nombres; cambian de número (y de color) «Exterior y presión» (ahora E02), «Lejos del aro» (E03), «Pausado y
+  seguro» (E04) y «Pintura física» (E05). ARI con el modelo de 8 ligas en los clubes comunes: 0,54.
+* **Estilo por entrenador.** Cada tramo club-temporada-entrenador (`bbstats/entrenadores.py`) recibe su propio
+  vector con la misma red, sin reentrenar (`bbestilo/entrenadores.py`): media de los perfiles de los jugadores
+  ponderada por los minutos que les dio ese entrenador, más la diferencia de los rasgos de equipo medidos en sus
+  partidos frente a la temporada del club (ritmo, 3PAr, FTr, AST%, pérdidas, rebote, robos, tapones, faltas, zonas de
+  tiro y canastas asistidas, del jugada a jugada); ambas cosas se contraen hacia la temporada entera con peso
+  n / (n + 8) partidos, para que un interino de dos partidos no invente un estilo. Sin jugada a jugada en el tramo
+  (menos de la mitad de sus partidos) hereda el vector del club (`metodo = club`). Resultado:
+  `data/modelos/estilos/entrenadores.csv` y el campo `entrenadores` de cada club en el Atlas (cadena de entrenadores,
+  un punto y una flecha por etapa en el mapa y filtro «Entrenador»). Con 10 o más partidos, el estilo cambia con el
+  entrenador en uno de cada cuatro clubes-temporada con relevo.
 
 ## 2. Datos y neutralización
 
 * Equivalentes EuroLeague 2025-26 del estudio de normalización (A+B; sólo A donde B no llega y en 2026-27),
-  temporada regular, 8 ligas. 997 clubes-competición-temporada de entrenamiento (2020-21 a 2025-26) y 120
-  provisionales (2026-27). 18.768 filas jugador-equipo.
+  temporada regular, 12 ligas. 1.490 clubes-competición-temporada de entrenamiento (2020-21 a 2025-26) y 230
+  provisionales (2026-27). 27.246 filas jugador-equipo.
 * Vector de club = media de sus jugadores ponderada por minutos (17 rasgos: ritmo relativo a su liga, 3PAr, FTr,
   AST%, TOV%, rebote ofensivo y defensivo, robos, tapones y faltas por 100 posesiones, concentración del uso,
   cuotas de minutos de interiores y exteriores y, del jugada a jugada, % de tiros en el aro, % de media distancia,

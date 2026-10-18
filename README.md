@@ -239,7 +239,7 @@ Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM
 
 ## 11. Modelos: `bbmodel` (algoritmos A y B)
 
-Traduce las métricas de cualquier jugador de las 8 ligas a su **equivalente en la EuroLeague** (entorno
+Traduce las métricas de cualquier jugador de las 12 ligas a su **equivalente en la EuroLeague** (entorno
 2025-26), con intervalo del 80 % y percentil EuroLeague por posición. Separa el entorno de cada liga de su
 nivel, usando 4.336 jugadores puente entre ligas. Explicación completa, fórmulas y validación:
 [`docs/algoritmo_A.md`](docs/algoritmo_A.md).
@@ -258,7 +258,7 @@ python -m bbmodel dataset-normalizado # dataset completo de equivalentes EuroLea
 
 **Dataset normalizado completo** ([`docs/datos_normalizados.md`](docs/datos_normalizados.md)):
 `data/modelos/normalizado/<temporada>.csv` tiene el equivalente EuroLeague 2025-26 de **todos** los jugadores de
-las 8 ligas y las 7 temporadas (19.508 jugador-liga-temporada, temporada regular) en las 25 métricas, con el valor en
+las 12 ligas y las 7 temporadas (temporada regular) en las 25 métricas, con el valor en
 su liga, A, B, A+B (sólo A donde B no traduce), intervalo del 80 % y percentil EuroLeague, más identidad y
 nacionalidad. Alimenta la pestaña **«Datos Normalizados»** de la Mesa y el explorador de «Normalización de ligas».
 
@@ -332,7 +332,7 @@ en paquetes de 150 partidos: si se cortan, la siguiente ejecución sólo pide lo
 
 ## 13. Estilos de juego: `bbestilo` (VaDE, 6 estilos sin nivel, 17 rasgos con jugada a jugada y mapa 3D)
 
-Asigna a cada **club-competición-temporada** de las 8 ligas uno de **6 estilos de juego** y lo sitúa, junto con
+Asigna a cada **club-competición-temporada** de las 12 ligas uno de **6 estilos de juego** y lo sitúa, junto con
 sus jugadores, en un **mapa 3D**. Usa sólo los datos **normalizados A+B** (equivalentes EuroLeague de `bbmodel`),
 agregados por minutos, más el ritmo relativo a la liga: 13 rasgos de caja y 4 del jugada a jugada (% de tiros en el aro,
 de media distancia y de triples de esquina, % de canastas asistidas). **Neutraliza el nivel**: a cada rasgo se le quita la parte
@@ -367,6 +367,12 @@ Escalas de lectura ±100 (Euroliga = 0) del Atlas y de Quintetos: `python -m bbm
 Documentación técnica: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md). Artículo completo:
 [`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf).
 
+
+**Estilo por entrenador** (`python -m bbestilo entrenadores`, y automáticamente al exportar el Atlas): cada tramo
+club-temporada-entrenador tiene su propio vector y estilo con la misma red (minutos que repartió ese entrenador y
+rasgos de equipo de sus partidos, contraídos hacia la temporada con peso n / (n + 8)); un club puede tener así dos o
+tres estilos en una temporada. Detalle en `docs/estilos_de_juego.md` (v5 → final). Modelo actual: 12 ligas, consenso
+con suelo de tamaño del 5 %; el de 8 ligas queda en `data/modelos/estilos/historial/v5_6estilos_8ligas/`.
 
 ## 14. Entrenadores por partido y tramos de entrenador
 

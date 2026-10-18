@@ -4,7 +4,7 @@
 
 * Publicado → origen: index.html = artifact/mesa-multiliga.html; atlas/, quintetos/ (páginas) y sus datos;
   datos/ = data/artifact/{<temporada>/, normalizados/, normalizacion/, temporadas.json, diccionario_columnas.json}.
-* Cada JSON de más de 256 KB se publica comprimido como <ruta>.gz.txt (gzip en base64: el Artifact sólo sirve
+* Cada JSON se publica comprimido como <ruta>.gz.txt (los de menos de 256 KB, también en claro) (gzip en base64: el Artifact sólo sirve
   tipos de texto y una versión admite 256 MB); las páginas leen primero esa versión (cargarJSON) y si no
   existe, el .json. La ruta .json antigua se marca para borrar (null) en el último lote.
 * Escribe <carpeta_salida>/lote<N>.json (≤ 58 MB y ≤ 250 ficheros por lote) con el mapa de ficheros.
@@ -49,12 +49,15 @@ def main(salida: str) -> None:
     final: dict[str, Path] = {}
     borrar = []
     for pub, src in mapa().items():
-        if src.suffix == ".json" and src.stat().st_size > UMBRAL:
+        if src.suffix == ".json":
             dst = comp / (pub.replace("/", "__") + ".gz.txt")
             if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
                 dst.write_bytes(base64.b64encode(gzip.compress(src.read_bytes(), 9)))
             final[pub + ".gz.txt"] = dst
-            borrar.append(pub)
+            if src.stat().st_size > UMBRAL:
+                borrar.append(pub)
+            else:               # los pequeños también en claro (páginas que los leen sin cargarJSON)
+                final[pub] = src
         else:
             final[pub] = src
     # páginas e índices primero (la página no se rompe a mitad de la publicación)
