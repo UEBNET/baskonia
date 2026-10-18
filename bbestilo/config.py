@@ -13,6 +13,7 @@ CLUBES = RAIZ / "config" / "clubes.json"
 TEMPORADAS_ENTRENO = ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
 # Temporada en curso: B no la traduce (sólo 4 filas), se usa A y se marca como provisional.
 TEMPORADAS_PROVISIONALES = ["2026-27"]
+MIN_CUOTA_ESTILO = 0.05   # un estilo reúne al menos el 5 % de los clubes (consenso de semillas)
 N_ESTILOS = 6           # iteraciones anteriores (12 y 8 estilos): data/modelos/estilos/historial/
 D_MAPA = 3
 # Neutralización del nivel: a cada rasgo de estilo se le quita la parte que explica el índice de nivel

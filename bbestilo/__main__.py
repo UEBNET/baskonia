@@ -2,6 +2,7 @@
 
     python -m bbestilo entrenar                 # entrena VaDE (10 semillas, consenso y ajuste fino), evalúa y guarda (≈25 min)
     python -m bbestilo evaluar                  # reevalúa las redes guardadas sin reentrenar
+    python -m bbestilo reconsensuar             # rehace consenso y ajuste fino con las semillas guardadas
     python -m bbestilo encaje --jugador "Nombre" [--club baskonia] [--competicion euroleague]
                               [--temporada 2025-26] [--minutos 600] [--sustituye "Nombre"]
     python -m bbestilo encaje --jugador "A" "B" [--minutos 900 700] [--baja "C" "D"]   # varios fichajes y bajas
@@ -71,6 +72,41 @@ def entrenar(redes: list[str], semillas: list[int]) -> None:
     print(f"Hecho en {time.time() - t0:.0f} s", flush=True)
 
 
+def reconsensuar(tipo: str = "vade") -> None:
+    """Rehace el consenso y el ajuste fino con las semillas ya entrenadas (vade/semillas/*.pt), sin
+    reentrenarlas (p. ej. tras cambiar la regla del consenso), y reevalúa."""
+    from . import datos, entrenar as E
+
+    t0 = time.time()
+    cj = datos.construir()
+    d = C.DIR_SALIDA / tipo
+    semillas = sorted(int(p.stem) for p in (d / "semillas").glob("*.pt"))
+    redes = [E.cargar(d / "semillas" / f"{s}.pt")[0] for s in semillas]
+    Xc = E.torch.tensor(cj.Xc[cj.clubes["temporada"].isin(C.TEMPORADAS_ENTRENO).to_numpy()], dtype=E.torch.float32)
+    et = [E.etiquetas(r, Xc) for r in redes]
+    cons = E.consenso(et, C.N_ESTILOS)
+    print(f"consenso: tamaños {np.bincount(cons, minlength=C.N_ESTILOS).tolist()}", flush=True)
+    a_c = [E.adjusted_rand_score(e, cons) for e in et]
+    i = int(np.argmax(a_c))
+    print(f"ARI de cada semilla con el consenso {np.round(a_c, 3).tolist()}; base = semilla {semillas[i]}", flush=True)
+    M = E.muestras(cj, C.TEMPORADAS_ENTRENO, semillas[i])
+    base = E.crear(tipo, redes[i].config)
+    base.load_state_dict(redes[i].state_dict())
+    reg: list = []
+    final = E.afinar_vade(base, M, cons, semillas[i], registro=reg)
+    E.orientar(final, M.Xc)
+    a_f = E.adjusted_rand_score(E.etiquetas(final, Xc), cons)
+    print(f"afinado desde el consenso: ARI con el consenso {a_f:.3f}; tamaños "
+          f"{np.bincount(E.etiquetas(final, Xc), minlength=C.N_ESTILOS).tolist()}", flush=True)
+    E.guardar(final, tipo, semillas[i], d / "modelo.pt")
+    _json({"registro": reg, "consenso": {"ari_semillas_consenso": a_c, "ari_final_consenso": a_f,
+           "ari_final_semillas": [E.adjusted_rand_score(E.etiquetas(final, Xc), e) for e in et],
+           "min_cuota_estilo": C.MIN_CUOTA_ESTILO}}, d / "registro.json")
+    np.save(d / "consenso.npy", cons)
+    evaluar([tipo], cj)
+    print(f"Hecho en {time.time() - t0:.0f} s", flush=True)
+
+
 def evaluar(redes: list[str], cj=None) -> None:
     """Evalúa las redes guardadas (modelo, semillas y reserva) y escribe tablas y comparativa."""
     from . import datos, entrenar as E, evaluar as V, resultados as R
@@ -134,6 +170,7 @@ def main(argv=None):
     ar.add_argument("--fuentes", default=None, help="carpeta con fuentes woff/ttf y fuentes.css (opcional)")
     sub.add_parser("entrenadores", help="estilo de cada tramo club-temporada-entrenador (entrenadores.csv)")
     sub.add_parser("quimica", help="química de estilos: efectos X → Y y sinergia por estilo × estilo (interacciones.json)")
+    sub.add_parser("reconsensuar", help="rehace consenso y ajuste fino con las semillas guardadas, y reevalúa")
     sub.add_parser("barrido", help="número de estilos (BIC/ICL y k-medias) antes de entrenar")
     x = sub.add_parser("exportar", help="datos del mapa 3D para el Artifact")
     x.add_argument("--salida", default=str(C.RAIZ / "artifact" / "estilos"))
@@ -171,6 +208,8 @@ def main(argv=None):
     elif args.orden == "articulo":
         from . import articulo
         print("escrito", articulo.construir(Path(args.fuentes) if args.fuentes else None))
+    elif args.orden == "reconsensuar":
+        reconsensuar()
     elif args.orden == "entrenadores":
         from . import entrenadores
         entrenadores.main()

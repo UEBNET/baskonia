@@ -1,21 +1,21 @@
 metrica,nombre,vade,mejor
-entropia_reparto,"Equilibrio del reparto (entropía, 1 = igual)",0.9916172241968679,vade
-tamano_min,Estilo más pequeño (clubes),135,vade
-salida_max_media,Confianza media de la neurona ganadora,0.788131594657898,vade
-silueta_mapa,Silueta en el mapa 3D,0.2907692492008209,vade
-silueta_rasgos,Silueta en los 13 rasgos,0.06702646470504829,vade
-davies_bouldin_mapa,Davies-Bouldin en el mapa (menos es mejor),1.151281657058222,vade
-ari_semillas_medio,Estabilidad de los estilos entre semillas (ARI medio),0.5184561292077106,vade
-ari_final_semillas_medio,Centralidad del modelo final (ARI medio con las semillas),0.5588618198789148,vade
-estabilidad_mapa,Estabilidad del mapa entre semillas (r de distancias),0.9786331489639818,vade
-robustez_reparto_minutos,Robustez al reparto de minutos,0.5967151454363089,vade
-ari_temporal_reserva,"Reproducibilidad temporal (ARI, red sin 2024-26)",0.5506483687475646,vade
-trustworthiness_k10,Fidelidad del mapa: trustworthiness,0.8859588444395847,vade
-continuidad_k10,Fidelidad del mapa: continuidad,0.9161759348345597,vade
-spearman_distancias,Correlación distancias mapa / perfil,0.7505835295240302,vade
-r2_medio,R² medio de reconstrucción,0.5400620218025803,vade
-eta2_nivel,Nivel explicado por el estilo (η²; menos = estilo independiente del nivel),0.013741900185527779,vade
-nmi_estilo_liga,Información compartida estilo-liga (NMI; menos = estilos que cruzan ligas),0.1026068383521589,vade
+entropia_reparto,"Equilibrio del reparto (entropía, 1 = igual)",0.9808748738496859,vade
+tamano_min,Estilo más pequeño (clubes),136,vade
+salida_max_media,Confianza media de la neurona ganadora,0.8102002739906311,vade
+silueta_mapa,Silueta en el mapa 3D,0.26399362087249756,vade
+silueta_rasgos,Silueta en los 13 rasgos,0.05329985631231429,vade
+davies_bouldin_mapa,Davies-Bouldin en el mapa (menos es mejor),1.2568695125225775,vade
+ari_semillas_medio,Estabilidad de los estilos entre semillas (ARI medio),0.476053771228601,vade
+ari_final_semillas_medio,Centralidad del modelo final (ARI medio con las semillas),0.5431567070845242,vade
+estabilidad_mapa,Estabilidad del mapa entre semillas (r de distancias),0.9682397161309654,vade
+robustez_reparto_minutos,Robustez al reparto de minutos,0.6012751677852349,vade
+ari_temporal_reserva,"Reproducibilidad temporal (ARI, red sin 2024-26)",0.5143715218619697,vade
+trustworthiness_k10,Fidelidad del mapa: trustworthiness,0.8806354104792661,vade
+continuidad_k10,Fidelidad del mapa: continuidad,0.9109449455053584,vade
+spearman_distancias,Correlación distancias mapa / perfil,0.7319859969334288,vade
+r2_medio,R² medio de reconstrucción,0.5176723546565667,vade
+eta2_nivel,Nivel explicado por el estilo (η²; menos = estilo independiente del nivel),0.011608849196991726,vade
+nmi_estilo_liga,Información compartida estilo-liga (NMI; menos = estilos que cruzan ligas),0.08600291212569215,vade
 pares_distintos,"Parejas de estilos distintas (permutación, Holm 5 %)",15/15,
-mahalanobis_min,Distancia de Mahalanobis mínima entre estilos,2.3621101487328744,vade
-replicabilidad,Replicabilidad de perfiles 2020-23 / 2023-26 (r medio),0.9406625828326577,vade
+mahalanobis_min,Distancia de Mahalanobis mínima entre estilos,2.1173416806298624,vade
+replicabilidad,Replicabilidad de perfiles 2020-23 / 2023-26 (r medio),0.9557816072647224,vade

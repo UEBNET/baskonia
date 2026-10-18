@@ -59,7 +59,8 @@ ITERACIONES = [   # (id, carpeta en historial/ o "" = modelo final, red, etiquet
     ("v2_idec", "v2_8estilos", "idec", "v2 · IDEC 8"),
     ("v3_vade", "v3_6estilos", "vade", "v3 · VaDE 6 (5 semillas)"),
     ("v4_vade", "v4_6estilos_box", "vade", "v4 · VaDE 6 (13 rasgos de caja)"),
-    ("final", "", "vade", "Final · VaDE 6 (17 rasgos con jugada a jugada)"),
+    ("v5_vade", "v5_6estilos_8ligas", "vade", "v5 · VaDE 6 (17 rasgos, 8 ligas)"),
+    ("final", "", "vade", "Final · VaDE 6 (17 rasgos, 12 ligas, entrenadores)"),
 ]
 # Métricas normalizadas de cada jugador que el Atlas proyecta al contexto del equipo de destino
 CLAVE_CTX = ["usg_pct", "pts_p100", "ts_pct", "efg_pct", "ast_pct", "tov_pct", "dreb_pct", "drtg", "per",

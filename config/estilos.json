@@ -1,33 +1,33 @@
 {
- "_descripcion": "Nombres interpretativos de los 6 estilos del modelo final (VaDE con 17 rasgos: 13 de caja + 4 del jugada a jugada, 10 semillas; data/modelos/estilos/vade/modelo.pt), puestos a partir de su perfil medio sin nivel (vade/estilos.csv). Si se reentrena, revisar que cada perfil coincide antes de reutilizarlos. Nombres de iteraciones anteriores: data/modelos/estilos/historial/*/nombres.json.",
+ "_descripcion": "Nombres interpretativos de los 6 estilos del modelo final (VaDE con 17 rasgos: 13 de caja + 4 del jugada a jugada; 12 ligas; 10 semillas y consenso con suelo de tamaño del 5 %; data/modelos/estilos/vade/modelo.pt), puestos a partir de su perfil medio sin nivel (vade/estilos.csv) y emparejados con el modelo de 8 ligas por correlación de perfiles (r ≥ 0,78). Si se reentrena, revisar que cada perfil coincide antes de reutilizarlos. Nombres de iteraciones anteriores: data/modelos/estilos/historial/*/nombres.json.",
  "E01": {
   "nombre": "Creación individual",
-  "descriptor": "Triple esquina ↓ · 3PAr ↓ · Reb. def. ↑ · Asistidas ↓",
+  "descriptor": "Triple esquina ↓ · 3PAr ↓ · Asistidas ↓ · Reb. def. ↑",
   "resumen": "Ataque que se fabrica sus tiros: poco triple (casi ningún triple de esquina), mucha media distancia, tiros libres y canastas sin asistencia; manda en el rebote defensivo y tapona."
  },
  "E02": {
-  "nombre": "Pintura física",
-  "descriptor": "Aro ↑ · FTr ↑ · Reb. of. ↑ · Faltas ↑",
-  "resumen": "Juego en la pintura: muchos tiros en el aro y tiros libres, rebote ofensivo, interiores, faltas y robos; poco triple y más pérdidas."
+  "nombre": "Exterior y presión",
+  "descriptor": "Exteriores ↑ · Aro ↑ · TOV% ↑ · Robos ↑",
+  "resumen": "Muchos minutos de bases y escoltas: ritmo alto, presión y robos; ataca el aro y saca tiros libres, reparte asistencias pero pierde más balones; pocas canastas asistidas y poco rebote defensivo."
  },
  "E03": {
-  "nombre": "Pausado y seguro",
-  "descriptor": "TOV% ↓ · Exteriores ↓ · AST% ↓ · Robos ↓",
-  "resumen": "Muy pocas pérdidas, pocas asistencias y pocos minutos de bases; ritmo algo bajo, defensa conservadora (pocos robos y faltas) y rebote; muchas de sus canastas llegan de pase."
- },
- "E04": {
   "nombre": "Lejos del aro",
-  "descriptor": "Aro ↓ · Reb. of. ↓ · Media dist. ↑ · FTr ↓",
+  "descriptor": "Aro ↓ · Reb. of. ↓ · Media dist. ↑",
   "resumen": "Muy pocos tiros cerca de la canasta: media distancia y triple, poco rebote ofensivo y pocos tiros libres; ritmo bajo y juego limpio (pocas faltas y pérdidas)."
  },
+ "E04": {
+  "nombre": "Pausado y seguro",
+  "descriptor": "Exteriores ↓ · TOV% ↓ · AST% ↓ · Robos ↓",
+  "resumen": "Muy pocas pérdidas, pocas asistencias y pocos minutos de bases; defensa conservadora (pocos robos y faltas) y buen rebote defensivo; ritmo algo bajo; muchas de sus canastas llegan de pase."
+ },
  "E05": {
-  "nombre": "Exterior y presión",
-  "descriptor": "Exteriores ↑ · Robos ↑ · Interiores ↓ · Reb. def. ↓",
-  "resumen": "Muchos minutos de bases y escoltas: ritmo alto, presión y robos, asistencias y creación propia (pocas canastas asistidas); poco rebote, más pérdidas y faltas."
+  "nombre": "Pintura física",
+  "descriptor": "Aro ↑ · Reb. of. ↑ · Media dist. ↓ · Faltas ↑",
+  "resumen": "Juego en la pintura: muchos tiros en el aro, rebote ofensivo, faltas y robos; casi nada de media distancia, pocas asistencias y menos minutos de bases."
  },
  "E06": {
   "nombre": "Circulación y triple",
-  "descriptor": "Triple esquina ↑ · Asistidas ↑ · 3PAr ↑ · Media dist. ↓",
+  "descriptor": "3PAr ↑ · Triple esquina ↑ · Asistidas ↑ · Reb. def. ↓",
   "resumen": "Mucho triple, sobre todo de esquina, y canastas asistidas; casi nada de media distancia y pocos tiros libres; poco rebote defensivo y pocos tapones."
  }
 }

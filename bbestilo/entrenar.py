@@ -167,15 +167,36 @@ def entrenar_vade(M: Muestras, semilla: int, hp=None, registro=None) -> RedVaDE:
     return red
 
 
-def consenso(etiquetas_semillas: list[np.ndarray], k: int) -> np.ndarray:
+def consenso(etiquetas_semillas: list[np.ndarray], k: int, min_frac: float = C.MIN_CUOTA_ESTILO) -> np.ndarray:
     """Partición de consenso: matriz de co-asociación (fracción de semillas que ponen juntos a dos
-    clubes) y agrupamiento jerárquico de enlace medio sobre 1 − co-asociación, cortado en k grupos."""
+    clubes) y agrupamiento jerárquico de enlace medio sobre 1 − co-asociación, cortado en k grupos.
+
+    Suelo de tamaño: un estilo debe reunir al menos `min_frac` de los clubes. El enlace medio tiende a dejar
+    grupitos de clubes raros; si al cortar en k aparece alguno por debajo del suelo, se corta más fino
+    (k+1, k+2…) hasta tener k grupos que lo superen, y los clubes de los grupos pequeños pasan al grupo
+    grande con el que más co-asociación media tienen."""
     from scipy.cluster.hierarchy import fcluster, linkage
     from scipy.spatial.distance import squareform
     E = np.stack(etiquetas_semillas)
     co = (E[:, :, None] == E[:, None, :]).mean(0)
-    D = squareform(1.0 - co, checks=False)
-    return fcluster(linkage(D, method="average"), k, criterion="maxclust") - 1
+    Z = linkage(squareform(1.0 - co, checks=False), method="average")
+    n, minimo = co.shape[0], max(1, int(np.ceil(min_frac * co.shape[0])))
+    for m in range(k, 6 * k + 1):
+        et = fcluster(Z, m, criterion="maxclust") - 1
+        tam = np.bincount(et, minlength=m)
+        grandes = np.argsort(-tam)[:k]
+        if (tam[grandes] >= minimo).all():
+            break
+    else:
+        return fcluster(Z, k, criterion="maxclust") - 1
+    sal = np.full(n, -1)
+    for j, g in enumerate(grandes):
+        sal[et == g] = j
+    resto = np.nonzero(sal < 0)[0]
+    if len(resto):
+        afin = np.stack([co[np.ix_(resto, np.nonzero(sal == j)[0])].mean(1) for j in range(k)], 1)
+        sal[resto] = afin.argmax(1)
+    return sal
 
 
 def afinar_vade(red: RedVaDE, M: Muestras, etiq: np.ndarray, semilla: int, hp=None, registro=None) -> RedVaDE:
