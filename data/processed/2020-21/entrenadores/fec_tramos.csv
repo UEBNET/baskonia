@@ -1,0 +1,25 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+fec,2020-21,9118,CSM CSU Oradea,1,cristian-achim,Cristian Achim,7,3,4,0,0,2021-01-26,2021-04-25,4,3,1,2,3,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103709;103708;103707;103985;103730;103736;104768
+fec,2020-21,1159,Besiktas ICRYPEX,1,ahmet-dursun-kandemir,Ahmet Dursun Kandemir,3,3,0,0,0,2021-01-26,2021-01-29,1,2,1,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103709;103764;103837
+fec,2020-21,9123,Rilski Sportist,1,ludmil-hadjisotirov,Ludmil Hadjisotirov,4,3,1,0,0,2021-01-26,2021-03-23,1,3,1,2,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103771;103770;103769;103983
+fec,2020-21,900,Kapfenberg Bulls,1,michael-coffin,Michael Coffin,3,3,0,0,0,2021-01-26,2021-01-29,1,2,1,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103771;103766;103775
+fec,2020-21,537,Szolnoki Olajbanyasz,1,gasper-potocnik,Gasper Potocnik,3,3,0,0,0,2021-01-26,2021-01-29,1,2,1,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103774;103779;103783
+fec,2020-21,3904,Arged BMSLAM Stal,1,igor-milicic,Igor Milicic,7,3,4,0,0,2021-01-26,2021-04-25,6,1,3,0,3,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103774;103784;103778;103979;103728;103736;103740
+fec,2020-21,59515,Sporting CP,1,luis-magalhaes,Luís Magalhães,3,3,0,0,0,2021-01-26,2021-01-29,0,3,0,3,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103785;103784;103783
+fec,2020-21,58593,Ironi Ness Ziona,1,brad-greenberg,Brad Greenberg,7,3,4,0,0,2021-01-26,2021-04-25,6,1,2,1,4,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103785;103779;103778;103981;103734;103738;103740
+fec,2020-21,2445,BC Kyiv Basket,1,ainars-bagatskis,Ainars Bagatskis,4,3,1,0,0,2021-01-26,2021-03-24,1,3,1,2,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103789;103766;103769;103981
+fec,2020-21,67937,BC Prometey,1,vitaliy-cherniy,Vitaliy Cherniy,4,3,1,0,0,2021-01-26,2021-03-23,3,1,3,0,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103789;103770;103775;103977
+fec,2020-21,1021,Belfius Mons-Hainaut,1,vedran-bosnic,Vedran Bosnic,5,3,2,0,0,2021-01-26,2021-03-25,2,3,1,2,1,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103799;103804;103807;103977;103728
+fec,2020-21,2102,UNAHOTELS Reggio Emilia,1,antimo-martino,Antimo Martino,3,3,0,0,0,2021-01-26,2021-01-29,2,1,2,1,0,0,1,0,2,,fiba.basketball staffA/staffB (Head Coach),103799;103808;103803
+fec,2020-21,2102,UNAHOTELS Reggio Emilia,2,attilio-caja,Attilio Caja,2,0,2,0,0,2021-03-23,2021-03-25,1,1,0,0,1,1,1,1,2,,fiba.basketball staffA/staffB (Head Coach),103971;103730
+fec,2020-21,307,Iraklis BC,1,asterios-kalyvas,Asterios Kalyvas,3,3,0,0,0,2021-01-26,2021-01-29,3,0,3,0,0,0,1,0,2,,fiba.basketball staffA/staffB (Head Coach),103809;103808;103807
+fec,2020-21,307,Iraklis BC,2,thanasis-skourtopoulos,Thanasis Skourtopoulos,2,0,2,0,0,2021-03-24,2021-03-26,1,1,0,0,1,1,1,1,2,,fiba.basketball staffA/staffB (Head Coach),103975;103734
+fec,2020-21,8537,Egis Kormend,1,ziga-mravljak,Ziga Mravljak,3,3,0,0,0,2021-01-26,2021-01-29,0,3,0,3,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103809;103804;103803
+fec,2020-21,8016,Heroes Den Bosch,1,jean-marc-marie-francois-jaumin,Jean-Marc Marie-François Jaumin,3,2,1,0,0,2021-01-26,2021-03-23,1,2,1,1,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103820;103838;103979
+fec,2020-21,386,Donar Groningen,1,ivan-rudez,Ivan Rudez,2,2,0,0,0,2021-01-26,2021-01-28,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103820;103819
+fec,2020-21,698,Fribourg Olympic,1,petar-aleksic,Petar Aleksic,3,2,1,0,0,2021-01-26,2021-03-23,1,2,1,1,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103822;103824;103973
+fec,2020-21,7867,BC Dnipro,1,denys-zhuravlov,Denys Zhuravlov,3,2,1,0,0,2021-01-26,2021-03-23,1,2,1,1,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103822;103826;103985
+fec,2020-21,675, BC CSU Sibiu,1,dan-fleseriu,Dan Fleseriu,4,3,1,0,0,2021-01-26,2021-03-23,2,2,2,1,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103835;103764;103707;103971
+fec,2020-21,9606,BC Balkan,1,jovica-arsic,Jovica Arsic,5,3,2,0,0,2021-01-26,2021-03-25,3,2,2,1,1,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103835;103708;103837;103973;103733
+fec,2020-21,843,Anwil,1,marcin-wozniak,Marcin Wozniak,3,2,1,0,2,2021-01-27,2021-03-24,1,2,1,1,0,1,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103826;103824;103975
+fec,2020-21,10097,BC Parma,1,kazys-maksvytis,Kazys Maksvytis,6,2,4,0,0,2021-01-28,2021-04-25,4,2,2,0,2,2,1,0,1,,fiba.basketball staffA/staffB (Head Coach),103819;103838;103983;103733;103738;104768

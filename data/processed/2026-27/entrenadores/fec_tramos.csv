@@ -1,0 +1,51 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+fec,2026-27,66578,FIATC Girona,1,ramon-fernandez,Ramon Fernandez,2,2,0,0,0,2026-10-06,2026-10-13,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135694;135698
+fec,2026-27,670,Dinamo Bucharest,1,zydrunas-urbonas,Zydrunas Urbonas,2,2,0,0,0,2026-10-06,2026-10-13,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135694;135697
+fec,2026-27,537,NHSZ-Szolnoki Olajbanyasz,1,mikko-larkas,Mikko Larkas,2,2,0,0,0,2026-10-06,2026-10-13,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135695;135697
+fec,2026-27,10024,Zastal Zielona Gora,1,arkadiusz-miloszewski,Arkadiusz Miloszewski,2,2,0,0,0,2026-10-06,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135695;135699
+fec,2026-27,57798,Patrioti Levice,1,michal-madzin,Michal Madzin,2,2,0,0,0,2026-10-06,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135696;135699
+fec,2026-27,396,Coretec Oostende,1,denis-wucherer,Denis Wucherer,2,2,0,0,0,2026-10-06,2026-10-13,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135696;135698
+fec,2026-27,1129,SLUC Nancy Basket,1,sylvain-lautie,Sylvain Lautie,2,2,0,0,0,2026-10-06,2026-10-13,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135754;135758
+fec,2026-27,73436,BC Vienna,1,dragan-bajic,Dragan Bajic,2,2,0,0,0,2026-10-06,2026-10-13,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135754;135757
+fec,2026-27,788,MZT Skopje Aerodrom,1,vasko-atanasov,Vasko Atanasov,2,2,0,0,0,2026-10-06,2026-10-14,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135784;135787
+fec,2026-27,307,Iraklis BC,1,zoran-lukic,Zoran Lukic,2,2,0,0,0,2026-10-06,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135784;135788
+fec,2026-27,2710,Tartu Ulikool Maks & Moorits,1,aivar-kuusmaa,Aivar Kuusmaa,2,2,0,0,0,2026-10-06,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135785;135787
+fec,2026-27,64933,Dziki Warszawa,1,marco-legovich,Marco Legovich,2,2,0,0,0,2026-10-06,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135785;135789
+fec,2026-27,68210,Yukatel Denizli Basket,1,zafer-aktas,Zafer Aktas,2,2,0,0,0,2026-10-06,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135844;135848
+fec,2026-27,302,BC Prievidza,1,gareth-murray,Gareth Murray,2,2,0,0,0,2026-10-06,2026-10-13,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135844;135847
+fec,2026-27,89375,Mykonos Betsson BC,1,evangelos-ziagkos,Evangelos Ziagkos,2,2,0,0,0,2026-10-06,2026-10-13,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135874;135878
+fec,2026-27,81526,Neftchi SC,1,konstantinos-vasileiadis,Konstantinos Vasileiadis,2,2,0,0,0,2026-10-06,2026-10-14,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135874;135877
+fec,2026-27,96069,VET-CONCEPT Gladiators Trier,1,jacques-schneider,Jacques Schneider,2,2,0,0,0,2026-10-07,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135664;135668
+fec,2026-27,2751,BC Batumi 2010,1,anatoli-berishvili,Anatoli Berishvili,2,2,0,0,0,2026-10-07,2026-10-14,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135664;135667
+fec,2026-27,1774,BK Opava,1,david-zach,David Zach,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135665;135667
+fec,2026-27,258,BC Split,1,damir-rancic,Damir Rancic,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135665;135669
+fec,2026-27,59546,Trepca,1,aziz-bekir,Aziz Bekir,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135666;135669
+fec,2026-27,57868,Promitheas Patras BC,1,george-vovoras,George Vovoras,1,1,0,0,0,2026-10-07,2026-10-07,1,0,1,0,0,0,1,0,2,,fiba.basketball staffA/staffB (Head Coach),135666
+fec,2026-27,57868,Promitheas Patras BC,2,michail-michelakos,Michail Michelakos,1,1,0,0,0,2026-10-14,2026-10-14,0,1,0,1,0,0,1,1,2,,fiba.basketball staffA/staffB (Head Coach),135668
+fec,2026-27,84842,Esenler Erokspor,1,ufuk-sarica,Ufuk Sarica,2,2,0,0,0,2026-10-07,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135724;135728
+fec,2026-27,68796,Gence BC,1,martin-knezevic,Martin Knezevic,1,1,0,0,0,2026-10-07,2026-10-07,0,1,0,1,0,0,1,0,2,,fiba.basketball staffA/staffB (Head Coach),135724
+fec,2026-27,68796,Gence BC,2,martin-milan-knezevic,Martin Milan Knezevic,1,1,0,0,0,2026-10-13,2026-10-13,0,1,0,1,0,0,1,1,2,,fiba.basketball staffA/staffB (Head Coach),135727
+fec,2026-27,58478,Kolossos H Hotels BC,1,aristeidis-lykogiannis,Aristeidis Lykogiannis,2,2,0,0,0,2026-10-07,2026-10-13,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135725;135727
+fec,2026-27,8787,SCM Universitatea Craiova,1,zare-markovski,Zare Markovski,2,2,0,0,0,2026-10-07,2026-10-14,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135725;135729
+fec,2026-27,59515,Sporting CP,1,antonio-madail-reis-pires,Antonio Madail Reis Pires,2,2,0,0,0,2026-10-07,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135726;135729
+fec,2026-27,9123,Rilski Sportist,1,lyubomir-kirov,Lyubomir Kirov,2,2,0,0,0,2026-10-07,2026-10-14,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135726;135728
+fec,2026-27,66528,King Szczecin,1,maciej-majcherek,Maciej Majcherek,2,2,0,0,0,2026-10-07,2026-10-13,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135755;135757
+fec,2026-27,89491,Nitra Blue Wings,1,martin-blaho,Martin Blaho,2,2,0,0,0,2026-10-07,2026-10-14,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135755;135759
+fec,2026-27,729,Keravnos BC,1,vasilios-kounas,Vasilios Kounas,2,2,0,0,0,2026-10-07,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135756;135759
+fec,2026-27,58616,BC Parnu,1,kristjan-evart,Kristjan Evart,2,2,0,0,0,2026-10-07,2026-10-13,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135756;135758
+fec,2026-27,551,Petrolina AEK,1,christophoros-livadiotis,Christophoros Livadiotis,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135786;135789
+fec,2026-27,10098,Fitness First Wurzburg Baskets,1,sasa-filipovski,Sasa Filipovski,2,2,0,0,0,2026-10-07,2026-10-14,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135786;135788
+fec,2026-27,2417,Elan Chalon,1,elric-delord,Elric Delord,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135814;135818
+fec,2026-27,76961,Manchester Basketball,1,matthew-otten,Matthew Otten,1,1,0,0,0,2026-10-07,2026-10-07,0,1,0,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135814
+fec,2026-27,66963,BC Bashkimi,1,igor-jovovic,Igor Jovovic,1,1,0,0,0,2026-10-07,2026-10-07,1,0,1,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135815
+fec,2026-27,80143,Valmiera Glass VIA,1,davis-coders,Davis Coders,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135815;135819
+fec,2026-27,8015,Bigbank/Kalev,1,brett-nomm,Brett Nomm,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135816;135819
+fec,2026-27,59793,Biotekno Korfez Basket,1,serhan-kavut,Serhan Kavut,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135816;135818
+fec,2026-27,96135,LANDAU Lions,1,erhan-toker,Erhan Toker,2,2,0,0,0,2026-10-07,2026-10-13,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135845;135847
+fec,2026-27,57936,Lions de Geneve,1,patrick-pembele,Patrick Pembele,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135845;135849
+fec,2026-27,7880,Bakken Bears,1,skyler-bowlin,Skyler Bowlin,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135846;135849
+fec,2026-27,237,SL Benfica,1,ainars-bagatskis,Ainars Bagatskis,2,2,0,0,0,2026-10-07,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135846;135848
+fec,2026-27,378,VEF Riga,1,jevgenijs-kosuskins,Jevgenijs Kosuskins,2,2,0,0,0,2026-10-07,2026-10-14,2,0,2,0,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135875;135877
+fec,2026-27,72935,Lokomotiv Plovdiv,1,asen-nikolov,Asen Nikolov,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135875;135879
+fec,2026-27,9118,CSM CSU Raiffeisen Oradea,1,mikko-riipinen,Mikko Riipinen,2,2,0,0,0,2026-10-07,2026-10-14,1,1,1,1,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135876;135879
+fec,2026-27,698,Fribourg Olympic Basket,1,thibaut-petit,Thibaut Petit,2,2,0,0,0,2026-10-07,2026-10-13,0,2,0,2,0,0,1,0,1,,fiba.basketball staffA/staffB (Head Coach),135876;135878

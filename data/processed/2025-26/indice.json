@@ -1,6 +1,6 @@
 {
   "temporada": "2025-26",
-  "generado": "2026-10-17T18:20:23.375154+00:00",
+  "generado": "2026-10-18T10:46:26.092219+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -85,7 +85,7 @@
     "gbl": {
       "nombre": "Greek Basket League (A1)",
       "archivo": "ligas/gbl.csv",
-      "fecha_extraccion": "2026-10-17T18:08:50.143874+00:00",
+      "fecha_extraccion": "2026-10-17T17:59:52.068505+00:00",
       "fases": {
         "playoffs": 107,
         "regular": 249,

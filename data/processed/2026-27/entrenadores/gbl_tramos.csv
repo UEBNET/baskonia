@@ -1,0 +1,15 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+gbl,2026-27,mykonos-betsson-bc,Mykonos Betsson BC,1,vaggelis-ziagkos,Βαγγέλης Ζιαγκοσ,3,3,0,0,0,"Sat, 03 Oc","Sat, 17 Oc",1,2,1,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902681;2902692;2902704
+gbl,2026-27,paok-bc,PAOK BC,1,andrea-trinchieri,Αντρέα Τρινκιερι,3,3,0,0,0,"Sat, 03 Oc","Sat, 17 Oc",3,0,3,0,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902681;2902694;2902687
+gbl,2026-27,kolossos-h-hotels-collection,Kolossos H Hotels Collection,1,aris-lykogiannis,Άρης Λυκογιαννησ,3,3,0,0,0,"Sat, 03 Oc","Sun, 11 Oc",1,2,1,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902682;2902687;2902702
+gbl,2026-27,doxa-lefkadas-elabet,Doxa Lefkadas ELABET,1,theodoros-terzis,Θεόδωρος Τερζησ,3,3,0,0,0,"Sat, 03 Oc","Sat, 17 Oc",0,3,0,3,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902682;2902694;2902689
+gbl,2026-27,promitheas-patras-vikos-cola,Promitheas Patras VIKOS COLA,1,giorgos-vovoras,Γιώργος Βοβορασ,3,3,0,0,1,"Sat, 03 Oc","Sat, 17 Oc",1,2,1,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902683;2902700;2902689
+gbl,2026-27,peristeri-betsson,Peristeri Betsson,1,vasilis-xanthopoulos,Βασίλης Ξανθοπουλοσ,2,2,0,0,0,"Sat, 03 Oc","Sat, 10 Oc",2,0,2,0,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902683;2902690
+gbl,2026-27,aek-bc,AEK BC,1,dragan-sakota,Ντράγκαν Σακοτα,3,3,0,0,0,"Sat, 03 Oc","Sat, 17 Oc",2,1,2,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902684;2902698;2902704
+gbl,2026-27,maroussi,Maroussi,1,ilias-papatheodorou,Ηλίας Παπαθεοδωρου,3,3,0,0,0,"Sat, 03 Oc","Sat, 17 Oc",0,3,0,3,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902684;2902692;2902693
+gbl,2026-27,ask-karditsa-iaponiki,ASK Karditsa IAPONIKI,1,nikos-papanikolopoulos,Νίκος Παπανικολοπουλοσ,3,3,0,0,0,"Sat, 03 Oc","Sat, 17 Oc",2,1,2,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902685;2902696;2902691
+gbl,2026-27,aris-bc,Aris BC,1,vassilis-spanoulis,Βασίλης Σπανουλησ,3,3,0,0,0,"Sat, 03 Oc","Sat, 17 Oc",2,1,2,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902685;2902698;2902693
+gbl,2026-27,iraklis-bc,Iraklis BC,1,zoran-lukic,Ζόραν Λουκιτσ,3,3,0,0,0,"Sat, 10 Oc","Sun, 04 Oc",1,2,1,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902690;2902691;2902688
+gbl,2026-27,vikos-falcons,ΒΙΚΟΣ ΦALCONS,1,thanasis-giaples,Θανάσης Γιαπλεσ,2,2,0,0,0,"Sat, 10 Oc","Sun, 04 Oc",0,2,0,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902696;2902686
+gbl,2026-27,panathinaikos-bc-aktor,Panathinaikos BC AKTOR,1,zeljko-obradovic,Željko Obradović,2,2,0,0,0,"Sat, 10 Oc","Sun, 04 Oc",2,0,2,0,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902700;2902686
+gbl,2026-27,olympiacos-piraeus,Olympiacos Piraeus,1,giorgos-bartzokas,Γιώργος Μπαρτζωκασ,2,2,0,0,0,"Sun, 04 Oc","Sun, 11 Oc",2,0,2,0,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2902688;2902702

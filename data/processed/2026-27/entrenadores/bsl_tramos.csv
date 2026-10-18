@@ -1,0 +1,20 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+bsl,2026-27,karsiyaka,KARŞIYAKA,1,nenad-markovic-zoric,Nenad Markovic Zoric,3,3,0,0,0,"Fri, 02 Oc","Sat, 26 Se",1,2,1,2,0,0,2,0,2,,FIBA LiveStats data.json (tm[].coach),2923433;2934600;2913589
+bsl,2026-27,karsiyaka,KARŞIYAKA,2,nenad-markovic,Nenad Markovic,1,1,0,0,0,"Fri, 16 Oc","Fri, 16 Oc",1,0,1,0,0,0,1,1,2,,FIBA LiveStats data.json (tm[].coach),2939271
+bsl,2026-27,galatasaray-mct-technic,GALATASARAY MCT TECHNIC,1,gianmarco-pozzecco,Gianmarco Pozzecco,3,3,0,0,0,"Fri, 02 Oc","Sat, 26 Se",1,2,1,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2923433;2934636;2913591
+bsl,2026-27,glint-cayirova-belediyesi,ÇAYIROVA BELEDİYESİ,1,ender-arslan,Ender Arslan,2,2,0,0,0,"Fri, 16 Oc","Sat, 26 Se",0,2,0,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2939271;2913591
+bsl,2026-27,tofas,TOFAŞ,1,massimo-cancellieri,Massimo Cancellieri,3,3,0,0,0,"Fri, 25 Se","Sat, 17 Oc",2,1,2,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2913588;2934618;2939429
+bsl,2026-27,pizzabulls-bordo-bandirma,PİZZABULLS BORDO BANDIRMA,1,tutku-acik,Tutku Açık,4,4,0,0,0,"Fri, 25 Se","Sun, 11 Oc",1,3,1,3,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2913588;2939366;2923437;2934620
+bsl,2026-27,besiktas,BEŞİKTAŞ,1,dusan-alimpijevic,Dusan Alimpijevic,3,3,0,0,0,"Mon, 05 Oc","Sun, 27 Se",1,2,1,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2929799;2934625;2913594
+bsl,2026-27,trabzonspor,TRABZONSPOR,1,selcuk-ernak,Burak Selçuk Ernak,3,3,0,0,0,"Mon, 05 Oc","Sun, 27 Se",2,1,2,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2929799;2934620;2913592
+bsl,2026-27,bursaspor-basketbol,BURSASPOR BASKETBOL,1,roger-grimau,Roger Grimau Gragera,4,4,0,0,0,"Mon, 12 Oc","Sun, 27 Se",1,3,1,3,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2934636;2923435;2939390;2913592
+bsl,2026-27,biotekno-korfez-basket,BİOTEKNO KÖRFEZ BASKET,1,serhan-kavut,Serhan Kavut,4,4,0,0,0,"Mon, 28 Se","Sun, 04 Oc",2,2,2,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2913595;2934616;2939429;2923438
+bsl,2026-27,esenler-erokspor,ESENLER EROKSPOR,1,ufuk-sarica,Ufuk Sarica,3,3,0,0,0,"Mon, 28 Se","Sat, 10 Oc",2,1,2,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2913595;2923436;2934618
+bsl,2026-27,turk-telekom,TÜRK TELEKOM,1,erdem-can,Erdem Can,4,4,0,0,0,"Sat, 03 Oc","Sun, 11 Oc",3,1,3,1,0,0,2,0,2,,FIBA LiveStats data.json (tm[].coach),2923435;2939366;2913589;2934625
+bsl,2026-27,turk-telekom,TÜRK TELEKOM,2,abdulkadir-utku-sarigul,Abdulkadir Utku Sarigül,1,1,0,0,0,"Sat, 17 Oc","Sat, 17 Oc",0,1,0,1,0,0,1,1,2,,FIBA LiveStats data.json (tm[].coach),2939404
+bsl,2026-27,aliaga-petkim-spor,ALİAĞA PETKİM SPOR,1,orhun-ene,Orhun Ene,3,3,0,0,0,"Sat, 03 Oc","Sat, 26 Se",1,2,1,2,0,0,2,0,2,,FIBA LiveStats data.json (tm[].coach),2923436;2934616;2913590
+bsl,2026-27,aliaga-petkim-spor,ALİAĞA PETKİM SPOR,2,ahmet-gurgen,Ahmet Gürgen,1,1,0,0,0,"Sat, 17 Oc","Sat, 17 Oc",1,0,1,0,0,0,1,1,2,,FIBA LiveStats data.json (tm[].coach),2939404
+bsl,2026-27,bahcesehir-koleji,BAHÇEŞEHİR KOLEJİ,1,aleksandar-djordjevic,Aleksandar Đorđević,3,3,0,0,0,"Sat, 10 Oc","Sun, 27 Se",3,0,3,0,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2934600;2939390;2913593
+bsl,2026-27,yukatel-denizli-basket,YUKATEL DENİZLİ BASKET,1,zafer-aktas,Zafer Aktaş,2,2,0,0,0,"Sat, 26 Se","Sun, 11 Oc",0,2,0,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2913590;2934621
+bsl,2026-27,anadolu-efes,ANADOLU EFES,1,pablo-laso,Pablo Laso,3,3,0,0,0,"Sun, 04 Oc","Sun, 27 Se",3,0,3,0,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2923437;2934621;2913594
+bsl,2026-27,fenerbahce-tarfin,FENERBAHÇE TARFİN,1,sarunas-jasikevicius,Šarūnas Jasikevičius,2,2,0,0,0,"Sun, 04 Oc","Sun, 27 Se",1,1,1,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2923438;2913593
