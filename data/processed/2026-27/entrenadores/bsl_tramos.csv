@@ -1,6 +1,5 @@
 liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
-bsl,2026-27,karsiyaka,KARŞIYAKA,1,nenad-markovic-zoric,Nenad Markovic Zoric,3,3,0,0,0,"Fri, 02 Oc","Sat, 26 Se",1,2,1,2,0,0,2,0,2,,FIBA LiveStats data.json (tm[].coach),2923433;2934600;2913589
-bsl,2026-27,karsiyaka,KARŞIYAKA,2,nenad-markovic,Nenad Markovic,1,1,0,0,0,"Fri, 16 Oc","Fri, 16 Oc",1,0,1,0,0,0,1,1,2,,FIBA LiveStats data.json (tm[].coach),2939271
+bsl,2026-27,karsiyaka,KARŞIYAKA,1,nenad-markovic-zoric,Nenad Markovic Zoric,4,4,0,0,0,"Fri, 02 Oc","Sat, 26 Se",2,2,2,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2923433;2939271;2934600;2913589
 bsl,2026-27,galatasaray-mct-technic,GALATASARAY MCT TECHNIC,1,gianmarco-pozzecco,Gianmarco Pozzecco,3,3,0,0,0,"Fri, 02 Oc","Sat, 26 Se",1,2,1,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2923433;2934636;2913591
 bsl,2026-27,glint-cayirova-belediyesi,ÇAYIROVA BELEDİYESİ,1,ender-arslan,Ender Arslan,2,2,0,0,0,"Fri, 16 Oc","Sat, 26 Se",0,2,0,2,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2939271;2913591
 bsl,2026-27,tofas,TOFAŞ,1,massimo-cancellieri,Massimo Cancellieri,3,3,0,0,0,"Fri, 25 Se","Sat, 17 Oc",2,1,2,1,0,0,1,0,1,,FIBA LiveStats data.json (tm[].coach),2913588;2934618;2939429

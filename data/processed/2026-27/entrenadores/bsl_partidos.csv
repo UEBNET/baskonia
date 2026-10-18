@@ -1,7 +1,7 @@
 liga,temporada,game_id,fecha,fase,equipo_id,equipo,rival_id,local,puntos,puntos_rival,resultado,entrenador,entrenador_id,entrenador_id_fuente,fuente,metodo,imputado,validacion_vd
 bsl,2026-27,2923433,"Fri, 02 Oc",regular,karsiyaka,KARŞIYAKA,galatasaray-mct-technic,1,78.0,71.0,V,Nenad Markovic Zoric,nenad-markovic-zoric,,FIBA LiveStats data.json (tm[].coach),partido,0,
 bsl,2026-27,2923433,"Fri, 02 Oc",regular,galatasaray-mct-technic,GALATASARAY MCT TECHNIC,karsiyaka,0,71.0,78.0,D,Gianmarco Pozzecco,gianmarco-pozzecco,,FIBA LiveStats data.json (tm[].coach),partido,0,
-bsl,2026-27,2939271,"Fri, 16 Oc",regular,karsiyaka,KARŞIYAKA,glint-cayirova-belediyesi,1,95.0,79.0,V,Nenad Markovic,nenad-markovic,,FIBA LiveStats data.json (tm[].coach),partido,0,
+bsl,2026-27,2939271,"Fri, 16 Oc",regular,karsiyaka,KARŞIYAKA,glint-cayirova-belediyesi,1,95.0,79.0,V,Nenad Markovic,nenad-markovic-zoric,,FIBA LiveStats data.json (tm[].coach),partido,0,
 bsl,2026-27,2939271,"Fri, 16 Oc",regular,glint-cayirova-belediyesi,ÇAYIROVA BELEDİYESİ,karsiyaka,0,79.0,95.0,D,Ender Arslan,ender-arslan,,FIBA LiveStats data.json (tm[].coach),partido,0,
 bsl,2026-27,2913588,"Fri, 25 Se",regular,tofas,TOFAŞ,pizzabulls-bordo-bandirma,1,90.0,89.0,V,Massimo Cancellieri,massimo-cancellieri,,FIBA LiveStats data.json (tm[].coach),partido,0,
 bsl,2026-27,2913588,"Fri, 25 Se",regular,pizzabulls-bordo-bandirma,PİZZABULLS BORDO BANDIRMA,tofas,0,89.0,90.0,D,Tutku Açık,tutku-acik,,FIBA LiveStats data.json (tm[].coach),partido,0,

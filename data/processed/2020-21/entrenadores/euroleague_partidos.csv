@@ -1,6 +1,6 @@
 liga,temporada,game_id,fecha,fase,equipo_id,equipo,rival_id,local,puntos,puntos_rival,resultado,entrenador,entrenador_id,entrenador_id_fuente,fuente,metodo,imputado,validacion_vd
 euroleague,2020-21,1,2020-10-01,regular,IST,Anadolu Efes Istanbul,DYR,1,69.0,73.0,D,Ergin Ataman,ergin-ataman,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
-euroleague,2020-21,1,2020-10-01,regular,DYR,Zenit St Petersburg,IST,0,73.0,69.0,V,Xavier Pascual Vives,xavier-pascual-vives,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
+euroleague,2020-21,1,2020-10-01,regular,DYR,Zenit St Petersburg,IST,0,73.0,69.0,V,Xavier Pascual Vives,xavi-pascual,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,2,2020-10-01,regular,OLY,Olympiacos Piraeus,ZAL,1,67.0,68.0,D,Georgios Bartzokas,georgios-bartzokas,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,2,2020-10-01,regular,ZAL,Zalgiris Kaunas,OLY,0,68.0,67.0,V,Martin Christian Schiller,martin-schiller,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,3,2020-10-01,regular,TEL,Maccabi Rapyd Tel Aviv,BER,1,80.0,73.0,V,Ioannis Sfairopoulos,ioannis-sfairopoulos,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
@@ -396,7 +396,7 @@ euroleague,2020-21,199,2021-01-28,regular,ULK,Fenerbahce Istanbul,KHI,0,107.0,76
 euroleague,2020-21,200,2021-01-28,regular,OLY,Olympiacos Piraeus,BAR,1,74.0,76.0,D,Georgios Bartzokas,georgios-bartzokas,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,200,2021-01-28,regular,BAR,FC Barcelona,OLY,0,76.0,74.0,V,Šarūnas Jasikevičius,sarunas-jasikevicius,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,202,2021-01-28,regular,MIL,Armani Olimpia Milan,DYR,1,82.0,76.0,V,Ettore Messina,ettore-messina,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
-euroleague,2020-21,202,2021-01-28,regular,DYR,Zenit St Petersburg,MIL,0,76.0,82.0,D,Xavier Pascual Vives,xavier-pascual-vives,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
+euroleague,2020-21,202,2021-01-28,regular,DYR,Zenit St Petersburg,MIL,0,76.0,82.0,D,Xavier Pascual Vives,xavi-pascual,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,203,2021-01-29,regular,CSK,CSKA Moscow,MUN,1,66.0,69.0,D,Dimitris Itoudis,dimitris-itoudis,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,203,2021-01-29,regular,MUN,FC Bayern Munich,CSK,0,69.0,66.0,V,Andrea Trinchieri,andrea-trinchieri,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,
 euroleague,2020-21,204,2021-01-29,regular,BER,ALBA Berlin,MAD,1,63.0,72.0,D,Aíto García Reneses,alejandro-garcia-reneses,,live.euroleague.net Boxscore (Stats[].Coach),partido,0,

@@ -40,6 +40,7 @@ import re
 import unicodedata
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
+from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Callable
 
@@ -115,6 +116,7 @@ class Alias:
     """config/entrenadores_alias.json: {"alias": {slug_variante: slug_canónico}, "nombres": {slug: nombre}}."""
     alias: dict = field(default_factory=dict)
     nombres: dict = field(default_factory=dict)
+    distintos: set = field(default_factory=set)   # pares {slug, slug} que NO son la misma persona
 
     @classmethod
     def load(cls, path: Path | str | None = None) -> "Alias":
@@ -122,8 +124,13 @@ class Alias:
         if not p.exists():
             return cls()
         doc = json.loads(p.read_text(encoding="utf-8"))
+        distintos = set()
+        for txt in doc.get("_no_son_la_misma_persona") or []:
+            par = [x.strip() for x in re.split(r"[/(]", txt)[:2]]
+            if len(par) == 2 and all(par):
+                distintos.add(frozenset(par))
         return cls({k: v for k, v in (doc.get("alias") or {}).items() if not k.startswith("_")},
-                   {k: v for k, v in (doc.get("nombres") or {}).items() if not k.startswith("_")})
+                   {k: v for k, v in (doc.get("nombres") or {}).items() if not k.startswith("_")}, distintos)
 
     def id_de(self, raw: Any) -> str | None:
         s = slug(raw)
@@ -141,6 +148,64 @@ def _mejor_nombre(variantes: list[str]) -> str:
         return (mixed, any(ord(c) > 127 for c in v))
     cnt = Counter(variantes)
     return max(cnt, key=lambda v: (score(v), cnt[v], -len(v)))
+
+
+# =============================================================================================== variantes
+def _tokens_nombre(i: str) -> list[str]:
+    return [t for t in (i or "").split("-") if len(t) > 1]
+
+
+def _parecido(a: str, b: str) -> float:
+    return SequenceMatcher(None, a, b).ratio()
+
+
+def misma_persona(a: str, b: str, umbral: float = 0.8) -> bool:
+    """Dos ids (slugs) de entrenador son la misma persona escrita de otra forma: el nombre de pila y el
+    apellido del más corto aparecen (con erratas leves) en el más largo, en ese orden. 'pablo-laso' ==
+    'pablo-lasso-biurrun', 'ahmet-kandemir' == 'ahmet-dursun-kandemir', 'roger-gregare' ==
+    'roger-grimau-gregera'; 'joonas-iisalo' != 'tuomas-iisalo' (el nombre de pila no coincide)."""
+    ta, tb = _tokens_nombre(a), _tokens_nombre(b)
+    if not ta or not tb or a == b:
+        return a == b
+    if len(ta) > len(tb):
+        ta, tb = tb, ta
+    if len(ta) == 1:
+        return False
+    # nombre de pila: primero del corto en algún sitio del largo (el largo puede llevar un nombre delante)
+    i0 = next((i for i, t in enumerate(tb) if _parecido(ta[0], t) >= umbral), None)
+    if i0 is None:
+        return False
+    # apellido: último del corto en un token posterior del largo
+    return any(_parecido(ta[-1], t) >= umbral for t in tb[i0 + 1:])
+
+
+def fusionar_variantes(df: pd.DataFrame, alias: Alias) -> pd.DataFrame:
+    """Une las grafías de un mismo entrenador dentro de cada club-temporada (la fuente de la BSL y la GBL
+    teclea el nombre partido a partido: 'Gianmarco Pozzeco' / 'Gianmarco Pozzecco'). El id que queda es el
+    más frecuente del grupo. No une los pares declarados distintos en config/entrenadores_alias.json."""
+    if df.empty or "entrenador_id" not in df:
+        return df
+    distintos = alias.distintos
+    df = df.copy()
+    for _, g in df[df["entrenador_id"].notna()].groupby("equipo_id"):
+        cuenta = g["entrenador_id"].value_counts()
+        ids = list(cuenta.index)          # del más frecuente al menos
+        # todas las grafías de cada id (el id puede venir de un alias manual: «carlos-duran-ortega» → «carles-duran»)
+        grafias = {i: {i} | {slug(n) for n in g.loc[g["entrenador_id"] == i, "entrenador"].dropna()} for i in ids}
+        destino = {}
+        for i, a in enumerate(ids):
+            if a in destino:
+                continue
+            for b in ids[i + 1:]:
+                if b in destino or frozenset((a, b)) in distintos:
+                    continue
+                if any(misma_persona(x, y, 0.7) for x in grafias[a] | {k for k, v in destino.items() if v == a}
+                       for y in grafias[b]):
+                    destino[b] = a
+        if destino:
+            m = df.index.isin(g.index) & df["entrenador_id"].isin(list(destino))
+            df.loc[m, "entrenador_id"] = df.loc[m, "entrenador_id"].map(destino)
+    return df
 
 
 # =============================================================================================== FIBA LiveStats
@@ -803,8 +868,8 @@ def _partidos(liga: str, temporada: str, cfg: dict, store: RawStore, ext: Extrac
     from .lineups.sources.base import Ctx
     lcfg = cfg["ligas"][liga]
     src = make_source(lcfg["pbp"]) if lcfg.get("pbp") else None
-    mp = store.latest(liga, temporada)
-    main = RawStore.load(mp)["payload"] if mp else None
+    _, doc_main = store.load_season(liga, temporada)   # une los paquetes incrementales de la temporada
+    main = doc_main["payload"] if doc_main else None
     ctx = Ctx(league=liga, season=temporada, cfg=lcfg, main_payload=main)
     lc = LectorCtx(liga, temporada, ctx, src, main)
     stored, _ = load_games(store, liga, temporada)
@@ -875,6 +940,7 @@ def run_league(liga: str, temporada: str, cfg: dict, store: RawStore, out_dir: P
     df["entrenador_id"] = clave.map(alias.id_de)
     vacio = df["entrenador_id"].isna()
     df.loc[vacio, ["entrenador", "entrenador_id_fuente", "fuente", "metodo"]] = None
+    df = fusionar_variantes(df, alias)
     df["entrenador"] = [alias.nombres.get(i) or n for i, n in zip(df["entrenador_id"], df["entrenador"])]
     df = imputar(df)
     names = _ligas_nombres(resolve_path(cfg, "procesado"), temporada, liga)
