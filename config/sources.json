@@ -30,7 +30,7 @@
       "embed-api.eui.connect.sportradar.com": 0.4,
       "api-prod.lnb.fr": 0.4,
       "www.fiba.basketball": 0.3,
-      "fibalivestats.dcd.shared.geniussports.com": 0.2
+      "fibalivestats.dcd.shared.geniussports.com": 0.05
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -311,6 +311,1048 @@
           "competition_id": 209129
         }
       }
+    },
+    "gbl": {
+      "adaptador": "fiba_livestats",
+      "activa": true,
+      "nombre": "Greek Basket League (A1)",
+      "pais": "Grecia",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://fibalivestats.dcd.shared.geniussports.com (data.json de FIBA LiveStats por partido; calendario de control: esake.gr)",
+      "plazas_playoffs": 8,
+      "partidos_por_paquete": 400,
+      "avance_busqueda": 20000,
+      "_partidos": "Ids de FIBA LiveStats por temporada y fase (rangos [desde, hasta]); se localizaron recorriendo los ids de la fuente (las jornadas de la liga se crean juntas) y se comprobaron con los resultados de esake.gr. 'excluir' = ids de los rangos que no son de la liga. Fases: A Φάση = regular; playoffs = partidos tras la temporada regular entre equipos del top 8 (play-outs y clasificación fuera). Supercopa (septiembre) excluida.",
+      "temporadas": {
+        "2020-21": {
+          "partidos": {
+            "regular": [
+              [
+                1771170,
+                1771175
+              ],
+              [
+                1777702,
+                1777707
+              ],
+              [
+                1779636,
+                1779641
+              ],
+              [
+                1791393,
+                1791398
+              ],
+              [
+                1796710,
+                1796717
+              ],
+              [
+                1800695,
+                1800700
+              ],
+              [
+                1808439,
+                1808444
+              ],
+              [
+                1811132,
+                1811137
+              ],
+              [
+                1813026,
+                1813031
+              ],
+              [
+                1814468,
+                1814473
+              ],
+              [
+                1816405,
+                1816410
+              ],
+              [
+                1845113,
+                1845118
+              ],
+              [
+                1847049,
+                1847054
+              ],
+              [
+                1848385,
+                1848390
+              ],
+              [
+                1856338,
+                1856344
+              ],
+              [
+                1858959,
+                1858964
+              ],
+              [
+                1862153,
+                1862158
+              ],
+              [
+                1864827,
+                1864832
+              ],
+              [
+                1866537,
+                1866542
+              ],
+              [
+                1870658,
+                1870663
+              ],
+              [
+                1872107,
+                1872112
+              ],
+              [
+                1876812,
+                1876817
+              ]
+            ],
+            "playoffs": [
+              [
+                1880769,
+                1880772
+              ],
+              [
+                1881975,
+                1881978
+              ],
+              [
+                1882635,
+                1882636
+              ],
+              [
+                1883103,
+                1883104
+              ],
+              [
+                1883955,
+                1883956
+              ],
+              [
+                1884162,
+                1884163
+              ],
+              [
+                1884632,
+                1884633
+              ],
+              1885324,
+              [
+                1886247,
+                1886248
+              ],
+              [
+                1887635,
+                1887636
+              ],
+              [
+                1887875,
+                1887876
+              ],
+              [
+                1889829,
+                1889830
+              ]
+            ]
+          },
+          "excluir": [
+            1796713,
+            1796716,
+            1856340
+          ],
+          "equipos": [
+            "AEK",
+            "ARIS",
+            "IONIKOS HELLENIC COIN",
+            "IRAKLIS",
+            "KAE PANATHINAIKOS OPAP",
+            "KOLOSSOS H HOTELS",
+            "LARISA BREAD FACTORY",
+            "LAVRIO MEGABOLT",
+            "MESSOLONGHI BAXI",
+            "P.A.O.K.",
+            "PERISTERI BC",
+            "PROMITHEAS"
+          ]
+        },
+        "2021-22": {
+          "partidos": {
+            "regular": [
+              [
+                1936977,
+                1936982
+              ],
+              [
+                1957636,
+                1957641
+              ],
+              [
+                1976761,
+                1976766
+              ],
+              [
+                1996106,
+                1996111
+              ],
+              [
+                1999439,
+                1999444
+              ],
+              [
+                2002095,
+                2002100
+              ],
+              [
+                2004675,
+                2004680
+              ],
+              [
+                2009405,
+                2009410
+              ],
+              [
+                2012672,
+                2012674
+              ],
+              [
+                2012681,
+                2012683
+              ],
+              [
+                2015006,
+                2015107
+              ]
+            ],
+            "playoffs": [
+              [
+                2096365,
+                2096374
+              ],
+              [
+                2098140,
+                2098148
+              ]
+            ]
+          },
+          "excluir": [
+            [
+              2096372,
+              2096373
+            ],
+            2098147
+          ],
+          "equipos": [
+            "AEK",
+            "APOLLON PATRAS OSCAR",
+            "ARIS",
+            "IONIKOS BASKET",
+            "IONIKOS HNC REVOLUTION",
+            "IRAKLIS",
+            "KAE PANATHINAIKOS OPAP",
+            "KOLOSSOS H HOTELS",
+            "LARISA",
+            "LAVRIO MEGABOLT",
+            "OLYMPIACOS",
+            "P.A.O.K. mateco",
+            "PERISTERI VITABIOTICS",
+            "PROMITHEAS PATRAS"
+          ]
+        },
+        "2022-23": {
+          "partidos": {
+            "regular": [
+              [
+                2147854,
+                2147964
+              ],
+              [
+                2147999,
+                2148028
+              ]
+            ],
+            "playoffs": [
+              [
+                2265563,
+                2265569
+              ],
+              [
+                2265603,
+                2265605
+              ],
+              2267375,
+              2268898,
+              [
+                2274083,
+                2274090
+              ],
+              [
+                2278604,
+                2278612
+              ]
+            ]
+          },
+          "excluir": [
+            [
+              2148001,
+              2148002
+            ],
+            [
+              2148007,
+              2148008
+            ],
+            2148013,
+            [
+              2148018,
+              2148019
+            ],
+            2148024,
+            2148027,
+            [
+              2265565,
+              2265567
+            ],
+            2278605,
+            2278611
+          ],
+          "equipos": [
+            "AEK",
+            "APOLLON PATRON",
+            "ARIS",
+            "IONIKOS BASKET",
+            "KAE PANATHINAIKOS",
+            "KARDITSA Biologiko Xorio",
+            "KOLOSSOS H HOTELS",
+            "LAVRIO MEGABOLT",
+            "OLYMPIACOS",
+            "P.A.O.K. mateco",
+            "PERISTERI bwin",
+            "PROMITHEAS PATRAS"
+          ]
+        },
+        "2023-24": {
+          "partidos": {
+            "regular": [
+              [
+                2317809,
+                2317941
+              ]
+            ],
+            "playoffs": [
+              [
+                2434010,
+                2434015
+              ],
+              [
+                2436384,
+                2436392
+              ],
+              [
+                2443369,
+                2443371
+              ],
+              [
+                2445623,
+                2445630
+              ],
+              2447093,
+              [
+                2447710,
+                2447714
+              ],
+              [
+                2450206,
+                2450211
+              ]
+            ]
+          },
+          "excluir": [
+            2317939,
+            2447712
+          ],
+          "equipos": [
+            "ΑΕΚ Betsson BC",
+            "ΑΠΟΛΛΩΝ ΠΑΤΡΩΝ CARNA",
+            "ΑΡΗΣ Midea",
+            "ΚΑΕ ΠΑΝΑΘΗΝΑΪΚΟΣ",
+            "ΚΑΡΔΙΤΣΑ ΙΑΠΩΝΙΚΗ",
+            "ΚΟΛΟΣΣΟΣ H HOTELS",
+            "ΛΑΥΡΙΟ MEGABOLT",
+            "ΜΑΡΟΥΣΙ",
+            "ΟΛΥΜΠΙΑΚΟΣ",
+            "ΠΑΝΑΘΗΝΑΪΚΟΣ",
+            "ΠΑΝΑΘΗΝΑΪΚΟΣ AKTOR",
+            "ΠΑΟΚ mateco",
+            "ΠΕΡΙΣΤΕΡΙ bwin",
+            "ΠΡΟΜΗΘΕΑΣ ΠΑΤΡΑΣ"
+          ]
+        },
+        "2024-25": {
+          "partidos": {
+            "regular": [
+              [
+                2504704,
+                2504835
+              ]
+            ],
+            "playoffs": [
+              2645712,
+              [
+                2646816,
+                2646831
+              ],
+              [
+                2650989,
+                2650996
+              ],
+              [
+                2655209,
+                2655212
+              ],
+              [
+                2656262,
+                2656263
+              ],
+              2656627,
+              [
+                2660293,
+                2660297
+              ]
+            ]
+          },
+          "excluir": [
+            [
+              2646829,
+              2646830
+            ]
+          ],
+          "equipos": [
+            "ΑΕΚ Betsson BC",
+            "ΑΡΗΣ Midea",
+            "ΚΑΡΔΙΤΣΑ ΙΑΠΩΝΙΚΗ",
+            "ΚΟΛΟΣΣΟΣ H HOTELS",
+            "ΛΑΥΡΙΟ DHI",
+            "ΜΑΡΟΥΣΙ",
+            "ΟΛΥΜΠΙΑΚΟΣ",
+            "ΠΑΝΑΘΗΝΑΪΚΟΣ AKTOR",
+            "ΠΑΝΙΩΝΙΟΣ ΧΥΜΟΙ VIVA",
+            "ΠΑΟΚ mateco",
+            "ΠΕΡΙΣΤΕΡΙ Domino's",
+            "ΠΡΟΜΗΘΕΑΣ ΠΑΤΡΑΣ",
+            "ΠΡΟΜΗΘΕΑΣ ΠΑΤΡΑΣ ΒΙΚΟΣ COLA"
+          ]
+        },
+        "2025-26": {
+          "partidos": {
+            "regular": [
+              [
+                2746536,
+                2746690
+              ],
+              2746737
+            ],
+            "playoffs": [
+              [
+                2843723,
+                2843731
+              ],
+              [
+                2850257,
+                2850262
+              ],
+              2850274,
+              [
+                2853706,
+                2853708
+              ],
+              2855279,
+              2856783
+            ]
+          },
+          "excluir": [
+            2843724,
+            [
+              2850259,
+              2850260
+            ]
+          ],
+          "equipos": [
+            "AEK BC",
+            "ASK Karditsa IAPONIKI",
+            "Aris Thessaloniki Betsson",
+            "Iraklis BC",
+            "Kolossos H Hotels Collection",
+            "Maroussi BC",
+            "Maroussi CHERY",
+            "Mykonos Betsson BC",
+            "Olympiacos Piraeus",
+            "PAOK BC",
+            "Panathinaikos BC AKTOR",
+            "Panionios Athens",
+            "Panionios COSMORAMA TRAVEL",
+            "Peristeri BC",
+            "Peristeri Betsson",
+            "Promitheas Patras VIKOS COLA"
+          ]
+        },
+        "2026-27": {
+          "partidos": {
+            "regular": [
+              [
+                2902681,
+                2902862
+              ]
+            ]
+          },
+          "equipos": [
+            "AEK BC",
+            "ASK Karditsa IAPONIKI",
+            "Aris BC",
+            "DOXA LEFKADAS ELABET",
+            "Doxa Lefkadas ELABET",
+            "Iraklis BC",
+            "Kolossos H Hotels Collection",
+            "Maroussi",
+            "Mykonos Betsson BC",
+            "Olympiacos Piraeus",
+            "PAOK BC",
+            "Panathinaikos BC AKTOR",
+            "Peristeri Betsson",
+            "Promitheas Patras VIKOS COLA",
+            "ΒΙΚΟΣ ΦALCONS",
+            "Δόξα Λευκάδας"
+          ],
+          "en_curso": true,
+          "regular_completa": true,
+          "excluir": [
+            2921979
+          ]
+        }
+      },
+      "estado_verificacion": "verificado con datos reales",
+      "pbp": "fiba_livestats"
+    },
+    "bsl": {
+      "adaptador": "fiba_livestats",
+      "activa": true,
+      "nombre": "Basketbol Süper Ligi",
+      "pais": "Turquía",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://fibalivestats.dcd.shared.geniussports.com (data.json de FIBA LiveStats por partido)",
+      "plazas_playoffs": 8,
+      "partidos_por_paquete": 400,
+      "avance_busqueda": 20000,
+      "_partidos": "Ids de FIBA LiveStats por temporada y fase; se localizaron recorriendo los ids de la fuente y uniendo equipos por plantilla (la federación turca crea en la misma cuenta ligas femeninas, de cantera y la TBL con los mismos nombres de club). tbf.org.tr y bsl.org.tr no son accesibles (Cloudflare / conexión cortada). 2021-22 a 2024-25: la liga no publicó en FIBA LiveStats (sin datos). 2020-21 con huecos (3 equipos con la mitad de partidos) y sin poder separar la Copa (las fechas de esa temporada no son fiables); 2025-26 completa (240 + playoffs; Copa y Supercopa excluidas).",
+      "temporadas": {
+        "2020-21": {
+          "partidos": {
+            "regular": [
+              1753923,
+              1754167,
+              [
+                1754773,
+                1754774
+              ],
+              [
+                1757214,
+                1757222
+              ],
+              1757316,
+              [
+                1759980,
+                1759982
+              ],
+              [
+                1759987,
+                1759991
+              ],
+              [
+                1767195,
+                1767197
+              ],
+              1767346,
+              [
+                1767353,
+                1767355
+              ],
+              [
+                1767611,
+                1767706
+              ],
+              1778161,
+              1798286,
+              [
+                1800012,
+                1800015
+              ],
+              [
+                1813199,
+                1813231
+              ],
+              1816590,
+              [
+                1845681,
+                1845695
+              ],
+              1845814,
+              1849326,
+              1849353,
+              [
+                1851312,
+                1851318
+              ],
+              [
+                1852128,
+                1852135
+              ],
+              [
+                1852151,
+                1852174
+              ],
+              [
+                1865993,
+                1865999
+              ],
+              [
+                1870442,
+                1870447
+              ],
+              1870489,
+              [
+                1872255,
+                1872266
+              ],
+              [
+                1876082,
+                1876089
+              ],
+              1877666,
+              [
+                1878676,
+                1878679
+              ]
+            ],
+            "playoffs": [
+              1880556,
+              [
+                1881563,
+                1881570
+              ],
+              1882800,
+              1882886,
+              1882975,
+              [
+                1883370,
+                1883373
+              ],
+              1884422,
+              [
+                1885200,
+                1885202
+              ]
+            ]
+          },
+          "excluir": [
+            1757216,
+            [
+              1757219,
+              1757220
+            ],
+            1759981,
+            1759988,
+            1767354,
+            [
+              1767631,
+              1767632
+            ],
+            [
+              1767635,
+              1767637
+            ],
+            1767641,
+            [
+              1767648,
+              1767649
+            ],
+            1767651,
+            [
+              1767654,
+              1767655
+            ],
+            [
+              1767658,
+              1767659
+            ],
+            1767667,
+            1767670,
+            1767676,
+            1767678,
+            1767681,
+            1767683,
+            1767688,
+            1767690,
+            1767695,
+            [
+              1767701,
+              1767702
+            ],
+            1767705,
+            1813204,
+            1813207,
+            1813215,
+            1813220,
+            1813224,
+            1813230,
+            1845686,
+            1845691,
+            1852129,
+            [
+              1852132,
+              1852133
+            ],
+            1852152,
+            1852159,
+            1852162,
+            [
+              1852172,
+              1852173
+            ],
+            [
+              1865994,
+              1865995
+            ],
+            [
+              1865997,
+              1865998
+            ],
+            [
+              1870444,
+              1870445
+            ],
+            [
+              1872257,
+              1872258
+            ],
+            [
+              1872260,
+              1872261
+            ],
+            1872263,
+            1876084,
+            [
+              1876086,
+              1876087
+            ],
+            1878677
+          ],
+          "equipos": [
+            "ALIAGA PETKIM SPOR",
+            "ALİAGA PETKİM SPOR",
+            "ALİAĞA PETKİM SPOR",
+            "ANADOLU EFES",
+            "BAHÇESEHIR KOLEJI",
+            "BAHÇESEHİR KOLEJİ",
+            "BAHÇEŞEHİR KOLEJİ",
+            "BESIKTAS",
+            "BESIKTAS ICRYPEX",
+            "BEŞİKTAŞ",
+            "BEŞİKTAŞ ICRYPEX",
+            "BÜYÜKÇEKMECE BASKETBOL",
+            "DARÜSSAFAKA TEKFEN",
+            "DARÜŞŞAFAKA TEKFEN",
+            "EMPERA HALI GAZIANTEP BASKETBOL",
+            "FENERBAHÇE BEKO",
+            "FRUTTI EXTRA BURSASPOR",
+            "FRUTTİ EXTRA BURSASPOR",
+            "GALATASARAY",
+            "GAZIANTEP BASKETBOL",
+            "GAZİANTEP BASKETBOL",
+            "HDI SİGORTA AFYON BELEDİYESİ",
+            "LOKMAN HEKİM FETHİYE BELEDİYE",
+            "OGM ORMANSPOR",
+            "PINAR KARSIYAKA",
+            "PINAR KARŞIYAKA",
+            "Pinar Karsiyaka",
+            "TOFAŞ",
+            "Tofas Bursa",
+            "TÜRK TELEKOM"
+          ]
+        },
+        "2021-22": {
+          "sin_datos": true,
+          "motivo": "no hay partidos de la BSL de esta temporada en FIBA LiveStats (muestreo de todos los ids de la temporada, 1 de cada 20, y barrido completo de ventanas) y tbf.org.tr / bsl.org.tr no son accesibles"
+        },
+        "2022-23": {
+          "sin_datos": true,
+          "motivo": "no hay partidos de la BSL de esta temporada en FIBA LiveStats (muestreo de todos los ids de la temporada, 1 de cada 20, y barrido completo de ventanas) y tbf.org.tr / bsl.org.tr no son accesibles"
+        },
+        "2023-24": {
+          "sin_datos": true,
+          "motivo": "no hay partidos de la BSL de esta temporada en FIBA LiveStats (muestreo de todos los ids de la temporada, 1 de cada 20, y barrido completo de ventanas) y tbf.org.tr / bsl.org.tr no son accesibles"
+        },
+        "2024-25": {
+          "sin_datos": true,
+          "motivo": "no hay partidos de la BSL de esta temporada en FIBA LiveStats (muestreo de todos los ids de la temporada, 1 de cada 20, y barrido completo de ventanas) y tbf.org.tr / bsl.org.tr no son accesibles"
+        },
+        "2025-26": {
+          "partidos": {
+            "regular": [
+              [
+                2714805,
+                2714807
+              ],
+              [
+                2715206,
+                2715237
+              ],
+              [
+                2715613,
+                2715620
+              ],
+              [
+                2715651,
+                2715657
+              ],
+              [
+                2715676,
+                2715683
+              ],
+              [
+                2715705,
+                2715712
+              ],
+              [
+                2715763,
+                2715769
+              ],
+              [
+                2715791,
+                2715797
+              ],
+              [
+                2715830,
+                2715837
+              ],
+              [
+                2715870,
+                2715876
+              ],
+              [
+                2717899,
+                2717905
+              ],
+              [
+                2717922,
+                2717928
+              ],
+              [
+                2717943,
+                2717949
+              ],
+              [
+                2717986,
+                2717992
+              ],
+              [
+                2718019,
+                2718025
+              ],
+              [
+                2718045,
+                2718051
+              ],
+              [
+                2718085,
+                2718091
+              ],
+              [
+                2718150,
+                2718156
+              ],
+              [
+                2718173,
+                2718179
+              ],
+              [
+                2718196,
+                2718202
+              ],
+              [
+                2718219,
+                2718227
+              ],
+              [
+                2718245,
+                2718251
+              ],
+              [
+                2718278,
+                2718286
+              ],
+              [
+                2718306,
+                2718314
+              ],
+              [
+                2718364,
+                2718384
+              ],
+              [
+                2736922,
+                2736955
+              ],
+              2844602
+            ],
+            "playoffs": [
+              [
+                2852284,
+                2852292
+              ],
+              2853347,
+              [
+                2853672,
+                2853674
+              ],
+              [
+                2853956,
+                2853958
+              ],
+              2855213,
+              2855501,
+              2856068,
+              [
+                2856781,
+                2856782
+              ],
+              2859020,
+              2860199
+            ]
+          },
+          "excluir": [
+            2715615,
+            2715682,
+            2715706,
+            2715831,
+            [
+              2718221,
+              2718222
+            ],
+            [
+              2718281,
+              2718282
+            ],
+            [
+              2718309,
+              2718310
+            ],
+            2718381,
+            [
+              2736932,
+              2736933
+            ],
+            [
+              2736949,
+              2736950
+            ],
+            2852285
+          ],
+          "equipos": [
+            "ALIAGA PETKIM SPOR",
+            "ALİAĞA PETKİM SPOR",
+            "ANADOLU EFES",
+            "BAHÇESEHIR KOLEJI",
+            "BAHÇEŞEHİR KOLEJİ",
+            "BESIKTAS GAIN",
+            "BEŞİKTAŞ GAİN",
+            "BURSASPOR BASKETBOL",
+            "ESENLER EROKSPOR",
+            "FENERBAHÇE BEKO",
+            "GALATASARAY MCT TECHNIC",
+            "GLINT MANISA BASKET",
+            "GLİNT MANİSA BASKET",
+            "KARSIYAKA",
+            "KARŞIYAKA",
+            "MANISA BASKET",
+            "MERSIN SPOR",
+            "MERSİN SPOR",
+            "ONVO BÜYÜKÇEKMECE BASKETBOL",
+            "SAFİPORT EROKSPOR",
+            "TOFAS",
+            "TOFAŞ",
+            "TRABZONSPOR",
+            "TÜRK TELEKOM",
+            "YUKATEL MERKEZEFENDI BELEDIYESI BASKET",
+            "YUKATEL MERKEZEFENDİ BELEDİYESİ BASKET"
+          ]
+        },
+        "2026-27": {
+          "partidos": {
+            "regular": [
+              [
+                2913588,
+                2913595
+              ],
+              [
+                2923433,
+                2923438
+              ],
+              2929799,
+              2934600,
+              [
+                2934616,
+                2934625
+              ],
+              2934636,
+              2939271,
+              2939366,
+              2939390,
+              2939404,
+              2939429
+            ]
+          },
+          "excluir": [
+            2923434,
+            2934617,
+            2934619,
+            [
+              2934622,
+              2934624
+            ]
+          ],
+          "equipos": [
+            "ALİAĞA PETKİM SPOR",
+            "ANADOLU EFES",
+            "BAHÇEŞEHİR KOLEJİ",
+            "BEŞİKTAŞ",
+            "BURSASPOR BASKETBOL",
+            "BİOTEKNO KÖRFEZ BASKET",
+            "ESENLER EROKSPOR",
+            "FENERBAHÇE TARFİN",
+            "GALATASARAY MCT TECHNIC",
+            "GLİNT ÇAYIROVA BELEDİYESİ",
+            "KARŞIYAKA",
+            "PİZZABULLS BORDO BANDIRMA",
+            "TOFAŞ",
+            "TRABZONSPOR",
+            "TÜRK TELEKOM",
+            "YUKATEL DENİZLİ BASKET",
+            "ÇAYIROVA BELEDİYESİ"
+          ],
+          "en_curso": true
+        }
+      },
+      "estado_verificacion": "verificado con datos reales (2020-21, 2025-26 y 2026-27)",
+      "pbp": "fiba_livestats"
     }
   }
 }

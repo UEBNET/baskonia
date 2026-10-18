@@ -9,8 +9,9 @@
 
 ## 1. Resumen en 10 líneas
 
-1. `bbstats` es un paquete Python que extrae estadísticas de **todos los jugadores** de 8 competiciones:
-   EuroLeague, EuroCup, Liga Endesa (ACB), NBA, NBA G League, LBA (Italia), BBL (Alemania) y LNB (Francia).
+1. `bbstats` es un paquete Python que extrae estadísticas de **todos los jugadores** de 12 competiciones:
+   EuroLeague, EuroCup, Liga Endesa (ACB), NBA, NBA G League, LBA (Italia), BBL (Alemania), LNB (Francia) y, desde
+   oct. 2026, Basketball Champions League, FIBA Europe Cup, Basketbol Süper Ligi (Turquía) y Greek Basket League (§9d).
 2. Cada liga tiene un **adaptador** que descarga su fuente (oficial siempre que existe) y la guarda **sin tocar**
    como JSON comprimido con fecha (almacén bruto).
 3. Los datos se normalizan a **un esquema único de 480 columnas**, idéntico para todas las ligas.
@@ -139,6 +140,10 @@ con pausa de cortesía; Basketball-Reference exige 3,5 s entre peticiones).
 | `lba` | LBA Serie A | `legabasket.it/api/championships/...` (campeonatos RS/PO, calendario por jornada, `matches-scores-by-id`) | boxscores | RS = regular, PO = playoffs |
 | `bbl` | easyCredit BBL | `easycredit-bbl.de/spiele/<id>` (JSON `__NEXT_DATA__` de la página pública) | boxscores | `MAIN_ROUND` = regular; play-in, cuartos, semis y final = playoffs |
 | `lnb` | LNB Betclic ÉLITE | `api-prod.lnb.fr` (token anónimo de `lnb.fr/api/token`; `altrstats/getPersonCriterion`, `getTeamsCriterion`, `teams/getRoster`, `person/getPersonSeasonAll`) | agregados por competición | Betclic ÉLITE = regular; Play-In + Playoffs = playoffs |
+| `bcl` | Basketball Champions League | páginas públicas de `fiba.basketball` (calendario `/en/history/112-…/<competition_id>/games` + `/en/games/<gameId>`: JSON de la página con boxscore, jugada a jugada, tiros y entrenadores) | boxscores | rondas de grupo (RS + Round of 16) = regular; Play-ins, cuartos, Final Four = playoffs; clasificación fuera |
+| `fec` | FIBA Europe Cup | igual (`/en/history/212-…/<competition_id>/games`) | boxscores | RS + Second Round = regular; eliminatorias = playoffs; `Q`/`QT` fuera |
+| `bsl` | Basketbol Süper Ligi | FIBA LiveStats `fibalivestats.dcd.shared.geniussports.com/data/<id>/data.json` (ids localizados y guardados en config) | boxscores | liga regular; playoffs = top 8 tras la liga; Copa/Supercopa fuera |
+| `gbl` | Greek Basket League (A1) | FIBA LiveStats (igual); control con esake.gr | boxscores | liga regular (Α Φάση); playoffs = top 8 (play-outs y clasificación fuera) |
 | (enriquecimiento) | EuroLeague, ACB | BasketNews `basketnews.com/advanced-stats/team-profile/{players,on-off}.json` | ratings individuales, stops, on/off | total, regular y fase "Playoffs" |
 
 Detalles operativos relevantes:
@@ -154,7 +159,7 @@ Detalles operativos relevantes:
   (2019-20 ≈ 24000, 2020-21 ≈ 25500, 2021-22 ≈ 26000, 2022-23 ≈ 27500); desde los playoffs 2024-25 (≈ 2003212) y
   2025-26 (≈ 2004000) son ≥ 2003000; entre 2000000 y 2003000 hay partidos históricos (1968-1998) importados.
 - Basketball-Reference rechaza la huella TLS de `requests`: se descarga con el binario `curl`.
-- Descartadas: stats.nba.com (bloquea servidores), RealGM y Proballers (Cloudflare), FIBA LiveStats (no usado por estas ligas).
+- Descartadas: stats.nba.com (bloquea servidores), RealGM y Proballers (Cloudflare). FIBA LiveStats: sólo BSL y GBL (§9d).
 
 ---
 
@@ -496,3 +501,33 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
   normalización con todas las temporadas, Atlas como última pestaña y sin Comparador.
 - Entrenadores (oct. 2026): `bbstats/entrenadores.py`, entrenador por partido y tramos de entrenador en las 8 ligas,
   2020-21 a 2026-27 (§9c).
+
+## 9d. Ligas nuevas (oct. 2026): BCL, FIBA Europe Cup, BSL y GBL
+
+- **Adaptadores**: `bbstats/adapters/fiba_web.py` (`FibaWebAdapter`: BCL y FEC) y `bbstats/adapters/fiba_livestats.py`
+  (`FibaLiveStatsAdapter` v2: BSL y GBL; sigue admitiendo la config genérica antigua `match_ids`/`discovery`).
+  Fuentes jugada a jugada: `bbstats/lineups/sources/fiba_web.py` (`FibaWebPBP`) y `.../fiba_livestats.py`
+  (`FibaLiveStatsPBP`), ambas `uses_main_raw` (el mismo documento por partido sirve al boxscore y al jugada a jugada:
+  no hay paquete `pbp_`). Entrenadores registrados en `bbstats/entrenadores.py` (`fiba_web`: staffA/staffB "Head
+  Coach"; `bsl`/`gbl`: `lector_fiba_livestats` con `docs_principal`).
+- **Fuentes consultadas** — BCL/FEC: `www.fiba.basketball` (HTML Next.js con los datos; la API `digital-api…/hapi`
+  pide clave y no se usa; los partidos no dan su id de LiveStats). BSL/GBL: data.json de FIBA LiveStats; sus ids no
+  se publican en ninguna web accesible (hosted.dcd.shared.geniussports.com vacío; tbf.org.tr Cloudflare 403; bsl.org.tr
+  conexión cortada; esake.gr sólo widgets de baskethotel en texto), así que se localizaron recorriendo los ids públicos
+  (cabecera de 450 bytes = nombre del local) y uniendo equipos por plantilla (≥ 4 jugadores comunes); control con los
+  resultados de esake.gr. Ids por temporada y fase en `config/sources.json` (`partidos`, `excluir`, `equipos`;
+  `en_curso` busca hacia delante en cada ejecución; `sin_datos` = temporada sin fuente).
+- **Brutos incrementales** (`payload.incremental`): cada ejecución guarda sólo los partidos nuevos, troceados en
+  paquetes de 400 (< 40 MB); `RawStore.load_season(liga, t)` los une (pipeline, quintetos). `adapter.store` +
+  `BaseAdapter.save_partial()` guardan los parciales durante la descarga.
+- **Ids**: BCL/FEC equipo = `organisationId`, jugador = `personId` de FIBA (comunes a las dos competiciones). BSL/GBL
+  jugador = `apellido-nombre` normalizado, equipo = nombre local normalizado más usado de la temporada (`season_teams`:
+  variantes unidas por plantilla): cambian entre temporadas (en `bbestilo.datos.LIGAS_ID_INESTABLE`).
+- **Coordenadas** (`bbmodel/zonas.py`): BCL/FEC media pista (x lateral 0-280, aro ≈ (140, 44)); BSL/GBL % de la pista
+  completa como LBA/LNB. Acierto de la calibración 99,6-99,9 %.
+- **Lagunas**: BSL 2021-22 a 2024-25 sin datos (no están en FIBA LiveStats); BSL 2020-21 incompleta (199 de 240
+  partidos de liga, Copa no separable); GBL: 1-5 partidos por temporada con el data.json cortado (no se agregan).
+- Pendiente de la sesión principal: reentrenar A/B, contexto, interacciones y estilos (las listas de ligas de
+  `bbmodel`/`bbestilo` ya incluyen las 4); `bbstats/entrenadores._partidos` lee sólo el último bruto principal
+  (`store.latest`): con brutos incrementales debería usar `store.load_season()` para ver todos los partidos.
+

@@ -1,0 +1,47 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+103799,regular,35,22,5.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+103835,regular,31,22,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103789,regular,38,23,2.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103785,regular,37,23,1.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103809,regular,42,24,19.0,1.7,0.0,0,0,,True,True,True,True,True,,True
+103709,regular,0,24,2205.0,1263.2,12.0,16,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103771,regular,25,22,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103774,regular,0,24,2073.0,1263.2,27.0,19,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103820,regular,0,24,2225.0,1500.0,10.0,17,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103822,regular,33,22,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+103804,regular,0,23,1850.0,1263.2,32.0,19,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103826,regular,35,24,2.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103808,regular,0,23,1938.0,1200.0,21.0,19,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+103708,regular,0,22,2118.0,1411.7,11.0,15,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+103766,regular,28,21,14.0,1.7,0.0,0,0,,True,True,True,True,True,,True
+103779,regular,31,23,8.0,1.1,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+103764,regular,0,24,2191.0,1263.2,29.0,19,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103770,regular,39,24,13.0,1.6,0.0,0,0,,True,True,True,True,True,,True
+103784,regular,31,24,2.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103819,regular,39,24,1.0,0.2,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+103807,regular,38,23,17.0,1.9,0.0,0,0,,True,True,True,True,True,,True
+103707,regular,0,24,2400.0,1333.4,18.0,17,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+103775,regular,32,22,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103778,regular,33,23,2.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+103803,regular,31,23,1.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103837,regular,0,22,2165.0,1333.3,10.0,18,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+103769,regular,31,23,5.0,0.9,0.0,0,0,,True,True,True,True,True,,True
+103824,regular,0,22,2017.0,1142.9,19.0,20,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103838,regular,0,24,2032.0,1000.0,34.0,24,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+103783,regular,0,23,2182.0,1200.0,14.0,18,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+103971,playoffs,25,24,6.0,0.9,0.0,0,0,,True,True,True,True,True,,True
+103973,playoffs,34,24,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+103977,playoffs,36,23,1.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103985,playoffs,36,24,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+103983,playoffs,27,22,1.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+103979,playoffs,38,24,1.0,0.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+103975,playoffs,36,22,1.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+103981,playoffs,40,20,19.0,2.0,0.0,0,0,,True,True,True,True,True,,True
+103728,playoffs,0,23,2238.0,1333.3,14.0,18,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103730,playoffs,31,24,1.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+103733,playoffs,0,24,1738.0,1142.8,24.0,20,0,,False,False,True,True,True,jugada a jugada sin cambios: sólo tiros y asistencias,False
+103734,playoffs,33,23,10.0,1.0,0.0,0,0,,True,True,True,True,True,,True
+103738,playoffs,0,23,2289.0,1263.2,16.0,18,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+103736,playoffs,0,24,2120.0,1333.3,22.0,17,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+104768,playoffs,39,24,2.0,0.5,0.0,0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+103740,playoffs,30,23,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True

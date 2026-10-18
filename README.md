@@ -1,7 +1,7 @@
 # baskonia · `bbstats` — extractor multi-liga de estadísticas de baloncesto
 
 Extrae, guarda en bruto, normaliza y enriquece las estadísticas de **todos los jugadores** de
-8 competiciones, separadas por **fase (temporada regular / playoffs / total)**, con **las mismas
+12 competiciones, separadas por **fase (temporada regular / playoffs / total)**, con **las mismas
 columnas para todas las ligas**, listas para aplicar tus propios algoritmos.
 
 - Temporadas descargadas: **de 2020-21 a 2025-26** (completas, con playoffs) y **2026-27** (hasta el 12-10-2026).
@@ -42,6 +42,10 @@ Todas las fuentes se han comprobado descargando datos reales (octubre de 2026).
 | `lba` | LBA Serie A (Italia) | API pública de legabasket.it (la que usa su web) | `legabasket.it/api/championships/get-championships` (campeonatos RS y PO por año), `…/get-championships-calendar-by-id?id=C&d=J` (partidos por jornada), `…/get-championships-matches-scores-by-id?id=M` (boxscore) | regular · playoffs · total |
 | `bbl` | easyCredit BBL (Alemania) | Páginas públicas de partido de easycredit-bbl.de | JSON embebido (`__NEXT_DATA__`) en `easycredit-bbl.de/spiele/<id>`: datos del partido y boxscore de jugadores. Los ids de cada temporada forman bloques consecutivos que se recorren desde ids semilla | regular (MAIN_ROUND) · playoffs (play-in, cuartos, semis, final) · total |
 | `lnb` | LNB Betclic ÉLITE (Francia) | API del "stats centre" de lnb.fr | token anónimo `lnb.fr/api/token` + `api-prod.lnb.fr/competition/getDivisionCompetitionByYear`, `altrstats/getPersonCriterion` y `getTeamsCriterion` (totales por competición), `teams/getRoster` y `person/getPersonSeasonAll` (plantillas y fichas para no omitir a jugadores con pocos partidos) | regular · playoffs (play-in + playoffs) · total |
+| `bcl` | Basketball Champions League (FIBA) | Páginas públicas de fiba.basketball (Next.js: los datos van en el HTML) | calendario `fiba.basketball/en/history/112-fiba-mens-european-club-competitions-tier-1/<competition_id>/games` y cada partido `fiba.basketball/en/games/<gameId>` (boxscore `gameDetails`, plantillas, jugada a jugada con cambios y coordenadas de tiro, entrenadores `staffA/B`). No se usa `digital-api.fiba.basketball/hapi` (exige clave de suscripción) | regular (rondas de grupos: Regular Season + Round of 16) · playoffs (Play-ins, cuartos, Final Four) · total; rondas de clasificación fuera |
+| `fec` | FIBA Europe Cup | Igual que la BCL (`212-fiba-mens-european-club-competitions-tier-2`) | igual | regular (Regular Season + Second Round) · playoffs (eliminatorias) · total; `Q` (Qualifiers) y `QT` (Qualifying Tournaments) fuera |
+| `bsl` | Basketbol Süper Ligi (Turquía) | FIBA LiveStats (Genius Sports) | `fibalivestats.dcd.shared.geniussports.com/data/<id>/data.json` (boxscore + jugada a jugada + tiros en el mismo documento). Ids localizados recorriendo los ids públicos de la fuente y guardados en `config/sources.json` | regular · playoffs (top 8) · total; Copa y Supercopa fuera |
+| `gbl` | Greek Basket League (A1) | FIBA LiveStats (Genius Sports); calendario de control en esake.gr | igual que la BSL; comprobado con los resultados de `esake.gr/el/action/EsakeResults` (Α Φάση = regular, Β Φάση = playoffs/play-outs) | regular · playoffs (top 8; play-outs y clasificación fuera) · total; Supercopa fuera |
 
 **Enriquecimiento (fuente no oficial contrastada):**
 
@@ -57,7 +61,11 @@ Todas las fuentes se han comprobado descargando datos reales (octubre de 2026).
 | api.basketball-bundesliga.de (BBL) | exige un secreto ofuscado de su web → se usan las páginas públicas de partido |
 | RealGM, Proballers | protegidos con Cloudflare (403) |
 | Basketball-Reference internacional | no cubre la BBL; para el resto hay fuentes oficiales mejores |
-| FIBA LiveStats | ninguna de estas ligas publica ahí; el adaptador genérico `fiba_livestats` se mantiene para otras ligas |
+| FIBA LiveStats para BCL / FIBA Europe Cup | la web de FIBA no da el id de LiveStats de sus partidos; sus páginas traen los mismos datos (boxscore, jugada a jugada, tiros) |
+| hosted.dcd.shared.geniussports.com (TBF, HEBA, FIBA) | responde vacío (200 sin contenido) o 404 |
+| tbf.org.tr, bsl.org.tr, basketbolsuperligi.com | Cloudflare (403) / conexión cortada / página vacía |
+| widgets.baskethotel.com (jugada a jugada de esake.gr) | funciona, pero en texto libre; FIBA LiveStats trae lo mismo estructurado |
+| RealGM, eurobasket.com | 403 |
 
 > Las fuentes no oficiales (Basketball-Reference, BasketNews) reproducen los datos oficiales.
 > Validación con datos reales: el TS% que calcula este proyecto coincide exactamente con el
@@ -423,3 +431,67 @@ q = q.merge(e[["game_id", "equipo_id", "entrenador_id"]], left_on=["game_id", "t
 Ligas nuevas: registrar un lector en `bbstats.entrenadores.EXTRACTORES` (`registrar(liga_o_fuente_pbp, Extractor(...))`);
 para FIBA LiveStats hay `extractor_fiba_livestats(doc)` (data.json: `tm["1"]["coach"]`, `coachDetails`) y el lector
 genérico `lector_fiba_livestats`, registrado con la clave `fiba_livestats`.
+
+## 15. Ligas nuevas: Basketball Champions League, FIBA Europe Cup, Basketbol Süper Ligi y Greek Basket League
+
+Cuatro competiciones más (oct. 2026), con el mismo esquema de 480 columnas, las mismas fases y la capa de
+quintetos completa (quintetos, parejas, on/off, RAPM, red de asistencias, zonas de tiro):
+
+| Código | Nombre (`liga_nombre`) | Adaptador · fuente jugada a jugada | De dónde salen los ids de partido |
+|---|---|---|---|
+| `bcl` | Basketball Champions League | `fiba_web` · `fiba_web` | calendario de la competición en fiba.basketball (`competition_id` por temporada en config; si falta, se descubre en `/en/events/basketball-champions-league-YY-YY/games` y se guarda) |
+| `fec` | FIBA Europe Cup | `fiba_web` · `fiba_web` | igual (`/en/events/fiba-europe-cup-YY-YY/games`) |
+| `bsl` | Basketbol Süper Ligi | `fiba_livestats` · `fiba_livestats` | `config/sources.json` → `ligas.bsl.temporadas.<t>.partidos` (rangos de ids de FIBA LiveStats por fase) |
+| `gbl` | Greek Basket League (A1) | `fiba_livestats` · `fiba_livestats` | igual (`ligas.gbl.temporadas.<t>.partidos`) |
+
+**Fuentes consultadas por liga**
+
+- **BCL y FIBA Europe Cup** — páginas públicas de `www.fiba.basketball` (y `www.championsleague.basketball`, a la
+  que redirigen los partidos de la BCL). Son páginas Next.js que llevan los datos en el HTML (`self.__next_f.push`):
+  el calendario (`/en/history/<ruta>/<competition_id>/games`: todos los partidos con ronda, tipo de ronda y estado) y
+  cada partido (`/en/games/<gameId>`): boxscore oficial (`gameDetails`: minutos, +/-, titulares, totales de equipo con
+  puntos en la pintura, de segunda oportunidad, de contraataque y tras pérdida), plantillas, jugada a jugada con
+  cambios, coordenadas de tiro y entrenadores. Ids: equipo = `organisationId` de FIBA (estable entre temporadas),
+  jugador = `personId` de FIBA (el mismo en BCL y FEC). La API `digital-api.fiba.basketball/hapi` exige una clave
+  de suscripción: no se usa. Las páginas de los partidos de BCL/FEC no dan el id de FIBA LiveStats.
+- **BSL y GBL** — FIBA LiveStats (Genius Sports): `fibalivestats.dcd.shared.geniussports.com/data/<id>/data.json`,
+  un documento por partido con boxscore (`tm[k].pl`), totales, entrenadores, jugada a jugada (`pbp`) y tiros
+  (`tm[k].shot`, x/y en % de la pista completa). El data.json no dice a qué competición pertenece ni la fecha, y las
+  webs de las ligas no publican los ids: `hosted.dcd.shared.geniussports.com` (códigos TBF, HEBA) responde vacío,
+  `tbf.org.tr` está tras Cloudflare (403), `bsl.org.tr` corta la conexión y `basketbolsuperligi.com` es una página
+  vacía; esake.gr sólo enlaza los widgets de baskethotel (jugada a jugada en texto). Por eso los ids se localizaron
+  **recorriendo los ids públicos** de FIBA LiveStats (cabeceras de 450 bytes con el nombre del equipo local) y uniendo
+  los equipos por **plantilla** (dos equipos son el mismo si comparten ≥ 4 jugadores; los clubes turcos tienen equipos
+  femeninos, filiales y de cantera con el mismo nombre en la misma cuenta). Los resultados se contrastaron con
+  esake.gr (`EsakeResults?idchampionship=…&idseason=…&mode=2`: Α Φάση = temporada regular, Β Φάση = playoffs,
+  play-outs y clasificación). Lo localizado está en config (`partidos`, `excluir`, `equipos`); la temporada en curso
+  (`en_curso`) busca en cada ejecución, en paralelo, los ids nuevos tras el último conocido (`avance_busqueda`).
+  Ids: jugador = `apellido-nombre` normalizado (sin personId en LiveStats), equipo = nombre local normalizado más
+  usado (las variantes que cada club teclea para el rival se unen por plantilla) — ambos son por temporada.
+
+**Fases**: BCL/FEC — rondas de grupo (Regular Season, Round of 16 / Second Round) = `regular`; Play-ins, cuartos,
+Final Four / finales y 3.er puesto = `playoffs`; rondas de clasificación (`Q`, `QT`) fuera (`rondas_excluidas`).
+BSL/GBL — liga regular = `regular`; partidos posteriores entre equipos del top 8 (`plazas_playoffs`) = `playoffs`;
+play-outs, partidos de clasificación, Copa y Supercopa fuera.
+
+**Brutos sin duplicar y < 40 MB**: un mismo documento sirve al boxscore y al jugada a jugada (la capa de quintetos lo
+lee del bruto principal, sin paquete `pbp_`). Los brutos de estas ligas son **incrementales**: cada ejecución guarda
+sólo los partidos nuevos (`"incremental": true`), troceados en paquetes de `partidos_por_paquete` (400 ≈ 12 MB), y
+`RawStore.load_season()` une todos los paquetes de la temporada al reprocesar.
+
+**Cobertura** (17-10-2026). Filas jugador-equipo (regular / playoffs):
+
+TABLA_FILAS
+
+Partidos (regular + playoffs) y jugada a jugada (partidos · % con cambios validados contra minutos y +/- oficiales):
+
+TABLA_PARTIDOS
+
+TABLA_PBP
+
+Lagunas: BSL 2021-22 a 2024-25 no están en FIBA LiveStats (muestreo de todos los ids de esas temporadas, 1 de cada 20,
+sin partidos de la BSL) y no hay otra fuente accesible: sin datos. BSL 2020-21: faltan partidos de 3 equipos y la Copa
+no se puede separar (las fechas de esa temporada en la fuente no son fiables). GBL: 1-5 partidos por temporada con el
+data.json cortado a mitad (no se agregan). BCL 2025-26: algún partido de playoffs con el boxscore incompleto en la
+fuente (Trapani, excluido de la competición). Calibración de coordenadas (`bbmodel/zonas.py`): 99,6-99,9 % de tiros de
+2 y 3 separados por la línea en las cuatro ligas.

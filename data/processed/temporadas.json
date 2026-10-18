@@ -1,9 +1,9 @@
 {
-  "generado": "2026-10-17T10:30:01.519585+00:00",
+  "generado": "2026-10-17T18:55:35.911254+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
-      "generado": "2026-10-17T10:12:37.860187+00:00",
+      "generado": "2026-10-17T18:41:48.688758+00:00",
       "fases": [
         "regular",
         "total"
@@ -21,6 +21,10 @@
           "regular": 394,
           "total": 394
         },
+        "bsl": {
+          "regular": 246,
+          "total": 246
+        },
         "eurocup": {
           "regular": 385,
           "total": 385
@@ -32,6 +36,10 @@
         "fec": {
           "regular": 590,
           "total": 590
+        },
+        "gbl": {
+          "regular": 190,
+          "total": 190
         },
         "lba": {
           "regular": 210,
@@ -45,7 +53,7 @@
     },
     {
       "temporada": "2025-26",
-      "generado": "2026-10-17T10:30:01.317492+00:00",
+      "generado": "2026-10-17T18:20:23.375154+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -67,6 +75,11 @@
           "regular": 493,
           "total": 501
         },
+        "bsl": {
+          "playoffs": 102,
+          "regular": 332,
+          "total": 332
+        },
         "eurocup": {
           "playoffs": 131,
           "regular": 315,
@@ -81,6 +94,11 @@
           "playoffs": 106,
           "regular": 572,
           "total": 578
+        },
+        "gbl": {
+          "playoffs": 107,
+          "regular": 249,
+          "total": 249
         },
         "gleague": {
           "playoffs": 160,
@@ -106,7 +124,7 @@
     },
     {
       "temporada": "2024-25",
-      "generado": "2026-10-13T07:55:13.102371+00:00",
+      "generado": "2026-10-17T18:09:56.902962+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -123,6 +141,11 @@
           "regular": 306,
           "total": 306
         },
+        "bcl": {
+          "playoffs": 253,
+          "regular": 482,
+          "total": 492
+        },
         "eurocup": {
           "playoffs": 130,
           "regular": 300,
@@ -132,6 +155,16 @@
           "playoffs": 125,
           "regular": 295,
           "total": 296
+        },
+        "fec": {
+          "playoffs": 105,
+          "regular": 562,
+          "total": 569
+        },
+        "gbl": {
+          "playoffs": 98,
+          "regular": 239,
+          "total": 243
         },
         "gleague": {
           "playoffs": 121,
@@ -157,7 +190,7 @@
     },
     {
       "temporada": "2023-24",
-      "generado": "2026-10-13T07:56:55.589661+00:00",
+      "generado": "2026-10-17T18:11:03.207710+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -174,6 +207,11 @@
           "regular": 299,
           "total": 299
         },
+        "bcl": {
+          "playoffs": 257,
+          "regular": 479,
+          "total": 488
+        },
         "eurocup": {
           "playoffs": 136,
           "regular": 307,
@@ -183,6 +221,16 @@
           "playoffs": 125,
           "regular": 287,
           "total": 287
+        },
+        "fec": {
+          "playoffs": 98,
+          "regular": 503,
+          "total": 510
+        },
+        "gbl": {
+          "playoffs": 113,
+          "regular": 232,
+          "total": 237
         },
         "gleague": {
           "playoffs": 120,
@@ -208,7 +256,7 @@
     },
     {
       "temporada": "2022-23",
-      "generado": "2026-10-13T07:58:53.033753+00:00",
+      "generado": "2026-10-17T18:27:15.827314+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -225,6 +273,11 @@
           "regular": 287,
           "total": 287
         },
+        "bcl": {
+          "playoffs": 275,
+          "regular": 491,
+          "total": 497
+        },
         "eurocup": {
           "playoffs": 168,
           "regular": 306,
@@ -234,6 +287,16 @@
           "playoffs": 101,
           "regular": 295,
           "total": 295
+        },
+        "fec": {
+          "playoffs": 330,
+          "regular": 431,
+          "total": 607
+        },
+        "gbl": {
+          "playoffs": 106,
+          "regular": 228,
+          "total": 229
         },
         "gleague": {
           "playoffs": 123,
@@ -259,7 +322,7 @@
     },
     {
       "temporada": "2021-22",
-      "generado": "2026-10-13T08:00:45.816866+00:00",
+      "generado": "2026-10-17T18:42:26.763692+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -276,6 +339,11 @@
           "regular": 315,
           "total": 316
         },
+        "bcl": {
+          "playoffs": 277,
+          "regular": 465,
+          "total": 478
+        },
         "eurocup": {
           "playoffs": 169,
           "regular": 311,
@@ -285,6 +353,16 @@
           "playoffs": 102,
           "regular": 293,
           "total": 293
+        },
+        "fec": {
+          "playoffs": 316,
+          "regular": 422,
+          "total": 577
+        },
+        "gbl": {
+          "playoffs": 86,
+          "regular": 255,
+          "total": 256
         },
         "gleague": {
           "playoffs": 124,
@@ -310,7 +388,7 @@
     },
     {
       "temporada": "2020-21",
-      "generado": "2026-10-13T08:02:46.181951+00:00",
+      "generado": "2026-10-17T18:55:35.620700+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -327,6 +405,16 @@
           "regular": 307,
           "total": 309
         },
+        "bcl": {
+          "playoffs": 96,
+          "regular": 467,
+          "total": 467
+        },
+        "bsl": {
+          "playoffs": 105,
+          "regular": 295,
+          "total": 295
+        },
         "eurocup": {
           "playoffs": 211,
           "regular": 342,
@@ -336,6 +424,16 @@
           "playoffs": 110,
           "regular": 297,
           "total": 298
+        },
+        "fec": {
+          "playoffs": 189,
+          "regular": 260,
+          "total": 289
+        },
+        "gbl": {
+          "playoffs": 100,
+          "regular": 229,
+          "total": 231
         },
         "gleague": {
           "playoffs": 83,

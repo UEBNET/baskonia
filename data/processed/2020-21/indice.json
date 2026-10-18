@@ -1,6 +1,6 @@
 {
   "temporada": "2020-21",
-  "generado": "2026-10-13T08:02:46.181951+00:00",
+  "generado": "2026-10-17T18:55:35.620700+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -32,6 +32,26 @@
         "total": 309
       }
     },
+    "bcl": {
+      "nombre": "Basketball Champions League",
+      "archivo": "ligas/bcl.csv",
+      "fecha_extraccion": "2026-10-17T18:42:27.045978+00:00",
+      "fases": {
+        "playoffs": 96,
+        "regular": 467,
+        "total": 467
+      }
+    },
+    "bsl": {
+      "nombre": "Basketbol Süper Ligi",
+      "archivo": "ligas/bsl.csv",
+      "fecha_extraccion": "2026-10-17T18:12:57.295190+00:00",
+      "fases": {
+        "playoffs": 105,
+        "regular": 295,
+        "total": 295
+      }
+    },
     "eurocup": {
       "nombre": "BKT EuroCup",
       "archivo": "ligas/eurocup.csv",
@@ -50,6 +70,26 @@
         "playoffs": 110,
         "regular": 297,
         "total": 298
+      }
+    },
+    "fec": {
+      "nombre": "FIBA Europe Cup",
+      "archivo": "ligas/fec.csv",
+      "fecha_extraccion": "2026-10-17T18:42:27.047821+00:00",
+      "fases": {
+        "playoffs": 189,
+        "regular": 260,
+        "total": 289
+      }
+    },
+    "gbl": {
+      "nombre": "Greek Basket League (A1)",
+      "archivo": "ligas/gbl.csv",
+      "fecha_extraccion": "2026-10-17T18:12:57.292650+00:00",
+      "fases": {
+        "playoffs": 100,
+        "regular": 229,
+        "total": 231
       }
     },
     "gleague": {
