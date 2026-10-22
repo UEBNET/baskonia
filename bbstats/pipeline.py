@@ -163,6 +163,12 @@ def _run_league(liga: str, cfg: dict, season: str, download: bool, store: RawSto
     t0 = time.monotonic()
     res = LeagueResult(liga=liga)
     lcfg = cfg["ligas"][liga]
+    first = lcfg.get("temporada_inicial")
+    if first and int(season[:4]) < int(str(first)[:4]):
+        # temporada anterior a la primera de la liga (alcance decidido por el usuario): ni se descarga ni se procesa
+        res.estado = "fuera_de_alcance"
+        res.notas.append(f"{liga}: temporada {season} fuera de alcance (primera temporada de la liga: {first})")
+        return res, None
     adapter = build_adapter(liga, lcfg)
     payload: Any = None
     meta: dict = {}

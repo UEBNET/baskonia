@@ -1393,7 +1393,9 @@
       "nombre_historico": "LEB Oro",
       "competicion_feb": 1,
       "slug": "primerafeb",
-      "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)"
+      "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)",
+      "temporada_inicial": "2022-23",
+      "_temporada_inicial": "Primera temporada de esta liga en el proyecto (decisión del usuario, 22-10-2026); las anteriores quedan fuera de alcance: historico/ejecutar no las descargan ni procesan."
     },
     "feb2": {
       "adaptador": "feb",
@@ -1431,7 +1433,9 @@
       "nombre_historico": "LEB Plata",
       "competicion_feb": 2,
       "slug": "segundafeb",
-      "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)"
+      "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)",
+      "temporada_inicial": "2023-24",
+      "_temporada_inicial": "Primera temporada de esta liga en el proyecto (decisión del usuario, 22-10-2026); las anteriores quedan fuera de alcance: historico/ejecutar no las descargan ni procesan."
     },
     "feb3": {
       "adaptador": "feb",
@@ -1470,7 +1474,9 @@
       "competicion_feb": 3,
       "slug": "tercerafeb",
       "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)",
-      "_grupos": "Tercera FEB/Liga EBA se juega en grupos (A-A, A-B, … E-B): el grupo es un atributo del partido, no una liga aparte."
+      "_grupos": "Tercera FEB/Liga EBA se juega en grupos (A-A, A-B, … E-B): el grupo es un atributo del partido, no una liga aparte.",
+      "temporada_inicial": "2023-24",
+      "_temporada_inicial": "Primera temporada de esta liga en el proyecto (decisión del usuario, 22-10-2026); las anteriores quedan fuera de alcance: historico/ejecutar no las descargan ni procesan."
     }
   },
   "identidad": {

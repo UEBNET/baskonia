@@ -205,6 +205,14 @@ def ejecutar(ligas: list[str] | None = None, temporadas: list[str] | None = None
             all_c.extend(c)
     partidos = pd.concat(all_p, ignore_index=True) if all_p else pd.DataFrame()
     cob, pos = cobertura(partidos), posesiones(partidos)
+    fuera = [{"liga": liga, "temporada": t, "grupo_id": None, "grupo": "fuera de alcance por decisión del usuario",
+              "fase": "fuera_de_alcance", "partidos": None, "descargado": False}
+             for liga in ligas for t in temporadas
+             if cfg["ligas"][liga].get("temporada_inicial")
+             and int(t[:4]) < int(str(cfg["ligas"][liga]["temporada_inicial"])[:4])]
+    if fuera:
+        cob = pd.concat([cob, pd.DataFrame(fuera)], ignore_index=True).sort_values(["liga", "temporada"]) \
+            .reset_index(drop=True)
     ses = sesgo_registro(processed, temporadas)
     con = contrato_resumen(all_c)
     if escribir and not partidos.empty:
