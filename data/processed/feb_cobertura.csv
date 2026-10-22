@@ -1,5 +1,60 @@
 liga,temporada,grupo_id,grupo,fase,partidos,pct_pbp,pct_solo_box,pct_sin_datos,pct_con_cambios,pct_quintetos_validos,pct_coordenadas,formato_pbp,descargado
 feb1,2026-27,89991,Liga Regular Único,regular,36,100.0,0.0,0.0,100.0,97.2,100.0,estructurado,True
+feb2,2025-26,89511,PERMANENCIA Final,excluida,2,,,,,,,,False
+feb2,2025-26,88875,1ºE-1ºO Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2025-26,88878,ELIMINATORIAS 1/2 Final,playoffs,4,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2025-26,88877,ELIMINATORIAS 1/4 Final,playoffs,8,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2025-26,88876,ELIMINATORIAS 1/8 Final,playoffs,14,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2025-26,88879,"Liga Regular ""ESTE""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2025-26,88880,"Liga Regular ""OESTE""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2026-27,89999,"Liga Regular ""A""",regular,21,100.0,0.0,0.0,100.0,95.2,100.0,estructurado,True
+feb2,2026-27,90000,"Liga Regular ""B""",regular,20,100.0,0.0,0.0,100.0,95.0,100.0,estructurado,True
+feb3,2025-26,89512,1ºAA-1ºAB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89517,1ºBA-1ºBB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89514,1ºCA-1ºCB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89515,1ºDA-1ºDB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89516,1ºEA-1ºEB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89691,"ELIMIN. GR ""A"" 1/2 Final",playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89518,"ELIMIN. GR ""A"" 1/4 Final",playoffs,3,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89692,"ELIMIN. GR ""B"" 1/2 Final",playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89519,"ELIMIN. GR ""B"" 1/4 Final",playoffs,3,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89693,"ELIMIN. GR ""C"" 1/2 Final",playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89520,"ELIMIN. GR ""C"" 1/4 Final",playoffs,3,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89694,"ELIMIN. GR ""D"" 1/2 Final",playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89521,"ELIMIN. GR ""D"" 1/4 Final",playoffs,3,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89695,"ELIMIN. GR ""E"" 1/2 Final",playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89522,"ELIMIN. GR ""E"" 1/4 Final",playoffs,3,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89851,FASE FINAL-A FFA1,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89852,FASE FINAL-A FFA2,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89853,FASE FINAL-B FFB3,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89854,FASE FINAL-B FFB4,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89855,FF 2ºA1-2ºA2 2ºA1-2ºA2,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,89856,FF 2ºB3-2ºB4 2ºB3-2ºB4,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,88882,"Liga Regular ""A-A""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,88883,"Liga Regular ""A-B""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,88884,"Liga Regular ""B-A""",regular,182,100.0,0.0,0.0,100.0,99.5,100.0,estructurado,True
+feb3,2025-26,88885,"Liga Regular ""B-B""",regular,182,100.0,0.0,0.0,100.0,99.5,100.0,estructurado,True
+feb3,2025-26,88886,"Liga Regular ""C-A""",regular,182,100.0,0.0,0.0,100.0,97.8,100.0,estructurado,True
+feb3,2025-26,88887,"Liga Regular ""C-B""",regular,182,100.0,0.0,0.0,100.0,99.5,100.0,estructurado,True
+feb3,2025-26,88888,"Liga Regular ""D-A""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,88890,"Liga Regular ""D-B""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2025-26,88891,"Liga Regular ""E-A""",regular,182,99.5,0.0,0.5,99.5,98.9,99.5,estructurado,True
+feb3,2025-26,88892,"Liga Regular ""E-B""",regular,156,100.0,0.0,0.0,100.0,99.4,100.0,estructurado,True
+feb3,2026-27,90059,"Liga Regular ""A-A""",regular,21,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90060,"Liga Regular ""A-B""",regular,21,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90061,"Liga Regular ""B-A""",regular,21,100.0,0.0,0.0,100.0,95.2,100.0,estructurado,True
+feb3,2026-27,90062,"Liga Regular ""B-B""",regular,21,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90063,"Liga Regular ""C-A""",regular,14,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90064,"Liga Regular ""C-B""",regular,16,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90065,"Liga Regular ""D-A""",regular,17,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90066,"Liga Regular ""D-B""",regular,18,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90067,"Liga Regular ""E-A""",regular,20,100.0,0.0,0.0,100.0,95.0,100.0,estructurado,True
+feb3,2026-27,90068,"Liga Regular ""E-B""",regular,16,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb1,2023-24,83065,Copa Princesa de Asturias Único,excluida,1,,,,,,,,False
+feb1,2023-24,83068,Play-Offs 1/2 Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb1,2023-24,83067,Play-Offs 1/4 Final,playoffs,16,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb1,2023-24,83069,Play-Offs Final,playoffs,1,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb1,2023-24,83066,Liga Regular Único,regular,306,100.0,0.0,0.0,100.0,99.3,0.3,estructurado;texto,True
 feb1,2025-26,88873,Play-offs 1/2 Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb1,2025-26,88872,Play-offs 1/4 Final,playoffs,15,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb1,2025-26,88874,Play-offs Final,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True

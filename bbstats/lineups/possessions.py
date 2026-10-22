@@ -10,6 +10,8 @@ Una posesión del equipo X termina con:
   * pérdida de X;
   * rebote defensivo del rival tras un fallo de X (de campo o del último tiro libre);
   * último tiro libre ANOTADO de una tanda de X (tanda = tiros libres seguidos de X en el mismo segundo).
+Si tras un fallo de X actúa el rival (tiro, tiro libre o pérdida) sin rebote anotado, se supone un rebote
+defensivo implícito (algunas fuentes, como el jugada a jugada en texto de la FEB 2020-24, omiten rebotes).
 Al acabar un periodo, un fallo sin rebote cierra la posesión del que tiró (como la fórmula de caja: cada FGA
 cuenta salvo que haya OREB). No se cuentan las posesiones que acaban por fin de periodo sin tiro ni pérdida, y un
 tiro libre técnico anotado cuenta como fin de posesión (sesgo pequeño, documentado).
@@ -56,6 +58,10 @@ def count_possessions(events: list[Event], teams: list[str]) -> tuple[Counter, d
             pending = None
             if not (e.kind == "ft" and e.team == team_p and abs(e.t - t_p) <= 1.0):
                 end(team_p)
+        if last_miss_team is not None and e.team != last_miss_team and e.kind in ("shot", "ft", "tov"):
+            # el rival actúa tras un fallo sin rebote anotado: rebote defensivo implícito (la fuente lo omitió)
+            end(last_miss_team)
+            last_miss_team = None
         pid_of[e.order] = current
         if e.kind == "shot":
             if e.made:

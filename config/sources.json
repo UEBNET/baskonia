@@ -1472,5 +1472,10 @@
       "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)",
       "_grupos": "Tercera FEB/Liga EBA se juega en grupos (A-A, A-B, … E-B): el grupo es un atributo del partido, no una liga aparte."
     }
+  },
+  "identidad": {
+    "umbral_fusion": 0.8,
+    "umbral_revision": 0.5,
+    "_identidad": "bbmodel/crosswalk.py: parejas de jugadores con confianza >= umbral_fusion se unen en persona_id; las de [umbral_revision, umbral_fusion) van a data/processed/crosswalk_revision.csv y NO se aplican."
   }
 }

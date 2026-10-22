@@ -1,4 +1,13 @@
 liga,temporada,formato_pbp,equipos_partido,pos_pbp_media,pos_box_media,dif_media,dif_abs_media,dif_pct_media,correlacion
 feb1,2026-27,estructurado,72,73.49,75.63,-2.14,2.77,-2.77,0.866
-feb1,2025-26,estructurado,580,74.26,75.38,-1.12,1.88,-1.46,0.892
-feb1,todas,estructurado,580,74.26,75.38,-1.12,1.88,-1.46,0.892
+feb2,2025-26,estructurado,784,76.0,77.41,-1.41,2.1,-1.81,0.905
+feb2,2026-27,estructurado,82,78.35,79.93,-1.58,2.12,-1.94,0.907
+feb3,2025-26,estructurado,3708,80.03,81.24,-1.21,1.99,-1.47,0.925
+feb3,2026-27,estructurado,370,82.26,83.81,-1.55,2.19,-1.81,0.938
+feb2,todas,estructurado,866,76.22,77.65,-1.43,2.1,-1.82,0.906
+feb3,todas,estructurado,4078,80.23,81.47,-1.24,2.01,-1.5,0.927
+feb1,2023-24,estructurado,2,71.5,73.44,-1.94,1.94,-2.59,
+feb1,2023-24,texto,648,72.79,73.89,-1.09,1.9,-1.45,0.89
+feb1,2025-26,estructurado,580,74.7,75.38,-0.69,1.61,-0.88,0.91
+feb1,todas,estructurado,582,74.69,75.38,-0.69,1.61,-0.89,0.91
+feb1,todas,texto,648,72.79,73.89,-1.09,1.9,-1.45,0.89

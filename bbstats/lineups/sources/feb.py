@@ -299,28 +299,31 @@ class FebPBP(PBPSource):
                     elif "Coach/Bench" in act and line_team:
                         evs.append(Event(kind="foul", team=line_team, **kw))
                     continue      # rebote de equipo sin nombre: equipo desconocido
-                is_reb = "TotReb" in act and not re.search(r"ANOTADO|FALLADO", act)
-                is_def = bool(re.search(r"Robo|Bloqueo", act))
+                is_reb = bool(re.search(r"TotReb|REBOTE", act, re.I)) and not re.search(r"ANOTADO|FALLADO", act, re.I)
+                is_def = bool(re.search(r"Robo|Bloqueo|Tap[oó]n", act, re.I))
                 tm, pid = who(actor, line_team, prefer_other=is_def)
                 if tm is None:
                     continue
                 kw.update(team=tm, player=pid)
-                pm = _PTS.search(act)
-                if re.search(r"Tiros? libres?", act):
-                    made = "ANOTADO" in act
+                pm = _PTS.search(act) or re.search(r"Puntos: (\d+)", act)
+                if re.search(r"Tiros? libres?|TIRO DE 1\b", act, re.I):
+                    made = bool(re.search(r"ANOTADO", act, re.I))
                     evs.append(Event(kind="ft", value=1, made=made, pts=1 if made else 0, **kw))
                     last_miss_team = None if made else tm
                     if pm:
                         pts_acc[pid] = int(pm.group(1))
                     if made:
                         last_made = evs[-1]
-                elif re.search(r"ANOTADO|FALLADO", act):
-                    made = "ANOTADO" in act
-                    v = 3 if re.search(r"3\s*Pts Tiro", act) else 2
-                    if made and pm:
-                        delta = int(pm.group(1)) - pts_acc.get(pid, 0)
-                        if delta in (2, 3):
-                            v = delta
+                elif re.search(r"ANOTADO|FALLADO", act, re.I):
+                    made = bool(re.search(r"ANOTADO", act, re.I))
+                    if re.search(r"3\s*Pts Tiro|TIRO DE 3", act, re.I):
+                        v = 3
+                    elif re.search(r"2\s*Pts Tiro|TIRO DE 2|suspensi|Mate|Bandeja|Gancho", act, re.I):
+                        v = 2
+                    else:          # sin tipo: por el acumulado de puntos del jugador (si es coherente)
+                        v = 2
+                        if made and pm and int(pm.group(1)) - pts_acc.get(pid, 0) == 3:
+                            v = 3
                     if pm:
                         pts_acc[pid] = int(pm.group(1))
                     e = Event(kind="shot", value=v, made=made, pts=v if made else 0, **kw)
@@ -330,19 +333,19 @@ class FebPBP(PBPSource):
                 elif is_reb:
                     evs.append(Event(kind="oreb" if last_miss_team == tm else "dreb", **kw))
                     last_miss_team = None
-                elif "Asistencia" in act:
+                elif re.search(r"Asistencia", act, re.I):
                     if last_made is not None and last_made.team == tm and last_made.assister is None \
                             and last_made.player != pid:
                         last_made.assister = pid
                         last_made.ast_ft = last_made.kind == "ft"
-                elif "Pérdida" in act or "Perdida" in act:
+                elif re.search(r"P[ée]rdida", act, re.I):
                     evs.append(Event(kind="tov", **kw))
                     last_miss_team = None
-                elif "Robo" in act:
+                elif re.search(r"Robo", act, re.I):
                     evs.append(Event(kind="stl", **kw))
-                elif "Bloqueo" in act or "Tapón" in act:
+                elif re.search(r"Bloqueo|Tap[oó]n", act, re.I):
                     evs.append(Event(kind="blk", **kw))
-                elif re.search(r"Personal|Antideportiva|T[ée]cnica|Descalificante|Ofensiva|Falta", act):
+                elif re.search(r"Personal|Antideportiva|T[ée]cnica|Descalificante|Ofensiva|Falta", act, re.I):
                     evs.append(Event(kind="foul", **kw))
         self._starters_from(g, pre)
         g.events = evs

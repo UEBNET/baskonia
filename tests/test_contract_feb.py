@@ -425,3 +425,10 @@ def test_domain_delay_shared_between_clients():
     b._throttle("https://pausa.test/y")
     a._throttle("https://pausa.test/z")
     assert time.monotonic() - t0 >= 0.38
+
+
+def test_possessions_implicit_defensive_rebound():
+    """Fallo de A sin rebote anotado y después tira B: la posesión de A termina igualmente."""
+    evs = [_ev(1, "shot", "A", False, 10), _ev(2, "shot", "B", True, 20)]
+    n, pid = count_possessions(evs, ["A", "B"])
+    assert n == Counter({"A": 1, "B": 1}) and pid[2] > pid[1]

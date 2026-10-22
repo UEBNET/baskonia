@@ -92,9 +92,10 @@ INICIAL = {
     "gbl": (Sistema("gbl", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
     # FEB (Primera, Segunda y Tercera FEB; KeyFacts de intrafeb.feb.es, "Position" = "x|y"): % de la pista completa
     # (x a lo largo 0-100, y lateral 0-100), como LBA / LNB. Sólo desde 2024-25 (antes el jugada a jugada es texto).
-    "feb1": (Sistema("feb1", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
-    "feb2": (Sistema("feb2", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
-    "feb3": (Sistema("feb3", "fiba", "x", (5.625, 50.0), (0.28, 0.15), pista_completa=100.0), True),
+    # Calibración oct. 2026 (2025-27): aro ≈ (11,4-12,0; 49,7), 99,1-99,3 % de tiros de 2 y 3 separados por la línea.
+    "feb1": (Sistema("feb1", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
+    "feb2": (Sistema("feb2", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
+    "feb3": (Sistema("feb3", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
 }
 
 

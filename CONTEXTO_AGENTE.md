@@ -531,3 +531,29 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
   `bbmodel`/`bbestilo` ya incluyen las 4); `bbstats/entrenadores._partidos` lee sólo el último bruto principal
   (`store.latest`): con brutos incrementales debería usar `store.load_season()` para ver todos los partidos.
 
+
+## 9e. Competiciones FEB (fase 1, oct. 2026): feb1 Primera FEB, feb2 Segunda FEB, feb3 Tercera FEB
+
+- **Mismo esquema y tubería** que el resto (ligas/<liga>.csv, quintetos/<liga>/, entrenadores/). Nombres
+  históricos (LEB Oro, LEB Plata, Liga EBA) en `config/competition_aliases.json`: un código = una serie.
+- **Adaptador** `bbstats/adapters/feb.py` (`FebAdapter`): calendario por postback ASP.NET de
+  baloncestoenvivo.feb.es/resultados (grupos y jornadas), KeyFacts/BoxScore de `intrafeb.feb.es/LiveStats.API`
+  con el token anónimo que la página pública da a cualquier visitante, plantilla y entrenador de `Equipo.aspx`.
+  Bruto incremental (`games`, `equipos`; `calendario` del último paquete). Partido sin datos en la API →
+  `{"sin_datos": true}` (se reintenta sólo si se jugó hace < 30 días).
+- **Ids**: jugador = id de persona FEB (común a feb1/feb2/feb3; a veces la FEB da otro id al mismo jugador),
+  equipo = id de inscripción de la temporada (cambia cada año; `clubCode` en `equipo_codigo`).
+- **Grupo** (Tercera FEB, y Este/Oeste de Segunda FEB) = atributo del partido: `data/processed/<t>/feb/<liga>_partidos.csv`
+  (`grupo_id`, `grupo`, `fase`, `jornada`, `con_box`, `formato_pbp`, `pbp_available`, `quintetos_validos`, posesiones).
+- **Jugada a jugada** `bbstats/lineups/sources/feb.py`: estructurado desde 2024-25 (ids + coordenadas), texto en
+  2020-24 (nombres emparejados con el boxscore; sin coordenadas; triples sin etiqueta se infieren por el acumulado de
+  puntos). Partidos sin jugada a jugada entran sólo con boxscore (`pbp_available = False`).
+- **Posesiones reales**: `bbstats/lineups/possessions.py` (`count_possessions`, genérico para cualquier liga:
+  `possession_id` por evento) frente a FGA + 0,44·FTA − OREB + TOV.
+- **Contrato de datos**: `bbstats/contrato.py` + `python -m bbstats contrato --ligas feb1 feb2 feb3`.
+- **Identidad entre ligas**: `bbmodel/crosswalk.py` → `data/processed/player_id_crosswalk.csv` (fuente_liga, fuente_id,
+  persona_id, confianza, metodo) y `crosswalk_revision.csv` (dudosos, NO aplicados). Umbrales en
+  `config/sources.json → identidad`. `identidad.resolver` (modelos A/B) no cambia.
+- **Entrenadores**: uno por equipo y temporada (página del equipo), `metodo = temporada`.
+- **Pendiente**: las listas de ligas de `bbmodel`/`bbestilo` (A/B, VaDE…) aún no incluyen las FEB; no se han
+  reentrenado los modelos. Resultados y riesgos: `docs/checkpoints/F1.md`.

@@ -1,0 +1,392 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+2414331,regular,44,22,1.0,0.1,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/20 asistencias sin enlazar | formato estructurado,True
+2414332,regular,34,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,2/31 asistencias sin enlazar | formato estructurado,True
+2414333,regular,52,23,0.0,0.0,,,2,actua_fuera_de_pista=1;no_cinco_4=1,True,True,True,True,False,2/32 asistencias sin enlazar | formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414334,regular,31,24,0.0,0.0,3.0,4.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414335,regular,39,24,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414336,regular,50,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,2/31 asistencias sin enlazar | formato estructurado,True
+2414337,regular,44,22,19.0,3.6,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,4/27 asistencias sin enlazar | formato estructurado,True
+2414338,regular,38,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,formato estructurado,True
+2414339,regular,42,22,0.0,0.0,0.0,0.0,6,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,1/23 asistencias sin enlazar | formato estructurado,True
+2414340,regular,36,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,2/30 asistencias sin enlazar | formato estructurado,True
+2414341,regular,39,24,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/35 asistencias sin enlazar | formato estructurado,True
+2414342,regular,40,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414343,regular,50,22,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/42 asistencias sin enlazar | formato estructurado,True
+2414344,regular,43,24,3.0,0.3,0.0,0.0,0,,True,True,True,True,True,2/41 asistencias sin enlazar | formato estructurado,True
+2414345,regular,31,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414346,regular,36,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414347,regular,31,20,0.0,0.0,2.0,8.0,6,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,4/27 asistencias sin enlazar | formato estructurado,True
+2414348,regular,39,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/33 asistencias sin enlazar | formato estructurado,True
+2414349,regular,32,23,0.0,0.0,,,3,actua_fuera_de_pista=1;no_cinco_6=1;quinteto_periodo_arrastrado=1,True,True,True,True,False,2/27 asistencias sin enlazar | formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414350,regular,49,24,0.0,0.0,3.0,2.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414351,regular,39,23,7.0,0.6,2.0,4.0,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414352,regular,42,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/30 asistencias sin enlazar | formato estructurado,True
+2414353,regular,39,22,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,3/37 asistencias sin enlazar | formato estructurado,True
+2414354,regular,33,22,5.0,0.9,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,3/29 asistencias sin enlazar | formato estructurado,True
+2414355,regular,31,23,8.0,1.1,3.0,2.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2,True,True,True,True,True,1/16 asistencias sin enlazar | formato estructurado,True
+2414356,regular,42,21,0.0,0.0,4.0,8.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,False,True,True,True,True,1/39 asistencias sin enlazar | formato estructurado,True
+2414357,regular,35,23,16.0,2.9,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,4/32 asistencias sin enlazar | formato estructurado,True
+2414358,regular,44,24,12.0,1.2,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,4/42 asistencias sin enlazar | formato estructurado,True
+2414359,regular,38,21,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,2/39 asistencias sin enlazar | formato estructurado,True
+2414361,regular,41,24,0.0,0.0,,,4,actua_fuera_de_pista=3;no_cinco_4=1,True,True,True,True,False,1/22 asistencias sin enlazar | formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414362,regular,30,18,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/31 asistencias sin enlazar | formato estructurado,True
+2414363,regular,35,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/43 asistencias sin enlazar | formato estructurado,True
+2414364,regular,39,22,12.0,2.4,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414365,regular,36,23,6.0,0.6,2.0,4.0,2,actua_fuera_de_pista=2,True,True,True,True,True,4/24 asistencias sin enlazar | formato estructurado,True
+2414366,regular,44,21,0.0,0.0,,,1,no_cinco_6=1,True,True,True,True,False,3/38 asistencias sin enlazar | formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414367,regular,36,24,3.0,0.3,0.0,0.0,0,,True,True,True,True,True,1/31 asistencias sin enlazar | formato estructurado,True
+2414368,regular,33,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414369,regular,35,19,16.0,1.7,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414370,regular,28,20,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,4/32 asistencias sin enlazar | formato estructurado,True
+2414371,regular,43,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/29 asistencias sin enlazar | formato estructurado,True
+2414372,regular,43,22,7.0,0.6,2.0,4.0,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/27 asistencias sin enlazar | formato estructurado,True
+2414373,regular,34,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/29 asistencias sin enlazar | formato estructurado,True
+2414374,regular,46,24,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414375,regular,31,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414376,regular,37,24,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414377,regular,38,22,0.0,0.0,2.0,4.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/21 asistencias sin enlazar | formato estructurado,True
+2414378,regular,36,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,4/33 asistencias sin enlazar | formato estructurado,True
+2414379,regular,35,23,0.0,0.0,3.0,2.0,0,,True,True,True,True,True,1/28 asistencias sin enlazar | formato estructurado,True
+2414380,regular,31,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/33 asistencias sin enlazar | formato estructurado,True
+2414381,regular,43,23,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=2,True,True,True,True,True,formato estructurado,True
+2414382,regular,44,21,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414383,regular,41,23,16.0,1.5,0.0,0.0,0,,True,True,True,True,True,1/36 asistencias sin enlazar | formato estructurado,True
+2414384,regular,37,22,0.0,0.0,0.0,0.0,3,quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/34 asistencias sin enlazar | formato estructurado,True
+2414385,regular,39,22,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/36 asistencias sin enlazar | formato estructurado,True
+2414386,regular,41,24,0.0,0.0,3.0,6.0,4,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/34 asistencias sin enlazar | formato estructurado,True
+2414387,regular,40,23,0.0,0.0,3.0,8.0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,True,4/28 asistencias sin enlazar | formato estructurado,True
+2414388,regular,37,23,0.0,0.0,3.0,4.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,3/36 asistencias sin enlazar | formato estructurado,True
+2414389,regular,44,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414390,regular,40,22,0.0,0.0,2.0,4.0,4,actua_fuera_de_pista=4,True,True,True,True,True,formato estructurado,True
+2414391,regular,40,24,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414392,regular,30,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414393,regular,35,23,9.0,0.8,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414394,regular,44,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414395,regular,30,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,4/40 asistencias sin enlazar | formato estructurado,True
+2414396,regular,35,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,4/38 asistencias sin enlazar | formato estructurado,True
+2414397,regular,30,23,9.0,0.8,2.0,2.0,0,,True,True,True,True,True,1/35 asistencias sin enlazar | formato estructurado,True
+2414398,regular,37,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3/37 asistencias sin enlazar | formato estructurado,True
+2414399,regular,34,21,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,3/37 asistencias sin enlazar | formato estructurado,True
+2414400,regular,41,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/23 asistencias sin enlazar | formato estructurado,True
+2414401,regular,37,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,4/35 asistencias sin enlazar | formato estructurado,True
+2414402,regular,41,24,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/29 asistencias sin enlazar | formato estructurado,True
+2414403,regular,44,23,0.0,0.0,3.0,3.0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,2/21 asistencias sin enlazar | formato estructurado,True
+2414404,regular,38,24,0.0,0.0,3.0,2.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/41 asistencias sin enlazar | formato estructurado,True
+2414405,regular,33,23,0.0,0.0,3.0,4.0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/42 asistencias sin enlazar | formato estructurado,True
+2414406,regular,30,24,0.0,0.0,3.0,10.0,4,quinteto_periodo_arrastrado=4,True,True,True,True,True,formato estructurado,True
+2414407,regular,28,22,19.0,1.7,3.0,2.0,8,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,formato estructurado,True
+2414408,regular,32,19,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414409,regular,34,23,0.0,0.0,3.0,4.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,2/36 asistencias sin enlazar | formato estructurado,True
+2414410,regular,31,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,5/33 asistencias sin enlazar | formato estructurado,True
+2414411,regular,30,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3/43 asistencias sin enlazar | formato estructurado,True
+2414412,regular,36,23,3.0,0.3,3.0,4.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,4/25 asistencias sin enlazar | formato estructurado,True
+2414413,regular,41,24,20.0,3.1,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/31 asistencias sin enlazar | formato estructurado,True
+2414414,regular,35,21,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,2/33 asistencias sin enlazar | formato estructurado,True
+2414415,regular,45,21,0.0,0.0,2.0,8.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,2/31 asistencias sin enlazar | formato estructurado,True
+2414416,regular,38,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,2/14 asistencias sin enlazar | formato estructurado,True
+2414417,regular,37,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/44 asistencias sin enlazar | formato estructurado,True
+2414418,regular,37,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/27 asistencias sin enlazar | formato estructurado,True
+2414419,regular,38,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/39 asistencias sin enlazar | formato estructurado,True
+2414420,regular,37,23,3.0,0.3,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414421,regular,36,19,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,5/44 asistencias sin enlazar | formato estructurado,True
+2414422,regular,48,22,0.0,0.0,0.0,0.0,1,no_cinco_6=1,True,True,True,True,True,2/32 asistencias sin enlazar | formato estructurado,True
+2414423,regular,31,20,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,2/38 asistencias sin enlazar | formato estructurado,True
+2414424,regular,42,24,0.0,0.0,2.0,2.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,2/30 asistencias sin enlazar | formato estructurado,True
+2414425,regular,29,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/27 asistencias sin enlazar | formato estructurado,True
+2414426,regular,42,24,0.0,0.0,2.0,4.0,4,actua_fuera_de_pista=4,True,True,True,True,True,4/37 asistencias sin enlazar | formato estructurado,True
+2414427,regular,27,21,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414428,regular,36,22,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414429,regular,39,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/30 asistencias sin enlazar | formato estructurado,True
+2414430,regular,38,22,0.0,0.0,2.0,10.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414431,regular,31,24,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,1/28 asistencias sin enlazar | formato estructurado,True
+2414432,regular,33,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/33 asistencias sin enlazar | formato estructurado,True
+2414433,regular,30,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,5/40 asistencias sin enlazar | formato estructurado,True
+2414434,regular,38,21,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,formato estructurado,True
+2414435,regular,36,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/32 asistencias sin enlazar | formato estructurado,True
+2414436,regular,38,22,0.0,0.0,2.0,4.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414437,regular,40,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3/43 asistencias sin enlazar | formato estructurado,True
+2414438,regular,32,22,0.0,0.0,2.0,6.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414439,regular,41,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,formato estructurado,True
+2414440,regular,34,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/25 asistencias sin enlazar | formato estructurado,True
+2414441,regular,39,21,4.0,0.8,2.0,2.0,2,actua_fuera_de_pista=2,True,True,True,True,True,3/26 asistencias sin enlazar | formato estructurado,True
+2414442,regular,36,23,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2,True,True,True,True,True,1/33 asistencias sin enlazar | formato estructurado,True
+2414443,regular,54,21,0.0,0.0,,,0,,True,True,True,True,False,formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414444,regular,36,24,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414445,regular,41,24,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2414446,regular,27,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/29 asistencias sin enlazar | formato estructurado,True
+2414447,regular,34,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,4/29 asistencias sin enlazar | formato estructurado,True
+2414448,regular,35,22,25.0,2.4,0.0,0.0,0,,True,True,True,True,True,3/28 asistencias sin enlazar | formato estructurado,True
+2414449,regular,53,24,8.0,2.3,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/27 asistencias sin enlazar | formato estructurado,True
+2414450,regular,40,22,10.0,0.9,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414451,regular,36,23,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414452,regular,28,23,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,1/30 asistencias sin enlazar | formato estructurado,True
+2414453,regular,34,22,0.0,0.0,1.0,2.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/36 asistencias sin enlazar | formato estructurado,True
+2414454,regular,40,22,0.0,0.0,3.0,6.0,0,,True,True,True,True,True,formato estructurado,True
+2414455,regular,36,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,5/30 asistencias sin enlazar | formato estructurado,True
+2414456,regular,39,24,16.0,1.5,2.0,4.0,0,,True,True,True,True,True,4/24 asistencias sin enlazar | formato estructurado,True
+2414457,regular,36,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/42 asistencias sin enlazar | formato estructurado,True
+2414458,regular,33,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/32 asistencias sin enlazar | formato estructurado,True
+2414459,regular,38,24,4.0,0.7,2.0,4.0,4,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/22 asistencias sin enlazar | formato estructurado,True
+2414460,regular,33,22,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/37 asistencias sin enlazar | formato estructurado,True
+2414461,regular,27,23,0.0,0.0,2.0,4.0,0,,True,True,True,True,True,formato estructurado,True
+2414462,regular,40,23,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414463,regular,33,24,0.0,0.0,2.0,6.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,5/32 asistencias sin enlazar | formato estructurado,True
+2414464,regular,31,20,0.0,0.0,2.0,4.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/26 asistencias sin enlazar | formato estructurado,True
+2414465,regular,45,24,0.0,0.0,3.0,2.0,0,,True,True,True,True,True,1/31 asistencias sin enlazar | formato estructurado,True
+2414466,regular,35,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3/40 asistencias sin enlazar | formato estructurado,True
+2414467,regular,38,22,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,4/38 asistencias sin enlazar | formato estructurado,True
+2414468,regular,37,22,1.0,0.4,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,2/25 asistencias sin enlazar | formato estructurado,True
+2414469,regular,46,23,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=4,True,True,True,True,True,formato estructurado,True
+2414470,regular,37,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/29 asistencias sin enlazar | formato estructurado,True
+2414471,regular,34,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/29 asistencias sin enlazar | formato estructurado,True
+2414472,regular,39,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,5/32 asistencias sin enlazar | formato estructurado,True
+2414473,regular,38,21,0.0,0.0,0.0,0.0,2,quinteto_periodo_arrastrado=2,True,True,True,True,True,1/36 asistencias sin enlazar | formato estructurado,True
+2414474,regular,35,23,7.0,0.6,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414475,regular,49,22,0.0,0.0,3.0,2.0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414476,regular,48,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/33 asistencias sin enlazar | formato estructurado,True
+2414477,regular,36,24,0.0,0.0,4.0,12.0,0,,False,True,True,True,True,1/33 asistencias sin enlazar | formato estructurado,True
+2414478,regular,43,21,8.0,0.8,0.0,0.0,0,,True,True,True,True,True,1/29 asistencias sin enlazar | formato estructurado,True
+2414479,regular,30,20,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/35 asistencias sin enlazar | formato estructurado,True
+2414480,regular,50,22,31.0,5.8,2.0,8.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,1/35 asistencias sin enlazar | formato estructurado,True
+2414481,regular,40,23,7.0,0.7,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,3/35 asistencias sin enlazar | formato estructurado,True
+2414482,regular,42,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/40 asistencias sin enlazar | formato estructurado,True
+2414483,regular,34,23,0.0,0.0,2.0,1.0,2,actua_fuera_de_pista=1;no_cinco_4=1,True,True,True,True,True,1/35 asistencias sin enlazar | formato estructurado,True
+2414484,regular,29,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414485,regular,37,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/30 asistencias sin enlazar | formato estructurado,True
+2414486,regular,32,22,0.0,0.0,2.0,2.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,1/25 asistencias sin enlazar | formato estructurado,True
+2414487,regular,38,21,22.0,2.2,3.0,2.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/26 asistencias sin enlazar | formato estructurado,True
+2414488,regular,35,23,18.0,1.9,1.0,2.0,0,,True,True,True,True,True,2/36 asistencias sin enlazar | formato estructurado,True
+2414489,regular,35,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414490,regular,37,23,12.0,1.1,3.0,4.0,6,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,2/34 asistencias sin enlazar | formato estructurado,True
+2414491,regular,35,23,17.0,1.5,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,1/28 asistencias sin enlazar | formato estructurado,True
+2414492,regular,34,19,0.0,0.0,3.0,4.0,0,,True,True,True,True,True,3/41 asistencias sin enlazar | formato estructurado,True
+2414493,regular,45,22,14.0,1.4,0.0,0.0,3,actua_fuera_de_pista=3,True,True,True,True,True,formato estructurado,True
+2414494,regular,33,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,3/28 asistencias sin enlazar | formato estructurado,True
+2414495,regular,43,24,0.0,0.0,3.0,4.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/35 asistencias sin enlazar | formato estructurado,True
+2414496,regular,31,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/41 asistencias sin enlazar | formato estructurado,True
+2414497,regular,34,23,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/32 asistencias sin enlazar | formato estructurado,True
+2414498,regular,43,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,2/41 asistencias sin enlazar | formato estructurado,True
+2414499,regular,39,18,7.0,0.8,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,3/35 asistencias sin enlazar | formato estructurado,True
+2414500,regular,37,21,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2414501,regular,28,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414502,regular,38,23,0.0,0.0,2.0,8.0,0,,True,True,True,True,True,1/32 asistencias sin enlazar | formato estructurado,True
+2414503,regular,37,22,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/46 asistencias sin enlazar | formato estructurado,True
+2414504,regular,40,24,0.0,0.0,3.0,4.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414505,regular,39,23,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414506,regular,31,18,0.0,0.0,2.0,2.0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/39 asistencias sin enlazar | formato estructurado,True
+2414507,regular,35,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/32 asistencias sin enlazar | formato estructurado,True
+2414508,regular,38,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/27 asistencias sin enlazar | formato estructurado,True
+2414509,regular,36,24,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,5/41 asistencias sin enlazar | formato estructurado,True
+2414510,regular,37,24,0.0,0.0,2.0,6.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/35 asistencias sin enlazar | formato estructurado,True
+2414511,regular,35,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414512,regular,40,19,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,3/28 asistencias sin enlazar | formato estructurado,True
+2414513,regular,33,23,0.0,0.0,3.0,4.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414514,regular,33,23,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,1/28 asistencias sin enlazar | formato estructurado,True
+2414515,regular,34,23,1.0,0.1,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414516,regular,42,24,0.0,0.0,4.0,3.0,4,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,False,True,True,True,True,1/36 asistencias sin enlazar | formato estructurado,True
+2414517,regular,45,23,0.0,0.0,3.0,4.0,0,,True,True,True,True,True,formato estructurado,True
+2414518,regular,48,21,0.0,0.0,2.0,4.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414519,regular,38,23,0.0,0.0,3.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414520,regular,46,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/28 asistencias sin enlazar | formato estructurado,True
+2414521,regular,39,21,7.0,0.7,2.0,4.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/26 asistencias sin enlazar | formato estructurado,True
+2414522,regular,54,23,0.0,0.0,2.0,6.0,7,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/16 asistencias sin enlazar | formato estructurado,True
+2414523,regular,51,24,0.0,0.0,2.0,2.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,2/23 asistencias sin enlazar | formato estructurado,True
+2414524,regular,35,22,9.0,2.8,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414525,regular,40,23,3.0,0.3,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414526,regular,40,24,1.0,0.1,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414527,regular,42,23,3.0,0.3,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414528,regular,43,23,10.0,2.1,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414529,regular,38,21,0.0,0.0,,,7,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2;sale_sin_estar=1,True,True,True,True,False,formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414530,regular,31,22,0.0,0.0,3.0,4.0,0,,True,True,True,True,True,2/43 asistencias sin enlazar | formato estructurado,True
+2414531,regular,55,24,61.0,5.3,2.0,4.0,0,,True,True,True,True,True,formato estructurado,True
+2414532,regular,35,23,13.0,1.2,2.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414533,regular,45,22,30.0,7.6,3.0,5.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414534,regular,48,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2414535,regular,33,21,0.0,0.0,2.0,8.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414536,regular,39,23,0.0,0.0,3.0,2.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,3/31 asistencias sin enlazar | formato estructurado,True
+2414537,regular,44,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,3/29 asistencias sin enlazar | formato estructurado,True
+2414538,regular,37,23,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414539,regular,42,22,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414540,regular,48,22,0.0,0.0,2.0,4.0,0,,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2414541,regular,41,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414542,regular,42,23,6.0,0.6,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,3/39 asistencias sin enlazar | formato estructurado,True
+2414543,regular,36,22,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414544,regular,51,22,1.0,0.2,2.0,2.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414545,regular,38,22,2.0,0.4,0.0,0.0,0,,True,True,True,True,True,2/23 asistencias sin enlazar | formato estructurado,True
+2414546,regular,43,24,0.0,0.0,3.0,4.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/18 asistencias sin enlazar | formato estructurado,True
+2414547,regular,36,20,2.0,0.4,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,3/33 asistencias sin enlazar | formato estructurado,True
+2414548,regular,42,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3/31 asistencias sin enlazar | formato estructurado,True
+2414549,regular,37,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/25 asistencias sin enlazar | formato estructurado,True
+2414550,regular,44,22,4.0,0.4,3.0,4.0,0,,True,True,True,True,True,formato estructurado,True
+2414551,regular,36,22,0.0,0.0,3.0,7.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414552,regular,50,24,25.0,5.1,3.0,2.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414553,regular,34,23,0.0,0.0,2.0,2.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414554,regular,41,23,0.0,0.0,1.0,2.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414555,regular,35,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414556,regular,40,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/17 asistencias sin enlazar | formato estructurado,True
+2414557,regular,42,24,0.0,0.0,6.0,13.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,True,True,formato estructurado,True
+2414558,regular,39,23,0.0,0.0,3.0,4.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414559,regular,49,22,23.0,4.4,3.0,2.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,2/25 asistencias sin enlazar | formato estructurado,True
+2414560,regular,42,24,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,3/36 asistencias sin enlazar | formato estructurado,True
+2414561,regular,40,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/22 asistencias sin enlazar | formato estructurado,True
+2414562,regular,38,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414563,regular,32,22,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414564,regular,37,22,12.0,1.1,2.0,4.0,0,,True,True,True,True,True,formato estructurado,True
+2414565,regular,35,23,6.0,0.6,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414566,regular,41,22,6.0,0.6,2.0,2.0,0,,True,True,True,True,True,1/23 asistencias sin enlazar | formato estructurado,True
+2414567,regular,43,24,0.0,0.0,3.0,2.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,2/20 asistencias sin enlazar | formato estructurado,True
+2414568,regular,32,21,0.0,0.0,2.0,6.0,1,actua_fuera_de_pista=1,True,True,True,True,True,3/26 asistencias sin enlazar | formato estructurado,True
+2414569,regular,26,21,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414570,regular,41,21,0.0,0.0,5.0,5.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,False,True,True,True,True,formato estructurado,True
+2414571,regular,34,22,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,1/30 asistencias sin enlazar | formato estructurado,True
+2414572,regular,47,22,81.0,21.8,,,4,actua_fuera_de_pista=3;no_cinco_6=1,True,True,True,True,False,1/20 asistencias sin enlazar | formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414573,regular,46,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3/38 asistencias sin enlazar | formato estructurado,True
+2414574,regular,41,22,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,1/23 asistencias sin enlazar | formato estructurado,True
+2414575,regular,31,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/28 asistencias sin enlazar | formato estructurado,True
+2414576,regular,31,23,0.0,0.0,2.0,4.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414577,regular,43,24,0.0,0.0,3.0,11.0,2,actua_fuera_de_pista=2,True,True,True,True,True,formato estructurado,True
+2414578,regular,35,23,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414579,regular,43,21,0.0,0.0,3.0,2.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414580,regular,38,22,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2414581,regular,33,23,15.0,1.6,4.0,8.0,2,actua_fuera_de_pista=2,False,True,True,True,True,formato estructurado,True
+2414582,regular,28,20,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/20 asistencias sin enlazar | formato estructurado,True
+2414583,regular,44,22,5.0,1.4,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414584,regular,35,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414585,regular,37,23,3.0,0.3,4.0,11.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,False,True,True,True,True,2/34 asistencias sin enlazar | formato estructurado,True
+2414586,regular,33,20,1.0,0.1,2.0,2.0,8,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=2,True,True,True,True,True,4/37 asistencias sin enlazar | formato estructurado,True
+2414587,regular,43,21,352.0,16.8,3.0,1.0,6,actua_fuera_de_pista=2;no_cinco_6=3;quinteto_periodo_arrastrado=1,False,True,True,True,True,formato estructurado,False
+2414588,regular,36,23,6.0,0.5,2.0,2.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/22 asistencias sin enlazar | formato estructurado,True
+2414589,regular,40,23,23.0,4.4,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414590,regular,35,23,0.0,0.0,5.0,7.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,True,True,formato estructurado,True
+2414591,regular,29,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414592,regular,45,24,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2414593,regular,37,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,4/31 asistencias sin enlazar | formato estructurado,True
+2414594,regular,29,21,0.0,0.0,2.0,2.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414595,regular,36,22,11.0,1.1,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,2/19 asistencias sin enlazar | formato estructurado,True
+2414596,regular,41,20,21.0,2.7,3.0,3.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414597,regular,32,22,0.0,0.0,3.0,6.0,4,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/33 asistencias sin enlazar | formato estructurado,True
+2414598,regular,51,22,13.0,3.7,3.0,2.0,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,formato estructurado,True
+2414599,regular,29,24,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414600,regular,41,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414601,regular,47,24,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414602,regular,41,24,0.0,0.0,3.0,6.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,4/32 asistencias sin enlazar | formato estructurado,True
+2414603,regular,39,23,1.0,0.1,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,formato estructurado,True
+2414604,regular,34,23,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414605,regular,39,24,0.0,0.0,2.0,8.0,0,,True,True,True,True,True,formato estructurado,True
+2414606,regular,39,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414607,regular,37,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414608,regular,38,20,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,2/20 asistencias sin enlazar | formato estructurado,True
+2414609,regular,35,21,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414610,regular,32,21,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,3/38 asistencias sin enlazar | formato estructurado,True
+2414611,regular,38,23,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414612,regular,32,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414613,regular,42,22,6.0,0.6,3.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414614,regular,41,22,0.0,0.0,0.0,0.0,3,quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414615,regular,26,24,0.0,0.0,2.0,4.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,1/28 asistencias sin enlazar | formato estructurado,True
+2414616,regular,46,23,0.0,0.0,2.0,8.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,4/32 asistencias sin enlazar | formato estructurado,True
+2414617,regular,38,23,0.0,0.0,2.0,6.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/37 asistencias sin enlazar | formato estructurado,True
+2414618,regular,41,23,53.0,9.1,4.0,11.0,6,actua_fuera_de_pista=4;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,True,True,1/29 asistencias sin enlazar | formato estructurado,True
+2414619,regular,33,24,20.0,2.9,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414620,regular,35,23,0.0,0.0,3.0,10.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414621,regular,45,23,0.0,0.0,0.0,0.0,6,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/27 asistencias sin enlazar | formato estructurado,True
+2414622,regular,50,24,11.0,1.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414623,regular,41,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414624,regular,42,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,3/34 asistencias sin enlazar | formato estructurado,True
+2414625,regular,36,24,14.0,1.3,3.0,4.0,0,,True,True,True,True,True,formato estructurado,True
+2414626,regular,39,19,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,4/33 asistencias sin enlazar | formato estructurado,True
+2414627,regular,38,23,0.0,0.0,3.0,4.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414628,regular,37,22,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=4;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414629,regular,40,22,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/23 asistencias sin enlazar | formato estructurado,True
+2414630,regular,28,23,0.0,0.0,4.0,11.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,False,True,True,True,True,5/41 asistencias sin enlazar | formato estructurado,True
+2414631,regular,39,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414632,regular,44,24,9.0,1.5,0.0,0.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414633,regular,41,23,11.0,1.0,3.0,6.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/33 asistencias sin enlazar | formato estructurado,True
+2414634,regular,32,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414635,regular,37,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414636,regular,36,19,0.0,0.0,2.0,2.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,True,True,True,True,True,formato estructurado,True
+2414637,regular,39,21,0.0,0.0,5.0,5.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,False,True,True,True,True,formato estructurado,True
+2414638,regular,32,20,4.0,0.4,5.0,5.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,False,True,True,True,True,1/28 asistencias sin enlazar | formato estructurado,True
+2414639,regular,45,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414640,regular,42,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414641,regular,32,19,0.0,0.0,2.0,4.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/39 asistencias sin enlazar | formato estructurado,True
+2414642,regular,35,22,0.0,0.0,2.0,2.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/32 asistencias sin enlazar | formato estructurado,True
+2414643,regular,49,23,17.0,1.5,2.0,2.0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,True,formato estructurado,True
+2414644,regular,36,21,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414645,regular,41,23,0.0,0.0,3.0,5.0,2,actua_fuera_de_pista=2,True,True,True,True,True,1/30 asistencias sin enlazar | formato estructurado,True
+2414646,regular,41,23,0.0,0.0,2.0,2.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/34 asistencias sin enlazar | formato estructurado,True
+2414647,regular,34,23,18.0,1.7,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/22 asistencias sin enlazar | formato estructurado,True
+2414648,regular,36,24,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,2/21 asistencias sin enlazar | formato estructurado,True
+2414649,regular,43,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414650,regular,35,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414651,regular,46,21,0.0,0.0,2.0,4.0,6,actua_fuera_de_pista=5;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/26 asistencias sin enlazar | formato estructurado,True
+2414652,regular,44,23,14.0,1.8,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414653,regular,38,24,17.0,1.6,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414654,regular,31,21,0.0,0.0,2.0,2.0,0,,True,True,True,True,True,formato estructurado,True
+2414655,regular,41,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414656,regular,37,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,2/24 asistencias sin enlazar | formato estructurado,True
+2414657,regular,39,23,0.0,0.0,5.0,8.0,4,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=2,False,True,True,True,True,1/22 asistencias sin enlazar | formato estructurado,True
+2414658,regular,40,23,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2,True,True,True,True,True,formato estructurado,True
+2414659,regular,44,22,0.0,0.0,3.0,8.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414660,regular,28,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414661,regular,32,24,0.0,0.0,,,1,no_cinco_4=1,True,True,True,True,False,formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2414662,regular,30,22,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/28 asistencias sin enlazar | formato estructurado,True
+2414663,regular,38,23,0.0,0.0,4.0,12.0,7,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=3,False,True,True,True,True,1/31 asistencias sin enlazar | formato estructurado,True
+2414664,regular,31,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414665,regular,29,21,0.0,0.0,2.0,6.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2414666,regular,32,23,13.0,1.2,2.0,6.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414667,regular,30,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414668,regular,47,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414669,regular,36,23,0.0,0.0,2.0,2.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414670,regular,42,23,7.0,0.7,0.0,0.0,6,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/30 asistencias sin enlazar | formato estructurado,True
+2414671,regular,38,21,0.0,0.0,2.0,2.0,2,actua_fuera_de_pista=2,True,True,True,True,True,2/46 asistencias sin enlazar | formato estructurado,True
+2414672,regular,36,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/34 asistencias sin enlazar | formato estructurado,True
+2414673,regular,36,24,0.0,0.0,5.0,3.0,2,quinteto_inicial_de_titulares=2,False,True,True,True,True,formato estructurado,True
+2414674,regular,47,23,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414675,regular,41,22,0.0,0.0,2.0,2.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414676,regular,30,23,17.0,3.6,2.0,4.0,0,,True,True,True,True,True,3/38 asistencias sin enlazar | formato estructurado,True
+2414677,regular,38,23,0.0,0.0,3.0,3.0,8,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=4,True,True,True,True,True,3/26 asistencias sin enlazar | formato estructurado,True
+2414678,regular,39,23,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,3/21 asistencias sin enlazar | formato estructurado,True
+2414679,regular,48,23,1.0,0.1,3.0,3.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414680,regular,43,19,0.0,0.0,2.0,2.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2414681,regular,41,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414682,regular,39,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2414683,regular,50,23,0.0,0.0,4.0,7.0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=2,False,True,True,True,True,4/34 asistencias sin enlazar | formato estructurado,True
+2414684,regular,33,22,17.0,1.7,0.0,0.0,0,,True,True,True,True,True,1/32 asistencias sin enlazar | formato estructurado,True
+2414685,regular,36,21,0.0,0.0,0.0,0.0,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,4/40 asistencias sin enlazar | formato estructurado,True
+2414686,regular,31,21,0.0,0.0,3.0,2.0,0,,True,True,True,True,True,2/31 asistencias sin enlazar | formato estructurado,True
+2414687,regular,51,22,21.0,2.0,2.0,2.0,0,,True,True,True,True,True,2/20 asistencias sin enlazar | formato estructurado,True
+2414688,regular,35,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2414689,regular,41,23,4.0,0.4,3.0,2.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,1/26 asistencias sin enlazar | formato estructurado,True
+2414690,regular,33,22,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/34 asistencias sin enlazar | formato estructurado,True
+2414691,regular,36,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/42 asistencias sin enlazar | formato estructurado,True
+2414692,regular,40,24,0.0,0.0,2.0,4.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/32 asistencias sin enlazar | formato estructurado,True
+2414693,regular,41,22,0.0,0.0,2.0,2.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2414694,regular,30,22,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/23 asistencias sin enlazar | formato estructurado,True
+2468967,playoffs,48,24,0.0,0.0,2.0,2.0,3,actua_fuera_de_pista=3,True,True,True,True,True,1/18 asistencias sin enlazar | formato estructurado,True
+2468968,playoffs,37,24,19.0,2.0,0.0,0.0,0,,True,True,True,True,True,1/25 asistencias sin enlazar | formato estructurado,True
+2468975,playoffs,34,22,0.0,0.0,0.0,0.0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,1/38 asistencias sin enlazar | formato estructurado,True
+2468976,playoffs,33,22,0.0,0.0,3.0,4.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,2/57 asistencias sin enlazar | formato estructurado,True
+2468977,playoffs,46,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/36 asistencias sin enlazar | formato estructurado,True
+2468978,playoffs,31,23,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,1/42 asistencias sin enlazar | formato estructurado,True
+2468979,playoffs,39,23,15.0,1.4,0.0,0.0,0,,True,True,True,True,True,1/33 asistencias sin enlazar | formato estructurado,True
+2468980,playoffs,45,23,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/25 asistencias sin enlazar | formato estructurado,True
+2468981,playoffs,33,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,2/25 asistencias sin enlazar | formato estructurado,True
+2468982,playoffs,38,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,6/36 asistencias sin enlazar | formato estructurado,True
+2468983,playoffs,44,20,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,formato estructurado,True
+2468984,playoffs,40,21,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2468985,playoffs,54,23,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,3/30 asistencias sin enlazar | formato estructurado,True
+2468986,playoffs,31,23,3.0,0.3,0.0,0.0,0,,True,True,True,True,True,4/32 asistencias sin enlazar | formato estructurado,True
+2468987,playoffs,35,24,0.0,0.0,3.0,2.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2468988,playoffs,40,23,14.0,1.3,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,formato estructurado,True
+2470041,playoffs,44,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2470042,playoffs,46,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
+2470043,playoffs,42,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,2/36 asistencias sin enlazar | formato estructurado,True
+2470044,playoffs,42,23,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2470045,playoffs,33,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/29 asistencias sin enlazar | formato estructurado,True
+2470046,playoffs,40,22,0.0,0.0,,,6,actua_fuera_de_pista=3;no_cinco_4=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,False,7/32 asistencias sin enlazar | formato estructurado | +/- oficial incoherente: validado sólo por minutos,True
+2470047,playoffs,33,24,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,4/33 asistencias sin enlazar | formato estructurado,True
+2470048,playoffs,35,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,4/30 asistencias sin enlazar | formato estructurado,True
+2471074,playoffs,42,24,10.0,1.0,0.0,0.0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2471075,playoffs,52,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True
+2471076,playoffs,36,23,0.0,0.0,2.0,6.0,0,,True,True,True,True,True,3/49 asistencias sin enlazar | formato estructurado,True
+2471077,playoffs,54,24,10.0,1.0,3.0,8.0,7,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1,True,True,True,True,True,1/24 asistencias sin enlazar | formato estructurado,True

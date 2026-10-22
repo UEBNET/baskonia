@@ -516,3 +516,63 @@ no se puede separar (las fechas de esa temporada en la fuente no son fiables). G
 data.json cortado a mitad (no se agregan). BCL 2020-21 (burbujas por la COVID): la mitad de los partidos (76 de 152) no anota los cambios → sólo tiros y asistencias, y de los que sí, 82 % validados; FIBA Europe Cup 2020-21: 16 de 46 sin cambios. BCL 2025-26: algún partido de playoffs con el boxscore incompleto en la
 fuente (Trapani, excluido de la competición). Calibración de coordenadas (`bbmodel/zonas.py`): 99,6-99,9 % de tiros de
 2 y 3 separados por la línea en las cuatro ligas.
+
+---
+
+## 16. Competiciones FEB: Primera FEB, Segunda FEB y Tercera FEB (fase 1, oct. 2026)
+
+Tres competiciones españolas más, en el **mismo esquema y la misma tubería** que las otras 12 (sin tablas
+paralelas): `ligas/<liga>.csv` (480 columnas), `quintetos/<liga>/` (quintetos, parejas, on/off, RAPM, asistencias,
+tiros) y `entrenadores/<liga>_*.csv`.
+
+| Código | Nombre actual | Nombre histórico (hasta 2023-24) | Código web FEB |
+|---|---|---|---|
+| `feb1` | Primera FEB | LEB Oro | `g=1` (`primerafeb`) |
+| `feb2` | Segunda FEB | LEB Plata | `g=2` (`segundafeb`) |
+| `feb3` | Tercera FEB | Liga EBA | `g=3` (`tercerafeb`) |
+
+Cada código es **una serie histórica**: `config/competition_aliases.json` da el nombre de cada temporada. En
+Tercera FEB los grupos (A-A, A-B… E-B) **no** son ligas distintas: el grupo es un atributo de cada partido
+(`grupo_id` y nombre originales en `data/processed/<t>/feb/feb3_partidos.csv` y `feb3_equipos.csv`).
+
+**Fuentes (públicas, anónimas; robots.txt de www.feb.es leído: sólo regula a `Mediapartners-Google`;
+baloncestoenvivo.feb.es y competiciones.feb.es no tienen robots.txt):**
+
+- Calendario: `baloncestoenvivo.feb.es/resultados/<slug>/<g>/<año>` (ASP.NET): desplegables de grupo y de jornada,
+  recorridos con el mismo «postback» que hace el navegador. Da todos los grupos (liga regular, play-offs, copa…).
+- Partido: `intrafeb.feb.es/LiveStats.API/api/v1/KeyFacts/<id>` (jugada a jugada + boxscore del directo) y
+  `…/BoxScore/<id>` (boxscore oficial). La API pide un token que **la propia página pública entrega a cualquier
+  visitante** (campo oculto `_ctl0_token`, rol de sólo lectura, caduca en 24 h): no es un secreto del JS.
+- Equipo: `baloncestoenvivo.feb.es/Equipo.aspx?i=<id>`: plantilla de esa temporada (fecha de nacimiento,
+  nacionalidad, formación, altura, puesto) y entrenador principal. Se guarda sólo ese fragmento.
+- Cortesía: ≥ 1 s entre peticiones por dominio (`http.delay_por_dominio`), con la pausa **compartida por todos los
+  clientes del proceso** (las tres FEB van en paralelo contra el mismo dominio), reintentos con espera exponencial.
+
+**Fases:** «Liga Regular …» (incluidas las segundas fases de liga) = `regular`; play-offs, eliminatorias, fases
+finales / de ascenso = `playoffs`; copas (Copa Princesa, Copa LEB Plata) y permanencia/descenso = fuera (no se
+descargan; sí cuentan en la cobertura). Reglas en `config/sources.json → ligas.feb*.fases_grupo`.
+
+**Jugada a jugada:** desde 2024-25 estructurado (acciones con ids de jugador y coordenadas de tiro); de 2020-21 a
+2023-24 sólo texto («J. PEREZ: 3Pts Tiro FALLADO, A. LOPEZ: (TotReb. 2)»), que se interpreta emparejando los nombres
+con el boxscore oficial (sin coordenadas). Fuente de quintetos `feb` (`bbstats/lineups/sources/feb.py`), lee el
+bruto principal. Coordenadas: `bbmodel/zonas.py` (% de la pista completa).
+
+**Brutos**: incrementales (`games`, `equipos`), paquetes de 400 partidos (< 10 MB), `data/raw/feb*/<t>/`.
+
+**Comandos propios:**
+
+```bash
+python -m bbstats historico --ligas feb1 feb2 feb3            # descarga (≈ 1 petición/s: horas para Tercera FEB)
+python -m bbstats feb                                         # partidos con grupo, cobertura, posesiones, sesgo
+python -m bbstats contrato --ligas feb1 feb2 feb3             # contrato de datos sobre los datos reales
+python -m bbstats entrenadores --ligas feb1 feb2 feb3 --sin-descarga
+python -m bbmodel crosswalk                                   # correspondencia de jugadores entre ligas
+```
+
+Salidas: `data/processed/feb_cobertura.csv` (competición × temporada × grupo: partidos, % con jugada a jugada,
+% sólo boxscore, % sin datos, % quintetos válidos), `feb_contrato.csv`, `feb_posesiones.csv`,
+`feb_sesgo_registro.csv`, `player_id_crosswalk.csv` y `crosswalk_revision.csv`. Resultados, decisiones y riesgos:
+[`docs/checkpoints/F1.md`](docs/checkpoints/F1.md).
+
+**Entrenadores:** el partido no trae el entrenador; se toma el de la página del equipo de esa temporada
+(`metodo = temporada`, como la G League): no se ven los cambios a mitad de temporada.
