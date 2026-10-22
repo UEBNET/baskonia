@@ -156,10 +156,11 @@ def parse_team_page(fragment: str) -> dict:
     out: dict[str, Any] = {"entrenador": None, "jugadores": {}}
     if not fragment:
         return out
-    m = re.search(r'class="box-entrenador".*?Foto\.aspx\?c=(\d+).*?class="nombre">([^<]*)<.*?'
-                  r'class="fecha nacimiento">([^<]*)<', fragment, re.S)
-    if m and m.group(2).strip():
-        out["entrenador"] = {"id": m.group(1), "nombre": " ".join(m.group(2).split()),
+    m = re.search(r'class="box-entrenador"(.*?)class="nombre">([^<]*)<.*?class="fecha nacimiento">([^<]*)<',
+                  fragment, re.S)
+    if m and m.group(2).strip():      # (muchos equipos de Tercera FEB no tienen entrenador en la web: vacío)
+        foto = re.search(r"Foto\.aspx\?c=(\d+)", m.group(1))
+        out["entrenador"] = {"id": foto.group(1) if foto else None, "nombre": " ".join(m.group(2).split()),
                              "fecha_nacimiento": _date(m.group(3))}
     for tr in re.findall(r"<tr>(.*?)</tr>", fragment, re.S):
         pm = re.search(r"Jugador\.aspx\?i=\d+&c=(\d+)'>([^<]*)<", tr)

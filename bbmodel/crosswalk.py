@@ -11,7 +11,8 @@ explícito para todas las ligas (incluidas las FEB, que traen fecha de nacimient
              la ACB a veces un apellido).
   puntuación (0-1, suma acotada):
       nombre       igual 0,55 · contenido 0,45
-      nacimiento   misma fecha +0,40 · mismo año ±1 +0,25 · años separados > 1,5 → RECHAZO
+      nacimiento   misma fecha +0,40 · dos fechas completas distintas → RECHAZO · (sin fecha completa) mismo
+                   año ±1 +0,25 · años separados > 1,5 → RECHAZO
       nacionalidad igual +0,10 · distinta −0,25 (puede haber doble nacionalidad)
       unicidad     el nombre es único en las dos ligas (y no hay otra pareja posible) +0,20
       trayectoria  temporadas contiguas o solapadas compatibles +0,05; club con nombre común (filial) +0,05
@@ -167,11 +168,8 @@ def puntuar(a: pd.Series, b: pd.Series, unico: bool = False) -> tuple[float, str
         if a["fecha_nac"] == b["fecha_nac"]:
             s += 0.40
             met.append("fecha_nac")
-        elif abs(int(a["fecha_nac"][:4]) - int(b["fecha_nac"][:4])) > 1:
+        else:      # dos fechas completas distintas = dos personas (p.ej. hermanos «P. SALO» y «A. SALO»)
             return 0.0, "+".join(met), "fecha de nacimiento distinta"
-        else:
-            s += 0.10
-            met.append("anio_nac_cercano")
     elif not np.isnan(a["anio_nac"]) and not np.isnan(b["anio_nac"]):
         d = abs(a["anio_nac"] - b["anio_nac"])
         if d > 1.5:

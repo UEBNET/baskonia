@@ -786,7 +786,7 @@ def _complemento_feb(df: pd.DataFrame, tc: TemporadaCtx) -> pd.DataFrame:
             continue
         m = df["equipo_id"] == tid
         df.loc[m, ["entrenador", "entrenador_id_fuente", "metodo", "fuente"]] = \
-            [ent["nombre"], f"feb:{ent['id']}", "temporada", "baloncestoenvivo.feb.es Equipo.aspx (entrenador)"]
+            [ent["nombre"], f"feb:{ent['id']}" if ent.get("id") else None, "temporada", "baloncestoenvivo.feb.es Equipo.aspx (entrenador)"]
     if sin:
         tc.errores.append(f"{len(sin)} equipos sin entrenador en su página: {sorted(map(str, sin))[:10]}")
     return df
