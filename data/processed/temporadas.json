@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-22T12:11:43.619190+00:00",
+  "generado": "2026-10-22T17:33:47.891526+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
@@ -232,7 +232,7 @@
     },
     {
       "temporada": "2023-24",
-      "generado": "2026-10-18T10:48:09.157249+00:00",
+      "generado": "2026-10-22T17:33:47.221594+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -263,6 +263,21 @@
           "playoffs": 125,
           "regular": 287,
           "total": 287
+        },
+        "feb1": {
+          "playoffs": 99,
+          "regular": 305,
+          "total": 308
+        },
+        "feb2": {
+          "playoffs": 196,
+          "regular": 482,
+          "total": 486
+        },
+        "feb3": {
+          "playoffs": 248,
+          "regular": 2391,
+          "total": 2392
         },
         "fec": {
           "playoffs": 98,

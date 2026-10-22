@@ -1,5 +1,20 @@
 liga,temporada,grupo_id,grupo,fase,partidos,pct_pbp,pct_solo_box,pct_sin_datos,pct_con_cambios,pct_quintetos_validos,pct_coordenadas,formato_pbp,descargado
+feb1,2024-25,86342,Play-Offs 1/2 Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb1,2024-25,86341,Play-Offs 1/4 Final,playoffs,15,100.0,0.0,0.0,100.0,93.3,100.0,estructurado,True
+feb1,2024-25,86343,Play-Offs Final,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb1,2024-25,86340,Liga Regular Único,regular,306,100.0,0.0,0.0,100.0,98.7,100.0,estructurado,True
+feb1,2025-26,88873,Play-offs 1/2 Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb1,2025-26,88872,Play-offs 1/4 Final,playoffs,15,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb1,2025-26,88874,Play-offs Final,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb1,2025-26,88871,Liga Regular Único,regular,272,100.0,0.0,0.0,100.0,99.6,100.0,estructurado,True
 feb1,2026-27,89991,Liga Regular Único,regular,36,100.0,0.0,0.0,100.0,97.2,100.0,estructurado,True
+feb2,2024-25,88199,PERMANENCIA 1/2 Final,excluida,4,,,,,,,,False
+feb2,2024-25,86344,1ºE-1ºO Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2024-25,86347,ELIMINATORIAS 1/2 Final,playoffs,4,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2024-25,86346,ELIMINATORIAS 1/4 Final,playoffs,8,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2024-25,86345,ELIMINATORIAS 1/8 Final,playoffs,14,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2024-25,86348,"Liga Regular ""ESTE""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb2,2024-25,86349,"Liga Regular ""OESTE""",regular,182,100.0,0.0,0.0,100.0,99.5,100.0,estructurado,True
 feb2,2025-26,89511,PERMANENCIA Final,excluida,2,,,,,,,,False
 feb2,2025-26,88875,1ºE-1ºO Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb2,2025-26,88878,ELIMINATORIAS 1/2 Final,playoffs,4,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
@@ -9,6 +24,26 @@ feb2,2025-26,88879,"Liga Regular ""ESTE""",regular,182,100.0,0.0,0.0,100.0,100.0
 feb2,2025-26,88880,"Liga Regular ""OESTE""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb2,2026-27,89999,"Liga Regular ""A""",regular,21,100.0,0.0,0.0,100.0,95.2,100.0,estructurado,True
 feb2,2026-27,90000,"Liga Regular ""B""",regular,20,100.0,0.0,0.0,100.0,95.0,100.0,estructurado,True
+feb3,2024-25,86369,Eliminatoria 2º-2º 2º AA-2º AB,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86370,Eliminatoria 2º-2º 2º BA-2º BB,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86371,Eliminatoria 2º-2º 2º CA-2º CB,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86372,Eliminatoria 2º-2º 2º DA-2º DB,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86373,FASE FINAL-A FFA1,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86374,FASE FINAL-A FFA2,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86375,FASE FINAL-B FFB3,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86376,FASE FINAL-B FFB4,playoffs,6,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86377,FF 2ºA1-2ºA2 2ºA1-2ºA2,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86378,FF 2ºB3-2ºB4 2ºB3-2ºB4,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86379,"Liga Regular ""A-A""",regular,182,100.0,0.0,0.0,100.0,98.9,100.0,estructurado,True
+feb3,2024-25,86380,"Liga Regular ""A-B""",regular,182,99.5,0.5,0.0,99.5,98.9,99.5,estructurado,True
+feb3,2024-25,86381,"Liga Regular ""B-A""",regular,182,99.5,0.5,0.0,99.5,98.4,99.5,estructurado,True
+feb3,2024-25,86382,"Liga Regular ""B-B""",regular,182,100.0,0.0,0.0,100.0,98.4,100.0,estructurado,True
+feb3,2024-25,86383,"Liga Regular ""C-A""",regular,182,98.9,1.1,0.0,98.9,98.4,98.9,estructurado,True
+feb3,2024-25,86384,"Liga Regular ""C-B""",regular,182,99.5,0.5,0.0,99.5,98.9,99.5,estructurado,True
+feb3,2024-25,86385,"Liga Regular ""D-A""",regular,156,100.0,0.0,0.0,100.0,98.7,100.0,estructurado,True
+feb3,2024-25,86386,"Liga Regular ""D-B""",regular,156,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2024-25,86387,"Liga Regular ""E-A""",regular,182,99.5,0.5,0.0,99.5,98.9,99.5,estructurado,True
+feb3,2024-25,86388,"Liga Regular ""E-B""",regular,156,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb3,2025-26,89512,1ºAA-1ºAB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb3,2025-26,89517,1ºBA-1ºBB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb3,2025-26,89514,1ºCA-1ºCB Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
@@ -55,7 +90,31 @@ feb1,2023-24,83068,Play-Offs 1/2 Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,0.0,
 feb1,2023-24,83067,Play-Offs 1/4 Final,playoffs,16,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
 feb1,2023-24,83069,Play-Offs Final,playoffs,1,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
 feb1,2023-24,83066,Liga Regular Único,regular,306,100.0,0.0,0.0,100.0,99.3,0.3,estructurado;texto,True
-feb1,2025-26,88873,Play-offs 1/2 Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb1,2025-26,88872,Play-offs 1/4 Final,playoffs,15,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb1,2025-26,88874,Play-offs Final,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb1,2025-26,88871,Liga Regular Único,regular,272,100.0,0.0,0.0,100.0,99.6,100.0,estructurado,True
+feb2,2023-24,83080,Copa LEB Plata Único,excluida,1,,,,,,,,False
+feb2,2023-24,83086,PERMANENCIA 1/2 Final,excluida,4,,,,,,,,False
+feb2,2023-24,83079,1ºO-1ºE Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb2,2023-24,83083,ELIMINATORIAS 1/2 Final,playoffs,4,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb2,2023-24,83082,ELIMINATORIAS 1/4 Final,playoffs,8,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb2,2023-24,83081,ELIMINATORIAS 1/8 Final,playoffs,14,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb2,2023-24,83084,"Liga Regular ""ESTE""",regular,182,99.5,0.0,0.5,99.5,99.5,0.0,texto,True
+feb2,2023-24,83085,"Liga Regular ""OESTE""",regular,182,100.0,0.0,0.0,100.0,98.9,0.0,texto,True
+feb3,2023-24,84903,Eliminatoria 2º-2º 2º AA-2º AB,playoffs,2,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,84904,Eliminatoria 2º-2º 2º BA-3º BB,playoffs,2,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,84905,Eliminatoria 2º-2º 2º DA-2º DB,playoffs,2,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,84906,Eliminatoria 2º-2º 2º EA-2º EB,playoffs,2,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,85384,FASE FINAL-A FFA1,playoffs,6,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,85385,FASE FINAL-A FFA2,playoffs,6,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,85386,FASE FINAL-B FFB3,playoffs,6,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,85387,FASE FINAL-B FFB4,playoffs,6,100.0,0.0,0.0,100.0,83.3,0.0,texto,True
+feb3,2023-24,85388,FF 2ºA1-2ºA2 2ºA1-2ºA2,playoffs,1,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,85389,FF 2ºB3-2ºB4 2ºB3-2ºB4,playoffs,1,100.0,0.0,0.0,100.0,100.0,0.0,texto,True
+feb3,2023-24,83104,"Liga Regular ""A-A""",regular,182,99.5,0.5,0.0,99.5,98.4,0.0,texto,True
+feb3,2023-24,83105,"Liga Regular ""A-B""",regular,182,99.5,0.5,0.0,99.5,98.4,0.0,texto,True
+feb3,2023-24,83106,"Liga Regular ""B-A""",regular,182,98.9,1.1,0.0,98.9,97.8,0.0,texto,True
+feb3,2023-24,83107,"Liga Regular ""B-B""",regular,182,99.5,0.5,0.0,99.5,98.4,0.0,texto,True
+feb3,2023-24,83108,"Liga Regular ""C-A""",regular,182,100.0,0.0,0.0,100.0,98.9,0.0,texto,True
+feb3,2023-24,83109,"Liga Regular ""C-B""",regular,182,100.0,0.0,0.0,100.0,97.8,0.0,texto,True
+feb3,2023-24,83110,"Liga Regular ""D-A""",regular,156,100.0,0.0,0.0,100.0,89.7,0.0,texto,True
+feb3,2023-24,83111,"Liga Regular ""D-B""",regular,182,100.0,0.0,0.0,99.5,96.7,0.0,texto,True
+feb3,2023-24,83112,"Liga Regular ""E-A""",regular,156,100.0,0.0,0.0,100.0,99.4,0.0,texto,True
+feb3,2023-24,83113,"Liga Regular ""E-B""",regular,156,99.4,0.6,0.0,99.4,84.6,0.0,texto,True
