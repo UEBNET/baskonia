@@ -5,6 +5,7 @@ import json
 import logging
 import shutil
 import subprocess
+import threading
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -17,6 +18,11 @@ from urllib3.util.retry import Retry
 from .utils import utc_now
 
 log = logging.getLogger(__name__)
+
+# Última petición por dominio COMPARTIDA por todos los clientes del proceso: la pausa de cortesía se respeta
+# aunque varias ligas del mismo dominio (p.ej. las tres FEB) se ejecuten en paralelo con clientes distintos.
+_LAST_HIT: dict[str, float] = {}
+_LAST_LOCK = threading.Lock()
 
 DEFAULT_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -82,13 +88,17 @@ class HttpClient:
         self._last_hit: dict[str, float] = {}
 
     def _throttle(self, url: str) -> None:
+        """Pausa mínima entre peticiones al mismo dominio (reserva el turno bajo un cerrojo global)."""
         host = urlparse(url).netloc
-        last = self._last_hit.get(host)
-        if last is not None:
-            wait = self.domain_delays.get(host, self.delay_s) - (time.monotonic() - last)
-            if wait > 0:
-                time.sleep(wait)
-        self._last_hit[host] = time.monotonic()
+        delay = self.domain_delays.get(host, self.delay_s)
+        with _LAST_LOCK:
+            now = time.monotonic()
+            last = _LAST_HIT.get(host)
+            slot = now if last is None else max(now, last + delay)
+            _LAST_HIT[host] = slot
+        self._last_hit[host] = slot
+        if slot > now:
+            time.sleep(slot - now)
 
     def get(self, url: str, params: dict | None = None, headers: dict | None = None,
             ok_status: tuple = ()) -> requests.Response:

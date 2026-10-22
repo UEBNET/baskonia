@@ -42,6 +42,7 @@ SOURCES = {
     "nba_stats": ("nba_stats", "NbaPBP"),
     "fiba_web": ("fiba_web", "FibaWebPBP"),
     "fiba_livestats": ("fiba_livestats", "FibaLiveStatsPBP"),
+    "feb": ("feb", "FebPBP"),
 }
 
 

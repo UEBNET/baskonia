@@ -1,0 +1,48 @@
+{
+  "_descripcion": "Nombres actuales e históricos de las competiciones FEB por temporada. Cada código de liga (feb1, feb2, feb3) es UNA serie histórica: el cambio de nombre de 2024-25 (LEB Oro -> Primera FEB, LEB Plata -> Segunda FEB, Liga EBA -> Tercera FEB) no crea ligas nuevas. 'nombre_web' = cómo aparece la competición en la cabecera de los partidos de baloncestoenvivo.feb.es (HEADER.competition), verificado con datos reales; 'nombre_oficial' = nombre de esa temporada.",
+  "competiciones": {
+    "feb1": {
+      "nombre_actual": "Primera FEB",
+      "nombres_historicos": ["LEB Oro", "Liga LEB Oro"],
+      "codigo_web": 1,
+      "temporadas": {
+        "2020-21": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
+        "2021-22": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
+        "2022-23": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
+        "2023-24": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
+        "2024-25": {"nombre_oficial": "Primera FEB", "nombre_web": "PRIMERA FEB"},
+        "2025-26": {"nombre_oficial": "Primera FEB", "nombre_web": "PRIMERA FEB"},
+        "2026-27": {"nombre_oficial": "Primera FEB", "nombre_web": "PRIMERA FEB"}
+      }
+    },
+    "feb2": {
+      "nombre_actual": "Segunda FEB",
+      "nombres_historicos": ["LEB Plata", "Liga LEB Plata"],
+      "codigo_web": 2,
+      "temporadas": {
+        "2020-21": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
+        "2021-22": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
+        "2022-23": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
+        "2023-24": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
+        "2024-25": {"nombre_oficial": "Segunda FEB", "nombre_web": "SEGUNDA FEB"},
+        "2025-26": {"nombre_oficial": "Segunda FEB", "nombre_web": "SEGUNDA FEB"},
+        "2026-27": {"nombre_oficial": "Segunda FEB", "nombre_web": "SEGUNDA FEB"}
+      }
+    },
+    "feb3": {
+      "nombre_actual": "Tercera FEB",
+      "nombres_historicos": ["Liga EBA"],
+      "codigo_web": 3,
+      "_grupos": "Se juega en grupos (A-A, A-B, … E-B; en 2020-22 también C-1…C-5). El grupo es atributo de cada partido (grupo_id y nombre originales en data/processed/<t>/feb/feb3_partidos.csv), no una liga distinta.",
+      "temporadas": {
+        "2020-21": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
+        "2021-22": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
+        "2022-23": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
+        "2023-24": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
+        "2024-25": {"nombre_oficial": "Tercera FEB", "nombre_web": "TERCERA FEB"},
+        "2025-26": {"nombre_oficial": "Tercera FEB", "nombre_web": "TERCERA FEB"},
+        "2026-27": {"nombre_oficial": "Tercera FEB", "nombre_web": "TERCERA FEB"}
+      }
+    }
+  }
+}

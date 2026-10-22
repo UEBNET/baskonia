@@ -755,6 +755,48 @@ for _liga in ("bsl", "gbl"):
                                docs_principal=_fls.docs_principal))
 
 
+# ---- FEB (Primera, Segunda y Tercera FEB): el partido NO trae el entrenador; la página pública del equipo de esa
+# temporada (Equipo.aspx?i=<id inscripción>, guardada en el bruto principal: payload["equipos"]) trae UN entrenador
+# principal (el vigente al descargar: para temporadas cerradas, el último de la temporada). Se asigna a todos los
+# partidos del equipo con metodo = "temporada" (como la G League): no se ven los cambios a mitad de temporada.
+def _lector_feb(item: dict, lc: LectorCtx) -> dict | None:
+    from .adapters.feb import header
+    doc = (item.get("docs") or {}).get("data") or {}
+    ref = item.get("ref") or {}
+    teams = header(doc).get("TEAM") or []
+    if len(teams) != 2:
+        return None
+    lados = [{"equipo_id": _s(t.get("id")), "equipo": " ".join(str(t.get("name") or "").split()),
+              "puntos": _num(t.get("pts")), "entrenador": None} for t in teams]
+    return {"fecha": ref.get("date"), "fase": ref.get("phase"), "lados": lados, "local_primero": True}
+
+
+def _complemento_feb(df: pd.DataFrame, tc: TemporadaCtx) -> pd.DataFrame:
+    from .adapters.feb import parse_team_page
+    if df.empty:
+        return df
+    _, doc = tc.store.load_season(tc.liga, tc.temporada)
+    equipos = ((doc or {}).get("payload") or {}).get("equipos") or {}
+    df = df.copy()
+    sin = []
+    for tid in df["equipo_id"].dropna().unique():
+        ent = parse_team_page(equipos.get(str(tid)) or "").get("entrenador")
+        if not ent:
+            sin.append(tid)
+            continue
+        m = df["equipo_id"] == tid
+        df.loc[m, ["entrenador", "entrenador_id_fuente", "metodo", "fuente"]] = \
+            [ent["nombre"], f"feb:{ent['id']}", "temporada", "baloncestoenvivo.feb.es Equipo.aspx (entrenador)"]
+    if sin:
+        tc.errores.append(f"{len(sin)} equipos sin entrenador en su página: {sorted(map(str, sin))[:10]}")
+    return df
+
+
+from .lineups.sources import feb as _feb  # noqa: E402
+registrar("feb", Extractor(_lector_feb, "baloncestoenvivo.feb.es Equipo.aspx (entrenador de la temporada)",
+                           docs_principal=_feb.docs_principal, complemento=_complemento_feb))
+
+
 # =============================================================================================== núcleo puro
 def imputar(df: pd.DataFrame) -> pd.DataFrame:
     """Rellena huecos de entrenador por equipo-temporada (orden por fecha): entre dos partidos del mismo

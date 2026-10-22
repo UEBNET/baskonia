@@ -18,6 +18,10 @@ Solución: emparejar por NOMBRE y descartar homónimos con dos pruebas.
 Un registro sin edad (ACB, LBA, BBL) se une a una persona sólo si hay UNA única persona
 compatible; si hay varias, queda aparte (se prefiere perder un puente a crear uno falso).
 Resultado: columna `persona_id` y una lista de casos ambiguos para revisar.
+
+Emparejamiento EXPLÍCITO con confianza (fecha de nacimiento, nacionalidad, trayectoria de clubes, ids FEB) y cola
+de revisión manual: `crosswalk()` → bbmodel/crosswalk.py (data/processed/player_id_crosswalk.csv y
+crosswalk_revision.csv). Las uniones de confianza baja NO se aplican automáticamente.
 """
 from __future__ import annotations
 
@@ -30,7 +34,7 @@ import pandas as pd
 SUFIJOS = {"jr", "sr", "ii", "iii", "iv"}
 # ligas que se juegan a la vez con otras (un jugador puede estar en ambas en la misma temporada)
 EUROPA_COPAS = {"euroleague", "eurocup", "bcl", "fec"}
-NACIONALES = {"acb", "lba", "bbl", "lnb", "bsl", "gbl"}
+NACIONALES = {"acb", "lba", "bbl", "lnb", "bsl", "gbl", "feb1", "feb2", "feb3"}
 CONCURRENTES = {frozenset({a, b}) for a in EUROPA_COPAS for b in NACIONALES} | {frozenset({"nba", "gleague"})}
 
 
@@ -145,3 +149,9 @@ def puentes(t: pd.DataFrame, min_minutos: float = 150) -> pd.DataFrame:
     for (la, lb), g in sig.groupby(["liga_a", "liga_b"]):
         filas.append({"tipo": "temporada siguiente", "liga_a": la, "liga_b": lb, "n": len(g)})
     return pd.DataFrame(filas)
+
+
+def crosswalk(**kw):
+    """Tabla de correspondencia con confianza y cola de revisión (ver bbmodel/crosswalk.py)."""
+    from .crosswalk import ejecutar
+    return ejecutar(**kw)

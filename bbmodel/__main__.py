@@ -49,6 +49,8 @@ def main(argv=None):
     mn = sub.add_parser("mesa-normalizacion", help="datos de la pestaña «Normalización de ligas» (A y B)")
     mn.add_argument("--salida", default="data/artifact")
     sub.add_parser("nacionalidades", help="nacionalidad de cada jugador → data/modelos/nacionalidades.csv")
+    sub.add_parser("crosswalk", help="correspondencia de jugadores entre ligas con confianza → "
+                                     "data/processed/player_id_crosswalk.csv y crosswalk_revision.csv")
     mq = sub.add_parser("mesa-quintetos", help="datos de la pestaña «Quintetos y conexiones» (JSON comprimidos)")
     mq.add_argument("--salida", default="data/artifact")
     es = sub.add_parser("escalas", help="escalas de lectura ±100 (referencia Euroliga) → meta.json del Atlas e indice.json de Quintetos")
@@ -80,6 +82,10 @@ def main(argv=None):
     if args.orden == "interacciones":
         from . import interacciones
         interacciones.construir()
+        return
+    if args.orden == "crosswalk":
+        from . import crosswalk
+        print(json.dumps(crosswalk.ejecutar(), ensure_ascii=False, indent=1))
         return
     if args.orden == "nacionalidades":
         from . import nacionalidad

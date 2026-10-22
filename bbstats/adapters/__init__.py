@@ -10,6 +10,7 @@ from .bref_nba import BRefNBAAdapter
 from .bbl import BBLAdapter
 from .base import AdapterError, BaseAdapter, NoDataYet, ParsedLeague
 from .euroleague import EuroleagueAdapter
+from .feb import FebAdapter
 from .fiba_livestats import FibaLiveStatsAdapter
 from .fiba_web import FibaWebAdapter
 from .html_table import HtmlTableAdapter
@@ -24,6 +25,7 @@ ADAPTERS: dict[str, type[BaseAdapter]] = {
     "acb": ACBAdapter,
     "fiba_livestats": FibaLiveStatsAdapter,
     "fiba_web": FibaWebAdapter,
+    "feb": FebAdapter,
     "html_table": HtmlTableAdapter,
     "bref_nba": BRefNBAAdapter,
     "lba": LBAAdapter,

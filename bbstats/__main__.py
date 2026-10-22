@@ -9,6 +9,8 @@
     python -m bbstats servidor --puerto 8765            # API HTTP para el botón EJECUTAR
     python -m bbstats artifact --temporada 2026-27      # JSON del Artifact en data/artifact/ (no versionado)
     python -m bbstats entrenadores [--temporada T ...] [--ligas acb nba] [--sin-descarga]
+    python -m bbstats feb [--ligas feb1 feb2 feb3] [--temporada T ...]   # informes FEB (cobertura, posesiones…)
+    python -m bbstats contrato --ligas feb1 feb2 feb3                   # contrato de datos sobre los datos reales
 """
 from __future__ import annotations
 
@@ -49,6 +51,14 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--temporada", nargs="*", help="Temporadas (por defecto, temporada_inicial .. temporada_por_defecto)")
     p.add_argument("--ligas", nargs="*")
     p.add_argument("--sin-descarga", action="store_true", help="Sólo brutos guardados, sin red")
+    p.add_argument("--config")
+    p = sub.add_parser("feb", help="Informes FEB sin red: partidos con grupo, cobertura, posesiones, sesgo de registro")
+    p.add_argument("--ligas", nargs="*", help="feb1 feb2 feb3 (por defecto, las tres)")
+    p.add_argument("--temporada", nargs="*")
+    p.add_argument("--config")
+    p = sub.add_parser("contrato", help="Contrato de datos (tipos, rangos, nulos, claves, minutos, jugada a jugada ↔ caja)")
+    p.add_argument("--ligas", nargs="*", help="Por ahora, ligas FEB (feb1 feb2 feb3)")
+    p.add_argument("--temporada", nargs="*")
     p.add_argument("--config")
     p = sub.add_parser("artifact", help="Genera los JSON que lee el Artifact a partir de los CSV procesados")
     p.add_argument("--temporada", nargs="*", help="Temporadas (por defecto, todas las procesadas)")
@@ -98,6 +108,28 @@ def main(argv: list[str] | None = None) -> int:
                                     descargar=not args.sin_descarga, config=args.config, progreso=print)
         print("Entrenadores terminado")
         return 0 if all(v.get("estado") != "error" for v in out.values()) else 1
+    elif args.cmd in ("feb", "contrato"):
+        import pandas as pd
+        from . import feb_informe
+        ligas = args.ligas or list(feb_informe.FEB)
+        otras = [l for l in ligas if l not in feb_informe.FEB]
+        if otras:
+            print(f"Ligas sin contrato automático todavía (sólo FEB): {otras}")
+            ligas = [l for l in ligas if l in feb_informe.FEB]
+        out = feb_informe.ejecutar(ligas=ligas, temporadas=args.temporada or None, config=args.config,
+                                   progreso=print)
+        with pd.option_context("display.width", 200, "display.max_columns", 40, "display.max_rows", 200):
+            if args.cmd == "contrato":
+                c = out["contrato"]
+                cols = ["liga", "temporada", "partidos"] + [x for x in c.columns if x.endswith("_pct")]
+                print(c[cols].to_string(index=False) if not c.empty else "Sin partidos")
+                print("\n% de partidos que cumplen cada regla (sobre los aplicables); detalle en "
+                      "data/processed/feb_contrato.csv")
+            else:
+                print(out["cobertura"].to_string(index=False) if not out["cobertura"].empty else "Sin partidos")
+                print(out["posesiones"].to_string(index=False) if not out["posesiones"].empty else "")
+        print("FEB terminado" if args.cmd == "feb" else "Contrato terminado")
+        return 0
     elif args.cmd == "artifact":
         from pathlib import Path
         from .config import load_config, resolve_path

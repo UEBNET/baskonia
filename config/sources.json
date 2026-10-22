@@ -30,11 +30,14 @@
       "embed-api.eui.connect.sportradar.com": 0.4,
       "api-prod.lnb.fr": 0.4,
       "www.fiba.basketball": 0.3,
-      "fibalivestats.dcd.shared.geniussports.com": 0.05
+      "fibalivestats.dcd.shared.geniussports.com": 0.05,
+      "baloncestoenvivo.feb.es": 1.0,
+      "intrafeb.feb.es": 1.0
     },
     "dominios_curl": [
       "www.basketball-reference.com"
-    ]
+    ],
+    "_delay_por_dominio": "Pausa mínima (s) entre peticiones al mismo dominio, compartida por todos los clientes del proceso (ligas en paralelo incluidas). FEB: >= 1 s por cortesía."
   },
   "comprimir_bruto": true,
   "ligas": {
@@ -1353,6 +1356,121 @@
       },
       "estado_verificacion": "verificado con datos reales (2020-21, 2025-26 y 2026-27)",
       "pbp": "fiba_livestats"
+    },
+    "feb1": {
+      "adaptador": "feb",
+      "activa": true,
+      "pais": "España",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "partidos_por_paquete": 400,
+      "pbp": "feb",
+      "_fases": "Fase por nombre de grupo de la web (fases_grupo: expresión regular -> fase, primera coincidencia; null = excluida): Liga Regular (y segundas fases de liga) = regular; play-offs, eliminatorias, fases finales / de ascenso = playoffs; copas y permanencia/descenso = fuera. El grupo original (id y nombre) se conserva en data/processed/<t>/feb/<liga>_partidos.csv.",
+      "fases_grupo": [
+        [
+          "copa",
+          null
+        ],
+        [
+          "liga regular",
+          "regular"
+        ],
+        [
+          "perman|descen",
+          null
+        ],
+        [
+          "2\\S* fase|clasif",
+          "regular"
+        ],
+        [
+          ".",
+          "playoffs"
+        ]
+      ],
+      "estado_verificacion": "verificado con datos reales (2020-21 a 2026-27)",
+      "nombre": "Primera FEB",
+      "nombre_historico": "LEB Oro",
+      "competicion_feb": 1,
+      "slug": "primerafeb",
+      "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)"
+    },
+    "feb2": {
+      "adaptador": "feb",
+      "activa": true,
+      "pais": "España",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "partidos_por_paquete": 400,
+      "pbp": "feb",
+      "_fases": "Fase por nombre de grupo de la web (fases_grupo: expresión regular -> fase, primera coincidencia; null = excluida): Liga Regular (y segundas fases de liga) = regular; play-offs, eliminatorias, fases finales / de ascenso = playoffs; copas y permanencia/descenso = fuera. El grupo original (id y nombre) se conserva en data/processed/<t>/feb/<liga>_partidos.csv.",
+      "fases_grupo": [
+        [
+          "copa",
+          null
+        ],
+        [
+          "liga regular",
+          "regular"
+        ],
+        [
+          "perman|descen",
+          null
+        ],
+        [
+          "2\\S* fase|clasif",
+          "regular"
+        ],
+        [
+          ".",
+          "playoffs"
+        ]
+      ],
+      "estado_verificacion": "verificado con datos reales (2020-21 a 2026-27)",
+      "nombre": "Segunda FEB",
+      "nombre_historico": "LEB Plata",
+      "competicion_feb": 2,
+      "slug": "segundafeb",
+      "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)"
+    },
+    "feb3": {
+      "adaptador": "feb",
+      "activa": true,
+      "pais": "España",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "partidos_por_paquete": 400,
+      "pbp": "feb",
+      "_fases": "Fase por nombre de grupo de la web (fases_grupo: expresión regular -> fase, primera coincidencia; null = excluida): Liga Regular (y segundas fases de liga) = regular; play-offs, eliminatorias, fases finales / de ascenso = playoffs; copas y permanencia/descenso = fuera. El grupo original (id y nombre) se conserva en data/processed/<t>/feb/<liga>_partidos.csv.",
+      "fases_grupo": [
+        [
+          "copa",
+          null
+        ],
+        [
+          "liga regular",
+          "regular"
+        ],
+        [
+          "perman|descen",
+          null
+        ],
+        [
+          "2\\S* fase|clasif",
+          "regular"
+        ],
+        [
+          ".",
+          "playoffs"
+        ]
+      ],
+      "estado_verificacion": "verificado con datos reales (2020-21 a 2026-27)",
+      "nombre": "Tercera FEB",
+      "nombre_historico": "Liga EBA",
+      "competicion_feb": 3,
+      "slug": "tercerafeb",
+      "fuente": "https://baloncestoenvivo.feb.es (resultados) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido)",
+      "_grupos": "Tercera FEB/Liga EBA se juega en grupos (A-A, A-B, … E-B): el grupo es un atributo del partido, no una liga aparte."
     }
   }
 }
