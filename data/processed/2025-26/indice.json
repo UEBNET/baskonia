@@ -1,6 +1,6 @@
 {
   "temporada": "2025-26",
-  "generado": "2026-10-18T10:46:26.092219+00:00",
+  "generado": "2026-10-22T07:49:50.553940+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -70,6 +70,36 @@
         "playoffs": 124,
         "regular": 335,
         "total": 335
+      }
+    },
+    "feb1": {
+      "nombre": "Primera FEB",
+      "archivo": "ligas/feb1.csv",
+      "fecha_extraccion": "2026-10-22T06:58:18.407762+00:00",
+      "fases": {
+        "playoffs": 99,
+        "regular": 295,
+        "total": 295
+      }
+    },
+    "feb2": {
+      "nombre": "Segunda FEB",
+      "archivo": "ligas/feb2.csv",
+      "fecha_extraccion": "2026-10-22T06:58:18.413441+00:00",
+      "fases": {
+        "playoffs": 187,
+        "regular": 466,
+        "total": 466
+      }
+    },
+    "feb3": {
+      "nombre": "Tercera FEB",
+      "archivo": "ligas/feb3.csv",
+      "fecha_extraccion": "2026-10-22T06:58:18.413363+00:00",
+      "fases": {
+        "playoffs": 497,
+        "regular": 2523,
+        "total": 2531
       }
     },
     "fec": {
