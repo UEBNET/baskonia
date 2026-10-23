@@ -6,3 +6,5 @@ lxml>=4.9
 # Modelos (bbmodel): algoritmo A y evaluación de ligas
 scipy>=1.10
 scikit-learn>=1.3
+pyyaml>=6
+mlflow-skinny>=2.10

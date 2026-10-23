@@ -6,3 +6,6 @@ __pycache__/
 data/processed/*/informes/
 data/artifact/
 docs/articulo/_trabajo/
+
+# MLflow local (los resúmenes versionados están en data/modelos/)
+experimentos/
