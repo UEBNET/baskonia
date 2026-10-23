@@ -546,7 +546,7 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
 - **Grupo** (Tercera FEB, y Este/Oeste de Segunda FEB) = atributo del partido: `data/processed/<t>/feb/<liga>_partidos.csv`
   (`grupo_id`, `grupo`, `fase`, `jornada`, `con_box`, `formato_pbp`, `pbp_available`, `quintetos_validos`, posesiones).
 - **Jugada a jugada** `bbstats/lineups/sources/feb.py`: estructurado desde 2024-25 (ids + coordenadas), texto en
-  2020-24 (nombres emparejados con el boxscore; sin coordenadas; triples sin etiqueta se infieren por el acumulado de
+  2022-24 (nombres emparejados con el boxscore; sin coordenadas; triples sin etiqueta se infieren por el acumulado de
   puntos). Partidos sin jugada a jugada entran sólo con boxscore (`pbp_available = False`).
 - **Posesiones reales**: `bbstats/lineups/possessions.py` (`count_possessions`, genérico para cualquier liga:
   `possession_id` por evento) frente a FGA + 0,44·FTA − OREB + TOV.

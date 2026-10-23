@@ -4,12 +4,13 @@
 
 Añadido
 - Tres ligas nuevas en el mismo esquema y tubería: `feb1` (Primera FEB / LEB Oro), `feb2` (Segunda FEB / LEB Plata)
-  y `feb3` (Tercera FEB / Liga EBA), temporadas 2020-21 a 2026-27. Grupo = atributo del partido.
+  y `feb3` (Tercera FEB / Liga EBA): Primera FEB 2022-23 a 2026-27, Segunda y Tercera 2023-24 a 2026-27 (alcance
+  decidido por el usuario; `temporada_inicial` por liga en config). Grupo = atributo del partido.
   `config/competition_aliases.json` con los nombres históricos por temporada.
 - Adaptador `bbstats/adapters/feb.py` (calendario por postback de baloncestoenvivo.feb.es, KeyFacts/BoxScore de
   intrafeb.feb.es con el token anónimo de la página pública, plantillas y entrenador de Equipo.aspx). Bruto incremental.
 - Fuente de jugada a jugada `feb` (`bbstats/lineups/sources/feb.py`): formato estructurado (2024-25+, con
-  coordenadas) y formato texto (2020-24, nombres emparejados con el boxscore).
+  coordenadas) y formato texto (hasta 2023-24, nombres emparejados con el boxscore).
 - `bbstats/lineups/possessions.py`: posesiones reales evento a evento (`possession_id`), genérico para todas las ligas.
 - `bbstats/contrato.py` y `python -m bbstats contrato --ligas feb1 feb2 feb3`; `python -m bbstats feb` (partidos con
   grupo, `feb_cobertura.csv`, `feb_posesiones.csv`, `feb_sesgo_registro.csv`).

@@ -3,46 +3,118 @@
   "competiciones": {
     "feb1": {
       "nombre_actual": "Primera FEB",
-      "nombres_historicos": ["LEB Oro", "Liga LEB Oro"],
+      "nombres_historicos": [
+        "LEB Oro",
+        "Liga LEB Oro"
+      ],
       "codigo_web": 1,
       "temporadas": {
-        "2020-21": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
-        "2021-22": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
-        "2022-23": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
-        "2023-24": {"nombre_oficial": "LEB Oro", "nombre_web": "LIGA LEB ORO"},
-        "2024-25": {"nombre_oficial": "Primera FEB", "nombre_web": "PRIMERA FEB"},
-        "2025-26": {"nombre_oficial": "Primera FEB", "nombre_web": "PRIMERA FEB"},
-        "2026-27": {"nombre_oficial": "Primera FEB", "nombre_web": "PRIMERA FEB"}
+        "2020-21": {
+          "nombre_oficial": "LEB Oro",
+          "nombre_web": "LIGA LEB ORO"
+        },
+        "2021-22": {
+          "nombre_oficial": "LEB Oro",
+          "nombre_web": "LIGA LEB ORO"
+        },
+        "2022-23": {
+          "nombre_oficial": "LEB Oro",
+          "nombre_web": "LIGA LEB ORO"
+        },
+        "2023-24": {
+          "nombre_oficial": "LEB Oro",
+          "nombre_web": "LIGA LEB ORO"
+        },
+        "2024-25": {
+          "nombre_oficial": "Primera FEB",
+          "nombre_web": "PRIMERA FEB"
+        },
+        "2025-26": {
+          "nombre_oficial": "Primera FEB",
+          "nombre_web": "PRIMERA FEB"
+        },
+        "2026-27": {
+          "nombre_oficial": "Primera FEB",
+          "nombre_web": "PRIMERA FEB"
+        }
       }
     },
     "feb2": {
       "nombre_actual": "Segunda FEB",
-      "nombres_historicos": ["LEB Plata", "Liga LEB Plata"],
+      "nombres_historicos": [
+        "LEB Plata",
+        "Liga LEB Plata"
+      ],
       "codigo_web": 2,
       "temporadas": {
-        "2020-21": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
-        "2021-22": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
-        "2022-23": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
-        "2023-24": {"nombre_oficial": "LEB Plata", "nombre_web": "LIGA LEB PLATA"},
-        "2024-25": {"nombre_oficial": "Segunda FEB", "nombre_web": "SEGUNDA FEB"},
-        "2025-26": {"nombre_oficial": "Segunda FEB", "nombre_web": "SEGUNDA FEB"},
-        "2026-27": {"nombre_oficial": "Segunda FEB", "nombre_web": "SEGUNDA FEB"}
+        "2020-21": {
+          "nombre_oficial": "LEB Plata",
+          "nombre_web": "LIGA LEB PLATA"
+        },
+        "2021-22": {
+          "nombre_oficial": "LEB Plata",
+          "nombre_web": "LIGA LEB PLATA"
+        },
+        "2022-23": {
+          "nombre_oficial": "LEB Plata",
+          "nombre_web": "LIGA LEB PLATA"
+        },
+        "2023-24": {
+          "nombre_oficial": "LEB Plata",
+          "nombre_web": "LIGA LEB PLATA"
+        },
+        "2024-25": {
+          "nombre_oficial": "Segunda FEB",
+          "nombre_web": "SEGUNDA FEB"
+        },
+        "2025-26": {
+          "nombre_oficial": "Segunda FEB",
+          "nombre_web": "SEGUNDA FEB"
+        },
+        "2026-27": {
+          "nombre_oficial": "Segunda FEB",
+          "nombre_web": "SEGUNDA FEB"
+        }
       }
     },
     "feb3": {
       "nombre_actual": "Tercera FEB",
-      "nombres_historicos": ["Liga EBA"],
+      "nombres_historicos": [
+        "Liga EBA"
+      ],
       "codigo_web": 3,
       "_grupos": "Se juega en grupos (A-A, A-B, … E-B; en 2020-22 también C-1…C-5). El grupo es atributo de cada partido (grupo_id y nombre originales en data/processed/<t>/feb/feb3_partidos.csv), no una liga distinta.",
       "temporadas": {
-        "2020-21": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
-        "2021-22": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
-        "2022-23": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
-        "2023-24": {"nombre_oficial": "Liga EBA", "nombre_web": "LIGA EBA"},
-        "2024-25": {"nombre_oficial": "Tercera FEB", "nombre_web": "TERCERA FEB"},
-        "2025-26": {"nombre_oficial": "Tercera FEB", "nombre_web": "TERCERA FEB"},
-        "2026-27": {"nombre_oficial": "Tercera FEB", "nombre_web": "TERCERA FEB"}
+        "2020-21": {
+          "nombre_oficial": "Liga EBA",
+          "nombre_web": "LIGA EBA"
+        },
+        "2021-22": {
+          "nombre_oficial": "Liga EBA",
+          "nombre_web": "LIGA EBA"
+        },
+        "2022-23": {
+          "nombre_oficial": "Liga EBA",
+          "nombre_web": "LIGA EBA"
+        },
+        "2023-24": {
+          "nombre_oficial": "Liga EBA",
+          "nombre_web": "LIGA EBA"
+        },
+        "2024-25": {
+          "nombre_oficial": "Tercera FEB",
+          "nombre_web": "TERCERA FEB"
+        },
+        "2025-26": {
+          "nombre_oficial": "Tercera FEB",
+          "nombre_web": "TERCERA FEB"
+        },
+        "2026-27": {
+          "nombre_oficial": "Tercera FEB",
+          "nombre_web": "TERCERA FEB"
+        }
       }
     }
-  }
+  },
+  "_verificacion": "nombre_web verificado en las cabeceras de los partidos descargados: feb1 2022-23 a 2026-27, feb2 y feb3 2023-24 a 2026-27. Las temporadas anteriores (fuera de alcance por decisión del usuario) se dejan con el nombre oficial de esa época sin verificar."
 }

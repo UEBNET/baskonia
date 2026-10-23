@@ -1,6 +1,6 @@
 {
   "temporada": "2022-23",
-  "generado": "2026-10-18T10:49:05.948275+00:00",
+  "generado": "2026-10-22T18:24:54.998047+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -60,6 +60,16 @@
         "playoffs": 101,
         "regular": 295,
         "total": 295
+      }
+    },
+    "feb1": {
+      "nombre": "Primera FEB",
+      "archivo": "ligas/feb1.csv",
+      "fecha_extraccion": "2026-10-22T17:33:47.922804+00:00",
+      "fases": {
+        "playoffs": 101,
+        "regular": 305,
+        "total": 305
       }
     },
     "fec": {

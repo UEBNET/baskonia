@@ -1,6 +1,6 @@
 {
   "temporada": "2024-25",
-  "generado": "2026-10-22T12:11:43.384505+00:00",
+  "generado": "2026-10-22T18:20:41.448301+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -85,7 +85,7 @@
     "feb3": {
       "nombre": "Tercera FEB",
       "archivo": "ligas/feb3.csv",
-      "fecha_extraccion": "2026-10-22T11:22:54.332724+00:00",
+      "fecha_extraccion": "2026-10-22T12:05:49.448689+00:00",
       "fases": {
         "playoffs": 247,
         "regular": 2452,

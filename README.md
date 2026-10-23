@@ -531,6 +531,8 @@ tiros) y `entrenadores/<liga>_*.csv`.
 | `feb2` | Segunda FEB | LEB Plata | `g=2` (`segundafeb`) |
 | `feb3` | Tercera FEB | Liga EBA | `g=3` (`tercerafeb`) |
 
+Alcance (decisión del usuario, 22-10-2026): **Primera FEB 2022-23 → 2026-27; Segunda y Tercera FEB 2023-24 →
+2026-27** (`config/sources.json → ligas.feb*.temporada_inicial`; las temporadas anteriores quedan fuera de alcance).
 Cada código es **una serie histórica**: `config/competition_aliases.json` da el nombre de cada temporada. En
 Tercera FEB los grupos (A-A, A-B… E-B) **no** son ligas distintas: el grupo es un atributo de cada partido
 (`grupo_id` y nombre originales en `data/processed/<t>/feb/feb3_partidos.csv` y `feb3_equipos.csv`).
@@ -552,8 +554,8 @@ baloncestoenvivo.feb.es y competiciones.feb.es no tienen robots.txt):**
 finales / de ascenso = `playoffs`; copas (Copa Princesa, Copa LEB Plata) y permanencia/descenso = fuera (no se
 descargan; sí cuentan en la cobertura). Reglas en `config/sources.json → ligas.feb*.fases_grupo`.
 
-**Jugada a jugada:** desde 2024-25 estructurado (acciones con ids de jugador y coordenadas de tiro); de 2020-21 a
-2023-24 sólo texto («J. PEREZ: 3Pts Tiro FALLADO, A. LOPEZ: (TotReb. 2)»), que se interpreta emparejando los nombres
+**Jugada a jugada:** desde 2024-25 estructurado (acciones con ids de jugador y coordenadas de tiro); hasta 2023-24
+sólo texto («J. PEREZ: 3Pts Tiro FALLADO, A. LOPEZ: (TotReb. 2)»), que se interpreta emparejando los nombres
 con el boxscore oficial (sin coordenadas). Fuente de quintetos `feb` (`bbstats/lineups/sources/feb.py`), lee el
 bruto principal. Coordenadas: `bbmodel/zonas.py` (% de la pista completa).
 
