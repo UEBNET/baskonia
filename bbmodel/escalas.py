@@ -107,10 +107,13 @@ def calcular() -> dict:
     # impacto individual traducido a la Euroliga (dataset normalizado)
     fr = []
     for p in sorted(glob.glob(str(DIR_MOD / "normalizado" / "20*.csv"))):
-        n = pd.read_csv(p, usecols=lambda c: c in {"liga", "temporada", "min", "rapm", "orapm", "drapm"}, low_memory=False)
+        n = pd.read_csv(p, usecols=lambda c: c in {"liga", "temporada", "min", "rapm", "orapm", "drapm",
+                                                    "rapm_am", "orapm_am", "drapm_am"}, low_memory=False)
         fr.append(n)
     if fr:
         n = pd.concat(fr, ignore_index=True)
+        from .contexto import usar_amortiguado
+        n = usar_amortiguado(n, "escalas", ["rapm", "orapm", "drapm"])
         n = n[(n["liga"] == REF) & ~n["temporada"].isin(PROVISIONALES)]
         for k, nm in (("rapm", "RAPM"), ("orapm", "ORAPM"), ("drapm", "DRAPM")):
             if k in n:

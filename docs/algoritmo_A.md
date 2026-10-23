@@ -1,11 +1,16 @@
 # Algoritmo A — Traductor por puestos + tipo de cambio
 
+> **Octubre de 2026.** Sobre el A hay ahora una capa de **normalización amortiguada** (nivel por competición y
+> temporada encadenado por puentes, contracción por escalón, mapeo monótono y compresión de colas λ(d)):
+> [`normalizacion_amortiguada.md`](normalizacion_amortiguada.md). Las columnas del A no cambian; las amortiguadas se
+> añaden aparte (`<m>_am`).
+
 **Para qué sirve.** Poner a todos los jugadores, jueguen donde jueguen, en la misma vara: la de la
 **EuroLeague** (temporada de referencia 2025-26). Para cada jugador y cada métrica da su valor
 equivalente en la EuroLeague, un intervalo del 80 % y su percentil entre los jugadores de EuroLeague
 de su posición. También da una proyección para la temporada siguiente, que tiene en cuenta la edad.
 
-**Código:** `bbmodel/` · **Ejecutar:** `python -m bbmodel ajustar` (≈15 min) ·
+**Código:** `bbmodel/` · **Ejecutar:** `python -m bbmodel ajustar` (≈1,5-4 h con las 15 ligas, según la carga) ·
 **Validar:** `python -m bbmodel validar` · **Resultados:** `data/modelos/algoritmo_A/`
 
 ---
@@ -28,8 +33,13 @@ pagado en las dos monedas.
 
 ## 2. Los datos que usa
 
-* Temporada regular 2020-21 a 2026-27 de las 8 ligas (`data/processed/*/ligas/*.csv`).
-  Son 18.508 registros jugador-liga-temporada y 5.806 personas distintas.
+* Temporada regular 2020-21 a 2026-27 de las 15 competiciones (`data/processed/*/ligas/*.csv`): EuroLeague,
+  EuroCup, ACB, NBA, G League, LBA, BBL, LNB, BCL, FIBA Europe Cup, BSL, GBL y Primera, Segunda y Tercera FEB
+  (`feb1` 2022-23 → 2026-27; `feb2`, `feb3` 2023-24 → 2026-27). Son 39.647 registros jugador-liga-temporada y
+  14.535 personas distintas (octubre de 2026; antes de las FEB: 27.539 registros y 8.953 personas).
+* **Identidad** también con el crosswalk explícito (`bbmodel/crosswalk.py`): además de la unión por nombre exacto de
+  abajo, se aplican las uniones automáticas del crosswalk (confianza ≥ 0,75, `configs/normalization.yaml`), que
+  reconocen, por ejemplo, «ALEIX FONT RODRIGUEZ» (Primera FEB) = «Aleix Font» (ACB). La cola de revisión no se usa.
 * **Identidad** (`identidad.py`). Las fuentes no comparten identificadores, así que el mismo jugador
   se reconoce por el nombre normalizado. Los homónimos se separan con el año de nacimiento
   (temporada − edad) y con la imposibilidad de jugar dos calendarios completos a la vez.

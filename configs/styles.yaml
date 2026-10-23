@@ -35,7 +35,12 @@ normalizacion:
   percentil_min: 0.01     # recorte del percentil antes de Φ⁻¹ (z en ±2,33)
 
 mezcla:
-  k_min: 1                      # K = 1-3 sólo como diagnóstico (qué estructura gruesa ve el BIC)
+  # Población sobre la que se ajusta la mezcla; la otra se proyecta con ella (probabilidad a posteriori).
+  # «jugadores»: los equipos no tienen grupos en este espacio (diagnóstico en seleccion_k.json → alternativas:
+  # BIC mínimo en K = 1-2 y ARI bootstrap < 0,4 con covarianza común); los jugadores sí (BIC con mínimo interior).
+  poblacion: jugadores
+  min_minutos_ajuste: 300       # jugador-equipo-temporada entra en el ajuste con ≥ 300 minutos y los 12 rasgos
+  k_min: 1                      # K = 1-4 sólo como diagnóstico (qué estructura gruesa ve el BIC)
   k_taxonomia: 5                # K mínimo de la taxonomía: con menos de 5 grupos no se pueden nombrar las 9
                                 # dimensiones del encargo (ritmo, triple, aro, creación, pase, rebote, TL, balón, defensa)
   k_max: 12
@@ -43,14 +48,20 @@ mezcla:
   n_init: 4
   max_iter: 500
   reg_covar: 1.0e-4
-  bootstrap: 50                 # remuestreos por (covarianza, K) para la estabilidad
+  bootstrap: 30                 # remuestreos por (covarianza, K) para la estabilidad
   # Regla de selección (bbfit.estilos_unificados.elegir):
   #  1. familia de covarianza con menor BIC;
   #  2. en K ≥ k_taxonomia: si el BIC tiene un mínimo interior estable y sin grupos diminutos → ese K;
   #  3. si el BIC crece con K desde k_taxonomia (continuo: ningún grupo extra tiene apoyo) → el MAYOR K con
-  #     estabilidad (ARI medio bootstrap) ≥ estabilidad_min y grupo más pequeño ≥ cuota_min.
+  #     estabilidad (ARI medio bootstrap) ≥ estabilidad_min y grupo más pequeño ≥ cuota_min;
+  #  4. si nada cumple, el más estable.
   estabilidad_min: 0.60
   cuota_min: 0.04
+  diagnostico:                  # alternativas descartadas, medidas en cada ejecución (no cambian la salida)
+    covarianzas_equipos: ["full", "tied"]
+    k_max: 8
+    bootstrap: 10
+    k_conjunto: [4, 6, 8]
 
 asignacion:
   umbral_puro: 0.80             # p(principal) ≥ 0,80 → «<Estilo> puro»
@@ -72,4 +83,37 @@ ejemplos:
 # y los nombres se escribieron tras inspeccionar los centroides (docs/checkpoints/F6.md). Si se reentrena
 # y un grupo casa mal con su firma (correlación < firma_min), queda como «Estilo <n>» y hay que revisar.
 firma_min: 0.30
-estilos: {}
+# firma: signo (y peso) esperado de cada rasgo en el centroide. Sólo los K que casan se usan.
+estilos:
+  spacing:
+    nombre: "Spacing"
+    color: "#2E86DE"
+    firma: {triple: 1, esquina: 1, aro: -1, autocreacion: -1, tiros_libres: -0.5}
+  pistons:
+    nombre: "Pistons"
+    color: "#C0392B"
+    firma: {robos: 1, faltas: 1, esquina: 0.5, aro: 0.5, reb_ofensivo: 0.5}
+  circulacion:
+    nombre: "Circulación"
+    color: "#16A085"
+    firma: {asistencia: 1, triple: 0.5, autocreacion: 0.5, reb_ofensivo: -1, tapones: -0.5}
+  isolation:
+    nombre: "Isolation"
+    color: "#8E44AD"
+    firma: {autocreacion: 1, asistencia: 1, perdidas: 0.5, tiros_libres: 0.3, triple: -0.3}
+  old_school:
+    nombre: "Old-School"
+    color: "#B9770E"
+    firma: {reb_ofensivo: 1, aro: 0.5, tapones: 0.5, asistencia: -0.5, autocreacion: -0.5, triple: -0.5}
+  pintura:
+    nombre: "Pintura"
+    color: "#E67E22"
+    firma: {aro: 1, tiros_libres: 1, reb_ofensivo: 1, tapones: 1, faltas: 1, triple: -1, esquina: -1}
+  vertigo:
+    nombre: "Vértigo"
+    color: "#F1C40F"
+    firma: {ritmo: 1, robos: 0.5, perdidas: 0.5}
+  control:
+    nombre: "Control"
+    color: "#5D6D7E"
+    firma: {ritmo: -1, perdidas: -1, faltas: -0.5}

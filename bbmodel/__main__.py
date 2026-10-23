@@ -13,6 +13,8 @@
     python -m bbmodel interacciones        # efectos X → Y entre compañeros (cuota de tiro, eFG%, asistidas…)
     python -m bbmodel mesa-quintetos       # datos de la pestaña «Quintetos y conexiones»
     python -m bbmodel escalas              # escalas ±100 (Euroliga = 0) para el Atlas y Quintetos
+    python -m bbmodel amortiguar [--validar | --diagnostico parametros.json]
+                                           # normalización con el salto de nivel amortiguado (docs/normalizacion_amortiguada.md)
 
 Resultados en data/modelos/algoritmo_A/:
     parametros.json             todos los parámetros (para reutilizar sin reajustar)
@@ -59,10 +61,19 @@ def main(argv=None):
     cx = sub.add_parser("contexto", help="contexto de nivel (compañeros y rivales) y sensibilidad de cada métrica")
     cx.add_argument("--bootstrap", type=int, default=50)
     sub.add_parser("interacciones", help="efectos X → Y entre compañeros → data/modelos/interacciones/")
+    am = sub.add_parser("amortiguar", help="normalización amortiguada → data/modelos/normalizacion_amortiguada/")
+    am.add_argument("--validar", action="store_true", help="examen temporal y dejando fuera una liga (lineal vs amortiguado)")
+    am.add_argument("--diagnostico", default=None, help="parametros.json de un ajuste del A: diagnóstico del esquema lineal")
     dn = sub.add_parser("dataset-normalizado", help="dataset completo de equivalentes EuroLeague (A+B) y JSON de la Mesa")
     dn.add_argument("--salida", default="data/artifact", help="carpeta de los JSON de la Mesa (datos/)")
     args = ap.parse_args(argv)
 
+    if args.orden == "amortiguar":
+        from threadpoolctl import threadpool_limits
+        threadpool_limits(1)
+        from . import amortiguacion
+        amortiguacion.main(validar=args.validar, diagnostico_params=args.diagnostico)
+        return
     if args.orden == "mesa-quintetos":
         from . import mesa_quintetos
         mesa_quintetos.main(args.salida)

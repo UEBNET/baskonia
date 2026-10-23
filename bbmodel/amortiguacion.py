@@ -404,12 +404,12 @@ def exposicion_posesiones(t: pd.DataFrame, minutos_partido: dict) -> pd.Series:
 
 
 # =============================================================================================== datos
-def z_por_metrica(tabla: pd.DataFrame, params: dict) -> dict:
+def z_por_metrica(tabla: pd.DataFrame, params: dict, metricas: list[str] | None = None) -> dict:
     """z_obs, v_obs del paso 1 del A para cada métrica (se recalculan: son deterministas dados los datos)."""
     from . import suerte
     if "_z" in params:
         return params["_z"]
-    return {col: suerte.ajustar_metrica(tabla, col)[0] for col in params["metricas"]}
+    return {col: suerte.ajustar_metrica(tabla, col)[0] for col in (metricas or params["metricas"])}
 
 
 def filas_metrica(tabla: pd.DataFrame, z: pd.DataFrame, enlace: dict) -> pd.DataFrame:
@@ -648,7 +648,8 @@ def ajustar(tabla: pd.DataFrame, params: dict, cfg: dict | None = None, hasta_an
     cfg = cfg or config()
     ref = cfg.get("referencia", "euroleague")
     base = tabla if hasta_anio is None else tabla[tabla["anio"] <= hasta_anio]
-    zs = z_por_metrica(base, params)
+    tc0 = (cfg.get("transferibilidad", {}) or {}).get("metricas_nivel", [])
+    zs = z_por_metrica(base, params, None if metricas is None else sorted(set(metricas) | set(tc0)))
     escalon_de = {l: e for e, ls in cfg.get("escalones", {}).items() for l in ls}
     tc = cfg.get("transferibilidad", {})
     mn = tc.get("metricas_nivel", ["per", "pts_p100"])
@@ -966,14 +967,17 @@ def ejemplos_puentes(tabla: pd.DataFrame, params: dict, ajuste: dict, trad: pd.D
     from . import validacion
     from .modelo import traducir as traducir_A
     filas = []
-    ta = traducir_A(tabla, params, "2025-26")
+    ta = traducir_A(tabla, {"metricas": {metrica: params["metricas"][metrica]}, "_z": ajuste["zs"]}, "2025-26")
     clave = ["liga", "temporada", "player_id"]
     ta = ta.set_index(clave)
     tr = trad.set_index(clave)
     pares = [("feb3", "feb2"), ("feb2", "feb1"), ("feb1", "acb"), ("feb1", "eurocup"), ("feb2", "acb"), ("acb", "euroleague"),
              ("eurocup", "euroleague"), ("gleague", "euroleague"), ("bcl", "euroleague")]
     for anio in sorted(tabla["anio"].unique())[:-1]:
-        c = validacion.casos(tabla, int(anio))
+        try:
+            c = validacion.casos(tabla, int(anio))
+        except KeyError:      # temporada siguiente sin nadie con 300 minutos (2026-27 en curso)
+            continue
         for lo, ld in pares:
             s = c[(c["liga_o"] == lo) & (c["liga_d"] == ld)].sort_values("min_o", ascending=False).head(n_por_par)
             for _, x in s.iterrows():

@@ -1,0 +1,6 @@
+medida,grupo,n,valor,ic_lo,ic_hi,nota
+delta_net_medio,externa,932,-0.1008,-0.4496,0.2267,"asociación descriptiva, no causal"
+delta_net_medio,interna_minutos,13,3.8160,2.1273,5.6508,"asociación descriptiva, no causal"
+delta_net_medio,interna_rol,70,-3.2170,-4.3096,-2.1422,"asociación descriptiva, no causal"
+delta_net_medio,todas,1015,-0.2656,-0.5870,0.0398,"asociación descriptiva, no causal"
+spearman_relleno_delta_net,todas,1015,-0.0780,-0.1290,-0.0273,"asociación descriptiva, no causal"

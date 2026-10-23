@@ -2,7 +2,10 @@
 semilla: 20261023
 
 uso_eficiencia:
-  min_intentos_partido: 3            # partidos con >= 3 intentos de tiro (TSA) entran en la elasticidad
+  min_partidos_tramo: 5              # principal: tramos de rol / temporadas con >= 5 partidos ...
+  min_intentos_tramo: 30             # ... y >= 30 intentos (TSA)
+  min_tramos_jugador: 3              # jugador con >= 3 tramos/temporadas → estimación propia
+  min_intentos_partido: 3            # secundaria (partido a partido): partidos con >= 3 intentos
   min_partidos_jugador: 15
   min_temporadas_tov: 3              # TOV% frente a USG%: variación entre temporadas del mismo jugador
   min_minutos_temporada_tov: 300

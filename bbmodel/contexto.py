@@ -74,6 +74,23 @@ def indice_nivel(df: pd.DataFrame, escala: dict) -> np.ndarray:
     return np.where(n > 0, np.where(ok, Z, 0).sum(1) / np.maximum(n, 1), np.nan)
 
 
+def usar_amortiguado(norm: pd.DataFrame, capa: str, metricas=None) -> pd.DataFrame:
+    """Si configs/normalization.yaml → usar_amortiguado.<capa> es verdadero y el dataset normalizado trae las columnas
+    amortiguadas (<m>_am, bbmodel/amortiguacion.py), las métricas de nivel se leen de ellas (salto de nivel entre
+    ligas amortiguado: encadenamiento por competición-temporada, contracción por escalón y λ(d))."""
+    try:
+        from bbfit.config import cargar
+        activo = bool((cargar("normalization").get("usar_amortiguado") or {}).get(capa, False))
+    except Exception:  # noqa: BLE001
+        activo = False
+    if not activo:
+        return norm
+    for c in (metricas or NIVEL):
+        if f"{c}_am" in norm:
+            norm[c] = norm[f"{c}_am"].where(norm[f"{c}_am"].notna(), norm[c])
+    return norm
+
+
 # ------------------------------------------------------------------------------------------ ids
 def ids_modelo(filas: pd.DataFrame) -> pd.DataFrame:
     """(liga, temporada, team_id, player_id de la fuente) -> player_id del modelo (BBL: «n:<nombre>»)."""
@@ -131,7 +148,7 @@ def contexto_pista(liga: str, temporada: str, L: dict, L_banquillo: float) -> pd
 
 def construir(guardar: bool = True) -> pd.DataFrame:
     """Contexto de cada jugador-equipo-temporada (temporada regular, todas las ligas)."""
-    norm = _leer(DIR_NORM).copy()
+    norm = usar_amortiguado(_leer(DIR_NORM).copy(), "contexto")
     escala = escala_nivel(norm)
     norm["L"] = indice_nivel(norm, escala)
     filas = cargar_filas("regular")

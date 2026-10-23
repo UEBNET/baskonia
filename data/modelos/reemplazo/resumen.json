@@ -1,0 +1,128 @@
+{
+ "uso_eficiencia": {
+  "personas": 15622,
+  "con_estimacion_propia_ts": 6972,
+  "beta_ts_grupo": {
+   "A": 0.1415,
+   "E": 0.232,
+   "I": -0.0099,
+   "NA": -0.0515
+  },
+  "tau2_ts_grupo": {
+   "A": 0.06563,
+   "E": 0.07609,
+   "I": 0.05309,
+   "NA": NaN
+  },
+  "beta_tov_grupo": {
+   "A": 0.1551,
+   "E": 0.1015,
+   "I": 0.0804,
+   "NA": -0.025
+  },
+  "w_media_ts": 0.2416498573728621
+ },
+ "libro": {
+  "transiciones_club": 1332,
+  "cierre_identidad_max": 1.0125233984581428e-13,
+  "relleno_clave_mediana": 0.9557662670942944,
+  "estrategias_clave": {
+   "externa": 1236,
+   "interna_rol": 76,
+   "interna_minutos": 16
+  },
+  "asociacion": [
+   {
+    "medida": "delta_net_medio",
+    "grupo": "externa",
+    "n": 932,
+    "valor": -0.10080815450643778,
+    "ic_lo": -0.44958687231759664,
+    "ic_hi": 0.22665829399141624,
+    "nota": "asociación descriptiva, no causal"
+   },
+   {
+    "medida": "delta_net_medio",
+    "grupo": "interna_minutos",
+    "n": 13,
+    "valor": 3.815969230769231,
+    "ic_lo": 2.127297692307692,
+    "ic_hi": 5.650805769230769,
+    "nota": "asociación descriptiva, no causal"
+   },
+   {
+    "medida": "delta_net_medio",
+    "grupo": "interna_rol",
+    "n": 70,
+    "valor": -3.2169957142857144,
+    "ic_lo": -4.309635928571428,
+    "ic_hi": -2.1422046428571426,
+    "nota": "asociación descriptiva, no causal"
+   },
+   {
+    "medida": "delta_net_medio",
+    "grupo": "todas",
+    "n": 1015,
+    "valor": -0.26555201970443354,
+    "ic_lo": -0.5869853004926109,
+    "ic_hi": 0.03982759113300494,
+    "nota": "asociación descriptiva, no causal"
+   },
+   {
+    "medida": "spearman_relleno_delta_net",
+    "grupo": "todas",
+    "n": 1015,
+    "valor": -0.0779829836498496,
+    "ic_lo": -0.1290434450463639,
+    "ic_hi": -0.027254542654456405,
+    "nota": "asociación descriptiva, no causal"
+   }
+  ]
+ },
+ "transiciones": {
+  "persistencia": {
+   "RESIDUAL": NaN,
+   "PROFUNDIDAD": 0.49184149184149184,
+   "ROTACION": 0.6045548654244306,
+   "TITULAR": 0.6256038647342995,
+   "GO_TO_GUY": 0.6774941995359629
+  },
+  "n_retornos": 3551
+ },
+ "calidad_companeros": {
+  "filas": 38824,
+  "con_L_pct": 0.6886719554914486,
+  "efecto": [
+   {
+    "produccion": "ts_pct",
+    "pendiente_por_unidad_L": 3.781384443339713,
+    "ic_lo": 3.3754033204887164,
+    "ic_hi": 4.238194427979013,
+    "n_filas": 9444,
+    "n_personas": 2324,
+    "nota": "asociación dentro de jugador, no causal"
+   },
+   {
+    "produccion": "usg_pct",
+    "pendiente_por_unidad_L": -1.4886813857492485,
+    "ic_lo": -1.7625350467956997,
+    "ic_hi": -1.1979164506404885,
+    "n_filas": 9444,
+    "n_personas": 2324,
+    "nota": "asociación dentro de jugador, no causal"
+   },
+   {
+    "produccion": "pts_100",
+    "pendiente_por_unidad_L": 0.11584581580515513,
+    "ic_lo": -0.26489747318471457,
+    "ic_hi": 0.4496446751690332,
+    "n_filas": 9444,
+    "n_personas": 2324,
+    "nota": "asociación dentro de jugador, no causal"
+   }
+  ]
+ },
+ "tendencias": {
+  "entrenadores": 949
+ }
+}

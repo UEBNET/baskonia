@@ -76,7 +76,7 @@ def construir(temporada: str) -> pd.DataFrame:
              "gp", "min"]].copy().rename(columns={"player_id": "pid_modelo"})
     out["min_pg"] = out["min"] / out["gp"].where(out["gp"] > 0)
     tiene_b = pd.Series(False, index=m.index)
-    cols = {}
+    cols, pct_b = {}, {}
     for c in METRICAS:
         A, lo_a, hi_a, p_a = m[f"{c}_el"], m[f"{c}_el_lo"], m[f"{c}_el_hi"], m[f"{c}_pct_el"]
         B = m.get(f"{c}_el_B", pd.Series(np.nan, index=m.index))
@@ -84,6 +84,7 @@ def construir(temporada: str) -> pd.DataFrame:
         hi_b = m.get(f"{c}_el_hi_B", pd.Series(np.nan, index=m.index))
         p_b = m.get(f"{c}_pct_el_B", pd.Series(np.nan, index=m.index))
         tiene_b |= B.notna()
+        pct_b[c] = pd.to_numeric(p_b, errors="coerce").to_numpy(float)
         cols[c] = combinar(A, B, c)
         cols[f"{c}_lo"] = combinar(lo_a, lo_b, c)
         cols[f"{c}_hi"] = combinar(hi_a, hi_b, c)
@@ -98,6 +99,7 @@ def construir(temporada: str) -> pd.DataFrame:
         cols[f"{c}_A"] = A
         cols[f"{c}_B"] = B
     out = pd.concat([out, pd.DataFrame(cols)], axis=1)
+    out = anadir_amortiguado(out, temporada, pct_b)
     out["fuente_norm"] = np.where(tiene_b, "A+B", "A")
     # identidad de los datos brutos y nacionalidad
     out = out.merge(_brutos(temporada), on=["liga", "pid_modelo"], how="left")
@@ -113,8 +115,53 @@ def construir(temporada: str) -> pd.DataFrame:
              "pos3", "pos3_estimada", "edad", "anio_nac", "fecha_nacimiento", "nacionalidad", "nacionalidad_fuente",
              "altura_cm", "gp", "min", "min_pg", "fuente_norm"]
     ident = [c for c in ident if c in out]
-    out = out[ident + list(cols)].drop_duplicates(["liga", "player_id"])
+    amort = [c for c in out.columns if c.endswith(("_A_am", "_am", "_am_lo", "_am_hi", "_am_pctel"))]
+    out = out[ident + list(cols) + amort].drop_duplicates(["liga", "player_id"])
     return anadir_contexto(out, temporada)
+
+
+DAM = RAIZ / "data" / "modelos" / "normalizacion_amortiguada" / "traducciones"
+
+
+def anadir_amortiguado(out: pd.DataFrame, temporada: str, pct_b: dict | None = None) -> pd.DataFrame:
+    """Valores con el salto de nivel amortiguado (bbmodel/amortiguacion.py; docs/normalizacion_amortiguada.md).
+
+    Columnas nuevas por métrica (las anteriores no cambian):
+        <m>_A_am               equivalente EuroLeague del algoritmo A amortiguado (encadenamiento por competición-
+                               temporada, contracción por escalón, mapeo monótono, λ(d), pesos de selección)
+        <m>_am                 estimación final amortiguada: la A+B de siempre más la corrección de la amortiguación
+                               del A en la escala transformada, T(<m>) + [T(<m>_A_am) − T(<m>_A)]
+        <m>_am_lo, <m>_am_hi   intervalo del 80 % con la anchura del A amortiguado (crece con el camino de puentes)
+        <m>_am_pctel           percentil EuroLeague (media del A amortiguado y del B; sólo A amortiguado sin B)"""
+    p = DAM / f"{temporada}.csv"
+    if not p.exists():
+        return out
+    am = pd.read_csv(p, dtype={"player_id": str}, low_memory=False).rename(columns={"player_id": "pid_modelo"})
+    am = am.drop(columns=[c for c in ("persona_id", "temporada") if c in am]).drop_duplicates(["liga", "pid_modelo"])
+    m = out[["liga", "pid_modelo"]].merge(am, on=["liga", "pid_modelo"], how="left")
+    nuevas = {}
+    for c in METRICAS:
+        if f"{c}_am" not in m:
+            continue
+        tr = CATALOGO[c].transf
+        a_am = pd.to_numeric(m[f"{c}_am"], errors="coerce").to_numpy(float)
+        T = lambda v: transformar(pd.to_numeric(v, errors="coerce"), tr)  # noqa: E731
+        corr = T(a_am) - T(out[f"{c}_A"])
+        centro = T(out[c]) + corr
+        lo = centro - (T(a_am) - T(m[f"{c}_am_lo"]))
+        hi = centro + (T(m[f"{c}_am_hi"]) - T(a_am))
+        nuevas[f"{c}_A_am"] = a_am
+        nuevas[f"{c}_am"] = destransformar(centro, tr)
+        nuevas[f"{c}_am_lo"] = destransformar(lo, tr)
+        nuevas[f"{c}_am_hi"] = destransformar(hi, tr)
+        pb = pct_b.get(c) if pct_b else None
+        pam = pd.to_numeric(m[f"{c}_am_pct"], errors="coerce").to_numpy(float)
+        nuevas[f"{c}_am_pctel"] = pam if pb is None else np.where(np.isfinite(pb), (pam + pb) / 2, pam)
+        if CATALOGO[c].grupo == "Pista":
+            sin_obs = pd.to_numeric(out[f"{c}_obs"], errors="coerce").isna().to_numpy()
+            for k in (f"{c}_am", f"{c}_am_lo", f"{c}_am_hi", f"{c}_am_pctel"):
+                nuevas[k] = np.where(sin_obs, np.nan, nuevas[k])
+    return pd.concat([out, pd.DataFrame(nuevas, index=out.index)], axis=1)
 
 
 CTX = RAIZ / "data" / "modelos" / "contexto"

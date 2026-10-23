@@ -22,11 +22,15 @@ ponderados por minutos y con la tasa contraída hacia la media de la liga, m / (
 No depende de la normalización de nivel entre ligas (bbmodel A+B): un equipo «muy de triple» lo es frente a
 su liga.
 
-Mezcla gaussiana: se ajusta sólo sobre equipos-temporada (la unidad donde «estilo» está definido) y los
-jugadores se proyectan con la misma mezcla (probabilidad a posteriori). Ajustar a la vez equipos y jugadores
-haría que los ~20 jugadores por equipo dominaran la verosimilitud y los grupos serían posiciones (base,
-alero, pívot), no estilos. Con rasgos en z de su población, «+1 en triple» significa lo mismo (un percentil
-84 en su liga) para un equipo y para un jugador, y la proyección se lee igual.
+Mezcla gaussiana: se ajusta sobre jugadores-equipo-temporada (≥ 300 min, configs/styles.yaml → mezcla.poblacion)
+y los equipos se proyectan con la misma mezcla (probabilidad a posteriori). Se probó al revés y a la vez
+(diagnóstico en seleccion_k.json → alternativas): en este espacio los equipos-temporada NO forman grupos (BIC
+mínimo en K = 1-2; con covarianza completa los componentes difieren en forma, no en posición, y con covarianza
+común el ARI bootstrap baja de 0,4 desde K = 3), y en un ajuste conjunto casi todos los equipos caen en un único
+componente propio (su estructura de correlaciones es la de una media de cinco jugadores). Los jugadores sí
+tienen grupos (BIC con mínimo interior, ARI ≈ 0,9 en K = 4). Con rasgos en z de su población, «+1 en triple»
+significa lo mismo (percentil 84 de su liga) para un equipo y para un jugador, así que un equipo recibe el
+arquetipo al que se parece su desviación respecto de su liga: un equipo «Spacing» tira como un tirador.
 
 Número de grupos: BIC y estabilidad bootstrap (ARI medio) por (covarianza, K); regla en configs/styles.yaml.
 Nombres: tras el ajuste, emparejando centroides con firmas (método húngaro). Cada jugador-etapa y equipo-temporada
@@ -281,9 +285,10 @@ def posterior(medias: np.ndarray, covs: np.ndarray, pesos: np.ndarray, X: np.nda
     return out
 
 
-def seleccionar_k(X: np.ndarray, c: dict, log=print) -> tuple[list[dict], dict]:
+def seleccionar_k(X: np.ndarray, c: dict, log=print, X_aux: np.ndarray | None = None) -> tuple[list[dict], dict]:
     """BIC y estabilidad bootstrap (ARI medio de la partición de cada remuestreo, predicha sobre todos los
-    datos, frente a la del ajuste completo) para cada (covarianza, K). Devuelve la tabla y la elección."""
+    datos, frente a la del ajuste completo) para cada (covarianza, K). Con X_aux (la otra población, que se
+    proyecta) se mide también la estabilidad de su asignación. Devuelve la tabla y la elección."""
     from sklearn.metrics import adjusted_rand_score
     m = c["mezcla"]
     semilla = c["semilla"]
@@ -293,21 +298,65 @@ def seleccionar_k(X: np.ndarray, c: dict, log=print) -> tuple[list[dict], dict]:
             t0 = time.time()
             g = _ajustar_gmm(X, k, cov, c, semilla)
             ref = g.predict(X)
+            ref_aux = g.predict(X_aux) if X_aux is not None else None
             rng = np.random.default_rng(semilla + 1000 * k)
-            aris = []
+            aris, aris_aux = [], []
             for b in range(m["bootstrap"]):
                 idx = rng.integers(0, len(X), len(X))
                 gb = _ajustar_gmm(X[idx], k, cov, {**c, "mezcla": {**m, "n_init": 1}}, semilla + b + 1)
                 aris.append(adjusted_rand_score(ref, gb.predict(X)))
+                if X_aux is not None:
+                    aris_aux.append(adjusted_rand_score(ref_aux, gb.predict(X_aux)))
             cuotas = np.bincount(ref, minlength=k) / len(ref)
             fila = {"covarianza": cov, "k": k, "bic": float(g.bic(X)), "aic": float(g.aic(X)),
                     "log_verosimilitud_media": float(g.score(X)), "estabilidad_ari": float(np.mean(aris)),
                     "estabilidad_ari_sd": float(np.std(aris)), "cuota_min": float(cuotas.min()),
                     "seguridad_media": float(g.predict_proba(X).max(1).mean()), "segundos": round(time.time() - t0, 1)}
+            if X_aux is not None:
+                ca = np.bincount(ref_aux, minlength=k) / len(ref_aux)
+                fila.update({"estabilidad_ari_proyectados": float(np.mean(aris_aux)), "cuota_min_proyectados": float(ca.min()),
+                             "seguridad_media_proyectados": float(g.predict_proba(X_aux).max(1).mean())})
             tabla.append(fila)
             log(f"  {cov:4s} K={k:2d} BIC={fila['bic']:.0f} ARI={fila['estabilidad_ari']:.3f} "
+                f"ARI_proy={fila.get('estabilidad_ari_proyectados', float('nan')):.3f} "
                 f"cuota_min={fila['cuota_min']:.3f} ({fila['segundos']} s)")
     return tabla, elegir(tabla, c)
+
+
+def diagnostico_alternativas(XT: np.ndarray, XJ: np.ndarray, c: dict, log=print) -> dict:
+    """Por qué la mezcla se ajusta sobre jugadores: (a) mezcla sólo con equipos (covarianza completa y
+    común), BIC y ARI bootstrap por K; (b) mezcla conjunta equipos + jugadores: qué parte de los equipos
+    cae en un único componente. Sin efecto en la salida; queda en seleccion_k.json."""
+    from sklearn.metrics import adjusted_rand_score
+    dg = c["mezcla"]["diagnostico"]
+    semilla = c["semilla"]
+    out = {"equipos": [], "conjunto": []}
+    for cov in dg["covarianzas_equipos"]:
+        for k in range(1, dg["k_max"] + 1):
+            g = _ajustar_gmm(XT, k, cov, c, semilla)
+            ref = g.predict(XT)
+            rng = np.random.default_rng(semilla + 7 * k)
+            aris = []
+            for b in range(dg["bootstrap"]):
+                idx = rng.integers(0, len(XT), len(XT))
+                gb = _ajustar_gmm(XT[idx], k, cov, {**c, "mezcla": {**c["mezcla"], "n_init": 1}}, semilla + b + 1)
+                aris.append(adjusted_rand_score(ref, gb.predict(XT)))
+            norma = np.linalg.norm(g.means_, axis=1)
+            out["equipos"].append({"covarianza": cov, "k": k, "bic": float(g.bic(XT)), "estabilidad_ari": float(np.mean(aris)),
+                                   "cuota_mayor": float(np.bincount(ref, minlength=k).max() / len(ref)),
+                                   "norma_min_centroide": float(norma.min()), "norma_max_centroide": float(norma.max())})
+            log(f"  diag. equipos {cov:4s} K={k} BIC={out['equipos'][-1]['bic']:.0f} ARI={np.mean(aris):.3f}")
+    X = np.vstack([XT, XJ])
+    nT = len(XT)
+    for k in dg["k_conjunto"]:
+        g = _ajustar_gmm(X, k, "full", c, semilla)
+        r = g.predict(X)
+        ct = np.bincount(r[:nT], minlength=k) / nT
+        cj = np.bincount(r[nT:], minlength=k) / (len(X) - nT)
+        out["conjunto"].append({"k": k, "bic": float(g.bic(X)), "cuota_equipos_en_su_componente_mayor": float(ct.max()),
+                                "cuota_jugadores_en_ese_componente": float(cj[int(ct.argmax())])})
+        log(f"  diag. conjunto K={k}: {ct.max():.0%} de los equipos en un componente con {cj[int(ct.argmax())]:.0%} de jugadores")
+    return out
 
 
 def elegir(tabla: list[dict], c: dict) -> dict:
@@ -653,6 +702,33 @@ def correspondencia_vade(eq: pd.DataFrame, ids: list[str], nombres: dict) -> tup
     return pd.DataFrame(filas), resumen
 
 
+def coherencia(eq: pd.DataFrame, jg: pd.DataFrame, ids: list[str]) -> dict:
+    """¿Cuadra el estilo del equipo con el de sus jugadores? Mezcla de pertenencias de los jugadores ponderada
+    por minutos frente a la pertenencia del equipo (filas de temporada): acuerdo del estilo principal y
+    correlación por estilo. También: parte de los clubes con relevo de entrenador cuyo estilo principal cambia."""
+    pc = [f"p_{i}" for i in ids]
+    jt = jg[(jg["nivel"] == "temporada") & jg["estilo"].notna()]
+    clave = ["liga", "temporada", "team_id"]
+    W = jt[pc].mul(jt["min"], axis=0).join(jt[clave]).groupby(clave)[pc].sum()
+    W = W.div(W.sum(axis=1), axis=0)
+    E = eq[(eq["nivel"] == "temporada") & eq["estilo"].notna()].set_index(clave)
+    W = W.reindex(E.index).dropna()
+    E = E.loc[W.index]
+    out = {"equipos": int(len(E)),
+           "acuerdo_estilo_principal": float((W.idxmax(axis=1).str[2:] == E["estilo"]).mean()),
+           "correlacion_por_estilo": {i: float(np.corrcoef(W[f"p_{i}"], E[f"p_{i}"])[0, 1]) for i in ids}}
+    ec = eq[eq["nivel"] == "entrenador"]
+    if len(ec):
+        n = ec.groupby(clave)["estilo"].nunique()
+        out["clubes_con_relevo"] = int(len(n))
+        out["cambia_estilo_con_relevo"] = float((n > 1).mean())
+        e10 = ec[ec["n_partidos"] >= 10]
+        n10 = e10.groupby(clave).filter(lambda x: len(x) >= 2).groupby(clave)["estilo"].nunique()
+        out["clubes_con_relevo_10_partidos"] = int(len(n10))
+        out["cambia_estilo_con_relevo_10_partidos"] = float((n10 > 1).mean()) if len(n10) else None
+    return out
+
+
 # =============================================================================== fichas
 def fichas(eq: pd.DataFrame, jg: pd.DataFrame, ids: list[str], medias: np.ndarray, c: dict) -> list[dict]:
     R = rasgos(c)
@@ -724,18 +800,19 @@ def pid_estilos(jg: pd.DataFrame) -> pd.Series:
     return pid
 
 
-def _tabla_guardada(c: dict, n: int) -> tuple[list[dict], dict] | None:
+def _tabla_guardada(c: dict, n: int) -> tuple[list[dict], dict, dict | None] | None:
     """Tabla de selección de K ya calculada con los mismos rasgos, datos y configuración de la mezcla."""
     p = DIR_SAL / "seleccion_k.json"
     if not p.exists():
         return None
     s = json.loads(p.read_text(encoding="utf-8"))
-    claves = ("k_min", "k_max", "covarianzas", "n_init", "max_iter", "reg_covar", "bootstrap")   # las que cambian la tabla
+    claves = ("k_min", "k_max", "covarianzas", "n_init", "max_iter", "reg_covar", "bootstrap", "poblacion",
+              "diagnostico")   # las que cambian la tabla
     previa = s.get("config_mezcla", {})
     if s.get("rasgos") != rasgos(c) or s.get("n_ajuste") != n or s.get("semilla") != c["semilla"] \
             or any(previa.get(k) != c["mezcla"].get(k) for k in claves):
         return None
-    return s["tabla"], elegir(s["tabla"], c)
+    return s["tabla"], elegir(s["tabla"], c), s.get("alternativas")
 
 
 def ejecutar(c: dict | None = None, log=print, entrenadores: bool = True, reusar_k: bool = False) -> dict:
@@ -747,15 +824,23 @@ def ejecutar(c: dict | None = None, log=print, entrenadores: bool = True, reusar
     log("1/6 rasgos por liga-temporada")
     eq, jg, refs = construir_datos(c, log)
     d = c["datos"]
-    ajuste = (eq["temporada"].isin(d["temporadas_ajuste"]) & (eq["gp"].fillna(0) >= d["min_partidos_equipo_ajuste"])
-              & eq[Z].notna().all(1)).to_numpy()
-    eq["en_ajuste"] = ajuste
-    X = eq.loc[ajuste, Z].to_numpy(float)
-    log(f"2/6 selección de K sobre {len(X)} equipos-temporada completos")
+    ref_eq = (eq["temporada"].isin(d["temporadas_ajuste"]) & (eq["gp"].fillna(0) >= d["min_partidos_equipo_ajuste"])
+              & eq[Z].notna().all(axis=1)).to_numpy()
+    ref_jg = (jg["temporada"].isin(d["temporadas_ajuste"]) & (jg["min"] >= c["mezcla"]["min_minutos_ajuste"])
+              & jg[Z].notna().all(axis=1)).to_numpy()
+    XT, XJ = eq.loc[ref_eq, Z].to_numpy(float), jg.loc[ref_jg, Z].to_numpy(float)
+    pob = c["mezcla"]["poblacion"]
+    X, X_aux = (XJ, XT) if pob == "jugadores" else (XT, XJ)
+    eq["en_ajuste"] = ref_eq if pob == "equipos" else False
+    jg["en_ajuste"] = ref_jg if pob == "jugadores" else False
+    log(f"2/6 selección de K sobre {len(X)} {pob} (proyectados: {len(X_aux)})")
     previa = _tabla_guardada(c, len(X)) if reusar_k else None
     if previa:
         log("   tabla de K reutilizada (seleccion_k.json con la misma configuración)")
-    tabla, elegido = previa or seleccionar_k(X, c, log)
+        tabla, elegido, alternativas = previa
+    else:
+        tabla, elegido = seleccionar_k(X, c, log, X_aux)
+        alternativas = diagnostico_alternativas(XT, XJ, c, log) if c["mezcla"].get("diagnostico") else None
     log(f"   elegido: {elegido}")
     g = _ajustar_gmm(X, elegido["k"], elegido["covarianza"], c, c["semilla"])
     est = c.get("estilos") or {}
@@ -800,6 +885,7 @@ def ejecutar(c: dict | None = None, log=print, entrenadores: bool = True, reusar
     eq["entrenador_id"] = eq.get("entrenador_id")
     jg["entrenador_id"] = jg.get("entrenador_id")
     eq["en_ajuste"] = eq["en_ajuste"].fillna(False).astype(bool)
+    jg["en_ajuste"] = jg["en_ajuste"].fillna(False).astype(bool)
     jg["pid_estilos"] = pid_estilos(jg)
     log("5/6 correspondencia con VaDE y fichas")
     eq["clave_vade"] = clave_vade(eq, jg)
@@ -817,7 +903,7 @@ def ejecutar(c: dict | None = None, log=print, entrenadores: bool = True, reusar
     eq = eq.sort_values(["temporada", "liga", "team_id", "nivel", "entrenador_id"], na_position="first")
     eq[cab_e].round(4).to_csv(DIR_SAL / "equipos.csv", index=False)
     cab_j = ["liga", "temporada", "team_id", "equipo", "player_id", "pid_estilos", "nombre", "posicion", "nivel",
-             "entrenador_id", "entrenador", "min", "peso_tramo", "fiable", "traspaso", "estilo", "estilo_nombre",
+             "entrenador_id", "entrenador", "min", "peso_tramo", "fiable", "en_ajuste", "traspaso", "estilo", "estilo_nombre",
              "p_estilo", "estilo2", "estilo2_nombre", "p_estilo2", "etiqueta"] + pcols + R + Z
     for col in cab_j:
         if col not in jg:
@@ -825,22 +911,27 @@ def ejecutar(c: dict | None = None, log=print, entrenadores: bool = True, reusar
     jg = jg.sort_values(["temporada", "liga", "team_id", "player_id", "nivel", "entrenador_id"], na_position="first")
     jg[cab_j].round(4).to_csv(DIR_SAL / "jugadores.csv.gz", index=False, compression={"method": "gzip", "mtime": 0})
     corr.to_csv(DIR_SAL / "correspondencia_vade.csv", index=False)
-    sel = {"generado": date.today().isoformat(), "unidad_ajuste": "equipo-temporada", "n_ajuste": int(len(X)),
-           "rasgos": R, "regla": {k: c["mezcla"][k] for k in ("estabilidad_min", "cuota_min", "bootstrap")},
-           "config_mezcla": c["mezcla"], "semilla": c["semilla"], "elegido": elegido, "tabla": tabla}
+    sel = {"generado": date.today().isoformat(),
+           "unidad_ajuste": "jugador-equipo-temporada" if pob == "jugadores" else "equipo-temporada",
+           "n_ajuste": int(len(X)), "n_proyectados": int(len(X_aux)), "rasgos": R,
+           "regla": {k: c["mezcla"].get(k) for k in ("k_taxonomia", "estabilidad_min", "cuota_min", "bootstrap")},
+           "config_mezcla": c["mezcla"], "semilla": c["semilla"], "elegido": elegido, "tabla": tabla,
+           "alternativas": alternativas}
     (DIR_SAL / "seleccion_k.json").write_text(json.dumps(sel, ensure_ascii=False, indent=1), encoding="utf-8")
     Et = eq[eq["nivel"] == "temporada"]
     Jt = jg[jg["nivel"] == "temporada"]
     resumen = {"k": elegido["k"], "covarianza": elegido["covarianza"],
-               "seguridad_media_equipos": float(Et.loc[Et["en_ajuste"], "p_estilo"].mean()),
+               "poblacion_ajuste": pob, "n_ajuste": int(len(X)),
+               "seguridad_media_equipos": float(Et["p_estilo"].mean()),
                "seguridad_media_jugadores": float(Jt.loc[Jt["fiable"].astype(bool), "p_estilo"].mean()),
                "equipos_asignados": int(Et["estilo"].notna().sum()), "jugadores_asignados": int(Jt["estilo"].notna().sum()),
                "tramos_equipo": int((eq["nivel"] == "entrenador").sum()),
                "tramos_jugador": int((jg["nivel"] == "entrenador").sum()),
-               "vade": corr_res, "segundos": round(time.time() - t0)}
+               "coherencia": coherencia(eq, jg, ids), "vade": corr_res, "segundos": round(time.time() - t0)}
     doc = {"generado": date.today().isoformat(),
            "descripcion": "Taxonomía unificada jugador ↔ equipo: mezcla gaussiana sobre 12 rasgos en z por rangos dentro "
-                          "de cada liga-temporada; los jugadores se proyectan con la mezcla ajustada en equipos.",
+                          f"de cada liga-temporada, ajustada sobre {pob}; la otra población se proyecta con la misma "
+                          "mezcla (probabilidad a posteriori).",
            "rasgos": c["rasgos"], "mezcla": {"k": elegido["k"], "covarianza": elegido["covarianza"],
                                              "pesos": [round(float(w), 4) for w in g.weights_],
                                              "medias": [[round(float(x), 4) for x in m] for m in g.means_],
@@ -855,7 +946,8 @@ def ejecutar(c: dict | None = None, log=print, entrenadores: bool = True, reusar
         with experimento("estilos_unificados", f"gmm_k{elegido['k']}_{elegido['covarianza']}", params=params,
                          semilla=c["semilla"]) as run:
             run.metricas({kk: vv for kk, vv in resumen.items() if isinstance(vv, (int, float))}
-                         | {"vade_ari": corr_res["ari"], "vade_nmi": corr_res["nmi"]})
+                         | {"vade_ari": corr_res["ari"], "vade_nmi": corr_res["nmi"],
+                            "acuerdo_jugadores_equipo": resumen["coherencia"]["acuerdo_estilo_principal"]})
             for nombre in ("seleccion_k.json", "estilos.json", "correspondencia_vade.csv"):
                 run.artefacto(DIR_SAL / nombre)
     except Exception as e:  # noqa: BLE001  (las salidas ya están escritas; el registro no debe tumbarlas)

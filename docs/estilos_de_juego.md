@@ -95,16 +95,16 @@ python -m bbestilo articulo     # PDF
 * **Consenso de 10 semillas** (co-asociación, enlace medio); la semilla más cercana (23) se ajusta 40 épocas con la
   mezcla fijada en el consenso. ARI del modelo final con el consenso 0,60.
 
-## 4. Los 6 estilos (nombres en `config/estilos.json`)
+## 4. Los 6 estilos (nombres y numeración de `config/estilos.json`, modelo final de 12 ligas)
 
-| | Estilo | Rasgos | Clubes |
+| | Estilo | Rasgos | Clubes (de 1.490 de entrenamiento, `vade/clubes.csv`) |
 |---|---|---|---|
-| E01 | Creación individual | poco triple (casi ningún triple de esquina), media distancia, tiros libres, canastas sin asistencia; rebote defensivo y tapones | 207 |
-| E02 | Pintura física | tiros en el aro y tiros libres, rebote ofensivo, interiores, faltas y robos; poco triple, más pérdidas | 135 |
-| E03 | Pausado y seguro | muy pocas pérdidas, pocas asistencias y pocos bases; defensa conservadora; canastas de pase | 160 |
-| E04 | Lejos del aro | muy pocos tiros cerca de la canasta, media distancia y triple, poco rebote ofensivo y pocos tiros libres | 153 |
-| E05 | Exterior y presión | bases y escoltas, ritmo, presión y robos, asistencias y creación propia; poco rebote | 138 |
-| E06 | Circulación y triple | mucho triple, sobre todo de esquina, canastas asistidas, sin media distancia; poco rebote defensivo | 204 |
+| E01 | Creación individual | poco triple (casi ningún triple de esquina), media distancia, tiros libres, canastas sin asistencia; rebote defensivo y tapones | 309 |
+| E02 | Exterior y presión | bases y escoltas, ritmo, presión y robos, asistencias y creación propia; poco rebote | 250 |
+| E03 | Lejos del aro | muy pocos tiros cerca de la canasta, media distancia y triple, poco rebote ofensivo y pocos tiros libres | 211 |
+| E04 | Pausado y seguro | muy pocas pérdidas, pocas asistencias y pocos bases; defensa conservadora; canastas de pase | 260 |
+| E05 | Pintura física | tiros en el aro y tiros libres, rebote ofensivo, interiores, faltas y robos; poco triple, más pérdidas | 136 |
+| E06 | Circulación y triple | mucho triple, sobre todo de esquina, canastas asistidas, sin media distancia; poco rebote defensivo | 324 |
 
 ## 5. Hallazgos (`analisis.json`, `interacciones.json`)
 
