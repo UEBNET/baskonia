@@ -1,5 +1,36 @@
 # Registro de cambios
 
+## 2026-10-23 — Fase 2: normalización con amortiguación del salto de nivel (15 ligas)
+
+Añadido
+- `bbmodel/amortiguacion.py` y `python -m bbmodel amortiguar [--validar --variante V | --elegir | --diagnostico P]`;
+  configuración en `configs/normalization.yaml`. Nivel por competición-temporada encadenado por un grafo de puentes
+  (mínimos cuadrados: suma de varianzas en serie, precisión inversa en paralelo), contracción bayesiana por escalón con
+  la media del escalón como nodo latente (τ por EM), mapeo monótono por liga y métrica (isotónica + PCHIP), λ(d)
+  elegida por error dejando fuera una liga, pesos de probabilidad inversa para la selección de los puentes, exposición
+  en posesiones (40'/48'). Salidas en `data/modelos/normalizacion_amortiguada/` (`league_offsets.csv`, traducciones,
+  diagnóstico antes, validación temporal y dejando fuera una liga, ejemplos de puentes reales).
+- Dataset normalizado: columnas `<m>_A_am`, `<m>_am`, `<m>_am_lo/_hi`, `<m>_am_pctel` (las anteriores no cambian). L,
+  contexto y escalas ±100 leen `<m>_am` (`usar_amortiguado`).
+- `identidad.unir_crosswalk`: los modelos A/B usan también las uniones automáticas del crosswalk (umbral 0,75,
+  decisión del usuario).
+- Tests sintéticos `tests/test_normalization.py` (12).
+
+Cambiado
+- Primera, Segunda y Tercera FEB en las listas de ligas de `bbmodel` y `bbestilo`; pista, A, B, contexto,
+  interacciones, escalas y `bbfit reemplazo` reajustados con las 15 ligas (VaDE no).
+- Variante por defecto `sin_mapeo` (elegida con el corte 2023-24 → 2024-25): empata con el A lineal en MAE (1,006 y
+  1,000) y mejora la cobertura del 80 % (0,829 → 0,841).
+- Documentación: `docs/normalizacion_amortiguada.md` (nuevo); `algoritmo_A.md`, `algoritmo_B.md`,
+  `datos_normalizados.md` sin las cifras de «8 ligas»; tabla §4 de `estilos_de_juego.md` con la numeración de
+  `config/estilos.json`.
+
+Corregido
+- `suerte.py`: σ² no identificado (pendiente ≤ 0 de la recta varianza–exposición) → mediana de las demás ligas.
+  Hallazgo 7 de la auditoría: pts/100 en la BCL tenía σ² = 1,8·10⁻⁴; afectaba también a NBA, FEC y Segunda FEB.
+
+Detalle, resultados y riesgos: `docs/checkpoints/F2.md`.
+
 ## 2026-10-23 — Fases 3, 4 y 5: roles por minutos, reemplazo de rol y entropía (`bbfit`)
 
 Añadido

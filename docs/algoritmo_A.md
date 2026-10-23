@@ -75,6 +75,14 @@ según la métrica):
   más el ruido estimado (DRtg 1,10 frente a 1,10; PER 1,61 frente a 1,69; TS% 4,49 frente a 4,43).
   La excepción es el T3%, cuyo ruido se sobreestima algo.
 
+* **σ² no identificado (corrección de octubre de 2026).** Si la recta de un grupo de ligas sale con pendiente ≤ 0 (σ² en
+  el suelo numérico), se usa la mediana de las demás ligas (`suerte._sigma2_no_identificado`, anotado en
+  `sigma2_imputado`). Caso de la auditoría: pts/100 en la BCL tenía σ² = 1,8·10⁻⁴ (resto 21-175) porque la recta sólo
+  usa jugadores con ≥ 200 posesiones y en la BCL (temporadas cortas) ese tramo de 1/n es estrecho y está dominado por
+  la heterogeneidad (los de más minutos son más distintos entre sí); la varianza observada sí baja con la exposición
+  (7,7 con < 31 posesiones → 0,44 con > 424). Con σ² ≈ 0 no se encogía a nadie. Ahora se imputan: pts/100 y USG% en
+  BCL y NBA, PER y Game Score/40 en BCL, FEC y NBA, DRtg en Segunda FEB, % asistidas en NBA.
+
 **Fiabilidad** (cuánto de lo que se ve es real, mediana con 100+ minutos, EuroLeague):
 USG% 0,96 · AST% 0,83 · Pts/100 0,85 · PER 0,66 · BLK% 0,62 · TS% 0,23 · ORtg 0,20 · T3% 0,13.
 En lenguaje de scouting: el uso y la creación se ven pronto; la eficiencia de tiro necesita
@@ -135,7 +143,9 @@ contexto, porque sólo así todos se comparan con la misma vara.
 
 `python -m bbmodel validar`. El modelo se ajusta SÓLO con temporadas hasta t y se predice qué
 hicieron en t+1 los jugadores que cambiaron de liga (300+ minutos en ambas): 2023-24 → 2024-25 y
-2024-25 → 2025-26, **412 jugadores**. Se compara con dos métodos:
+2024-25 → 2025-26, **412 jugadores** en la versión de 8 ligas de la tabla de abajo (con las 15 ligas, octubre de
+2026, son 722 casos por métrica; resultados de A frente al A amortiguado en
+`data/modelos/normalizacion_amortiguada/validacion.csv`). Se compara con dos métodos:
 
 * «mismo número»: suponer que repite su número.
 * «mismo percentil»: suponer que ocupa el mismo puesto relativo en la nueva liga. Es lo que hace
@@ -200,6 +210,12 @@ puentes por métrica y liga.
 | DRtg individual | −0,11 ±0,07 | +0,29 ±0,07 | +0,41 ±0,05 | +0,62 ±0,06 | – | +0,72 ±0,06 | +1,12 ±0,08 |
 
 El orden de nivel que sale en las métricas globales es NBA > EuroLeague > G League ≈ ACB > LNB > EuroCup ≈ LBA > BBL. La escala s está entre 0,7 y 1,2: en G League y LNB las diferencias entre jugadores se comprimen al llevarlas a la EuroLeague (s ≈ 0,81 y 0,74 en PER); en NBA se estiran (s ≈ 1,20).
+
+**Con 15 ligas (octubre de 2026)**, media con signo de m en las 8 métricas de nivel (DT EuroLeague;
+`data/modelos/normalizacion_amortiguada/diagnostico_antes_ligas.csv`, ajuste sin la corrección de σ²): NBA +0,18,
+ACB −0,41, G League −0,51, LNB −0,60, EuroCup −0,69, BSL −0,74, LBA −0,81, BBL −0,91, GBL −0,91, Primera FEB −1,09,
+BCL −1,10, Segunda FEB −1,70, FEC −1,81, Tercera FEB −2,76. La versión amortiguada (por competición y temporada)
+está en `normalizacion_amortiguada.md`.
 
 **Edad (deriva d, PER, en desviaciones típicas por temporada):** ≤23: +0,06 · 24-26: +0,04 · 27-29: −0,02 · 30-32: −0,14 · 33+: −0,28.
 

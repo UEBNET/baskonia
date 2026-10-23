@@ -87,7 +87,7 @@ en DRtg, por eso sus niveles de DRtg son más moderados.
 
 ## 6. Examen fuera de muestra
 
-Mismo examen que el A: se entrena con temporadas hasta t y se predice t+1 de los **412 jugadores que cambiaron de
+Mismo examen que el A: se entrena con temporadas hasta t y se predice t+1 de los **412 jugadores (versión de 8 ligas; 722 con las 15 ligas) que cambiaron de
 liga** (cortes 2023-24 → 2024-25 y 2024-25 → 2025-26; **88 llegadas a la EuroLeague**).
 «Mejora» = 1 − ECM/ECM(mismo percentil), en %. **A+B** = media de A y B en la escala transformada.
 

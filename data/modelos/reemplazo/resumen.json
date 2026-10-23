@@ -155,33 +155,33 @@
  },
  "calidad_companeros": {
   "filas": 38824,
-  "con_L_pct": 0.6886719554914486,
+  "con_L_pct": 0.9927106944158253,
   "efecto": [
    {
     "produccion": "ts_pct",
-    "pendiente_por_unidad_L": 3.7994235141550936,
-    "ic_lo": 3.4074596479193193,
-    "ic_hi": 4.174912265651517,
-    "n_filas": 9542,
-    "n_personas": 2346,
+    "pendiente_por_unidad_L": 6.453074067898667,
+    "ic_lo": 5.902797619938948,
+    "ic_hi": 7.045496992878022,
+    "n_filas": 12999,
+    "n_personas": 3731,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "usg_pct",
-    "pendiente_por_unidad_L": -1.5025723480916635,
-    "ic_lo": -1.7505553689845044,
-    "ic_hi": -1.202182389200626,
-    "n_filas": 9542,
-    "n_personas": 2346,
+    "pendiente_por_unidad_L": -2.3099815386391893,
+    "ic_lo": -2.7017872806214687,
+    "ic_hi": -1.9445408020949397,
+    "n_filas": 13000,
+    "n_personas": 3731,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "pts_100",
-    "pendiente_por_unidad_L": 0.11497955053258341,
-    "ic_lo": -0.27926228322636426,
-    "ic_hi": 0.46347213604224763,
-    "n_filas": 9542,
-    "n_personas": 2346,
+    "pendiente_por_unidad_L": 0.8486655712336719,
+    "ic_lo": 0.3662206814607049,
+    "ic_hi": 1.336491751796895,
+    "n_filas": 13000,
+    "n_personas": 3731,
     "nota": "asociación dentro de jugador, no causal"
    }
   ]
