@@ -1,7 +1,7 @@
-estilo_vade,nombre_vade,equipos,n_pintura,n_pistons,n_isolation,n_old_school,n_spacing,n_vertigo,n_circulacion,pct_pintura,pct_pistons,pct_isolation,pct_old_school,pct_spacing,pct_vertigo,pct_circulacion,principal_nuevo
-E01,Creación individual,315,16,25,50,137,22,20,45,5.1,7.9,15.9,43.5,7.0,6.3,14.3,Old-School
-E02,Exterior y presión,273,9,42,12,103,27,33,47,3.3,15.4,4.4,37.7,9.9,12.1,17.2,Old-School
-E03,Lejos del aro,222,1,13,35,40,56,6,71,0.5,5.9,15.8,18.0,25.2,2.7,32.0,Circulación
-E04,Pausado y seguro,299,3,30,23,118,52,8,65,1.0,10.0,7.7,39.5,17.4,2.7,21.7,Old-School
-E05,Pintura física,177,3,34,7,74,10,8,41,1.7,19.2,4.0,41.8,5.6,4.5,23.2,Old-School
-E06,Circulación y triple,381,3,54,19,89,99,11,106,0.8,14.2,5.0,23.4,26.0,2.9,27.8,Circulación
+estilo_vade,nombre_vade,equipos,n_pistons,n_isolation,n_old_school,n_spacing,n_circulacion,n_pintura,pct_pistons,pct_isolation,pct_old_school,pct_spacing,pct_circulacion,pct_pintura,principal_nuevo
+E01,Creación individual,315,20,79,127,38,32,19,6.3,25.1,40.3,12.1,10.2,6.0,Old-School
+E02,Exterior y presión,273,36,37,101,52,35,12,13.2,13.6,37.0,19.0,12.8,4.4,Old-School
+E03,Lejos del aro,222,7,44,36,56,78,1,3.2,19.8,16.2,25.2,35.1,0.5,Circulación
+E04,Pausado y seguro,299,18,33,120,67,56,5,6.0,11.0,40.1,22.4,18.7,1.7,Old-School
+E05,Pintura física,177,15,17,86,33,22,4,8.5,9.6,48.6,18.6,12.4,2.3,Old-School
+E06,Circulación y triple,381,23,33,82,147,92,4,6.0,8.7,21.5,38.6,24.1,1.0,Spacing

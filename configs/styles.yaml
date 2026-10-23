@@ -91,23 +91,23 @@ estilos:
     color: "#2E86DE"
     rol_jugador: "Tirador"
     definicion: "Tiro exterior: mucho triple, sobre todo de esquina, casi siempre tras pase; poco aro, pocos tiros libres y pocas pérdidas."
-    equipo: "Equipo que abre la pista: alto volumen de triples (también de esquina), pocos tiros en el aro y pocas pérdidas."
+    equipo: "Equipo que abre la pista: alto volumen de triples tras pase, pocos tiros en el aro y pocos tiros libres."
     jugador: "Tirador de recepción: espera en la esquina o en el ala y tira tras pase; apenas bota ni pierde balones."
     firma: {triple: 1, esquina: 1, aro: -1, autocreacion: -1, tiros_libres: -0.5}
   pistons:
     nombre: "Pistons"
     color: "#C0392B"
-    rol_jugador: "Energía y 3&D"
-    definicion: "Intensidad sin balón: rebote ofensivo, tapones y faltas, con triples de esquina asistidos; poco balón en las manos."
-    equipo: "Equipo físico y de esfuerzo: castiga el rebote ofensivo, tapona y hace faltas; en ataque busca el triple de esquina tras pase."
-    jugador: "Jugador de energía / 3&D: no necesita el balón, tira desde la esquina, rebotea en ataque y defiende con contacto."
+    rol_jugador: "Ala de energía"
+    definicion: "Intensidad física: robos, faltas, ataque al aro y rebote ofensivo, con triple de esquina; poco balón en las manos."
+    equipo: "Equipo físico y de presión: roba, hace faltas, ataca el aro y pelea el rebote ofensivo; en ataque, triple de esquina."
+    jugador: "Ala atlético de energía: defiende con robos y contacto, ataca el aro sin balón, rebotea y tira desde la esquina."
     firma: {robos: 1, faltas: 1, esquina: 0.5, aro: 0.5, reb_ofensivo: 0.5}
   circulacion:
     nombre: "Circulación"
     color: "#16A085"
     rol_jugador: "Conector"
     definicion: "Juego de pase lejos del aro: triple y asistencias; poco rebote ofensivo, pocos tapones y pocos tiros en el aro."
-    equipo: "Equipo de circulación exterior: mueve el balón por fuera y tira de tres; renuncia al rebote ofensivo."
+    equipo: "Equipo de juego exterior: mucho triple (también de esquina), pocos tiros en el aro y poco rebote ofensivo; el balón circula por fuera."
     jugador: "Conector exterior: base o escolta que pasa, tira de tres y no ataca el aro."
     firma: {asistencia: 1, triple: 0.5, autocreacion: 0.5, reb_ofensivo: -1, tapones: -0.5}
   isolation:
