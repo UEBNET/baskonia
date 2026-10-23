@@ -1,0 +1,110 @@
+# Fase 7 — adaptación al cambio de liga (bbfit/adaptacion.py)
+# Todos los umbrales e hiperparámetros viven aquí; el código no fija ninguno.
+semilla: 20261023
+
+identidad:
+  # persona_id del dataset normalizado = unión por nombre (bbmodel.identidad) + uniones automáticas del
+  # crosswalk con confianza >= umbral (decisión del usuario, 23-10-2026)
+  umbral_crosswalk: 0.75
+
+traspasos:
+  min_minutos_origen: 150            # minutos de temporada regular en la liga de origen
+  min_minutos_destino: 150           # ... y en la de destino (igual que los puentes de la normalización)
+  min_partidos_destino: 3
+  tolerancia_dias_intra: 3           # traspaso dentro de la temporada: primer partido en B >= último en A − tolerancia
+  solape_max_intra: 0.15             # fracción máxima de partidos de B anteriores al último de A (si no, son concurrentes)
+
+paises_liga:                         # país de cada competición (EUR = copa paneuropea, sin país)
+  acb: ES
+  feb1: ES
+  feb2: ES
+  feb3: ES
+  lba: IT
+  bbl: DE
+  lnb: FR
+  bsl: TR
+  gbl: GR
+  nba: US
+  gleague: US
+  euroleague: EUR
+  eurocup: EUR
+  bcl: EUR
+  fec: EUR
+
+# códigos ISO alfa-2 considerados «europeos» para el grupo de nacionalidad (incluye Turquía, Israel y el Cáucaso,
+# que compiten en las copas europeas)
+paises_europeos: [AD, AL, AM, AT, AZ, BA, BE, BG, BY, CH, CY, CZ, DE, DK, EE, ES, FI, FR, GB, GE, GR, HR, HU, IE,
+                  IL, IS, IT, LT, LU, LV, MC, MD, ME, MK, MT, NL, NO, PL, PT, RO, RS, RU, SE, SI, SK, SM, TR, UA,
+                  XK]
+
+grupos_nacionalidad:                 # orden de evaluación en bbfit.adaptacion.grupo_nacionalidad
+  - EEUU_a_Europa                    # nacionalidad EE. UU., de NBA/G League a una liga europea
+  - otro_desde_EEUU                  # no estadounidense (o sin dato) de NBA/G League a Europa
+  - hacia_EEUU                       # de Europa a NBA/G League
+  - intra_EEUU                       # NBA <-> G League
+  - nacional_mismo_pais              # cambia de liga dentro de su país (p. ej. español de Primera FEB a ACB)
+  - extranjero_mismo_pais            # extranjero que cambia de liga dentro de un mismo país
+  - europeo_cambia_liga              # europeo que cambia de país o entra/sale de una copa europea
+  - extranjero_cambia_pais           # no europeo ya en Europa que cambia de país o de competición europea
+  - desconocido                      # sin nacionalidad (NaN + bandera; nunca se imputa)
+
+metricas:                            # métricas clave (por 100 posesiones o tasas) + índice de nivel L
+  clave: [pts_p100, ts_pct, usg_pct, ast_pct, reb_p100, per, L]
+  # reb_p100 = oreb_p100 + dreb_p100 (cada una traducida por separado y sumadas)
+  # L = índice de nivel compuesto: media de los z con signo de las 8 métricas de nivel (bbmodel.contexto.NIVEL)
+  # en la vara EuroLeague; su efecto relativo es la media geométrica de los cocientes y/ŷ de esas 8 métricas
+  # (DRtg invertido: ŷ/y), para que ADAPT%_L tenga el mismo sentido (100 = lo esperado) que en las demás
+  ratio_recorte: [0.2, 5.0]          # cociente y/ŷ fuera de este rango → NaN (valores degenerados, no se recorta)
+
+modelo:                              # modelo jerárquico gaussiano (bayes empírico, Gibbs opcional) para Δ
+  respuesta: log_ratio               # Δ_rel = exp(E[log(y/ŷ)]) − 1
+  # efectos aleatorios anidados: pareja origen→destino ⊂ escalón de destino ⊂ global
+  covariables: [grupo_nacionalidad, pos3, edad_c, edad_c2, edad_desconocida, rol_origen_num, cambio_rol,
+                salto_nivel, salto_nivel_abs, distancia_estilo_equipo, estilo_desconocido, cambio_entrenador,
+                entrenador_desconocido, intra_temporada, adicion]
+  edad_centro: 26
+  prior_beta_sd: 1.0                 # previa N(0, 1) de los coeficientes fijos (escala log-cociente)
+  gibbs_iteraciones: 3000
+  gibbs_calentamiento: 1000
+  gibbs_cadenas: 2
+  tau2_minimo: 1.0e-5
+  peso_minutos_ref: 600              # peso de cada traspaso en la verosimilitud: min/(min + ref) (ruido de muestreo)
+
+curva:                               # y_i(g) = ŷ_i·(1 + a_i + D_i·exp(−g/κ_c)), g = partidos en la liga nueva
+  metricas: [pts_p100, ts_pct, usg_tiro, prod_p100]  # por partido (tabla partido × jugador de la fase 3)
+  # prod_p100 = 100·(PTS + AST)/posesiones en pista (la misma producción de la fase 5): se usa como curva del índice L
+  metrica_para_L: prod_p100
+  partidos_max: 40                   # primeros partidos en la liga nueva que entran en la curva
+  min_posesiones_partido: 5
+  min_partidos_jugador: 8
+  kappa_rejilla: [0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 60]
+  grupos: [grupo_nacionalidad]       # κ_c por grupo de covariables (con contracción hacia el global)
+  min_jugadores_grupo: 30
+  bootstrap: 200                     # remuestreo de jugadores para los intervalos de κ y de los partidos al 50/90 %
+  control_permanecen: true           # misma curva en jugadores que siguen en su equipo: descuenta el «arranque de temporada»
+
+censura:                             # supervivencia: quien no se adapta juega menos o se va
+  # IPCW: P(seguir observado | covariables, rendimiento temprano) por logit; peso = 1/p (recortado)
+  min_minutos_observado: 300         # «observado» = llega a min_minutos en la liga de destino esa temporada
+  partidos_tempranos: 5              # rendimiento de los primeros k partidos como predictor de la censura
+  recorte_pesos: [0.02, 0.98]        # percentiles de recorte de 1/p
+  C_logit: 1.0
+
+priors:                              # tabla adaptation_priors.csv y jerarquía de reserva
+  n_min_celda: 8                     # traspasos mínimos para usar una celda (si no, se sube de nivel)
+  niveles: [celda, par_grupo, par, escalon_grupo, escalon, global_grupo, global]
+  delta_sd_defecto: 0.10             # stub / sin datos: Δ = 0 ± 0,10 (relativo)
+  kappa_defecto: 5.0                 # stub / sin datos: κ = 5 ± 5 partidos
+  kappa_sd_defecto: 5.0
+
+adapt:
+  primeros_partidos: 10              # ADAPT% también en los primeros N partidos en la liga nueva
+  nivel_intervalo: 0.80
+  bins_calibracion: 10
+
+validacion:
+  cortes: [2023, 2024]               # ajuste con traspasos de destino <= t, evaluación en destino t+1 (sin fuga)
+  dejar_fuera_liga: true
+
+salida:
+  max_mb_fichero: 40
