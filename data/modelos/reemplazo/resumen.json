@@ -1,26 +1,90 @@
 {
  "uso_eficiencia": {
-  "personas": 15622,
-  "con_estimacion_propia_ts": 6972,
+  "personas": 15049,
+  "con_estimacion_propia_ts": 175,
   "beta_ts_grupo": {
-   "A": 0.1415,
-   "E": 0.232,
-   "I": -0.0099,
-   "NA": -0.0515
+   "A": -0.17,
+   "E": -0.0138,
+   "I": -0.1589,
+   "NA": -0.0762
   },
   "tau2_ts_grupo": {
-   "A": 0.06563,
-   "E": 0.07609,
-   "I": 0.05309,
+   "A": 0.0,
+   "E": 0.0,
+   "I": 0.0,
    "NA": NaN
   },
   "beta_tov_grupo": {
-   "A": 0.1551,
-   "E": 0.1015,
-   "I": 0.0804,
-   "NA": -0.025
+   "A": 0.0431,
+   "E": -0.0851,
+   "I": -0.0682,
+   "NA": NaN
   },
-  "w_media_ts": 0.2416498573728621
+  "w_media_ts": 5.120443144745022e-10,
+  "beta_ts_partido_grupo_mco": {
+   "A": 0.1416,
+   "E": 0.2337,
+   "I": -0.0074,
+   "NA": -0.0515
+  },
+  "beta_ts_tramos_grupo_mco": {
+   "A": 0.0389,
+   "E": 0.1039,
+   "I": 0.0634,
+   "NA": NaN
+  },
+  "iv_grupos": [
+   {
+    "pos3_p": "A",
+    "beta_iv": -0.17,
+    "beta_iv_sd": 0.2593,
+    "beta_iv_lo": -0.5808,
+    "beta_iv_hi": 0.2649,
+    "primera_etapa": 3.3635,
+    "n_filas": 77318,
+    "n_personas": 1736
+   },
+   {
+    "pos3_p": "E",
+    "beta_iv": -0.0138,
+    "beta_iv_sd": 0.1288,
+    "beta_iv_lo": -0.2193,
+    "beta_iv_hi": 0.204,
+    "primera_etapa": 4.4779,
+    "n_filas": 245889,
+    "n_personas": 5409
+   },
+   {
+    "pos3_p": "I",
+    "beta_iv": -0.1589,
+    "beta_iv_sd": 0.1979,
+    "beta_iv_lo": -0.4864,
+    "beta_iv_hi": 0.1588,
+    "primera_etapa": 3.0667,
+    "n_filas": 193041,
+    "n_personas": 4416
+   },
+   {
+    "pos3_p": "NA",
+    "beta_iv": 2.8969,
+    "beta_iv_sd": 30.7664,
+    "beta_iv_lo": -19.0862,
+    "beta_iv_hi": 19.9416,
+    "primera_etapa": -1.862,
+    "n_filas": 1239,
+    "n_personas": 616
+   },
+   {
+    "pos3_p": "todos",
+    "beta_iv": -0.0762,
+    "beta_iv_sd": 0.0933,
+    "beta_iv_lo": -0.2227,
+    "beta_iv_hi": 0.0771,
+    "primera_etapa": 3.8108,
+    "n_filas": 517487,
+    "n_personas": 12177
+   }
+  ]
  },
  "libro": {
   "transiciones_club": 1332,
@@ -95,29 +159,29 @@
   "efecto": [
    {
     "produccion": "ts_pct",
-    "pendiente_por_unidad_L": 3.781384443339713,
-    "ic_lo": 3.3754033204887164,
-    "ic_hi": 4.238194427979013,
-    "n_filas": 9444,
-    "n_personas": 2324,
+    "pendiente_por_unidad_L": 3.7994235141550936,
+    "ic_lo": 3.4074596479193193,
+    "ic_hi": 4.174912265651517,
+    "n_filas": 9542,
+    "n_personas": 2346,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "usg_pct",
-    "pendiente_por_unidad_L": -1.4886813857492485,
-    "ic_lo": -1.7625350467956997,
-    "ic_hi": -1.1979164506404885,
-    "n_filas": 9444,
-    "n_personas": 2324,
+    "pendiente_por_unidad_L": -1.5025723480916635,
+    "ic_lo": -1.7505553689845044,
+    "ic_hi": -1.202182389200626,
+    "n_filas": 9542,
+    "n_personas": 2346,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "pts_100",
-    "pendiente_por_unidad_L": 0.11584581580515513,
-    "ic_lo": -0.26489747318471457,
-    "ic_hi": 0.4496446751690332,
-    "n_filas": 9444,
-    "n_personas": 2324,
+    "pendiente_por_unidad_L": 0.11497955053258341,
+    "ic_lo": -0.27926228322636426,
+    "ic_hi": 0.46347213604224763,
+    "n_filas": 9542,
+    "n_personas": 2346,
     "nota": "asociación dentro de jugador, no causal"
    }
   ]

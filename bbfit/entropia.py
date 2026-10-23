@@ -77,6 +77,9 @@ def entropia_dirichlet(conteos: np.ndarray, prior: np.ndarray, alpha: float, mue
 
 def _sistema(liga: str, temp: str, ti: pd.DataFrame, cal: dict, minimo: float):
     from bbmodel import zonas as Z
+    campo = ti[ti["tipo"].isin(["T2", "T3"])]
+    if campo.empty or campo[["x", "y"]].notna().all(axis=1).mean() < 0.5:
+        return None, "sin_coordenadas"
     c = cal.get(f"{liga}|{temp}")
     if c:
         sis = Z.Sistema(liga, c["regla"], c["eje_largo"], tuple(c["aro"]), tuple(c["escala"]), c.get("pista_completa"))
@@ -154,7 +157,7 @@ def estilo_liga(acc: pd.DataFrame, cfg: dict, rng) -> pd.DataFrame:
     for c_ in caja:
         if filas[c_].notna().sum() == 0:
             filas[c_] = np.nan
-    Cb = filas[bas].to_numpy(float)
+    Cb = filas[bas].to_numpy(float, copy=True)
     publicada = ~filas[bas].isna().all().to_numpy()
     Cb[np.isnan(Cb) & publicada[None, :]] = 0.0          # jugador sin fila de caja en una categoría publicada: 0
     pri = np.nansum(Cb, axis=0)
@@ -165,7 +168,7 @@ def estilo_liga(acc: pd.DataFrame, cfg: dict, rng) -> pd.DataFrame:
     zon = e["categorias_tiro_zonas"]
     if (filas["nivel_categorias"] == "zonas").any() and all(z in filas for z in zon):
         cats = zon + caja
-        Cz = filas[cats].to_numpy(float)
+        Cz = filas[cats].to_numpy(float, copy=True)
         Cz[np.isnan(Cz) & (~filas[cats].isna().all().to_numpy())[None, :]] = 0.0
         malo = (filas["cobertura_zonas"].fillna(0) < 0.9).to_numpy()
         Cz[malo] = np.nan
@@ -182,7 +185,7 @@ def estilo_liga(acc: pd.DataFrame, cfg: dict, rng) -> pd.DataFrame:
     tot = np.nansum(Cb, axis=1)
     filas["acciones"] = tot
     filas["muestra_pequena"] = tot < float(e["min_acciones"])
-    falta = filas[caja].isna().to_numpy()
+    falta = np.isnan(Cb[:, len(e["categorias_tiro_basicas"]):])
     filas["categorias_faltantes"] = [";".join(np.array(caja)[m]) for m in falta]
     return filas
 
