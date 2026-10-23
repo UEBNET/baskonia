@@ -1,0 +1,68 @@
+# Normalización entre ligas con amortiguación del salto de nivel (bbmodel/amortiguacion.py).
+# Documentación: docs/normalizacion_amortiguada.md. Todo lo que no está aquí sale de los datos.
+
+referencia: euroleague          # nivel 0 en todas las temporadas (igual que el algoritmo A)
+
+identidad:
+  usar_crosswalk: true          # une además las personas del crosswalk explícito (data/processed/player_id_crosswalk.csv)
+  umbral_confianza: 0.75        # = umbral de fusión del crosswalk (0,75 por decisión del usuario, 23-10-2026); la cola de revisión no se usa
+
+puentes:
+  min_minutos: 150              # minutos mínimos en cada una de las dos competiciones (igual que el enlace del A)
+  consecutivas: true            # también los que cambian de liga de una temporada a la siguiente (con deriva por edad)
+  min_puentes_arista: 3         # aristas con menos puentes no entran en el grafo
+
+# 1) Encadenamiento jerárquico: grafo de competición-temporada; cada arista = desfase medido con sus puentes.
+#    El desfase total es la solución de mínimos cuadrados ponderados del grafo: en una cadena es la suma de los
+#    desfases y suma las varianzas; con caminos en paralelo combina por precisión inversa (resistencias).
+encadenamiento:
+  sobredispersion: true         # varianza de la arista = max(modelo, empírica/n)
+  varianza_minima_arista: 0.0004
+
+# 2) Contracción bayesiana parcial: nivel(competición, temporada) ~ N(μ_escalón, τ²), μ y τ por bayes empírico (EM).
+escalones:
+  elite: [euroleague, nba]
+  domestica_alta: [acb, lba, bbl, lnb, bsl, gbl]
+  copas_europeas: [eurocup, bcl, fec]
+  desarrollo: [gleague]
+  feb1: [feb1]
+  feb2: [feb2]
+  feb3: [feb3]
+contraccion:
+  tau2_inicial: 0.05
+  tau2_minimo: 0.0025           # τ ≥ 0,05 DT: evita contraer del todo una temporada hacia su escalón
+  hiperprevia_sd: 2.0           # μ_escalón ~ N(media global, 2²): sólo pesa si un escalón no tiene puentes
+  iteraciones_em: 200
+
+# 3) Mapeo de cuantiles monótono por métrica (forma; la pendiente global la pone λ(d)).
+mapeo:
+  nodos: 7                      # tramos de cuantiles de z en los puentes de la liga
+  puentes_previa: 30            # cada tramo se contrae hacia la recta con el peso de 30 puentes
+  min_puentes_liga: 40          # con menos puentes la liga usa la recta (sin forma)
+
+# 4) Compresión de colas / transferibilidad: θ_ref = μ_origen + λ(d)·(θ_traducido − μ_origen)
+#    d = distancia de nivel a la referencia (|media del desfase en las métricas de nivel|, DT EuroLeague).
+transferibilidad:
+  formas: [constante, exponencial, logistica]   # se elige por error dejando fuera una liga
+  lambda_minimo: 0.2
+  metricas_nivel: [per, game_score_p40, ws_per_40, ortg, drtg, pts_p100, ts_pct, efg_pct]
+
+# 5) Sesgo de selección de los puentes: ponderación por probabilidad inversa (logit de «ser puente»).
+seleccion:
+  ipw: true
+  recorte_pesos: [0.01, 0.99]   # percentiles de 1/p que se recortan
+  C: 1.0                        # regularización del logit
+
+# 6) Unidades: todo por 100 posesiones; partidos de 40 (FIBA) o 48 minutos (NBA, G League).
+unidades:
+  minutos_partido: {nba: 48, gleague: 48, defecto: 40}
+
+iteraciones_externas: 4         # alternancia desfases ↔ λ/forma
+validacion:
+  anios: [2023, 2024]           # examen temporal: ajusta con ≤ t y predice t+1 (mismo que bbmodel validar)
+  bootstrap: 10
+  intervalo: 0.80
+
+usar_amortiguado:               # capas que leen el valor amortiguado (<m>_am) en vez del A+B original
+  contexto: true                # índice de nivel L y contexto de compañeros/rivales
+  escalas: true                 # escalas ±100 (nivel y RAPM)

@@ -1480,7 +1480,7 @@
     }
   },
   "identidad": {
-    "umbral_fusion": 0.8,
+    "umbral_fusion": 0.75,
     "umbral_revision": 0.5,
     "_identidad": "bbmodel/crosswalk.py: parejas de jugadores con confianza >= umbral_fusion se unen en persona_id; las de [umbral_revision, umbral_fusion) van a data/processed/crosswalk_revision.csv y NO se aplican."
   }
