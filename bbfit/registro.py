@@ -9,6 +9,7 @@ Si MLflow no está instalado, el registro se degrada a un JSON en experimentos/r
 from __future__ import annotations
 
 import json
+import os
 import time
 from contextlib import contextmanager
 from pathlib import Path
@@ -38,6 +39,8 @@ class _Run:
 def experimento(nombre: str, run: str, params: dict | None = None, semilla: int | None = None):
     params = {**(params or {}), **({"semilla": semilla} if semilla is not None else {})}
     try:
+        # almacén de ficheros local (experimentos/mlruns): MLflow 3 lo exige explícitamente
+        os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
         import mlflow
         DIR_EXP.mkdir(exist_ok=True)
         mlflow.set_tracking_uri((DIR_EXP / "mlruns").as_uri())

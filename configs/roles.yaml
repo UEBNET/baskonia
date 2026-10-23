@@ -1,0 +1,54 @@
+# Fase 3 — sistema de roles por minutos (bbfit/roles.py, bbfit/cambios.py)
+# Todos los umbrales viven aquí; el código no fija ninguno.
+semilla: 20261023
+
+partido:
+  minutos_reglamentarios: {defecto: 40, nba: 48, gleague: 48}   # duración del partido sin prórroga
+  coef_tl: 0.44                      # peso del tiro libre en la posesión / uso de tiro
+  fases: [regular, playoffs]         # fases que entran en la serie partido a partido
+  ventana_cierre_s: 300              # «CLOSE»: últimos 5 min de cada periodo >= 4 ...
+  margen_cierre: 5                   # ... con |margen| <= 5 al empezar el tramo
+  cobertura_pbp_minima: 0.5          # liga-temporada con < 50 % de partidos en tramos → respaldo de caja
+
+roles:
+  orden: [RESIDUAL, PROFUNDIDAD, ROTACION, TITULAR, GO_TO_GUY]
+  # Etiquetas en minutos sobre un partido de 40'; internamente se usan como MIN% = minutos/40
+  # (en NBA / G League el mismo MIN% equivale a minutos/48 · 48).
+  referencia_minutos: 40
+  umbral_profundidad_min: 5          # < 5'  → RESIDUAL
+  umbral_rotacion_min: 15            # 5-15' → PROFUNDIDAD
+  umbral_titular_min: 22             # >= 22' → TITULAR (o ROTACIÓN en el solape)
+  umbral_titular_seguro_min: 25      # 22-25' = solape: TITULAR si GS% >= 50 % o CLOSE% >= 50 %
+  gs_pct_solape: 0.5
+  close_pct_solape: 0.5
+  n_partidos_minimo: 5               # muestra < N partidos → rol como vector de probabilidad, sin etiqueta dura
+  dirichlet_alpha: 2.0               # suavizado: p_k = (n_k + alpha·pi_k) / (n + alpha), pi = reparto de la liga
+
+gti:                                 # índice GO-TO-GUY: suma ponderada de z dentro de liga-temporada
+  pesos: {usg: 1.0, pie: 1.0, no_asistidas: 1.0, usg_clutch: 1.0}
+  min_pct_referencia: 0.25           # jugadores con MIN% >= 25 % forman la referencia de las z
+  partidos_referencia: 5
+  top_equipo: 2                      # top-2 del equipo en GTI ...
+  umbral_absoluto_medio: 1.0         # ... y GTI >= 1,0 × Σ pesos (z medio de los componentes >= 1 DT)
+  k_clutch_intentos: 15              # contracción del USG% clutch hacia el USG% global (intentos de equipo)
+  k_no_asistidas_fgm: 20             # contracción del % no asistido hacia la media de la liga (canastas)
+
+cambios:                             # changepoints bayesianos en línea (BOCPD), media desconocida
+  hazard_lambda: 20                  # H = 1/lambda: un cambio cada ~20 partidos a priori
+  prior_sd_media: 0.25               # sd a priori de la media de MIN% (escala 0-1) al abrir un tramo
+  prior_sd_media_usg: 0.10
+  ruido_sd_min_suelo: 0.06           # suelo del ruido partido a partido de MIN%
+  ruido_sd_usg_suelo: 0.05
+  usg_min_minutos: 8                 # el USG% de un partido sólo entra si jugó >= 8'
+  retardo: 4                         # partidos posteriores con los que se confirma un cambio
+  umbral_prob: 0.5                   # probabilidad mínima de cambio
+  tramo_minimo: 4                    # partidos mínimos por tramo
+  bloque_entrenador_minimo: 3        # un entrenador con < 3 partidos seguidos (interino) no abre tramo propio
+  ventana_covariables: 4             # partidos antes/después para las covariables del cambio
+  vacio_min_pct: 0.5                 # compañero de su pos3 con MIN% medio >= 50 % ...
+  vacio_ausencia: 0.5                # ... que no juega >= 50 % de los partidos siguientes
+  fichaje_partidos_previos: 4        # un compañero nuevo es fichaje si el equipo ya llevaba >= 4 partidos
+  fichaje_min_pct: 0.3
+
+salida:
+  max_mb_fichero: 40

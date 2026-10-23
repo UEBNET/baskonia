@@ -1,0 +1,75 @@
+# Taxonomía unificada de estilos jugador ↔ equipo (fase 6, bbfit/estilos_unificados.py).
+# Todo umbral o hiperparámetro del módulo vive aquí; el código no fija ninguno.
+
+semilla: 20261023
+
+datos:
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26", "2026-27"]
+  temporadas_ajuste: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]   # 2026-27 en curso: sólo se asigna
+  fase: regular
+  min_partidos_equipo_ajuste: 10      # equipo-temporada entra en el ajuste de la mezcla con ≥ 10 partidos
+  min_minutos_referencia: 150         # jugador entra en la distribución de referencia de su liga-temporada
+  min_minutos_asignar: 40             # jugador-etapa recibe estilo con ≥ 40 minutos (por debajo, no se asigna)
+  min_minutos_fiable: 300             # marca «fiable» en la salida
+  contraccion_minutos_jugador: 150    # tasa del jugador contraída hacia la media de su liga: m / (m + 150)
+  min_rasgos_observados: 8            # de los 12; con menos no se asigna
+
+# Rasgos del espacio común (mismo nombre y misma lectura en jugador y en equipo). Cada uno se convierte en
+# puntuación normal por rangos dentro de su liga-temporada y población (equipos | jugadores ponderados por
+# minutos): z = Φ⁻¹(percentil). Así el estilo no depende de la normalización de nivel entre ligas.
+rasgos:
+  - {id: ritmo,        nombre: "Ritmo",                   corto: "Ritmo",        dimension: "Ritmo"}
+  - {id: triple,       nombre: "Triples / tiros de campo (3PAr)", corto: "3PAr",  dimension: "Dependencia del triple"}
+  - {id: esquina,      nombre: "% de tiros desde la esquina (triple)", corto: "Esquina", dimension: "Dependencia del triple"}
+  - {id: aro,          nombre: "% de tiros en el aro (< 1,8 m)", corto: "Aro",    dimension: "Ataque al aro"}
+  - {id: tiros_libres, nombre: "Tiros libres / tiros de campo (FTr)", corto: "FTr", dimension: "Generación de tiros libres"}
+  - {id: autocreacion, nombre: "% de canastas propias sin asistencia", corto: "Sin asistencia", dimension: "Creación propia"}
+  - {id: asistencia,   nombre: "AST% (canastas de compañeros asistidas)", corto: "AST%", dimension: "Circulación"}
+  - {id: reb_ofensivo, nombre: "Rebotes ofensivos por 100 posesiones", corto: "Reb. of.", dimension: "Rebote ofensivo"}
+  - {id: perdidas,     nombre: "Pérdidas por posesión usada (TOV%)", corto: "TOV%",  dimension: "Cuidado del balón"}
+  - {id: robos,        nombre: "Robos por 100 posesiones", corto: "Robos",       dimension: "Intensidad defensiva"}
+  - {id: tapones,      nombre: "Tapones por 100 posesiones", corto: "Tapones",   dimension: "Intensidad defensiva"}
+  - {id: faltas,       nombre: "Faltas por 100 posesiones", corto: "Faltas",     dimension: "Intensidad defensiva"}
+
+normalizacion:
+  percentil_min: 0.01     # recorte del percentil antes de Φ⁻¹ (z en ±2,33)
+
+mezcla:
+  k_min: 1                      # K = 1-3 sólo como diagnóstico (qué estructura gruesa ve el BIC)
+  k_taxonomia: 5                # K mínimo de la taxonomía: con menos de 5 grupos no se pueden nombrar las 9
+                                # dimensiones del encargo (ritmo, triple, aro, creación, pase, rebote, TL, balón, defensa)
+  k_max: 12
+  covarianzas: ["full", "diag"]
+  n_init: 4
+  max_iter: 500
+  reg_covar: 1.0e-4
+  bootstrap: 50                 # remuestreos por (covarianza, K) para la estabilidad
+  # Regla de selección (bbfit.estilos_unificados.elegir):
+  #  1. familia de covarianza con menor BIC;
+  #  2. en K ≥ k_taxonomia: si el BIC tiene un mínimo interior estable y sin grupos diminutos → ese K;
+  #  3. si el BIC crece con K desde k_taxonomia (continuo: ningún grupo extra tiene apoyo) → el MAYOR K con
+  #     estabilidad (ARI medio bootstrap) ≥ estabilidad_min y grupo más pequeño ≥ cuota_min.
+  estabilidad_min: 0.60
+  cuota_min: 0.04
+
+asignacion:
+  umbral_puro: 0.80             # p(principal) ≥ 0,80 → «<Estilo> puro»
+  umbral_mezcla: 0.25           # p(secundario) ≥ 0,25 → «<Estilo> · <Secundario>»
+
+entrenadores:
+  contraccion_partidos_equipo: 8      # equipo: peso del tramo = n / (n + 8) partidos
+  contraccion_minutos_jugador: 200    # jugador: peso del tramo = m / (m + 200) minutos
+  min_cobertura_pbp: 0.5              # parte de los partidos del tramo con jugada a jugada
+
+ejemplos:
+  min_minutos_jugador: 500
+  n_equipos: 6
+  n_jugadores: 6
+  temporadas: ["2024-25", "2025-26"]
+
+# Nombres: se asignan a los grupos DESPUÉS de ajustar, emparejando el centroide de cada grupo con una firma
+# (signo esperado de cada rasgo) por el método húngaro sobre la correlación centroide-firma. Las firmas
+# y los nombres se escribieron tras inspeccionar los centroides (docs/checkpoints/F6.md). Si se reentrena
+# y un grupo casa mal con su firma (correlación < firma_min), queda como «Estilo <n>» y hay que revisar.
+firma_min: 0.30
+estilos: {}

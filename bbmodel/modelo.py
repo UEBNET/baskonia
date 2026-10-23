@@ -39,12 +39,27 @@ MIN_MINUTOS_ENLACE = 150
 Z80 = norm.ppf(0.9)  # intervalo central del 80 %
 
 
+def _config_identidad() -> dict:
+    """Bloque `identidad` de configs/normalization.yaml (valores por defecto si no existe)."""
+    try:
+        from bbfit.config import cargar
+        return cargar("normalization").get("identidad") or {}
+    except Exception:  # noqa: BLE001 — sin YAML: uniones del crosswalk ≥ 0,80
+        return {}
+
+
 def preparar(temporadas: list[str] | None = None) -> tuple[pd.DataFrame, dict]:
     t = datos.cargar("regular", temporadas)
     t, ambiguos = identidad.resolver(t)
+    # uniones automáticas del crosswalk explícito (FEB ↔ ACB con nombre completo, fechas de nacimiento…)
+    cfg_id = _config_identidad()
+    info_cw = {"crosswalk": None}
+    if cfg_id.get("usar_crosswalk", True):
+        t, info_cw = identidad.unir_crosswalk(t, umbral=float(cfg_id.get("umbral_confianza", 0.80)))
     t, info_pos = posicion.asignar(t)
     t = posicion.consolidar_por_persona(t)
     info = {"registros": len(t), "personas": int(t["persona_id"].nunique()), "identidades_ambiguas": len(ambiguos),
+            "crosswalk": info_cw,
             "posicion": info_pos, "puentes": identidad.puentes(t).to_dict("records")}
     return t, info
 

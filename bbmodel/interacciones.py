@@ -1,6 +1,6 @@
 """Interacciones entre jugadores: cómo cambia el juego de Y cuando X está en pista (y por qué: estilo y nivel).
 
-Base (capa de quintetos de bbstats, temporada regular, 8 ligas):
+Base (capa de quintetos de bbstats, temporada regular, todas las ligas con jugada a jugada):
   * tiros.csv.gz: cada tiro con su lanzador, si fue asistido y el quinteto de su equipo en pista.
   * tramos.csv.gz: segundos y estadística de equipo de cada quinteto (posesiones).
   * parejas.csv: Net de la pareja, WOWY, sinergia y sinergia frente al RAPM.

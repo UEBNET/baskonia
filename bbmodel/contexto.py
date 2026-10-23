@@ -130,7 +130,7 @@ def contexto_pista(liga: str, temporada: str, L: dict, L_banquillo: float) -> pd
 
 
 def construir(guardar: bool = True) -> pd.DataFrame:
-    """Contexto de cada jugador-equipo-temporada (temporada regular, 8 ligas)."""
+    """Contexto de cada jugador-equipo-temporada (temporada regular, todas las ligas)."""
     norm = _leer(DIR_NORM).copy()
     escala = escala_nivel(norm)
     norm["L"] = indice_nivel(norm, escala)

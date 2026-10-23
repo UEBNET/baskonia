@@ -1,0 +1,30 @@
+# Fase 4 — reemplazo de rol (bbfit/reemplazo.py)
+semilla: 20261023
+
+uso_eficiencia:
+  min_intentos_partido: 3            # partidos con >= 3 intentos de tiro (TSA) entran en la elasticidad
+  min_partidos_jugador: 15
+  min_temporadas_tov: 3              # TOV% frente a USG%: variación entre temporadas del mismo jugador
+  min_minutos_temporada_tov: 300
+  grupos: [pos3]                     # agrupación para el «partial pooling» (arquetipo/posición)
+  nivel_intervalo: 0.90
+  tau2_minimo: 1.0e-6
+
+libro:
+  minutos_minimos_retorno: 300       # jugador que vuelve: >= 300' en las dos temporadas (transiciones)
+  bootstrap: 2000
+  nivel_intervalo: 0.90
+  roles_clave: [TITULAR, GO_TO_GUY]  # volumen «de peso» para relacionar con el cambio de Net
+  club_clave: {feb1: equipo_codigo, feb2: equipo_codigo, feb3: equipo_codigo, defecto: team_id}
+
+asignacion:                          # asignar_minutos: Plackett-Luce sobre nivel × encaje posicional
+  simulaciones: 2000
+  temperatura: 1.0
+  max_min_partido: 36                # tope por jugador (escala 40'; ×48/40 en NBA)
+  rotacion_defecto: 9
+  min_por_pos3: {E: 1, A: 0, I: 1}   # al menos un exterior y un interior entre los 5 primeros
+  encaje_peso: 0.5
+  tendencias:
+    min_rotacion_min: 10             # jugador «de rotación» en un partido: >= 10'
+    k_contraccion_partidos: 30       # contracción de la tendencia del entrenador hacia la de su liga
+    rangos: 12

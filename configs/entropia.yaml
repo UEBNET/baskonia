@@ -1,0 +1,23 @@
+# Fase 5 — entropía (bbfit/entropia.py)
+semilla: 20261023
+
+estilo:
+  categorias_tiro_zonas: [aro, corta, media, t3_esquina, t3_frontal]
+  categorias_tiro_basicas: [T2, T3]
+  categorias_caja: [visitas_tl, ast, tov, pfd, oreb]
+  acierto_minimo_zonas: 0.95         # calibración de coordenadas aceptable
+  alpha_prior: 5.0                   # Dirichlet(conteos + alpha·reparto de la liga)
+  muestras: 400
+  min_acciones: 20
+  nivel_intervalo: 0.90
+
+volatilidad:
+  peso_ast: 1.0                      # producción = 100·(PTS + peso_ast·AST)/posesiones en pista
+  posesiones_referencia: 30          # varianza expresada para un partido de 30 posesiones
+  min_posesiones_partido: 5
+  min_partidos: 10
+  grupos: [liga, pos3]               # contracción jerárquica de log σ² por liga × posición
+  nivel_intervalo: 0.90
+
+equipo:
+  min_minutos_jugador: 0

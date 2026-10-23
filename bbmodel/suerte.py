@@ -39,6 +39,34 @@ def _media_ponderada(y, w, grupos):
     return (num / den).reindex(g).to_numpy()
 
 
+# σ² de una liga por debajo de esta fracción de la mediana de las demás = no identificado (ver abajo)
+FRACCION_SIGMA2_MIN = 0.1
+
+
+def _sigma2_no_identificado(sigma2: dict) -> list[str]:
+    """Sustituye por la mediana de las demás ligas el σ² que la recta r² = τ² + σ²/n no identifica.
+
+    Auditoría 21-10-2026 (§6, hallazgo 7): σ² de pts/100 en la BCL = 1,8·10⁻⁴ (resto de ligas 21-175); también NBA
+    pts/100 (1,3·10⁻³) y FEC faltas/100 (5·10⁻⁵). No es ruido real: la varianza observada de pts/100 sí baja con la
+    exposición en la BCL (7,7 con < 31 posesiones → 0,44 con > 424), pero la recta se ajusta sólo con exposición
+    ≥ 200 posesiones; en la BCL (temporadas cortas: máximo ≈ 740 posesiones) ese tramo de 1/n es estrecho y, como los
+    jugadores de más minutos son también más heterogéneos (τ² crece con n), la pendiente sale ≤ 0 y cae al suelo
+    numérico 10⁻⁶. Con σ² ≈ 0 el paso 1 no encoge a nadie (fiabilidad 1 con 30 posesiones) y los puentes de muestra
+    mínima pesan como si fueran exactos. Corrección: si el σ² de una liga es < 10 % de la mediana de las demás, se usa
+    esa mediana (el ruido de un conteo por posesión no cambia en un orden de magnitud entre ligas) y se anota la liga
+    en `sigma2_imputado`."""
+    if len(sigma2) < 3:
+        return []
+    imputado = []
+    for g in list(sigma2):
+        otros = [v for k, v in sigma2.items() if k != g]
+        med = float(np.median(otros))
+        if sigma2[g] < FRACCION_SIGMA2_MIN * med:
+            sigma2[g] = med
+            imputado.append(g)
+    return sorted(imputado)
+
+
 def valor_y_exposicion(t: pd.DataFrame, col: str) -> tuple[np.ndarray, np.ndarray]:
     """Métrica en escala transformada (recortada) y su exposición, fila a fila.
     Muestras minúsculas dan valores imposibles (TS% de 795 con medio intento): se recortan a los
@@ -88,6 +116,7 @@ def ajustar_metrica(t: pd.DataFrame, col: str, iter_: int = 4) -> tuple[pd.DataF
             sigma2[gs] = float(max(beta[-1], 1e-6 * vt * dl["n"].median()))
             for p, b in zip(pos, beta[:-1]):
                 tau2[p] = float(max(b, 0.02 * vt))   # suelo: τ² no puede ser 0 (habría un solo tipo de jugador)
+        imputado = _sigma2_no_identificado(sigma2) if not por_tiro else []
 
     s2 = d["gs"].map(sigma2).to_numpy(); t2 = d["lp"].map(tau2).to_numpy()
     tau = np.sqrt(t2)
@@ -98,7 +127,7 @@ def ajustar_metrica(t: pd.DataFrame, col: str, iter_: int = 4) -> tuple[pd.DataF
     out.loc[ok, "z_obs"] = z_obs; out.loc[ok, "v_obs"] = v_obs
     out.loc[ok, "z_post"] = z_obs / (1 + v_obs); out.loc[ok, "v_post"] = v_obs / (1 + v_obs)
     grupos = d.groupby("g").agg(mu=("mu", "first"), n_jug=("y", "size")).reset_index()
-    params = {"metrica": col, "sigma2": sigma2, "tau2": tau2,
+    params = {"metrica": col, "sigma2": sigma2, "tau2": tau2, "sigma2_imputado": imputado,
               "mu": {g: float(v) for g, v in zip(grupos["g"], grupos["mu"])},
               "fiabilidad_media": {liga: float(np.median(1 / (1 + v_obs[(d["liga"] == liga).to_numpy() & ajuste.to_numpy()])))
                                    for liga in sorted(d["liga"].unique())}}

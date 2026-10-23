@@ -25,7 +25,7 @@ SEQ = LinearSegmentedColormap.from_list("kraft", ["#ffffff", "#efe0cd", "#c9ad8c
 INK, MUTED, LINE, KRAFT = "#3a2a1c", "#7a6450", "#e3d0b8", "#f9f3eb"
 LIGAS = {"euroleague": "EuroLeague", "eurocup": "EuroCup", "acb": "Liga Endesa", "nba": "NBA", "gleague": "G League",
          "lba": "LBA", "bbl": "BBL", "lnb": "LNB", "bcl": "BCL", "fec": "FIBA Europe Cup",
-                "bsl": "BSL", "gbl": "GBL"}
+                "bsl": "BSL", "gbl": "GBL", "feb1": "Primera FEB", "feb2": "Segunda FEB", "feb3": "Tercera FEB"}
 
 
 def estilo_mpl(fuentes: Path | None = None) -> None:

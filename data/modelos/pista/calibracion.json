@@ -377,6 +377,20 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "feb1|2022-23": {
+  "acierto": NaN,
+  "aro": [
+   11.7,
+   49.7
+  ],
+  "escala": [
+   0.38,
+   0.174
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
  "fec|2022-23": {
   "acierto": 0.996,
   "aro": [
@@ -531,6 +545,48 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "feb1|2023-24": {
+  "acierto": 0.9914,
+  "aro": [
+   21.311317917295455,
+   54.97327048581461
+  ],
+  "escala": [
+   3.5272223609456126,
+   0.17815186603395744
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb2|2023-24": {
+  "acierto": NaN,
+  "aro": [
+   11.7,
+   49.7
+  ],
+  "escala": [
+   0.38,
+   0.174
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb3|2023-24": {
+  "acierto": NaN,
+  "aro": [
+   11.7,
+   49.7
+  ],
+  "escala": [
+   0.38,
+   0.174
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
  "fec|2023-24": {
   "acierto": 0.9977,
   "aro": [
@@ -684,6 +740,48 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "feb1|2024-25": {
+  "acierto": 0.9913,
+  "aro": [
+   11.708072922123092,
+   49.593505594572314
+  ],
+  "escala": [
+   0.3794217422118767,
+   0.17440050680603447
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb2|2024-25": {
+  "acierto": 0.9896,
+  "aro": [
+   11.94216586321923,
+   49.71938722864085
+  ],
+  "escala": [
+   0.38455165639388045,
+   0.17281894041013696
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb3|2024-25": {
+  "acierto": 0.9903,
+  "aro": [
+   11.959540579318299,
+   49.68261340165574
+  ],
+  "escala": [
+   0.38636999720973575,
+   0.17304759173491843
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "fec|2024-25": {
   "acierto": 0.9977,
@@ -853,6 +951,48 @@
   "regla": "fiba",
   "pista_completa": null
  },
+ "feb1|2025-26": {
+  "acierto": 0.9927,
+  "aro": [
+   12.289811515591548,
+   49.727767538193135
+  ],
+  "escala": [
+   0.3969132415162334,
+   0.17355532281211708
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb2|2025-26": {
+  "acierto": 0.9931,
+  "aro": [
+   11.627183408645024,
+   49.781670743068716
+  ],
+  "escala": [
+   0.37901199658759377,
+   0.17406846843705917
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb3|2025-26": {
+  "acierto": 0.9913,
+  "aro": [
+   11.970167966048525,
+   49.7374493599337
+  ],
+  "escala": [
+   0.39163837769882304,
+   0.17384902908328242
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
  "fec|2025-26": {
   "acierto": 0.9977,
   "aro": [
@@ -1020,6 +1160,48 @@
   "eje_largo": "y",
   "regla": "fiba",
   "pista_completa": null
+ },
+ "feb1|2026-27": {
+  "acierto": 0.9927,
+  "aro": [
+   11.602016685066628,
+   48.90370395148804
+  ],
+  "escala": [
+   0.38419153209781065,
+   0.17450165543206853
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb2|2026-27": {
+  "acierto": 0.9934,
+  "aro": [
+   13.567464323055304,
+   50.54831266251114
+  ],
+  "escala": [
+   0.43197012830490505,
+   0.17674096396817113
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
+ },
+ "feb3|2026-27": {
+  "acierto": 0.9911,
+  "aro": [
+   11.210518838946868,
+   49.58412132635253
+  ],
+  "escala": [
+   0.3755759191255379,
+   0.17321892166638214
+  ],
+  "eje_largo": "x",
+  "regla": "fiba",
+  "pista_completa": 100.0
  },
  "fec|2026-27": {
   "acierto": 0.9984,

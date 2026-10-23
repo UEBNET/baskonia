@@ -155,3 +155,65 @@ def crosswalk(**kw):
     """Tabla de correspondencia con confianza y cola de revisión (ver bbmodel/crosswalk.py)."""
     from .crosswalk import ejecutar
     return ejecutar(**kw)
+
+
+def unir_crosswalk(t: pd.DataFrame, ruta=None, umbral: float = 0.80) -> tuple[pd.DataFrame, dict]:
+    """Une además las personas que el crosswalk explícito (bbmodel/crosswalk.py) enlaza AUTOMÁTICAMENTE.
+
+    `resolver` une por nombre exacto (conjunto de palabras): no reconoce «ALEIX FONT RODRIGUEZ» (Primera FEB, nombre
+    y dos apellidos) y «Aleix Font» (ACB). El crosswalk sí (nombre contenido + fecha de nacimiento + unicidad +
+    trayectoria), con confianza 0-1. Aquí sólo se usan sus uniones automáticas (confianza ≥ `umbral`, por defecto el
+    umbral de fusión 0,80; la cola de revisión NUNCA se aplica). Cada grupo del crosswalk funde los `persona_id` de
+    `resolver` de sus nodos, salvo que la fusión deje a una persona dos veces en la misma liga y temporada (se
+    descarta esa unión). El año de nacimiento del crosswalk (fecha completa de la FEB) rellena el de la persona.
+    `t` es la salida de `resolver` (liga, player_id con «n:<nombre>» en la BBL, temporada, persona_id, anio_nac)."""
+    from pathlib import Path
+    ruta = Path(ruta) if ruta else Path(__file__).resolve().parent.parent / "data" / "processed" / "player_id_crosswalk.csv"
+    info = {"crosswalk": str(ruta.name), "umbral": umbral, "uniones": 0, "descartadas_conflicto": 0}
+    if not ruta.exists():
+        info["crosswalk"] = None
+        return t, info
+    cw = pd.read_csv(ruta, dtype={"fuente_id": str})
+    cw = cw[cw["confianza"] >= umbral]
+    # nodo del modelo: (liga, player_id); en la BBL el id es «n:<nombre normalizado>»
+    pid = cw["fuente_id"].astype(str)
+    bbl = cw["fuente_liga"] == "bbl"
+    k = cw.loc[bbl, "nombre"].map(clave_nombre)
+    pid[bbl] = ("n:" + k.fillna("")).where(k.notna(), pid[bbl])
+    cw = cw.assign(nodo=cw["fuente_liga"] + ":" + pid)
+    t = t.copy()
+    t["_nodo"] = t["liga"] + ":" + t["player_id"].astype(str)
+    nodo_persona = t.drop_duplicates("_nodo").set_index("_nodo")["persona_id"]
+    cw = cw[cw["nodo"].isin(nodo_persona.index)]
+    cw = cw.assign(pid_res=cw["nodo"].map(nodo_persona))
+    # unión-búsqueda sobre los persona_id de resolver, con control de choque (misma liga y temporada)
+    padre = {p: p for p in t["persona_id"].unique()}
+    huella = {p: set(map(tuple, g[["liga", "temporada"]].to_numpy())) for p, g in t.groupby("persona_id")}
+
+    def raiz(x):
+        while padre[x] != x:
+            padre[x] = padre[padre[x]]
+            x = padre[x]
+        return x
+
+    for _, g in cw.groupby("persona_id"):
+        ids = list(dict.fromkeys(g["pid_res"].astype(int)))
+        for b in ids[1:]:
+            ra, rb = raiz(ids[0]), raiz(b)
+            if ra == rb:
+                continue
+            if huella[ra] & huella[rb]:
+                info["descartadas_conflicto"] += 1
+                continue
+            lo, hi = min(ra, rb), max(ra, rb)
+            padre[hi] = lo
+            huella[lo] |= huella.pop(hi)
+            info["uniones"] += 1
+    t["persona_id"] = t["persona_id"].map(lambda p: raiz(p)).astype(int)
+    # año de nacimiento: el de la persona (mediana) y, si falta, el del crosswalk
+    an_cw = cw.dropna(subset=["anio_nacimiento"]).set_index("nodo")["anio_nacimiento"]
+    t["_an_cw"] = t["_nodo"].map(an_cw[~an_cw.index.duplicated()])
+    t["anio_nac"] = t["anio_nac"].fillna(t["_an_cw"])
+    t["anio_nac"] = t.groupby("persona_id")["anio_nac"].transform("median")
+    info["personas"] = int(t["persona_id"].nunique())
+    return t.drop(columns=["_nodo", "_an_cw"]), info

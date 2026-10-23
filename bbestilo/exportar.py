@@ -219,6 +219,7 @@ def main(salida: str) -> None:
         SQ.append(_lista((np.where(okq, Q, 0) * w[:, None]).sum(0), 3))
         WQ.append(_lista((okq * w[:, None]).sum(0), 2))
     c["S"], c["W"], c["SQ"], c["WQ"] = S, W, SQ, WQ
+    c_team = c["team_id"].astype(str).to_numpy()   # para la taxonomía unificada (bbfit), antes de quitarlo
     c = c.drop(columns=["team_id"])
     m = (cj.jugadores["min"] >= C.MIN_JUGADOR).to_numpy()
     J = cj.jugadores.loc[m, ["nombre", "clave", "nombre_club", "liga", "temporada", "pos3", "min", "nivel", "fuente_norm",
@@ -249,6 +250,9 @@ def main(salida: str) -> None:
     brutos = {"columnas": ["Rb", "Qb"], "nota": "Valores observados en su propia liga, alineados por índice con jugadores.json",
               "filas": [[r, q] for r, q in zip(obs_r, obs_q)]}
     J["persona_id"] = J["persona_id"].where(J["persona_id"].notna(), J["liga"] + ":" + J["player_id"].astype(str))
+    team_de_clave = dict(zip(cj.clubes["clave"], cj.clubes["team_id"].astype(str)))
+    J_ids = pd.DataFrame({"liga": J["liga"].to_numpy(), "temporada": J["temporada"].to_numpy(),
+                          "team_id": J["clave"].map(team_de_clave).to_numpy(), "player_id": J["player_id"].astype(str).to_numpy()})
     J = J.drop(columns=["player_id"])
 
     # ---- modelo final
@@ -286,6 +290,25 @@ def main(salida: str) -> None:
     except Exception as e:  # noqa: BLE001
         print(f"escalas: no se pudieron calcular ({e})")
     dec.update({"L": 3, "ctx_plantilla_dev": 3, "ctx_comp": 3, "rapm_el": 2, "orapm_el": 2, "drapm_el": 2, "rapm_pct": 1})
+    # ---- taxonomía unificada jugador ↔ equipo (bbfit/estilos_unificados.py): campos NUEVOS; los VaDE (e, p,
+    # probs) se mantienen. eu/eu2 = índice en meta["estilos_unificados"]["estilos"]; eu_p, eu_probs, eu_etiqueta.
+    try:
+        from bbfit.estilos_unificados import campos_atlas
+        tmp_c = pd.DataFrame({"liga": c["liga"].to_numpy(), "temporada": c["temporada"].to_numpy(), "team_id": c_team})
+        if "entrenadores" in c:
+            tmp_c["entrenadores"] = c["entrenadores"].to_numpy()
+        eu = campos_atlas(tmp_c, J_ids)
+    except Exception as e:  # noqa: BLE001
+        print(f"estilos unificados: no se añaden ({e})")
+        eu = None
+    if eu is not None:
+        c2, j2, meta["estilos_unificados"] = eu
+        for col in ("eu", "eu2", "eu_p", "eu_probs", "eu_etiqueta"):
+            c[col] = c2[col].to_numpy()
+            J[col] = j2[col].to_numpy()
+        if "entrenadores" in c:
+            c["entrenadores"] = c2["entrenadores"].to_numpy()
+        dec["eu_p"] = 3
     for nombre, obj in (("meta.json", meta), ("clubes.json", _columnar(c, dec)), ("jugadores.json", _columnar(J, dec)),
                         ("brutos.json", brutos)):
         (d / nombre).write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=float), encoding="utf-8")

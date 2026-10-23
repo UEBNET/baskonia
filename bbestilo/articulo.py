@@ -127,7 +127,9 @@ UNIDADES_PISTA = {"euroleague": "cm desde el aro", "eurocup": "cm desde el aro",
                   "lba": "% de la pista completa (28 × 15 m)", "lnb": "% de la pista completa (28 × 15 m)",
                   "bbl": "unidades propias, media pista",
                   "bcl": "unidades de fiba.basketball, media pista", "fec": "unidades de fiba.basketball, media pista",
-                  "bsl": "% de la pista completa (28 × 15 m)", "gbl": "% de la pista completa (28 × 15 m)"}
+                  "bsl": "% de la pista completa (28 × 15 m)", "gbl": "% de la pista completa (28 × 15 m)",
+                  "feb1": "% de la pista completa (28 × 15 m)", "feb2": "% de la pista completa (28 × 15 m)",
+                  "feb3": "% de la pista completa (28 × 15 m)"}
 
 
 def _leer_json(p: Path):
