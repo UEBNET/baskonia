@@ -1,5 +1,27 @@
 # Registro de cambios
 
+## 2026-10-23 — Fase 7: adaptación al cambio de liga (`bbfit adaptacion`)
+
+Añadido
+- `bbfit/adaptacion.py` y `python -m bbfit adaptacion [--rehacer] [--sin-validacion]` (reanudable, caché en
+  `experimentos/cache_adaptacion/`); hiperparámetros en `configs/adaptacion.yaml`; registro en MLflow.
+- Interfaz para el simulador: `prior(liga_origen, liga_destino, grupo_nacionalidad, pos3, metrica)` con jerarquía de
+  reserva celda → par → escalón de destino → global, `grupo_nacionalidad(...)` y `curva(g, delta, kappa)`.
+- Identificación de 5.040 traspasos (entre temporadas, adiciones y dentro de la temporada) con el `persona_id` del
+  crosswalk 0,75; ŷ = origen traducido a la escala de destino invirtiendo la normalización amortiguada; modelo
+  jerárquico gaussiano (Gibbs) del log-cociente y/ŷ con efectos de pareja y escalón y covariables (nacionalidad,
+  pos3, arquetipo, edad, roles, salto de nivel, estilo de equipo, entrenador); curva por partido con grupo de control;
+  IPCW de la censura; ADAPT% por traspaso con examen temporal, dejando fuera una liga y calibración.
+- Salidas en `data/modelos/adaptacion/` (`adaptation_priors.csv`, `adapt_historico.csv.gz`, `adapt_pct_roles.csv`,
+  coeficientes, hipótesis EE. UU., curvas, censura, supervivencia, segunda temporada, validación, calibración).
+- Tests sintéticos `tests/test_adaptacion.py` (10).
+
+Resultados principales: estadounidense en su primer año europeo −6,8 % [−9,7, −3,8] de ADAPT% compuesto frente al
+europeo que cambia de liga (sin adaptación más lenta detectable); sin hueco de arranque propio del que cambia de liga
+(todos arrancan ~2 % abajo); el IPCW baja el Δ medio 1-2 puntos.
+
+Detalle, resultados y riesgos: `docs/checkpoints/F7.md`.
+
 ## 2026-10-23 — Fase 2: normalización con amortiguación del salto de nivel (15 ligas)
 
 Añadido

@@ -18,8 +18,17 @@ Convenio (docs/checkpoints/F7.md):
   * nivel_fallback: celda (par + grupo + pos3) → par_grupo → par → escalon_grupo → escalon (escalón de la liga de
     destino) → global_grupo → global; «sin_datos» si aún no existe la tabla (valores por defecto del YAML).
 
-Esta primera versión es compatible con la interfaz (stub): si data/modelos/adaptacion/adaptation_priors.csv no
-existe, prior() devuelve los valores por defecto de configs/adaptacion.yaml.
+Si data/modelos/adaptacion/adaptation_priors.csv no existe, prior() devuelve los valores por defecto del YAML
+(nivel_fallback = «sin_datos»).
+
+Resto del módulo (python -m bbfit adaptacion; detalle y resultados en docs/checkpoints/F7.md):
+  1. traspasos entre competiciones (identificar_traspasos) con el persona_id del dataset normalizado;
+  2. ŷ = origen traducido a la escala de destino con la normalización amortiguada (esperado_en_destino) y modelo
+     jerárquico bayesiano del log-cociente y/ŷ (gibbs_jerarquico, ModeloDelta) con covariables;
+  3. curva por partido dentro de jugador con grupo de control (estadisticos_curva, ajustar_kappa, ajustar_curvas);
+  4. censura por IPCW (pesos_ipcw) y adaptación de la 2.ª temporada (segunda_temporada);
+  5. tabla de priors con proyección a la forma de la interfaz (tabla_priors, proyectar_interfaz);
+  6. ADAPT% por traspaso, examen temporal / dejando fuera una liga y calibración (escribir_salidas).
 """
 from __future__ import annotations
 
@@ -1384,6 +1393,7 @@ def resumir_validacion(r: pd.DataFrame, clave: list[str]) -> pd.DataFrame:
                "cobertura_80": float(np.mean((g["observado"] >= g["pi_lo"]) & (g["observado"] <= g["pi_hi"]))),
                "corr_prev_obs": float(np.corrcoef(p, o)[0, 1]) if len(g) > 2 else np.nan}
         out["mejora_mae_pct"] = 100 * (out["mae_adapt"] / out["mae_sin_adaptacion"] - 1)
+        out.update({"n_estricto": 0, "mae_estricto_sin": np.nan, "mae_estricto_adapt": np.nan, "mejora_estricto_pct": np.nan})
         if "logr_estricto" in g and g["logr_estricto"].notna().sum() >= 10:
             h = g[g["logr_estricto"].notna()]
             ph = np.log(h["previsto"] / 100)
