@@ -73,15 +73,18 @@ validacion:
   simulaciones: 400                  # iteraciones por fichaje en el examen
   calibracion_casos: 600             # fichajes del corte anterior para calibrar la temperatura y la rotación
   calibracion_sim: 200
-  rejilla_escala: [1.0, 1.5, 2.0, 3.0, 4.0]      # escala de la utilidad (inversa de la temperatura de Plackett-Luce)
-  rejilla_rotacion_sd: [0.3, 1.0]                # factor de la sd del tamaño de rotación del entrenador
+  rejilla_escala: [0.6, 0.8, 1.0, 1.3]           # escala de la utilidad (inversa de la temperatura de Plackett-Luce)
+  rejilla_rotacion_extra: [0, 2, 4]              # jugadores extra en la rotación sobre la mediana medida (≥ 12,5 % MIN%)
+  rotacion_sd_factor: 0.3                        # la sd del entrenador es partido a partido; la de temporada es menor
 
 historico:
   simulaciones: 400
   temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
 
 exportar:
-  temporada_base: "2025-26"          # insumos de jugador (última temporada completa)
-  temporadas_jugador: ["2024-25", "2025-26", "2026-27"]
+  temporada_base: "2025-26"          # insumos por defecto (última temporada completa) → destino 2026-27
+  temporadas_base: ["2024-25", "2025-26"]          # destinos 2025-26 y 2026-27 (plantillas de esas temporadas)
+  temporadas_candidatas_extra: ["2026-27"]         # registros de la temporada en curso como candidatos (provisionales)
   minimo_minutos_jugador: 100
+  simulaciones_navegador: 600
   max_mb: 40

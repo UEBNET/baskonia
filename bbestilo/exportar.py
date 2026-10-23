@@ -160,15 +160,19 @@ def ejes(Z: np.ndarray, X: np.ndarray) -> list[dict]:
 def main(salida: str) -> None:
     d = Path(salida)
     d.mkdir(parents=True, exist_ok=True)
-    cj = conjunto()
     red = red_guardada(RED)
     rd = C.DIR_SALIDA / RED
+    rob = pd.read_csv(rd / "clubes.csv")
+    # el modelo VaDE guardado se entrenó con estas competiciones: el mapa se exporta sólo con ellas (con sus escalas);
+    # las competiciones añadidas después (FEB) no tienen estilo VaDE hasta que se reentrene la red
+    cj = conjunto(tuple(sorted(rob["liga"].unique())))
     ev = json.loads((C.DIR_SALIDA / "evaluacion.json").read_text(encoding="utf-8"))
     an = C.DIR_SALIDA / "analisis.json"
     est = pd.read_csv(rd / "estilos.csv")
     pesos = json.loads((rd / "pesos.json").read_text(encoding="utf-8"))
-    rob = pd.read_csv(rd / "clubes.csv")
-    assert (rob["clave"].to_numpy() == cj.clubes["clave"].to_numpy()).all(), "clubes.csv no corresponde a los datos"
+    if not (len(rob) == len(cj.clubes) and (rob["clave"].to_numpy() == cj.clubes["clave"].to_numpy()).all()):
+        print(f"aviso: clubes.csv ({len(rob)}) no coincide con los datos actuales ({len(cj.clubes)}); robustez por clave")
+    rob = cj.clubes[["clave"]].merge(rob[["clave", "robustez"]], on="clave", how="left")
     P, Z = predecir(red, cj.Xc)
     sel = cj.clubes["temporada"].isin(C.TEMPORADAS_ENTRENO).to_numpy()
     nombres = nombres_estilos()
@@ -220,7 +224,7 @@ def main(salida: str) -> None:
         WQ.append(_lista((okq * w[:, None]).sum(0), 2))
     c["S"], c["W"], c["SQ"], c["WQ"] = S, W, SQ, WQ
     c_team = c["team_id"].astype(str).to_numpy()   # para la taxonomía unificada (bbfit), antes de quitarlo
-    c = c.drop(columns=["team_id"])
+    c = c.rename(columns={"team_id": "tid"})      # id del equipo en la fuente (simulador v2)
     m = (cj.jugadores["min"] >= C.MIN_JUGADOR).to_numpy()
     J = cj.jugadores.loc[m, ["nombre", "clave", "nombre_club", "liga", "temporada", "pos3", "min", "nivel", "fuente_norm",
                              "provisional", "persona_id", "player_id"]].copy()
@@ -253,7 +257,7 @@ def main(salida: str) -> None:
     team_de_clave = dict(zip(cj.clubes["clave"], cj.clubes["team_id"].astype(str)))
     J_ids = pd.DataFrame({"liga": J["liga"].to_numpy(), "temporada": J["temporada"].to_numpy(),
                           "team_id": J["clave"].map(team_de_clave).to_numpy(), "player_id": J["player_id"].astype(str).to_numpy()})
-    J = J.drop(columns=["player_id"])
+    J = J.rename(columns={"player_id": "pid"})    # id del jugador en la fuente (BBL: «n:<nombre>»; simulador v2)
 
     # ---- modelo final
     dec = {"nivel": 3, "net_z": 3, "min": 0, "min_total": 0, "cobertura_ab": 3, "edad": 1,

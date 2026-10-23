@@ -340,10 +340,13 @@ def _nombres_club(f: pd.DataFrame) -> pd.Series:
     return g
 
 
-def construir(temporadas: list[str] | None = None) -> Conjunto:
+def construir(temporadas: list[str] | None = None, ligas: list[str] | None = None) -> Conjunto:
+    """`ligas`: sólo esas competiciones (p. ej. las del modelo VaDE guardado, para exportarlo con sus escalas)."""
     temporadas = temporadas or (C.TEMPORADAS_ENTRENO + C.TEMPORADAS_PROVISIONALES)
     norm = cargar_normalizadas(temporadas)
     f = cargar_filas_equipo(temporadas)
+    if ligas:
+        f = f[f["liga"].isin(ligas)].reset_index(drop=True)
     f["ritmo_rel"] = ritmo_relativo(f)
     f["club_id"] = enlazar_clubes(f)
     f["clave_club"] = f["liga"] + ":" + f["club_id"]

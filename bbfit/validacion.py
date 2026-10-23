@@ -34,7 +34,7 @@ from scipy import optimize, stats
 from . import sim_insumos as SI
 from . import simulador as S
 from .config import cargar
-from .roles import ROLES
+from .roles import ROLES, clasificar
 
 DIR_VAL = S.DIR_SIM / "validacion"
 EPS = 1e-3
@@ -515,15 +515,17 @@ def calibrar(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: dict, p
     r1 = roles[roles["temporada"] == t]
     filas = []
     for k_u in cfg["validacion"]["rejilla_escala"]:
-        for f_sd in cfg["validacion"]["rejilla_rotacion_sd"]:
-            c.calib = {**base, "escala_utilidad": k_u, "rotacion_sd_factor": f_sd}
+        for ex in cfg["validacion"]["rejilla_rotacion_extra"]:
+            f_sd = float(cfg["validacion"]["rotacion_sd_factor"])
+            c.calib = {**base, "escala_utilidad": k_u, "rotacion_sd_factor": f_sd,
+                       "rotacion_extra": float(base.get("rotacion_extra", 1.0)) + ex}
             v = simular_fichajes(c, casos, r1, eq1, cfg, "inicio", n_sim=int(cfg["validacion"]["calibracion_sim"]),
-                                 progreso=None)
+                                 progreso=None, sin_adaptacion=True)
             m = casos.reset_index(drop=True).join(v[["min_pred", "min_lo50", "min_hi50"] + [f"p_{r}" for r in ROLES]])
             ok = m["rol_real"].isin(ROLES)
             P = m.loc[ok, [f"p_{r}" for r in ROLES]].to_numpy(float)
             y = m.loc[ok, "rol_real"].map({r: i for i, r in enumerate(ROLES)}).to_numpy(int)
-            filas.append({"escala_utilidad": k_u, "rotacion_sd_factor": f_sd,
+            filas.append({"escala_utilidad": k_u, "rotacion_sd_factor": f_sd, "extra_adicional": ex,
                           "mae_min": float((m["min_pred"] - m["min_real"]).abs().mean()),
                           "cob50_min": float(((m["min_real"] >= m["min_lo50"]) & (m["min_real"] <= m["min_hi50"])).mean()),
                           "logloss": float(_logloss(P, y).mean())})
@@ -531,10 +533,11 @@ def calibrar(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: dict, p
     g["obj"] = g["mae_min"] / g["mae_min"].min() + g["logloss"] / g["logloss"].min()
     best = g.sort_values("obj").iloc[0]
     res = {**base, "escala_utilidad": float(best["escala_utilidad"]), "rotacion_sd_factor": float(best["rotacion_sd_factor"]),
+           "rotacion_extra": float(base.get("rotacion_extra", 1.0)) + float(best["extra_adicional"]),
            "rejilla": g.round(4).to_dict("records"), "corte_calibracion": tp}
     dest.write_text(json.dumps(res, indent=1))
     if progreso:
-        progreso(f"  calibración {t} (fichajes {tp}): escala {best['escala_utilidad']}, sd rotación ×{best['rotacion_sd_factor']}"
+        progreso(f"  calibración {t} (fichajes {tp}): escala {best['escala_utilidad']}, rotación +{best['extra_adicional']}"
                  f" · MAE {best['mae_min']:.2f} · log-loss {best['logloss']:.3f}")
     return res
 
@@ -611,6 +614,15 @@ def errores(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         ll[okp] = _logloss(P[okp], y[okp].astype(int).to_numpy())
         out[f"{pre}_logloss"] = ll
         pred = np.array(ROLES, object)[np.nan_to_num(P, nan=-1).argmax(1)]
+        if pre == "v":
+            # rol puntual de v2 = regla de roles aplicada a la mediana de minutos y a P(titular); GO-TO-GUY si
+            # P(GO-TO-GUY) > P(TITULAR). El arg máx. de las probabilidades se guarda aparte.
+            out["v_rol_argmax"] = np.where(okp, pred, None)
+            out["v_acierto_argmax"] = np.where(okp, (pred == out["rol_real"]).astype(float), np.nan)
+            gm = np.where(out["liga_d"].isin(["nba", "gleague"]), 48.0, 40.0)
+            pred = np.asarray(clasificar(out["v_min_pred"].to_numpy(float) / gm, out["v_p_titular"].to_numpy(float),
+                                         np.full(len(out), np.nan),
+                                         (out["v_p_GO_TO_GUY"] > out["v_p_TITULAR"]).to_numpy(bool), cargar("roles")), object)
         out[f"{pre}_rol_pred"] = np.where(okp, pred, None)
         out[f"{pre}_acierto"] = np.where(okp, (pred == out["rol_real"]).astype(float), np.nan)
         for m in cfg["produccion"]["metricas"]:
@@ -751,23 +763,47 @@ def calibracion_roles(e: pd.DataFrame, bins: int = 10) -> pd.DataFrame:
 
 
 # =============================================================================================== principal
+def _etiqueta(fuente: str, escenario: str, adaptacion: bool) -> str:
+    return f"{fuente.replace(':', '_')}_{escenario}{'' if not adaptacion else '_adapt'}"
+
+
 def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | None = None, progreso=print,
-             guardar: bool = True) -> dict:
-    """Examen temporal completo (cronológico, reanudable)."""
+             guardar: bool = True, adaptacion: bool = False, pesos_de: str | None = None) -> dict:
+    """Examen temporal completo, cronológico y reanudable.
+
+    adaptacion=False (por defecto): Δ de adaptación = 0. Los priors de la fase 7 se estimaron con TODOS los traspasos
+    (incluidos los del examen): usarlos en el examen sería fuga; la variante adaptacion=True mide su efecto.
+    pesos_de: etiqueta de otra ejecución (p. ej. «AB_inicio») cuyos pesos por corte (utilidad, calibración, Fit) se
+    reutilizan: así dos fuentes de θ (A con todas las temporadas frente a A reajustado con ≤ t) sólo difieren en θ."""
     cfg = cfg_sim()
     roles = _roles()
     temps = cfg["historico"]["temporadas"]
     examen = cortes or cfg["validacion"]["cortes_examen"]
-    todos = [t for t in temps[:-1] if t <= max(examen)]
-    preds, F_por_corte, P_por_corte = [], {}, {}
+    etq = _etiqueta(fuente, escenario, adaptacion)
     t0 = time.time()
+    preds, F_por_corte, P_por_corte = [], {}, {}
+    if pesos_de:
+        todos = list(examen)
+    else:
+        todos = [t for t in temps[:-1] if t <= max(examen)]
     for k, t in enumerate(todos):
-        prev = pd.concat(preds, ignore_index=True) if preds else pd.DataFrame()
-        pesos = entrenar_pesos(t, fuente, cfg, roles, progreso) if k > 0 else \
-            {"utilidad": dict(cfg["utilidad"]["inicial"]), "calibracion": {"rotacion_extra": 1.0, "disponibilidad": 0.85}}
-        fit = ajustar_fit(prev.assign(**{f"c_{r}": prev[f"v_c_{r}"] for r in RASGOS_FIT}), cfg) if len(prev) else None
-        trans = matriz_transicion(prev[["rol_o", "rol_real"]]) if len(prev) else None
-        d = ejecutar_corte(t, fuente, cfg, roles, pesos, fit, trans, escenario, progreso)
+        fp = SI.DIR_CACHE / f"pesos_final_{t}_{pesos_de or etq}.pkl"
+        if pesos_de:
+            pesos, fit, trans = pickle.loads(fp.read_bytes())
+        else:
+            prev = pd.concat(preds, ignore_index=True) if preds else pd.DataFrame()
+            if k > 0:
+                pesos = entrenar_pesos(t, fuente, cfg, roles, progreso)
+                pesos = {**pesos, "calibracion": calibrar(t, fuente, cfg, roles, pesos, progreso)}
+            else:
+                pesos = {"utilidad": dict(cfg["utilidad"]["inicial"]),
+                         "calibracion": {"rotacion_extra": 3.0, "disponibilidad": 0.85, "escala_utilidad": 1.0,
+                                         "rotacion_sd_factor": float(cfg["validacion"]["rotacion_sd_factor"])}}
+            fit = ajustar_fit(prev.assign(**{f"c_{r}": prev[f"v_c_{r}"] for r in RASGOS_FIT}), cfg) if len(prev) else None
+            trans = matriz_transicion(prev[["rol_o", "rol_real"]]) if len(prev) else None
+            fp.write_bytes(pickle.dumps((pesos, fit, trans)))
+        d = ejecutar_corte(t, fuente, cfg, roles, pesos, fit, trans, escenario, progreso,
+                           sin_adaptacion=not adaptacion, etiqueta="_adapt" if adaptacion else "")
         d["v_fit"] = aplicar_fit(d.assign(**{f"c_{r}": d.get(f"v_c_{r}") for r in RASGOS_FIT}), fit)
         preds.append(d)
         F_por_corte[t], P_por_corte[t] = fit, pesos
@@ -775,32 +811,48 @@ def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | 
     todo = pd.concat(preds, ignore_index=True)
     ex = todo[todo["corte"].isin(examen)]
     e = errores(ex, cfg)
-    res = {"fuente": fuente, "escenario": escenario, "cortes": examen, "resumen": resumen_metricas(e, cfg),
-           "pesos": {t: P_por_corte[t] for t in P_por_corte}, "fit": {t: F_por_corte[t] for t in F_por_corte}}
+    res = {"fuente": fuente, "escenario": escenario, "adaptacion": adaptacion, "pesos_de": pesos_de, "cortes": examen,
+           "resumen": resumen_metricas(e, cfg), "resumen_por_corte": {t: resumen_metricas(g, cfg) for t, g in e.groupby("corte")},
+           "pesos": {t: P_por_corte[t] for t in P_por_corte}, "fit": {t: F_por_corte[t] for t in F_por_corte},
+           "acierto_rol_argmax_v2": float(e["v_acierto_argmax"].mean())}
     bt = bootstrap_diferencias(e, cfg)
     res["bootstrap"] = bt.to_dict("records")
     seg = segmentos(e, cfg)
     ok = e["v_fit"].notna() & e["exito"].notna()
-    res["fit_validacion"] = {"spearman": float(stats.spearmanr(e.loc[ok, "v_fit"], e.loc[ok, "exito"]).statistic) if ok.sum() > 10 else None,
-                             "n": int(ok.sum()),
-                             "pendiente": float(np.polyfit(e.loc[ok, "v_fit"], e.loc[ok, "exito"], 1)[0]) if ok.sum() > 10 else None,
-                             "spearman_min_origen": float(stats.spearmanr(e.loc[ok, "min_pct_o"], e.loc[ok, "exito"]).statistic) if ok.sum() > 10 else None}
+    if ok.sum() > 10:
+        res["fit_validacion"] = {"spearman": float(stats.spearmanr(e.loc[ok, "v_fit"], e.loc[ok, "exito"]).statistic),
+                                 "n": int(ok.sum()), "pendiente": float(np.polyfit(e.loc[ok, "v_fit"], e.loc[ok, "exito"], 1)[0]),
+                                 "spearman_min_origen": float(stats.spearmanr(e.loc[ok, "min_pct_o"], e.loc[ok, "exito"]).statistic),
+                                 "spearman_L_origen": float(stats.spearmanr(e.loc[ok, "v_L_o"], e.loc[ok, "exito"]).statistic)}
     if guardar:
-        d = DIR_VAL / f"{fuente.replace(':', '_')}_{escenario}"
+        d = DIR_VAL / etq
         d.mkdir(parents=True, exist_ok=True)
-        cols = [c_ for c_ in e.columns if not c_.startswith("v_c_") or True]
-        e[cols].to_csv(d / "predicciones.csv.gz", index=False, float_format="%.4f")
+        e.to_csv(d / "predicciones.csv.gz", index=False, float_format="%.4f")
         bt.to_csv(d / "bootstrap.csv", index=False, float_format="%.4f")
         seg.to_csv(d / "segmentos.csv", index=False, float_format="%.4f")
         for pre in ("v", "a", "b"):
             confusion(e, pre).to_csv(d / f"confusion_{pre}.csv")
         calibracion_roles(e).to_csv(d / "calibracion_roles.csv", index=False, float_format="%.4f")
         (d / "resumen.json").write_text(json.dumps(res, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    progreso(f"examen {etq} terminado en {time.time() - t0:.0f} s")
     return res
 
 
-if __name__ == "__main__":   # python -m bbfit.validacion [fuente] [escenario]
+def main(fuente: str = "AB", escenario: str = "inicio", adaptacion: bool = False, pesos_de: str | None = None,
+         cortes: list[str] | None = None) -> dict:
+    from .registro import experimento
+    cfg = cfg_sim()
+    with experimento("simulador_v2", f"examen_{_etiqueta(fuente, escenario, adaptacion)}", params={
+            "fuente": fuente, "escenario": escenario, "adaptacion": adaptacion, "pesos_de": pesos_de},
+            semilla=cfg["semilla"]) as run:
+        r = backtest(fuente, escenario, cortes, adaptacion=adaptacion, pesos_de=pesos_de)
+        run.metricas({f"{p}_{k}": v for p, d in r["resumen"].items() for k, v in d.items()
+                      if k in ("mae_min", "logloss_rol", "acierto_rol", "mae_pts_p100", "cob90_pts_p100")})
+    return r
+
+
+if __name__ == "__main__":   # python -m bbfit.validacion [fuente] [escenario] [--adaptacion]
     import sys
-    a = sys.argv[1:]
-    r = backtest(a[0] if a else "AB", a[1] if len(a) > 1 else "inicio")
+    a = [x for x in sys.argv[1:] if not x.startswith("--")]
+    r = main(a[0] if a else "AB", a[1] if len(a) > 1 else "inicio", "--adaptacion" in sys.argv)
     print(json.dumps(r["resumen"], indent=1))

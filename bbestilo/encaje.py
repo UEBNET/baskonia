@@ -33,8 +33,8 @@ from .resultados import nombre_estilo
 
 
 @lru_cache(maxsize=1)
-def conjunto() -> Conjunto:
-    return construir()
+def conjunto(ligas: list[str] | None = None) -> Conjunto:
+    return construir(ligas=ligas)
 
 
 def red_guardada(tipo: str, carpeta=None):

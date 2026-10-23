@@ -398,6 +398,16 @@ def _uso_natural(c: Corte, fila: dict, liga_d: str) -> tuple[float, float]:
     return float(t.get("usg_pct", np.nan)), float(t.get("ts_pct", np.nan))
 
 
+def redistribuir_uso(M: np.ndarray, USG: np.ndarray, usg_medio: float = 20.0, amortiguar: float = 1.0):
+    """Suma fija del uso: en cada simulación Σ_i min_i·USG_i = usg_medio·Σ_i min_i (los 5 en pista suman el 100 %).
+    Factor común f = objetivo/actual, amortiguado: USG' = USG·(1 + a·(f − 1)); con a = 1 la suma se cumple exactamente."""
+    objetivo = usg_medio * M.sum(1)
+    actual = (M * USG).sum(1)
+    f = np.where(actual > 0, objetivo / np.where(actual > 0, actual, 1), 1.0)
+    f = 1 + amortiguar * (f - 1)
+    return USG * f[:, None], f
+
+
 def _gti_proyectado(gti0, usg_nuevo, usg0, ref_d, ref_o, peso):
     z1 = (usg_nuevo - ref_d[0]) / ref_d[1]
     z0 = (usg0 - ref_o[0]) / ref_o[1]
@@ -527,11 +537,8 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     usg_f_s = np.asarray(tr.get("usg_pct", np.full(n_sim, usg_nat[i_f])), float) * fact["usg_pct"]["temporada"]
     USG = np.repeat(usg_nat[None, :], n_sim, 0)
     USG[:, i_f] = np.where(np.isfinite(usg_f_s), usg_f_s, usg_nat[i_f])
-    objetivo = float(cfg["produccion"]["usg_medio_pista"]) * M.sum(1)
-    actual = (M * USG).sum(1)
-    f_uso = np.where(actual > 0, objetivo / actual, 1.0)
-    f_uso = 1 + float(cfg["produccion"]["amortiguar_uso"]) * (f_uso - 1)
-    USG2 = USG * f_uso[:, None]
+    USG2, f_uso = redistribuir_uso(M, USG, float(cfg["produccion"]["usg_medio_pista"]),
+                                   float(cfg["produccion"]["amortiguar_uso"]))
     d_usg = USG2[:, i_f] - USG[:, i_f]
     beta_m, beta_sd = c.mod["beta_uso"].get(pos3, c.mod["beta_uso"].get("todos", (-0.08, 0.1)))
     beta_s = beta_m + beta_sd * rng.standard_normal(n_sim)
