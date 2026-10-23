@@ -67,3 +67,12 @@ validacion:
 usar_amortiguado:               # capas que leen el valor amortiguado (<m>_am) en vez del A+B original
   contexto: true                # índice de nivel L y contexto de compañeros/rivales
   escalas: true                 # escalas ±100 (nivel y RAPM)
+
+# Variantes que se validan (python -m bbmodel amortiguar --validar --variante <v>; después --elegir). Se elige con el
+# corte 2023-24 → 2024-25 y se confirma con el 2024-25 → 2025-26 (sin mirar el futuro). La elegida va en `variante`.
+variantes:
+  completo:            {mapeo: true,  lambda: true,  ipw: true}
+  sin_mapeo:           {mapeo: false, lambda: true,  ipw: true}
+  grafo_contraccion_ipw: {mapeo: false, lambda: false, ipw: true}
+  grafo_contraccion:   {mapeo: false, lambda: false, ipw: false}
+variante: sin_mapeo              # elegida con el corte 2023-24 → 2024-25 (ver validacion_variantes.csv)

@@ -1,0 +1,5 @@
+variante,mapeo,amortiguar_lambda,ipw,mae_rel_2023,cob80_lineal_2023,cob80_amortiguado_2023,metricas_mejor_2023,mae_rel_desde_feb_2023,mae_rel_hacia_feb_2023,mae_rel_a_euroleague_2023,mae_rel_2024,cob80_lineal_2024,cob80_amortiguado_2024,metricas_mejor_2024,mae_rel_desde_feb_2024,mae_rel_hacia_feb_2024,mae_rel_a_euroleague_2024,elegida_por_corte
+sin_mapeo,False,True,True,1.0062,0.8308,0.8433,11,1.0145,1.0107,0.996,0.9997,0.8283,0.839,15,0.9971,0.9895,0.9864,2023
+grafo_contraccion_ipw,False,False,True,1.0062,0.8308,0.8433,11,1.0145,1.0107,0.996,0.9997,0.8283,0.839,15,0.9971,0.9895,0.9864,2023
+grafo_contraccion,False,False,False,1.0064,0.8308,0.8392,10,1.0125,1.0086,0.9966,0.9986,0.8282,0.8373,14,0.9961,0.9884,0.984,2023
+completo,True,True,True,1.0108,0.8308,0.8318,10,1.0156,1.0118,0.9998,1.0103,0.8282,0.8315,10,1.0052,1.0004,0.9918,2023

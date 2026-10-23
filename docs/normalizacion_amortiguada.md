@@ -37,9 +37,15 @@ capacidad estimada del jugador dentro de su liga-temporada-posición (pasos 1-2 
 ### 1.2 Contracción bayesiana parcial por escalón
 `δ_c ~ N(μ_escalón(c), τ²)`, con escalones fijados en el YAML: élite (EuroLeague, NBA), doméstica alta (ACB, LBA,
 BBL, LNB, BSL, GBL), copas europeas (EuroCup, BCL, FEC), desarrollo (G League), Primera FEB, Segunda FEB, Tercera
-FEB. μ y τ² se estiman por **bayes empírico con un EM exacto** sobre el modelo conjunto (grafo + previa); μ_escalón
-tiene una hiperprevia débil N(media global, 2²) que sólo pesa en un escalón sin puentes. Una temporada con pocos
-puentes (p. ej. 2026-27, en curso) se acerca a su escalón; una con muchos apenas se mueve.
+FEB. Las medias de escalón μ son **nodos latentes del grafo** (cada competición-temporada se une a su μ con una
+arista δ_c − μ = 0 de varianza τ²; μ ~ N(0, 2²), previa débil que sólo pesa en un escalón sin puentes), de modo
+que la posterior conjunta **integra la incertidumbre de μ**: las temporadas de Tercera FEB comparten el mismo
+camino de puentes hasta la EuroLeague, y esa incertidumbre común no se reduce por tener cuatro temporadas. τ² se
+estima por **bayes empírico con EM** (τ² = media de E[(δ_c − μ)²]). Una temporada con pocos puentes (p. ej.
+2026-27, en curso) se acerca a su escalón; una con muchos apenas se mueve.
+
+> Primera versión (descartada): μ como estimación puntual (EM clásico). Daba desviaciones típicas de 0,06-0,07 al
+> nivel de Tercera FEB a través de 4-5 aristas, porque trataba la media del escalón como conocida.
 
 ### 1.3 Mapeo de cuantiles monótono (forma)
 En vez de sólo desplazar, la parte del jugador es `g_l(z) = λ(d_l)·F_l(s_l·z)`, con F_l monótona creciente, F(0) = 0 y

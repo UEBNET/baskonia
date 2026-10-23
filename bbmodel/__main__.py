@@ -13,7 +13,7 @@
     python -m bbmodel interacciones        # efectos X → Y entre compañeros (cuota de tiro, eFG%, asistidas…)
     python -m bbmodel mesa-quintetos       # datos de la pestaña «Quintetos y conexiones»
     python -m bbmodel escalas              # escalas ±100 (Euroliga = 0) para el Atlas y Quintetos
-    python -m bbmodel amortiguar [--validar | --diagnostico parametros.json]
+    python -m bbmodel amortiguar [--validar [--variante V] | --elegir | --diagnostico parametros.json]
                                            # normalización con el salto de nivel amortiguado (docs/normalizacion_amortiguada.md)
 
 Resultados en data/modelos/algoritmo_A/:
@@ -64,6 +64,8 @@ def main(argv=None):
     am = sub.add_parser("amortiguar", help="normalización amortiguada → data/modelos/normalizacion_amortiguada/")
     am.add_argument("--validar", action="store_true", help="examen temporal y dejando fuera una liga (lineal vs amortiguado)")
     am.add_argument("--diagnostico", default=None, help="parametros.json de un ajuste del A: diagnóstico del esquema lineal")
+    am.add_argument("--variante", default=None, help="variante de configs/normalization.yaml (por defecto, la elegida)")
+    am.add_argument("--elegir", action="store_true", help="compara las variantes validadas y elige con el corte más antiguo")
     dn = sub.add_parser("dataset-normalizado", help="dataset completo de equivalentes EuroLeague (A+B) y JSON de la Mesa")
     dn.add_argument("--salida", default="data/artifact", help="carpeta de los JSON de la Mesa (datos/)")
     args = ap.parse_args(argv)
@@ -72,7 +74,8 @@ def main(argv=None):
         from threadpoolctl import threadpool_limits
         threadpool_limits(1)
         from . import amortiguacion
-        amortiguacion.main(validar=args.validar, diagnostico_params=args.diagnostico)
+        amortiguacion.main(validar=args.validar, diagnostico_params=args.diagnostico, variante=args.variante,
+                           elegir=args.elegir)
         return
     if args.orden == "mesa-quintetos":
         from . import mesa_quintetos

@@ -1018,12 +1018,24 @@ def ejemplos_puentes(tabla: pd.DataFrame, params: dict, ajuste: dict, trad: pd.D
     return d
 
 
-def main(validar: bool = False, diagnostico_params: str | None = None, salida: Path = DIR_SALIDA) -> None:
+def opciones_variante(cfg: dict, nombre: str | None = None) -> dict:
+    """Argumentos de `ajustar` de una variante de configs/normalization.yaml → variantes (por defecto, la elegida)."""
+    nombre = nombre or cfg.get("variante", "completo")
+    v = (cfg.get("variantes") or {}).get(nombre, {}) or {}
+    return {"mapeo": bool(v.get("mapeo", True)), "amortiguar_lambda": bool(v.get("lambda", True)),
+            "ipw": bool(v.get("ipw", cfg.get("seleccion", {}).get("ipw", True)))}
+
+
+def main(validar: bool = False, diagnostico_params: str | None = None, salida: Path = DIR_SALIDA,
+         variante: str | None = None, elegir: bool = False) -> None:
     from . import modelo
     t0 = time.time()
     cfg = config()
     salida = Path(salida)
     salida.mkdir(parents=True, exist_ok=True)
+    if elegir:
+        elegir_variante(cfg, salida)
+        return
     tabla, info = modelo.preparar()
     mn = cfg.get("transferibilidad", {}).get("metricas_nivel", [])
     print(f"tabla: {info['registros']} registros, {info['personas']} personas · crosswalk {info.get('crosswalk')}", flush=True)
@@ -1038,14 +1050,24 @@ def main(validar: bool = False, diagnostico_params: str | None = None, salida: P
         return
     from bbfit.registro import experimento
     if validar:
-        _validar(tabla, cfg, salida)
+        _validar(tabla, cfg, salida, variante or cfg.get("variante", "completo"))
         print(f"validación en {time.time() - t0:.0f} s")
         return
     params = cargar_parametros_A()
-    with experimento("normalizacion_amortiguada", "ajuste_completo", params={"config": json.dumps(cfg)[:480]}) as run:
-        aj = ajustar(tabla, params, cfg)
-        aj_sin = ajustar(tabla, params, cfg, ipw=False, progreso=None)
-        off = tabla_offsets(aj, params, aj_sin)
+    variante = variante or cfg.get("variante", "completo")
+    op = opciones_variante(cfg, variante)
+    with experimento("normalizacion_amortiguada", f"ajuste_{variante}", params={"variante": variante, **op,
+                                                                                 "config": json.dumps(cfg)[:400]}) as run:
+        aj = ajustar(tabla, params, cfg, **op)
+        aj_sin = ajustar(tabla, params, cfg, **{**op, "ipw": False}, progreso=None) if op["ipw"] else \
+            ajustar(tabla, params, cfg, **{**op, "ipw": True}, progreso=None)
+        if op["ipw"]:
+            off = tabla_offsets(aj, params, aj_sin)
+        else:      # la variante no usa pesos: la columna «sin IPW» es la propia y se guarda la de «con IPW» aparte
+            off = tabla_offsets(aj, params, aj)
+            con = tabla_offsets(aj_sin, params)
+            off["media_con_ipw"] = con["media"].to_numpy()
+        off["variante"] = variante
         off.round(5).to_csv(salida / "league_offsets.csv", index=False)
         trad = traducir(tabla, params, aj)
         (salida / "traducciones").mkdir(exist_ok=True)
@@ -1054,7 +1076,10 @@ def main(validar: bool = False, diagnostico_params: str | None = None, salida: P
         ej = ejemplos_puentes(tabla, params, aj, trad)
         ej.round(4).to_csv(salida / "ejemplos_puentes.csv", index=False)
         lam = {k: v for k, v in aj["lambda"].items() if k != "lambda_hat"}
-        lh = pd.DataFrame(aj["lambda"]["lambda_hat"])
+        lh = pd.DataFrame(aj["lambda"].get("lambda_hat", []))
+        if not len(lh):    # variante sin λ: se guardan igualmente las λ̂ medidas (diagnóstico)
+            lh = pd.DataFrame([{"metrica": c, "liga": x.liga, "lam": x.lam, "var": x.var, "n": x.n}
+                               for c, r in aj["resultados"].items() for x in r["lam_hat"].itertuples()])
         lh.round(5).to_csv(salida / "lambda_por_liga.csv", index=False)
         mapeos = {col: {l: F.a_dict() for l, F in r["estado"].F.items() if not F.es_lineal}
                   for col, r in aj["resultados"].items()}
@@ -1062,12 +1087,16 @@ def main(validar: bool = False, diagnostico_params: str | None = None, salida: P
         nivel["s"] = nivel["metrica"].map(lambda c: CATALOGO[c].sentido)
         res_liga = (nivel.assign(m=nivel["media"] * nivel["s"], ms=nivel["media_sin_ipw"] * nivel["s"],
                                  ml=nivel["media_lineal_A"] * nivel["s"], me=nivel["media_encadenada"] * nivel["s"])
-                    .groupby("competicion")[["m", "ms", "ml", "me", "sd"]].mean())
-        resumen = {"lambda": lam, "lambda_por_liga": aj["lam_liga"], "distancia": aj["distancia"], "ipw": aj["ipw"],
+                    .groupby("competicion")[["m", "ms", "ml", "me", "sd"]].median())
+        efecto = (off["media_con_ipw"] - off["media"]) if "media_con_ipw" in off else (off["media"] - off["media_sin_ipw"])
+        resumen = {"variante": variante, "opciones": op, "lambda": lam, "lambda_por_liga": aj["lam_liga"],
+                   "distancia": aj["distancia"], "ipw": aj["ipw"] if op["ipw"] else aj_sin["ipw"],
                    "tau_escalon": {c: float(np.sqrt(r["contraccion"]["tau2"])) for c, r in aj["resultados"].items()},
                    "mu_escalon": {c: r["contraccion"]["mu_escalon"] for c, r in aj["resultados"].items()},
-                   "nivel_medio_liga": res_liga.round(4).to_dict("index"),
-                   "efecto_ipw_medio_abs": float((off["media"] - off["media_sin_ipw"]).abs().mean()),
+                   "mu_escalon_sd": {c: r["contraccion"].get("mu_escalon_sd") for c, r in aj["resultados"].items()},
+                   "nivel_mediano_liga": res_liga.round(4).to_dict("index"),
+                   "efecto_ipw_medio_abs": float(efecto.abs().mean()),
+                   "efecto_ipw_por_liga": (efecto.abs().groupby(off["competicion"]).mean().round(4).to_dict()),
                    "mapeos_no_lineales": mapeos, "info_identidad": info.get("crosswalk"),
                    "tiempo_s": round(time.time() - t0)}
         _guardar_json(resumen, salida / "resumen.json")
@@ -1076,61 +1105,104 @@ def main(validar: bool = False, diagnostico_params: str | None = None, salida: P
         run.artefacto(salida / "league_offsets.csv")
         run.artefacto(salida / "resumen.json")
     print(res_liga.round(3).to_string())
-    print(f"forma λ(d): {aj['lambda'].get('elegida')} {aj['lambda'].get('parametros')} · {time.time() - t0:.0f} s")
+    print(f"variante {variante} · forma λ(d): {aj['lambda'].get('elegida')} {aj['lambda'].get('parametros')} · {time.time() - t0:.0f} s")
 
 
-def _validar(tabla: pd.DataFrame, cfg: dict, salida: Path) -> None:
-    """Examen temporal (A lineal frente a amortiguado, mismos casos) y dejar fuera una liga. Reanudable: los
-    parámetros del A de cada corte se guardan en experimentos/cache_normalizacion/."""
+def _validar(tabla: pd.DataFrame, cfg: dict, salida: Path, variante: str) -> None:
+    """Examen temporal (A lineal frente a amortiguado, mismos casos) de una variante y, para la variante elegida en el
+    YAML, dejar fuera una liga. Reanudable: los parámetros del A de cada corte se guardan en experimentos/cache_normalizacion/
+    y cada (variante, corte) en un CSV propio."""
     import pickle
     from bbfit.registro import experimento
     from . import modelo, validacion
     vc = cfg.get("validacion", {})
+    op = opciones_variante(cfg, variante)
     DIR_CACHE.mkdir(parents=True, exist_ok=True)
-    res = []
-    with experimento("normalizacion_amortiguada", "validacion", params={"anios": vc.get("anios")}) as run:
+    dv = salida / "validacion_variantes"
+    dv.mkdir(parents=True, exist_ok=True)
+    with experimento("normalizacion_amortiguada", f"validacion_{variante}", params={"anios": vc.get("anios"), **op}) as run:
         for anio in vc.get("anios", [2023, 2024]):
+            destino = dv / f"{variante}_{anio}.csv.gz"
+            if destino.exists():
+                print(f"  {variante} {anio}: ya hecho", flush=True)
+                continue
             cache = DIR_CACHE / f"A_hasta_{anio}.pkl"
             if cache.exists():
                 p = pickle.loads(cache.read_bytes())
             else:
                 p = modelo.ajustar(tabla, hasta_anio=anio, n_boot=int(vc.get("bootstrap", 10)), progreso=None)
                 cache.write_bytes(pickle.dumps(p))
-            print(f"  A ≤ {anio} listo", flush=True)
             ra = validacion.evaluar(tabla, anio, p)
-            aj = ajustar(tabla[tabla["anio"] <= anio], p, cfg, hasta_anio=None, progreso=print)
+            aj = ajustar(tabla[tabla["anio"] <= anio], p, cfg, hasta_anio=None, progreso=print, **op)
             aj["hasta_anio"] = anio
             rb = predecir_cambios(tabla, anio, p, aj)
             m = ra.merge(rb[["metrica", "anio", "persona_id", "amortiguado", "dentro_80_am"]],
                          on=["metrica", "anio", "persona_id"], how="inner")
-            res.append(m)
-            print(f"  corte {anio}: {len(m)} predicciones", flush=True)
-            if anio == max(vc.get("anios", [2023, 2024])):
+            m.round(4).to_csv(destino, index=False)
+            print(f"  {variante} corte {anio}: {len(m)} predicciones", flush=True)
+            if variante == cfg.get("variante", "completo") and anio == max(vc.get("anios", [2023, 2024])):
                 lolo = dejar_fuera_liga(aj, p, cfg)
                 lolo.round(5).to_csv(salida / "validacion_lolo.csv", index=False)
-        r = pd.concat(res)
-        r.round(4).to_csv(salida / "validacion_casos.csv.gz", index=False)
-        out = []
-        for col, g in r.groupby("metrica"):
-            ea, em = (g["algoritmo_A"] - g["real"]).abs(), (g["amortiguado"] - g["real"]).abs()
-            ep = (g["mismo_percentil"] - g["real"]).abs()
-            out.append({"metrica": col, "casos": len(g), "mae_lineal_A": ea.mean(), "mae_amortiguado": em.mean(),
-                        "mae_mismo_percentil": ep.mean(), "mejora_mae_%": 100 * (1 - em.mean() / ea.mean()),
-                        "cobertura80_lineal": g["dentro_80"].mean(), "cobertura80_amortiguado": g["dentro_80_am"].mean()})
-            for grupo, s in (("a_euroleague", g["liga_d"] == "euroleague"), ("desde_feb", g["liga_o"].str.startswith("feb")),
-                             ("hacia_feb", g["liga_d"].str.startswith("feb"))):
-                out[-1][f"casos_{grupo}"] = int(s.sum())
-                out[-1][f"mae_lineal_{grupo}"] = ea[s].mean() if s.any() else np.nan
-                out[-1][f"mae_amortiguado_{grupo}"] = em[s].mean() if s.any() else np.nan
-        resumen = pd.DataFrame(out)
-        resumen.round(4).to_csv(salida / "validacion.csv", index=False)
-        lolo = pd.read_csv(salida / "validacion_lolo.csv")
+        r = pd.concat([pd.read_csv(dv / f"{variante}_{a}.csv.gz") for a in vc.get("anios", [2023, 2024])])
+        resumen = resumir_validacion(r)
+        resumen.round(4).to_csv(dv / f"{variante}_resumen.csv", index=False)
         run.metricas({"mae_rel_medio": float((resumen["mae_amortiguado"] / resumen["mae_lineal_A"]).mean()),
                       "cob80_lineal": float(resumen["cobertura80_lineal"].mean()),
-                      "cob80_amortiguado": float(resumen["cobertura80_amortiguado"].mean()),
-                      "lolo_error_jerarquica": float(lolo["error_jerarquica"].mean()),
-                      "lolo_error_sin_jerarquia": float(lolo["error_sin_jerarquia"].mean()),
-                      "lolo_cobertura90": float(lolo["dentro_90"].mean())})
-        run.artefacto(salida / "validacion.csv")
+                      "cob80_amortiguado": float(resumen["cobertura80_amortiguado"].mean())})
     print(resumen[["metrica", "casos", "mae_lineal_A", "mae_amortiguado", "cobertura80_lineal", "cobertura80_amortiguado"]]
           .round(3).to_string(index=False))
+
+
+def resumir_validacion(r: pd.DataFrame) -> pd.DataFrame:
+    out = []
+    for col, g in r.groupby("metrica"):
+        ea, em = (g["algoritmo_A"] - g["real"]).abs(), (g["amortiguado"] - g["real"]).abs()
+        ep = (g["mismo_percentil"] - g["real"]).abs()
+        out.append({"metrica": col, "casos": len(g), "mae_lineal_A": ea.mean(), "mae_amortiguado": em.mean(),
+                    "mae_mismo_percentil": ep.mean(), "mejora_mae_%": 100 * (1 - em.mean() / ea.mean()),
+                    "cobertura80_lineal": g["dentro_80"].mean(), "cobertura80_amortiguado": g["dentro_80_am"].mean()})
+        for grupo, s in (("a_euroleague", g["liga_d"] == "euroleague"), ("desde_feb", g["liga_o"].str.startswith("feb")),
+                         ("hacia_feb", g["liga_d"].str.startswith("feb"))):
+            out[-1][f"casos_{grupo}"] = int(s.sum())
+            out[-1][f"mae_lineal_{grupo}"] = ea[s].mean() if s.any() else np.nan
+            out[-1][f"mae_amortiguado_{grupo}"] = em[s].mean() if s.any() else np.nan
+            out[-1][f"cob80_lineal_{grupo}"] = g.loc[s, "dentro_80"].mean() if s.any() else np.nan
+            out[-1][f"cob80_amortiguado_{grupo}"] = g.loc[s, "dentro_80_am"].mean() if s.any() else np.nan
+    return pd.DataFrame(out)
+
+
+def elegir_variante(cfg: dict, salida: Path) -> pd.DataFrame:
+    """Compara las variantes: se ELIGE con el corte de selección (2023-24 → 2024-25, el más antiguo) y se CONFIRMA con
+    el de examen (2024-25 → 2025-26). Criterio: media entre métricas de MAE(amortiguado)/MAE(lineal). Escribe
+    validacion_variantes.csv y validacion.csv / validacion_casos.csv.gz de la variante elegida."""
+    vc = cfg.get("validacion", {})
+    anios = vc.get("anios", [2023, 2024])
+    sel, exa = min(anios), max(anios)
+    dv = salida / "validacion_variantes"
+    filas = []
+    for nombre in (cfg.get("variantes") or {"completo": {}}):
+        partes = {a: dv / f"{nombre}_{a}.csv.gz" for a in anios}
+        if not all(p.exists() for p in partes.values()):
+            continue
+        fila = {"variante": nombre, **opciones_variante(cfg, nombre)}
+        for a, p in partes.items():
+            rs = resumir_validacion(pd.read_csv(p))
+            fila[f"mae_rel_{a}"] = float((rs["mae_amortiguado"] / rs["mae_lineal_A"]).mean())
+            fila[f"cob80_lineal_{a}"] = float(rs["cobertura80_lineal"].mean())
+            fila[f"cob80_amortiguado_{a}"] = float(rs["cobertura80_amortiguado"].mean())
+            fila[f"metricas_mejor_{a}"] = int((rs["mae_amortiguado"] < rs["mae_lineal_A"]).sum())
+            for grupo in ("desde_feb", "hacia_feb", "a_euroleague"):
+                fila[f"mae_rel_{grupo}_{a}"] = float((rs[f"mae_amortiguado_{grupo}"] / rs[f"mae_lineal_{grupo}"]).mean())
+        filas.append(fila)
+    t = pd.DataFrame(filas).sort_values(f"mae_rel_{sel}")
+    t["elegida_por_corte"] = sel
+    t.round(4).to_csv(salida / "validacion_variantes.csv", index=False)
+    elegida = t.iloc[0]["variante"]
+    r = pd.concat([pd.read_csv(dv / f"{elegida}_{a}.csv.gz") for a in anios])
+    r.round(4).to_csv(salida / "validacion_casos.csv.gz", index=False)
+    res = resumir_validacion(r)
+    res["variante"] = elegida
+    res.round(4).to_csv(salida / "validacion.csv", index=False)
+    print(t.round(4).to_string(index=False))
+    print(f"elegida (corte {sel}): {elegida}; configs/normalization.yaml → variante")
+    return t
