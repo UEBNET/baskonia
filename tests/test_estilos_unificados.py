@@ -15,7 +15,7 @@ R = ["ritmo", "triple", "esquina", "aro", "tiros_libres", "autocreacion", "asist
 
 def _cfg(**extra):
     c = {"semilla": 7, "rasgos": [{"id": r, "corto": r} for r in R], "normalizacion": {"percentil_min": 0.01},
-         "datos": {"contraccion_minutos_jugador": 100, "min_minutos_referencia": 100},
+         "datos": {"contraccion_minutos_jugador": 100, "min_minutos_referencia": 100, "referencia_fraccion_max": 0.3},
          "mezcla": {"k_min": 2, "k_max": 5, "covarianzas": ["full"], "n_init": 2, "max_iter": 300, "reg_covar": 1e-4,
                     "bootstrap": 5, "estabilidad_min": 0.6, "cuota_min": 0.04},
          "asignacion": {"umbral_puro": 0.8, "umbral_mezcla": 0.25}}

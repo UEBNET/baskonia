@@ -226,6 +226,10 @@ def puntuar_liga(eq: pd.DataFrame, jg: pd.DataFrame, c: dict) -> tuple[pd.DataFr
     ref = {"equipo": {}, "jugador": {}, "media_jugador": {}}
     eq, jg = eq.copy(), jg.copy()
     m = jg["min"].to_numpy(float)
+    # temporada en curso o formato corto (FIBA Europe Cup 2020-21 en burbuja): nadie llega a mref minutos;
+    # el umbral baja a una fracción de los minutos del jugador que más juega en esa liga-temporada
+    if len(m):
+        mref = min(mref, c["datos"]["referencia_fraccion_max"] * float(m.max()))
     en_ref = m >= mref
     for r in R:
         xe = eq[r].to_numpy(float)

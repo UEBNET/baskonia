@@ -9,6 +9,7 @@ datos:
   fase: regular
   min_partidos_equipo_ajuste: 10      # equipo-temporada entra en el ajuste de la mezcla con ≥ 10 partidos
   min_minutos_referencia: 150         # jugador entra en la distribución de referencia de su liga-temporada
+  referencia_fraccion_max: 0.3        # … o, si es menor, el 30 % de los minutos del que más juega (temporada en curso)
   min_minutos_asignar: 40             # jugador-etapa recibe estilo con ≥ 40 minutos (por debajo, no se asigna)
   min_minutos_fiable: 300             # marca «fiable» en la salida
   contraccion_minutos_jugador: 150    # tasa del jugador contraída hacia la media de su liga: m / (m + 150)
@@ -88,32 +89,64 @@ estilos:
   spacing:
     nombre: "Spacing"
     color: "#2E86DE"
+    rol_jugador: "Tirador"
+    definicion: "Tiro exterior: mucho triple, sobre todo de esquina, casi siempre tras pase; poco aro, pocos tiros libres y pocas pérdidas."
+    equipo: "Equipo que abre la pista: alto volumen de triples (también de esquina), pocos tiros en el aro y pocas pérdidas."
+    jugador: "Tirador de recepción: espera en la esquina o en el ala y tira tras pase; apenas bota ni pierde balones."
     firma: {triple: 1, esquina: 1, aro: -1, autocreacion: -1, tiros_libres: -0.5}
   pistons:
     nombre: "Pistons"
     color: "#C0392B"
+    rol_jugador: "Energía y 3&D"
+    definicion: "Intensidad sin balón: rebote ofensivo, tapones y faltas, con triples de esquina asistidos; poco balón en las manos."
+    equipo: "Equipo físico y de esfuerzo: castiga el rebote ofensivo, tapona y hace faltas; en ataque busca el triple de esquina tras pase."
+    jugador: "Jugador de energía / 3&D: no necesita el balón, tira desde la esquina, rebotea en ataque y defiende con contacto."
     firma: {robos: 1, faltas: 1, esquina: 0.5, aro: 0.5, reb_ofensivo: 0.5}
   circulacion:
     nombre: "Circulación"
     color: "#16A085"
+    rol_jugador: "Conector"
+    definicion: "Juego de pase lejos del aro: triple y asistencias; poco rebote ofensivo, pocos tapones y pocos tiros en el aro."
+    equipo: "Equipo de circulación exterior: mueve el balón por fuera y tira de tres; renuncia al rebote ofensivo."
+    jugador: "Conector exterior: base o escolta que pasa, tira de tres y no ataca el aro."
     firma: {asistencia: 1, triple: 0.5, autocreacion: 0.5, reb_ofensivo: -1, tapones: -0.5}
   isolation:
     nombre: "Isolation"
     color: "#8E44AD"
+    rol_jugador: "Creador"
+    definicion: "Creación individual: muchas canastas sin asistencia y mucho pase con el balón en las manos; más pérdidas, poco rebote ofensivo."
+    equipo: "Equipo de uno contra uno: muchas canastas sin pase previo, poco triple y casi nada de rebote ofensivo."
+    jugador: "Creador con balón: fabrica su tiro y el de los demás (bote, bloqueo directo) y asume pérdidas."
     firma: {autocreacion: 1, asistencia: 1, perdidas: 0.5, tiros_libres: 0.3, triple: -0.3}
   old_school:
     nombre: "Old-School"
     color: "#B9770E"
+    rol_jugador: "Interior clásico"
+    definicion: "Juego interior clásico: rebote ofensivo, tiros cerca del aro y tapones; poco triple y poco pase."
+    equipo: "Equipo de estructura tradicional: ataque por dentro y segundas opciones; tira menos de tres que su liga."
+    jugador: "Interior clásico o ala-pívot de contacto: finaliza tras pase cerca del aro, rebotea y tapona, sin abrirse al triple."
     firma: {reb_ofensivo: 1, aro: 0.5, tapones: 0.5, asistencia: -0.5, autocreacion: -0.5, triple: -0.5}
   pintura:
     nombre: "Pintura"
     color: "#E67E22"
+    rol_jugador: "Pívot dominante"
+    definicion: "Juego en la pintura: casi ningún triple, muchísimos tiros en el aro y tiros libres, rebote ofensivo, tapones y faltas."
+    equipo: "Equipo que vive dentro: ataca el aro, la línea de personal y el rebote ofensivo; apenas tira de tres."
+    jugador: "Interior dominante: termina en el aro, saca faltas, captura rebotes ofensivos y protege el aro."
     firma: {aro: 1, tiros_libres: 1, reb_ofensivo: 1, tapones: 1, faltas: 1, triple: -1, esquina: -1}
   vertigo:
     nombre: "Vértigo"
     color: "#F1C40F"
+    rol_jugador: "Penetrador"
+    definicion: "Transición y agresividad: robos, tiros en el aro sin asistencia, ritmo algo más alto y más pérdidas."
+    equipo: "Equipo que corre y ataca el aro: roba, sale rápido y finaliza cerca de la canasta; asume pérdidas."
+    jugador: "Penetrador de transición: roba, corre la pista y termina él mismo en el aro."
     firma: {ritmo: 1, robos: 0.5, perdidas: 0.5}
   control:
     nombre: "Control"
     color: "#5D6D7E"
+    rol_jugador: "Gestor seguro"
+    definicion: "Ritmo bajo y pocas pérdidas."
+    equipo: "Equipo de ritmo bajo que cuida el balón."
+    jugador: "Jugador que gestiona sin perder balones."
     firma: {ritmo: -1, perdidas: -1, faltas: -0.5}

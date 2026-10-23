@@ -5,8 +5,11 @@ uso_eficiencia:
   min_partidos_tramo: 5              # principal: tramos de rol / temporadas con >= 5 partidos ...
   min_intentos_tramo: 30             # ... y >= 30 intentos (TSA)
   min_tramos_jugador: 3              # jugador con >= 3 tramos/temporadas → estimación propia
-  min_intentos_partido: 3            # secundaria (partido a partido): partidos con >= 3 intentos
+  min_intentos_partido: 3            # partido a partido: partidos con >= 3 intentos (TSA)
   min_partidos_jugador: 15
+  vacio_min_pct_rotacion: 0.25       # instrumento: compañeros de rotación (MIN% de temporada >= 25 %) ausentes
+  f_minimo_individual: 10            # β_i propio sólo con primera etapa F_i >= 10 (si no, el del grupo)
+  bootstrap_grupo: 200               # intervalo del IV de grupo (remuestreo de personas)
   min_temporadas_tov: 3              # TOV% frente a USG%: variación entre temporadas del mismo jugador
   min_minutos_temporada_tov: 300
   grupos: [pos3]                     # agrupación para el «partial pooling» (arquetipo/posición)

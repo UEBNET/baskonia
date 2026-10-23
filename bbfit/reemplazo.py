@@ -233,6 +233,8 @@ def uso_eficiencia(pj: pd.DataFrame, temp_rec: pd.DataFrame, cfg: dict, tramos: 
     nombres = temp_rec.sort_values("min_total").drop_duplicates("persona_id", keep="last").set_index("persona_id")
     universo = pd.DataFrame({"persona_id": temp_rec["persona_id"].unique()})
     # principal: variable instrumental (vacío de rol), partido a partido dentro de jugador-equipo-temporada
+    pj = pj.copy()
+    pj["z_vacio"] = instrumento_vacio(pj, float(c["vacio_min_pct_rotacion"]))
     g = pj[pj["jugo"]].copy()
     g["tsa"] = g["fga"] + g["coef_tl"] * g["fta"]
     g = g[g["tsa"] >= c["min_intentos_partido"]]
@@ -242,6 +244,7 @@ def uso_eficiencia(pj: pd.DataFrame, temp_rec: pd.DataFrame, cfg: dict, tramos: 
     grp_ts = iv_grupo(g, "ts_pct", "usg_tiro", "z_vacio", "tsa", "grupo_intra", "pos3_p", int(c["bootstrap_grupo"]), sem,
                       float(c["nivel_intervalo"]))
     obj = {r["pos3_p"]: (r["beta_iv"], r["beta_iv_sd"] ** 2) for r in grp_ts.to_dict("records")}
+    obj["NA"] = obj.get("todos", (np.nan, np.nan))      # sin posición: el centro de todos los jugadores
     est = _iv_intra(g, "ts_pct", "usg_tiro", "z_vacio", "tsa", "grupo_intra", float(c["f_minimo_individual"]))
     est = universo.merge(est[est["n"] >= c["min_partidos_jugador"]], on="persona_id", how="left")
     est["pos3"] = est["persona_id"].map(pos).fillna("NA")
@@ -763,13 +766,17 @@ def main() -> dict:
                          low_memory=False)
         ue = uso_eficiencia(pj, tr, cfg, sp)
         ue.to_csv(DIR_REEMP / "uso_eficiencia.csv", index=False, float_format="%.5f")
+        giv = ue.attrs.get("grupo_iv", pd.DataFrame())
+        giv.to_csv(DIR_REEMP / "uso_eficiencia_grupos.csv", index=False, float_format="%.5f")
         con = ue[~ue["solo_grupo_ts"].astype(bool)]
         res["uso_eficiencia"] = {"personas": len(ue), "con_estimacion_propia_ts": int(len(con)),
                                  "beta_ts_grupo": ue.groupby("pos3")["beta_grupo_ts"].first().round(4).to_dict(),
                                  "tau2_ts_grupo": ue.groupby("pos3")["tau2_grupo_ts"].first().round(5).to_dict(),
                                  "beta_tov_grupo": ue.groupby("pos3")["beta_grupo_tov"].first().round(4).to_dict(),
                                  "w_media_ts": float(con["w_ts"].mean()) if len(con) else None,
-                                 "beta_ts_partido_grupo": ue.groupby("pos3")["beta_grupo_ts_partido"].first().round(4).to_dict()}
+                                 "beta_ts_partido_grupo_mco": ue.groupby("pos3")["beta_grupo_ts_partido"].first().round(4).to_dict(),
+                                 "beta_ts_tramos_grupo_mco": ue.groupby("pos3")["beta_grupo_ts_tramos"].first().round(4).to_dict(),
+                                 "iv_grupos": giv.round(4).to_dict("records")}
         prod = produccion_por_rol(tr)
         prod.to_csv(DIR_REEMP / "produccion_por_rol.csv", index=False, float_format="%.4f")
         pe = pj[pj["jugo"]].groupby(["liga", "temporada", "team_id"])["game_id"].nunique().rename("g_equipo").reset_index()
