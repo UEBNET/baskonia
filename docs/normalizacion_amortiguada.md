@@ -50,7 +50,7 @@ pendiente global la pone λ.
 
 ### 1.4 Compresión de colas / transferibilidad λ(d)
 `θ_ref = μ_origen + λ(d)·(θ_traducido − μ_origen)`, con μ_origen = δ_c (el nivel medio de la competición de origen
-en la vara de referencia), λ(0) = 1 y λ decreciente en la distancia de nivel d_l = |media con signo de δ en las 8
+en la vara de referencia), λ(0) = 1 y λ decreciente en la distancia de nivel d_l = |mediana con signo de δ (media de sus temporadas) en las 8
 métricas de nivel (PER, GmSc/40, WS/40, ORtg, DRtg, pts/100, TS%, eFG%)|.
 * **Medición empírica**: para cada liga y métrica, λ̂ = pendiente del valor del puente en la otra competición (vara
   de referencia) sobre su valor traducido s·z*, con efecto fijo por arista (cada pareja de competiciones conserva su

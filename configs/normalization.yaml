@@ -31,7 +31,7 @@ escalones:
 contraccion:
   tau2_inicial: 0.05
   tau2_minimo: 0.0025           # τ ≥ 0,05 DT: evita contraer del todo una temporada hacia su escalón
-  hiperprevia_sd: 2.0           # μ_escalón ~ N(media global, 2²): sólo pesa si un escalón no tiene puentes
+  hiperprevia_sd: 2.0           # μ_escalón ~ N(0, 2²), nodo latente del grafo: sólo pesa si un escalón no tiene puentes
   iteraciones_em: 200
 
 # 3) Mapeo de cuantiles monótono por métrica (forma; la pendiente global la pone λ(d)).
@@ -41,7 +41,7 @@ mapeo:
   min_puentes_liga: 40          # con menos puentes la liga usa la recta (sin forma)
 
 # 4) Compresión de colas / transferibilidad: θ_ref = μ_origen + λ(d)·(θ_traducido − μ_origen)
-#    d = distancia de nivel a la referencia (|media del desfase en las métricas de nivel|, DT EuroLeague).
+#    d = distancia de nivel a la referencia (|mediana con signo del desfase en las métricas de nivel|, DT EuroLeague).
 transferibilidad:
   formas: [constante, exponencial, logistica]   # se elige por error dejando fuera una liga
   lambda_minimo: 0.2
@@ -57,7 +57,8 @@ seleccion:
 unidades:
   minutos_partido: {nba: 48, gleague: 48, defecto: 40}
 
-iteraciones_externas: 4         # alternancia desfases ↔ λ/forma
+iteraciones_externas: 12        # máximo de alternancias desfases ↔ λ/forma
+tolerancia_externa: 0.005       # para cuando ningún λ de liga cambia más que esto
 validacion:
   anios: [2023, 2024]           # examen temporal: ajusta con ≤ t y predice t+1 (mismo que bbmodel validar)
   bootstrap: 10

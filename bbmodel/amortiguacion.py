@@ -174,35 +174,42 @@ def camino_preciso(n: int, aristas: list[tuple[int, int, float, float]], origen:
 # =============================================================================================== 2. contracción
 def contraccion_jerarquica(n: int, aristas, ref: int, escalon: list[str | None], tau2_inicial: float = 0.05,
                            tau2_minimo: float = 0.0025, hiperprevia_sd: float = 2.0, iteraciones: int = 200) -> dict:
-    """Bayes empírico (EM) de nivel_k ~ N(μ_escalón(k), τ²) con la verosimilitud del grafo.
+    """Contracción bayesiana parcial: nivel_c = μ_escalón(c) + ε_c, ε_c ~ N(0, τ²), μ_escalón ~ N(0, hiperprevia_sd²).
 
-    E: posterior conjunta de los niveles (resolver_grafo con la previa). M: μ_escalón = media posterior de sus nodos
-    (con una hiperprevia débil hacia la media global, para escalones sin puentes) y τ² = media de (nivel − μ)² + var.
+    Las medias de escalón son nodos LATENTES del grafo (una arista δ_c − μ_k = 0 con varianza τ² por cada nodo del
+    escalón, y una previa débil sobre μ_k): la posterior conjunta integra la incertidumbre de μ (un escalón de una sola
+    liga comparte el camino de puentes de todas sus temporadas, y esa incertidumbre común no desaparece al promediar).
+    τ² por bayes empírico con EM: τ² = media de E[(δ_c − μ_k)²] = (m_c − m_k)² + V_cc + V_kk − 2·V_ck.
     El nodo de referencia no entra en la previa (está fijado a 0)."""
     escalones = sorted({e for k, e in enumerate(escalon) if e is not None and k != ref})
-    mu = {e: 0.0 for e in escalones}
-    tau2 = float(tau2_inicial)
+    nodo_mu = {e: n + i for i, e in enumerate(escalones)}
+    N = n + len(escalones)
     libres = [k for k in range(n) if k != ref and escalon[k] is not None]
+    pv = np.full(N, np.inf)
+    for e in escalones:
+        pv[nodo_mu[e]] = hiperprevia_sd ** 2
+    pm = np.zeros(N)
+    tau2 = float(tau2_inicial)
+
+    def resolver(t2):
+        ar = list(aristas) + [(k, nodo_mu[escalon[k]], 0.0, t2) for k in libres]
+        return resolver_grafo(N, ar, ref, pm, pv)
+
+    it = 0
     for it in range(iteraciones):
-        pm = np.array([mu.get(escalon[k], 0.0) if k in libres else 0.0 for k in range(n)])
-        pv = np.array([tau2 if k in libres else np.inf for k in range(n)])
-        media, cov = resolver_grafo(n, aristas, ref, pm, pv)
-        glob = float(np.nanmean([media[k] for k in libres])) if libres else 0.0
-        nuevo = {}
-        for e in escalones:
-            ks = [k for k in libres if escalon[k] == e]
-            prec = len(ks) / tau2 + 1.0 / hiperprevia_sd ** 2
-            nuevo[e] = (sum(media[k] for k in ks) / tau2 + glob / hiperprevia_sd ** 2) / prec
-        t2 = float(np.mean([(media[k] - nuevo[escalon[k]]) ** 2 + cov[k, k] for k in libres])) if libres else tau2
+        media, cov = resolver(tau2)
+        t2 = float(np.mean([(media[k] - media[nodo_mu[escalon[k]]]) ** 2 + cov[k, k] + cov[nodo_mu[escalon[k]], nodo_mu[escalon[k]]]
+                            - 2 * cov[k, nodo_mu[escalon[k]]] for k in libres])) if libres else tau2
         t2 = max(t2, tau2_minimo)
-        cambio = max([abs(nuevo[e] - mu[e]) for e in escalones] + [abs(t2 - tau2)])
-        mu, tau2 = nuevo, t2
-        if cambio < 1e-6:
+        cambio = abs(t2 - tau2)
+        tau2 = t2
+        if cambio < 1e-7:
             break
-    pm = np.array([mu.get(escalon[k], 0.0) if k in libres else 0.0 for k in range(n)])
-    pv = np.array([tau2 if k in libres else np.inf for k in range(n)])
-    media, cov = resolver_grafo(n, aristas, ref, pm, pv)
-    return {"media": media, "cov": cov, "mu_escalon": mu, "tau2": tau2, "iteraciones": it + 1}
+    media, cov = resolver(tau2)
+    mu = {e: float(media[nodo_mu[e]]) for e in escalones}
+    mu_sd = {e: float(np.sqrt(cov[nodo_mu[e], nodo_mu[e]])) for e in escalones}
+    return {"media": media[:n], "cov": cov[:n, :n], "mu_escalon": mu, "mu_escalon_sd": mu_sd, "tau2": tau2,
+            "iteraciones": it + 1}
 
 
 # =============================================================================================== 3. mapeo monótono
@@ -250,9 +257,10 @@ class Mapeo:
         return y - self._c
 
     def derivada(self, x):
+        """F'(x), con suelo 0,05 (evita varianzas nulas en tramos casi planos)."""
         x = np.asarray(x, float)
         d = self._f.derivative()(np.clip(x, self.xs[0], self.xs[-1]))
-        return np.where((x < self.xs[0]) | (x > self.xs[-1]), 1.0, d)
+        return np.maximum(np.where((x < self.xs[0]) | (x > self.xs[-1]), 1.0, d), 0.05)
 
     def inversa(self, y):
         """F⁻¹ (numérica: F es estrictamente creciente salvo tramos planos, donde se toma el centro)."""
@@ -297,6 +305,8 @@ def ajustar_mapeo(x: np.ndarray, y: np.ndarray, w: np.ndarray, nodos: int = 7, p
         return Mapeo()
     xs = np.array(xs)
     ys = isotonica(np.array(ys), np.array(ws))
+    # estrictamente creciente: los empates de la isotónica dejarían tramos planos (F' = 0 → puentes sin varianza)
+    ys = ys + np.arange(len(ys)) * 1e-3 * max(float(np.ptp(xs)), 1e-3)
     # estrictamente creciente (PCHIP necesita x distintos; y no decreciente basta) y anclas lineales en los extremos
     xs, idx = np.unique(xs, return_index=True)
     ys = ys[idx]
@@ -494,7 +504,7 @@ def medidas_puentes(P: pd.DataFrame, f: pd.DataFrame, est: Estado, ipw: np.ndarr
             zy = Y.loc[sy, "z_obs"].to_numpy()
             gy[sy] = est.g(liga, zy)
             vy[sy] = est.gp(liga, zy) ** 2 * (Y.loc[sy, "v_obs"].to_numpy() + Y.loc[sy, "psi"].to_numpy())
-    var = vx + vy + e["eta2"] * np.abs(dt)
+    var = np.maximum(vx + vy + e["eta2"] * np.abs(dt), 1e-4)
     out = pd.DataFrame({"persona_id": P["persona_id"].to_numpy(), "nodo_x": X["nodo"].to_numpy(),
                         "nodo_y": Y["nodo"].to_numpy(), "liga_x": X["liga"].to_numpy(), "liga_y": Y["liga"].to_numpy(),
                         "medida": gy - gx - der * dt, "var": var, "x": xs, "gx": gx,
@@ -631,14 +641,16 @@ def indicador_puente(tabla: pd.DataFrame, min_minutos: float) -> np.ndarray:
 
 
 def distancia_liga(offsets: dict, metricas_nivel: list[str]) -> dict:
-    """d_l = |media con signo del nivel de la liga (media de sus temporadas) en las métricas de nivel|."""
+    """d_l = |mediana con signo del nivel de la liga (media de sus temporadas) en las métricas de nivel|. Mediana y no
+    media: una métrica de nivel muy dependiente del equipo (DRtg individual) puede encadenar desfases erráticos y
+    no debe decidir sola la distancia."""
     acum = {}
     for c in metricas_nivel:
         if c not in offsets:
             continue
         for liga, v in offsets[c].items():
             acum.setdefault(liga, []).append(CATALOGO[c].sentido * v)
-    return {l: float(abs(np.mean(v))) for l, v in acum.items()}
+    return {l: float(abs(np.median(v))) for l, v in acum.items()}
 
 
 def ajustar(tabla: pd.DataFrame, params: dict, cfg: dict | None = None, hasta_anio: int | None = None,
@@ -677,6 +689,7 @@ def ajustar(tabla: pd.DataFrame, params: dict, cfg: dict | None = None, hasta_an
     dist = distancia_liga({c: params["metricas"][c]["enlace"]["m"] for c in metricas}, mn)
     resultados, info_lambda = {}, {}
     n_ext = int(cfg.get("iteraciones_externas", 4))
+    lam_prev = {}
     for it in range(n_ext):
         lam_tab = []
         for col in metricas:
@@ -708,6 +721,12 @@ def ajustar(tabla: pd.DataFrame, params: dict, cfg: dict | None = None, hasta_an
         if progreso:
             progreso(f"  iteración {it + 1}/{n_ext}: forma λ(d) = {info_lambda['elegida']} {np.round(info_lambda['parametros'], 3).tolist()}"
                      f" · λ FEB3 {lam_g.get('feb3', np.nan):.3f} · d FEB3 {dist.get('feb3', np.nan):.2f}")
+        # convergencia de la alternancia desfases ↔ λ: cambio máximo de λ entre ligas < tolerancia
+        cambio = max(abs(lam_g[l] - lam_prev.get(l, 1.0)) for l in lam_g)
+        lam_prev = dict(lam_g)
+        info_lambda["iteraciones_externas"] = it + 1
+        if cambio < float(cfg.get("tolerancia_externa", 0.005)):
+            break
     # última pasada con las λ finales
     for col in metricas:
         resultados[col] = ajustar_metrica(col, filas[col], params["metricas"][col]["enlace"], cfg, lam_liga[col], ipw_arr,

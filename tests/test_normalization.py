@@ -102,3 +102,13 @@ def test_exposicion_en_posesiones_partidos_de_48_minutos():
                       "poss_on_court": [np.nan, np.nan]})
     pos = AM.exposicion_posesiones(t, {"nba": 48, "defecto": 40})
     assert pos.tolist() == pytest.approx([100.0, 72.0])   # un partido completo = las posesiones del equipo
+
+
+def test_contraccion_no_borra_la_incertidumbre_del_camino_comun():
+    # 4 temporadas de una liga lejana que sólo se enlazan con la referencia por UNA arista común (var 0.09):
+    # 1 (puente) — 0 (ref); temporadas 2..5 enlazadas con 1 con mucha precisión
+    aristas = [(1, 0, -1.0, 0.09)] + [(k, 1, -1.0, 0.001) for k in range(2, 6)]
+    r = AM.contraccion_jerarquica(6, aristas, 0, [None, "a", "b", "b", "b", "b"])
+    for k in range(2, 6):
+        assert r["cov"][k, k] >= 0.09 * 0.95          # el camino común no se promedia entre temporadas
+    assert "mu_escalon_sd" in r and r["mu_escalon_sd"]["b"] > 0.25
