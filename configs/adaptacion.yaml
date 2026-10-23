@@ -49,7 +49,9 @@ grupos_nacionalidad:                 # orden de evaluación en bbfit.adaptacion.
   - desconocido                      # sin nacionalidad (NaN + bandera; nunca se imputa)
 
 metricas:                            # métricas clave (por 100 posesiones o tasas) + índice de nivel L
-  clave: [pts_p100, ts_pct, usg_pct, ast_pct, reb_p100, per, L]
+  clave: [pts_p100, ts_pct, usg_pct, ast_pct, reb_p100, per, L, L_rel]
+  # L     = efecto ADITIVO en el índice L (unidades de L, DT de capacidad EuroLeague): L(g) = L̂ + δ·exp(−g/κ)
+  # L_rel = efecto RELATIVO compuesto (media geométrica de y/ŷ de las 8 métricas de L): es el ADAPT% principal
   # reb_p100 = oreb_p100 + dreb_p100 (cada una traducida por separado y sumadas)
   # L = índice de nivel compuesto: media de los z con signo de las 8 métricas de nivel (bbmodel.contexto.NIVEL)
   # en la vara EuroLeague; su efecto relativo es la media geométrica de los cocientes y/ŷ de esas 8 métricas
@@ -59,10 +61,16 @@ metricas:                            # métricas clave (por 100 posesiones o tas
 modelo:                              # modelo jerárquico gaussiano (bayes empírico, Gibbs opcional) para Δ
   respuesta: log_ratio               # Δ_rel = exp(E[log(y/ŷ)]) − 1
   # efectos aleatorios anidados: pareja origen→destino ⊂ escalón de destino ⊂ global
-  covariables: [grupo_nacionalidad, pos3, edad_c, edad_c2, edad_desconocida, rol_origen_num, cambio_rol,
-                salto_nivel, salto_nivel_abs, distancia_estilo_equipo, estilo_desconocido, cambio_entrenador,
-                entrenador_desconocido, intra_temporada, adicion]
+  # efectos fijos (las categóricas con su nivel de referencia); NaN → 0 con su bandera «_desconocido»
+  categoricas: {grupo_nacionalidad: europeo_cambia_liga, pos3: E, arquetipo: circulacion}
+  continuas: [edad_c, edad_c2, rol_origen_c, cambio_rol, salto_nivel, salto_nivel_abs, distancia_estilo_c,
+              cambio_entrenador]
+  banderas: [edad_desconocida, rol_desconocido, estilo_desconocido, entrenador_desconocido, intra_temporada,
+             adicion, regreso]
   edad_centro: 26
+  edad_escala: 4
+  prior_tau_a: 1.0                   # τ² ~ IG(a, b) de los efectos aleatorios (pareja y escalón) y del ruido
+  prior_tau_b: 0.001
   prior_beta_sd: 1.0                 # previa N(0, 1) de los coeficientes fijos (escala log-cociente)
   gibbs_iteraciones: 3000
   gibbs_calentamiento: 1000
@@ -71,21 +79,37 @@ modelo:                              # modelo jerárquico gaussiano (bayes empí
   peso_minutos_ref: 600              # peso de cada traspaso en la verosimilitud: min/(min + ref) (ruido de muestreo)
 
 curva:                               # y_i(g) = ŷ_i·(1 + a_i + D_i·exp(−g/κ_c)), g = partidos en la liga nueva
-  metricas: [pts_p100, ts_pct, usg_tiro, prod_p100]  # por partido (tabla partido × jugador de la fase 3)
-  # prod_p100 = 100·(PTS + AST)/posesiones en pista (la misma producción de la fase 5): se usa como curva del índice L
-  metrica_para_L: prod_p100
-  partidos_max: 40                   # primeros partidos en la liga nueva que entran en la curva
+  # por partido (tabla partido × jugador de la fase 3); a cada métrica clave le corresponde una serie por partido.
+  # prod_p100 = 100·(PTS + AST)/posesiones en pista (la producción de la fase 5): curva del índice L, de PER y del
+  # rebote (no hay rebotes ni PER por partido) [supuesto]
+  serie_por_metrica: {pts_p100: pts_p100, ts_pct: ts_pct, usg_pct: usg_tiro, ast_pct: ast_p100, reb_p100: prod_p100,
+                      per: prod_p100, L: prod_p100, L_rel: prod_p100}
+  partidos_max: 80                   # partidos en la liga nueva que entran en la curva (1.ª temporada y, si sigue, la 2.ª)
+  horizonte_proyeccion: 60           # partidos sobre los que se proyecta la trayectoria a la forma 1 + δ·exp(−g/κ)
+  kappa_max_proyeccion: 500          # rejilla de κ de la interfaz: κ ≫ horizonte = efecto persistente en el horizonte
   min_posesiones_partido: 5
   min_partidos_jugador: 8
-  kappa_rejilla: [0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 60]
+  kappa_min: 0.5                     # rejilla logarítmica de κ (partidos) para el perfil de verosimilitud
+  kappa_max: 80
+  kappa_puntos: 49
   grupos: [grupo_nacionalidad]       # κ_c por grupo de covariables (con contracción hacia el global)
   min_jugadores_grupo: 30
+  # previas del MAP (κ, D): la forma está poco identificada (perfil casi plano en κ) y sin previa κ cae en los bordes
+  previa_kappa: 5.0                  # log κ ~ N(log 5, 1²): 90 % previo entre ~1 y ~26 partidos
+  previa_log_kappa_sd: 1.0
+  previa_D_sd: 0.15                  # D ~ N(0, 0,15²): huecos iniciales de hasta ±30 % plausibles a priori
   bootstrap: 200                     # remuestreo de jugadores para los intervalos de κ y de los partidos al 50/90 %
   control_permanecen: true           # misma curva en jugadores que siguen en su equipo: descuenta el «arranque de temporada»
 
 censura:                             # supervivencia: quien no se adapta juega menos o se va
   # IPCW: P(seguir observado | covariables, rendimiento temprano) por logit; peso = 1/p (recortado)
-  min_minutos_observado: 300         # «observado» = llega a min_minutos en la liga de destino esa temporada
+  # «observado» (no censurado) = juega >= min_pct_disponible de los minutos que su equipo juega desde que llega
+  # (>= 10' por partido del equipo en 40') y >= min_minutos_absolutos; sin partidos del equipo, >= min_minutos_observado
+  min_pct_disponible: 0.25
+  min_minutos_absolutos: 150
+  min_minutos_observado: 300
+  temporadas_en_curso: ["2026-27"]   # censura administrativa (temporada sin terminar): fuera del ajuste y de la censura
+  duracion_partido: {defecto: 40, nba: 48, gleague: 48}
   partidos_tempranos: 5              # rendimiento de los primeros k partidos como predictor de la censura
   recorte_pesos: [0.02, 0.98]        # percentiles de recorte de 1/p
   C_logit: 1.0
@@ -103,8 +127,10 @@ adapt:
   bins_calibracion: 10
 
 validacion:
-  cortes: [2023, 2024]               # ajuste con traspasos de destino <= t, evaluación en destino t+1 (sin fuga)
+  cortes: [2022, 2023, 2024]         # ajuste con traspasos de destino <= t, evaluación en destino t+1 (sin fuga)
   dejar_fuera_liga: true
+  gibbs_iteraciones: 1500            # validación: una cadena más corta
+  gibbs_calentamiento: 500
 
 salida:
   max_mb_fichero: 40

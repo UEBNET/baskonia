@@ -6,6 +6,8 @@
   entropia    fase 5: entropía de estilo y de rol, volatilidad, entropía de equipo → data/modelos/entropia/
   estilos     fase 6: taxonomía unificada de estilos jugador ↔ equipo → data/modelos/estilos_unificados/
               (--reusar-k reutiliza la tabla de selección de K si la configuración no ha cambiado)
+  adaptacion  fase 7: adaptación al cambio de liga (Δ jerárquico, curva, censura, ADAPT%) → data/modelos/adaptacion/
+              (reanudable: caché en experimentos/cache_adaptacion; --rehacer la ignora; --sin-validacion)
 
 Para añadir una orden: una función en ORDENES que reciba los argumentos ya leídos.
 """
@@ -38,7 +40,13 @@ def _estilos(a):
     return estilos_unificados.ejecutar(reusar_k=getattr(a, "reusar_k", False))
 
 
-ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "estilos": _estilos}
+def _adaptacion(a):
+    from . import adaptacion
+    return adaptacion.main(rehacer=a.rehacer, sin_validacion=getattr(a, "sin_validacion", False))
+
+
+ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "estilos": _estilos,
+           "adaptacion": _adaptacion}
 
 
 def main(argv=None) -> int:
@@ -48,6 +56,7 @@ def main(argv=None) -> int:
     p.add_argument("--ligas", nargs="*", default=None)
     p.add_argument("--rehacer", action="store_true", help="ignora la caché por liga-temporada")
     p.add_argument("--reusar-k", action="store_true", help="estilos: reutiliza la tabla de selección de K guardada")
+    p.add_argument("--sin-validacion", action="store_true", help="adaptacion: omite el examen temporal y dejar fuera una liga")
     a = p.parse_args(argv)
     res = ORDENES[a.orden](a)
     if isinstance(res, dict):

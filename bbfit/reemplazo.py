@@ -664,7 +664,8 @@ def tendencias_entrenador(pj: pd.DataFrame, cfg: dict) -> pd.DataFrame:
 def asignar_minutos(plantilla: pd.DataFrame, total_min: float = 200.0, minutos_partido: float = 40.0,
                     rotacion_media: float | None = None, rotacion_sd: float = 1.0, curva: np.ndarray | None = None,
                     n_sim: int | None = None, semilla: int | None = None, cfg: dict | None = None,
-                    devolver_simulaciones: bool = False):
+                    devolver_simulaciones: bool = False, niveles_sim: np.ndarray | None = None,
+                    presencia: np.ndarray | None = None):
     """Asignación endógena de minutos por Monte Carlo.
 
     plantilla: player_id, nivel (p. ej. L), pos3 (E/A/I o NaN) y opcional encaje (0-1).
@@ -673,7 +674,11 @@ def asignar_minutos(plantilla: pd.DataFrame, total_min: float = 200.0, minutos_p
     (3) tamaño de rotación R ~ N(rotación media del entrenador, sd), recortado a [5, n]; (4) minutos por rango
     según la curva de reparto del entrenador (renormalizada a los R primeros), × total; (5) tope por jugador
     con redistribución proporcional del exceso. Devuelve por jugador minutos medios e intervalo y la
-    probabilidad de cada rol (regla de bbfit.roles con titular = está entre los 5 primeros)."""
+    probabilidad de cada rol (regla de bbfit.roles con titular = está entre los 5 primeros).
+
+    Opcionales (simulador v2, bbfit/simulador.py): `niveles_sim` (n_sim × n) sustituye al nivel en cada simulación
+    (incertidumbre del nivel acoplada a los minutos); `presencia` (n, 0-1): en cada simulación el jugador está en la
+    plantilla con esa probabilidad (siempre quedan al menos 5)."""
     cfg = cfg or _cfg()
     a = cfg["asignacion"]
     n_sim = int(n_sim or a["simulaciones"])
@@ -697,8 +702,20 @@ def asignar_minutos(plantilla: pd.DataFrame, total_min: float = 200.0, minutos_p
     minimos = a["min_por_pos3"]
     M = np.zeros((n_sim, n))
     T5 = np.zeros((n_sim, n), bool)
+    if niveles_sim is not None:
+        U = (np.asarray(niveles_sim, float) + float(a["encaje_peso"]) * enc[None, :]) / float(a["temperatura"])
+    pres = None if presencia is None else np.clip(np.nan_to_num(np.asarray(presencia, float), nan=1.0), 0, 1)
     for s in range(n_sim):
-        orden = list(np.argsort(-(u + rng.gumbel(size=n))))
+        us = U[s] if niveles_sim is not None else u
+        g_ = rng.gumbel(size=n)
+        if pres is not None:
+            fuera = rng.random(n) > pres
+            if (~fuera).sum() < 5:            # al menos 5 disponibles: vuelven los de más presencia
+                fuera[np.argsort(-pres)[:5]] = False
+            us = np.where(fuera, -np.inf, us)
+        orden = list(np.argsort(-(us + g_)))
+        if pres is not None:
+            orden = [i for i in orden if np.isfinite(us[i])]
         # restricciones de posición en los 5 primeros
         for grupo, k in minimos.items():
             while sum(pos[i] == grupo for i in orden[:5]) < int(k):
@@ -712,7 +729,7 @@ def asignar_minutos(plantilla: pd.DataFrame, total_min: float = 200.0, minutos_p
                 sale, entra = sobran[0], fuera[0]
                 i_s, i_e = orden.index(sale), orden.index(entra)
                 orden[i_s], orden[i_e] = entra, sale
-        R = int(np.clip(round(rng.normal(rot_m, rotacion_sd)), 5, n))
+        R = int(np.clip(round(rng.normal(rot_m, rotacion_sd)), 5, len(orden)))
         w = curva[:R] / curva[:R].sum()
         mins = w * total_min
         for _ in range(20):                       # tope con redistribución proporcional
