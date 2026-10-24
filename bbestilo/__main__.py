@@ -12,7 +12,7 @@
     python -m bbestilo quimica                  # química de estilos: efectos X → Y y sinergia por estilo × estilo
     python -m bbestilo entrenadores             # estilo de cada tramo club-temporada-entrenador
     python -m bbestilo exportar                 # JSON del mapa 3D (artifact/estilos/)
-    python -m bbestilo articulo [--fuentes D]   # artículo científico en PDF (docs/articulo/)
+    python -m bbestilo articulo [--fuentes D]   # artículo completo en PDF (docs/articulo/; = python -m bbfit articulo)
 
 Resultados en data/modelos/estilos/ (ver docs/estilos_de_juego.md).
 """
@@ -206,7 +206,7 @@ def main(argv=None):
         analisis.main()
         print("escrito", C.DIR_SALIDA / "analisis.json")
     elif args.orden == "articulo":
-        from . import articulo
+        from bbfit import articulo   # artículo completo: Parte I (estilos) + Parte II (encaje v2)
         print("escrito", articulo.construir(Path(args.fuentes) if args.fuentes else None))
     elif args.orden == "reconsensuar":
         reconsensuar()

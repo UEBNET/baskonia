@@ -114,9 +114,9 @@ def _priors() -> dict | None:
     t = AD.cargar_priors()
     if t is None:
         return None
-    t = t[t["metrica"].isin(["pts_p100", "ts_pct", "usg_pct", "ast_pct", "reb_p100", "L"])]
+    t = t[t["metrica"].isin(["pts_p100", "ts_pct", "usg_pct", "ast_pct", "reb_p100", "L", "L_rel"])]
     cols = ["nivel", "liga_origen", "liga_destino", "grupo_nacionalidad", "pos3", "escalon_destino", "metrica", "n",
-            "delta_media", "delta_sd", "kappa_media", "kappa_sd"]
+            "delta_media", "delta_sd", "kappa_media", "kappa_sd"] + S.PRIOR_EXTRA
     t = t[cols]
     return {"columnas": cols, "filas": [[(_r(v, 5) if isinstance(v, (float, np.floating)) else (int(v) if isinstance(v, (int, np.integer)) else v))
                                          for v in fila] for fila in t.itertuples(index=False)]}
@@ -246,6 +246,7 @@ def exportar(salida: str | Path = SALIDA) -> dict:
             "beta_uso": {k: list(v) for k, v in c0.mod["beta_uso"].items()},
             "companeros_ts": list(c0.mod["companeros"].get("ts_pct", (0.0, 0.0))),
             "adaptacion": {"partidos": cfg["adaptacion"]["partidos_temporada"], "primeros": cfg["adaptacion"]["primeros_partidos"],
+                           "contraccion": cfg["adaptacion"]["contraccion"],
                            "priors": _priors(), "n_min": ad["priors"]["n_min_celda"],
                            "defecto": [0.0, ad["priors"]["delta_sd_defecto"], ad["priors"]["kappa_defecto"], ad["priors"]["kappa_sd_defecto"]],
                            "paises_liga": ad["paises_liga"], "paises_europeos": ad["paises_europeos"],
@@ -266,3 +267,33 @@ def exportar(salida: str | Path = SALIDA) -> dict:
     print(f"simulador v2 exportado en {salida}: {len(jug)} registros, {len(clubes)} clubes · "
           + ", ".join(f"{k} {v / 1e6:.1f} MB" for k, v in tam.items()))
     return {"registros": len(jug), "clubes": len(clubes), "mb": round(total, 2)}
+
+
+def paridad(carpeta: str | Path = SALIDA, n: int = 6, n_sim: int = 3000, semilla: int = 11) -> list[dict]:
+    """Casos de referencia (Python) para comparar con el motor JS: n fichajes al azar (registro de la temporada base)
+    a clubes de destino exportados. → <carpeta>/paridad.json"""
+    carpeta = Path(carpeta)
+    cl = json.loads((carpeta / "clubes.json").read_text(encoding="utf-8"))
+    jg = json.loads((carpeta / "jugadores.json").read_text(encoding="utf-8"))
+    clubes = [dict(zip(cl["columnas"], f)) for f in cl["filas"]]
+    jug = [dict(zip(jg["columnas"], f)) for f in jg["filas"]]
+    rng = np.random.default_rng(semilla)
+    ex = cargar("simulation")["exportar"]
+    out = []
+    cand_cl = [x for x in clubes if x["base"] == ex["temporada_base"] and len(x["plantilla"]) >= 8
+               and x["liga"] in ("euroleague", "acb", "lnb", "feb1", "eurocup", "nba", "bbl")]
+    cand_j = [x for x in jug if x["temporada"] == ex["temporada_base"] and (x["min_total"] or 0) >= 600 and x["th"][0] is not None]
+    c = S.cargar_corte(ex["temporada_base"])
+    for k in range(n):
+        club = cand_cl[int(rng.integers(len(cand_cl)))]
+        rec = cand_j[int(rng.integers(len(cand_j)))]
+        r = S.simular(c, rec["persona"], club["liga"], club["team"], [(p[3], p[1]) for p in club["plantilla"]],
+                      entrenador=club["entrenador"], ritmo=club["ritmo"], team_eu=club["eu"], team_eu_probs=club["eu_probs"],
+                      n_sim=n_sim, detalle=False, club_t=club["club_t"])
+        out.append({"rec": rec["id"], "club": f"{club['liga']}|{club['team']}|{club['temporada']}",
+                    "minutos": r["minutos"]["media"], "roles": r["roles"], "pts_p100": r["produccion_p100"]["pts_p100"]["media"],
+                    "ts_pct": r["produccion_p100"]["ts_pct"]["media"], "usg_pct": r["produccion_p100"]["usg_pct"]["media"],
+                    "adapt": r["adaptacion"]["adapt_pct_temporada"]["media"], "d_net": r["equipo"]["d_net"],
+                    "fit": r["fit"]["total"], "nombre": r["nombre"], "club_nombre": club["nombre"]})
+    (carpeta / "paridad.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+    return out

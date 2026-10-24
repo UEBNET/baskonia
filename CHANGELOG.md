@@ -1,5 +1,70 @@
 # Registro de cambios
 
+## Encaje v2 (fases 1-9, 21-10-2026 → 23-10-2026): resumen consolidado
+
+Proyecto multifase sobre la línea base de la auditoría `docs/AUDIT_2026-10-21.md`. Cada fase tiene código, YAML en
+`configs/`, tests sintéticos, registro en MLflow e informe en `docs/checkpoints/F<n>.md`.
+
+| Fase | Qué añade | Órdenes | Salidas | Informe |
+|---|---|---|---|---|
+| 1 | Primera, Segunda y Tercera FEB en el esquema común; contrato de datos; posesiones reales; correspondencia de jugadores entre ligas | `bbstats historico/feb/contrato`, `bbmodel crosswalk` | `data/processed/…/feb/`, `feb_*.csv`, `player_id_crosswalk.csv` | F1 |
+| 2 | Normalización amortiguada (grafo de puentes con varianza acumulada, contracción por escalón, mapeo monótono probado, λ(d) → constante, IPW); 15 ligas en `bbmodel`/`bbestilo` | `bbmodel amortiguar` | `normalizacion_amortiguada/`, columnas `<m>_am*` del dataset normalizado | F2 |
+| 3 | Roles por minutos (RESIDUAL … GO-TO-GUY), GTI, vector de rol, cambios de rol (BOCPD) | `bbfit roles` | `roles/` | F3 |
+| 4 | Reemplazo de rol: libro de volumen, desplazamiento de minutos / de rol, tasa de relleno, elasticidad uso–eficiencia con IV, suma fija del uso, minutos endógenos | `bbfit reemplazo` | `reemplazo/` | F4 |
+| 5 | Entropía de estilo y de rol, volatilidad σ_i, entropía de equipo | `bbfit entropia` | `entropia/` | F5 |
+| 6 | Taxonomía unificada de 6 estilos jugador ↔ equipo | `bbfit estilos` | `estilos_unificados/` | F6 |
+| 7 | Adaptación al cambio de liga: Δ jerárquico, curva, censura IPCW, priors, ADAPT% | `bbfit adaptacion` | `adaptacion/` | F7 |
+| 8 | Simulador de encaje v2 (rol y minutos endógenos, Fit descompuesto, avisos) y su validación | `bbfit simular` y órdenes de la fase 8 | `simulador/v2/` | F8 (en curso) |
+| 9 | Documentación: artículo con Parte II y notación formal, LaTeX autónomo, diccionario de datos, glosario, README, contexto | `bbestilo articulo` (= `python -m bbfit.articulo`) | `docs/articulo/`, `docs/data_dictionary.md`, `docs/glosario.md` | este registro |
+
+### Cambios incompatibles (breaking changes)
+
+1. **Identidad de personas**: los modelos A/B usan también las uniones automáticas del crosswalk y el umbral de
+   fusión pasa de 0,80 a **0,75** (fase 2, decisión del usuario): cambian `persona_id` y el número de personas
+   (39.647 registros, 14.535 personas). Cualquier unión guardada por `persona_id` anterior debe rehacerse.
+2. **15 ligas en los modelos**: A, B, pista, contexto, interacciones, escalas y `bbfit reemplazo` se reajustaron con
+   las FEB; todos los equivalentes EuroLeague, L y percentiles cambian. `algoritmo_A/validacion.csv` sigue siendo de
+   12 ligas (no se relanzó `bbmodel validar`). VaDE (Parte I) no se reentrenó con las FEB.
+3. **L, contexto y escalas ±100 leen `<m>_am`** (normalización amortiguada) en vez de A+B
+   (`configs/normalization.yaml → usar_amortiguado`); las columnas antiguas del dataset normalizado no cambian, pero
+   `L`, `ctx_*` y las escalas sí.
+4. **Corrección de σ²** en `bbmodel/suerte.py` (pendiente ≤ 0 → mediana de las demás ligas): cambia el paso 1 del A
+   en BCL, NBA, FEC y Segunda FEB (p. ej. σ² de pts/100 en la BCL de 1,8·10⁻⁴ a 105,2).
+5. **Cortesía HTTP compartida**: `bbstats/http.py` aplica la pausa por dominio a todos los clientes del proceso
+   (antes, por cliente): las descargas en paralelo contra un mismo dominio son más lentas.
+6. **`python -m bbestilo articulo` genera el artículo completo** (Parte I + Parte II, ≈ 49 páginas) y, además,
+   `docs/articulo/fit_v2.tex`; `bbestilo.articulo.construir` acepta `parte2` y usa por defecto las fuentes de
+   `bbestilo/recursos/fuentes/`. La Parte I se recompone con el modelo VaDE actual (12 ligas; el PDF anterior era de
+   8) y el texto ya no dice «ocho ligas» fijo.
+7. **Configuración YAML** (`configs/*.yaml`) para todas las capas nuevas y registro MLflow en `experimentos/`
+   (no versionado; MLflow 3 necesita `MLFLOW_ALLOW_FILE_STORE=true`, que `bbfit.registro` fija).
+
+## 2026-10-23 — Fase 9: documentación y artículo científico
+
+Añadido
+- `bbfit/articulo.py`: Parte II del artículo (secciones 14-24: FEB, normalización amortiguada, roles y BOCPD,
+  reemplazo de rol, entropía, taxonomía unificada, adaptación, simulador v2 con marcadores `[[F8: …]]` para los
+  resultados pendientes, supuestos y limitaciones, reproducibilidad) escrita una sola vez en un marcado mínimo y
+  traducida a HTML (fórmulas LaTeX con KaTeX incrustado, sin red) y a LaTeX autónomo (`docs/articulo/fit_v2.tex`,
+  compilable con pdflatex, xelatex o lualatex; figuras en `docs/articulo/fit_v2_figuras/`). Cuatro figuras nuevas
+  (roles por liga, nivel antes/después, curva de adaptación, centroides de los estilos unificados). Ejecución:
+  `python -m bbestilo articulo` o `python -m bbfit.articulo [--fuentes DIR] [--sin-pdf]`.
+- `bbestilo/recursos/`: KaTeX 0.16.11 (MIT) y fuentes Source Serif 4, IBM Plex y Barlow Condensed (OFL) en woff2.
+- `docs/data_dictionary.md` (todas las tablas de `data/processed/` y `data/modelos/`), `docs/glosario.md` (roles,
+  estilos y medidas para dirección deportiva); README §17-§20 (orden de ejecución de `bbfit`, `configs/*.yaml`,
+  MLflow, artículo); secciones nuevas en `CONTEXTO_AGENTE.md`; este resumen consolidado.
+- `tests/test_articulo.py` (5 tests del marcado: HTML, LaTeX, marcadores F8).
+
+Cambiado
+- `bbestilo/articulo.py`: título común, Parte II insertada antes de las referencias, número de ligas del modelo VaDE
+  leído de los datos (antes «ocho» fijo), fuentes por defecto versionadas. `bbestilo/figuras.py`: paleta de 15 ligas.
+- `bbestilo/__main__.py`: `articulo` llama a `bbfit.articulo.construir`.
+
+## 2026-10-23 — Fase 8: simulador de encaje v2 (en curso)
+
+Ver `docs/checkpoints/F8.md` cuando exista (código en `bbfit/simulador.py`, `bbfit/sim_insumos.py`,
+`bbfit/validacion.py`, `bbfit/sim_exportar.py`; configuración `configs/simulation.yaml`).
+
 ## 2026-10-23 — Fase 7: adaptación al cambio de liga (`bbfit adaptacion`)
 
 Añadido
@@ -21,6 +86,56 @@ europeo que cambia de liga (sin adaptación más lenta detectable); sin hueco de
 (todos arrancan ~2 % abajo); el IPCW baja el Δ medio 1-2 puntos.
 
 Detalle, resultados y riesgos: `docs/checkpoints/F7.md`.
+
+## 2026-10-23 — Fase 6: taxonomía unificada de estilos jugador ↔ equipo
+
+Añadido
+- `bbfit/estilos_unificados.py` y `python -m bbfit estilos [--reusar-k]`: 12 rasgos con la misma definición para
+  jugador y equipo (ritmo, 3PAr, triple de esquina, aro, FTr, canastas sin asistencia, AST%, rebote ofensivo,
+  TOV%, robos, tapones, faltas) en z por rangos dentro de cada liga-temporada (15 ligas, incluidas las FEB);
+  mezcla gaussiana ajustada sobre jugadores (≥ 300 min) con proyección de los equipos; K por BIC + estabilidad
+  bootstrap → **6 estilos**: Spacing, Circulación, Isolation, Old-School, Pistons, Pintura. Estilo principal,
+  secundario, vector de pertenencia y etiqueta («puro», «A · B») por equipo-temporada, jugador-etapa y tramo de
+  entrenador. Registro en MLflow (experimento `estilos_unificados`).
+- `configs/styles.yaml` (umbrales, regla de K, nombres, colores, definiciones y firmas de nombre).
+- Salidas `data/modelos/estilos_unificados/{equipos.csv, jugadores.csv.gz, estilos.json, seleccion_k.json,
+  correspondencia_vade.csv}`; correspondencia con VaDE (ARI 0,03: miden cosas distintas).
+- Tests sintéticos `tests/test_estilos_unificados.py`.
+
+Cambiado
+- `bbestilo/exportar.py`: campos nuevos `eu`, `eu2`, `eu_p`, `eu_probs`, `eu_etiqueta` en clubes, etapas de
+  entrenador y jugadores del Atlas, y `meta.estilos_unificados`; los campos VaDE no cambian.
+- `bbfit/__main__.py`: orden `estilos`.
+
+Detalle, resultados y riesgos: `docs/checkpoints/F6.md`.
+
+## 2026-10-23 — Fases 3, 4 y 5: roles por minutos, reemplazo de rol y entropía (`bbfit`)
+
+Añadido
+- `python -m bbfit roles|reemplazo|entropia` (`bbfit/__main__.py`); cada ejecución queda registrada en MLflow
+  (`bbfit.registro`, almacén local `experimentos/`, no versionado). Umbrales y pesos en `configs/roles.yaml`,
+  `configs/reemplazo.yaml` y `configs/entropia.yaml`.
+- Fase 3 (`bbfit/roles.py`, `bbfit/cambios.py`, `bbfit/datos.py`): tabla partido × jugador desde los tramos y tiros
+  (`data/modelos/roles/partidos_jugador/<t>.csv.gz`, con ausencias), respaldo de caja donde no hay jugada a jugada,
+  roles RESIDUAL/PROFUNDIDAD/ROTACIÓN/TITULAR/GO-TO-GUY por MIN% (40'/48'), GTI, vector de rol Dirichlet para
+  muestras < 5 partidos, H_rol, cambios de rol con detección bayesiana en línea (BOCPD propio) y covariables
+  (entrenador, vacío de rol, fichaje, rendimiento reciente). Salidas `player_role_spells.csv.gz`,
+  `player_role_season.csv.gz`, `team_role_structure.csv` y validación.
+- Fase 4 (`bbfit/reemplazo.py`): producción por rol y proyección condicionada al rol de destino; elasticidad
+  uso-eficiencia con variable instrumental (vacío de rol del partido) y agrupamiento parcial por pos3; redistribución
+  de suma fija; libro de minutos por rol entre temporadas (identidad exacta) con tasa de relleno, transiciones de
+  rol, asociación con el cambio de Net (bootstrap, no causal); calidad de compañeros; tendencias de entrenador y
+  `asignar_minutos` (Plackett-Luce con restricciones) para el simulador. Salidas en `data/modelos/reemplazo/`.
+- Fase 5 (`bbfit/entropia.py`): H_estilo (zonas de tiro + acciones de caja, Dirichlet con intervalo), H_rol
+  posterior, volatilidad intrínseca σ_i (residuo sin contexto, varianza por exposición, contracción jerárquica de
+  log σ²) y entropía de equipo (uso, tiros, minutos, red de pases). Salidas en `data/modelos/entropia/`.
+- Tests sintéticos `tests/test_roles.py`, `tests/test_reemplazo.py`, `tests/test_entropia.py` (29).
+
+Cambiado
+- `bbfit/registro.py`: permite el almacén de ficheros de MLflow 3 (`MLFLOW_ALLOW_FILE_STORE`).
+- `.gitignore`: caché `data/modelos/roles/_cache/`.
+
+Detalle, resultados y riesgos: `docs/checkpoints/F3.md`, `F4.md`, `F5.md`.
 
 ## 2026-10-23 — Fase 2: normalización con amortiguación del salto de nivel (15 ligas)
 
@@ -52,56 +167,6 @@ Corregido
   Hallazgo 7 de la auditoría: pts/100 en la BCL tenía σ² = 1,8·10⁻⁴; afectaba también a NBA, FEC y Segunda FEB.
 
 Detalle, resultados y riesgos: `docs/checkpoints/F2.md`.
-
-## 2026-10-23 — Fases 3, 4 y 5: roles por minutos, reemplazo de rol y entropía (`bbfit`)
-
-Añadido
-- `python -m bbfit roles|reemplazo|entropia` (`bbfit/__main__.py`); cada ejecución queda registrada en MLflow
-  (`bbfit.registro`, almacén local `experimentos/`, no versionado). Umbrales y pesos en `configs/roles.yaml`,
-  `configs/reemplazo.yaml` y `configs/entropia.yaml`.
-- Fase 3 (`bbfit/roles.py`, `bbfit/cambios.py`, `bbfit/datos.py`): tabla partido × jugador desde los tramos y tiros
-  (`data/modelos/roles/partidos_jugador/<t>.csv.gz`, con ausencias), respaldo de caja donde no hay jugada a jugada,
-  roles RESIDUAL/PROFUNDIDAD/ROTACIÓN/TITULAR/GO-TO-GUY por MIN% (40'/48'), GTI, vector de rol Dirichlet para
-  muestras < 5 partidos, H_rol, cambios de rol con detección bayesiana en línea (BOCPD propio) y covariables
-  (entrenador, vacío de rol, fichaje, rendimiento reciente). Salidas `player_role_spells.csv.gz`,
-  `player_role_season.csv.gz`, `team_role_structure.csv` y validación.
-- Fase 4 (`bbfit/reemplazo.py`): producción por rol y proyección condicionada al rol de destino; elasticidad
-  uso-eficiencia con variable instrumental (vacío de rol del partido) y agrupamiento parcial por pos3; redistribución
-  de suma fija; libro de minutos por rol entre temporadas (identidad exacta) con tasa de relleno, transiciones de
-  rol, asociación con el cambio de Net (bootstrap, no causal); calidad de compañeros; tendencias de entrenador y
-  `asignar_minutos` (Plackett-Luce con restricciones) para el simulador. Salidas en `data/modelos/reemplazo/`.
-- Fase 5 (`bbfit/entropia.py`): H_estilo (zonas de tiro + acciones de caja, Dirichlet con intervalo), H_rol
-  posterior, volatilidad intrínseca σ_i (residuo sin contexto, varianza por exposición, contracción jerárquica de
-  log σ²) y entropía de equipo (uso, tiros, minutos, red de pases). Salidas en `data/modelos/entropia/`.
-- Tests sintéticos `tests/test_roles.py`, `tests/test_reemplazo.py`, `tests/test_entropia.py` (29).
-
-Cambiado
-- `bbfit/registro.py`: permite el almacén de ficheros de MLflow 3 (`MLFLOW_ALLOW_FILE_STORE`).
-- `.gitignore`: caché `data/modelos/roles/_cache/`.
-
-Detalle, resultados y riesgos: `docs/checkpoints/F3.md`, `F4.md`, `F5.md`.
-
-## 2026-10-23 — Fase 6: taxonomía unificada de estilos jugador ↔ equipo
-
-Añadido
-- `bbfit/estilos_unificados.py` y `python -m bbfit estilos [--reusar-k]`: 12 rasgos con la misma definición para
-  jugador y equipo (ritmo, 3PAr, triple de esquina, aro, FTr, canastas sin asistencia, AST%, rebote ofensivo,
-  TOV%, robos, tapones, faltas) en z por rangos dentro de cada liga-temporada (15 ligas, incluidas las FEB);
-  mezcla gaussiana ajustada sobre jugadores (≥ 300 min) con proyección de los equipos; K por BIC + estabilidad
-  bootstrap → **6 estilos**: Spacing, Circulación, Isolation, Old-School, Pistons, Pintura. Estilo principal,
-  secundario, vector de pertenencia y etiqueta («puro», «A · B») por equipo-temporada, jugador-etapa y tramo de
-  entrenador. Registro en MLflow (experimento `estilos_unificados`).
-- `configs/styles.yaml` (umbrales, regla de K, nombres, colores, definiciones y firmas de nombre).
-- Salidas `data/modelos/estilos_unificados/{equipos.csv, jugadores.csv.gz, estilos.json, seleccion_k.json,
-  correspondencia_vade.csv}`; correspondencia con VaDE (ARI 0,03: miden cosas distintas).
-- Tests sintéticos `tests/test_estilos_unificados.py`.
-
-Cambiado
-- `bbestilo/exportar.py`: campos nuevos `eu`, `eu2`, `eu_p`, `eu_probs`, `eu_etiqueta` en clubes, etapas de
-  entrenador y jugadores del Atlas, y `meta.estilos_unificados`; los campos VaDE no cambian.
-- `bbfit/__main__.py`: orden `estilos`.
-
-Detalle, resultados y riesgos: `docs/checkpoints/F6.md`.
 
 ## 2026-10-22 — Fase 1: competiciones FEB (Primera, Segunda y Tercera FEB)
 

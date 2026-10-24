@@ -6,6 +6,13 @@
   entropia    fase 5: entropía de estilo y de rol, volatilidad, entropía de equipo → data/modelos/entropia/
   estilos     fase 6: taxonomía unificada de estilos jugador ↔ equipo → data/modelos/estilos_unificados/
               (--reusar-k reutiliza la tabla de selección de K si la configuración no ha cambiado)
+  simular     fase 8: simulador de encaje v2 de un jugador en un club (sin minutos manuales)
+              --jugador «nombre» --club «nombre» [--liga acb] [--temporada 2025-26] [--bajas «a» «b»] [--json f.json]
+  backtest    fase 8: examen temporal del simulador frente a los baselines (reanudable)
+              [--fuente AB|A|A_corte] [--escenario inicio|real] [--adaptacion] [--pesos-de AB_inicio] [--cortes …]
+  pesos-simulador   fase 8: pesos de producción (utilidad, calibración, Fit) → data/modelos/simulador/v2/pesos.json
+  historico   fase 8: simulación v2 de todos los fichajes reales → data/modelos/simulador/v2/historico_<temp>.csv.gz
+  exportar-simulador  fase 8: insumos del motor del navegador → data/artifact/simulador/ [--salida carpeta]
   adaptacion  fase 7: adaptación al cambio de liga (Δ jerárquico, curva, censura, ADAPT%) → data/modelos/adaptacion/
               (reanudable: caché en experimentos/cache_adaptacion; --rehacer la ignora; --sin-validacion)
 
@@ -56,6 +63,19 @@ def main(argv=None) -> int:
     p.add_argument("--ligas", nargs="*", default=None)
     p.add_argument("--rehacer", action="store_true", help="ignora la caché por liga-temporada")
     p.add_argument("--reusar-k", action="store_true", help="estilos: reutiliza la tabla de selección de K guardada")
+    p.add_argument("--jugador", help="simular: nombre (o parte) del jugador")
+    p.add_argument("--club", help="simular: nombre (o parte) del club de destino")
+    p.add_argument("--liga", help="simular: competición del club de destino")
+    p.add_argument("--temporada", help="simular: temporada base de los insumos (por defecto la de configs/simulation.yaml)")
+    p.add_argument("--bajas", nargs="*", default=None, help="simular: jugadores de la plantilla que no estarán")
+    p.add_argument("--n-sim", type=int, default=None, help="simular: iteraciones Monte Carlo")
+    p.add_argument("--json", default=None, help="simular: guarda la salida completa en este fichero")
+    p.add_argument("--fuente", default="AB", help="backtest: AB | A | A_corte")
+    p.add_argument("--escenario", default="inicio", help="backtest: inicio | real")
+    p.add_argument("--adaptacion", action="store_true", help="backtest: usa los priors de adaptación (fase 7)")
+    p.add_argument("--pesos-de", default=None, help="backtest: reutiliza los pesos por corte de otra ejecución")
+    p.add_argument("--cortes", nargs="*", default=None, help="backtest: temporadas t de examen (t → t+1)")
+    p.add_argument("--salida", default=None, help="exportar-simulador: carpeta de salida")
     p.add_argument("--sin-validacion", action="store_true", help="adaptacion: omite el examen temporal y dejar fuera una liga")
     a = p.parse_args(argv)
     res = ORDENES[a.orden](a)

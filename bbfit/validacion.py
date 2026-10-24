@@ -522,11 +522,12 @@ def calibrar(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: dict, p
             v = simular_fichajes(c, casos, r1, eq1, cfg, "inicio", n_sim=int(cfg["validacion"]["calibracion_sim"]),
                                  progreso=None, sin_adaptacion=True)
             m = casos.reset_index(drop=True).join(v[["min_pred", "min_lo50", "min_hi50"] + [f"p_{r}" for r in ROLES]])
-            ok = m["rol_real"].isin(ROLES)
+            ok = m["rol_real"].isin(ROLES) & m[[f"p_{r}" for r in ROLES]].notna().all(1)
             P = m.loc[ok, [f"p_{r}" for r in ROLES]].to_numpy(float)
             y = m.loc[ok, "rol_real"].map({r: i for i, r in enumerate(ROLES)}).to_numpy(int)
             filas.append({"escala_utilidad": k_u, "rotacion_sd_factor": f_sd, "extra_adicional": ex,
                           "mae_min": float((m["min_pred"] - m["min_real"]).abs().mean()),
+                          "errores": int(v["error"].notna().sum()) if "error" in v else 0,
                           "cob50_min": float(((m["min_real"] >= m["min_lo50"]) & (m["min_real"] <= m["min_hi50"])).mean()),
                           "logloss": float(_logloss(P, y).mean())})
     g = pd.DataFrame(filas)
@@ -836,6 +837,85 @@ def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | 
         (d / "resumen.json").write_text(json.dumps(res, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
     progreso(f"examen {etq} terminado en {time.time() - t0:.0f} s")
     return res
+
+
+def pesos_produccion(progreso=print) -> dict:
+    """Pesos del simulador en producción (web, histórico, CLI): utilidad con todas las temporadas cerradas (resultados
+    ≤ última), calibración con los fichajes del último corte y Fit con todos los fichajes del examen AB (cortes con
+    resultado). → data/modelos/simulador/v2/pesos.json"""
+    cfg = cfg_sim()
+    roles = _roles()
+    ult = cfg["historico"]["temporadas"][-1]
+    P = entrenar_pesos(ult, "AB", cfg, roles, progreso)
+    cal = calibrar(ult, "AB", cfg, roles, P, progreso)
+    preds = [pickle.loads(f.read_bytes()) for f in sorted(SI.DIR_CACHE.glob("pred_*_AB_inicio.pkl"))]
+    prev = pd.concat(preds, ignore_index=True) if preds else pd.DataFrame()
+    fit = ajustar_fit(prev.assign(**{f"c_{r}": prev[f"v_c_{r}"] for r in RASGOS_FIT}), cfg) if len(prev) else None
+    res_val = None
+    pr = DIR_VAL / "A_corte_inicio" / "resumen.json"
+    pv = DIR_VAL / "AB_inicio" / "resumen.json"
+    if pv.exists():
+        r = json.loads(pv.read_text(encoding="utf-8"))
+        res_val = {"cortes": r["cortes"], "resumen": {k: {m: v for m, v in d.items() if m in (
+            "mae_min", "acierto_rol", "logloss_rol", "mae_pts_p100", "cob50_pts_p100", "cob90_pts_p100", "cob50_min", "cob90_min")}
+            for k, d in r["resumen"].items()}}
+    out = {"version": cfg["version"], "utilidad": {k: v for k, v in P["utilidad"].items() if not k.startswith("_")},
+           "calibracion": {k: v for k, v in cal.items() if k != "rejilla"}, "fit": fit,
+           "entrenamiento": {"equipos_utilidad": P["equipos_entrenamiento"], "temporadas_utilidad": P["temporadas"],
+                             "fichajes_fit": fit["n"] if fit else 0, "corte_calibracion": cal.get("corte_calibracion")},
+           "validacion_resumen": res_val, "honesta_disponible": pr.exists()}
+    S.DIR_SIM.mkdir(parents=True, exist_ok=True)
+    (S.DIR_SIM / "pesos.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+    progreso(f"pesos de producción → {S.DIR_SIM / 'pesos.json'}")
+    return out
+
+
+def historico(temporadas: list[str] | None = None, progreso=print) -> dict:
+    """Recalcula la simulación v2 de TODOS los fichajes reales de cada temporada (t → t+1) con los pesos de producción,
+    adaptación activada y el escenario «inicio»; versionado en data/modelos/simulador/v2/historico_<temporada destino>.csv.gz
+    (columna `version`). Reanudable por temporada."""
+    cfg = cfg_sim()
+    roles = _roles()
+    P = json.loads((S.DIR_SIM / "pesos.json").read_text(encoding="utf-8"))
+    temps = cfg["historico"]["temporadas"]
+    out = {}
+    for t in temporadas or temps:
+        t1 = SI.siguiente(t)
+        dest = S.DIR_SIM / f"historico_{t1}.csv.gz"
+        if dest.exists():
+            out[t1] = "ya hecho"
+            continue
+        pc = preparar_corte(t, "AB", cfg, roles, progreso)
+        c = S.cargar_corte(t, "AB", pesos=False)
+        c.w_util, c.calib, c.fit = P["utilidad"], P["calibracion"], P["fit"]
+        eq1 = S.cargar_corte(t1, "AB", pesos=False).eq
+        v = simular_fichajes(c, pc["casos"], roles[roles["temporada"] == t1], eq1, cfg, "inicio",
+                             n_sim=int(cfg["historico"]["simulaciones"]), progreso=progreso)
+        casos = pc["casos"].reset_index(drop=True)
+        d = pd.concat([casos, v.drop(columns=["persona_id", "liga_o", "liga_d", "team_d"])], axis=1)
+        d["fit"] = aplicar_fit(d.assign(**{f"c_{r}": d.get(f"c_{r}") for r in RASGOS_FIT}), P["fit"])
+        try:
+            from .adaptacion import rellenar_adapt_pct
+            obs = rellenar_adapt_pct(d.rename(columns={"liga_d": "liga", "temporada_d": "temporada"})
+                                     .assign(player_id=d["persona_id"].map(_pid_destino(roles, t1)), adapt_pct=np.nan))
+            d["adapt_pct_fase7"] = obs["adapt_pct"].to_numpy()
+        except Exception:  # noqa: BLE001
+            d["adapt_pct_fase7"] = np.nan
+        d["version"] = cfg["version"]
+        d["generado"] = pd.Timestamp.now().strftime("%Y-%m-%d")
+        d.to_csv(dest, index=False, float_format="%.4f")
+        out[t1] = len(d)
+        progreso(f"histórico {t} → {t1}: {len(d)} fichajes → {dest.name}")
+    (S.DIR_SIM / "historico_meta.json").write_text(json.dumps({"version": cfg["version"], "escenario": "inicio",
+                                                               "fuente": "AB", "adaptacion": True, "ficheros": out,
+                                                               "pesos": "pesos.json"}, ensure_ascii=False, indent=1),
+                                                   encoding="utf-8")
+    return out
+
+
+def _pid_destino(roles: pd.DataFrame, t1: str) -> dict:
+    r = roles[roles["temporada"] == t1].sort_values("min_total").drop_duplicates("persona_id", keep="last")
+    return dict(zip(r["persona_id"], r["player_id"].astype(str)))
 
 
 def main(fuente: str = "AB", escenario: str = "inicio", adaptacion: bool = False, pesos_de: str | None = None,

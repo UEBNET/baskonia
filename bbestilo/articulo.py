@@ -28,6 +28,8 @@ from .entrenar import HIPER
 LIGAS = figuras.LIGAS
 SALIDA = C.RAIZ / "docs" / "articulo"
 NOMBRE_PDF = "estilos_de_juego_baskonia.pdf"
+NUMEROS = {6: "seis", 7: "siete", 8: "ocho", 9: "nueve", 10: "diez", 11: "once", 12: "doce", 13: "trece", 14: "catorce",
+           15: "quince"}
 
 
 def n(x, d=2, signo=False):
@@ -94,7 +96,13 @@ ul, ol { margin: 0 0 6pt 14pt; padding: 0; } li { margin-bottom: 2.5pt; text-ali
 """
 
 
+RECURSOS = Path(__file__).resolve().parent / "recursos"
+FUENTES_DEFECTO = RECURSOS / "fuentes"   # Source Serif 4, IBM Plex y Barlow Condensed (woff2, OFL), versionadas
+
+
 def _fuentes_css(fuentes: Path | None, d: Path) -> str:
+    """Reglas @font-face con las fuentes copiadas a d/fuentes. fuentes.css puede apuntar a fonts.gstatic.com (tal como
+    lo sirve Google Fonts) o a nombres de fichero locales; sin carpeta se usan las fuentes del sistema."""
     if not fuentes or not (fuentes / "fuentes.css").exists():
         return ""
     (d / "fuentes").mkdir(exist_ok=True)
@@ -102,7 +110,8 @@ def _fuentes_css(fuentes: Path | None, d: Path) -> str:
     for f in fuentes.glob("*.woff*"):
         shutil.copy(f, d / "fuentes" / f.name)
     import re
-    return re.sub(r"url\(https://fonts\.gstatic\.com/[^)]*/([^/)]+)\)", r"url(fuentes/\1)", css)
+    css = re.sub(r"url\(https://fonts\.gstatic\.com/[^)]*/([^/)]+)\)", r"url(fuentes/\1)", css)
+    return re.sub(r"url\(([^/:)]+\.woff2?)\)", r"url(fuentes/\1)", css)
 
 
 def _campo(x: dict, ruta: str):
@@ -237,12 +246,18 @@ def ejemplo_simulacion() -> dict:
     }
 
 
-def construir(fuentes: Path | None = None, chrome: str | None = None) -> Path:
+def construir(fuentes: Path | None = None, chrome: str | None = None, parte2: dict | None = None) -> Path:
+    """Compone el artículo y lo imprime a PDF. Sin `parte2` es sólo la parte de estilos (VaDE, contexto, química);
+    `python -m bbestilo articulo` y `python -m bbfit articulo` pasan la Parte II (bbfit.articulo.parte2): claves
+    titulo, subtitulo, resumen, html (secciones antes de las referencias), refs (lista de <li>), head (HTML extra en
+    <head>), css, pie (scripts al final de <body>)."""
     R = C.DIR_SALIDA
     d = SALIDA
     d.mkdir(parents=True, exist_ok=True)
     trabajo = d / "_trabajo"
     trabajo.mkdir(exist_ok=True)
+    if fuentes is None and (FUENTES_DEFECTO / "fuentes.css").exists():
+        fuentes = FUENTES_DEFECTO
     EJ = ejemplo_simulacion()
     F = figuras.todas(trabajo / "figuras", fuentes, EJ)
     ev = json.loads((R / "evaluacion.json").read_text(encoding="utf-8"))
@@ -528,15 +543,18 @@ def construir(fuentes: Path | None = None, chrome: str | None = None) -> Path:
     cr = lambda m: f"{pc(r2[rasgo[m]])}" if m in rasgo else "–"  # noqa: E731
     menos_mas = lambda m: "menos" if c_antes[rasgo[m]] < 0 else "más"  # noqa: E731
 
+    ligas_vade = [l for l in LIGAS if l in set(ent["liga"])]
+    NL = NUMEROS.get(len(ligas_vade), str(len(ligas_vade)))
+    LISTA_LIGAS = ", ".join(LIGAS[l] for l in ligas_vade[:-1]) + " y " + LIGAS[ligas_vade[-1]]
     cuerpo = f"""
-<h1>Seis estilos de juego independientes del nivel en ocho ligas de baloncesto</h1>
+<h1>Seis estilos de juego independientes del nivel en {NL} ligas de baloncesto</h1>
 <p style="font-size:12.5pt;margin-top:-2pt;color:#6b4f38;text-align:left">Un autoencoder variacional de mezcla gaussiana con rasgos de caja y de jugada a jugada para comparar clubes, buscar jugadores parecidos, simular fichajes y medir la química entre estilos en Saski Baskonia</p>
 <div class="autores">Dirección Deportiva · Saski Baskonia &nbsp;|&nbsp; Modelado y análisis: Claude Code (Anthropic) &nbsp;|&nbsp; {hoy} &nbsp;|&nbsp; Código: paquetes <code>bbestilo</code> y <code>bbmodel</code>, rama <code>claude/basketball-stats-extractor-jpas93</code></div>
 
 <div class="resumen ejecutivo">
 <p class="rt">Resumen ejecutivo</p>
 <ul>
-<li><b>Qué es.</b> Un modelo que asigna a cada club, competición y temporada de las ocho ligas uno de <b>seis estilos de juego</b> y lo sitúa, con sus jugadores, en un mapa 3D. Trabaja sobre {NR} rasgos normalizados a la vara EuroLeague ({n_caja} de estadística de caja y {n_pbp} de jugada a jugada: dónde se tira y cuántas canastas llegan de pase) y <b>quita el nivel</b>: dice cómo juega un equipo, no cuán bueno es (el estilo sólo explica el {pc(V["eta2_nivel"], 1)} del nivel de los clubes).</li>
+<li><b>Qué es.</b> Un modelo que asigna a cada club, competición y temporada de las {NL} ligas del modelo uno de <b>seis estilos de juego</b> y lo sitúa, con sus jugadores, en un mapa 3D. Trabaja sobre {NR} rasgos normalizados a la vara EuroLeague ({n_caja} de estadística de caja y {n_pbp} de jugada a jugada: dónde se tira y cuántas canastas llegan de pase) y <b>quita el nivel</b>: dice cómo juega un equipo, no cuán bueno es (el estilo sólo explica el {pc(V["eta2_nivel"], 1)} del nivel de los clubes).</li>
 <li><b>Cuánto fiarse.</b> La red asigna el estilo con una seguridad media de {n(V["salida_max_media"], 2)}; el mapa es casi idéntico entre {n_sem} redes entrenadas por separado (r = {n(V["estabilidad_mapa"], 2)}) y los perfiles de los estilos se repiten entre 2020-23 y 2023-26 (r = {n(V["replicabilidad"]["correlacion_media"], 2)}). Las fronteras entre estilos son más débiles que el mapa: el estilo es un continuo y la distancia entre clubes es la medida más fiable.</li>
 <li><b>Cómo se llegó.</b> Cinco iteraciones: 12 estilos sin tratar el nivel (los estilos reflejaban la liga y la calidad), 8 con el nivel neutralizado, 6 (los que piden los criterios estadísticos), una v4 sólo con la red VaDE y consenso de {n_sem} redes, y el modelo final, que añade los {n_pbp} rasgos de jugada a jugada. Éstos mejoran la estabilidad y redefinen buena parte de los estilos (acuerdo con la v4: ARI = {n(ac_v4.get("ari"), 2)}).</li>
 <li><b>Baskonia.</b> En 2025-26 juega «{e(nombre(ultimo["euroleague"]["estilo"]))}» en la EuroLeague y «{e(nombre(ultimo["acb"]["estilo"]))}» en la Liga Endesa. Es de los clubes que más cambian de estilo de un año a otro (mediana de sus cambios en el percentil {n(float(np.median(desp_bk)), 0)}).</li>
@@ -548,19 +566,19 @@ def construir(fuentes: Path | None = None, chrome: str | None = None) -> Path:
 </div>
 
 <div class="resumen">
-<p><b>Resumen.</b> Se presenta un modelo que asigna a cada club, competición y temporada uno de seis estilos de juego y lo sitúa, junto con sus jugadores, en un mapa tridimensional común. Los datos son los equivalentes EuroLeague de un estudio previo de normalización entre ligas (algoritmos A y B), agregados por minutos para {n_cl} clubes-temporada de ocho competiciones entre 2020-21 y 2025-26 (más {n_prov} de 2026-27, provisionales). A los {n_caja} rasgos de estadística de caja se añaden {n_pbp} de jugada a jugada (porcentaje de tiros en el aro, de media distancia y triples de esquina, y de canastas asistidas), para los que las coordenadas de tiro de ocho fuentes con sistemas distintos se calibran automáticamente con la línea de triple oficial. Como la vara común traslada el nivel de cada liga a las métricas de estilo, cada uno de los {NR} rasgos se depura de la parte explicada por un índice de calidad, que explicaba hasta el {pc(r2.max())} de algunos rasgos. El modelo es un VaDE (autoencoder variacional con previa de mezcla) de {mil(n_par)} parámetros con una capa latente de tres neuronas (el mapa) y una capa de salida de seis (los estilos), covarianzas completas, regularización de estrés MDS, consenso de {n_sem} semillas y ajuste fino desde el consenso. Se documentan las cinco iteraciones que llevaron a él (12, 8 y 6 estilos con una red IDEC de contraste en las tres primeras, consenso ampliado y rasgos de jugada a jugada).</p>
+<p><b>Resumen.</b> Se presenta un modelo que asigna a cada club, competición y temporada uno de seis estilos de juego y lo sitúa, junto con sus jugadores, en un mapa tridimensional común. Los datos son los equivalentes EuroLeague de un estudio previo de normalización entre ligas (algoritmos A y B), agregados por minutos para {n_cl} clubes-temporada de {NL} competiciones entre 2020-21 y 2025-26 (más {n_prov} de 2026-27, provisionales). A los {n_caja} rasgos de estadística de caja se añaden {n_pbp} de jugada a jugada (porcentaje de tiros en el aro, de media distancia y triples de esquina, y de canastas asistidas), para los que las coordenadas de tiro de {NL} fuentes con sistemas distintos se calibran automáticamente con la línea de triple oficial. Como la vara común traslada el nivel de cada liga a las métricas de estilo, cada uno de los {NR} rasgos se depura de la parte explicada por un índice de calidad, que explicaba hasta el {pc(r2.max())} de algunos rasgos. El modelo es un VaDE (autoencoder variacional con previa de mezcla) de {mil(n_par)} parámetros con una capa latente de tres neuronas (el mapa) y una capa de salida de seis (los estilos), covarianzas completas, regularización de estrés MDS, consenso de {n_sem} semillas y ajuste fino desde el consenso. Se documentan las cinco iteraciones que llevaron a él (12, 8 y 6 estilos con una red IDEC de contraste en las tres primeras, consenso ampliado y rasgos de jugada a jugada).</p>
 <p>En el modelo final el estilo explica el {pc(V["eta2_nivel"], 1)} del nivel (v1: {pc(V1.get("eta2_nivel"), 0)}) y la información compartida entre estilo y liga es {n(V["nmi_estilo_liga"], 2)} (v1: {n(V1.get("nmi_estilo_liga"), 2)}). Las {V["diferenciacion"]["pares"]} parejas de estilos difieren en pruebas de permutación con corrección de Holm ({V["diferenciacion"]["pares_distintos_holm_05"]} significativas), los perfiles se replican entre periodos (r = {n(V["replicabilidad"]["correlacion_media"], 2)}) y el mapa es estable (r = {n(V["estabilidad_mapa"], 2)}) y fiel a las distancias del perfil (trustworthiness {n(V["trustworthiness_k10"], 2)}). En el barrido previo al entrenamiento, el ICL tiene su mínimo en K = {k_icl}. A igual nivel, {"el estilo explica un η² parcial del " + pc(ex["eta2_parcial_estilo"], 0) + " del net rating" if sig_ex else "el estilo no explica el net rating"}; en {mil(enc["casos"])} cambios de club, parecerse al estilo del destino no mejora el rendimiento del jugador (coeficiente {n(ed["coef"], 3, True)} por unidad de distancia, de signo {signo_enc}); y la continuidad de la plantilla predice conservar el estilo (OR = {n(con["or_mismo_estilo_por_10pp"], 2)} por cada 10 puntos). Una capa de contexto estima, con efectos fijos de jugador, cuánto cambia cada métrica con el nivel de los compañeros, y {mil(n_pares)} parejas dirigidas de compañeros dan matrices de química estilo × estilo con controles de nivel.</p>
 <p class="clave"><b>Palabras clave:</b> baloncesto · estilo de juego · agrupamiento profundo · VaDE · autoencoder variacional · normalización entre ligas · jugada a jugada · zonas de tiro · RAPM · química de quintetos · scouting · simulación de fichajes</p>
 </div>
 
 <h2>1. Introducción</h2>
-<p>La dirección deportiva necesita responder a preguntas que las estadísticas brutas no permiten comparar entre ligas: cómo ha jugado su equipo en cada temporada y competición, qué clubes de otras ligas juegan de forma parecida, y si uno o varios jugadores que se estudian encajan en esa forma de jugar o añadirían a la plantilla perfiles ajenos al del resto («una oveja de cada madre»). Un estudio previo del club resolvió la comparabilidad del rendimiento individual trasladando las métricas de los jugadores de ocho ligas a la vara de la EuroLeague 2025-26 (algoritmos A, B y su media A+B). Este trabajo construye sobre esos datos un modelo de <i>estilo de juego</i> de los clubes.</p>
+<p>La dirección deportiva necesita responder a preguntas que las estadísticas brutas no permiten comparar entre ligas: cómo ha jugado su equipo en cada temporada y competición, qué clubes de otras ligas juegan de forma parecida, y si uno o varios jugadores que se estudian encajan en esa forma de jugar o añadirían a la plantilla perfiles ajenos al del resto («una oveja de cada madre»). Un estudio previo del club resolvió la comparabilidad del rendimiento individual trasladando las métricas de los jugadores de quince ligas a la vara de la EuroLeague 2025-26 (algoritmos A, B y su media A+B). Este trabajo construye sobre esos datos un modelo de <i>estilo de juego</i> de los clubes.</p>
 <p>El modelo final es el resultado de cinco iteraciones (sección 4). La primera, con doce estilos y dos redes (IDEC y VaDE), mostró que la vara común arrastraba el nivel de cada liga a las métricas de estilo. La segunda neutralizó el nivel, redujo los estilos a ocho y reforzó la red VaDE. La tercera bajó a seis estilos, el número que prefieren los criterios de información, y mejoró la estabilidad. La cuarta retiró la red de contraste y duplicó el número de redes del consenso. La última añade {n_pbp} rasgos de jugada a jugada (dónde tira cada jugador y cuántas de sus canastas llegan de pase), que dan una partición más estable y en buena parte distinta. La sección 6 añade dos capas que no entran en la red: el contexto de nivel de cada jugador (con quién y contra quién juega) y la química entre los estilos de los compañeros.</p>
-<p>Las contribuciones son: (i) un procedimiento de neutralización del nivel compatible con la normalización entre ligas y aplicable a cualquier plantilla simulada; (ii) rasgos de tiro por zonas a partir de las coordenadas de ocho fuentes con sistemas distintos, calibradas automáticamente con la línea de triple; (iii) un VaDE con covarianzas completas, regularización de estrés y consenso de semillas, con un mapa 3D compartido por clubes y jugadores; (iv) una evaluación de estabilidad, fidelidad y diferenciación estadística, y su evolución a lo largo de las iteraciones; (v) análisis complementarios sobre el número de estilos, el éxito, el efecto del encaje y la continuidad de las plantillas; (vi) una capa de contexto de nivel y matrices de química estilo × estilo entre compañeros; y (vii) herramientas de decisión: búsqueda de clubes y jugadores parecidos y simulación exacta de varios fichajes y bajas.</p>
+<p>Las contribuciones son: (i) un procedimiento de neutralización del nivel compatible con la normalización entre ligas y aplicable a cualquier plantilla simulada; (ii) rasgos de tiro por zonas a partir de las coordenadas de {NL} fuentes con sistemas distintos, calibradas automáticamente con la línea de triple; (iii) un VaDE con covarianzas completas, regularización de estrés y consenso de semillas, con un mapa 3D compartido por clubes y jugadores; (iv) una evaluación de estabilidad, fidelidad y diferenciación estadística, y su evolución a lo largo de las iteraciones; (v) análisis complementarios sobre el número de estilos, el éxito, el efecto del encaje y la continuidad de las plantillas; (vi) una capa de contexto de nivel y matrices de química estilo × estilo entre compañeros; y (vii) herramientas de decisión: búsqueda de clubes y jugadores parecidos y simulación exacta de varios fichajes y bajas.</p>
 
 <h2>2. Datos</h2>
 <h3>2.1 Fuentes, periodo y normalización previa</h3>
-<p>Se usan las estadísticas de temporada regular de ocho competiciones (EuroLeague, EuroCup, Liga Endesa, NBA, G League, LBA, BBL y LNB) entre 2020-21 y 2026-27, extraídas de sus fuentes oficiales con el paquete <code>bbstats</code>, incluido su jugada a jugada (tiros con coordenadas, asistencias y quintetos en pista). Cada jugador-liga-temporada tiene su equivalente EuroLeague por dos algoritmos del estudio de normalización: A (bayes empírico para quitar la suerte de las muestras pequeñas y un «tipo de cambio» por liga y métrica estimado por EM con 4.336 jugadores puente) y B (red neuronal multitarea que aprende un «ADN» del jugador separando nivel, liga, temporada, posición y equipo). Se usa la media A+B en la escala transformada de cada métrica, que en el examen fuera de muestra del estudio mejoró en un 20 % la predicción de los cambios de liga frente a la práctica habitual de comparar percentiles. Donde B no tiene al jugador (menos de 150 minutos o la temporada en curso) se usa A. En 2026-27, B sólo traduce cuatro filas, por lo que esa temporada se trata como provisional y no entra en el entrenamiento. Las traducciones cubren el 99-100 % de los minutos jugados en cada liga, y B el 95-97 %.</p>
+<p>Se usan las estadísticas de temporada regular de {NL} competiciones ({LISTA_LIGAS}) entre 2020-21 y 2026-27, extraídas de sus fuentes oficiales con el paquete <code>bbstats</code>, incluido su jugada a jugada (tiros con coordenadas, asistencias y quintetos en pista). Cada jugador-liga-temporada tiene su equivalente EuroLeague por dos algoritmos del estudio de normalización: A (bayes empírico para quitar la suerte de las muestras pequeñas y un «tipo de cambio» por liga y métrica estimado por EM con 4.336 jugadores puente) y B (red neuronal multitarea que aprende un «ADN» del jugador separando nivel, liga, temporada, posición y equipo). Se usa la media A+B en la escala transformada de cada métrica, que en el examen fuera de muestra del estudio mejoró en un 20 % la predicción de los cambios de liga frente a la práctica habitual de comparar percentiles. Donde B no tiene al jugador (menos de 150 minutos o la temporada en curso) se usa A. En 2026-27, B sólo traduce cuatro filas, por lo que esa temporada se trata como provisional y no entra en el entrenamiento. Las traducciones cubren el 99-100 % de los minutos jugados en cada liga, y B el 95-97 %.</p>
 <h3>2.2 Unidad de análisis y agregación</h3>
 <p>La unidad es el club-competición-temporada: Baskonia EuroLeague 2025-26 y Baskonia Liga Endesa 2025-26 son dos observaciones. El vector de un club es la media de los vectores de sus jugadores ponderada por los minutos que jugaron en él, es decir, el perfil medio de los cinco jugadores en pista. La agregación es exacta y lineal en los minutos, lo que permite recalcular el club con uno o varios fichajes, bajas o cualquier otro reparto de minutos. Los rasgos no lineales se construyen con momentos ponderados: la concentración del uso es E<sub>w</sub>[USG²]/E<sub>w</sub>[USG]² (1 = uso repartido) y las cuotas de minutos de interiores y exteriores salen de la posición estimada del estudio. El ritmo no forma parte del estudio de normalización: se añade como el z del ritmo del equipo dentro de su liga y temporada. Los {n_pbp} rasgos de jugada a jugada (sección 2.3) se agregan igual y se transforman con el arcoseno de la raíz, que estabiliza la varianza de una proporción. La Tabla {tn["rasgos"]} recoge los {NR} rasgos.</p>
 {tcap("rasgos", f"Los {NR} rasgos de estilo, su origen, la transformación aplicada tras agregar y la parte de su varianza entre clubes que explicaba el índice de nivel antes de neutralizar. A+B (jugada a jugada) = métrica del jugada a jugada normalizada a la vara EuroLeague con los algoritmos A y B.")}
@@ -579,7 +597,7 @@ def construir(fuentes: Path | None = None, chrome: str | None = None) -> Path:
 <h3>3.1 Neutralización del nivel</h3>
 <p>Para cada rasgo transformado y estandarizado x<sub>k</sub> se ajusta, sobre los clubes de entrenamiento, una regresión en una base cuadrática del nivel y se conserva el residuo reescalado a desviación 1:</p>
 <div class="eq">x̃_k = ( x_k − β₀k − β₁k · L − β₂k · L² ) / s_k ,   con β por mínimos cuadrados y s_k la desviación del residuo</div>
-<p>Los jugadores tienen su propia regresión (sobre jugadores, ponderada por minutos). El nivel se recalcula para cualquier reparto de minutos (plantillas remuestreadas, fichajes simulados) antes de neutralizar. Esta operación no duplica la normalización entre ligas: la normalización pone a todos los jugadores en la misma escala, condición necesaria para que una regresión común sea válida en ocho ligas; la neutralización quita de los rasgos de estilo la parte que se predice por la calidad, sea cual sea la liga. Por el teorema de Frisch–Waugh–Lovell, los residuos son ortogonales a L y L² en la muestra de ajuste. Las diferencias entre ligas que no se deben al nivel (por ejemplo, el volumen de triples o el ritmo) se conservan.</p>
+<p>Los jugadores tienen su propia regresión (sobre jugadores, ponderada por minutos). El nivel se recalcula para cualquier reparto de minutos (plantillas remuestreadas, fichajes simulados) antes de neutralizar. Esta operación no duplica la normalización entre ligas: la normalización pone a todos los jugadores en la misma escala, condición necesaria para que una regresión común sea válida en {NL} ligas; la neutralización quita de los rasgos de estilo la parte que se predice por la calidad, sea cual sea la liga. Por el teorema de Frisch–Waugh–Lovell, los residuos son ortogonales a L y L² en la muestra de ajuste. Las diferencias entre ligas que no se deben al nivel (por ejemplo, el volumen de triples o el ritmo) se conservan.</p>
 <h3>3.2 Arquitectura</h3>
 <p>La red ({fr("arquitectura")}) es un VaDE (Jiang et al., 2017). Un codificador de dos capas ocultas (64 y 32 neuronas, GELU) produce la media μ<sub>z</sub> y la log-varianza de una posterior gaussiana en ℝ³; μ<sub>z</sub> es el punto del club en el mapa. La previa sobre z es una mezcla de seis gaussianas con covarianza completa, de modo que cada estilo es un elipsoide con su centro, su forma y su orientación. La capa de salida tiene seis neuronas: la probabilidad a posteriori de cada componente, γ<sub>k</sub> = π<sub>k</sub>N(z | μ<sub>k</sub>, Σ<sub>k</sub>) / Σ<sub>j</sub> π<sub>j</sub>N(z | μ<sub>j</sub>, Σ<sub>j</sub>). El estilo asignado es la neurona de mayor salida. El decodificador (3 → 32 → 64 → {NR}) usa una varianza de reconstrucción común a los {NR} rasgos; con una varianza por rasgo, la red de la v1 trataba como ruido rasgos difíciles como el ritmo.</p>
 {fig("arquitectura", f"Arquitectura del VaDE final. La entrada son los {NR} rasgos sin nivel; el mapa 3D es la media de la posterior; la capa de salida es la responsabilidad de cada una de las {C.N_ESTILOS} componentes de la mezcla.")}
@@ -710,7 +728,7 @@ estrés = Σ_(i&lt;j) ( ‖z_i − z_j‖ − ‖x_i − x_j‖ )² / Σ_(i&lt;j
 <ol>
 <li>Con los datos normalizados a la vara EuroLeague, el estilo de juego sólo es comparable entre ligas si se neutraliza antes el nivel: sin hacerlo, la red aprende ligas y calidad ({pc(V1.get("eta2_nivel"), 0)} del nivel explicado en la v1); tras hacerlo, {pc(V["eta2_nivel"], 1)}.</li>
 <li>Seis estilos es la resolución que respaldan los datos (mínimo del ICL y BIC casi plano entre seis y once) y la que da asignaciones más seguras y más estables entre redes y temporadas que ocho y doce, que añaden fronteras poco reproducibles.</li>
-<li>Los rasgos de jugada a jugada (zonas de tiro con coordenadas calibradas en las ocho fuentes y canastas asistidas) hacen el modelo más estable y replicable, y redefinen los estilos en torno a cómo se fabrica el tiro.</li>
+<li>Los rasgos de jugada a jugada (zonas de tiro con coordenadas calibradas en las {NL} fuentes y canastas asistidas) hacen el modelo más estable y replicable, y redefinen los estilos en torno a cómo se fabrica el tiro.</li>
 <li>El VaDE con covarianzas completas, consenso de {n_sem} semillas y ajuste fino da asignaciones seguras ({n(V["salida_max_media"], 2)}) y un mapa muy estable (r = {n(V["estabilidad_mapa"], 2)}); la distancia en el mapa es más fiable que la etiqueta.</li>
 <li>A igual nivel, {"el estilo se asocia con ganar" if sig_ex else "el estilo no se asocia con ganar"}; parecerse al estilo del destino no mejora el rendimiento de un fichaje; y la continuidad de la plantilla sostiene la identidad.</li>
 <li>Los números de un jugador dependen del nivel de sus compañeros (menos uso y más canastas asistidas con compañeros mejores), y la química entre estilos es medible: el juego de pase y triple se potencia en pareja y la creación individual, no.</li>
@@ -727,7 +745,7 @@ estrés = Σ_(i&lt;j) ( ‖z_i − z_j‖ − ‖x_i − x_j‖ )² / Σ_(i&lt;j
 <li><b>Consenso dependiente de las semillas.</b> El consenso de cinco redes de la v3 no se sostenía frente a cinco redes nuevas (ARI {n(c3["nuevas"], 2)}); se amplió a {len(sem4)}.</li>
 <li><b>Consenso degenerado.</b> En la v2, la partición de consenso por enlace medio produjo un grupo muy pequeño y, con paso M durante el ajuste fino, la red se alejaba del consenso (ARI 0,57). Fijar la mezcla del consenso y entrenar sólo codificador y decodificador lo resolvió.</li>
 <li><b>Número de estilos.</b> El encargo inicial (12 neuronas) y la segunda versión (8) iban por encima de lo que respaldan los datos; hicieron falta dos iteraciones para llegar a 6. Con {NR} rasgos, el BIC y el ICL con covarianza completa prefieren tres estilos por el peso de su penalización ({par_full} parámetros por componente), por lo que la decisión se apoyó en la versión diagonal y en la estabilidad.</li>
-<li><b>Coordenadas de ocho fuentes.</b> Cada liga usa un sistema distinto (centímetros, décimas de pie, milímetros con los ejes cambiados, porcentaje de la pista completa o unidades propias de media pista); calibrarlas a mano no era viable por liga y temporada, y se resolvió ajustando aro y escala contra la línea de triple oficial con la propia anotación de 2 y 3 de la fuente.</li>
+<li><b>Coordenadas de {NL} fuentes.</b> Cada liga usa un sistema distinto (centímetros, décimas de pie, milímetros con los ejes cambiados, porcentaje de la pista completa o unidades propias de media pista); calibrarlas a mano no era viable por liga y temporada, y se resolvió ajustando aro y escala contra la línea de triple oficial con la propia anotación de 2 y 3 de la fuente.</li>
 <li><b>Rol frente a contexto.</b> El contexto en pista mezcla el rol del jugador con su entorno (quien mejora juega con los titulares); la sensibilidad se estimó con el contexto de plantilla y efectos fijos de persona. Aun así, el RAPM arrastra parte del contexto.</li>
 <li><b>Etiquetas que cambian con los rasgos.</b> Añadir el jugada a jugada cambió buena parte de la partición (ARI {n(ac_v4.get("ari"), 2)} con la v4), lo que obligó a renombrar los estilos y a archivar la v4 completa para poder comparar.</li>
 <li><b>Datos.</b> La posición se estima en EuroLeague, EuroCup, LBA y parte de la G League (≈77 % de acierto); los traspasos en EuroLeague y EuroCup vienen en una fila (se asignan al último equipo); LBA y LNB cambian el identificador de equipo cada temporada (se enlazan por nombre y continuidad de plantilla); la LNB no publica totales de rivales ni tiene jugada a jugada en 2020-21; la BBL no tiene quintetos en 2020-23; 2026-27 sólo tiene unas jornadas y el algoritmo A.</li>
@@ -750,7 +768,7 @@ estrés = Σ_(i&lt;j) ( ‖z_i − z_j‖ − ‖x_i − x_j‖ )² / Σ_(i&lt;j
 <h2>12. Mejoras propuestas</h2>
 <h3>12.1 Del modelo</h3>
 <ol>
-<li><b>Datos de juego más finos:</b> tipos de jugada (pick and roll, aislamiento, transición), defensa por posesión y datos de seguimiento, cuando estén disponibles para las ocho ligas; las zonas de tiro y las canastas asistidas ya están incorporadas.</li>
+<li><b>Datos de juego más finos:</b> tipos de jugada (pick and roll, aislamiento, transición), defensa por posesión y datos de seguimiento, cuando estén disponibles para todas las ligas; las zonas de tiro y las canastas asistidas ya están incorporadas.</li>
 <li><b>Contexto dentro del estilo:</b> situar a los jugadores con sus métricas «con compañeros de nivel medio» (sección 6.1), para que el perfil de un jugador no dependa de la plantilla en la que jugó.</li>
 <li><b>Química en el simulador:</b> usar los efectos X → Y y la sinergia de parejas para estimar cómo cambia el juego del resto de la plantilla con un fichaje, no sólo su vector medio.</li>
 <li><b>Neutralización dentro de la red:</b> un VaDE condicional (decodificador condicionado al nivel) o con penalización de independencia (HSIC) entre el mapa y el nivel, en lugar de residualizar antes.</li>
@@ -796,8 +814,13 @@ estrés = Σ_(i&lt;j) ( ‖z_i − z_j‖ − ‖x_i − x_j‖ )² / Σ_(i&lt;j
 <li>Saski Baskonia, Dirección Deportiva (2026). Normalización de ligas hacia la EuroLeague: algoritmos A y B; Jugada a jugada en los modelos: zonas de tiro, contexto de nivel y química de estilos. Documentación interna (<code>docs/algoritmo_A.md</code>, <code>docs/algoritmo_B.md</code>, <code>docs/contexto_y_quimica.md</code>).</li>
 </ol>
 """
-    doc = f"""<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Estilos de juego · Saski Baskonia</title>
-<style>{_fuentes_css(fuentes, trabajo)}{CSS}</style></head><body>{cuerpo}</body></html>"""
+    titulo_doc, cabeza, css2, pie = "Estilos de juego · Saski Baskonia", "", "", ""
+    if parte2:
+        cuerpo = _con_parte2(cuerpo, parte2)
+        titulo_doc = parte2.get("titulo_doc", titulo_doc)
+        cabeza, css2, pie = parte2.get("head", ""), parte2.get("css", ""), parte2.get("pie", "")
+    doc = f"""<!doctype html><html lang="es"><head><meta charset="utf-8"><title>{e(titulo_doc)}</title>{cabeza}
+<style>{_fuentes_css(fuentes, trabajo)}{CSS}{css2}</style></head><body>{cuerpo}{pie}</body></html>"""
     (trabajo / "articulo.html").write_text(doc, encoding="utf-8")
     pdf = d / NOMBRE_PDF
     chrome = chrome or _chrome()
@@ -808,6 +831,28 @@ estrés = Σ_(i&lt;j) ( ‖z_i − z_j‖ − ‖x_i − x_j‖ )² / Σ_(i&lt;j
     destino.mkdir(parents=True, exist_ok=True)
     shutil.copy(pdf, destino / NOMBRE_PDF)
     return pdf
+
+
+def _con_parte2(cuerpo: str, p2: dict) -> str:
+    """Inserta la Parte II en el cuerpo de la Parte I: título común, resumen ejecutivo de la Parte II tras el de la
+    Parte I, rótulo «Parte I» antes de la introducción, secciones nuevas antes de las referencias y sus referencias."""
+    i0, i1 = cuerpo.index("<h1>"), cuerpo.index("</h1>") + len("</h1>")
+    h1_parte1 = cuerpo[i0 + 4:i1 - 5]
+    j = cuerpo.index("</p>", i1) + len("</p>")          # subtítulo
+    sub_parte1 = cuerpo[cuerpo.index(">", i1) + 1:j - 4]
+    cuerpo = (cuerpo[:i0] + f"<h1>{p2['titulo']}</h1>\n" + f'<p class="subt">{p2["subtitulo"]}</p>' + cuerpo[j:])
+    cuerpo = cuerpo.replace("paquetes <code>bbestilo</code> y <code>bbmodel</code>",
+                            "paquetes <code>bbstats</code>, <code>bbmodel</code>, <code>bbestilo</code> y <code>bbfit</code>", 1)
+    marca = '<div class="resumen">\n<p><b>Resumen.</b>'
+    cuerpo = cuerpo.replace(marca, p2.get("resumen", "") + marca, 1)
+    cuerpo = cuerpo.replace("<h2>1. Introducción</h2>",
+                            f'<div class="parte p1"><p class="pt">Parte I</p><p class="pn">{h1_parte1}</p>'
+                            f'<p class="ps">{sub_parte1}</p></div>\n<h2>1. Introducción</h2>', 1)
+    cuerpo = cuerpo.replace("<h2>Referencias</h2>", p2.get("html", "") + "\n<h2>Referencias</h2>", 1)
+    if p2.get("refs"):
+        a, b, c = cuerpo.rpartition("</ol>")
+        cuerpo = a + "".join(p2["refs"]) + b + c
+    return cuerpo
 
 
 def _chrome() -> str:

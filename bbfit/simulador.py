@@ -448,30 +448,22 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     grupo = AD.grupo_nacionalidad(fila.get("nacionalidad"), lo, liga_d)
     pos3 = fila.get("pos3") if isinstance(fila.get("pos3"), str) else "A"
     G = int(cfg["adaptacion"]["partidos_temporada"].get(liga_d, cfg["adaptacion"]["partidos_temporada"]["defecto"]))
-    priors = {}
-    for mp in set(ADAPT_METRICA.values()) | {"L"}:
-        try:
-            pr = AD.prior(lo, liga_d, grupo, pos3, mp, ruta=adaptacion_ruta) if not sin_adaptacion else AD._defecto("desactivado")
-        except Exception:  # noqa: BLE001
-            pr = {"delta_media": 0.0, "delta_sd": cfg["adaptacion"]["sd_sin_prior"], "kappa_media": np.nan,
-                  "kappa_sd": np.nan, "n": 0, "nivel_fallback": "error"}
-        if sin_adaptacion:
-            pr = {**pr, "delta_media": 0.0, "delta_sd": 0.0}
+    ca = cfg["adaptacion"]
+    contr = 0.0 if sin_adaptacion else float(ca["contraccion"])
+    priors, fact = {}, {}
+    for mp in set(ADAPT_METRICA.values()) | {"L", "L_rel"}:
+        pr = prior_completo(lo, liga_d, grupo, pos3, mp, adaptacion_ruta)
         priors[mp] = pr
-    g_juega = np.arange(G)
-    fact = {}
-    for mp, pr in priors.items():
-        d_s = pr["delta_media"] + pr["delta_sd"] * rng.standard_normal(n_sim)
-        k_s = np.abs(pr["kappa_media"] + (pr["kappa_sd"] if np.isfinite(pr["kappa_sd"]) else 0) * rng.standard_normal(n_sim)) \
-            if np.isfinite(pr["kappa_media"]) else np.full(n_sim, np.nan)
-        Fm = AD.curva(g_juega[None, :], d_s[:, None], k_s[:, None])
-        fact[mp] = {"temporada": Fm.mean(1), "primeros": Fm[:, :int(cfg["adaptacion"]["primeros_partidos"])].mean(1),
-                    "curva": Fm}
-    # ΔL por adaptación: cociente relativo sobre las métricas de nivel → desplazamiento de L
-    kL = _k_nivel(fila)
-    L_eff = L_s + (fact["L"]["temporada"] - 1) * kL
+        fact[mp] = factores_adaptacion(pr, G, int(ca["primeros_partidos"]), contr, rng, n_sim)
+    # L: prior ADITIVO en unidades de L (fase 7): L_efectivo = L + contracción·Δ_temporada
+    L_eff = L_s + (fact["L"]["temporada"] - 1)
     # ---------------------------------------------------------------- 3. plantilla, utilidad y minutos endógenos
-    P = plantilla(c, club_d, liga_d, [m for m in miembros if m[0] != persona_id] + [(persona_id, 1.0)])
+    miembros = [m for m in miembros if m[0] != persona_id]
+    # plantilla conocida demasiado corta (club nuevo, temporada que empieza): se completa con jugadores de reemplazo
+    # (sin registro: nivel de banquillo de la liga de destino) hasta el mínimo de la configuración
+    faltan = int(cfg["plantilla"]["minimo_jugadores"]) - 1 - len(miembros)
+    miembros = miembros + [(f"__reemplazo_{k}", 1.0) for k in range(max(faltan, 0))]
+    P = plantilla(c, club_d, liga_d, miembros + [(persona_id, 1.0)])
     # el fichaje puede no estar en el registro principal que se pidió (registro explícito)
     i_f = int(np.where(P["persona_id"].to_numpy() == persona_id)[0][-1])
     if registro is not None:
@@ -623,17 +615,18 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
                           "efecto_ts": float(np.mean(b_s * dL))},
            "ritmo_destino": float(ritmo)}
     # adaptación
-    pa = priors.get("pts_p100", priors["L"])
-    res["adaptacion"] = {"prior": {k: _num(v) for k, v in pa.items()}, "prior_L": {k: _num(v) for k, v in priors["L"].items()},
-                         "adapt_pct_temporada": resumen(100 * fact["pts_p100"]["temporada"]),
-                         "adapt_pct_primeros": resumen(100 * fact["pts_p100"]["primeros"]),
-                         "primeros_partidos": int(cfg["adaptacion"]["primeros_partidos"]), "partidos_temporada": G,
-                         "curva": [[int(g), float(np.mean(fact["pts_p100"]["curva"][:, g])),
-                                    float(np.quantile(fact["pts_p100"]["curva"][:, g], 0.05)),
-                                    float(np.quantile(fact["pts_p100"]["curva"][:, g], 0.95))]
-                                   for g in range(0, min(G, 40))],
-                         "partidos_50": AD.partidos_hasta(0.5, pa["kappa_media"]) if np.isfinite(pa["kappa_media"]) else None,
-                         "partidos_90": AD.partidos_hasta(0.9, pa["kappa_media"]) if np.isfinite(pa["kappa_media"]) else None}
+    pa = priors["L_rel"]
+    fl = fact["L_rel"]
+    res["adaptacion"] = {"prior": {k: _num(v) for k, v in pa.items()}, "prior_pts": {k: _num(v) for k, v in priors["pts_p100"].items()},
+                         "contraccion": contr,
+                         "adapt_pct_temporada": resumen(100 * fl["temporada"]),
+                         "adapt_pct_primeros": resumen(100 * fl["primeros"]),
+                         "adapt_pct_pts": resumen(100 * fact["pts_p100"]["temporada"]),
+                         "delta_L": float(np.mean(fact["L"]["temporada"] - 1)),
+                         "primeros_partidos": int(ca["primeros_partidos"]), "partidos_temporada": G,
+                         "curva": [[int(g), float(np.mean(fl["curva"][:, g])), float(np.quantile(fl["curva"][:, g], 0.05)),
+                                    float(np.quantile(fl["curva"][:, g], 0.95))] for g in range(0, min(G, 40))],
+                         "partidos_50": _num(pa.get("partidos_50")), "partidos_90": _num(pa.get("partidos_90"))}
     # estilo, complementariedad y entropías
     res["estilo"] = estilo_y_complementariedad(c, P, i_f, M, M0, usg_nat, team_eu, team_eu_probs)
     # impacto en el equipo y quintetos
@@ -645,6 +638,68 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     if detalle:
         res["plantilla"] = _plantilla_salida(P, M, i_f, gm, rol_s)
     return res
+
+
+PRIOR_EXTRA = ["delta_temporada_media", "delta_temporada_sd", "D_forma_media", "kappa_forma_media", "partidos_50",
+               "partidos_90"]
+
+
+_PRIORS: dict = {}
+
+
+def prior_completo(lo, ld, grupo, pos3, metrica, ruta=None) -> dict:
+    k = (lo, ld, grupo, pos3, metrica, str(ruta))
+    if k not in _PRIORS:
+        _PRIORS[k] = _prior_completo(lo, ld, grupo, pos3, metrica, ruta)
+    return dict(_PRIORS[k])
+
+
+def _prior_completo(lo, ld, grupo, pos3, metrica, ruta=None) -> dict:
+    """bbfit.adaptacion.prior más las columnas de la tabla que describen el efecto de TEMPORADA (Δ_temporada) y la forma
+    del transitorio dentro de la temporada (D, κ_forma, partidos al 50/90 %), del mismo nivel de reserva."""
+    from . import adaptacion as AD
+    try:
+        pr = AD.prior(lo, ld, grupo, pos3, metrica, ruta=ruta)
+    except Exception:  # noqa: BLE001
+        pr = AD._defecto("error")
+    pr = dict(pr)
+    t = AD.cargar_priors(ruta)
+    fila = None
+    if t is not None and pr["nivel_fallback"] not in ("sin_datos", "error"):
+        C_ = AD.COMODIN
+        claves = {"celda": (lo, ld, grupo, pos3), "par_grupo": (lo, ld, grupo, C_), "par": (lo, ld, C_, C_),
+                  "escalon_grupo": (C_, C_, grupo, C_), "escalon": (C_, C_, C_, C_), "global_grupo": (C_, C_, grupo, C_),
+                  "global": (C_, C_, C_, C_)}
+        a, b, c_, d = claves[pr["nivel_fallback"]]
+        s = t[(t["metrica"] == metrica) & (t["nivel"] == pr["nivel_fallback"]) & (t["liga_origen"] == a)
+              & (t["liga_destino"] == b) & (t["grupo_nacionalidad"] == c_) & (t["pos3"] == d)]
+        if pr["nivel_fallback"].startswith("escalon"):
+            s = s[s["escalon_destino"] == (AD.escalon_de(ld) or C_)]
+        if len(s):
+            fila = s.iloc[0]
+    for k in PRIOR_EXTRA:
+        pr[k] = float(fila[k]) if fila is not None and k in fila and np.isfinite(_f(fila[k])) else np.nan
+    if not np.isfinite(pr["delta_temporada_media"]):
+        pr["delta_temporada_media"], pr["delta_temporada_sd"] = pr["delta_media"], pr["delta_sd"]
+    return pr
+
+
+def factores_adaptacion(pr: dict, G: int, N: int, contraccion: float, rng, n_sim: int) -> dict:
+    """Factor de adaptación por simulación. Temporada: 1 + c·Δ_temp (Δ_temp ~ N(media, sd), c = pendiente de calibración
+    fuera de muestra de la fase 7). Curva dentro de la temporada (forma del transitorio):
+        f(g) = (1 + c·Δ_temp)·(1 + D·e^(−g/κ_f)) / (1 + D·w̄),  w̄ = media de e^(−g/κ_f) en los G partidos,
+    de modo que la media de la temporada es exactamente 1 + c·Δ_temp."""
+    d = contraccion * (pr["delta_temporada_media"] + _f(pr["delta_temporada_sd"]) * rng.standard_normal(n_sim)) \
+        if contraccion > 0 else np.zeros(n_sim)
+    D = _f(pr.get("D_forma_media"))
+    kf = _f(pr.get("kappa_forma_media"))
+    D = D * contraccion if np.isfinite(D) else 0.0
+    g = np.arange(G)
+    phi = np.exp(-g / kf) if np.isfinite(kf) and kf > 0 else np.zeros(G)
+    wbar = phi.mean()
+    forma = (1 + D * phi) / (1 + D * wbar)
+    curva = (1 + d)[:, None] * forma[None, :]
+    return {"temporada": 1 + d, "primeros": curva[:, :N].mean(1), "curva": curva}
 
 
 def _num(v):

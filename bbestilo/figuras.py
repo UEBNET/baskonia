@@ -16,9 +16,10 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
 from . import config as C  # noqa: E402
 
 # Paleta categórica (orden fijo; validada: CVD en la banda 6-8 sólo con apoyo de forma o etiqueta directa).
-# Los 6 estilos usan las 6 primeras; las 8 ligas, las 8.
-COL = ["#2a78d6", "#e0662c", "#0f8a6a", "#b98500", "#c94f86", "#6a4fd0", "#5b8c12", "#a33a2e"]
-MARC = ["o", "s", "D", "^", "v", "P", "X", "*"]
+# Los 6 estilos usan las 6 primeras; las ligas, todas (las 7 últimas sólo se distinguen con la forma del marcador).
+COL = ["#2a78d6", "#e0662c", "#0f8a6a", "#b98500", "#c94f86", "#6a4fd0", "#5b8c12", "#a33a2e",
+       "#5f6b7a", "#0b6e99", "#c27c0e", "#8c564b", "#1f9e9e", "#9e2f7f", "#3b7d23"]
+MARC = ["o", "s", "D", "^", "v", "P", "X", "*", "h", "<", ">", "p", "d", "8", "H"]
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 # secuencial de un solo tono (kraft → nogal), de blanco (0) a oscuro
 SEQ = LinearSegmentedColormap.from_list("kraft", ["#ffffff", "#efe0cd", "#c9ad8c", "#8f6b4a", "#3a2a1c"])
@@ -267,7 +268,9 @@ def mapas_iteraciones(d: Path) -> str:
     paneles = [("v1_12estilos", "v1 · 12 estilos, sin neutralizar"), ("v2_8estilos", "v2 · 8 estilos, nivel neutralizado"),
                ("", f"Final · {C.N_ESTILOS} estilos")]
     fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.7))
-    ligas = list(LIGAS)
+    pf = C.DIR_SALIDA / "vade" / "clubes.csv"
+    presentes = set(pd.read_csv(pf, usecols=["liga"])["liga"]) if pf.exists() else set(LIGAS)
+    ligas = [l for l in LIGAS if l in presentes]
     for ax, (carpeta, tit) in zip(axs, paneles):
         p = (C.DIR_SALIDA / "historial" / carpeta if carpeta else C.DIR_SALIDA) / "vade" / "clubes.csv"
         if not p.exists():
@@ -284,7 +287,7 @@ def mapas_iteraciones(d: Path) -> str:
         ax.tick_params(labelsize=6)
         ax.set_aspect("equal", adjustable="datalim")
     hs = [plt.Line2D([], [], marker=MARC[k], ls="", color=COL[k], label=LIGAS[l]) for k, l in enumerate(ligas)]
-    fig.legend(handles=hs, loc="lower center", ncol=8, frameon=False, fontsize=6.5, bbox_to_anchor=(0.5, -0.06), handletextpad=0.2, columnspacing=0.8)
+    fig.legend(handles=hs, loc="lower center", ncol=min(8, len(ligas)), frameon=False, fontsize=6.5, bbox_to_anchor=(0.5, -0.06), handletextpad=0.2, columnspacing=0.8)
     fig.tight_layout()
     return _guardar(fig, d / "fig_mapas_iteraciones.png")
 

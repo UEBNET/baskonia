@@ -1,13 +1,22 @@
 # baskonia · `bbstats` — extractor multi-liga de estadísticas de baloncesto
 
 Extrae, guarda en bruto, normaliza y enriquece las estadísticas de **todos los jugadores** de
-12 competiciones, separadas por **fase (temporada regular / playoffs / total)**, con **las mismas
-columnas para todas las ligas**, listas para aplicar tus propios algoritmos.
+15 competiciones (las 12 originales más Primera, Segunda y Tercera FEB, §16), separadas por **fase (temporada
+regular / playoffs / total)**, con **las mismas columnas para todas las ligas**, listas para aplicar tus propios
+algoritmos. Encima de los datos hay tres paquetes de modelos: `bbmodel` (normalización entre ligas, §11 y §17),
+`bbestilo` (estilos de juego VaDE, §13) y `bbfit` (encaje v2: roles, reemplazo, entropía, estilos unificados,
+adaptación y simulador, §17).
 
 - Temporadas descargadas: **de 2020-21 a 2025-26** (completas, con playoffs) y **2026-27** (hasta el 12-10-2026).
   La temporada por defecto es 2026-27; cualquier otra: `python ejecutar.py --temporada 2024-25`.
 - Datos reales en el repositorio: ver [¿Dónde están los datos?](#3-dónde-están-los-datos).
 - **Contexto para agentes de IA**: [`CONTEXTO_AGENTE.md`](CONTEXTO_AGENTE.md) explica todo el proceso operativo, el esquema, las fórmulas, las limitaciones y el Artifact asociado.
+- **Diccionario de datos** de todas las tablas (claves, granularidad, columnas, unidades, banderas):
+  [`docs/data_dictionary.md`](docs/data_dictionary.md). **Glosario** de roles, estilos y medidas en lenguaje de
+  dirección deportiva: [`docs/glosario.md`](docs/glosario.md).
+- **Artículo técnico** (Parte I estilos; Parte II encaje v2 con notación formal):
+  [`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf) y el LaTeX de la
+  Parte II [`docs/articulo/fit_v2.tex`](docs/articulo/fit_v2.tex) (§20). Informes de cada fase: `docs/checkpoints/F*.md`.
 
 **Jugadores (filas jugador-equipo) descargados — temporada regular / playoffs:**
 
@@ -46,6 +55,9 @@ Todas las fuentes se han comprobado descargando datos reales (octubre de 2026).
 | `fec` | FIBA Europe Cup | Igual que la BCL (`212-fiba-mens-european-club-competitions-tier-2`) | igual | regular (Regular Season + Second Round) · playoffs (eliminatorias) · total; `Q` (Qualifiers) y `QT` (Qualifying Tournaments) fuera |
 | `bsl` | Basketbol Süper Ligi (Turquía) | FIBA LiveStats (Genius Sports) | `fibalivestats.dcd.shared.geniussports.com/data/<id>/data.json` (boxscore + jugada a jugada + tiros en el mismo documento). Ids localizados recorriendo los ids públicos de la fuente y guardados en `config/sources.json` | regular · playoffs (top 8) · total; Copa y Supercopa fuera |
 | `gbl` | Greek Basket League (A1) | FIBA LiveStats (Genius Sports); calendario de control en esake.gr | igual que la BSL; comprobado con los resultados de `esake.gr/el/action/EsakeResults` (Α Φάση = regular, Β Φάση = playoffs/play-outs) | regular · playoffs (top 8; play-outs y clasificación fuera) · total; Supercopa fuera |
+| `feb1` | Primera FEB (antes LEB Oro) | Web pública de la FEB | calendario `baloncestoenvivo.feb.es/resultados/<slug>/<g>/<año>` (grupos y jornadas por postback ASP.NET), partido `intrafeb.feb.es/LiveStats.API/api/v1/{KeyFacts,BoxScore}/<id>` con el token anónimo que la página pública da a cualquier visitante, plantilla y entrenador `Equipo.aspx` (§16) | regular · playoffs (eliminatorias y fases de ascenso) · total; copas y permanencia fuera |
+| `feb2` | Segunda FEB (antes LEB Plata) | Igual | igual (grupos Este/Oeste = atributo del partido) | igual |
+| `feb3` | Tercera FEB (antes Liga EBA) | Igual | igual (10-31 grupos por temporada = atributo del partido) | igual |
 
 **Enriquecimiento (fuente no oficial contrastada):**
 
@@ -101,6 +113,11 @@ En este repositorio, rama `claude/basketball-stats-extractor-jpas93`:
 | `data/processed/<temporada>/informe_ejecucion.json` | Estado de cada liga en la última ejecución |
 | `data/processed/temporadas.json` | Temporadas con datos, ligas y filas por fase |
 | `data/artifact/` (**no versionado**) | JSON columnar por temporada y fase para el Artifact; se genera con `python -m bbstats artifact [--temporada T]` |
+| `data/processed/<temporada>/quintetos/<liga>/`, `entrenadores/`, `feb/` | Jugada a jugada (tramos, quintetos, parejas, tiros, asistencias, on/off, RAPM), entrenadores por partido y partidos FEB con grupo (§12, §14, §16) |
+| `data/processed/player_id_crosswalk.csv` | Correspondencia de jugadores entre ligas (persona, confianza, método) |
+| `data/modelos/` | Salidas de los modelos: `algoritmo_A/`, `algoritmo_B/`, `normalizacion_amortiguada/`, `normalizado/`, `pista/`, `contexto/`, `interacciones/`, `estilos/` (VaDE), `roles/`, `reemplazo/`, `entropia/`, `estilos_unificados/`, `adaptacion/`, `simulador/` (fase 8). Todas descritas en [`docs/data_dictionary.md`](docs/data_dictionary.md) |
+| `configs/*.yaml` | Umbrales e hiperparámetros de las capas nuevas (§18) |
+| `experimentos/` (**no versionado**) | Registro MLflow y cachés reanudables de los modelos (§19) |
 
 ## 4. Ejecutar (sólo cuando tú lo pides)
 
@@ -578,3 +595,110 @@ Salidas: `data/processed/feb_cobertura.csv` (competición × temporada × grupo:
 
 **Entrenadores:** el partido no trae el entrenador; se toma el de la página del equipo de esa temporada
 (`metodo = temporada`, como la G League): no se ven los cambios a mitad de temporada.
+
+---
+
+## 17. Encaje v2: `bbfit` (fases 2-8), en el orden de ejecución
+
+Cada orden lee las salidas de la anterior, registra su ejecución en MLflow (§19) y deja sus resultados en
+`data/modelos/<capa>/`. Resultados, decisiones y riesgos de cada fase: `docs/checkpoints/F1.md` … `F8.md`;
+formulación completa: Parte II del artículo (§20).
+
+```bash
+# 0. Datos (fase 1): FEB + correspondencia de jugadores entre ligas
+python -m bbstats historico --ligas feb1 feb2 feb3 [--sin-descarga]
+python -m bbstats feb && python -m bbstats contrato --ligas feb1 feb2 feb3
+python -m bbstats entrenadores --ligas feb1 feb2 feb3 --sin-descarga
+python -m bbmodel crosswalk
+
+# 1. Normalización (fase 2): A, B y capa amortiguada; dataset normalizado, contexto, escalas
+python -m bbmodel pista
+python -m bbmodel ajustar && python -m bbmodel ajustar-b
+python -m bbmodel amortiguar                      # ≈ 6 min; --validar --variante V | --elegir | --diagnostico P
+python -m bbmodel dataset-normalizado && python -m bbmodel contexto && python -m bbmodel dataset-normalizado
+python -m bbmodel interacciones && python -m bbmodel escalas
+
+# 2. Capas de encaje (fases 3-7)
+python -m bbfit roles                             # roles por minutos, GTI, tramos BOCPD  (≈ 10 min; --rehacer)
+python -m bbfit reemplazo                         # libro de rol, elasticidad IV, transiciones, entrenadores (≈ 7 min)
+python -m bbfit entropia                          # H_estilo, H_rol, volatilidad σ_i, entropía de equipo (≈ 4 min)
+python -m bbfit estilos [--reusar-k]              # taxonomía unificada jugador ↔ equipo (≈ 2-8 min)
+python -m bbfit adaptacion [--rehacer] [--sin-validacion]   # Δ jerárquico, curva, censura, ADAPT% (5-8 min)
+
+# 3. Simulador de encaje (fase 8)
+python -m bbfit simular --jugador «nombre» --club «nombre» [--liga acb] [--temporada 2025-26] [--bajas …]
+#    (pesos, examen temporal, histórico y exportación al navegador: ver docs/checkpoints/F8.md)
+
+# 4. Artículo y pruebas
+python -m bbestilo articulo                       # = python -m bbfit.articulo; PDF + docs/articulo/fit_v2.tex
+python -m pytest -q
+```
+
+| Orden | Módulo | Salida (`data/modelos/…`) | Informe |
+|---|---|---|---|
+| `bbmodel amortiguar` | `bbmodel/amortiguacion.py` | `normalizacion_amortiguada/` (`league_offsets.csv`, traducciones, validación) | F2 |
+| `bbfit roles` | `bbfit/roles.py`, `bbfit/cambios.py`, `bbfit/datos.py` | `roles/` (tramos, temporadas, estructura de equipo, partido × jugador) | F3 |
+| `bbfit reemplazo` | `bbfit/reemplazo.py` | `reemplazo/` (uso–eficiencia, libro de rol, transiciones, compañeros, entrenadores) | F4 |
+| `bbfit entropia` | `bbfit/entropia.py` | `entropia/` (jugadores, equipos) | F5 |
+| `bbfit estilos` | `bbfit/estilos_unificados.py` | `estilos_unificados/` (equipos, jugadores, fichas, selección de K, VaDE) | F6 |
+| `bbfit adaptacion` | `bbfit/adaptacion.py` | `adaptacion/` (priors, histórico, curvas, censura, validación) | F7 |
+| `bbfit simular` y órdenes de la fase 8 | `bbfit/simulador.py`, `sim_insumos.py`, `validacion.py`, `sim_exportar.py` | `simulador/v2/` | F8 |
+
+Interfaz entre capas usada por el simulador: `bbfit.adaptacion.prior(liga_origen, liga_destino, grupo, pos3,
+metrica)`, `grupo_nacionalidad(...)`, `curva(g, delta, kappa)`; `bbfit.reemplazo.asignar_minutos(...)` (minutos
+endógenos por Plackett-Luce) y `redistribuir(...)` (suma fija de minutos y uso); `bbfit.roles.clasificar(...)`.
+
+## 18. Configuración: `configs/*.yaml`
+
+Todos los umbrales e hiperparámetros de las capas nuevas viven en YAML (el código no fija ninguno); se leen con
+`bbfit.config.cargar("<nombre>")`. Cambiar un valor y volver a ejecutar la orden correspondiente basta.
+
+| Fichero | Capa | Qué fija |
+|---|---|---|
+| `configs/normalization.yaml` | normalización amortiguada (fase 2) | identidad (crosswalk, umbral 0,75), puentes (≥ 150 min, ≥ 3 por arista), escalones de contracción, mapeo de cuantiles, formas de λ(d), IPW, variantes validadas y la elegida (`sin_mapeo`), capas que leen `<m>_am` |
+| `configs/roles.yaml` | roles (fase 3) | duración reglamentaria (40'/48'), ventana de cierre, umbrales de rol en minutos, solape 22-25', GTI (pesos, referencia, top-2, umbral, contracciones), Dirichlet α, BOCPD (riesgo 1/20, previas, suelos de ruido, retardo, tramo mínimo, interinos), covariables de cambio |
+| `configs/reemplazo.yaml` | reemplazo (fase 4) | mínimos de la elasticidad uso–eficiencia, instrumento (rotación ≥ 25 %), F mínimo individual, bootstrap, libro (retornos ≥ 300', roles clave, club estable por liga), asignación de minutos (simulaciones, temperatura, tope 36', mínimos por posición, contracción del entrenador k = 30) |
+| `configs/entropia.yaml` | entropía (fase 5) | categorías de acciones, acierto mínimo de zonas, prior Dirichlet α = 5, muestras, volatilidad (peso de AST, 30 posesiones de referencia, mínimos, grupos de contracción) |
+| `configs/styles.yaml` | estilos unificados (fase 6) | temporadas, mínimos de minutos, contracción m/(m+150), los 12 rasgos, regla de selección de K, umbrales «puro»/mezcla, tramos de entrenador, firmas y nombres de los estilos |
+| `configs/adaptacion.yaml` | adaptación (fase 7) | definición de traspaso, país de cada liga, grupos de nacionalidad, métricas, modelo jerárquico (previas, Gibbs, pesos por minutos), curva (previas de κ y D, bootstrap, control), censura (IPCW), jerarquía de priors, validación |
+| `configs/simulation.yaml` | simulador (fase 8) | iteraciones, intervalos, fuente de la normalización, plantilla, producción y suma fija de uso, utilidad de Plackett-Luce, GO-TO-GUY proyectado, contracción de la adaptación (0,55), índice Fit, avisos, validación y exportación |
+
+## 19. Registro de experimentos (MLflow)
+
+`bbfit.registro.experimento(nombre, run, params, semilla)` registra cada ejecución (parámetros = la sección del YAML,
+semilla, métricas de resumen y artefactos como `resumen.json`) en un almacén de ficheros local,
+`experimentos/mlruns` (**no versionado**; MLflow 3 necesita `MLFLOW_ALLOW_FILE_STORE=true`, que el módulo fija). Si
+MLflow no está instalado, el registro se degrada a `experimentos/registro_local.jsonl` sin fallar.
+
+| Experimento | Lo escribe | Runs |
+|---|---|---|
+| `normalizacion_amortiguada` | `bbmodel amortiguar` | `ajuste_<variante>`, `validacion_<variante>` |
+| `roles` | `bbfit roles` | `reglas_minutos_bocpd` |
+| `reemplazo` | `bbfit reemplazo` | `rol_reemplazo_v1` |
+| `entropia` | `bbfit entropia` | `entropia_v1` |
+| `estilos_unificados` | `bbfit estilos` | `gmm_k<K>_<covarianza>` |
+| `adaptacion` | `bbfit adaptacion` | `fase7` |
+| `simulador_v2` | examen temporal del simulador (fase 8) | `examen_<fuente>_<escenario>…` |
+
+Consulta: `mlflow ui --backend-store-uri experimentos/mlruns` (o `mlflow.search_runs(experiment_names=[...])`).
+Las cachés reanudables también viven en `experimentos/` (`cache_normalizacion/`, `cache_adaptacion/`,
+`cache_simulador/`).
+
+## 20. Artículo técnico y documentación
+
+`python -m bbestilo articulo` (o `python -m bbfit.articulo [--fuentes DIR] [--sin-pdf]`) compone el artículo
+completo en HTML y lo imprime a PDF con Chromium sin interfaz: **Parte I** (estilos VaDE, contexto de nivel y
+química; `bbestilo/articulo.py`, con las cifras leídas de `data/modelos/estilos/`) y **Parte II** (encaje v2:
+FEB, normalización amortiguada, roles, reemplazo, entropía, estilos unificados, adaptación y simulador;
+`bbfit/articulo.py`, con las cifras de los informes de fase). Las fórmulas se escriben en LaTeX y se componen con
+KaTeX incrustado (`bbestilo/recursos/katex/`, sin red); las fuentes tipográficas van en `bbestilo/recursos/fuentes/`.
+Salidas: `docs/articulo/estilos_de_juego_baskonia.pdf` (copia en `artifact/articulo/` para el Atlas),
+`docs/articulo/fit_v2.tex` (LaTeX autónomo de la Parte II, compila con pdflatex, xelatex o lualatex) y sus
+figuras en `docs/articulo/fit_v2_figuras/`. Los resultados de la fase 8 pendientes aparecen como marcadores
+`[[F8: …]]`.
+
+Otros documentos: [`docs/data_dictionary.md`](docs/data_dictionary.md) (todas las tablas),
+[`docs/glosario.md`](docs/glosario.md) (roles, estilos y medidas en lenguaje de dirección deportiva),
+[`docs/normalizacion_amortiguada.md`](docs/normalizacion_amortiguada.md), [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md),
+[`docs/contexto_y_quimica.md`](docs/contexto_y_quimica.md), [`docs/AUDIT_2026-10-21.md`](docs/AUDIT_2026-10-21.md)
+(línea base del proyecto multifase) y [`CHANGELOG.md`](CHANGELOG.md).

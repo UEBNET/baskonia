@@ -16,6 +16,7 @@ plantilla:
   nivel_sin_dato: banquillo          # compañero sin registro en t: L medio de los jugadores de < 300 min de su liga
   sd_sin_dato: 0.6                   # incertidumbre de su nivel (unidades de L)
   max_jugadores: 18                  # plantilla máxima (los de menos presencia fuera)
+  minimo_jugadores: 9                # plantilla mínima: se completa con jugadores de reemplazo (nivel de banquillo)
 
 produccion:
   metricas: [pts_p100, ts_pct, usg_pct, ast_pct, oreb_p100, dreb_p100, stl_p100, blk_p100, tov_pct]
@@ -44,7 +45,7 @@ rol_go_to_guy:                       # GO-TO-GUY proyectado: TITULAR por minutos
 adaptacion:
   partidos_temporada: {defecto: 34, nba: 82, gleague: 50, euroleague: 34, eurocup: 18, bcl: 14, fec: 12, feb3: 26}
   primeros_partidos: 10              # ADAPT% de los N primeros partidos
-  sd_sin_prior: 0.5                  # prior de reserva (sin módulo de adaptación): δ ~ N(0, 0,5²), sin curva
+  contraccion: 0.55                  # Δ previsto × 0,55: pendiente de calibración fuera de muestra (docs/checkpoints/F7.md)
 
 estilo:
   minimo_minutos_equipo: 100         # jugadores que entran en la composición de estilos de la plantilla
@@ -71,9 +72,9 @@ validacion:
   bootstrap: 2000
   nivel_ic: 0.90
   simulaciones: 400                  # iteraciones por fichaje en el examen
-  calibracion_casos: 600             # fichajes del corte anterior para calibrar la temperatura y la rotación
+  calibracion_casos: 500             # fichajes del corte anterior para calibrar la temperatura y la rotación
   calibracion_sim: 200
-  rejilla_escala: [0.6, 0.8, 1.0, 1.3]           # escala de la utilidad (inversa de la temperatura de Plackett-Luce)
+  rejilla_escala: [0.5, 0.75, 1.0, 1.25]         # escala de la utilidad (inversa de la temperatura de Plackett-Luce)
   rejilla_rotacion_extra: [0, 2, 4]              # jugadores extra en la rotación sobre la mediana medida (≥ 12,5 % MIN%)
   rotacion_sd_factor: 0.3                        # la sd del entrenador es partido a partido; la de temporada es menor
 

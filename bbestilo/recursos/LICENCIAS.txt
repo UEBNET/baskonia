@@ -1,0 +1,7 @@
+Recursos incrustados en el artículo (python -m bbfit articulo / python -m bbestilo articulo), para que el PDF se
+genere sin red con Chromium sin interfaz:
+
+katex/    KaTeX 0.16.11 (katex.min.js, katex.min.css sólo con las fuentes woff2, fonts/*.woff2), licencia MIT
+          (katex/LICENSE). Descargado del registro npm (paquete «katex»). Renderiza las fórmulas LaTeX del artículo.
+fuentes/  Source Serif 4, IBM Plex Sans, IBM Plex Mono y Barlow Condensed (subconjuntos woff2 de Google Fonts),
+          SIL Open Font License 1.1. fuentes.css = las reglas @font-face con rutas locales.
