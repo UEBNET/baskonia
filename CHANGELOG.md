@@ -32,33 +32,22 @@ Proyecto multifase sobre la línea base de la auditoría `docs/AUDIT_2026-10-21.
    en BCL, NBA, FEC y Segunda FEB (p. ej. σ² de pts/100 en la BCL de 1,8·10⁻⁴ a 105,2).
 5. **Cortesía HTTP compartida**: `bbstats/http.py` aplica la pausa por dominio a todos los clientes del proceso
    (antes, por cliente): las descargas en paralelo contra un mismo dominio son más lentas.
-6. **`python -m bbestilo articulo` genera el artículo completo** (Parte I + Parte II, ≈ 49 páginas) y, además,
-   `docs/articulo/fit_v2.tex`; `bbestilo.articulo.construir` acepta `parte2` y usa por defecto las fuentes de
-   `bbestilo/recursos/fuentes/`. La Parte I se recompone con el modelo VaDE actual (12 ligas; el PDF anterior era de
-   8) y el texto ya no dice «ocho ligas» fijo.
-7. **Configuración YAML** (`configs/*.yaml`) para todas las capas nuevas y registro MLflow en `experimentos/`
+6. **Configuración YAML** (`configs/*.yaml`) para todas las capas nuevas y registro MLflow en `experimentos/`
    (no versionado; MLflow 3 necesita `MLFLOW_ALLOW_FILE_STORE=true`, que `bbfit.registro` fija).
 
-## 2026-10-23 — Fase 9: documentación y artículo científico
+## 2026-10-23 — Fase 9: documentación (artículo científico descartado)
 
 Añadido
-- `bbfit/articulo.py`: Parte II del artículo (secciones 14-24: FEB, normalización amortiguada, roles y BOCPD,
-  reemplazo de rol, entropía, taxonomía unificada, adaptación, simulador v2 con marcadores `[[F8: …]]` para los
-  resultados pendientes, supuestos y limitaciones, reproducibilidad) escrita una sola vez en un marcado mínimo y
-  traducida a HTML (fórmulas LaTeX con KaTeX incrustado, sin red) y a LaTeX autónomo (`docs/articulo/fit_v2.tex`,
-  compilable con pdflatex, xelatex o lualatex; figuras en `docs/articulo/fit_v2_figuras/`). Cuatro figuras nuevas
-  (roles por liga, nivel antes/después, curva de adaptación, centroides de los estilos unificados). Ejecución:
-  `python -m bbestilo articulo` o `python -m bbfit.articulo [--fuentes DIR] [--sin-pdf]`.
-- `bbestilo/recursos/`: KaTeX 0.16.11 (MIT) y fuentes Source Serif 4, IBM Plex y Barlow Condensed (OFL) en woff2.
 - `docs/data_dictionary.md` (todas las tablas de `data/processed/` y `data/modelos/`), `docs/glosario.md` (roles,
   estilos y medidas para dirección deportiva); README §17-§20 (orden de ejecución de `bbfit`, `configs/*.yaml`,
-  MLflow, artículo); secciones nuevas en `CONTEXTO_AGENTE.md`; este resumen consolidado.
-- `tests/test_articulo.py` (5 tests del marcado: HTML, LaTeX, marcadores F8).
+  MLflow); secciones nuevas en `CONTEXTO_AGENTE.md`; este resumen consolidado.
 
 Cambiado
-- `bbestilo/articulo.py`: título común, Parte II insertada antes de las referencias, número de ligas del modelo VaDE
-  leído de los datos (antes «ocho» fijo), fuentes por defecto versionadas. `bbestilo/figuras.py`: paleta de 15 ligas.
-- `bbestilo/__main__.py`: `articulo` llama a `bbfit.articulo.construir`.
+- `bbestilo/figuras.py`: paleta de 15 ligas.
+
+Retirado (26-10-2026, por decisión del usuario: el artículo científico no se actualiza)
+- La Parte II del artículo (`bbfit/articulo.py`, `docs/articulo/fit_v2.tex` y figuras, recursos KaTeX y fuentes,
+  `tests/test_articulo.py`); el PDF y `bbestilo/articulo.py` vuelven a su versión anterior.
 
 ## 2026-10-23 — Fase 8: simulador de encaje v2 (en curso)
 

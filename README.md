@@ -14,9 +14,9 @@ adaptación y simulador, §17).
 - **Diccionario de datos** de todas las tablas (claves, granularidad, columnas, unidades, banderas):
   [`docs/data_dictionary.md`](docs/data_dictionary.md). **Glosario** de roles, estilos y medidas en lenguaje de
   dirección deportiva: [`docs/glosario.md`](docs/glosario.md).
-- **Artículo técnico** (Parte I estilos; Parte II encaje v2 con notación formal):
-  [`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf) y el LaTeX de la
-  Parte II [`docs/articulo/fit_v2.tex`](docs/articulo/fit_v2.tex) (§20). Informes de cada fase: `docs/checkpoints/F*.md`.
+- **Artículo técnico** (estilos de juego; sin actualizar con las fases 1-8 por decisión del usuario):
+  [`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf). Informes de cada
+  fase: `docs/checkpoints/F*.md`.
 
 **Jugadores (filas jugador-equipo) descargados — temporada regular / playoffs:**
 
@@ -630,7 +630,7 @@ python -m bbfit simular --jugador «nombre» --club «nombre» [--liga acb] [--t
 #    (pesos, examen temporal, histórico y exportación al navegador: ver docs/checkpoints/F8.md)
 
 # 4. Artículo y pruebas
-python -m bbestilo articulo                       # = python -m bbfit.articulo; PDF + docs/articulo/fit_v2.tex
+python -m bbestilo articulo                       # PDF del artículo de estilos (sin las fases 1-8)
 python -m pytest -q
 ```
 
@@ -686,16 +686,10 @@ Las cachés reanudables también viven en `experimentos/` (`cache_normalizacion/
 
 ## 20. Artículo técnico y documentación
 
-`python -m bbestilo articulo` (o `python -m bbfit.articulo [--fuentes DIR] [--sin-pdf]`) compone el artículo
-completo en HTML y lo imprime a PDF con Chromium sin interfaz: **Parte I** (estilos VaDE, contexto de nivel y
-química; `bbestilo/articulo.py`, con las cifras leídas de `data/modelos/estilos/`) y **Parte II** (encaje v2:
-FEB, normalización amortiguada, roles, reemplazo, entropía, estilos unificados, adaptación y simulador;
-`bbfit/articulo.py`, con las cifras de los informes de fase). Las fórmulas se escriben en LaTeX y se componen con
-KaTeX incrustado (`bbestilo/recursos/katex/`, sin red); las fuentes tipográficas van en `bbestilo/recursos/fuentes/`.
-Salidas: `docs/articulo/estilos_de_juego_baskonia.pdf` (copia en `artifact/articulo/` para el Atlas),
-`docs/articulo/fit_v2.tex` (LaTeX autónomo de la Parte II, compila con pdflatex, xelatex o lualatex) y sus
-figuras en `docs/articulo/fit_v2_figuras/`. Los resultados de la fase 8 pendientes aparecen como marcadores
-`[[F8: …]]`.
+`python -m bbestilo articulo` compone el artículo de estilos de juego (estilos VaDE, contexto de nivel y química;
+`bbestilo/articulo.py`) y lo imprime a PDF: `docs/articulo/estilos_de_juego_baskonia.pdf` (copia en
+`artifact/articulo/`). Por decisión del usuario (26-10-2026) el artículo **no** se ha ampliado con las fases 1-8;
+la documentación de esas fases está en `docs/checkpoints/F*.md`.
 
 Otros documentos: [`docs/data_dictionary.md`](docs/data_dictionary.md) (todas las tablas),
 [`docs/glosario.md`](docs/glosario.md) (roles, estilos y medidas en lenguaje de dirección deportiva),
