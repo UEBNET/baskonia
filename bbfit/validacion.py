@@ -10,7 +10,7 @@ lo que pasó en t+1:
     (pareados por fichaje) de las diferencias de métricas.
 
 Fichaje real: persona con registro en t (≥ min minutos) que en t+1 juega en un club en el que no estaba en t (club =
-liga + equipo; un equipo de t+1 cuya plantilla comparte ≥ 40 % de jugadores con un equipo de t es el mismo club, aunque
+liga + equipo, o código de club FEB; un equipo de t+1 cuya plantilla comparte ≥ 30 % (y ≥ 3) jugadores con uno de t es el mismo club, aunque
 cambie de id o de liga). Destino = su registro de más minutos en un club nuevo.
 
 Escenario de plantilla (lo que sabría un director deportivo al fichar): los compañeros del club de destino en t+1 que
@@ -837,6 +837,67 @@ def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | 
         (d / "resumen.json").write_text(json.dumps(res, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
     progreso(f"examen {etq} terminado en {time.time() - t0:.0f} s")
     return res
+
+
+def dejar_fuera_liga(etiqueta: str = "AB_inicio", min_casos: int = 30, progreso=print) -> pd.DataFrame:
+    """Dejar fuera una liga: para cada liga de destino L y corte de examen, la utilidad Plackett-Luce se reajusta SIN los
+    equipos de L y el Fit SIN los fichajes hacia L; se vuelven a simular los fichajes hacia L y se comparan con la
+    ejecución principal (mismos fichajes) y con los baselines. La normalización no se reajusta (su propio examen dejando
+    fuera una liga está en la fase 2)."""
+    cfg = cfg_sim()
+    roles = _roles()
+    d = DIR_VAL / etiqueta
+    e = pd.read_csv(d / "predicciones.csv.gz", dtype={"team_d": str, "team_o": str, "persona_id": str}, low_memory=False)
+    fuente, escenario = e["fuente"].iloc[0], e["escenario"].iloc[0]
+    temps = cfg["historico"]["temporadas"]
+    filas = []
+    ligas = [l for l, n in e["liga_d"].value_counts().items() if n >= min_casos]
+    todos_pred = {t: pickle.loads((SI.DIR_CACHE / f"pred_{t}_{fuente}_{escenario}.pkl").read_bytes())
+                  for t in temps[:-1] if (SI.DIR_CACHE / f"pred_{t}_{fuente}_{escenario}.pkl").exists()}
+    for t in sorted(e["corte"].unique()):
+        pesos, _, trans = pickle.loads((SI.DIR_CACHE / f"pesos_final_{t}_{etiqueta}.pkl").read_bytes())
+        bloques = []
+        for s_ in [x for x in temps if x <= t][1:]:
+            bloques += pickle.loads((SI.DIR_CACHE / f"bloques_{s_}_{fuente}.pkl").read_bytes())
+        prev = pd.concat([v for k, v in todos_pred.items() if k < t], ignore_index=True)
+        pc = preparar_corte(t, fuente, cfg, roles, progreso)
+        c = S.cargar_corte(t, fuente, pesos=False)
+        t1 = SI.siguiente(t)
+        eq1 = S.cargar_corte(t1, "AB", pesos=False).eq
+        r1 = roles[roles["temporada"] == t1]
+        for L in ligas:
+            casos = pc["casos"][pc["casos"]["liga_d"] == L]
+            if casos.empty:
+                continue
+            w = ajustar_utilidad([b for b in bloques if b["liga"] != L], cfg)
+            pr = prev[prev["liga_d"] != L]
+            fit = ajustar_fit(pr.assign(**{f"c_{r}": pr[f"v_c_{r}"] for r in RASGOS_FIT}), cfg) if len(pr) else None
+            c.w_util, c.calib, c.fit = w, pesos["calibracion"], fit
+            v = simular_fichajes(c, casos, r1, eq1, cfg, escenario, progreso=None, sin_adaptacion=True)
+            base = e[(e["corte"] == t) & (e["liga_d"] == L)].set_index("persona_id")
+            v = v.set_index("persona_id")
+            m = base.join(v[["min_pred"] + [f"p_{r}" for r in ROLES] + ["pts_p100_pred"]].add_prefix("lolo_"), how="inner")
+            filas.append(m.reset_index().assign(liga_fuera=L))
+        progreso(f"  dejar fuera una liga · corte {t} listo")
+    x = pd.concat(filas, ignore_index=True)
+    res = []
+    for L, g in x.groupby("liga_fuera"):
+        ok = g["eval_min"].astype(str).str.lower().isin(["true", "1"])
+        P = g[[f"lolo_p_{r}" for r in ROLES]].to_numpy(float)
+        okr = g["rol_real"].isin(ROLES).to_numpy() & np.isfinite(P).all(1)
+        y = g["rol_real"].map({r: i for i, r in enumerate(ROLES)})
+        res.append({"liga": L, "n": len(g), "mae_min_principal": g.loc[ok, "v_err_min"].mean(),
+                    "mae_min_fuera": (g.loc[ok, "lolo_min_pred"] - g.loc[ok, "min_real"]).abs().mean(),
+                    "mae_min_a": g.loc[ok, "a_err_min"].mean(), "mae_min_b": g.loc[ok, "b_err_min"].mean(),
+                    "logloss_principal": g["v_logloss"].mean(),
+                    "logloss_fuera": float(_logloss(P[okr], y[okr].astype(int).to_numpy()).mean()) if okr.any() else np.nan,
+                    "logloss_b": g["b_logloss"].mean(),
+                    "mae_pts_principal": g["v_err_pts_p100"].abs().mean(),
+                    "mae_pts_fuera": (g["lolo_pts_p100_pred"] - g["pts_p100_real"]).where(g["v_err_pts_p100"].notna()).abs().mean(),
+                    "mae_pts_b": g["b_err_pts_p100"].abs().mean()})
+    r = pd.DataFrame(res)
+    r.to_csv(d / "dejar_fuera_liga.csv", index=False, float_format="%.4f")
+    return r
 
 
 def pesos_produccion(progreso=print) -> dict:

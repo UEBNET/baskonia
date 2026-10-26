@@ -20,6 +20,7 @@ Ficheros (data/artifact/simulador/, publicados en atlas/simulador/):
 from __future__ import annotations
 
 import json
+import re
 from datetime import date
 from pathlib import Path
 
@@ -259,7 +260,9 @@ def exportar(salida: str | Path = SALIDA) -> dict:
     tam = {}
     for nombre, obj in (("meta.json", meta), ("jugadores.json", jcols), ("clubes.json", cl)):
         p = salida / nombre
-        p.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=_r), encoding="utf-8")
+        txt = json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=_r)
+        txt = re.sub(r"(?<=[,\[:])-?(?:NaN|Infinity)(?=[,\]}])", "null", txt)     # JSON válido para el navegador
+        p.write_text(txt, encoding="utf-8")
         tam[nombre] = p.stat().st_size
     total = sum(tam.values()) / 1e6
     if total > float(ex["max_mb"]):

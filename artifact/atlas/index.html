@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-gl3d-dist-min@2.35.2/plotly-gl3d.min.js"></script>
+<script src="simulador_v2.js"></script>
 <style>
 /* Layout: resumen ejecutivo arriba y cinco pestañas de trabajo: mapa y comparación de clubes · simulador de fichajes
    (varios jugadores y bajas) · buscar parecidos · ligas y estilos · hallazgos y modelo. */
@@ -149,6 +150,30 @@ section.block { background: var(--surface); border: 1px solid var(--line); borde
 .frow .who b { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .frow .who small { color: var(--muted); font-size: 11.5px; }
 .frow .mins { grid-column: 2 / -1; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 8px; align-items: center; }
+/* simulador de encaje v2 */
+.frow .v2s { grid-column: 2 / -1; font: 500 11.5px var(--f-data); color: var(--muted); }
+.frow .v2s b { color: var(--ink); font-weight: 600; }
+.v2 { display: grid; gap: 12px; }
+.v2card { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 12px 14px; display: grid; gap: 10px; }
+.v2card h3 { margin: 0; font-size: 15px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.v2card h3 small { color: var(--muted); font-weight: 500; font-size: 12px; }
+.v2grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 10px 16px; }
+.v2grid > div { min-width: 0; overflow-x: auto; }
+.v2t th, .v2t td { font-size: 12px; }
+.rolbar { display: flex; height: 18px; border-radius: 5px; overflow: hidden; border: 1px solid var(--line); }
+.rolbar i { display: block; height: 100%; }
+.rolleg { display: flex; flex-wrap: wrap; gap: 2px 10px; font: 500 11.5px var(--f-data); color: var(--muted); margin-top: 4px; }
+.rolleg span { display: inline-flex; align-items: center; gap: 4px; }
+.rolleg i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.v2t { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.v2t th, .v2t td { padding: 3px 6px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.v2t th:first-child, .v2t td:first-child { text-align: left; }
+.v2t td.iv { color: var(--muted); font: 500 11px var(--f-data); }
+.fitrow { display: grid; grid-template-columns: 130px minmax(0, 1fr) 54px; gap: 6px; align-items: center; font-size: 12.5px; }
+.fitrow em { font: 500 11.5px var(--f-data); font-style: normal; text-align: right; }
+.avisos2 { display: flex; flex-wrap: wrap; gap: 6px; }
+.avisos2 span { border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; font-size: 11.5px; background: var(--surface-2); }
+.v2nota { font-size: 12px; color: var(--muted); }
 .roster { display: grid; gap: 1px; max-height: 300px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
 .roster label { display: grid; grid-template-columns: 18px 12px minmax(0, 1fr) auto; gap: 7px; align-items: center; padding: 5px 8px; font-size: 12.5px; cursor: pointer; }
 .roster label:hover { background: var(--c4); }
@@ -638,6 +663,7 @@ details.mas[open] > summary { margin-bottom: 6px; }
           <select id="sClub" aria-label="Club"></select>
           <span class="label">Fichajes</span>
           <input type="search" id="sBus" placeholder="Añadir jugador por nombre" autocomplete="off"><div class="sugs" id="sBusS" hidden></div>
+          <p class="note">Sólo eliges jugador y club: los minutos y el rol salen del simulador.</p>
           <div class="fich" id="sFich"></div>
           <span class="label">Plantilla · marca quién sale</span>
           <div class="roster" id="sRoster"></div>
@@ -651,6 +677,9 @@ details.mas[open] > summary { margin-bottom: 6px; }
         </div>
         <div class="res">
           <div id="sBanner"></div>
+          <div class="lvlhead"><h3>Encaje del fichaje · simulador v2</h3><p class="note">Rol y minutos los decide el simulador (no se teclean): nivel traducido al destino, adaptación al cambio de liga, competencia por minutos con la plantilla y las costumbres del entrenador, uso compartido, compañeros, estilo y ritmo. Intervalos del 50 % y del 90 % de 600 temporadas simuladas.</p></div>
+          <div class="v2" id="sV2"><p class="note">Cargando el simulador…</p></div>
+          <div class="lvlhead"><h3>Estilo de mapa con los cambios</h3><p class="note">Mapa VaDE: cada fichaje entra con los minutos que le da el simulador v2.</p></div>
           <div class="outcome" id="sOutcome"></div>
           <div class="grid2">
             <div class="mapbox"><div class="maphead"><span class="label">La plantilla en el mapa</span><label class="tog note"><input type="checkbox" id="sOtros"> Clubes de la misma competición</label></div><div id="sMapa"></div>
@@ -1237,6 +1266,7 @@ async function cargar() {
   construirSimulador();
   construirBuscador();
   construirEquipo();
+  cargarSim();
   enlazar();
   pintarTodo();
   irA(st.tab, false);
@@ -1396,7 +1426,7 @@ function elipsoide(s, k) {
   return { type: "mesh3d", x: X, y: Y, z: Z, alphahull: 0, opacity: 0.1, color: COL[k], hoverinfo: "skip", showlegend: false };
 }
 const hovClub = (c, accion = "añadir a la comparación") => { const s = sNivC(c), pl = ESC.pDe(muestra("c", c.liga, c.temporada), Lclub(c.nivel)), en = entrenadores(c);
-  return `<b>${esc(c.nombre_club)}</b><br>${LIGAS[c.liga]} ${c.temporada}${c.provisional ? " (provisional)" : ""}${en.length ? `<br>Entrenador: ${en.map((e) => esc(e.nombre)).join(" → ")}` : ""}<br>${esc(eNom(c.e))} · afinidad ${afin(c.p)} de 100 · robustez ${pct(c.rob)}<br>Nivel ${ESC.txt(s)} (Euroliga = 0)${pl != null ? ` · p${Math.round(pl)} en su liga` : ""}${c.net_z != null ? ` · net rating ${ESC.txt(ESC.S("z", c.net_z))} en su liga` : ""}${accion ? `<br><i>clic: ${accion}</i>` : ""}`; };
+  return `<b>${esc(c.nombre_club)}</b><br>${LIGAS[c.liga]} ${c.temporada}${c.provisional ? " (provisional)" : ""}${en.length ? `<br>Entrenador: ${en.map((e) => esc(e.nombre)).join(" → ")}` : ""}<br>${c.eu != null ? `Estilo: ${esc(c.eu_etiqueta || euNom(c.eu))} · ` : ""}mapa: ${esc(eNom(c.e))} · afinidad ${afin(c.p)} de 100 · robustez ${pct(c.rob)}<br>Nivel ${ESC.txt(s)} (Euroliga = 0)${pl != null ? ` · p${Math.round(pl)} en su liga` : ""}${c.net_z != null ? ` · net rating ${ESC.txt(ESC.S("z", c.net_z))} en su liga` : ""}${accion ? `<br><i>clic: ${accion}</i>` : ""}`; };
 const ejes3d = () => { const ax = (i) => { const e = META.ejes[i]; return { title: { text: `Eje ${i + 1}${e.positivo.length ? " · + " + e.positivo.join(", ") : ""}`, font: { family: "Barlow Condensed", size: 13, color: MUTED } }, gridcolor: LINE, zerolinecolor: (DK ? "#3a4659" : "#d6cec0"), showbackground: true, backgroundcolor: C4, tickfont: { family: "Manrope", size: 10, color: MUTED } }; }; return { xaxis: ax(0), yaxis: ax(1), zaxis: ax(2), aspectmode: "data" }; };
 const LAYOUT = (rev) => ({ uirevision: rev, margin: { l: 0, r: 0, t: 4, b: 0 }, paper_bgcolor: SURF, font: { family: "Barlow", color: INK }, hoverlabel: { bgcolor: SURF, bordercolor: LINE, font: { family: "Barlow", color: INK, size: 12 } } });
 const CFG = { displaylogo: false, responsive: true, modeBarButtonsToRemove: ["toImage"] };
@@ -1502,6 +1532,107 @@ function pintarComparacion() {
 }
 
 // ---------------------------------------------------------------- simulador de fichajes
+// ---------------------------------------------------------------- simulador de encaje v2 (motor: simulador_v2.js = bbfit.simulador)
+// Datos: simulador/{meta,jugadores,clubes}.json (bbfit/sim_exportar.py). Sin minutos manuales: el rol y los minutos son endógenos.
+let SIMD = null, SIMP = null, SIMPID = null;
+const SIMV2 = new Map();
+const ROL_NOM = { RESIDUAL: "Residual", PROFUNDIDAD: "Profundidad", ROTACION: "Rotación", TITULAR: "Titular", GO_TO_GUY: "Go-to-guy" };
+const ROL_COL = { RESIDUAL: "#a7adb8", PROFUNDIDAD: "#8fb3d9", ROTACION: "#3b7fe0", TITULAR: "#1f9e6e", GO_TO_GUY: "#c9852a" };
+function cargarSim() {
+  if (SIMP) return SIMP;
+  SIMP = Promise.all(["simulador/meta.json", "simulador/jugadores.json", "simulador/clubes.json"].map((u) => cargarJSON(u))).then(([m, j, c]) => {
+    SIMD = SIM2.cargar(m, j, c); SIMPID = new Map(); SIMD.jug.forEach((r) => SIMPID.set(`${r.liga}|${r.temporada}|${r.pid}`, r));
+    if (!$("#p-simulador").hidden) pintarSim(); if (!$("#p-equipo").hidden) pintarEq();
+  }).catch((e) => { SIMD = { error: e.message }; console.error(e); if (!$("#p-simulador").hidden) pintarSim(); });
+  return SIMP;
+}
+const simRec = (j) => (SIMPID && j ? SIMPID.get(`${j.liga}|${j.temporada}|${j.pid}`) || null : null);
+const simClub = (d) => (SIMD && SIMD.porClub && d ? SIMD.porClub.get(`${d.liga}|${d.tid}|${d.temporada}`) || null : null);
+function v2Estado(d, todos, bajasRows) {
+  if (!SIMD || SIMD.error || !SIMD.porClub) return null;
+  const club = simClub(d); if (!club) return { sinClub: true, res: new Map() };
+  const bajas = new Set(bajasRows.map(simRec).filter(Boolean).map((r) => r.persona));
+  const recs = todos.map((o) => o.rec).filter(Boolean);
+  const key = JSON.stringify([club.liga, club.team, club.temporada, [...bajas].sort(), recs.map((r) => r.id)]);
+  if (SIMV2.has(key)) return SIMV2.get(key);
+  const res = new Map();
+  recs.forEach((r) => { try { res.set(r.id, SIM2.simular({ rec: r, club, bajas, extras: recs.filter((x) => x !== r) })); } catch (e) { console.error(e); res.set(r.id, { error: e.message }); } });
+  const out = { club, res, bajas };
+  SIMV2.set(key, out); if (SIMV2.size > 60) SIMV2.delete(SIMV2.keys().next().value);
+  return out;
+}
+// ---- estilos unificados (taxonomía jugador ↔ equipo): son los nombres que se muestran; VaDE queda como «estilo de mapa»
+const EUS = () => (META && META.estilos_unificados && META.estilos_unificados.estilos) || [];
+const euNom = (k) => (EUS()[k] ? EUS()[k].nombre : "–");
+const euCol = (k) => (EUS()[k] ? EUS()[k].color : MUTED);
+const euIdx = (id) => EUS().findIndex((e) => e.id === id);
+const glyphEU = (r, sz = 12) => (r && r.eu != null ? `<span class="sw" style="background:${euCol(r.eu)};width:${sz}px;height:${sz}px"></span>` : glyph(r.e, sz));
+function chipEst(r, conMapa = true) {
+  if (!r || r.eu == null) return chipE(r.e, r.p);
+  const e = EUS()[r.eu] || {}, tip = `<b>${esc(r.eu_etiqueta || euNom(r.eu))}</b> · pertenencia ${afin(r.eu_p)} de 100<br>${esc(e.rol_jugador ? e.rol_jugador + ": " : "")}${esc(r.jugador ? e.jugador : e.definicion || "")}${r.e != null ? `<br>Estilo de mapa (VaDE): «${esc(eNom(r.e))}», afinidad ${afin(r.p)}` : ""}`;
+  return `<span class="st" data-tip="${esc(tip)}">${glyphEU(r)}${esc(r.eu_etiqueta || euNom(r.eu))}${r.eu_p != null ? ` <span class="muted num">${afin(r.eu_p)}</span>` : ""}${conMapa && r.e != null ? ` <small class="muted">· mapa: ${esc(eNom(r.e))}</small>` : ""}</span>`;
+}
+function euDeVector(p) { if (!Array.isArray(p) || !p.every((x) => isFinite(x))) return null; const k = argmax(p); return { eu: euIdx(SIMD.meta.estilos[k].id), eu_p: p[k] }; }
+const ivTxt = (d, k, dec = 1) => (d && d["lo" + k] != null ? `${fmt(d["lo" + k], dec)}–${fmt(d["hi" + k], dec)}` : "–");
+function barraRoles(roles) {
+  return `<div class="rolbar" role="img" aria-label="Probabilidad de cada rol">${SIM2.ROLES.map((r) => `<i style="width:${100 * roles[r]}%;background:${ROL_COL[r]}" data-tip="${ROL_NOM[r]}: ${Math.round(100 * roles[r])} %"></i>`).join("")}</div>` +
+    `<div class="rolleg">${SIM2.ROLES.map((r) => `<span><i style="background:${ROL_COL[r]}"></i>${ROL_NOM[r]} ${Math.round(100 * roles[r])} %</span>`).join("")}</div>`;
+}
+function svgCurva(a) {
+  const c = a.curva || []; if (!c.length) return "";
+  const W = 300, H = 90, ys = c.flatMap((x) => [x[2], x[3]]).map((v) => 100 * v), lo = Math.min(97, ...ys) - 1, hi = Math.max(103, ...ys) + 1, n = c.length - 1 || 1;
+  const X = (g) => 28 + (W - 34) * g / n, Y = (v) => 6 + (H - 22) * (1 - (100 * v - lo) / (hi - lo));
+  const banda = c.map((x) => `${X(x[0])},${Y(x[3])}`).join(" ") + " " + c.slice().reverse().map((x) => `${X(x[0])},${Y(x[2])}`).join(" ");
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px" role="img" aria-label="Curva de adaptación"><line x1="28" x2="${W - 6}" y1="${Y(1)}" y2="${Y(1)}" stroke="${LINE}" stroke-dasharray="3 3"/>
+    <polygon points="${banda}" fill="${SIM}" opacity="0.18"/><polyline points="${c.map((x) => `${X(x[0])},${Y(x[1])}`).join(" ")}" fill="none" stroke="${SIM}" stroke-width="2"/>
+    <text x="2" y="${Y(1) + 4}" font-size="10" fill="${MUTED}">100</text><text x="28" y="${H - 2}" font-size="10" fill="${MUTED}">partido 1</text><text x="${W - 6}" y="${H - 2}" font-size="10" fill="${MUTED}" text-anchor="end">partido ${c.length}</text></svg>`;
+}
+const COMP_NOM = { nivel: "Nivel", rol: "Rol", estilo: "Estilo", complementariedad: "Complementariedad", adaptacion: "Adaptación", riesgo: "Riesgo" };
+const COMP_TIP = { nivel: "Nivel traducido al destino frente al de sus compañeros (ponderado por minutos)", rol: "Rol esperado (0 = residual … 4 = go-to-guy)",
+  estilo: "Cercanía entre su estilo y el del equipo (Jensen-Shannon)", complementariedad: "Cubre un hueco de estilo de la plantilla frente a los equipos de su estilo, y cambio en la entropía del reparto de uso y de la red de pases",
+  adaptacion: "ADAPT% esperado frente a 100", riesgo: "Volatilidad partido a partido, incertidumbre del nivel y entropía de rol (más = más riesgo, resta)" };
+const MET_V2 = [["pts_p100", "Puntos/100", 1], ["ts_pct", "TS%", 1], ["usg_pct", "USG%", 1], ["ast_pct", "AST%", 1], ["oreb_p100", "Reb. of./100", 1], ["dreb_p100", "Reb. def./100", 1], ["stl_p100", "Robos/100", 1], ["blk_p100", "Tapones/100", 1]];
+const PP_V2 = [["pts", "Puntos"], ["reb", "Rebotes"], ["stl", "Robos"], ["blk", "Tapones"], ["posesiones", "Posesiones en pista"]];
+function tarjetaV2(o, n, s) {
+  const r = o.v2, nom = o.j ? o.j.nombre : o.rec ? o.rec.nombre : "?";
+  if (!r) return `<div class="v2card"><h3><span class="badge" style="background:${FICH_COL[n % FICH_COL.length]}">${n + 1}</span>${esc(nom)}</h3><p class="note">${o.rec ? "Sin plantilla del simulador v2 para este club y temporada (hay plantillas de 2025-26 y 2026-27)." : "Sin insumos del simulador v2 para esta temporada del jugador: elige otra de sus temporadas (2024-25 a 2026-27)."}</p></div>`;
+  if (r.error) return `<div class="v2card"><h3>${esc(nom)}</h3><p class="note">No se pudo simular (${esc(r.error)}).</p></div>`;
+  const F = r.fit, a = r.adaptacion, eq = r.equipo, e = r.estilo, t = r.temporada_destino;
+  const fitTot = F.total != null ? ESC.html("z", F.total, null, { nombre: "Fit (éxito esperado)", raw: `${sg(F.total, 2)} DT del éxito`, extra: "Éxito = 0,5·z(minutos) + 0,5·z(nivel) en la liga de destino; 0 = fichaje medio" }) : "–";
+  const prod = `<table class="v2t"><thead><tr><th>Por 100 posesiones</th><th>Media</th><th>50 %</th><th>90 %</th></tr></thead><tbody>` +
+    MET_V2.map(([m, nm]) => { const d = r.produccion_p100[m]; return d && d.media != null ? `<tr><td>${nm}</td><td>${fmt(d.media, 1)}</td><td class="iv">${ivTxt(d, 50)}</td><td class="iv">${ivTxt(d, 90)}</td></tr>` : ""; }).join("") + `</tbody></table>`;
+  const pp = `<table class="v2t"><thead><tr><th>Por partido (ritmo del club)</th><th>Media</th><th>50 %</th><th>90 %</th></tr></thead><tbody>` +
+    PP_V2.map(([k, nm]) => { const d = r.por_partido[k]; return d && d.media != null ? `<tr><td>${nm}</td><td>${fmt(d.media, 1)}</td><td class="iv">${ivTxt(d, 50)}</td><td class="iv">${ivTxt(d, 90)}</td></tr>` : ""; }).join("") + `</tbody></table>`;
+  const comps = Object.entries(F.componentes || {}).map(([k, v]) => `<div class="fitrow" data-tip="${esc(COMP_TIP[k])}"><span>${COMP_NOM[k]}</span>${v != null ? ESC.barra(ESC.dS("z", v)) : "<span></span>"}<em>${v != null ? sg(v, 2) : "–"}</em></div>`).join("");
+  const peu = euDeVector(e.jugador), teu = euDeVector(e.equipo), hueco = e.hueco_cubierto ? euNom(euIdx(e.hueco_cubierto)) : null;
+  const plant = (r.plantilla || []).filter((p) => p.minutos >= 1).slice(0, 10).map((p) => `<tr${p.fichaje ? ' style="font-weight:600"' : ""}><td>${esc(p.nombre || (String(p.persona).startsWith("__") ? "(reemplazo)" : "s/d"))}${p.fichaje ? " ★" : ""}</td><td>${fmt(p.minutos, 1)}</td><td class="iv">${p.minutos_sin != null ? fmt(p.minutos_sin, 1) : p.fichaje ? "–" : ""}</td></tr>`).join("");
+  return `<div class="v2card">
+    <h3><span class="badge" style="background:${FICH_COL[n % FICH_COL.length]}">${n + 1}</span>${esc(nom)} <small>${esc(ESC.ligaCorto(r.liga_origen))} → ${esc(r.club_destino)} (${esc(ESC.ligaCorto(r.liga_destino))} ${t}) · ${esc(r.escenario || "")}</small></h3>
+    <div class="v2grid">
+      <div><span class="label">Rol esperado</span>${barraRoles(r.roles)}
+        <p style="margin:8px 0 0"><b>${fmt(r.minutos.media, 1)}'</b> por partido · 50 %: ${ivTxt(r.minutos, 50)}' · 90 %: ${ivTxt(r.minutos, 90)}'<br><span class="note">Titular en el ${Math.round(100 * r.p_titular)} % de las temporadas simuladas · nivel ${ESC.html("nivel", r.L_efectivo, "2025-26", { raw: `L ${sg(r.L_efectivo)} ± ${fmt(r.L_sd)}` })}</span></p></div>
+      <div><span class="label">Índice Fit</span><p style="margin:2px 0 6px">${fitTot}</p>${comps}<p class="v2nota">Suma exacta: base ${sg(F.base, 2)} + componentes = ${sg(F.total, 2)} DT (pesos por regresión sobre fichajes reales anteriores).</p></div>
+    </div>
+    <div class="v2grid"><div>${prod}</div><div>${pp}</div></div>
+    <div class="v2grid">
+      <div><span class="label">Adaptación (ADAPT%)</span><p style="margin:2px 0">Temporada <b>${fmt(a.adapt_pct_temporada.media, 1)}</b> (90 %: ${ivTxt(a.adapt_pct_temporada, 90)}) · primeros ${a.primeros_partidos} partidos <b>${fmt(a.adapt_pct_primeros.media, 1)}</b></p>${svgCurva(a)}
+        <p class="v2nota">100 = rinde lo que dice la normalización. Prior «${esc(r.grupo_nacionalidad)}», nivel ${esc(a.prior.nivel_fallback)} (n = ${a.prior.n ?? 0}), encogido ×${fmt(a.contraccion, 2)}${a.partidos_50 ? ` · el hueco se cierra al 50 % en ${fmt(a.partidos_50, 0)} partidos` : ""}.</p></div>
+      <div><span class="label">Impacto en el equipo</span><p style="margin:2px 0">Net con él ${ESC.html("net_equipo", eq.d_net, null, { S: ESC.dS("net_equipo", eq.d_net), nombre: "Cambio del Net del equipo", raw: `${sg(eq.d_net, 2)} pts/100 (90 %: ${sg(eq.d_net_lo90, 1)} a ${sg(eq.d_net_hi90, 1)})` })} <span class="note">(minutos simulados × RAPM traducido)</span></p>
+        <span class="label" style="margin-top:6px">Quintetos más probables</span>${(eq.quintetos || []).map((q) => `<p class="v2nota" style="margin:2px 0">${Math.round(100 * q.prob)} % · ${q.nombres.map((x) => esc(String(x).split(",")[0])).join(", ")}${q.con_fichaje ? " ★" : ""} · Σ RAPM ${sg(q.net, 1)}</p>`).join("")}</div>
+      <div><span class="label">Estilo</span><p style="margin:2px 0">${peu ? chipEst({ ...peu, jugador: true }, false) : "–"} en un equipo ${teu ? chipEst(teu, false) : "–"}</p>
+        <p class="v2nota">Distancia de estilo ${fmt(e.distancia_js, 2)} (0 = idéntico, 1 = opuesto)${hueco ? ` · cubre sobre todo el hueco de «${esc(hueco)}»` : ""} · entropía del uso ${sg(100 * e.d_entropia_uso, 1)} pp, de la red de pases ${sg(100 * e.d_entropia_pases, 1)} pp.</p></div>
+    </div>
+    ${plant ? `<details class="mas"><summary>Minutos de la plantilla con y sin él</summary><table class="v2t"><thead><tr><th>Jugador</th><th>Con él</th><th>Sin él</th></tr></thead><tbody>${plant}</tbody></table></details>` : ""}
+    ${r.avisos.length ? `<div class="avisos2">${r.avisos.map((x) => `<span data-tip="${esc(x.tipo)}">⚠ ${esc(x.texto)}</span>`).join("")}</div>` : ""}
+  </div>`;
+}
+function pintarV2(s) {
+  const box = $("#sV2"); if (!box) return;
+  if (!SIMD) { box.innerHTML = `<p class="note">Cargando el simulador…</p>`; return; }
+  if (SIMD.error) { box.innerHTML = `<p class="note">No se pudo cargar el simulador v2 (${esc(SIMD.error)}).</p>`; return; }
+  if (!s.todos.length) { box.innerHTML = `<p class="note">Añade un fichaje para ver su rol, minutos, producción, Fit, adaptación e impacto.</p>`; return; }
+  box.innerHTML = s.todos.map((o, n) => tarjetaV2(o, n, s)).join("");
+}
 const simDestino = () => BY.get(`${st.sim.club}:${st.sim.temp}`);
 const FICH_COL = DK ? ["#f0d9a8", "#d6b373", "#b89a62", "#9c8352", "#e6c88f", "#8a7550", "#c8aa70", "#6f5f42"] : ["#141922", "#9a7130", "#5d6676", "#c9a868", "#3c4452", "#b8914a", "#8a93a5", "#7a561c"];
 function escenarioEjemplo() {
@@ -1528,8 +1659,13 @@ function construirSimulador() {
   $("#sOtros").onchange = (e) => { st.sim.otros = e.target.checked; guardar(); pintarSim(); };
   $("#sBus").oninput = () => { const q = norm($("#sBus").value).trim().split(/\s+/).filter(Boolean), box = $("#sBusS"); if (!q.length) { box.hidden = true; return; }
     const res = JG.filter((x) => { const n = norm(x.nombre); return q.every((p) => n.includes(p)); }).sort((a, b) => b.temporada.localeCompare(a.temporada) || b.min - a.min).slice(0, 30);
-    box.innerHTML = res.map((x) => `<button data-k="${esc(jKey(x))}"><span>${esc(x.nombre)}</span><small>${LC[x.liga]} ${tC(x.temporada)} · ${esc(x.nombre_club)} · ${Math.round(x.min)}'</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados con ${META.min_jugador}+ minutos.</span>`; box.hidden = false; };
-  $("#sBusS").onclick = (e) => { const b = e.target.closest("[data-k]"); if (!b) return; $("#sBusS").hidden = true; $("#sBus").value = ""; addFichaje(JK.get(b.dataset.k)); };
+    const vistosS = new Set(res.map((x) => { const r = simRec(x); return r ? r.id : null; }).filter(Boolean));
+    const soloS = SIMD && SIMD.jug ? [...SIMD.jug.values()].filter((r) => !vistosS.has(r.id) && !JK.has(`${r.liga}:${r.team}:${r.temporada}|${r.nombre}`) && (r.min_total || 0) >= 100 && q.every((p) => norm(r.nombre || "").includes(p))).sort((a, b) => b.temporada.localeCompare(a.temporada) || b.min_total - a.min_total).slice(0, 15) : [];
+    box.innerHTML = res.map((x) => `<button data-k="${esc(jKey(x))}"><span>${esc(x.nombre)}</span><small>${LC[x.liga]} ${tC(x.temporada)} · ${esc(x.nombre_club)} · ${Math.round(x.min)}'</small></button>`).join("") +
+      soloS.map((r) => `<button data-k="s:${esc(r.id)}"><span>${esc(r.nombre)}</span><small>${esc(ESC.ligaCorto(r.liga))} ${tC(r.temporada)} · ${esc(r.club || r.team)} · ${Math.round(r.min_total)}' · sólo simulador v2</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados con ${META.min_jugador}+ minutos.</span>`; box.hidden = false; };
+  $("#sBusS").onclick = (e) => { const b = e.target.closest("[data-k]"); if (!b) return; $("#sBusS").hidden = true; $("#sBus").value = "";
+    if (b.dataset.k.startsWith("s:")) { if (st.sim.ejemplo) { st.sim.fich = []; st.sim.ejemplo = false; } if (!st.sim.fich.some((f) => f.k === b.dataset.k)) st.sim.fich.push({ k: b.dataset.k }); st.sim.fich = st.sim.fich.slice(0, 8); guardar(); pintarSim(); return; }
+    addFichaje(JK.get(b.dataset.k)); };
   $("#sFich").addEventListener("click", (e) => { const b = e.target.closest("[data-quitar]"); if (!b) return; st.sim.fich.splice(+b.dataset.quitar, 1); editar(); });
   $("#sFich").addEventListener("change", (e) => { const n = e.target.dataset.min; if (n == null) return; st.sim.fich[+n].m = Math.max(0, +e.target.value || 0); editar(); });
   // el deslizador no se vuelve a pintar mientras se arrastra: sólo su casilla de minutos y los resultados
@@ -1562,18 +1698,23 @@ function simEstado() {
   const d = simDestino(); if (!d) return null;
   const T = d.min_total, roster = (ROSTER.get(d.clave) || []).slice().sort((a, b) => b.min - a.min);
   const bajas = roster.filter((x) => st.sim.bajas.includes(jKey(x)));
-  const fich = st.sim.fich.map((f, n) => ({ f, n, j: JK.get(f.k) })).filter((o) => o.j && o.j.clave !== d.clave);
-  fich.forEach((o) => { const cj = BY.get(o.j.clave); o.mDef = Math.round(o.j.min / cj.min_total * T); o.m = o.f.m == null ? o.mDef : o.f.m; });
+  // fichajes: filas del Atlas (j) o registros sólo del simulador v2 (k = «s:<id>»)
+  const todos = st.sim.fich.map((f, n) => { const j = f.k.startsWith("s:") ? null : JK.get(f.k), rec = j ? simRec(j) : (SIMD && SIMD.jug ? SIMD.jug.get(f.k.slice(2)) : null); return { f, n, j, rec }; })
+    .filter((o) => (o.j && o.j.clave !== d.clave) || (!o.j && o.f.k.startsWith("s:")));
+  const v2 = v2Estado(d, todos, bajas);
+  todos.forEach((o) => { o.v2 = v2 && v2.res ? v2.res.get(o.rec ? o.rec.id : "") : null; });
+  const fich = todos.filter((o) => o.j);
+  fich.forEach((o) => { const cj = BY.get(o.j.clave); o.mDef = Math.round(o.j.min / cj.min_total * T); o.m = o.v2 && !o.v2.error ? o.v2.minutos.media * partidos() : o.mDef; o.mV2 = !!(o.v2 && !o.v2.error); });
   const Fmax = Math.round(0.85 * T), F = fich.reduce((s, o) => s + o.m, 0), recorte = F > Fmax ? Fmax / F : 1;
   if (recorte < 1) fich.forEach((o) => o.m *= recorte);
   const libres = bajas.reduce((s, x) => s + x.min, 0);
   const antes = { p: d.probs, xyz: XYZ(d), e: d.e, L: d.nivel, X: d.X };
-  if (!fich.length && !bajas.length) return { d, roster, bajas, fich, antes, despues: null, T, libres, recorte };
+  if (!fich.length && !bajas.length) return { d, roster, bajas, fich, todos, v2, antes, despues: null, T, libres, recorte };
   const xs = simPlantilla(d, fich, bajas), r = red(xs.x);
   const despues = { p: r.p, xyz: r.xyz, e: argmax(r.p), L: xs.L, X: xs.x, f: xs.f };
   fich.forEach((o) => { const pj = red(xJug(o.j)); o.pj = pj.p; o.e = argmax(pj.p); o.xyz = XYZ(o.j); o.X = xJug(o.j);
     o.d = dist(o.xyz, antes.xyz); o.pd = percentil(META.referencias.jugador_su_club, o.d); o.afin = pj.p[antes.e]; o.simil = 1 - js2(pj.p, d.probs); });
-  return { d, roster, bajas, fich, antes, despues, T, libres, recorte };
+  return { d, roster, bajas, fich, todos, v2, antes, despues, T, libres, recorte };
 }
 // composición de la plantilla (minutos por estilo de jugador y dispersión en el mapa)
 function composicion(filas) {
@@ -1583,9 +1724,10 @@ function composicion(filas) {
   const disp = filas.reduce((s, o) => s + o.w * dist(o.xyz, cen), 0) / W;
   return { rep, disp, pdisp: percentil(META.referencias.dispersion, disp) };
 }
-function cajaEstado(tit, r, cls, t, liga) {
+function cajaEstado(tit, r, cls, t, liga, club = null) {
   const L = Lclub(r.L), pE = ESC.pDe(muestra("c", "euroleague", t), L);
-  return `<div class="state ${cls}"><span class="label">${tit}</span><b class="big">${glyph(r.e, 14)} ${esc(eNom(r.e))}</b><dl class="kv"><dt data-tip="Afinidad con el estilo ganador: la salida de la red para ese estilo, de 0 a 100 (las 6 suman 100).">Afinidad con su estilo</dt><dd>${afin(r.p[r.e])} de 100 · ${claridad(r.p[r.e])}</dd><dt data-tip="Escala ±100: 0 = club medio de la Euroliga de esa temporada. Pasa el ratón por la cifra para ver el valor original.">Nivel de la plantilla</dt><dd>${nivClubHtml(r.L, t, liga)}${pE != null ? ` <span class="muted">· p${Math.round(pE)} en la Euroliga</span>` : ""}</dd></dl></div>`;
+  const cab = club && club.eu != null ? `<b class="big">${glyphEU(club, 14)} ${esc(club.eu_etiqueta || euNom(club.eu))}</b><span class="note">Estilo de mapa: ${glyph(r.e, 10)} ${esc(eNom(r.e))}</span>` : `<b class="big">${glyph(r.e, 14)} ${esc(eNom(r.e))}</b>${club ? "" : `<span class="note">Estilo de mapa (VaDE)</span>`}`;
+  return `<div class="state ${cls}"><span class="label">${tit}</span>${cab}<dl class="kv"><dt data-tip="Afinidad con el estilo ganador: la salida de la red para ese estilo, de 0 a 100 (las 6 suman 100).">Afinidad con su estilo</dt><dd>${afin(r.p[r.e])} de 100 · ${claridad(r.p[r.e])}</dd><dt data-tip="Escala ±100: 0 = club medio de la Euroliga de esa temporada. Pasa el ratón por la cifra para ver el valor original.">Nivel de la plantilla</dt><dd>${nivClubHtml(r.L, t, liga)}${pE != null ? ` <span class="muted">· p${Math.round(pE)} en la Euroliga</span>` : ""}</dd></dl></div>`;
 }
 function veredicto(o, eClub) {
   const cerca = o.pd != null && o.pd <= 50, mismo = o.e === eClub || o.afin >= 0.2;
@@ -1601,22 +1743,24 @@ function pintarSim(sinControles = false) {
   if (!s) { $("#sOutcome").innerHTML = `<p class="note">Elige un club.</p>`; return; }
   const { d, roster, bajas, fich, antes, despues, T } = s, f = despues ? despues.f : 1;
   // controles: fichajes y plantilla
-  if (!sinControles) $("#sFich").innerHTML = fich.map((o, n) => `<div class="frow"><span class="badge" style="background:${FICH_COL[n % FICH_COL.length]}">${n + 1}</span><div class="who"><b>${esc(o.j.nombre)}</b><small>${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)} · ${POS[o.j.pos3] || "s/d"}</small></div><button class="x" data-quitar="${o.n}" aria-label="Quitar ${esc(o.j.nombre)}">×</button>
-    <div class="mins"><input type="number" min="0" step="10" value="${Math.round(o.m)}" data-min="${o.n}" aria-label="Minutos de ${esc(o.j.nombre)}"><input type="range" min="0" max="${Math.round(T * 0.6 / 10) * 10}" step="10" value="${Math.round(o.m)}" data-rng="${o.n}" aria-label="Minutos de ${esc(o.j.nombre)}"><small class="mpp" data-mpp="${o.n}">${mppTxt(o.m)}</small></div></div>`).join("")
+  if (!sinControles) $("#sFich").innerHTML = s.todos.map((o, n) => { const nom = o.j ? o.j.nombre : o.rec ? o.rec.nombre : "?", sub = o.j ? `${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)} · ${POS[o.j.pos3] || "s/d"}` : o.rec ? `${esc(o.rec.club || o.rec.team)} · ${esc(ESC.ligaCorto(o.rec.liga))} ${tC(o.rec.temporada)} · ${POS[o.rec.pos3] || "s/d"}` : "";
+      const r = o.v2, resumenV2 = r && !r.error ? `Rol <b>${esc(ROL_NOM[r.rol_esperado])}</b> · <b>${fmt(r.minutos.media, 1)}'</b>/partido (50 %: ${fmt(r.minutos.lo50, 0)}–${fmt(r.minutos.hi50, 0)}') · ${Math.round(100 * r.p_titular)} % titular` : (SIMD && !SIMD.error ? (o.rec ? (s.v2 && s.v2.sinClub ? "Sin plantilla v2 para este club y temporada" : "Calculando…") : "Sin insumos del simulador v2 para esta temporada") : "Cargando el simulador…");
+      return `<div class="frow"><span class="badge" style="background:${FICH_COL[n % FICH_COL.length]}">${n + 1}</span><div class="who"><b>${esc(nom)}</b><small>${sub}</small></div><button class="x" data-quitar="${o.n}" aria-label="Quitar ${esc(nom)}">×</button><div class="v2s">${resumenV2}</div></div>`; }).join("")
     || `<p class="note">Sin fichajes. Busca jugadores arriba o usa «+ Simular» en «Buscar parecidos».</p>`;
-  if (fich.length && !sinControles) $("#sFich").insertAdjacentHTML("beforeend", `<p class="note">Son minutos de toda la temporada. El club suma ${Math.round(T).toLocaleString("es-ES")}' (≈ ${Math.round(partidos())} partidos). Por defecto, cada fichaje tiene el mismo peso que tenía en su equipo.${s.recorte < 1 ? ` <span class="warn">Los fichajes superaban el 85 % de los minutos y se han recortado a prorrata.</span>` : ""}</p>`);
+  if (s.todos.length && !sinControles) $("#sFich").insertAdjacentHTML("beforeend", `<p class="note">El club suma ${Math.round(T).toLocaleString("es-ES")}' (≈ ${Math.round(partidos())} partidos). Los minutos de cada fichaje los asigna el simulador (competencia con la plantilla y costumbres del entrenador); el mapa de estilo los usa tal cual.${s.recorte < 1 ? ` <span class="warn">Los fichajes superaban el 85 % de los minutos y se han recortado a prorrata.</span>` : ""}</p>`);
+  pintarV2(s);
   $("#sRoster").innerHTML = roster.map((x) => { const out = st.sim.bajas.includes(jKey(x)), mNew = out ? 0 : x.min * f;
-    return `<label class="${out ? "out" : ""}"><input type="checkbox" data-baja="${esc(jKey(x))}" ${out ? "checked" : ""} aria-label="Baja de ${esc(x.nombre)}">${glyph(x.e, 10)}<span class="nm">${esc(x.nombre)}</span><small>${Math.round(x.min)}'${despues ? ` → ${Math.round(mNew)}'` : ""}</small></label>`; }).join("") || `<p class="note" style="padding:6px">Sin jugadores con ${META.min_jugador}+ minutos.</p>`;
+    return `<label class="${out ? "out" : ""}"><input type="checkbox" data-baja="${esc(jKey(x))}" ${out ? "checked" : ""} aria-label="Baja de ${esc(x.nombre)}">${glyphEU(x, 10)}<span class="nm">${esc(x.nombre)}</span><small>${Math.round(x.min)}'${despues ? ` → ${Math.round(mNew)}'` : ""}</small></label>`; }).join("") || `<p class="note" style="padding:6px">Sin jugadores con ${META.min_jugador}+ minutos.</p>`;
   // aviso de temporada en curso y de ejemplo
   const ultC = TEMPS.filter((t) => !META.temporadas_provisionales.includes(t)).pop();
   const provis = d.provisional ? `<div class="provis"><span><b>Temporada en curso:</b> el club solo suma ${Math.round(T).toLocaleString("es-ES")}' (≈ ${Math.round(partidos())} partidos)${roster.length ? "" : " y aún no hay jugadores con 100 minutos"}. Con tan poca muestra, cualquier fichaje mueve mucho el estilo: para decidir, simula sobre la última temporada completa.</span><button class="btn ghost sm" type="button" data-simtemp="${ultC}">Usar ${ultC}</button></div>` : "";
   $("#sBanner").innerHTML = provis + (st.sim.ejemplo && fich.length ? `<div class="banner"><span><b>Escenario de ejemplo:</b> llegan los dos jugadores de ${d.temporada} (fuera de la NBA) cuyo perfil más se parece al estilo de ${esc(d.nombre_club)} y sale el jugador con más minutos. Cámbialos, añade más o marca otras bajas.</span><button class="btn ghost sm" id="sQuitarEj">Empezar vacío</button></div>` : "");
   // resultado
-  const caja = (tit, r, cls) => cajaEstado(tit, r, cls, d.temporada, d.liga);
-  if (!despues) { $("#sOutcome").innerHTML = caja(`${esc(d.nombre_club)} hoy`, antes, "") + `<div class="arrow" aria-hidden="true">→</div><div class="state after"><span class="label">Con los cambios</span><p class="note">Añade fichajes o marca bajas para ver cómo cambia el estilo.</p></div>`; }
+  const caja = (tit, r, cls, club = null) => cajaEstado(tit, r, cls, d.temporada, d.liga, club);
+  if (!despues) { $("#sOutcome").innerHTML = caja(`${esc(d.nombre_club)} hoy`, antes, "", d) + `<div class="arrow" aria-hidden="true">→</div><div class="state after"><span class="label">Con los cambios</span><p class="note">Añade fichajes o marca bajas para ver cómo cambia el estilo.</p></div>`; }
   else { const despl = dist(despues.xyz, antes.xyz), pdes = percentil(META.referencias.club_club, despl), cambia = despues.e !== antes.e;
     const bk = banda(pdes), sa = sNivL(Lclub(antes.L), d.temporada), sd = sNivL(Lclub(despues.L), d.temporada), dp = Math.round(sd) - Math.round(sa);
-    $("#sOutcome").innerHTML = caja(`${esc(d.nombre_club)} hoy`, antes, "") + `<div class="arrow" aria-hidden="true">→</div>` + caja("Con los cambios", despues, "after") +
+    $("#sOutcome").innerHTML = caja(`${esc(d.nombre_club)} hoy`, antes, "", d) + `<div class="arrow" aria-hidden="true">→</div>` + caja("Con los cambios", despues, "after") +
       `<div class="verdict" style="grid-column:1/-1"><div class="vh"><span class="label">Cambio de estilo</span><b class="vb b${bk}">${CAMBIO[bk][0]}</b>${medidor(bk)}<span class="note">${CAMBIO[bk][1]}</span></div>
       <div class="cambios" style="padding:0">${cambioLinea("Afinidad (0-100)", antes.p, despues.p, antes.e, despues.e)}</div>
       <p>${cambia ? `Pasa de <b>${esc(eNom(antes.e))}</b> a <b>${esc(eNom(despues.e))}</b>.` : `Mantiene su estilo: <b>${esc(eNom(antes.e))}</b>.`} El equipo cambiaría más de lo que se diferencian el ${fmt(pdes, 0)} % de las parejas de clubes entre sí.</p>
@@ -1634,7 +1778,7 @@ function pintarSim(sinControles = false) {
     `<dl class="kv"><dt data-tip="Dispersión de los jugadores en el mapa, ponderada por minutos (${fmt(ca.disp)}${cd ? ` → ${fmt(cd.disp)}` : ""}).">Variedad de perfiles en la plantilla</dt><dd>${variedad(ca.pdisp)} · p${fmt(ca.pdisp, 0)}${cd ? ` → ${variedad(cd.pdisp)} · p${fmt(cd.pdisp, 0)}` : ""}</dd></dl><p class="note">«Muy variada» (p80 o más) = un poco de todo; «muy homogénea» = todos juegan parecido.</p>`;
   // tabla de encaje de cada fichaje
   $("#sTabla").innerHTML = fich.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Su estilo</th><th style="text-align:right">Minutos</th><th style="text-align:right" data-tip="0-100: 100 = juega exactamente como el club; 50 = tan lejos como un jugador típico de su propio club">Cercanía</th><th style="text-align:right" data-tip="Afinidad del jugador con el estilo del club (0-100)">Afinidad con el club</th><th style="text-align:right" data-tip="Coincidencia de su reparto entre los 6 estilos con el del club">Parecido</th><th style="text-align:right" data-tip="Nivel en la escala ±100 (0 = jugador medio de la Euroliga de su temporada)">Nivel</th><th style="text-align:right" data-tip="Impacto en pista (RAPM traducido a la Euroliga) en la escala ±100; 0 = jugador medio de la Euroliga">Impacto</th><th>Encaje</th></tr></thead><tbody>` +
-    fich.map((o, n) => { const [cls, t] = veredicto(o, antes.e); return `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${chipE(o.e, o.pj[o.e])}</td><td class="n">${Math.round(o.m)}' <span class="muted">${mppTxt(o.m).replace(" por partido", "/p")}</span></td><td class="n" data-tip="Distancia al club en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})"><span class="par p${parBanda(100 - (o.pd ?? 50))[0]}">${Math.round(100 - (o.pd ?? 50))}</span></td><td class="n">${afin(o.afin)}</td><td class="n">${pct(o.simil)}</td><td class="n">${nivJugHtml(o.j)}</td><td class="n">${rapmHtml(o.j)}</td><td><span class="pill ${cls}">${t}</span></td></tr>`; }).join("") +
+    fich.map((o, n) => { const [cls, t] = veredicto(o, antes.e); return `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${chipEst(o.j)}</td><td class="n">${Math.round(o.m)}' <span class="muted">${mppTxt(o.m).replace(" por partido", "/p")}</span></td><td class="n" data-tip="Distancia al club en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})"><span class="par p${parBanda(100 - (o.pd ?? 50))[0]}">${Math.round(100 - (o.pd ?? 50))}</span></td><td class="n">${afin(o.afin)}</td><td class="n">${pct(o.simil)}</td><td class="n">${nivJugHtml(o.j)}</td><td class="n">${rapmHtml(o.j)}</td><td><span class="pill ${cls}">${t}</span></td></tr>`; }).join("") +
     `</tbody></table><p class="note"><b>Encaja</b>: cerca del club y comparte su estilo. <b>Alejado</b>: muy lejos y de otro estilo; cambiará la identidad del equipo, que puede ser justo lo que buscas. <b>Parcial</b>: el resto. Cercanía 0-100 (100 = juega como el club, 50 = como un jugador típico respecto a su propio equipo).</p>` : `<p class="note">Añade fichajes para ver su encaje.</p>`;
   // perfil
   const P = [{ letra: "H", t: d.temporada, color: MUTED, label: `${d.nombre_club} hoy`, corto: `${d.nombre_club} hoy`, X: antes.X }].concat(despues ? [{ letra: "+", t: d.temporada, color: SIM, label: "Con los cambios", corto: "Con los cambios", X: despues.X }] : []).concat(fich.map((o, n) => ({ letra: String(n + 1), t: d.temporada, color: FICH_COL[n % FICH_COL.length], label: o.j.nombre, corto: o.j.nombre, X: o.X })));
@@ -1830,7 +1974,7 @@ function buscarQuimica(c, propio, cerca) {
   const porque = (o) => { const pr = o.pares.slice().sort((x, y) => y.e - x.e), m = pr[0], w = pr[pr.length - 1], eJ = argmax(pJ(o.j)), e1 = argmax(m.o.p), e2 = argmax(w.o.p);
     return `Su estilo («${esc(eNom(eJ))}», afinidad ${afin(pJ(o.j)[eJ])}) encaja mejor con ${esc(ape(m.o.k.nombre))} («${esc(eNom(e1))}», ${ESC.txt(ESC.dS("sinergia_rapm", m.e))}) y peor con ${esc(ape(w.o.k.nombre))} («${esc(eNom(e2))}», ${ESC.txt(ESC.dS("sinergia_rapm", w.e))}); su nivel añade ${ESC.txt(ESC.dS("net_quinteto", o.nv))}.`; };
   $("#bRes").innerHTML = BUSQ.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Club</th><th>Pos.</th><th style="text-align:right">Edad</th><th style="text-align:right">Min</th><th style="text-align:right" data-tip="Nivel en la escala ±100 (0 = jugador medio de la Euroliga)">Nivel</th><th style="text-align:right" data-tip="RAPM traducido a la Euroliga, escala ±100">Impacto</th><th>Estilo</th><th style="text-align:right" data-tip="Parte de estilo de la química con los 5 del núcleo, frente a una pareja media de la Euroliga, en puntos de la escala del Net de quinteto">Encaje de estilo</th><th style="text-align:right" data-tip="Química prevista con los 5 del núcleo (estilo + nivel), frente a parejas medias de la Euroliga, en puntos de la escala del Net de quinteto">Química con el núcleo</th><th style="text-align:right" data-tip="Impacto + 4/5 de la química con el núcleo: lo que añadiría al Net del quinteto al entrar en lugar de uno de los cinco (escala ±100 del Net de quinteto)">Aporte previsto</th><th style="min-width:220px">Por qué</th><th></th></tr></thead><tbody>` +
-    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n">${nivJugHtml(o.j)}</td><td class="n">${rapmHtml(o.j)}</td><td>${chipE(argmax(pJ(o.j)), Math.max(...pJ(o.j)))}</td><td class="n">${ESC.html("net_quinteto", o.est, null, { S: ESC.dS("net_quinteto", o.est), nombre: "Encaje de estilo con el núcleo" })}</td><td class="n">${ESC.html("net_quinteto", o.Q, null, { S: ESC.dS("net_quinteto", o.Q), nombre: "Química con el núcleo", extra: `Por estilo ${sg(o.est, 2)} · por nivel ${sg(o.nv, 2)} pts/100` })}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end">${ESC.barra(ESC.dS("net_quinteto", o.ap))}${ESC.html("net_quinteto", o.ap, null, { S: ESC.dS("net_quinteto", o.ap), nombre: "Aporte previsto al quinteto" })}</div></td><td class="note" style="white-space:normal">${porque(o)}</td><td>${enEsc.has(jKey(o.j)) ? `<span class="note">En el escenario</span>` : `<button class="btn ghost sm" data-sim="${o.j.i}">+ Simular</button>`} <button class="btn ghost sm" data-eq="${o.j.i}" data-tip="Añadir a «Simular equipo completo»">+ Equipo</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
+    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n">${nivJugHtml(o.j)}</td><td class="n">${rapmHtml(o.j)}</td><td>${chipEst(o.j)}</td><td class="n">${ESC.html("net_quinteto", o.est, null, { S: ESC.dS("net_quinteto", o.est), nombre: "Encaje de estilo con el núcleo" })}</td><td class="n">${ESC.html("net_quinteto", o.Q, null, { S: ESC.dS("net_quinteto", o.Q), nombre: "Química con el núcleo", extra: `Por estilo ${sg(o.est, 2)} · por nivel ${sg(o.nv, 2)} pts/100` })}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end">${ESC.barra(ESC.dS("net_quinteto", o.ap))}${ESC.html("net_quinteto", o.ap, null, { S: ESC.dS("net_quinteto", o.ap), nombre: "Aporte previsto al quinteto" })}</div></td><td class="note" style="white-space:normal">${porque(o)}</td><td>${enEsc.has(jKey(o.j)) ? `<span class="note">En el escenario</span>` : `<button class="btn ghost sm" data-sim="${o.j.i}">+ Simular</button>`} <button class="btn ghost sm" data-eq="${o.j.i}" data-tip="Añadir a «Simular equipo completo»">+ Equipo</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
 }
 function buscar() {
   const b = st.bus, c = refClub();
@@ -1840,7 +1984,7 @@ function buscar() {
   cs.forEach((o) => o.par = parecido(o.d, META.similitud.club_club));
   $("#bClubT").textContent = `Clubes que juegan como ${c.nombre_club} (${LC[c.liga]} ${c.temporada})`;
   $("#bClubes").innerHTML = cs.length ? `<table><thead><tr><th>Club</th><th>Competición</th><th>Estilo</th><th style="text-align:right" data-tip="Escala ±100: 0 = club medio de la Euroliga">Nivel</th><th style="text-align:right">Parecido</th><th></th></tr></thead><tbody>` +
-    cs.slice(0, 12).map((o) => `<tr><td><b>${esc(o.c.nombre_club)}</b></td><td class="note">${LIGAS[o.c.liga]} ${o.c.temporada}</td><td>${chipE(o.c.e)}</td><td class="n">${nivClubHtml(o.c.nivel, o.c.temporada, o.c.liga)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:60px"><i style="width:${o.par}%"></i></div>${fmt(o.par, 1)}</div></td><td><button class="btn ghost sm" data-add="${esc(o.c.clave)}">+ Comparar</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin clubes con estos filtros.</p>`;
+    cs.slice(0, 12).map((o) => `<tr><td><b>${esc(o.c.nombre_club)}</b></td><td class="note">${LIGAS[o.c.liga]} ${o.c.temporada}</td><td>${chipEst(o.c)}</td><td class="n">${nivClubHtml(o.c.nivel, o.c.temporada, o.c.liga)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:60px"><i style="width:${o.par}%"></i></div>${fmt(o.par, 1)}</div></td><td><button class="btn ghost sm" data-add="${esc(o.c.clave)}">+ Comparar</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin clubes con estos filtros.</p>`;
   const X = xJugadores(), cerca = b.alc === "cerca" ? new Set(cs.slice(0, b.n).map((o) => o.c.clave)) : null, parC = new Map(cs.map((o) => [o.c.clave, o.par]));
   const rj = b.modo === "jugador" && b.ref != null ? JG[b.ref] : null;
   if (b.modo === "jugador" && !rj) { $("#bRes").innerHTML = `<p class="note">Elige un jugador de referencia.</p>`; BUSQ = []; return; }
@@ -1862,8 +2006,8 @@ function buscar() {
   $("#bJugT").textContent = rj ? `Sustitutos de ${rj.nombre} (${POS[rj.pos3] || "s/d"}, ${rj.nombre_club})${cerca ? ` en los ${b.n} clubes más parecidos` : ""}` : `Jugadores que encajan con el estilo de ${c.nombre_club}${cerca ? ` (en los ${b.n} clubes más parecidos)` : ""}`;
   const enEsc = new Set(st.sim.club === b.club && st.sim.temp === b.temp ? st.sim.fich.map((f) => f.k) : []);
   $("#bRes").innerHTML = BUSQ.length ? `<table><thead><tr><th>#</th><th>Jugador</th><th>Club</th><th>Pos.</th><th style="text-align:right">Edad</th><th style="text-align:right">Min</th><th style="text-align:right" data-tip="Escala ±100: 0 = jugador medio de la Euroliga">Nivel</th><th style="text-align:right" data-tip="RAPM traducido a la Euroliga, escala ±100">Impacto</th><th>Estilo</th><th style="text-align:right">Parecido jugador</th><th style="text-align:right">Parecido club</th><th style="text-align:right">Puntuación</th><th></th></tr></thead><tbody>` +
-    (rj ? `<tr class="ref"><td>ref.</td><td><b>${esc(rj.nombre)}</b></td><td class="note">${esc(rj.nombre_club)} · ${LC[rj.liga]} ${tC(rj.temporada)}</td><td>${rj.pos3 || "–"}</td><td class="n">${fmt(rj.edad, 0)}</td><td class="n">${Math.round(rj.min)}</td><td class="n">${nivJugHtml(rj)}</td><td class="n">${rapmHtml(rj)}</td><td>${chipE(rj.e)}</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td></td></tr>` : "") +
-    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n">${nivJugHtml(o.j)}</td><td class="n">${rapmHtml(o.j)}</td><td>${chipE(o.j.e)}</td><td class="n">${fmt(o.pj, 1)}</td><td class="n">${fmt(o.pc, 1)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:56px"><i style="width:${o.sc}%"></i></div>${fmt(o.sc, 1)}</div></td><td>${enEsc.has(jKey(o.j)) ? `<span class="note">En el escenario</span>` : `<button class="btn ghost sm" data-sim="${o.j.i}">+ Simular</button>`} <button class="btn ghost sm" data-eq="${o.j.i}" data-tip="Añadir a «Simular equipo completo»">+ Equipo</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
+    (rj ? `<tr class="ref"><td>ref.</td><td><b>${esc(rj.nombre)}</b></td><td class="note">${esc(rj.nombre_club)} · ${LC[rj.liga]} ${tC(rj.temporada)}</td><td>${rj.pos3 || "–"}</td><td class="n">${fmt(rj.edad, 0)}</td><td class="n">${Math.round(rj.min)}</td><td class="n">${nivJugHtml(rj)}</td><td class="n">${rapmHtml(rj)}</td><td>${chipEst(rj)}</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td></td></tr>` : "") +
+    BUSQ.map((o, n) => `<tr><td class="n">${n + 1}</td><td><b>${esc(o.j.nombre)}</b></td><td class="note">${esc(o.j.nombre_club)} · ${LC[o.j.liga]} ${tC(o.j.temporada)}${o.j.provisional ? "*" : ""}</td><td>${o.j.pos3 || "–"}</td><td class="n">${fmt(o.j.edad, 0)}</td><td class="n">${Math.round(o.j.min)}</td><td class="n">${nivJugHtml(o.j)}</td><td class="n">${rapmHtml(o.j)}</td><td>${chipEst(o.j)}</td><td class="n">${fmt(o.pj, 1)}</td><td class="n">${fmt(o.pc, 1)}</td><td class="n"><div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><div class="bar" style="width:56px"><i style="width:${o.sc}%"></i></div>${fmt(o.sc, 1)}</div></td><td>${enEsc.has(jKey(o.j)) ? `<span class="note">En el escenario</span>` : `<button class="btn ghost sm" data-sim="${o.j.i}">+ Simular</button>`} <button class="btn ghost sm" data-eq="${o.j.i}" data-tip="Añadir a «Simular equipo completo»">+ Equipo</button></td></tr>`).join("") + `</tbody></table>` : `<p class="note">Sin jugadores con estos filtros. Amplía temporadas, competiciones, posiciones o el número de clubes parecidos.</p>`;
   if (st.tab === "comparar") pintarMapa();
 }
 
@@ -1907,7 +2051,10 @@ function rapmEquipo(filas) { let s = 0, w = 0; filas.forEach((o) => { if (rapmOk
 const elClubs = () => { const t = ultCompleta(); return CL.filter((c) => c.liga === "euroleague" && c.temporada === t).sort((a, b) => b.nivel - a.nivel); };
 function eqEstado() {
   const d = eqRef();
-  const jug = st.eq.jug.map((f, n) => { const j = JK.get(f.k); if (!j) return null; const modo = f.modo || modoDef(j), m = f.m == null ? mpgDef(j) : f.m; return { f, n, j, modo, m, ...valsJ(j, modo) }; }).filter(Boolean);
+  const jug = st.eq.jug.map((f, n) => { const j = JK.get(f.k); if (!j) return null; const modo = f.modo || modoDef(j); return { f, n, j, modo, m: mpgDef(j), ...valsJ(j, modo) }; }).filter(Boolean);
+  // minutos endógenos (simulador v2): Plackett-Luce con la utilidad de cada jugador y las costumbres del entrenador
+  const mv = eqMinutosV2(jug, d);
+  if (mv) jug.forEach((o, i) => { o.m = mv[i].minutos * 200 / (5 * (SIMD.meta.min_partido[mv.liga] || 40)); o.v2 = mv[i]; });
   const M = jug.reduce((s, o) => s + o.m, 0), k = M > 0 ? 200 / M : 1;
   jug.forEach((o) => { o.w = o.m * k; o.pos = posJ(o.j, o.modo); o.niv = nivelJ(o.j, o.modo); });
   const eq = jug.length && M > 0 ? equipoDe(jug) : null;
@@ -1916,6 +2063,20 @@ function eqEstado() {
     o.d = dist(o.pos.xyz, eq.xyz); o.pd = percentil(META.referencias.jugador_su_club, o.d); });
   const antes = d ? { p: d.probs, xyz: XYZ(d), e: d.e, L: d.nivel, X: d.X, Q: medias(d.SQ, d.WQ, d.SQ.length) } : null;
   return { d, jug, M, k, eq, antes };
+}
+// «Simular equipo completo»: minutos por partido de cada jugador con el motor v2 (no se teclean)
+const EQV2 = new Map();
+function eqMinutosV2(jug, d) {
+  if (!SIMD || SIMD.error || !SIMD.meta || jug.length < 5) return null;
+  let club = d ? simClub(d) : null;
+  if (!club) { const base = SIMD.meta.bases[SIMD.meta.bases["2025-26"] ? "2025-26" : Object.keys(SIMD.meta.bases).pop()] ? (SIMD.meta.bases["2025-26"] ? "2025-26" : Object.keys(SIMD.meta.bases).pop()) : null;
+    const liga = d && SIMD.meta.bases[base].ligas[d.liga] ? d.liga : "euroleague";
+    club = { liga, team: d ? d.tid : "", temporada: d ? d.temporada : "", base, tendencia: SIMD.meta.bases[base].ligas[liga].tendencia, eu: null, plantilla: [] }; }
+  const recs = jug.map((o) => simRec(o.j) || { persona: pKey(o.j), nombre: o.j.nombre, liga: o.j.liga, L: Lof(o.j), L_sd: 0.4, pos3: o.j.pos3, edad: o.j.edad,
+    min_pct: (() => { const c = BY.get(o.j.clave); return c ? 5 * o.j.min / c.min_total : 0.3; })(), eu: o.j.eu_probs });
+  const key = JSON.stringify([club.liga, club.team, club.temporada, recs.map((r) => r.id || r.persona)]);
+  if (!EQV2.has(key)) { const r = SIM2.minutosEquipo(recs, club, 600); if (r) r.liga = club.liga; EQV2.set(key, r); }
+  return EQV2.get(key);
 }
 function llenarEqClub() {
   const s = st.eq; if (!s.temp) s.temp = ultCompleta();
@@ -1983,8 +2144,8 @@ function ejemploBrutosEL() {
 function pintarEqTot(s) {
   const M = s.M, cls = Math.abs(M - 200) < 0.5 ? "ok" : M > 200 ? "over" : "under";
   $("#eTot").className = "etot " + cls;
-  $("#eTot").innerHTML = `<div class="row"><span><b>${fmt(M, 1)}'</b> <span class="note">de 200' por partido</span></span>${cls === "ok" ? `<span class="pill good">Cuadra</span>` : `<button class="btn ghost sm" id="eAjustar" type="button">Ajustar a 200'</button>`}</div><div class="bar"><i style="width:${Math.min(100, M / 2)}%"></i></div>` +
-    (cls === "ok" || !M ? "" : `<span class="note ${cls === "over" ? "bad" : "warn"}">${cls === "over" ? `Sobran ${fmt(M - 200, 1)}'` : `Faltan ${fmt(200 - M, 1)}'`}. Para el cálculo se escalan todos a prorrata (×${fmt(s.k, 2)}) hasta 200'.</span>`);
+  $("#eTot").innerHTML = `<div class="row"><span><b>${fmt(M, 1)}'</b> <span class="note">de 200' por partido · reparto del simulador v2 (rol y minutos endógenos, sin minutos manuales)</span></span>${cls === "ok" ? `<span class="pill good">Cuadra</span>` : ""}</div><div class="bar"><i style="width:${Math.min(100, M / 2)}%"></i></div>` +
+    (cls === "ok" || !M ? "" : `<span class="note warn">${cls === "over" ? `Sobran ${fmt(M - 200, 1)}'` : `Faltan ${fmt(200 - M, 1)}' (nadie puede pasar de 36' por partido: con tan pocos jugadores no se llega a 200')`}. Para el mapa se escalan todos a prorrata (×${fmt(s.k, 2)}).</span>`);
 }
 function pintarEq(soloRes = false) {
   if (!META || VISTA !== "atlas") return;
@@ -1996,14 +2157,12 @@ function pintarEq(soloRes = false) {
   $("#eModoG").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", st.eq.jug.length > 0 && st.eq.jug.every((f) => (f.modo || "n") === b.dataset.v)));
   if (!soloRes) {
     const ro = d ? (ROSTER.get(d.clave) || []).slice().sort((a, b) => b.min - a.min) : [];
-    $("#eRoster").innerHTML = ro.map((x) => { const dentro = enEq.has(jKey(x)); return `<label class="${dentro ? "in" : ""}"><input type="checkbox" data-sigue="${esc(jKey(x))}" ${dentro ? "checked" : ""} aria-label="${esc(x.nombre)} sigue">${glyph(x.e, 10)}<span class="nm">${esc(x.nombre)}</span><small>${fmt(mpgReal(x), 1)}'/p</small></label>`; }).join("") || `<p class="note" style="padding:6px">Sin jugadores con ${META.min_jugador}+ minutos.</p>`;
+    $("#eRoster").innerHTML = ro.map((x) => { const dentro = enEq.has(jKey(x)); return `<label class="${dentro ? "in" : ""}"><input type="checkbox" data-sigue="${esc(jKey(x))}" ${dentro ? "checked" : ""} aria-label="${esc(x.nombre)} sigue">${glyphEU(x, 10)}<span class="nm">${esc(x.nombre)}</span><small>${fmt(mpgReal(x), 1)}'/p</small></label>`; }).join("") || `<p class="note" style="padding:6px">Sin jugadores con ${META.min_jugador}+ minutos.</p>`;
     $("#eJug").innerHTML = jug.map((o, n) => { const otras = personas().get(pKey(o.j)) || [o.j], b = tieneB(o.j), mr = mpgReal(o.j), du = durPartido(o.j.liga) / 5;
       return `<div class="erow"><span class="badge" style="background:${EQ_COL(n)}">${n + 1}</span><div class="who"><b>${esc(o.j.nombre)}</b><small>${esc(o.j.nombre_club)} · ${LC[o.j.liga]} · ${POS[o.j.pos3] || "s/d"}</small></div><button class="x" data-quitar="${o.n}" aria-label="Quitar ${esc(o.j.nombre)}">×</button>
         <div class="opts"><select data-temp="${o.n}" aria-label="Temporada de ${esc(o.j.nombre)}">${otras.map((x) => `<option value="${esc(jKey(x))}"${x === o.j ? " selected" : ""}>${x.temporada} · ${LC[x.liga]}${otras.filter((y) => y.temporada === x.temporada && y.liga === x.liga).length > 1 ? " · " + esc(x.nombre_club) : ""}${x.provisional ? " (prov.)" : ""}</option>`).join("")}</select>
           <span class="seg mini" role="group" aria-label="Valores"><button data-i="${o.n}" data-modo="b" aria-pressed="${o.modo === "b"}" ${b ? "" : "disabled"} data-tip="Valores brutos: lo que hizo en ${esc(LIGAS[o.j.liga])}${o.j.liga === "euroleague" ? ", tal cual, sin estabilizar por muestra" : ", sin convertir a Euroliga"}. El mapa se construyó con valores normalizados.">B · brutos</button><button data-i="${o.n}" data-modo="n" aria-pressed="${o.modo === "n"}" data-tip="Normalizados a Euroliga (recomendado): equivalente estimado en la Euroliga${o.j.liga === "euroleague" ? ", estabilizado por muestra" : ""}. Es la misma escala que los clubes del mapa.">N · Euroliga</button></span></div>
-        <div class="mins"><input type="number" min="0" max="48" step="0.5" value="${o.m}" data-min="${o.n}" aria-label="Minutos por partido de ${esc(o.j.nombre)}"><input type="range" min="0" max="40" step="0.5" value="${o.m}" data-rng="${o.n}" aria-label="Minutos por partido de ${esc(o.j.nombre)}"><small data-tip="Minutos por partido en ${o.j.temporada} (${Math.round(o.j.min)}' en total)${du !== 40 ? `, en partidos de ${du}'; equivalen a ${fmt(mpgDef(o.j), 1)}' en uno de 40'` : ""}">antes <b>${fmt(mr, 1)}'</b></small></div>
-        ${o.f.m != null ? `<span class="ref"><a href="#" data-reset="${o.n}">Volver a sus minutos de ${o.j.temporada}${du !== 40 ? " (equivalentes en 40')" : ""}</a></span>` : du !== 40 ? `<span class="ref">${fmt(mr, 1)}' en partidos de ${du}' ≈ ${fmt(mpgDef(o.j), 1)}' en 40'</span>` : ""}</div>`; }).join("")
-      || `<p class="note">Equipo vacío. Marca quién sigue en la plantilla de partida o busca jugadores.</p>`;
+        <div class="v2s" style="grid-column:2/-1;font:500 11.5px var(--f-data);color:var(--muted)">${o.v2 ? `Simulador: <b>${fmt(o.v2.minutos, 1)}'</b>/partido (50 %: ${fmt(o.v2.lo50, 0)}–${fmt(o.v2.hi50, 0)}') · titular ${Math.round(100 * o.v2.p_titular)} %` : "Calculando minutos…"} · antes ${fmt(mr, 1)}'</div>`; }).join("")      || `<p class="note">Equipo vacío. Marca quién sigue en la plantilla de partida o busca jugadores.</p>`;
   } else {
     jug.forEach((o) => { const r = $(`#eJug [data-rng="${o.n}"]`); if (r && document.activeElement !== r) r.value = o.m; });
   }
@@ -2099,7 +2258,7 @@ function pintarEqTabla(s) {
   if (!jug.length) { $("#eJugT").innerHTML = `<p class="note">Añade jugadores.</p>`; return; }
   $("#eJugT").innerHTML = `<table><thead><tr><th>#</th><th>Jugador</th><th>Valores</th><th style="text-align:right">Min/p</th><th style="text-align:right" data-tip="Parte de los minutos del equipo (una vez escalado a 200')">% min</th><th>Su estilo</th><th style="text-align:right" data-tip="Nivel individual en la escala ±100 (0 = jugador medio de la Euroliga) con los valores elegidos">Nivel</th><th style="text-align:right" data-tip="Impacto en pista (RAPM traducido a la Euroliga) en la escala ±100; no cambia con brutos/normalizados">Impacto</th><th style="text-align:right" data-tip="Puntos de la escala de Nivel que pierde el equipo si se quita">Aporte nivel</th><th data-tip="Cuánto se movería el estilo del equipo sin él (misma escala que «Cambio de estilo»)">Peso en el estilo</th><th style="text-align:right" data-tip="0-100: 100 = juega exactamente como el equipo; 50 = tan lejos como un jugador típico de su propio club">Cercanía</th></tr></thead><tbody>` +
     jug.map((o, n) => { const bk = o.pm != null ? banda(o.pm) : null;
-      return `<tr><td class="n"><span class="badge" style="background:${EQ_COL(n)};width:18px;height:18px;font-size:10px">${n + 1}</span></td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${o.modo === "b" ? "Brutos" : "Norm. EL"}</td><td class="n">${fmt(o.m, 1)}'</td><td class="n">${fmt(o.w / 2, 0)} %</td><td>${chipE(o.pos.e, o.pos.p[o.pos.e])}</td><td class="n">${nivJugHtml(o.j, o.modo === "b" ? (o.niv ?? Lof(o.j)) : Lof(o.j), o.modo === "b" ? { raw: `índice con brutos ${sg(o.niv)}` } : {})}</td><td class="n">${rapmHtml(o.j)}</td><td class="n">${o.aporte != null ? (() => { const tq = ultCompleta(), v = sNivL(Lclub(eq.L), tq) - sNivL(Lclub(eq.L - o.aporte), tq); return `<span class="${v >= 0 ? "good" : "bad"}" data-tip="Valor original: ${sg(o.aporte)} del índice de nivel de club">${v >= 0 ? "+" : "−"}${fmt(Math.abs(v), 1)}</span>`; })() : "–"}</td><td>${bk != null ? `<span data-tip="Sin él, el equipo se movería ${fmt(o.mueve)} en el mapa (percentil ${fmt(o.pm, 0)})">${CAMBIO[bk][0]}</span>` : "–"}</td><td class="n" data-tip="Distancia al equipo en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})">${o.pd != null ? `<span class="par p${parBanda(100 - o.pd)[0]}">${Math.round(100 - o.pd)}</span>` : "–"}</td></tr>`; }).join("") +
+      return `<tr><td class="n"><span class="badge" style="background:${EQ_COL(n)};width:18px;height:18px;font-size:10px">${n + 1}</span></td><td><b>${esc(o.j.nombre)}</b> <span class="note">${esc(o.j.nombre_club)} ${LC[o.j.liga]} ${tC(o.j.temporada)}</span></td><td>${o.modo === "b" ? "Brutos" : "Norm. EL"}</td><td class="n">${fmt(o.m, 1)}'</td><td class="n">${fmt(o.w / 2, 0)} %</td><td>${chipEst(o.j)}</td><td class="n">${nivJugHtml(o.j, o.modo === "b" ? (o.niv ?? Lof(o.j)) : Lof(o.j), o.modo === "b" ? { raw: `índice con brutos ${sg(o.niv)}` } : {})}</td><td class="n">${rapmHtml(o.j)}</td><td class="n">${o.aporte != null ? (() => { const tq = ultCompleta(), v = sNivL(Lclub(eq.L), tq) - sNivL(Lclub(eq.L - o.aporte), tq); return `<span class="${v >= 0 ? "good" : "bad"}" data-tip="Valor original: ${sg(o.aporte)} del índice de nivel de club">${v >= 0 ? "+" : "−"}${fmt(Math.abs(v), 1)}</span>`; })() : "–"}</td><td>${bk != null ? `<span data-tip="Sin él, el equipo se movería ${fmt(o.mueve)} en el mapa (percentil ${fmt(o.pm, 0)})">${CAMBIO[bk][0]}</span>` : "–"}</td><td class="n" data-tip="Distancia al equipo en el mapa: ${fmt(o.d)} (percentil ${fmt(o.pd, 0)})">${o.pd != null ? `<span class="par p${parBanda(100 - o.pd)[0]}">${Math.round(100 - o.pd)}</span>` : "–"}</td></tr>`; }).join("") +
     `</tbody></table><p class="note"><b>Peso en el estilo</b>: Ligero = sin él el equipo jugaría casi igual; Fuerte o Radical = es quien define el estilo. <b>Cercanía</b> alta = juega como el equipo; baja = aporta algo distinto.</p>`;
 }
 const EM_ENTS = () => st.em.ents.map(entidad).filter(Boolean);
@@ -2311,7 +2470,7 @@ function svgBosque(items, o = {}) {
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.aria || "Efectos con intervalo")}">${g}</svg>`;
 }
 function mbars(p) { return `<div class="mbars">${p.map((v, k) => `<div class="r"><span>${glyph(k, 8)}${esc(eNom(k))}</span><div class="track"><i style="width:${Math.round(v * 100)}%;background:${COL[k]}"></i></div><em>${afin(v)}</em></div>`).join("")}</div>`; }
-const hovJug = (x, extra = "") => `<b>${esc(x.nombre)}</b><br>${esc(x.nombre_club)} · ${LC[x.liga]} ${tC(x.temporada)} · ${POS[x.pos3] || "s/d"} · ${Math.round(x.min)}'<br>${esc(eNom(x.e))} (afinidad ${afin(x.p)} de 100)<br>Nivel ${ESC.txt(sNivJ(x))} (Euroliga = 0)${rapmOk(x) ? ` · impacto ${ESC.txt(ESC.S("rapm", x.rapm_el, x.temporada))}` : " · sin RAPM"}${x.ctx_plantilla_dev != null ? `<br>Compañeros ${ESC.txt(ESC.dS("nivel", x.ctx_plantilla_dev))} vs su liga · en pista ${ESC.txt(sNivL(x.ctx_comp, x.temporada))}` : ""}${extra}`;
+const hovJug = (x, extra = "") => `<b>${esc(x.nombre)}</b><br>${esc(x.nombre_club)} · ${LC[x.liga]} ${tC(x.temporada)} · ${POS[x.pos3] || "s/d"} · ${Math.round(x.min)}'<br>${x.eu != null ? `Estilo: ${esc(x.eu_etiqueta || euNom(x.eu))} · ` : ""}mapa: ${esc(eNom(x.e))} (afinidad ${afin(x.p)} de 100)<br>Nivel ${ESC.txt(sNivJ(x))} (Euroliga = 0)${rapmOk(x) ? ` · impacto ${ESC.txt(ESC.S("rapm", x.rapm_el, x.temporada))}` : " · sin RAPM"}${x.ctx_plantilla_dev != null ? `<br>Compañeros ${ESC.txt(ESC.dS("nivel", x.ctx_plantilla_dev))} vs su liga · en pista ${ESC.txt(sNivL(x.ctx_comp, x.temporada))}` : ""}${extra}`;
 
 // ---------------------------------------------------------------- pestaña «Química de estilos»
 function construirQuimica() {

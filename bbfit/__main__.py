@@ -52,8 +52,39 @@ def _adaptacion(a):
     return adaptacion.main(rehacer=a.rehacer, sin_validacion=getattr(a, "sin_validacion", False))
 
 
+def _simular(a):
+    from . import simulador as S
+    if not a.jugador or not a.club:
+        raise SystemExit("simular: hacen falta --jugador y --club")
+    r = S.simular_cli(a.jugador, a.club, a.temporada, a.liga, a.bajas, a.n_sim, a.json)
+    print(S.texto_resumen(r))
+    return None
+
+
+def _backtest(a):
+    from . import validacion as V
+    r = V.main(a.fuente, a.escenario, a.adaptacion, a.pesos_de, a.cortes)
+    return {"resumen": r["resumen"], "bootstrap": r["bootstrap"]}
+
+
+def _pesos(a):
+    from . import validacion as V
+    return V.pesos_produccion()
+
+
+def _historico(a):
+    from . import validacion as V
+    return V.historico(a.temporadas)
+
+
+def _exportar_sim(a):
+    from . import sim_exportar as E
+    return E.exportar(a.salida or E.SALIDA)
+
+
 ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "estilos": _estilos,
-           "adaptacion": _adaptacion}
+           "adaptacion": _adaptacion, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
+           "historico": _historico, "exportar-simulador": _exportar_sim}
 
 
 def main(argv=None) -> int:
