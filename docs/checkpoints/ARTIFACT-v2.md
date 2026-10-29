@@ -28,7 +28,7 @@ simulador_v2.js,informe_v3.js}`, `artifact/quintetos/{index.html,estilos_unifica
 - **Sin nombres VaDE**: jugadores, clubes y plantillas simuladas usan solo Pistons, Isolation, Old-School, Spacing,
   Circulación y Pintura (y sus mezclas). Los modelos estimados sobre los grupos VaDE (química de estilos, regiones y
   colores del mapa 3D) se rotulan como **«Perfil de mapa A–F»**, neutros, con aviso de que no equivalen a los estilos
-  (opción 1 propuesta; pendiente de confirmación del CEO).
+  (opción 1, confirmada por el CEO el 29-10-2026).
 - **Lectura de fichaje (informe PDF v3)** con la estructura pedida y caja «Por qué este jugador» reescrita en tono
   Cerno por Claude (capacidad `sample`, a través de la página principal).
 
@@ -89,8 +89,6 @@ simulador_v2.js,informe_v3.js}`, `artifact/quintetos/{index.html,estilos_unifica
   artifact.
 
 ## Pendientes
-- Confirmar la opción de nomenclatura para los modelos VaDE (perfiles de mapa) o re-estimar la química sobre los
-  estilos nuevos en el pipeline.
 - Regenerar `atlas/informe/*.json` con los `persona_id` actuales (pipeline) y quitar el emparejamiento por minutos.
 - Altura y nacionalidad: faltan en la mayoría de ligas en los datos; el informe solo muestra lo disponible.
 - El artículo metodológico PDF conserva nombres VaDE (sin fuente editable); su descarga ya no lleva «VaDE» en el nombre.
