@@ -46,3 +46,36 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 11,regular,47,23,8.0,0.8,0.0,0.0,0,,True,True,True,True,True,,True
 2,regular,41,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 12,regular,42,22,2.0,0.2,2.0,2.0,0,,True,True,True,True,True,,True
+69,regular,39,23,10.0,1.2,0.0,0.0,0,,True,True,True,True,True,,True
+71,regular,37,24,724.0,69.0,,,4,actua_fuera_de_pista=3;sale_sin_estar=1,False,True,True,True,False,1 asistencias sin enlazar | +/- oficial incoherente: validado sólo por minutos,False
+65,regular,36,24,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,1 asistencias sin enlazar,True
+66,regular,43,23,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+68,regular,57,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+76,regular,35,22,1.0,0.1,,,1,actua_fuera_de_pista=1,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+73,regular,40,24,1.0,0.2,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+67,regular,54,23,15.0,2.5,0.0,0.0,0,,True,True,True,True,True,,True
+74,regular,39,22,22.0,3.4,0.0,0.0,0,,True,True,True,True,True,,True
+70,regular,28,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+79,regular,32,24,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+75,regular,40,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+72,regular,45,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+80,regular,41,24,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+77,regular,40,23,27.0,2.7,0.0,0.0,0,,True,True,True,True,True,,True
+78,regular,38,24,12.0,1.0,0.0,0.0,0,,True,True,True,True,True,,True
+56,regular,33,24,10.0,1.8,0.0,0.0,0,,True,True,True,True,True,,True
+60,regular,49,23,60.0,9.7,0.0,0.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+52,regular,35,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+63,regular,40,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+58,regular,32,23,1.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
+53,regular,51,24,34.0,2.8,0.0,0.0,0,,True,True,True,True,True,,True
+64,regular,50,23,9.0,1.4,0.0,0.0,0,,True,True,True,True,True,,True
+57,regular,38,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+49,regular,28,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+51,regular,37,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+54,regular,51,24,1.0,0.1,,,0,,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+62,regular,49,24,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
+50,regular,39,24,1.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
+59,regular,38,22,1.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
+55,regular,41,24,0.0,0.0,1.0,2.0,0,,True,True,True,True,True,,True
+61,regular,40,23,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+40,regular,51,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
