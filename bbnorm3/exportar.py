@@ -161,8 +161,14 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
         from .prediccion import soporte
         lo_s, hi_s = soporte(D, float(margen))
     partes = []
-    for m, P in cj:
+    from .flujo import DIR_CACHE, _huella
+    for i_red, (m, P) in enumerate(cj):
         K = m.K
+        f_cache = DIR_CACHE / f"traducir_{_huella(cfg)}_{len(t)}_red{i_red}.npz"
+        if f_cache.exists():                           # reanudación: lo ya calculado para esta red
+            x = np.load(f_cache)
+            partes.append((m, P, x["media"], x["var"], x["z"], x["vz"]))
+            continue
         media = np.zeros((len(t), K)); var = np.zeros((len(t), K))
         media[ok] = P.media[ips] - P.media[P.nPS + R]
         # varianza de (u − μ_R) por dimensión: diag de la inversa en el contraste (una resolución por fila única)
@@ -187,6 +193,7 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
             prec_z = m.precision_unicidad().numpy()
             z[okp] = m.Z.numpy()[pi[okp].astype(int)]
             vz[okp] = 1.0 / (prec_z[pi[okp].astype(int)] + 1.0 / m.s2Z.numpy()[None, :])
+        np.savez(f_cache, media=media, var=var, z=z, vz=vz)
         partes.append((m, P, media, var, z, vz))
     # 2) Monte Carlo por bloques de filas (las muestras de todas las filas a la vez no caben en memoria)
     n = len(t)
