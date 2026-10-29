@@ -138,7 +138,16 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
     lR = int(D.comp_liga[R])
     t = tabla[tabla["pos3"].notna()].copy()
     t["comp"] = t["liga"] + "|" + t["temporada"]
-    t = t[t["comp"].isin(D.comps)]
+    # competición-temporada sin filas de entrenamiento (p. ej. una liga en curso sin nadie con 100 min): nivel y
+    # entorno de la última temporada de esa liga en el ajuste, más el paso aleatorio κ² de una temporada
+    ultima = {}
+    for c in D.comps:
+        l, tt = c.split("|")
+        if l not in ultima or tt > ultima[l].split("|")[1]:
+            ultima[l] = c
+    t["comp_ajuste"] = np.where(t["comp"].isin(D.comps), t["comp"], t["liga"].map(ultima))
+    t = t[t["comp_ajuste"].notna()]
+    extra_kappa = np.where(t["comp"] == t["comp_ajuste"], 0.0, cfg["prior"]["kappa"] ** 2)
     t["ps"] = t["persona_id"].astype(str) + "|" + t["anio"].astype(str)
     ps_idx = {p: i for i, p in enumerate(D.ps)}
     en_ent = t["ps"].map(ps_idx)
@@ -147,7 +156,7 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
     rng = np.random.default_rng(int(cfg["semillas"][0]))
     Yn, Mn, Vn = matrices_filas(t, D.esc)
     liga_n = np.array([D.ligas.index(l) for l in t["liga"]])
-    comp_n = np.array([D.comps.index(c) for c in t["comp"]])
+    comp_n = np.array([D.comps.index(c) for c in t["comp_ajuste"]])
     pos_n = t["pos3"].map({p: i for i, p in enumerate(POSICIONES)}).to_numpy()
     logmin = np.log(np.clip(t["min"].to_numpy(float), 1, None)) / 7.0
     # 1) por red: media y varianza de (u − μ_R) y factor específico de cada fila (poca memoria: filas × K)
@@ -186,7 +195,7 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
             media[~ok] = P.media[P.nPS + comp_n[~ok]] + sl * rmed - P.media[P.nPS + R]
             cu, ci = np.unique(comp_n[~ok], return_inverse=True)
             vc = P.var_contrastes(P.nPS + cu, np.full(len(cu), P.nPS + R))
-            var[~ok] = sl ** 2 / prec + vc[ci]
+            var[~ok] = sl ** 2 / prec + vc[ci] + extra_kappa[~ok][:, None]
         z = np.zeros((len(t), len(METRICAS))); vz = np.zeros_like(z)
         if m.usar_unicidad:
             vz[:] = m.s2Z.numpy()[None, :]
@@ -221,7 +230,8 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
     # percentil entre los jugadores de la referencia de su posición (sus propios equivalentes)
     out = {"persona_id": t["persona_id"].to_numpy(), "player_id": t["player_id"].to_numpy(),
            "team_id": t["team_id"].to_numpy(), "liga": t["liga"].to_numpy(), "temporada": t["temporada"].to_numpy(),
-           "fuente_v3": np.where(en_ent.notna(), "posterior_conjunta", "codificador")}
+           "fuente_v3": np.where(en_ent.notna(), "posterior_conjunta",
+                                 np.where(extra_kappa > 0, "codificador_nivel_temporada_anterior", "codificador"))}
     for c in IDENTIDAD:
         if c in t:
             out[c] = t[c].to_numpy()
@@ -293,6 +303,12 @@ def todo(tabla: pd.DataFrame, D, cj, cfg, normalizado: bool = True) -> pd.DataFr
     return trad
 
 
+def _norm_nombre(x: pd.Series) -> pd.Series:
+    import unicodedata
+    return x.astype(str).map(lambda v: " ".join(unicodedata.normalize("NFKD", v).encode("ascii", "ignore")
+                                              .decode().lower().replace(".", " ").split()))
+
+
 def escribir_resumen(D, cj, cfg) -> None:
     out = C.dir_salida(cfg)
     resumen = {"version": cfg["version"], "semillas": cfg["semillas"], "K": cfg["latente"]["K"],
@@ -318,8 +334,34 @@ def _normalizado(trad: pd.DataFrame, dir_out, columnas_nuevas=None, sufijo: str 
         g = g.copy()
         for c in ("player_id", "team_id"):
             g[c] = g[c].astype(str); v1[c] = v1[c].astype(str)
-        base = g[clave].merge(v1.drop_duplicates(clave), on=clave, how="left")
+        # 1) cruce por (player_id, team_id, liga, temporada); 2) si falla (p. ej. ids de la BBL que han cambiado de
+        # formato), por (nombre normalizado, team_id, liga, temporada), sólo con emparejamientos únicos
+        v1 = v1.reset_index(drop=True)
+        fila = g[clave].reset_index(drop=True).merge(v1[clave].assign(_f=np.arange(len(v1))).drop_duplicates(clave, keep=False),
+                                                     on=clave, how="left")["_f"]
+        if "nombre" in v1 and "nombre" in g:
+            k2 = ["_nom", "team_id", "liga", "temporada"]
+            a = g.assign(_nom=_norm_nombre(g["nombre"]))[k2].reset_index(drop=True)
+            b = v1.assign(_nom=_norm_nombre(v1["nombre"]), _f=np.arange(len(v1)))[k2 + ["_f"]].drop_duplicates(k2, keep=False)
+            b = b[~b["_f"].isin(fila.dropna())]
+            fila = fila.fillna(a.merge(b, on=k2, how="left")["_f"])
+        fila = fila.fillna(-1).astype(int).to_numpy()
+        base = v1.reindex(fila).reset_index(drop=True)   # filas sin pareja en el v1: vacías
         base = base[v1.columns].copy()               # mismo orden de columnas que el v1
+        for c in clave:
+            base[c] = g[c].to_numpy()
+        # fila del v1 calculada con otros partidos (temporada en curso): no se mezcla un valor viejo con uno nuevo
+        gp1, gp3 = pd.to_numeric(base.get("gp"), errors="coerce"), pd.to_numeric(g["gp"], errors="coerce").to_numpy() \
+            if "gp" in g else None
+        desact = (np.isfinite(gp1) & np.isfinite(gp3) & (gp1.to_numpy() != gp3)) if gp3 is not None else np.zeros(len(base), bool)
+        # filas del v1 que la tabla actual no traduce (p. ej. sin posición estimada): se conservan con su valor v1
+        resto = v1.loc[~v1.index.isin(fila[fila >= 0])]
+        if len(resto):
+            g_resto = pd.DataFrame({c: resto[c].to_numpy() for c in ["persona_id"] + IDENTIDAD + clave if c in resto})
+            g_resto["fuente_v3"] = "solo_v1"
+            base = pd.concat([base, resto[v1.columns]], ignore_index=True)
+            desact = np.r_[desact, np.zeros(len(resto), bool)]
+            g = pd.concat([g.reset_index(drop=True), g_resto], ignore_index=True)
         # identidad y valor observado de la tabla actual (también en las filas que el v1 no tiene)
         g = g.reset_index(drop=True)
         for c in ["persona_id"] + IDENTIDAD:
@@ -330,7 +372,7 @@ def _normalizado(trad: pd.DataFrame, dir_out, columnas_nuevas=None, sufijo: str 
                 base[f"{col}_obs"] = base[f"{col}_obs"].fillna(pd.Series(g[f"{col}_obs__tabla"].to_numpy()))
         v3cols = g[[c for c in g.columns if "_v3" in c and not c.endswith("__tabla")]]
         if columnas_nuevas is not None:                 # v3.1: combinación con las columnas v1 de la misma fila
-            v3cols = columnas_nuevas(base, v3cols)
+            v3cols = columnas_nuevas(base.assign(_v1_desactualizado=desact), v3cols)
         comb = salidas.combinar_normalizado(base, v3cols, METRICAS, sufijo=sufijo, fuente=fuente)
         comb["fuente_v3"] = g["fuente_v3"].to_numpy()
         comb.round(4).to_csv(dir_out / f"{temp}.csv.gz", index=False)

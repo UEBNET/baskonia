@@ -286,9 +286,12 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
             w[pocas] = 0.0
             sz = v3[f"{col}_v3_sd_entre_z"].to_numpy(float)
             w[sz > cb["max_discrepancia_redes"]] = 0.0
-            sin_v2 = ~np.isfinite(m2) | ~np.isfinite(s2)
-            w[sin_v2] = 1.0                               # fila que el v1 no tiene (p. ej. partidos nuevos de 2026-27)
+            sin_v2 = ~np.isfinite(m2) | ~np.isfinite(s2) | base["_v1_desactualizado"].to_numpy(bool)
+            w[sin_v2] = 1.0                               # fila que el v1 no tiene o tiene desactualizada (2026-27)
             m2, s2 = np.where(sin_v2, m3, m2), np.where(sin_v2, s3, s2)
+            sin_v3 = ~np.isfinite(m3) | ~np.isfinite(s3)
+            w[sin_v3] = 0.0                               # fila que la CVAE no traduce (sin posición): sólo v1
+            m3, s3 = np.where(sin_v3, m2, m3), np.where(sin_v3, s2, s3)
             s2, s3 = np.maximum(s2, 1e-6), np.maximum(s3, 1e-6)
             media = w * m3 + (1 - w) * m2
             lo, hi = _cuantiles_mezcla(w, m3, s3, m2, s2, (0.1, 0.9))
@@ -299,7 +302,8 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
             out[f"{col}_v31_hi"] = destransformar(hi, tr)
             p2 = pd.to_numeric(base.get(f"{col}_am_pctel"), errors="coerce").to_numpy(float)
             p3 = v3[f"{col}_v3_pctel"].to_numpy(float)
-            out[f"{col}_v31_pctel"] = np.where(np.isfinite(p2), w * p3 + (1 - w) * p2, p3)
+            out[f"{col}_v31_pctel"] = np.where(np.isfinite(p2) & np.isfinite(p3), w * p3 + (1 - w) * p2,
+                                               np.where(np.isfinite(p3), p3, p2))
             out[f"{col}_v31_peso_cvae"] = w
         return out
 
