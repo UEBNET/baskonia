@@ -196,6 +196,7 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
             yh = np.clip(yh, lo_s[lR][None, None, :], hi_s[lR][None, None, :])
         centros.append(yh.mean(1)); muestras.append(yh)
     centro = np.mean(centros, 0)
+    entre = np.std(centros, 0)                      # discrepancia entre las redes (salvaguarda de la v3.1)
     mez = np.concatenate(muestras, 1)
     lo, hi = np.quantile(mez, [0.1, 0.9], axis=1)
     # percentil entre los jugadores de la referencia de su posición (sus propios equivalentes)
@@ -215,6 +216,7 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
         out[f"{col}_v3_lo"] = destransformar(c + s * lo[:, k], tr)
         out[f"{col}_v3_hi"] = destransformar(c + s * hi[:, k], tr)
         out[f"{col}_v3_sd"] = (out[f"{col}_v3_hi"] - out[f"{col}_v3_lo"]) / (2 * Z80)
+        out[f"{col}_v3_sd_entre_z"] = entre[:, k]
         pct = np.full(len(t), np.nan)
         for p in POSICIONES:
             refv = np.sort(centro[es_ref & (t["pos3"] == p).to_numpy(), k])
@@ -231,8 +233,8 @@ def _e(n, i, j):
 
 
 # ---------------------------------------------------------------------------------------------- todo
-def todo(tabla: pd.DataFrame, D, cj, cfg) -> None:
-    out = C.DIR_SALIDA
+def todo(tabla: pd.DataFrame, D, cj, cfg, normalizado: bool = True) -> pd.DataFrame:
+    out = C.dir_salida(cfg)
     out.mkdir(parents=True, exist_ok=True)
     niv, covdf, (deltas, Js, covs, R) = tabla_niveles(D, cj, cfg)
     niv.round(5).to_csv(out / "niveles.csv", index=False)
@@ -265,7 +267,8 @@ def todo(tabla: pd.DataFrame, D, cj, cfg) -> None:
     pd.DataFrame(filas).round(5).to_csv(out / "ciclo.csv", index=False)
     # dataset normalizado v3
     trad = traducir_filas(tabla, D, cj, cfg)
-    _normalizado(trad, out / "normalizado")
+    if normalizado:
+        _normalizado(trad, out / "normalizado")
     resumen = {"version": cfg["version"], "semillas": cfg["semillas"], "K": cfg["latente"]["K"],
                "filas_entrenamiento": int(len(D.t)), "personas_temporada": len(D.ps), "competiciones": len(D.comps),
                "ipw": D.info_ipw, "referencia_salida": cfg["referencia_salida"],
@@ -273,9 +276,10 @@ def todo(tabla: pd.DataFrame, D, cj, cfg) -> None:
                "unicidad_omega2": {met: float(np.mean([m.s2Z.numpy()[k] for m, _ in cj])) for k, met in enumerate(METRICAS)}}
     (out / "resumen.json").write_text(json.dumps(resumen, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
     print(f"Salidas v3 en {out}", flush=True)
+    return trad
 
 
-def _normalizado(trad: pd.DataFrame, dir_out) -> None:
+def _normalizado(trad: pd.DataFrame, dir_out, columnas_nuevas=None, sufijo: str = "_v3", fuente: str = "V3") -> None:
     """Esquema del dataset normalizado v1 (data/modelos/normalizado/<t>.csv) + columnas v3 (salidas.combinar_normalizado).
     Las filas son las de la tabla actual; las columnas del v1 se unen por (player_id, team_id, liga, temporada) y
     quedan vacías en las filas que el v1 no tiene (p. ej. partidos de 2026-27 posteriores a su cálculo)."""
@@ -301,6 +305,8 @@ def _normalizado(trad: pd.DataFrame, dir_out) -> None:
             if f"{col}_obs" in base:
                 base[f"{col}_obs"] = base[f"{col}_obs"].fillna(pd.Series(g[f"{col}_obs__tabla"].to_numpy()))
         v3cols = g[[c for c in g.columns if "_v3" in c and not c.endswith("__tabla")]]
-        comb = salidas.combinar_normalizado(base, v3cols, METRICAS)
+        if columnas_nuevas is not None:                 # v3.1: combinación con las columnas v1 de la misma fila
+            v3cols = columnas_nuevas(base, v3cols)
+        comb = salidas.combinar_normalizado(base, v3cols, METRICAS, sufijo=sufijo, fuente=fuente)
         comb["fuente_v3"] = g["fuente_v3"].to_numpy()
         comb.round(4).to_csv(dir_out / f"{temp}.csv.gz", index=False)

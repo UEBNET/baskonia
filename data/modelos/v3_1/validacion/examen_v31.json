@@ -1,0 +1,333 @@
+{
+ "aviso": "Los cortes 2023 y 2024 ya se habían visto al diseñar la v3.1: los resultados son orientativos; la decisión debe tomarse con el examen limpio 2025-26 → 2026-27.",
+ "cvae_sola": {
+  "pasa": false,
+  "criterio_1_mae": {
+   "cumple": false,
+   "estimacion": 0.016787129945551316,
+   "ic95": [
+    0.00089636783688305,
+    0.03386950619016154
+   ],
+   "unidades": 722,
+   "remuestreos": 2000
+  },
+  "criterio_2_cobertura": {
+   "cumple": false,
+   "rango": [
+    0.78,
+    0.85
+   ],
+   "grupos": 5,
+   "grupos_fuera": [
+    {
+     "liga_o": "feb2",
+     "liga_d": "feb1",
+     "personas": 36,
+     "cobertura80": 0.779
+    },
+    {
+     "liga_o": "feb2",
+     "liga_d": "feb3",
+     "personas": 44,
+     "cobertura80": 0.703
+    },
+    {
+     "liga_o": "feb3",
+     "liga_d": "feb2",
+     "personas": 79,
+     "cobertura80": 0.732
+    }
+   ],
+   "cobertura_media": 0.8025320985997405,
+   "metricas_fuera": {
+    "blk_p100": 0.773,
+    "blk_pct": 0.768,
+    "ft_pct": 0.77,
+    "pct_corta": 0.778,
+    "pct_media": 0.722,
+    "usg_pct": 0.779
+   }
+  },
+  "criterio_3_euroleague": {
+   "cumple": false,
+   "estimacion": 0.03618046436068467,
+   "ic95": [
+    0.005498058627407959,
+    0.0738347637606778
+   ],
+   "unidades": 89,
+   "remuestreos": 2000
+  },
+  "mae_rel_percentil": -0.10041242631745628,
+  "mae_rel_F0": -0.014128424519016303,
+  "por_corte": {
+   "2023": {
+    "frente_am": 0.07506945756237227,
+    "ic95": [
+     0.049222822376652,
+     0.1015102396236085
+    ],
+    "cob80": 0.7623464970403746
+   },
+   "2024": {
+    "frente_am": -0.038755872638188915,
+    "ic95": [
+     -0.05509515838836592,
+     -0.02072936430090161
+    ],
+    "cob80": 0.8437556643103136
+   }
+  },
+  "por_grupo": {
+   "a_euroleague": {
+    "personas": 89,
+    "frente_am": 0.03618046436068467,
+    "cob80": 0.824261828530772
+   },
+   "europa": {
+    "personas": 230,
+    "frente_am": 0.011605788736666733,
+    "cob80": 0.8200862600123229
+   },
+   "feb": {
+    "personas": 202,
+    "frente_am": 0.029887691844717956,
+    "cob80": 0.7601405769512374
+   },
+   "nba_gleague": {
+    "personas": 135,
+    "frente_am": -0.009209611943850393,
+    "cob80": 0.8212266202696825
+   }
+  },
+  "casos_conocimiento": {
+   "personas": 117,
+   "frente_am": 0.05154024545236324,
+   "resto_frente_am": 0.0092776843922866
+  }
+ },
+ "combinada_regla_fija": {
+  "pasa": false,
+  "criterio_1_mae": {
+   "cumple": true,
+   "estimacion": -0.029615601673128822,
+   "ic95": [
+    -0.03527571143170336,
+    -0.02358706187463135
+   ],
+   "unidades": 722,
+   "remuestreos": 2000
+  },
+  "criterio_2_cobertura": {
+   "cumple": false,
+   "rango": [
+    0.78,
+    0.85
+   ],
+   "grupos": 5,
+   "grupos_fuera": [
+    {
+     "liga_o": "feb2",
+     "liga_d": "feb3",
+     "personas": 44,
+     "cobertura80": 0.718
+    },
+    {
+     "liga_o": "feb3",
+     "liga_d": "feb2",
+     "personas": 79,
+     "cobertura80": 0.777
+    }
+   ],
+   "cobertura_media": 0.8083031360443789,
+   "metricas_fuera": {
+    "blk_pct": 0.772,
+    "ft_pct": 0.776,
+    "pct_media": 0.771,
+    "usg_pct": 0.779
+   }
+  },
+  "criterio_3_euroleague": {
+   "cumple": true,
+   "estimacion": -0.011567518229960383,
+   "ic95": [
+    -0.02729295541732308,
+    0.006411243916910207
+   ],
+   "unidades": 89,
+   "remuestreos": 2000
+  },
+  "mae_rel_percentil": -0.13989346891630972,
+  "mae_rel_F0": -0.059854942996362626,
+  "por_corte": {
+   "2023": {
+    "frente_am": -0.009421548840565563,
+    "ic95": [
+     -0.016713706788374118,
+     -0.001804469604988326
+    ],
+    "cob80": 0.7961834084283064
+   },
+   "2024": {
+    "frente_am": -0.04763565495261779,
+    "ic95": [
+     -0.055777795968465015,
+     -0.038845646492747944
+    ],
+    "cob80": 0.8207359071959398
+   }
+  },
+  "por_grupo": {
+   "a_euroleague": {
+    "personas": 89,
+    "frente_am": -0.011567518229960383,
+    "cob80": 0.8199928850942725
+   },
+   "europa": {
+    "personas": 230,
+    "frente_am": -0.018820106400458392,
+    "cob80": 0.8219346888478127
+   },
+   "feb": {
+    "personas": 202,
+    "frente_am": -0.048070099436689606,
+    "cob80": 0.782252159906282
+   },
+   "nba_gleague": {
+    "personas": 135,
+    "frente_am": -0.025016415723443153,
+    "cob80": 0.8157894736842105
+   }
+  },
+  "casos_conocimiento": {
+   "personas": 117,
+   "frente_am": -0.042217839270781155,
+   "resto_frente_am": -0.02492127997993543
+  },
+  "pesos": {
+   "general": {
+    "size": 19372,
+    "mean": 0.5
+   },
+   "salvaguarda_temporadas": {
+    "size": 2981,
+    "mean": 0.0
+   }
+  }
+ },
+ "combinada_con_conocimiento_feb3": {
+  "pasa": false,
+  "criterio_1_mae": {
+   "cumple": true,
+   "estimacion": -0.03320224424781426,
+   "ic95": [
+    -0.040681428105706435,
+    -0.025406476119679475
+   ],
+   "unidades": 722,
+   "remuestreos": 2000
+  },
+  "criterio_2_cobertura": {
+   "cumple": false,
+   "rango": [
+    0.78,
+    0.85
+   ],
+   "grupos": 5,
+   "grupos_fuera": [
+    {
+     "liga_o": "feb2",
+     "liga_d": "feb3",
+     "personas": 44,
+     "cobertura80": 0.759
+    }
+   ],
+   "cobertura_media": 0.8152820650471972,
+   "metricas_fuera": {
+    "ft_pct": 0.78,
+    "pct_media": 0.774
+   }
+  },
+  "criterio_3_euroleague": {
+   "cumple": true,
+   "estimacion": -0.011567518229960383,
+   "ic95": [
+    -0.02729295541732308,
+    0.006411243916910207
+   ],
+   "unidades": 89,
+   "remuestreos": 2000
+  },
+  "mae_rel_percentil": -0.14322920652358473,
+  "mae_rel_F0": -0.0630769403591126,
+  "por_corte": {
+   "2023": {
+    "frente_am": -0.009421548840565563,
+    "ic95": [
+     -0.016713706788374118,
+     -0.001804469604988326
+    ],
+    "cob80": 0.8056365403304179
+   },
+   "2024": {
+    "frente_am": -0.05396392729621302,
+    "ic95": [
+     -0.06598479135322873,
+     -0.04101444398528438
+    ],
+    "cob80": 0.8251767264817835
+   }
+  },
+  "por_grupo": {
+   "a_euroleague": {
+    "personas": 89,
+    "frente_am": -0.011567518229960383,
+    "cob80": 0.8199928850942725
+   },
+   "europa": {
+    "personas": 230,
+    "frente_am": -0.018820106400458392,
+    "cob80": 0.8219346888478127
+   },
+   "feb": {
+    "personas": 202,
+    "frente_am": -0.05595812723878024,
+    "cob80": 0.8050959144823546
+   },
+   "nba_gleague": {
+    "personas": 135,
+    "frente_am": -0.025016415723443153,
+    "cob80": 0.8157894736842105
+   }
+  },
+  "casos_conocimiento": {
+   "personas": 117,
+   "frente_am": -0.05387108192516443,
+   "resto_frente_am": -0.02492127997993543
+  },
+  "pesos": {
+   "conocimiento": {
+    "size": 1952,
+    "mean": 1.0
+   },
+   "general": {
+    "size": 17420,
+    "mean": 0.5
+   },
+   "salvaguarda_temporadas": {
+    "size": 2981,
+    "mean": 0.0
+   }
+  },
+  "peso_v3_conocimiento_elegido": 1.0,
+  "factor_intervalo_conocimiento_elegido": 1.1193471745530241,
+  "rejilla_conocimiento_frente_am": {
+   "0.0": 0.0,
+   "0.25": -0.02402337866897275,
+   "0.5": -0.042217839270781155,
+   "0.75": -0.05284275722485776,
+   "1.0": -0.05387108192516443
+  }
+ }
+}

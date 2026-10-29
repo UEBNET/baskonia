@@ -6,6 +6,10 @@
     python -m bbnorm3 lolo            # dejar fuera una liga: nivel sin sus puentes frente al nivel completo
     python -m bbnorm3 ajustar         # ajuste con todos los datos → data/modelos/v3/ (niveles, traducción cruzada…)
 
+v3.1 (combinación v2 + CVAE corregida, configs/normalization_v31.yaml):
+    python -m bbnorm3 --config configs/normalization_v31.yaml validar-combinada
+    python -m bbnorm3 --config configs/normalization_v31.yaml ajustar-combinada
+
 Las redes entrenadas se guardan en experimentos/v3/ (no versionado) para poder reanudar sin reentrenar.
 """
 from __future__ import annotations
@@ -33,8 +37,11 @@ def main(argv=None):
     sub.add_parser("lolo")
     sub.add_parser("f0", help="cobertura de la línea base F0 (grafo amortiguado con covarianza completa)")
     sub.add_parser("ajustar")
+    sub.add_parser("validar-combinada", help="v3.1: examen de la combinación v2 + CVAE")
+    sub.add_parser("ajustar-combinada", help="v3.1: ajuste final y dataset normalizado combinado")
+    ap.add_argument("--config", help="configuración (por defecto configs/normalization_v3.yaml, la v3.0)")
     a = ap.parse_args(argv)
-    cfg = C.cargar()
+    cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
     print("Preparando datos (identidades y posiciones)…", flush=True)
     tabla = _tabla()
@@ -47,6 +54,12 @@ def main(argv=None):
         flujo.f0(tabla, cfg)
     elif a.orden == "lolo":
         flujo.lolo(tabla, cfg)
+    elif a.orden == "validar-combinada":
+        from . import combinacion
+        combinacion.validar_combinada(tabla, cfg)
+    elif a.orden == "ajustar-combinada":
+        from . import combinacion
+        combinacion.ajustar_combinada(tabla, cfg)
     else:
         flujo.ajustar(tabla, cfg)
     print(json.dumps({"tiempo_s": round(time.time() - t0)}))

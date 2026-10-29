@@ -11,11 +11,19 @@ from . import config as C
 from . import datos, examen, modelo, niveles, prediccion
 
 DIR_CACHE = C.RAIZ / "experimentos" / "v3"
-DIR_VAL = C.DIR_SALIDA / "validacion"
+# claves que no cambian las redes entrenadas (no entran en la huella de la caché)
+NO_MODELO = ("validacion", "prediccion", "semillas", "version", "salida", "combinacion")
 
 
 def _huella(cfg: dict) -> str:
+    cfg = {k: v for k, v in cfg.items() if k not in NO_MODELO}
     return hashlib.sha1(json.dumps(cfg, sort_keys=True, default=str).encode()).hexdigest()[:10]
+
+
+def dir_val(cfg: dict):
+    d = C.dir_salida(cfg) / "validacion"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
 
 
 def conjunto(tabla: pd.DataFrame, cfg: dict, hasta_anio: int | None, semillas=None, etiqueta: str = "",
@@ -23,7 +31,7 @@ def conjunto(tabla: pd.DataFrame, cfg: dict, hasta_anio: int | None, semillas=No
     """Datos + deep ensemble (una red por semilla) + posterior de cada red. Reutiliza las redes guardadas."""
     D = datos.construir(tabla, cfg, hasta_anio=hasta_anio)
     DIR_CACHE.mkdir(parents=True, exist_ok=True)
-    huella = _huella({k: v for k, v in cfg.items() if k not in ("validacion", "prediccion", "semillas")})
+    huella = _huella(cfg)
     out = []
     for s in (semillas or cfg["semillas"]):
         f = DIR_CACHE / f"{etiqueta}h{hasta_anio}_{huella}_s{s}.pt"
@@ -57,16 +65,14 @@ def elegir_k(tabla: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         filas.append({"K": K, "casos": len(r), "mae_relativo_medio": float((mae / ref).mean()),
                       "cobertura80_bruta": float(r["dentro_80_v3"].mean())})
     out = pd.DataFrame(filas).sort_values("K")
-    DIR_VAL.mkdir(parents=True, exist_ok=True)
-    out.round(4).to_csv(DIR_VAL / "elegir_k.csv", index=False)
+    out.round(4).to_csv(dir_val(cfg) / "elegir_k.csv", index=False)
     print(out.round(4).to_string(index=False))
     return out
 
 
 # ---------------------------------------------------------------------------------------------- examen
 def predicciones_corte(tabla: pd.DataFrame, cfg: dict, anio: int) -> pd.DataFrame:
-    DIR_VAL.mkdir(parents=True, exist_ok=True)
-    f = DIR_VAL / f"predicciones_{anio}.csv.gz"
+    f = dir_val(cfg) / f"predicciones_{anio}.csv.gz"
     if f.exists():
         return pd.read_csv(f)
     D, cj = conjunto(tabla, cfg, anio)
@@ -88,15 +94,15 @@ def validar(tabla: pd.DataFrame, cfg: dict, f0: bool = True) -> dict:
         r = examen.aplicar_calibracion(preds[a], fac)
         j = examen.unir(r, examen.lineas_base(a))
         if f0:
-            j = _f0(j, a)
+            j = _f0(j, a, cfg)
         unidos.append(j)
-        (DIR_VAL / f"calibracion_{a}.json").write_text(json.dumps(fac, indent=1, ensure_ascii=False), encoding="utf-8")
+        (dir_val(cfg) / f"calibracion_{a}.json").write_text(json.dumps(fac, indent=1, ensure_ascii=False), encoding="utf-8")
     r = pd.concat(unidos, ignore_index=True)
-    r.round(5).to_csv(DIR_VAL / "casos.csv.gz", index=False)
+    r.round(5).to_csv(dir_val(cfg) / "casos.csv.gz", index=False)
     res = examen.resumen_metricas(r)
-    res.round(4).to_csv(DIR_VAL / "resumen_metricas.csv", index=False)
+    res.round(4).to_csv(dir_val(cfg) / "resumen_metricas.csv", index=False)
     pares = examen.cobertura_grupos(r, 1)
-    pares.round(4).to_csv(DIR_VAL / "pares_origen_destino.csv", index=False)
+    pares.round(4).to_csv(dir_val(cfg) / "pares_origen_destino.csv", index=False)
     pt = examen.puerta(r, cfg)
     pt["mae_rel_v3_percentil"] = examen.mae_rel_medio(r, "v3", "mismo_percentil")
     pt["mae_rel_v3_F0"] = examen.mae_rel_medio(r, "v3", "F0")
@@ -107,7 +113,7 @@ def validar(tabla: pd.DataFrame, cfg: dict, f0: bool = True) -> dict:
     g = examen.grupo(r["liga_o"], r["liga_d"])
     pt["por_grupo"] = {k: {"casos": int((g == k).sum()), "v3_am": examen.mae_rel_medio(r[g == k]),
                            "cob80": float(r.loc[g == k, "dentro_80_v3c"].mean())} for k in sorted(g.unique())}
-    (DIR_VAL / "puerta.json").write_text(json.dumps(pt, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    (dir_val(cfg) / "puerta.json").write_text(json.dumps(pt, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
     print(json.dumps({k: pt[k] for k in ("pasa", "mae_rel_v3_percentil", "mae_rel_v3_F0")}, default=float))
     print(json.dumps(pt["criterio_1_mae"], default=float))
     return pt
@@ -116,18 +122,17 @@ def validar(tabla: pd.DataFrame, cfg: dict, f0: bool = True) -> dict:
 def f0(tabla: pd.DataFrame, cfg: dict) -> None:
     """Calcula y guarda la cobertura de F0 (covarianza completa del grafo amortiguado) en cada corte del examen."""
     from .f0 import f0_corte
-    DIR_VAL.mkdir(parents=True, exist_ok=True)
     for a in cfg["validacion"]["anios"]:
-        f = DIR_VAL / f"f0_{a}.csv.gz"
+        f = dir_val(cfg) / f"f0_{a}.csv.gz"
         if not f.exists():
             r = f0_corte(tabla, int(a))
             r.round(5).to_csv(f, index=False)
             print(f"  F0 {a}: {len(r)} predicciones, cobertura {r['dentro_80_F0'].mean():.3f}", flush=True)
 
 
-def _f0(j: pd.DataFrame, anio: int) -> pd.DataFrame:
+def _f0(j: pd.DataFrame, anio: int, cfg: dict | None = None) -> pd.DataFrame:
     """Cobertura de F0 (A amortiguado con la covarianza completa del grafo) si se ha calculado."""
-    f = DIR_VAL / f"f0_{anio}.csv.gz"
+    f = dir_val(cfg or {}) / f"f0_{anio}.csv.gz"
     if not f.exists():
         return j.assign(dentro_80_F0=np.nan)
     x = pd.read_csv(f)
@@ -168,8 +173,7 @@ def lolo(tabla: pd.DataFrame, cfg: dict) -> pd.DataFrame:
                               "dentro_80": abs(d2[c2, k] - d1[c1, k]) <= 1.2816 * sd2[k]})
         print(f"  lolo {liga}: hecho", flush=True)
     out = pd.DataFrame(filas)
-    DIR_VAL.mkdir(parents=True, exist_ok=True)
-    out.round(5).to_csv(DIR_VAL / "lolo.csv", index=False)
+    out.round(5).to_csv(dir_val(cfg) / "lolo.csv", index=False)
     print(out.groupby("liga").agg(error_abs=("error", lambda x: np.abs(x).mean()), cob80=("dentro_80", "mean")).round(3))
     return out
 

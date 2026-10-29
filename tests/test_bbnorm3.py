@@ -140,3 +140,36 @@ def test_esquema_normalizado_v3():
     assert list(out.columns[:len(v1.columns)]) == list(v1.columns)
     assert {"per_v3", "per_v3_lo", "per_v3_hi", "per_v1"}.issubset(out.columns)
     assert out["per_am"].iloc[0] == pytest.approx(10.5) and out["per_v1"].iloc[0] == pytest.approx(10.0)
+
+
+def _caso_comb(n=4):
+    from bbnorm3 import datos as dd
+    esc = dd.Escala(c={"per": 10.0}, s={"per": 4.0}, sigma2={"per": {"todas": 1.0}}, recorte={"per": (-1e9, 1e9)})
+    j = pd.DataFrame({"metrica": "per", "anio": 2024, "persona_id": range(n), "nombre": "x",
+                      "liga_o": ["acb", "feb3", "acb", "acb"][:n], "liga_d": ["euroleague", "feb2", "lba", "bbl"][:n],
+                      "real": 12.0, "real_z": 0.5, "v3": 0.0, "v3_lo": 0.0, "v3_hi": 0.0, "dentro_80_v3": True,
+                      "v3_centro_z": 1.0, "v3_sd_z": 0.5, "v3_sd_entre_z": [0.1, 0.1, 0.1, 0.9][:n],
+                      "v2_centro_z": 0.0, "v2_sd_z": 0.5, "temporadas_o": [4, 4, 1, 4][:n], "temporadas_d": 4})
+    j.attrs["esc"] = esc
+    return j
+
+
+def test_combinacion_pesos_y_salvaguardas():
+    from bbnorm3 import combinacion
+    cfg = config.cargar(config.RAIZ / "configs" / "normalization_v31.yaml")
+    out = combinacion.combinar(_caso_comb(), cfg, peso_conocimiento=0.25)
+    # general 0,5; FEB3 por conocimiento 0,25; liga con 1 temporada → 0; redes que discrepan → 0
+    assert list(out["peso_cvae"]) == [0.5, 0.25, 0.0, 0.0]
+    assert out["v3_centro_z"].tolist() == pytest.approx([0.5, 0.25, 0.0, 0.0])
+    assert "cvae_centro_z" in out and out["cvae_centro_z"].iloc[0] == pytest.approx(1.0)
+    # la varianza de la mezcla incluye la separación de los dos centros
+    assert out["v3_sd_z"].iloc[0] == pytest.approx(np.sqrt(0.25 + 0.25), rel=1e-6)
+
+
+def test_cuantiles_mezcla():
+    from scipy.stats import norm
+    from bbnorm3.combinacion import _cuantiles_mezcla
+    w, c3, s3, c2, s2 = (np.array([x]) for x in (0.3, 1.0, 0.5, -1.0, 0.8))
+    lo, hi = _cuantiles_mezcla(w, c3, s3, c2, s2, (0.1, 0.9))
+    F = lambda x: 0.3 * norm.cdf((x - 1) / 0.5) + 0.7 * norm.cdf((x + 1) / 0.8)  # noqa: E731
+    assert F(lo[0]) == pytest.approx(0.1, abs=1e-6) and F(hi[0]) == pytest.approx(0.9, abs=1e-6)

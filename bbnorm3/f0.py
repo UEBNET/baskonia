@@ -76,6 +76,7 @@ def predecir_f0(tabla: pd.DataFrame, anio: int, params: dict, ajuste: dict) -> p
             y_t = float(transformar(y_real, m.transf))
             filas.append({"metrica": col, "anio": anio, "nombre": x["nombre_o"], "liga_o": lo, "liga_d": ld,
                           "real": y_real, "dentro_80_F0": bool(abs(y_t - (mu_d + tau_d * zd)) <= Z80 * tau_d * sd),
+                          "centro_t_F0": float(mu_d + tau_d * zd), "sd_t_F0": float(tau_d * sd),
                           "sd_par_completa": float(np.sqrt(max(v_par, 0))),
                           "sd_par_marginal": float(np.sqrt(max(cov[ko, ko] + cov[kd, kd], 0)))})
     return pd.DataFrame(filas)

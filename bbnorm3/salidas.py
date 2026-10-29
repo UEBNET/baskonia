@@ -22,26 +22,28 @@ FUENTE_V3 = {"": "_v3", "_lo": "_v3_lo", "_hi": "_v3_hi", "_pctel": "_v3_pctel",
              "_am": "_v3", "_am_lo": "_v3_lo", "_am_hi": "_v3_hi", "_am_pctel": "_v3_pctel"}
 
 
-def combinar_normalizado(v1: pd.DataFrame, v3: pd.DataFrame, metricas: list[str]) -> pd.DataFrame:
-    """v1: dataset normalizado actual (mismas filas y orden que v3); v3: columnas <m>_v3*. Devuelve el v3 con el
-    esquema del v1 delante (mismo orden) y las columnas nuevas al final."""
+def combinar_normalizado(v1: pd.DataFrame, v3: pd.DataFrame, metricas: list[str], sufijo: str = "_v3",
+                         fuente: str = "V3") -> pd.DataFrame:
+    """v1: dataset normalizado actual (mismas filas y orden que v3); v3: columnas <m><sufijo>* (sufijo «_v3» en la
+    v3.0, «_v31» en la v3.1). Devuelve el esquema del v1 delante (mismo orden) y las columnas nuevas al final."""
     out = v1.reset_index(drop=True).copy()
     v3 = v3.reset_index(drop=True)
+    mapa = {k: x.replace("_v3", sufijo) for k, x in FUENTE_V3.items()}
     nuevas = {}
     for m in metricas:
-        if f"{m}_v3" not in v3:
+        if f"{m}{sufijo}" not in v3:
             continue
         nuevas[f"{m}_v1"] = out[m].copy() if m in out else None
         if f"{m}_am" in out:
             nuevas[f"{m}_am_v1"] = out[f"{m}_am"].copy()
         for suf in SUSTITUIR:
-            col, fuente = f"{m}{suf}", f"{m}{FUENTE_V3[suf]}"
-            if col in out and fuente in v3:
-                out[col] = v3[fuente].to_numpy()
+            col, origen = f"{m}{suf}", f"{m}{mapa[suf]}"
+            if col in out and origen in v3:
+                out[col] = v3[origen].to_numpy()
         for c in v3.columns:
             if c.startswith(f"{m}_v3"):
                 nuevas[c] = v3[c].to_numpy()
     if "fuente_norm" in out:
-        out["fuente_norm"] = "V3"
+        out["fuente_norm"] = fuente
     extra = pd.DataFrame({k: v for k, v in nuevas.items() if v is not None})
     return pd.concat([out, extra], axis=1)

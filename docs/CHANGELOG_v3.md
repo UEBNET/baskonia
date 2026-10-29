@@ -32,6 +32,19 @@ Regla suprema: **versionar, nunca sustituir**. La v1/v2 queda en `main` (y debí
 * `config/ESTILOS_VADE_OBSOLETOS.md`: deja constancia de que E01–E06 quedan desestimados en la v3 (sin tocar
   `config/estilos.json`).
 
+## v3.1 (30-10-2026) — combinación v2 + CVAE corregida
+
+* `configs/normalization_v31.yaml` y `bbnorm3/combinacion.py`. CLI:
+  `python -m bbnorm3 --config configs/normalization_v31.yaml {validar-combinada, ajustar-combinada}`.
+* CVAE con escala por liga fija (s_l = 1); mezcla caso a caso con `<m>_am` (w = 0,5 fijado de antemano); salvaguardas
+  (liga con < 2 temporadas o redes que discrepan → sólo v2); parte v2 con la anchura de F0 (covarianza completa).
+* Ajuste por conocimiento de la Tercera FEB (sobreajuste asumido por el CEO): w = 1,0 y anchura × 1,12.
+* Examen orientativo (cortes ya vistos): −3,3 % de MAE frente a `<m>_am` (IC −4,1 % a −2,5 %); con la regla fija,
+  −3,0 % (IC −3,5 % a −2,4 %). La puerta falla sólo por la cobertura del par Segunda → Tercera FEB (0,759 < 0,78).
+* Salidas en `data/modelos/v3_1/`. El selector de versión sigue en `v1`. Detalle en
+  `docs/normalizacion_v31_combinada.md`.
+* Cachés de redes: la huella ya no incluye `version`, `salida` ni `combinacion` (no cambian el entrenamiento).
+
 ### Sin cambios
 * `bbstats/`, `bbmodel/`, `bbfit/`, `bbestilo/`, `artifact/` y todas las salidas en `data/modelos/` de la v1/v2.
 

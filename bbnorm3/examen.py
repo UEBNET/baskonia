@@ -63,7 +63,8 @@ def unir(v3: pd.DataFrame, base: pd.DataFrame) -> pd.DataFrame:
     v3 = v3.assign(real_r=v3["real"].round(3))
     base = base.drop_duplicates(CLAVE, keep=False)
     v3 = v3.drop_duplicates(CLAVE, keep=False)
-    cols = CLAVE + ["mismo_percentil", "algoritmo_A", "dentro_80", "am", "F0", "dentro_80_am", "con_B"]
+    cols = CLAVE + [c for c in ["mismo_percentil", "algoritmo_A", "dentro_80", "am", "F0", "dentro_80_am", "con_B",
+                                "centro_t_F0", "sd_t_F0", "dentro_80_F0"] if c in base]
     return v3.merge(base[cols], on=CLAVE, how="inner")
 
 

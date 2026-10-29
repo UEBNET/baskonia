@@ -116,6 +116,7 @@ def predecir_cambios(conjunto: list[tuple[CVAE, Posterior]], D: Datos, tabla: pd
         yh, yo = muestras_traduccion(modelo, post, D, ps, cb, gb, np.ones(len(ps)), S, rng, V_obs=Vd)
         centros.append(yh.mean(1)); obs.append(yo)
     centro = np.mean(centros, 0)
+    entre = np.std(centros, 0)                  # discrepancia entre las redes del ensemble
     mezcla = np.concatenate(obs, 1)
     q10, q90 = np.quantile(mezcla, [0.1, 0.9], axis=1)
     sd = mezcla.std(1)
@@ -131,7 +132,8 @@ def predecir_cambios(conjunto: list[tuple[CVAE, Posterior]], D: Datos, tabla: pd
                           "v3": destransformar(cm + sm * centro[:, k], m.transf),
                           "v3_lo": destransformar(cm + sm * q10[:, k], m.transf),
                           "v3_hi": destransformar(cm + sm * q90[:, k], m.transf),
-                          "v3_centro_z": centro[:, k], "v3_sd_z": sd[:, k], "real_z": y_std,
+                          "v3_centro_z": centro[:, k], "v3_sd_z": sd[:, k], "v3_sd_entre_z": entre[:, k],
+                          "real_z": y_std,
                           "dentro_80_v3": (y_std >= q10[:, k]) & (y_std <= q90[:, k]),
                           "min_d": c["min_d"].to_numpy(float)})
         filas.append(f[ok])
