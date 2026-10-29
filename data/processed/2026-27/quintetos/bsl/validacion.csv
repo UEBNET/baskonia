@@ -25,3 +25,15 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 2939390,regular,30,24,1.0,0.4,0.0,0,0,,True,True,True,True,True,,True
 2939404,regular,51,24,4.0,1.0,3.0,6,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
 2939429,regular,50,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+2939483,regular,31,23,1.0,0.6,0.0,0,0,,True,True,True,True,True,,True
+2939522,regular,32,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+2939551,regular,41,24,9.0,1.6,0.0,0,0,,True,True,True,True,True,,True
+2939554,regular,31,24,3.0,0.6,0.0,0,0,,True,True,True,True,True,,True
+2943896,regular,31,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+2943903,regular,31,24,12.0,1.2,1.0,2,0,,True,True,True,True,True,,True
+2943904,regular,35,24,1.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+2943905,regular,31,24,68.0,7.2,5.0,3,2,actua_fuera_de_pista=2,False,True,True,True,True,,True
+2943906,regular,27,24,32.0,1.6,5.0,1,1,no_cinco_6=1,False,True,True,True,True,,True
+2943907,regular,38,24,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+2943908,regular,40,24,2.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+2943909,regular,35,24,50.0,4.8,2.0,2,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True

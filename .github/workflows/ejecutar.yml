@@ -21,6 +21,8 @@ jobs:
   ejecutar:
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      contents: write        # sólo para el paso «Commit de los datos» (ramas datos/…)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -56,3 +58,24 @@ jobs:
             data/raw
             data/artifact
             config/sources.json
+      # Commit de los datos (aprobado por el CEO, 29-10-2026). Sólo actúa si el workflow se lanza sobre una rama
+      # «datos/…» (nunca sobre main). Versiona lo mismo que el repo ya versiona (data/raw, data/processed salvo
+      # informes/, config/sources.json; data/artifact está en .gitignore). Ficheros > 95 MB no se suben (GitHub
+      # rechaza > 100 MB): se listan en el mensaje del commit.
+      - name: Commit de los datos
+        if: startsWith(github.ref_name, 'datos/')
+        env:
+          LIGAS: ${{ inputs.ligas }}
+          TEMPORADA: ${{ inputs.temporada }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898208+github-actions[bot]@users.noreply.github.com"
+          git add data/raw data/processed config/sources.json
+          GRANDES=$(git diff --cached --name-only -z | xargs -0 -r -I{} find {} -maxdepth 0 -type f -size +95M)
+          for f in $GRANDES; do git reset -q -- "$f"; done
+          if git diff --cached --quiet; then echo "Sin cambios que versionar"; exit 0; fi
+          MSG="Datos $TEMPORADA: extracción ${LIGAS:-todas las ligas} (run ${{ github.run_id }})"
+          if [ -n "$GRANDES" ]; then MSG="$MSG"$'\n\nNo subidos por superar 95 MB:\n'"$GRANDES"; fi
+          git commit -q -m "$MSG"
+          for i in 1 2 3; do git pull -q --rebase origin "${{ github.ref_name }}" && git push -q origin "HEAD:${{ github.ref_name }}" && exit 0; sleep 10; done
+          echo "No se pudo hacer push" && exit 1
