@@ -35,3 +35,12 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 2535758,regular,36,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,formato estructurado,True
 2535759,regular,45,22,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
 2535760,regular,57,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2535761,regular,39,23,8.0,0.8,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2535762,regular,33,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2535763,regular,41,24,0.0,0.0,0.0,0.0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2535764,regular,46,24,11.0,1.0,0.0,0.0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2535765,regular,36,24,0.0,0.0,0.0,0.0,4,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2535766,regular,49,24,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2535767,regular,51,23,23.0,5.3,0.0,0.0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2535768,regular,48,24,11.0,1.0,0.0,0.0,2,no_cinco_6=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2535769,regular,56,24,0.0,0.0,0.0,0.0,2,quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True

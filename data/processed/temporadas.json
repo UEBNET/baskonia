@@ -1,65 +1,69 @@
 {
-  "generado": "2026-10-22T18:24:55.394494+00:00",
+  "generado": "2026-10-29T14:02:09.915925+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
-      "generado": "2026-10-22T18:12:28.410304+00:00",
+      "generado": "2026-10-29T14:02:09.870273+00:00",
       "fases": [
         "regular",
         "total"
       ],
       "ligas": {
         "acb": {
-          "regular": 237,
-          "total": 237
+          "regular": 250,
+          "total": 250
         },
         "bbl": {
+          "regular": 247,
+          "total": 247
+        },
+        "bcl": {
+          "regular": 428,
+          "total": 428
+        },
+        "bsl": {
+          "regular": 255,
+          "total": 255
+        },
+        "eurocup": {
+          "regular": 411,
+          "total": 411
+        },
+        "euroleague": {
+          "regular": 288,
+          "total": 288
+        },
+        "feb1": {
           "regular": 237,
           "total": 237
         },
-        "bcl": {
-          "regular": 394,
-          "total": 394
-        },
-        "bsl": {
-          "regular": 246,
-          "total": 246
-        },
-        "eurocup": {
-          "regular": 385,
-          "total": 385
-        },
-        "euroleague": {
-          "regular": 269,
-          "total": 269
-        },
-        "feb1": {
-          "regular": 231,
-          "total": 231
-        },
         "feb2": {
-          "regular": 340,
-          "total": 340
+          "regular": 347,
+          "total": 347
         },
         "feb3": {
-          "regular": 1764,
-          "total": 1764
+          "regular": 1822,
+          "total": 1822
         },
         "fec": {
-          "regular": 590,
-          "total": 590
+          "regular": 619,
+          "total": 619
         },
         "gbl": {
-          "regular": 190,
-          "total": 190
+          "regular": 202,
+          "total": 202
         },
         "lba": {
-          "regular": 210,
-          "total": 210
+          "regular": 226,
+          "total": 226
         },
         "lnb": {
           "regular": 179,
           "total": 179
+        },
+        "nba": {
+          "regular": 425,
+          "total": 425
         }
       }
     },
