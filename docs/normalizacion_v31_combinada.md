@@ -49,6 +49,23 @@ cada una. **LECTURA** previa al examen: en el corte de selección (2022 → 23),
 |---|---|
 | `normalizado/<temporada>.csv.gz` | Esquema del v1 (mismas columnas y orden). Las columnas de estimación final (`<m>`, `_lo`, `_hi`, `_pctel`, `<m>_am`, `_am_lo`, `_am_hi`, `_am_pctel`) llevan la v3.1. Se conservan `<m>_v1` y `<m>_am_v1` (originales), las de la CVAE (`<m>_v3*`) y las propias (`<m>_v31`, `_v31_lo`, `_v31_hi`, `_v31_pctel`, `_v31_peso_cvae`) |
 | `niveles.csv`, `niveles_covarianza.csv.gz`, `traduccion_cruzada/`, `puentes.csv`, `ciclo.csv`, `resumen.json` | Los mismos ficheros de la v3.0 (§4 de su documento), con la CVAE corregida |
+
+Reglas del dataset normalizado, fila a fila (columna `fuente_v3` y `<m>_v31_peso_cvae`):
+* `posterior_conjunta`: fila del entrenamiento (≥ 100 min); combinación con w = 0,5 (Tercera FEB: w = 1, intervalo
+  × 1,12; redes que discrepan > 0,5 DT: w = 0).
+* `codificador`: fila con < 100 min; la CVAE la traduce con su codificador y el prior por nivel.
+* `codificador_nivel_temporada_anterior`: competición sin ninguna fila de entrenamiento (p. ej. la BCL 2026-27, en
+  la que nadie llega aún a 100 min). Usa el nivel y el entorno de la última temporada de esa liga, más el paso
+  aleatorio κ² de una temporada.
+* `solo_v1`: fila que la CVAE no traduce (jugador sin posición estimada); se conserva el valor v1 (w = 0).
+* Sólo CVAE (w = 1) si la fila no existe en el v1 o el v1 la calculó con otros partidos. Pasa en 2026-27: el v1 es del
+  14-10 y no se mezcla un valor viejo con uno nuevo.
+* Cruce con el v1 por (player_id, team_id, liga, temporada). Si falla, se cruza por nombre normalizado + equipo (los ids
+  de la BBL 2025-26 han cambiado de formato).
+* Comprobación: en la EuroLeague 2025-26 (la vara), la mediana traducida coincide con la observada (pts/100 21,7
+  frente a 21,1; PER 14,2 frente a 13,7). En el resto de ligas la CVAE sitúa los niveles algo más lejos de la
+  EuroLeague que la v2 (mediana de pts/100 de todas las filas: v2 16,6; CVAE 13,4; v3.1 15,0).
+
 | `validacion/examen_v31.json` | El examen de las tres variantes (§4) |
 | `validacion/casos_combinada.csv.gz`, `resumen_metricas_combinada.csv` | Casos y resumen por métrica de la variante con conocimiento |
 
@@ -94,7 +111,19 @@ diría nada sobre el futuro.
 * El único punto débil sigue siendo la incertidumbre en el escalón más bajo (Segunda ↔ Tercera FEB): el punto
   mejora, pero el intervalo se queda algo corto.
 
-## 5. Siguiente paso
+## 5. Ajuste final con todos los datos [DATO: `data/modelos/v3_1/`]
+* Niveles 2025-26 re-anclados con ACB = 0 (CVAE corregida, `niveles.csv`; entre paréntesis, la v2):
+  - pts/100: NBA +1,13 (+0,87); EuroLeague +0,20 (+0,14); EuroCup −0,21; BBL −0,28; FEC −0,41; Primera FEB
+    −1,08 (−0,90); Segunda FEB −1,88 (−1,89); Tercera FEB −3,20 (−3,20).
+  - PER: Tercera FEB −4,82 (−3,75).
+  - La Tercera FEB ya no se degenera.
+* Matriz cruzada (`traduccion_cruzada/`), con el efecto de quitar el doble conteo. Ejemplo, PER de Tercera FEB a
+  Primera FEB: sd 0,12 con la covarianza conjunta, frente a 0,17 sumando varianzas marginales.
+* Residuo de ciclo a → b → c → a: 0,07 DT de media (máximo 0,48) en los 455 triángulos de ligas de 2025-26.
+* Dataset normalizado: las mismas filas que el v1 en 2020-21 a 2025-26 (+2 a +5 filas por cruces nuevos) y 5.911
+  en 2026-27 (el v1 tenía 5.272, con datos hasta el 14-10).
+
+## 6. Siguiente paso
 Validar la regla (con los parámetros de conocimiento ya fijados) en el **examen limpio 2025-26 → 2026-27** cuando
 la temporada en curso tenga suficientes minutos, sin volver a tocar nada. Si pasa la puerta, se activa
 `version_activa: v3` en `configs/version.yaml` y se regenera aguas abajo (fases 4 y 5 del encargo).
