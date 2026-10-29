@@ -9,7 +9,8 @@ temporada (por defecto la de `config/sources.json → temporada_por_defecto`, ho
      reutiliza el último bruto guardado y sólo pide a la web lo que falta (los adaptadores FEB, FIBA web y
      FIBA LiveStats guardan además paquetes incrementales sólo con los partidos nuevos).
   2. Entrenadores por partido y tramos club-temporada-entrenador (`bbstats.entrenadores.ejecutar`).
-  3. Informes FEB (cobertura, posesiones, contrato) si entra alguna liga FEB (`bbstats.feb_informe`).
+  3. Informes FEB (cobertura, posesiones, contrato) si entra alguna liga FEB (`bbstats.feb_informe`; se rehacen
+     sobre todas las temporadas, sin red, para que las filas agregadas «todas» sigan siendo correctas).
   4. JSON del Artifact para esa temporada (`bbstats.pipeline.export_artifact`, no versionado).
   5. Foto «después», comparación y comprobaciones (esquema de 480 columnas, ligas sin partidos, última
      fecha atrasada, errores de cada liga).
@@ -233,7 +234,8 @@ def actualizar(temporada: str | None = None, ligas: list[str] | None = None, des
             if feb:
                 from bbstats import feb_informe
                 try:
-                    feb_informe.ejecutar(ligas=feb, temporadas=[t], config=cfg, progreso=progreso)
+                    # todas las temporadas (sin red): las filas agregadas «todas» de los informes FEB las necesitan
+                    feb_informe.ejecutar(ligas=feb, temporadas=None, config=cfg, progreso=progreso)
                     informe["pasos"]["feb_informes"] = {"ligas": feb}
                 except Exception as exc:  # noqa: BLE001
                     informe["pasos"]["feb_informes"] = {"error": f"{type(exc).__name__}: {exc}"}

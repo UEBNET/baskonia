@@ -16,7 +16,7 @@ sin tocar su código (`bbstats/`) ni otras temporadas.
 | 0. Foto «antes» | lectura de `data/processed/<t>/` (sin red) | partidos, última fecha, jugadores, equipos por liga |
 | 1. Descarga delta + procesado | `bbstats.api.ejecutar(temporada=t)` | brutos nuevos en `data/raw/<liga>/<t>/`, `data/processed/<t>/ligas/*.csv` (480 columnas, fases regular/playoffs/total), quintetos, parejas, tríos, tiros, on/off en `quintetos/<liga>/` |
 | 2. Entrenadores | `bbstats.entrenadores.ejecutar(temporadas=[t])` | `data/processed/<t>/entrenadores/<liga>_partidos.csv` y `_tramos.csv` |
-| 3. Informes FEB | `bbstats.feb_informe.ejecutar` (si entra feb1/feb2/feb3) | `data/processed/<t>/feb/` |
+| 3. Informes FEB | `bbstats.feb_informe.ejecutar` (si entra feb1/feb2/feb3; todas las temporadas, sin red, para que las filas «todas» sigan bien) | `data/processed/<t>/feb/`, `data/processed/feb_*.csv` |
 | 4. JSON del artifact | `bbstats.pipeline.export_artifact` | `data/artifact/<t>/` (no versionado) |
 | 5. Foto «después» y control | comparación + comprobaciones | informe JSON y tabla |
 
