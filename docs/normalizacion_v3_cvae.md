@@ -95,7 +95,8 @@ con ≤ 2023 (que son los casos del corte 2023, no los del 2024).
 El encargo pide elegir K «solo con el corte 2022-23 → 2023-24, sin mirar el examen». Ese corte se usó para **todas**
 las decisiones de diseño. Como el corte no tiene líneas base versionadas, se recalcularon A, el amortiguado y B con
 ≤ 2022 con los mismos procedimientos (`bbmodel validar`, `amortiguar --validar`, `validar-b`). Resultados en
-`data/modelos/v3/validacion/seleccion_2022.csv` (MAE medio de la v3 relativo a `<m>_am`, 1-3 semillas):
+`data/modelos/v3/validacion/seleccion_2022.csv` (MAE medio de la v3 relativo a `<m>_am`, 1-3 semillas). Esos ensayos
+se hicieron con un guion de desarrollo sobre la tabla de `main` (idéntica a la actual para ≤ 2022). `python -m bbnorm3 elegir-k` reproduce la parte de K, pero no se ha vuelto a ejecutar:
 
 **DATO** (`seleccion_2022.csv`; 7.653 predicciones, 33 métricas; «v3/am» = MAE medio de la v3 relativo a `<m>_am`,
 media de las 33 métricas; negativo = mejor):
@@ -192,8 +193,11 @@ en el aro (−4 %) y de media distancia (−4 %); queda igual en triples de esqu
 
 1. **Escala por liga acotada o fija** (s_l = 1, o |log s_l| ≤ 0,5 con una parametrización acotada en lugar de un prior
    débil). Ya está implementado como opción: `prior.escala_por_liga: false`. Hay un diagnóstico **post hoc** en el
-   corte 2023 en `validacion/diagnostico_posthoc/` (ver el informe). **No vale como examen**, porque la variante se
-   eligió después de ver el resultado.
+   corte 2023 en `validacion/diagnostico_posthoc/`. **No vale como examen**, porque la variante se eligió después de
+   ver el resultado. **DATO** (post hoc, corte 2023, 5 semillas, misma recalibración): v3 con s_l = 1 frente a
+   `<m>_am` +7,5 % (IC +4,9 % a +10,2 %), frente al +29,6 % de la v3.0. Por grupo: FEB +16 % (antes +80 %), Europa
+   +3,3 %, EuroLeague +5,1 %, NBA/G League +1,1 %; cobertura 0,760 (FEB 0,59). **LECTURA:** quitar la escala
+   degenerada corrige la mayor parte del fallo, pero en el corte 2023 la v3 sigue sin superar a `<m>_am`.
 2. **Examen limpio para la v3.1.** Como los cortes 2023 y 2024 ya se han visto, la v3.1 debería validarse en un corte
    nuevo: 2025-26 → 2026-27 cuando la temporada en curso tenga suficientes minutos (≥ 300 por jugador, hacia
    enero-febrero de 2027). Otra opción es que el CEO acepte, de forma explícita, reutilizar los cortes actuales
