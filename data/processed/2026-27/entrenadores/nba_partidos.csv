@@ -1,0 +1,137 @@
+liga,temporada,game_id,fecha,fase,equipo_id,equipo,rival_id,local,puntos,puntos_rival,resultado,entrenador,entrenador_id,entrenador_id_fuente,fuente,metodo,imputado,validacion_vd
+nba,2026-27,0022600001,2026-10-20,regular,DET,Detroit Pistons,BOS,1,121.0,113.0,V,J.B. Bickerstaff,j-b-bickerstaff,bref:bickejb01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600001,2026-10-20,regular,BOS,Boston Celtics,DET,0,113.0,121.0,D,Joe Mazzulla,joe-mazzulla,bref:mazzujo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600002,2026-10-20,regular,NYK,New York Knicks,PHI,1,100.0,106.0,D,Mike Brown,mike-brown,bref:brownmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600002,2026-10-20,regular,PHI,Philadelphia 76ers,NYK,0,106.0,100.0,V,Nick Nurse,nick-nurse,bref:nurseni01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600003,2026-10-20,regular,SAS,San Antonio Spurs,OKC,1,104.0,116.0,D,Mitch Johnson,mitch-johnson,bref:johnsmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600003,2026-10-20,regular,OKC,Oklahoma City Thunder,SAS,0,116.0,104.0,V,Mark Daigneault,mark-daigneault,bref:daignma99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600004,2026-10-21,regular,MIA,Miami Heat,MIN,1,106.0,131.0,D,Erik Spoelstra,erik-spoelstra,bref:spoeler99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600004,2026-10-21,regular,MIN,Minnesota Timberwolves,MIA,0,131.0,106.0,V,Chris Finch,chris-finch,bref:finchch01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600005,2026-10-21,regular,LAL,Los Angeles Lakers,GSW,1,127.0,105.0,V,JJ Redick,jj-redick,bref:redicjj01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600005,2026-10-21,regular,GSW,Golden State Warriors,LAL,0,105.0,127.0,D,Steve Kerr,steve-kerr,bref:kerrst01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600085,2026-10-21,regular,ORL,Orlando Magic,ATL,1,125.0,132.0,D,Sean Sweeney,sean-sweeney,bref:sweense01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600085,2026-10-21,regular,ATL,Atlanta Hawks,ORL,0,132.0,125.0,V,Quin Snyder,quin-snyder,bref:snydequ01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600086,2026-10-21,regular,WAS,Washington Wizards,MIL,1,128.0,116.0,V,Brian Keefe,brian-keefe,bref:keefebr01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600086,2026-10-21,regular,MIL,Milwaukee Bucks,WAS,0,116.0,128.0,D,Taylor Jenkins,taylor-jenkins,bref:jenkita01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600087,2026-10-21,regular,BRK,Brooklyn Nets,CHO,1,103.0,110.0,D,Jordi Fernández Torres,jordi-fernandez-torres,bref:fernajo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600087,2026-10-21,regular,CHO,Charlotte Hornets,BRK,0,110.0,103.0,V,Charles Lee,charles-lee,bref:leech01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600088,2026-10-21,regular,TOR,Toronto Raptors,CHI,1,135.0,92.0,V,Darko Rajakovic,darko-rajakovic,bref:rajakda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600088,2026-10-21,regular,CHI,Chicago Bulls,TOR,0,92.0,135.0,D,Tiago Splitter,tiago-splitter,bref:splitti01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600089,2026-10-21,regular,MEM,Memphis Grizzlies,UTA,1,123.0,103.0,V,Tuomas Iisalo,tuomas-iisalo,bref:iisaltu01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600089,2026-10-21,regular,UTA,Utah Jazz,MEM,0,103.0,123.0,D,Will Hardy,will-hardy,bref:hardywi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600090,2026-10-21,regular,NOP,New Orleans Pelicans,IND,1,120.0,123.0,D,Jamahl Mosley,jamahl-mosley,bref:mosleja01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600090,2026-10-21,regular,IND,Indiana Pacers,NOP,0,123.0,120.0,V,Rick Carlisle,rick-carlisle,bref:carliri01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600091,2026-10-21,regular,HOU,Houston Rockets,DAL,1,128.0,110.0,V,Ime Udoka,ime-udoka,bref:udokaim01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600091,2026-10-21,regular,DAL,Dallas Mavericks,HOU,0,110.0,128.0,D,Dusty May,dusty-may,bref:maydu99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600092,2026-10-21,regular,POR,Portland Trail Blazers,PHO,1,124.0,83.0,V,Micah Nori,micah-nori,bref:norimi01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600092,2026-10-21,regular,PHO,Phoenix Suns,POR,0,83.0,124.0,D,Jordan Ott,jordan-ott,bref:ottjo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600093,2026-10-21,regular,LAC,Los Angeles Clippers,SAC,1,121.0,96.0,V,Tyronn Lue,tyronn-lue,bref:luety01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600093,2026-10-21,regular,SAC,Sacramento Kings,LAC,0,96.0,121.0,D,Doug Christie,doug-christie,bref:chrisdo01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600006,2026-10-22,regular,PHI,Philadelphia 76ers,CLE,1,114.0,106.0,V,Nick Nurse,nick-nurse,bref:nurseni01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600006,2026-10-22,regular,CLE,Cleveland Cavaliers,PHI,0,106.0,114.0,D,Kenny Atkinson,kenny-atkinson,bref:atkinke01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600007,2026-10-22,regular,OKC,Oklahoma City Thunder,DEN,1,96.0,84.0,V,Mark Daigneault,mark-daigneault,bref:daignma99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600007,2026-10-22,regular,DEN,Denver Nuggets,OKC,0,84.0,96.0,D,David Adelman,david-adelman,bref:adelmda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600008,2026-10-23,regular,BOS,Boston Celtics,NYK,1,107.0,103.0,V,Joe Mazzulla,joe-mazzulla,bref:mazzujo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600008,2026-10-23,regular,NYK,New York Knicks,BOS,0,103.0,107.0,D,Mike Brown,mike-brown,bref:brownmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600009,2026-10-23,regular,SAS,San Antonio Spurs,HOU,1,110.0,114.0,D,Mitch Johnson,mitch-johnson,bref:johnsmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600009,2026-10-23,regular,HOU,Houston Rockets,SAS,0,114.0,110.0,V,Ime Udoka,ime-udoka,bref:udokaim01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600094,2026-10-23,regular,CHO,Charlotte Hornets,ATL,1,81.0,128.0,D,Charles Lee,charles-lee,bref:leech01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600094,2026-10-23,regular,ATL,Atlanta Hawks,CHO,0,128.0,81.0,V,Quin Snyder,quin-snyder,bref:snydequ01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600095,2026-10-23,regular,IND,Indiana Pacers,DAL,1,105.0,121.0,D,Rick Carlisle,rick-carlisle,bref:carliri01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600095,2026-10-23,regular,DAL,Dallas Mavericks,IND,0,121.0,105.0,V,Dusty May,dusty-may,bref:maydu99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600096,2026-10-23,regular,ORL,Orlando Magic,MIN,1,93.0,115.0,D,Sean Sweeney,sean-sweeney,bref:sweense01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600096,2026-10-23,regular,MIN,Minnesota Timberwolves,ORL,0,115.0,93.0,V,Chris Finch,chris-finch,bref:finchch01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600097,2026-10-23,regular,WAS,Washington Wizards,TOR,1,102.0,112.0,D,Brian Keefe,brian-keefe,bref:keefebr01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600097,2026-10-23,regular,TOR,Toronto Raptors,WAS,0,112.0,102.0,V,Darko Rajakovic,darko-rajakovic,bref:rajakda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600098,2026-10-23,regular,MIA,Miami Heat,DET,1,111.0,128.0,D,Erik Spoelstra,erik-spoelstra,bref:spoeler99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600098,2026-10-23,regular,DET,Detroit Pistons,MIA,0,128.0,111.0,V,J.B. Bickerstaff,j-b-bickerstaff,bref:bickejb01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600099,2026-10-23,regular,MIL,Milwaukee Bucks,CHI,1,125.0,132.0,D,Taylor Jenkins,taylor-jenkins,bref:jenkita01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600099,2026-10-23,regular,CHI,Chicago Bulls,MIL,0,132.0,125.0,V,Tiago Splitter,tiago-splitter,bref:splitti01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600100,2026-10-23,regular,UTA,Utah Jazz,NOP,1,120.0,119.0,V,Will Hardy,will-hardy,bref:hardywi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600100,2026-10-23,regular,NOP,New Orleans Pelicans,UTA,0,119.0,120.0,D,Jamahl Mosley,jamahl-mosley,bref:mosleja01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600101,2026-10-23,regular,GSW,Golden State Warriors,MEM,1,108.0,111.0,D,Steve Kerr,steve-kerr,bref:kerrst01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600101,2026-10-23,regular,MEM,Memphis Grizzlies,GSW,0,111.0,108.0,V,Tuomas Iisalo,tuomas-iisalo,bref:iisaltu01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600102,2026-10-23,regular,LAL,Los Angeles Lakers,LAC,1,125.0,117.0,V,JJ Redick,jj-redick,bref:redicjj01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600102,2026-10-23,regular,LAC,Los Angeles Clippers,LAL,0,117.0,125.0,D,Tyronn Lue,tyronn-lue,bref:luety01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600103,2026-10-23,regular,SAC,Sacramento Kings,POR,1,120.0,128.0,D,Doug Christie,doug-christie,bref:chrisdo01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600103,2026-10-23,regular,POR,Portland Trail Blazers,SAC,0,128.0,120.0,V,Micah Nori,micah-nori,bref:norimi01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600104,2026-10-24,regular,CHO,Charlotte Hornets,MIA,1,115.0,110.0,V,Charles Lee,charles-lee,bref:leech01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600104,2026-10-24,regular,MIA,Miami Heat,CHO,0,110.0,115.0,D,Erik Spoelstra,erik-spoelstra,bref:spoeler99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600105,2026-10-24,regular,CLE,Cleveland Cavaliers,BRK,1,125.0,121.0,V,Kenny Atkinson,kenny-atkinson,bref:atkinke01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600105,2026-10-24,regular,BRK,Brooklyn Nets,CLE,0,121.0,125.0,D,Jordi Fernández Torres,jordi-fernandez-torres,bref:fernajo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600106,2026-10-24,regular,PHI,Philadelphia 76ers,MIL,1,127.0,116.0,V,Nick Nurse,nick-nurse,bref:nurseni01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600106,2026-10-24,regular,MIL,Milwaukee Bucks,PHI,0,116.0,127.0,D,Taylor Jenkins,taylor-jenkins,bref:jenkita01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600107,2026-10-24,regular,ATL,Atlanta Hawks,HOU,1,114.0,121.0,D,Quin Snyder,quin-snyder,bref:snydequ01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600107,2026-10-24,regular,HOU,Houston Rockets,ATL,0,121.0,114.0,V,Ime Udoka,ime-udoka,bref:udokaim01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600108,2026-10-24,regular,CHI,Chicago Bulls,WAS,1,120.0,124.0,D,Tiago Splitter,tiago-splitter,bref:splitti01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600108,2026-10-24,regular,WAS,Washington Wizards,CHI,0,124.0,120.0,V,Brian Keefe,brian-keefe,bref:keefebr01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600109,2026-10-24,regular,DAL,Dallas Mavericks,SAS,1,106.0,122.0,D,Dusty May,dusty-may,bref:maydu99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600109,2026-10-24,regular,SAS,San Antonio Spurs,DAL,0,122.0,106.0,V,Mitch Johnson,mitch-johnson,bref:johnsmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600110,2026-10-24,regular,DEN,Denver Nuggets,NOP,1,141.0,135.0,V,David Adelman,david-adelman,bref:adelmda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600110,2026-10-24,regular,NOP,New Orleans Pelicans,DEN,0,135.0,141.0,D,Jamahl Mosley,jamahl-mosley,bref:mosleja01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600111,2026-10-24,regular,PHO,Phoenix Suns,GSW,1,131.0,122.0,V,Jordan Ott,jordan-ott,bref:ottjo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600111,2026-10-24,regular,GSW,Golden State Warriors,PHO,0,122.0,131.0,D,Steve Kerr,steve-kerr,bref:kerrst01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600112,2026-10-25,regular,UTA,Utah Jazz,LAL,1,123.0,132.0,D,Will Hardy,will-hardy,bref:hardywi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600112,2026-10-25,regular,LAL,Los Angeles Lakers,UTA,0,132.0,123.0,V,JJ Redick,jj-redick,bref:redicjj01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600113,2026-10-25,regular,BRK,Brooklyn Nets,IND,1,109.0,136.0,D,Jordi Fernández Torres,jordi-fernandez-torres,bref:fernajo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600113,2026-10-25,regular,IND,Indiana Pacers,BRK,0,136.0,109.0,V,Rick Carlisle,rick-carlisle,bref:carliri01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600114,2026-10-25,regular,NYK,New York Knicks,ORL,1,102.0,111.0,D,Mike Brown,mike-brown,bref:brownmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600114,2026-10-25,regular,ORL,Orlando Magic,NYK,0,111.0,102.0,V,Sean Sweeney,sean-sweeney,bref:sweense01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600115,2026-10-25,regular,MIN,Minnesota Timberwolves,TOR,1,117.0,94.0,V,Chris Finch,chris-finch,bref:finchch01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600115,2026-10-25,regular,TOR,Toronto Raptors,MIN,0,94.0,117.0,D,Darko Rajakovic,darko-rajakovic,bref:rajakda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600116,2026-10-25,regular,OKC,Oklahoma City Thunder,LAC,1,108.0,101.0,V,Mark Daigneault,mark-daigneault,bref:daignma99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600116,2026-10-25,regular,LAC,Los Angeles Clippers,OKC,0,101.0,108.0,D,Tyronn Lue,tyronn-lue,bref:luety01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600117,2026-10-25,regular,PHI,Philadelphia 76ers,DET,1,93.0,106.0,D,Nick Nurse,nick-nurse,bref:nurseni01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600117,2026-10-25,regular,DET,Detroit Pistons,PHI,0,106.0,93.0,V,J.B. Bickerstaff,j-b-bickerstaff,bref:bickejb01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600118,2026-10-25,regular,SAC,Sacramento Kings,MEM,1,112.0,123.0,D,Doug Christie,doug-christie,bref:chrisdo01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600118,2026-10-25,regular,MEM,Memphis Grizzlies,SAC,0,123.0,112.0,V,Tuomas Iisalo,tuomas-iisalo,bref:iisaltu01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600119,2026-10-26,regular,CHO,Charlotte Hornets,WAS,1,110.0,103.0,V,Charles Lee,charles-lee,bref:leech01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600119,2026-10-26,regular,WAS,Washington Wizards,CHO,0,103.0,110.0,D,Brian Keefe,brian-keefe,bref:keefebr01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600120,2026-10-26,regular,CLE,Cleveland Cavaliers,MIN,1,127.0,125.0,V,Kenny Atkinson,kenny-atkinson,bref:atkinke01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600120,2026-10-26,regular,MIN,Minnesota Timberwolves,CLE,0,125.0,127.0,D,Chris Finch,chris-finch,bref:finchch01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600121,2026-10-26,regular,BOS,Boston Celtics,CHI,1,134.0,99.0,V,Joe Mazzulla,joe-mazzulla,bref:mazzujo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600121,2026-10-26,regular,CHI,Chicago Bulls,BOS,0,99.0,134.0,D,Tiago Splitter,tiago-splitter,bref:splitti01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600122,2026-10-26,regular,MIA,Miami Heat,DAL,1,109.0,113.0,D,Erik Spoelstra,erik-spoelstra,bref:spoeler99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600122,2026-10-26,regular,DAL,Dallas Mavericks,MIA,0,113.0,109.0,V,Dusty May,dusty-may,bref:maydu99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600123,2026-10-26,regular,MIL,Milwaukee Bucks,IND,1,110.0,102.0,V,Taylor Jenkins,taylor-jenkins,bref:jenkita01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600123,2026-10-26,regular,IND,Indiana Pacers,MIL,0,102.0,110.0,D,Rick Carlisle,rick-carlisle,bref:carliri01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600124,2026-10-26,regular,OKC,Oklahoma City Thunder,PHO,1,125.0,114.0,V,Mark Daigneault,mark-daigneault,bref:daignma99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600124,2026-10-26,regular,PHO,Phoenix Suns,OKC,0,114.0,125.0,D,Jordan Ott,jordan-ott,bref:ottjo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600125,2026-10-26,regular,HOU,Houston Rockets,ATL,1,120.0,110.0,V,Ime Udoka,ime-udoka,bref:udokaim01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600125,2026-10-26,regular,ATL,Atlanta Hawks,HOU,0,110.0,120.0,D,Quin Snyder,quin-snyder,bref:snydequ01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600126,2026-10-26,regular,UTA,Utah Jazz,MEM,1,105.0,110.0,D,Will Hardy,will-hardy,bref:hardywi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600126,2026-10-26,regular,MEM,Memphis Grizzlies,UTA,0,110.0,105.0,V,Tuomas Iisalo,tuomas-iisalo,bref:iisaltu01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600127,2026-10-26,regular,DEN,Denver Nuggets,GSW,1,114.0,134.0,D,David Adelman,david-adelman,bref:adelmda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600127,2026-10-26,regular,GSW,Golden State Warriors,DEN,0,134.0,114.0,V,Steve Kerr,steve-kerr,bref:kerrst01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600128,2026-10-27,regular,BOS,Boston Celtics,BRK,1,125.0,124.0,V,Joe Mazzulla,joe-mazzulla,bref:mazzujo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600128,2026-10-27,regular,BRK,Brooklyn Nets,BOS,0,124.0,125.0,D,Jordi Fernández Torres,jordi-fernandez-torres,bref:fernajo99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600129,2026-10-27,regular,NYK,New York Knicks,DET,1,111.0,97.0,V,Mike Brown,mike-brown,bref:brownmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600129,2026-10-27,regular,DET,Detroit Pistons,NYK,0,97.0,111.0,D,J.B. Bickerstaff,j-b-bickerstaff,bref:bickejb01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600130,2026-10-27,regular,SAS,San Antonio Spurs,SAC,1,130.0,103.0,V,Mitch Johnson,mitch-johnson,bref:johnsmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600130,2026-10-27,regular,SAC,Sacramento Kings,SAS,0,103.0,130.0,D,Doug Christie,doug-christie,bref:chrisdo01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600131,2026-10-27,regular,LAL,Los Angeles Lakers,POR,1,129.0,136.0,D,JJ Redick,jj-redick,bref:redicjj01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600131,2026-10-27,regular,POR,Portland Trail Blazers,LAL,0,136.0,129.0,V,Micah Nori,micah-nori,bref:norimi01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600132,2026-10-28,regular,ATL,Atlanta Hawks,MIA,1,117.0,129.0,D,Quin Snyder,quin-snyder,bref:snydequ01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600132,2026-10-28,regular,MIA,Miami Heat,ATL,0,129.0,117.0,V,Erik Spoelstra,erik-spoelstra,bref:spoeler99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600133,2026-10-28,regular,CLE,Cleveland Cavaliers,WAS,1,121.0,111.0,V,Kenny Atkinson,kenny-atkinson,bref:atkinke01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600133,2026-10-28,regular,WAS,Washington Wizards,CLE,0,111.0,121.0,D,Brian Keefe,brian-keefe,bref:keefebr01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600134,2026-10-28,regular,DET,Detroit Pistons,CHO,1,97.0,89.0,V,J.B. Bickerstaff,j-b-bickerstaff,bref:bickejb01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600134,2026-10-28,regular,CHO,Charlotte Hornets,DET,0,89.0,97.0,D,Charles Lee,charles-lee,bref:leech01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600135,2026-10-28,regular,IND,Indiana Pacers,PHI,1,109.0,114.0,D,Rick Carlisle,rick-carlisle,bref:carliri01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600135,2026-10-28,regular,PHI,Philadelphia 76ers,IND,0,114.0,109.0,V,Nick Nurse,nick-nurse,bref:nurseni01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600136,2026-10-28,regular,TOR,Toronto Raptors,ORL,1,129.0,99.0,V,Darko Rajakovic,darko-rajakovic,bref:rajakda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600136,2026-10-28,regular,ORL,Orlando Magic,TOR,0,99.0,129.0,D,Sean Sweeney,sean-sweeney,bref:sweense01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600137,2026-10-28,regular,CHI,Chicago Bulls,NYK,1,127.0,133.0,D,Tiago Splitter,tiago-splitter,bref:splitti01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600137,2026-10-28,regular,NYK,New York Knicks,CHI,0,133.0,127.0,V,Mike Brown,mike-brown,bref:brownmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600138,2026-10-28,regular,MIL,Milwaukee Bucks,HOU,1,100.0,132.0,D,Taylor Jenkins,taylor-jenkins,bref:jenkita01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600138,2026-10-28,regular,HOU,Houston Rockets,MIL,0,132.0,100.0,V,Ime Udoka,ime-udoka,bref:udokaim01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600139,2026-10-28,regular,MIN,Minnesota Timberwolves,GSW,1,114.0,119.0,D,Chris Finch,chris-finch,bref:finchch01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600139,2026-10-28,regular,GSW,Golden State Warriors,MIN,0,119.0,114.0,V,Steve Kerr,steve-kerr,bref:kerrst01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600140,2026-10-28,regular,NOP,New Orleans Pelicans,DEN,1,91.0,104.0,D,Jamahl Mosley,jamahl-mosley,bref:mosleja01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600140,2026-10-28,regular,DEN,Denver Nuggets,NOP,0,104.0,91.0,V,David Adelman,david-adelman,bref:adelmda01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600141,2026-10-28,regular,UTA,Utah Jazz,SAS,1,111.0,117.0,D,Will Hardy,will-hardy,bref:hardywi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600141,2026-10-28,regular,SAS,San Antonio Spurs,UTA,0,117.0,111.0,V,Mitch Johnson,mitch-johnson,bref:johnsmi99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600142,2026-10-28,regular,DAL,Dallas Mavericks,OKC,1,120.0,96.0,V,Dusty May,dusty-may,bref:maydu99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600142,2026-10-28,regular,OKC,Oklahoma City Thunder,DAL,0,96.0,120.0,D,Mark Daigneault,mark-daigneault,bref:daignma99c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600143,2026-10-28,regular,LAC,Los Angeles Clippers,LAL,1,87.0,103.0,D,Tyronn Lue,tyronn-lue,bref:luety01c,basketball-reference.com,orden_vd,0,ok
+nba,2026-27,0022600143,2026-10-28,regular,LAL,Los Angeles Lakers,LAC,0,103.0,87.0,V,JJ Redick,jj-redick,bref:redicjj01c,basketball-reference.com,orden_vd,0,ok
