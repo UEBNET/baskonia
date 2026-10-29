@@ -97,7 +97,33 @@ las decisiones de diseño. Como el corte no tiene líneas base versionadas, se r
 ≤ 2022 con los mismos procedimientos (`bbmodel validar`, `amortiguar --validar`, `validar-b`). Resultados en
 `data/modelos/v3/validacion/seleccion_2022.csv` (MAE medio de la v3 relativo a `<m>_am`, 1-3 semillas):
 
-(se completa con los resultados: ver §5)
+**DATO** (`seleccion_2022.csv`; 7.653 predicciones, 33 métricas; «v3/am» = MAE medio de la v3 relativo a `<m>_am`,
+media de las 33 métricas; negativo = mejor):
+
+| Variante | Semillas | v3/am | a la EuroLeague | FEB (13 personas) | resto de Europa |
+|---|---|---|---|---|---|
+| Sin factor específico, η = 0,15 | 1 | +3,0 % | +1,8 % | +26 % | +2,6 % |
+| Sin factor específico, η = 0,03 | 1 | +2,5 % | +0,3 % | +46 % | +1,1 % |
+| K = 4 | 1 | +10,3 % | +5,8 % | +57 % | +10,8 % |
+| K = 12 | 1 | +3,0 % | −0,1 % | +44 % | +2,7 % |
+| Sin factor específico, ensemble | 3 | +2,9 % | −0,5 % | +42 % | +2,4 % |
+| Inferencia semi-amortizada (refinada) | 3 | +4,2 % | 0,0 % | +64 % | +2,0 % |
+| **Con factor específico** ζ, η = 0,03 | 3 | +0,5 % | −2,5 % | +43 % | −0,6 % |
+| Con ζ, η = 0,08, acotado al soporte ← **elegida** | 2 | −0,1 % | −2,6 % | +33 % | 0,0 % |
+| Con ζ, η = 0,15, acotado al soporte | 2 | +0,2 % | −2,6 % | +27 % | −0,1 % |
+| Con ζ, 4.000 pasos (sin acotar) | 2 | +6,1 % | −3,7 % | +152 % | −0,2 % |
+
+**LECTURA.**
+* La v3 sin factor específico ya era **mejor que cada modelo de la v2 por separado** (en el mismo corte: A +3,9 %,
+  B +6,2 %, A amortiguado +5,3 % frente a `<m>_am`). `<m>_am` gana porque promedia dos modelos distintos (A y B).
+* Lo que le faltaba a la v3 es lo que aporta el A: la parte de cada métrica que es propia del jugador. Un latente
+  común de 8 dimensiones no recoge, por ejemplo, el TL% de un tirador. El **factor específico persona × métrica**
+  (unicidad del análisis factorial) recupera unos 2,5 puntos.
+* K = 4 se queda corto; K = 12 no mejora a K = 8 → **K = 8**.
+* El grupo FEB del corte de selección son 13 personas (en 2022-23 sólo existe la Primera FEB) y lo domina un caso
+  extremo: un pívot de 2,20 m de Primera FEB al que el decodificador, sin freno, llevaba en la ACB a un TS% > 100. De
+  ahí el **acotado al soporte**: el valor traducido no puede salir del rango observado en la liga de destino ± 0,25
+  DT. Con tan pocos casos, este corte no permite afinar la FEB (ver limitaciones).
 
 ## 4. Salidas (`data/modelos/v3/`)
 
@@ -112,6 +138,73 @@ las decisiones de diseño. Como el corte no tiene líneas base versionadas, se r
 | `validacion/` | examen, líneas base, calibración, puerta de control, dejar fuera una liga, elección de K |
 | `resumen.json` | configuración, escalas por liga, ω² del factor específico, ponderación de selección |
 
-## 5. Validación (puerta de control)
+## 5. Validación (puerta de control): **NO SE CUMPLE**
 
-(se completa con los resultados del examen)
+Examen idéntico al de la v1/v2: se ajusta con ≤ t y se predice t+1 de quien cambia de liga con ≥ 300 minutos en
+ambas, en los cortes 2023 → 24 y 2024 → 25. La CVAE se **reentrena en cada corte** (5 semillas). Son 22.254
+predicciones de 722 persona-cortes, emparejadas caso a caso con las líneas base. Ficheros en
+`data/modelos/v3/validacion/` (`puerta.json`, `resumen_metricas.csv`, `casos.csv.gz`, `diagnostico_por_corte.json`).
+
+### 5.1 Criterios del CEO [DATO]
+| Criterio | Resultado | ¿Cumple? |
+|---|---|---|
+| 1. MAE medio mejor que `<m>_am`, con un IC 95 % bootstrap por persona de la diferencia que excluya el 0 | **+12,6 %** (IC +8,2 % a +16,9 %): **peor** | **No** |
+| 2. Cobertura del 80 % entre 0,78 y 0,85 en grupos con ≥ 30 casos | media 0,790; 2 de los 5 pares origen → destino con ≥ 30 personas fuera de rango (Segunda → Tercera FEB 0,71; Tercera → Segunda FEB 0,65; en 2023 sólo, 0,34) y 11 de 33 métricas fuera | **No** |
+| 3. No empeorar en las llegadas a la EuroLeague | +1,7 % (IC −1,1 % a +4,8 %) | **No** (empate estadístico, pero la estimación es peor) |
+
+Otras comparaciones (media de 33 métricas): v3 frente a «mismo percentil» −0,5 %; frente a F0 +9,1 %. Como
+referencia, `<m>_am` frente a «mismo percentil» −11,3 % y F0 frente a `<m>_am` +3,3 %. Cobertura del 80 %: v3 0,790
+(recalibrada; 0,833 sin recalibrar), `<m>_am` 0,842, F0 0,832.
+
+### 5.2 Por corte y grupo [DATO]
+| Corte | v3 frente a `<m>_am` (IC 95 %) | A la EuroLeague | FEB | Resto de Europa | NBA / G League | Cobertura v3 / `<m>_am` / F0 |
+|---|---|---|---|---|---|---|
+| 2023 → 24 | **+29,6 %** (+22,3 %, +37,4 %) | +5,1 % | **+80,0 %** | +2,7 % | +0,2 % | 0,737 / 0,844 / 0,832 |
+| 2024 → 25 | **−5,0 %** (−6,5 %, −3,4 %) | +0,1 % | −9,2 % | −2,5 % | −3,4 % | 0,845 / 0,839 / 0,832 |
+
+Cobertura por grupo en 2024 (v3): EuroLeague 0,757, resto de Europa 0,803, FEB 0,988 (demasiado ancha), NBA/G League
+0,773. Por métrica (los dos cortes): la v3 mejora en RAPM (−17 %), RAPM ofensivo (−7 %), % de tiros cortos (−8 %),
+en el aro (−4 %) y de media distancia (−4 %); queda igual en triples de esquina y canastas asistidas (±1 %), y empeora en el resto (+5 % a +39 %; tapones y rebote, los que más).
+
+### 5.3 Diagnóstico del fallo [DATO + LECTURA]
+* **DATO.** En el corte 2023, la escala latente de la Tercera FEB sale s = 15,6, frente a 0,3-2,2 en las demás ligas
+  (2022: 0,35-3,4; 2024: FEB3 0,40). Su nivel en pts/100 queda en −11,4 DT frente a −3,3 del amortiguado (PER −13,2
+  frente a −3,7). A los 43 jugadores que suben de Tercera a Segunda FEB la v3 les sobrestima el rendimiento (sesgo
+  +10 pts/100, +12 PER, +13 TS%; con `<m>_am`, +1 a +3) y su intervalo sólo cubre el 34 %.
+* **LECTURA.** Con s enorme, la posición relativa r = (u − μ)/s de un jugador de la Tercera FEB apenas depende de su
+  latente: la red «desconecta» la liga de sus 9 puentes de esa temporada y su nivel queda sin anclar. El prior de la
+  escala (log s ~ N(0, 0,3²)) cuesta unos pocos nats frente a la verosimilitud de miles de filas, así que no lo
+  impide. En 2023-24 la Tercera FEB tiene una sola temporada (sin transiciones que la aten) y muy pocos puentes del
+  mismo año. En 2024, con dos temporadas FEB y sus transiciones, el defecto no aparece y la v3 mejora a `<m>_am`.
+* **Por qué no se vio antes.** En el corte de selección (2022-23) no hay ni Segunda ni Tercera FEB: el defecto no se
+  podía observar sin mirar el examen.
+
+### 5.4 Lo que no se ejecutó
+* **Dejar fuera una liga** (`python -m bbnorm3 lolo`): implementado y no ejecutado. La puerta ya falla por el
+  criterio 1, y son unos 75 minutos de cálculo que no cambian la decisión.
+* **Ajuste final y salidas** (`python -m bbnorm3 ajustar`: `niveles.csv`, `traduccion_cruzada/`, `normalizado/`…):
+  implementado y no ejecutado. Con la puerta sin pasar no tiene sentido publicar niveles ni traducciones de un modelo
+  que no se va a usar.
+* Fases 4 y 5 (índice L, contexto, escalas, estilos, simulador v3, datos del artifact): **no se ejecutan**, tal como
+  manda el encargo cuando la puerta no se cumple.
+
+## 6. Propuesta v3.1 (pendiente de aprobación)
+
+1. **Escala por liga acotada o fija** (s_l = 1, o |log s_l| ≤ 0,5 con una parametrización acotada en lugar de un prior
+   débil). Ya está implementado como opción: `prior.escala_por_liga: false`. Hay un diagnóstico **post hoc** en el
+   corte 2023 en `validacion/diagnostico_posthoc/` (ver el informe). **No vale como examen**, porque la variante se
+   eligió después de ver el resultado.
+2. **Examen limpio para la v3.1.** Como los cortes 2023 y 2024 ya se han visto, la v3.1 debería validarse en un corte
+   nuevo: 2025-26 → 2026-27 cuando la temporada en curso tenga suficientes minutos (≥ 300 por jugador, hacia
+   enero-febrero de 2027). Otra opción es que el CEO acepte, de forma explícita, reutilizar los cortes actuales
+   sabiendo que hay sesgo de selección.
+3. **Recalibración por grupo más fina** (en 2024, la FEB sale demasiado ancha y la EuroLeague y la NBA demasiado
+   estrechas): un factor por grupo origen → destino estimado con su propio corte anterior.
+
+## 7. Limitaciones
+* La IPW sólo corrige la selección por lo observable (no por inobservables).
+* El factor específico ζ viaja entero con el jugador (sin contracción por distancia de nivel).
+* El acotado al soporte impide extrapolar fuera del rango observado en la liga de destino: un jugador
+  verdaderamente excepcional queda recortado al máximo observado ± 0,25 DT.
+* El efecto equipo y el factor específico son estimaciones puntuales con su varianza a posteriori aproximada (no se
+  integra la incertidumbre de ω² ni de σ²_T).

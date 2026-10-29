@@ -124,6 +124,8 @@ class CVAE(nn.Module):
         return self.mu_raw - (self.w_comp[:, None] * self.mu_raw).sum(0, keepdim=True)
 
     def log_s(self):
+        if not self.cfg["prior"].get("escala_por_liga", True):
+            return torch.zeros_like(self.ls_raw)          # diagnóstico v3.1: sin escala latente por liga (s_l = 1)
         return self.ls_raw - (self.w_liga * self.ls_raw).sum()
 
     def codificar(self, Y, Mk, V, liga, pos, logmin):

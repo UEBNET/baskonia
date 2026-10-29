@@ -189,6 +189,11 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
             z[okp] = m.Z.numpy()[pi[okp].astype(int)]
             vz[okp] = 1.0 / (prec_z[pi[okp].astype(int)] + 1.0 / m.s2Z.numpy()[None, :])
             yh = yh + z[:, None, :] + np.sqrt(vz)[:, None, :] * rng.standard_normal(yh.shape)
+        margen = cfg["prediccion"].get("margen_soporte")
+        if margen is not None:
+            from .prediccion import soporte
+            lo_s, hi_s = soporte(D, float(margen))
+            yh = np.clip(yh, lo_s[lR][None, None, :], hi_s[lR][None, None, :])
         centros.append(yh.mean(1)); muestras.append(yh)
     centro = np.mean(centros, 0)
     mez = np.concatenate(muestras, 1)

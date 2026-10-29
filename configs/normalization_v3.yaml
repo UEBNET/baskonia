@@ -14,12 +14,13 @@ latente:
   K_candidatos: [4, 8, 12]
 
 prior:
-  eta: 0.15                     # z_{i,t+1} = z_{i,t} + d(edad) + η (DT de z por temporada)
+  eta: 0.08                     # z_{i,t+1} = z_{i,t} + d(edad) + η (DT de z por temporada)
   prior_por_persona: false      # true: el prior N(μ_c, s²) pesa 1/temporadas en cada temporada (una vez por persona)
   kappa: 0.10                   # paseo aleatorio del nivel μ_{l,t} entre temporadas
   tau: 0.35                     # μ medio de la liga ~ N(μ_escalón, τ²)
   sd_escalon: 2.0               # μ_escalón ~ N(0, 2²): previa débil
   sd_log_escala: 0.30           # log s_l ~ N(0, 0,3²): dispersión de la capacidad en la liga (análogo de s_l del A)
+  escala_por_liga: true         # false = s_l = 1 (diagnóstico post hoc v3.1, ver docs/normalizacion_v3_cvae.md §6)
 
 red:
   oculta_decodificador: 32
@@ -51,6 +52,7 @@ escalones:                      # mismos escalones que configs/normalization.yam
 
 prediccion:
   muestras: 200                 # Monte Carlo por jugador (posterior de z, de μ, η, equipo, ψ y ruido de muestra)
+  margen_soporte: 0.25          # el valor traducido se acota al rango observado en la liga de destino ± 0,25 DT
   intervalo: 0.80
 
 validacion:

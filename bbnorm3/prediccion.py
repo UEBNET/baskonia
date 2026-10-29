@@ -24,6 +24,21 @@ from .niveles import Posterior
 Z80 = norm.ppf(0.9)
 
 
+def soporte(D: Datos, margen: float) -> tuple[np.ndarray, np.ndarray]:
+    """Rango observado de cada métrica en cada liga (cuantiles 0,5 % y 99,5 % de las filas de entrenamiento, en la
+    escala de trabajo) ± margen. El decodificador es una red: fuera de la nube de datos extrapola sin freno (p. ej. un
+    pívot extremo de Primera FEB traducido a la ACB con TS% > 100); el valor traducido se acota a ese soporte."""
+    lo = np.full((len(D.ligas), D.Y.shape[1]), -np.inf)
+    hi = np.full_like(lo, np.inf)
+    for l in range(len(D.ligas)):
+        f = D.idx["liga"] == l
+        for k in range(D.Y.shape[1]):
+            y = D.Y[f & (D.M[:, k] > 0), k]
+            if len(y) >= 20:
+                lo[l, k], hi[l, k] = np.quantile(y, 0.005) - margen, np.quantile(y, 0.995) + margen
+    return lo, hi
+
+
 @torch.no_grad()
 def muestras_traduccion(modelo: CVAE, post: Posterior, D: Datos, ps: np.ndarray, comp_b: np.ndarray,
                         grupo_b: np.ndarray, avanzar: np.ndarray, S: int, rng: np.random.Generator,
@@ -61,6 +76,10 @@ def muestras_traduccion(modelo: CVAE, post: Posterior, D: Datos, ps: np.ndarray,
         zeta = modelo.Z.numpy()[per].astype(float)
         vz = 1.0 / (modelo.precision_unicidad().numpy()[per] + 1.0 / modelo.s2Z.numpy()[None, :])
         yhat = yhat + zeta[:, None, :] + np.sqrt(vz)[:, None, :] * rng.standard_normal(yhat.shape)
+    margen = cfg["prediccion"].get("margen_soporte")
+    if margen is not None:
+        lo, hi = soporte(D, float(margen))
+        yhat = np.clip(yhat, lo[liga_b][:, None, :], hi[liga_b][:, None, :])
     yobs = yhat + np.sqrt(ruido) * rng.standard_normal(yhat.shape)
     return yhat, yobs
 

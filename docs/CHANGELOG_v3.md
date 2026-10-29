@@ -23,6 +23,15 @@ Regla suprema: **versionar, nunca sustituir**. La v1/v2 queda en `main` (y debí
 * `requirements-v3.txt`: `torch==2.5.1` (CPU). En un fichero aparte para que el workflow de extracción (que instala
   `requirements.txt`) no descargue PyTorch.
 
+### Resultado de la puerta de control: NO SE CUMPLE (29-10-2026)
+* Examen 2023 → 24 y 2024 → 25: v3 +12,6 % de MAE frente a `<m>_am` (IC 95 % +8,2 % a +16,9 %). Por corte: 2023
+  +29,6 % (fallo de la Tercera FEB: escala latente degenerada, s = 15,6) y 2024 −5,0 % (IC −6,5 % a −3,4 %).
+* Por tanto, **no** se ejecutan las fases 4 (aguas abajo) y 5 (datos del artifact), ni el ajuste final, ni dejar
+  fuera una liga. `configs/version.yaml` sigue en `v1`. Detalle en `docs/normalizacion_v3_cvae.md` §5-6.
+* Añadida la opción de diagnóstico `prior.escala_por_liga` (por defecto `true` = v3.0 tal como se examinó).
+* `config/ESTILOS_VADE_OBSOLETOS.md`: deja constancia de que E01–E06 quedan desestimados en la v3 (sin tocar
+  `config/estilos.json`).
+
 ### Sin cambios
 * `bbstats/`, `bbmodel/`, `bbfit/`, `bbestilo/`, `artifact/` y todas las salidas en `data/modelos/` de la v1/v2.
 
