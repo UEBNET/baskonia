@@ -171,6 +171,7 @@ def normalizacion_hasta(anio_corte: int, metricas: list[str] | None = None, prog
             th[f"{m}_am"] = tr[f"{m}_am"].to_numpy()
     th["pos3"] = base["pos3"].to_numpy()
     const = constantes_A(p, list(p["metricas"]))
+    completar_am(th, const)
     off = AM.tabla_offsets(aj, p)
     nod = nodos_offsets(off, list(p["metricas"]))
     res = {"theta": th, "traduccion": {"constantes": const, "nodos": nod, "fuente": f"A_corte_{anio_corte}"},
@@ -179,6 +180,23 @@ def normalizacion_hasta(anio_corte: int, metricas: list[str] | None = None, prog
     if progreso:
         progreso(f"normalización ≤ {anio_corte}: {len(th)} filas, {time.time() - t0:.0f} s")
     return res
+
+
+def completar_am(th: pd.DataFrame, const: dict, temp_ref: str = "2025-26") -> None:
+    """<m>_am (vara EuroLeague) desde θ con μ/τ de la EuroLeague de la temporada de referencia o, si el ajuste no la
+    tiene (A ajustado con ≤ t), de la más cercana anterior (bbmodel.amortiguacion.traducir dejaría NaN)."""
+    from bbmodel.metricas import destransformar
+    for m, k in const.items():
+        if f"{m}_th" not in th:
+            continue
+        v = np.full(len(th), np.nan)
+        for pos in ("E", "A", "I"):
+            s_ = (th["pos3"] == pos).to_numpy()
+            mu, tau = entorno(k, "euroleague", temp_ref, pos)
+            if s_.any() and np.isfinite(mu):
+                v[s_] = destransformar(mu + tau * th.loc[s_, f"{m}_th"].to_numpy(float), k["transf"])
+        if f"{m}_am" not in th or th[f"{m}_am"].isna().all():
+            th[f"{m}_am"] = v
 
 
 def traduccion_completa(metricas: list[str] | None = None) -> dict:

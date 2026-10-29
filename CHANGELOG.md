@@ -14,7 +14,7 @@ Proyecto multifase sobre la línea base de la auditoría `docs/AUDIT_2026-10-21.
 | 5 | Entropía de estilo y de rol, volatilidad σ_i, entropía de equipo | `bbfit entropia` | `entropia/` | F5 |
 | 6 | Taxonomía unificada de 6 estilos jugador ↔ equipo | `bbfit estilos` | `estilos_unificados/` | F6 |
 | 7 | Adaptación al cambio de liga: Δ jerárquico, curva, censura IPCW, priors, ADAPT% | `bbfit adaptacion` | `adaptacion/` | F7 |
-| 8 | Simulador de encaje v2 (rol y minutos endógenos, Fit descompuesto, avisos) y su validación | `bbfit simular` y órdenes de la fase 8 | `simulador/v2/` | F8 (en curso) |
+| 8 | Simulador de encaje v2 (rol y minutos endógenos, Fit descompuesto, avisos) y su validación | `bbfit simular` y órdenes de la fase 8 | `simulador/v2/`, `data/artifact/simulador/` | F8 |
 | 9 | Documentación: artículo con Parte II y notación formal, LaTeX autónomo, diccionario de datos, glosario, README, contexto | `bbestilo articulo` (= `python -m bbfit.articulo`) | `docs/articulo/`, `docs/data_dictionary.md`, `docs/glosario.md` | este registro |
 
 ### Cambios incompatibles (breaking changes)
@@ -35,6 +35,33 @@ Proyecto multifase sobre la línea base de la auditoría `docs/AUDIT_2026-10-21.
 6. **Configuración YAML** (`configs/*.yaml`) para todas las capas nuevas y registro MLflow en `experimentos/`
    (no versionado; MLflow 3 necesita `MLFLOW_ALLOW_FILE_STORE=true`, que `bbfit.registro` fija).
 
+## 2026-10-29 — Fase 8: simulador de encaje v2 (sin minutos manuales) y su validación
+
+Añadido
+* `bbfit/simulador.py` (motor Monte Carlo: nivel traducido con la normalización amortiguada, adaptación de la fase 7,
+  rol y minutos endógenos con Plackett-Luce y las tendencias del entrenador, uso de suma fija y curva uso-eficiencia,
+  compañeros, estilo y complementariedad, ruido personal, ritmo; Fit aditivo; impacto en el Net; quintetos; avisos),
+  `bbfit/sim_insumos.py`, `bbfit/validacion.py` (examen temporal cronológico, baselines, bootstrap por club, segmentos,
+  dejar fuera una liga, normalización reajustada con ≤ t), `bbfit/sim_exportar.py`, `configs/simulation.yaml`.
+* Órdenes `python -m bbfit simular | backtest | pesos-simulador | historico | exportar-simulador`.
+* `data/modelos/simulador/v2/` (histórico versionado v2.0, pesos, validación) y `data/artifact/simulador/` (no versionado).
+* Atlas: «Simular fichajes» y «Simular equipo completo» sin campos de minutos; tarjetas v2 (roles, minutos e intervalos,
+  producción por 100 y por partido, Fit descompuesto, ADAPT% y curva, impacto, quintetos, avisos); motor en
+  `artifact/atlas/simulador_v2.js`; nombres de estilo unificados en tablas, fichas, leyenda y tooltips (VaDE como
+  «estilo de mapa»); búsqueda de jugadores que sólo están en el simulador (FEB).
+* Tests: `tests/test_simulation.py` (13), `tests/js/paridad_simulador.js`, `tests/js/atlas_simulador.js`.
+
+Cambiado
+* `bbfit/reemplazo.py::asignar_minutos`: argumentos opcionales `niveles_sim` y `presencia` (sin cambio por defecto).
+* `bbestilo/exportar.py`: exporta el mapa con las competiciones del modelo VaDE guardado (12; las FEB no tienen estilo
+  VaDE) y añade `tid` (clubes) y `pid` (jugadores) para enlazar con el simulador. `bbestilo/datos.construir` y
+  `encaje.conjunto` aceptan `ligas`.
+* `artifact/empaquetar.py`: publica `atlas/simulador_v2.js` y `atlas/simulador/*.json`.
+
+Resultados (examen 2021-22 … 2024-25 → t+1, 4.512 fichajes): MAE de minutos 4,71 frente a 5,84 (Atlas anterior) y 5,63
+(modelo simple); log-loss de rol 1,235 frente a 2,676 y 1,257; pts/100 empate con el Atlas anterior y mejor que el
+simple; TS% peor que ambos. Detalle en `docs/checkpoints/F8.md`.
+
 ## 2026-10-23 — Fase 9: documentación (artículo científico descartado)
 
 Añadido
@@ -48,11 +75,6 @@ Cambiado
 Retirado (26-10-2026, por decisión del usuario: el artículo científico no se actualiza)
 - La Parte II del artículo (`bbfit/articulo.py`, `docs/articulo/fit_v2.tex` y figuras, recursos KaTeX y fuentes,
   `tests/test_articulo.py`); el PDF y `bbestilo/articulo.py` vuelven a su versión anterior.
-
-## 2026-10-23 — Fase 8: simulador de encaje v2 (en curso)
-
-Ver `docs/checkpoints/F8.md` cuando exista (código en `bbfit/simulador.py`, `bbfit/sim_insumos.py`,
-`bbfit/validacion.py`, `bbfit/sim_exportar.py`; configuración `configs/simulation.yaml`).
 
 ## 2026-10-23 — Fase 7: adaptación al cambio de liga (`bbfit adaptacion`)
 

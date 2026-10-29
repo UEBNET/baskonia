@@ -1,0 +1,15 @@
+{
+ "version": "v2.0",
+ "escenario": "inicio",
+ "fuente": "AB",
+ "adaptacion": true,
+ "ficheros": {
+  "2021-22": 854,
+  "2022-23": 818,
+  "2023-24": 964,
+  "2024-25": 1444,
+  "2025-26": 1509,
+  "2026-27": 1245
+ },
+ "pesos": "pesos.json"
+}

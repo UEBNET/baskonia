@@ -468,7 +468,7 @@ details.mas[open] > summary { margin-bottom: 6px; }
   </header>
 
   <details class="cheat only-atlas" id="cheat">
-    <summary><span class="label">Chuleta · los 6 estilos</span><span class="cheat-mini" id="cheatMini"></span><span class="cheat-tog"></span></summary>
+    <summary><span class="label">Chuleta · los estilos</span><span class="cheat-mini" id="cheatMini"></span><span class="cheat-tog"></span></summary>
     <div class="cheat-grid" id="chuleta"></div>
   </details>
 
@@ -1319,7 +1319,11 @@ function pintarChuleta() {
   const top = (s, sgn) => META.rasgos.map((r, i) => ({ r, v: s.perfil[i] || 0 })).filter((o) => o.v * sgn >= 0.5).sort((a, b) => sgn * (b.v - a.v)).slice(0, 3).map((o) => esc(llano(o.r.corto)).toLowerCase());
   $("#chuleta").innerHTML = META.estilos.map((s, k) => { const mas = top(s, 1), menos = top(s, -1);
     return `<div class="cs" style="--c:${COL[k]}"><b>${glyph(k, 10)}${esc(s.nombre)}</b><p>${esc(s.resumen || s.descriptor)}</p><div class="cs-t">${mas.length ? `<span class="up">▲ Más ${mas.join(", ")}</span>` : ""}${menos.length ? `<span class="dn">▼ Menos ${menos.join(", ")}</span>` : ""}</div></div>`; }).join("");
-  $("#cheatMini").innerHTML = META.estilos.map((s, k) => `<span>${glyph(k, 9)}${esc(s.nombre)}</span>`).join("");
+  $("#cheatMini").innerHTML = (EUS().length ? EUS().map((e) => `<span><span class="sw" style="background:${e.color};width:9px;height:9px"></span>${esc(e.nombre)}</span>`).join("") : META.estilos.map((s, k) => `<span>${glyph(k, 9)}${esc(s.nombre)}</span>`).join(""));
+  // estilos unificados (jugador ↔ equipo): los nombres que usan las tablas; el mapa 3D sigue con los estilos de mapa (VaDE)
+  if (EUS().length) $("#chuleta").innerHTML = `<p class="note" style="grid-column:1/-1;margin:0">Estilos (taxonomía unificada jugador ↔ equipo): son los nombres de jugadores y equipos en las tablas y fichas.</p>` +
+    EUS().map((e) => `<div class="cs" style="--c:${e.color}"><b><span class="sw" style="background:${e.color};width:10px;height:10px"></span>${esc(e.nombre)}${e.rol_jugador ? ` <small class="muted">· ${esc(e.rol_jugador)}</small>` : ""}</b><p>${esc(e.equipo || e.definicion || "")}</p><p class="note">${esc(e.jugador || "")}</p></div>`).join("") +
+    `<p class="note" style="grid-column:1/-1;margin:6px 0 0">Estilos de mapa (VaDE, colores del mapa 3D):</p>` + $("#chuleta").innerHTML;
 }
 function llenarAddClub() {
   const l = $("#addLiga").value, t = $("#addTemp").value, tipo = $("#addTipo [aria-pressed=true]").dataset.t;

@@ -268,6 +268,21 @@
       uso: { natural: usgNat[iF], factor_equipo: media(fUso), d_usg: media(USG2f.map((x, s) => x - usgB[s])) },
       companeros: { L_bar: media(Lbar), L_origen: fin(ctxO) ? ctxO : null, efecto_ts: media(bS.map((b, s) => b * dL[s])) },
     };
+    // capa de calibración de salida (minutos y roles; ajustada con fichajes reales anteriores: bbfit.validacion)
+    const CS = meta.calibracion_salida;
+    if (CS) {
+      const ro = ROLES.includes(rec.rol) ? rec.rol : "ROTACION", mb = num((LB.min_rol || {})[ro], 0.4) * gm, mo = fin(rec.min_pct) ? rec.min_pct * gm : mb;
+      const tr = (CS.transicion || {})[ro], Pb = ROLES.map((r) => (tr ? num(tr[r], 0.2) : 0.2)), m0 = res.minutos, c = CS.min.c;
+      const m = Math.max(0, c[0] + c[1] * m0.mediana + c[2] * mo + c[3] * mb);
+      const mi = { media: m, mediana: m };
+      ["50", "90"].forEach((a) => { const s_ = num(CS.min["s" + a], 1); mi["lo" + a] = Math.max(0, m + s_ * (m0["lo" + a] - m0.mediana)); mi["hi" + a] = m + s_ * (m0["hi" + a] - m0.mediana); });
+      const R = CS.roles, z = ROLES.map((r, k) => R.theta[k] + R.alfa * Math.log(Math.min(1, Math.max(1e-3, pRol[r]))) + R.beta * Math.log(Math.min(1, Math.max(1e-3, Pb[k])))), zm = Math.max(...z), ez = z.map((x) => Math.exp(x - zm)), se = ez.reduce((a, b) => a + b, 0);
+      res.minutos_motor = m0; res.roles_motor = { ...pRol };
+      res.minutos = mi; res.min_pct = Object.fromEntries(Object.entries(mi).map(([k, v]) => [k, v / gm]));
+      ROLES.forEach((r, k) => (res.roles[r] = ez[k] / se));
+      res.rol_esperado = ROLES.reduce((a, r) => (res.roles[r] > res.roles[a] ? r : a), ROLES[0]);
+      res.indice_rol = ROLES.reduce((a, r, i) => a + i * res.roles[r], 0); res.calibrado = true;
+    }
     // por partido
     const possPg = mF.map((m) => (m / gm) * ritmo);
     res.por_partido = { posesiones: resumen(possPg, niveles) };
@@ -304,7 +319,7 @@
     // componentes del Fit, índice y avisos
     let lt = 0, wt = 0; P.forEach((p, i) => { if (i !== iF) { lt += wm[i] * p.L; wt += wm[i]; } });
     const sigRef = LB.ref.sigma, hr = rec.hrol;
-    const x = { nivel: res.L_efectivo - lt / Math.max(wt, 1e-9), rol: indiceRol, estilo: -(fin(res.estilo.distancia_js) ? res.estilo.distancia_js : 0.25),
+    const x = { nivel: res.L_efectivo - lt / Math.max(wt, 1e-9), rol: indiceRol,     // rol del motor (como en el ajuste del Fit) estilo: -(fin(res.estilo.distancia_js) ? res.estilo.distancia_js : 0.25),
       complementariedad: num(res.estilo.complementariedad, 0), entropia: res.estilo.d_entropia_uso + res.estilo.d_entropia_pases,
       adaptacion: num(res.adaptacion.adapt_pct_temporada.media, 100) - 100,
       volatilidad: -(fin(rec.sigma) && fin(sigRef) ? rec.sigma / sigRef - 1 : 0), incertidumbre: -Lsd, h_rol: -(fin(hr) ? hr : 1.2) };

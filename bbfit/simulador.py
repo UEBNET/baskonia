@@ -113,6 +113,7 @@ class Corte:
     w_util: dict = field(default_factory=dict)
     fit: dict | None = None
     calib: dict = field(default_factory=dict)
+    calib_salida: dict | None = None
 
     def __post_init__(self):
         p = self.reg[self.reg["principal"]]
@@ -164,6 +165,7 @@ def cargar_corte(temp: str, fuente: str | None = None, cfg: dict | None = None, 
         c.w_util = P.get("utilidad", c.w_util)
         c.fit = P.get("fit")
         c.calib = P.get("calibracion", {})
+        c.calib_salida = P.get("calibracion_salida")
     return c
 
 
@@ -614,6 +616,8 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
            "companeros": {"L_bar": float(np.mean(Lbar)), "L_origen": ctx_o if np.isfinite(ctx_o) else None,
                           "efecto_ts": float(np.mean(b_s * dL))},
            "ritmo_destino": float(ritmo)}
+    if c.calib_salida:
+        _calibrar_res(c, res, fila, liga_d, gm)
     # adaptación
     pa = priors["L_rel"]
     fl = fact["L_rel"]
@@ -638,6 +642,50 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     if detalle:
         res["plantilla"] = _plantilla_salida(P, M, i_f, gm, rol_s)
     return res
+
+
+# =============================================================================================== calibración de salida
+def _calibrar_res(c: "Corte", res: dict, fila: dict, liga_d: str, gm: float) -> None:
+    """Aplica la capa de calibración de salida (pesos de producción) a un resultado de `simular`."""
+    C = c.calib_salida
+    ro = fila.get("rol_mas_probable") if isinstance(fila.get("rol_mas_probable"), str) else "ROTACION"
+    mb = float(c.mod["min_rol"].get((liga_d, ro), c.mod["min_rol_global"].get(ro, 0.4))) * gm
+    mo = _f(fila.get("min_pct")) * gm
+    tr = (C.get("transicion") or {}).get(ro)
+    Pb = np.array([[tr.get(r, 0.2) if tr else 0.2 for r in ROLES]])
+    m0 = res["minutos"]
+    P = np.array([[res["roles"][r] for r in ROLES]])
+    m, iv, Pc = calibrar_salida(C, np.array([m0["mediana"]]), {a: (np.array([m0[f"lo{a}"]]), np.array([m0[f"hi{a}"]]))
+                                                             for a in ("50", "90")}, P, np.array([mo if np.isfinite(mo) else mb]),
+                                np.array([mb]), Pb)
+    res["minutos_motor"], res["roles_motor"], res["indice_rol_motor"] = dict(m0), dict(res["roles"]), res["indice_rol"]
+    res["minutos"] = {"media": float(m[0]), "mediana": float(m[0]), **{f"lo{a}": float(iv[a][0][0]) for a in iv},
+                      **{f"hi{a}": float(iv[a][1][0]) for a in iv}}
+    res["min_pct"] = {k: v / gm for k, v in res["minutos"].items()}
+    res["roles"] = {r: float(Pc[0, k]) for k, r in enumerate(ROLES)}
+    res["rol_esperado"] = max(res["roles"], key=res["roles"].get)
+    res["indice_rol"] = float(sum(IDX_ROL[r] * p for r, p in res["roles"].items()))
+    res["calibrado"] = True
+
+def calibrar_salida(C: dict, min_med, intervalos: dict, P, min_o_dest, min_b, Pb):
+    """Capa de calibración de las salidas del motor (ajustada con fichajes de cortes anteriores, bbfit.validacion):
+      minutos:  m = c0 + c1·mediana_motor + c2·(MIN% de origen × minutos de partido) + c3·(minutos típicos de su rol de
+                origen en la liga de destino), por regresión de mínimo error absoluto; los intervalos se trasladan a m y se
+                escalan con s50 / s90 para que cubran lo nominal en los cortes anteriores;
+      roles:    P(k) ∝ exp(θ_k + α·log p_motor,k + β·log p_transición,k)  (logit multinomial; p_transición = P(rol destino |
+                rol origen) de los fichajes anteriores).
+    Arrays numpy (una fila por fichaje). Devuelve (m, intervalos, P)."""
+    m = C["min"]["c"][0] + C["min"]["c"][1] * min_med + C["min"]["c"][2] * min_o_dest + C["min"]["c"][3] * min_b
+    m = np.clip(m, 0, None)
+    iv = {}
+    for a, (lo, hi) in intervalos.items():
+        s_ = C["min"].get(f"s{a}", 1.0)
+        iv[a] = (np.clip(m + s_ * (lo - min_med), 0, None), m + s_ * (hi - min_med))
+    R = C["roles"]
+    Z = np.asarray(R["theta"])[None, :] + R["alfa"] * np.log(np.clip(P, 1e-3, 1)) + R["beta"] * np.log(np.clip(Pb, 1e-3, 1))
+    Z = Z - Z.max(1, keepdims=True)
+    E = np.exp(Z)
+    return m, iv, E / E.sum(1, keepdims=True)
 
 
 PRIOR_EXTRA = ["delta_temporada_media", "delta_temporada_sd", "D_forma_media", "kappa_forma_media", "partidos_50",
@@ -856,7 +904,7 @@ def componentes(c: Corte, res: dict, fila: dict, P: pd.DataFrame, i_f: int, M, l
     sig_ref = c.ref["sigma"].get(liga_d, np.nan)
     hr = fila.get("H_rol_post", fila.get("H_rol", np.nan))
     e = res["estilo"]
-    return {"nivel": res["L_efectivo"] - Lt, "rol": res["indice_rol"],
+    return {"nivel": res["L_efectivo"] - Lt, "rol": res.get("indice_rol_motor", res["indice_rol"]),
             "estilo": -(e["distancia_js"] if e["distancia_js"] is not None else 0.25),
             "complementariedad": e["complementariedad"] if e["complementariedad"] is not None else 0.0,
             "entropia": e["d_entropia_uso"] + e["d_entropia_pases"],

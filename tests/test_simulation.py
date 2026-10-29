@@ -223,3 +223,14 @@ def test_mapa_clubes_por_continuidad():
                           "team_id": ["X"] * 6 + ["Y"] * 6, "persona_id": list("pqrstu") + list("pqrsvw"), "presencia": 1.0})
     m = V.mapa_clubes(roles, "t", "u")
     assert m[("b", "Y")] == ("a", "X")
+
+
+def test_calibracion_de_salida():
+    C = {"min": {"c": [2.0, 0.8, 0.1, 0.1], "s50": 0.9, "s90": 1.2},
+         "roles": {"theta": [0, 0.5, 0.5, 0.5, 0.5], "alfa": 0.5, "beta": 0.5}}
+    P = np.array([[0.1, 0.2, 0.3, 0.3, 0.1], [0.0, 0.0, 0.0, 1.0, 0.0]])
+    m, iv, Pc = S.calibrar_salida(C, np.array([20.0, 30.0]), {"50": (np.array([15.0, 25.0]), np.array([25.0, 33.0]))},
+                                  P, np.array([18.0, 28.0]), np.array([19.0, 27.0]), P)
+    assert np.allclose(Pc.sum(1), 1) and (Pc > 0).all()
+    assert m[0] == pytest.approx(2 + 16 + 1.8 + 1.9)
+    assert (iv["50"][0] <= m).all() and (iv["50"][1] >= m).all()

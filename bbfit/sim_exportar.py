@@ -85,6 +85,8 @@ def _constantes_base(c: S.Corte, ligas: list[str]) -> dict:
                                      "sigma": _r(c.ref["sigma"].get(liga)), "sigma_p80": _r(c.ref["sigma_p80"].get(liga)),
                                      "ritmo": _r(c.ref["ritmo"].get(liga))},
              "min_residual": _r(c.mod["min_rol"].get((liga, "RESIDUAL"), c.mod["min_rol_global"].get("RESIDUAL", 0.06))),
+             "min_rol": {r: _r(c.mod["min_rol"].get((liga, r), c.mod["min_rol_global"].get(r)), 4)
+                         for r in ["RESIDUAL", "PROFUNDIDAD", "ROTACION", "TITULAR", "GO_TO_GUY"]},
              "tendencia": list(_tend(c, None, liga)), "nivel": _r(S._nivel_liga(c, liga))}
         for m in METS:
             k = const.get(m)
@@ -244,6 +246,7 @@ def exportar(salida: str | Path = SALIDA) -> dict:
             "go_to_guy": cfg["rol_go_to_guy"], "produccion": cfg["produccion"], "plantilla": cfg["plantilla"],
             "utilidad_rasgos": S.RASGOS_UTIL, "utilidad": P.get("utilidad", cfg["utilidad"]["inicial"]),
             "calibracion": P.get("calibracion", {}), "fit": P.get("fit"), "componentes": S.COMPONENTES,
+            "calibracion_salida": P.get("calibracion_salida"),
             "beta_uso": {k: list(v) for k, v in c0.mod["beta_uso"].items()},
             "companeros_ts": list(c0.mod["companeros"].get("ts_pct", (0.0, 0.0))),
             "adaptacion": {"partidos": cfg["adaptacion"]["partidos_temporada"], "primeros": cfg["adaptacion"]["primeros_partidos"],

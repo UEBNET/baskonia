@@ -543,6 +543,82 @@ def calibrar(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: dict, p
     return res
 
 
+def _gm(ligas) -> np.ndarray:
+    return np.array([S.minutos_partido(l) for l in ligas], float)
+
+
+def _entradas_calibracion(d: pd.DataFrame):
+    P = d[[f"v_p_{r}_motor" if f"v_p_{r}_motor" in d else f"v_p_{r}" for r in ROLES]].to_numpy(float)
+    Pb = d[[f"b_p_{r}" for r in ROLES]].to_numpy(float)
+    med = d["v_min_pred_motor" if "v_min_pred_motor" in d else "v_min_pred"].to_numpy(float)
+    mo = d["min_pct_o"].to_numpy(float) * _gm(d["liga_d"])
+    mb = d["b_min_pred"].to_numpy(float)
+    return med, P, mo, mb, Pb
+
+
+def ajustar_calibracion(prev: pd.DataFrame, cfg: dict) -> dict | None:
+    """Ajusta la capa de calibración de salida (simulador.calibrar_salida) con los fichajes de cortes anteriores."""
+    v = cfg["validacion"]
+    d = prev[prev["min_real"].notna() & (prev["gp_real"] >= v["min_partidos_destino"]) & prev["rol_real"].isin(ROLES)]
+    d = d[np.isfinite(_entradas_calibracion(d)[0])]
+    if len(d) < 100:
+        return None
+    med, P, mo, mb, Pb = _entradas_calibracion(d)
+    ok = np.isfinite(P).all(1) & np.isfinite(Pb).all(1) & np.isfinite(mo) & np.isfinite(mb)
+    d, med, P, mo, mb, Pb = d[ok], med[ok], P[ok], mo[ok], mb[ok], Pb[ok]
+    y = d["min_real"].to_numpy(float)
+    X = np.c_[np.ones(len(y)), med, mo, mb]
+    c0 = np.linalg.lstsq(X, y, rcond=None)[0]
+    r = optimize.minimize(lambda c: np.abs(y - X @ c).mean(), c0, method="Powell")
+    c = r.x
+    m = np.clip(X @ c, 0, None)
+    out = {"min": {"c": c.tolist(), "mae_entrenamiento": float(np.abs(y - m).mean())}, "n": int(len(y))}
+    for a, cob in (("50", 0.5), ("90", 0.9)):
+        lo, hi = d[f"v_min_lo{a}"].to_numpy(float), d[f"v_min_hi{a}"].to_numpy(float)
+        best = 1.0
+        for s_ in np.linspace(0.2, 2.0, 91):
+            dentro = (y >= m + s_ * (lo - med)) & (y <= m + s_ * (hi - med))
+            if dentro.mean() >= cob:
+                best = float(s_)
+                break
+        out["min"][f"s{a}"] = best
+    yk = d["rol_real"].map({k: i for i, k in enumerate(ROLES)}).to_numpy(int)
+    LP, LB = np.log(np.clip(P, 1e-3, 1)), np.log(np.clip(Pb, 1e-3, 1))
+
+    def nll(w):
+        th = np.r_[0.0, w[:4]]
+        Z = th[None, :] + w[4] * LP + w[5] * LB
+        Z = Z - Z.max(1, keepdims=True)
+        lse = np.log(np.exp(Z).sum(1))
+        return float(-(Z[np.arange(len(yk)), yk] - lse).mean() + 1e-3 * (w ** 2).sum())
+    r = optimize.minimize(nll, np.r_[np.zeros(4), 1.0, 1.0], method="L-BFGS-B")
+    out["roles"] = {"theta": [0.0] + r.x[:4].tolist(), "alfa": float(r.x[4]), "beta": float(r.x[5]),
+                    "logloss_entrenamiento": float(r.fun)}
+    return out
+
+
+def aplicar_calibracion(d: pd.DataFrame, C: dict | None) -> pd.DataFrame:
+    """Guarda las salidas del motor (*_motor) y escribe las calibradas en las columnas v_*."""
+    d = d.copy()
+    for col in ["v_min_pred", "v_min_lo50", "v_min_hi50", "v_min_lo90", "v_min_hi90"] + [f"v_p_{r}" for r in ROLES]:
+        if f"{col}_motor" not in d:
+            d[f"{col}_motor"] = d[col]
+    if not C:
+        return d
+    med, P, mo, mb, Pb = _entradas_calibracion(d)
+    ok = np.isfinite(med) & np.isfinite(mo) & np.isfinite(mb)
+    iv = {a: (d[f"v_min_lo{a}_motor"].to_numpy(float), d[f"v_min_hi{a}_motor"].to_numpy(float)) for a in ("50", "90")}
+    m, ivc, Pc = S.calibrar_salida(C, np.nan_to_num(med), {a: tuple(np.nan_to_num(x) for x in v) for a, v in iv.items()},
+                                   np.nan_to_num(P, nan=0.2), np.nan_to_num(mo), np.nan_to_num(mb), np.nan_to_num(Pb, nan=0.2))
+    d.loc[ok, "v_min_pred"] = m[ok]
+    for a in ("50", "90"):
+        d.loc[ok, f"v_min_lo{a}"], d.loc[ok, f"v_min_hi{a}"] = ivc[a][0][ok], ivc[a][1][ok]
+    okp = ok & np.isfinite(P).all(1)
+    for k, r in enumerate(ROLES):
+        d.loc[okp, f"v_p_{r}"] = Pc[okp, k]
+    return d
+
+
 def ejecutar_corte(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: dict, fit: dict | None,
                    trans: pd.DataFrame | None, escenario: str = "inicio", progreso=print, sin_adaptacion=False,
                    etiqueta: str = "") -> pd.DataFrame:
@@ -764,6 +840,14 @@ def calibracion_roles(e: pd.DataFrame, bins: int = 10) -> pd.DataFrame:
 
 
 # =============================================================================================== principal
+def _motor(d: pd.DataFrame) -> pd.DataFrame:
+    """Predicciones del motor sin la capa de calibración (para comparar)."""
+    d = d.copy()
+    for c in [x for x in d.columns if x.endswith("_motor")]:
+        d[c[:-6]] = d[c]
+    return d
+
+
 def _etiqueta(fuente: str, escenario: str, adaptacion: bool) -> str:
     return f"{fuente.replace(':', '_')}_{escenario}{'' if not adaptacion else '_adapt'}"
 
@@ -782,7 +866,7 @@ def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | 
     examen = cortes or cfg["validacion"]["cortes_examen"]
     etq = _etiqueta(fuente, escenario, adaptacion)
     t0 = time.time()
-    preds, F_por_corte, P_por_corte = [], {}, {}
+    preds, F_por_corte, P_por_corte, CS_por_corte = [], {}, {}, {}
     if pesos_de:
         todos = list(examen)
     else:
@@ -806,6 +890,13 @@ def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | 
         d = ejecutar_corte(t, fuente, cfg, roles, pesos, fit, trans, escenario, progreso,
                            sin_adaptacion=not adaptacion, etiqueta="_adapt" if adaptacion else "")
         d["v_fit"] = aplicar_fit(d.assign(**{f"c_{r}": d.get(f"v_c_{r}") for r in RASGOS_FIT}), fit)
+        # capa de calibración de salida (minutos y roles) ajustada con los cortes anteriores (sin fuga)
+        if pesos_de:
+            cal_s = json.loads((DIR_VAL / pesos_de / "resumen.json").read_text(encoding="utf-8"))["calibracion_salida"].get(t)
+        else:
+            cal_s = ajustar_calibracion(pd.concat(preds, ignore_index=True), cfg) if preds else None
+        d = aplicar_calibracion(d, cal_s)
+        CS_por_corte[t] = cal_s
         preds.append(d)
         F_por_corte[t], P_por_corte[t] = fit, pesos
         progreso(f"corte {t} listo ({len(d)} fichajes, {time.time() - t0:.0f} s)")
@@ -815,6 +906,8 @@ def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | 
     res = {"fuente": fuente, "escenario": escenario, "adaptacion": adaptacion, "pesos_de": pesos_de, "cortes": examen,
            "resumen": resumen_metricas(e, cfg), "resumen_por_corte": {t: resumen_metricas(g, cfg) for t, g in e.groupby("corte")},
            "pesos": {t: P_por_corte[t] for t in P_por_corte}, "fit": {t: F_por_corte[t] for t in F_por_corte},
+           "calibracion_salida": CS_por_corte,
+           "resumen_motor_sin_calibrar": resumen_metricas(errores(_motor(ex), cfg), cfg)["v"],
            "acierto_rol_argmax_v2": float(e["v_acierto_argmax"].mean())}
     bt = bootstrap_diferencias(e, cfg)
     res["bootstrap"] = bt.to_dict("records")
@@ -840,7 +933,8 @@ def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | 
 
 
 def dejar_fuera_liga(etiqueta: str = "AB_inicio", min_casos: int = 30, progreso=print) -> pd.DataFrame:
-    """Dejar fuera una liga: para cada liga de destino L y corte de examen, la utilidad Plackett-Luce se reajusta SIN los
+    """Dejar fuera una liga (salidas del MOTOR, sin la capa de calibración): para cada liga de destino L y corte de
+    examen, la utilidad Plackett-Luce se reajusta SIN los
     equipos de L y el Fit SIN los fichajes hacia L; se vuelven a simular los fichajes hacia L y se comparan con la
     ejecución principal (mismos fichajes) y con los baselines. La normalización no se reajusta (su propio examen dejando
     fuera una liga está en la fase 2)."""
@@ -886,10 +980,12 @@ def dejar_fuera_liga(etiqueta: str = "AB_inicio", min_casos: int = 30, progreso=
         P = g[[f"lolo_p_{r}" for r in ROLES]].to_numpy(float)
         okr = g["rol_real"].isin(ROLES).to_numpy() & np.isfinite(P).all(1)
         y = g["rol_real"].map({r: i for i, r in enumerate(ROLES)})
-        res.append({"liga": L, "n": len(g), "mae_min_principal": g.loc[ok, "v_err_min"].mean(),
+        res.append({"liga": L, "n": len(g),
+                    "mae_min_principal": (g.loc[ok, "v_min_pred_motor"] - g.loc[ok, "min_real"]).abs().mean(),
                     "mae_min_fuera": (g.loc[ok, "lolo_min_pred"] - g.loc[ok, "min_real"]).abs().mean(),
                     "mae_min_a": g.loc[ok, "a_err_min"].mean(), "mae_min_b": g.loc[ok, "b_err_min"].mean(),
-                    "logloss_principal": g["v_logloss"].mean(),
+                    "logloss_principal": float(_logloss(g.loc[okr, [f"v_p_{r}_motor" for r in ROLES]].to_numpy(float),
+                                                        y[okr].astype(int).to_numpy()).mean()) if okr.any() else np.nan,
                     "logloss_fuera": float(_logloss(P[okr], y[okr].astype(int).to_numpy()).mean()) if okr.any() else np.nan,
                     "logloss_b": g["b_logloss"].mean(),
                     "mae_pts_principal": g["v_err_pts_p100"].abs().mean(),
@@ -912,6 +1008,10 @@ def pesos_produccion(progreso=print) -> dict:
     preds = [pickle.loads(f.read_bytes()) for f in sorted(SI.DIR_CACHE.glob("pred_*_AB_inicio.pkl"))]
     prev = pd.concat(preds, ignore_index=True) if preds else pd.DataFrame()
     fit = ajustar_fit(prev.assign(**{f"c_{r}": prev[f"v_c_{r}"] for r in RASGOS_FIT}), cfg) if len(prev) else None
+    cal_s = ajustar_calibracion(prev, cfg) if len(prev) else None
+    trans = matriz_transicion(prev[["rol_o", "rol_real"]]) if len(prev) else None
+    if cal_s is not None and trans is not None:
+        cal_s["transicion"] = {r: trans.loc[r].to_dict() for r in trans.index}
     res_val = None
     pr = DIR_VAL / "A_corte_inicio" / "resumen.json"
     pv = DIR_VAL / "AB_inicio" / "resumen.json"
@@ -921,7 +1021,7 @@ def pesos_produccion(progreso=print) -> dict:
             "mae_min", "acierto_rol", "logloss_rol", "mae_pts_p100", "cob50_pts_p100", "cob90_pts_p100", "cob50_min", "cob90_min")}
             for k, d in r["resumen"].items()}}
     out = {"version": cfg["version"], "utilidad": {k: v for k, v in P["utilidad"].items() if not k.startswith("_")},
-           "calibracion": {k: v for k, v in cal.items() if k != "rejilla"}, "fit": fit,
+           "calibracion": {k: v for k, v in cal.items() if k != "rejilla"}, "fit": fit, "calibracion_salida": cal_s,
            "entrenamiento": {"equipos_utilidad": P["equipos_entrenamiento"], "temporadas_utilidad": P["temporadas"],
                              "fichajes_fit": fit["n"] if fit else 0, "corte_calibracion": cal.get("corte_calibracion")},
            "validacion_resumen": res_val, "honesta_disponible": pr.exists()}
@@ -948,7 +1048,7 @@ def historico(temporadas: list[str] | None = None, progreso=print) -> dict:
             continue
         pc = preparar_corte(t, "AB", cfg, roles, progreso)
         c = S.cargar_corte(t, "AB", pesos=False)
-        c.w_util, c.calib, c.fit = P["utilidad"], P["calibracion"], P["fit"]
+        c.w_util, c.calib, c.fit, c.calib_salida = P["utilidad"], P["calibracion"], P["fit"], P.get("calibracion_salida")
         eq1 = S.cargar_corte(t1, "AB", pesos=False).eq
         v = simular_fichajes(c, pc["casos"], roles[roles["temporada"] == t1], eq1, cfg, "inicio",
                              n_sim=int(cfg["historico"]["simulaciones"]), progreso=progreso)

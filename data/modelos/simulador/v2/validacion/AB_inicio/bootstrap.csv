@@ -1,10 +1,10 @@
 metrica,baseline,n,v2,base,diferencia,ic90_lo,ic90_hi,veredicto
-mae_min,a,4512,5.7372,5.8423,-0.1051,-0.2444,0.0382,sin diferencia clara
-mae_min,b,4512,5.7372,5.6267,0.1106,-0.0271,0.2382,sin diferencia clara
-logloss_rol,a,4512,1.5633,2.6764,-1.1131,-1.1655,-1.0602,v2 mejor
-logloss_rol,b,4512,1.5633,1.2569,0.3064,0.2818,0.3313,v2 peor
-acierto_rol,a,4512,0.4003,0.3938,0.0064,-0.0086,0.0211,sin diferencia clara
-acierto_rol,b,4512,0.4003,0.3907,0.0095,-0.0052,0.0244,sin diferencia clara
+mae_min,a,4512,4.7060,5.8423,-1.1364,-1.2215,-1.0478,v2 mejor
+mae_min,b,4512,4.7060,5.6267,-0.9207,-1.0054,-0.8424,v2 mejor
+logloss_rol,a,4512,1.2347,2.6764,-1.4417,-1.4934,-1.3921,v2 mejor
+logloss_rol,b,4512,1.2347,1.2569,-0.0222,-0.0306,-0.0143,v2 mejor
+acierto_rol,a,4512,0.4430,0.3938,0.0492,0.0363,0.0627,v2 mejor
+acierto_rol,b,4512,0.4430,0.3907,0.0523,0.0385,0.0662,v2 mejor
 mae_pts_p100,a,3347,3.7830,3.7559,0.0271,-0.0242,0.0781,sin diferencia clara
 mae_pts_p100,b,3347,3.7830,3.8358,-0.0528,-0.0815,-0.0243,v2 mejor
 rmse_pts_p100,a,3347,4.7924,4.7544,0.0381,-0.0193,0.0944,sin diferencia clara
