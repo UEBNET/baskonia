@@ -64,7 +64,7 @@ ITERACIONES = [   # (id, carpeta en historial/ o "" = modelo final, red, etiquet
 ]
 # Métricas normalizadas de cada jugador que el Atlas proyecta al contexto del equipo de destino
 CLAVE_CTX = ["usg_pct", "pts_p100", "ts_pct", "efg_pct", "ast_pct", "tov_pct", "dreb_pct", "drtg", "per",
-             "ws_per_40", "rapm", "pct_asistidas", "pct_t3_esquina"]
+             "ws_per_40", "rapm", "pct_asistidas", "pct_t3_esquina", "ortg", "oreb_pct"]
 
 
 def _normalizados() -> pd.DataFrame:
