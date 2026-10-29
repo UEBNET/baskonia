@@ -150,20 +150,24 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
     comp_n = np.array([D.comps.index(c) for c in t["comp"]])
     pos_n = t["pos3"].map({p: i for i, p in enumerate(POSICIONES)}).to_numpy()
     logmin = np.log(np.clip(t["min"].to_numpy(float), 1, None)) / 7.0
-    centros, muestras = [], []
+    # 1) por red: media y varianza de (u − μ_R) y factor específico de cada fila (poca memoria: filas × K)
+    ok = en_ent.notna().to_numpy()
+    ips = en_ent[ok].astype(int).to_numpy()
+    per_idx = {p: i for i, p in enumerate(D.personas)}
+    pi = t["persona_id"].map(per_idx)
+    okp = pi.notna().to_numpy()
+    margen = cfg["prediccion"].get("margen_soporte")
+    if margen is not None:
+        from .prediccion import soporte
+        lo_s, hi_s = soporte(D, float(margen))
+    partes = []
     for m, P in cj:
         K = m.K
         media = np.zeros((len(t), K)); var = np.zeros((len(t), K))
-        ok = en_ent.notna().to_numpy()
-        ips = en_ent[ok].astype(int).to_numpy()
         media[ok] = P.media[ips] - P.media[P.nPS + R]
-        nv = P.media.shape[0]
         # varianza de (u − μ_R) por dimensión: diag de la inversa en el contraste (una resolución por fila única)
         unicos, inv = np.unique(ips, return_inverse=True)
-        vu = np.zeros((len(unicos), K))
-        for j, p in enumerate(unicos):
-            a = np.zeros(nv); a[p] = 1.0; a[P.nPS + R] -= 1.0
-            vu[j] = P.var_contraste(a)
+        vu = P.var_contrastes(unicos, np.full(len(unicos), P.nPS + R))
         var[ok] = vu[inv]
         # filas fuera del entrenamiento: experto del codificador ⊗ prior N(μ_c, s²)
         if (~ok).any():
@@ -174,31 +178,39 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
             rmed = mm_.numpy() * np.exp(lp.numpy()) / prec
             sl = P.s[liga_n[~ok]][:, None]
             media[~ok] = P.media[P.nPS + comp_n[~ok]] + sl * rmed - P.media[P.nPS + R]
-            var[~ok] = sl ** 2 / prec + np.array([P.var_contraste(_e(nv, P.nPS + c, P.nPS + R)) for c in comp_n[~ok]])
-        eps = rng.standard_normal((len(t), S, K))
-        r = (media[:, None, :] + np.sqrt(np.maximum(var, 0))[:, None, :] * eps) / P.s[lR]
-        yh = m.decodificar(torch.as_tensor(r.reshape(-1, K), dtype=torch.float32),
-                           torch.full((len(t) * S,), lR), torch.as_tensor(np.repeat(grupos_R, S))).numpy()
-        yh = yh.reshape(len(t), S, -1).astype(float)
+            cu, ci = np.unique(comp_n[~ok], return_inverse=True)
+            vc = P.var_contrastes(P.nPS + cu, np.full(len(cu), P.nPS + R))
+            var[~ok] = sl ** 2 / prec + vc[ci]
+        z = np.zeros((len(t), len(METRICAS))); vz = np.zeros_like(z)
         if m.usar_unicidad:
-            per_idx = {p: i for i, p in enumerate(D.personas)}
-            pi = t["persona_id"].map(per_idx)
-            z = np.zeros((len(t), len(METRICAS))); vz = np.tile(m.s2Z.numpy(), (len(t), 1)).astype(float)
-            okp = pi.notna().to_numpy()
+            vz[:] = m.s2Z.numpy()[None, :]
             prec_z = m.precision_unicidad().numpy()
             z[okp] = m.Z.numpy()[pi[okp].astype(int)]
             vz[okp] = 1.0 / (prec_z[pi[okp].astype(int)] + 1.0 / m.s2Z.numpy()[None, :])
-            yh = yh + z[:, None, :] + np.sqrt(vz)[:, None, :] * rng.standard_normal(yh.shape)
-        margen = cfg["prediccion"].get("margen_soporte")
-        if margen is not None:
-            from .prediccion import soporte
-            lo_s, hi_s = soporte(D, float(margen))
-            yh = np.clip(yh, lo_s[lR][None, None, :], hi_s[lR][None, None, :])
-        centros.append(yh.mean(1)); muestras.append(yh)
-    centro = np.mean(centros, 0)
-    entre = np.std(centros, 0)                      # discrepancia entre las redes (salvaguarda de la v3.1)
-    mez = np.concatenate(muestras, 1)
-    lo, hi = np.quantile(mez, [0.1, 0.9], axis=1)
+        partes.append((m, P, media, var, z, vz))
+    # 2) Monte Carlo por bloques de filas (las muestras de todas las filas a la vez no caben en memoria)
+    n = len(t)
+    centro = np.zeros((n, len(METRICAS))); entre = np.zeros_like(centro)
+    lo = np.zeros_like(centro); hi = np.zeros_like(centro)
+    bloque = 1000
+    for a in range(0, n, bloque):
+        sl_ = slice(a, min(a + bloque, n))
+        nb = sl_.stop - sl_.start
+        cent_b, mues_b = [], []
+        for m, P, media, var, z, vz in partes:
+            K = m.K
+            eps = rng.standard_normal((nb, S, K))
+            r = (media[sl_, None, :] + np.sqrt(np.maximum(var[sl_], 0))[:, None, :] * eps) / P.s[lR]
+            yh = m.decodificar(torch.as_tensor(r.reshape(-1, K), dtype=torch.float32),
+                               torch.full((nb * S,), lR), torch.as_tensor(np.repeat(grupos_R[sl_], S))).numpy()
+            yh = yh.reshape(nb, S, -1).astype(float)
+            yh = yh + z[sl_, None, :] + np.sqrt(vz[sl_])[:, None, :] * rng.standard_normal(yh.shape)
+            if margen is not None:
+                yh = np.clip(yh, lo_s[lR][None, None, :], hi_s[lR][None, None, :])
+            cent_b.append(yh.mean(1)); mues_b.append(yh)
+        centro[sl_] = np.mean(cent_b, 0)
+        entre[sl_] = np.std(cent_b, 0)                  # discrepancia entre las redes (salvaguarda de la v3.1)
+        lo[sl_], hi[sl_] = np.quantile(np.concatenate(mues_b, 1), [0.1, 0.9], axis=1)
     # percentil entre los jugadores de la referencia de su posición (sus propios equivalentes)
     out = {"persona_id": t["persona_id"].to_numpy(), "player_id": t["player_id"].to_numpy(),
            "team_id": t["team_id"].to_numpy(), "liga": t["liga"].to_numpy(), "temporada": t["temporada"].to_numpy(),
@@ -269,14 +281,19 @@ def todo(tabla: pd.DataFrame, D, cj, cfg, normalizado: bool = True) -> pd.DataFr
     trad = traducir_filas(tabla, D, cj, cfg)
     if normalizado:
         _normalizado(trad, out / "normalizado")
+    escribir_resumen(D, cj, cfg)
+    print(f"Salidas v3 en {out}", flush=True)
+    return trad
+
+
+def escribir_resumen(D, cj, cfg) -> None:
+    out = C.dir_salida(cfg)
     resumen = {"version": cfg["version"], "semillas": cfg["semillas"], "K": cfg["latente"]["K"],
                "filas_entrenamiento": int(len(D.t)), "personas_temporada": len(D.ps), "competiciones": len(D.comps),
                "ipw": D.info_ipw, "referencia_salida": cfg["referencia_salida"],
                "escala_liga": {l: float(np.mean([P.s[i] for _, P in cj])) for i, l in enumerate(D.ligas)},
                "unicidad_omega2": {met: float(np.mean([m.s2Z.numpy()[k] for m, _ in cj])) for k, met in enumerate(METRICAS)}}
     (out / "resumen.json").write_text(json.dumps(resumen, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
-    print(f"Salidas v3 en {out}", flush=True)
-    return trad
 
 
 def _normalizado(trad: pd.DataFrame, dir_out, columnas_nuevas=None, sufijo: str = "_v3", fuente: str = "V3") -> None:

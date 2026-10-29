@@ -261,7 +261,11 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
         f = flujo.dir_val(cfg) / "examen_v31.json"
         f_con = json.loads(f.read_text())["combinada_con_conocimiento_feb3"].get("factor_intervalo_conocimiento_elegido", 1.0)
     D, cj = flujo.conjunto(tabla, cfg, None)
-    trad = exportar.todo(tabla, D, cj, cfg, normalizado=False)
+    if (C.dir_salida(cfg) / "niveles.csv").exists():   # niveles y traducciones ya exportados con estas mismas redes
+        trad = exportar.traducir_filas(tabla, D, cj, cfg)
+        exportar.escribir_resumen(D, cj, cfg)
+    else:
+        trad = exportar.todo(tabla, D, cj, cfg, normalizado=False)
     temporadas = temporadas_por_liga(tabla, cfg, int(tabla["anio"].max()))
     resumen = {"peso_v3": cb["peso_v3"], "peso_v3_conocimiento": w_con, "factor_intervalo_conocimiento": f_con}
 

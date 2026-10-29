@@ -50,6 +50,19 @@ class Posterior:
         """aᵀ Q_k⁻¹ a para cada dimensión k (a: vector disperso denso de longitud n_var)."""
         return np.array([float(a @ f.solve(a)) for f in self.lu])
 
+    def var_contrastes(self, i: np.ndarray, j: np.ndarray, lote: int = 400) -> np.ndarray:
+        """Var(x_i − x_j) para muchos pares a la vez (n_pares × K), resolviendo por lotes de columnas."""
+        n = self.media.shape[0]
+        out = np.zeros((len(i), len(self.lu)))
+        for a in range(0, len(i), lote):
+            ii, jj = i[a:a + lote], j[a:a + lote]
+            E = np.zeros((n, len(ii)))
+            E[ii, np.arange(len(ii))] += 1.0
+            E[jj, np.arange(len(ii))] -= 1.0
+            for k, f in enumerate(self.lu):
+                out[a:a + lote, k] = np.einsum("nc,nc->c", E, f.solve(E))
+        return out
+
     def cov_mu(self) -> np.ndarray:
         """Covarianza conjunta de los μ_c (K × nC × nC), sin gauge."""
         n = self.media.shape[0]
