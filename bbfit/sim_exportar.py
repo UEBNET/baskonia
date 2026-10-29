@@ -240,7 +240,7 @@ def exportar(salida: str | Path = SALIDA) -> dict:
             "exposicion": {m: const[m]["exposicion"] for m in METS if m in const},
             "deriva": {m: const[m]["deriva"] for m in METS if m in const},
             "roles": ["RESIDUAL", "PROFUNDIDAD", "ROTACION", "TITULAR", "GO_TO_GUY"],
-            "roles_umbral": umbrales_pct(rcfg), "roles_solape": {"gs": rcfg["roles"]["gs_pct_solape"]},
+            "roles_umbral": umbrales_pct(rcfg), "roles_solape": {"gs": rcfg["roles"]["gs_pct_solape"]}, "rol_asignado": cfg.get("rol_asignado"),
             "min_partido": rcfg["partido"]["minutos_reglamentarios"],
             "asignacion": {k: cargar("reemplazo")["asignacion"][k] for k in ("max_min_partido", "min_por_pos3")},
             "go_to_guy": cfg["rol_go_to_guy"], "produccion": cfg["produccion"], "plantilla": cfg["plantilla"],

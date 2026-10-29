@@ -3,7 +3,8 @@
     python artifact/empaquetar.py <carpeta_salida>
 
 * Publicado → origen: index.html = artifact/mesa-multiliga.html; atlas/, quintetos/ (páginas) y sus datos
-  (atlas/simulador/ = data/artifact/simulador/, insumos del simulador v2, y atlas/simulador_v2.js, su motor);
+  (atlas/simulador/ = data/artifact/simulador/, insumos del simulador v2, y atlas/simulador_v2.js, su motor v2.1;
+  atlas/informe_v3.js = lectura de fichaje en PDF; quintetos/estilos_unificados*.gz.txt = estilos de la taxonomía nueva);
   datos/ = data/artifact/{<temporada>/, normalizados/, normalizacion/, temporadas.json, diccionario_columnas.json}.
 * Cada JSON se publica comprimido como <ruta>.gz.txt (los de menos de 256 KB, también en claro) (gzip en base64: el Artifact sólo sirve
   tipos de texto y una versión admite 256 MB); las páginas leen primero esa versión (cargarJSON) y si no
@@ -30,7 +31,11 @@ def mapa() -> dict[str, Path]:
          "atlas/articulo/estilos_de_juego_baskonia.pdf": RAIZ / "docs/articulo/estilos_de_juego_baskonia.pdf"}
     for p in sorted((DA / "atlas" / "estilos").glob("*.json")):
         m[f"atlas/estilos/{p.name}"] = p
-    m["atlas/simulador_v2.js"] = RAIZ / "artifact/atlas/simulador_v2.js"        # motor del simulador de encaje v2
+    m["atlas/simulador_v2.js"] = RAIZ / "artifact/atlas/simulador_v2.js"        # motor del simulador de encaje v2.1 (rol asignado)
+    m["atlas/informe_v3.js"] = RAIZ / "artifact/atlas/informe_v3.js"            # lectura de fichaje (informe PDF v3)
+    # estilos unificados para Equipos y quintetos (generados con artifact/herramientas/gen_eu_*.py)
+    for nombre in ("estilos_unificados.gz.txt", "estilos_unificados_clubes.gz.txt"):
+        m[f"quintetos/{nombre}"] = RAIZ / "artifact/quintetos" / nombre
     for p in sorted((DA / "simulador").glob("*.json")):
         if p.name != "paridad.json":
             m[f"atlas/simulador/{p.name}"] = p

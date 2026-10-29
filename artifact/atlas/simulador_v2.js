@@ -1,4 +1,11 @@
-/* Simulador de encaje v2 — motor en el navegador.
+/* Simulador de encaje v2.1 — motor en el navegador.
+ * v2.1 (29-10-2026): ROL ASIGNADO. Quien simula elige el rol de cada fichaje (y de cada jugador en «equipo completo»);
+ * el motor ya no lo decide. Con rol asignado: los minutos de ese jugador salen de la franja de minutos de ese rol en la
+ * liga de destino (centro = min_rol de la liga, dispersión 0,04 del partido, recortada a los umbrales del rol), es
+ * titular si el rol es TITULAR o GO_TO_GUY, el resto de la plantilla reparte los minutos que quedan, y la probabilidad de
+ * rol es 1 en el rol elegido (el componente «rol» del Fit usa ese rol; sin capa de calibración de salida para él).
+ * Todo lo demás (traducción, adaptación, uso, compañeros, producción, estilo, impacto, quintetos, Fit y avisos) se
+ * calcula igual que en v2.0, ahora condicionado a esos minutos. Sin rol asignado, comportamiento v2.0 idéntico.
  * Port de bbfit.simulador.simular (Python, la referencia). Mismas ecuaciones y mismos datos (atlas/simulador/*.json,
  * generados por bbfit/sim_exportar.py); los números aleatorios no son los de numpy, así que Python y JS coinciden en
  * distribución (paridad comprobada en las medias dentro del error Monte Carlo), no bit a bit.
@@ -160,6 +167,31 @@
     }
     return { M, T5 };
   }
+  // v2.1 · constantes del rol asignado (configs/simulation.yaml → rol_asignado, exportadas en meta.rol_asignado; si faltan, las de abajo)
+  const rolCfg = () => ({ dispersion: 0.04, min_residual: 0.02, tope_titular: 0.82, tope_fijos: 0.9, ...((D && D.meta && D.meta.rol_asignado) || {}) });
+  // v2.1 · franja de minutos (fracción del partido) de cada rol, con los umbrales de clasificación del motor
+  function franjaRol(rol) {
+    const u = D.meta.roles_umbral, tope = D.meta.asignacion.max_min_partido / 40, C = rolCfg();
+    return { RESIDUAL: [C.min_residual, u.prof], PROFUNDIDAD: [u.prof, u.rot], ROTACION: [u.rot, u.tit], TITULAR: [u.tit, Math.min(tope, C.tope_titular)], GO_TO_GUY: [u.tit_seguro, tope] }[rol] || null;
+  }
+  // v2.1 · impone los roles asignados (fuerza: Map índice → rol) sobre cada iteración de minutos M / titulares T5
+  function forzarRoles(M, T5, fuerza, total, gm, LB, rng) {
+    if (!fuerza || !fuerza.size) return;
+    const tope = D.meta.asignacion.max_min_partido * gm / 40 * total / (5 * gm), minRol = (LB && LB.min_rol) || {};
+    for (let s = 0; s < M.length; s++) {
+      const fila = M[s], t5 = T5[s]; let fijo = 0;
+      fuerza.forEach((rol, i) => { const f = franjaRol(rol); if (!f) return; const c = Math.min(f[1], Math.max(f[0], num(minRol[rol], (f[0] + f[1]) / 2)));
+        const mp = Math.min(f[1], Math.max(f[0], c + rolCfg().dispersion * rng.n())); fila[i] = mp * gm; fijo += fila[i]; t5[i] = rol === "TITULAR" || rol === "GO_TO_GUY"; });
+      const tf = rolCfg().tope_fijos; if (fijo > tf * total) { const k = tf * total / fijo; fuerza.forEach((_, i) => { fila[i] *= k; }); fijo = tf * total; }
+      const libres = fila.map((_, i) => !fuerza.has(i)), resto = fila.reduce((a, m, i) => a + (libres[i] ? m : 0), 0), objetivo = total - fijo;
+      if (resto > 0) { let k = objetivo / resto; fila.forEach((m, i) => { if (libres[i]) fila[i] = m * k; });
+        for (let it = 0; it < 20; it++) { const ex = fila.reduce((a, m, i) => a + (libres[i] ? Math.max(m - tope, 0) : 0), 0); if (ex < 1e-9) break; const lib = fila.map((m, i) => libres[i] && m < tope - 1e-9), sl = fila.reduce((a, m, i) => a + (lib[i] ? m : 0), 0); if (sl <= 0) break; fila.forEach((m, i) => { if (libres[i]) fila[i] = Math.min(m, tope); }); fila.forEach((m, i) => { if (lib[i]) fila[i] = m + ex * m / sl; }); } }
+      // titulares: 5 exactos; los forzados como titulares entran primero, el resto por minutos
+      const forz = [...fuerza.keys()].filter((i) => t5[i]), noTit = new Set([...fuerza.keys()].filter((i) => !t5[i]));
+      const otros = fila.map((m, i) => [m, i]).filter(([, i]) => !fuerza.has(i)).sort((a, b) => b[0] - a[0]).map((x) => x[1]);
+      const tit = forz.slice(0, 5).concat(otros).filter((i) => !noTit.has(i)).slice(0, 5); t5.fill(false); tit.forEach((i) => (t5[i] = true));
+    }
+  }
   function clasificar(mp, gs, gtg) {
     const u = D.meta.roles_umbral, sol = D.meta.roles_solape.gs;
     let r = mp < u.prof ? "RESIDUAL" : mp < u.rot ? "PROFUNDIDAD" : mp < u.tit ? "ROTACION" : mp < u.tit_seguro ? (gs >= sol ? "TITULAR" : "ROTACION") : "TITULAR";
@@ -208,6 +240,11 @@
     const U = Array.from({ length: nSim }, (_, s) => { const r = P.map((p) => p.u); r[iF] += ku * num(meta.utilidad.L, 0) * (Leff[s] - L0); return r; });
     const [rot, rotSd, curva] = tendencia(club), pres = P.map((p, i) => (i === iF ? 1 : num(p.presencia, 1)));
     const { M, T5 } = asignar(P, U, pres, total, gm, rot, rotSd, curva, nSim, rng);
+    // v2.1 · roles asignados (fichaje: op.rol; otros fichajes que entran como compañeros: op.roles = Map persona → rol)
+    const rolAsig = ROLES.includes(op.rol) ? op.rol : null, fuerza = new Map();
+    if (op.roles) P.forEach((p, i) => { const r = op.roles.get ? op.roles.get(p.persona) : op.roles[p.persona]; if (i !== iF && ROLES.includes(r)) fuerza.set(i, r); });
+    if (rolAsig) fuerza.set(iF, rolAsig);
+    forzarRoles(M, T5, fuerza, total, gm, LB, rng);
     const P0 = P.slice(0, iF), n0 = Math.max(200, Math.floor(nSim / 2));
     const M0 = P0.length >= 5 ? asignar(P0, null, pres.slice(0, iF), total, gm, rot, rotSd, curva, n0, rng).M : null;
     const resid = num(LB.min_residual, 0.06) * gm;
@@ -253,7 +290,7 @@
       obs[m] = ruido(m, ligaD, base, prod[m], poss.map((p, s) => p * (tiro ? USG2f[s] / 100 : 1)), rng);
     });
     // roles
-    const rolS = mF.map((m, s) => clasificar(m / gm, T5[s][iF] ? 1 : 0, esGtg[s]));
+    const rolS = rolAsig ? mF.map(() => rolAsig) : mF.map((m, s) => clasificar(m / gm, T5[s][iF] ? 1 : 0, esGtg[s]));
     const pRol = Object.fromEntries(ROLES.map((r) => [r, rolS.filter((x) => x === r).length / nSim]));
     const rolEsp = ROLES.reduce((a, r) => (pRol[r] > pRol[a] ? r : a), ROLES[0]);
     const indiceRol = ROLES.reduce((a, r, i) => a + i * pRol[r], 0);
@@ -269,8 +306,9 @@
       companeros: { L_bar: media(Lbar), L_origen: fin(ctxO) ? ctxO : null, efecto_ts: media(bS.map((b, s) => b * dL[s])) },
     };
     // capa de calibración de salida (minutos y roles; ajustada con fichajes reales anteriores: bbfit.validacion)
+    res.rol_asignado = rolAsig; res.rol_origen = rec.rol || null; res.version_motor = rolAsig || fuerza.size ? "v2.1" : "v2.0";
     const CS = meta.calibracion_salida;
-    if (CS) {
+    if (CS && !rolAsig) {
       const ro = ROLES.includes(rec.rol) ? rec.rol : "ROTACION", mb = num((LB.min_rol || {})[ro], 0.4) * gm, mo = fin(rec.min_pct) ? rec.min_pct * gm : mb;
       const tr = (CS.transicion || {})[ro], Pb = ROLES.map((r) => (tr ? num(tr[r], 0.2) : 0.2)), m0 = res.minutos, c = CS.min.c;
       const m = Math.max(0, c[0] + c[1] * m0.mediana + c[2] * mo + c[3] * mb);
@@ -351,7 +389,7 @@
     return out;
   }
   // Minutos endógenos de una plantilla completa (sin fichaje): «Simular equipo completo»
-  function minutosEquipo(recs, club, nSim) {
+  function minutosEquipo(recs, club, nSim, roles) {
     const base = club.base, ligaD = club.liga, gm = minPartido(ligaD), total = 5 * gm, rng = rngDe(crc(`${club.liga}|${club.team}|equipo`));
     const lmc = new Map((club.plantilla || []).map((x) => [x[3], x[2]]));
     const P = recs.map((r) => { const m = miembro(r, 1, lmc.has(r.persona) ? lmc.get(r.persona) : null, ligaD, base, !lmc.has(r.persona)); m.persona = r.persona; return m; });
@@ -360,8 +398,10 @@
     const ku = num((D.meta.calibracion || {}).escala_utilidad, 1); P.forEach((p) => (p.u = ku * utilidad(p)));
     const [rot, rotSd, curva] = tendencia(club), n = nSim || D.meta.n_sim;
     const { M, T5 } = asignar(P, null, P.map(() => 1), total, gm, rot, rotSd, curva, n, rng);
+    // v2.1 · roles asignados por quien simula (roles: Map persona → rol)
+    if (roles) { const fz = new Map(); P.forEach((p, i) => { const r = roles.get ? roles.get(p.persona) : roles[p.persona]; if (ROLES.includes(r)) fz.set(i, r); }); forzarRoles(M, T5, fz, total, gm, ligaBase(base, ligaD), rng); }
     return P.map((p, i) => ({ persona: p.persona, minutos: media(M.map((f) => f[i])), mediana: cuantil(M.map((f) => f[i]), 0.5), lo50: cuantil(M.map((f) => f[i]), 0.25), hi50: cuantil(M.map((f) => f[i]), 0.75), p_titular: T5.filter((t) => t[i]).length / n }));
   }
-  const api = { cargar, simular, minutosEquipo, prior, grupoNac, traducir, clasificar, ROLES, get datos() { return D; } };
+  const api = { cargar, simular, minutosEquipo, prior, grupoNac, traducir, clasificar, franjaRol, ROLES, VERSION: "v2.1", get datos() { return D; } };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else raiz.SIM2 = api;
 })(typeof window !== "undefined" ? window : globalThis);
