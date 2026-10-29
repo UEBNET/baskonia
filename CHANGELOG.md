@@ -1,6 +1,6 @@
 # Registro de cambios
 
-## Artifact v2 candidata y simulador v2.1 (29-10-2026)
+## Artifact v2 (publicada en el enlace vigente) y simulador v2.1 (29-10-2026)
 
 Detalle, verificación y pendientes: `docs/checkpoints/ARTIFACT-v2.md`. Especificación de la interfaz: `docs/ux/UX-SPEC.md`.
 

@@ -1,10 +1,11 @@
 # Artifact de análisis · v2 candidata: usabilidad, roles, nomenclatura de estilos y lectura de fichaje (29-10-2026)
 
 Base: versión publicada 1793270587-2224 (F1 rebranding) de https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.
-La v2 está publicada como **artifact separado** (candidata): https://claude.ai/artifact/Qk58XhN8Bp2mfLkXgSHDDy
-(versión 1793277823-b6d5, 210 ficheros, capacidades `downloads` y `sample`). El artifact vigente no se toca hasta que
-el CEO apruebe sustituirlo. Los datos se copiaron en servidor desde el vigente en cuatro publicaciones (límite de 64 MB
-por publicación); el único dato nuevo son los dos ficheros de estilos unificados de Equipos y quintetos.
+**Estado (29-10-2026, 13:50): la v2 sustituye a la versión vigente** por decisión del CEO, en el mismo enlace
+https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (versión 1793278157-f2b5, 210 ficheros, capacidades `downloads` y
+`sample`; se retira el conector Claude Code Remote que usaba «Ejecutar»; runtime 0.2.92). Antes de publicar se
+comprobó que la versión vigente seguía siendo exactamente la base de la v2 (sin cambios que fusionar). La copia
+candidata https://claude.ai/artifact/Qk58XhN8Bp2mfLkXgSHDDy queda como duplicado de revisión.
 
 Repositorio (rama `main`, UEBNET/baskonia): `artifact/mesa-multiliga.html`, `artifact/atlas/{index.html,
 simulador_v2.js,informe_v3.js}`, `artifact/quintetos/{index.html,estilos_unificados*.gz.txt}`, `artifact/empaquetar.py`
