@@ -7,7 +7,9 @@
 #   2. normalización v3.1 (CVAE corregida reentrenada + combinación con la v2 rehecha)
 #   3. capas de encaje (roles, reemplazo, entropía, estilos unificados) y adaptación (fase 7 + adaptación v3)
 #   4. simulador v3.1: examen completo (V31 con adaptación), pesos de producción, diagnóstico V31A, histórico, exportación
-# y deja los resultados en <copia>/data/modelos; scripts/importar_v31.sh los copia a las carpetas versionadas.
+# y deja los resultados en <copia>/data/modelos. Importación a las carpetas versionadas del repositorio:
+#   <copia>/data/modelos/v3_1           → data/modelos/v3_1_<fecha>/ (sin base_v2) y su normalizado v2 en base_v2/ (gzip)
+#   <copia>/data/modelos/adaptacion/v3_1 y simulador/v3_1 → las mismas rutas del repositorio
 #
 #   scripts/actualizar_v31.sh [carpeta de la copia, por defecto /tmp/cerno_v31]
 set -euo pipefail
@@ -33,6 +35,7 @@ paso python3 -m bbmodel escalas
 rm -f data/modelos/v3_1/niveles.csv                   # niveles y traducción cruzada con las redes nuevas
 paso python3 -m bbnorm3 --config configs/normalization_v31.yaml ajustar-combinada
 ln -sfn v3_1 data/modelos/v3_1_20261029             # la configuración del simulador v3.1 lee esta carpeta
+mkdir -p data/modelos/v3_1/base_v2 && ln -sfn ../../normalizado data/modelos/v3_1/base_v2/normalizado   # su base v2
 # 3. capas de encaje y adaptación
 paso python3 -m bbfit roles
 paso python3 -m bbfit reemplazo
@@ -43,10 +46,10 @@ mkdir -p data/modelos/adaptacion/v3_1/fase7
 cp data/modelos/adaptacion/curvas.csv data/modelos/adaptacion/adaptation_priors.csv data/modelos/adaptacion/v3_1/fase7/
 # 4. simulador v3.1
 export CERNO_SIMULADOR=v31
+paso python3 -m bbfit dataset-simulador             # v3.1 con la Tercera FEB de la v2 (docs/simulador_v31.md §4.1)
 paso python3 -m bbfit adaptacion-v3
 paso python3 -m bbfit backtest --fuente V31 --escenario inicio --adaptacion
 paso python3 -m bbfit pesos-simulador
-paso python3 -m bbfit backtest --fuente V31A --escenario inicio --adaptacion --pesos-de V31_inicio_adapt
 paso python3 -m bbfit historico
 paso python3 -m bbfit exportar-simulador --salida "$W/_sim"
 echo "=== $(date +%H:%M:%S) FIN (copia en $W)"
