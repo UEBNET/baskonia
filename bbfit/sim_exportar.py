@@ -125,8 +125,9 @@ def _priors() -> dict | None:
                                          for v in fila] for fila in t.itertuples(index=False)]}
 
 
-def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple[list[dict], set]:
-    """Clubes de destino de temp_dest con su plantilla (registros de la temporada base c.temp)."""
+def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple[list[dict], set, dict]:
+    """Clubes de destino de temp_dest con su plantilla (registros de la temporada base c.temp) y los registros mínimos
+    de los miembros sin registro en esa temporada (sólo su nombre)."""
     from . import validacion as V
     ids = SI.estilos_ids()
     r1 = roles[roles["temporada"] == temp_dest]
@@ -152,7 +153,7 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple
             continue
         eq_dest.append((e.liga, e.team_id, e.equipo, e.club, S.miembros_actuales(c, e.club),
                         f"plantilla {c.temp} (sin datos de {temp_dest})"))
-    out, usados = [], set()
+    out, usados, stubs = [], set(), {}
     for liga, team, nombre, club1, miembros, esc in eq_dest:
         club_t = V.club_en_t(c, liga, team, club1, mapa)
         et = c.eq[c.eq["club"] == club_t].iloc[0] if club_t is not None and (c.eq["club"] == club_t).any() else None
@@ -168,7 +169,12 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple
         rc = c.por_club.get(club_t) if club_t else None
         for p, pres in miembros:
             if p not in c.prin.index:
-                pl.append([None, _r(pres, 3), None, p])
+                # sin registro en la temporada base (debutante, o no jugó en ninguna liga cubierta): el motor lo trata
+                # como «sin dato» (nivel de banquillo). Registro mínimo sólo para que la página muestre su nombre;
+                # con min_pct 0,5 (logit 0) y sin L, edad, posición ni estilo, simula igual que un registro vacío
+                sid = f"sin_registro|{temp_dest}|{p}"
+                pl.append([sid, _r(pres, 3), None, p])
+                stubs[sid] = _stub(sid, p, liga, team, temp_dest, r1)
                 continue
             r = c.prin.loc[p]
             rid = f"{r['liga']}|{r['temporada']}|{r['player_id']}"
@@ -185,7 +191,18 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple
                     "eu": et.get("eu") if et is not None and isinstance(et.get("eu"), str) else None,
                     "eu_probs": [_r(et.get(f"eu_{i}"), 3) for i in ids] if et is not None else None,
                     "plantilla": pl})
-    return out, usados
+    return out, usados, stubs
+
+
+def _stub(sid: str, persona: str, liga: str, team, temp: str, r1: pd.DataFrame) -> list:
+    """Fila de jugadores.json para un miembro de la plantilla sin registro en la temporada base: sólo identidad."""
+    x = r1[(r1["persona_id"] == persona) & (r1["liga"] == liga) & (r1["team_id"].astype(str) == str(team))]
+    x = x if len(x) else r1[r1["persona_id"] == persona]
+    nombre = x.sort_values("min_total").iloc[-1]["nombre"] if len(x) and "nombre" in x else None
+    fila = {k: None for k in COLS_JUG}
+    fila.update({"id": sid, "persona": str(persona), "nombre": nombre if isinstance(nombre, str) else None, "liga": liga,
+                 "temporada": temp, "team": str(team), "min_pct": 0.5})
+    return [fila[k] for k in COLS_JUG]
 
 
 def exportar(salida: str | Path = SALIDA) -> dict:
@@ -196,11 +213,12 @@ def exportar(salida: str | Path = SALIDA) -> dict:
     roles = SI._leer_roles_temporada()
     P = json.loads((S.DIR_SIM / "pesos.json").read_text(encoding="utf-8")) if (S.DIR_SIM / "pesos.json").exists() else {}
     bases = {SI.siguiente(t): t for t in ex["temporadas_base"]}       # destino → base
-    meta_bases, clubes, filas_jug, usados_por_base = {}, [], [], {}
+    meta_bases, clubes, filas_jug, usados_por_base, stubs = {}, [], [], {}, {}
     ligas_todas = set()
     for dest, base in bases.items():
         c = S.cargar_corte(base)
-        clubs, usados = _clubes(c, dest, roles, cfg)
+        clubs, usados, sin_reg = _clubes(c, dest, roles, cfg)
+        stubs.update(sin_reg)
         clubes += clubs
         ligas = sorted(set(c.reg["liga"]) | {x["liga"] for x in clubs})
         ligas_todas |= set(ligas)
@@ -218,6 +236,7 @@ def exportar(salida: str | Path = SALIDA) -> dict:
         c = S.cargar_corte(t)
         r = c.reg[c.reg["min_total"] >= ex["minimo_minutos_jugador"]]
         filas_jug += _registros(c, r)
+    filas_jug += list(stubs.values())
     vistos, jug = set(), []
     for f in filas_jug:
         if f[0] in vistos:

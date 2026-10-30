@@ -13,6 +13,7 @@
   pesos-simulador   fase 8: pesos de producción (utilidad, calibración, Fit) → data/modelos/simulador/v2/pesos.json
   historico   fase 8: simulación v2 de todos los fichajes reales → data/modelos/simulador/v2/historico_<temp>.csv.gz
   exportar-simulador  fase 8: insumos del motor del navegador → data/artifact/simulador/ [--salida carpeta]
+  auditar     identidades: personas coherentes en roles y plantillas exportadas = las reales [--simulador carpeta]
   dataset-simulador  simulador v3.1: dataset normalizado que lee (v3.1; Tercera FEB con la v2) → normalizacion.dir
   adaptacion-v3  adaptación v3 (ADAPT% ascendente hacia el nivel adaptado) → data/modelos/adaptacion/v3/
   (simulador v3: CERNO_SIMULADOR=v3 python -m bbfit <orden> usa configs/simulation_v3.yaml → data/modelos/simulador/v3/)
@@ -48,6 +49,11 @@ def _entropia(a):
 def _estilos(a):
     from . import estilos_unificados
     return estilos_unificados.ejecutar(reusar_k=getattr(a, "reusar_k", False))
+
+
+def _auditar(a):
+    from . import auditoria
+    return auditoria.main(a.simulador)
 
 
 def _dataset_simulador(a):
@@ -96,7 +102,7 @@ def _exportar_sim(a):
 
 
 ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "estilos": _estilos,
-           "adaptacion": _adaptacion, "adaptacion-v3": _adaptacion_v3, "dataset-simulador": _dataset_simulador, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
+           "adaptacion": _adaptacion, "adaptacion-v3": _adaptacion_v3, "dataset-simulador": _dataset_simulador, "auditar": _auditar, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
            "historico": _historico, "exportar-simulador": _exportar_sim}
 
 
@@ -120,6 +126,7 @@ def main(argv=None) -> int:
     p.add_argument("--pesos-de", default=None, help="backtest: reutiliza los pesos por corte de otra ejecución")
     p.add_argument("--cortes", nargs="*", default=None, help="backtest: temporadas t de examen (t → t+1)")
     p.add_argument("--salida", default=None, help="exportar-simulador: carpeta de salida")
+    p.add_argument("--simulador", default=None, help="auditar: carpeta de exportar-simulador (clubes.json, jugadores.json)")
     p.add_argument("--sin-validacion", action="store_true", help="adaptacion: omite el examen temporal y dejar fuera una liga")
     a = p.parse_args(argv)
     res = ORDENES[a.orden](a)
