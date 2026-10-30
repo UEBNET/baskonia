@@ -13,6 +13,7 @@
   pesos-simulador   fase 8: pesos de producción (utilidad, calibración, Fit) → data/modelos/simulador/v2/pesos.json
   historico   fase 8: simulación v2 de todos los fichajes reales → data/modelos/simulador/v2/historico_<temp>.csv.gz
   exportar-simulador  fase 8: insumos del motor del navegador → data/artifact/simulador/ [--salida carpeta]
+  dataset-simulador  simulador v3.1: dataset normalizado que lee (v3.1; Tercera FEB con la v2) → normalizacion.dir
   adaptacion-v3  adaptación v3 (ADAPT% ascendente hacia el nivel adaptado) → data/modelos/adaptacion/v3/
   (simulador v3: CERNO_SIMULADOR=v3 python -m bbfit <orden> usa configs/simulation_v3.yaml → data/modelos/simulador/v3/)
   adaptacion  fase 7: adaptación al cambio de liga (Δ jerárquico, curva, censura, ADAPT%) → data/modelos/adaptacion/
@@ -47,6 +48,11 @@ def _entropia(a):
 def _estilos(a):
     from . import estilos_unificados
     return estilos_unificados.ejecutar(reusar_k=getattr(a, "reusar_k", False))
+
+
+def _dataset_simulador(a):
+    from . import sim_insumos as SI
+    return str(SI.dataset_simulador())
 
 
 def _adaptacion_v3(a):
@@ -90,7 +96,7 @@ def _exportar_sim(a):
 
 
 ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "estilos": _estilos,
-           "adaptacion": _adaptacion, "adaptacion-v3": _adaptacion_v3, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
+           "adaptacion": _adaptacion, "adaptacion-v3": _adaptacion_v3, "dataset-simulador": _dataset_simulador, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
            "historico": _historico, "exportar-simulador": _exportar_sim}
 
 

@@ -319,6 +319,16 @@ def escribir_resumen(D, cj, cfg) -> None:
     (out / "resumen.json").write_text(json.dumps(resumen, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
 
 
+def _ids_fuente(temp: str) -> dict:
+    """(liga, id de modelo) → id de la fuente (bbmodel.dataset_normalizado._brutos); vacío si no hay datos brutos."""
+    try:
+        from bbmodel.dataset_normalizado import _brutos
+        b = _brutos(temp)
+    except Exception:  # noqa: BLE001
+        return {}
+    return {(l, str(m)): str(f) for l, m, f in zip(b["liga"], b["pid_modelo"], b["player_id_fuente"]) if str(m) != str(f)}
+
+
 def _normalizado(trad: pd.DataFrame, dir_out, columnas_nuevas=None, sufijo: str = "_v3", fuente: str = "V3") -> None:
     """Esquema del dataset normalizado v1 (data/modelos/normalizado/<t>.csv) + columnas v3 (salidas.combinar_normalizado).
     Las filas son las de la tabla actual; las columnas del v1 se unen por (player_id, team_id, liga, temporada) y
@@ -348,8 +358,14 @@ def _normalizado(trad: pd.DataFrame, dir_out, columnas_nuevas=None, sufijo: str 
         fila = fila.fillna(-1).astype(int).to_numpy()
         base = v1.reindex(fila).reset_index(drop=True)   # filas sin pareja en el v1: vacías
         base = base[v1.columns].copy()               # mismo orden de columnas que el v1
+        # identificadores: los del v1 donde hay pareja (los de la fuente, que usan el simulador y la página); en las
+        # filas nuevas, el id de la tabla traducido al de la fuente (la tabla usa ids de modelo «n:nombre» en la BBL)
+        ids_fuente = _ids_fuente(temp)
         for c in clave:
-            base[c] = g[c].to_numpy()
+            v = g[c].to_numpy(object)
+            if c == "player_id" and ids_fuente:
+                v = np.array([ids_fuente.get((l, x), x) for l, x in zip(g["liga"].to_numpy(), v)], dtype=object)
+            base[c] = np.where(fila >= 0, base[c].astype(str).to_numpy(object), v) if c in ("player_id", "team_id") else v
         # fila del v1 calculada con otros partidos (temporada en curso): no se mezcla un valor viejo con uno nuevo
         gp1, gp3 = pd.to_numeric(base.get("gp"), errors="coerce"), pd.to_numeric(g["gp"], errors="coerce").to_numpy() \
             if "gp" in g else None

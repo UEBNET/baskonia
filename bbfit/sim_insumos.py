@@ -264,6 +264,42 @@ def _dir_norm() -> tuple[Path, str]:
     return DIR_NORM, ".csv"
 
 
+def dataset_simulador(progreso=print) -> Path:
+    """Dataset normalizado que lee el simulador v3.1 (normalizacion.dir): el de la v3.1 (normalizacion.origen_v31) con
+    las filas de las ligas de normalizacion.ligas_v2 (la Tercera FEB) tomadas del A+B amortiguado
+    (normalizacion.origen_v2: estimación final, intervalos y percentiles de cada métrica). Motivo (examen completo del
+    simulador, decisión post hoc): en la Tercera FEB la v3.1 usa sólo la CVAE (peso 1, ajuste por conocimiento), que
+    comprime las diferencias entre jugadores de esa liga; en los fichajes con destino la Tercera FEB (casi todos desde
+    ella misma) el error de pts/100 subía de 4,39 a 5,09 y la cobertura del 90 % bajaba de 0,81 a 0,54.
+    Con estas filas iguales a la v2, traduccion_v31 deja en la Tercera FEB las constantes amortiguadas (θ_v31 = θ_v2)."""
+    from bbmodel.dataset_normalizado import METRICAS
+    n = cfg_sim()["normalizacion"]
+    o31, o2, dest = RAIZ / n["origen_v31"], RAIZ / n["origen_v2"], RAIZ / n["dir"]
+    ligas = list(n.get("ligas_v2", []))
+    dest.mkdir(parents=True, exist_ok=True)
+    clave = ["liga", "temporada", "player_id", "team_id"]
+    sufijos = ["", "_lo", "_hi", "_pctel", "_am", "_am_lo", "_am_hi", "_am_pctel"]
+    for f in sorted(o31.glob("*.csv.gz")):
+        temp = f.name[:7]
+        d = pd.read_csv(f, dtype={"player_id": str, "team_id": str}, low_memory=False)
+        p2 = o2 / f"{temp}.csv.gz"
+        p2 = p2 if p2.exists() else o2 / f"{temp}.csv"
+        cambiadas = 0
+        if ligas and p2.exists():
+            v2 = pd.read_csv(p2, dtype={"player_id": str, "team_id": str}, low_memory=False)
+            v2 = v2[v2["liga"].isin(ligas)].drop_duplicates(clave, keep=False)
+            cols = [f"{m}{x}" for m in METRICAS for x in sufijos if f"{m}{x}" in d and f"{m}{x}" in v2]
+            idx = d[clave].reset_index().merge(v2[clave].reset_index().rename(columns={"index": "i2"}), on=clave)
+            if len(idx):
+                d.loc[idx["index"].to_numpy(), cols] = v2.loc[idx["i2"].to_numpy(), cols].to_numpy()
+                d.loc[idx["index"].to_numpy(), "fuente_norm"] = "A+B (Tercera FEB en el simulador)"
+                cambiadas = len(idx)
+        d.to_csv(dest / f.name, index=False)
+        if progreso:
+            progreso(f"  dataset del simulador {temp}: {len(d)} filas, {cambiadas} con la v2 ({', '.join(ligas)})")
+    return dest
+
+
 def traduccion(fuente: str, metricas: list[str] | None = None) -> dict:
     """Constantes de traducción a la liga de destino según la fuente de θ: «V31» = las de la v3.1 (traduccion_v31);
     el resto (AB, A y «V31A», diagnóstico) = las de la normalización amortiguada (traduccion_completa)."""

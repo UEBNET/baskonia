@@ -16,7 +16,10 @@ intervalos: [0.50, 0.90]             # intervalos centrales de la salida
 
 normalizacion:
   fuente: V31                        # V31 = <m>_am de la v3.1 + constantes de traducción v3.1 | V31A = con las amortiguadas
-  dir: data/modelos/v3_1_20261029/normalizado   # v3.1 rehecha con los datos hasta el 29-10
+  dir: experimentos/cache_simulador_v3_1/normalizado   # dataset que lee el simulador (`bbfit dataset-simulador`)
+  origen_v31: data/modelos/v3_1_20261029/normalizado  # v3.1 rehecha con los datos hasta el 29-10
+  origen_v2: data/modelos/v3_1_20261029/base_v2/normalizado   # A+B amortiguado rehecho con esos datos (base de la v3.1)
+  ligas_v2: [feb3]                   # filas que el simulador toma de la v2 (DECISIÓN POST HOC, sim_insumos.dataset_simulador)
   temporada_ref: "2025-26"           # vara de los <m>_am (μ/τ EuroLeague de esa temporada)
   minimo_minutos_jugador: 100        # registro de origen con ≥ 100 min (por debajo: aviso de muestra pequeña)
 
@@ -64,9 +67,8 @@ adaptacion:
 traduccion:                          # constantes v3.1 (sim_insumos.traduccion_v31)
   min_minutos: 400                   # jugadores con ≥ 400 min en el ajuste E[θ_v2 | θ_v31] = c + d·θ_v31 de cada liga
   pendiente_minima: 0.1              # d mínima (con d → 0 la escala s' = s/d no tendría límite)
-  r_minima: 0.95                     # correlación v3.1–v2 mínima en la liga-métrica para usar el sustituto lineal; por
-                                     # debajo (sólo la Tercera FEB: r 0,37-0,95) constantes amortiguadas. DECISIÓN POST HOC:
-                                     # tomada tras ver que el examen empeoraba sólo en los fichajes con la Tercera FEB
+  r_minima: 0.95                     # correlación v3.1–v2 mínima en la liga-métrica para usar el sustituto lineal (por
+                                     # debajo, constantes amortiguadas); con la Tercera FEB tomada de la v2 no se activa
   min_filas_liga: 30                 # por debajo, la liga conserva las constantes amortiguadas
 
 estilo:
