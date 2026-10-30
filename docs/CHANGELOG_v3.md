@@ -57,6 +57,20 @@ Regla suprema: **versionar, nunca sustituir**. La v1/v2 queda en `main` (y debí
 * `bbnorm3/artifact.py`: «Datos Normalizados» y el explorador de normalización con la v3.1.
 * Pesos de utilidad, calibración y Fit: los de la v2 (no reentrenados). Detalle y límites en `docs/simulador_v3.md`.
 
+## Simulador v3.1 (30-10-2026) — todo rehecho con los datos al 29-10
+
+* `scripts/actualizar_v31.sh`: copia aislada del repositorio en la que se rehace, con los datos al 29-10, toda la
+  cadena (normalización v2 y v3.1, roles, reemplazo, entropía, estilos unificados, fase 7, adaptación v3, examen,
+  pesos, histórico y exportación). La v1/v2 del repositorio no se toca.
+* Salidas versionadas: `data/modelos/v3_1_20261029/` (con `base_v2/`), `adaptacion/v3_1/`, `simulador/v3_1/`.
+  Se usan con `configs/simulation_v31.yaml` (`CERNO_SIMULADOR=v31`).
+* Constantes de traducción de la v3.1 (`sim_insumos.traduccion_v31`).
+* Adaptación sin doble conteo en la producción.
+* Ids de la fuente en la v3.1: la BBL llevaba ids de modelo.
+* Tercera FEB con la v2 en el simulador (post hoc).
+* Pesos reentrenados con el examen completo: minutos y rol igual o algo mejor que la v2; pts/100 empate; USG, AST,
+  rebote y TOV mejor; TS% y cobertura del 90 % algo peor. Detalle en `docs/simulador_v31.md`.
+
 ### Sin cambios
 * El código de `bbstats/`, `bbmodel/` y `artifact/` (página y motor JS). En `bbfit/` y `bbestilo/` sólo se añaden
   opciones nuevas; por defecto se comportan como la v2.

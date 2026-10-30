@@ -107,7 +107,24 @@ Resultado:
 
 Los diagnósticos están en `validacion/diagnostico_previo/`.
 
-## 5. Lo que queda abierto [LECTURA]
+## 5. Producción y artifact [DATO]
+* **Pesos de producción** (`simulador/v3_1/pesos.json`): utilidad con todas las temporadas cerradas, calibración del
+  último corte, y Fit y calibración de salida con las predicciones del examen V31.
+* **Histórico** (`historico_<temporada>.csv.gz`, columna `version` = v3.1): 854 / 818 / 964 / 1.444 / 1.509 / 1.765
+  fichajes simulados para 2021-22 … 2026-27.
+* **Paridad Python ↔ navegador:** 6 de 6 casos dentro de tolerancia, con el motor del repositorio y con el publicado.
+* **Intervalo de la ADAPT%:** el motor muestrea Δ_temp con una normal sin recortar. La sd se limita a |media|/1,645
+  para que el intervalo del 90 % no pase de 100.
+* **Artifact «Cerno Analytics»** (sólo datos; página y motor sin cambios):
+  * simulador v3.1;
+  * Atlas de estilos con las 15 ligas y los estilos unificados rehechos;
+  * estilos unificados de Quintetos, regenerados con los generadores de `artifact-v2-candidata`;
+  * «Datos Normalizados» y explorador de normalización con la v3.1 al 29-10;
+  * resumen de «Normalización de ligas» y «Evaluación de ligas» con la v2 rehecha.
+* **Sin regenerar:** los datos del informe PDF del Atlas (`atlas/informe/`). Su generador (`build_informe.py`) no
+  está en el repositorio; la página ya resuelve en el navegador los `persona_id` antiguos.
+
+## 6. Lo que queda abierto [LECTURA]
 
 * **TS% y cobertura de producción.**
   * El TS% es algo peor que en la v2 (+0,20) y el intervalo del 90 % de pts/100 cubre el 85 % (v2 88 %). En la
