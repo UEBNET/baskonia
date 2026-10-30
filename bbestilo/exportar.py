@@ -295,7 +295,8 @@ def main(salida: str, todas_las_ligas: bool = False) -> None:
     from . import entrenadores as ENT
     te = ENT.construir(cj, red, log=lambda *_: None)
     if len(te):
-        te.to_csv(ENT.SALIDA, index=False)
+        if not todas_las_ligas:                  # la tabla de la v2 no se sustituye con la proyección
+            te.to_csv(ENT.SALIDA, index=False)
         pk = [f"p{k}" for k in range(P.shape[1])]
         por_club = {}
         for _, t in te.sort_values(["clave", "orden"]).iterrows():

@@ -45,8 +45,23 @@ Regla suprema: **versionar, nunca sustituir**. La v1/v2 queda en `main` (y debí
   `docs/normalizacion_v31_combinada.md`.
 * Cachés de redes: la huella ya no incluye `version`, `salida` ni `combinacion` (no cambian el entrenamiento).
 
+## Simulador v3 (30-10-2026) — normalización v3.1, ADAPT% ascendente y FEB visibles
+
+* `configs/simulation_v3.yaml` (se activa con `CERNO_SIMULADOR=v3`): capacidad θ desde el dataset v3.1 (fuente
+  `V31`), partidos reales por temporada en destino, contracción 1. Salidas en `data/modelos/simulador/v3/`.
+* `bbfit/adaptacion_v3.py` (`python -m bbfit adaptacion-v3`): ADAPT%(g) = 100·(1 + D·e^(−g/κ)) con D ≤ 0, desde la
+  curva bruta de los traspasos. Empieza por debajo de 100 (global 95,6 % en el partido 1) y sube hasta 100 (90 % del
+  hueco cerrado en 3,8 partidos). Salidas en `data/modelos/adaptacion/v3/`. El motor del artifact no cambia.
+* `bbestilo exportar --todas-las-ligas`: el Atlas de estilos exporta las 15 ligas (las FEB proyectadas con las
+  escalas de las 12 de la red VaDE), así que las FEB aparecen en «Tu club» y en el buscador del simulador.
+* `bbnorm3/artifact.py`: «Datos Normalizados» y el explorador de normalización con la v3.1.
+* Pesos de utilidad, calibración y Fit: los de la v2 (no reentrenados). Detalle y límites en `docs/simulador_v3.md`.
+
 ### Sin cambios
-* `bbstats/`, `bbmodel/`, `bbfit/`, `bbestilo/`, `artifact/` y todas las salidas en `data/modelos/` de la v1/v2.
+* El código de `bbstats/`, `bbmodel/` y `artifact/` (página y motor JS). En `bbfit/` y `bbestilo/` sólo se añaden
+  opciones nuevas; por defecto se comportan como la v2.
+* Las salidas de la v1/v2 en `data/modelos/`: las nuevas van en carpetas propias (`v3_1/`, `adaptacion/v3/`,
+  `simulador/v3/`). La exportación del Atlas con las 15 ligas se hace en una carpeta aparte.
 
 ### Pendiente (requiere aprobación del CEO)
 * Etiqueta `v2-snapshot-20261029`: esta sesión no tenía permiso para subir etiquetas (HTTP 403). Comando para

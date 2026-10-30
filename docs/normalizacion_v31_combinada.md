@@ -49,6 +49,8 @@ cada una. **LECTURA** previa al examen: en el corte de selección (2022 → 23),
 |---|---|
 | `normalizado/<temporada>.csv.gz` | Esquema del v1 (mismas columnas y orden). Las columnas de estimación final (`<m>`, `_lo`, `_hi`, `_pctel`, `<m>_am`, `_am_lo`, `_am_hi`, `_am_pctel`) llevan la v3.1. Se conservan `<m>_v1` y `<m>_am_v1` (originales), las de la CVAE (`<m>_v3*`) y las propias (`<m>_v31`, `_v31_lo`, `_v31_hi`, `_v31_pctel`, `_v31_peso_cvae`) |
 | `niveles.csv`, `niveles_covarianza.csv.gz`, `traduccion_cruzada/`, `puentes.csv`, `ciclo.csv`, `resumen.json` | Los mismos ficheros de la v3.0 (§4 de su documento), con la CVAE corregida |
+| `validacion/examen_v31.json` | El examen de las tres variantes (§4) |
+| `validacion/casos_combinada.csv.gz`, `resumen_metricas_combinada.csv` | Casos y resumen por métrica de la variante con conocimiento |
 
 Reglas del dataset normalizado, fila a fila (columna `fuente_v3` y `<m>_v31_peso_cvae`):
 * `posterior_conjunta`: fila del entrenamiento (≥ 100 min); combinación con w = 0,5 (Tercera FEB: w = 1, intervalo
@@ -65,9 +67,6 @@ Reglas del dataset normalizado, fila a fila (columna `fuente_v3` y `<m>_v31_peso
 * Comprobación: en la EuroLeague 2025-26 (la vara), la mediana traducida coincide con la observada (pts/100 21,7
   frente a 21,1; PER 14,2 frente a 13,7). En el resto de ligas la CVAE sitúa los niveles algo más lejos de la
   EuroLeague que la v2 (mediana de pts/100 de todas las filas: v2 16,6; CVAE 13,4; v3.1 15,0).
-
-| `validacion/examen_v31.json` | El examen de las tres variantes (§4) |
-| `validacion/casos_combinada.csv.gz`, `resumen_metricas_combinada.csv` | Casos y resumen por métrica de la variante con conocimiento |
 
 ## 4. Examen (orientativo)
 
