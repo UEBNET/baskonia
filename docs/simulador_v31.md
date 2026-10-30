@@ -190,3 +190,31 @@ se exportaban sin nombre y la página mostraba su código: el 36 % de los miembr
   tabla de datos.
 * El examen no cambia (minutos 4,70; pts/100 3,77): la contaminación sólo afectaba a 2026-27 y los cortes del examen
   llegan a 2025-26.
+
+## 8. Simular sobre la temporada en curso con las fichas de esta temporada (30-10-2026)
+
+**Cambio.** Si el club de destino es de la temporada en curso (2026-27), cada compañero con ≥ 100 min esta temporada
+usa su ficha de 2026-27.
+* Si tiene ficha en ese club, se usa esa: cuenta como jugador que ya está en el club, con su cuota real de minutos.
+  El club se reconoce por su clave o por liga + equipo, porque algunas ligas cambian el id del equipo entre temporadas.
+* Si no la tiene en ese club, se usa su ficha principal de 2026-27.
+* Con menos minutos se mantiene la ficha de la temporada base (2025-26) o, si no la tiene, «sin dato».
+* El fichaje usa siempre la ficha que se elige en la página.
+
+Se aplica igual en el motor Python (`simulador.ficha_actual`, `plantilla`) y en los datos del navegador.
+
+**Comprobaciones [DATO].**
+* Paridad 6/6.
+* Auditoría: 2 personas dudosas de 15.166; 1,0 % de miembros de plantilla no comparables con la tabla de datos;
+  0 sin nombre; fichas para el 100 % de los ≥ 100 min.
+* 1.217 compañeros reconocidos en su club con la ficha de 2026-27.
+* Baskonia EL 2026-27: Lawson, Stewart, Faried, Baugh, Simmons, Kurucs, Sedekerskis, Duarte y Spagnolo con su ficha
+  del club en 2026-27. Santos, Joksimovic, Frisch y Howard tienen < 100 min y siguen con la de 2025-26.
+
+**Lo que no es de 2026-27 [LECTURA].**
+* Ritmo, estilo de equipo y tendencia de reparto del entrenador: salen de la última temporada completa.
+* Conexiones reales entre jugadores (quintetos): el simulador no las usa.
+* Constantes de traducción, pesos y adaptación: calibrados con el histórico.
+
+Con pocos partidos, el nivel de 2026-27 es más incierto; la normalización lo encoge y ensancha su intervalo. El examen
+no cambia: sus destinos nunca son la temporada en curso.

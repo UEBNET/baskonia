@@ -210,7 +210,7 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict, nombres:
             if dest_prin is not None:
                 # destino = temporada en curso: su ficha de esta temporada (la de este club si la tiene, como jugador
                 # que ya está en él; si no, la principal). Igual que simulador.ficha_actual (paridad)
-                r_act, fila = S.ficha_actual(c, p, club_t)
+                r_act, fila = S.ficha_actual(c, p, club_t, liga, team)
                 if r_act is not None:
                     rid = f"{r_act['liga']}|{r_act['temporada']}|{r_act['player_id']}"
                     lmc = _r(float(S._logit(S._f(fila["min_pct"]))), 3) if fila is not None else None
