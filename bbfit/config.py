@@ -1,6 +1,7 @@
 """Lectura de configs/*.yaml (umbrales e hiperparámetros) con caché."""
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from pathlib import Path
 
@@ -15,6 +16,8 @@ DIR_MOD = RAIZ / "data" / "modelos"
 @lru_cache(maxsize=None)
 def cargar(nombre: str) -> dict:
     """configs/<nombre>.yaml como diccionario (KeyError claro si falta)."""
+    if nombre == "simulation" and os.environ.get("CERNO_SIMULADOR") == "v3":
+        nombre = "simulation_v3"                 # simulador v3 (configs/simulation_v3.yaml); sin la variable, la v2
     p = DIR_CONFIGS / f"{nombre}.yaml"
     if not p.exists():
         raise FileNotFoundError(f"falta {p}")

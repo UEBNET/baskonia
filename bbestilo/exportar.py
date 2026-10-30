@@ -157,15 +157,41 @@ def ejes(Z: np.ndarray, X: np.ndarray) -> list[dict]:
     return out
 
 
-def main(salida: str) -> None:
+def conjunto_proyectado(ligas_red: tuple) -> "Conjunto":
+    """Todas las competiciones (también las FEB, añadidas después de entrenar la red) PROYECTADAS con las escalas,
+    el índice de nivel y el neutralizador ajustados sólo con las competiciones de la red: la red guardada recibe las
+    entradas en la misma escala con la que se entrenó, sin reentrenarse. Las competiciones nuevas quedan ubicadas en
+    el mapa y con su estilo unificado (fase 6), que sí se ajustó con ellas."""
+    from .datos import construir
+    ref = conjunto(ligas_red)
+    cj = construir()
+    for a in ("escala_club", "escala_jugador", "nivel_club", "nivel_jugador", "neutral_club", "neutral_jugador"):
+        setattr(cj, a, getattr(ref, a))
+    V_c = cj.clubes[C.COLS].to_numpy(float)
+    Q_c = cj.clubes[[f"n_{c}" for c in C.NIVEL]].to_numpy(float)
+    V_j = cj.jugadores[C.COLS].to_numpy(float)
+    Q_j = cj.jugadores[list(C.NIVEL)].to_numpy(float)
+    cj.clubes["nivel"] = cj.nivel_club.indice(Q_c)
+    cj.jugadores["nivel"] = cj.nivel_jugador.indice(Q_j)
+    nc, nj = cj.neutral_club, cj.neutral_jugador
+    cj.neutral_club = cj.neutral_jugador = None              # «bruto» = antes de neutralizar (diagnóstico)
+    cj.Xc_bruto, cj.Xj_bruto = cj.x_club(V_c), cj.x_jugador(V_j)
+    cj.neutral_club, cj.neutral_jugador = nc, nj
+    cj.Xc, cj.Xj = cj.x_club(V_c, Q_c), cj.x_jugador(V_j, Q_j)
+    return cj
+
+
+def main(salida: str, todas_las_ligas: bool = False) -> None:
     d = Path(salida)
     d.mkdir(parents=True, exist_ok=True)
     red = red_guardada(RED)
     rd = C.DIR_SALIDA / RED
     rob = pd.read_csv(rd / "clubes.csv")
-    # el modelo VaDE guardado se entrenó con estas competiciones: el mapa se exporta sólo con ellas (con sus escalas);
-    # las competiciones añadidas después (FEB) no tienen estilo VaDE hasta que se reentrene la red
-    cj = conjunto(tuple(sorted(rob["liga"].unique())))
+    # el modelo VaDE guardado se entrenó con estas competiciones: por defecto el mapa se exporta sólo con ellas (con
+    # sus escalas). Con todas_las_ligas, las añadidas después (FEB) se proyectan con esas mismas escalas
+    # (conjunto_proyectado) para que aparezcan en el Atlas y en el simulador
+    ligas_red = tuple(sorted(rob["liga"].unique()))
+    cj = conjunto_proyectado(ligas_red) if todas_las_ligas else conjunto(ligas_red)
     ev = json.loads((C.DIR_SALIDA / "evaluacion.json").read_text(encoding="utf-8"))
     an = C.DIR_SALIDA / "analisis.json"
     est = pd.read_csv(rd / "estilos.csv")

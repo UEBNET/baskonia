@@ -19,6 +19,9 @@ Dos fuentes de la capacidad θ (configs/simulation.yaml → normalizacion):
         fase 2, experimentos/cache_normalizacion/A_hasta_<año>.pkl) + amortiguación reajustada con ≤ t.
 * «A»   capacidad amortiguada del A con todas las temporadas (`_am_a`, `_am_sd`): sirve para medir la fuga
         comparándola con «A_corte» en los mismos cortes.
+* «V31» (simulador v3, configs/simulation_v3.yaml): igual que «AB» pero leyendo el dataset normalizado v3.1
+        (data/modelos/v3_1/normalizado: combinación v2 + CVAE corregida). Las constantes de traducción a la liga de
+        destino siguen siendo las de la normalización amortiguada (limitación documentada en docs/simulador_v3.md).
 Caché: experimentos/cache_simulador/ (no versionado; se regenera).
 """
 from __future__ import annotations
@@ -247,10 +250,19 @@ def theta_completa(fuente: str, metricas: list[str], trad: dict) -> pd.DataFrame
     return th
 
 
+def _dir_norm() -> tuple[Path, str]:
+    """Dataset normalizado de la fuente activa: «V31» (simulador v3) = data/modelos/v3_1/normalizado/<t>.csv.gz, con el
+    mismo esquema que el v1 (sus <m>_am llevan la v3.1); resto = data/modelos/normalizado/<t>.csv."""
+    if cfg_sim()["normalizacion"]["fuente"] == "V31":
+        return DIR_MOD / "v3_1" / "normalizado", ".csv.gz"
+    return DIR_NORM, ".csv"
+
+
 def _normalizado(cols: list[str]) -> pd.DataFrame:
     fr = []
     base = ["liga", "temporada", "player_id"]
-    for p in sorted(DIR_NORM.glob("*.csv")):
+    d, ext = _dir_norm()
+    for p in sorted(d.glob(f"*{ext}")):
         fr.append(pd.read_csv(p, dtype={"player_id": str}, usecols=lambda c: c in base + cols, low_memory=False))
     n = pd.concat(fr, ignore_index=True)
     return n.drop_duplicates(base)
@@ -400,7 +412,8 @@ def registros_temporada(temp: str, theta: pd.DataFrame, const: dict, cfg: dict |
 
 
 def _normalizado_temp(temp: str, cols: list[str]) -> pd.DataFrame:
-    p = DIR_NORM / f"{temp}.csv"
+    d, ext = _dir_norm()
+    p = d / f"{temp}{ext}"
     cab = pd.read_csv(p, nrows=0).columns
     base = ["liga", "temporada", "player_id"]
     n = pd.read_csv(p, dtype={"player_id": str}, usecols=[c for c in base + cols if c in cab], low_memory=False)

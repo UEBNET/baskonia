@@ -174,6 +174,8 @@ def main(argv=None):
     sub.add_parser("barrido", help="número de estilos (BIC/ICL y k-medias) antes de entrenar")
     x = sub.add_parser("exportar", help="datos del mapa 3D para el Artifact")
     x.add_argument("--salida", default=str(C.RAIZ / "artifact" / "estilos"))
+    x.add_argument("--todas-las-ligas", action="store_true",
+                   help="incluye las competiciones añadidas tras entrenar la red (FEB), proyectadas con sus escalas")
     for sp in (e, v, an):
         sp.add_argument("--estilos", type=int, default=C.N_ESTILOS, help="neuronas de salida (final: 6; v2: 8; v1: 12)")
         sp.add_argument("--sin-neutralizar", action="store_true", help="no quitar el nivel (como la v1)")
@@ -221,7 +223,7 @@ def main(argv=None):
         barrido.barrido()
     elif args.orden == "exportar":
         from . import exportar
-        exportar.main(args.salida)
+        exportar.main(args.salida, todas_las_ligas=args.todas_las_ligas)
 
 
 if __name__ == "__main__":

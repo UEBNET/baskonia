@@ -48,7 +48,7 @@ from . import sim_insumos as SI
 from .config import DIR_MOD, cargar
 from .roles import ROLES, clasificar
 
-DIR_SIM = DIR_MOD / "simulador" / "v2"
+DIR_SIM = DIR_MOD / "simulador" / cargar("simulation").get("carpeta", "v2")   # v2 (por defecto) o v3 (CERNO_SIMULADOR=v3)
 IDX_ROL = {r: i for i, r in enumerate(ROLES)}
 ADAPT_METRICA = {"pts_p100": "pts_p100", "ts_pct": "ts_pct", "usg_pct": "usg_pct", "ast_pct": "ast_pct",
                  "oreb_p100": "reb_p100", "dreb_p100": "reb_p100"}

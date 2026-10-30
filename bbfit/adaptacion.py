@@ -141,6 +141,11 @@ def _tabla_priors(ruta: str, mtime: float) -> pd.DataFrame:  # mtime en la clave
 
 
 def cargar_priors(ruta: Path | None = None) -> pd.DataFrame | None:
+    """Tabla de priors. Sin ruta: la del simulador activo (configs/simulation_v3.yaml → adaptacion.priors, la
+    adaptación v3 ascendente) o, si no la declara (v2), data/modelos/adaptacion/adaptation_priors.csv."""
+    if ruta is None:
+        r = cargar("simulation").get("adaptacion", {}).get("priors")
+        ruta = (DIR_MOD.parent.parent / r) if r else None
     p = Path(ruta or FICHERO_PRIORS)
     if not p.exists():
         return None
