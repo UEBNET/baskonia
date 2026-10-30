@@ -121,8 +121,14 @@ Los diagnósticos están en `validacion/diagnostico_previo/`.
   * estilos unificados de Quintetos, regenerados con los generadores de `artifact-v2-candidata`;
   * «Datos Normalizados» y explorador de normalización con la v3.1 al 29-10;
   * resumen de «Normalización de ligas» y «Evaluación de ligas» con la v2 rehecha.
-* **Sin regenerar:** los datos del informe PDF del Atlas (`atlas/informe/`). Su generador (`build_informe.py`) no
-  está en el repositorio; la página ya resuelve en el navegador los `persona_id` antiguos.
+* **Pestaña «Informe» del Atlas** (`atlas/informe/<temporada>.json`): su generador no estaba en el repositorio y los
+  datos publicados eran antiguos.
+  * Sólo coincidían 7 de 3.346 claves con el Atlas, y 2026-27 tenía 173 jugadores sin ACB, FEB ni NBA.
+  * Reconstruido en `bbestilo/informe.py` (`python -m bbestilo informe`) a partir del formato publicado y de cómo lo
+    lee la página. Validado reproduciendo 2025-26: valores observados y ficha idénticos; percentiles y referencias a
+    ±1-2 puntos, por la versión distinta del dataset.
+  * Regenerado con los datos al 29-10: 2.665 / 2.937 / 3.165 / 5.259 / 5.230 / 5.583 / 1.284 jugadores-club en 2020-21
+    … 2026-27, todos con su fila de datos y su normalización (v3.1), FEB incluidas.
 
 ## 6. Lo que queda abierto [LECTURA]
 

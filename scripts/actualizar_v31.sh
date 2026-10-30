@@ -52,4 +52,12 @@ paso python3 -m bbfit backtest --fuente V31 --escenario inicio --adaptacion
 paso python3 -m bbfit pesos-simulador
 paso python3 -m bbfit historico
 paso python3 -m bbfit exportar-simulador --salida "$W/_sim"
+# 5. datos del artifact que dependen de lo anterior (atlas/estilos, datos/normalizados, normalización, informe)
+paso python3 -m bbestilo exportar --salida "$W/_art/atlas/estilos" --todas-las-ligas
+paso python3 -m bbnorm3.artifact --salida "$W/_art/datos"
+paso python3 -m bbmodel mesa-normalizacion --salida "$W/_art/datos"
+paso python3 -m bbmodel evaluacion-ligas --salida "$W/_art/datos"
+paso python3 -m bbstats artifact --salida "$W/_art/datos"            # tablas de datos (<temporada>/regular.json…)
+paso python3 -m bbestilo informe --atlas "$W/_art/atlas/estilos" --datos "$W/_art/datos" \
+  --normalizado data/modelos/v3_1/normalizado --salida "$W/_art/atlas/informe"
 echo "=== $(date +%H:%M:%S) FIN (copia en $W)"

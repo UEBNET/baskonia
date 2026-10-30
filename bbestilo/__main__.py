@@ -12,6 +12,7 @@
     python -m bbestilo quimica                  # química de estilos: efectos X → Y y sinergia por estilo × estilo
     python -m bbestilo entrenadores             # estilo de cada tramo club-temporada-entrenador
     python -m bbestilo exportar                 # JSON del mapa 3D (artifact/estilos/)
+    python -m bbestilo informe --atlas A --datos D --normalizado N --salida S   # datos de la pestaña «Informe» del Atlas
     python -m bbestilo articulo [--fuentes D]   # artículo científico en PDF (docs/articulo/)
 
 Resultados en data/modelos/estilos/ (ver docs/estilos_de_juego.md).
@@ -176,6 +177,11 @@ def main(argv=None):
     x.add_argument("--salida", default=str(C.RAIZ / "artifact" / "estilos"))
     x.add_argument("--todas-las-ligas", action="store_true",
                    help="incluye las competiciones añadidas tras entrenar la red (FEB), proyectadas con sus escalas")
+    inf = sub.add_parser("informe", help="datos de la pestaña «Informe» del Atlas (atlas/informe/<temporada>.json)")
+    inf.add_argument("--atlas", required=True, help="carpeta con jugadores.json y meta.json del Atlas (atlas/estilos)")
+    inf.add_argument("--datos", required=True, help="carpeta con <temporada>/regular.json (python -m bbstats artifact)")
+    inf.add_argument("--normalizado", required=True, help="carpeta del dataset normalizado (<temporada>.csv[.gz])")
+    inf.add_argument("--salida", required=True)
     for sp in (e, v, an):
         sp.add_argument("--estilos", type=int, default=C.N_ESTILOS, help="neuronas de salida (final: 6; v2: 8; v1: 12)")
         sp.add_argument("--sin-neutralizar", action="store_true", help="no quitar el nivel (como la v1)")
@@ -224,6 +230,9 @@ def main(argv=None):
     elif args.orden == "exportar":
         from . import exportar
         exportar.main(args.salida, todas_las_ligas=args.todas_las_ligas)
+    elif args.orden == "informe":
+        from . import informe
+        informe.main(args.atlas, args.datos, args.normalizado, args.salida)
 
 
 if __name__ == "__main__":
