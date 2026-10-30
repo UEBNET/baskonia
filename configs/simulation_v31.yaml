@@ -64,6 +64,9 @@ adaptacion:
 traduccion:                          # constantes v3.1 (sim_insumos.traduccion_v31)
   min_minutos: 400                   # jugadores con ≥ 400 min en el ajuste E[θ_v2 | θ_v31] = c + d·θ_v31 de cada liga
   pendiente_minima: 0.1              # d mínima (con d → 0 la escala s' = s/d no tendría límite)
+  r_minima: 0.95                     # correlación v3.1–v2 mínima en la liga-métrica para usar el sustituto lineal; por
+                                     # debajo (sólo la Tercera FEB: r 0,37-0,95) constantes amortiguadas. DECISIÓN POST HOC:
+                                     # tomada tras ver que el examen empeoraba sólo en los fichajes con la Tercera FEB
   min_filas_liga: 30                 # por debajo, la liga conserva las constantes amortiguadas
 
 estilo:

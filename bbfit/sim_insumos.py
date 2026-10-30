@@ -282,7 +282,8 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
     y la traducción se acerca a la media de la liga en vez de exagerar las diferencias. Componiendo:
         z_d = (c_lt + d_l·θ − δ_lt)/s_l   ⇒   δ'_lt = (δ_lt − c_lt)/d_l,   s'_l = s_l/d_l,   m'_l = (m_l − c̄_l)/d_l
     con la misma varianza de nivel, ψ, deriva, μ/τ y σ² que la v2 (propiedades de los datos de cada liga, no del
-    modelo de normalización). La EuroLeague (vara) no se toca: el motor fija su δ en 0.
+    modelo de normalización). La EuroLeague (vara) no se toca: el motor fija su δ en 0. Donde la relación v3.1–v2 no
+    es lineal (correlación < traduccion.r_minima: sólo la Tercera FEB) se conservan las constantes amortiguadas.
     Caché: traduccion_v31.pkl (en la caché de la versión)."""
     DIR_CACHE.mkdir(parents=True, exist_ok=True)
     dest = DIR_CACHE / "traduccion_v31.pkl"
@@ -295,6 +296,7 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
     min_min = float(cfg_t.get("min_minutos", 400))
     min_filas = int(cfg_t.get("min_filas_liga", 30))
     d_min = float(cfg_t.get("pendiente_minima", 0.1))      # evita s' infinita si una liga no tuviera relación alguna
+    r_min = float(cfg_t.get("r_minima", 0.0))               # correlación v3.1–v2 mínima para usar el sustituto lineal
     cols = ["pos3", "min"] + [c for m in metricas for c in (f"{m}_am", f"{m}_am_v1")]
     n = _normalizado(cols)
     n = n[pd.to_numeric(n["min"], errors="coerce") >= min_min]
@@ -321,6 +323,13 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
             y = g["t2"] - g.groupby("temporada")["t2"].transform("mean")
             x = g["t31"] - g.groupby("temporada")["t31"].transform("mean")
             dd = float((x * y).sum() / (x * x).sum()) if (x * x).sum() > 0 else 1.0
+            r = float(np.corrcoef(x, y)[0, 1]) if len(g) > 2 else np.nan
+            if not (r >= r_min):
+                # relación no lineal entre la v3.1 y la v2 en esa liga-métrica (Tercera FEB): el sustituto lineal no
+                # representa a la v3.1 y se conservan las constantes amortiguadas
+                ajuste[f"{m}|{liga}"] = {"d": None, "c_medio": None, "r": round(r, 3), "n": int(len(g)),
+                                         "constantes": "amortiguadas"}
+                continue
             dd = max(dd, d_min)
             c_t = (g.groupby("temporada")["t2"].mean() - dd * g.groupby("temporada")["t31"].mean()).to_dict()
             c_bar = float(np.average(list(c_t.values()), weights=g.groupby("temporada").size().reindex(list(c_t)).to_numpy()))
@@ -332,14 +341,14 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
                 s_m[liga] = s_m[liga] / dd
             if liga in m_m:
                 m_m[liga] = (m_m[liga] - c_bar) / dd
-            r = float(np.corrcoef(x, y)[0, 1]) if len(g) > 2 else np.nan
-            ajuste[f"{m}|{liga}"] = {"d": round(dd, 4), "c_medio": round(c_bar, 4), "r": round(r, 3), "n": int(len(g))}
+            ajuste[f"{m}|{liga}"] = {"d": round(dd, 4), "c_medio": round(c_bar, 4), "r": round(r, 3), "n": int(len(g)),
+                                     "constantes": "v31"}
         nodos[m] = nod_m
         const[m] = {**k, "s": s_m, "m": m_m}
     res = {"constantes": const, "nodos": nodos, "fuente": "v31_lineal", "ajuste": ajuste}
     dest.write_bytes(pickle.dumps(res))
     if progreso:
-        ds = np.array([v["d"] for v in ajuste.values()])
+        ds = np.array([v["d"] for v in ajuste.values() if v["d"] is not None])
         progreso(f"traducción v3.1: {len(ajuste)} métrica-liga, pendiente d mediana {np.median(ds):.3f} "
                  f"(p10 {np.quantile(ds, 0.1):.3f}, p90 {np.quantile(ds, 0.9):.3f})")
     return res
