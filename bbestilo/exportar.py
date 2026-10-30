@@ -41,6 +41,18 @@ def _lista(a, d=3):
     return [_r(x, d) for x in np.asarray(a, float).ravel()]
 
 
+def _sin_nan(o):
+    """NaN/±inf → null también dentro de listas y dicts anidados (p. ej. etapas de entrenador sin estilo unificado):
+    JSON.parse del navegador no acepta NaN."""
+    if isinstance(o, (float, np.floating)) and not np.isfinite(o):
+        return None
+    if isinstance(o, dict):
+        return {k: _sin_nan(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_sin_nan(v) for v in o]
+    return o
+
+
 def _columnar(df: pd.DataFrame, dec: dict | None = None) -> dict:
     dec = dec or {}
     filas = []
@@ -342,5 +354,5 @@ def main(salida: str, todas_las_ligas: bool = False) -> None:
         dec["eu_p"] = 3
     for nombre, obj in (("meta.json", meta), ("clubes.json", _columnar(c, dec)), ("jugadores.json", _columnar(J, dec)),
                         ("brutos.json", brutos)):
-        (d / nombre).write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=float), encoding="utf-8")
+        (d / nombre).write_text(json.dumps(_sin_nan(obj), ensure_ascii=False, separators=(",", ":"), default=float, allow_nan=False), encoding="utf-8")
     print("escrito", d, {p.name: p.stat().st_size for p in d.glob("*.json")})
