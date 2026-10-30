@@ -93,7 +93,10 @@ def tabla_priors(priors_v2: pd.DataFrame, cv: pd.DataFrame, partidos: dict) -> p
     # también 1 + D·w̄ contaría dos veces el arranque. En el resto de métricas el factor de temporada es 1.
     solo_adapt = (t["metrica"] == "L_rel").to_numpy() if "metrica" in t else np.ones(len(t), bool)
     t["delta_temporada_media"] = np.where(solo_adapt, np.array(D) * wb, 0.0)
-    t["delta_temporada_sd"] = np.where(solo_adapt, np.array(Dsd) * wb, 0.0)
+    # el motor muestrea Δ_temp ~ N(media, sd) sin recortar: la sd se limita a |media|/z90 para que el intervalo del 90 %
+    # de la ADAPT% no pase de 100 (D ≤ 0: el jugador no rinde por encima de su nivel adaptado)
+    sd_t = np.minimum(np.array(Dsd) * wb, np.abs(np.array(D) * wb) / Z90)
+    t["delta_temporada_sd"] = np.where(solo_adapt, sd_t, 0.0)
     t["delta_temporada_lo"] = t["delta_temporada_media"] - Z90 * t["delta_temporada_sd"]
     t["delta_temporada_hi"] = np.minimum(t["delta_temporada_media"] + Z90 * t["delta_temporada_sd"], 0.0)
     t["p_delta_temporada_negativo"] = np.where(solo_adapt & (np.array(D) < 0), 1.0, 0.0)

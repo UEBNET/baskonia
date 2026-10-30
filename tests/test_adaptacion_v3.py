@@ -63,3 +63,13 @@ def test_produccion_sin_doble_conteo():
     assert (t.loc[1:, "delta_temporada_media"] == 0).all() and (t.loc[1:, "delta_temporada_sd"] == 0).all()
     f = factores_adaptacion(t.iloc[1].to_dict(), G=34, N=10, contraccion=1.0, rng=np.random.default_rng(0), n_sim=3)
     assert np.allclose(f["temporada"], 1.0)                     # producción de temporada = la de la v3.1
+
+
+def test_intervalo_de_la_adapt_no_pasa_de_100():
+    cv = A3.curvas_ascendentes(_curvas())
+    v2 = pd.DataFrame({"nivel": ["global"], "liga_origen": ["*"], "liga_destino": ["*"], "grupo_nacionalidad": ["*"],
+                       "pos3": ["*"], "escalon_destino": ["*"], "metrica": ["L_rel"], "serie_curva": ["prod_p100"],
+                       "grupo_curva": ["global"]})
+    t = A3.tabla_priors(v2, cv, {"defecto": 34})
+    f = factores_adaptacion(t.iloc[0].to_dict(), G=34, N=10, contraccion=1.0, rng=np.random.default_rng(1), n_sim=20000)
+    assert np.quantile(f["temporada"], 0.95) <= 1.0 + 1e-3
