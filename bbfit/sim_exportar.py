@@ -188,7 +188,7 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict, nombres:
             continue
         eq_dest.append((e.liga, e.team_id, e.equipo, e.club, S.miembros_actuales(c, e.club),
                         f"plantilla {c.temp} (sin datos de {temp_dest})"))
-    out, usados, stubs, usados_dest = [], set(), {}, set()
+    out, usados, stubs = [], set(), {}
     dest_prin = None
     if temp_dest in cfg["exportar"].get("temporadas_candidatas_extra", []):
         cd = S.cargar_corte(temp_dest)
@@ -207,13 +207,15 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict, nombres:
         pl = []
         rc = c.por_club.get(club_t) if club_t else None
         for p, pres in miembros:
-            if p not in c.prin.index and dest_prin is not None and p in dest_prin.index:
-                # sin ficha de la temporada base pero con ficha provisional de la temporada en curso (≥ 100 min, p. ej.
-                # Onyema en la LBA 2026-27, sin 2025-26): se usa esa en vez de tratarlo como «sin dato»
-                r = dest_prin.loc[p]
-                pl.append([f"{r['liga']}|{r['temporada']}|{r['player_id']}", _r(pres, 3), None, p])
-                usados_dest.add(p)
-                continue
+            if dest_prin is not None:
+                # destino = temporada en curso: su ficha de esta temporada (la de este club si la tiene, como jugador
+                # que ya está en él; si no, la principal). Igual que simulador.ficha_actual (paridad)
+                r_act, fila = S.ficha_actual(c, p, club_t)
+                if r_act is not None:
+                    rid = f"{r_act['liga']}|{r_act['temporada']}|{r_act['player_id']}"
+                    lmc = _r(float(S._logit(S._f(fila["min_pct"]))), 3) if fila is not None else None
+                    pl.append([rid, _r(pres, 3), lmc, p])
+                    continue
             if p not in c.prin.index:
                 # sin registro en la temporada base (debutante, o no jugó en ninguna liga cubierta): el motor lo trata
                 # como «sin dato» (nivel de banquillo). Registro mínimo sólo para que la página muestre su nombre;
