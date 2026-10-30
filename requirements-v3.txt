@@ -1,0 +1,5 @@
+# Normalización v3 (bbnorm3/): PyTorch CPU con versión fijada.
+# Va en un fichero aparte (como requirements-estilos.txt) para que el workflow de extracción, que instala
+# requirements.txt, no descargue PyTorch.
+#   pip install -r requirements.txt -r requirements-v3.txt --extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.5.1

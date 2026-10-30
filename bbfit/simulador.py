@@ -48,7 +48,7 @@ from . import sim_insumos as SI
 from .config import DIR_MOD, cargar
 from .roles import ROLES, clasificar
 
-DIR_SIM = DIR_MOD / "simulador" / "v2"
+DIR_SIM = DIR_MOD / "simulador" / cargar("simulation").get("carpeta", "v2")   # v2 (por defecto) o v3 (CERNO_SIMULADOR=v3)
 IDX_ROL = {r: i for i, r in enumerate(ROLES)}
 ADAPT_METRICA = {"pts_p100": "pts_p100", "ts_pct": "ts_pct", "usg_pct": "usg_pct", "ast_pct": "ast_pct",
                  "oreb_p100": "reb_p100", "dreb_p100": "reb_p100"}
@@ -144,7 +144,7 @@ def cargar_corte(temp: str, fuente: str | None = None, cfg: dict | None = None, 
                 nh = SI.normalizacion_hasta(SI.anio(temp), mets)
                 theta, trad = nh["theta"], nh["traduccion"]
             else:
-                trad = SI.traduccion_completa(mets)
+                trad = SI.traduccion(fuente, mets)
                 theta = SI.theta_completa(fuente, mets, trad)
             reg = SI.registros_temporada(temp, theta, trad["constantes"], cfg)
             eq = SI.equipos_temporada(temp, reg)
@@ -273,10 +273,38 @@ def jugador_insumos(c: Corte, persona_id: str, registro: dict | None = None) -> 
     return d
 
 
-def plantilla(c: Corte, club_d: str, liga_d: str, miembros: list[tuple[str, float]], excluir: set | None = None) -> pd.DataFrame:
+def ficha_actual(c: Corte, pid: str, club_d: str | None, liga_d: str | None = None, team_d=None):
+    """Ficha de la temporada en curso de un compañero cuando el destino es esa temporada (la siguiente a la base y en
+    exportar.temporadas_candidatas_extra) y suma ya los minutos mínimos: la de ESE club si la tiene (cuenta como
+    jugador que ya está en el club, con sus minutos reales) o su ficha principal. Devuelve (ficha, fila del club o
+    None) o (None, None). No afecta al examen: sus temporadas destino nunca son la temporada en curso."""
+    ex = c.cfg.get("exportar", {})
+    t1 = SI.siguiente(c.temp)
+    if t1 not in ex.get("temporadas_candidatas_extra", []):
+        return None, None
+    cd = cargar_corte(t1, c.fuente, c.cfg, pesos=False)
+    mn = float(ex.get("minimo_minutos_jugador", 100))
+    reg = cd.reg[(cd.reg["persona_id"] == pid) & (pd.to_numeric(cd.reg["min_total"], errors="coerce") >= mn)]
+    if not len(reg):
+        return None, None
+    # mismo club: por su clave o por liga + equipo de destino (la clave cambia si el equipo cambia de id entre temporadas)
+    mismo = reg[(reg["club"] == club_d) | ((reg["liga"] == liga_d) & (reg["team_id"].astype(str) == str(team_d)))]
+    if len(mismo):
+        fila = mismo.sort_values("min_total").iloc[-1]
+        d = fila.to_dict()
+        d["persona_id"] = pid
+        return d, fila
+    if pid in cd.prin.index:
+        return jugador_insumos(cd, pid), None
+    return None, None
+
+
+def plantilla(c: Corte, club_d: str, liga_d: str, miembros: list[tuple[str, float]], excluir: set | None = None,
+              fijas: dict | None = None, team_d=None) -> pd.DataFrame:
     """Plantilla de destino: [(persona_id, presencia)] → filas con los rasgos de la utilidad y lo que necesita la
-    simulación (L, uso natural traducido, GTI, estilo, RAPM). Los compañeros sin registro en t entran con el L de
-    banquillo de la liga de destino y la marca sin_dato."""
+    simulación (L, uso natural traducido, GTI, estilo, RAPM). Si el destino es la temporada en curso, cada compañero
+    con los minutos mínimos usa su ficha de esta temporada (ficha_actual); si no, la de la temporada base. Los que no
+    tienen ninguna entran con el L de banquillo de la liga de destino y la marca sin_dato."""
     cfg = c.cfg
     pc = cfg["plantilla"]
     ids = SI.estilos_ids()
@@ -286,13 +314,15 @@ def plantilla(c: Corte, club_d: str, liga_d: str, miembros: list[tuple[str, floa
         if pid in excluir:
             continue
         f = {"persona_id": pid, "presencia": float(pres)}
-        r = jugador_insumos(c, pid)
-        club_rec = c.por_club.get(club_d)
-        rc = None
-        if club_rec is not None:
-            x = club_rec[club_rec["persona_id"] == pid]
-            if len(x):
-                rc = x.sort_values("min_total").iloc[-1]
+        # destino = temporada en curso: cada compañero con su ficha de esta temporada; el fichaje, con la ficha elegida
+        r, rc = (None, None) if fijas and pid in fijas else ficha_actual(c, pid, club_d, liga_d, team_d)
+        if r is None:
+            r = jugador_insumos(c, pid, (fijas or {}).get(pid))
+            club_rec = c.por_club.get(club_d)
+            if club_rec is not None:
+                x = club_rec[club_rec["persona_id"] == pid]
+                if len(x):
+                    rc = x.sort_values("min_total").iloc[-1]
         if r is None:
             f.update({"nombre": None, "pos3": None, "L": c.ref["banquillo"].get(liga_d, -0.5), "L_sd": pc["sd_sin_dato"],
                       "sin_dato": 1.0, "nuevo": 1.0, "lmin_club": 0.0, "lmin_fuera": 0.0, "edad": np.nan})
@@ -465,7 +495,7 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     # (sin registro: nivel de banquillo de la liga de destino) hasta el mínimo de la configuración
     faltan = int(cfg["plantilla"]["minimo_jugadores"]) - 1 - len(miembros)
     miembros = miembros + [(f"__reemplazo_{k}", 1.0) for k in range(max(faltan, 0))]
-    P = plantilla(c, club_d, liga_d, miembros + [(persona_id, 1.0)])
+    P = plantilla(c, club_d, liga_d, miembros + [(persona_id, 1.0)], fijas={persona_id: fila}, team_d=team_d)
     # el fichaje puede no estar en el registro principal que se pidió (registro explícito)
     i_f = int(np.where(P["persona_id"].to_numpy() == persona_id)[0][-1])
     if registro is not None:

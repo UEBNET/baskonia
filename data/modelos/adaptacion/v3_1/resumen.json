@@ -1,0 +1,98 @@
+{
+ "definicion": "ADAPT%(g) = 100·(1 + D·e^(−g/κ)), D ≤ 0: fracción del nivel adaptado en el partido g",
+ "fuente": "curva bruta dentro de jugador de los traspasos (data/modelos/adaptacion/curvas.csv), contraída hacia el global por grupo de nacionalidad",
+ "grupos_acotados_a_0": 9,
+ "grupos": 50,
+ "L_rel_prod_p100": {
+  "global": {
+   "D": -0.0437,
+   "kappa": 1.69,
+   "adapt_partido_1": 95.6,
+   "adapt_primeros_10": 99.0,
+   "adapt_temporada_34": 99.7,
+   "partidos_90": 3.9,
+   "acotado_a_0": false
+  },
+  "EEUU_a_Europa": {
+   "D": -0.0454,
+   "kappa": 3.86,
+   "adapt_partido_1": 95.5,
+   "adapt_primeros_10": 98.2,
+   "adapt_temporada_34": 99.4,
+   "partidos_90": 8.9,
+   "acotado_a_0": false
+  },
+  "desconocido": {
+   "D": -0.0249,
+   "kappa": 3.16,
+   "adapt_partido_1": 97.5,
+   "adapt_primeros_10": 99.1,
+   "adapt_temporada_34": 99.7,
+   "partidos_90": 7.3,
+   "acotado_a_0": false
+  },
+  "europeo_cambia_liga": {
+   "D": -0.032,
+   "kappa": 2.64,
+   "adapt_partido_1": 96.8,
+   "adapt_primeros_10": 99.0,
+   "adapt_temporada_34": 99.7,
+   "partidos_90": 6.1,
+   "acotado_a_0": false
+  },
+  "extranjero_cambia_pais": {
+   "D": -0.0488,
+   "kappa": 2.02,
+   "adapt_partido_1": 95.1,
+   "adapt_primeros_10": 98.8,
+   "adapt_temporada_34": 99.6,
+   "partidos_90": 4.7,
+   "acotado_a_0": false
+  },
+  "extranjero_mismo_pais": {
+   "D": -0.0152,
+   "kappa": 2.98,
+   "adapt_partido_1": 98.5,
+   "adapt_primeros_10": 99.5,
+   "adapt_temporada_34": 99.8,
+   "partidos_90": 6.9,
+   "acotado_a_0": false
+  },
+  "hacia_EEUU": {
+   "D": -0.0563,
+   "kappa": 3.26,
+   "adapt_partido_1": 94.4,
+   "adapt_primeros_10": 98.0,
+   "adapt_temporada_34": 99.4,
+   "partidos_90": 7.5,
+   "acotado_a_0": false
+  },
+  "intra_EEUU": {
+   "D": -0.0643,
+   "kappa": 4.05,
+   "adapt_partido_1": 93.6,
+   "adapt_primeros_10": 97.3,
+   "adapt_temporada_34": 99.1,
+   "partidos_90": 9.3,
+   "acotado_a_0": false
+  },
+  "nacional_mismo_pais": {
+   "D": -0.0346,
+   "kappa": 2.34,
+   "adapt_partido_1": 96.5,
+   "adapt_primeros_10": 99.0,
+   "adapt_temporada_34": 99.7,
+   "partidos_90": 5.4,
+   "acotado_a_0": false
+  },
+  "otro_desde_EEUU": {
+   "D": -0.0338,
+   "kappa": 2.6,
+   "adapt_partido_1": 96.6,
+   "adapt_primeros_10": 99.0,
+   "adapt_temporada_34": 99.7,
+   "partidos_90": 6.0,
+   "acotado_a_0": false
+  }
+ }
+}

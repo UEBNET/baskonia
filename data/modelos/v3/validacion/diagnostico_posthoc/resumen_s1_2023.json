@@ -1,0 +1,36 @@
+{
+ "aviso": "POST HOC: variante elegida después de ver el examen; no vale como validación",
+ "corte": 2023,
+ "v3_s1_am": {
+  "estimacion": 0.0749740751070922,
+  "ic95": [
+   0.04899375802191459,
+   0.10214549122623297
+  ],
+  "unidades": 374,
+  "remuestreos": 2000
+ },
+ "grupos": {
+  "a_euroleague": {
+   "personas": 35,
+   "v3_am": 0.051457840255373366,
+   "cob80": 0.8586046511627907
+  },
+  "europa": {
+   "personas": 141,
+   "v3_am": 0.032713788629698426,
+   "cob80": 0.8181176470588235
+  },
+  "feb": {
+   "personas": 123,
+   "v3_am": 0.16422064970570838,
+   "cob80": 0.5940146809712027
+  },
+  "nba_gleague": {
+   "personas": 75,
+   "v3_am": 0.011478812923148674,
+   "cob80": 0.8566069195498124
+  }
+ },
+ "cob80": 0.7597195100301793
+}

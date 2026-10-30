@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-10-29T14:02:09.870273+00:00",
+  "generado": "2026-10-29T14:07:45.080931+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -122,10 +122,10 @@
     "lnb": {
       "nombre": "LNB Betclic ÉLITE (Francia)",
       "archivo": "ligas/lnb.csv",
-      "fecha_extraccion": "2026-10-15T08:55:26.249732+00:00",
+      "fecha_extraccion": "2026-10-29T14:05:36.001774+00:00",
       "fases": {
-        "regular": 179,
-        "total": 179
+        "regular": 195,
+        "total": 195
       }
     },
     "nba": {
