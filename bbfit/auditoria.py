@@ -27,6 +27,7 @@ UMBRAL_EQUIVOCADO = 0.06       # miembros de plantilla que no están en la plant
                                # (≈ 4,8 % en la v3): la tabla de datos guarda un solo equipo por jugador en la G League
                                # y omite fases que sí están en los roles; una mezcla de identidades da ≈ 30 %
 UMBRAL_SIN_NOMBRE = 0.0        # miembros sin nombre
+UMBRAL_COBERTURA = 0.98        # jugadores con ≥ 100 min (roles) que tienen ficha en el simulador, por liga-temporada
 
 
 _GRIEGO = dict(zip("αβγδεζηθικλμνξοπρσςτυφχψω", ["a", "v", "g", "d", "e", "z", "i", "th", "i", "k", "l", "m", "n", "x", "o",
@@ -133,9 +134,28 @@ def auditar_simulador(carpeta: Path) -> dict:
             "ejemplos_equivocados": ej_mal, "ejemplos_sin_nombre": ej_sin}
 
 
+def auditar_fichas(carpeta: Path, roles: pd.DataFrame, minimo: float = 100) -> dict:
+    """Cobertura de fichas: cada jugador con ≥ minimo minutos en una liga-temporada exportada tiene ficha."""
+    j = json.loads((carpeta / "jugadores.json").read_text(encoding="utf-8"))
+    J = pd.DataFrame(j["filas"], columns=j["columnas"])
+    J = J[~J["id"].astype(str).str.startswith("sin_registro")]
+    ids = set(J["id"])
+    r = roles.copy()
+    r["min_total"] = pd.to_numeric(r["min_total"], errors="coerce")
+    r = r[(r["min_total"] >= minimo) & r["temporada"].isin(set(J["temporada"]))]
+    r = r.groupby(["liga", "temporada", "player_id"], as_index=False)["min_total"].sum()
+    r["tiene"] = (r["liga"] + "|" + r["temporada"] + "|" + r["player_id"].astype(str)).isin(ids)
+    t = r.groupby(["liga", "temporada"])["tiene"].agg(["sum", "size"])
+    t["cobertura"] = t["sum"] / t["size"]
+    bajas = t[t["cobertura"] < UMBRAL_COBERTURA]
+    return {"ligas_temporadas": int(len(t)), "cobertura_minima": float(t["cobertura"].min()) if len(t) else None,
+            "por_debajo": {f"{l} {tt}": f"{int(x['sum'])}/{int(x['size'])}" for (l, tt), x in bajas.iterrows()},
+            "fichas_por_liga": {f"{l} {tt}": int(x["sum"]) for (l, tt), x in t.iterrows() if tt == max(J["temporada"])}}
+
+
 def main(simulador: str | None = None) -> dict:
     roles = pd.read_csv(DIR_MOD / "roles" / "player_role_season.csv.gz", dtype=str,
-                        usecols=["liga", "temporada", "team_id", "persona_id", "nombre"])
+                        usecols=["liga", "temporada", "team_id", "player_id", "persona_id", "nombre", "min_total"])
     res = {"roles": auditar_roles(roles)}
     fallos = []
     if res["roles"]["tasa"] > UMBRAL_MEZCLA:
@@ -146,6 +166,9 @@ def main(simulador: str | None = None) -> dict:
             fallos.append(f"plantillas con jugadores equivocados: {s['equivocados']} ({s['tasa_equivocados']:.1%})")
         if s["tasa_sin_nombre"] > UMBRAL_SIN_NOMBRE:
             fallos.append(f"miembros de plantilla sin nombre: {s['sin_nombre']}")
+        res["fichas"] = f = auditar_fichas(Path(simulador), roles)
+        if f["por_debajo"]:
+            fallos.append(f"ligas-temporada sin fichas de jugadores con ≥ 100 min: {f['por_debajo']}")
     res["fallos"] = fallos
     print(json.dumps(res, ensure_ascii=False, indent=1, default=str))
     if fallos:

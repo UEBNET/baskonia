@@ -12,7 +12,7 @@
 #   <copia>/data/modelos/adaptacion/v3_1 y simulador/v3_1 → las mismas rutas del repositorio
 #
 #   scripts/actualizar_v31.sh [carpeta de la copia, por defecto /tmp/cerno_v31]
-set -euo pipefail
+set -euo pipefail          # cualquier paso que falle (también la auditoría) detiene la actualización
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
 W="${1:-/tmp/cerno_v31}"
 rm -rf "$W" && mkdir -p "$W"
@@ -36,8 +36,11 @@ rm -f data/modelos/v3_1/niveles.csv                   # niveles y traducción cr
 paso python3 -m bbnorm3 --config configs/normalization_v31.yaml ajustar-combinada
 ln -sfn v3_1 data/modelos/v3_1_20261029             # la configuración del simulador v3.1 lee esta carpeta
 mkdir -p data/modelos/v3_1/base_v2 && ln -sfn ../../normalizado data/modelos/v3_1/base_v2/normalizado   # su base v2
-# 3. capas de encaje y adaptación
-paso python3 -m bbfit roles
+# 3. capas de encaje y adaptación. Los roles se rehacen SIN caché: el crosswalk de arriba renumera a las personas y
+#    una caché con la numeración anterior las mezclaría (fallo del 30-10-2026); la auditoría lo comprueba
+rm -rf data/modelos/roles/_cache
+paso python3 -m bbfit roles --rehacer
+paso python3 -m bbfit auditar
 paso python3 -m bbfit reemplazo
 paso python3 -m bbfit entropia
 paso python3 -m bbfit estilos --reusar-k
@@ -52,6 +55,7 @@ paso python3 -m bbfit backtest --fuente V31 --escenario inicio --adaptacion
 paso python3 -m bbfit pesos-simulador
 paso python3 -m bbfit historico
 paso python3 -m bbfit exportar-simulador --salida "$W/_sim"
+paso python3 -m bbfit auditar --simulador "$W/_sim"      # plantillas reales, con nombre y fichas de todos los ≥ 100 min
 # 5. datos del artifact que dependen de lo anterior (atlas/estilos, datos/normalizados, normalización, informe)
 paso python3 -m bbestilo exportar --salida "$W/_art/atlas/estilos" --todas-las-ligas
 paso python3 -m bbnorm3.artifact --salida "$W/_art/datos"

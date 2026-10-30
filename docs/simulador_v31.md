@@ -149,3 +149,44 @@ Los diagnósticos están en `validacion/diagnostico_previo/`.
   * La taxonomía VaDE (E01–E06) está desestimada en la v3 (`config/ESTILOS_VADE_OBSOLETOS.md`).
   * Reentrenarla cambiaría el significado de esos estilos.
   * Los estilos oficiales (unificados) se han rehecho con las FEB.
+
+## 7. Incidencia del 30-10-2026: identidades mezcladas en las plantillas (corregida)
+
+**Qué pasó [DATO].** La primera v3.1 publicada mezclaba jugadores en las plantillas. Por ejemplo, el Baskonia 2026-27
+mostraba a Shorts, Beliauskas o Pablo Sevilla en lugar de Lawson, Simmons o Stewart, y aparecían códigos («P000956»)
+en lugar de nombres.
+
+**Causa.** El crosswalk rehecho renumera a las personas. La fase de roles reutilizó una caché de 2026-27 con la
+numeración anterior: quedó de una ejecución hecha por error en el repositorio esa mañana y la copia aislada la heredó.
+* 27 % de las personas mezcladas en los roles.
+* 31 % de los miembros de plantilla eran jugadores de otros equipos.
+
+**Fallo previo (también en la v2/v3).** Los miembros sin ficha en la temporada base (debutantes, o sin liga cubierta)
+se exportaban sin nombre y la página mostraba su código: el 36 % de los miembros.
+
+**Corrección.**
+* Roles rehechos sin caché, y todo lo que depende de ellos: reemplazo, entropía, estilos, adaptación, examen, pesos,
+  histórico y exportación.
+* Nombre para todos los miembros. Se toma el más frecuente de la persona; si no hay, el de los datos procesados. Los
+  que no tienen ficha llevan un registro mínimo que simula igual que «sin dato».
+* Ficha provisional de la temporada en curso para los compañeros sin ficha de la base con ≥ 100 min (Onyema, LBA
+  2026-27), en Python y en el navegador.
+* **Auditoría obligatoria** (`python -m bbfit auditar`), comprobada con los nombres:
+  * personas coherentes;
+  * plantillas exportadas iguales a las reales del club;
+  * ningún miembro sin nombre;
+  * ficha para cada jugador con ≥ 100 min.
+
+**Resultado [DATO]:**
+
+| Comprobación | v3.1 publicada al principio | v3.1 corregida |
+|---|---|---|
+| Personas mezcladas | 27 % | 2 de 15.166 |
+| Miembros de plantilla de otro equipo | 31 % | 1,0 % |
+| Miembros sin nombre | 6.210 | 0 |
+| Jugadores con ≥ 100 min con ficha | — | 100 % (LBA 2026-27: 75) |
+
+* El 1 % que queda son formatos de nombre (FEB3 con iniciales) o jugadores que sólo aparecen en fases ausentes de la
+  tabla de datos.
+* El examen no cambia (minutos 4,70; pts/100 3,77): la contaminación sólo afectaba a 2026-27 y los cortes del examen
+  llegan a 2025-26.

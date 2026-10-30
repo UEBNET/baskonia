@@ -50,10 +50,45 @@ def _isos(nac) -> str | None:
     return "/".join(v) if v else None
 
 
-def _registros(c: S.Corte, filas: pd.DataFrame) -> list[list]:
+def nombres_por_persona(roles: pd.DataFrame) -> dict:
+    """persona_id → su nombre: el más frecuente en los roles (algunas filas del jugada a jugada vienen sin nombre; el
+    jugador sí lo tiene en sus otras filas) o, si no tiene ninguno, el de los datos procesados (quintetos y temporada)
+    por (liga, player_id)."""
+    r = roles.dropna(subset=["persona_id", "nombre"])
+    out = r.groupby("persona_id")["nombre"].agg(lambda s: s.value_counts().index[0]).to_dict()
+    faltan = roles[~roles["persona_id"].isin(out)].dropna(subset=["persona_id"])
+    if len(faltan):
+        fuente = _nombres_fuente()
+        for per, liga, pid in zip(faltan["persona_id"], faltan["liga"], faltan["player_id"].astype(str)):
+            n = fuente.get((liga, pid)) or fuente.get((liga, pid.split(":", 1)[-1]))
+            if n and per not in out:
+                out[per] = n
+    return out
+
+
+def _nombres_fuente() -> dict:
+    """(liga, player_id) → nombre en los datos procesados (quintetos/<liga>/jugadores.csv y ligas/<liga>.csv)."""
+    from .config import RAIZ
+    out = {}
+    for p in sorted((RAIZ / "data" / "processed").glob("*/quintetos/*/jugadores.csv")) + \
+            sorted((RAIZ / "data" / "processed").glob("*/ligas/*.csv")):
+        try:
+            d = pd.read_csv(p, dtype=str, usecols=["liga", "player_id", "nombre"]).dropna()
+        except (ValueError, KeyError):
+            continue
+        for l, i, n in zip(d["liga"], d["player_id"], d["nombre"]):
+            out.setdefault((l, i), n)
+            out.setdefault((l, i.split(":", 1)[-1]), n)
+    return out
+
+
+def _registros(c: S.Corte, filas: pd.DataFrame, nombres: dict | None = None) -> list[list]:
     from bbmodel.nacionalidad import id_modelo
     ids = SI.estilos_ids()
     f = filas.copy()
+    if nombres:
+        f["nombre"] = f["nombre"].where(f["nombre"].notna() & (f["nombre"].astype(str).str.strip() != ""),
+                                        f["persona_id"].map(nombres))
     f["pid"] = id_modelo(f["liga"], f["player_id"].astype(str), f["nombre"].fillna(""))
     out = []
     for r in f.to_dict("records"):
@@ -125,7 +160,7 @@ def _priors() -> dict | None:
                                          for v in fila] for fila in t.itertuples(index=False)]}
 
 
-def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple[list[dict], set, dict]:
+def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict, nombres: dict) -> tuple[list[dict], set, dict]:
     """Clubes de destino de temp_dest con su plantilla (registros de la temporada base c.temp) y los registros mínimos
     de los miembros sin registro en esa temporada (sólo su nombre)."""
     from . import validacion as V
@@ -153,7 +188,11 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple
             continue
         eq_dest.append((e.liga, e.team_id, e.equipo, e.club, S.miembros_actuales(c, e.club),
                         f"plantilla {c.temp} (sin datos de {temp_dest})"))
-    out, usados, stubs = [], set(), {}
+    out, usados, stubs, usados_dest = [], set(), {}, set()
+    dest_prin = None
+    if temp_dest in cfg["exportar"].get("temporadas_candidatas_extra", []):
+        cd = S.cargar_corte(temp_dest)
+        dest_prin = cd.prin[cd.prin["min_total"] >= cfg["exportar"]["minimo_minutos_jugador"]]
     for liga, team, nombre, club1, miembros, esc in eq_dest:
         club_t = V.club_en_t(c, liga, team, club1, mapa)
         et = c.eq[c.eq["club"] == club_t].iloc[0] if club_t is not None and (c.eq["club"] == club_t).any() else None
@@ -168,13 +207,20 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple
         pl = []
         rc = c.por_club.get(club_t) if club_t else None
         for p, pres in miembros:
+            if p not in c.prin.index and dest_prin is not None and p in dest_prin.index:
+                # sin ficha de la temporada base pero con ficha provisional de la temporada en curso (≥ 100 min, p. ej.
+                # Onyema en la LBA 2026-27, sin 2025-26): se usa esa en vez de tratarlo como «sin dato»
+                r = dest_prin.loc[p]
+                pl.append([f"{r['liga']}|{r['temporada']}|{r['player_id']}", _r(pres, 3), None, p])
+                usados_dest.add(p)
+                continue
             if p not in c.prin.index:
                 # sin registro en la temporada base (debutante, o no jugó en ninguna liga cubierta): el motor lo trata
                 # como «sin dato» (nivel de banquillo). Registro mínimo sólo para que la página muestre su nombre;
                 # con min_pct 0,5 (logit 0) y sin L, edad, posición ni estilo, simula igual que un registro vacío
                 sid = f"sin_registro|{temp_dest}|{p}"
                 pl.append([sid, _r(pres, 3), None, p])
-                stubs[sid] = _stub(sid, p, liga, team, temp_dest, r1)
+                stubs[sid] = _stub(sid, p, liga, team, temp_dest, r1, nombres)
                 continue
             r = c.prin.loc[p]
             rid = f"{r['liga']}|{r['temporada']}|{r['player_id']}"
@@ -194,11 +240,11 @@ def _clubes(c: S.Corte, temp_dest: str, roles: pd.DataFrame, cfg: dict) -> tuple
     return out, usados, stubs
 
 
-def _stub(sid: str, persona: str, liga: str, team, temp: str, r1: pd.DataFrame) -> list:
+def _stub(sid: str, persona: str, liga: str, team, temp: str, r1: pd.DataFrame, nombres: dict) -> list:
     """Fila de jugadores.json para un miembro de la plantilla sin registro en la temporada base: sólo identidad."""
     x = r1[(r1["persona_id"] == persona) & (r1["liga"] == liga) & (r1["team_id"].astype(str) == str(team))]
-    x = x if len(x) else r1[r1["persona_id"] == persona]
-    nombre = x.sort_values("min_total").iloc[-1]["nombre"] if len(x) and "nombre" in x else None
+    x = (x if len(x) else r1[r1["persona_id"] == persona]).dropna(subset=["nombre"])
+    nombre = x.sort_values("min_total").iloc[-1]["nombre"] if len(x) else nombres.get(persona)
     fila = {k: None for k in COLS_JUG}
     fila.update({"id": sid, "persona": str(persona), "nombre": nombre if isinstance(nombre, str) else None, "liga": liga,
                  "temporada": temp, "team": str(team), "min_pct": 0.5})
@@ -211,13 +257,14 @@ def exportar(salida: str | Path = SALIDA) -> dict:
     salida = Path(salida)
     salida.mkdir(parents=True, exist_ok=True)
     roles = SI._leer_roles_temporada()
+    nombres = nombres_por_persona(roles)
     P = json.loads((S.DIR_SIM / "pesos.json").read_text(encoding="utf-8")) if (S.DIR_SIM / "pesos.json").exists() else {}
     bases = {SI.siguiente(t): t for t in ex["temporadas_base"]}       # destino → base
     meta_bases, clubes, filas_jug, usados_por_base, stubs = {}, [], [], {}, {}
     ligas_todas = set()
     for dest, base in bases.items():
         c = S.cargar_corte(base)
-        clubs, usados, sin_reg = _clubes(c, dest, roles, cfg)
+        clubs, usados, sin_reg = _clubes(c, dest, roles, cfg, nombres)
         stubs.update(sin_reg)
         clubes += clubs
         ligas = sorted(set(c.reg["liga"]) | {x["liga"] for x in clubs})
@@ -230,12 +277,12 @@ def exportar(salida: str | Path = SALIDA) -> dict:
                 meta_bases[base]["entrenadores"][cl["entrenador"]] = cl["tendencia"]
         # registros de la temporada base: candidatos (≥ min minutos) y miembros de alguna plantilla
         r = c.reg[(c.reg["min_total"] >= ex["minimo_minutos_jugador"]) | (c.reg["principal"] & c.reg["persona_id"].isin(usados))]
-        filas_jug += _registros(c, r)
+        filas_jug += _registros(c, r, nombres)
     # registros de la temporada en curso como candidatos (provisionales)
     for t in ex.get("temporadas_candidatas_extra", []):
         c = S.cargar_corte(t)
         r = c.reg[c.reg["min_total"] >= ex["minimo_minutos_jugador"]]
-        filas_jug += _registros(c, r)
+        filas_jug += _registros(c, r, nombres)
     filas_jug += list(stubs.values())
     vistos, jug = set(), []
     for f in filas_jug:
