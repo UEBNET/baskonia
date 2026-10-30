@@ -20,8 +20,9 @@ Dos fuentes de la capacidad θ (configs/simulation.yaml → normalizacion):
 * «A»   capacidad amortiguada del A con todas las temporadas (`_am_a`, `_am_sd`): sirve para medir la fuga
         comparándola con «A_corte» en los mismos cortes.
 * «V31» (simulador v3, configs/simulation_v3.yaml): igual que «AB» pero leyendo el dataset normalizado v3.1
-        (data/modelos/v3_1/normalizado: combinación v2 + CVAE corregida). Las constantes de traducción a la liga de
-        destino siguen siendo las de la normalización amortiguada (limitación documentada en docs/simulador_v3.md).
+        (combinación v2 + CVAE corregida; carpeta en normalizacion.dir) y con las constantes de traducción a la liga
+        de destino de la v3.1 (traduccion_v31: sustituto lineal ajustado sobre el propio dataset).
+* «V31A» (diagnóstico): θ de la v3.1 con las constantes de la normalización amortiguada (lo que hacía la v3.0).
 Caché: experimentos/cache_simulador/ (no versionado; se regenera).
 """
 from __future__ import annotations
@@ -38,7 +39,10 @@ from . import datos as D
 from .config import DIR_MOD, RAIZ, cargar
 from .roles import ROLES
 
-DIR_CACHE = RAIZ / "experimentos" / "cache_simulador"
+# caché propia por versión del simulador (v2: cache_simulador; v3: cache_simulador_v3): las dos usan los mismos nombres
+# de fichero por corte y fuente, y la v3 lee otros insumos (dataset v3.1, constantes v3.1, datos al 29-10)
+_CARPETA = cargar("simulation").get("carpeta", "v2")
+DIR_CACHE = RAIZ / "experimentos" / ("cache_simulador" if _CARPETA == "v2" else f"cache_simulador_{_CARPETA}")
 DIR_NORM = DIR_MOD / "normalizado"
 DIR_AM = DIR_MOD / "normalizacion_amortiguada"
 
@@ -251,11 +255,94 @@ def theta_completa(fuente: str, metricas: list[str], trad: dict) -> pd.DataFrame
 
 
 def _dir_norm() -> tuple[Path, str]:
-    """Dataset normalizado de la fuente activa: «V31» (simulador v3) = data/modelos/v3_1/normalizado/<t>.csv.gz, con el
-    mismo esquema que el v1 (sus <m>_am llevan la v3.1); resto = data/modelos/normalizado/<t>.csv."""
-    if cfg_sim()["normalizacion"]["fuente"] == "V31":
-        return DIR_MOD / "v3_1" / "normalizado", ".csv.gz"
+    """Dataset normalizado de la fuente activa: «V31» (simulador v3) = normalizacion.dir de la configuración (por defecto
+    data/modelos/v3_1/normalizado/<t>.csv.gz, mismo esquema que el v1: sus <m>_am llevan la v3.1 y <m>_am_v1 el A+B
+    amortiguado); resto = data/modelos/normalizado/<t>.csv."""
+    n = cfg_sim()["normalizacion"]
+    if str(n["fuente"]).startswith("V31"):
+        return RAIZ / n.get("dir", "data/modelos/v3_1/normalizado"), ".csv.gz"
     return DIR_NORM, ".csv"
+
+
+def traduccion(fuente: str, metricas: list[str] | None = None) -> dict:
+    """Constantes de traducción a la liga de destino según la fuente de θ: «V31» = las de la v3.1 (traduccion_v31);
+    el resto (AB, A y «V31A», diagnóstico) = las de la normalización amortiguada (traduccion_completa)."""
+    return traduccion_v31(metricas) if fuente == "V31" else traduccion_completa(metricas)
+
+
+def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
+    """Constantes de traducción coherentes con la v3.1 (sustituto lineal), sin tocar el motor.
+
+    El motor traduce la capacidad θ (DT de la vara EuroLeague) a la liga de destino d con z_d = (θ − δ_d)/s_d
+    (valor = T⁻¹(μ_d + τ_d·z_d)); con las constantes amortiguadas (δ, s) es la inversa de la v2 (θ_v2 ≈ δ + s·z), ya
+    validada en el examen de la fase 8. Para una θ de la v3.1 se predice primero su equivalente en la escala v2 de esa
+    liga, E[θ_v2 | θ_v31] = c_lt + d_l·θ_v31, ajustado con los mismos jugadores de la liga (las dos columnas del dataset
+    v3.1: <m>_am y <m>_am_v1; ≥ min_minutos; pendiente d_l común a sus temporadas, intercepto c_lt por temporada).
+    Es la regresión en el sentido de la predicción: donde la v3.1 y la v2 se parecen poco (Tercera FEB), d_l es pequeña
+    y la traducción se acerca a la media de la liga en vez de exagerar las diferencias. Componiendo:
+        z_d = (c_lt + d_l·θ − δ_lt)/s_l   ⇒   δ'_lt = (δ_lt − c_lt)/d_l,   s'_l = s_l/d_l,   m'_l = (m_l − c̄_l)/d_l
+    con la misma varianza de nivel, ψ, deriva, μ/τ y σ² que la v2 (propiedades de los datos de cada liga, no del
+    modelo de normalización). La EuroLeague (vara) no se toca: el motor fija su δ en 0.
+    Caché: traduccion_v31.pkl (en la caché de la versión)."""
+    DIR_CACHE.mkdir(parents=True, exist_ok=True)
+    dest = DIR_CACHE / "traduccion_v31.pkl"
+    if dest.exists():
+        return pickle.loads(dest.read_bytes())
+    metricas = metricas or metricas_traduccion()
+    base = traduccion_completa(metricas)
+    const, nodos = base["constantes"], base["nodos"]
+    cfg_t = cfg_sim().get("traduccion", {})
+    min_min = float(cfg_t.get("min_minutos", 400))
+    min_filas = int(cfg_t.get("min_filas_liga", 30))
+    d_min = float(cfg_t.get("pendiente_minima", 0.1))      # evita s' infinita si una liga no tuviera relación alguna
+    cols = ["pos3", "min"] + [c for m in metricas for c in (f"{m}_am", f"{m}_am_v1")]
+    n = _normalizado(cols)
+    n = n[pd.to_numeric(n["min"], errors="coerce") >= min_min]
+    ajuste = {}
+    for m in metricas:
+        if m not in const or f"{m}_am_v1" not in n:
+            continue
+        k = const[m]
+        t31, t2 = np.full(len(n), np.nan), np.full(len(n), np.nan)
+        for pos in ("E", "A", "I"):
+            s_ = (n["pos3"] == pos).to_numpy()
+            if s_.any():
+                v31 = n.loc[s_, f"{m}_am"].to_numpy(float)
+                v2 = n.loc[s_, f"{m}_am_v1"].to_numpy(float)
+                t31[s_] = theta_desde_valor(v31, v31, v31, k, pos)[0]
+                t2[s_] = theta_desde_valor(v2, v2, v2, k, pos)[0]
+        d = pd.DataFrame({"liga": n["liga"].to_numpy(), "temporada": n["temporada"].to_numpy(), "t31": t31, "t2": t2})
+        d = d[np.isfinite(d["t31"]) & np.isfinite(d["t2"])]
+        nod_m, s_m, m_m = dict(nodos.get(m, {})), dict(k["s"]), dict(k["m"])
+        for liga, g in d.groupby("liga"):
+            if liga == "euroleague" or len(g) < min_filas:
+                continue
+            # E[θ_v2 | θ_v31]: pendiente común (dentro de cada temporada) e interceptos por temporada
+            y = g["t2"] - g.groupby("temporada")["t2"].transform("mean")
+            x = g["t31"] - g.groupby("temporada")["t31"].transform("mean")
+            dd = float((x * y).sum() / (x * x).sum()) if (x * x).sum() > 0 else 1.0
+            dd = max(dd, d_min)
+            c_t = (g.groupby("temporada")["t2"].mean() - dd * g.groupby("temporada")["t31"].mean()).to_dict()
+            c_bar = float(np.average(list(c_t.values()), weights=g.groupby("temporada").size().reindex(list(c_t)).to_numpy()))
+            for key, (dl, vl) in list(nod_m.items()):
+                lg, temp = key.split(":", 1)
+                if lg == liga:
+                    nod_m[key] = ((dl - c_t.get(temp, c_bar)) / dd, vl / dd ** 2)
+            if liga in s_m:
+                s_m[liga] = s_m[liga] / dd
+            if liga in m_m:
+                m_m[liga] = (m_m[liga] - c_bar) / dd
+            r = float(np.corrcoef(x, y)[0, 1]) if len(g) > 2 else np.nan
+            ajuste[f"{m}|{liga}"] = {"d": round(dd, 4), "c_medio": round(c_bar, 4), "r": round(r, 3), "n": int(len(g))}
+        nodos[m] = nod_m
+        const[m] = {**k, "s": s_m, "m": m_m}
+    res = {"constantes": const, "nodos": nodos, "fuente": "v31_lineal", "ajuste": ajuste}
+    dest.write_bytes(pickle.dumps(res))
+    if progreso:
+        ds = np.array([v["d"] for v in ajuste.values()])
+        progreso(f"traducción v3.1: {len(ajuste)} métrica-liga, pendiente d mediana {np.median(ds):.3f} "
+                 f"(p10 {np.quantile(ds, 0.1):.3f}, p90 {np.quantile(ds, 0.9):.3f})")
+    return res
 
 
 def _normalizado(cols: list[str]) -> pd.DataFrame:

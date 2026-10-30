@@ -144,7 +144,7 @@ def cargar_corte(temp: str, fuente: str | None = None, cfg: dict | None = None, 
                 nh = SI.normalizacion_hasta(SI.anio(temp), mets)
                 theta, trad = nh["theta"], nh["traduccion"]
             else:
-                trad = SI.traduccion_completa(mets)
+                trad = SI.traduccion(fuente, mets)
                 theta = SI.theta_completa(fuente, mets, trad)
             reg = SI.registros_temporada(temp, theta, trad["constantes"], cfg)
             eq = SI.equipos_temporada(temp, reg)

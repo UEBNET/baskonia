@@ -49,3 +49,17 @@ def test_tabla_priors_forma_v3():
     t = A3.tabla_priors(v2, cv, {"defecto": 34, "feb1": 32})
     assert (t["D_forma_media"] <= 0).all() and (t["delta_temporada_media"] <= 0).all() and (t["delta_media"] <= 0).all()
     assert t.loc[1, "partidos_1a_temporada"] == 32
+
+
+def test_produccion_sin_doble_conteo():
+    """Sólo L_rel (la ADAPT% mostrada) lleva el factor de temporada: la producción y L ya salen de la v3.1."""
+    cv = A3.curvas_ascendentes(_curvas())
+    v2 = pd.DataFrame({"nivel": ["global"] * 3, "liga_origen": ["*"] * 3, "liga_destino": ["*"] * 3,
+                       "grupo_nacionalidad": ["*"] * 3, "pos3": ["*"] * 3, "escalon_destino": ["*"] * 3,
+                       "metrica": ["L_rel", "pts_p100", "L"], "serie_curva": ["prod_p100"] * 3,
+                       "grupo_curva": ["global"] * 3})
+    t = A3.tabla_priors(v2, cv, {"defecto": 34})
+    assert t.loc[0, "delta_temporada_media"] < 0
+    assert (t.loc[1:, "delta_temporada_media"] == 0).all() and (t.loc[1:, "delta_temporada_sd"] == 0).all()
+    f = factores_adaptacion(t.iloc[1].to_dict(), G=34, N=10, contraccion=1.0, rng=np.random.default_rng(0), n_sim=3)
+    assert np.allclose(f["temporada"], 1.0)                     # producción de temporada = la de la v3.1

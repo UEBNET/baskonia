@@ -44,6 +44,20 @@ def cfg_sim() -> dict:
     return cargar("simulation")
 
 
+def fuente_base(cfg: dict | None = None) -> str:
+    """Fuente de θ de producción: «AB» en la v2, la de la configuración («V31») en la v3."""
+    f = str((cfg or cfg_sim())["normalizacion"].get("fuente", "AB"))
+    return f if f.startswith("V31") else "AB"
+
+
+def ruta_produccion(cfg: dict | None = None) -> tuple[str, str, bool]:
+    """(fuente, escenario, adaptación) del examen cuyas predicciones ajustan el Fit y la calibración de producción
+    (validacion.produccion; por defecto el de la v2: AB, inicio, sin adaptación)."""
+    cfg = cfg or cfg_sim()
+    p = cfg.get("validacion", {}).get("produccion", {})
+    return p.get("fuente", fuente_base(cfg)), p.get("escenario", "inicio"), bool(p.get("adaptacion", False))
+
+
 # =============================================================================================== fichajes
 def mapa_clubes(roles: pd.DataFrame, t: str, t1: str, umbral: float = 0.3) -> dict:
     """(liga, team_id) de t+1 → clave de club en t (el equipo de t con el que comparte ≥ umbral de la plantilla)."""
@@ -630,7 +644,8 @@ def ejecutar_corte(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: d
     casos, t1 = pc["casos"], pc["t1"]
     c = S.cargar_corte(t, fuente, pesos=False)
     c.w_util, c.calib, c.fit = pesos["utilidad"], pesos["calibracion"], fit
-    eq1 = S.cargar_corte(t1, "AB", pesos=False).eq if t1 <= cfg["historico"]["temporadas"][-1] else _eq_simple(roles, t1)
+    eq1 = S.cargar_corte(t1, "AB" if fuente.startswith("A") else fuente, pesos=False).eq \
+        if t1 <= cfg["historico"]["temporadas"][-1] else _eq_simple(roles, t1)
     r1 = roles[roles["temporada"] == t1]
     v2 = simular_fichajes(c, casos, r1, eq1, cfg, escenario, progreso=progreso, sin_adaptacion=sin_adaptacion)
     mets = list(cfg["produccion"]["metricas"])
@@ -957,7 +972,7 @@ def dejar_fuera_liga(etiqueta: str = "AB_inicio", min_casos: int = 30, progreso=
         pc = preparar_corte(t, fuente, cfg, roles, progreso)
         c = S.cargar_corte(t, fuente, pesos=False)
         t1 = SI.siguiente(t)
-        eq1 = S.cargar_corte(t1, "AB", pesos=False).eq
+        eq1 = S.cargar_corte(t1, "AB" if fuente.startswith("A") else fuente, pesos=False).eq
         r1 = roles[roles["temporada"] == t1]
         for L in ligas:
             casos = pc["casos"][pc["casos"]["liga_d"] == L]
@@ -1003,9 +1018,11 @@ def pesos_produccion(progreso=print) -> dict:
     cfg = cfg_sim()
     roles = _roles()
     ult = cfg["historico"]["temporadas"][-1]
-    P = entrenar_pesos(ult, "AB", cfg, roles, progreso)
-    cal = calibrar(ult, "AB", cfg, roles, P, progreso)
-    preds = [pickle.loads(f.read_bytes()) for f in sorted(SI.DIR_CACHE.glob("pred_*_AB_inicio.pkl"))]
+    fp, esc, adapt = ruta_produccion(cfg)
+    etq = _etiqueta(fp, esc, adapt)
+    P = entrenar_pesos(ult, fp, cfg, roles, progreso)
+    cal = calibrar(ult, fp, cfg, roles, P, progreso)
+    preds = [pickle.loads(f.read_bytes()) for f in sorted(SI.DIR_CACHE.glob(f"pred_*_{fp}_{esc}{'_adapt' if adapt else ''}.pkl"))]
     prev = pd.concat(preds, ignore_index=True) if preds else pd.DataFrame()
     fit = ajustar_fit(prev.assign(**{f"c_{r}": prev[f"v_c_{r}"] for r in RASGOS_FIT}), cfg) if len(prev) else None
     cal_s = ajustar_calibracion(prev, cfg) if len(prev) else None
@@ -1014,7 +1031,7 @@ def pesos_produccion(progreso=print) -> dict:
         cal_s["transicion"] = {r: trans.loc[r].to_dict() for r in trans.index}
     res_val = None
     pr = DIR_VAL / "A_corte_inicio" / "resumen.json"
-    pv = DIR_VAL / "AB_inicio" / "resumen.json"
+    pv = DIR_VAL / etq / "resumen.json"
     if pv.exists():
         r = json.loads(pv.read_text(encoding="utf-8"))
         res_val = {"cortes": r["cortes"], "resumen": {k: {m: v for m, v in d.items() if m in (
@@ -1046,10 +1063,11 @@ def historico(temporadas: list[str] | None = None, progreso=print) -> dict:
         if dest.exists():
             out[t1] = "ya hecho"
             continue
-        pc = preparar_corte(t, "AB", cfg, roles, progreso)
-        c = S.cargar_corte(t, "AB", pesos=False)
+        fb = fuente_base(cfg)
+        pc = preparar_corte(t, fb, cfg, roles, progreso)
+        c = S.cargar_corte(t, fb, pesos=False)
         c.w_util, c.calib, c.fit, c.calib_salida = P["utilidad"], P["calibracion"], P["fit"], P.get("calibracion_salida")
-        eq1 = S.cargar_corte(t1, "AB", pesos=False).eq
+        eq1 = S.cargar_corte(t1, fb, pesos=False).eq
         v = simular_fichajes(c, pc["casos"], roles[roles["temporada"] == t1], eq1, cfg, "inicio",
                              n_sim=int(cfg["historico"]["simulaciones"]), progreso=progreso)
         casos = pc["casos"].reset_index(drop=True)
@@ -1068,7 +1086,7 @@ def historico(temporadas: list[str] | None = None, progreso=print) -> dict:
         out[t1] = len(d)
         progreso(f"histórico {t} → {t1}: {len(d)} fichajes → {dest.name}")
     (S.DIR_SIM / "historico_meta.json").write_text(json.dumps({"version": cfg["version"], "escenario": "inicio",
-                                                               "fuente": "AB", "adaptacion": True, "ficheros": out,
+                                                               "fuente": fuente_base(cfg), "adaptacion": True, "ficheros": out,
                                                                "pesos": "pesos.json"}, ensure_ascii=False, indent=1),
                                                    encoding="utf-8")
     return out

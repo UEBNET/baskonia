@@ -12,7 +12,8 @@ simulaciones: 1000                   # iteraciones Monte Carlo por jugador-club
 intervalos: [0.50, 0.90]             # intervalos centrales de la salida
 
 normalizacion:
-  fuente: V31                        # V31 = <m>_am del dataset normalizado v3.1 (v2 + CVAE) | AB = el de la v2
+  fuente: V31A                       # V31A = <m>_am de la v3.1 con las constantes amortiguadas (así se publicó la v3.0;
+                                     # V31 = constantes v3.1, configs/simulation_v31.yaml) | AB = el de la v2
   temporada_ref: "2025-26"           # vara de los <m>_am (μ/τ EuroLeague de esa temporada)
   minimo_minutos_jugador: 100        # registro de origen con ≥ 100 min (por debajo: aviso de muestra pequeña)
 

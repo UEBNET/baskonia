@@ -18,7 +18,9 @@ El nivel lo pone la normalización v3.1, validada directamente sobre el rendimie
 el efecto Δ_temp deja de llamarse «adaptación» y no se aplica.
 
 Forma de la tabla para el motor (Python y JS, sin cambiar su código):
-    delta_temporada = D · w̄_G   (w̄_G = media de e^(−g/κ) en los G partidos de la liga de destino)
+    delta_temporada = D · w̄_G   sólo en la métrica L_rel (la ADAPT% mostrada; w̄_G = media de e^(−g/κ) en los G
+                                partidos de la liga de destino); 0 en la producción y en L, que ya salen de la v3.1
+                                (su promedio de temporada incluye el arranque: aplicarlo otra vez lo contaría dos veces)
     D_forma = D,  κ_forma = κ,  delta_media = D,  kappa_media = κ  (interfaz 1 + δ·e^(−g/κ) también ascendente)
 con contracción 1 (configs/simulation_v3.yaml): el motor calcula curva(g) = (1 + D·w̄)·(1 + D·φ_g)/(1 + D·w̄) =
 1 + D·φ_g, ADAPT% de la temporada = 100·(1 + D·w̄) ≤ 100 y de los N primeros = media de 100·(1 + D·φ_g).
@@ -32,7 +34,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from .config import DIR_MOD, cargar
+from .config import DIR_MOD, RAIZ, cargar
 
 DIR_V3 = DIR_MOD / "adaptacion" / "v3"
 Z90 = 1.6448536269514722
@@ -86,11 +88,15 @@ def tabla_priors(priors_v2: pd.DataFrame, cv: pd.DataFrame, partidos: dict) -> p
     G = [partidos.get(l, partidos["defecto"]) if isinstance(l, str) and l != "*" else partidos["defecto"]
          for l in t["liga_destino"]]
     wb = np.array([wbar(k, g) for k, g in zip(K, G)])
-    t["delta_temporada_media"] = np.array(D) * wb                     # media de la temporada frente al nivel adaptado
-    t["delta_temporada_sd"] = np.array(Dsd) * wb
+    # media de la temporada frente al nivel adaptado. Sólo en L_rel (la ADAPT% que se muestra): la producción y L ya
+    # salen de la v3.1, que predice el promedio de temporada de quien cambia de liga (con su arranque incluido); aplicarles
+    # también 1 + D·w̄ contaría dos veces el arranque. En el resto de métricas el factor de temporada es 1.
+    solo_adapt = (t["metrica"] == "L_rel").to_numpy() if "metrica" in t else np.ones(len(t), bool)
+    t["delta_temporada_media"] = np.where(solo_adapt, np.array(D) * wb, 0.0)
+    t["delta_temporada_sd"] = np.where(solo_adapt, np.array(Dsd) * wb, 0.0)
     t["delta_temporada_lo"] = t["delta_temporada_media"] - Z90 * t["delta_temporada_sd"]
     t["delta_temporada_hi"] = np.minimum(t["delta_temporada_media"] + Z90 * t["delta_temporada_sd"], 0.0)
-    t["p_delta_temporada_negativo"] = np.where(np.array(D) < 0, 1.0, 0.0)
+    t["p_delta_temporada_negativo"] = np.where(solo_adapt & (np.array(D) < 0), 1.0, 0.0)
     t["delta_media"], t["delta_sd"] = D, Dsd                          # interfaz 1 + δ·e^(−g/κ), δ ≤ 0
     t["delta_lo"] = t["delta_media"] - Z90 * t["delta_sd"]
     t["delta_hi"] = np.minimum(t["delta_media"] + Z90 * t["delta_sd"], 0.0)
@@ -104,14 +110,19 @@ def tabla_priors(priors_v2: pd.DataFrame, cv: pd.DataFrame, partidos: dict) -> p
 
 
 def main() -> dict:
-    sim = cargar("simulation_v3")
+    sim = cargar("simulation")
+    if "salida_v3" not in sim["adaptacion"] and sim.get("carpeta", "v2") == "v2":
+        sim = cargar("simulation_v3")                # sin CERNO_SIMULADOR: la v3 (como hasta ahora)
     partidos = dict(sim["adaptacion"]["partidos_temporada"])
-    curvas = pd.read_csv(DIR_MOD / "adaptacion" / "curvas.csv")
+    ca = sim["adaptacion"]
+    curvas = pd.read_csv(RAIZ / ca.get("curvas_fase7", "data/modelos/adaptacion/curvas.csv"))
     cv = curvas_ascendentes(curvas)
-    pr = tabla_priors(pd.read_csv(DIR_MOD / "adaptacion" / "adaptation_priors.csv"), cv, partidos)
-    DIR_V3.mkdir(parents=True, exist_ok=True)
-    cv.round(5).to_csv(DIR_V3 / "curvas_v3.csv", index=False)
-    pr.round(5).to_csv(DIR_V3 / "adaptation_priors.csv", index=False)
+    pr = tabla_priors(pd.read_csv(RAIZ / ca.get("priors_fase7", "data/modelos/adaptacion/adaptation_priors.csv")), cv,
+                      partidos)
+    dv = RAIZ / ca["salida_v3"] if ca.get("salida_v3") else DIR_V3
+    dv.mkdir(parents=True, exist_ok=True)
+    cv.round(5).to_csv(dv / "curvas_v3.csv", index=False)
+    pr.round(5).to_csv(dv / "adaptation_priors.csv", index=False)
     N = int(sim["adaptacion"]["primeros_partidos"])
     ejemplo = {}
     for r in cv[cv["serie"] == "prod_p100"].itertuples():
@@ -126,6 +137,6 @@ def main() -> dict:
                      "hacia el global por grupo de nacionalidad",
            "grupos_acotados_a_0": int(cv["acotado"].sum()), "grupos": int(len(cv)),
            "L_rel_prod_p100": ejemplo}
-    (DIR_V3 / "resumen.json").write_text(json.dumps(res, indent=1, ensure_ascii=False), encoding="utf-8")
+    (dv / "resumen.json").write_text(json.dumps(res, indent=1, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(res["L_rel_prod_p100"], ensure_ascii=False, indent=1))
     return res
