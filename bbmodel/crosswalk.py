@@ -69,6 +69,16 @@ def tokens_nombre(nombre: str) -> frozenset:
                      and t not in {"de", "del", "la", "las", "los", "da", "dos", "van", "der", "von", "y"})
 
 
+def inicial_nombre(nombre: str) -> str | None:
+    """Inicial del nombre de pila cuando el nombre viene como «S. Cooper» / «Cooper, S.» (p. ej. extranjeros de la
+    CBA en QQ): la letra suelta seguida de punto. None si no hay inicial suelta."""
+    if not isinstance(nombre, str):
+        return None
+    n = unicodedata.normalize("NFKD", nombre).encode("ascii", "ignore").decode().lower()
+    m = re.search(r"(?:^|[\s,])([a-z])\.", n)
+    return m.group(1) if m else None
+
+
 def _iso(v):
     from .nacionalidad import codigo
     return codigo(v)
@@ -108,6 +118,7 @@ def cargar_nodos(proc: Path = PROC, temporadas: list[str] | None = None) -> pd.D
         return pd.Series({
             "nombre": g["nombre"].mode().iat[0] if g["nombre"].notna().any() else None,
             "tokens": tokens_nombre(g["nombre_cmp"].mode().iat[0]) if g["nombre_cmp"].notna().any() else frozenset(),
+            "inicial": inicial_nombre(g["nombre_cmp"].mode().iat[0]) if g["nombre_cmp"].notna().any() else None,
             "fecha_nac": fn.mode().iat[0] if len(fn) else None,
             "anio_nac": float(an.median()) if len(an) else np.nan,
             "iso": iso.mode().iat[0] if len(iso) else None,
@@ -145,10 +156,17 @@ def puntuar(a: pd.Series, b: pd.Series, unico: bool = False) -> tuple[float, str
     if a["liga"] in FEB and b["liga"] in FEB and a["player_id"] == b["player_id"]:
         return 1.0, "id_feb", ""
     ta, tb = a["tokens"], b["tokens"]
-    if len(ta & tb) < 2 or not (ta <= tb or tb <= ta):
+    por_inicial = _par_inicial(a, b)
+    if not por_inicial and (len(ta & tb) < 2 or not (ta <= tb or tb <= ta)):
         return 0.0, "", "nombre distinto"
     met = []
-    if ta == tb:
+    if por_inicial:
+        # «S. Cooper» ↔ «Sterling Cooper»: sólo con la MISMA fecha de nacimiento completa (se comprueba abajo)
+        if not (a["fecha_nac"] and b["fecha_nac"]):
+            return 0.0, "inicial_apellido", "inicial sin fecha de nacimiento completa"
+        s = 0.45
+        met.append("inicial_apellido")
+    elif ta == tb:
         s = 0.55
         met.append("nombre_igual")
     else:
@@ -197,6 +215,38 @@ def puntuar(a: pd.Series, b: pd.Series, unico: bool = False) -> tuple[float, str
         s += 0.05
         met.append("club_comun")
     return float(min(1.0, max(0.0, s))), "+".join(met), ""
+
+
+def _par_inicial(a, b) -> bool:
+    """Un nodo con inicial + un solo apellido («S. Cooper») y otro cuyo nombre contiene ese apellido y una palabra
+    que empieza por esa inicial."""
+    for x, y in ((a, b), (b, a)):
+        ini = x.get("inicial") if hasattr(x, "get") else None
+        if isinstance(ini, str) and len(x["tokens"]) == 1 and x["tokens"] <= y["tokens"] and len(y["tokens"]) >= 2 \
+                and any(w.startswith(ini) for w in y["tokens"] - x["tokens"]):
+            return True
+    return False
+
+
+def candidatos_inicial(nodos: pd.DataFrame) -> list[tuple[str, str]]:
+    """Parejas de la regla de la inicial: nodo «S. Cooper» (un apellido + inicial + fecha de nacimiento) con los
+    nodos de otras ligas que contienen ese apellido."""
+    if "inicial" not in nodos:
+        return []
+    con = nodos[nodos["inicial"].notna() & (nodos["tokens"].map(len) == 1) & nodos["fecha_nac"].notna()]
+    if con.empty:
+        return []
+    idx = defaultdict(set)
+    for n, tk in zip(nodos.index, nodos["tokens"]):
+        if len(tk) >= 2:
+            for w in tk:
+                idx[w].add(n)
+    pares = set()
+    for n, tk in zip(con.index, con["tokens"]):
+        for m in idx[next(iter(tk))]:
+            if nodos.at[m, "liga"] != nodos.at[n, "liga"] and _par_inicial(nodos.loc[n], nodos.loc[m]):
+                pares.add(tuple(sorted((n, m))))
+    return sorted(pares)
 
 
 def candidatos(nodos: pd.DataFrame) -> list[tuple[str, str]]:
@@ -248,7 +298,7 @@ class _UF:
 def resolver(nodos: pd.DataFrame, umbral_fusion: float = 0.80, umbral_revision: float = 0.50,
              pasadas: int = 2) -> tuple[pd.DataFrame, pd.DataFrame]:
     """(crosswalk, revisión) a partir de la tabla de nodos."""
-    pares = candidatos(nodos)
+    pares = sorted(set(candidatos(nodos)) | set(candidatos_inicial(nodos)))
     # unicidad: el nombre exacto sólo aparece una vez en cada una de las dos ligas y el nodo tiene una sola pareja
     # posible en la otra liga
     por_liga_nombre = nodos.groupby(["liga", nodos["tokens"].map(lambda t: " ".join(sorted(t)))]).size()

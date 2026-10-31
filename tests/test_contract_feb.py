@@ -432,3 +432,19 @@ def test_possessions_implicit_defensive_rebound():
     evs = [_ev(1, "shot", "A", False, 10), _ev(2, "shot", "B", True, 20)]
     n, pid = count_possessions(evs, ["A", "B"])
     assert n == Counter({"A": 1, "B": 1}) and pid[2] > pid[1]
+
+
+def test_crosswalk_inicial_apellido_exige_fecha():
+    """«S. Cooper» (CBA, QQ) sólo se une a «Sterling Cooper» con la misma fecha de nacimiento completa."""
+    import pandas as pd
+    from bbmodel.crosswalk import inicial_nombre, puntuar, tokens_nombre
+
+    def nodo(liga, nombre, fecha):
+        return pd.Series({"liga": liga, "player_id": nombre, "tokens": tokens_nombre(nombre),
+                          "inicial": inicial_nombre(nombre), "fecha_nac": fecha, "anio_nac": float(fecha[:4]) if fecha else float("nan"),
+                          "iso": None, "temporadas": {"2023-24": 1.0}, "equipos": {}})
+    a = nodo("cba", "S. Cooper", "1996-11-17")
+    assert puntuar(a, nodo("nba", "Sterling Cooper", "1996-11-17"))[0] >= 0.8
+    assert puntuar(a, nodo("nba", "Sterling Cooper", "1990-01-01"))[2] == "fecha de nacimiento distinta"
+    assert puntuar(a, nodo("nba", "Sterling Cooper", None))[2] == "inicial sin fecha de nacimiento completa"
+    assert puntuar(a, nodo("nba", "Mike Cooper", "1996-11-17"))[2] == "nombre distinto"
