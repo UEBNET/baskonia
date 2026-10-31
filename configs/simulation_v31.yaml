@@ -17,8 +17,8 @@ intervalos: [0.50, 0.90]             # intervalos centrales de la salida
 normalizacion:
   fuente: V31                        # V31 = <m>_am de la v3.1 + constantes de traducción v3.1 | V31A = con las amortiguadas
   dir: experimentos/cache_simulador_v3_1/normalizado   # dataset que lee el simulador (`bbfit dataset-simulador`)
-  origen_v31: data/modelos/v3_1_20261029/normalizado  # v3.1 rehecha con los datos hasta el 29-10
-  origen_v2: data/modelos/v3_1_20261029/base_v2/normalizado   # A+B amortiguado rehecho con esos datos (base de la v3.1)
+  origen_v31: data/modelos/v3_1_20261031/normalizado  # v3.1 con las 20 ligas (datos al 29-10, rehecha el 31-10)
+  origen_v2: data/modelos/v3_1_20261031/base_v2/normalizado   # A+B amortiguado rehecho con esos datos (base de la v3.1)
   ligas_v2: [feb3]                   # filas que el simulador toma de la v2 (DECISIÓN POST HOC, sim_insumos.dataset_simulador)
   temporada_ref: "2025-26"           # vara de los <m>_am (μ/τ EuroLeague de esa temporada)
   minimo_minutos_jugador: 100        # registro de origen con ≥ 100 min (por debajo: aviso de muestra pequeña)
