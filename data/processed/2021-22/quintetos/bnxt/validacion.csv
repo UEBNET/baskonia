@@ -9,7 +9,6 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 1910283,regular,41,23,24.0,2.9,0.0,0.0,0,,True,True,True,True,True,,True
 1910284,regular,32,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
 1910285,regular,41,24,26.0,7.5,0.0,0.0,0,,True,True,True,True,True,,True
-1910286,regular,40,24,1.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
 1910287,regular,40,24,31.0,3.0,2.0,6.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 1910288,regular,30,24,1.0,0.4,0.0,0.0,0,,True,True,True,True,True,,True
 1910289,regular,33,24,1.0,0.5,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
@@ -26,15 +25,11 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 1910300,regular,39,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
 1910301,regular,40,24,9.0,1.1,0.0,0.0,0,,True,True,True,True,True,,True
 1910302,regular,39,24,2.0,0.9,0.0,0.0,0,,True,True,True,True,True,,True
-1910303,regular,39,22,2.0,0.7,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
-1910304,regular,34,22,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
 1910305,regular,30,24,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
-1910306,regular,43,23,1.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 1910307,regular,30,24,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
 1910308,regular,28,23,13.0,1.5,0.0,0.0,1,quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
 1910309,regular,33,21,3.0,0.4,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 1910310,regular,33,24,128.0,6.1,3.0,1.0,3,actua_fuera_de_pista=1;no_cinco_6=1;quinteto_inicial_de_titulares=1,False,True,True,True,True,,False
-1910311,regular,42,22,7.0,0.8,0.0,0.0,0,,True,True,True,True,True,,True
 1910312,regular,44,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
 1910313,regular,40,24,23.0,3.8,0.0,0.0,0,,True,True,True,True,True,,True
 1910314,regular,41,22,1.0,0.5,0.0,0.0,0,,True,True,True,True,True,,True
@@ -42,7 +37,6 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 1910316,regular,37,24,13.0,1.6,0.0,0.0,0,,True,True,True,True,True,,True
 1910317,regular,34,23,24.0,2.3,0.0,0.0,0,,True,True,True,True,True,,True
 1910318,regular,30,24,2.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
-1910319,regular,46,24,600.0,89.3,16.0,3.0,25,actua_fuera_de_pista=18;no_cinco_6=4;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,True,,False
 1910320,regular,33,22,12.0,1.5,0.0,0.0,0,,True,True,True,True,True,,True
 1910321,regular,28,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 1910322,regular,35,24,18.0,2.1,0.0,0.0,0,,True,True,True,True,True,,True
@@ -106,7 +100,6 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 1925290,regular,30,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 1925291,regular,28,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 1925292,regular,30,23,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
-1925293,regular,33,22,30.0,3.1,1.0,2.0,4,actua_fuera_de_pista=2;sale_sin_estar=2,True,True,True,True,True,,True
 1925294,regular,27,24,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
 1925295,regular,33,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
 1925296,regular,30,26,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
@@ -195,6 +188,8 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 1925382,regular,27,23,1.0,0.1,0.0,0.0,0,,True,True,True,True,True,,True
 1925384,regular,24,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 1925385,regular,32,19,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+1939031,regular,45,23,2.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
+1939046,regular,33,22,1.0,0.3,0.0,0.0,0,,True,True,True,True,True,,True
 2061915,regular,37,24,1.0,0.2,0.0,0.0,0,,True,True,True,True,True,,True
 2061916,regular,29,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 2061917,regular,32,21,84.0,21.2,4.0,4.0,5,actua_fuera_de_pista=2;no_cinco_6=2;quinteto_periodo_arrastrado=1,False,True,True,True,True,,True
