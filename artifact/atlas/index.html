@@ -1302,8 +1302,11 @@ const ESC = (() => {
   } };
   const LIGAS_INFO = { euroleague: ["EuroLeague", "EL"], eurocup: ["EuroCup", "EC"], acb: ["Liga Endesa", "ACB"], nba: ["NBA", "NBA"], gleague: ["G League", "GL"],
     lba: ["LBA", "LBA"], bbl: ["BBL", "BBL"], lnb: ["LNB", "LNB"], bcl: ["Basketball Champions League", "BCL"], fec: ["FIBA Europe Cup", "FEC"],
-    bsl: ["Basketbol Süper Ligi", "BSL"], gbl: ["Greek Basket League", "GBL"] };
-  const LIGA_COL = ["#2A6FA8", "#C4552E", "#1E9670", "#7A5BC8", "#C9628E", "#4E8A2A", "#1F4F78", "#D98C6E", "#6E9DC9", "#737B84", "#545D67", "#3B434C"];
+    bsl: ["Basketbol Süper Ligi", "BSL"], gbl: ["Greek Basket League", "GBL"], bnxt: ["BNXT League", "BNXT"], vtb: ["VTB United League", "VTB"],
+    cba: ["Chinese Basketball Association", "CBA"], nbl: ["NBL (Australia)", "NBL"], ncaa: ["NCAA D-I (top-50)", "NCAA"],
+    feb1: ["Primera FEB", "FEB1"], feb2: ["Segunda FEB", "FEB2"], feb3: ["Tercera FEB", "FEB3"] };
+  const LIGA_COL = ["#2A6FA8", "#C4552E", "#1E9670", "#7A5BC8", "#C9628E", "#4E8A2A", "#1F4F78", "#D98C6E", "#6E9DC9", "#737B84", "#545D67", "#3B434C",
+    "#9DBEDD", "#4680B6", "#EBC3B1", "#C3D7EA", "#B9CFE3", "#9AA0A6", "#C2C3BF", "#DAD7CF"];
   let E = DEF, modo = "escala";
   try { if (localStorage.getItem("mm.escala") === "original") modo = "original"; } catch (e) { /* sin almacenamiento */ }
   const okn = (v) => typeof v === "number" && isFinite(v);
@@ -1526,12 +1529,51 @@ function entidad(e, i) {
 }
 const ENTS = () => st.ents.map(entidad).filter(Boolean);
 
+
+// ---------------------------------------------------------------- mapa unificado (taxonomía jugador ↔ equipo)
+// Sustituye, al cargar, el estilo, las probabilidades y la posición VaDE (e, p, probs, x, y, z) de clubes, jugadores y
+// etapas de entrenador por los unificados (eu, eu_p, eu_probs, ux, uy, uz; se conservan en *_vade). Las filas sin
+// estilo unificado quedan fuera del mapa (e = -1) pero siguen en las demás vistas. Los equipos que calcula el
+// navegador (simulador, medias de liga) usan la aplicación lineal exportada (estilos_unificados.desde_x).
+function unificarMapa() {
+  const U = META.estilos_unificados, MP = U && U.mapa;
+  if (!U || !MP || !Array.isArray(MP.centros) || !U.estilos || !U.estilos.length) {
+    (META.estilos || []).forEach((e, k) => { e.nombre_vade = e.nombre; e.nombre = "Perfil de mapa " + "ABCDEFGH"[k]; });
+    return;
+  }
+  const RN = {}; (U.rasgos || []).forEach((r) => { RN[r.id] = r.corto || r.nombre || r.id; });
+  META.estilos_vade = META.estilos;
+  META.estilos = U.estilos.map((e, k) => ({ id: e.id, nombre: e.nombre, descriptor: e.definicion || "", resumen: e.equipo || "",
+    centro: MP.centros[k], cov_mapa: MP.cov[k], ejemplos: Array.isArray(e.ejemplos_equipos) ? e.ejemplos_equipos.slice(0, 3).join(", ") : (e.ejemplos_equipos || ""),
+    ligas: {}, clubes: 0, unificado: true }));
+  META.n_estilos = KE = META.estilos.length;
+  META.ejes = (MP.ejes || []).map((e) => ({ r: e.r, positivo: e.rasgos.filter((_, i) => e.signo[i] > 0).map((r) => RN[r] || r),
+    negativo: e.rasgos.filter((_, i) => e.signo[i] < 0).map((r) => RN[r] || r) }));
+  EU_COL.forEach((c, k) => { COL[k] = c; });
+  const fin = (v) => typeof v === "number" && isFinite(v);
+  const pasar = (o) => { o.e_vade = o.e; o.p_vade = o.p; o.probs_vade = o.probs; o.x_vade = o.x; o.y_vade = o.y; o.z_vade = o.z;
+    if (o.eu != null && fin(o.ux)) { o.e = o.eu; o.p = o.eu_p; o.probs = o.eu_probs; o.x = o.ux; o.y = o.uy; o.z = o.uz; }
+    else { o.e = -1; o.x = o.y = o.z = NaN; } };
+  CL.forEach((c) => { pasar(c); (Array.isArray(c.entrenadores) ? c.entrenadores : []).forEach(pasar); });
+  JG.forEach(pasar);
+  META.estilos.forEach((s, k) => { s.clubes = CL.filter((c) => c.e === k && !c.provisional).length; });
+  const DX = U.desde_x;
+  if (DX && DX.W_xyz) {
+    red = (x) => {
+      const xyz = DX.W_xyz.map((w, j) => w.reduce((s, wi, i) => s + wi * (fin(x[i]) ? x[i] : 0), DX.b_xyz[j]));
+      const lg = DX.W_p.map((w, j) => w.reduce((s, wi, i) => s + wi * (fin(x[i]) ? x[i] : 0), DX.b_p[j])), sm = softmax(lg);
+      const p = new Array(KE).fill(0); DX.clases.forEach((c, j) => { p[c] = sm[j]; });
+      return { p, xyz };
+    };
+  }
+}
 // ---------------------------------------------------------------- carga
 async function cargar() {
   const [m, c, j] = await Promise.all(["estilos/meta.json", "estilos/clubes.json", "estilos/jugadores.json"].map((u) => cargarJSON(u)));
   META = m; CR = META.crudas; CL = cols(c); JG = cols(j); KE = META.n_estilos;
-  // v2 · nomenclatura: los grupos del mapa (red VaDE) no son estilos de juego; se rotulan «Perfil de mapa A–F». Los estilos son los unificados.
-  (META.estilos || []).forEach((e, k) => { e.nombre_vade = e.nombre; e.nombre = "Perfil de mapa " + "ABCDEFGH"[k]; });
+  // v3 · decisión del usuario (31-10-2026): el mapa 3D se agrupa con los 6 estilos unificados (Spacing, Pistons…), no con
+  // los perfiles VaDE. Si la exportación no trae el mapa unificado, se mantiene la nomenclatura v2 («Perfil de mapa A–F»).
+  unificarMapa();
   BY = new Map(CL.map((x) => [x.clave, x]));
   prepararLigas(CL.map((x) => x.liga)); ESC.usar(META.escalas);
   JK = new Map(); ROSTER = new Map(); JG.forEach((x, i) => { x.i = i; JK.set(jKey(x), x); if (!ROSTER.has(x.clave)) ROSTER.set(x.clave, []); ROSTER.get(x.clave).push(x); });
@@ -1614,7 +1656,7 @@ function pintarChuleta() {
   // estilos unificados (jugador ↔ equipo): los nombres que usan las tablas; el mapa 3D sigue con los estilos de mapa (VaDE)
   if (EUS().length) $("#chuleta").innerHTML = `<p class="note" style="grid-column:1/-1;margin:0">Estilos (taxonomía unificada jugador ↔ equipo): son los nombres de jugadores y equipos en las tablas y fichas.</p>` +
     EUS().map((e) => `<div class="cs" style="--c:${e.color}"><b><span class="sw" style="background:${e.color};width:10px;height:10px"></span>${esc(e.nombre)}${e.rol_jugador ? ` <small class="muted">· ${esc(e.rol_jugador)}</small>` : ""}</b><p>${esc(e.equipo || e.definicion || "")}</p><p class="note">${esc(e.jugador || "")}</p></div>`).join("") +
-    `<p class="note" style="grid-column:1/-1;margin:6px 0 0">Perfiles de mapa (colores del mapa 3D):</p>` + $("#chuleta").innerHTML;
+    `<p class="note" style="grid-column:1/-1;margin:6px 0 0">${META.estilos_vade ? "Estilos de juego (colores del mapa 3D):" : "Perfiles de mapa (colores del mapa 3D):"}</p>` + $("#chuleta").innerHTML;
 }
 function llenarAddClub() {
   const l = $("#addLiga").value, t = $("#addTemp").value, tipo = $("#addTipo [aria-pressed=true]").dataset.t;
@@ -1721,7 +1763,7 @@ function elipsoide(s, k) {
   return { type: "mesh3d", x: X, y: Y, z: Z, alphahull: 0, opacity: 0.1, color: COL[k], hoverinfo: "skip", showlegend: false };
 }
 const hovClub = (c, accion = "añadir a la comparación") => { const s = sNivC(c), pl = ESC.pDe(muestra("c", c.liga, c.temporada), Lclub(c.nivel)), en = entrenadores(c);
-  return `<b>${esc(c.nombre_club)}</b><br>${LIGAS[c.liga]} ${c.temporada}${c.provisional ? " (provisional)" : ""}${en.length ? `<br>Entrenador: ${en.map((e) => esc(e.nombre)).join(" → ")}` : ""}<br>${c.eu != null ? `Estilo: ${esc(c.eu_etiqueta || euNom(c.eu))} · ` : ""}mapa: ${esc(eNom(c.e))} · afinidad ${afin(c.p)} de 100 · robustez ${pct(c.rob)}<br>Nivel ${ESC.txt(s)} (Euroliga = 0)${pl != null ? ` · p${Math.round(pl)} en su liga` : ""}${c.net_z != null ? ` · net rating ${ESC.txt(ESC.S("z", c.net_z))} en su liga` : ""}${accion ? `<br><i>clic: ${accion}</i>` : ""}`; };
+  return `<b>${esc(c.nombre_club)}</b><br>${LIGAS[c.liga]} ${c.temporada}${c.provisional ? " (provisional)" : ""}${en.length ? `<br>Entrenador: ${en.map((e) => esc(e.nombre)).join(" → ")}` : ""}<br>${c.eu != null ? `Estilo: ${esc(c.eu_etiqueta || euNom(c.eu))} · ` : ""}afinidad ${afin(c.p)} de 100 · robustez ${pct(c.rob)}<br>Nivel ${ESC.txt(s)} (Euroliga = 0)${pl != null ? ` · p${Math.round(pl)} en su liga` : ""}${c.net_z != null ? ` · net rating ${ESC.txt(ESC.S("z", c.net_z))} en su liga` : ""}${accion ? `<br><i>clic: ${accion}</i>` : ""}`; };
 const ejes3d = () => { const ax = (i) => { const e = META.ejes[i]; return { title: { text: `Eje ${i + 1}${e.positivo.length ? " · + " + e.positivo.join(", ") : ""}`, font: { family: "Mona Sans", size: 13, color: MUTED } }, gridcolor: LINE, zerolinecolor: (DK ? "#3B434C" : "#C2C3BF"), showbackground: true, backgroundcolor: C4, tickfont: { family: "Geist Mono", size: 10, color: MUTED } }; }; return { xaxis: ax(0), yaxis: ax(1), zaxis: ax(2), aspectmode: "data" }; };
 const LAYOUT = (rev) => ({ uirevision: rev, margin: { l: 0, r: 0, t: 4, b: 0 }, paper_bgcolor: SURF, font: { family: "Mona Sans", color: INK }, hoverlabel: { bgcolor: SURF, bordercolor: LINE, font: { family: "Mona Sans", color: INK, size: 12 } } });
 const CFG = { displaylogo: false, responsive: true, modeBarButtonsToRemove: ["toImage"] };

@@ -453,8 +453,11 @@ const ESC = (() => {
   } };
   const LIGAS_INFO = { euroleague: ["EuroLeague", "EL"], eurocup: ["EuroCup", "EC"], acb: ["Liga Endesa", "ACB"], nba: ["NBA", "NBA"], gleague: ["G League", "GL"],
     lba: ["LBA", "LBA"], bbl: ["BBL", "BBL"], lnb: ["LNB", "LNB"], bcl: ["Basketball Champions League", "BCL"], fec: ["FIBA Europe Cup", "FEC"],
-    bsl: ["Basketbol Süper Ligi", "BSL"], gbl: ["Greek Basket League", "GBL"] };
-  const LIGA_COL = ["#2A6FA8", "#C4552E", "#1E9670", "#7A5BC8", "#C9628E", "#4E8A2A", "#1F4F78", "#D98C6E", "#6E9DC9", "#737B84", "#545D67", "#3B434C"];
+    bsl: ["Basketbol Süper Ligi", "BSL"], gbl: ["Greek Basket League", "GBL"], bnxt: ["BNXT League", "BNXT"], vtb: ["VTB United League", "VTB"],
+    cba: ["Chinese Basketball Association", "CBA"], nbl: ["NBL (Australia)", "NBL"], ncaa: ["NCAA D-I (top-50)", "NCAA"],
+    feb1: ["Primera FEB", "FEB1"], feb2: ["Segunda FEB", "FEB2"], feb3: ["Tercera FEB", "FEB3"] };
+  const LIGA_COL = ["#2A6FA8", "#C4552E", "#1E9670", "#7A5BC8", "#C9628E", "#4E8A2A", "#1F4F78", "#D98C6E", "#6E9DC9", "#737B84", "#545D67", "#3B434C",
+    "#9DBEDD", "#4680B6", "#EBC3B1", "#C3D7EA", "#B9CFE3", "#9AA0A6", "#C2C3BF", "#DAD7CF"];
   let E = DEF, modo = "escala";
   try { if (localStorage.getItem("mm.escala") === "original") modo = "original"; } catch (e) { /* sin almacenamiento */ }
   const okn = (v) => typeof v === "number" && isFinite(v);

@@ -101,6 +101,12 @@ def ajustar_metrica(t: pd.DataFrame, col: str, iter_: int = 4) -> tuple[pd.DataF
     # arranque: la mitad de la varianza para cada componente
     sigma2 = d.groupby("gs")["y"].var().mul(0.5 * d["n"].median()).to_dict()
     tau2 = d[ajuste].groupby("lp")["y"].var().mul(0.5).to_dict()
+    # grupos liga|posición con una sola fila en el ajuste (o ninguna: ligas con pocas temporadas, p. ej. la CBA al
+    # empezar la carga) no tienen varianza: arrancan con la mitad de la varianza global
+    v0 = float(d.loc[ajuste, "y"].var() * 0.5) if ajuste.any() else float(d["y"].var() * 0.5)
+    tau2 = {k: (v if np.isfinite(v) and v > 0 else v0) for k, v in tau2.items()}
+    for k in d["lp"].unique():
+        tau2.setdefault(k, v0)
     for _ in range(iter_):
         s2 = d["gs"].map(sigma2).to_numpy(); t2 = d["lp"].map(tau2).to_numpy()
         w = 1.0 / (t2 + s2 / d["n"].to_numpy())
@@ -111,7 +117,11 @@ def ajustar_metrica(t: pd.DataFrame, col: str, iter_: int = 4) -> tuple[pd.DataF
             pos = sorted(dl["lp"].unique())
             X = np.column_stack([(dl["lp"] == p).to_numpy(float) for p in pos] + [1.0 / dl["n"].to_numpy()])
             ww = 1.0 / (dl["lp"].map(tau2).to_numpy() + sigma2[gs] / dl["n"].to_numpy()) ** 2
-            beta, *_ = np.linalg.lstsq(X * np.sqrt(ww)[:, None], r2[dl.index].to_numpy() * np.sqrt(ww), rcond=None)
+            rr = r2[dl.index].to_numpy()
+            fin = np.isfinite(ww) & np.isfinite(rr) & np.isfinite(X).all(1)
+            if fin.sum() <= X.shape[1]:
+                continue
+            beta, *_ = np.linalg.lstsq(X[fin] * np.sqrt(ww[fin])[:, None], rr[fin] * np.sqrt(ww[fin]), rcond=None)
             vt = dl["y"].var()
             sigma2[gs] = float(max(beta[-1], 1e-6 * vt * dl["n"].median()))
             for p, b in zip(pos, beta[:-1]):
