@@ -1,0 +1,15 @@
+{
+ "version": "v3.1",
+ "escenario": "inicio",
+ "fuente": "V31",
+ "adaptacion": true,
+ "ficheros": {
+  "2021-22": "ya hecho",
+  "2022-23": "ya hecho",
+  "2023-24": "ya hecho",
+  "2024-25": "ya hecho",
+  "2025-26": "ya hecho",
+  "2026-27": 1371
+ },
+ "pesos": "pesos.json"
+}

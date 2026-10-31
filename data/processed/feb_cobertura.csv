@@ -19,7 +19,7 @@ feb1,2025-26,88873,Play-offs 1/2 Final,playoffs,2,100.0,0.0,0.0,100.0,100.0,100.
 feb1,2025-26,88872,Play-offs 1/4 Final,playoffs,15,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb1,2025-26,88874,Play-offs Final,playoffs,1,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb1,2025-26,88871,Liga Regular Único,regular,272,100.0,0.0,0.0,100.0,99.6,100.0,estructurado,True
-feb1,2026-27,89991,Liga Regular Único,regular,36,100.0,0.0,0.0,100.0,97.2,100.0,estructurado,True
+feb1,2026-27,89991,Liga Regular Único,regular,45,100.0,0.0,0.0,100.0,97.8,100.0,estructurado,True
 feb2,2020-21,,fuera de alcance por decisión del usuario,fuera_de_alcance,,,,,,,,,False
 feb2,2021-22,,fuera de alcance por decisión del usuario,fuera_de_alcance,,,,,,,,,False
 feb2,2022-23,,fuera de alcance por decisión del usuario,fuera_de_alcance,,,,,,,,,False
@@ -45,8 +45,8 @@ feb2,2025-26,88877,ELIMINATORIAS 1/4 Final,playoffs,8,100.0,0.0,0.0,100.0,100.0,
 feb2,2025-26,88876,ELIMINATORIAS 1/8 Final,playoffs,14,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb2,2025-26,88879,"Liga Regular ""ESTE""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb2,2025-26,88880,"Liga Regular ""OESTE""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb2,2026-27,89999,"Liga Regular ""A""",regular,21,100.0,0.0,0.0,100.0,95.2,100.0,estructurado,True
-feb2,2026-27,90000,"Liga Regular ""B""",regular,20,100.0,0.0,0.0,100.0,95.0,100.0,estructurado,True
+feb2,2026-27,89999,"Liga Regular ""A""",regular,28,100.0,0.0,0.0,100.0,96.4,100.0,estructurado,True
+feb2,2026-27,90000,"Liga Regular ""B""",regular,27,100.0,0.0,0.0,100.0,96.3,100.0,estructurado,True
 feb3,2020-21,,fuera de alcance por decisión del usuario,fuera_de_alcance,,,,,,,,,False
 feb3,2021-22,,fuera de alcance por decisión del usuario,fuera_de_alcance,,,,,,,,,False
 feb3,2022-23,,fuera de alcance por decisión del usuario,fuera_de_alcance,,,,,,,,,False
@@ -121,13 +121,13 @@ feb3,2025-26,88888,"Liga Regular ""D-A""",regular,182,100.0,0.0,0.0,100.0,100.0,
 feb3,2025-26,88890,"Liga Regular ""D-B""",regular,182,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
 feb3,2025-26,88891,"Liga Regular ""E-A""",regular,182,99.5,0.0,0.5,99.5,98.9,99.5,estructurado,True
 feb3,2025-26,88892,"Liga Regular ""E-B""",regular,156,100.0,0.0,0.0,100.0,99.4,100.0,estructurado,True
-feb3,2026-27,90059,"Liga Regular ""A-A""",regular,21,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb3,2026-27,90060,"Liga Regular ""A-B""",regular,21,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb3,2026-27,90061,"Liga Regular ""B-A""",regular,21,100.0,0.0,0.0,100.0,95.2,100.0,estructurado,True
-feb3,2026-27,90062,"Liga Regular ""B-B""",regular,21,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb3,2026-27,90063,"Liga Regular ""C-A""",regular,14,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb3,2026-27,90064,"Liga Regular ""C-B""",regular,16,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb3,2026-27,90065,"Liga Regular ""D-A""",regular,17,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb3,2026-27,90066,"Liga Regular ""D-B""",regular,18,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
-feb3,2026-27,90067,"Liga Regular ""E-A""",regular,20,100.0,0.0,0.0,100.0,95.0,100.0,estructurado,True
-feb3,2026-27,90068,"Liga Regular ""E-B""",regular,16,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90059,"Liga Regular ""A-A""",regular,28,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90060,"Liga Regular ""A-B""",regular,28,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90061,"Liga Regular ""B-A""",regular,27,100.0,0.0,0.0,100.0,96.3,100.0,estructurado,True
+feb3,2026-27,90062,"Liga Regular ""B-B""",regular,28,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90063,"Liga Regular ""C-A""",regular,22,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90064,"Liga Regular ""C-B""",regular,24,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90065,"Liga Regular ""D-A""",regular,23,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90066,"Liga Regular ""D-B""",regular,24,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True
+feb3,2026-27,90067,"Liga Regular ""E-A""",regular,27,100.0,0.0,0.0,100.0,96.3,100.0,estructurado,True
+feb3,2026-27,90068,"Liga Regular ""E-B""",regular,23,100.0,0.0,0.0,100.0,100.0,100.0,estructurado,True

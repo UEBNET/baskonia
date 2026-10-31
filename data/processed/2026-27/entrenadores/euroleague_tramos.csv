@@ -1,21 +1,22 @@
 liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
-euroleague,2026-27,RED,Crvena Zvezda Meridianbet Belgrade,1,ibon-navarro,Ibon Navarro,5,5,0,0,0,2026-09-24,2026-10-13,3,2,3,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),1;12;21;37;41
-euroleague,2026-27,ZAL,Zalgiris Kaunas,1,tomas-masiulis,Tomas Masiulis,5,5,0,0,0,2026-09-24,2026-10-13,2,3,2,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),1;14;24;39;46
-euroleague,2026-27,DUB,Dubai Basketball,1,xavi-pascual,Xavi Pascual,5,5,0,0,0,2026-09-24,2026-10-13,3,2,3,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),2;13;29;37;42
-euroleague,2026-27,MAD,Real Madrid,1,pedro-martinez,Pedro Martínez,5,5,0,0,0,2026-09-24,2026-10-13,2,3,2,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),2;11;22;35;43
-euroleague,2026-27,HTA,Hapoel Tel Aviv,1,dimitris-itoudis,Dimitris Itoudis,5,5,0,0,0,2026-09-24,2026-10-14,3,2,3,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;12;22;34;48
-euroleague,2026-27,MUN,FC Bayern Munich,1,anton-gavel,Anton Gavel,5,5,0,0,0,2026-09-24,2026-10-14,2,3,2,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;17;28;33;49
-euroleague,2026-27,BAR,FC Barcelona,1,aleksander-sekulic,Aleksander Sekulic,5,5,0,0,0,2026-09-24,2026-10-13,3,2,3,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),4;13;25;39;44
-euroleague,2026-27,IST,Anadolu Efes Istanbul,1,pablo-laso,Pablo Laso,5,5,0,0,0,2026-09-24,2026-10-14,1,4,1,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),4;11;21;40;49
-euroleague,2026-27,BAS,Baskonia Vitoria-Gasteiz,1,paolo-galbiati,Paolo Galbiati,5,5,0,0,0,2026-09-24,2026-10-13,1,4,1,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),5;15;27;38;42
-euroleague,2026-27,OLY,Olympiacos Piraeus,1,georgios-bartzokas,Georgios Bartzokas,5,5,0,0,0,2026-09-24,2026-10-13,4,1,4,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),5;14;23;40;45
-euroleague,2026-27,ASV,LDLC ASVEL Villeurbanne,1,tony-parker,Tony Parker,5,5,0,0,0,2026-09-24,2026-10-13,2,3,2,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;20;26;31;41
-euroleague,2026-27,TEL,Maccabi Rapyd Tel Aviv,1,oded-kattash,Oded Kattash,5,5,0,0,0,2026-09-24,2026-10-13,1,4,1,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;19;30;32;44
-euroleague,2026-27,PAN,Panathinaikos AKTOR Athens,1,zeljko-obradovic,Željko Obradović,5,5,0,0,0,2026-09-24,2026-10-13,5,0,5,0,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),7;20;30;36;47
-euroleague,2026-27,PRS,Paris Basketball,1,maxime-lefevre,Maxime Lefevre,5,5,0,0,0,2026-09-24,2026-10-14,1,4,1,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),7;18;24;31;50
-euroleague,2026-27,PAR,Partizan Mozzart Bet Belgrade,1,joan-penarroya,Joan Peñarroya,5,5,0,0,0,2026-09-25,2026-10-13,3,2,3,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),10;18;28;35;47
-euroleague,2026-27,MIL,Armani Olimpia Milan,1,giuseppe-poeta,Giuseppe Poeta,5,5,0,0,0,2026-09-25,2026-10-13,1,4,1,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),10;16;27;32;43
-euroleague,2026-27,BES,Besiktas Istanbul,1,dusan-alimpijevic,Dusan Alimpijevic,5,5,0,0,0,2026-09-25,2026-10-14,2,3,2,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;19;25;38;48
-euroleague,2026-27,PAM,Valencia Basket,1,xavier-albert,Xavier Albert,5,5,0,0,0,2026-09-25,2026-10-13,4,1,4,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;15;26;34;45
-euroleague,2026-27,ULK,Fenerbahce Istanbul,1,sarunas-jasikevicius,Šarūnas Jasikevičius,5,5,0,0,0,2026-09-25,2026-10-13,4,1,4,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),9;17;29;36;46
-euroleague,2026-27,VIR,Virtus Bologna,1,alex-mumbru,Alex Mumbru,5,5,0,0,0,2026-09-25,2026-10-14,3,2,3,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),9;16;23;33;50
+euroleague,2026-27,RED,Crvena Zvezda Meridianbet Belgrade,1,ibon-navarro,Ibon Navarro,8,8,0,0,0,2026-09-24,2026-10-27,5,3,5,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),1;12;21;37;41;56;66;71
+euroleague,2026-27,ZAL,Zalgiris Kaunas,1,tomas-masiulis,Tomas Masiulis,8,8,0,0,0,2026-09-24,2026-10-28,4,4,4,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),1;14;24;39;46;57;68;80
+euroleague,2026-27,DUB,Dubai Basketball,1,xavi-pascual,Xavi Pascual,8,8,0,0,0,2026-09-24,2026-10-27,5,3,5,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),2;13;29;37;42;51;65;72
+euroleague,2026-27,MAD,Real Madrid,1,pedro-martinez,Pedro Martínez,8,8,0,0,0,2026-09-24,2026-10-27,5,3,5,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),2;11;22;35;43;53;62;73
+euroleague,2026-27,HTA,Hapoel Tel Aviv,1,dimitris-itoudis,Dimitris Itoudis,8,8,0,0,0,2026-09-24,2026-10-28,6,2,6,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;12;22;34;48;60;61;77
+euroleague,2026-27,MUN,FC Bayern Munich,1,anton-gavel,Anton Gavel,8,8,0,0,0,2026-09-24,2026-10-27,2,6,2,6,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),3;17;28;33;49;55;65;74
+euroleague,2026-27,BAR,FC Barcelona,1,aleksander-sekulic,Aleksander Sekulic,8,8,0,0,0,2026-09-24,2026-10-27,5,3,5,3,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),4;13;25;39;44;58;63;74
+euroleague,2026-27,IST,Anadolu Efes Istanbul,1,pablo-laso,Pablo Laso,8,8,0,0,0,2026-09-24,2026-10-28,3,5,3,5,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),4;11;21;40;49;57;64;77
+euroleague,2026-27,BAS,Baskonia Vitoria-Gasteiz,1,paolo-galbiati,Paolo Galbiati,5,5,0,0,0,2026-09-24,2026-10-13,1,4,1,4,0,0,1,0,2,,live.euroleague.net Boxscore (Stats[].Coach),5;15;27;38;42
+euroleague,2026-27,BAS,Baskonia Vitoria-Gasteiz,2,velimir-perasovic,Velimir Perasovic,3,3,0,0,0,2026-10-16,2026-10-27,0,3,0,3,0,0,1,1,2,,live.euroleague.net Boxscore (Stats[].Coach),59;67;73
+euroleague,2026-27,OLY,Olympiacos Piraeus,1,georgios-bartzokas,Georgios Bartzokas,8,8,0,0,0,2026-09-24,2026-10-28,6,2,6,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),5;14;23;40;45;58;70;79
+euroleague,2026-27,ASV,LDLC ASVEL Villeurbanne,1,tony-parker,Tony Parker,8,8,0,0,0,2026-09-24,2026-10-28,3,5,3,5,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;20;26;31;41;53;68;78
+euroleague,2026-27,TEL,Maccabi Rapyd Tel Aviv,1,oded-kattash,Oded Kattash,8,8,0,0,0,2026-09-24,2026-10-27,2,6,2,6,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),6;19;30;32;44;52;62;71
+euroleague,2026-27,PAN,Panathinaikos AKTOR Athens,1,zeljko-obradovic,Željko Obradović,8,8,0,0,0,2026-09-24,2026-10-27,7,1,7,1,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),7;20;30;36;47;60;67;76
+euroleague,2026-27,PRS,Paris Basketball,1,maxime-lefevre,Maxime Lefevre,8,8,0,0,0,2026-09-24,2026-10-27,2,6,2,6,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),7;18;24;31;50;56;69;72
+euroleague,2026-27,PAR,Partizan Mozzart Bet Belgrade,1,joan-penarroya,Joan Peñarroya,8,8,0,0,0,2026-09-25,2026-10-28,4,4,4,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),10;18;28;35;47;54;66;78
+euroleague,2026-27,MIL,Armani Olimpia Milan,1,giuseppe-poeta,Giuseppe Poeta,8,8,0,0,0,2026-09-25,2026-10-27,1,7,1,7,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),10;16;27;32;43;51;63;76
+euroleague,2026-27,BES,Besiktas Istanbul,1,dusan-alimpijevic,Dusan Alimpijevic,8,8,0,0,0,2026-09-25,2026-10-28,3,5,3,5,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;19;25;38;48;55;64;79
+euroleague,2026-27,PAM,Valencia Basket,1,xavier-albert,Xavier Albert,8,8,0,0,0,2026-09-25,2026-10-27,6,2,6,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),8;15;26;34;45;52;69;75
+euroleague,2026-27,ULK,Fenerbahce Istanbul,1,sarunas-jasikevicius,Šarūnas Jasikevičius,8,8,0,0,0,2026-09-25,2026-10-27,6,2,6,2,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),9;17;29;36;46;54;70;75
+euroleague,2026-27,VIR,Virtus Bologna,1,alex-mumbru,Alex Mumbru,8,8,0,0,0,2026-09-25,2026-10-28,4,4,4,4,0,0,1,0,1,,live.euroleague.net Boxscore (Stats[].Coach),9;16;23;33;50;59;61;80

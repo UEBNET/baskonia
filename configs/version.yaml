@@ -1,0 +1,6 @@
+# Selector de versión de la normalización que leen los módulos aguas abajo (índice L, contexto, escalas, estilos,
+# simulador, artifact). v1 = la de siempre (A, A+B y amortiguado: data/modelos/normalizado/); v3 = CVAE jerárquica
+# (data/modelos/v3/). Con v1 todo produce exactamente lo mismo que antes de la v3.
+# Se mantiene en v1 hasta que la v3 pase la puerta de control (docs/normalizacion_v3_cvae.md §Validación) y el CEO
+# lo apruebe.
+version_activa: v1

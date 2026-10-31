@@ -1,0 +1,69 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+0022600001,regular,38,35,10.0,1.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 31/35,True
+0022600002,regular,33,34,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/34,True
+0022600003,regular,39,34,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/34,True
+0022600004,regular,38,33,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/33,True
+0022600005,regular,33,36,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/36,True
+0022600085,regular,41,35,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/35,True
+0022600086,regular,41,36,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 30/36,True
+0022600087,regular,36,36,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/36,True
+0022600088,regular,44,33,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/33,True
+0022600089,regular,33,35,0.1,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/35,True
+0022600090,regular,30,35,0.2,0.0,3.0,15.0,1,actua_fuera_de_pista=1,True,True,True,True,True,ids BR emparejados 28/35,True
+0022600091,regular,33,35,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 30/35,True
+0022600092,regular,31,27,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 26/27 | sin id BR (con minutos): Hansen Yang,True
+0022600093,regular,33,33,563.0,23.5,,,0,,False,True,True,True,False,ids BR emparejados 26/33 | +/- oficial incoherente: validado sólo por minutos,False
+0022600006,regular,29,34,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 24/34,True
+0022600007,regular,27,33,572.0,24.8,,,0,,False,True,True,True,False,ids BR emparejados 29/33 | +/- oficial incoherente: validado sólo por minutos,False
+0022600008,regular,36,34,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/34,True
+0022600009,regular,38,25,0.0,0.0,25.0,14.0,0,,False,True,True,True,True,ids BR emparejados 25/25,True
+0022600094,regular,29,27,12.3,2.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 26/27,True
+0022600095,regular,47,35,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 30/35,True
+0022600096,regular,33,33,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/33,True
+0022600097,regular,43,34,0.5,0.3,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 30/34,True
+0022600098,regular,37,35,0.3,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 32/35,True
+0022600099,regular,36,35,10.0,1.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/35,True
+0022600100,regular,32,36,0.1,0.0,1.0,2.0,0,,True,True,True,True,True,ids BR emparejados 27/36,True
+0022600101,regular,42,36,9.3,0.9,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/36,True
+0022600102,regular,37,35,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/35,True
+0022600103,regular,44,34,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 25/34,True
+0022600104,regular,39,27,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/27,True
+0022600105,regular,33,35,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/35,True
+0022600106,regular,32,35,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/35,True
+0022600107,regular,35,35,0.4,0.2,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,ids BR emparejados 28/35,True
+0022600108,regular,35,29,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/29,True
+0022600109,regular,36,25,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 25/25,True
+0022600110,regular,41,34,595.7,28.5,,,0,,False,True,True,True,False,ids BR emparejados 28/34 | +/- oficial incoherente: validado sólo por minutos,False
+0022600111,regular,40,35,0.5,0.1,1.0,4.0,0,,True,True,True,True,True,ids BR emparejados 30/35,True
+0022600112,regular,32,36,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/36,True
+0022600113,regular,33,35,0.4,0.1,4.0,10.0,0,,False,True,True,True,True,ids BR emparejados 31/35,True
+0022600114,regular,30,35,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/35,True
+0022600115,regular,42,32,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/32,True
+0022600116,regular,36,34,148.0,6.8,,,0,,False,True,True,True,False,ids BR emparejados 28/34 | +/- oficial incoherente: validado sólo por minutos,False
+0022600117,regular,36,35,276.2,51.7,6.0,4.0,13,actua_fuera_de_pista=6;añadido_por_actuar=3;no_cinco_4=3;quinteto_periodo_arrastrado=1,False,True,True,True,True,ids BR emparejados 30/35,False
+0022600118,regular,34,27,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 24/27,True
+0022600119,regular,35,36,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/36,True
+0022600120,regular,40,28,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 25/28,True
+0022600121,regular,32,34,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/34,True
+0022600122,regular,35,35,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 30/35,True
+0022600123,regular,40,35,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 29/35,True
+0022600124,regular,29,34,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 30/34,True
+0022600125,regular,30,35,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/35,True
+0022600126,regular,36,36,0.4,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/36,True
+0022600127,regular,34,34,514.9,18.4,,,0,,False,True,True,True,False,ids BR emparejados 30/34 | +/- oficial incoherente: validado sólo por minutos,False
+0022600128,regular,44,27,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/27,True
+0022600129,regular,41,29,0.5,0.2,1.0,2.0,0,,True,True,True,True,True,ids BR emparejados 29/29,True
+0022600130,regular,29,24,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 24/24,True
+0022600131,regular,42,27,0.4,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 24/27,True
+0022600132,regular,32,27,18.3,2.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/27,True
+0022600133,regular,24,27,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 24/27,True
+0022600134,regular,34,28,0.2,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/28,True
+0022600135,regular,41,25,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 24/25,True
+0022600136,regular,40,25,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 25/25,True
+0022600137,regular,39,29,0.5,0.2,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 28/29,True
+0022600138,regular,33,29,0.3,0.1,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,ids BR emparejados 28/29,True
+0022600139,regular,44,27,0.5,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 27/27,True
+0022600140,regular,23,28,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 25/28,True
+0022600141,regular,36,25,0.4,0.0,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 25/25,True
+0022600142,regular,39,24,121.6,5.1,2.0,1.0,4,no_cinco_6=3;sale_sin_estar=1,False,True,True,True,True,ids BR emparejados 24/24,False
+0022600143,regular,32,25,0.3,0.1,0.0,0.0,0,,True,True,True,True,True,ids BR emparejados 24/25,True

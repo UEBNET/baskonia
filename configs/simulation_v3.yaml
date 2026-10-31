@@ -1,0 +1,99 @@
+# Simulador de encaje v3: el motor de la v2 (bbfit/simulador.py y artifact/atlas/simulador_v2.js, sin cambios) con
+#   * capacidad de los jugadores de la normalización v3.1 (fuente «V31»: data/modelos/v3_1/normalizado, <m>_am),
+#   * adaptación v3 ascendente (bbfit/adaptacion_v3.py, data/modelos/adaptacion/v3/adaptation_priors.csv),
+#   * calendario de destino completado con los partidos reales de 2025-26 (FEB1 32, FEB2 26…).
+# Se activa con la variable de entorno CERNO_SIMULADOR=v3 (sin ella, todo usa configs/simulation.yaml: la v2).
+# Todo umbral o hiperparámetro del simulador vive aquí; el código no fija ninguno.
+semilla: 20261023
+version: "v3.0"                      # etiqueta de versión de los resultados (data/modelos/simulador/v3/)
+carpeta: v3                          # data/modelos/simulador/<carpeta>/
+
+simulaciones: 1000                   # iteraciones Monte Carlo por jugador-club
+intervalos: [0.50, 0.90]             # intervalos centrales de la salida
+
+normalizacion:
+  fuente: V31A                       # V31A = <m>_am de la v3.1 con las constantes amortiguadas (así se publicó la v3.0;
+                                     # V31 = constantes v3.1, configs/simulation_v31.yaml) | AB = el de la v2
+  temporada_ref: "2025-26"           # vara de los <m>_am (μ/τ EuroLeague de esa temporada)
+  minimo_minutos_jugador: 100        # registro de origen con ≥ 100 min (por debajo: aviso de muestra pequeña)
+
+plantilla:
+  minimo_presencia: 0.15             # escenario «plantilla real»: compañeros presentes en ≥ 15 % de los partidos
+  nivel_sin_dato: banquillo          # compañero sin registro en t: L medio de los jugadores de < 300 min de su liga
+  sd_sin_dato: 0.6                   # incertidumbre de su nivel (unidades de L)
+  max_jugadores: 18                  # plantilla máxima (los de menos presencia fuera)
+  minimo_jugadores: 9                # plantilla mínima: se completa con jugadores de reemplazo (nivel de banquillo)
+
+produccion:
+  metricas: [pts_p100, ts_pct, usg_pct, ast_pct, oreb_p100, dreb_p100, stl_p100, blk_p100, tov_pct]
+  principal: pts_p100
+  por_partido: {pts: pts_p100, reb: [oreb_p100, dreb_p100], stl: stl_p100, blk: blk_p100}
+  usg_medio_pista: 20.0              # Σ min·USG% = 20 · Σ min (los 5 en pista suman el 100 % del uso)
+  amortiguar_uso: 0.5                # fracción del desajuste de uso del equipo que se redistribuye (0 = nada, 1 = todo)
+  ts_min: 30.0
+  ts_max: 80.0
+
+utilidad:                            # utilidad Plackett-Luce de la asignación de minutos (se ajusta por verosimilitud)
+  rasgos: [L, logit_min_previo, nuevo, encaje_pos, encaje_estilo, sin_dato]
+  inicial: {L: 1.5, logit_min_previo: 0.8, nuevo: -0.2, encaje_pos: 0.3, encaje_estilo: 0.0, sin_dato: -0.5}
+  regularizacion: 0.01               # penalización L2 del ajuste
+  min_jugadores_equipo: 7
+  min_presencia: 0.3                 # jugadores del equipo-temporada que entran en la verosimilitud
+  logit_recorte: [0.02, 0.98]        # MIN% previo recortado antes del logit
+  min_previo_defecto: 0.25           # MIN% previo de quien no tiene registro en t
+
+rol_go_to_guy:                       # GO-TO-GUY proyectado: TITULAR por minutos + top-2 del equipo en GTI proyectado
+  top_equipo: 2
+  umbral_gti: 4.0                    # = umbral_absoluto_medio (1,0) × Σ pesos (4) de configs/roles.yaml
+  peso_uso: 2.0                      # el uso entra en dos componentes del GTI (USG% y USG% clutch)
+  min_minutos_pct: 0.55              # ≥ 22' de 40
+
+adaptacion:
+  partidos_temporada: {defecto: 34, nba: 82, gleague: 50, euroleague: 34, eurocup: 18, bcl: 14, fec: 12, feb3: 26,
+                       feb1: 32, feb2: 26, acb: 34, bbl: 34, lba: 28, lnb: 30, bsl: 30, gbl: 24}   # FEB1/FEB2 y resto: 2025-26
+  primeros_partidos: 10              # ADAPT% de los N primeros partidos
+  contraccion: 1.0                   # v3: la forma D, κ se mide directamente (curva dentro de jugador); sin contracción
+  priors: data/modelos/adaptacion/v3/adaptation_priors.csv   # adaptación v3 (curva ascendente)
+
+estilo:
+  minimo_minutos_equipo: 100         # jugadores que entran en la composición de estilos de la plantilla
+
+encaje:                              # índice Fit: regresión lineal del éxito sobre las componentes (cortes previos)
+  componentes: [nivel, rol, estilo, complementariedad, adaptacion, riesgo]
+  ridge: 1.0
+  exito: {minutos: 0.5, produccion: 0.5}   # éxito = 0,5·z(MIN%) + 0,5·z(pts/100) dentro de la liga-temporada destino
+
+avisos:
+  muestra_pequena_min: 300           # minutos de origen
+  muestra_pequena_partidos: 10
+  incertidumbre_alta_sd: 0.45        # sd de la capacidad (DT) en la métrica principal
+  distancia_liga_alta: 0.6           # |nivel destino − nivel origen| (DT EuroLeague)
+  cambio_rol: 2                      # |índice de rol esperado − índice de rol de origen| ≥ 2 escalones
+  volatilidad_alta_pct: 80           # σ_i por encima del percentil 80 de su liga
+
+validacion:
+  cortes_examen: ["2021-22", "2022-23", "2023-24", "2024-25"]    # t (se simula t → t+1)
+  cortes_sin_fuga: ["2023-24", "2024-25"]                        # normalización reajustada con ≤ t
+  min_partidos_destino: 5
+  min_minutos_origen: 100
+  min_minutos_produccion: 300        # producción: ≥ 300 min en destino (como el examen de la fase 2)
+  bootstrap: 2000
+  nivel_ic: 0.90
+  simulaciones: 400                  # iteraciones por fichaje en el examen
+  calibracion_casos: 500             # fichajes del corte anterior para calibrar la temperatura y la rotación
+  calibracion_sim: 200
+  rejilla_escala: [0.5, 0.75, 1.0, 1.25]         # escala de la utilidad (inversa de la temperatura de Plackett-Luce)
+  rejilla_rotacion_extra: [0, 2, 4]              # jugadores extra en la rotación sobre la mediana medida (≥ 12,5 % MIN%)
+  rotacion_sd_factor: 0.3                        # la sd del entrenador es partido a partido; la de temporada es menor
+
+historico:
+  simulaciones: 400
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+
+exportar:
+  temporada_base: "2025-26"          # insumos por defecto (última temporada completa) → destino 2026-27
+  temporadas_base: ["2024-25", "2025-26"]          # destinos 2025-26 y 2026-27 (plantillas de esas temporadas)
+  temporadas_candidatas_extra: ["2026-27"]         # registros de la temporada en curso como candidatos (provisionales)
+  minimo_minutos_jugador: 100
+  simulaciones_navegador: 600
+  max_mb: 40

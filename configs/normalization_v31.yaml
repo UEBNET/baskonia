@@ -1,0 +1,80 @@
+# Normalización cruzada v3.1: combinación de la v2 (A+B amortiguado, <m>_am) con la CVAE jerárquica corregida.
+# Documentación: docs/normalizacion_v31_combinada.md. La v3.0 tal como se examinó sigue en normalization_v3.yaml.
+# Todo hiperparámetro vive aquí; el código no fija ninguno. Semillas fijas → resultados reproducibles.
+version: "v3.1"
+salida: data/modelos/v3_1
+semillas: [20261029, 20261030, 20261031, 20261101, 20261102]   # deep ensemble de 5 redes
+referencia_salida: {liga: euroleague, temporada: "2025-26"}    # vara del dataset normalizado (igual que v1/v2)
+
+datos:
+  min_minutos: 100              # filas jugador-liga-temporada que entran en el entrenamiento
+  min_minutos_escala: 300       # filas que fijan la estandarización global de cada métrica
+  min_minutos_puente: 150       # «puente» para la ponderación de selección (igual que normalization.yaml)
+
+latente:
+  K: 8                          # dimensión del latente z (elegida con el corte 2022-23 → 2023-24; ver elegir-k)
+  K_candidatos: [4, 8, 12]
+
+prior:
+  eta: 0.08                     # z_{i,t+1} = z_{i,t} + d(edad) + η (DT de z por temporada)
+  prior_por_persona: false      # true: el prior N(μ_c, s²) pesa 1/temporadas en cada temporada (una vez por persona)
+  kappa: 0.10                   # paseo aleatorio del nivel μ_{l,t} entre temporadas
+  tau: 0.35                     # μ medio de la liga ~ N(μ_escalón, τ²)
+  sd_escalon: 2.0               # μ_escalón ~ N(0, 2²): previa débil
+  sd_log_escala: 0.30           # log s_l ~ N(0, 0,3²): dispersión de la capacidad en la liga (análogo de s_l del A)
+  escala_por_liga: false        # v3.1: s_l = 1. En la v3.0 la escala libre de la Tercera FEB se degeneró (s = 15,6)
+
+red:
+  oculta_decodificador: 32
+  oculta_codificador: 128
+  sd_film: 0.30                 # FiLM por liga (γ_l − 1, β_l) ~ N(0, 0,3²): contraído hacia la red común
+  sd_cabezal_liga: 0.10         # cabezal residual por liga V_l ~ N(0, 0,1²)
+  decaimiento_pesos: 1.0e-4
+  psi_minimo: 0.005             # ψ_{l,m} ≥ 0,005 (varianza de contexto no explicada)
+  s2_equipo_minimo: 0.005       # varianza mínima del efecto equipo-temporada (bayes empírico)
+  unicidad: true                # factor específico persona × métrica ζ ~ N(0, ω²_m) (ω² por EM)
+
+entrenamiento:
+  pasos: 2500
+  lr: 0.004
+  lr_final: 0.0004
+  ciclo_peso: 0.5               # penalización de consistencia de ciclo (codificar ∘ decodificar_b ≈ identidad)
+  ciclo_filas: 2048             # filas por paso para el término de ciclo
+  ipw: true
+  recorte_ipw: [0.01, 0.99]
+
+escalones:                      # mismos escalones que configs/normalization.yaml
+  elite: [euroleague, nba]
+  domestica_alta: [acb, lba, bbl, lnb, bsl, gbl]
+  copas_europeas: [eurocup, bcl, fec]
+  desarrollo: [gleague]
+  feb1: [feb1]
+  feb2: [feb2]
+  feb3: [feb3]
+
+prediccion:
+  muestras: 200                 # Monte Carlo por jugador (posterior de z, de μ, η, equipo, ψ y ruido de muestra)
+  margen_soporte: 0.25          # el valor traducido se acota al rango observado en la liga de destino ± 0,25 DT
+  intervalo: 0.80
+
+combinacion:                    # v3.1 = mezcla de la v2 (<m>_am) y la CVAE, en la escala de trabajo de cada métrica
+  peso_v3: 0.5                  # reparto general, fijado de antemano (sin ajustar con el examen)
+  min_temporadas_liga: 2        # salvaguarda: liga de origen o destino con < 2 temporadas en el ajuste → sólo v2
+  max_discrepancia_redes: 0.5   # salvaguarda: sd entre las 5 redes de la CVAE > 0,5 DT en esa métrica → sólo v2
+  ligas_conocimiento: [feb3]    # ajuste ESPECÍFICO por conocimiento previo (con sobreajuste asumido por el CEO)
+  pesos_candidatos: [0.0, 0.25, 0.5, 0.75, 1.0]
+  peso_v3_conocimiento: null    # peso de la CVAE en los casos con origen o destino en esas ligas; lo fija
+                                # `python -m bbnorm3 --config configs/normalization_v31.yaml validar-combinada`
+  factor_intervalo_conocimiento: null   # factor de anchura del intervalo en esos casos (también se fija con el examen)
+
+validacion:
+  anios: [2023, 2024]           # examen: ajusta con ≤ t, predice t+1 (igual que bbmodel validar)
+  anio_seleccion: 2022          # corte 2022-23 → 2023-24: sólo para elegir K y calibrar el corte 2023
+  lineas_base_seleccion: data/modelos/v3_1/validacion/lineas_base_2022   # A, amortiguado y B ajustados con ≤ 2022
+  min_casos_grupo: 30           # grupos origen → destino con menos casos usan la calibración global
+  bootstrap: 2000               # remuestreo por persona del IC 95 % de la diferencia de MAE
+  semilla_bootstrap: 20261029
+  cobertura_objetivo: [0.78, 0.85]
+
+inferencia:
+  refinar_pasos: 0              # > 0: inferencia semi-amortizada (optimiza r de cada fila con el decodificador)
