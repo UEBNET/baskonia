@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-31T18:18:59.210578+00:00",
+  "generado": "2026-10-31T18:25:21.117485+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
@@ -77,7 +77,7 @@
     },
     {
       "temporada": "2025-26",
-      "generado": "2026-10-31T18:12:12.242984+00:00",
+      "generado": "2026-10-31T18:22:53.564643+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -168,6 +168,11 @@
           "playoffs": 667,
           "regular": 766,
           "total": 766
+        },
+        "vtb": {
+          "playoffs": 105,
+          "regular": 200,
+          "total": 201
         }
       }
     },
@@ -264,7 +269,7 @@
     },
     {
       "temporada": "2023-24",
-      "generado": "2026-10-31T18:14:22.568918+00:00",
+      "generado": "2026-10-31T18:25:20.725169+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -345,6 +350,11 @@
           "playoffs": 80,
           "regular": 157,
           "total": 157
+        },
+        "ncaa": {
+          "playoffs": 640,
+          "regular": 803,
+          "total": 803
         }
       }
     },

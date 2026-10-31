@@ -1,6 +1,6 @@
 {
   "temporada": "2023-24",
-  "generado": "2026-10-31T18:14:22.568918+00:00",
+  "generado": "2026-10-31T18:25:20.725169+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -160,6 +160,16 @@
         "playoffs": 80,
         "regular": 157,
         "total": 157
+      }
+    },
+    "ncaa": {
+      "nombre": "NCAA Division I (top-50 T-Rank)",
+      "archivo": "ligas/ncaa.csv",
+      "fecha_extraccion": "2026-10-31T18:18:59.221103+00:00",
+      "fases": {
+        "playoffs": 640,
+        "regular": 803,
+        "total": 803
       }
     }
   },
