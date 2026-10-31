@@ -68,7 +68,7 @@ def preparar_matrices(t: pd.DataFrame, min_minutos: float = 50) -> dict:
     t["ps"] = t["persona_id"].astype(str) + "|" + t["anio"].astype(str)
     t["g"] = t["liga"] + "|" + t["temporada"] + "|" + t["pos3"]
     t["eq"] = t["liga"] + "|" + t["temporada"] + "|" + t["team_id"].astype(str)
-    t["tramo"] = (t["anio"] - t["anio_nac"]).map(enlace.tramo_edad)
+    t["tramo"] = [enlace.tramo(e, lg) for e, lg in zip(t["anio"] - t["anio_nac"], t["liga"])]
     # liga principal de cada persona (la de más minutos en su carrera): fija la media de su ADN
     principal = t.groupby(["persona_id", "liga"])["min"].sum().reset_index().sort_values("min").drop_duplicates("persona_id", keep="last")
     t["liga_principal"] = t["persona_id"].map(principal.set_index("persona_id")["liga"])
@@ -283,7 +283,7 @@ class ConjuntoB:
         Zs = [r.z() for r in self.redes]
         X, V = self.expresar_filas(c["ps"][0], Zs, REFERENCIA, gk)
         # proyección a la temporada siguiente: ADN estable + curva de edad del año siguiente
-        tr_sig = (t["anio"] + 1 - t["anio_nac"]).map(enlace.tramo_edad)
+        tr_sig = [enlace.tramo(e, lg) for e, lg in zip(t["anio"] + 1 - t["anio_nac"], t["liga"])]
         it = np.array([c["tramo"][1].index(x) if x in c["tramo"][1] else 0 for x in tr_sig])
         Zn = [r.p["U"][c["persona_id"][0]] + r.p["A"][it] for r in self.redes]
         Xn, _ = self.expresar_filas(c["ps"][0], Zn, REFERENCIA, gk)
@@ -323,7 +323,8 @@ class ConjuntoB:
                 continue
             ip = np.array([pers[p] for p in g["persona_id"]])
             ips = np.array([ps[f"{p}|{anio}"] for p in g["persona_id"].astype(str)])
-            tr = (anio + 1 - g["anio_nac_o"]).map(enlace.tramo_edad)
+            lo_g = g["liga_o"] if "liga_o" in g else pd.Series([None] * len(g), index=g.index)
+            tr = [enlace.tramo(e, lo) for e, lo in zip(anio + 1 - g["anio_nac_o"], lo_g)]
             it = np.array([c["tramo"][1].index(x) if x in c["tramo"][1] else 0 for x in tr])
             Zs = [r.p["U"][ip] + r.p["A"][it] for r in self.redes]
             temp_t = f"{anio}-{str(anio + 1)[-2:]}"

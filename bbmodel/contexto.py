@@ -33,7 +33,7 @@ import numpy as np
 import pandas as pd
 
 from .datos import cargar_filas
-from .enlace import tramo_edad
+from .enlace import tramo, tramo_edad  # noqa: F401
 from .identidad import clave_nombre
 from .metricas import CATALOGO
 
@@ -242,7 +242,7 @@ def sensibilidad(ctx_jl: pd.DataFrame, n_boot: int = 50, semilla: int = 7) -> pd
     trad = _leer(DIR_A)
     d = trad.merge(ctx_jl, on=["liga", "temporada", "player_id"], how="inner", suffixes=("", "_c"))
     d = d[(d["min"] >= MIN_BETA) & d["ctx_plantilla_dev"].notna()]
-    d["tramo"] = (d["anio"] - d["anio_nac"]).map(tramo_edad)
+    d["tramo"] = [tramo(e, lg) for e, lg in zip(d["anio"] - d["anio_nac"], d["liga"])]
     d = d[d.groupby("persona_id")["persona_id"].transform("size") >= 2]
     d["ctx_riv_dev"] = d["ctx_riv_dev"].fillna(0.0)
     tramos = pd.get_dummies(d["tramo"], prefix="t", dtype=float)

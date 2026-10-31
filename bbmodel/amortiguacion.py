@@ -489,8 +489,8 @@ def medidas_puentes(P: pd.DataFrame, f: pd.DataFrame, est: Estado, ipw: np.ndarr
     signo = np.where(x_es_a, 1.0, -1.0)            # tiempo de y menos tiempo de x
     dt = P["dt"].to_numpy() * signo
     edad = (np.where(x_es_a, A["anio"], B["anio"]) - X["anio_nac"].to_numpy())
-    from .enlace import tramo_edad
-    der = np.array([e["deriva"].get(tramo_edad(v), 0.0) for v in edad])
+    from .enlace import tramo
+    der = np.array([e["deriva"].get(tramo(v, lg), 0.0) for v, lg in zip(edad, X["liga"].to_numpy())])
     gx = np.empty(len(P)); gy = np.empty(len(P)); vx = np.empty(len(P)); vy = np.empty(len(P)); xs = np.empty(len(P))
     for liga in set(X["liga"]) | set(Y["liga"]):
         sx = (X["liga"] == liga).to_numpy()
@@ -892,7 +892,7 @@ def predecir_cambios(tabla: pd.DataFrame, anio: int, params: dict, ajuste: dict)
                 continue
             th, vth = theta(ajuste, col, lo, f"{lo}:{x['temporada_o']}", np.array([zo]), np.array([vo]))
             edad = x["anio_o"] - x["anio_nac_o"]
-            th1 = th[0] + e["deriva"].get(E.tramo_edad(edad), 0.0)
+            th1 = th[0] + e["deriva"].get(E.tramo(edad, lo), 0.0)
             v1 = vth[0] + e["eta2"]
             # destino: nivel de su liga en la temporada t (la de t+1 aún no se conoce)
             nd = f"{ld}:{temp_t}"

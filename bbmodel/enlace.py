@@ -37,6 +37,16 @@ import numpy as np
 import pandas as pd
 
 REFERENCIA = "euroleague"
+# Desarrollo universitario (decisión del usuario, 31-10-2026): los puentes NCAA(t) → profesional(t+1) mezclan el
+# nivel de la NCAA con lo que mejora un jugador de 19-23 años, y NO hay puentes en sentido contrario ni en la misma
+# temporada, así que nivel y desarrollo no se separan con la deriva por edad común. Solución: las unidades con
+# ancla en la NCAA (temporada t universitaria) usan un tramo de deriva propio, TRAMO_NCAA, que se estima SÓLO con
+# las observaciones NCAA(t) → NCAA(t+1) del mismo jugador (dentro de la misma liga el nivel se cancela: desarrollo
+# puro). Esa deriva se aplica también a NCAA(t) → profesional(t+1), cuyos puentes identifican entonces el nivel.
+# HIPÓTESIS: el salto de desarrollo del último año universitario al primero profesional ≈ el de un curso a otro
+# (sin contar el cambio de liga). La ESPN no da fecha de nacimiento: el tramo no depende de la edad.
+LIGA_UNIVERSITARIA = "ncaa"
+TRAMO_NCAA = "NCAA"
 TRAMOS_EDAD = [(-1, 23, "≤23"), (24, 26, "24-26"), (27, 29, "27-29"), (30, 32, "30-32"), (33, 99, "33+")]
 
 
@@ -47,6 +57,12 @@ def tramo_edad(edad: float) -> str:
         if lo <= edad <= hi:
             return nombre
     return "s/d"
+
+
+def tramo(edad: float, liga: str | None = None) -> str:
+    """Tramo de deriva de una observación de origen: el de la NCAA si la liga de origen es la universitaria; si no,
+    el de su edad."""
+    return TRAMO_NCAA if liga == LIGA_UNIVERSITARIA else tramo_edad(edad)
 
 
 def construir_unidades(obs: pd.DataFrame) -> pd.DataFrame:
@@ -71,6 +87,7 @@ def construir_unidades(obs: pd.DataFrame) -> pd.DataFrame:
     t0 = u[u["delta"] == 0].sort_values("min", ascending=False).drop_duplicates("unidad")
     u["ancla"] = u["unidad"].map(t0.set_index("unidad")["liga"]).fillna(u["liga"])
     u["tramo"] = (u["anio"] - u["anio_nac"]).map(tramo_edad)
+    u.loc[u["ancla"] == LIGA_UNIVERSITARIA, "tramo"] = TRAMO_NCAA
     u["uid"] = pd.factorize(u["unidad"])[0]
     return u.reset_index(drop=True)
 
@@ -130,6 +147,8 @@ class Enlace:
         resto = D["z"] - self.alfa[l] - be * a_hat[D["u"]]
         for j in range(len(self.tramos)):
             s = (tr == j) & (D["delta"] == 1)
+            if self.tramos[j] == TRAMO_NCAA and LIGA_UNIVERSITARIA in self.ligas:
+                s = s & (l == self.ligas.index(LIGA_UNIVERSITARIA))   # sólo NCAA → NCAA: desarrollo sin nivel
             if s.sum() >= 20:
                 self.d[j] = (c[s] * be[s] * resto[s]).sum() / (c[s] * be[s] ** 2).sum()
         # varianzas de contexto (ψ) y de cambio anual (η²), por momentos
@@ -201,7 +220,7 @@ def ajustar_metrica(obs: pd.DataFrame, n_boot: int = 20, semilla: int = 20261013
     ligas = sorted(u["liga"].unique())
     if REFERENCIA not in ligas:
         raise ValueError("la métrica no tiene datos de la liga de referencia")
-    tramos = [t[2] for t in TRAMOS_EDAD] + ["s/d"]
+    tramos = [t[2] for t in TRAMOS_EDAD] + ["s/d", TRAMO_NCAA]
     anclas = ligas
     D = _arrays(u, ligas, tramos, anclas)
     base = Enlace(ligas, tramos, anclas).ajustar(D)

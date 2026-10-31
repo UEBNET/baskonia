@@ -109,6 +109,7 @@ def traducir(t: pd.DataFrame, params: dict, temporada_ref: str = TEMPORADA_REF) 
              "anio_nac", "gp", "min"]].copy()
     edad = (t["anio"] - t["anio_nac"]).to_numpy()
     tramos = pd.Series(edad).map(enlace.tramo_edad).to_numpy()
+    tramos = np.where((t["liga"] == enlace.LIGA_UNIVERSITARIA).to_numpy(), enlace.TRAMO_NCAA, tramos)
     nuevas = {}
     for col, p in params["metricas"].items():
         m = CATALOGO[col]

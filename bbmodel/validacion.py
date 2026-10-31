@@ -66,7 +66,7 @@ def evaluar(t: pd.DataFrame, anio: int, params: dict) -> pd.DataFrame:
             # predictor 3: algoritmo A
             a, va = modelo.capacidad(zo, vo, lo, e)
             edad = r["anio_o"] - r["anio_nac_o"]
-            a1 = a + e["deriva"].get(enlace.tramo_edad(edad), 0.0)
+            a1 = a + e["deriva"].get(enlace.tramo(edad, lo), 0.0)
             va1 = va + e["eta2"]
             zd = (a1 - e["m"][ld]) / e["s"][ld]
             vzd = va1 / e["s"][ld] ** 2
