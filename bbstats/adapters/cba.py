@@ -992,6 +992,8 @@ def parse_payload(payload: dict, cfg: dict) -> dict[str, ParsedLeague]:
                 line["name"] = p.get("name") or line.get("name")
                 if p.get("dateOfBirth"):
                     line["fecha_nacimiento"] = p["dateOfBirth"]
+                if p.get("nameType") in ("chino", "minoria"):     # nombre chino (pinyin) o de minoría → China
+                    line["nacionalidad"] = "CN"
                 if p.get("height"):
                     line["altura_cm"] = p["height"]
         n_split += all(d.get("rebotes_desglosados", {}).values())

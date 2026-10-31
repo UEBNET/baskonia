@@ -189,6 +189,12 @@ def to_fls(doc: dict, cambios_tras_acciones: bool = False) -> dict:
     teams = {str(_int(t.get("TeamNumber"))): t for t in doc.get("GameTeams") or [] if isinstance(t, dict)}
     tm: dict[str, dict] = {}
     pno: dict[int, tuple[str, str]] = {}               # PersonID -> (lado, pno)
+    ficha = {}                                         # PersonID -> (país ISO-2, fecha de nacimiento AAAA-MM-DD)
+    for o in doc.get("OnlineStarts") or []:
+        if isinstance(o, dict) and o.get("StartType") == 1 and o.get("PersonID"):
+            b = str(o.get("PersonBirth") or "")
+            fecha = f"{b[6:10]}-{b[3:5]}-{b[0:2]}" if len(b) == 10 and b[2] == "." else None
+            ficha[_int(o.get("PersonID"))] = (o.get("CountryCodeIOC") or None, fecha)
     for k in ("1", "2"):
         t = teams.get(k) or {}
         tn = t.get("TeamName") or {}
@@ -215,7 +221,8 @@ def to_fls(doc: dict, cambios_tras_acciones: bool = False) -> dict:
             line = {"personId": str(pid), "firstName": first, "familyName": last,
                     "name": f"{first} {last}".strip(), "shirtNumber": p.get("DisplayNumber"),
                     "playingPosition": None, "starter": 1 if p.get("IsStart") else 0,
-                    "height": p.get("Height"), "sMinutes": _mmss(sec)}
+                    "height": p.get("Height"), "sMinutes": _mmss(sec),
+                    "nationality": (ficha.get(pid) or (None, None))[0], "dateOfBirth": (ficha.get(pid) or (None, None))[1]}
             for a, b in STAT.items():
                 line[b] = p.get(a) or 0
             line["sFieldGoalsMade"] = line["sTwoPointersMade"] + line["sThreePointersMade"]

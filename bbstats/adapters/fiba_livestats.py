@@ -232,6 +232,10 @@ def parse_fiba_game(match_id: str, doc: dict, phase: str = "regular",
             line.update({c: to_float(stats.get(s)) for s, c in _EXTRA.items() if stats.get(s) is not None})
             if p.get("sMinutes") is not None:
                 line["min"] = parse_minutes(p.get("sMinutes"))
+            if p.get("nationality"):              # ligas traducidas al data.json que traen ficha (VTB, CBA)
+                line["nacionalidad"] = p["nationality"]
+            if p.get("dateOfBirth"):
+                line["fecha_nacimiento"] = p["dateOfBirth"]
             players.append(line)
         tid, tname = (teams[idx] if teams and teams[idx] else (norm(name).replace(" ", "-") or code, name))
         sides.append({"team_id": tid, "name": tname, "code": code, "totals": totals, "players": players})
