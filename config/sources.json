@@ -37,8 +37,7 @@
       "site.api.espn.com": 0.2,
       "org.infobasket.su": 1.0,
       "matchweb.sports.qq.com": 1.0,
-      "cba.sports.sina.com.cn": 1.0,
-      "_nota": "añadir a http.delay_por_dominio de config/sources.json (cortesía: 1 petición/s por dominio)"
+      "cba.sports.sina.com.cn": 1.0
     },
     "dominios_curl": [
       "www.basketball-reference.com"
