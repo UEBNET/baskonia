@@ -193,6 +193,32 @@ def conjunto_proyectado(ligas_red: tuple) -> "Conjunto":
     return cj
 
 
+def desde_x_unificado(Xc: np.ndarray, c: pd.DataFrame) -> dict | None:
+    """Mapa unificado para los equipos que el navegador calcula al vuelo (simulador, escenarios): desde el vector de
+    entrada del club (el de la red VaDE, mismas escalas) a la posición del mapa unificado (regresión lineal) y a las
+    probabilidades de los 6 estilos unificados (logística multinomial), ajustadas con los clubes reales. Devuelve
+    los coeficientes y su calidad (R² por eje y acierto del estilo principal), o None si faltan datos."""
+    from sklearn.linear_model import LinearRegression, LogisticRegression
+    if "ux" not in c or "eu" not in c:
+        return None
+    Y = c[["ux", "uy", "uz"]].to_numpy(float)
+    e = pd.to_numeric(c["eu"], errors="coerce").to_numpy(float)
+    ok = np.isfinite(Xc).all(1) & np.isfinite(Y).all(1) & np.isfinite(e)
+    if ok.sum() < 100:
+        return None
+    lin = LinearRegression().fit(Xc[ok], Y[ok])
+    r2 = [float(1 - ((Y[ok][:, j] - lin.predict(Xc[ok])[:, j]) ** 2).sum() / ((Y[ok][:, j] - Y[ok][:, j].mean()) ** 2).sum())
+          for j in range(3)]
+    log = LogisticRegression(max_iter=2000, C=1.0).fit(Xc[ok], e[ok].astype(int))
+    clases = [int(k) for k in log.classes_]
+    return {"W_xyz": [_lista(w, 5) for w in lin.coef_], "b_xyz": _lista(lin.intercept_, 5),
+            "W_p": [_lista(w, 5) for w in log.coef_], "b_p": _lista(log.intercept_, 5), "clases": clases,
+            "r2_xyz": [round(v, 3) for v in r2], "acierto_estilo": round(float((log.predict(Xc[ok]) == e[ok]).mean()), 3),
+            "n": int(ok.sum()),
+            "nota": "Equipos calculados en el navegador: posición y estilo unificados aproximados con estos coeficientes "
+                    "(ajustados con los clubes reales); los clubes reales usan sus valores exactos."}
+
+
 def main(salida: str, todas_las_ligas: bool = False) -> None:
     d = Path(salida)
     d.mkdir(parents=True, exist_ok=True)
@@ -346,12 +372,15 @@ def main(salida: str, todas_las_ligas: bool = False) -> None:
         eu = None
     if eu is not None:
         c2, j2, meta["estilos_unificados"] = eu
-        for col in ("eu", "eu2", "eu_p", "eu_probs", "eu_etiqueta"):
-            c[col] = c2[col].to_numpy()
-            J[col] = j2[col].to_numpy()
+        for col in ("eu", "eu2", "eu_p", "eu_probs", "eu_etiqueta", "ux", "uy", "uz"):
+            if col in c2:
+                c[col] = c2[col].to_numpy()
+            if col in j2:
+                J[col] = j2[col].to_numpy()
         if "entrenadores" in c:
             c["entrenadores"] = c2["entrenadores"].to_numpy()
-        dec["eu_p"] = 3
+        dec.update({"eu_p": 3, "ux": 3, "uy": 3, "uz": 3})
+        meta["estilos_unificados"]["desde_x"] = desde_x_unificado(cj.Xc, c)
     for nombre, obj in (("meta.json", meta), ("clubes.json", _columnar(c, dec)), ("jugadores.json", _columnar(J, dec)),
                         ("brutos.json", brutos)):
         (d / nombre).write_text(json.dumps(_sin_nan(obj), ensure_ascii=False, separators=(",", ":"), default=float, allow_nan=False), encoding="utf-8")
