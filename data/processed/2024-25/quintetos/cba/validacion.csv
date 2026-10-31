@@ -1,0 +1,498 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+100098119,regular,34,24,644.0,119.4,,,18,actua_fuera_de_pista=13;no_cinco_6=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098120,regular,44,24,465.0,149.2,,,27,actua_fuera_de_pista=10;añadido_por_actuar=1;no_cinco_4=5;no_cinco_6=8;quinteto_periodo_arrastrado=3,False,True,True,False,True,Sina: puntos 110-85 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 3 jugadores | lado 2: sin desglose de rebotes OF/DEF,False
+100098121,regular,53,24,59.0,27.8,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,Sina: puntos 84-39 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: sin desglose de rebotes OF/DEF,True
+100098123,regular,34,24,414.0,59.0,,,7,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 91-100 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098125,regular,43,24,417.0,115.0,,,14,actua_fuera_de_pista=8;añadido_por_actuar=1;no_cinco_4=2;no_cinco_6=2;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098128,regular,56,24,284.0,54.4,,,16,actua_fuera_de_pista=10;no_cinco_6=4;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"Sina: puntos 108-99 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | 5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098129,regular,38,24,266.0,52.7,,,3,actua_fuera_de_pista=3,False,True,True,False,True,"Sina: puntos 104-80 distintos del marcador QQ; casado por nombre de equipo | lado 2: sin desglose de rebotes OF/DEF | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098131,regular,53,24,277.0,86.5,,,19,actua_fuera_de_pista=9;añadido_por_actuar=1;no_cinco_4=2;no_cinco_6=6;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 92-51 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra),False
+100098133,regular,34,24,475.0,54.8,,,4,actua_fuera_de_pista=1;no_cinco_6=2;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 86-93 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra),False
+100098134,regular,38,24,351.0,86.0,,,17,actua_fuera_de_pista=6;añadido_por_actuar=1;no_cinco_4=8;quinteto_periodo_arrastrado=2,False,True,True,False,True,"Sina: puntos 109-36 distintos del marcador QQ; casado por nombre de equipo | lado 2: sin desglose de rebotes OF/DEF | 5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098136,regular,35,24,411.0,69.2,,,4,actua_fuera_de_pista=4,False,True,True,False,True,Sina: puntos 109-46 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098137,regular,48,24,487.0,138.2,,,33,actua_fuera_de_pista=22;añadido_por_actuar=1;no_cinco_4=4;no_cinco_6=2;quinteto_periodo_arrastrado=4,False,True,True,False,True,"Sina: puntos 49-96 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098140,regular,40,24,664.0,65.5,,,10,actua_fuera_de_pista=2;no_cinco_6=7;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 102-112 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098141,regular,54,24,54.0,32.0,,,7,actua_fuera_de_pista=7,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098144,regular,38,24,313.0,69.7,,,9,actua_fuera_de_pista=7;no_cinco_6=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 108-42 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra),False
+100098146,regular,33,24,562.0,94.7,,,41,actua_fuera_de_pista=26;añadido_por_actuar=1;no_cinco_4=2;no_cinco_6=10;quinteto_periodo_arrastrado=2,False,True,True,False,True,Sina: puntos 91-102 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098151,regular,23,24,481.0,145.2,,,16,actua_fuera_de_pista=6;añadido_por_actuar=2;no_cinco_4=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=4,False,True,True,False,True,Sina: puntos 97-121 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098152,regular,27,24,496.0,52.3,,,11,actua_fuera_de_pista=4;no_cinco_6=6;quinteto_inicial_de_titulares=1,False,True,True,False,True,"Sina: puntos 116-57 distintos del marcador QQ; casado por nombre de equipo | lado 2: sin desglose de rebotes OF/DEF | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098154,regular,32,24,555.0,131.1,,,15,actua_fuera_de_pista=3;no_cinco_6=9;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=2,False,True,True,False,True,"Sina: puntos 85-101 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | 6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098156,regular,38,24,244.0,53.4,,,4,actua_fuera_de_pista=4,False,True,True,False,True,"Sina: puntos 102-48 distintos del marcador QQ; casado por nombre de equipo | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098157,regular,38,24,652.0,175.6,,,33,actua_fuera_de_pista=21;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=5;no_cinco_7=1;no_cinco_8=1;quinteto_periodo_arrastrado=3,False,True,True,False,True,"Sina: puntos 61-126 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098159,regular,46,24,54.0,27.5,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098161,regular,31,24,407.0,68.0,,,16,actua_fuera_de_pista=14;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 70-111 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098163,regular,41,24,232.0,44.4,,,2,actua_fuera_de_pista=2,False,True,True,False,True,Sina: puntos 90-55 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098164,regular,31,24,356.0,72.6,,,13,actua_fuera_de_pista=9;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 41-120 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores,False
+100098165,regular,35,24,304.0,67.7,,,7,actua_fuera_de_pista=6;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 120-97 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098166,regular,41,24,451.0,142.6,,,25,actua_fuera_de_pista=23;quinteto_periodo_arrastrado=2,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098168,regular,32,24,393.0,89.5,,,17,actua_fuera_de_pista=12;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 97-102 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: sin desglose de rebotes OF/DEF,False
+100098170,regular,36,24,137.0,41.7,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"Sina: puntos 102-94 distintos del marcador QQ; casado por nombre de equipo | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098172,regular,43,24,216.0,60.2,,,6,actua_fuera_de_pista=3;añadido_por_actuar=1;no_cinco_4=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"Sina: puntos 51-108 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098173,regular,35,24,277.0,49.9,,,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098175,regular,27,24,297.0,51.3,,,5,actua_fuera_de_pista=4;quinteto_inicial_de_titulares=1,False,True,True,False,True,Sina: puntos 62-111 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098177,regular,42,24,450.0,76.1,,,13,actua_fuera_de_pista=6;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=3,False,True,True,False,True,Sina: puntos 105-40 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 3 jugadores | lado 2: sin desglose de rebotes OF/DEF,False
+100098179,regular,34,24,319.0,65.0,,,4,actua_fuera_de_pista=4,False,True,True,False,True,"Sina: puntos 100-115 distintos del marcador QQ; casado por nombre de equipo | 2 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098181,regular,40,24,616.0,67.2,,,12,actua_fuera_de_pista=1;no_cinco_6=10;quinteto_periodo_arrastrado=1,False,True,True,False,True,"Sina: puntos 102-74 distintos del marcador QQ; casado por nombre de equipo | lado 2: sin desglose de rebotes OF/DEF | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098182,regular,31,24,488.0,97.0,,,10,actua_fuera_de_pista=9;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 62-107 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098183,regular,31,24,282.0,51.4,,,1,actua_fuera_de_pista=1,False,True,True,False,True,Sina: puntos 120-83 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra),False
+100098185,regular,35,24,591.0,114.0,,,22,actua_fuera_de_pista=13;añadido_por_actuar=1;no_cinco_4=3;no_cinco_6=5,False,True,True,False,True,"Sina: puntos 74-102 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | 5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098186,regular,32,24,922.0,193.8,,,32,actua_fuera_de_pista=18;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=9;quinteto_periodo_arrastrado=3,False,True,True,False,True,"Sina: puntos 127-88 distintos del marcador QQ; casado por nombre de equipo | lado 2: sin desglose de rebotes OF/DEF | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098189,regular,29,24,294.0,54.3,,,7,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=3,False,True,True,False,True,Sina: puntos 74-118 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098191,regular,37,24,366.0,51.1,,,4,actua_fuera_de_pista=1;no_cinco_6=2;quinteto_periodo_arrastrado=1,False,True,True,False,True,"Sina: puntos 126-89 distintos del marcador QQ; casado por nombre de equipo | lado 2: sin desglose de rebotes OF/DEF | 7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098192,regular,36,24,60.0,25.3,,,0,,True,True,True,False,True,Sina: puntos 47-72 distintos del marcador QQ; casado por nombre de equipo | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,True
+100098194,regular,35,24,692.0,124.3,,,18,actua_fuera_de_pista=17;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 113-117 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098196,regular,27,24,382.0,68.5,,,9,actua_fuera_de_pista=7;no_cinco_6=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098197,regular,35,24,391.0,47.0,,,3,no_cinco_6=3,False,True,True,False,True,Sina: puntos 85-94 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra),False
+100098199,regular,35,24,362.0,71.9,,,11,actua_fuera_de_pista=7;no_cinco_6=1;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,False,True,True,False,True,Sina: puntos 98-68 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | lado 2: sin desglose de rebotes OF/DEF,False
+100098201,regular,40,24,96.0,31.5,,,8,añadido_por_actuar=1;no_cinco_4=3;no_cinco_6=3;quinteto_periodo_arrastrado=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098204,regular,38,24,57.0,27.0,,,0,,True,True,True,False,True,Sina: puntos 107-47 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,True
+100098206,regular,35,24,277.0,65.9,,,18,actua_fuera_de_pista=12;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=1;quinteto_periodo_arrastrado=3,False,True,True,False,True,"Sina: puntos 116-93 distintos del marcador QQ; casado por nombre de equipo | lado 2: sin desglose de rebotes OF/DEF | 4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098208,regular,46,24,173.0,40.8,,,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098209,regular,32,24,590.0,111.1,,,13,actua_fuera_de_pista=7;no_cinco_4=1;no_cinco_6=5,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098211,regular,40,24,257.0,46.9,,,8,actua_fuera_de_pista=3;añadido_por_actuar=1;no_cinco_4=2;no_cinco_6=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098212,regular,43,24,54.0,28.7,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098213,regular,39,24,132.0,37.5,,,12,actua_fuera_de_pista=1;añadido_por_actuar=2;no_cinco_4=5;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=3,False,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | 4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098214,regular,36,24,568.0,112.5,,,19,actua_fuera_de_pista=12;añadido_por_actuar=2;no_cinco_4=2;no_cinco_6=2;quinteto_periodo_arrastrado=1,False,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098216,regular,43,24,767.0,147.1,,,25,actua_fuera_de_pista=12;añadido_por_actuar=2;no_cinco_4=6;no_cinco_6=3;quinteto_periodo_arrastrado=2,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098217,regular,29,24,58.0,33.1,,,0,,True,True,True,False,True,"2 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098218,regular,39,25,230.0,43.8,,,4,actua_fuera_de_pista=1;añadido_por_actuar=1;no_cinco_4=2,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098220,regular,39,24,60.0,28.7,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098222,regular,27,24,177.0,33.3,,,6,actua_fuera_de_pista=5;quinteto_inicial_de_titulares=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098224,regular,32,24,100.0,31.0,,,0,,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098225,regular,37,24,265.0,49.5,,,5,actua_fuera_de_pista=1;añadido_por_actuar=1;no_cinco_4=1;quinteto_periodo_arrastrado=2,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098227,regular,37,24,59.0,35.0,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098228,regular,36,24,55.0,30.1,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores | 4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098230,regular,44,24,336.0,60.6,,,0,,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098231,regular,42,24,104.0,34.0,,,0,,False,True,True,False,True,"2 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098233,regular,28,24,110.0,28.1,,,0,,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098235,regular,28,24,119.0,27.9,,,2,actua_fuera_de_pista=2,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098236,regular,35,24,371.0,84.0,,,8,actua_fuera_de_pista=3;añadido_por_actuar=1;no_cinco_4=1;quinteto_periodo_arrastrado=3,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098239,regular,25,24,219.0,41.1,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098240,regular,37,24,265.0,66.5,,,12,actua_fuera_de_pista=12,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098241,regular,49,24,60.0,25.8,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098242,regular,28,24,55.0,27.3,,,0,,True,True,True,False,True,,True
+100098244,regular,39,24,60.0,30.0,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098245,regular,38,24,413.0,47.2,,,6,actua_fuera_de_pista=3;no_cinco_6=1;quinteto_periodo_arrastrado=2,False,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098247,regular,37,24,59.0,32.7,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098248,regular,24,24,61.0,27.1,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098251,regular,38,24,426.0,106.6,,,10,actua_fuera_de_pista=8;no_cinco_6=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098252,regular,38,24,541.0,117.6,,,25,actua_fuera_de_pista=24;quinteto_periodo_arrastrado=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098122,regular,30,24,57.0,31.5,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098124,regular,22,24,535.0,76.7,,,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098126,regular,27,24,540.0,91.1,,,7,actua_fuera_de_pista=6;quinteto_inicial_de_titulares=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098127,regular,38,24,313.0,59.6,,,6,actua_fuera_de_pista=6,False,True,True,False,True,"lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 3 jugadores | 1 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098130,regular,29,24,591.0,64.8,,,11,actua_fuera_de_pista=3;no_cinco_6=6;quinteto_periodo_arrastrado=2,False,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098132,regular,35,24,48.0,28.6,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098135,regular,44,24,182.0,51.0,,,5,actua_fuera_de_pista=3;no_cinco_6=2,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098138,regular,29,24,1078.0,152.3,,,17,actua_fuera_de_pista=15;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098139,regular,33,24,97.0,25.6,,,0,,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098142,regular,33,24,298.0,68.6,,,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,False,True,True,False,True,"lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores | 4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098143,regular,41,24,58.0,25.0,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098145,regular,29,24,54.0,24.0,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098147,regular,31,24,229.0,44.0,,,3,añadido_por_actuar=1;no_cinco_4=2,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098149,regular,43,24,310.0,56.6,,,9,actua_fuera_de_pista=8;quinteto_periodo_arrastrado=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098150,regular,25,24,57.0,28.6,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098153,regular,31,24,58.0,31.4,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098155,regular,40,24,172.0,37.8,,,5,actua_fuera_de_pista=5,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098158,regular,42,24,561.0,63.4,,,13,actua_fuera_de_pista=5;no_cinco_6=5;quinteto_periodo_arrastrado=3,False,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098160,regular,49,24,152.0,43.7,,,3,actua_fuera_de_pista=3,False,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores | 5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098148,regular,42,24,407.0,74.3,,,21,actua_fuera_de_pista=14;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=4;quinteto_periodo_arrastrado=1,False,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098585,regular,33,24,57.0,27.5,,,5,actua_fuera_de_pista=4;quinteto_periodo_arrastrado=1,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098167,regular,38,24,58.0,23.0,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098169,regular,41,24,59.0,32.7,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098171,regular,27,24,58.0,28.6,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098174,regular,36,24,58.0,27.4,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098176,regular,44,24,60.0,33.9,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098178,regular,29,24,61.0,30.0,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098180,regular,36,24,57.0,28.7,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098184,regular,35,24,63.0,32.1,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098187,regular,39,24,57.0,32.5,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098190,regular,35,24,58.0,25.7,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 5 jugadores | 4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098193,regular,41,24,57.0,32.6,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098195,regular,28,24,59.0,34.7,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098198,regular,39,24,61.0,26.1,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098200,regular,40,24,522.0,113.9,,,18,actua_fuera_de_pista=13;añadido_por_actuar=1;no_cinco_4=3;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098202,regular,32,24,63.0,27.3,,,0,,True,True,True,False,True,"7 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098203,regular,48,24,60.0,33.9,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098205,regular,29,24,56.0,31.4,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098207,regular,40,24,52.0,27.5,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098210,regular,40,24,59.0,31.3,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098215,regular,29,24,55.0,30.3,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098219,regular,45,24,56.0,26.1,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098221,regular,45,25,67.0,22.9,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098223,regular,33,24,56.0,30.1,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098229,regular,34,24,56.0,32.7,,,0,,True,True,True,False,True,,True
+100098232,regular,34,24,54.0,27.3,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098234,regular,34,24,56.0,30.0,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098237,regular,34,24,61.0,27.5,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098238,regular,22,24,49.0,27.3,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098243,regular,44,24,588.0,54.7,,,12,actua_fuera_de_pista=4;no_cinco_6=6;quinteto_periodo_arrastrado=2,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098246,regular,27,24,57.0,27.5,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098249,regular,59,24,453.0,68.5,,,5,actua_fuera_de_pista=2;no_cinco_4=1;no_cinco_6=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098250,regular,35,24,61.0,38.2,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098253,regular,36,24,59.0,32.7,,,0,,True,True,True,False,True,,True
+100098254,regular,34,24,59.0,32.5,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 2 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098255,regular,32,24,58.0,30.8,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098257,regular,38,24,53.0,27.5,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098258,regular,46,24,57.0,23.8,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | 4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098259,regular,37,24,58.0,34.4,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098260,regular,56,24,57.0,30.2,,,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098261,regular,43,24,60.0,36.2,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098262,regular,24,24,58.0,30.1,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098263,regular,31,24,60.0,32.5,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098264,regular,38,24,55.0,28.7,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098265,regular,34,24,177.0,34.6,,,3,actua_fuera_de_pista=3,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098266,regular,47,24,57.0,23.6,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,"lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | 4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098267,regular,40,24,59.0,35.5,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098268,regular,49,24,60.0,30.0,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098269,regular,31,24,64.0,30.0,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098270,regular,26,24,59.0,27.5,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098271,regular,45,24,69.0,28.7,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098272,regular,40,24,59.0,30.0,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098273,regular,26,24,56.0,27.4,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098274,regular,44,25,267.0,48.4,,,3,actua_fuera_de_pista=3,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098275,regular,28,24,57.0,32.5,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098276,regular,21,24,53.0,26.1,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098277,regular,42,24,60.0,34.3,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098278,regular,34,24,51.0,23.5,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098439,regular,30,24,62.0,27.3,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098440,regular,35,24,60.0,26.2,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098441,regular,45,24,59.0,26.1,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098442,regular,32,25,55.0,30.0,,,3,actua_fuera_de_pista=3,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098443,regular,32,24,61.0,31.4,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098444,regular,30,24,442.0,127.8,,,20,actua_fuera_de_pista=4;añadido_por_actuar=3;no_cinco_4=7;no_cinco_6=2;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=3,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098445,regular,48,24,56.0,30.0,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098446,regular,26,24,57.0,36.5,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098447,regular,38,24,59.0,30.0,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098448,regular,42,24,49.0,24.7,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098449,regular,40,24,59.0,33.0,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098450,regular,45,24,108.0,36.5,,,1,actua_fuera_de_pista=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098451,regular,24,24,57.0,34.7,,,0,,True,True,True,False,True,,True
+100098452,regular,37,24,56.0,36.5,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098453,regular,27,24,53.0,25.9,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098454,regular,37,24,52.0,25.0,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"lado 1: sin desglose de rebotes OF/DEF | 2 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098455,regular,38,24,200.0,42.5,,,6,actua_fuera_de_pista=5;quinteto_periodo_arrastrado=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098456,regular,49,24,52.0,24.5,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098457,regular,33,24,61.0,30.0,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098458,regular,22,24,57.0,25.7,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098459,regular,39,24,191.0,36.3,,,6,añadido_por_actuar=1;no_cinco_4=2;no_cinco_6=3,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098460,regular,40,24,135.0,40.6,,,4,actua_fuera_de_pista=4,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098461,regular,38,24,72.0,37.2,,,0,,True,True,True,False,True,"Sina: puntos 112-88 distintos del marcador QQ; casado por nombre de equipo | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 7 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098462,regular,24,24,59.0,31.4,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098463,regular,34,25,54.0,26.1,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098464,regular,28,24,57.0,28.6,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098465,regular,33,24,58.0,31.4,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098466,regular,23,24,58.0,31.6,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098467,regular,32,24,59.0,30.0,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098468,regular,31,24,59.0,30.0,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098469,regular,33,24,83.0,28.7,,,10,actua_fuera_de_pista=5;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=1;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098470,regular,44,24,58.0,28.4,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"lado 2: sin desglose de rebotes OF/DEF | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098471,regular,43,24,60.0,26.3,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098472,regular,39,24,54.0,24.6,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098473,regular,45,24,56.0,30.0,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098474,regular,25,26,56.0,31.6,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098475,regular,30,25,60.0,27.0,,,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098476,regular,29,24,58.0,22.1,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098477,regular,30,24,113.0,34.4,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098478,regular,42,24,57.0,28.4,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098479,regular,25,26,59.0,30.0,,,0,,True,True,True,False,True,Sina: puntos 107-93 distintos del marcador QQ | lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra),True
+100098480,regular,42,25,359.0,59.5,,,8,actua_fuera_de_pista=8,False,True,True,False,True,"7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098481,regular,30,24,71.0,27.3,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098482,regular,33,24,61.0,29.5,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098483,regular,31,24,70.0,25.5,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098484,regular,31,24,61.0,32.5,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098485,regular,40,24,58.0,31.3,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098486,regular,37,24,58.0,31.3,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 7 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098487,regular,26,24,60.0,29.9,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098488,regular,36,24,62.0,31.4,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098490,regular,40,23,56.0,25.7,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,"2 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098491,regular,44,24,58.0,36.0,,,3,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=2,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 7 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098492,regular,36,24,53.0,25.3,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 7 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098494,regular,46,24,55.0,28.7,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098495,regular,34,25,60.0,29.2,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098496,regular,42,24,59.0,24.5,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098498,regular,35,24,70.0,29.7,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098499,regular,28,24,63.0,31.3,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098500,regular,42,24,58.0,31.6,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098502,regular,32,25,58.0,36.5,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098504,regular,35,24,59.0,28.7,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098506,regular,42,24,444.0,62.8,,,14,actua_fuera_de_pista=13;quinteto_inicial_de_titulares=1,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098507,regular,31,25,57.0,26.1,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098509,regular,29,24,59.0,27.0,,,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098510,regular,32,24,67.0,28.4,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098513,regular,35,24,58.0,30.0,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098515,regular,33,24,65.0,31.4,,,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098516,regular,30,26,56.0,28.7,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098517,regular,32,23,50.0,26.1,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098519,regular,43,24,55.0,22.9,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098520,regular,30,24,62.0,32.7,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098521,regular,43,24,49.0,28.7,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098522,regular,34,24,53.0,28.6,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098523,regular,35,24,61.0,26.6,,,0,,True,True,True,False,True,"lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098524,regular,46,24,60.0,32.7,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098526,regular,30,24,52.0,22.9,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098528,regular,27,24,58.0,33.3,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098530,regular,34,24,150.0,40.2,,,0,,False,True,True,False,True,"lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 6 jugadores | 6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098531,regular,32,24,58.0,27.5,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098532,regular,42,24,58.0,31.4,,,1,quinteto_periodo_arrastrado=1,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098288,regular,34,24,54.0,25.7,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098289,regular,31,24,712.0,163.1,,,24,actua_fuera_de_pista=18;añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=1;no_cinco_7=1;quinteto_periodo_arrastrado=2,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098290,regular,0,23,2340.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: sin desglose de rebotes OF/DEF | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores,False
+100098293,regular,31,24,56.0,24.0,,,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098295,regular,36,24,58.0,28.7,,,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098298,regular,30,24,63.0,27.5,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100098302,regular,56,24,339.0,47.2,,,9,actua_fuera_de_pista=4;no_cinco_6=4;quinteto_periodo_arrastrado=1,False,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100098304,regular,0,24,2520.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098305,regular,0,26,2220.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098306,regular,0,24,1980.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098307,regular,0,24,2460.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: sin desglose de rebotes OF/DEF,False
+100098308,regular,0,25,2520.0,1645.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098309,regular,0,24,2700.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores,False
+100098311,regular,0,23,2520.0,1484.2,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098314,regular,0,25,2160.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098315,regular,0,24,2580.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores,False
+100098316,regular,0,24,2700.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores,False
+100098317,regular,0,24,2280.0,1228.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098318,regular,0,24,2580.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098319,regular,0,25,2760.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098320,regular,0,24,2520.0,1477.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098322,regular,0,22,2040.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098323,regular,0,24,2880.0,1632.6,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: sin desglose de rebotes OF/DEF,False
+100098325,regular,0,24,2580.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | Sina: puntos 109-88 distintos del marcador QQ | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098326,regular,0,24,2160.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098327,regular,0,24,2400.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098328,regular,0,25,2340.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098330,regular,0,24,2580.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098332,regular,0,24,2580.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098335,regular,0,23,2340.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098339,regular,0,24,2400.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: sin desglose de rebotes OF/DEF,False
+100098341,regular,0,24,2520.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098342,regular,0,24,2520.0,1484.2,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098345,regular,0,24,2100.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098347,regular,0,24,2400.0,1404.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098350,regular,0,24,2580.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098352,regular,0,24,2520.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098354,regular,0,24,2340.0,1167.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098356,regular,0,24,2340.0,1284.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098358,regular,0,24,2760.0,1477.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098367,regular,0,24,2100.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098369,regular,0,24,2700.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098381,regular,0,24,2400.0,1180.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098385,regular,0,24,2280.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098388,regular,0,23,2340.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098393,regular,0,24,2700.0,1404.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098396,regular,0,24,2100.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098399,regular,0,24,2400.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098401,regular,0,25,2520.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098405,regular,0,24,2880.0,1665.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098409,regular,0,24,2820.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098411,regular,0,24,2220.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098412,regular,0,24,2400.0,1493.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098413,regular,0,24,2640.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: sin desglose de rebotes OF/DEF | lado 2: sin desglose de rebotes OF/DEF,False
+100098414,regular,0,26,2100.0,1351.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098415,regular,0,24,1860.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098416,regular,0,24,2580.0,1416.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 4 jugadores,False
+100098417,regular,0,24,2880.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098418,regular,0,25,2520.0,1669.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098419,regular,0,24,2100.0,1419.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098420,regular,0,24,2280.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098421,regular,0,24,2400.0,1226.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098422,regular,0,24,1800.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098423,regular,0,24,2340.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098424,regular,0,24,2640.0,1570.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098425,regular,0,24,2340.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098426,regular,0,24,2580.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098427,regular,0,23,2760.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098428,regular,0,24,2700.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098429,regular,0,24,2100.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098430,regular,0,24,2340.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098431,regular,0,24,2760.0,1570.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098432,regular,0,24,2700.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098433,regular,0,24,2280.0,1215.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098434,regular,0,24,2340.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098435,regular,0,24,2280.0,1215.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098436,regular,0,24,2760.0,1228.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098437,regular,0,24,2460.0,1162.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098438,regular,0,24,2040.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098279,regular,0,24,2700.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores,False
+100098280,regular,0,24,2460.0,1228.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098281,regular,0,24,2640.0,1477.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098282,regular,0,25,2400.0,1334.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098283,regular,0,24,2520.0,1484.2,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098284,regular,0,24,2880.0,1413.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098285,regular,0,24,2220.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098286,regular,0,24,2640.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098287,regular,0,24,2640.0,1175.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098291,regular,0,24,2400.0,1228.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098292,regular,0,24,2580.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098294,regular,0,24,2460.0,1165.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098296,regular,0,24,2760.0,1228.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098297,regular,0,24,2520.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores,False
+100098299,regular,0,24,2520.0,1167.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098301,regular,0,24,2880.0,1419.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098303,regular,0,24,2220.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098310,regular,0,24,2880.0,1665.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098312,regular,0,24,2280.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098313,regular,0,24,2580.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098321,regular,0,24,2460.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098324,regular,0,24,2820.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098329,regular,0,24,2520.0,1484.2,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098331,regular,0,24,2460.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098333,regular,0,25,2100.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098334,regular,0,24,2820.0,1766.2,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098336,regular,0,24,2520.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098337,regular,0,24,2280.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098338,regular,0,24,2700.0,1662.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098340,regular,0,24,2640.0,1218.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098300,regular,0,24,2460.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098587,regular,0,24,2100.0,1337.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098343,regular,0,24,2340.0,1218.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098344,regular,0,24,2100.0,1226.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098346,regular,0,24,2640.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098348,regular,0,24,1920.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098349,regular,0,24,2280.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098351,regular,0,24,2520.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098353,regular,0,24,2160.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098355,regular,0,24,2340.0,1175.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098357,regular,0,24,2880.0,1736.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098359,regular,0,24,2460.0,1337.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098360,regular,0,24,2400.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098361,regular,0,24,2700.0,1477.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098362,regular,0,24,2280.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098363,regular,0,24,2400.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098364,regular,0,24,2160.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098365,regular,0,24,2760.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098366,regular,0,24,2580.0,1226.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098368,regular,0,24,2580.0,1226.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098370,regular,0,24,2100.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098371,regular,0,24,2160.0,1175.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098372,regular,0,24,2640.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098373,regular,0,24,2520.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098374,regular,0,24,2580.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098375,regular,0,24,2880.0,1557.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098376,regular,0,24,2760.0,1415.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098377,regular,0,24,2220.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098378,regular,0,24,2160.0,1265.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098379,regular,0,24,2760.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098380,regular,0,24,1980.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098382,regular,0,24,2400.0,1337.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098383,regular,0,24,2520.0,1273.6,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098384,regular,0,24,2520.0,1337.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098386,regular,0,24,2580.0,1413.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098387,regular,0,24,2520.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098389,regular,0,24,2280.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098390,regular,0,24,2520.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098391,regular,0,24,2640.0,1273.6,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098392,regular,0,24,2580.0,1348.6,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098394,regular,0,24,2460.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores,False
+100098395,regular,0,24,2280.0,1226.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098397,regular,0,24,1740.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098398,regular,0,24,2520.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098400,regular,0,24,2100.0,1226.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098402,regular,0,24,2700.0,1563.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098403,regular,0,24,2880.0,1496.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 3 jugadores | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 6 jugadores,False
+100098404,regular,0,25,2400.0,1484.2,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098406,regular,0,24,2700.0,1416.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098407,regular,0,24,2460.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098408,regular,0,24,2160.0,1226.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098410,regular,0,24,2520.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098489,regular,0,24,2700.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098493,regular,0,24,3120.0,1563.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098497,regular,0,24,2400.0,1484.2,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098501,regular,0,24,2520.0,1218.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098503,regular,0,24,2760.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098505,regular,0,24,2580.0,1404.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098508,regular,0,24,2040.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098511,regular,0,24,2340.0,1165.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098512,regular,0,24,2220.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098514,regular,0,24,2520.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098518,regular,0,23,2820.0,1576.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098525,regular,0,24,2400.0,1490.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098527,regular,0,24,2100.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098529,regular,0,26,2880.0,1490.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098533,regular,0,24,2520.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098534,regular,0,24,2400.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098535,regular,0,24,2220.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098536,regular,0,24,2280.0,1167.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098537,regular,0,24,2460.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098538,regular,0,24,2760.0,1337.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098539,regular,0,24,2220.0,1401.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098540,regular,0,24,2100.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098541,regular,0,24,2040.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098542,regular,0,24,2520.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098543,regular,0,24,2160.0,1404.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098544,regular,0,24,2340.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098545,regular,0,24,2340.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098546,regular,0,24,2220.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098547,regular,0,24,2400.0,1218.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098548,regular,0,25,2460.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098549,regular,0,24,2520.0,1416.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098550,regular,0,24,2760.0,1284.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098551,regular,0,24,2400.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 1: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores,False
+100098552,regular,0,24,2280.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098553,regular,0,24,2640.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098554,regular,0,24,2280.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098555,regular,0,24,2580.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098556,regular,0,24,2340.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098557,regular,0,24,2640.0,1345.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098558,regular,0,24,2460.0,1331.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098559,regular,0,24,1860.0,1175.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098560,regular,0,24,2340.0,1413.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098561,regular,0,24,2460.0,1165.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098562,regular,0,24,2640.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098563,regular,0,24,2340.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098564,regular,0,24,2340.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098565,regular,0,24,2040.0,1175.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098566,regular,0,24,2460.0,1284.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098567,regular,0,24,2580.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098568,regular,0,24,2760.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098188,regular,0,24,2460.0,1337.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098588,regular,0,24,2700.0,1218.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098569,regular,0,25,2460.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098570,regular,0,24,2520.0,1487.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098571,regular,0,24,2400.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098572,regular,0,24,2400.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098573,regular,0,25,2280.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098574,regular,0,24,2280.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098575,regular,0,24,2520.0,1223.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098576,regular,0,24,2460.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098577,regular,0,24,2580.0,1284.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100098578,regular,0,24,2220.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102514,playoffs,0,24,2520.0,1566.7,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102515,playoffs,35,25,600.0,82.4,,,5,actua_fuera_de_pista=3;no_cinco_6=1;quinteto_periodo_arrastrado=1,False,True,True,False,True,"2 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100102516,playoffs,0,24,2640.0,1407.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102518,playoffs,0,24,2520.0,1276.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102521,playoffs,0,25,2400.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102522,playoffs,31,24,66.0,24.0,,,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100102517,playoffs,0,24,2820.0,1563.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102519,playoffs,0,24,2340.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102520,playoffs,0,25,2640.0,1573.3,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102525,playoffs,0,24,2460.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102599,playoffs,43,24,61.0,30.0,,,2,actua_fuera_de_pista=2,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100102625,playoffs,0,24,2460.0,1273.6,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102604,playoffs,0,24,2340.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102666,playoffs,0,24,2160.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102600,playoffs,31,23,51.0,25.3,,,1,actua_fuera_de_pista=1,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100102626,playoffs,0,24,2400.0,1413.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102605,playoffs,0,24,2520.0,1413.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102667,playoffs,0,24,2280.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102601,playoffs,0,24,2520.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102627,playoffs,0,24,2580.0,1487.4,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102606,playoffs,0,24,2400.0,1416.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102668,playoffs,0,24,2100.0,1220.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102628,playoffs,0,24,2640.0,1490.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102607,playoffs,0,24,2460.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102629,playoffs,0,25,2640.0,1410.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102716,playoffs,0,25,2100.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102709,playoffs,0,24,2340.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102717,playoffs,0,24,1920.0,1175.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102710,playoffs,0,24,2340.0,1175.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 1 jugadores,False
+100102718,playoffs,0,24,2460.0,1172.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100102711,playoffs,0,24,2460.0,1284.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100103414,playoffs,0,24,2700.0,1340.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100103415,playoffs,0,24,2580.0,1281.8,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100103416,playoffs,0,24,2460.0,1279.1,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100103417,playoffs,0,24,1920.0,1170.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+100103418,playoffs,0,24,2700.0,1342.9,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido | lado 2: rebotes OF/DEF de Sina ajustados al total de QQ en 2 jugadores,False
+100103419,playoffs,0,24,2580.0,1398.0,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False

@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-31T19:47:56.970263+00:00",
+  "generado": "2026-10-31T22:18:06.421074+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
@@ -196,7 +196,7 @@
     },
     {
       "temporada": "2024-25",
-      "generado": "2026-10-31T19:28:31.013876+00:00",
+      "generado": "2026-10-31T20:20:20.838669+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -222,6 +222,11 @@
           "playoffs": 173,
           "regular": 360,
           "total": 361
+        },
+        "cba": {
+          "playoffs": 165,
+          "regular": 426,
+          "total": 426
         },
         "eurocup": {
           "playoffs": 130,
@@ -297,7 +302,7 @@
     },
     {
       "temporada": "2023-24",
-      "generado": "2026-10-31T19:30:01.391089+00:00",
+      "generado": "2026-10-31T21:05:18.445334+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -323,6 +328,11 @@
           "playoffs": 198,
           "regular": 363,
           "total": 369
+        },
+        "cba": {
+          "playoffs": 165,
+          "regular": 447,
+          "total": 448
         },
         "eurocup": {
           "playoffs": 136,
@@ -398,7 +408,7 @@
     },
     {
       "temporada": "2022-23",
-      "generado": "2026-10-31T19:31:34.788986+00:00",
+      "generado": "2026-10-31T21:42:54.714869+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -424,6 +434,11 @@
           "playoffs": 240,
           "regular": 354,
           "total": 358
+        },
+        "cba": {
+          "playoffs": 241,
+          "regular": 436,
+          "total": 436
         },
         "eurocup": {
           "playoffs": 168,
@@ -489,7 +504,7 @@
     },
     {
       "temporada": "2021-22",
-      "generado": "2026-10-31T19:33:13.347065+00:00",
+      "generado": "2026-10-31T22:18:06.226282+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -515,6 +530,11 @@
           "playoffs": 252,
           "regular": 353,
           "total": 355
+        },
+        "cba": {
+          "playoffs": 249,
+          "regular": 432,
+          "total": 432
         },
         "eurocup": {
           "playoffs": 169,
