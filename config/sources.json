@@ -1512,6 +1512,144 @@
           "fecha_corte": "2026-10-29"
         }
       }
+    },
+    "bnxt": {
+      "adaptador": "fiba_livestats",
+      "activa": true,
+      "nombre": "BNXT League",
+      "pais": "Bélgica y Países Bajos",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://fibalivestats.dcd.shared.geniussports.com (data.json de FIBA LiveStats por partido; la web de la liga enlaza sus partidos a /u/BNXT/<id>)",
+      "plazas_playoffs": 0,
+      "partidos_por_paquete": 400,
+      "avance_busqueda": 20000,
+      "_partidos": "Ids de FIBA LiveStats localizados con un muestreo de 1 de cada 10 ids de la temporada (cabecera del data.json) y un recorrido denso de cada bloque aceptando sólo partidos entre dos clubes de la liga (sin filiales, femeninos ni cantera); la ventana de playoffs se recorre id a id. Control: los 33 partidos de Donar 2021-22 enlazados en Wikipedia están todos. La API propia de la liga (bnxt.sportpress.info) exige una clave de cliente sacada del código de su web: no se usa.",
+      "_fases": "Regular = fases nacionales + fase transfronteriza (Elite Gold / Elite Silver): bloques grandes de ids. Playoffs = playoffs BNXT + playoffs nacionales (belgas y neerlandeses), juntos. Copas belga y neerlandesa (eliminatorias a ida y vuelta) y Supercopa fuera (_copas_excluidas).",
+      "estado_verificacion": "verificado con datos reales (2021-22)",
+      "pbp": "fiba_livestats",
+      "temporadas": {
+        "2020-21": {
+          "sin_datos": true,
+          "motivo": "la BNXT League empezó en 2021-22 (antes, ligas belga y neerlandesa separadas; fuera de alcance por decisión del usuario)"
+        },
+        "2021-22": {
+          "partidos": {
+            "regular": [
+              [
+                1910276,
+                1910365
+              ],
+              [
+                1925276,
+                1925385
+              ],
+              [
+                2061915,
+                2062019
+              ]
+            ],
+            "playoffs": [
+              [
+                2089701,
+                2089716
+              ],
+              [
+                2091424,
+                2091426
+              ],
+              [
+                2091522,
+                2091524
+              ],
+              [
+                2091705,
+                2091706
+              ],
+              [
+                2091798,
+                2091811
+              ],
+              [
+                2091860,
+                2091864
+              ],
+              2094285,
+              [
+                2095128,
+                2095130
+              ],
+              [
+                2095317,
+                2095322
+              ],
+              [
+                2095553,
+                2095557
+              ],
+              [
+                2096216,
+                2096217
+              ],
+              [
+                2097140,
+                2097141
+              ],
+              [
+                2097323,
+                2097324
+              ],
+              [
+                2097530,
+                2097531
+              ],
+              2097994,
+              [
+                2098779,
+                2098782
+              ],
+              [
+                2099811,
+                2099815
+              ],
+              [
+                2099822,
+                2099823
+              ],
+              2100994,
+              2100999
+            ]
+          },
+          "excluir": [
+            1925347,
+            1925370,
+            1925380,
+            2091802,
+            [
+              2091804,
+              2091805
+            ],
+            2091807,
+            2095556,
+            [
+              2099812,
+              2099814
+            ]
+          ],
+          "_copas_excluidas": [
+            1939031,
+            1939046,
+            1939435,
+            2008417,
+            2008418,
+            2008419,
+            2008420,
+            2008421,
+            2008422,
+            2059780
+          ]
+        }
+      }
     }
   },
   "identidad": {
