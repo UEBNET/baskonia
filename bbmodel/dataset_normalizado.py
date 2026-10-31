@@ -38,7 +38,8 @@ SALIDA_CSV = RAIZ / "data" / "modelos" / "normalizado"
 METRICAS = list(CATALOGO)
 NOMBRES_LIGA = {"euroleague": "EuroLeague", "eurocup": "EuroCup", "acb": "Liga Endesa", "nba": "NBA", "gleague": "G League",
                 "lba": "LBA", "bbl": "BBL", "lnb": "LNB", "bcl": "BCL", "fec": "FIBA Europe Cup",
-                "bsl": "BSL", "gbl": "GBL", "feb1": "Primera FEB", "feb2": "Segunda FEB", "feb3": "Tercera FEB"}
+                "bsl": "BSL", "gbl": "GBL", "feb1": "Primera FEB", "feb2": "Segunda FEB", "feb3": "Tercera FEB",
+                "bnxt": "BNXT", "vtb": "VTB", "cba": "CBA", "nbl": "NBL", "ncaa": "NCAA"}
 IDENTIDAD_BRUTA = ["player_uid", "team_id", "posicion", "edad", "fecha_nacimiento", "altura_cm", "peso_kg", "dorsal", "equipo_codigo",
                    "liga_nombre", "fecha_extraccion"]
 

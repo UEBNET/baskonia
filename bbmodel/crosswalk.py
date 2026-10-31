@@ -99,7 +99,7 @@ def cargar_nodos(proc: Path = PROC, temporadas: list[str] | None = None) -> pd.D
     t["iso"] = t["nacionalidad"].map(_iso)
     t["frac"] = pd.to_numeric(t["gp"], errors="coerce") / pd.to_numeric(t["team_gp"], errors="coerce")
     # nombre de las ligas con alfabeto propio: el id ya es "apellido-nombre" internacional (BSL, GBL)
-    t["nombre_cmp"] = np.where(t["liga"].isin(["gbl", "bsl"]), t["player_id"].str.replace("-", " "), t["nombre"])
+    t["nombre_cmp"] = np.where(t["liga"].isin(["gbl", "bsl", "bnxt"]), t["player_id"].str.replace("-", " "), t["nombre"])
 
     def agg(g: pd.DataFrame) -> pd.Series:
         fn = g["fecha_nac"].dropna()

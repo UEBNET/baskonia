@@ -24,6 +24,11 @@ paises_liga:                         # país de cada competición (EUR = copa pa
   lnb: FR
   bsl: TR
   gbl: GR
+  bnxt: BE                           # BNXT: Bélgica + Países Bajos (país de referencia BE; ver grupo nacional)
+  vtb: RU
+  cba: CN
+  nbl: AU
+  ncaa: US
   nba: US
   gleague: US
   euroleague: EUR

@@ -669,13 +669,13 @@ def clave_vade(eq: pd.DataFrame, jg: pd.DataFrame) -> pd.Series:
     vc = set(pd.read_csv(pc, usecols=["clave"])["clave"])
     directa = eq["liga"] + ":" + eq["team_id"].astype(str) + ":" + eq["temporada"]
     vj = pd.read_csv(p, usecols=["clave", "liga", "temporada", "player_id"], dtype={"player_id": str})
-    vj = vj[vj["liga"].isin(["lba", "lnb", "bsl", "gbl"])]
+    vj = vj[vj["liga"].isin(["lba", "lnb", "bsl", "gbl", "bnxt"])]
     jj = jg[~jg["traspaso"]][["liga", "temporada", "team_id", "player_id"]]
     m = jj.merge(vj, on=["liga", "temporada", "player_id"])
     voto = (m.groupby(["liga", "temporada", "team_id", "clave"]).size().reset_index(name="n")
             .sort_values("n", ascending=False).drop_duplicates(["liga", "temporada", "team_id"]))
     k = eq[["liga", "temporada", "team_id"]].merge(voto, how="left", on=["liga", "temporada", "team_id"])["clave"]
-    out = np.where(eq["liga"].isin(["lba", "lnb", "bsl", "gbl"]).to_numpy(), k.to_numpy(), directa.to_numpy())
+    out = np.where(eq["liga"].isin(["lba", "lnb", "bsl", "gbl", "bnxt"]).to_numpy(), k.to_numpy(), directa.to_numpy())
     return pd.Series([x if isinstance(x, str) and x in vc else None for x in out], index=eq.index)
 
 

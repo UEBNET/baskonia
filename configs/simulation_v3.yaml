@@ -50,7 +50,8 @@ rol_go_to_guy:                       # GO-TO-GUY proyectado: TITULAR por minutos
 
 adaptacion:
   partidos_temporada: {defecto: 34, nba: 82, gleague: 50, euroleague: 34, eurocup: 18, bcl: 14, fec: 12, feb3: 26,
-                       feb1: 32, feb2: 26, acb: 34, bbl: 34, lba: 28, lnb: 30, bsl: 30, gbl: 24}   # FEB1/FEB2 y resto: 2025-26
+                       feb1: 32, feb2: 26, acb: 34, bbl: 34, lba: 28, lnb: 30, bsl: 30, gbl: 24,
+                       bnxt: 34, vtb: 30, cba: 42, nbl: 33, ncaa: 31}   # FEB1/FEB2 y resto: 2025-26
   primeros_partidos: 10              # ADAPT% de los N primeros partidos
   contraccion: 1.0                   # v3: la forma D, κ se mide directamente (curva dentro de jugador); sin contracción
   priors: data/modelos/adaptacion/v3/adaptation_priors.csv   # adaptación v3 (curva ascendente)

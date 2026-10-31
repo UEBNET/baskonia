@@ -96,6 +96,15 @@ INICIAL = {
     "feb1": (Sistema("feb1", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
     "feb2": (Sistema("feb2", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
     "feb3": (Sistema("feb3", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
+    # Ligas añadidas el 31-10-2026: todas llegan traducidas al data.json de FIBA LiveStats (% de la pista completa,
+    # x a lo largo, y lateral). BNXT y NBL: FIBA LiveStats / Genius (como BSL/GBL). VTB (Infobasket) y NCAA (ESPN):
+    # tiros llevados al aro izquierdo por el adaptador. NCAA: línea de 3 a 6,75 m desde 2019-20 (regla fiba).
+    # CBA: QQ no da coordenadas en la mayoría de partidos (si las da, se calibran igual).
+    "bnxt": (Sistema("bnxt", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
+    "nbl": (Sistema("nbl", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
+    "vtb": (Sistema("vtb", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
+    "ncaa": (Sistema("ncaa", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
+    "cba": (Sistema("cba", "fiba", "x", (8.2, 50.5), (0.32, 0.16), pista_completa=100.0), True),
 }
 
 
