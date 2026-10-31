@@ -359,6 +359,25 @@ def _chrono(ids: list[str], evs: dict) -> list[str]:
                                      pos[i]))
 
 
+def _first_touch(block: list[dict], k: str) -> tuple[set, dict]:
+    """Jugadores del equipo `k` que estaban en pista al empezar el bloque (periodo): los que actúan antes de
+    entrar. Si salen más de 5 (falta algún cambio en el texto), los que salen sin haber entrado y, después,
+    los que actúan antes. Devuelve (quinteto, {pno: "in" | "act" | "out"} del primer evento de cada uno)."""
+    first: dict[str, str] = {}
+    pos: dict[str, int] = {}
+    for i, a in enumerate(block):
+        n = str(a["pno"])
+        if str(a["tno"]) == k and a["pno"] and n not in first:
+            first[n] = a["subType"] if a["actionType"] == "substitution" and a["subType"] in ("in", "out") else "act"
+            pos[n] = i
+    want = {n for n, v in first.items() if v != "in"}
+    if len(want) > 5:
+        sure = sorted((n for n in want if first[n] == "out"), key=pos.get)
+        rest = sorted((n for n in want if first[n] != "out"), key=pos.get)
+        want = set((sure + rest)[:5])
+    return want, first
+
+
 def _period_starts(pbp: list[dict], tm: dict, qq_period: dict, period_start: dict,
                    opts: dict | None = None) -> tuple[list[dict], int]:
     """QQ no anota los cambios entre periodos. Quinteto con que empieza cada periodo (desde el 2.º), por equipo:
@@ -386,15 +405,23 @@ def _period_starts(pbp: list[dict], tm: dict, qq_period: dict, period_start: dic
         while j < len(pbp) and per_of(pbp[j]) == per:
             j += 1
         block = pbp[i:j]
+        if per == 1:
+            # titulares: los que actúan en el 1.er periodo antes de entrar; se completan con los de la fuente
+            # (Sina; a veces marca mal el quinteto inicial) que no entran después
+            for k in ("1", "2"):
+                want, first1 = _first_touch(block, k)
+                for n in sorted(cur[k] - want):
+                    if len(want) < 5 and first1.get(n) != "in":
+                        want.add(n)
+                if len(want) == 5 and want != cur[k]:
+                    cur[k] = want
+                    n_fix += 1
+                    for n, p in tm[k]["pl"].items():
+                        p["starter"] = 1 if n in want else 0
         if per > 1:
             ins = []
             for k in ("1", "2"):
-                first: dict[str, str] = {}
-                for a in block:
-                    if str(a["tno"]) == k and a["pno"] and str(a["pno"]) not in first:
-                        first[str(a["pno"])] = "in" if (a["actionType"] == "substitution" and a["subType"] == "in") \
-                            else "act"
-                want = {n for n, v in first.items() if v == "act"}
+                want, first = _first_touch(block, k)
                 if len(want) < 5:
                     for pool in ((qq_period.get(per) or {}).get(k) or set(), cur[k]):
                         for n in sorted(pool - want):
@@ -464,13 +491,22 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
     sina_side: dict[str, dict] = {}
     if len(sina) == 2:
         score = {k: to_float(ti.get(("left" if k == "1" else "right") + "Goal")) for k in ("1", "2")}
-        for k, s in zip(("1", "2"), sina):            # orden de Sina = local, visitante (comprobado por puntos)
-            pts = sum(p.get("pts") or 0 for p in s["jugadores"])
-            if score[k] is not None and pts and pts != score[k]:
-                notes.append(f"Sina: puntos del lado {k} ({pts:g}) distintos del marcador QQ ({score[k]:g})")
+        pts = [sum(p.get("pts") or 0 for p in s["jugadores"]) for s in sina]
+        if (pts[0], pts[1]) == (score["1"], score["2"]) or score["1"] is None:
+            sina_side = {"1": sina[0], "2": sina[1]}
+        elif (pts[1], pts[0]) == (score["1"], score["2"]):
+            sina_side = {"1": sina[1], "2": sina[0]}      # Sina pone a veces primero al visitante
+        else:
+            # puntos que no cuadran (alguna fila de Sina sin puntos): por el nombre corto del equipo
+            names_qq = {k: str(ti.get(("left" if k == "1" else "right") + "Name") or "") for k in ("1", "2")}
+            for k in ("1", "2"):
+                hit = [s_ for s_ in sina if s_.get("equipo") and s_["equipo"] in names_qq[k]]
+                if len(hit) == 1:
+                    sina_side[k] = hit[0]
+            if len(sina_side) != 2 or sina_side["1"] is sina_side["2"]:
                 sina_side = {}
-                break
-            sina_side[k] = s
+            notes.append(f"Sina: puntos {pts[0]:g}-{pts[1]:g} distintos del marcador QQ"
+                         + ("; casado por nombre de equipo" if sina_side else ""))
     elif g.get("sina") is not None:
         notes.append("Sina: boxscore ilegible")
     tm: dict[str, dict] = {}
@@ -521,6 +557,8 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
                     line["sReboundsOffensive"], line["sReboundsDefensive"] = s["oreb"], s["dreb"]
                 elif (line.get("sReboundsTotal") or 0) > 0:
                     ok = False
+                if s.get("oreb") is not None and s.get("dreb") is not None:
+                    line["_sina_reb"] = (s["oreb"], s["dreb"])
                 line["sinaId"] = s.get("sina_id")
             t["pl"][n] = line
             names[k][q["cn"]] = q["pid"]
@@ -709,6 +747,17 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
                     p["sReboundsOffensive"], p["sReboundsDefensive"] = reb_pbp.get(p["personId"], [0, 0])
                 split_ok[k] = True
                 notes.append(f"lado {k}: rebotes OF/DEF del jugada a jugada (Sina no cuadra)")
+        if not split_ok[k] and all("_sina_reb" in p or not (p.get("sReboundsTotal") or 0) for p in t["pl"].values()):
+            # QQ y Sina difieren en ±1-2 rebotes de algún jugador: total de QQ, ofensivos de Sina (acotados)
+            n_adj = 0
+            for p in t["pl"].values():
+                tot = p.get("sReboundsTotal") or 0
+                o, d_ = p.get("_sina_reb") or (0, 0)
+                n_adj += (o + d_) != tot
+                p["sReboundsOffensive"] = min(o, tot)
+                p["sReboundsDefensive"] = tot - p["sReboundsOffensive"]
+            split_ok[k] = True
+            notes.append(f"lado {k}: rebotes OF/DEF de Sina ajustados al total de QQ en {n_adj} jugadores")
         if split_ok[k]:
             pl_or = sum(p.get("sReboundsOffensive") or 0 for p in t["pl"].values())
             pl_dr = sum(p.get("sReboundsDefensive") or 0 for p in t["pl"].values())
@@ -722,6 +771,7 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
             notes.append(f"lado {k}: sin desglose de rebotes OF/DEF")
     for pid, (k, n) in pno.items():
         p = tm[k]["pl"][n]
+        p.pop("_sina_reb", None)
         if pbp:
             p["sFoulsOn"] = drawn.get(pid, 0)
             p["sBlocksReceived"] = blocked.get(pid, 0)

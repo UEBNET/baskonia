@@ -47,6 +47,7 @@ SOURCES = {
     "nbl": ("nbl", "NblPBP"),
     "ncaa": ("ncaa", "NcaaPBP"),
     "vtb": ("vtb", "VtbPBP"),
+    "cba": ("cba", "CbaPBP"),
 }
 
 

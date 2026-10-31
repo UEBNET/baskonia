@@ -754,7 +754,9 @@ for _liga in ("bsl", "gbl", "bnxt"):
     registrar(_liga, Extractor(lector_fiba_livestats, "FIBA LiveStats data.json (tm[].coach)",
                                docs_principal=_fls.docs_principal))
 # NCAA (ESPN): un entrenador por temporada (plantilla de ESPN, sólo top-50), traducido a tm[].coach por to_fls
-from .lineups.sources import ncaa as _ncaa, vtb as _vtb  # noqa: E402
+from .lineups.sources import cba as _cba, ncaa as _ncaa, vtb as _vtb  # noqa: E402
+registrar("cba", Extractor(lector_fiba_livestats, "Sina (主教练, entrenador por partido)",
+                           docs_principal=_cba.docs_principal))
 registrar("vtb", Extractor(lector_fiba_livestats, "Infobasket GetOnline (Coaches, PosID 1000)",
                            docs_principal=_vtb.docs_principal))
 registrar("ncaa", Extractor(lector_fiba_livestats, "ESPN teams/<id>/roster (coach, uno por temporada)",

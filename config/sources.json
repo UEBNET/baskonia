@@ -35,7 +35,10 @@
       "intrafeb.feb.es": 1.0,
       "prod.rosetta.nbl.com.au": 0.3,
       "site.api.espn.com": 0.2,
-      "org.infobasket.su": 1.0
+      "org.infobasket.su": 1.0,
+      "matchweb.sports.qq.com": 1.0,
+      "cba.sports.sina.com.cn": 1.0,
+      "_nota": "añadir a http.delay_por_dominio de config/sources.json (cortesía: 1 petición/s por dominio)"
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -4022,6 +4025,59 @@
           "fecha_corte": "2026-10-29"
         }
       }
+    },
+    "cba": {
+      "adaptador": "cba",
+      "activa": true,
+      "nombre": "Chinese Basketball Association",
+      "pais": "China",
+      "minutos_partido": 40,
+      "_minutos_partido": "Cuartos de 12' (48') hasta 2024-25 y de 10' (40') desde 2025-26: temporadas.<t>.minutos_partido sobreescribe el valor de la liga.",
+      "fase": "todas",
+      "fuente": "https://matchweb.sports.qq.com (Tencent Sports: calendario, boxscore, jugada a jugada y fichas de jugador, JSON público) + http://cba.sports.sina.com.cn (Sina: rebotes ofensivos/defensivos, titulares y entrenador por partido, HTML)",
+      "plazas_playoffs": 0,
+      "partidos_por_paquete": 150,
+      "lote_eventos": 400,
+      "pbp": "cba",
+      "entrenadores": "cba",
+      "_fases": "matchDesc de QQ: CBA常规赛 = regular (los partidos de la Copa de Clubes que cuentan para la clasificación vienen como 常规赛), CBA季后赛 = playoffs (de la primera ronda a la final). Fuera: 季前赛 (pretemporada), 全明星赛 (All-Star y 星锐赛), 保级, cualquier 杯赛.",
+      "_nombres": "Nombres latinos: pinyin (pypinyin) guiado por el enName de QQ para los chinos («Apellido Nombre»: Zhou Qi), enName de QQ para extranjeros («S. Cooper») y minorías («Abdusalam»). nombres_latinos = {\"nombre chino\": \"Nombre latino\"} manda (jugadores y entrenadores; los entrenadores extranjeros sólo vienen transliterados al chino).",
+      "nombres_latinos": {
+        "马布里": "Stephon Marbury"
+      },
+      "estado_verificacion": "verificado con datos reales (31-10-2026): 2026-27 hasta el 29-10 (55 partidos, quintetos 94,5 % validados), 2023-24 dic-2023 (134, 50 %: QQ sin cinco en pista hasta 2024-25 y cambios sin anotar), 2020-21 nov-2020 (53, sin jugada a jugada en QQ)",
+      "temporadas": {
+        "2020-21": {
+          "sina_liga": 206,
+          "minutos_partido": 48
+        },
+        "2021-22": {
+          "sina_liga": 210,
+          "minutos_partido": 48
+        },
+        "2022-23": {
+          "sina_liga": 211,
+          "minutos_partido": 48
+        },
+        "2023-24": {
+          "sina_liga": 212,
+          "minutos_partido": 48
+        },
+        "2024-25": {
+          "sina_liga": 215,
+          "minutos_partido": 48
+        },
+        "2025-26": {
+          "sina_liga": 216
+        },
+        "2026-27": {
+          "sina_liga": 217,
+          "fecha_corte": "2026-10-29"
+        }
+      },
+      "_nombres_latinos": "Entrenadores extranjeros que Sina sólo da transliterados (sin override salen como una palabra en pinyin, tipo 'transliterado'): 乌戈 (Wuge) y 雅尼斯 (Yanisi), vistos en 2023-24/2026-27. Añadir aquí su nombre real cuando se verifique. 阿的江 (Adijiang) y 西热力江 (Xirelijiang) son uigures: la transliteración es correcta.",
+      "_entrenadores": "Registrar en bbstats/entrenadores.py: registrar('cba', Extractor(lector_fiba_livestats, 'Sina schedule/show (主教练)', docs_principal=lambda m, g: cba_src.docs_principal(m, g))) con `from .lineups.sources import cba as cba_src`; 'entrenadores': 'cba' en esta config.",
+      "_temporadas": "sina_liga = qleagueid del calendario de Sina; minutos_partido por temporada (48 hasta 2024-25). Opcional para pruebas: meses = ['AAAA-MM', ...] limita la descarga a esos meses."
     }
   },
   "identidad": {
