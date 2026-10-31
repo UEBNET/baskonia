@@ -1701,9 +1701,9 @@
       "plazas_playoffs": 0,
       "partidos_por_paquete": 400,
       "avance_busqueda": 20000,
-      "_partidos": "Ids de FIBA LiveStats localizados con un muestreo de 1 de cada 10 ids de la temporada (cabecera del data.json) y un recorrido denso de cada bloque aceptando sólo partidos entre dos clubes de la liga (sin filiales, femeninos ni cantera); la ventana de playoffs se recorre id a id. Control: los 33 partidos de Donar 2021-22 enlazados en Wikipedia están todos. La API propia de la liga (bnxt.sportpress.info) exige una clave de cliente sacada del código de su web: no se usa.",
-      "_fases": "Regular = fases nacionales + fase transfronteriza (Elite Gold / Elite Silver): bloques grandes de ids. Playoffs = playoffs BNXT + playoffs nacionales (belgas y neerlandeses), juntos. Copas belga y neerlandesa (eliminatorias a ida y vuelta) y Supercopa fuera (_copas_excluidas).",
-      "estado_verificacion": "verificado con datos reales (2021-22)",
+      "_partidos": "Ids de FIBA LiveStats localizados con un muestreo de 1 de cada 10 ids por temporada (cabecera del data.json), un recorrido denso de cada bloque (sólo partidos entre dos clubes de la liga; fuera filiales «PDL»/«B», femeninos VSE/DSE y cantera) y la ventana de playoffs id a id. Temporada y fase por la fecha (cabecera Last-Modified del data.json): playoffs desde el inicio oficial de los playoffs nacionales/BNXT de cada temporada. Copas y supercopas fuera (_copas_excluidas): partidos entre clubes del mismo país en las ventanas de copa que forman bloques de ids aislados o repiten una pareja más veces de las del calendario de liga. Control (docs/fuentes_ligas_nuevas.md §4): regular / playoffs encontrados frente a los oficiales: 2021-22 297/305 · 72/72; 2022-23 277/280 · 74/74; 2023-24 292/292 · 45/45; 2024-25 341/342 · 38/38; 2025-26 309/306 · 39/40. La API propia de la liga (bnxt.sportpress.info) exige una clave de cliente sacada del código de su web: no se usa.",
+      "_fases": "Regular = fases nacionales + fase transfronteriza (Elite Gold/Silver) o liga única (desde 2024-25). Playoffs = playoffs BNXT + playoffs nacionales belgas y neerlandeses, juntos. Copas y supercopas fuera.",
+      "estado_verificacion": "verificado con datos reales (2021-22 a 2026-27) y contrastado con los recuentos oficiales por temporada",
       "pbp": "fiba_livestats",
       "temporadas": {
         "2020-21": {
@@ -1715,12 +1715,47 @@
             "regular": [
               [
                 1910276,
+                1910285
+              ],
+              [
+                1910287,
+                1910302
+              ],
+              1910305,
+              [
+                1910307,
+                1910310
+              ],
+              [
+                1910312,
+                1910318
+              ],
+              [
+                1910320,
                 1910365
               ],
               [
                 1925276,
+                1925292
+              ],
+              [
+                1925294,
+                1925346
+              ],
+              [
+                1925348,
+                1925369
+              ],
+              [
+                1925371,
+                1925379
+              ],
+              [
+                1925381,
                 1925385
               ],
+              1939031,
+              1939046,
               [
                 2061915,
                 2062019
@@ -1745,6 +1780,12 @@
               ],
               [
                 2091798,
+                2091801
+              ],
+              2091803,
+              2091806,
+              [
+                2091808,
                 2091811
               ],
               [
@@ -1762,8 +1803,9 @@
               ],
               [
                 2095553,
-                2095557
+                2095555
               ],
+              2095557,
               [
                 2096216,
                 2096217
@@ -1785,10 +1827,8 @@
                 2098779,
                 2098782
               ],
-              [
-                2099811,
-                2099815
-              ],
+              2099811,
+              2099815,
               [
                 2099822,
                 2099823
@@ -1797,34 +1837,334 @@
               2100999
             ]
           },
-          "excluir": [
-            1925347,
-            1925370,
-            1925380,
-            2091802,
-            [
-              2091804,
-              2091805
-            ],
-            2091807,
-            2095556,
-            [
-              2099812,
-              2099814
-            ]
-          ],
           "_copas_excluidas": [
-            1939031,
-            1939046,
-            1939435,
-            2008417,
-            2008418,
-            2008419,
-            2008420,
             2008421,
             2008422,
-            2059780
+            2008417,
+            2008418,
+            2008419
           ]
+        },
+        "2022-23": {
+          "partidos": {
+            "regular": [
+              [
+                2143604,
+                2143624
+              ],
+              [
+                2143626,
+                2143676
+              ],
+              [
+                2143678,
+                2143680
+              ],
+              [
+                2143682,
+                2143703
+              ],
+              [
+                2143705,
+                2143784
+              ],
+              [
+                2241905,
+                2242004
+              ]
+            ],
+            "playoffs": [
+              [
+                2270063,
+                2270078
+              ],
+              2272647,
+              2272654,
+              [
+                2273153,
+                2273163
+              ],
+              [
+                2273177,
+                2273181
+              ],
+              [
+                2273186,
+                2273189
+              ],
+              2274803,
+              [
+                2274825,
+                2274826
+              ],
+              [
+                2275429,
+                2275430
+              ],
+              2275526,
+              [
+                2275731,
+                2275737
+              ],
+              [
+                2276265,
+                2276269
+              ],
+              2277053,
+              2277059,
+              [
+                2277249,
+                2277251
+              ],
+              2277253,
+              2278050,
+              2278369,
+              [
+                2278470,
+                2278472
+              ],
+              [
+                2279526,
+                2279529
+              ],
+              [
+                2280766,
+                2280768
+              ]
+            ]
+          },
+          "_copas_excluidas": [
+            2216524,
+            2216525,
+            2216527,
+            2216520,
+            2216521,
+            2216523
+          ]
+        },
+        "2023-24": {
+          "partidos": {
+            "regular": [
+              [
+                2308248,
+                2308420
+              ],
+              [
+                2308422,
+                2308429
+              ],
+              2308431,
+              [
+                2415249,
+                2415358
+              ]
+            ],
+            "playoffs": [
+              [
+                2443756,
+                2443771
+              ],
+              2445091,
+              2445104,
+              [
+                2445192,
+                2445195
+              ],
+              [
+                2445338,
+                2445345
+              ],
+              2446276,
+              2446285,
+              2446637,
+              2447374,
+              2447378,
+              2447740,
+              [
+                2447742,
+                2447745
+              ],
+              2448204,
+              2449041,
+              2449813,
+              2451461,
+              2451463
+            ]
+          },
+          "_copas_excluidas": [
+            2388290,
+            2388291,
+            2388289,
+            2388286,
+            2388287,
+            2388285,
+            2401120,
+            2401121,
+            2401118,
+            2401119,
+            2424276,
+            2428637
+          ]
+        },
+        "2024-25": {
+          "partidos": {
+            "regular": [
+              [
+                2508185,
+                2508206
+              ],
+              [
+                2508208,
+                2508384
+              ],
+              [
+                2508386,
+                2508526
+              ],
+              2637231
+            ],
+            "playoffs": [
+              [
+                2658896,
+                2658907
+              ],
+              2660279,
+              2660282,
+              [
+                2660285,
+                2660286
+              ],
+              [
+                2660288,
+                2660289
+              ],
+              [
+                2660299,
+                2660303
+              ],
+              [
+                2660873,
+                2660875
+              ],
+              [
+                2662998,
+                2663000
+              ],
+              [
+                2663222,
+                2663224
+              ],
+              [
+                2663248,
+                2663249
+              ],
+              [
+                2663813,
+                2663815
+              ],
+              2664865
+            ]
+          },
+          "_copas_excluidas": [
+            2617640,
+            2624831,
+            2624829,
+            2642168
+          ]
+        },
+        "2025-26": {
+          "partidos": {
+            "regular": [
+              2508207,
+              [
+                2688913,
+                2689218
+              ],
+              2707041,
+              2707088
+            ],
+            "playoffs": [
+              [
+                2847669,
+                2847680
+              ],
+              [
+                2850254,
+                2850256
+              ],
+              [
+                2850276,
+                2850279
+              ],
+              2850994,
+              [
+                2850997,
+                2850999
+              ],
+              [
+                2851001,
+                2851002
+              ],
+              [
+                2852146,
+                2852147
+              ],
+              2852156,
+              2852171,
+              2853585,
+              [
+                2853587,
+                2853589
+              ],
+              [
+                2854002,
+                2854003
+              ],
+              2854007,
+              2855278,
+              2855645,
+              2857370
+            ]
+          },
+          "_copas_excluidas": [
+            2789999,
+            2790000,
+            2790001
+          ]
+        },
+        "2026-27": {
+          "partidos": {
+            "regular": [
+              2873600,
+              [
+                2873602,
+                2873607
+              ],
+              2873609,
+              [
+                2873611,
+                2873616
+              ],
+              [
+                2873618,
+                2873620
+              ],
+              [
+                2873623,
+                2873624
+              ],
+              [
+                2873626,
+                2873630
+              ],
+              2873633,
+              2873636
+            ],
+            "playoffs": []
+          },
+          "en_curso": true,
+          "fecha_corte": "2026-10-29",
+          "equipos": []
         }
       }
     },
