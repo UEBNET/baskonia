@@ -1,6 +1,6 @@
 {
   "temporada": "2020-21",
-  "generado": "2026-10-31T22:42:47.079592+00:00",
+  "generado": "2026-10-31T22:48:05.036203+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -55,7 +55,7 @@
     "cba": {
       "nombre": "Chinese Basketball Association",
       "archivo": "ligas/cba.csv",
-      "fecha_extraccion": "2026-10-31T22:18:06.425686+00:00",
+      "fecha_extraccion": "2026-10-31T22:40:14.265338+00:00",
       "fases": {
         "playoffs": 247,
         "regular": 433,
