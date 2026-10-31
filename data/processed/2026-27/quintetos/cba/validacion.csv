@@ -1,0 +1,56 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+100110655,regular,32,24,5.0,1.4,0.0,0,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110666,regular,39,24,5.0,1.4,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110677,regular,37,24,2.0,1.0,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110682,regular,48,24,3.0,1.3,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110691,regular,22,24,2.0,0.7,0.0,0,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110698,regular,41,24,7.0,1.9,0.0,0,1,quinteto_periodo_arrastrado=1,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110709,regular,36,24,3.0,1.2,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110717,regular,44,24,4.0,1.3,2.0,4,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110724,regular,34,24,9.0,2.7,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110729,regular,37,24,9.0,1.9,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110739,regular,30,24,87.0,8.5,2.0,2,5,añadido_por_actuar=1;no_cinco_4=2;no_cinco_6=1;quinteto_periodo_arrastrado=1,True,True,True,False,True,"7 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110746,regular,43,24,4.0,1.0,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110757,regular,28,24,2.0,1.1,0.0,0,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110763,regular,32,24,6.0,2.1,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110768,regular,30,24,2.0,0.6,0.0,0,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110776,regular,36,24,15.0,3.9,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110783,regular,39,24,6.0,1.3,0.0,0,0,,True,True,True,False,True,"3 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110787,regular,37,24,7.0,2.1,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110794,regular,37,24,20.0,3.3,3.0,2,0,,True,True,True,False,True,"7 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110801,regular,38,24,63.0,9.1,1.0,2,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110820,regular,26,24,14.0,2.2,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110827,regular,29,24,4.0,1.4,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110831,regular,27,24,2.0,1.3,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110839,regular,34,24,3.0,1.1,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110842,regular,34,24,2.0,1.0,0.0,0,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110854,regular,39,24,2.0,1.1,0.0,0,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110861,regular,39,24,3.0,1.2,0.0,0,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110869,regular,39,24,3.0,1.0,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110877,regular,46,24,5.0,1.7,0.0,0,0,,True,True,True,False,True,"lado 1: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | lado 2: rebotes OF/DEF del jugada a jugada (Sina no cuadra) | 5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110888,regular,32,24,2.0,1.0,0.0,0,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110894,regular,30,24,14.0,2.3,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110899,regular,27,24,10.0,1.7,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110903,regular,24,24,2.0,0.7,0.0,0,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110911,regular,28,23,2.0,0.9,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110918,regular,30,24,2.0,1.2,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110925,regular,40,24,11.0,2.1,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110929,regular,38,24,3.0,1.3,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110935,regular,29,24,2.0,0.9,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110941,regular,51,24,229.0,26.6,18.0,6,15,añadido_por_actuar=1;no_cinco_4=5;no_cinco_6=9,False,True,True,False,True,"7 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100110943,regular,37,24,6.0,2.0,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110944,regular,30,24,5.0,2.2,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110946,regular,28,24,3.0,1.0,0.0,0,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110949,regular,43,24,5.0,1.4,2.0,4,1,quinteto_periodo_arrastrado=1,True,True,True,False,True,"8 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110951,regular,30,24,2.0,0.9,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110953,regular,43,24,69.0,11.6,4.0,6,1,no_cinco_4=1,False,True,True,False,True,"10 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110955,regular,47,24,7.0,2.0,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110957,regular,30,24,12.0,4.2,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110958,regular,30,24,2.0,0.6,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110961,regular,34,24,16.0,3.1,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110963,regular,40,24,4.0,1.3,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110964,regular,30,24,2.0,0.8,0.0,0,0,,True,True,True,False,True,"4 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110965,regular,34,24,4.0,1.1,0.0,0,0,,True,True,True,False,True,"5 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110966,regular,41,24,5.0,1.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True
+100110967,regular,38,24,136.0,12.8,5.0,2,0,,False,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",False
+100110968,regular,29,24,3.0,0.9,0.0,0,0,,True,True,True,False,True,"6 cambios de quinteto sin anotar en QQ, reconstruidos",True

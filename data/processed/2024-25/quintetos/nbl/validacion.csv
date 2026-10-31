@@ -31,8 +31,8 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 42e2663c-4114-11f0-8827-13101ae268c9,regular,45,25,2.0,0.8,0.0,0,0,,True,True,True,True,True,,True
 41244d90-4114-11f0-b568-13101ae268c9,regular,33,23,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
 415742ee-4114-11f0-a72c-13101ae268c9,regular,42,25,19.0,2.1,0.0,0,0,,True,True,True,True,True,,True
-41929961-4114-11f0-b397-13101ae268c9,regular,0,24,2039.0,1200.8,22.0,19,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
-41cfff7f-4114-11f0-946d-13101ae268c9,regular,0,23,2513.0,1588.8,11.0,17,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+41929961-4114-11f0-b397-13101ae268c9,regular,32,24,1.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+41cfff7f-4114-11f0-946d-13101ae268c9,regular,37,23,27.0,3.5,0.0,0,4,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
 42099a6f-4114-11f0-9d74-13101ae268c9,regular,39,25,2.0,0.6,0.0,0,0,,True,True,True,True,True,,True
 421ce175-4114-11f0-8ac5-13101ae268c9,regular,37,24,2.0,0.3,0.0,0,0,,True,True,True,True,True,,True
 42787f6c-4114-11f0-8517-13101ae268c9,regular,31,24,20.0,2.3,0.0,0,0,,True,True,True,True,True,,True
@@ -59,10 +59,10 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 4ba3243a-4114-11f0-9b0f-514aa82183c3,regular,49,26,13.0,1.7,1.0,2,0,,True,True,True,True,True,,True
 4bda5825-4114-11f0-a557-514aa82183c3,regular,43,24,1.0,0.6,0.0,0,0,,True,True,True,True,True,,True
 4bc83d81-4114-11f0-87ad-514aa82183c3,regular,38,26,2.0,0.6,1.0,2,0,,True,True,True,True,True,,True
-4c129a00-4114-11f0-a09b-514aa82183c3,regular,0,25,1697.0,1000.5,40.0,24,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+4c129a00-4114-11f0-a09b-514aa82183c3,regular,42,25,1.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 4c23ef91-4114-11f0-9679-514aa82183c3,regular,41,24,2.0,0.6,0.0,0,0,,True,True,True,True,True,,True
-4c4a5452-4114-11f0-913f-514aa82183c3,regular,0,24,2074.0,1044.0,28.0,23,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
-4c6e5d98-4114-11f0-922b-514aa82183c3,regular,0,24,1894.0,1200.6,21.0,19,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+4c4a5452-4114-11f0-913f-514aa82183c3,regular,43,24,600.0,51.1,6.0,4,19,actua_fuera_de_pista=2;añadido_por_actuar=1;no_cinco_4=10;no_cinco_6=2;no_cinco_7=3;sale_sin_estar=1,False,True,True,True,True,,False
+4c6e5d98-4114-11f0-922b-514aa82183c3,regular,48,24,2.0,0.6,0.0,0,0,,True,True,True,True,True,,True
 4c91752a-4114-11f0-b4bd-514aa82183c3,regular,41,22,17.0,2.6,2.0,2,0,,True,True,True,True,True,,True
 4cb9ea6a-4114-11f0-a5f9-514aa82183c3,regular,36,25,1.0,0.7,1.0,8,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 4ccee367-4114-11f0-b2a3-514aa82183c3,regular,43,24,2.0,0.6,0.0,0,0,,True,True,True,True,True,,True
@@ -87,7 +87,7 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 4e7c7093-4114-11f0-80ce-514aa82183c3,regular,35,25,1.0,0.6,0.0,0,0,,True,True,True,True,True,,True
 4ea629aa-4114-11f0-8afa-514aa82183c3,regular,36,24,1.0,0.7,1.0,2,0,,True,True,True,True,True,,True
 4ec7d564-4114-11f0-81ba-514aa82183c3,regular,37,24,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
-4d9e8124-4114-11f0-94fa-514aa82183c3,regular,0,24,2030.0,1091.3,27.0,19,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+4d9e8124-4114-11f0-94fa-514aa82183c3,regular,45,24,5.0,1.0,3.0,2,0,,True,True,True,True,True,,True
 4d6ea5e8-4114-11f0-a7ae-514aa82183c3,regular,45,24,8.0,1.4,2.0,8,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 4dca4a13-4114-11f0-8f89-514aa82183c3,regular,32,23,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
 4df3387f-4114-11f0-bb66-514aa82183c3,regular,42,23,1.0,0.7,0.0,0,0,,True,True,True,True,True,,True
@@ -114,10 +114,10 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 4f8ab71e-4114-11f0-aa83-514aa82183c3,regular,32,24,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
 4fac5ef0-4114-11f0-a2b2-514aa82183c3,regular,32,23,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
 4fcf9bc5-4114-11f0-9fc7-514aa82183c3,regular,41,21,1.0,0.3,0.0,0,0,,True,True,True,True,True,,True
-4ff16df2-4114-11f0-be4e-514aa82183c3,regular,0,24,2111.0,1333.8,21.0,18,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+4ff16df2-4114-11f0-be4e-514aa82183c3,regular,25,24,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
 5014cf27-4114-11f0-bc11-514aa82183c3,regular,33,22,1.0,0.6,0.0,0,0,,True,True,True,True,True,,True
 50369d51-4114-11f0-85e6-514aa82183c3,regular,34,25,1.0,0.4,0.0,0,0,,True,True,True,True,True,,True
-50478a00-4114-11f0-8123-514aa82183c3,regular,0,24,1979.0,1044.0,24.0,21,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+50478a00-4114-11f0-8123-514aa82183c3,regular,38,24,1.0,0.5,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
 507a7d9c-4114-11f0-839a-514aa82183c3,regular,35,24,1.0,0.3,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 509ba392-4114-11f0-9a06-514aa82183c3,regular,36,24,1.0,0.6,0.0,0,0,,True,True,True,True,True,,True
 50bd3649-4114-11f0-ac49-514aa82183c3,regular,28,24,1.0,0.6,0.0,0,0,,True,True,True,True,True,,True
@@ -142,10 +142,10 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 52235751-4114-11f0-929f-514aa82183c3,regular,36,21,13.0,1.7,4.0,14,0,,False,True,True,True,True,,True
 51b0729c-4114-11f0-ba6d-514aa82183c3,regular,33,25,1.0,0.6,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 51c197cc-4114-11f0-86f4-514aa82183c3,regular,31,24,1.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
-51ecb8ef-4114-11f0-954d-514aa82183c3,regular,0,24,1916.0,1200.4,23.0,19,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
-520eea13-4114-11f0-a21b-514aa82183c3,regular,0,25,1886.0,1043.9,22.0,23,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+51ecb8ef-4114-11f0-954d-514aa82183c3,regular,33,24,181.0,27.4,2.0,4,11,actua_fuera_de_pista=5;no_cinco_4=1;no_cinco_6=4;quinteto_inicial_de_titulares=1,False,True,True,True,True,,False
+520eea13-4114-11f0-a21b-514aa82183c3,regular,41,25,1.0,0.4,0.0,0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
 5236830d-4114-11f0-97d7-514aa82183c3,playoffs,42,25,1.0,0.4,0.0,0,0,,True,True,True,True,True,,True
-5249ff7d-4114-11f0-bb17-514aa82183c3,playoffs,0,23,2276.0,1333.8,14.0,17,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+5249ff7d-4114-11f0-bb17-514aa82183c3,playoffs,29,23,2.0,0.5,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
 525dfa46-4114-11f0-bdf0-514aa82183c3,playoffs,32,25,1.0,0.4,0.0,0,0,,True,True,True,True,True,,True
 52704816-4114-11f0-b853-514aa82183c3,playoffs,35,25,1.0,0.7,0.0,0,0,,True,True,True,True,True,,True
 5643fc75-4114-11f0-9463-eb47bace4bab,playoffs,89,25,601.0,286.1,44.0,20,214,actua_fuera_de_pista=126;añadido_por_actuar=3;no_cinco_4=3;no_cinco_6=19;no_cinco_7=15;sale_sin_estar=48,False,True,True,True,True,,False

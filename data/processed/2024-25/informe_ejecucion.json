@@ -2,37 +2,37 @@
   "version": "1.1.0",
   "temporada": "2024-25",
   "modo": "ejecutar",
-  "inicio": "2026-10-31T18:22:54.013021+00:00",
-  "fin": "2026-10-31T18:28:52.815277+00:00",
+  "inicio": "2026-10-31T19:12:32.338460+00:00",
+  "fin": "2026-10-31T19:13:00.394017+00:00",
   "salida_combinada": "/home/user/baskonia/data/processed/2024-25/ligas",
   "ligas": [
     {
-      "liga": "vtb",
+      "liga": "nbl",
       "estado": "ok",
-      "jugadores": 217,
-      "equipos": 11,
+      "jugadores": 157,
+      "equipos": 10,
       "filas_por_fase": {
-        "total": 217,
-        "regular": 215,
-        "playoffs": 127
+        "regular": 157,
+        "total": 157,
+        "playoffs": 78
       },
       "quintetos": {
         "estado": "ok",
-        "partidos": 301,
+        "partidos": 159,
         "partidos_nuevos": 0,
         "errores": [],
-        "quintetos": 5042,
-        "parejas": 1603,
-        "validos_pct": 97.3,
-        "partidos_con_quintetos": 301,
-        "directorio": "/home/user/baskonia/data/processed/2024-25/quintetos/vtb"
+        "quintetos": 2528,
+        "parejas": 978,
+        "validos_pct": 95.0,
+        "partidos_con_quintetos": 159,
+        "directorio": "/home/user/baskonia/data/processed/2024-25/quintetos/nbl"
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/vtb/2024-25/vtb_2024-25_20261031T182254Z.json.gz",
-      "fecha_extraccion": "2026-10-31T18:22:54.013223+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2024-25/ligas/vtb.csv",
+      "archivo_bruto": "/home/user/baskonia/data/raw/nbl/2024-25/nbl_2024-25_20261031T191234Z.json.gz",
+      "fecha_extraccion": "2026-10-31T19:12:34.583050+00:00",
+      "archivo_salida": "/home/user/baskonia/data/processed/2024-25/ligas/nbl.csv",
       "columnas_con_datos": 277,
       "columnas_vacias": [
-        "posicion",
+        "altura_cm",
         "peso_kg",
         "edad",
         "fecha_nacimiento",
@@ -238,14 +238,14 @@
       ],
       "errores": [],
       "notas": [
-        "[regular] fase regular: 264 partidos en origen",
-        "[regular] 264 partidos agregados",
-        "[playoffs] fase playoffs: 37 partidos en origen",
-        "[playoffs] 37 partidos agregados",
-        "[total] 301 boxscores FIBA LiveStats; 0 de play-out/clasificación excluidos; 0 reutilizados",
-        "[total] 301 partidos agregados"
+        "[regular] fase regular: 145 partidos en origen",
+        "[regular] 145 partidos agregados",
+        "[playoffs] fase playoffs: 14 partidos en origen",
+        "[playoffs] 14 partidos agregados",
+        "[total] 159 boxscores FIBA LiveStats; 0 de play-out/clasificación excluidos; 148 reutilizados",
+        "[total] 159 partidos agregados"
       ],
-      "duracion_s": 356.71
+      "duracion_s": 25.62
     }
   ]
 }

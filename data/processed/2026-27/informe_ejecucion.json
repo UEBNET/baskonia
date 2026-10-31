@@ -2,39 +2,37 @@
   "version": "1.1.0",
   "temporada": "2026-27",
   "modo": "ejecutar",
-  "inicio": "2026-10-31T18:17:09.103055+00:00",
-  "fin": "2026-10-31T18:17:53.106135+00:00",
+  "inicio": "2026-10-31T19:06:35.917498+00:00",
+  "fin": "2026-10-31T19:14:49.030545+00:00",
   "salida_combinada": "/home/user/baskonia/data/processed/2026-27/ligas",
   "ligas": [
     {
-      "liga": "vtb",
+      "liga": "cba",
       "estado": "ok",
-      "jugadores": 158,
-      "equipos": 11,
+      "jugadores": 278,
+      "equipos": 20,
       "filas_por_fase": {
-        "regular": 158,
-        "total": 158
+        "regular": 278,
+        "total": 278
       },
       "quintetos": {
         "estado": "ok",
-        "partidos": 35,
+        "partidos": 55,
         "partidos_nuevos": 0,
         "errores": [],
-        "quintetos": 1061,
-        "parejas": 880,
-        "validos_pct": 100.0,
-        "partidos_con_quintetos": 35,
-        "directorio": "/home/user/baskonia/data/processed/2026-27/quintetos/vtb"
+        "quintetos": 1411,
+        "parejas": 1410,
+        "validos_pct": 94.5,
+        "partidos_con_quintetos": 55,
+        "directorio": "/home/user/baskonia/data/processed/2026-27/quintetos/cba"
       },
-      "archivo_bruto": "/home/user/baskonia/data/raw/vtb/2026-27/vtb_2026-27_20261031T181709Z.json.gz",
-      "fecha_extraccion": "2026-10-31T18:17:09.103302+00:00",
-      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/vtb.csv",
-      "columnas_con_datos": 238,
+      "archivo_bruto": "/home/user/baskonia/data/raw/cba/2026-27/cba_2026-27_20261031T190635Z.json.gz",
+      "fecha_extraccion": "2026-10-31T19:06:35.917800+00:00",
+      "archivo_salida": "/home/user/baskonia/data/processed/2026-27/ligas/cba.csv",
+      "columnas_con_datos": 240,
       "columnas_vacias": [
-        "posicion",
         "peso_kg",
         "edad",
-        "fecha_nacimiento",
         "nacionalidad",
         "dunks",
         "fastbreaks",
@@ -276,12 +274,12 @@
       ],
       "errores": [],
       "notas": [
-        "[regular] fase regular: 35 partidos en origen",
-        "[regular] 35 partidos agregados",
-        "[total] 35 boxscores FIBA LiveStats; 0 de play-out/clasificación excluidos; 0 reutilizados",
-        "[total] 35 partidos agregados"
+        "[regular] fase regular: 55 partidos en origen",
+        "[regular] 55 partidos agregados",
+        "[total] 55 partidos QQ; 55 con rebotes OF/DEF de Sina en los dos equipos; 55 con jugada a jugada",
+        "[total] 55 partidos agregados"
       ],
-      "duracion_s": 42.83
+      "duracion_s": 491.89
     }
   ]
 }

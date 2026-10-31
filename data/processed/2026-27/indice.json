@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-10-31T18:17:53.024580+00:00",
+  "generado": "2026-10-31T19:14:48.943426+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -45,6 +45,15 @@
       "fases": {
         "regular": 255,
         "total": 255
+      }
+    },
+    "cba": {
+      "nombre": "Chinese Basketball Association",
+      "archivo": "ligas/cba.csv",
+      "fecha_extraccion": "2026-10-31T19:06:35.917800+00:00",
+      "fases": {
+        "regular": 278,
+        "total": 278
       }
     },
     "eurocup": {
