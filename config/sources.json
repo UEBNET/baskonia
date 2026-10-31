@@ -32,7 +32,8 @@
       "www.fiba.basketball": 0.3,
       "fibalivestats.dcd.shared.geniussports.com": 0.05,
       "baloncestoenvivo.feb.es": 1.0,
-      "intrafeb.feb.es": 1.0
+      "intrafeb.feb.es": 1.0,
+      "prod.rosetta.nbl.com.au": 0.3
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -1492,6 +1493,25 @@
       "_grupos": "Tercera FEB/Liga EBA se juega en grupos (A-A, A-B, … E-B): el grupo es un atributo del partido, no una liga aparte.",
       "temporada_inicial": "2023-24",
       "_temporada_inicial": "Primera temporada de esta liga en el proyecto (decisión del usuario, 22-10-2026); las anteriores quedan fuera de alcance: historico/ejecutar no las descargan ni procesan."
+    },
+    "nbl": {
+      "adaptador": "nbl",
+      "activa": true,
+      "nombre": "National Basketball League (NBL)",
+      "pais": "Australia",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://prod.rosetta.nbl.com.au (API pública de nbl.com.au: calendario por temporada y partido con boxscore + jugada a jugada; modelo de datos de Genius Sports)",
+      "plazas_playoffs": 0,
+      "partidos_por_paquete": 400,
+      "_fases": "match_type regular = temporada regular (la NBL Cup se juega dentro de ella); final = playoffs (play-in + eliminatorias + Gran Final). Partidos sin match_type (exhibiciones NBAxNBL) fuera.",
+      "estado_verificacion": "verificado con datos reales (2020-21, 2024-25, 2025-26 y 2026-27)",
+      "pbp": "nbl",
+      "temporadas": {
+        "2026-27": {
+          "fecha_corte": "2026-10-29"
+        }
+      }
     }
   },
   "identidad": {

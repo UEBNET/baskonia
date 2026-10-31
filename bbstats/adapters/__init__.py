@@ -17,6 +17,7 @@ from .html_table import HtmlTableAdapter
 from .lba import LBAAdapter
 from .lnb import LNBAdapter
 from .nba import GLeagueAdapter, NBAAdapter
+from .nbl import NBLAdapter
 
 ADAPTERS: dict[str, type[BaseAdapter]] = {
     "euroleague": EuroleagueAdapter,
@@ -31,6 +32,7 @@ ADAPTERS: dict[str, type[BaseAdapter]] = {
     "lba": LBAAdapter,
     "bbl": BBLAdapter,
     "lnb": LNBAdapter,
+    "nbl": NBLAdapter,
 }
 
 
