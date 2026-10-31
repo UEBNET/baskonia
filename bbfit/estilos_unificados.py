@@ -993,11 +993,15 @@ def mapa_unificado(eq: pd.DataFrame, jg: pd.DataFrame, ids: list[str]) -> tuple[
     Zb = lda.transform(base[zc].to_numpy(float))
     esc = float(np.percentile(np.abs(Zb), 98)) or 1.0       # ±1 ≈ el 98 % de los jugadores
     def proy(df):
+        """Rasgos ausentes (p. ej. zonas de tiro en la CBA, sin coordenadas) = 0, la media de su liga en esta escala
+        (z por rangos dentro de liga-temporada), si hay al menos `min_rasgos_observados` (los mismos que exige la
+        asignación del estilo); con menos, sin posición."""
         X = df[zc].to_numpy(float)
-        ok = np.isfinite(X).all(1)
+        n_obs = np.isfinite(X).sum(1)
+        ok = n_obs >= int(cfg().get("datos", {}).get("min_rasgos_observados", len(zc)))
         out = np.full((len(df), 3), np.nan)
         if ok.any():
-            out[ok] = lda.transform(X[ok]) / esc
+            out[ok] = lda.transform(np.nan_to_num(X[ok], nan=0.0)) / esc
         return out
     Zb = Zb / esc
     centros, covs = [], []
