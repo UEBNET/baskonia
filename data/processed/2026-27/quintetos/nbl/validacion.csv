@@ -1,0 +1,46 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+36dbeb55-58ad-11f1-a69b-43a6b5595d3e,regular,33,23,11.0,2.1,0.0,0,0,,True,True,True,True,True,,True
+36e0e11c-58ad-11f1-93d0-e78395b5c13c,regular,40,24,1.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+3700706c-58ad-11f1-ae9e-a93048d70593,regular,36,23,1.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+36e225dc-58ad-11f1-b0d4-e94b8c35b649,regular,30,23,1.0,0.6,0.0,0,0,,True,True,True,True,True,,True
+36e80b8c-58ad-11f1-ab03-2572c13c410b,regular,42,23,2.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+36e7aa3c-58ad-11f1-b88d-1138b8cb68ba,regular,47,24,58.0,7.2,0.0,0,0,,True,True,True,True,True,,True
+36e0818b-58ad-11f1-89d2-fb9d3a8baf78,regular,40,22,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+3705a1db-58ad-11f1-af46-11cc539397b9,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+36e93c3b-58ad-11f1-8215-c5dc2cf09b1f,regular,32,30,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+36f361e7-58ad-11f1-a449-59142d8bd7d5,regular,40,23,1.0,0.4,0.0,0,0,,True,True,True,True,True,1/42 asistencias sin enlazar,True
+36f4ac8b-58ad-11f1-bf00-2942781e7154,regular,37,23,4.0,0.7,0.0,0,0,,True,True,True,True,True,2/42 asistencias sin enlazar,True
+36f8857c-58ad-11f1-9db7-b15d4ea6aed8,regular,25,31,1.0,0.1,0.0,0,0,,True,True,True,True,True,,True
+3715a95f-58ad-11f1-9621-61e4f965035a,regular,35,25,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+36f8c608-58ad-11f1-aa0e-2bbb920071b5,regular,30,23,2.0,0.8,0.0,0,0,,True,True,True,True,True,1/37 asistencias sin enlazar,True
+3718a994-58ad-11f1-add9-d98e318e0a1e,regular,38,30,20.0,4.2,0.0,0,0,,True,True,True,True,True,,True
+36f713cb-58ad-11f1-b8d2-f1316c48f9c2,regular,47,24,6.0,2.4,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+36f2e004-58ad-11f1-aa96-6775645a7b9a,regular,30,22,3.0,0.5,0.0,0,8,no_cinco_4=1;quinteto_inicial_de_titulares=2;sale_sin_estar=5,True,True,True,True,True,,True
+3724384a-58ad-11f1-bbdc-6d6f61141df2,regular,36,24,14.0,1.5,0.0,0,0,,True,True,True,True,True,,True
+37007b03-58ad-11f1-89e4-67a8251482c3,regular,42,24,14.0,1.5,0.0,0,2,quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+36fd4a13-58ad-11f1-9ca2-a9a6cbaba447,regular,40,25,2.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+36fdee6b-58ad-11f1-ac5d-19f7d3a187d4,regular,32,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+36fff950-58ad-11f1-8de3-37c9e1eacb09,regular,25,22,1.0,0.2,0.0,0,0,,True,True,True,True,True,,True
+36fc0fd6-58ad-11f1-8ed4-c9ba3efad88d,regular,31,24,8.0,2.7,0.0,0,0,,True,True,True,True,True,1/47 asistencias sin enlazar,True
+37023ff5-58ad-11f1-88e1-6f9744c8d3ab,regular,33,24,7.0,1.2,0.0,0,0,,True,True,True,True,True,,True
+36fe21e3-58ad-11f1-ba69-dd12ee8972e9,regular,27,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,1/47 asistencias sin enlazar,True
+3703c23b-58ad-11f1-bf9b-db7d6019155e,regular,43,23,2.0,0.2,0.0,0,0,,True,True,True,True,True,1/40 asistencias sin enlazar,True
+3705bd4d-58ad-11f1-8baa-ede76c1d904d,regular,34,23,3.0,0.9,0.0,0,0,,True,True,True,True,True,,True
+36fffdc1-58ad-11f1-b499-f3575d2dc39f,regular,28,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+36fb1b72-58ad-11f1-a2a4-7da015763581,regular,39,25,14.0,1.5,0.0,0,0,,True,True,True,True,True,,True
+3706e834-58ad-11f1-8519-a362560fc147,regular,33,24,2.0,0.4,0.0,0,0,,True,True,True,True,True,,True
+36fd506c-58ad-11f1-a57f-6d6fb61b331b,regular,45,25,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+3700bf63-58ad-11f1-89a0-03625b994063,regular,28,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+37082c14-58ad-11f1-8882-9bf90a853321,regular,40,25,0.0,0.0,0.0,0,2,quinteto_periodo_arrastrado=1;sale_sin_estar=1,True,True,True,True,True,,True
+3707e960-58ad-11f1-a8d4-819ec06531e4,regular,39,24,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+37085418-58ad-11f1-9e12-411a11259918,regular,31,24,3.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+371032f3-58ad-11f1-a72d-69c2b72ae0a9,regular,42,24,1.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+370d79db-58ad-11f1-8bd9-59a0fb078f66,regular,41,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+370e679e-58ad-11f1-acba-8b618b817e22,regular,27,24,3.0,0.7,0.0,0,0,,True,True,True,True,True,,True
+371130fd-58ad-11f1-aac7-754512109772,regular,37,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+37106a00-58ad-11f1-a7e9-87e414b8c2d5,regular,46,24,13.0,1.2,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+3711a017-58ad-11f1-b649-93b9302663c0,regular,36,24,3.0,0.3,0.0,0,0,,True,True,True,True,True,,True
+3714bc12-58ad-11f1-bdd2-69207a436dad,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+3716743f-58ad-11f1-8c04-1fa229f84a5e,regular,35,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,,True
+371aff1e-58ad-11f1-b4cd-0919017f2391,regular,27,23,1.0,0.5,0.0,0,0,,True,True,True,True,True,,True
+37196322-58ad-11f1-9f91-61e38b2284ba,regular,47,25,4.0,1.0,0.0,0,0,,True,True,True,True,True,,True
