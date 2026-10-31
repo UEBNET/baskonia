@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-31T17:54:33.046747+00:00",
+  "generado": "2026-10-31T17:57:37.796920+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
@@ -397,7 +397,7 @@
     },
     {
       "temporada": "2021-22",
-      "generado": "2026-10-18T10:50:00.195456+00:00",
+      "generado": "2026-10-31T17:57:37.597387+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -418,6 +418,11 @@
           "playoffs": 277,
           "regular": 465,
           "total": 478
+        },
+        "bnxt": {
+          "playoffs": 252,
+          "regular": 352,
+          "total": 354
         },
         "eurocup": {
           "playoffs": 169,

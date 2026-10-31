@@ -1,6 +1,6 @@
 {
   "temporada": "2021-22",
-  "generado": "2026-10-18T10:50:00.195456+00:00",
+  "generado": "2026-10-31T17:57:37.597387+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -40,6 +40,16 @@
         "playoffs": 277,
         "regular": 465,
         "total": 478
+      }
+    },
+    "bnxt": {
+      "nombre": "BNXT League",
+      "archivo": "ligas/bnxt.csv",
+      "fecha_extraccion": "2026-10-31T17:55:53.122254+00:00",
+      "fases": {
+        "playoffs": 252,
+        "regular": 352,
+        "total": 354
       }
     },
     "eurocup": {
