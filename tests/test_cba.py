@@ -1,5 +1,5 @@
 """CBA: nombres latinos, fases, Sina y traducción QQ (+ Sina) al data.json de FIBA LiveStats (to_fls)."""
-from bbstats.adapters.cba import (_chrono, fase_de, nombre_latino, parse_payload, sina_box, sina_schedule,
+from bbstats.adapters.cba import (_chrono, entrenador_latino, fase_de, nombre_latino, parse_payload, sina_box, sina_schedule,
                                   to_fls)
 from bbstats.config import minutos_partido
 from bbstats.lineups.sources.base import Ctx
@@ -89,6 +89,9 @@ def test_nombres_y_fases():
     assert nombre_latino("谢里夫·库珀", "S. COOPER")["name"] == "S. Cooper"
     assert nombre_latino("吉默·弗雷戴特", "Jimmer Fredette")["family"] == "Fredette"
     assert nombre_latino("乌戈·洛佩斯", None, {"乌戈·洛佩斯": "Hugo López"})["family"] == "López"
+    assert entrenador_latino("徐长锁")["name"] == "Xu Changsuo" and entrenador_latino("曾繁日")["name"] == "Zeng Fanri"
+    assert entrenador_latino("阿的江") == {"first": "", "family": "Adijiang", "name": "Adijiang", "tipo": "transliterado"}
+    assert entrenador_latino("马布里", {"马布里": "Stephon Marbury"})["family"] == "Marbury"
     assert fase_de("CBA常规赛第4轮") == "regular" and fase_de("CBA季后赛总决赛G1") == "playoffs"
     assert fase_de("CBA季前赛") is None and fase_de("CBA全明星赛") is None
 

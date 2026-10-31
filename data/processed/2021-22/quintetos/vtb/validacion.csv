@@ -1,0 +1,122 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+603779,regular,0,24,1696.0,1000.0,36.0,24.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603780,regular,0,24,2196.0,1142.9,26.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603784,regular,0,24,2270.0,1043.5,20.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603785,regular,0,24,1932.0,1043.5,28.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603787,regular,0,24,1923.0,1142.9,31.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603788,regular,0,24,2042.0,1043.5,20.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603789,regular,0,24,1714.0,1043.5,,,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603790,regular,0,24,2130.0,1200.0,9.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603791,regular,0,22,2227.0,1333.3,16.0,18.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603792,regular,0,22,2100.0,1142.9,17.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603794,regular,0,24,1986.0,1043.5,24.0,23.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603795,regular,0,23,1895.0,1090.9,27.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603796,regular,36,21,0.0,0.0,3.0,11.0,0,,True,True,True,True,True,,True
+603798,regular,38,23,0.0,0.0,3.0,11.0,3,actua_fuera_de_pista=3,True,True,True,True,True,,True
+603799,regular,0,24,2312.0,1200.0,17.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603801,regular,0,24,2005.0,1142.9,29.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603802,regular,0,24,2217.0,1142.9,13.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603803,regular,0,22,2368.0,1500.0,,,0,,False,False,False,False,False,la fuente no tiene jugada a jugada de este partido | +/- oficial incoherente: validado sólo por minutos,False
+603804,regular,0,20,1873.0,1333.3,23.0,18.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603805,regular,0,24,1919.0,1200.0,21.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603807,regular,32,21,0.0,0.0,4.0,12.0,0,,False,True,True,True,True,,True
+603808,regular,42,24,0.0,0.0,4.0,16.0,4,actua_fuera_de_pista=4,False,True,True,True,True,,True
+603819,regular,0,24,1701.0,1090.9,24.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603820,regular,32,22,0.0,0.0,1.0,4.0,0,,True,True,True,True,True,,True
+603821,regular,46,23,0.0,0.0,7.0,16.0,10,actua_fuera_de_pista=10,False,True,True,True,True,,True
+603823,regular,36,24,0.0,0.0,4.0,11.0,6,actua_fuera_de_pista=6,False,True,True,True,True,,True
+603824,regular,30,22,0.0,0.0,5.0,16.0,3,actua_fuera_de_pista=3,False,True,True,True,True,,True
+603825,regular,0,24,2101.0,1142.9,,,0,,False,False,False,False,False,la fuente no tiene jugada a jugada de este partido | +/- oficial incoherente: validado sólo por minutos,False
+603826,regular,0,23,3101.0,1650.0,14.0,17.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603827,regular,0,24,2145.0,1090.9,16.0,17.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603829,regular,0,24,1975.0,1200.0,13.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603830,regular,0,24,2341.0,1090.9,13.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603831,regular,33,24,0.0,0.0,6.0,19.0,4,actua_fuera_de_pista=4,False,True,True,True,True,,True
+603832,regular,40,24,511.0,25.5,6.0,10.0,11,añadido_por_actuar=1;no_cinco_4=8;quinteto_periodo_arrastrado=2,False,True,True,True,True,,False
+603833,regular,33,24,8.0,0.7,3.0,12.0,5,actua_fuera_de_pista=3;quinteto_periodo_arrastrado=2,True,True,True,True,True,,True
+603834,regular,38,22,0.0,0.0,5.0,14.0,0,,False,True,True,True,True,,True
+603835,regular,0,24,2400.0,1200.0,35.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603836,regular,40,23,6.0,0.5,5.0,18.0,3,actua_fuera_de_pista=3,False,True,True,True,True,,True
+603837,regular,46,22,155.0,44.1,5.0,20.0,3,actua_fuera_de_pista=3,False,True,True,True,True,,False
+603838,regular,0,24,2565.0,1285.7,22.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603841,regular,0,24,1931.0,1142.9,14.0,17.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603843,regular,0,24,1586.0,1043.5,34.0,23.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603844,regular,0,24,2115.0,1090.9,17.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603845,regular,0,23,2095.0,1090.9,20.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603846,regular,38,21,0.0,0.0,2.0,10.0,0,,True,True,True,True,True,1/30 asistencias sin enlazar,True
+603847,regular,44,23,234.0,36.1,,,6,no_cinco_6=1;no_cinco_7=3;quinteto_periodo_arrastrado=1;sale_sin_estar=1,False,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,False
+603849,regular,43,22,1.0,0.1,2.0,13.0,0,,True,True,True,True,True,,True
+603850,regular,45,24,0.0,0.0,2.0,10.0,4,actua_fuera_de_pista=4,True,True,True,True,True,,True
+603851,regular,0,24,2572.0,1285.7,15.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603852,regular,0,23,2013.0,1200.0,37.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603853,regular,0,24,2191.0,1350.0,13.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603854,regular,0,24,1842.0,1090.9,25.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603855,regular,0,24,1902.0,1090.9,19.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603857,regular,0,23,1913.0,1200.0,14.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603858,regular,41,23,14.0,1.5,4.0,9.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,False,True,True,True,True,,True
+603860,regular,30,24,105.0,19.2,2.0,4.0,0,,False,True,True,True,True,,True
+603861,regular,37,22,967.0,87.4,9.0,12.0,19,actua_fuera_de_pista=2;añadido_por_actuar=2;no_cinco_4=10;no_cinco_6=3;quinteto_periodo_arrastrado=2,False,True,True,True,True,,False
+603873,regular,0,24,1958.0,1043.5,38.0,23.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603874,regular,0,23,2265.0,1200.0,,,0,,False,False,False,False,False,la fuente no tiene jugada a jugada de este partido | +/- oficial incoherente: validado sólo por minutos,False
+603875,regular,0,24,1715.0,1000.0,21.0,24.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603876,regular,43,23,0.0,0.0,4.0,11.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,True
+603877,regular,33,23,0.0,0.0,5.0,19.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,True
+603878,regular,48,22,609.0,27.7,15.0,21.0,13,actua_fuera_de_pista=4;no_cinco_4=9,False,True,True,True,True,,False
+603880,regular,45,24,4.0,0.4,2.0,14.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+603882,regular,35,23,0.0,0.0,7.0,15.0,6,actua_fuera_de_pista=6,False,True,True,True,True,,True
+603883,regular,31,22,1.0,0.1,5.0,12.0,0,,False,True,True,True,True,,True
+603884,regular,25,24,0.0,0.0,3.0,10.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+603885,regular,38,23,0.0,0.0,4.0,17.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,True
+603886,regular,35,24,0.0,0.0,3.0,11.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+603887,regular,0,24,1468.0,1043.5,21.0,23.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603888,regular,0,24,2400.0,1200.0,28.0,18.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603889,regular,0,24,3197.0,1736.8,11.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603891,regular,0,24,1402.0,1000.0,28.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603892,regular,0,24,1993.0,1142.9,24.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603893,regular,39,23,514.0,23.4,9.0,14.0,14,actua_fuera_de_pista=3;no_cinco_4=9;quinteto_periodo_arrastrado=2,False,True,True,True,True,,False
+603894,regular,32,22,0.0,0.0,3.0,14.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+603895,regular,37,23,0.0,0.0,4.0,14.0,0,,False,True,True,True,True,,True
+603896,regular,0,21,1888.0,1200.0,37.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603897,regular,0,24,2002.0,1090.9,24.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603898,regular,0,21,2125.0,1200.0,20.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603900,regular,0,24,2350.0,1200.0,27.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603901,regular,0,24,2239.0,1142.9,19.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603902,regular,43,23,0.0,0.0,4.0,13.0,5,actua_fuera_de_pista=5,False,True,True,True,True,,True
+603903,regular,39,24,0.0,0.0,2.0,10.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+603904,regular,0,23,2092.0,1263.2,7.0,16.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603905,regular,0,23,1874.0,1090.9,37.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603906,regular,0,24,1773.0,1090.9,22.0,20.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603907,regular,0,24,1945.0,1043.5,26.0,21.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603908,regular,0,24,1988.0,1000.0,20.0,22.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+603910,regular,0,24,2020.0,1090.9,13.0,19.0,0,,False,False,False,False,True,la fuente no tiene jugada a jugada de este partido,False
+640848,playoffs,29,22,0.0,0.0,4.0,15.0,1,actua_fuera_de_pista=1,False,True,True,True,True,,True
+640849,playoffs,25,22,0.0,0.0,4.0,15.0,3,actua_fuera_de_pista=3,False,True,True,True,True,,True
+640850,playoffs,37,22,0.0,0.0,7.0,19.0,4,actua_fuera_de_pista=4,False,True,True,True,True,,True
+640851,playoffs,41,23,0.0,0.0,5.0,12.0,4,actua_fuera_de_pista=4,False,True,True,True,True,,True
+640852,playoffs,36,23,0.0,0.0,1.0,4.0,0,,True,True,True,True,True,,True
+640853,playoffs,40,22,0.0,0.0,5.0,20.0,1,actua_fuera_de_pista=1,False,True,True,True,True,,True
+640854,playoffs,26,23,0.0,0.0,3.0,13.0,0,,True,True,True,True,True,,True
+640855,playoffs,29,23,496.0,22.5,11.0,10.0,8,no_cinco_4=6;quinteto_periodo_arrastrado=2,False,True,True,True,True,,False
+641031,playoffs,28,23,0.0,0.0,4.0,9.0,0,,False,True,True,True,True,,True
+641032,playoffs,36,24,0.0,0.0,4.0,16.0,4,actua_fuera_de_pista=4,False,True,True,True,True,,True
+641033,playoffs,32,22,0.0,0.0,4.0,19.0,0,,False,True,True,True,True,,True
+641034,playoffs,40,23,0.0,0.0,4.0,17.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,True
+642634,playoffs,40,24,0.0,0.0,4.0,11.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,True
+642635,playoffs,41,24,0.0,0.0,3.0,9.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+642636,playoffs,32,24,0.0,0.0,3.0,16.0,3,actua_fuera_de_pista=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,,True
+642637,playoffs,32,24,0.0,0.0,4.0,14.0,5,actua_fuera_de_pista=5,False,True,True,True,True,,True
+642638,playoffs,31,24,12.0,1.1,4.0,13.0,0,,False,True,True,True,True,,True
+642639,playoffs,33,24,6.0,0.5,2.0,12.0,0,,True,True,True,True,True,,True
+642640,playoffs,38,24,0.0,0.0,5.0,19.0,6,actua_fuera_de_pista=6,False,True,True,True,True,,True
+642642,playoffs,41,24,0.0,0.0,7.0,16.0,6,actua_fuera_de_pista=6,False,True,True,True,True,,True
+643892,playoffs,35,24,0.0,0.0,6.0,16.0,5,actua_fuera_de_pista=5,False,True,True,True,True,,True
+643893,playoffs,29,24,0.0,0.0,3.0,16.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
+643894,playoffs,35,24,0.0,0.0,6.0,18.0,4,actua_fuera_de_pista=4,False,True,True,True,True,,True
+643895,playoffs,39,24,0.0,0.0,8.0,17.0,2,actua_fuera_de_pista=1;quinteto_periodo_arrastrado=1,False,True,True,True,True,,True
+643896,playoffs,40,24,0.0,0.0,8.0,14.0,6,actua_fuera_de_pista=6,False,True,True,True,True,,True
+643897,playoffs,30,24,0.0,0.0,2.0,15.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+643898,playoffs,41,24,0.0,0.0,8.0,16.0,0,,False,True,True,True,True,,True
+643924,playoffs,34,24,0.0,0.0,5.0,15.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,True
+643925,playoffs,37,24,0.0,0.0,5.0,15.0,5,actua_fuera_de_pista=5,False,True,True,True,True,,True
+643926,playoffs,38,24,0.0,0.0,3.0,11.0,0,,True,True,True,True,True,,True
+643927,playoffs,39,24,0.0,0.0,5.0,15.0,2,actua_fuera_de_pista=2,False,True,True,True,True,,True

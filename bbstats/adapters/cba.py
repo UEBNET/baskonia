@@ -69,6 +69,14 @@ def fase_de(desc: str) -> str | None:
 _COMPOUND = ("欧阳", "司马", "上官", "诸葛", "东方", "皇甫", "尉迟", "公孙", "慕容", "长孙", "宇文", "司徒",
              "夏侯", "轩辕", "令狐", "端木", "独孤", "南宫", "西门", "百里", "呼延", "申屠", "太史", "澹台")
 
+# apellidos chinos frecuentes (para distinguir un nombre chino de una transliteración sin «·»: 阿的江, 乌戈…)
+_SURNAMES = set("王李张刘陈杨黄赵吴周徐孙马朱胡郭何高林罗郑梁谢宋唐许韩冯邓曹彭曾肖田董袁潘于蒋蔡余杜叶程苏魏吕丁任"
+                "沈姚卢姜崔钟谭陆汪范金石廖贾夏韦付方白邹孟熊秦邱江尹薛闫段雷侯龙史陶黎贺顾毛郝龚邵万钱严覃武戴"
+                "莫孔向汤常温康施文牛樊葛邢安齐易乔伍庞颜倪庄聂章鲁岳翟殷詹申欧耿关兰焦俞左柳甘祝包宁尚符舒阮柯"
+                "纪梅童凌毕单季裴霍涂成苗谷盛曲翁冉骆蓝路游辛靳管柴蒙鲍华喻祁蒲房滕屈饶解牟艾尤阳时穆农司卓古吉"
+                "缪简车项连芦麦褚娄窦戚岑景党宫费卜冷晏席卫米柏宗瞿桂全佟应臧闵苟邬边卞姬师和仇栾隋商刁沙荣巫寇"
+                "桑郎甄丛仲虞敖巩明佘池查麻苑迟邝逄彰偰容原")
+
 try:   # opcional: sin pypinyin los chinos quedan con el enName de QQ ("Zhao J.W.")
     from pypinyin import Style, pinyin as _pinyin
 except ImportError:  # pragma: no cover
@@ -88,6 +96,24 @@ def _py(ch: str, initial: str | None = None) -> str | None:
             if o[0] == initial.lower():
                 return o
     return opts[0]
+
+
+# lecturas de apellido y de nombre de pila de caracteres polifónicos (pypinyin da la lectura común)
+_SURNAME_PY = {"曾": "zeng", "单": "shan", "仇": "qiu", "解": "xie", "查": "zha", "区": "ou", "朴": "piao", "盖": "ge",
+               "乐": "yue", "缪": "miao", "覃": "qin", "翟": "zhai", "繁": "po", "种": "chong", "员": "yun"}
+_GIVEN_PY = {"长": "chang", "乐": "le", "重": "chong", "行": "xing", "的": "di"}
+
+
+def _py_phrase(cn: str) -> list[str] | None:
+    """Pinyin carácter a carácter con el diccionario de frases de pypinyin (polifónicos: 长锁 -> chang suo)."""
+    if _pinyin is None:
+        return None
+    sy = [(x[0] if x else "").replace("ü", "u").replace("v", "u")
+          for x in _pinyin(cn, style=Style.NORMAL, v_to_u=True)]
+    if sy:
+        sy[0] = _SURNAME_PY.get(cn[0], sy[0])
+        sy[1:] = [_GIVEN_PY.get(c, x) for c, x in zip(cn[1:], sy[1:])]
+    return sy if sy and all(re.fullmatch(r"[a-z]+", x) for x in sy) and len(sy) == len(cn) else None
 
 
 def _cap(s: str) -> str:
@@ -132,8 +158,11 @@ def nombre_latino(cn: str | None, en: str | None, override: dict | None = None) 
                 "tipo": "extranjero"}
     if cn and "·" not in cn and re.fullmatch(r"[一-鿿]{2,4}", cn):  # sin enName: pinyin directo
         n_fam = 2 if cn[:2] in _COMPOUND else 1
-        sy = [_py(c) for c in cn]
-        if all(sy):
+        sy = _py_phrase(cn)
+        if sy and n_fam == 1 and cn[0] not in _SURNAMES:      # transliteración (阿的江 -> Adijiang)
+            w = "".join(sy).capitalize()
+            return {"first": "", "family": w, "name": w, "tipo": "transliterado"}
+        if sy:
             family = "".join(sy[:n_fam]).capitalize()
             given = "".join(sy[n_fam:]).capitalize()
             return {"first": given, "family": family, "name": f"{family} {given}", "tipo": "chino"}
@@ -330,6 +359,95 @@ def _chrono(ids: list[str], evs: dict) -> list[str]:
                                      pos[i]))
 
 
+def _period_starts(pbp: list[dict], tm: dict, qq_period: dict, period_start: dict,
+                   opts: dict | None = None) -> tuple[list[dict], int]:
+    """QQ no anota los cambios entre periodos. Quinteto con que empieza cada periodo (desde el 2.º), por equipo:
+    los jugadores cuyo primer evento del periodo no es una entrada; si son menos de 5, se completa con los
+    cinco en pista que da QQ en el primer evento del periodo (desde 2025-26) y, si no, con los que acabaron el
+    periodo anterior. Si difiere del quinteto que se lleva, se insertan al inicio del periodo las salidas y
+    entradas que faltan (qualifier "entre_periodos"). La lista de QQ sola no basta: a veces no aplica un cambio.
+    Devuelve (pbp renumerado, nº de periodos-equipo corregidos)."""
+    opts = opts or {}
+    if not any(a["actionType"] == "substitution" for a in pbp):
+        for a in pbp:
+            a.pop("_on", None)
+        return pbp, 0
+    cur = {k: {n for n, p in tm[k]["pl"].items() if p.get("starter")} for k in ("1", "2")}
+
+    def per_of(a):
+        return a["period"] + (4 if a.get("periodType") == "OVERTIME" else 0)
+
+    out: list[dict] = []
+    n_fix = 0
+    i = 0
+    while i < len(pbp):
+        per = per_of(pbp[i])
+        j = i
+        while j < len(pbp) and per_of(pbp[j]) == per:
+            j += 1
+        block = pbp[i:j]
+        if per > 1:
+            ins = []
+            for k in ("1", "2"):
+                first: dict[str, str] = {}
+                for a in block:
+                    if str(a["tno"]) == k and a["pno"] and str(a["pno"]) not in first:
+                        first[str(a["pno"])] = "in" if (a["actionType"] == "substitution" and a["subType"] == "in") \
+                            else "act"
+                want = {n for n, v in first.items() if v == "act"}
+                if len(want) < 5:
+                    for pool in ((qq_period.get(per) or {}).get(k) or set(), cur[k]):
+                        for n in sorted(pool - want):
+                            if len(want) < 5 and first.get(n) != "in":
+                                want.add(n)
+                if len(want) != 5 or want == cur[k]:
+                    continue
+                gt = period_start.get(per) or block[0]["gt"]
+                base = {"period": block[0]["period"], "periodType": block[0].get("periodType"), "gt": gt,
+                        "s1": block[0].get("s1"), "s2": block[0].get("s2"), "success": 0, "tno": int(k),
+                        "actionType": "substitution", "qualifier": ["entre_periodos"]}
+                ins += [{**base, "subType": "out", "pno": int(n)} for n in sorted(cur[k] - want)]
+                ins += [{**base, "subType": "in", "pno": int(n)} for n in sorted(want - cur[k])]
+                n_fix += 1                      # (el quinteto que se lleva se actualiza al recorrer el bloque)
+            # tras el evento de inicio de periodo, si lo hay
+            lead = 1 if block and block[0]["actionType"] == "period" else 0
+            block = block[:lead] + ins + block[lead:]
+        for a in block:
+            k, n = str(a["tno"]), str(a["pno"])
+            on = (a.get("_on") or {}).get(k)
+            if a["actionType"] == "substitution" and a["tno"] and a["pno"]:
+                if opts.get("descartar", True) and (a["subType"] == "in" and n in cur[k]
+                                                    or a["subType"] == "out" and n not in cur[k]):
+                    continue                    # cambio imposible con el quinteto que se lleva: se descarta
+                (cur[k].add if a["subType"] == "in" else cur[k].discard)(n)
+            elif opts.get("reparar", True) and a["pno"] and k in cur and n not in cur[k] and on and n in on \
+                    and on != cur[k] \
+                    and a["actionType"] not in ("period", "game", "timeout"):
+                # actúa quien no está en pista y QQ sí lo tiene en pista: falta un cambio en el texto
+                base = {kk: a.get(kk) for kk in ("period", "periodType", "gt", "s1", "s2")}
+                for x in sorted(cur[k] - on):
+                    out.append({**base, "actionType": "substitution", "subType": "out", "success": 0, "tno": int(k),
+                                "pno": int(x), "qualifier": ["sin_anotar"]})
+                for x in sorted(on - cur[k]):
+                    out.append({**base, "actionType": "substitution", "subType": "in", "success": 0, "tno": int(k),
+                                "pno": int(x), "qualifier": ["sin_anotar"]})
+                cur[k] = set(on)
+                n_fix += 1
+            out.append(a)
+        i = j
+    renum = {}
+    for a in out:
+        a.pop("_on", None)
+    for n, a in enumerate(out, 1):
+        if "actionNumber" in a:
+            renum[a["actionNumber"]] = n
+        a["actionNumber"] = n
+    for a in out:
+        if a.get("previousAction") is not None:
+            a["previousAction"] = renum.get(a["previousAction"])
+    return out, n_fix
+
+
 def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> dict:
     """Partido del bruto (QQ + Sina) -> estructura del data.json de FIBA LiveStats (tm, pbp)."""
     cfg = cfg or {}
@@ -449,6 +567,8 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
         n = pno.get(pid, (k, "0"))[1] if pid else "0"
         a = {"actionNumber": len(pbp) + 1, "actionType": at, "subType": kw.pop("subType", ""),
              "success": kw.pop("success", 0), "tno": int(k) if k else 0, "pno": int(n), **e, **kw}
+        if cur_on:
+            a["_on"] = cur_on
         pbp.append(a)
         return a
 
@@ -470,22 +590,9 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
         if len(first_five) == 2:
             break
     cur = {k: set(v) for k, v in first_five.items()}
-    n_sync = 0
     period_start: dict[int, Any] = {}
-    played: set[int] = set()
-
-    def sync(e: dict, base: dict) -> None:
-        """Cambios que QQ no anota (entre periodos, o con nombres que no casan): si el quinteto en pista del
-        evento difiere del que se lleva, se emiten las salidas y entradas que faltan, antes del evento."""
-        nonlocal n_sync
-        for k, v in on_court(e).items():
-            if k in cur and v != cur[k]:
-                for x in sorted(cur[k] - v):
-                    add("substitution", k, x, base, subType="out", qualifier=["sincronizado"])
-                for x in sorted(v - cur[k]):
-                    add("substitution", k, x, base, subType="in", qualifier=["sincronizado"])
-                n_sync += 1
-                cur[k] = set(v)
+    qq_period: dict[int, dict] = {}            # cinco en pista que da QQ en el primer evento de cada periodo
+    cur_on: dict = {}
 
     for eid in order:
         e = evs.get(eid)
@@ -503,15 +610,12 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
         per = _quarter(e)
         if at == "13":
             period_start[per] = e.get("time") or e.get("quarterTime")
+        cur_on = {k_: {pno[x][1] for x in v} for k_, v in on_court(e).items()}
         base = {"period": per - 4 if per > 4 else per, "periodType": "OVERTIME" if per > 4 else "REGULAR",
                 "gt": e.get("time") or e.get("quarterTime") or "00:00", "s1": e.get("leftGoal"),
                 "s2": e.get("rightGoal"), "qqId": eid}
-        if at not in ("9", "13", "14", "15") and per not in played:
-            # cambios entre periodos (QQ no los anota): los cinco en pista del primer evento del periodo, con el
-            # reloj del inicio del periodo. Dentro del periodo mandan los cambios del texto (la lista de QQ a
-            # veces no aplica un cambio anotado y deja a un jugador «en pista» que ya no actúa).
-            sync(e, {**base, "gt": period_start.get(per, base["gt"])})
-            played.add(per)
+        if at not in ("9", "13", "14", "15") and per not in qq_period:
+            qq_period[per] = cur_on
         if at in ("1", "2") and k:
             v = "3pt" if "三分" in txt else "2pt"
             made = at == "1"
@@ -577,6 +681,9 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
             add("period", None, None, base, subType="start" if at == "13" else "end")
         elif at == "15":
             add("game", None, None, base, subType="end")
+    pbp, n_sync = _period_starts(pbp, tm, qq_period, period_start,
+                                 {"descartar": cfg.get("descartar_cambios_imposibles", True),
+                                  "reparar": cfg.get("reparar_con_quinteto_qq", True)})
     # rebotes OF/DEF: Sina si cuadra con el total de QQ; si no, el jugada a jugada (también tipado OF/DEF) si cuadra
     reb_pbp: dict[str, list] = {}
     team_reb: dict[str, list] = {"1": [0, 0], "2": [0, 0]}
@@ -621,7 +728,7 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
         if "starter" not in p and first_five.get(k):
             p["starter"] = 1 if pid in first_five[k] else 0
     if n_sync:
-        notes.append(f"{n_sync} cambios entre periodos sin anotar en QQ, reconstruidos con los cinco en pista")
+        notes.append(f"{n_sync} cambios de quinteto sin anotar en QQ, reconstruidos")
     pbp.reverse()                       # FIBA LiveStats: orden descendente de actionNumber
     final = str(cal.get("matchPeriod") or "2") == "2"
     return {"tm": tm, "pbp": pbp, "status": "complete" if final else "live", "matchDate": cal.get("startTime"),

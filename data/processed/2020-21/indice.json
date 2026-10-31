@@ -1,6 +1,6 @@
 {
   "temporada": "2020-21",
-  "generado": "2026-10-18T10:50:59.368855+00:00",
+  "generado": "2026-10-31T18:44:55.924454+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -130,6 +130,26 @@
         "playoffs": 239,
         "regular": 626,
         "total": 626
+      }
+    },
+    "ncaa": {
+      "nombre": "NCAA Division I (top-50 T-Rank)",
+      "archivo": "ligas/ncaa.csv",
+      "fecha_extraccion": "2026-10-31T18:38:09.742217+00:00",
+      "fases": {
+        "playoffs": 656,
+        "regular": 813,
+        "total": 813
+      }
+    },
+    "vtb": {
+      "nombre": "VTB United League (Liga VTB)",
+      "archivo": "ligas/vtb.csv",
+      "fecha_extraccion": "2026-10-31T18:41:46.323146+00:00",
+      "fases": {
+        "playoffs": 104,
+        "regular": 245,
+        "total": 247
       }
     }
   },

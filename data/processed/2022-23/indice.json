@@ -1,6 +1,6 @@
 {
   "temporada": "2022-23",
-  "generado": "2026-10-22T18:24:54.998047+00:00",
+  "generado": "2026-10-31T18:39:20.968096+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -130,6 +130,36 @@
         "playoffs": 217,
         "regular": 609,
         "total": 612
+      }
+    },
+    "nbl": {
+      "nombre": "National Basketball League (NBL)",
+      "archivo": "ligas/nbl.csv",
+      "fecha_extraccion": "2026-10-31T18:14:22.940220+00:00",
+      "fases": {
+        "playoffs": 74,
+        "regular": 156,
+        "total": 156
+      }
+    },
+    "ncaa": {
+      "nombre": "NCAA Division I (top-50 T-Rank)",
+      "archivo": "ligas/ncaa.csv",
+      "fecha_extraccion": "2026-10-31T18:25:21.126314+00:00",
+      "fases": {
+        "playoffs": 625,
+        "regular": 794,
+        "total": 794
+      }
+    },
+    "vtb": {
+      "nombre": "VTB United League (Liga VTB)",
+      "archivo": "ligas/vtb.csv",
+      "fecha_extraccion": "2026-10-31T18:34:49.060385+00:00",
+      "fases": {
+        "playoffs": 105,
+        "regular": 220,
+        "total": 222
       }
     }
   },
