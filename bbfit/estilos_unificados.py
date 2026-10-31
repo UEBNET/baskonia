@@ -982,7 +982,11 @@ def mapa_unificado(eq: pd.DataFrame, jg: pd.DataFrame, ids: list[str]) -> tuple[
     meta con centros, covarianzas y lectura de los ejes)."""
     from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
     zc = [c for c in jg.columns if c.startswith("z_")]
-    base = jg[(jg["nivel"] == "temporada") & jg.get("en_ajuste", True).astype(bool)].dropna(subset=zc + ["estilo"])
+    if not zc or "estilo" not in jg:
+        return {}, {}
+    en = jg["en_ajuste"].astype(bool) if "en_ajuste" in jg else pd.Series(True, index=jg.index)
+    nivel = jg["nivel"] == "temporada" if "nivel" in jg else pd.Series(True, index=jg.index)
+    base = jg[nivel & en].dropna(subset=zc + ["estilo"])
     if len(base) < 50 or base["estilo"].nunique() < 4:
         return {}, {}
     lda = LinearDiscriminantAnalysis(n_components=3).fit(base[zc].to_numpy(float), base["estilo"].to_numpy())
