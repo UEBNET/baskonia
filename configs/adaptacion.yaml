@@ -42,7 +42,10 @@ paises_europeos: [AD, AL, AM, AT, AZ, BA, BE, BG, BY, CH, CY, CZ, DE, DK, EE, ES
                   IL, IS, IT, LT, LU, LV, MC, MD, ME, MK, MT, NL, NO, PL, PT, RO, RS, RU, SE, SI, SK, SM, TR, UA,
                   XK]
 
+ligas_universitarias: [ncaa]         # origen universitario: grupo propio NCAA_a_profesional (decisión del usuario)
+
 grupos_nacionalidad:                 # orden de evaluación en bbfit.adaptacion.grupo_nacionalidad
+  - NCAA_a_profesional               # de la NCAA a cualquier liga profesional (va primero)
   - EEUU_a_Europa                    # nacionalidad EE. UU., de NBA/G League a una liga europea
   - otro_desde_EEUU                  # no estadounidense (o sin dato) de NBA/G League a Europa
   - hacia_EEUU                       # de Europa a NBA/G League

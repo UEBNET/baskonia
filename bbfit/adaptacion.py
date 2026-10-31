@@ -100,13 +100,15 @@ def _isos(nacionalidad) -> list[str]:
 def grupo_nacionalidad(nacionalidad, liga_origen: str, liga_destino: str) -> str:
     """Grupo de nacionalidad / origen formativo de un traspaso liga_origen → liga_destino (configs/adaptacion.yaml).
 
-    EEUU_a_Europa · otro_desde_EEUU · hacia_EEUU · intra_EEUU · nacional_mismo_pais · extranjero_mismo_pais ·
+    NCAA_a_profesional · EEUU_a_Europa · otro_desde_EEUU · hacia_EEUU · intra_EEUU · nacional_mismo_pais · extranjero_mismo_pais ·
     europeo_cambia_liga · extranjero_cambia_pais · desconocido. Sin nacionalidad → «desconocido» salvo en los grupos
     que sólo dependen de las ligas (hacia_EEUU, intra_EEUU). Las copas europeas no tienen país (EUR): entrar o salir de
     una copa cuenta como cambio de competición europea."""
     c = cfg()
     paises = c["paises_liga"]
     europa = set(c["paises_europeos"])
+    if str(liga_origen) in set(c.get("ligas_universitarias") or []) and str(liga_destino) != str(liga_origen):
+        return "NCAA_a_profesional"          # salto universidad → profesional (sea cual sea el destino o el país)
     po, pd_ = paises.get(str(liga_origen)), paises.get(str(liga_destino))
     us_o, us_d = po == "US", pd_ == "US"
     if us_o and us_d:

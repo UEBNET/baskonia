@@ -322,6 +322,7 @@ def exportar(salida: str | Path = SALIDA) -> dict:
                            "priors": _priors(), "n_min": ad["priors"]["n_min_celda"],
                            "defecto": [0.0, ad["priors"]["delta_sd_defecto"], ad["priors"]["kappa_defecto"], ad["priors"]["kappa_sd_defecto"]],
                            "paises_liga": ad["paises_liga"], "paises_europeos": ad["paises_europeos"],
+                           "ligas_universitarias": ad.get("ligas_universitarias", []),
                            "escalones": cargar("normalization").get("escalones")},
             "avisos": cfg["avisos"], "estilos": estilos, "bases": meta_bases,
             "validacion": P.get("validacion_resumen"),

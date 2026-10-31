@@ -22,7 +22,9 @@ encadenamiento:
 # 2) Contracción bayesiana parcial: nivel(competición, temporada) ~ N(μ_escalón, τ²), μ y τ por bayes empírico (EM).
 escalones:
   elite: [euroleague, nba]
-  domestica_alta: [acb, lba, bbl, lnb, bsl, gbl]
+  domestica_alta: [acb, lba, bbl, lnb, bsl, gbl, vtb, nbl]
+  domestica_media: [bnxt, cba]  # 31-10-2026: escalón nuevo (asignación fijada de antemano, sin mirar resultados)
+  universitaria: [ncaa]         # NCAA top-50: escalón propio; el desarrollo se separa con el tramo NCAA (bbmodel.enlace)
   copas_europeas: [eurocup, bcl, fec]
   desarrollo: [gleague]
   feb1: [feb1]

@@ -79,7 +79,9 @@
 
   // ------------------------------------------------------------------ 2. adaptación (fase 7)
   function grupoNac(nac, lo, ld) {
-    const A = D.meta.adaptacion, po = A.paises_liga[lo], pd = A.paises_liga[ld], usO = po === "US", usD = pd === "US";
+    const A = D.meta.adaptacion;
+    if ((A.ligas_universitarias || []).includes(lo) && ld !== lo) return "NCAA_a_profesional";
+    const po = A.paises_liga[lo], pd = A.paises_liga[ld], usO = po === "US", usD = pd === "US";
     if (usO && usD) return "intra_EEUU"; if (usD) return "hacia_EEUU";
     const nats = nac ? String(nac).split("/").filter(Boolean) : [];
     if (!nats.length) return "desconocido";
