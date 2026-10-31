@@ -172,6 +172,17 @@ def phase_map(payload: dict, docs: dict, teams: dict, cfg: dict, season: str) ->
     return out
 
 
+def _lm_date(lm: Any) -> str | None:
+    """Cabecera Last-Modified -> 'AAAA-MM-DD' (UTC)."""
+    if not lm:
+        return None
+    try:
+        from email.utils import parsedate_to_datetime
+        return parsedate_to_datetime(str(lm)).strftime("%Y-%m-%d")
+    except (TypeError, ValueError):
+        return None
+
+
 def _is_final(doc: Any) -> bool:
     if not isinstance(doc, dict):
         return False
@@ -475,6 +486,7 @@ class FibaLiveStatsAdapter(BaseAdapter):
         reused = n_new = 0
         phases = {str(i): ph for ph, ids in by_phase.items() for i in ids}
         guard, rejected = None, []
+        corte = str(sc.get("fecha_corte") or self.cfg.get("fecha_corte") or "")
         if sc.get("en_curso") or self.cfg.get("verificar_equipos"):
             known = {norm(n) for n in sc.get("equipos") or []}
             guard = (known, league_rosters(prev_games.values()))
@@ -486,6 +498,8 @@ class FibaLiveStatsAdapter(BaseAdapter):
                 else self._doc(http, mid)
             if not doc or (not _is_final(doc) and not doc.get("pbp")):
                 continue      # aún sin jugar (los ids de las jornadas futuras ya existen en la fuente)
+            if corte and _lm_date(lm) and _lm_date(lm) > corte:
+                continue      # jugado después de la fecha de corte (el data.json no trae fecha: Last-Modified)
             if guard is not None and mid not in self._probe_docs and not member(doc, *guard):
                 rejected.append((mid, doc, lm))   # temporada en curso: ¿id de otra liga intercalada? (se repasa)
                 continue
