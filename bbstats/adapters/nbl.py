@@ -16,6 +16,11 @@ jugador son los `player.id` de la NBL (estables entre temporadas) y los de equip
 Bruto: de cada partido se guardan, sin transformar, sólo las claves con datos de juego (`CLAVES`); el resto
 (imágenes, patrocinio, apuestas, retransmisión) se descarta (≈ 1,2 MB → 0,3 MB por partido).
 Bruto INCREMENTAL: cada ejecución guarda sólo los partidos nuevos (como fiba_livestats).
+
+Complemento FIBA LiveStats: nbl.com.au no tiene jugada a jugada de 2023-24 (ni de 11 partidos de 2024-25). Para
+esos partidos `temporadas.<t>.fls_ids` ({uuid: id de FIBA LiveStats}, emparejados por fecha y equipo local) hace
+que se descargue también su data.json (clave "fls" del partido en el bruto); `to_fls` usa entonces su jugada a
+jugada y sus tiros, con equipos y jugadores reasignados a los de la NBL (dorsal o apellido).
 """
 from __future__ import annotations
 
@@ -62,6 +67,48 @@ def _minutes(v: Any) -> str | None:
     except ValueError:
         return None
     return f"{sec // 60}:{sec % 60:02d}"
+
+
+def _last(n: Any) -> str:
+    return (str(n or "").split() or [""])[-1].lower()
+
+
+def _merge_fls(tm: dict, fls: dict) -> None:
+    """Complemento: el data.json de FIBA LiveStats del mismo partido (el jugada a jugada lo usa tal cual, con sus
+    tno/pno). Se reordenan sus equipos y números de jugador a los de la NBL: lado por la última palabra del nombre
+    del equipo (o por marcador), jugador por apellido (o dorsal). Tiros y entrenador salen del data.json."""
+    ftm = fls.get("tm") or {}
+    names = {k: _last((ftm.get(k) or {}).get("name")) for k in ("1", "2")}
+    swap = names.get("1") == _last(tm["2"].get("name")) or names.get("2") == _last(tm["1"].get("name"))
+    for k_fls, t in ftm.items():
+        k = {"1": "2", "2": "1"}[k_fls] if swap else k_fls
+        if k not in tm:
+            continue
+        ours = tm[k]["pl"]
+        by_shirt = {str(p.get("shirtNumber") or "").lstrip("0") or "0": n for n, p in ours.items()}
+        by_fam = {_last(p.get("familyName")): n for n, p in ours.items()}
+        remap = {}
+        for pno, p in (t.get("pl") or {}).items():
+            # apellido primero: nbl.com.au da el dorsal ACTUAL del jugador, no el de esa temporada
+            n = by_fam.get(_last(p.get("familyName") or p.get("internationalFamilyName"))) or \
+                by_shirt.get(str(p.get("shirtNumber") or "").lstrip("0") or "0")
+            if n:
+                remap[str(pno)] = n
+                ours[n].setdefault("starter", p.get("starter"))
+        t["_remap"], t["_k"] = remap, k
+        tm[k]["shot"] = list(t.get("shot") or [])
+        for c in ("coach", "coachDetails", "assistcoach1", "assistcoach2"):
+            if t.get(c):
+                tm[k][c] = t[c]
+    for a in fls.get("pbp") or []:
+        t = ftm.get(str(a.get("tno"))) or {}
+        if "_k" in t:
+            a["tno"] = int(t["_k"])
+            if a.get("pno"):
+                a["pno"] = int(t["_remap"].get(str(a["pno"]), 0) or 0)
+    for t in ftm.values():
+        t.pop("_remap", None)
+        t.pop("_k", None)
 
 
 def to_fls(doc: dict) -> dict:
@@ -147,6 +194,11 @@ def to_fls(doc: dict) -> dict:
         if acts:
             tm[k]["pl"][n]["sFoulsOn"] = drawn.get(pid, 0)
             tm[k]["pl"][n]["sBlocksReceived"] = blocked.get(pid, 0)
+    if not acts and isinstance(doc.get("fls"), dict):
+        _merge_fls(tm, doc["fls"])      # temporadas sin jugada a jugada en nbl.com.au (2023-24 y algún 2024-25)
+        return {"tm": tm, "pbp": doc["fls"].get("pbp") or [], "status": "complete" if str(
+                doc.get("match_status") or "").lower() == "complete" else doc.get("match_status"),
+                "matchDate": doc.get("start_time"), "period": doc.get("current_period")}
     pbp.reverse()                       # FIBA LiveStats: orden descendente de actionNumber
     status = str(doc.get("match_status") or "").lower()
     return {"tm": tm, "pbp": pbp, "status": "complete" if status == "complete" else status,
@@ -184,9 +236,16 @@ class NBLAdapter(FibaLiveStatsAdapter):
         if not fases:
             raise NoDataYet(f"nbl {season}: aún no hay partidos terminados")
         new, n_new, reused = {}, 0, 0
+        fls_ids = {str(k): v for k, v in (sc.get("fls_ids") or {}).items()}
         for mid in sorted(fases, key=lambda i: fechas[i] or ""):
-            if mid in prev and _is_final(to_fls(prev[mid])):
+            if mid in prev and _is_final(to_fls(prev[mid])) and (mid not in fls_ids or prev[mid].get("fls")):
                 reused += 1
+                continue
+            if mid in prev and mid in fls_ids and not prev[mid].get("fls"):
+                d = dict(prev[mid])
+                d["fls"], _ = self._doc(http, fls_ids[mid])
+                new[mid] = d
+                n_new += 1
                 continue
             try:
                 r = self._get(http, MATCH_URL.format(mid=mid))
@@ -198,6 +257,8 @@ class NBLAdapter(FibaLiveStatsAdapter):
             if not isinstance(d, dict):
                 continue
             new[mid] = {k: d.get(k) for k in CLAVES}
+            if mid in fls_ids and not d.get("play_by_play"):
+                new[mid]["fls"], _ = self._doc(http, fls_ids[mid])
             n_new += 1
             if len(new) >= int(self.cfg.get("partidos_por_paquete", 400)):
                 self.save_partial(season, {"claves_incrementales": ["games", "fechas"], "fases": fases,
