@@ -971,6 +971,49 @@ def cargar_salidas() -> tuple[pd.DataFrame, pd.DataFrame, dict] | None:
     return eq, jg, json.loads(ps.read_text(encoding="utf-8"))
 
 
+def mapa_unificado(eq: pd.DataFrame, jg: pd.DataFrame, ids: list[str]) -> tuple[dict, dict]:
+    """Mapa 3D del Atlas en el espacio de la taxonomía unificada (decisión del usuario, 31-10-2026: los grupos del
+    mapa son los 6 estilos unificados, no los perfiles VaDE).
+
+    Proyección discriminante lineal (LDA, 3 ejes) de los 12 rasgos estandarizados (z_*), ajustada con los
+    jugadores-etapa de la mezcla (en_ajuste) y su estilo principal: los ejes son las combinaciones de rasgos que
+    MÁS separan los 6 estilos. Se aplica igual a jugadores, equipos y tramos de entrenador (mismo espacio: el equipo
+    entra con su desviación respecto de su liga, como en la asignación). Devuelve ({clave: (x, y, z)} por tabla,
+    meta con centros, covarianzas y lectura de los ejes)."""
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+    zc = [c for c in jg.columns if c.startswith("z_")]
+    base = jg[(jg["nivel"] == "temporada") & jg.get("en_ajuste", True).astype(bool)].dropna(subset=zc + ["estilo"])
+    if len(base) < 50 or base["estilo"].nunique() < 4:
+        return {}, {}
+    lda = LinearDiscriminantAnalysis(n_components=3).fit(base[zc].to_numpy(float), base["estilo"].to_numpy())
+    Zb = lda.transform(base[zc].to_numpy(float))
+    esc = float(np.percentile(np.abs(Zb), 98)) or 1.0       # ±1 ≈ el 98 % de los jugadores
+    def proy(df):
+        X = df[zc].to_numpy(float)
+        ok = np.isfinite(X).all(1)
+        out = np.full((len(df), 3), np.nan)
+        if ok.any():
+            out[ok] = lda.transform(X[ok]) / esc
+        return out
+    Zb = Zb / esc
+    centros, covs = [], []
+    for i in ids:
+        s_ = (base["estilo"] == i).to_numpy()
+        centros.append([round(float(v), 4) for v in (Zb[s_].mean(0) if s_.any() else [np.nan] * 3)])
+        covs.append([[round(float(v), 5) for v in fila] for fila in (np.cov(Zb[s_].T) if s_.sum() > 3 else np.eye(3) * 0.01)])
+    ejes = []
+    for j in range(3):
+        r = np.array([np.corrcoef(Zb[:, j], base[c].to_numpy(float))[0, 1] for c in zc])
+        orden = np.argsort(-np.abs(r))[:3]
+        ejes.append({"r": [round(float(v), 3) for v in r], "rasgos": [zc[k][2:] for k in orden],
+                     "signo": [int(np.sign(r[k])) for k in orden],
+                     "varianza_entre": round(float(lda.explained_variance_ratio_[j]), 3)})
+    meta = {"metodo": "LDA de los 12 rasgos z_* supervisado por el estilo unificado (jugadores en_ajuste)",
+            "rasgos": [c[2:] for c in zc], "centros": centros, "cov": covs, "ejes": ejes, "escala": esc,
+            "acierto_lda": round(float((lda.predict(base[zc].to_numpy(float)) == base["estilo"].to_numpy()).mean()), 3)}
+    return {"eq": proy(eq), "jg": proy(jg)}, meta
+
+
 def campos_atlas(clubes: pd.DataFrame, jugadores: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dict] | None:
     """Campos nuevos del Atlas (bbestilo/exportar.py), sin tocar los antiguos.
 
@@ -1002,7 +1045,17 @@ def campos_atlas(clubes: pd.DataFrame, jugadores: pd.DataFrame) -> tuple[pd.Data
         P = rr[pc].to_numpy(float)
         out["eu_probs"] = [None if not np.isfinite(p).all() else [round(float(x), 3) for x in p] for p in P]
         out["eu_etiqueta"] = [x if isinstance(x, str) else None for x in rr["etiqueta"]]
+        if "_ux" in rr:     # posición en el mapa 3D unificado
+            for a in ("ux", "uy", "uz"):
+                out[a] = np.round(rr[f"_{a}"].to_numpy(float), 3)
         return out
+
+    coords, mapa = mapa_unificado(eq, jg, ids)
+    if coords:
+        eq = eq.copy(); jg = jg.copy()
+        for k, a in enumerate(("ux", "uy", "uz")):
+            eq[f"_{a}"] = coords["eq"][:, k]
+            jg[f"_{a}"] = coords["jg"][:, k]
 
     E = eq[eq["nivel"] == "temporada"].copy()
     c2 = clubes.copy()
@@ -1028,9 +1081,14 @@ def campos_atlas(clubes: pd.DataFrame, jugadores: pd.DataFrame) -> tuple[pd.Data
                     et["eu"], et["eu_p"] = pos.get(src["estilo"]), round(float(src["p_estilo"]), 3)
                     et["eu_probs"] = [round(float(src[p]), 3) for p in pc]
                     et["eu_etiqueta"] = src["etiqueta"]
+                    if "_ux" in src:
+                        et["ux"], et["uy"], et["uz"] = (round(float(src[f"_{a}"]), 3) if np.isfinite(src[f"_{a}"]) else None
+                                                        for a in ("ux", "uy", "uz"))
                 else:   # un solo entrenador en la temporada: el del club
                     et["eu"], et["eu_p"], et["eu_probs"], et["eu_etiqueta"] = (
                         fila["eu"], fila["eu_p"], fila["eu_probs"], fila["eu_etiqueta"])
+                    if "ux" in fila:
+                        et["ux"], et["uy"], et["uz"] = fila["ux"], fila["uy"], fila["uz"]
                 lst.append(et)
             nuevas.append(lst)
         c2["entrenadores"] = nuevas
@@ -1044,6 +1102,7 @@ def campos_atlas(clubes: pd.DataFrame, jugadores: pd.DataFrame) -> tuple[pd.Data
                                             "metricas_caracterizan", "ejemplos_equipos", "ejemplos_jugadores")}
                         for e in doc["estilos"]],
             "rasgos": doc["rasgos"], "asignacion": doc["asignacion"], "resumen": doc["resumen"],
+            "mapa": mapa,
             "nota": "Taxonomía unificada jugador ↔ equipo (data/modelos/estilos_unificados). Campos eu, eu2, eu_p, "
                     "eu_probs, eu_etiqueta en clubes, etapas de entrenador y jugadores; los campos VaDE (e, p, probs) siguen."}
     return c2, j2, meta
