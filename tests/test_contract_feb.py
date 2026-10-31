@@ -439,11 +439,11 @@ def test_crosswalk_inicial_apellido_exige_fecha():
     import pandas as pd
     from bbmodel.crosswalk import inicial_nombre, puntuar, tokens_nombre
 
-    def nodo(liga, nombre, fecha):
+    def nodo(liga, nombre, fecha, temp="2021-22"):
         return pd.Series({"liga": liga, "player_id": nombre, "tokens": tokens_nombre(nombre),
                           "inicial": inicial_nombre(nombre), "fecha_nac": fecha, "anio_nac": float(fecha[:4]) if fecha else float("nan"),
-                          "iso": None, "temporadas": {"2023-24": 1.0}, "equipos": {}})
-    a = nodo("cba", "S. Cooper", "1996-11-17")
+                          "iso": None, "temporadas": {temp: 1.0}, "equipos": {}})
+    a = nodo("cba", "S. Cooper", "1996-11-17", "2023-24")
     assert puntuar(a, nodo("nba", "Sterling Cooper", "1996-11-17"))[0] >= 0.8
     assert puntuar(a, nodo("nba", "Sterling Cooper", "1990-01-01"))[2] == "fecha de nacimiento distinta"
     assert puntuar(a, nodo("nba", "Sterling Cooper", None))[2] == "inicial sin fecha de nacimiento completa"
