@@ -1,7 +1,7 @@
 # Fase 8 — simulador de encaje (fit-in) v2: bbfit/simulador.py, bbfit/sim_insumos.py, bbfit/validacion.py.
 # Todo umbral o hiperparámetro del simulador vive aquí; el código no fija ninguno.
 semilla: 20261023
-version: "v2.0"                      # etiqueta de versión de los resultados (data/modelos/simulador/v2/)
+version: "v2.1"                      # etiqueta de versión de los resultados (data/modelos/simulador/v2/); v2.1 = rol asignado
 
 simulaciones: 1000                   # iteraciones Monte Carlo por jugador-club
 intervalos: [0.50, 0.90]             # intervalos centrales de la salida
@@ -42,6 +42,11 @@ rol_go_to_guy:                       # GO-TO-GUY proyectado: TITULAR por minutos
   peso_uso: 2.0                      # el uso entra en dos componentes del GTI (USG% y USG% clutch)
   min_minutos_pct: 0.55              # ≥ 22' de 40
 
+rol_asignado:                        # v2.1 · rol que asigna quien simula (el motor ya no lo decide si se indica)
+  dispersion: 0.04                   # DT de los minutos (fracción del partido) alrededor del centro del rol (min_rol de la liga)
+  min_residual: 0.02                 # límite inferior de la franja RESIDUAL (fracción del partido)
+  tope_titular: 0.82                 # límite superior de la franja TITULAR (GO-TO-GUY llega al tope max_min_partido)
+  tope_fijos: 0.90                   # si los roles asignados suman más de esta fracción de los minutos del equipo, se escalan
 adaptacion:
   partidos_temporada: {defecto: 34, nba: 82, gleague: 50, euroleague: 34, eurocup: 18, bcl: 14, fec: 12, feb3: 26}
   primeros_partidos: 10              # ADAPT% de los N primeros partidos

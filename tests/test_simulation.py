@@ -234,3 +234,23 @@ def test_calibracion_de_salida():
     assert np.allclose(Pc.sum(1), 1) and (Pc > 0).all()
     assert m[0] == pytest.approx(2 + 16 + 1.8 + 1.9)
     assert (iv["50"][0] <= m).all() and (iv["50"][1] >= m).all()
+
+
+# --------------------------------------------------------------------------------------------- v2.1 · rol asignado
+def test_rol_asignado_condiciona_la_salida(corte):
+    """Con rol asignado, la probabilidad de rol es 1 en él, los minutos crecen con el rol, la plantilla sigue sumando
+    los minutos del equipo y el componente «rol» del Fit usa el rol asignado."""
+    medias = []
+    for k, rol in enumerate(S.ROLES):
+        r = _simular(corte, n=300, rol=rol)
+        assert r["rol_asignado"] == rol and r["rol_esperado"] == rol
+        assert r["roles"][rol] == pytest.approx(1.0)
+        assert r["componentes_crudos"]["rol"] == pytest.approx(k)
+        assert sum(p["minutos"] for p in r["plantilla"]) == pytest.approx(200.0, abs=1e-6)
+        medias.append(r["minutos"]["media"])
+    assert all(a < b for a, b in zip(medias, medias[1:]))
+
+
+def test_sin_rol_es_v20(corte):
+    a, b = _simular(corte), _simular(corte, rol=None, roles=None)
+    assert a["minutos"] == b["minutos"] and a["fit"] == b["fit"] and b.get("rol_asignado") is None

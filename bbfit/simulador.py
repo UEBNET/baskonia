@@ -450,11 +450,14 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
             entrenador: str | None = None, ritmo: float | None = None, team_eu: str | None = None,
             team_eu_probs: list | None = None, n_sim: int | None = None, semilla: int | None = None,
             registro: dict | None = None, detalle: bool = True, adaptacion_ruta=None, sin_adaptacion: bool = False,
-            club_t: str | None = None) -> dict:
+            club_t: str | None = None, rol: str | None = None, roles: dict | None = None) -> dict:
     """Simula el fichaje de `persona_id` (insumos de la temporada c.temp) por el club (liga_d, team_d) en t+1, con la
     plantilla `miembros` [(persona_id, presencia)] (sin el fichaje). `club_t` = clave del mismo club en la temporada
     base (para saber quién ya estaba y con cuántos minutos); por defecto, el de (liga_d, team_d) en t.
-    Devuelve un dict con todas las salidas (semilla determinista por jugador-club)."""
+    Devuelve un dict con todas las salidas (semilla determinista por jugador-club).
+    v2.1 · `rol` = rol asignado al fichaje por quien simula (RESIDUAL … GO_TO_GUY) y `roles` = {persona_id: rol} para
+    otros miembros con rol asignado. Con rol asignado, sus minutos salen de la franja de ese rol (ver forzar_roles), la
+    probabilidad de rol es 1 en él y no se aplica la calibración de salida a ese jugador. Sin rol: idéntico a v2.0."""
     from . import adaptacion as AD
     from . import reemplazo as RE
     cfg = c.cfg
@@ -527,7 +530,19 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
                                    presencia=pres[sin])
     else:
         M0 = None
-    T5 = _top5(M)
+    # v2.1 · roles asignados (fichaje y, si se dan, otros miembros)
+    rol_asig = rol if rol in IDX_ROL else None
+    fuerza = {}
+    if roles:
+        for i, pid in enumerate(P["persona_id"].to_numpy()):
+            if i != i_f and roles.get(pid) in IDX_ROL:
+                fuerza[i] = roles[pid]
+    if rol_asig:
+        fuerza[i_f] = rol_asig
+    if fuerza:
+        T5 = forzar_roles(M, fuerza, total, gm, liga_d, c, rng)
+    else:
+        T5 = _top5(M)
     # minutos del fichaje: fuera de la rotación → minutos residuales de su liga (cuando juega)
     m_f = M[:, i_f].copy()
     resid = float(c.mod["min_rol"].get((liga_d, "RESIDUAL"), c.mod["min_rol_global"].get("RESIDUAL", 0.06))) * gm
@@ -618,7 +633,8 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     # ---------------------------------------------------------------- roles
     mp_s = m_f / gm
     gs = T5[:, i_f].astype(float)
-    rol_s = clasificar(mp_s, gs, np.full(n_sim, np.nan), es_gtg[:, i_f], cargar("roles"))
+    rol_s = (np.full(n_sim, rol_asig, dtype=object) if rol_asig else
+             clasificar(mp_s, gs, np.full(n_sim, np.nan), es_gtg[:, i_f], cargar("roles")))
     p_rol = {r: float(np.mean(rol_s == r)) for r in ROLES}
     # ---------------------------------------------------------------- salida
     q = lambda v, a: float(np.nanquantile(v, a)) if np.isfinite(v).any() else None  # noqa: E731
@@ -646,7 +662,10 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
            "companeros": {"L_bar": float(np.mean(Lbar)), "L_origen": ctx_o if np.isfinite(ctx_o) else None,
                           "efecto_ts": float(np.mean(b_s * dL))},
            "ritmo_destino": float(ritmo)}
-    if c.calib_salida:
+    res["rol_asignado"], res["rol_origen"] = rol_asig, fila.get("rol")
+    if fuerza:
+        res["version"] = "v2.1"
+    if c.calib_salida and not rol_asig:
         _calibrar_res(c, res, fila, liga_d, gm)
     # adaptación
     pa = priors["L_rel"]
@@ -800,6 +819,59 @@ def _recortar(P: pd.DataFrame, nmax: int, i_f: int) -> pd.DataFrame:
     orden[i_f] = np.inf
     keep = np.argsort(-orden)[:nmax]
     return P.iloc[sorted(keep)].reset_index(drop=True)
+
+
+def franja_rol(rol: str, cfg_rol: dict, u: dict, tope: float) -> tuple[float, float] | None:
+    """v2.1 · franja de minutos (fracción del partido) de cada rol, con los umbrales de clasificación de configs/roles.yaml."""
+    return {"RESIDUAL": (cfg_rol["min_residual"], u["prof"]), "PROFUNDIDAD": (u["prof"], u["rot"]), "ROTACION": (u["rot"], u["tit"]),
+            "TITULAR": (u["tit"], min(tope, cfg_rol["tope_titular"])), "GO_TO_GUY": (u["tit_seguro"], tope)}.get(rol)
+
+
+def forzar_roles(M: np.ndarray, fuerza: dict, total: float, gm: float, liga_d: str, c: "Corte", rng) -> np.ndarray:
+    """v2.1 · impone los roles asignados {índice: rol} sobre cada simulación de minutos M (n_sim × jugadores, se modifica
+    en sitio) y devuelve los titulares T5. Minutos del rol: centro = min_rol de la liga de destino, dispersión
+    `rol_asignado.dispersion`, recortado a la franja; titular si TITULAR o GO_TO_GUY; el resto de la plantilla reparte
+    los minutos que quedan (con el tope por jugador). Misma lógica que forzarRoles en artifact/atlas/simulador_v2.js."""
+    from .roles import umbrales_pct
+    cr = c.cfg["rol_asignado"]
+    u = umbrales_pct(cargar("roles"))
+    tope_p = float(cargar("reemplazo")["asignacion"]["max_min_partido"]) / 40.0
+    tope = tope_p * gm
+    n_sim, n = M.shape
+    T5 = np.zeros(M.shape, bool)
+    libres = np.array([i not in fuerza for i in range(n)])
+    for s in range(n_sim):
+        fila = M[s]
+        tit = []
+        for i, r in fuerza.items():
+            lo, hi = franja_rol(r, cr, u, tope_p)
+            cen = float(c.mod["min_rol"].get((liga_d, r), c.mod["min_rol_global"].get(r, (lo + hi) / 2)))
+            cen = min(hi, max(lo, cen))
+            fila[i] = min(hi, max(lo, cen + cr["dispersion"] * rng.standard_normal())) * gm
+            if r in ("TITULAR", "GO_TO_GUY"):
+                tit.append(i)
+        fijo = fila[list(fuerza)].sum()
+        if fijo > cr["tope_fijos"] * total:
+            fila[list(fuerza)] *= cr["tope_fijos"] * total / fijo
+            fijo = cr["tope_fijos"] * total
+        resto = fila[libres].sum()
+        if resto > 0:
+            fila[libres] *= (total - fijo) / resto
+            for _ in range(20):
+                ex = np.clip(fila[libres] - tope, 0, None).sum()
+                if ex < 1e-9:
+                    break
+                lib = libres & (fila < tope - 1e-9)
+                sl = fila[lib].sum()
+                if sl <= 0:
+                    break
+                fila[libres] = np.minimum(fila[libres], tope)
+                fila[lib] += ex * fila[lib] / sl
+        otros = [i for i in np.argsort(-fila) if i not in fuerza]
+        no_tit = {i for i, r in fuerza.items() if r not in ("TITULAR", "GO_TO_GUY")}
+        cinco = [i for i in tit[:5] + otros if i not in no_tit][:5]
+        T5[s, cinco] = True
+    return T5
 
 
 def _top5(M: np.ndarray) -> np.ndarray:

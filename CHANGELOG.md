@@ -1,5 +1,44 @@
 # Registro de cambios
 
+## Lectura de fichaje v3.1 → v3.3 (29-10-2026, publicada en el enlace vigente)
+
+Solo cambia `artifact/atlas/informe_v3.js` (versión publicada 1793286109-fca7). Detalle y verificación:
+`docs/checkpoints/INFORME-v3.3.md`. Arnés de prueba nuevo: `artifact/herramientas/prueba_informe.py`.
+
+- **v3.1 · contenido y composición**: frase nueva en «Basketball judgment, model rigor»; títulos por facetas desde la
+  sección 02 (la conclusión pasa a la entradilla); panel Ink central en 02 (estilo, Nivel Cerno, impacto, punto fuerte,
+  a mejorar); «Por qué lo proponemos» abre 03; curva ADAPT% con la pérdida sombreada; 04/05 sin cifras en el título y
+  con cifras clave (valor + percentil + rango); 04 sin «Qué produce hoy por cada 25 minutos», 9 métricas con el rol
+  asignado y mapa de tiro más grande; 06 en tres páginas (carencias y estilos · sinergias de pareja y quinteto ·
+  minutos e impacto en los compañeros) sin «Conexiones»; clasificaciones en columna; «percentil N» como forma única.
+- **v3.2 · títulos y plantilla**: títulos de sección en Index sobre banda Ink (contraste 11,6:1). Selector
+  «Compañeros en el club de destino»: quitar jugadores y añadir otros (bajas/extras del simulador v2.1, como en
+  «Simular equipo completo»), guardado por club y temporada (`st.inf.plant`). Lugar en la plantilla, nivel medio y
+  química salen de esos compañeros y el informe rotula los cambios.
+- **v3.3 · adaptación**: la frase de adaptación lee la forma de la curva del simulador (arranca arriba y baja, arranca
+  abajo y recupera, o estable) en lugar de decir siempre «perdería un poco al principio».
+- Sin cambios en el motor, los datos ni el resto del artifact.
+
+## Artifact v2 (publicada en el enlace vigente) y simulador v2.1 (29-10-2026)
+
+Detalle, verificación y pendientes: `docs/checkpoints/ARTIFACT-v2.md`. Especificación de la interfaz: `docs/ux/UX-SPEC.md`.
+
+- **Simulador v2.1 (rol asignado)**: `simular(..., rol=, roles=)` en Python y `simular({rol, roles})` en JS. El club
+  elige el rol (RESIDUAL, PROFUNDIDAD, ROTACION, TITULAR, GO_TO_GUY) y el motor fija los minutos en la franja del rol
+  en la liga de destino, la titularidad y el reparto del resto de la plantilla; se mantienen todas las salidas del
+  Índice Fit. Constantes en `configs/simulation.yaml → rol_asignado` (exportadas en `meta.rol_asignado`).
+  Sin rol, resultados idénticos a v2.0 (`tests/test_simulation.py::test_sin_rol_es_v20`,
+  `artifact/herramientas/test_paridad_simulador.js`).
+- **Artifact**: fuera el botón «Ejecutar» (única baja aprobada); capa de usabilidad `cerno-ux` en las tres páginas
+  (mueve y agrupa, no cambia ids, opciones, claves de almacenamiento ni cálculos); rol visible en las tablas; selector
+  de rol en «Simular fichajes» y «Simular equipo completo»; estilos solo con la taxonomía nueva (los grupos del mapa
+  se rotulan «Perfil de mapa A–F»); lectura de fichaje en PDF v3 (`artifact/atlas/informe_v3.js`) con nota del
+  analista redactada por Claude.
+- **Corrección**: el informe del Atlas no encontraba datos porque `atlas/informe/*.json` conserva los `persona_id`
+  anteriores a la fase 2; el navegador resuelve por clave y, si falta, por minutos dentro del club-temporada.
+  Pendiente en el pipeline: regenerar esos ficheros.
+- `artifact/empaquetar.py` publica también `atlas/informe_v3.js` y `quintetos/estilos_unificados*.gz.txt`.
+
 ## Encaje v2 (fases 1-9, 21-10-2026 → 23-10-2026): resumen consolidado
 
 Proyecto multifase sobre la línea base de la auditoría `docs/AUDIT_2026-10-21.md`. Cada fase tiene código, YAML en

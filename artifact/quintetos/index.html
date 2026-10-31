@@ -6,53 +6,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Equipos y quintetos</title>
-<script>try { var t = (parent && parent !== window && parent.document.documentElement.dataset.theme) || localStorage.getItem("mm.theme"); if (t === "dark") document.documentElement.dataset.theme = "dark"; } catch (e) {}</script>
+<script>try { var t = (parent && parent !== window && parent.document.documentElement.dataset.theme) || localStorage.getItem("mm.theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); document.documentElement.dataset.theme = t === "dark" ? "dark" : "light"; } catch (e) {}</script>
 <script>try { document.documentElement.dataset.aprende = localStorage.getItem("mm.quintetos.aprende") === "0" ? "0" : "1"; } catch (e) { document.documentElement.dataset.aprende = "1"; }</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 /* Quintetos y conexiones · subpágina de Moneyball Analytics (se carga en un marco de la Mesa, como el Atlas de Estilos).
    Mismos tokens que la página principal: día por defecto, noche con data-theme="dark". Gráficos SVG hechos a mano. */
 :root {
-  --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f8f9fb; --surface-3: #eef0f4;
-  --line: #e3e6eb; --line-2: #d2d7df;
-  --ink: #121820; --ink-2: #39424f; --muted: #687282; --faint: #a0a4ac;
-  --accent: #1f3b63; --accent-strong: #1f3b63; --accent-ink: #ffffff; --accent-soft: rgba(31, 59, 99, .08); --accent-line: rgba(31, 59, 99, .36);
-  --good: #1d8a58; --bad: #c4473a; --warn: #b7791f; --neutral: #7c8496;
-  --c1: rgba(31, 59, 99, .08); --c2: #f8f9fb; --c3: #eef0f4; --c4: #fafbfc; --c5: #ffffff;
-  --heat-good: 46, 150, 100; --heat-bad: 212, 92, 74; --heat-mid: 246, 244, 239; --heat-seq: 31, 59, 99;
-  --ev-pos-c: 47, 111, 214; --ev-neg-c: 226, 110, 52;
-  --btn-bg: #121820; --btn-ink: #f4f5f7; --btn-hover: #1f3b63;
-  --th-bg: #f8f9fb; --row-hover: rgba(20, 25, 34, .03); --sel-bg: #e9eff7; --sel-ink: #1f3b63;
-  --tip-bg: #121820; --tip-ink: #f1f3f6; --tip-line: #121820;
-  --warn-bg: #fbf4e6; --warn-line: #ecd9b4; --warn-ink: #7a5414;
-  --court: #f2f4f7; --court-line: #d0d6df;
-  --e1: #3b6fb6; --e2: #e08a3c; --e3: #2a9d8f; --e4: #c9a227; --e5: #b4589a; --e6: #7562c4; --e0: #8a93a5;
-  --shadow: 0 1px 2px rgba(20, 25, 34, .04), 0 12px 32px -20px rgba(20, 25, 34, .22);
-  --shadow-lg: 0 18px 44px -14px rgba(20, 25, 34, .28);
-  --f-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
-  --f-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-data: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bg: #F3F0E8; --surface: #F3F0E8; --surface-2: #E8E5DD; --surface-3: #E8E5DD;
+  --line: #DAD7CF; --line-2: #C2C3BF;
+  --ink: #12161B; --ink-2: #3B434C; --muted: #545D67; --faint: #9AA0A6;
+  --accent: #12161B; --accent-strong: #12161B; --accent-ink: #F3F0E8; --accent-soft: rgba(18, 22, 27, .08); --accent-line: rgba(18, 22, 27, .36);
+  --good: #2A6FA8; --bad: #C4552E; --warn: #B7810C; --neutral: #737B84;
+  --c1: rgba(18, 22, 27, .08); --c2: #E8E5DD; --c3: #E8E5DD; --c4: #F3F0E8; --c5: #F3F0E8;
+  --heat-good: 42, 111, 168; --heat-bad: 196, 85, 46; --heat-mid: 243, 240, 232; --heat-seq: 18, 22, 27;
+  --ev-pos-c: 42, 111, 168; --ev-neg-c: 196, 85, 46;
+  --btn-bg: #12161B; --btn-ink: #F3F0E8; --btn-hover: #12161B;
+  --th-bg: #E8E5DD; --row-hover: rgba(18, 22, 27, .03); --sel-bg: #E3ECF4; --sel-ink: #12161B;
+  --tip-bg: #12161B; --tip-ink: #F3F0E8; --tip-line: #12161B;
+  --warn-bg: #E8E5DD; --warn-line: #C2C3BF; --warn-ink: #3B434C;
+  --court: #E8E5DD; --court-line: #C2C3BF;
+  --e1: #2A6FA8; --e2: #C4552E; --e3: #1E9670; --e4: #7A5BC8; --e5: #C9628E; --e6: #4E8A2A; --e0: #9AA0A6;
+  --shadow: 0 1px 2px rgba(18, 22, 27, .04), 0 12px 32px -20px rgba(18, 22, 27, .22);
+  --shadow-lg: 0 18px 44px -14px rgba(18, 22, 27, .28);
+  --f-display: "Mona Sans", system-ui, sans-serif;
+  --f-body: "Mona Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-data: "Geist Mono", system-ui, -apple-system, "Segoe UI", sans-serif;
   --r: 14px; --r-sm: 9px;
   color-scheme: light;
 }
 :root[data-theme="dark"] {
-  --bg: #0b0f15; --surface: #121820; --surface-2: #171e28; --surface-3: #1e2633;
-  --line: #242d3a; --line-2: #303b4b;
-  --ink: #e7ebf1; --ink-2: #bcc4d1; --muted: #8792a3; --faint: #5c6679;
-  --accent: #8db4e6; --accent-strong: #8db4e6; --accent-ink: #0b0f15; --accent-soft: rgba(141, 180, 230, .11); --accent-line: rgba(141, 180, 230, .42);
-  --good: #3cc98b; --bad: #ef6b5d; --warn: #e5a83b; --neutral: #8d98ad;
-  --c1: rgba(141, 180, 230, .11); --c2: #171e28; --c3: #1e2633; --c4: #141b25; --c5: #121820;
-  --heat-good: 52, 168, 112; --heat-bad: 214, 84, 70; --heat-mid: 24, 32, 46; --heat-seq: 141, 180, 230;
-  --ev-pos-c: 78, 146, 240; --ev-neg-c: 238, 122, 62;
-  --btn-bg: #8db4e6; --btn-ink: #0b0f15; --btn-hover: #a9c7ee;
-  --th-bg: #161d28; --row-hover: rgba(255, 255, 255, .035); --sel-bg: #16202e; --sel-ink: #8db4e6;
-  --tip-bg: #1b2330; --tip-ink: #e7ebf1; --tip-line: #303b4b;
-  --warn-bg: rgba(229, 168, 59, .08); --warn-line: rgba(229, 168, 59, .3); --warn-ink: #f1d39b;
-  --court: #131b27; --court-line: #2f3b50;
-  --e0: #6c768a;
-  --shadow: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 12px 32px -18px rgba(0, 0, 0, .7);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, .55);
+  --bg: #12161B; --surface: #12161B; --surface-2: #262C33; --surface-3: #262C33;
+  --line: #3B434C; --line-2: #3B434C;
+  --ink: #F3F0E8; --ink-2: #C2C3BF; --muted: #9AA0A6; --faint: #737B84;
+  --accent: #4A8CC4; --accent-strong: #4A8CC4; --accent-ink: #12161B; --accent-soft: rgba(157, 190, 221, .11); --accent-line: rgba(157, 190, 221, .42);
+  --good: #4A8CC4; --bad: #D9693F; --warn: #B7810C; --neutral: #9AA0A6;
+  --c1: rgba(157, 190, 221, .11); --c2: #262C33; --c3: #262C33; --c4: #12161B; --c5: #12161B;
+  --heat-good: 74, 140, 196; --heat-bad: 217, 105, 63; --heat-mid: 18, 22, 27; --heat-seq: 157, 190, 221;
+  --ev-pos-c: 74, 140, 196; --ev-neg-c: 217, 105, 63;
+  --btn-bg: #4A8CC4; --btn-ink: #12161B; --btn-hover: #9DBEDD;
+  --th-bg: #262C33; --row-hover: rgba(243, 240, 232, .035); --sel-bg: #262C33; --sel-ink: #4A8CC4;
+  --tip-bg: #262C33; --tip-ink: #F3F0E8; --tip-line: #3B434C;
+  --warn-bg: rgba(183, 129, 12, .08); --warn-line: rgba(183, 129, 12, .3); --warn-ink: #E8E5DD;
+  --court: #262C33; --court-line: #3B434C;
+  --e0: #737B84;
+  --shadow: 0 1px 0 rgba(243, 240, 232, .03) inset, 0 12px 32px -18px rgba(18, 22, 27, .7);
+  --shadow-lg: 0 12px 32px rgba(18, 22, 27, .55);
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -91,25 +89,25 @@ input::placeholder { color: var(--faint); }
 .btn.ghost:hover:not(:disabled) { background: var(--surface-3); color: var(--ink); border-color: var(--faint); }
 .btn.sm { font-size: 10px; padding: 4px 9px; letter-spacing: .08em; }
 .btn:disabled { opacity: .4; cursor: not-allowed; }
-.lnk { all: unset; cursor: pointer; color: var(--accent); font-weight: 600; border-radius: 3px; }
+.lnk { all: unset; cursor: pointer; color: var(--accent); font-weight: 600; border-radius: 2px; }
 .lnk:hover { text-decoration: underline; }
 .pl { all: unset; cursor: pointer; font-weight: 600; color: var(--ink); border-bottom: 1px dotted var(--faint); border-radius: 2px; }
 .pl:hover { color: var(--accent); border-bottom-color: var(--accent); }
 button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, [tabindex]:focus-visible, .chip:focus-visible, .lnk:focus-visible, .pl:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font: 500 12.5px var(--f-body); border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); border-radius: 999px; padding: 4px 11px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.chip { font: 500 12.5px var(--f-body); border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); border-radius: 2px; padding: 4px 11px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
 .chip:hover:not(:disabled) { border-color: var(--faint); color: var(--ink); }
 .chip[aria-pressed="true"] { background: var(--accent-soft); color: var(--ink); border-color: var(--accent-line); font-weight: 600; }
 .chip:disabled { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
-.seg { display: inline-flex; gap: 2px; padding: 3px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 9px; flex-wrap: wrap; max-width: 100%; }
-.segb { all: unset; cursor: pointer; font: 600 12px var(--f-body); letter-spacing: .03em; padding: 5px 10px; border-radius: 6px; color: var(--muted); white-space: nowrap; }
+.seg { display: inline-flex; gap: 2px; padding: 3px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 4px; flex-wrap: wrap; max-width: 100%; }
+.segb { all: unset; cursor: pointer; font: 600 12px var(--f-body); letter-spacing: .03em; padding: 5px 10px; border-radius: 2px; color: var(--muted); white-space: nowrap; }
 .segb:hover:not([disabled]) { color: var(--ink); }
 .segb[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent-line); }
 .segb[disabled] { opacity: .35; cursor: not-allowed; }
 .segb:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.switch { all: unset; cursor: pointer; display: inline-flex; gap: 9px; align-items: center; font: 600 12.5px var(--f-body); color: var(--ink-2); padding: 6px 12px 6px 8px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--surface); }
-.switch i { width: 30px; height: 17px; border-radius: 999px; background: var(--line-2); position: relative; flex: none; transition: background .15s; }
-.switch i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: left .15s; }
+.switch { all: unset; cursor: pointer; display: inline-flex; gap: 9px; align-items: center; font: 600 12.5px var(--f-body); color: var(--ink-2); padding: 6px 12px 6px 8px; border: 1px solid var(--line-2); border-radius: 2px; background: var(--surface); }
+.switch i { width: 30px; height: 17px; border-radius: 2px; background: var(--line-2); position: relative; flex: none; transition: background .15s; }
+.switch i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 2px rgba(18,22,27,.25); transition: left .15s; }
 .switch[aria-pressed="true"] i { background: var(--accent); }
 .switch[aria-pressed="true"] i::after { left: 15px; }
 .switch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -126,9 +124,9 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 @media (max-width: 700px) { .cov { margin-left: 0; } #selEquipo { min-width: 0; width: 100%; max-width: none; } .cmd-group.eq { width: 100%; } .cmd-group.eq select { flex: 1; } }
 
 /* ------------------------------------------------------------------ subpestañas */
-.subnav { display: flex; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow-x: auto; scrollbar-width: none; width: max-content; max-width: 100%; box-shadow: var(--shadow); }
+.subnav { display: flex; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow-x: auto; scrollbar-width: none; width: max-content; max-width: 100%; box-shadow: var(--shadow); }
 .subnav::-webkit-scrollbar { display: none; }
-.subtab { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; flex-direction: column; gap: 0; white-space: nowrap; padding: 7px 14px; border-radius: 9px; font: 600 13px var(--f-body); letter-spacing: .01em; color: var(--muted); }
+.subtab { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; flex-direction: column; gap: 0; white-space: nowrap; padding: 7px 14px; border-radius: 4px; font: 600 13px var(--f-body); letter-spacing: .01em; color: var(--muted); }
 .subtab small { font: 500 11px var(--f-body); color: var(--faint); letter-spacing: 0; }
 .subtab:hover:not([aria-selected="true"]) { color: var(--ink); background: var(--surface-2); }
 .subtab[aria-selected="true"] { background: var(--btn-bg); color: var(--btn-ink); }
@@ -164,7 +162,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .kv div { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 6px 9px; display: grid; gap: 1px; min-width: 0; }
 .kv span { font: 600 9.5px var(--f-body); color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 .kv b { font: 600 15px var(--f-data); font-variant-numeric: tabular-nums; }
-.pill { display: inline-flex; align-items: center; gap: 5px; font: 600 10.5px var(--f-body); letter-spacing: .06em; border-radius: 999px; padding: 2px 8px; border: 1px solid var(--line-2); color: var(--ink-2); background: var(--surface-2); white-space: nowrap; }
+.pill { display: inline-flex; align-items: center; gap: 5px; font: 600 10.5px var(--f-body); letter-spacing: .06em; border-radius: 2px; padding: 2px 8px; border: 1px solid var(--line-2); color: var(--ink-2); background: var(--surface-2); white-space: nowrap; }
 .pill.warn { color: var(--warn-ink); background: var(--warn-bg); border-color: var(--warn-line); }
 .pill.acc { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
 .sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
@@ -216,10 +214,10 @@ tbody tr.sel td.sticky { background: var(--sel-bg); color: var(--sel-ink); }
 tbody tr:last-child td { border-bottom: 0; }
 tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 td.hc { text-align: center; min-width: 46px; }
-.mini { display: inline-block; height: 7px; border-radius: 4px; vertical-align: middle; }
-.dbar { position: relative; width: 74px; height: 8px; display: inline-block; vertical-align: middle; background: var(--surface-3); border-radius: 4px; margin-left: 6px; }
+.mini { display: inline-block; height: 7px; border-radius: 2px; vertical-align: middle; }
+.dbar { position: relative; width: 74px; height: 8px; display: inline-block; vertical-align: middle; background: var(--surface-3); border-radius: 2px; margin-left: 6px; }
 .dbar::before { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--faint); }
-.dbar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.dbar i { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
 .pager { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; color: var(--muted); font-size: 12.5px; }
 .pager .num { color: var(--ink-2); }
 .toolbar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
@@ -235,7 +233,7 @@ td.hc { text-align: center; min-width: 46px; }
 .scrollx svg { max-width: none; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12px; color: var(--muted); }
 .legend span { display: inline-flex; gap: 6px; align-items: center; }
-.legend .ramp { width: 120px; height: 7px; border-radius: 4px; flex: none; display: inline-block; }
+.legend .ramp { width: 120px; height: 7px; border-radius: 2px; flex: none; display: inline-block; }
 svg text { font-family: var(--f-data); }
 svg .lab { font-family: var(--f-body); }
 svg .ax { font-size: 10.5px; fill: var(--muted); }
@@ -254,8 +252,8 @@ svg .hit:focus-visible > :first-child { stroke: var(--accent); stroke-width: 3; 
 .links { display: grid; gap: 4px; }
 .link { display: grid; grid-template-columns: minmax(0, 1fr) 70px 46px 46px; gap: 8px; align-items: center; font-size: 12.5px; }
 .link .who { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.link .bar { height: 7px; border-radius: 4px; background: var(--surface-3); overflow: hidden; }
-.link .bar i { display: block; height: 100%; border-radius: 4px; }
+.link .bar { height: 7px; border-radius: 2px; background: var(--surface-3); overflow: hidden; }
+.link .bar i { display: block; height: 100%; border-radius: 2px; }
 .link .n { font: 500 12px var(--f-data); text-align: right; }
 .lrow { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 6px 8px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface-2); cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; }
 .lrow:hover { border-color: var(--accent-line); }
@@ -274,7 +272,7 @@ svg .hit:focus-visible > :first-child { stroke: var(--accent); stroke-width: 3; 
 /* ------------------------------------------------------------------ aprende */
 .ap { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 16px; align-items: start; }
 .ap nav { position: sticky; top: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 8px; display: grid; gap: 2px; box-shadow: var(--shadow); max-height: calc(100vh - 16px); overflow: auto; }
-.ap nav button { all: unset; cursor: pointer; padding: 5px 9px; border-radius: 7px; font-size: 13px; color: var(--ink-2); display: flex; gap: 8px; align-items: baseline; }
+.ap nav button { all: unset; cursor: pointer; padding: 5px 9px; border-radius: 4px; font-size: 13px; color: var(--ink-2); display: flex; gap: 8px; align-items: baseline; }
 .ap nav button i { font: 600 10px var(--f-data); font-style: normal; color: var(--faint); min-width: 16px; }
 .ap nav button:hover, .ap nav button:focus-visible { background: var(--surface-2); color: var(--ink); }
 .ap nav button.on { background: var(--accent-soft); color: var(--ink); }
@@ -291,16 +289,16 @@ svg .hit:focus-visible > :first-child { stroke: var(--accent); stroke-width: 3; 
 /* ------------------------------------------------------------------ tooltip */
 .tip { position: fixed; z-index: 60; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink); border: 1px solid var(--tip-line); font-size: 12.5px; line-height: 1.45; padding: 8px 10px; border-radius: var(--r-sm); max-width: 300px; box-shadow: var(--shadow-lg); }
 .tip b { color: inherit; }
-.tip hr { border: 0; border-top: 1px solid rgba(255,255,255,.18); margin: 5px 0; }
+.tip hr { border: 0; border-top: 1px solid rgba(243,240,232,.18); margin: 5px 0; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
 /* Escalas ±100 (bloque compartido: idéntico en el Atlas de Estilos y en Quintetos y conexiones) */
 .esc { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; cursor: help; }
 .esc.up { color: var(--good); } .esc.dn { color: var(--bad); } .esc.na { color: var(--muted); font-weight: 400; cursor: default; }
 .esc .escp { font-weight: 500; color: var(--muted); font-size: .85em; margin-left: 2px; }
 .kpi b > .esc, .kv b > .esc, .kv dd .esc, .bignet b > .esc, .kpi3 b > .esc, b > .esc { font: inherit; letter-spacing: inherit; text-transform: none; }
-.escbar { display: inline-block; position: relative; width: 56px; height: 8px; border-radius: 4px; background: var(--line); vertical-align: middle; margin-left: 6px; }
+.escbar { display: inline-block; position: relative; width: 56px; height: 8px; border-radius: 2px; background: var(--line); vertical-align: middle; margin-left: 6px; }
 .escbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); }
-.escbar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.escbar i { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
 .escbar i.p { background: var(--good); } .escbar i.n { background: var(--bad); }
 .escbar.neu i.p { background: var(--accent-strong); } .escbar.neu i.n { background: var(--muted); }
 .escsw { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
@@ -314,52 +312,52 @@ svg .hit:focus-visible > :first-child { stroke: var(--accent); stroke-width: 3; 
 .esctab { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .esctab th, .esctab td { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .esctab td.n, .esctab th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.escform { font: 600 15px var(--f-data); padding: 8px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); display: inline-block; }
+.escform { font: 600 15px var(--f-data); padding: 8px 12px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); display: inline-block; }
 
 /* ===== Evaluación de equipos ===== */
 .evst { display: inline-flex; align-items: center; gap: 6px; font: 500 12.5px var(--f-body); white-space: nowrap; }
-.evst i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.evst i { width: 10px; height: 10px; border-radius: 2px; flex: none; }
 .evst small { color: var(--muted); font: 500 11px var(--f-data); }
 .kpi b .evst, .kv b .evst { font: 600 15px var(--f-body); white-space: normal; text-transform: none; letter-spacing: 0; color: var(--ink); }
 .kpi b .evst small, .kv b .evst small { text-transform: none; letter-spacing: 0; }
 .evins { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: 13.5px; color: var(--ink-2); }
 .evins b { color: var(--ink); }
-.evtl { position: relative; height: 14px; border-radius: 7px; background: var(--surface-3); overflow: hidden; }
+.evtl { position: relative; height: 14px; border-radius: 4px; background: var(--surface-3); overflow: hidden; }
 .evtl i { position: absolute; top: 0; bottom: 0; border-right: 2px solid var(--surface); }
 .evtl-ax { display: flex; justify-content: space-between; font: 500 11px var(--f-data); color: var(--muted); margin-top: 2px; }
 .evdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; flex: none; }
 .evrep { margin-top: 3px; display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px; align-items: center; font-size: 12px; color: var(--muted); }
-.evrep > div { display: flex; height: 18px; border-radius: 5px; overflow: hidden; background: var(--surface-3); }
-.evrep i { display: grid; place-items: center; font: 600 10px var(--f-data); color: #fff; font-style: normal; border-right: 1px solid var(--surface); }
+.evrep > div { display: flex; height: 18px; border-radius: 2px; overflow: hidden; background: var(--surface-3); }
+.evrep i { display: grid; place-items: center; font: 600 10px var(--f-data); color: #F3F0E8; font-style: normal; border-right: 1px solid var(--surface); }
 table.evmet tr.grp th { background: var(--surface-2); font: 700 10px var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-align: left; }
 
 /* ===================== EBATE · capa de diseño común ===================== */
 :root {
-  --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f8f9fb; --surface-3: #eef0f4; --line: #e3e6eb; --line-2: #d2d7df;
-  --ink: #121820; --ink-2: #39424f; --muted: #687282; --faint: #a1a8b4;
-  --accent: #1f3b63; --accent-strong: #1f3b63; --accent-ink: #ffffff; --accent-soft: rgba(31, 59, 99, .07); --accent-line: rgba(31, 59, 99, .32);
-  --good: #1a7f4b; --bad: #c0392b; --warn: #b7791f; --neutral: #7c8496; --sim: #1f3b63; --navy: #1f3b63;
-  --btn-bg: #121820; --btn-ink: #f4f5f7; --btn-hover: #1f3b63; --sel-bg: #e9eff7; --sel-ink: #1f3b63; --th-bg: #f8f9fb;
-  --top-bg: rgba(244, 245, 247, .92); --row-hover: rgba(18, 24, 32, .03);
-  --e1: #3b6fb6; --e2: #e08a3c; --e3: #2a9d8f; --e4: #c9a227; --e5: #b4589a; --e6: #7562c4;
-  --shadow: 0 1px 2px rgba(18, 24, 32, .04), 0 10px 28px -22px rgba(18, 24, 32, .28); --shadow-lg: 0 16px 40px -14px rgba(18, 24, 32, .3);
+  --bg: #F3F0E8; --surface: #F3F0E8; --surface-2: #E8E5DD; --surface-3: #E8E5DD; --line: #DAD7CF; --line-2: #C2C3BF;
+  --ink: #12161B; --ink-2: #3B434C; --muted: #545D67; --faint: #9AA0A6;
+  --accent: #12161B; --accent-strong: #12161B; --accent-ink: #F3F0E8; --accent-soft: rgba(18, 22, 27, .07); --accent-line: rgba(18, 22, 27, .32);
+  --good: #2A6FA8; --bad: #C4552E; --warn: #B7810C; --neutral: #737B84; --sim: #12161B; --navy: #12161B;
+  --btn-bg: #12161B; --btn-ink: #F3F0E8; --btn-hover: #12161B; --sel-bg: #E3ECF4; --sel-ink: #12161B; --th-bg: #E8E5DD;
+  --top-bg: rgba(243, 240, 232, .92); --row-hover: rgba(18, 22, 27, .03);
+  --e1: #2A6FA8; --e2: #C4552E; --e3: #1E9670; --e4: #7A5BC8; --e5: #C9628E; --e6: #4E8A2A;
+  --shadow: 0 1px 2px rgba(18, 22, 27, .04), 0 10px 28px -22px rgba(18, 22, 27, .28); --shadow-lg: 0 16px 40px -14px rgba(18, 22, 27, .3);
   --r: 12px; --r-sm: 8px;
 }
 :root[data-theme="dark"] {
-  --bg: #0b0f15; --surface: #121820; --surface-2: #171e28; --surface-3: #1e2633; --line: #242d3a; --line-2: #303b4b;
-  --ink: #e7ebf1; --ink-2: #b8c0cc; --muted: #8792a3; --faint: #5b6577;
-  --accent: #8db4e6; --accent-strong: #8db4e6; --accent-ink: #0b0f15; --accent-soft: rgba(141, 180, 230, .10); --accent-line: rgba(141, 180, 230, .38);
-  --good: #3fbf7f; --bad: #ef6b5d; --warn: #e5a83b; --sim: #8db4e6; --navy: #8db4e6;
-  --btn-bg: #e7ebf1; --btn-ink: #0b0f15; --btn-hover: #8db4e6; --sel-bg: #16202e; --sel-ink: #8db4e6; --th-bg: #161d28;
-  --top-bg: rgba(11, 15, 21, .9); --row-hover: rgba(255, 255, 255, .035);
-  --shadow: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 12px 30px -18px rgba(0, 0, 0, .7);
+  --bg: #12161B; --surface: #12161B; --surface-2: #262C33; --surface-3: #262C33; --line: #3B434C; --line-2: #3B434C;
+  --ink: #F3F0E8; --ink-2: #C2C3BF; --muted: #9AA0A6; --faint: #737B84;
+  --accent: #4A8CC4; --accent-strong: #4A8CC4; --accent-ink: #12161B; --accent-soft: rgba(157, 190, 221, .10); --accent-line: rgba(157, 190, 221, .38);
+  --good: #4A8CC4; --bad: #D9693F; --warn: #B7810C; --sim: #4A8CC4; --navy: #4A8CC4;
+  --btn-bg: #F3F0E8; --btn-ink: #12161B; --btn-hover: #4A8CC4; --sel-bg: #262C33; --sel-ink: #4A8CC4; --th-bg: #262C33;
+  --top-bg: rgba(18, 22, 27, .9); --row-hover: rgba(243, 240, 232, .035);
+  --shadow: 0 1px 0 rgba(243, 240, 232, .03) inset, 0 12px 30px -18px rgba(18, 22, 27, .7);
 }
 body { background: var(--bg); }
 .label { font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 ::selection { background: var(--accent-soft); }
 
-:root { --e0: #8a93a5; --court: #f2f4f7; --court-line: #d0d6df; --heat-seq: 31, 59, 99; }
-:root[data-theme="dark"] { --heat-seq: 141, 180, 230; }
+:root { --e0: #9AA0A6; --court: #E8E5DD; --court-line: #C2C3BF; --heat-seq: 18, 22, 27; }
+:root[data-theme="dark"] { --heat-seq: 157, 190, 221; }
 :root[data-embed] .wrap { max-width: none; padding: 4px 0 40px; grid-template-columns: 290px minmax(0, 1fr); column-gap: 18px; align-items: start; }
 :root[data-embed] .head, :root[data-embed] #subnav { display: none !important; }
 :root[data-embed] .command { grid-column: 1; grid-row: 1 / span 40; position: sticky; top: 8px; gap: 16px; padding: 16px; }
@@ -456,7 +454,7 @@ const ESC = (() => {
   const LIGAS_INFO = { euroleague: ["EuroLeague", "EL"], eurocup: ["EuroCup", "EC"], acb: ["Liga Endesa", "ACB"], nba: ["NBA", "NBA"], gleague: ["G League", "GL"],
     lba: ["LBA", "LBA"], bbl: ["BBL", "BBL"], lnb: ["LNB", "LNB"], bcl: ["Basketball Champions League", "BCL"], fec: ["FIBA Europe Cup", "FEC"],
     bsl: ["Basketbol Süper Ligi", "BSL"], gbl: ["Greek Basket League", "GBL"] };
-  const LIGA_COL = ["#3b6fb6", "#e08a3c", "#2a9d8f", "#c9a227", "#b4589a", "#7562c4", "#5fae3a", "#e5504f", "#2fb3c4", "#b0793a", "#9b59b6", "#7a8a99"];
+  const LIGA_COL = ["#2A6FA8", "#C4552E", "#1E9670", "#7A5BC8", "#C9628E", "#4E8A2A", "#1F4F78", "#D98C6E", "#6E9DC9", "#737B84", "#545D67", "#3B434C"];
   let E = DEF, modo = "escala";
   try { if (localStorage.getItem("mm.escala") === "original") modo = "original"; } catch (e) { /* sin almacenamiento */ }
   const okn = (v) => typeof v === "number" && isFinite(v);
@@ -565,7 +563,7 @@ function divC(v, sc, neutral = false, max = 0.85) {
 function seqC(v, max, m = 0.9) { if (!ok(v)) return null; return mixA(PAL.mid, PAL.seq, clamp(v / (max || 1), 0, 1) * m); }
 function cellCss(c, alpha = 1) {
   if (!c) return "";
-  const ink = lum(c) > 0.32 ? "#121820" : "#f1f3f6";
+  const ink = lum(c) > 0.32 ? "#12161B" : "#F3F0E8";
   return `background:${rgbS(c)};color:${ink};${alpha < 1 ? `opacity:${alpha.toFixed(2)};` : ""}`;
 }
 const solidC = (v, neutral = false) => (v >= 0 ? (neutral ? rgbS(PAL.pos) : "var(--good)") : (neutral ? rgbS(PAL.neg) : "var(--bad)"));
@@ -577,22 +575,41 @@ const LNOM = new Proxy({}, { get: (o, l) => (typeof l === "string" ? ESC.ligaNom
 const FASES = [["regular", "Regular"], ["playoffs", "Playoffs"], ["total", "Total"]];
 const FNOM = { regular: "temporada regular", playoffs: "playoffs", total: "toda la temporada" };
 const TABS = ["evaluacion", "equipo", "quintetos", "parejas", "conexiones", "jugadores", "liga", "aprende"];
+// Perfiles del mapa del Atlas (los seis grupos con los que se entrenó el mapa): rótulos neutros A–F con su rasgo.
+// La taxonomía de estilos que se muestra es la unificada (Pistons, Isolation, Old-School, Spacing, Circulación, Pintura).
 const ESTILOS = {
-  E01: ["Perímetro y presión", "Muchos minutos de exteriores, mucho triple y robos; poco rebote defensivo y pocos tiros libres."],
-  E02: ["Pausado y seguro", "Ritmo bajo, muy pocas pérdidas y pocas asistencias."],
-  E03: ["Pintura física", "Interiores, rebote ofensivo y muchas faltas; pocas asistencias."],
-  E04: ["Exterior y riesgo", "Bases y escoltas, robos, tiros libres y asistencias; más pérdidas y faltas."],
-  E05: ["Ritmo y juego limpio", "Ritmo alto, muy pocas faltas, buen rebote defensivo."],
-  E06: ["Ataque al aro", "Penetración, tiros libres, asistencias, rebote defensivo y tapones; poco triple."],
+  E01: ["Perfil de mapa A", "Se fabrica sus tiros: poco triple, mucha media distancia, tiros libres y canastas sin asistencia; rebote defensivo y tapones."],
+  E02: ["Perfil de mapa B", "Muchos minutos de bases y escoltas: ritmo alto, presión y robos; ataca el aro y reparte, pero pierde más balones."],
+  E03: ["Perfil de mapa C", "Pocos tiros cerca del aro: media distancia y triple, poco rebote ofensivo; ritmo bajo y pocas faltas y pérdidas."],
+  E04: ["Perfil de mapa D", "Muy pocas pérdidas y pocas asistencias; defensa conservadora y buen rebote defensivo; muchas canastas tras pase."],
+  E05: ["Perfil de mapa E", "Juego en la pintura: tiros en el aro, rebote ofensivo, faltas y robos; poca media distancia y pocas asistencias."],
+  E06: ["Perfil de mapa F", "Mucho triple, sobre todo de esquina, y canastas asistidas; poca media distancia y pocos tiros libres."],
 };
 const ECOL = { E01: "var(--e1)", E02: "var(--e2)", E03: "var(--e3)", E04: "var(--e4)", E05: "var(--e5)", E06: "var(--e6)" };
 // nombres y colores de los estilos: los del fichero (estilos_nombres) mandan sobre los del Atlas incrustados aquí
 const estInfo = (id) => (D && D.estN && D.estN[id]) || null;
-const estNombre = (id) => (estInfo(id) && estInfo(id).nombre) || (ESTILOS[id] && ESTILOS[id][0]) || id;
-const estDesc = (id) => (estInfo(id) && (estInfo(id).descripcion || estInfo(id).resumen || estInfo(id).descriptor)) || (ESTILOS[id] && ESTILOS[id][1]) || "";
-const estCol = (id) => ECOL[id] || (estInfo(id) && /^(#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)|hsla?\([\d\s.,%deg]+\))$/i.test(String(estInfo(id).color || "").trim()) ? String(estInfo(id).color).trim() : "var(--e0)"); // paleta EBATE por encima de los colores del fichero
+const estNombre = (id) => (ESTILOS[id] && ESTILOS[id][0]) || "–"; // perfiles del mapa: siempre el rótulo neutro A–F
+const estDesc = (id) => (ESTILOS[id] && ESTILOS[id][1]) || "";
+const estCol = (id) => ECOL[id] || (estInfo(id) && /^(#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)|hsla?\([\d\s.,%deg]+\))$/i.test(String(estInfo(id).color || "").trim()) ? String(estInfo(id).color).trim() : "var(--e0)"); // paleta de marca por encima de los colores del fichero
 const estConocido = (id) => !!id && (!!estInfo(id) || !!ESTILOS[id]);
 const estIds = () => (D && D.estN ? Object.keys(D.estN).sort() : Object.keys(ESTILOS));
+// --------------------------------------------------------------------------------- estilos unificados (taxonomía nueva)
+// estilos_unificados.gz.txt: {estilos:[{id,nombre,definicion,jugador,rol_jugador}], j:{"liga|temporada|team_id|player_id": [eu, eu_p, eu_etiqueta]}}
+// estilos_unificados_clubes.gz.txt: {c:{"liga:club:temporada": {u:[eu,eu_p,etiqueta], pr:[6 probs], ent:{id:[eu,eu_p,etiqueta,probs]}, pl:[[eu,eu_p,etiqueta]|null…]}}}
+// Ambos derivados del Atlas de Estilos. Colores: paleta categórica de marca en este orden (tokens --e1…--e6, con variante oscura).
+const EU_IDS = ["pistons", "isolation", "old_school", "spacing", "circulacion", "pintura"];
+const EU_NOM = ["Pistons", "Isolation", "Old-School", "Spacing", "Circulación", "Pintura"];
+let EU = null, EUC = null, EUCD = null, EUP = null, EUCP = null;
+function cargarEU() { if (!EUP) { EUP = bajarJSON("estilos_unificados.gz.txt").then((d) => { EU = d || null; return EU; }).catch((err) => { console.warn("Estilos unificados no disponibles:", err.message); EU = null; return null; }); } return EUP; }
+function cargarEUC() { if (!EUCP) { EUCP = bajarJSON("estilos_unificados_clubes.gz.txt").then((d) => { EUC = (d && d.c) || null; EUCD = (d && d.estilos) || null; return EUC; }).catch((err) => { console.warn("Estilos unificados de clubes no disponibles:", err.message); EUC = null; return null; }); } return EUCP; }
+const euDef = (i) => (EU && Array.isArray(EU.estilos) && EU.estilos[i]) || null;
+const euNom = (i) => (euDef(i) && euDef(i).nombre) || EU_NOM[i] || "";
+const euCol = (i) => (ok(i) && i >= 0 && i < 6 ? `var(--e${i + 1})` : "var(--e0)");
+const euOk = (u) => Array.isArray(u) && ok(u[0]) && u[0] >= 0 && u[0] < 6 && !!u[2];
+const euJ = (j) => { if (!EU || !EU.j || !D) return null; const o = J(j); const u = EU.j[`${D.liga}|${D.temp}|${o.team_id}|${o.player_id}`]; return euOk(u) ? u : null; };
+const euTip = (u, extra = "") => { if (!euOk(u)) return ""; const d = euDef(u[0]); return `<b>${esc(u[2])}</b>${d ? `<br>${esc(d.rol_jugador || "")}${d.rol_jugador ? ": " : ""}${esc(d.jugador || d.definicion || "")}` : ""}${ok(u[1]) ? `<br>Claridad del estilo: ${f(100 * u[1], 0)} %` : ""}${extra}`; };
+const euTipClub = (u) => { if (!euOk(u)) return ""; const d = EUCD && EUCD[u[0]]; return `<b>${esc(u[2])}</b>${d ? `<br>${esc(d.equipo || d.definicion || "")}` : ""}${ok(u[1]) ? `<br>Claridad del estilo: ${f(100 * u[1], 0)} %` : ""}`; };
+const euSpan = (u, p, club = true) => (euOk(u) ? `<span class="evst" ${tipA(club ? euTipClub(u) : euTip(u))}><i style="background:${euCol(u[0])}"></i>${esc(u[2])}${p && ok(u[1]) ? ` <small>${f(100 * u[1], 0)} %</small>` : ""}</span>` : "–");
 const POSN = { E: "Exterior (base o escolta)", A: "Alero", I: "Interior" };
 const POSO = { E: 0, A: 1, I: 2 };
 const SIN_DATOS = { // por qué falta una liga-temporada
@@ -641,7 +658,7 @@ async function bajarJSON(url) {
 }
 function cargarLiga(t, l) {
   const k = `${t}/${l}`;
-  if (!CACHE.has(k)) { const p = bajarJSON(`datos/${t}/${l}.gz.txt`).then(prep); p.catch(() => CACHE.delete(k)); CACHE.set(k, p); p.then((d) => { p.listo = d; }); }
+  if (!CACHE.has(k)) { const p = Promise.all([bajarJSON(`datos/${t}/${l}.gz.txt`), cargarEU()]).then(([raw]) => prep(raw)); p.catch(() => CACHE.delete(k)); CACHE.set(k, p); p.then((d) => { p.listo = d; }); }
   return CACHE.get(k);
 }
 function objs(tab) {
@@ -891,10 +908,10 @@ function vacioFase(T) {
     otras.length ? `<div class="row" style="justify-content:center">${otras.map((fz) => `<button class="btn ghost" type="button" data-a="fase" data-v="${fz}">Ver ${FNOM[fz]}</button>`).join("")}</div>` : "");
 }
 function chipEstilo(j) {
-  const o = J(j); if (!estConocido(o.estilo)) return "";
-  return `<span class="pill" ${tipA(`<b>Estilo ${esc(o.estilo)} · ${esc(estNombre(o.estilo))}</b><br>${esc(estDesc(o.estilo))}${ok(o.p_estilo) ? `<br>Claridad del estilo: ${fp(100 * o.p_estilo, 0)}` : ""}<br><span style="opacity:.75">Estilos del Atlas de Estilos.</span>`)}><i class="sw" style="background:${estCol(o.estilo)}"></i>${esc(estNombre(o.estilo))}</span>`;
+  const u = euJ(j); if (!u) return "";
+  return `<span class="pill" ${tipA(euTip(u, `<br><span style="opacity:.75">Estilos del Atlas de Estilos.</span>`))}><i class="sw" style="background:${euCol(u[0])}"></i>${esc(u[2])}</span>`;
 }
-const colJug = (j) => { const o = J(j); return estConocido(o.estilo) ? estCol(o.estilo) : "var(--e0)"; };
+const colJug = (j) => { const u = euJ(j); return u ? euCol(u[0]) : "var(--e0)"; };
 const btnJ = (j, T, txt) => `<button class="pl" type="button" data-a="j" data-v="${esc(pid(j))}">${esc(txt || sn(j, T))}</button>`;
 const nombresQ = (u, T, sep = " · ") => u.map((j) => esc(sn(j, T))).join(sep);
 function ordenarPos(u, T) { return u.slice().sort((a, b) => (POSO[J(a).pos3] ?? 3) - (POSO[J(b).pos3] ?? 3) || ((T && T.by.get(b) ? T.by.get(b).min_on : 0) - (T && T.by.get(a) ? T.by.get(a).min_on : 0))); }
@@ -970,12 +987,12 @@ function pistaQuinteto(u, T, opts = {}) {
   const nodos = js.map((j, k) => {
     const [x, y] = slots[k] || [160, 125], o = J(j), r = T && T.by.get(j);
     const sub = opts.sub ? opts.sub(j, r) : "";
-    const tip = `<b>${esc(o.nm)}</b>${o.pos3 ? ` · ${esc(POSN[o.pos3])}` : ""}${estConocido(o.estilo) ? `<br>Estilo: ${esc(estNombre(o.estilo))}` : ""}` +
+    const tip = `<b>${esc(o.nm)}</b>${o.pos3 ? ` · ${esc(POSN[o.pos3])}` : ""}${euJ(j) ? `<br>Estilo: ${esc(euJ(j)[2])}` : ""}` +
       (r ? `<br>${fm(r.min_on)} en ${esc(FNOM[S.f])} · RAPM ${ESC.txt(nS("rapm_liga", r.rapm))} (${fs(r.rapm, 1)})<br>On−off ${ESC.txt(nS("onoff", r.net_rtg_onoff))} (${fs(r.net_rtg_onoff, 1)})` : "") + (ok(o.L) ? `<br>Nivel ${ESC.txt(nS("nivel", o.L))} (Euroliga = 0)` : "") + "<br><i>Clic: ficha del jugador</i>";
     const lx = x;
     return `<g class="hit" data-a="j" data-v="${esc(pid(j))}" ${tipA(tip)} tabindex="0" role="button" aria-label="${esc(o.nm)}">` +
       `<circle cx="${x}" cy="${y}" r="17" fill="${colJug(j)}" stroke="var(--surface)" stroke-width="2.5"/>` +
-      `<text x="${x}" y="${y + 4.5}" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">${esc(o.pos3 || "·")}</text>` +
+      `<text x="${x}" y="${y + 4.5}" text-anchor="middle" font-size="13" font-weight="700" fill="#F3F0E8">${esc(o.pos3 || "·")}</text>` +
       `<text class="lab" x="${lx}" y="${y + 31}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--court)" stroke-width="3">${esc(sn(j, T))}</text>` +
       (sub ? `<text x="${lx}" y="${y + 44}" text-anchor="middle" font-size="10.5" fill="var(--muted)" paint-order="stroke" stroke="var(--court)" stroke-width="3">${sub}</text>` : "") + `</g>`;
   }).join("");
@@ -990,7 +1007,7 @@ function tira(rows, k, v, opts = {}) {
   let g = `<line x1="8" y1="16" x2="${W - 8}" y2="16" stroke="var(--line-2)" stroke-width="2" stroke-linecap="round"/>`;
   g += `<line x1="${x(med)}" y1="9" x2="${x(med)}" y2="23" stroke="var(--faint)" stroke-width="1.5" ${tipA(`Mediana de la liga: ${f(med, d)}`)}/>`;
   rows.filter((r) => ok(r[k]) && r.team_id !== S.e).forEach((r) => { g += `<circle cx="${x(r[k])}" cy="16" r="4" fill="var(--muted)" opacity=".45" ${tipA(`${esc(D.eqn[r.team_id] || r.team_id)}: ${f(r[k], d)}`)}/>`; });
-  g += `<circle cx="${x(v)}" cy="16" r="7" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" ${tipA(`<b>${esc(D.eqn[S.e])}</b>: ${f(v, d)}`)}/>`;
+  g += `<circle cx="${x(v)}" cy="16" r="7" fill="var(--sim)" stroke="var(--ink)" stroke-width="1.5" ${tipA(`<b>${esc(D.eqn[S.e])}</b>: ${f(v, d)}`)}/>`;
   g += `<text x="8" y="35" font-size="9.5" fill="var(--muted)">${f(lo0, d)}${opts.izq ? " · " + esc(opts.izq) : ""}</text><text x="${W - 8}" y="35" font-size="9.5" fill="var(--muted)" text-anchor="end">${opts.der ? esc(opts.der) + " · " : ""}${f(hi0, d)}</text>`;
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px" role="img" aria-label="${esc(opts.aria || k)}: ${f(v, d)} frente al resto de la liga">${g}</svg>`;
 }
@@ -1036,7 +1053,7 @@ function zonasSVG(r, ref, nombre) {
   z += `<path d="${arco}" fill="${fill("media")}" ${tip("media")}/>`;
   z += `<path d="${c(4.25 * s)}" fill="${fill("corta")}" ${tip("corta")}/>`;
   z += `<path d="${c(1.8 * s)}" fill="${fill("aro")}" ${tip("aro")}/></g>`;
-  const L = (k, x, y) => { const q = pf.find((w) => w.k === k), cz = seqC(q.sh, Math.max(45, maxSh), 0.95), claro = lum(cz) > 0.3, st = `pointer-events:none;fill:${claro ? "#121820" : "#f1f3f6"};stroke:${claro ? "rgba(255,255,255,.55)" : "rgba(0,0,0,.45)"}`;
+  const L = (k, x, y) => { const q = pf.find((w) => w.k === k), cz = seqC(q.sh, Math.max(45, maxSh), 0.95), claro = lum(cz) > 0.3, st = `pointer-events:none;fill:${claro ? "#12161B" : "#F3F0E8"};stroke:${claro ? "rgba(243,240,232,.55)" : "rgba(18,22,27,.45)"}`;
     return `<text class="zone-lab" x="${x}" y="${y}" text-anchor="middle" style="${st}">${f(q.sh, 0)} %</text><text class="zone-lab" x="${x}" y="${y + 12}" text-anchor="middle" font-size="9.5" font-weight="500" style="${st}">${q.fga ? f(q.pct, 0) + " % ac." : "—"}</text>`; };
   const lineas = `<g style="pointer-events:none">${lineasPista(g).replace(/fill="var\(--court\)"/, 'fill="none"')}</g>`;
   const svg = `<svg viewBox="0 0 ${W} ${H}" style="max-width:360px;width:100%" role="img" aria-label="Reparto de tiros por zona de ${esc(nombre)}">${z}${lineas}${L("aro", bx, by - 3)}${L("corta", bx, by - 3.05 * s)}${L("media", bx, by - 5.55 * s)}${L("t3_frontal", bx, 26)}</svg>`;
@@ -1177,7 +1194,7 @@ R.equipo = (el) => {
   <div class="g2">${tit}${pri}</div>
   ${aprende("En la pista, cada jugador se coloca por su posición (<b>E</b> exterior arriba, <b>A</b> alero en las alas, <b>I</b> interior cerca del aro) y se colorea por su <b>estilo</b> del Atlas. El quinteto <b>titular</b> es el que empieza los partidos; el <b>principal</b>, el que más minutos juega junto. No tienen por qué coincidir.", "tramo")}
   <div class="g2">
-    <div class="dcard"><h2>Estructura de la rotación</h2><p class="hint">Cada punto gris es un equipo de la liga; el dorado, ${esc(T.nombre)}. La raya vertical marca la mediana.</p>${estrHtml}
+    <div class="dcard"><h2>Estructura de la rotación</h2><p class="hint">Cada punto gris es un equipo de la liga; el amarillo, ${esc(T.nombre)}. La raya vertical marca la mediana.</p>${estrHtml}
       ${aprende("Un equipo <b>estable</b> concentra minutos en pocos quintetos (más química, más previsible); uno <b>cambiante</b> combina mucho (por lesiones, rivales o filosofía). El <b>HHI</b> mide concentración: suma de las cuotas al cuadrado. Si 5 jugadores jugaran el 100 % de los minutos, HHI = 5 × 20² = 2.000; con 10 jugadores a partes iguales, 1.000.", "rotacion")}</div>
     <div class="dcard"><h2>Rotación por cuartos</h2><p class="hint">Minutos por partido que juega cada uno en cada cuarto (de ${ql}). Más oscuro = más minutos. Clic en un jugador para ver su ficha.</p>${rot}
       ${aprende(`Lee las filas: un titular clásico juega mucho el 1.º y el 3.º cuarto; un <b>cerrador</b> concentra minutos en el 4.º y aparece en «Cierra». «Relevos/p» y «Min/relevo» dicen si el entrenador da turnos largos o cortos.`, "rotacion")}</div>
@@ -1247,7 +1264,7 @@ R.quintetos = (el) => {
   </div>
   <div class="dcard"><div class="cardhead"><h2>Todos los quintetos</h2><div class="chips" role="group" aria-label="Grupos de columnas">${G.map(([k, n]) => `<button class="chip" type="button" data-grupo="qGrupos" data-v="${k}" aria-pressed="${grupos.includes(k)}">${n}</button>`).join("")}</div></div>
     <div id="qTabla"></div>
-    ${aprende("Clic en una fila para abrir su ficha (o selecciónala con el teclado y pulsa Intro). Clic en una cabecera para ordenar. En <b>Eficiencia</b> y <b>Cuatro factores</b>, el color compara con la media del propio equipo: verde, mejor que el equipo; rojo, peor.", "factores")}
+    ${aprende("Clic en una fila para abrir su ficha (o selecciónala con el teclado y pulsa Intro). Clic en una cabecera para ordenar. En <b>Eficiencia</b> y <b>Cuatro factores</b>, el color compara con la media del propio equipo: azul, mejor que el equipo; naranja, peor.", "factores")}
   </div>`;
   qScatter(T); qFicha(T); qTabla(T);
 };
@@ -1341,7 +1358,7 @@ function qFicha(T) {
       <div class="tablebox flat"><table class="ptable" aria-label="Cuatro factores"><thead><tr><th class="txt">Factor</th><th>Quinteto</th><th>Equipo</th><th>Dif.</th></tr></thead><tbody>
       <tr><td class="txt label" colspan="4" style="color:var(--accent)">En ataque</td></tr>${FF.slice(0, 4).map(ffRow).join("")}
       <tr><td class="txt label" colspan="4" style="color:var(--accent)">En defensa</td></tr>${FF.slice(4).map(ffRow).join("")}</tbody></table></div>
-      ${aprende("Los <b>cuatro factores</b> de Dean Oliver explican casi todo el Net: tirar bien (eFG%), no perderla, rebotear y llegar al tiro libre; y lo mismo para el rival. La diferencia en verde es favorable para el quinteto aunque el número baje (p. ej., menos pérdidas).", "factores")}</div>
+      ${aprende("Los <b>cuatro factores</b> de Dean Oliver explican casi todo el Net: tirar bien (eFG%), no perderla, rebotear y llegar al tiro libre; y lo mismo para el rival. La diferencia en azul es favorable para el quinteto aunque el número baje (p. ej., menos pérdidas).", "factores")}</div>
     <div class="kv"><div ${tipA("Minutos en clutch: últimos 5 minutos con ±5")}><span>Min clutch</span><b>${f(q.min_clutch, 1)}</b></div><div ${tipA("Minutos con el partido ya decidido")}><span>Min basura</span><b>${f(q.min_basura, 1)}</b></div><div><span>Ritmo</span><b>${f(q.ritmo)}</b></div><div><span>% triples</span><b>${fp(q.fg3a_rate, 0)}</b></div><div><span>% asistidas</span><b>${fp(q.ast_pct, 0)}</b></div><div ${tipA("Suma del RAPM de los cinco (pts/100, valor original)")}><span>Σ RAPM</span><b>${fs(q.rapm_suma)}</b></div></div>
     ${q.min_basura > 0.2 * q.min ? `<div class="warnbox">El ${fp((100 * q.min_basura) / q.min, 0)} de sus minutos fueron de la basura: sus cifras dicen poco de su valor real.</div>` : ""}`;
 }
@@ -1373,7 +1390,7 @@ R.parejas = (el) => {
       <div class="seg" role="group" aria-label="Métrica de la matriz">${Object.entries(PMET).map(([k, m]) => `<button class="segb" type="button" data-set="pMet" data-v="${k}" aria-pressed="${k === met}" ${tipA(m.tip)}>${m.lab}</button>`).join("")}</div>
       <div class="scrollx" id="pMatriz"></div>
       <div class="legend" id="pLeyenda"></div>
-      ${aprende(`Cada celda cruza al jugador de la <b>fila</b> con el de la <b>columna</b>, ordenados por minutos. ${PMET[met].tipo === "div" ? "Verde: la pareja suma; rojo: resta. Las celdas <b>pálidas</b> tienen pocos minutos juntos y son poco fiables." : "Más oscuro = más."} Las celdas vacías son parejas con menos de 40 minutos juntos. Clic en una celda para analizar la pareja.`, "wowy")}
+      ${aprende(`Cada celda cruza al jugador de la <b>fila</b> con el de la <b>columna</b>, ordenados por minutos. ${PMET[met].tipo === "div" ? "Azul: la pareja suma; naranja: resta. Las celdas <b>pálidas</b> tienen pocos minutos juntos y son poco fiables." : "Más oscuro = más."} Las celdas vacías son parejas con menos de 40 minutos juntos. Clic en una celda para analizar la pareja.`, "wowy")}
     </div>
     <div class="dcard" id="pFicha"></div>
   </div>
@@ -1410,7 +1427,7 @@ function pMatriz(T, met) {
     if (!pp) { g += `<rect x="${x + 1}" y="${y + 1}" width="${cs - 2}" height="${cs - 2}" rx="3" fill="none" stroke="var(--line)" stroke-dasharray="2 2" ${tipA(`${esc(J(a).nm)} + ${esc(J(b).nm)}: menos de 40 minutos juntos`)}/>`; return; }
     const minj = parV(pp, "min"), c = M.tipo === "div" ? divC(v, max, false, 0.95) : seqC(v, max, 0.92);
     const alpha = M.tipo === "div" ? 0.28 + 0.72 * clamp(minj / 250, 0, 1) : 1;
-    const ink = c && lum(c) > 0.32 ? "#121820" : "#f1f3f6";
+    const ink = c && lum(c) > 0.32 ? "#12161B" : "#F3F0E8";
     const tip = `<b>${esc(J(a).nm)} + ${esc(J(b).nm)}</b><br>${esc(M.lab)}: <b>${M.tipo === "div" ? `${ESC.txt(v)}</b> en la escala (${fs(v0)} pts/100)<b>` : met === "pct" ? fp(v, 0) : f(v, M.d)}</b>${ok(nivelConjunto([a, b])) ? `<br>Nivel conjunto ${ESC.txt(nS("nivel", nivelConjunto([a, b])))}` : ""}<hr>${fm(minj)} juntos (${fp(parV(pp, "pct_min_a_con_b"), 0)} de los de ${esc(sn(a, T))})<br>Net aj. juntos ${fs(parV(pp, "net_rtg_aj"))}<br>Sinergia WOWY ${fs(parV(pp, "sinergia"))} · RAPM ${fs(parV(pp, "sinergia_rapm"))}<br>Asistencias ${esc(sn(a, T))} → ${esc(sn(b, T))}: ${fi(parV(pp, "ast_a_a_b"))}${minj < 120 ? "<br><b>Pocos minutos: poco fiable</b>" : ""}`;
     g += `<g class="hit" data-a="p" data-v="${esc(pid(a) + "," + pid(b))}" tabindex="0" role="button" aria-label="${esc(J(a).nm)} y ${esc(J(b).nm)}" ${tipA(tip)}><rect x="${x + 1}" y="${y + 1}" width="${cs - 2}" height="${cs - 2}" rx="3" fill="${c ? rgbS(c) : "var(--surface-2)"}" fill-opacity="${alpha.toFixed(2)}" stroke="${isSel ? "var(--ink)" : "none"}" stroke-width="2.2"/>` +
       (cs >= 26 && ok(v) ? `<text x="${x + cs / 2}" y="${y + cs / 2 + 3.5}" text-anchor="middle" font-size="${cs >= 34 ? 10.5 : 9.5}" font-weight="600" fill="${alpha < 0.6 ? "var(--ink)" : ink}" style="pointer-events:none">${M.tipo === "div" ? (ESC.modo === "original" ? fs(v0, 0) : ESC.txt(v)).replace("±", "") : f(v, 0)}</text>` : "") + `</g>`;
@@ -1502,7 +1519,7 @@ R.conexiones = (el) => {
     <div class="dcard"><div class="cardhead"><h2>Red de asistencias · ${esc(T.nombre)}</h2><span class="note">${fi(sum(T.A, (a) => a.ast))} asistencias entre ${redNodos(T).length} jugadores · ${esc(FNOM[S.f])}</span></div>
       <div class="toolbar"><div class="slider"><span>Mostrar enlaces de</span><input type="range" min="2" max="${maxA}" step="1" value="${thr}" data-ui="nThr:${S.l}" aria-label="Mínimo de asistencias por enlace"><output>${fi(thr)}+ asist.</output></div></div>
       <div class="chartbox" id="nRed"></div>
-      <div class="legend">${estIds().map((k) => `<span><i class="sw" style="background:${estCol(k)}"></i>${esc(estNombre(k))}</span>`).join("")}<span><i class="sw" style="background:var(--e0)"></i>Sin estilo</span></div>
+      <div class="legend">${EU_NOM.map((nm, k) => `<span ${euDef(k) ? tipA(`<b>${esc(euNom(k))}</b><br>${esc(euDef(k).definicion || "")}`) : ""}><i class="sw" style="background:${euCol(k)}"></i>${esc(euNom(k))}</span>`).join("")}<span><i class="sw" style="background:var(--e0)"></i>Sin estilo</span></div>
       <div class="legend"><span><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="var(--accent)" stroke-width="3"/></svg>asistencias que da el jugador elegido</span><span><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="${rgbS(PAL.pos)}" stroke-width="3"/></svg>asistencias que recibe</span><span>Tamaño del círculo = PageRank · grosor = asistencias</span></div>
       ${aprende("Cada flecha va del <b>pasador</b> al <b>anotador</b>; cuanto más gruesa, más asistencias. Los jugadores se ordenan en el círculo de exteriores (arriba) a interiores. Pasa el ratón por un jugador para aislar sus conexiones; haz clic para fijarlo y ver sus listas a la derecha.", "red")}
     </div>
@@ -1652,7 +1669,7 @@ function jTabla(T, grupos, liga) {
   ].concat(liga ? [{ k: "eq", l: "Equipo", txt: 1, get: (r) => D.eqn[r.team_id] || r.team_id, fmt: (v) => esc(v) }] : [])
     .concat([
       { k: "pos", l: "Pos.", txt: 1, get: (r) => J(r.j).pos3 || "", tip: "E exterior · A alero · I interior" },
-      { k: "est", l: "Estilo", txt: 1, get: (r) => J(r.j).estilo || "", fmt: (v) => (estConocido(v) ? `<span ${tipA(`<b>${esc(estNombre(v))}</b><br>${esc(estDesc(v))}`)}><i class="sw" style="background:${estCol(v)}"></i> ${esc(v)}</span>` : "–"), tip: "Estilo de juego del Atlas de Estilos" },
+      { k: "est", l: "Estilo", txt: 1, get: (r) => { const u = euJ(r.j); return u ? u[2] : ""; }, fmt: (v, r) => { const u = euJ(r.j); return u ? `<span ${tipA(euTip(u))}><i class="sw" style="background:${euCol(u[0])}"></i> ${esc(u[2])}</span>` : "–"; }, tip: "Estilo de juego del Atlas de Estilos (Pistons, Isolation, Old-School, Spacing, Circulación, Pintura)" },
       { k: "edad", l: "Edad", d: 0, get: (r) => J(r.j).edad },
       N("gp", "PJ", "", 0, "Partidos con minutos"), N("min_on", "Min", "", 0, "Minutos en pista"),
       N("min_pct_equipo", "% min", "", 1, "% de los minutos del equipo"),
@@ -1789,7 +1806,7 @@ R.liga = (el) => {
 let EV = null, EVP = null;
 function cargarEV() {
   if (!EVP) {
-    EVP = bajarJSON("datos/equipos.gz.txt").then((raw) => {
+    EVP = Promise.all([bajarJSON("datos/equipos.gz.txt"), cargarEUC()]).then(([raw]) => {
       const C = raw.columnas;
       const F = raw.filas.map((f) => { const o = {}; C.forEach((c, i) => { o[c] = f[i]; }); o.wp = ok(o.w) && ok(o.l) && o.w + o.l > 0 ? (100 * o.w) / (o.w + o.l) : null; return o; });
       const by = new Map(); F.forEach((r) => by.set(`${r.t}|${r.f}|${r.liga}|${r.id}`, r));
@@ -1803,6 +1820,11 @@ function cargarEV() {
 }
 const evId = (e) => (ok(e) ? `E0${e + 1}` : null);
 const evChip = (e, p) => { const id = evId(e); return id ? `<span class="evst" ${tipA(`<b>${esc(estNombre(id))}</b><br>${esc(estDesc(id))}${ok(p) ? `<br>Claridad del estilo: ${f(100 * p, 0)} %` : ""}`)}><i style="background:${estCol(id)}"></i>${esc(estNombre(id))}${ok(p) ? ` <small>${f(100 * p, 0)} %</small>` : ""}</span>` : "–"; };
+// estilo unificado del club-temporada (clave liga:club:temporada), de una etapa de entrenador y de un jugador de la plantilla
+const evU = (k) => (EUC && EUC[k] && euOk(EUC[k].u) ? EUC[k].u : null);
+const evUent = (k, id) => { const e = EUC && EUC[k] && EUC[k].ent && EUC[k].ent[id]; return euOk(e) ? e : null; };
+const evUpl = (k, i) => { const u = EUC && EUC[k] && EUC[k].pl && EUC[k].pl[i]; return euOk(u) ? u : null; };
+const evUdef = (u) => { const d = euOk(u) && EUCD ? EUCD[u[0]] : null; return d ? d.equipo || d.definicion || "" : ""; };
 const evLiga = (t, l) => { const L = ((ESC.fam("nivel").ligas || {})[t] || {})[l]; return ok(L) ? L : null; };
 const evNiv = (L, extra = "") => (ok(L) ? nivHtml(L, extra) : `<span class="esc na">–</span>`);
 const evWL = (r) => (r && ok(r.w) && ok(r.l) ? `${r.w}-${r.l}${r.wl === "entrenadores_con_playoffs" ? `<sup ${tipA("Balance de sus entrenadores: incluye los playoffs (la fuente oficial de esta liga no separa las fases)")}>*</sup>` : ""}` : "–");
@@ -1858,8 +1880,8 @@ R.evaluacion = (el) => {
       "<b>Net</b>: puntos anotados menos recibidos por 100 posesiones, en su liga. En la escala ±100 (vara: los equipos de la Euroliga). Para comparar entre ligas, súmale el nivel de la liga: un +5 en la FIBA Europe Cup no es un +5 en la Euroliga.") +
     kp("Victorias esperadas", ok(py) ? f(py, 1) : "–", ok(dPy) ? `${fs(dPy, 1)} frente a las reales` : "con su ORtg y DRtg",
       "<b>Victorias esperadas</b> (fórmula pitagórica, exponente 14): las que «merece» un equipo con su rating ofensivo y defensivo. Si gana más, ha cerrado bien los partidos igualados o ha tenido suerte; si gana menos, al revés.") +
-    kp("Estilo (informativo)", club && ok(club.e) ? evChip(club.e) : "–", club && ok(club.p) ? `claridad ${f(100 * club.p, 0)} %` : "",
-      "<b>Estilo del club</b> según el Atlas de Estilos (red VaDE): cómo juega, no cuánto vale. Es informativo y no entra en ninguna cifra de nivel.");
+    kp("Estilo (informativo)", euSpan(evU(r.k)), evU(r.k) && ok(evU(r.k)[1]) ? `claridad ${f(100 * evU(r.k)[1], 0)} %` : "",
+      "<b>Estilo del club</b> según el Atlas de Estilos: cómo juega, no cuánto vale. Es informativo y no entra en ninguna cifra de nivel.");
 
   // lectura rápida
   const ins = [];
@@ -1870,7 +1892,7 @@ R.evaluacion = (el) => {
   if (ok(dPy) && Math.abs(dPy) >= 1.5) ins.push(`Ha ganado <b>${f(Math.abs(dPy), 1)} partidos ${dPy > 0 ? "más" : "menos"}</b> de los que sugieren sus ratings: ${dPy > 0 ? "buen cierre de partidos igualados o algo de suerte" : "ha perdido partidos igualados o le ha faltado suerte"}.`);
   const ent = club && club.ent ? club.ent : [];
   if (ent.length > 1) { const pri = ent[0], ult = ent[ent.length - 1];
-    ins.push(`<b>${ent.length} entrenadores</b> esta temporada: ${ent.map((e) => `${esc(e.n)} (${ok(e.w) ? `${e.w}-${e.l}` : `${fi(e.pj)} PJ`})`).join(" → ")}.${ok(pri.L) && ok(ult.L) && Math.abs(nS("nivel", ult.L) - nS("nivel", pri.L)) >= 5 ? ` El nivel de los jugadores que usaba ${nS("nivel", ult.L) > nS("nivel", pri.L) ? "subió" : "bajó"} de ${ESC.txt(nS("nivel", pri.L))} a ${ESC.txt(nS("nivel", ult.L))}.` : ""}${ok(pri.e) && ok(ult.e) && pri.e !== ult.e ? ` Y cambió de estilo: de «${esc(estNombre(evId(pri.e)))}» a «${esc(estNombre(evId(ult.e)))}».` : ""}`); }
+    ins.push(`<b>${ent.length} entrenadores</b> esta temporada: ${ent.map((e) => `${esc(e.n)} (${ok(e.w) ? `${e.w}-${e.l}` : `${fi(e.pj)} PJ`})`).join(" → ")}.${ok(pri.L) && ok(ult.L) && Math.abs(nS("nivel", ult.L) - nS("nivel", pri.L)) >= 5 ? ` El nivel de los jugadores que usaba ${nS("nivel", ult.L) > nS("nivel", pri.L) ? "subió" : "bajó"} de ${ESC.txt(nS("nivel", pri.L))} a ${ESC.txt(nS("nivel", ult.L))}.` : ""}${(() => { const a = evUent(r.k, pri.id), b = evUent(r.k, ult.id); return a && b && a[2] !== b[2] ? ` Y cambió de estilo: de «${esc(a[2])}» a «${esc(b[2])}».` : ""; })()}`); }
   // puntos fuertes y débiles frente a su liga (factores con juicio)
   const fac = []; EV_MET.forEach(([, ms]) => ms.forEach(([k, nm, dir]) => { if (!dir || k === "net" || k === "ortg" || k === "drtg") return; const s = evSliga(r[k], evMedia(lg, k), evDT(lg, k), dir); if (ok(s)) fac.push({ nm, s }); }));
   fac.sort((a, b) => b.s - a.s);
@@ -1882,7 +1904,7 @@ R.evaluacion = (el) => {
     ${ins.length ? `<ul class="evins">${ins.map((x) => `<li>${x}</li>`).join("")}</ul>` : ""}
     ${aprende("Todas las cifras de nivel están en la escala ±100 con la <b>Euroliga como 0</b>: el nivel de la liga dice cuánto vale competir allí y el de la plantilla, cuánto valen sus jugadores, en la misma vara. Las cifras de rendimiento (Net, factores) se miden <b>dentro de su liga</b>; para compararlas entre ligas, léelas junto al nivel de la liga. Pasa el ratón por cualquier cifra para ver su valor original.", "escalas")}</div>
   <div class="dcard"><div class="cardhead"><h2>Nivel: la liga y la plantilla, con la Euroliga como 0</h2><span class="note">Escala ±100 · pasa el ratón por cada punto</span></div><div class="chartbox" id="evStrip"></div>
-    ${aprende("Arriba, la media de cada liga; en el centro, las plantillas de los equipos de su liga; abajo, las de la Euroliga como referencia. El equipo elegido va en dorado. Un equipo de una liga más floja puede tener plantilla de Euroliga: es lo que hay que mirar al fichar o al comparar rivales.")}</div>
+    ${aprende("Arriba, la media de cada liga; en el centro, las plantillas de los equipos de su liga; abajo, las de la Euroliga como referencia. El equipo elegido va en amarillo. Un equipo de una liga más floja puede tener plantilla de Euroliga: es lo que hay que mirar al fichar o al comparar rivales.")}</div>
   <div class="dcard"><h2>Entrenadores</h2><div id="evEnt"></div></div>
   <div class="dcard"><h2>Estilo del club <span class="note" style="font-weight:500">· informativo</span></h2><div id="evEst"></div></div>
   <div class="dcard"><div class="cardhead"><h2>Rendimiento frente a su liga</h2><span class="note">${n} equipos · ${esc(FNOM[fz])}</span></div><div id="evMet"></div>
@@ -1896,9 +1918,9 @@ R.evaluacion = (el) => {
 
   evPintarStrip(t, l, id, r, lg);
   evPintarEnt(club, r, t);
-  evPintarEst(club);
+  evPintarEst(club, r);
   evPintarMet(r, lg);
-  evPintarPl(pl, t);
+  evPintarPl(pl, t, r.k);
   evPintarTodos(t, fz, l, id);
   evPintarHist(club, r);
 };
@@ -1922,7 +1944,7 @@ function evPintarStrip(t, l, id, r, lg) {
     conLab.forEach((p) => { const cx = X(p.s), w = p.lab.length * 6.6 + 6; for (const c of [0, 1]) { if (!ocup[c].some(([a, b]) => cx - w / 2 < b && cx + w / 2 > a)) { ocup[c].push([cx - w / 2, cx + w / 2]); pos.set(p, c); break; } } });
     pts.slice().sort((a, b) => a.me - b.me).forEach((p) => {
       const cx = X(p.s), c = pos.get(p);
-      g += `<g ${p.act ? `class="hit" data-a="ev" data-v="${esc(p.act)}" role="button" tabindex="0"` : ""} ${tipA(p.tip)}><circle cx="${cx}" cy="${y}" r="${p.me ? 8 : i === 0 ? 6 : 4.5}" fill="${p.me ? "var(--accent)" : p.col}" fill-opacity="${p.me ? 1 : i === 0 ? 0.95 : 0.6}" stroke="var(--surface)" stroke-width="1.5"/>${p.lab && c != null ? `<text class="lab" x="${cx}" y="${c === 0 ? y - 11 : y + 19}" text-anchor="middle" font-size="${p.me ? 11.5 : 10}" font-weight="${p.me ? 700 : 500}" fill="${p.me ? "var(--ink)" : "var(--muted)"}">${esc(p.lab)}</text>` : ""}</g>`;
+      g += `<g ${p.act ? `class="hit" data-a="ev" data-v="${esc(p.act)}" role="button" tabindex="0"` : ""} ${tipA(p.tip)}><circle cx="${cx}" cy="${y}" r="${p.me ? 8 : i === 0 ? 6 : 4.5}" fill="${p.me ? "var(--sim)" : p.col}" fill-opacity="${p.me ? 1 : i === 0 ? 0.95 : 0.6}" stroke="${p.me ? "var(--ink)" : "var(--surface)"}" stroke-width="1.5"/>${p.lab && c != null ? `<text class="lab" x="${cx}" y="${c === 0 ? y - 11 : y + 19}" text-anchor="middle" font-size="${p.me ? 11.5 : 10}" font-weight="${p.me ? 700 : 500}" fill="${p.me ? "var(--ink)" : "var(--muted)"}">${esc(p.lab)}</text>` : ""}</g>`;
     });
   });
   box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Nivel de las ligas y de las plantillas, Euroliga = 0">${g}</svg>`;
@@ -1939,18 +1961,19 @@ function evPintarEnt(club, r, t) {
     return `<i style="left:${x}%;width:${w}%;background:${COLS[i % COLS.length]}" ${tipA(`<b>${esc(e.n)}</b>${e.int ? " (interino)" : ""}<br>${evFecha(e.de)} – ${evFecha(e.a)} · ${fi(e.pj)} partidos${ok(e.w) ? ` · ${e.w}-${e.l}` : ""}`)}></i>`; }).join("")}</div><div class="evtl-ax"><span>${evFecha(new Date(t0).toISOString().slice(0, 10))}</span><span>${evFecha(new Date(t1).toISOString().slice(0, 10))}</span></div>` : "";
   const met = { club_unico: "Un solo entrenador: su etapa es la temporada entera.", "minutos_tramo+equipo": "Nivel y estilo calculados solo con los partidos que dirigió (minutos de sus jugadores en esos partidos).", club: "Sin desglose por partidos: nivel y estilo son los de toda la temporada." };
   box.innerHTML = linea + `<div class="tablebox flat"><table aria-label="Entrenadores"><thead><tr><th class="txt sticky">Entrenador</th><th>PJ</th><th>Balance</th><th>% vict.</th><th class="txt">Etapa</th><th ${tipA("Nivel L de los jugadores que usó en sus partidos, ponderado por minutos, en la escala ±100 (Euroliga = 0). Convertido desde el índice de nivel del club (r = " + (EV.conv ? f(EV.conv.r, 3) : "–") + ").")}>Nivel plantilla</th><th class="txt">Estilo en su etapa</th></tr></thead><tbody>` +
-    ent.map((e, i) => `<tr><td class="txt name sticky"><i class="evdot" style="background:${COLS[i % COLS.length]}"></i>${esc(e.n)}${e.int ? ` <span class="pill" ${tipA("Entrenador interino")}>interino</span>` : ""}</td><td>${fi(e.pj)}${e.pp ? ` <span class="muted" ${tipA(`${fi(e.pr)} de liga regular y ${fi(e.pp)} de playoffs`)}>(${fi(e.pp)} PO)</span>` : ""}</td><td>${ok(e.w) ? `${e.w}-${e.l}` : "–"}</td><td>${ok(e.w) && e.w + e.l ? f((100 * e.w) / (e.w + e.l), 0) + " %" : "–"}</td><td class="txt">${evFecha(e.de)} – ${evFecha(e.a)}</td><td ${tipA(met[e.met] || "")}>${evNiv(e.L)}</td><td class="txt">${evChip(e.e, e.p)}</td></tr>`).join("") +
+    ent.map((e, i) => `<tr><td class="txt name sticky"><i class="evdot" style="background:${COLS[i % COLS.length]}"></i>${esc(e.n)}${e.int ? ` <span class="pill" ${tipA("Entrenador interino")}>interino</span>` : ""}</td><td>${fi(e.pj)}${e.pp ? ` <span class="muted" ${tipA(`${fi(e.pr)} de liga regular y ${fi(e.pp)} de playoffs`)}>(${fi(e.pp)} PO)</span>` : ""}</td><td>${ok(e.w) ? `${e.w}-${e.l}` : "–"}</td><td>${ok(e.w) && e.w + e.l ? f((100 * e.w) / (e.w + e.l), 0) + " %" : "–"}</td><td class="txt">${evFecha(e.de)} – ${evFecha(e.a)}</td><td ${tipA(met[e.met] || "")}>${evNiv(e.L)}</td><td class="txt">${euSpan(evUent(r.k, e.id), true)}</td></tr>`).join("") +
     `</tbody></table></div>${ent.length > 1 ? `<p class="note">Con varios entrenadores, el nivel y el estilo de cada etapa se calculan solo con los partidos que dirigió cada uno. Una etapa corta (un interino de pocos partidos) es poco fiable.</p>` : ""}`;
 }
 
-function evPintarEst(club) {
+function evPintarEst(club, r) {
   const box = $("#evEst"); if (!box) return;
-  if (!club || !Array.isArray(club.probs)) { box.innerHTML = `<p class="note">Este equipo no está en el Atlas de Estilos.</p>`; return; }
-  const barra = (probs, lab) => `<div class="evrep"><span>${esc(lab)}</span><div>${probs.map((p, k) => p >= 0.01 ? `<i style="width:${100 * p}%;background:${estCol(evId(k))}" ${tipA(`${esc(estNombre(evId(k)))}: ${f(100 * p, 0)} %`)}>${p >= 0.12 ? f(100 * p, 0) : ""}</i>` : "").join("")}</div></div>`;
-  const ent = (club.ent || []).filter((e) => Array.isArray(e.probs));
-  box.innerHTML = `<div class="kv"><div><span>Estilo</span><b>${evChip(club.e)}</b></div><div ${tipA("Con qué seguridad asigna la red este estilo: 80 % o más, muy definido; menos de 40 %, mezcla de dos.")}><span>Claridad</span><b>${ok(club.p) ? f(100 * club.p, 0) + " %" : "–"}</b></div><div ${tipA("Proporción de remuestreos de los minutos de la plantilla en la que conserva el estilo: alta = no depende de quién juegue cada noche.")}><span>Robustez</span><b>${ok(club.rob) ? f(100 * club.rob, 0) + " %" : "–"}</b></div></div>
-    ${barra(club.probs, "Temporada")}${ent.length > 1 ? ent.map((e) => barra(e.probs, e.n.split(" ").slice(-1)[0])).join("") : ""}
-    <p class="note">${esc(estDesc(evId(club.e)))}</p><p class="note">Informativo: el estilo describe cómo juega el equipo y no entra en el nivel. El detalle, en «Atlas de Estilos».</p>`;
+  const u = r ? evU(r.k) : null, x = r && EUC ? EUC[r.k] : null;
+  if (!u) { box.innerHTML = `<p class="note">Este equipo no está en el Atlas de Estilos.</p>`; return; }
+  const barra = (probs, lab) => `<div class="evrep"><span>${esc(lab)}</span><div>${probs.map((p, k) => p >= 0.01 ? `<i style="width:${100 * p}%;background:${euCol(k)}" ${tipA(`${esc(euNom(k))}: ${f(100 * p, 0)} %`)}>${p >= 0.12 ? f(100 * p, 0) : ""}</i>` : "").join("")}</div></div>`;
+  const ent = ((club && club.ent) || []).map((e) => ({ e, v: evUent(r.k, e.id) })).filter((o) => o.v && Array.isArray(o.v[3]) && o.v[3].length);
+  box.innerHTML = `<div class="kv"><div><span>Estilo</span><b>${euSpan(u)}</b></div><div ${tipA("Con qué seguridad asigna el Atlas este estilo: 80 % o más, muy definido; menos de 40 %, mezcla de dos.")}><span>Claridad</span><b>${ok(u[1]) ? f(100 * u[1], 0) + " %" : "–"}</b></div><div ${tipA("Proporción de remuestreos de los minutos de la plantilla en la que el club conserva su perfil del mapa: alta = no depende de quién juegue cada noche. Se calcula sobre los perfiles del mapa, no sobre los estilos nuevos.")}><span>Robustez</span><b>${club && ok(club.rob) ? f(100 * club.rob, 0) + " %" : "–"}</b></div></div>
+    ${x && Array.isArray(x.pr) && x.pr.length ? barra(x.pr, "Temporada") : ""}${ent.length > 1 ? ent.map((o) => barra(o.v[3], o.e.n.split(" ").slice(-1)[0])).join("") : ""}
+    <p class="note">${esc(evUdef(u))}</p><p class="note">Informativo: el estilo describe cómo juega el equipo y no entra en el nivel. La robustez se estimó sobre los perfiles del mapa (A–F), no sobre los estilos nuevos. El detalle, en «Atlas de Estilos».</p>`;
 }
 
 function evPintarMet(r, lg) {
@@ -1962,7 +1985,7 @@ function evPintarMet(r, lg) {
   box.innerHTML = `<div class="tablebox flat"><table aria-label="Rendimiento frente a su liga" class="evmet"><thead><tr><th class="txt sticky">Métrica</th><th>Equipo</th><th>Media liga</th><th ${tipA("Puesto en su liga (1 = el mejor; en las de estilo, 1 = el valor más alto)")}>Puesto</th><th ${tipA("Frente al equipo medio de su liga, escala ±100")}>Frente a su liga</th><th></th></tr></thead><tbody>${filas}</tbody></table></div>`;
 }
 
-function evPintarPl(pl, t) {
+function evPintarPl(pl, t, k) {
   const box = $("#evPl"); if (!box) return;
   if (!pl || !pl.j || !pl.j.length) { box.innerHTML = `<p class="note">Sin jugadores con 100+ minutos normalizados en esta temporada (habitual al principio de la temporada en curso).</p>`; return; }
   const js = pl.j, tot = js.reduce((a, j) => a + (j[3] || 0), 0), top5 = js.slice(0, 5), banq = js.slice(5);
@@ -1970,7 +1993,7 @@ function evPintarPl(pl, t) {
   const conc = tot ? (100 * top5.reduce((a, j) => a + j[3], 0)) / tot : null;
   box.innerHTML = `<div class="kv"><div><span>Nivel de la plantilla</span><b>${evNiv(pl.L)}</b></div><div ${tipA("Los cinco jugadores con más minutos")}><span>Nivel de los 5 que más juegan</span><b>${evNiv(nivDe(top5))}</b></div><div><span>Nivel del resto</span><b>${evNiv(nivDe(banq))}</b></div>
       <div><span>Jugadores (100'+)</span><b>${fi(pl.n)}</b></div><div ${tipA("Media ponderada por minutos")}><span>Edad media</span><b>${f(pl.edad, 1)}</b></div><div ${tipA("% de los minutos que juegan los cinco con más minutos: alto = rotación corta")}><span>Minutos del top 5</span><b>${fp(conc, 0)}</b></div></div>
-    <div class="tablebox flat" style="margin-top:4px"><table aria-label="Plantilla"><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Pos.</th><th>Edad</th><th>Min</th><th ${tipA("% del tiempo de juego del equipo que pasa en pista")}>% en pista</th><th ${tipA("Nivel L del jugador en la escala ±100 (Euroliga = 0)")}>Nivel</th><th class="txt">Estilo propio</th></tr></thead><tbody>${js.map((j) => `<tr><td class="txt name sticky">${esc(nombreBonito(j[0]).full)}</td><td class="txt">${esc(POSN[j[1]] || "–")}</td><td>${ok(j[2]) ? fi(j[2]) : "–"}</td><td>${fi(j[3])}</td><td>${tot ? f(Math.min(100, (500 * j[3]) / tot), 0) + " %" : "–"}</td><td>${evNiv(j[4])}${ok(j[4]) ? ESC.barra(nS("nivel", j[4])) : ""}</td><td class="txt">${evChip(j[5], j[6])}</td></tr>`).join("")}</tbody></table></div>`;
+    <div class="tablebox flat" style="margin-top:4px"><table aria-label="Plantilla"><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Pos.</th><th>Edad</th><th>Min</th><th ${tipA("% del tiempo de juego del equipo que pasa en pista")}>% en pista</th><th ${tipA("Nivel L del jugador en la escala ±100 (Euroliga = 0)")}>Nivel</th><th class="txt">Estilo propio</th></tr></thead><tbody>${js.map((j, i) => `<tr><td class="txt name sticky">${esc(nombreBonito(j[0]).full)}</td><td class="txt">${esc(POSN[j[1]] || "–")}</td><td>${ok(j[2]) ? fi(j[2]) : "–"}</td><td>${fi(j[3])}</td><td>${tot ? f(Math.min(100, (500 * j[3]) / tot), 0) + " %" : "–"}</td><td>${evNiv(j[4])}${ok(j[4]) ? ESC.barra(nS("nivel", j[4])) : ""}</td><td class="txt">${euSpan(evUpl(k, i), true, false)}</td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function evPintarTodos(t, fz, l, id) {
@@ -1988,7 +2011,7 @@ function evPintarTodos(t, fz, l, id) {
     const st = Math.abs(x1 - x0) > 120 ? 50 : 25; for (let v = Math.ceil(x0 / st) * st; v <= x1; v += st) g += `<line class="grid" x1="${X(v)}" y1="${m.t}" x2="${X(v)}" y2="${m.t + ph}" ${v === 0 ? 'stroke="var(--faint)" stroke-width="1.5"' : ""}/><text class="ax" x="${X(v)}" y="${H - 22}" text-anchor="middle">${v === 0 ? "EL = 0" : (v > 0 ? "+" : "−") + Math.abs(v)}</text>`;
     g += `<text class="ax lab" x="${m.l + pw}" y="${H - 6}" text-anchor="end">Nivel de la plantilla (Euroliga = 0) →</text><text class="ax lab" transform="translate(11 ${m.t}) rotate(-90)" text-anchor="end">% de victorias ↑</text>`;
     pts.slice().sort((a, b) => (a.liga === l && a.id === id) - (b.liga === l && b.id === id)).forEach((x) => { const me = x.liga === l && x.id === id;
-      g += `<g class="hit" data-a="ev" data-v="${esc(x.liga + "|" + x.id)}" role="button" tabindex="0" ${tipA(`<b>${esc(x.eq)}</b> · ${esc(ESC.ligaCorto(x.liga))}<br>Plantilla ${ESC.txt(nS("nivel", x.L))} · ${evWL(x)} (${f(x.wp, 0)} %)<br>Net en su liga ${fs(x.net)}<br><i>Clic: evaluar este equipo</i>`)}><circle cx="${X(nS("nivel", x.L))}" cy="${Y(x.wp)}" r="${me ? 8 : 5}" fill="${me ? "var(--accent)" : ESC.ligaCol(x.liga)}" fill-opacity="${me ? 1 : 0.7}" stroke="var(--surface)" stroke-width="1.5"/>${me ? `<text class="lab" x="${X(nS("nivel", x.L)) + 11}" y="${Y(x.wp) + 4}" font-size="12" font-weight="700" fill="var(--ink)">${esc(corto(x.id) === x.id && x.eq ? x.eq.slice(0, 18) : corto(x.id))}</text>` : ""}</g>`; });
+      g += `<g class="hit" data-a="ev" data-v="${esc(x.liga + "|" + x.id)}" role="button" tabindex="0" ${tipA(`<b>${esc(x.eq)}</b> · ${esc(ESC.ligaCorto(x.liga))}<br>Plantilla ${ESC.txt(nS("nivel", x.L))} · ${evWL(x)} (${f(x.wp, 0)} %)<br>Net en su liga ${fs(x.net)}<br><i>Clic: evaluar este equipo</i>`)}><circle cx="${X(nS("nivel", x.L))}" cy="${Y(x.wp)}" r="${me ? 8 : 5}" fill="${me ? "var(--sim)" : ESC.ligaCol(x.liga)}" fill-opacity="${me ? 1 : 0.7}" stroke="${me ? "var(--ink)" : "var(--surface)"}" stroke-width="1.5"/>${me ? `<text class="lab" x="${X(nS("nivel", x.L)) + 11}" y="${Y(x.wp) + 4}" font-size="12" font-weight="700" fill="var(--ink)">${esc(corto(x.id) === x.id && x.eq ? x.eq.slice(0, 18) : corto(x.id))}</text>` : ""}</g>`; });
     const ls = [...new Set(pts.map((x) => x.liga))];
     box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Nivel de la plantilla frente a % de victorias">${g}</svg>${ls.length > 1 ? `<div class="legend">${ESC.ordenLigas(ls).map((x) => `<span><i class="evdot" style="background:${ESC.ligaCol(x)}"></i>${esc(ESC.ligaNom(x))}</span>`).join("")}</div>` : ""}`;
   } else box.innerHTML = "";
@@ -2000,7 +2023,7 @@ function evPintarTodos(t, fz, l, id) {
     { k: "wp", l: "% vict.", fmt: (v, x) => (ok(v) ? `${f(v, 0)} % <span class="muted">${evWL(x)}</span>` : "–"), tip: "Porcentaje de victorias (balance entre paréntesis)" },
     { k: "net", l: "Net", fmt: (v) => (ok(v) ? fs(v) : "–"), tip: "Net en su liga, por 100 posesiones" },
     { k: "ent", l: "Entrenador", txt: true, get: (x) => ((EV.C[x.k] || {}).ent || []).map((e) => e.n).join(" → "), fmt: (v) => esc(v || "–") },
-    { k: "est", l: "Estilo", txt: true, get: (x) => { const c = EV.C[x.k]; return c && ok(c.e) ? estNombre(evId(c.e)) : ""; }, fmt: (v, x) => { const c = EV.C[x.k]; return c ? evChip(c.e) : "–"; } },
+    { k: "est", l: "Estilo", txt: true, get: (x) => { const u = evU(x.k); return u ? u[2] : ""; }, fmt: (v, x) => euSpan(evU(x.k)) },
   ];
   tb.innerHTML = tabla("tEv", cols, rows, { sort: "SL", dir: -1, per: 30, act: "ev", key: (x) => `${x.liga}|${x.id}`, sel: `${l}|${id}`, aria: "Todos los equipos" }) +
     (rows.some((x) => x.wl === "entrenadores_con_playoffs") ? `<p class="note">* Euroliga y EuroCup: la fuente oficial no publica el balance por fases; se suma el de sus entrenadores, que incluye los playoffs.</p>` : "");
@@ -2014,7 +2037,7 @@ function evPintarHist(club, r) {
   if (filas.length < 2) { box.innerHTML = `<p class="note">Solo hay una temporada de este club en los datos.</p>`; return; }
   box.innerHTML = `<div class="tablebox flat"><table aria-label="Evolución del club"><thead><tr><th class="txt sticky">Temporada</th><th ${tipA("Nivel medio de su liga esa temporada (Euroliga = 0)")}>Nivel liga</th><th ${tipA("Nivel de la plantilla (Euroliga = 0)")}>Plantilla</th><th>Balance</th><th>Net</th><th class="txt">Entrenador</th><th class="txt">Estilo</th></tr></thead><tbody>` +
     filas.map((x) => { const c = EV.C[x.k], Ll = evLiga(x.t, x.liga);
-      return `<tr class="${x.t === r.t ? "sel" : ""}"><td class="txt name sticky">${esc(x.t)}${c.prov ? " <small class=\"muted\">(en curso)</small>" : ""}</td><td>${ok(Ll) ? `<span class="esc ${ESC.cls(ESC.S("nivel", Ll, x.t))}">${ESC.txt(ESC.S("nivel", Ll, x.t))}</span>` : "–"}</td><td>${ok(x.L) ? `<span class="esc ${ESC.cls(ESC.S("nivel", x.L, x.t))}" ${tipA(ESC.tip("nivel", x.L, x.t))}>${ESC.txt(ESC.S("nivel", x.L, x.t))}</span>` : "–"}</td><td>${evWL(x)}${ok(x.wp) ? ` <span class="muted">${f(x.wp, 0)} %</span>` : ""}</td><td>${fs(x.net)}</td><td class="txt">${esc((c.ent || []).map((e) => e.n).join(" → ") || "–")}</td><td class="txt">${evChip(c.e, c.p)}</td></tr>`; }).join("") +
+      return `<tr class="${x.t === r.t ? "sel" : ""}"><td class="txt name sticky">${esc(x.t)}${c.prov ? " <small class=\"muted\">(en curso)</small>" : ""}</td><td>${ok(Ll) ? `<span class="esc ${ESC.cls(ESC.S("nivel", Ll, x.t))}">${ESC.txt(ESC.S("nivel", Ll, x.t))}</span>` : "–"}</td><td>${ok(x.L) ? `<span class="esc ${ESC.cls(ESC.S("nivel", x.L, x.t))}" ${tipA(ESC.tip("nivel", x.L, x.t))}>${ESC.txt(ESC.S("nivel", x.L, x.t))}</span>` : "–"}</td><td>${evWL(x)}${ok(x.wp) ? ` <span class="muted">${f(x.wp, 0)} %</span>` : ""}</td><td>${fs(x.net)}</td><td class="txt">${esc((c.ent || []).map((e) => e.n).join(" → ") || "–")}</td><td class="txt">${euSpan(evU(x.k), true)}</td></tr>`; }).join("") +
     `</tbody></table></div><p class="note">Temporada regular de ${esc(LNOM[r.liga])}. Cada temporada, el nivel se mide con la Euroliga de ese año como 0.</p>`;
 }
 
@@ -2039,7 +2062,7 @@ function lScatter(lg, xk, yk) {
   const sitio = (lx, ly, w, an) => { const x0 = an === "end" ? lx - w : lx; for (const dy of [0, -11, 11, -20, 20]) { const b = [x0, ly + dy - 9, x0 + w, ly + dy + 2]; if (!puestos.some((p) => b[0] < p[2] && b[2] > p[0] && b[1] < p[3] && b[3] > p[1])) { puestos.push(b); return dy; } } return null; };
   pts.slice().sort((a, b) => (b.team_id === S.e) - (a.team_id === S.e)).forEach((r) => { const me = r.team_id === S.e, cx = X(r[xk]), cy = Y(r[yk]);
     const an = cx > m.l + pw - 60 ? "end" : "start", lx = cx + (an === "end" ? -9 : 9), dy = sitio(lx, cy + 4, corto(r.team_id).length * (me ? 7.2 : 6.2), an);
-    g += `<g class="hit" data-a="e" data-v="${esc(r.team_id)}" tabindex="0" role="button" aria-label="${esc(D.eqn[r.team_id])}" ${tipA(`<b>${esc(D.eqn[r.team_id])}</b><br>${esc(XLIGA[xk][0])}: ${f(r[xk], 1)}<br>Net ${fs(r.net_rtg)} · sin suerte ${fs(r.net_rtg_suerte)}<br><i>Clic: seleccionar equipo</i>`)}><circle cx="${cx}" cy="${cy}" r="${me ? 8 : 5.5}" fill="${me ? "var(--accent)" : "var(--ink-2)"}" fill-opacity="${me ? 1 : 0.55}" stroke="var(--surface)" stroke-width="2"/>` +
+    g += `<g class="hit" data-a="e" data-v="${esc(r.team_id)}" tabindex="0" role="button" aria-label="${esc(D.eqn[r.team_id])}" ${tipA(`<b>${esc(D.eqn[r.team_id])}</b><br>${esc(XLIGA[xk][0])}: ${f(r[xk], 1)}<br>Net ${fs(r.net_rtg)} · sin suerte ${fs(r.net_rtg_suerte)}<br><i>Clic: seleccionar equipo</i>`)}><circle cx="${cx}" cy="${cy}" r="${me ? 8 : 5.5}" fill="${me ? "var(--sim)" : "var(--ink-2)"}" fill-opacity="${me ? 1 : 0.55}" stroke="${me ? "var(--ink)" : "var(--surface)"}" stroke-width="2"/>` +
       (dy === null ? "" : `<text class="lab" x="${lx}" y="${cy + 4 + dy}" text-anchor="${an}" font-size="${me ? 12 : 10.5}" font-weight="${me ? 700 : 500}" fill="${me ? "var(--ink)" : "var(--muted)"}">${esc(corto(r.team_id))}</text>`) + `</g>`; });
   box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Equipos: ${esc(XLIGA[xk][0])} frente a Net">${g}</svg>`;
 }
@@ -2078,7 +2101,7 @@ function diagMuestra(T) {
 function diagWowy(p, T) {
   if (!p) return "";
   const A = sn(p.a, T), B = sn(p.b, T), W = 430, H = 196, X0 = 124, X1 = 268, Y0 = 30, Y1 = 100;
-  const c = (x, y, t, v, mi, k) => { const col = divC(v, 15, false, 0.8), ink = lum(col) > 0.32 ? "#121820" : "#f1f3f6";
+  const c = (x, y, t, v, mi, k) => { const col = divC(v, 15, false, 0.8), ink = lum(col) > 0.32 ? "#12161B" : "#F3F0E8";
     return `<g ${tipA(`${esc(t)}: Net ajustado ${fs(v)} en ${fm(mi)}`)}><rect x="${x}" y="${y}" width="136" height="62" rx="8" fill="${rgbS(col)}" stroke="var(--line-2)"/><text x="${x + 68}" y="${y + 24}" text-anchor="middle" font-size="11.5" class="lab" fill="${ink}">${esc(k)} · ${fm(mi)}</text><text x="${x + 68}" y="${y + 46}" text-anchor="middle" font-size="16" font-weight="700" fill="${ink}">${fs(v)}</text></g>`; };
   let g = `<text class="lab" x="${X0 + 68}" y="18" text-anchor="middle" font-size="11.5" fill="var(--muted)">${esc(trunc(B, 14))} en pista</text><text class="lab" x="${X1 + 68}" y="18" text-anchor="middle" font-size="11.5" fill="var(--muted)">${esc(trunc(B, 14))} en el banquillo</text>`;
   [[Y0, "en pista"], [Y1, "en el banquillo"]].forEach(([y, t]) => { g += `<text class="lab" x="${X0 - 10}" y="${y + 28}" text-anchor="end" font-size="11.5" fill="var(--ink-2)" font-weight="600">${esc(trunc(A, 15))}</text><text class="lab" x="${X0 - 10}" y="${y + 43}" text-anchor="end" font-size="11" fill="var(--muted)">${t}</text>`; });
@@ -2317,7 +2340,7 @@ window.addEventListener("resize", () => { clearTimeout(tmRes); tmRes = setTimeou
 })();
 </script>
 <script>
-/* Dentro de Moneyball Analytics: avisa a la página contenedora del alto de esta página (mismo mensaje que el Atlas) para que el marco no tenga barra propia. */
+/* Dentro de Cerno Analytics: avisa a la página contenedora del alto de esta página (mismo mensaje que el Atlas) para que el marco no tenga barra propia. */
 (function () {
   if (window.parent === window) return;
   let ultimo = 0;
@@ -2326,5 +2349,428 @@ window.addEventListener("resize", () => { clearTimeout(tmRes); tmRes = setTimeou
   window.addEventListener("load", avisar);
 })();
 </script>
+<style id="cerno-brand">
+/* =====================================================================================
+   Cerno Analytics · capa de marca v1.0 (F1 · rebranding)
+   Se aplica al final de cada aplicación: redefine los tokens existentes con la paleta,
+   tipografías y componentes del sistema de marca Cerno. No cambia estructura ni lógica.
+   ===================================================================================== */
+@font-face { font-family: "Mona Sans"; src: url("../cerno/fonts/MonaSans-Variable.woff2") format("woff2"); font-weight: 200 900; font-stretch: 75% 125%; font-display: swap; }
+@font-face { font-family: "Mona Sans"; src: url("../cerno/fonts/MonaSans-Italic-Variable.woff2") format("woff2"); font-weight: 200 900; font-stretch: 75% 125%; font-style: italic; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("../cerno/fonts/Newsreader-Variable.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("../cerno/fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+/* ---- tokens · claro (por defecto) */
+:root, :root[data-theme="light"] {
+  --cn-ink: #12161B; --cn-paper: #F3F0E8; --cn-index: #F2CC2F;
+  --cn-g800: #262C33; --cn-g700: #3B434C; --cn-g600: #545D67; --cn-g500: #737B84; --cn-g400: #9AA0A6; --cn-g300: #C2C3BF; --cn-g200: #DAD7CF; --cn-g100: #E8E5DD;
+  --cn-steel: #2A6FA8; --cn-steel700: #1F4F78; --cn-clay: #C4552E; --cn-violet: #7A5BC8;
+  --cn-band: rgba(42, 111, 168, 0.18); --cn-hl-row: rgba(242, 204, 47, 0.28); --cn-callout: #12161B;
+  --cn-sans: "Mona Sans", system-ui, sans-serif; --cn-serif: "Newsreader", Georgia, serif; --cn-mono: "Geist Mono", ui-monospace, monospace;
+  --cn-ease: cubic-bezier(.2, 0, 0, 1);
+
+  --bg: #F3F0E8; --surface: #F3F0E8; --surface-2: #E8E5DD; --surface-3: #E2DED4; --line: #DAD7CF; --line-2: #C2C3BF;
+  --ink: #12161B; --ink-2: #3B434C; --muted: #545D67; --faint: #737B84;
+  --accent: #12161B; --accent-strong: #12161B; --accent-ink: #F3F0E8; --accent-soft: rgba(18, 22, 27, .06); --accent-line: rgba(18, 22, 27, .34);
+  --good: #2A6FA8; --bad: #C4552E; --warn: #B7810C; --neutral: #737B84; --navy: #12161B;
+  --sim: #F2CC2F; --sim-ink: #12161B;
+  --c1: rgba(18, 22, 27, .05); --c2: #E8E5DD; --c3: #F3F0E8; --c4: #F3F0E8; --c5: #F3F0E8;
+  --heat-good: 42, 111, 168; --heat-bad: 196, 85, 46; --heat-mid: 243, 240, 232; --heat-seq: 42, 111, 168;
+  --ev-pos-c: 42, 111, 168; --ev-neg-c: 196, 85, 46;
+  --nl-a: #2A6FA8; --nl-b: #C4552E;
+  --btn-bg: #12161B; --btn-ink: #F3F0E8; --btn-hover: #262C33;
+  --top-bg: #F3F0E8; --th-bg: #E8E5DD; --row-hover: rgba(18, 22, 27, .035); --sel-bg: #E3ECF4; --sel-ink: #1F4F78;
+  --hitcur-bg: #12161B; --hitcur-ink: #F3F0E8;
+  --tip-bg: #12161B; --tip-ink: #F3F0E8; --tip-line: #12161B;
+  --warn-bg: rgba(183, 129, 12, .08); --warn-line: rgba(183, 129, 12, .45); --warn-ink: #3B434C;
+  --glow-1: transparent; --glow-2: transparent;
+  --crest-on: #F3F0E8; --crest-glow: 0 0 0 1px #12161B;
+  --shadow: none; --shadow-lg: 0 14px 36px -20px rgba(18, 22, 27, .35);
+  --f-display: "Mona Sans", system-ui, sans-serif; --f-body: "Mona Sans", system-ui, sans-serif; --f-data: "Geist Mono", ui-monospace, monospace;
+  --r: 4px; --r-sm: 2px;
+  --e0: #9AA0A6; --e1: #2A6FA8; --e2: #C4552E; --e3: #1E9670; --e4: #7A5BC8; --e5: #C9628E; --e6: #4E8A2A;
+  --brand: #12161B;
+  --court: #E8E5DD; --court-line: #C2C3BF;
+  color-scheme: light;
+}
+/* ---- tokens · oscuro: el conmutador fija data-theme; sin elección guardada se sigue al sistema */
+:root[data-theme="dark"] {
+  --cn-band: rgba(74, 140, 196, 0.28); --cn-callout: #262C33;
+  --bg: #12161B; --surface: #12161B; --surface-2: #262C33; --surface-3: #262C33; --line: #3B434C; --line-2: #545D67;
+  --ink: #F3F0E8; --ink-2: #C2C3BF; --muted: #9AA0A6; --faint: #737B84;
+  --accent: #F3F0E8; --accent-strong: #F3F0E8; --accent-ink: #12161B; --accent-soft: rgba(243, 240, 232, .08); --accent-line: rgba(243, 240, 232, .36);
+  --good: #4A8CC4; --bad: #D9693F; --warn: #B7810C; --neutral: #9AA0A6; --navy: #F3F0E8;
+  --sim: #F2CC2F; --sim-ink: #F2CC2F;
+  --c1: rgba(243, 240, 232, .06); --c2: #262C33; --c3: #12161B; --c4: #12161B; --c5: #12161B;
+  --heat-good: 74, 140, 196; --heat-bad: 217, 105, 63; --heat-mid: 18, 22, 27; --heat-seq: 157, 190, 221;
+  --ev-pos-c: 74, 140, 196; --ev-neg-c: 217, 105, 63;
+  --nl-a: #4A8CC4; --nl-b: #D9693F;
+  --btn-bg: #F3F0E8; --btn-ink: #12161B; --btn-hover: #DAD7CF;
+  --top-bg: #12161B; --th-bg: #262C33; --row-hover: rgba(243, 240, 232, .04); --sel-bg: #262C33; --sel-ink: #4A8CC4;
+  --hitcur-bg: #F3F0E8; --hitcur-ink: #12161B;
+  --tip-bg: #262C33; --tip-ink: #F3F0E8; --tip-line: #3B434C;
+  --warn-bg: rgba(183, 129, 12, .12); --warn-line: rgba(183, 129, 12, .5); --warn-ink: #E8E5DD;
+  --crest-on: #262C33; --crest-glow: 0 0 0 1px #F3F0E8;
+  --shadow: none; --shadow-lg: 0 14px 36px -18px rgba(0, 0, 0, .6);
+  --e0: #737B84; --e1: #4A8CC4; --e2: #D9693F; --e3: #219C74; --e4: #8E78DE; --e5: #D46C9A; --e6: #6A9F35;
+  --brand: #F3F0E8;
+  --court: #262C33; --court-line: #3B434C;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]):not([data-theme="dark"]) { color-scheme: dark; } }
+
+/* ---- base */
+html, body { background: var(--bg) !important; color: var(--ink); }
+body { font-family: var(--cn-sans); font-weight: 400; background-image: none !important; -webkit-font-smoothing: antialiased; font-variant-numeric: lining-nums tabular-nums; }
+::selection { background: var(--cn-band); color: inherit; }
+a { color: var(--sel-ink); }
+b, strong { font-weight: 640; }
+:focus-visible { outline: 2px solid var(--ink) !important; outline-offset: 2px; }
+
+/* ---- tipografía: titulares Mona 620 con interletraje negativo; etiquetas en Geist Mono */
+h1, h2, h3, .sec-title { font-family: var(--cn-sans) !important; font-weight: 620 !important; letter-spacing: -0.01em !important; text-transform: none !important; }
+h2, .sec-title { letter-spacing: -0.015em; }
+.label, .kicker, .eyebrow { font-family: var(--cn-mono) !important; font-weight: 500 !important; letter-spacing: .08em !important; text-transform: uppercase; color: var(--muted); font-size: 10.5px; }
+th { font-family: var(--cn-mono); font-weight: 500; letter-spacing: .06em; }
+input, select, textarea, button { font-family: var(--cn-sans); }
+
+/* ---- cabecera y navegación */
+.eb-top { background: var(--top-bg) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border-bottom: 1px solid var(--line); }
+.eb-brand { gap: 0 !important; }
+.eb-brand .cn-logo { display: block; width: 132px; flex: none; }
+.eb-brand .cn-logo svg { display: block; width: 100%; height: auto; }
+.eb-brand .cn-logo .neg { display: none; }
+:root[data-theme="dark"] .eb-brand .cn-logo .pos { display: none; }
+:root[data-theme="dark"] .eb-brand .cn-logo .neg { display: block; }
+.eb-area { font-family: var(--cn-sans) !important; font-weight: 560 !important; letter-spacing: 0 !important; text-transform: none !important; font-size: 14px !important; }
+.eb-area[aria-selected="true"] { border-bottom-color: var(--ink) !important; }
+.eb-area .ro, .ro-tag, .ro-k { font-family: var(--cn-mono) !important; text-transform: uppercase; letter-spacing: .08em; }
+.eb-tool, .eb-seg button, .eb-switch, .chip, .tab, .subtab, .seg button { font-family: var(--cn-sans) !important; letter-spacing: 0 !important; }
+.eb-tool[aria-selected="true"] { background: var(--btn-bg); color: var(--btn-ink); border-color: var(--btn-bg); }
+.eb-switch[aria-pressed="true"] i { background: var(--ink) !important; }
+
+/* ---- botones: primario Ink (Paper en oscuro); secundario solo filete */
+.btn { font-family: var(--cn-sans) !important; letter-spacing: .02em !important; border-radius: 2px !important; box-shadow: none !important; }
+.btn.ghost { background: transparent !important; color: var(--ink) !important; border: 1px solid var(--line-2) !important; }
+.btn.ghost:hover { border-color: var(--ink) !important; }
+
+/* ---- superficies planas: retícula de filetes, sin sombras ni brillos */
+.eb-rail, .dcard, .panel, .fpanel, .card, .block, .tablebox, .command { box-shadow: none !important; }
+.crest[aria-pressed="true"] { background: var(--crest-on) !important; box-shadow: var(--crest-glow) !important; border-color: var(--ink) !important; }
+.crest b { font-family: var(--cn-mono) !important; font-weight: 600 !important; letter-spacing: .04em !important; }
+
+/* ---- tablas: cifras en Geist Mono */
+td, .num, .n { font-variant-numeric: tabular-nums; }
+
+/* ---- ayudas emergentes */
+[role="tooltip"], .tip, #tip { border-radius: 2px !important; }
+
+/* ---- vista complementaria «Radar 3D» (excepción aprobada por el CEO, solo vista interna) */
+.cn-pct { display: grid; gap: 7px; margin-top: 8px; }
+.cn-pct-row { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 12px; align-items: center; }
+.cn-pct-row > span { font-size: 12.5px; color: var(--ink-2); }
+.cn-pct-trk { position: relative; display: grid; gap: 4px; padding: 3px 34px 3px 0; background: linear-gradient(90deg, transparent calc(25% - .5px), var(--line) calc(25% - .5px), var(--line) calc(25% + .5px), transparent calc(25% + .5px), transparent calc(50% - .5px), var(--line-2) calc(50% - .5px), var(--line-2) calc(50% + .5px), transparent calc(50% + .5px), transparent calc(75% - .5px), var(--line) calc(75% - .5px), var(--line) calc(75% + .5px), transparent calc(75% + .5px)) content-box; border-bottom: 1px solid var(--line); }
+.cn-pct-ln { position: relative; height: 9px; }
+.cn-pct-ln i { position: absolute; left: 0; top: 0; bottom: 0; display: block; }
+.cn-pct-ln b { position: absolute; right: -34px; top: 0; width: 28px; text-align: right; font: 500 9.5px/1 var(--cn-mono); color: var(--ink-2); }
+.cn-pct-ax .cn-pct-trk { border: 0; background: none; height: 12px; }
+.cn-pct-ax em { position: absolute; top: 0; transform: translateX(-50%); font: 500 9.5px var(--cn-mono); font-style: normal; color: var(--muted); }
+.cn-pct-ax em:first-child { transform: none; } .cn-pct-ax em:last-child { transform: translateX(-100%); }
+.cmp { --p1: var(--e1) !important; --p2: var(--e2) !important; --p3: var(--e3) !important; }
+.cn-r3d { display: grid; gap: 8px; }
+.cn-r3d svg { width: 100%; height: auto; display: block; touch-action: none; cursor: grab; }
+.cn-r3d .cn-r3d-ctl { display: flex; gap: 10px; align-items: center; font-size: 12px; color: var(--muted); }
+.cn-r3d input[type=range] { flex: 1; accent-color: var(--ink); }
+.cn-seg { display: inline-flex; gap: 0; border: 1px solid var(--line-2); border-radius: 2px; margin: 4px 0 8px; }
+.cn-seg button { all: unset; cursor: pointer; padding: 5px 12px; font: 560 12.5px var(--cn-sans); color: var(--muted); }
+.cn-seg button[aria-pressed="true"] { background: var(--btn-bg); color: var(--btn-ink); }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+@media (max-width: 640px) { .eb-brand .cn-logo { width: 112px; } .cn-pct-row { grid-template-columns: 96px minmax(0, 1fr); } }
+.arrow { color: var(--sim-ink) !important; }
+/* titulares de bloque del Atlas y del panel lateral: Mona 620, sentence case */
+section.block > div:first-child > h2, .side-r h2 { font: 620 17px/1.25 var(--cn-sans) !important; letter-spacing: -0.01em !important; text-transform: none !important; }
+.side summary { font-family: var(--cn-mono) !important; font-weight: 500 !important; font-size: 11px !important; letter-spacing: .08em !important; color: var(--muted) !important; }
+
+</style>
+<style id="cerno-ux">
+/* =====================================================================================
+   Cerno Analytics · capa de usabilidad v2 · Equipos y quintetos
+   Solo presentación: no cambia ids, data-*, valores de <option>, claves de localStorage ni cálculos.
+   - Filtros (temporada, fase, equipo, liga): la columna lateral pasa a un panel plegable encima del contenido,
+     con un acordeón por grupo y una fila de chips de filtros activos (los monta #cerno-ux-js moviendo nodos).
+   - KPIs (.kpis/.kpi) y cifras de ficha (.kv): banda compacta con filetes verticales, sin recuadro por cifra.
+   - Tarjetas (.dcard): sin borde completo ni fondo; filete superior y aire de 32 px entre bloques.
+   - «¿Cómo se lee?» (.learn): dentro de un <details> plegado; abierto cuando «Ayudas de lectura» está activado.
+   - Pestañas de segundo nivel (.seg) como subrayado; tablas con cabecera mono, filas de 34-36 px y fila elegida
+     con banda Index al 28 %; listas (.lrow) sin cajas; ficha lateral con «Más detalle» plegable.
+   ===================================================================================== */
+:root { --ux-gap: 32px; }
+
+/* ---- esqueleto: una sola columna también dentro del marco (la columna de filtros desaparece) */
+.wrap { gap: 16px; }
+:root[data-embed] .wrap { grid-template-columns: minmax(0, 1fr) !important; padding: 0 0 40px !important; row-gap: 16px; }
+:root[data-embed] .wrap > * { grid-column: 1 / -1 !important; }
+:root[data-embed] .command { grid-row: auto !important; position: static !important; }
+.subpage { gap: var(--ux-gap); }
+.g2, .g3, .gside { gap: var(--ux-gap) 32px; }
+.stack { gap: 12px; }
+
+/* ---- barra de filtros: botón «Filtros» + chips de filtros activos + cobertura */
+.ux-fbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 0 0 12px; border-bottom: 1px solid var(--line); min-width: 0; }
+.ux-fbtn { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 5px 12px; border: 1px solid var(--line-2); border-radius: 2px; font: 560 13px var(--cn-sans); color: var(--ink); background: transparent; }
+.ux-fbtn:hover { border-color: var(--ink); }
+.ux-fbtn svg { width: 14px; height: 14px; flex: none; }
+.ux-fbtn .ux-n { font: 500 10.5px var(--cn-mono); min-width: 18px; height: 18px; padding: 0 5px; display: inline-grid; place-items: center; border-radius: 2px; background: var(--btn-bg); color: var(--btn-ink); }
+.ux-fbtn .ux-n:empty { display: none; }
+.ux-fbtn[aria-expanded="true"] { background: var(--surface-2); }
+.ux-fbtn .ux-car { transition: transform .15s var(--cn-ease, ease); }
+.ux-fbtn[aria-expanded="true"] .ux-car { transform: rotate(180deg); }
+.ux-chips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; flex: 1 1 320px; }
+.ux-chip { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: baseline; gap: 6px; max-width: 100%; padding: 4px 10px; border-radius: 2px; background: var(--surface-2); font: 500 12.5px var(--cn-sans); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ux-chip:hover { box-shadow: inset 0 0 0 1px var(--line-2); }
+.ux-chip > span { font: 500 10px var(--cn-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.ux-chip > b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.ux-fbar .cov { margin-left: auto; border: 0; padding: 0; font-size: 12px; }
+@media (max-width: 700px) { .ux-fbar .cov { margin-left: 0; flex-basis: 100%; } .ux-chips { flex-basis: 100%; } }
+
+/* ---- panel de filtros (la antigua barra/columna de mando) */
+.command.ux-panel { border: 0 !important; border-radius: 0 !important; background: transparent !important; padding: 4px 0 16px !important; gap: 0 !important; border-bottom: 1px solid var(--line) !important; }
+.command.ux-panel.ux-closed { display: none !important; }
+.command.ux-panel .cmd-row.ux-empty { display: none !important; }
+.ux-fgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 2fr); gap: 0 24px; align-items: start; }
+@media (max-width: 1100px) { .ux-fgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ux-fgrid .ux-g-liga { grid-column: 1 / -1; } }
+@media (max-width: 600px) { .ux-fgrid { grid-template-columns: minmax(0, 1fr); } }
+.ux-acc { border-top: 1px solid var(--line); min-width: 0; }
+.ux-acc > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 10px; padding: 10px 0; min-width: 0; }
+.ux-acc > summary::-webkit-details-marker { display: none; }
+.ux-acc > summary::after { content: ""; margin-left: auto; width: 6px; height: 6px; flex: none; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg) translate(-2px, -2px); transition: transform .15s; }
+.ux-acc[open] > summary::after { transform: rotate(-135deg) translate(-1px, -1px); }
+.ux-acc > summary .ux-k { font: 500 10.5px var(--cn-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); flex: none; }
+.ux-acc > summary .ux-v { font: 560 13px var(--cn-sans); color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ux-acc > .cmd-group { padding: 0 0 14px; flex-direction: column !important; align-items: stretch !important; gap: 6px !important; }
+.ux-acc > .cmd-group > .label { display: none !important; }
+.ux-acc #selTemp, .ux-acc #selEquipo { width: 100%; max-width: none; min-width: 0; }
+.ux-acc .chips { gap: 6px; }
+.ux-acc #segFase { display: inline-flex !important; }
+
+/* ---- tarjetas: sin caja; filete superior */
+.dcard { background: transparent !important; border: 0 !important; border-top: 1px solid var(--line-2) !important; border-radius: 0 !important; padding: 16px 0 0 !important; gap: 16px; }
+.dcard .dcard { border-top-color: var(--line) !important; }
+.dcard h2 { font: 620 15px/1.3 var(--cn-sans) !important; letter-spacing: -0.01em !important; }
+.dcard h2::before { display: none !important; }
+.dcard .hint { margin: -8px 0 0; color: var(--muted); }
+.cardhead { gap: 8px 16px; align-items: center; }
+.cardhead > .note { order: 3; flex-basis: 100%; margin-top: -4px; }
+
+/* ---- banda de KPIs */
+.kpis { grid-template-columns: repeat(auto-fit, minmax(max(150px, 15.5%), 1fr)) !important; gap: 14px 0 !important; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 0; }
+.kpi { border: 0 !important; border-radius: 0 !important; background: transparent !important; border-left: 1px solid var(--line) !important; margin-left: -1px; padding: 2px 16px !important; gap: 3px !important; }
+.kpi > span { font: 500 10.5px/1.3 var(--cn-mono) !important; letter-spacing: .08em !important; text-transform: uppercase; color: var(--muted) !important; }
+.kpi > b { font: 600 24px/1.15 var(--cn-sans) !important; letter-spacing: -0.015em !important; font-variant-numeric: tabular-nums lining-nums; }
+.kpi > small { font-size: 11px !important; line-height: 1.35; color: var(--muted); }
+@media (max-width: 600px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } .kpi { padding: 2px 12px !important; } .kpi > b { font-size: 22px !important; } }
+.kv { grid-template-columns: repeat(auto-fit, minmax(min(100%, 110px), 1fr)); gap: 10px 0; overflow: hidden; border-top: 1px solid var(--line); padding-top: 10px; }
+.kv > div { background: transparent !important; border: 0 !important; border-radius: 0 !important; border-left: 1px solid var(--line) !important; margin-left: -1px; padding: 0 12px !important; }
+.kv span { font: 500 10px/1.3 var(--cn-mono) !important; letter-spacing: .07em !important; color: var(--muted); }
+.kv b { font: 600 15px var(--cn-sans) !important; font-variant-numeric: tabular-nums; }
+.kpi b .evst, .kv b .evst { font: 600 14px/1.3 var(--cn-sans) !important; }
+
+/* ---- «¿Cómo se lee?» plegable */
+details.ux-learn { min-width: 0; }
+details.ux-learn > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; font: 560 12.5px var(--cn-sans); color: var(--muted); padding: 2px 0; border-radius: 2px; }
+details.ux-learn > summary::-webkit-details-marker { display: none; }
+details.ux-learn > summary::before { content: "?"; display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--line-2); font: 600 10px var(--cn-mono); color: var(--ink-2); }
+details.ux-learn > summary:hover { color: var(--ink); }
+details.ux-learn[open] > summary { color: var(--ink); }
+:root[data-aprende="0"] details.ux-learn > .learn, details.ux-learn > .learn { display: grid !important; }
+details.ux-learn > .learn { margin-top: 6px; border: 0 !important; border-left: 2px solid var(--line-2) !important; border-radius: 0 !important; background: transparent !important; padding: 2px 0 2px 12px !important; color: var(--ink-2); }
+details.ux-learn > .learn > b:first-child { display: none !important; }
+
+/* ---- pestañas de segundo nivel como subrayado */
+.seg { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--line) !important; border-radius: 0 !important; padding: 0 !important; gap: 0 14px !important; }
+.segb { padding: 6px 0 7px !important; border-radius: 0 !important; color: var(--muted); box-shadow: none !important; background: transparent !important; margin-bottom: -1px; border-bottom: 2px solid transparent; }
+.segb[aria-pressed="true"] { color: var(--ink) !important; border-bottom-color: var(--ink); background: transparent !important; }
+.escsw .seg { border-bottom: 0 !important; }
+/* conmutadores de columnas (selección múltiple): chips discretos */
+.chip { border-radius: 2px; padding: 4px 10px; }
+.chip[aria-pressed="true"] { background: var(--surface-2) !important; border-color: var(--ink) !important; }
+/* subpestañas (solo fuera del marco) */
+.subnav { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--line) !important; border-radius: 0 !important; padding: 0 !important; gap: 20px !important; width: auto !important; }
+.subtab { border-radius: 0 !important; padding: 8px 0 9px !important; border-bottom: 2px solid transparent; background: transparent !important; }
+.subtab[aria-selected="true"] { background: transparent !important; color: var(--ink) !important; border-bottom-color: var(--ink); }
+.subtab[aria-selected="true"] small { color: var(--muted) !important; opacity: 1 !important; }
+
+/* ---- tablas */
+.tablebox { border: 0 !important; border-radius: 0 !important; border-top: 1px solid var(--line-2) !important; background: transparent !important; }
+th, td { padding: 8px 10px; }
+th { background: var(--surface) !important; font: 500 10.5px var(--cn-mono) !important; letter-spacing: .07em !important; color: var(--muted) !important; border-bottom: 1px solid var(--line-2) !important; }
+th.grp, table.evmet tr.grp th { background: var(--surface) !important; color: var(--ink) !important; }
+td { border-bottom-color: var(--line); }
+td.sticky { background: var(--surface); }
+tbody tr.sel td { box-shadow: none !important; }
+tbody tr.sel td:not([style*="background"]) { background-color: var(--cn-hl-row) !important; color: var(--ink) !important; }
+tbody tr.sel td.sticky { background-color: var(--cn-hl-row) !important; color: var(--ink) !important; }
+.ptable td, .ptable th { padding: 6px 8px; }
+.pager { justify-content: flex-end; gap: 16px; font-size: 12px; }
+.pager .btn.ghost { border-color: transparent !important; }
+.pager .btn.ghost:hover:not(:disabled) { border-color: var(--line-2) !important; }
+
+/* ---- listas y avisos sin caja */
+.lrows { gap: 0; }
+.lrow { border: 0 !important; border-bottom: 1px solid var(--line) !important; border-radius: 0 !important; background: transparent !important; padding: 7px 2px !important; }
+.lrow:hover { background: var(--row-hover) !important; }
+.warnbox { border: 0 !important; border-left: 2px solid var(--warn) !important; border-radius: 0 !important; padding: 6px 12px !important; }
+.insights li::before { background: transparent !important; color: var(--muted) !important; border: 1px solid var(--line-2); font: 500 10.5px var(--cn-mono) !important; }
+.formula { border: 0 !important; border-radius: 2px !important; }
+.cov { border-style: solid; }
+
+/* ---- «Más detalle» en las fichas */
+details.ux-more { border-top: 1px solid var(--line); min-width: 0; }
+details.ux-more > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 10px 0; font: 560 13px var(--cn-sans); color: var(--ink); }
+details.ux-more > summary::-webkit-details-marker { display: none; }
+details.ux-more > summary::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg) translate(-2px, -2px); transition: transform .15s; }
+details.ux-more[open] > summary::after { transform: rotate(-135deg) translate(-1px, -1px); }
+details.ux-more > summary small { font: 500 11px var(--cn-sans); color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+details.ux-more, .ux-acc { overflow: hidden; }
+details.ux-more > summary::after { flex: none; margin-right: 3px; }
+details.ux-more > .ux-more-in { display: grid; gap: 16px; padding-bottom: 4px; min-width: 0; }
+
+/* ---- Aprende */
+.ap nav { border: 0 !important; border-left: 1px solid var(--line) !important; border-radius: 0 !important; background: transparent !important; padding: 0 0 0 8px !important; }
+.ap nav button.on { background: var(--surface-2) !important; }
+.concept .parts { gap: 16px 24px; }
+.concept .part { border: 0 !important; border-top: 1px solid var(--line) !important; border-radius: 0 !important; background: transparent !important; padding: 10px 0 0 !important; }
+.concept .part.ex { border-top: 2px solid var(--ink) !important; }
+@media (max-width: 900px) { .ap nav { border-left: 0 !important; border-top: 1px solid var(--line) !important; padding: 8px 0 0 !important; grid-template-columns: none !important; grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; scrollbar-width: thin; } }
+
+/* ---- estilos unificados (Pistons…Pintura) en pastillas y celdas */
+.evst i { border-radius: 50%; }
+.pill { border-radius: 2px; }
+
+/* ---- 390 px: nada más ancho que la pantalla */
+@media (max-width: 600px) {
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  :root[data-embed] .wrap { padding-left: 0 !important; padding-right: 0 !important; }
+  .chartbox, .scrollx, .tablebox { max-width: 100%; }
+  .cmpr { grid-template-columns: 90px minmax(0, 1fr) 52px; }
+  .link { grid-template-columns: minmax(0, 1fr) 56px 40px 40px; }
+}
+</style>
+<script id="cerno-ux-js">
+/* Cerno Analytics · capa de usabilidad v2 (Equipos y quintetos). Solo reorganiza nodos existentes, de forma idempotente:
+   1) Filtros: inserta una barra (#uxFbar) con el botón «Filtros», chips de filtros activos y la cobertura (#cov, movido);
+      la sección .command pasa a panel plegable y cada .cmd-group (Equipo, Liga, Temporada, Fase) se MUEVE a un <details>.
+      Los controles (#selTemp, #segFase, #selEquipo, #chipsLiga) no se recrean: el código los repinta por dentro como antes.
+   2) «¿Cómo se lee?»: cada .learn que pinta la app se mete en un <details class="ux-learn">. Abierto si «Ayudas de lectura»
+      está activado de forma explícita (mm.quintetos.aprende = "1", o mensaje {aprende:true}); si no, plegado. Nunca se borra.
+   3) Fichas laterales (#qFicha, #jFicha): los bloques secundarios pasan a un plegable «Más detalle».
+   Tolera los repintados con un MutationObserver sobre #wrap. Estado del panel: localStorage mm.quintetos.ux.filtros (clave nueva). */
+(function () {
+  if (window.__cernoUx) return; window.__cernoUx = true;
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const ls = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } } };
+  const wrap = $("#wrap"), cmd = $(".command");
+  if (!wrap || !cmd) return;
+  const root = document.documentElement;
+
+  // ---------------------------------------------------------------- 1 · panel de filtros
+  const GRUPOS = [["equipo", "Equipo", "#selEquipo"], ["liga", "Liga", "#chipsLiga"], ["temporada", "Temporada", "#selTemp"], ["fase", "Fase", "#segFase"]];
+  const bar = document.createElement("div"); bar.className = "ux-fbar"; bar.id = "uxFbar";
+  bar.innerHTML = `<button class="ux-fbtn" type="button" id="uxFiltros" aria-expanded="false" aria-controls="uxPanel"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M4.5 8h7M7 12h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>Filtros<span class="ux-n" aria-label="filtros distintos del valor por defecto"></span><svg class="ux-car" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"/></svg></button><div class="ux-chips" id="uxChips" aria-label="Filtros activos"></div>`;
+  cmd.parentNode.insertBefore(bar, cmd);
+  cmd.classList.add("ux-panel"); if (!cmd.id) cmd.id = "uxPanel";
+  $("#uxFiltros").setAttribute("aria-controls", cmd.id);
+  const cov = $("#cov"); if (cov) bar.appendChild(cov); // se mueve el nodo: pintarCobertura() sigue repintándolo por dentro
+  const grid = document.createElement("div"); grid.className = "ux-fgrid";
+  cmd.appendChild(grid);
+  const acc = {};
+  GRUPOS.forEach(([k, lab, sel]) => {
+    const ctl = $(sel); const g = ctl && ctl.closest(".cmd-group"); if (!g) return;
+    const d = document.createElement("details"); d.className = `ux-acc ux-g-${k}`;
+    d.innerHTML = `<summary><span class="ux-k">${lab}</span><span class="ux-v"></span></summary>`;
+    d.appendChild(g); grid.appendChild(d); acc[k] = d;
+  });
+  $$(".cmd-row", cmd).forEach((r) => { if (!r.querySelector("select,button,input,.cov")) r.classList.add("ux-empty"); });
+
+  const txt = (el) => (el ? el.textContent.replace(/\s+/g, " ").trim() : "");
+  function valores() {
+    const st = $("#selTemp"), se = $("#selEquipo");
+    const temp = st && st.selectedOptions[0] ? txt(st.selectedOptions[0]) : "";
+    if (st && st.value && tempIni == null) tempIni = st.value; // la temporada con la que abre la app cuenta como valor por defecto
+    const tempDef = tempIni;
+    const fb = $("#segFase [aria-pressed='true']"), lb = $("#chipsLiga [aria-pressed='true']");
+    const liga = lb ? txt(lb).replace(/\s*solo pases\s*$/i, "") : "";
+    return {
+      equipo: { v: se && !se.disabled && se.selectedOptions[0] ? txt(se.selectedOptions[0]) : "—", def: true },
+      liga: { v: liga || "—", def: !lb || lb.dataset.liga === "euroleague" },
+      temporada: { v: temp || "—", def: !st || st.value === tempDef },
+      fase: { v: fb ? txt(fb) : "—", def: !fb || fb.dataset.fase === "regular" },
+    };
+  }
+  let primera = true, tempIni = null;
+  function pintarFiltros() {
+    const V = valores();
+    Object.entries(acc).forEach(([k, d]) => { const s = d.querySelector(".ux-v"); if (s && s.textContent !== V[k].v) s.textContent = V[k].v; });
+    if (primera && $("#selEquipo") && $("#selTemp") && $("#selTemp").options.length) { // al arrancar: abierto el primero y los que no están en su valor por defecto
+      primera = false; Object.entries(acc).forEach(([k, d], i) => { d.open = i === 0 || !V[k].def; });
+    }
+    const n = ["liga", "temporada", "fase"].filter((k) => !V[k].def).length;
+    const nb = $("#uxFiltros .ux-n"); if (nb) nb.textContent = n ? String(n) : "";
+    const chips = $("#uxChips"); if (!chips) return;
+    const html = GRUPOS.filter(([k]) => acc[k]).map(([k, lab]) => `<button type="button" class="ux-chip" data-ux-g="${k}" title="Cambiar ${lab.toLowerCase()}"><span>${lab}</span><b>${V[k].v.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]))}</b></button>`).join("");
+    if (chips.innerHTML !== html) chips.innerHTML = html;
+  }
+  const abrirPanel = (on) => { cmd.classList.toggle("ux-closed", !on); $("#uxFiltros").setAttribute("aria-expanded", String(on)); ls.set("mm.quintetos.ux.filtros", on ? "1" : "0"); };
+  abrirPanel(ls.get("mm.quintetos.ux.filtros") === "1");
+  $("#uxFiltros").addEventListener("click", () => abrirPanel(cmd.classList.contains("ux-closed")));
+  $("#uxChips").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-ux-g]"); if (!b) return;
+    const d = acc[b.dataset.uxG]; abrirPanel(true); if (d) { d.open = true; const c = d.querySelector("select, button:not([disabled])"); if (c) c.focus({ preventScroll: false }); }
+  });
+  ["#selTemp", "#selEquipo"].forEach((s) => { const el = $(s); if (el) el.addEventListener("change", () => setTimeout(pintarFiltros, 0)); });
+  new MutationObserver(() => pintarFiltros()).observe(cmd, { subtree: true, childList: true, attributes: true, attributeFilter: ["aria-pressed", "disabled"] });
+
+  // ---------------------------------------------------------------- 2 · ayudas «¿Cómo se lee?»
+  let ayudas = ls.get("mm.quintetos.aprende") === "1";
+  const fijarAyudas = () => $$("details.ux-learn").forEach((d) => { d.open = ayudas; });
+  new MutationObserver(() => { ayudas = root.dataset.aprende === "1"; fijarAyudas(); }).observe(root, { attributes: true, attributeFilter: ["data-aprende"] });
+  window.addEventListener("message", (e) => { const d = e.data || {}; if (typeof d.aprende === "boolean") { ayudas = d.aprende; fijarAyudas(); } });
+  function envolverAyudas(scope) {
+    $$(".learn", scope).forEach((l) => {
+      if (l.parentElement && l.parentElement.matches("details.ux-learn")) return;
+      const d = document.createElement("details"); d.className = "ux-learn"; d.open = ayudas;
+      const s = document.createElement("summary"); s.textContent = "¿Cómo se lee?"; d.appendChild(s);
+      l.parentNode.insertBefore(d, l); d.appendChild(l); // se mueve el recuadro entero (con su botón «Saber más»)
+    });
+  }
+
+  // ---------------------------------------------------------------- 3 · «Más detalle» en las fichas
+  const MAS = { "#qFicha": /^Cuatro factores/i, "#jFicha": /^(Cuándo juega|Dónde tira)/i };
+  const masAbierto = {};
+  function masDetalle() {
+    Object.entries(MAS).forEach(([sel, re]) => {
+      const box = $(sel); if (!box || box.querySelector(":scope > details.ux-more")) return;
+      const kids = Array.from(box.children);
+      const i = kids.findIndex((k) => { const lb = k.matches(".stack") && k.querySelector(":scope > .label"); return lb && re.test(txt(lb)); });
+      if (i < 0 || i >= kids.length) return;
+      const resto = kids.slice(i); if (!resto.length) return;
+      const labs = resto.map((k) => k.querySelector(":scope > .label")).filter(Boolean).map(txt).slice(0, 4);
+      const d = document.createElement("details"); d.className = "ux-more"; d.open = !!masAbierto[sel];
+      d.innerHTML = `<summary>Más detalle <small>${labs.map((x) => x.split("(")[0].trim()).join(" · ").replace(/[&<>]/g, "")}</small></summary><div class="ux-more-in"></div>`;
+      d.addEventListener("toggle", () => { masAbierto[sel] = d.open; });
+      const inn = d.querySelector(".ux-more-in"); resto.forEach((k) => inn.appendChild(k));
+      box.appendChild(d);
+    });
+  }
+
+  // ---------------------------------------------------------------- observador de repintados
+  let pend = false;
+  const mejorar = () => { pend = false; obs.disconnect(); try { envolverAyudas(wrap); masDetalle(); pintarFiltros(); } catch (err) { console.warn("cerno-ux:", err); } obs.observe(wrap, { childList: true, subtree: true }); };
+  const obs = new MutationObserver(() => { if (!pend) { pend = true; Promise.resolve().then(mejorar); } });
+  mejorar();
+})();
+</script>
+
 </body>
 </html>
