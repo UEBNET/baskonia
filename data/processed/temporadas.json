@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-31T18:44:56.183414+00:00",
+  "generado": "2026-10-31T18:53:15.599535+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
@@ -542,7 +542,7 @@
     },
     {
       "temporada": "2020-21",
-      "generado": "2026-10-31T18:44:55.924454+00:00",
+      "generado": "2026-10-31T18:53:15.298039+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -608,6 +608,11 @@
           "playoffs": 239,
           "regular": 626,
           "total": 626
+        },
+        "nbl": {
+          "playoffs": 50,
+          "regular": 136,
+          "total": 136
         },
         "ncaa": {
           "playoffs": 656,
