@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-10-31T19:25:29.901479+00:00",
+  "generado": "2026-10-31T19:42:41.497216+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -36,6 +36,15 @@
       "fases": {
         "regular": 428,
         "total": 428
+      }
+    },
+    "bnxt": {
+      "nombre": "BNXT League",
+      "archivo": "ligas/bnxt.csv",
+      "fecha_extraccion": "2026-10-31T19:33:23.504317+00:00",
+      "fases": {
+        "regular": 199,
+        "total": 199
       }
     },
     "bsl": {
