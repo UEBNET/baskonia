@@ -750,9 +750,13 @@ registrar("fiba_livestats", Extractor(lector_fiba_livestats, "FIBA LiveStats dat
 from .lineups.sources import fiba_livestats as _fls, fiba_web as _fweb  # noqa: E402
 registrar("fiba_web", Extractor(_fweb.lector_entrenadores, "fiba.basketball staffA/staffB (Head Coach)",
                                 docs_principal=_fweb.docs_principal))
-for _liga in ("bsl", "gbl"):
+for _liga in ("bsl", "gbl", "bnxt"):
     registrar(_liga, Extractor(lector_fiba_livestats, "FIBA LiveStats data.json (tm[].coach)",
                                docs_principal=_fls.docs_principal))
+# NCAA (ESPN): un entrenador por temporada (plantilla de ESPN, sólo top-50), traducido a tm[].coach por to_fls
+from .lineups.sources import ncaa as _ncaa  # noqa: E402
+registrar("ncaa", Extractor(lector_fiba_livestats, "ESPN teams/<id>/roster (coach, uno por temporada)",
+                            docs_principal=_ncaa.docs_principal))
 
 
 # ---- FEB (Primera, Segunda y Tercera FEB): el partido NO trae el entrenador; la página pública del equipo de esa

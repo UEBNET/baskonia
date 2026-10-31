@@ -33,7 +33,8 @@
       "fibalivestats.dcd.shared.geniussports.com": 0.05,
       "baloncestoenvivo.feb.es": 1.0,
       "intrafeb.feb.es": 1.0,
-      "prod.rosetta.nbl.com.au": 0.3
+      "prod.rosetta.nbl.com.au": 0.3,
+      "site.api.espn.com": 0.2
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -1648,6 +1649,2163 @@
             2008422,
             2059780
           ]
+        }
+      }
+    },
+    "ncaa": {
+      "adaptador": "ncaa",
+      "activa": true,
+      "nombre": "NCAA Division I (top-50 T-Rank)",
+      "pais": "EE. UU.",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball (API pública de ESPN: teams/<id>/schedule, teams/<id>/roster, summary?event=<id> con boxscore + jugada a jugada)",
+      "_alcance": "Sólo los 50 primeros del T-Rank (barttorvik.com) de cada temporada (temporadas.<t>.top50, ids de equipo de ESPN). Se descargan TODOS sus partidos (rivales fuera del top-50 o de la D-I incluidos, para que team_*/opp_* sean completos); las filas de jugador y equipo son sólo de los top-50. Partidos entre dos top-50, una vez. La capa de quintetos sí incluye a los rivales (necesarios en pista).",
+      "_ranking": "Metodología: T-Rank final de Bart Torvik (orden por barthag = probabilidad de ganar a un equipo medio de D-I, a partir de eficiencias ofensiva/defensiva ajustadas por rival y sede), incluye postemporada. CSV público congelado en la fecha de descarga (Torvik recalcula). 2026-27: pretemporada, a sustituir por el final.",
+      "_fases": "regular = seasontype 2 de ESPN (liga regular, torneos de inicio y torneos de conferencia); playoffs = torneo NCAA (seasontype 3 con notes \"Men's Basketball Championship - …\", First Four incluido); NIT/CBI/College Basketball Crown fuera (no se descargan).",
+      "_periodos": "2 mitades de 20': cada mitad se traduce como dos periodos de 10' (1-2 = 1.ª mitad, 3-4 = 2.ª) para que el tiempo transcurrido del modelo común sea exacto; prórrogas de 5' = periodo 5+. En quintetos 'periodo'/q1..q4 son tramos de 10'.",
+      "_huecos": "Sustituciones: ninguna en 2020-21..2023-24, parte de 2024-25, todas en 2025-26 (sin cambios: boxscore, tiros y asistencias, no quintetos). Coordenadas reales de tiro: mayoría de partidos sólo desde 2025-26. Minutos enteros; sin +/- ni faltas recibidas; tapones recibidos desde el pbp.",
+      "plazas_playoffs": 0,
+      "partidos_por_paquete": 400,
+      "pbp": "ncaa",
+      "estado_verificacion": "verificado con datos reales (2025-26 completa y muestra de 2021-22); 2026-27 sin partidos",
+      "temporadas": {
+        "2020-21": {
+          "top50": [
+            {
+              "espn_id": "2250",
+              "nombre": "Gonzaga Bulldogs",
+              "rank": 1,
+              "torvik": "Gonzaga"
+            },
+            {
+              "espn_id": "239",
+              "nombre": "Baylor Bears",
+              "rank": 2,
+              "torvik": "Baylor"
+            },
+            {
+              "espn_id": "248",
+              "nombre": "Houston Cougars",
+              "rank": 3,
+              "torvik": "Houston"
+            },
+            {
+              "espn_id": "356",
+              "nombre": "Illinois Fighting Illini",
+              "rank": 4,
+              "torvik": "Illinois"
+            },
+            {
+              "espn_id": "130",
+              "nombre": "Michigan Wolverines",
+              "rank": 5,
+              "torvik": "Michigan"
+            },
+            {
+              "espn_id": "2294",
+              "nombre": "Iowa Hawkeyes",
+              "rank": 6,
+              "torvik": "Iowa"
+            },
+            {
+              "espn_id": "30",
+              "nombre": "USC Trojans",
+              "rank": 7,
+              "torvik": "USC"
+            },
+            {
+              "espn_id": "38",
+              "nombre": "Colorado Buffaloes",
+              "rank": 8,
+              "torvik": "Colorado"
+            },
+            {
+              "espn_id": "333",
+              "nombre": "Alabama Crimson Tide",
+              "rank": 9,
+              "torvik": "Alabama"
+            },
+            {
+              "espn_id": "52",
+              "nombre": "Florida State Seminoles",
+              "rank": 10,
+              "torvik": "Florida St."
+            },
+            {
+              "espn_id": "194",
+              "nombre": "Ohio State Buckeyes",
+              "rank": 11,
+              "torvik": "Ohio St."
+            },
+            {
+              "espn_id": "275",
+              "nombre": "Wisconsin Badgers",
+              "rank": 12,
+              "torvik": "Wisconsin"
+            },
+            {
+              "espn_id": "2350",
+              "nombre": "Loyola Chicago Ramblers",
+              "rank": 13,
+              "torvik": "Loyola Chicago"
+            },
+            {
+              "espn_id": "222",
+              "nombre": "Villanova Wildcats",
+              "rank": 14,
+              "torvik": "Villanova"
+            },
+            {
+              "espn_id": "41",
+              "nombre": "UConn Huskies",
+              "rank": 15,
+              "torvik": "Connecticut"
+            },
+            {
+              "espn_id": "2641",
+              "nombre": "Texas Tech Red Raiders",
+              "rank": 16,
+              "torvik": "Texas Tech"
+            },
+            {
+              "espn_id": "21",
+              "nombre": "San Diego State Aztecs",
+              "rank": 17,
+              "torvik": "San Diego St."
+            },
+            {
+              "espn_id": "26",
+              "nombre": "UCLA Bruins",
+              "rank": 18,
+              "torvik": "UCLA"
+            },
+            {
+              "espn_id": "251",
+              "nombre": "Texas Longhorns",
+              "rank": 19,
+              "torvik": "Texas"
+            },
+            {
+              "espn_id": "277",
+              "nombre": "West Virginia Mountaineers",
+              "rank": 20,
+              "torvik": "West Virginia"
+            },
+            {
+              "espn_id": "99",
+              "nombre": "LSU Tigers",
+              "rank": 21,
+              "torvik": "LSU"
+            },
+            {
+              "espn_id": "258",
+              "nombre": "Virginia Cavaliers",
+              "rank": 22,
+              "torvik": "Virginia"
+            },
+            {
+              "espn_id": "235",
+              "nombre": "Memphis Tigers",
+              "rank": 23,
+              "torvik": "Memphis"
+            },
+            {
+              "espn_id": "156",
+              "nombre": "Creighton Bluejays",
+              "rank": 24,
+              "torvik": "Creighton"
+            },
+            {
+              "espn_id": "252",
+              "nombre": "BYU Cougars",
+              "rank": 25,
+              "torvik": "BYU"
+            },
+            {
+              "espn_id": "8",
+              "nombre": "Arkansas Razorbacks",
+              "rank": 26,
+              "torvik": "Arkansas"
+            },
+            {
+              "espn_id": "2633",
+              "nombre": "Tennessee Volunteers",
+              "rank": 27,
+              "torvik": "Tennessee"
+            },
+            {
+              "espn_id": "12",
+              "nombre": "Arizona Wildcats",
+              "rank": 28,
+              "torvik": "Arizona"
+            },
+            {
+              "espn_id": "2509",
+              "nombre": "Purdue Boilermakers",
+              "rank": 29,
+              "torvik": "Purdue"
+            },
+            {
+              "espn_id": "2483",
+              "nombre": "Oregon Ducks",
+              "rank": 30,
+              "torvik": "Oregon"
+            },
+            {
+              "espn_id": "2305",
+              "nombre": "Kansas Jayhawks",
+              "rank": 31,
+              "torvik": "Kansas"
+            },
+            {
+              "espn_id": "150",
+              "nombre": "Duke Blue Devils",
+              "rank": 32,
+              "torvik": "Duke"
+            },
+            {
+              "espn_id": "59",
+              "nombre": "Georgia Tech Yellow Jackets",
+              "rank": 33,
+              "torvik": "Georgia Tech"
+            },
+            {
+              "espn_id": "120",
+              "nombre": "Maryland Terrapins",
+              "rank": 34,
+              "torvik": "Maryland"
+            },
+            {
+              "espn_id": "179",
+              "nombre": "St. Bonaventure Bonnies",
+              "rank": 35,
+              "torvik": "St. Bonaventure"
+            },
+            {
+              "espn_id": "197",
+              "nombre": "Oklahoma State Cowboys",
+              "rank": 36,
+              "torvik": "Oklahoma St."
+            },
+            {
+              "espn_id": "153",
+              "nombre": "North Carolina Tar Heels",
+              "rank": 37,
+              "torvik": "North Carolina"
+            },
+            {
+              "espn_id": "183",
+              "nombre": "Syracuse Orange",
+              "rank": 38,
+              "torvik": "Syracuse"
+            },
+            {
+              "espn_id": "57",
+              "nombre": "Florida Gators",
+              "rank": 39,
+              "torvik": "Florida"
+            },
+            {
+              "espn_id": "201",
+              "nombre": "Oklahoma Sooners",
+              "rank": 40,
+              "torvik": "Oklahoma"
+            },
+            {
+              "espn_id": "142",
+              "nombre": "Missouri Tigers",
+              "rank": 41,
+              "torvik": "Missouri"
+            },
+            {
+              "espn_id": "164",
+              "nombre": "Rutgers Scarlet Knights",
+              "rank": 42,
+              "torvik": "Rutgers"
+            },
+            {
+              "espn_id": "228",
+              "nombre": "Clemson Tigers",
+              "rank": 43,
+              "torvik": "Clemson"
+            },
+            {
+              "espn_id": "2670",
+              "nombre": "VCU Rams",
+              "rank": 44,
+              "torvik": "VCU"
+            },
+            {
+              "espn_id": "213",
+              "nombre": "Penn State Nittany Lions",
+              "rank": 45,
+              "torvik": "Penn St."
+            },
+            {
+              "espn_id": "328",
+              "nombre": "Utah State Aggies",
+              "rank": 46,
+              "torvik": "Utah St."
+            },
+            {
+              "espn_id": "96",
+              "nombre": "Kentucky Wildcats",
+              "rank": 47,
+              "torvik": "Kentucky"
+            },
+            {
+              "espn_id": "145",
+              "nombre": "Ole Miss Rebels",
+              "rank": 48,
+              "torvik": "Mississippi"
+            },
+            {
+              "espn_id": "254",
+              "nombre": "Utah Utes",
+              "rank": 49,
+              "torvik": "Utah"
+            },
+            {
+              "espn_id": "259",
+              "nombre": "Virginia Tech Hokies",
+              "rank": 50,
+              "torvik": "Virginia Tech"
+            }
+          ],
+          "ranking": "T-Rank final 2020-21 (barttorvik.com/2021_team_results.csv, descargado 2026-10-31)"
+        },
+        "2021-22": {
+          "top50": [
+            {
+              "espn_id": "2250",
+              "nombre": "Gonzaga Bulldogs",
+              "rank": 1,
+              "torvik": "Gonzaga"
+            },
+            {
+              "espn_id": "248",
+              "nombre": "Houston Cougars",
+              "rank": 2,
+              "torvik": "Houston"
+            },
+            {
+              "espn_id": "2305",
+              "nombre": "Kansas Jayhawks",
+              "rank": 3,
+              "torvik": "Kansas"
+            },
+            {
+              "espn_id": "2641",
+              "nombre": "Texas Tech Red Raiders",
+              "rank": 4,
+              "torvik": "Texas Tech"
+            },
+            {
+              "espn_id": "239",
+              "nombre": "Baylor Bears",
+              "rank": 5,
+              "torvik": "Baylor"
+            },
+            {
+              "espn_id": "150",
+              "nombre": "Duke Blue Devils",
+              "rank": 6,
+              "torvik": "Duke"
+            },
+            {
+              "espn_id": "2633",
+              "nombre": "Tennessee Volunteers",
+              "rank": 7,
+              "torvik": "Tennessee"
+            },
+            {
+              "espn_id": "222",
+              "nombre": "Villanova Wildcats",
+              "rank": 8,
+              "torvik": "Villanova"
+            },
+            {
+              "espn_id": "12",
+              "nombre": "Arizona Wildcats",
+              "rank": 9,
+              "torvik": "Arizona"
+            },
+            {
+              "espn_id": "26",
+              "nombre": "UCLA Bruins",
+              "rank": 10,
+              "torvik": "UCLA"
+            },
+            {
+              "espn_id": "96",
+              "nombre": "Kentucky Wildcats",
+              "rank": 11,
+              "torvik": "Kentucky"
+            },
+            {
+              "espn_id": "2509",
+              "nombre": "Purdue Boilermakers",
+              "rank": 12,
+              "torvik": "Purdue"
+            },
+            {
+              "espn_id": "2294",
+              "nombre": "Iowa Hawkeyes",
+              "rank": 13,
+              "torvik": "Iowa"
+            },
+            {
+              "espn_id": "2",
+              "nombre": "Auburn Tigers",
+              "rank": 14,
+              "torvik": "Auburn"
+            },
+            {
+              "espn_id": "251",
+              "nombre": "Texas Longhorns",
+              "rank": 15,
+              "torvik": "Texas"
+            },
+            {
+              "espn_id": "153",
+              "nombre": "North Carolina Tar Heels",
+              "rank": 16,
+              "torvik": "North Carolina"
+            },
+            {
+              "espn_id": "235",
+              "nombre": "Memphis Tigers",
+              "rank": 17,
+              "torvik": "Memphis"
+            },
+            {
+              "espn_id": "259",
+              "nombre": "Virginia Tech Hokies",
+              "rank": 18,
+              "torvik": "Virginia Tech"
+            },
+            {
+              "espn_id": "2608",
+              "nombre": "Saint Mary's Gaels",
+              "rank": 19,
+              "torvik": "Saint Mary's"
+            },
+            {
+              "espn_id": "356",
+              "nombre": "Illinois Fighting Illini",
+              "rank": 20,
+              "torvik": "Illinois"
+            },
+            {
+              "espn_id": "8",
+              "nombre": "Arkansas Razorbacks",
+              "rank": 21,
+              "torvik": "Arkansas"
+            },
+            {
+              "espn_id": "99",
+              "nombre": "LSU Tigers",
+              "rank": 22,
+              "torvik": "LSU"
+            },
+            {
+              "espn_id": "2539",
+              "nombre": "San Francisco Dons",
+              "rank": 23,
+              "torvik": "San Francisco"
+            },
+            {
+              "espn_id": "130",
+              "nombre": "Michigan Wolverines",
+              "rank": 24,
+              "torvik": "Michigan"
+            },
+            {
+              "espn_id": "41",
+              "nombre": "UConn Huskies",
+              "rank": 25,
+              "torvik": "Connecticut"
+            },
+            {
+              "espn_id": "2628",
+              "nombre": "TCU Horned Frogs",
+              "rank": 26,
+              "torvik": "TCU"
+            },
+            {
+              "espn_id": "21",
+              "nombre": "San Diego State Aztecs",
+              "rank": 27,
+              "torvik": "San Diego St."
+            },
+            {
+              "espn_id": "84",
+              "nombre": "Indiana Hoosiers",
+              "rank": 28,
+              "torvik": "Indiana"
+            },
+            {
+              "espn_id": "201",
+              "nombre": "Oklahoma Sooners",
+              "rank": 29,
+              "torvik": "Oklahoma"
+            },
+            {
+              "espn_id": "194",
+              "nombre": "Ohio State Buckeyes",
+              "rank": 30,
+              "torvik": "Ohio St."
+            },
+            {
+              "espn_id": "333",
+              "nombre": "Alabama Crimson Tide",
+              "rank": 31,
+              "torvik": "Alabama"
+            },
+            {
+              "espn_id": "245",
+              "nombre": "Texas A&M Aggies",
+              "rank": 32,
+              "torvik": "Texas A&M"
+            },
+            {
+              "espn_id": "197",
+              "nombre": "Oklahoma State Cowboys",
+              "rank": 33,
+              "torvik": "Oklahoma St."
+            },
+            {
+              "espn_id": "2507",
+              "nombre": "Providence Friars",
+              "rank": 34,
+              "torvik": "Providence"
+            },
+            {
+              "espn_id": "154",
+              "nombre": "Wake Forest Demon Deacons",
+              "rank": 35,
+              "torvik": "Wake Forest"
+            },
+            {
+              "espn_id": "87",
+              "nombre": "Notre Dame Fighting Irish",
+              "rank": 36,
+              "torvik": "Notre Dame"
+            },
+            {
+              "espn_id": "275",
+              "nombre": "Wisconsin Badgers",
+              "rank": 37,
+              "torvik": "Wisconsin"
+            },
+            {
+              "espn_id": "2390",
+              "nombre": "Miami Hurricanes",
+              "rank": 38,
+              "torvik": "Miami FL"
+            },
+            {
+              "espn_id": "2350",
+              "nombre": "Loyola Chicago Ramblers",
+              "rank": 39,
+              "torvik": "Loyola Chicago"
+            },
+            {
+              "espn_id": "68",
+              "nombre": "Boise State Broncos",
+              "rank": 40,
+              "torvik": "Boise St."
+            },
+            {
+              "espn_id": "127",
+              "nombre": "Michigan State Spartans",
+              "rank": 41,
+              "torvik": "Michigan St."
+            },
+            {
+              "espn_id": "265",
+              "nombre": "Washington State Cougars",
+              "rank": 42,
+              "torvik": "Washington St."
+            },
+            {
+              "espn_id": "66",
+              "nombre": "Iowa State Cyclones",
+              "rank": 43,
+              "torvik": "Iowa St."
+            },
+            {
+              "espn_id": "2168",
+              "nombre": "Dayton Flyers",
+              "rank": 44,
+              "torvik": "Dayton"
+            },
+            {
+              "espn_id": "183",
+              "nombre": "Syracuse Orange",
+              "rank": 45,
+              "torvik": "Syracuse"
+            },
+            {
+              "espn_id": "2166",
+              "nombre": "Davidson Wildcats",
+              "rank": 46,
+              "torvik": "Davidson"
+            },
+            {
+              "espn_id": "93",
+              "nombre": "Murray State Racers",
+              "rank": 47,
+              "torvik": "Murray St."
+            },
+            {
+              "espn_id": "2752",
+              "nombre": "Xavier Musketeers",
+              "rank": 48,
+              "torvik": "Xavier"
+            },
+            {
+              "espn_id": "36",
+              "nombre": "Colorado State Rams",
+              "rank": 49,
+              "torvik": "Colorado St."
+            },
+            {
+              "espn_id": "2599",
+              "nombre": "St. John's Red Storm",
+              "rank": 50,
+              "torvik": "St. John's"
+            }
+          ],
+          "ranking": "T-Rank final 2021-22 (barttorvik.com/2022_team_results.csv, descargado 2026-10-31)"
+        },
+        "2022-23": {
+          "top50": [
+            {
+              "espn_id": "41",
+              "nombre": "UConn Huskies",
+              "rank": 1,
+              "torvik": "Connecticut"
+            },
+            {
+              "espn_id": "333",
+              "nombre": "Alabama Crimson Tide",
+              "rank": 2,
+              "torvik": "Alabama"
+            },
+            {
+              "espn_id": "248",
+              "nombre": "Houston Cougars",
+              "rank": 3,
+              "torvik": "Houston"
+            },
+            {
+              "espn_id": "26",
+              "nombre": "UCLA Bruins",
+              "rank": 4,
+              "torvik": "UCLA"
+            },
+            {
+              "espn_id": "2633",
+              "nombre": "Tennessee Volunteers",
+              "rank": 5,
+              "torvik": "Tennessee"
+            },
+            {
+              "espn_id": "251",
+              "nombre": "Texas Longhorns",
+              "rank": 6,
+              "torvik": "Texas"
+            },
+            {
+              "espn_id": "2509",
+              "nombre": "Purdue Boilermakers",
+              "rank": 7,
+              "torvik": "Purdue"
+            },
+            {
+              "espn_id": "12",
+              "nombre": "Arizona Wildcats",
+              "rank": 8,
+              "torvik": "Arizona"
+            },
+            {
+              "espn_id": "2250",
+              "nombre": "Gonzaga Bulldogs",
+              "rank": 9,
+              "torvik": "Gonzaga"
+            },
+            {
+              "espn_id": "2608",
+              "nombre": "Saint Mary's Gaels",
+              "rank": 10,
+              "torvik": "Saint Mary's"
+            },
+            {
+              "espn_id": "21",
+              "nombre": "San Diego State Aztecs",
+              "rank": 11,
+              "torvik": "San Diego St."
+            },
+            {
+              "espn_id": "269",
+              "nombre": "Marquette Golden Eagles",
+              "rank": 12,
+              "torvik": "Marquette"
+            },
+            {
+              "espn_id": "156",
+              "nombre": "Creighton Bluejays",
+              "rank": 13,
+              "torvik": "Creighton"
+            },
+            {
+              "espn_id": "2305",
+              "nombre": "Kansas Jayhawks",
+              "rank": 14,
+              "torvik": "Kansas"
+            },
+            {
+              "espn_id": "150",
+              "nombre": "Duke Blue Devils",
+              "rank": 15,
+              "torvik": "Duke"
+            },
+            {
+              "espn_id": "235",
+              "nombre": "Memphis Tigers",
+              "rank": 16,
+              "torvik": "Memphis"
+            },
+            {
+              "espn_id": "239",
+              "nombre": "Baylor Bears",
+              "rank": 17,
+              "torvik": "Baylor"
+            },
+            {
+              "espn_id": "277",
+              "nombre": "West Virginia Mountaineers",
+              "rank": 18,
+              "torvik": "West Virginia"
+            },
+            {
+              "espn_id": "8",
+              "nombre": "Arkansas Razorbacks",
+              "rank": 19,
+              "torvik": "Arkansas"
+            },
+            {
+              "espn_id": "2752",
+              "nombre": "Xavier Musketeers",
+              "rank": 20,
+              "torvik": "Xavier"
+            },
+            {
+              "espn_id": "2",
+              "nombre": "Auburn Tigers",
+              "rank": 21,
+              "torvik": "Auburn"
+            },
+            {
+              "espn_id": "2226",
+              "nombre": "Florida Atlantic Owls",
+              "rank": 22,
+              "torvik": "Florida Atlantic"
+            },
+            {
+              "espn_id": "245",
+              "nombre": "Texas A&M Aggies",
+              "rank": 23,
+              "torvik": "Texas A&M"
+            },
+            {
+              "espn_id": "2306",
+              "nombre": "Kansas State Wildcats",
+              "rank": 24,
+              "torvik": "Kansas St."
+            },
+            {
+              "espn_id": "127",
+              "nombre": "Michigan State Spartans",
+              "rank": 25,
+              "torvik": "Michigan St."
+            },
+            {
+              "espn_id": "96",
+              "nombre": "Kentucky Wildcats",
+              "rank": 26,
+              "torvik": "Kentucky"
+            },
+            {
+              "espn_id": "2390",
+              "nombre": "Miami Hurricanes",
+              "rank": 27,
+              "torvik": "Miami FL"
+            },
+            {
+              "espn_id": "2628",
+              "nombre": "TCU Horned Frogs",
+              "rank": 28,
+              "torvik": "TCU"
+            },
+            {
+              "espn_id": "66",
+              "nombre": "Iowa State Cyclones",
+              "rank": 29,
+              "torvik": "Iowa St."
+            },
+            {
+              "espn_id": "328",
+              "nombre": "Utah State Aggies",
+              "rank": 30,
+              "torvik": "Utah St."
+            },
+            {
+              "espn_id": "120",
+              "nombre": "Maryland Terrapins",
+              "rank": 31,
+              "torvik": "Maryland"
+            },
+            {
+              "espn_id": "77",
+              "nombre": "Northwestern Wildcats",
+              "rank": 32,
+              "torvik": "Northwestern"
+            },
+            {
+              "espn_id": "249",
+              "nombre": "North Texas Mean Green",
+              "rank": 33,
+              "torvik": "North Texas"
+            },
+            {
+              "espn_id": "258",
+              "nombre": "Virginia Cavaliers",
+              "rank": 34,
+              "torvik": "Virginia"
+            },
+            {
+              "espn_id": "84",
+              "nombre": "Indiana Hoosiers",
+              "rank": 35,
+              "torvik": "Indiana"
+            },
+            {
+              "espn_id": "213",
+              "nombre": "Penn State Nittany Lions",
+              "rank": 36,
+              "torvik": "Penn St."
+            },
+            {
+              "espn_id": "2483",
+              "nombre": "Oregon Ducks",
+              "rank": 37,
+              "torvik": "Oregon"
+            },
+            {
+              "espn_id": "5",
+              "nombre": "UAB Blazers",
+              "rank": 38,
+              "torvik": "UAB"
+            },
+            {
+              "espn_id": "164",
+              "nombre": "Rutgers Scarlet Knights",
+              "rank": 39,
+              "torvik": "Rutgers"
+            },
+            {
+              "espn_id": "153",
+              "nombre": "North Carolina Tar Heels",
+              "rank": 40,
+              "torvik": "North Carolina"
+            },
+            {
+              "espn_id": "2294",
+              "nombre": "Iowa Hawkeyes",
+              "rank": 41,
+              "torvik": "Iowa"
+            },
+            {
+              "espn_id": "197",
+              "nombre": "Oklahoma State Cowboys",
+              "rank": 42,
+              "torvik": "Oklahoma St."
+            },
+            {
+              "espn_id": "68",
+              "nombre": "Boise State Broncos",
+              "rank": 43,
+              "torvik": "Boise St."
+            },
+            {
+              "espn_id": "130",
+              "nombre": "Michigan Wolverines",
+              "rank": 44,
+              "torvik": "Michigan"
+            },
+            {
+              "espn_id": "194",
+              "nombre": "Ohio State Buckeyes",
+              "rank": 45,
+              "torvik": "Ohio St."
+            },
+            {
+              "espn_id": "30",
+              "nombre": "USC Trojans",
+              "rank": 46,
+              "torvik": "USC"
+            },
+            {
+              "espn_id": "2132",
+              "nombre": "Cincinnati Bearcats",
+              "rank": 47,
+              "torvik": "Cincinnati"
+            },
+            {
+              "espn_id": "152",
+              "nombre": "NC State Wolfpack",
+              "rank": 48,
+              "torvik": "N.C. State"
+            },
+            {
+              "espn_id": "2335",
+              "nombre": "Liberty Flames",
+              "rank": 49,
+              "torvik": "Liberty"
+            },
+            {
+              "espn_id": "356",
+              "nombre": "Illinois Fighting Illini",
+              "rank": 50,
+              "torvik": "Illinois"
+            }
+          ],
+          "ranking": "T-Rank final 2022-23 (barttorvik.com/2023_team_results.csv, descargado 2026-10-31)"
+        },
+        "2023-24": {
+          "top50": [
+            {
+              "espn_id": "41",
+              "nombre": "UConn Huskies",
+              "rank": 1,
+              "torvik": "Connecticut"
+            },
+            {
+              "espn_id": "248",
+              "nombre": "Houston Cougars",
+              "rank": 2,
+              "torvik": "Houston"
+            },
+            {
+              "espn_id": "2509",
+              "nombre": "Purdue Boilermakers",
+              "rank": 3,
+              "torvik": "Purdue"
+            },
+            {
+              "espn_id": "2",
+              "nombre": "Auburn Tigers",
+              "rank": 4,
+              "torvik": "Auburn"
+            },
+            {
+              "espn_id": "66",
+              "nombre": "Iowa State Cyclones",
+              "rank": 5,
+              "torvik": "Iowa St."
+            },
+            {
+              "espn_id": "12",
+              "nombre": "Arizona Wildcats",
+              "rank": 6,
+              "torvik": "Arizona"
+            },
+            {
+              "espn_id": "2633",
+              "nombre": "Tennessee Volunteers",
+              "rank": 7,
+              "torvik": "Tennessee"
+            },
+            {
+              "espn_id": "150",
+              "nombre": "Duke Blue Devils",
+              "rank": 8,
+              "torvik": "Duke"
+            },
+            {
+              "espn_id": "153",
+              "nombre": "North Carolina Tar Heels",
+              "rank": 9,
+              "torvik": "North Carolina"
+            },
+            {
+              "espn_id": "156",
+              "nombre": "Creighton Bluejays",
+              "rank": 10,
+              "torvik": "Creighton"
+            },
+            {
+              "espn_id": "269",
+              "nombre": "Marquette Golden Eagles",
+              "rank": 11,
+              "torvik": "Marquette"
+            },
+            {
+              "espn_id": "2250",
+              "nombre": "Gonzaga Bulldogs",
+              "rank": 12,
+              "torvik": "Gonzaga"
+            },
+            {
+              "espn_id": "356",
+              "nombre": "Illinois Fighting Illini",
+              "rank": 13,
+              "torvik": "Illinois"
+            },
+            {
+              "espn_id": "333",
+              "nombre": "Alabama Crimson Tide",
+              "rank": 14,
+              "torvik": "Alabama"
+            },
+            {
+              "espn_id": "2608",
+              "nombre": "Saint Mary's Gaels",
+              "rank": 15,
+              "torvik": "Saint Mary's"
+            },
+            {
+              "espn_id": "2599",
+              "nombre": "St. John's Red Storm",
+              "rank": 16,
+              "torvik": "St. John's"
+            },
+            {
+              "espn_id": "239",
+              "nombre": "Baylor Bears",
+              "rank": 17,
+              "torvik": "Baylor"
+            },
+            {
+              "espn_id": "127",
+              "nombre": "Michigan State Spartans",
+              "rank": 18,
+              "torvik": "Michigan St."
+            },
+            {
+              "espn_id": "251",
+              "nombre": "Texas Longhorns",
+              "rank": 19,
+              "torvik": "Texas"
+            },
+            {
+              "espn_id": "228",
+              "nombre": "Clemson Tigers",
+              "rank": 20,
+              "torvik": "Clemson"
+            },
+            {
+              "espn_id": "2305",
+              "nombre": "Kansas Jayhawks",
+              "rank": 21,
+              "torvik": "Kansas"
+            },
+            {
+              "espn_id": "57",
+              "nombre": "Florida Gators",
+              "rank": 22,
+              "torvik": "Florida"
+            },
+            {
+              "espn_id": "38",
+              "nombre": "Colorado Buffaloes",
+              "rank": 23,
+              "torvik": "Colorado"
+            },
+            {
+              "espn_id": "252",
+              "nombre": "BYU Cougars",
+              "rank": 24,
+              "torvik": "BYU"
+            },
+            {
+              "espn_id": "275",
+              "nombre": "Wisconsin Badgers",
+              "rank": 25,
+              "torvik": "Wisconsin"
+            },
+            {
+              "espn_id": "158",
+              "nombre": "Nebraska Cornhuskers",
+              "rank": 26,
+              "torvik": "Nebraska"
+            },
+            {
+              "espn_id": "96",
+              "nombre": "Kentucky Wildcats",
+              "rank": 27,
+              "torvik": "Kentucky"
+            },
+            {
+              "espn_id": "21",
+              "nombre": "San Diego State Aztecs",
+              "rank": 28,
+              "torvik": "San Diego St."
+            },
+            {
+              "espn_id": "167",
+              "nombre": "New Mexico Lobos",
+              "rank": 29,
+              "torvik": "New Mexico"
+            },
+            {
+              "espn_id": "221",
+              "nombre": "Pittsburgh Panthers",
+              "rank": 30,
+              "torvik": "Pittsburgh"
+            },
+            {
+              "espn_id": "222",
+              "nombre": "Villanova Wildcats",
+              "rank": 31,
+              "torvik": "Villanova"
+            },
+            {
+              "espn_id": "2641",
+              "nombre": "Texas Tech Red Raiders",
+              "rank": 32,
+              "torvik": "Texas Tech"
+            },
+            {
+              "espn_id": "245",
+              "nombre": "Texas A&M Aggies",
+              "rank": 33,
+              "torvik": "Texas A&M"
+            },
+            {
+              "espn_id": "344",
+              "nombre": "Mississippi State Bulldogs",
+              "rank": 34,
+              "torvik": "Mississippi St."
+            },
+            {
+              "espn_id": "154",
+              "nombre": "Wake Forest Demon Deacons",
+              "rank": 35,
+              "torvik": "Wake Forest"
+            },
+            {
+              "espn_id": "2440",
+              "nombre": "Nevada Wolf Pack",
+              "rank": 36,
+              "torvik": "Nevada"
+            },
+            {
+              "espn_id": "77",
+              "nombre": "Northwestern Wildcats",
+              "rank": 37,
+              "torvik": "Northwestern"
+            },
+            {
+              "espn_id": "2550",
+              "nombre": "Seton Hall Pirates",
+              "rank": 38,
+              "torvik": "Seton Hall"
+            },
+            {
+              "espn_id": "265",
+              "nombre": "Washington State Cougars",
+              "rank": 39,
+              "torvik": "Washington St."
+            },
+            {
+              "espn_id": "254",
+              "nombre": "Utah Utes",
+              "rank": 40,
+              "torvik": "Utah"
+            },
+            {
+              "espn_id": "194",
+              "nombre": "Ohio State Buckeyes",
+              "rank": 41,
+              "torvik": "Ohio St."
+            },
+            {
+              "espn_id": "282",
+              "nombre": "Indiana State Sycamores",
+              "rank": 42,
+              "torvik": "Indiana St."
+            },
+            {
+              "espn_id": "36",
+              "nombre": "Colorado State Rams",
+              "rank": 43,
+              "torvik": "Colorado St."
+            },
+            {
+              "espn_id": "68",
+              "nombre": "Boise State Broncos",
+              "rank": 44,
+              "torvik": "Boise St."
+            },
+            {
+              "espn_id": "2132",
+              "nombre": "Cincinnati Bearcats",
+              "rank": 45,
+              "torvik": "Cincinnati"
+            },
+            {
+              "espn_id": "2628",
+              "nombre": "TCU Horned Frogs",
+              "rank": 46,
+              "torvik": "TCU"
+            },
+            {
+              "espn_id": "2168",
+              "nombre": "Dayton Flyers",
+              "rank": 47,
+              "torvik": "Dayton"
+            },
+            {
+              "espn_id": "152",
+              "nombre": "NC State Wolfpack",
+              "rank": 48,
+              "torvik": "N.C. State"
+            },
+            {
+              "espn_id": "201",
+              "nombre": "Oklahoma Sooners",
+              "rank": 49,
+              "torvik": "Oklahoma"
+            },
+            {
+              "espn_id": "2579",
+              "nombre": "South Carolina Gamecocks",
+              "rank": 50,
+              "torvik": "South Carolina"
+            }
+          ],
+          "ranking": "T-Rank final 2023-24 (barttorvik.com/2024_team_results.csv, descargado 2026-10-31)"
+        },
+        "2024-25": {
+          "top50": [
+            {
+              "espn_id": "248",
+              "nombre": "Houston Cougars",
+              "rank": 1,
+              "torvik": "Houston"
+            },
+            {
+              "espn_id": "150",
+              "nombre": "Duke Blue Devils",
+              "rank": 2,
+              "torvik": "Duke"
+            },
+            {
+              "espn_id": "2",
+              "nombre": "Auburn Tigers",
+              "rank": 3,
+              "torvik": "Auburn"
+            },
+            {
+              "espn_id": "57",
+              "nombre": "Florida Gators",
+              "rank": 4,
+              "torvik": "Florida"
+            },
+            {
+              "espn_id": "333",
+              "nombre": "Alabama Crimson Tide",
+              "rank": 5,
+              "torvik": "Alabama"
+            },
+            {
+              "espn_id": "2633",
+              "nombre": "Tennessee Volunteers",
+              "rank": 6,
+              "torvik": "Tennessee"
+            },
+            {
+              "espn_id": "2641",
+              "nombre": "Texas Tech Red Raiders",
+              "rank": 7,
+              "torvik": "Texas Tech"
+            },
+            {
+              "espn_id": "2250",
+              "nombre": "Gonzaga Bulldogs",
+              "rank": 8,
+              "torvik": "Gonzaga"
+            },
+            {
+              "espn_id": "120",
+              "nombre": "Maryland Terrapins",
+              "rank": 9,
+              "torvik": "Maryland"
+            },
+            {
+              "espn_id": "12",
+              "nombre": "Arizona Wildcats",
+              "rank": 10,
+              "torvik": "Arizona"
+            },
+            {
+              "espn_id": "66",
+              "nombre": "Iowa State Cyclones",
+              "rank": 11,
+              "torvik": "Iowa St."
+            },
+            {
+              "espn_id": "275",
+              "nombre": "Wisconsin Badgers",
+              "rank": 12,
+              "torvik": "Wisconsin"
+            },
+            {
+              "espn_id": "127",
+              "nombre": "Michigan State Spartans",
+              "rank": 13,
+              "torvik": "Michigan St."
+            },
+            {
+              "espn_id": "252",
+              "nombre": "BYU Cougars",
+              "rank": 14,
+              "torvik": "BYU"
+            },
+            {
+              "espn_id": "2509",
+              "nombre": "Purdue Boilermakers",
+              "rank": 15,
+              "torvik": "Purdue"
+            },
+            {
+              "espn_id": "2599",
+              "nombre": "St. John's Red Storm",
+              "rank": 16,
+              "torvik": "St. John's"
+            },
+            {
+              "espn_id": "96",
+              "nombre": "Kentucky Wildcats",
+              "rank": 17,
+              "torvik": "Kentucky"
+            },
+            {
+              "espn_id": "26",
+              "nombre": "UCLA Bruins",
+              "rank": 18,
+              "torvik": "UCLA"
+            },
+            {
+              "espn_id": "356",
+              "nombre": "Illinois Fighting Illini",
+              "rank": 19,
+              "torvik": "Illinois"
+            },
+            {
+              "espn_id": "142",
+              "nombre": "Missouri Tigers",
+              "rank": 20,
+              "torvik": "Missouri"
+            },
+            {
+              "espn_id": "2305",
+              "nombre": "Kansas Jayhawks",
+              "rank": 21,
+              "torvik": "Kansas"
+            },
+            {
+              "espn_id": "130",
+              "nombre": "Michigan Wolverines",
+              "rank": 22,
+              "torvik": "Michigan"
+            },
+            {
+              "espn_id": "245",
+              "nombre": "Texas A&M Aggies",
+              "rank": 23,
+              "torvik": "Texas A&M"
+            },
+            {
+              "espn_id": "97",
+              "nombre": "Louisville Cardinals",
+              "rank": 24,
+              "torvik": "Louisville"
+            },
+            {
+              "espn_id": "145",
+              "nombre": "Ole Miss Rebels",
+              "rank": 25,
+              "torvik": "Mississippi"
+            },
+            {
+              "espn_id": "228",
+              "nombre": "Clemson Tigers",
+              "rank": 26,
+              "torvik": "Clemson"
+            },
+            {
+              "espn_id": "2608",
+              "nombre": "Saint Mary's Gaels",
+              "rank": 27,
+              "torvik": "Saint Mary's"
+            },
+            {
+              "espn_id": "2483",
+              "nombre": "Oregon Ducks",
+              "rank": 28,
+              "torvik": "Oregon"
+            },
+            {
+              "espn_id": "239",
+              "nombre": "Baylor Bears",
+              "rank": 29,
+              "torvik": "Baylor"
+            },
+            {
+              "espn_id": "269",
+              "nombre": "Marquette Golden Eagles",
+              "rank": 30,
+              "torvik": "Marquette"
+            },
+            {
+              "espn_id": "156",
+              "nombre": "Creighton Bluejays",
+              "rank": 31,
+              "torvik": "Creighton"
+            },
+            {
+              "espn_id": "2670",
+              "nombre": "VCU Rams",
+              "rank": 32,
+              "torvik": "VCU"
+            },
+            {
+              "espn_id": "153",
+              "nombre": "North Carolina Tar Heels",
+              "rank": 33,
+              "torvik": "North Carolina"
+            },
+            {
+              "espn_id": "61",
+              "nombre": "Georgia Bulldogs",
+              "rank": 34,
+              "torvik": "Georgia"
+            },
+            {
+              "espn_id": "344",
+              "nombre": "Mississippi State Bulldogs",
+              "rank": 35,
+              "torvik": "Mississippi St."
+            },
+            {
+              "espn_id": "41",
+              "nombre": "UConn Huskies",
+              "rank": 36,
+              "torvik": "Connecticut"
+            },
+            {
+              "espn_id": "277",
+              "nombre": "West Virginia Mountaineers",
+              "rank": 37,
+              "torvik": "West Virginia"
+            },
+            {
+              "espn_id": "8",
+              "nombre": "Arkansas Razorbacks",
+              "rank": 38,
+              "torvik": "Arkansas"
+            },
+            {
+              "espn_id": "36",
+              "nombre": "Colorado State Rams",
+              "rank": 39,
+              "torvik": "Colorado St."
+            },
+            {
+              "espn_id": "2752",
+              "nombre": "Xavier Musketeers",
+              "rank": 40,
+              "torvik": "Xavier"
+            },
+            {
+              "espn_id": "194",
+              "nombre": "Ohio State Buckeyes",
+              "rank": 41,
+              "torvik": "Ohio St."
+            },
+            {
+              "espn_id": "167",
+              "nombre": "New Mexico Lobos",
+              "rank": 42,
+              "torvik": "New Mexico"
+            },
+            {
+              "espn_id": "238",
+              "nombre": "Vanderbilt Commodores",
+              "rank": 43,
+              "torvik": "Vanderbilt"
+            },
+            {
+              "espn_id": "2132",
+              "nombre": "Cincinnati Bearcats",
+              "rank": 44,
+              "torvik": "Cincinnati"
+            },
+            {
+              "espn_id": "251",
+              "nombre": "Texas Longhorns",
+              "rank": 45,
+              "torvik": "Texas"
+            },
+            {
+              "espn_id": "2541",
+              "nombre": "Santa Clara Broncos",
+              "rank": 46,
+              "torvik": "Santa Clara"
+            },
+            {
+              "espn_id": "77",
+              "nombre": "Northwestern Wildcats",
+              "rank": 47,
+              "torvik": "Northwestern"
+            },
+            {
+              "espn_id": "68",
+              "nombre": "Boise State Broncos",
+              "rank": 48,
+              "torvik": "Boise St."
+            },
+            {
+              "espn_id": "28",
+              "nombre": "UC San Diego Tritons",
+              "rank": 49,
+              "torvik": "UC San Diego"
+            },
+            {
+              "espn_id": "84",
+              "nombre": "Indiana Hoosiers",
+              "rank": 50,
+              "torvik": "Indiana"
+            }
+          ],
+          "ranking": "T-Rank final 2024-25 (barttorvik.com/2025_team_results.csv, descargado 2026-10-31)"
+        },
+        "2025-26": {
+          "top50": [
+            {
+              "espn_id": "130",
+              "nombre": "Michigan Wolverines",
+              "rank": 1,
+              "torvik": "Michigan"
+            },
+            {
+              "espn_id": "12",
+              "nombre": "Arizona Wildcats",
+              "rank": 2,
+              "torvik": "Arizona"
+            },
+            {
+              "espn_id": "150",
+              "nombre": "Duke Blue Devils",
+              "rank": 3,
+              "torvik": "Duke"
+            },
+            {
+              "espn_id": "57",
+              "nombre": "Florida Gators",
+              "rank": 4,
+              "torvik": "Florida"
+            },
+            {
+              "espn_id": "248",
+              "nombre": "Houston Cougars",
+              "rank": 5,
+              "torvik": "Houston"
+            },
+            {
+              "espn_id": "356",
+              "nombre": "Illinois Fighting Illini",
+              "rank": 6,
+              "torvik": "Illinois"
+            },
+            {
+              "espn_id": "66",
+              "nombre": "Iowa State Cyclones",
+              "rank": 7,
+              "torvik": "Iowa St."
+            },
+            {
+              "espn_id": "2509",
+              "nombre": "Purdue Boilermakers",
+              "rank": 8,
+              "torvik": "Purdue"
+            },
+            {
+              "espn_id": "41",
+              "nombre": "UConn Huskies",
+              "rank": 9,
+              "torvik": "Connecticut"
+            },
+            {
+              "espn_id": "2599",
+              "nombre": "St. John's Red Storm",
+              "rank": 10,
+              "torvik": "St. John's"
+            },
+            {
+              "espn_id": "127",
+              "nombre": "Michigan State Spartans",
+              "rank": 11,
+              "torvik": "Michigan St."
+            },
+            {
+              "espn_id": "2633",
+              "nombre": "Tennessee Volunteers",
+              "rank": 12,
+              "torvik": "Tennessee"
+            },
+            {
+              "espn_id": "333",
+              "nombre": "Alabama Crimson Tide",
+              "rank": 13,
+              "torvik": "Alabama"
+            },
+            {
+              "espn_id": "238",
+              "nombre": "Vanderbilt Commodores",
+              "rank": 14,
+              "torvik": "Vanderbilt"
+            },
+            {
+              "espn_id": "2250",
+              "nombre": "Gonzaga Bulldogs",
+              "rank": 15,
+              "torvik": "Gonzaga"
+            },
+            {
+              "espn_id": "2641",
+              "nombre": "Texas Tech Red Raiders",
+              "rank": 16,
+              "torvik": "Texas Tech"
+            },
+            {
+              "espn_id": "158",
+              "nombre": "Nebraska Cornhuskers",
+              "rank": 17,
+              "torvik": "Nebraska"
+            },
+            {
+              "espn_id": "258",
+              "nombre": "Virginia Cavaliers",
+              "rank": 18,
+              "torvik": "Virginia"
+            },
+            {
+              "espn_id": "97",
+              "nombre": "Louisville Cardinals",
+              "rank": 19,
+              "torvik": "Louisville"
+            },
+            {
+              "espn_id": "8",
+              "nombre": "Arkansas Razorbacks",
+              "rank": 20,
+              "torvik": "Arkansas"
+            },
+            {
+              "espn_id": "2305",
+              "nombre": "Kansas Jayhawks",
+              "rank": 21,
+              "torvik": "Kansas"
+            },
+            {
+              "espn_id": "275",
+              "nombre": "Wisconsin Badgers",
+              "rank": 22,
+              "torvik": "Wisconsin"
+            },
+            {
+              "espn_id": "2294",
+              "nombre": "Iowa Hawkeyes",
+              "rank": 23,
+              "torvik": "Iowa"
+            },
+            {
+              "espn_id": "194",
+              "nombre": "Ohio State Buckeyes",
+              "rank": 24,
+              "torvik": "Ohio St."
+            },
+            {
+              "espn_id": "26",
+              "nombre": "UCLA Bruins",
+              "rank": 25,
+              "torvik": "UCLA"
+            },
+            {
+              "espn_id": "328",
+              "nombre": "Utah State Aggies",
+              "rank": 26,
+              "torvik": "Utah St."
+            },
+            {
+              "espn_id": "153",
+              "nombre": "North Carolina Tar Heels",
+              "rank": 27,
+              "torvik": "North Carolina"
+            },
+            {
+              "espn_id": "2608",
+              "nombre": "Saint Mary's Gaels",
+              "rank": 28,
+              "torvik": "Saint Mary's"
+            },
+            {
+              "espn_id": "96",
+              "nombre": "Kentucky Wildcats",
+              "rank": 29,
+              "torvik": "Kentucky"
+            },
+            {
+              "espn_id": "2132",
+              "nombre": "Cincinnati Bearcats",
+              "rank": 30,
+              "torvik": "Cincinnati"
+            },
+            {
+              "espn_id": "2541",
+              "nombre": "Santa Clara Broncos",
+              "rank": 31,
+              "torvik": "Santa Clara"
+            },
+            {
+              "espn_id": "84",
+              "nombre": "Indiana Hoosiers",
+              "rank": 32,
+              "torvik": "Indiana"
+            },
+            {
+              "espn_id": "2390",
+              "nombre": "Miami Hurricanes",
+              "rank": 33,
+              "torvik": "Miami FL"
+            },
+            {
+              "espn_id": "222",
+              "nombre": "Villanova Wildcats",
+              "rank": 34,
+              "torvik": "Villanova"
+            },
+            {
+              "espn_id": "252",
+              "nombre": "BYU Cougars",
+              "rank": 35,
+              "torvik": "BYU"
+            },
+            {
+              "espn_id": "228",
+              "nombre": "Clemson Tigers",
+              "rank": 36,
+              "torvik": "Clemson"
+            },
+            {
+              "espn_id": "201",
+              "nombre": "Oklahoma Sooners",
+              "rank": 37,
+              "torvik": "Oklahoma"
+            },
+            {
+              "espn_id": "251",
+              "nombre": "Texas Longhorns",
+              "rank": 38,
+              "torvik": "Texas"
+            },
+            {
+              "espn_id": "245",
+              "nombre": "Texas A&M Aggies",
+              "rank": 39,
+              "torvik": "Texas A&M"
+            },
+            {
+              "espn_id": "2",
+              "nombre": "Auburn Tigers",
+              "rank": 40,
+              "torvik": "Auburn"
+            },
+            {
+              "espn_id": "139",
+              "nombre": "Saint Louis Billikens",
+              "rank": 41,
+              "torvik": "Saint Louis"
+            },
+            {
+              "espn_id": "61",
+              "nombre": "Georgia Bulldogs",
+              "rank": 42,
+              "torvik": "Georgia"
+            },
+            {
+              "espn_id": "152",
+              "nombre": "NC State Wolfpack",
+              "rank": 43,
+              "torvik": "N.C. State"
+            },
+            {
+              "espn_id": "21",
+              "nombre": "San Diego State Aztecs",
+              "rank": 44,
+              "torvik": "San Diego St."
+            },
+            {
+              "espn_id": "239",
+              "nombre": "Baylor Bears",
+              "rank": 45,
+              "torvik": "Baylor"
+            },
+            {
+              "espn_id": "142",
+              "nombre": "Missouri Tigers",
+              "rank": 46,
+              "torvik": "Missouri"
+            },
+            {
+              "espn_id": "2670",
+              "nombre": "VCU Rams",
+              "rank": 47,
+              "torvik": "VCU"
+            },
+            {
+              "espn_id": "2628",
+              "nombre": "TCU Horned Frogs",
+              "rank": 48,
+              "torvik": "TCU"
+            },
+            {
+              "espn_id": "2567",
+              "nombre": "SMU Mustangs",
+              "rank": 49,
+              "torvik": "SMU"
+            },
+            {
+              "espn_id": "58",
+              "nombre": "South Florida Bulls",
+              "rank": 50,
+              "torvik": "South Florida"
+            }
+          ],
+          "ranking": "T-Rank final 2025-26 (barttorvik.com/2026_team_results.csv, descargado 2026-10-31)"
+        },
+        "2026-27": {
+          "top50": [
+            {
+              "espn_id": "150",
+              "nombre": "Duke Blue Devils",
+              "rank": 1,
+              "torvik": "Duke"
+            },
+            {
+              "espn_id": "12",
+              "nombre": "Arizona Wildcats",
+              "rank": 2,
+              "torvik": "Arizona"
+            },
+            {
+              "espn_id": "57",
+              "nombre": "Florida Gators",
+              "rank": 3,
+              "torvik": "Florida"
+            },
+            {
+              "espn_id": "2305",
+              "nombre": "Kansas Jayhawks",
+              "rank": 4,
+              "torvik": "Kansas"
+            },
+            {
+              "espn_id": "258",
+              "nombre": "Virginia Cavaliers",
+              "rank": 5,
+              "torvik": "Virginia"
+            },
+            {
+              "espn_id": "248",
+              "nombre": "Houston Cougars",
+              "rank": 6,
+              "torvik": "Houston"
+            },
+            {
+              "espn_id": "356",
+              "nombre": "Illinois Fighting Illini",
+              "rank": 7,
+              "torvik": "Illinois"
+            },
+            {
+              "espn_id": "2250",
+              "nombre": "Gonzaga Bulldogs",
+              "rank": 8,
+              "torvik": "Gonzaga"
+            },
+            {
+              "espn_id": "97",
+              "nombre": "Louisville Cardinals",
+              "rank": 9,
+              "torvik": "Louisville"
+            },
+            {
+              "espn_id": "66",
+              "nombre": "Iowa State Cyclones",
+              "rank": 10,
+              "torvik": "Iowa St."
+            },
+            {
+              "espn_id": "127",
+              "nombre": "Michigan State Spartans",
+              "rank": 11,
+              "torvik": "Michigan St."
+            },
+            {
+              "espn_id": "2390",
+              "nombre": "Miami Hurricanes",
+              "rank": 12,
+              "torvik": "Miami FL"
+            },
+            {
+              "espn_id": "41",
+              "nombre": "UConn Huskies",
+              "rank": 13,
+              "torvik": "Connecticut"
+            },
+            {
+              "espn_id": "130",
+              "nombre": "Michigan Wolverines",
+              "rank": 14,
+              "torvik": "Michigan"
+            },
+            {
+              "espn_id": "158",
+              "nombre": "Nebraska Cornhuskers",
+              "rank": 15,
+              "torvik": "Nebraska"
+            },
+            {
+              "espn_id": "2633",
+              "nombre": "Tennessee Volunteers",
+              "rank": 16,
+              "torvik": "Tennessee"
+            },
+            {
+              "espn_id": "2641",
+              "nombre": "Texas Tech Red Raiders",
+              "rank": 17,
+              "torvik": "Texas Tech"
+            },
+            {
+              "espn_id": "2599",
+              "nombre": "St. John's Red Storm",
+              "rank": 18,
+              "torvik": "St. John's"
+            },
+            {
+              "espn_id": "251",
+              "nombre": "Texas Longhorns",
+              "rank": 19,
+              "torvik": "Texas"
+            },
+            {
+              "espn_id": "194",
+              "nombre": "Ohio State Buckeyes",
+              "rank": 20,
+              "torvik": "Ohio St."
+            },
+            {
+              "espn_id": "333",
+              "nombre": "Alabama Crimson Tide",
+              "rank": 21,
+              "torvik": "Alabama"
+            },
+            {
+              "espn_id": "8",
+              "nombre": "Arkansas Razorbacks",
+              "rank": 22,
+              "torvik": "Arkansas"
+            },
+            {
+              "espn_id": "238",
+              "nombre": "Vanderbilt Commodores",
+              "rank": 23,
+              "torvik": "Vanderbilt"
+            },
+            {
+              "espn_id": "252",
+              "nombre": "BYU Cougars",
+              "rank": 24,
+              "torvik": "BYU"
+            },
+            {
+              "espn_id": "26",
+              "nombre": "UCLA Bruins",
+              "rank": 25,
+              "torvik": "UCLA"
+            },
+            {
+              "espn_id": "84",
+              "nombre": "Indiana Hoosiers",
+              "rank": 26,
+              "torvik": "Indiana"
+            },
+            {
+              "espn_id": "96",
+              "nombre": "Kentucky Wildcats",
+              "rank": 27,
+              "torvik": "Kentucky"
+            },
+            {
+              "espn_id": "201",
+              "nombre": "Oklahoma Sooners",
+              "rank": 28,
+              "torvik": "Oklahoma"
+            },
+            {
+              "espn_id": "2509",
+              "nombre": "Purdue Boilermakers",
+              "rank": 29,
+              "torvik": "Purdue"
+            },
+            {
+              "espn_id": "142",
+              "nombre": "Missouri Tigers",
+              "rank": 30,
+              "torvik": "Missouri"
+            },
+            {
+              "espn_id": "222",
+              "nombre": "Villanova Wildcats",
+              "rank": 31,
+              "torvik": "Villanova"
+            },
+            {
+              "espn_id": "269",
+              "nombre": "Marquette Golden Eagles",
+              "rank": 32,
+              "torvik": "Marquette"
+            },
+            {
+              "espn_id": "152",
+              "nombre": "NC State Wolfpack",
+              "rank": 33,
+              "torvik": "N.C. State"
+            },
+            {
+              "espn_id": "245",
+              "nombre": "Texas A&M Aggies",
+              "rank": 34,
+              "torvik": "Texas A&M"
+            },
+            {
+              "espn_id": "61",
+              "nombre": "Georgia Bulldogs",
+              "rank": 35,
+              "torvik": "Georgia"
+            },
+            {
+              "espn_id": "30",
+              "nombre": "USC Trojans",
+              "rank": 36,
+              "torvik": "USC"
+            },
+            {
+              "espn_id": "2132",
+              "nombre": "Cincinnati Bearcats",
+              "rank": 37,
+              "torvik": "Cincinnati"
+            },
+            {
+              "espn_id": "2",
+              "nombre": "Auburn Tigers",
+              "rank": 38,
+              "torvik": "Auburn"
+            },
+            {
+              "espn_id": "120",
+              "nombre": "Maryland Terrapins",
+              "rank": 39,
+              "torvik": "Maryland"
+            },
+            {
+              "espn_id": "228",
+              "nombre": "Clemson Tigers",
+              "rank": 40,
+              "torvik": "Clemson"
+            },
+            {
+              "espn_id": "2483",
+              "nombre": "Oregon Ducks",
+              "rank": 41,
+              "torvik": "Oregon"
+            },
+            {
+              "espn_id": "259",
+              "nombre": "Virginia Tech Hokies",
+              "rank": 42,
+              "torvik": "Virginia Tech"
+            },
+            {
+              "espn_id": "2253",
+              "nombre": "Grand Canyon Lopes",
+              "rank": 43,
+              "torvik": "Grand Canyon"
+            },
+            {
+              "espn_id": "156",
+              "nombre": "Creighton Bluejays",
+              "rank": 44,
+              "torvik": "Creighton"
+            },
+            {
+              "espn_id": "239",
+              "nombre": "Baylor Bears",
+              "rank": 45,
+              "torvik": "Baylor"
+            },
+            {
+              "espn_id": "153",
+              "nombre": "North Carolina Tar Heels",
+              "rank": 46,
+              "torvik": "North Carolina"
+            },
+            {
+              "espn_id": "275",
+              "nombre": "Wisconsin Badgers",
+              "rank": 47,
+              "torvik": "Wisconsin"
+            },
+            {
+              "espn_id": "277",
+              "nombre": "West Virginia Mountaineers",
+              "rank": 48,
+              "torvik": "West Virginia"
+            },
+            {
+              "espn_id": "2294",
+              "nombre": "Iowa Hawkeyes",
+              "rank": 49,
+              "torvik": "Iowa"
+            },
+            {
+              "espn_id": "2116",
+              "nombre": "UCF Knights",
+              "rank": 50,
+              "torvik": "UCF"
+            }
+          ],
+          "ranking": "T-Rank de PRETEMPORADA 2026-27 (barttorvik.com/2027_team_results.csv, 0-0, descargado 2026-10-31): sustituir por el final al acabar la temporada",
+          "sin_datos": true,
+          "motivo": "la temporada 2026-27 aún no ha empezado (31-10-2026): quitar sin_datos cuando haya partidos"
         }
       }
     }

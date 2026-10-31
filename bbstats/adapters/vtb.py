@@ -13,7 +13,8 @@ Si CompIssue falla, se pide el calendario de la temporada entera y la fase se de
 
 El partido (GetOnline) trae:
   GameTeams[2]   totales, Players[] (PersonID, nombres En/Ru, Seconds, Goal/Shot 1-2-3, Off/DefRebound, Assist,
-                 Steal, Blocks, Turnover, Foul, OpponentFoul, PlusMinus, IsStart; null = 0) y Coach
+                 Steal, Blocks, Turnover, Foul, OpponentFoul, PlusMinus, IsStart; null = 0) y Coaches[] (principal =
+                 PosID 1000; el campo Coach a veces es un ayudante)
   OnlineStarts[] StartID -> TeamNumber, StartType (1 jugador, 3 entrenador, 0 equipo, 4 oficial), PersonID
   OnlinePlays[]  PlayID, PlayPeriod, PlaySecond (DÉCIMAS transcurridas del periodo), StartID, ParentPlayID,
                  PlayTypeID, PlayX/PlayY (dm desde el aro atacado: X lateral, Y hacia el centro), SysStatus
@@ -98,6 +99,19 @@ def _name(p: dict) -> tuple[str, str]:
            (p.get("LastNameEn") or p.get("LastNameRu") or "").strip()
 
 
+def _head_coach(t: dict) -> dict:
+    """Entrenador principal: el de Coaches con PosID 1000 (los ayudantes llevan 1001) o, si no, el número 1.
+    El campo `Coach` NO sirve: en algunos partidos trae a un ayudante."""
+    cs = [c for c in t.get("Coaches") or [] if isinstance(c, dict)]
+    for c in cs:
+        if _int(c.get("PosID")) == 1000:
+            return c
+    for c in cs:
+        if _int(c.get("PlayerNumber")) == 1:
+            return c
+    return t.get("Coach") or (cs[0] if cs else {})
+
+
 def _ordered(plays: list[dict], subs_after: bool = False) -> list[dict]:
     """Orden real: jugadas madre por (periodo, instante, PlayID), cada una seguida de sus hijas por PlaySortOrder.
     (El PlayID es el orden de anotación: dentro del mismo instante es el orden real -falta, 1.er TL, cambio,
@@ -178,14 +192,17 @@ def to_fls(doc: dict, cambios_tras_acciones: bool = False) -> dict:
     for k in ("1", "2"):
         t = teams.get(k) or {}
         tn = t.get("TeamName") or {}
-        c = t.get("Coach") or {}
+        c = _head_coach(t)
         cf, cl = _name(c)
+        assist = [" ".join(_name(x)).strip() for x in t.get("Coaches") or []
+                  if isinstance(x, dict) and x.get("PersonID") != c.get("PersonID")]
         tm[k] = {"name": tn.get("CompTeamNameEn") or tn.get("CompTeamNameRu"),
                  "nameInternational": tn.get("CompTeamNameEn"), "shortName": tn.get("CompTeamShortNameEn"),
                  "code": tn.get("CompTeamAbcNameEn"), "teamId": t.get("TeamID"), "score": t.get("Score"),
                  "coach": f"{cf} {cl}".strip() or None,
                  "coachDetails": ({"firstName": cf, "familyName": cl, "internationalFirstName": cf,
                                    "internationalFamilyName": cl, "personId": c.get("PersonID")} if c else {}),
+                 "assistcoach1": assist[0] if assist else None, "assistcoach2": assist[1] if len(assist) > 1 else None,
                  "pl": {}, "shot": []}
         players = [p for p in t.get("Players") or [] if isinstance(p, dict)]
         has_pm = any(p.get("PlusMinus") is not None for p in players)

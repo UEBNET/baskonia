@@ -11,7 +11,9 @@ def _pl(pid, team, num, **kw):
 
 def _team(n, name, players, **kw):
     t = {"TeamNumber": n, "TeamID": 100 + n, "TeamName": {"CompTeamNameEn": name, "CompTeamShortNameEn": name[:3]},
-         "Players": players, "Coach": {"PersonID": 900 + n, "FirstNameEn": "Coach", "LastNameEn": name}}
+         "Players": players, "Coach": {"PersonID": 800 + n, "FirstNameEn": "Asst", "LastNameEn": name},
+         "Coaches": [{"PersonID": 800 + n, "PosID": 1001, "PlayerNumber": 2, "FirstNameEn": "Asst", "LastNameEn": name},
+                     {"PersonID": 900 + n, "PosID": 1000, "PlayerNumber": 1, "FirstNameEn": "Coach", "LastNameEn": name}]}
     t.update(kw)
     return t
 
@@ -79,6 +81,7 @@ def test_to_fls_caja_y_jugadas():
     assert f["period"] == 1 and f["periodType"] == "OVERTIME"
     t1, t2 = f["tm"]["1"], f["tm"]["2"]
     assert t1["name"] == "Home" and t1["coach"] == "Coach Home" and t1["coachDetails"]["personId"] == 901
+    assert t1["assistcoach1"] == "Asst Home"
     p = t1["pl"]["1"]
     assert p["personId"] == "1000" and p["firstName"] == "F1000" and p["sMinutes"] == "10:00"
     assert p["sPoints"] == 2 and p["sFieldGoalsMade"] == 1 and p["sPlusMinusPoints"] == 2 and p["starter"] == 1

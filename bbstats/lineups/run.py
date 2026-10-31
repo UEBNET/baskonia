@@ -44,6 +44,7 @@ SOURCES = {
     "fiba_livestats": ("fiba_livestats", "FibaLiveStatsPBP"),
     "feb": ("feb", "FebPBP"),
     "nbl": ("nbl", "NblPBP"),
+    "ncaa": ("ncaa", "NcaaPBP"),
 }
 
 
