@@ -19,7 +19,7 @@ import pandas as pd
 from . import __version__
 from .adapters import NoDataYet, ParsedLeague, build_adapter
 from .enrich import basketnews
-from .config import active_leagues, load_config, resolve_path, update_league_config
+from .config import active_leagues, load_config, minutos_partido, resolve_path, update_league_config
 from .http import HttpClient
 from .metrics import compute_player_metrics, finalize_columns
 from .raw_store import RawStore
@@ -58,7 +58,7 @@ def _phase_frame(parsed: ParsedLeague, phase: str, liga: str, lcfg: dict, season
     for k in ("player_id", "team_id"):
         players[k] = players.get(k, pd.Series(index=players.index, dtype=object)).astype(str)
     teams = pd.DataFrame(parsed.teams)
-    game_min = float(lcfg.get("minutos_partido", 40))
+    game_min = minutos_partido(lcfg, season)
     df = compute_player_metrics(players, teams, game_min, single_ft=bool(lcfg.get("tiro_libre_unico")),
                                 coef_tl=float(lcfg.get("coef_tl_posesion", 0.4)))
     df = df.assign(

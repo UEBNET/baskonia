@@ -30,6 +30,13 @@ def active_leagues(cfg: dict) -> list[str]:
     return [k for k, v in cfg.get("ligas", {}).items() if v.get("activa", True)]
 
 
+def minutos_partido(lcfg: dict, season: str | None = None) -> float:
+    """Duración reglamentaria del partido: `temporadas.<t>.minutos_partido` si existe (p.ej. la CBA, 48' hasta
+    2024-25 y 40' desde 2025-26) y si no `minutos_partido` de la liga (40 por defecto)."""
+    sc = ((lcfg or {}).get("temporadas") or {}).get(season or "") or {}
+    return float(sc.get("minutos_partido") or (lcfg or {}).get("minutos_partido") or 40)
+
+
 def season_label(start_year: int) -> str:
     """2020 -> '2020-21'."""
     return f"{start_year}-{str(start_year + 1)[-2:]}"

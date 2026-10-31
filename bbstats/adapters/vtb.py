@@ -69,7 +69,7 @@ FOUL = {40: "personal", 41: "unsportsmanlike", 42: "technical", 43: "disqualifyi
 OFFENSIVE = 47                       # hija de una falta: falta en ataque
 AWARD = {50, 51, 52, 53}             # hija de una falta: saque / 1, 2 o 3 tiros libres (StartID = el que la recibe)
 DRAWN_FROM = {40, 41, 43}            # faltas con jugador objeto de la falta (las técnicas no)
-REGULAR_PHASE = re.compile(r"round robin|regular|stage|этап|регуляр", re.I)
+REGULAR_PHASE = re.compile(r"round robin|regular|stage|этап|регуляр", re.IGNORECASE)
 
 
 def _int(v: Any, default: int = 0) -> int:

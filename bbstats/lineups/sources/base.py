@@ -36,7 +36,8 @@ class Ctx:
 
     @property
     def game_min(self) -> float:
-        return float(self.cfg.get("minutos_partido", 40))
+        from ...config import minutos_partido
+        return minutos_partido(self.cfg, self.season)
 
 
 class PBPSource:

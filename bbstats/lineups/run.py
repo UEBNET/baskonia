@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 
 from .. import __version__
+from ..config import minutos_partido
 from ..http import HttpClient
 from ..raw_store import RawStore
 from ..utils import utc_now, utc_stamp
@@ -45,6 +46,7 @@ SOURCES = {
     "feb": ("feb", "FebPBP"),
     "nbl": ("nbl", "NblPBP"),
     "ncaa": ("ncaa", "NcaaPBP"),
+    "vtb": ("vtb", "VtbPBP"),
 }
 
 
@@ -183,7 +185,7 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
     k = float(qcfg.get("contraccion_posesiones", 300))
     lam = float(qcfg.get("rapm_lambda", 1500))
     coef = float(lcfg.get("coef_tl_posesion", 0.4)) + 0.04
-    game_min = float(lcfg.get("minutos_partido", 40))
+    game_min = minutos_partido(lcfg, season)
     max_dif = float(qcfg.get("excluir_si_dif_min_s", 120))
     vals = [r.validation() for r in results]
     usable = []

@@ -19,6 +19,7 @@ from .lnb import LNBAdapter
 from .nba import GLeagueAdapter, NBAAdapter
 from .nbl import NBLAdapter
 from .ncaa import NCAAAdapter
+from .vtb import VTBAdapter
 
 ADAPTERS: dict[str, type[BaseAdapter]] = {
     "euroleague": EuroleagueAdapter,
@@ -35,6 +36,7 @@ ADAPTERS: dict[str, type[BaseAdapter]] = {
     "lnb": LNBAdapter,
     "nbl": NBLAdapter,
     "ncaa": NCAAAdapter,
+    "vtb": VTBAdapter,
 }
 
 

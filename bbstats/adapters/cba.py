@@ -1,0 +1,759 @@
+"""CBA (Chinese Basketball Association): Tencent Sports (QQ) + Sina, partido a partido, todo público.
+
+QQ (matchweb.sports.qq.com; JSON sin token, sólo User-Agent de navegador):
+    /matchUnion/list?columnId=100008&startTime=AAAA-MM-01&endTime=AAAA-MM-DD&...   calendario de un mes
+        mid = "100008:<id>" (<id> = el scheduleId oficial de la CBA), matchDesc (CBA常规赛…, CBA季后赛…,
+        CBA季前赛, CBA全明星赛), startTime, left* = local, right* = visitante, matchPeriod 2 = terminado
+    /kbs/matchStat?mid=100008:<id>            boxscore: playerStats (fila por jugador con playerId de QQ:
+        minutos "30'40", pts, reb TOTAL, ast, TC/T3/TL "m/a", rob, tap, pérd, faltas, +/-), teamStats (totales
+        de equipo CON rebotes y pérdidas de equipo), teamInfo (ids de equipo QQ, nombre chino y enName)
+    /textLive/index?competitionId=100008&matchId=<id>            ids de los eventos (más reciente primero)
+    /textLive/detail?competitionId=100008&matchId=<id>&ids=a,b   eventos: broadcast.actionType (1 canasta,
+        2 fallo, 3 rebote, 4 pérdida, 5 falta, 6/7 TL anotado/fallado, 9 cambio, 10 tiempo muerto, 11 salto,
+        13/14 inicio/fin de periodo, 15 fin), player/relatedPlayer (id QQ), team, texto en chino; desde 2025-26
+        además match.playerList = los cinco en pista. Sin jugada a jugada: 2020-21 y ene-may 2025.
+    /player/baseInfo?playerId=<id>&from=web   ficha: cnName, enName ("ZHAO J.W.", "S. COOPER", a veces el
+        nombre completo), fecha de nacimiento, altura
+Sina (cba.sports.sina.com.cn; HTML GBK):
+    /cba/schedule/all/?qleagueid=<L>     calendario de la temporada (L en config temporadas.<t>.sina_liga)
+    /cba/schedule/show/<id>/             boxscore con rebotes OF/DEF, titulares y entrenador principal
+Se casan por fecha y marcador (local, visitante); los jugadores, por lado + dorsal (+ nombre chino).
+
+Traducción al data.json de FIBA LiveStats (`to_fls`) para reutilizar el jugada a jugada de FibaLiveStatsPBP.
+Ids: jugador = playerId de QQ (estable entre temporadas), equipo = id de equipo QQ (estable).
+Nombres latinos (`nombre_latino`): chinos → pinyin (pypinyin) guiado por las iniciales del enName de QQ,
+«Apellido Nombre» (周琦 → "Zhou Qi"); minorías con enName de una palabra → esa palabra; extranjeros → enName
+("S. Cooper"). `nombres_latinos` en la config ({"nombre chino": "Nombre latino"}) manda sobre todo lo demás.
+Bruto INCREMENTAL: sólo los partidos nuevos; de cada uno se guarda el JSON de QQ (los eventos sin imágenes ni
+textos de patrocinio) y el trozo de HTML de Sina con las dos tablas.
+"""
+from __future__ import annotations
+
+import datetime as dt
+import re
+from typing import Any
+
+from ..http import FetchError, HttpClient
+from ..utils import to_float
+from .base import AdapterError, NoDataYet, ParsedLeague
+from .boxscore import aggregate_by_phase
+from .fiba_livestats import FibaLiveStatsAdapter, parse_fiba_game
+
+QQ = "https://matchweb.sports.qq.com"
+COMP = "100008"
+LIST_URL = QQ + "/matchUnion/list?today={d1}&startTime={d1}&endTime={d2}&columnId=100008&index=3&isInit=true&timestamp=1"
+STAT_URL = QQ + "/kbs/matchStat?mid=100008:{mid}"
+TL_INDEX_URL = QQ + "/textLive/index?competitionId=100008&matchId={mid}"
+TL_DETAIL_URL = QQ + "/textLive/detail?competitionId=100008&matchId={mid}&ids={ids}"
+PLAYER_URL = QQ + "/player/baseInfo?playerId={pid}&from=web"
+SINA = "http://cba.sports.sina.com.cn"
+SINA_LIST_URL = SINA + "/cba/schedule/all/?qleagueid={liga}&qmonth=&qteamid="
+SINA_GAME_URL = SINA + "/cba/schedule/show/{sid}/"
+HEADERS = {"Referer": "https://sports.qq.com/", "Accept": "application/json, text/plain, */*"}
+
+
+def fase_de(desc: str) -> str | None:
+    """matchDesc de QQ -> fase: 常规赛 = regular, 季后赛 = playoffs (final incluida); el resto (季前赛,
+    全明星赛, 保级, 杯赛…) fuera."""
+    d = str(desc or "")
+    if any(x in d for x in ("全明星", "季前", "保级", "杯", "附加")):
+        return None
+    if "常规赛" in d:
+        return "regular"
+    if "季后赛" in d or "总决赛" in d:
+        return "playoffs"
+    return None
+
+
+# =============================================================================================== nombres
+_COMPOUND = ("欧阳", "司马", "上官", "诸葛", "东方", "皇甫", "尉迟", "公孙", "慕容", "长孙", "宇文", "司徒",
+             "夏侯", "轩辕", "令狐", "端木", "独孤", "南宫", "西门", "百里", "呼延", "申屠", "太史", "澹台")
+
+try:   # opcional: sin pypinyin los chinos quedan con el enName de QQ ("Zhao J.W.")
+    from pypinyin import Style, pinyin as _pinyin
+except ImportError:  # pragma: no cover
+    _pinyin = None
+
+
+def _py(ch: str, initial: str | None = None) -> str | None:
+    """Pinyin (sin tonos) de un carácter; con `initial`, la lectura que empieza por esa letra (polifónicos)."""
+    if _pinyin is None:
+        return None
+    opts = [o.replace("ü", "u").replace("v", "u") for o in
+            (_pinyin(ch, style=Style.NORMAL, heteronym=True, v_to_u=True) or [[""]])[0] if o]
+    if not opts or not re.fullmatch(r"[a-z]+", opts[0]):
+        return None
+    if initial:
+        for o in opts:
+            if o[0] == initial.lower():
+                return o
+    return opts[0]
+
+
+def _cap(s: str) -> str:
+    return " ".join(w[:1].upper() + w[1:].lower() if w else w for w in s.split(" "))
+
+
+def nombre_latino(cn: str | None, en: str | None, override: dict | None = None) -> dict:
+    """{"first", "family", "name", "tipo"} latinos a partir del nombre chino y el enName de QQ.
+
+    tipo: "chino" (pinyin), "minoria" (nombre uigur/… de una palabra), "extranjero", "override", "sin_latino"."""
+    cn, en = (cn or "").strip(), re.sub(r"\s+", " ", (en or "").strip())
+    ov = (override or {}).get(cn)
+    if ov:
+        parts = ov.split(" ", 1)
+        return {"first": parts[0] if len(parts) > 1 else "", "family": parts[-1], "name": ov, "tipo": "override"}
+    m = re.fullmatch(r"([A-Z][A-Z' -]*?)\s+((?:[A-Z]\.)+)", en)
+    if m and cn and "·" not in cn:                                         # "ZHAO J.W." (chino)
+        fam_en = m.group(1).replace(" ", "")
+        inits = re.findall(r"[A-Z]", m.group(2))
+        n_fam = len(cn) - len(inits)
+        if n_fam < 1:
+            n_fam = 2 if cn[:2] in _COMPOUND else 1
+        given_cn = cn[n_fam:]
+        sy = [_py(c, inits[i] if i < len(inits) else None) for i, c in enumerate(given_cn)]
+        if sy and all(sy):
+            given = "".join(sy).capitalize()
+            family = fam_en.capitalize()
+            return {"first": given, "family": family, "name": f"{family} {given}", "tipo": "chino"}
+        family, given = fam_en.capitalize(), m.group(2)
+        return {"first": given, "family": family, "name": f"{family} {given}", "tipo": "chino"}
+    if re.fullmatch(r"[A-Z][A-Z'-]+", en):                                  # "ABDUSALAM" (minoría)
+        return {"first": "", "family": en.capitalize(), "name": en.capitalize(), "tipo": "minoria"}
+    m = re.fullmatch(r"((?:[A-Z]\.\s?)+)\s*([A-Za-z].*)", en)               # "S. COOPER", "D. LE DEE"
+    if m:
+        first = m.group(1).replace(" ", "")
+        family = _cap(m.group(2)) if m.group(2).isupper() else m.group(2)
+        return {"first": first, "family": family, "name": f"{first} {family}", "tipo": "extranjero"}
+    if en and re.search(r"[A-Za-z]", en):                                    # "Jimmer Fredette"
+        en2 = _cap(en) if en.isupper() else en
+        parts = en2.split(" ", 1)
+        return {"first": parts[0] if len(parts) > 1 else "", "family": parts[-1], "name": en2,
+                "tipo": "extranjero"}
+    if cn and "·" not in cn and re.fullmatch(r"[一-鿿]{2,4}", cn):  # sin enName: pinyin directo
+        n_fam = 2 if cn[:2] in _COMPOUND else 1
+        sy = [_py(c) for c in cn]
+        if all(sy):
+            family = "".join(sy[:n_fam]).capitalize()
+            given = "".join(sy[n_fam:]).capitalize()
+            return {"first": given, "family": family, "name": f"{family} {given}", "tipo": "chino"}
+    return {"first": "", "family": cn, "name": cn, "tipo": "sin_latino"}
+
+
+def entrenador_latino(cn: str | None, override: dict | None = None) -> dict | None:
+    """Entrenador (Sina sólo lo da en chino) -> {"first", "family", "name", "tipo"}: override de la config
+    ("Nombre Apellido") o pinyin; los extranjeros (nombre transliterado, con «·») sin override quedan en chino."""
+    cn = (cn or "").strip()
+    if not cn:
+        return None
+    ov = (override or {}).get(cn)
+    if ov:
+        parts = ov.split(" ", 1)
+        return {"first": parts[0] if len(parts) > 1 else "", "family": parts[-1], "name": ov, "tipo": "override"}
+    return nombre_latino(cn, None)
+
+
+def equipo_latino(en: str | None, cn: str | None) -> str:
+    """enName de QQ ("LIAO NING") -> "Liaoning"; si no hay, el nombre chino."""
+    en = (en or "").strip()
+    return "".join(w.capitalize() for w in en.split()) if en else (cn or "")
+
+
+# =============================================================================================== Sina
+_TAG = re.compile(r"<[^>]+>")
+
+
+def _txt(s: str) -> str:
+    s = re.sub(r'document\.write\("([^"]*)"\);?', r"\1", s)
+    s = _TAG.sub(" ", s).replace("&nbsp;", " ").replace("&#58;", ":")
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def sina_schedule(html: str) -> list[dict]:
+    """Calendario de Sina: [{"sid", "fecha", "local", "visitante", "pts_local", "pts_visitante"}]."""
+    out, seen = [], set()
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", html or "", re.S):
+        m = re.search(r"schedule/show/(\d+)/", row)
+        d = re.search(r"(\d{4}-\d{2}-\d{2})", row)
+        if not m or not d or m.group(1) in seen:
+            continue
+        sc = re.search(r"(\d+)\s*(?:&nbsp;)?\s*(?::|&#58;)\s*(?:&nbsp;)?\s*(\d+)", _TAG.sub(" ", row.split(m.group(0), 1)[1]))
+        teams = [_txt(t) for t in re.findall(r"team/show/\d+/[^>]*>(.*?)</a>", row, re.S)]
+        seen.add(m.group(1))
+        out.append({"sid": m.group(1), "fecha": d.group(1), "local": teams[0] if teams else None,
+                    "visitante": teams[1] if len(teams) > 1 else None,
+                    "pts_local": int(sc.group(1)) if sc else None, "pts_visitante": int(sc.group(2)) if sc else None})
+    return out
+
+
+def sina_slice(html: str) -> str | None:
+    """Trozo del HTML del partido de Sina con las dos tablas (y el entrenador de cada equipo)."""
+    a = (html or "").find("<!-- part01 start -->")
+    if a < 0:
+        return None
+    ends = [m.end() for m in re.finditer("</table>", html[a:])]
+    return html[a:a + ends[1]] if len(ends) >= 2 else None
+
+
+SINA_COLS = {"球员": "name", "号码": "dorsal", "出场时间": "min", "首发": "starter", "2分中-投": "fg2",
+             "3分中-投": "fg3", "罚球中-投": "ft", "进攻篮板": "oreb", "防守篮板": "dreb", "助攻": "ast",
+             "犯规": "pf", "抢断": "stl", "失误": "tov", "盖帽": "blk", "得分": "pts"}
+
+
+def sina_box(fragment: str | None) -> list[dict]:
+    """[{"equipo", "entrenador", "jugadores": [...], "total": {...}}] (orden de la página: local, visitante)."""
+    out = []
+    for part in re.split(r"<!-- part0\d start -->", fragment or "")[1:]:
+        h2 = re.search(r"<h2[^>]*>(.*?)</h2>", part, re.S)
+        team = re.search(r"<span>(.*?)</span>", h2.group(1)).group(1).strip() if h2 and "<span>" in h2.group(1) else None
+        coach = re.search(r"主教练：([^&<]*)", h2.group(1)) if h2 else None
+        rows = re.findall(r"<tr[^>]*>(.*?)</tr>", part, re.S)
+        if not rows:
+            continue
+        head = [_txt(c) for c in re.findall(r"<th[^>]*>(.*?)</th>", rows[0], re.S)]
+        cols = [SINA_COLS.get(h) for h in head]
+        players, total = [], None
+        for r in rows[1:]:
+            cells = re.findall(r"<td[^>]*>(.*?)</td>", r, re.S)
+            if len(cells) != len(cols):
+                continue
+            rec: dict[str, Any] = {}
+            pid = re.search(r"player/show/(\d+)/", cells[0])
+            for c, v in zip(cols, cells):
+                if c:
+                    rec[c] = _txt(v)
+            for c in ("fg2", "fg3", "ft"):
+                m = re.match(r"(\d+)-(\d+)", rec.get(c) or "")
+                rec[c] = (int(m.group(1)), int(m.group(2))) if m else None
+            for c in ("min", "oreb", "dreb", "ast", "pf", "stl", "tov", "blk", "pts"):
+                rec[c] = to_float(rec.get(c))
+            rec["starter"] = rec.get("starter") == "是"
+            if pid:
+                rec["sina_id"] = pid.group(1)
+                players.append(rec)
+            else:
+                total = rec
+        out.append({"equipo": team, "entrenador": coach.group(1).strip() if coach else None,
+                    "jugadores": players, "total": total})
+    return out
+
+
+# =============================================================================================== QQ -> data.json
+def _mmss(v: Any) -> str | None:
+    """"30'40" -> "30:40", "46'" -> "46:00"."""
+    s = str(v or "").strip()
+    m = re.fullmatch(r"(\d+)'(\d*)", s)
+    if m:
+        return f"{int(m.group(1))}:{int(m.group(2) or 0):02d}"
+    return s if re.fullmatch(r"\d+:\d{2}", s) else None
+
+
+def _ma(v: Any) -> tuple[float | None, float | None]:
+    m = re.fullmatch(r"\s*(\d+)\s*/\s*(\d+)\s*", str(v or ""))
+    return (float(m.group(1)), float(m.group(2))) if m else (None, None)
+
+
+QQ_HEAD = {"号码/球员": "num", "时间": "min", "得分": "pts", "篮板": "reb", "助攻": "ast", "投篮": "fg",
+           "三分": "fg3", "罚球": "ft", "抢断": "stl", "盖帽": "blk", "失误": "tov", "犯规": "pf", "+/-": "pm"}
+TEAM_STAT = {"得分": "sPoints", "篮板": "sReboundsTotal", "助攻": "sAssists", "抢断": "sSteals", "盖帽": "sBlocks",
+             "失误": "sTurnovers", "犯规": "sFoulsPersonal"}
+TEAM_STAT_MA = {"投篮": ("sFieldGoalsMade", "sFieldGoalsAttempted"),
+                "三分": ("sThreePointersMade", "sThreePointersAttempted"),
+                "罚球": ("sFreeThrowsMade", "sFreeThrowsAttempted")}
+
+
+def _box_rows(side: list) -> list[dict]:
+    if not side:
+        return []
+    head = (side[0] or {}).get("head") or []
+    keys = [QQ_HEAD.get(h) for h in head]
+    out = []
+    for r in side[1:]:
+        row = r.get("row") or []
+        if not r.get("playerId"):
+            continue
+        rec = {"pid": str(r["playerId"]), "dorsal": row[0] if row else None, "cn": row[1] if len(row) > 1 else ""}
+        rest = row[2:]
+        for k, v in zip(keys[1:], rest):
+            if k:
+                rec[k] = v
+        out.append(rec)
+    return out
+
+
+def _same_name(a: str, b: str) -> bool:
+    a, b = (a or "").replace("-", "·"), (b or "").replace("-", "·")
+    return bool(a and b) and (a == b or a in b or b in a or a.split("·")[-1] == b.split("·")[-1])
+
+
+def _match_sina(qrows: list[dict], srows: list[dict]) -> dict[str, dict]:
+    """playerId QQ -> fila de Sina: mismo dorsal (y nombre compatible si el dorsal se repite) o mismo nombre."""
+    out, used = {}, set()
+    by_d: dict[str, list] = {}
+    for i, s in enumerate(srows):
+        by_d.setdefault(str(s.get("dorsal") or "").strip(), []).append(i)
+    for q in qrows:
+        cand = [i for i in by_d.get(str(q.get("dorsal") or "").strip(), []) if i not in used]
+        if len(cand) > 1:
+            cand = [i for i in cand if _same_name(q["cn"], srows[i].get("name"))] or cand[:1]
+        if not cand:
+            cand = [i for i, s in enumerate(srows) if i not in used and _same_name(q["cn"], s.get("name"))][:1]
+        if cand:
+            used.add(cand[0])
+            out[q["pid"]] = srows[cand[0]]
+    return out
+
+
+_RE_ASSIST = re.compile(r"收到(.+?)助攻")
+_RE_BLOCK = re.compile(r"被(.+?)封盖")
+_RE_STEAL = re.compile(r"被(.+?)抢断")
+_RE_FOUL_ON = re.compile(r"对(.+?)(?:的)?(?:打手|个人|进攻|防守|技术|违体|恶意|投篮)?犯规")
+_RE_SUB = re.compile(r"(.+?)上场，换下(.+)$")
+
+
+def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> dict:
+    """Partido del bruto (QQ + Sina) -> estructura del data.json de FIBA LiveStats (tm, pbp)."""
+    cfg = cfg or {}
+    over = cfg.get("nombres_latinos") or {}
+    jugadores = jugadores or {}
+    cal, st = g.get("cal") or {}, g.get("stat") or {}
+    ti = st.get("teamInfo") or {}
+    ids = {"1": str(ti.get("leftId") or cal.get("leftId") or ""), "2": str(ti.get("rightId") or cal.get("rightId") or "")}
+    side_of = {v: k for k, v in ids.items() if v}
+    notes: list[str] = []
+    ps = st.get("playerStats") or {}
+    qrows = {"1": _box_rows(ps.get("left") or []), "2": _box_rows(ps.get("right") or [])}
+    sina = sina_box((g.get("sina") or {}).get("html"))
+    sina_side: dict[str, dict] = {}
+    if len(sina) == 2:
+        score = {k: to_float(ti.get(("left" if k == "1" else "right") + "Goal")) for k in ("1", "2")}
+        for k, s in zip(("1", "2"), sina):            # orden de Sina = local, visitante (comprobado por puntos)
+            pts = sum(p.get("pts") or 0 for p in s["jugadores"])
+            if score[k] is not None and pts and pts != score[k]:
+                notes.append(f"Sina: puntos del lado {k} ({pts:g}) distintos del marcador QQ ({score[k]:g})")
+                sina_side = {}
+                break
+            sina_side[k] = s
+    elif g.get("sina") is not None:
+        notes.append("Sina: boxscore ilegible")
+    tm: dict[str, dict] = {}
+    pno: dict[str, tuple[str, str]] = {}
+    names: dict[str, dict[str, str]] = {"1": {}, "2": {}}
+    split_ok = {"1": False, "2": False}
+    for k, lr in (("1", "left"), ("2", "right")):
+        cn_team = ti.get(lr + "Name") or cal.get(lr + "Name")
+        t = {"name": equipo_latino(ti.get(lr + "EnName"), cn_team), "nameLocal": cn_team,
+             "nameFull": ti.get(lr + "FullCnName"), "code": None, "teamId": ids[k],
+             "score": to_float(ti.get(lr + "Goal") or cal.get(lr + "Goal")), "pl": {}, "shot": []}
+        ss = sina_side.get(k)
+        smap = _match_sina(qrows[k], ss["jugadores"]) if ss else {}
+        if ss and ss.get("entrenador"):
+            c = entrenador_latino(ss["entrenador"], over)
+            t["coach"] = c["name"]
+            t["coachDetails"] = {"firstName": c["first"], "familyName": c["family"], "nameLocal": ss["entrenador"],
+                                 "nameType": c["tipo"]}
+        ok = bool(ss) and all(p["pid"] in smap for p in qrows[k] if (to_float(p.get("reb")) or 0) > 0)
+        for i, q in enumerate(qrows[k], 1):
+            n = str(i)
+            pno[q["pid"]] = (k, n)
+            info = jugadores.get(q["pid"]) or {}
+            nm = nombre_latino(info.get("cnName") or q["cn"], info.get("enName"), over)
+            line = {"personId": q["pid"], "firstName": nm["first"], "familyName": nm["family"], "name": nm["name"],
+                    "nameLocal": info.get("cnName") or q["cn"], "nameShort": q["cn"], "nameType": nm["tipo"],
+                    "shirtNumber": q.get("dorsal"), "playingPosition": info.get("position") or None,
+                    "height": to_float(str(info.get("height") or "").replace("cm", "")),
+                    "dateOfBirth": info.get("birthDate") or None, "sMinutes": _mmss(q.get("min"))}
+            for a, b in (("pts", "sPoints"), ("reb", "sReboundsTotal"), ("ast", "sAssists"), ("stl", "sSteals"),
+                         ("blk", "sBlocks"), ("tov", "sTurnovers"), ("pf", "sFoulsPersonal")):
+                if to_float(q.get(a)) is not None:
+                    line[b] = to_float(q.get(a))
+            pm = to_float(str(q.get("pm") or "").replace("+", ""))
+            if pm is not None:
+                line["sPlusMinusPoints"] = pm
+            for a, (bm, ba) in (("fg", ("sFieldGoalsMade", "sFieldGoalsAttempted")),
+                                ("fg3", ("sThreePointersMade", "sThreePointersAttempted")),
+                                ("ft", ("sFreeThrowsMade", "sFreeThrowsAttempted"))):
+                m_, a_ = _ma(q.get(a))
+                if m_ is not None:
+                    line[bm], line[ba] = m_, a_
+            s = smap.get(q["pid"])
+            if s is not None:
+                line["starter"] = 1 if s.get("starter") else 0
+                if s.get("oreb") is not None and s.get("dreb") is not None and \
+                        s["oreb"] + s["dreb"] == (line.get("sReboundsTotal") or 0):
+                    line["sReboundsOffensive"], line["sReboundsDefensive"] = s["oreb"], s["dreb"]
+                elif (line.get("sReboundsTotal") or 0) > 0:
+                    ok = False
+                line["sinaId"] = s.get("sina_id")
+            t["pl"][n] = line
+            names[k][q["cn"]] = q["pid"]
+            if info.get("cnName"):
+                names[k].setdefault(info["cnName"], q["pid"])
+        split_ok[k] = ok
+        for row in st.get("teamStats") or []:
+            lab = row.get("text")
+            v = row.get("leftVal" if k == "1" else "rightVal")
+            if lab in TEAM_STAT and to_float(v) is not None:
+                t["tot_" + TEAM_STAT[lab]] = to_float(v)
+            if lab in TEAM_STAT_MA:
+                m_, a_ = _ma(row.get("leftExt" if k == "1" else "rightExt"))
+                if m_ is not None:
+                    t["tot_" + TEAM_STAT_MA[lab][0]], t["tot_" + TEAM_STAT_MA[lab][1]] = m_, a_
+        if ss and ok and ss.get("total"):
+            tot = ss["total"]
+            pl_or = sum(p.get("sReboundsOffensive") or 0 for p in t["pl"].values())
+            pl_dr = sum(p.get("sReboundsDefensive") or 0 for p in t["pl"].values())
+            team_reb = (t.get("tot_sReboundsTotal") or 0) - pl_or - pl_dr
+            if tot.get("oreb") is not None and tot.get("dreb") is not None and \
+                    tot["oreb"] + tot["dreb"] == (t.get("tot_sReboundsTotal") or -1):
+                t["tot_sReboundsOffensive"], t["tot_sReboundsDefensive"] = tot["oreb"], tot["dreb"]
+            elif team_reb == 0:
+                t["tot_sReboundsOffensive"], t["tot_sReboundsDefensive"] = pl_or, pl_dr
+        if not ok:
+            for p in t["pl"].values():
+                p.pop("sReboundsOffensive", None)
+                p.pop("sReboundsDefensive", None)
+            notes.append(f"lado {k}: sin desglose de rebotes OF/DEF ({'Sina no casa' if ss else 'sin Sina'})")
+        tm[k] = t
+
+    # ------------------------------------------------------------------ jugada a jugada
+    order = list(reversed(g.get("pbp_index") or []))            # el índice viene del más reciente al primero
+    evs = g.get("pbp") or {}
+    pbp: list[dict] = []
+    last_made: dict[str, int] = {}
+    drawn: dict[str, int] = {}
+    blocked: dict[str, int] = {}
+    first_five: dict[str, list] = {}
+
+    def other(k):
+        return "2" if k == "1" else "1"
+
+    def who(name: str, k: str | None) -> str | None:
+        name = (name or "").strip()
+        if not name or not k:
+            return None
+        if name in names[k]:
+            return names[k][name]
+        hits = [pid for n, pid in names[k].items() if _same_name(n, name)]
+        return hits[0] if len(hits) == 1 else None
+
+    def add(at, k, pid, e, **kw):
+        n = pno.get(pid, (k, "0"))[1] if pid else "0"
+        a = {"actionNumber": len(pbp) + 1, "actionType": at, "subType": kw.pop("subType", ""),
+             "success": kw.pop("success", 0), "tno": int(k) if k else 0, "pno": int(n), **e, **kw}
+        pbp.append(a)
+        return a
+
+    for eid in order:
+        e = evs.get(eid)
+        if not isinstance(e, dict):
+            continue
+        b = e.get("broadcast") or {}
+        at = str(b.get("actionType") or "")
+        txt = str(e.get("content") or "")
+        pl = (e.get("match") or {}).get("playerList") or {}
+        for k, lr in (("1", "left"), ("2", "right")):
+            if k not in first_five and len(pl.get(lr) or []) == 5:
+                first_five[k] = [str(x) for x in pl[lr]]
+        tid = str((b.get("team") or {}).get("id") or e.get("teamId") or "")
+        k = side_of.get(tid)
+        pid = str((b.get("player") or {}).get("id") or "") or None
+        rid = str((b.get("relatedPlayer") or {}).get("id") or "") or None
+        if pid and pid in pno and k is None:
+            k = pno[pid][0]
+        q = str(e.get("quarter") or (e.get("match") or {}).get("quarter") or "1").upper().lstrip("Q")
+        per = int(q) if q.isdigit() else 1
+        base = {"period": per - 4 if per > 4 else per, "periodType": "OVERTIME" if per > 4 else "REGULAR",
+                "gt": e.get("time") or e.get("quarterTime") or "00:00", "s1": e.get("leftGoal"),
+                "s2": e.get("rightGoal"), "qqId": eid}
+        if at in ("1", "2") and k:
+            v = "3pt" if "三分" in txt else "2pt"
+            made = at == "1"
+            sh = add(v, k, pid, base, success=1 if made else 0)
+            if made:
+                last_made[k] = sh["actionNumber"]
+                ma = _RE_ASSIST.search(txt)
+                ast = rid if rid in pno and pno[rid][0] == k else (who(ma.group(1), k) if ma else None)
+                if ma and ast:
+                    add("assist", k, ast, base, previousAction=sh["actionNumber"])
+            else:
+                mb = _RE_BLOCK.search(txt)
+                if mb:
+                    blk = who(mb.group(1), other(k))
+                    if blk:
+                        add("block", other(k), blk, base)
+                        if pid:
+                            blocked[pid] = blocked.get(pid, 0) + 1
+        elif at in ("6", "7") and k:
+            made = at == "6"
+            ft = add("freethrow", k, pid, base, success=1 if made else 0)
+            if made:
+                last_made[k] = ft["actionNumber"]
+        elif at == "3" and k:
+            sub = "offensive" if "进攻篮板" in txt else "defensive"
+            a = add("rebound", k, pid if pid in pno else None, base, subType=sub)
+            if a["pno"] == 0:
+                a["qualifier"] = ["team"]
+        elif at == "4" and k:
+            add("turnover", k, pid if pid in pno else None, base)
+            ms = _RE_STEAL.search(txt)
+            if ms:
+                stl = who(ms.group(1), other(k))
+                if stl:
+                    add("steal", other(k), stl, base)
+        elif at == "5" and k:
+            add("foul", k, pid if pid in pno else None, base,
+                subType="technical" if "技术" in txt else ("offensive" if "进攻犯规" in txt else "personal"))
+            mf = _RE_FOUL_ON.search(txt)
+            if mf:
+                victim = who(mf.group(1), other(k))
+                if victim:
+                    add("foulon", other(k), victim, base)
+                    drawn[victim] = drawn.get(victim, 0) + 1
+        elif at == "9" and k:
+            m = _RE_SUB.search(txt.split("，", 1)[-1] if "换人，" in txt else txt)
+            p_in = who(m.group(1), k) if m else None
+            p_out = who(m.group(2), k) if m else None
+            p_in = p_in or (rid if rid in pno else None)     # QQ: player = sale, relatedPlayer = entra
+            p_out = p_out or (pid if pid in pno else None)
+            if p_out:
+                add("substitution", k, p_out, base, subType="out")
+            if p_in:
+                add("substitution", k, p_in, base, subType="in")
+        elif at == "10":
+            add("timeout", k, None, base)
+        elif at == "11" and k:
+            add("jumpball", k, pid if pid in pno else None, base)
+        elif at in ("13", "14"):
+            add("period", None, None, base, subType="start" if at == "13" else "end")
+        elif at == "15":
+            add("game", None, None, base, subType="end")
+    for pid, (k, n) in pno.items():
+        p = tm[k]["pl"][n]
+        if pbp:
+            p["sFoulsOn"] = drawn.get(pid, 0)
+            p["sBlocksReceived"] = blocked.get(pid, 0)
+        if "starter" not in p and first_five.get(k):
+            p["starter"] = 1 if pid in first_five[k] else 0
+    pbp.reverse()                       # FIBA LiveStats: orden descendente de actionNumber
+    final = str(cal.get("matchPeriod") or "2") == "2"
+    return {"tm": tm, "pbp": pbp, "status": "complete" if final else "live", "matchDate": cal.get("startTime"),
+            "period": None, "notas": notes, "rebotes_desglosados": split_ok}
+
+
+# =============================================================================================== adaptador
+def _months(start_year: int, until: str) -> list[tuple[str, str]]:
+    """Meses de la temporada (septiembre del año de inicio a julio siguiente) hasta `until` (AAAA-MM-DD)."""
+    out = []
+    y, m = start_year, 9
+    while (y, m) <= (start_year + 1, 7):
+        d1 = dt.date(y, m, 1)
+        if d1.isoformat() > until:
+            break
+        nxt = dt.date(y + (m == 12), m % 12 + 1, 1)
+        out.append((d1.isoformat(), (nxt - dt.timedelta(days=1)).isoformat()))
+        y, m = nxt.year, nxt.month
+    return out
+
+
+def _compact_event(e: dict) -> dict:
+    """Evento de QQ sin imágenes, textos de patrocinio ni fichas completas: lo que usa `to_fls`."""
+    b = e.get("broadcast") or {}
+
+    def pl(x):
+        return {k: x.get(k) for k in ("id", "name", "teamId", "jerseyNum")} if isinstance(x, dict) else None
+
+    m = e.get("match") or {}
+    lst = m.get("playerList") or {}
+    return {"content": e.get("content"), "time": e.get("time"), "quarter": e.get("quarter"),
+            "quarterTime": e.get("quarterTime"), "teamId": e.get("teamId"), "leftGoal": e.get("leftGoal"),
+            "rightGoal": e.get("rightGoal"), "version": e.get("version"), "ctype": e.get("ctype"),
+            "broadcast": {"actionType": b.get("actionType"), "summary": b.get("summary"), "player": pl(b.get("player")),
+                          "relatedPlayer": pl(b.get("relatedPlayer")),
+                          "team": {"id": (b.get("team") or {}).get("id")} if b.get("team") else None},
+            "match": {"quarter": m.get("quarter"),
+                      "playerList": {s: [p.get("id") for p in lst.get(s) or [] if isinstance(p, dict)]
+                                     for s in ("left", "right")} if lst else None}}
+
+
+class CBAAdapter(FibaLiveStatsAdapter):
+    """CBA: calendario, boxscore y jugada a jugada de QQ + rebotes OF/DEF, titulares y entrenador de Sina.
+
+    Config: `temporadas.<t>.sina_liga` (qleagueid de Sina), `fecha_corte` (global o por temporada, "AAAA-MM-DD":
+    sólo partidos hasta ese día), `nombres_latinos` ({"中文名": "Nombre latino"}, jugadores y entrenadores),
+    `lote_eventos` (ids por petición de textLive/detail, 400 por defecto)."""
+    name = "cba"
+    version = "1.0"
+
+    def _json(self, http: HttpClient, url: str) -> Any:
+        return http.get(url, headers=HEADERS).json()
+
+    def _sina_text(self, http: HttpClient, url: str) -> str:
+        resp = http.get(url)
+        return resp.content.decode("gbk", errors="replace")
+
+    def _calendar(self, http: HttpClient, start_year: int, corte: str) -> dict[str, dict]:
+        cal: dict[str, dict] = {}
+        for d1, d2 in _months(start_year, corte):
+            try:
+                r = self._json(http, LIST_URL.format(d1=d1, d2=d2))
+            except (FetchError, ValueError) as exc:
+                self.soft_fail(f"calendario {d1[:7]}: {exc}")
+                continue
+            for day in ((r or {}).get("data") or {}).values():
+                for m in day or []:
+                    mid = str(m.get("mid") or "").split(":")[-1]
+                    if not mid or str(m.get("competitionId") or COMP) != COMP:
+                        continue
+                    if str(m.get("startTime") or "")[:10] > corte:
+                        continue
+                    cal[mid] = {k: m.get(k) for k in ("mid", "matchDesc", "startTime", "matchPeriod", "leftId",
+                                                      "leftName", "leftGoal", "rightId", "rightName", "rightGoal")}
+        return cal
+
+    def _pbp(self, http: HttpClient, mid: str) -> tuple[list, dict]:
+        idx = self._json(http, TL_INDEX_URL.format(mid=mid))
+        ids = idx[1] if isinstance(idx, list) and len(idx) > 1 and isinstance(idx[1], list) else []
+        evs: dict[str, dict] = {}
+        lote = int(self.cfg.get("lote_eventos", 400))
+        for i in range(0, len(ids), lote):
+            d = self._json(http, TL_DETAIL_URL.format(mid=mid, ids=",".join(ids[i:i + lote])))
+            if isinstance(d, list) and len(d) > 1 and isinstance(d[1], dict):
+                evs.update({k: _compact_event(v) for k, v in d[1].items() if isinstance(v, dict)})
+        return [i for i in ids if i in evs], evs
+
+    def fetch(self, season: str, http: HttpClient, previous_payload: Any | None = None) -> Any:
+        sc = self.season_cfg(season)
+        today = dt.date.today().isoformat()
+        corte = min(str(sc.get("fecha_corte") or self.cfg.get("fecha_corte") or "9999-12-31"), today)
+        prev = previous_payload if isinstance(previous_payload, dict) else {}
+        prev_games, prev_jug = prev.get("games") or {}, prev.get("jugadores") or {}
+        cal = self._calendar(http, sc["start_year"], corte)
+        fases, fechas = {}, {}
+        for mid, m in cal.items():
+            ph = fase_de(m.get("matchDesc"))
+            if ph and str(m.get("matchPeriod")) == "2":
+                fases[mid], fechas[mid] = ph, m.get("startTime")
+        meses = sc.get("meses")         # pruebas: sólo esos meses ("AAAA-MM")
+        if meses:
+            fases = {k: v for k, v in fases.items() if str(fechas[k])[:7] in meses}
+            fechas = {k: fechas[k] for k in fases}
+        if not fases:
+            raise NoDataYet(f"cba {season}: aún no hay partidos terminados")
+        todo = sorted((m for m in fases if m not in prev_games), key=lambda i: fechas[i] or "")
+        sina_list: list[dict] = []
+        if todo and sc.get("sina_liga"):
+            try:
+                sina_list = sina_schedule(self._sina_text(http, SINA_LIST_URL.format(liga=sc["sina_liga"])))
+            except FetchError as exc:
+                self.soft_fail(f"Sina calendario: {exc}")
+        sina_idx = {(s["fecha"], s["pts_local"], s["pts_visitante"]): s for s in sina_list}
+        new: dict[str, dict] = {}
+        jug_new: dict[str, dict] = {}
+        seen_j: set[str] = set()
+        n_new = 0
+        block = int(self.cfg.get("partidos_por_paquete", 150))
+        for mid in todo:
+            m = cal[mid]
+            try:
+                stat = (self._json(http, STAT_URL.format(mid=mid)) or {}).get("data") or {}
+            except (FetchError, ValueError) as exc:
+                self.soft_fail(f"{mid} matchStat: {exc}")
+                continue
+            if not (stat.get("playerStats") or {}).get("left"):
+                self.soft_fail(f"{mid}: matchStat sin boxscore")
+                continue
+            g: dict[str, Any] = {"cal": m, "stat": {k: stat.get(k) for k in ("teamInfo", "playerStats", "teamStats",
+                                                                             "periodGoals")}}
+            try:
+                g["pbp_index"], g["pbp"] = self._pbp(http, mid)
+            except (FetchError, ValueError) as exc:
+                self.soft_fail(f"{mid} textLive: {exc}")
+                g["pbp_index"], g["pbp"] = [], {}
+            key = (str(m.get("startTime") or "")[:10], int(to_float(m.get("leftGoal")) or -1),
+                   int(to_float(m.get("rightGoal")) or -1))
+            s = sina_idx.get(key)
+            if s:
+                try:
+                    g["sina"] = {"sid": s["sid"], "html": sina_slice(self._sina_text(http, SINA_GAME_URL.format(sid=s["sid"])))}
+                except FetchError as exc:
+                    self.soft_fail(f"{mid} Sina {s['sid']}: {exc}")
+                    g["sina"] = None
+            else:
+                g["sina"] = None
+                if sc.get("sina_liga"):
+                    self.soft_fail(f"{mid}: sin partido de Sina con fecha y marcador {key}")
+            for side in ("left", "right"):
+                for r in ((stat.get("playerStats") or {}).get(side) or [])[1:]:
+                    pid = str(r.get("playerId") or "")
+                    if pid and pid not in prev_jug and pid not in seen_j:
+                        seen_j.add(pid)
+                        try:
+                            info = (self._json(http, PLAYER_URL.format(pid=pid)) or {}).get("data") or {}
+                        except (FetchError, ValueError) as exc:
+                            self.soft_fail(f"jugador {pid}: {exc}")
+                            continue
+                        jug_new[pid] = {k: info.get(k) for k in ("cnName", "enName", "birthDate", "height",
+                                                                  "weight", "position", "jerseyNum")}
+            new[mid] = g
+            n_new += 1
+            if len(new) >= block:
+                self.save_partial(season, {"claves_incrementales": ["games", "fechas", "jugadores"],
+                                           "fases": fases, "fechas": fechas, "games": new, "jugadores": jug_new})
+                new, jug_new = {}, {}
+        return {"incremental": True, "claves_incrementales": ["games", "fechas", "jugadores"], "fases": fases,
+                "fechas": fechas, "games": new, "jugadores": jug_new, "reused_games": len(fases) - len(todo),
+                "partidos_nuevos": n_new}
+
+    def parse(self, payload: Any, season: str) -> dict[str, ParsedLeague]:
+        return parse_payload(payload, self.cfg)
+
+
+def season_docs(payload: dict, cfg: dict) -> dict[str, dict]:
+    """{mid: data.json traducido} de los partidos de liga regular y playoffs del bruto."""
+    fases = payload.get("fases") or {}
+    jug = payload.get("jugadores") or {}
+    return {mid: to_fls(g, jug, cfg) for mid, g in (payload.get("games") or {}).items()
+            if isinstance(g, dict) and fases.get(mid) in ("regular", "playoffs")}
+
+
+def team_names(docs: dict[str, dict]) -> dict[str, str]:
+    """team_id -> nombre latino más reciente de la temporada (los patrocinios cambian el nombre chino)."""
+    out: dict[str, tuple[str, str]] = {}
+    for d in docs.values():
+        for k in ("1", "2"):
+            t = d["tm"][k]
+            key = str(d.get("matchDate") or "")
+            if t["teamId"] not in out or key >= out[t["teamId"]][0]:
+                out[t["teamId"]] = (key, t["name"])
+    return {k: v[1] for k, v in out.items()}
+
+
+def parse_payload(payload: dict, cfg: dict) -> dict[str, ParsedLeague]:
+    fases = payload.get("fases") or {}
+    docs = season_docs(payload, cfg)
+    names = team_names(docs)
+    games, notes = [], []
+    n_split = 0
+    for mid in sorted(docs, key=lambda m: (str(docs[m].get("matchDate") or ""), m)):
+        d = docs[mid]
+        t1, t2 = d["tm"]["1"]["teamId"], d["tm"]["2"]["teamId"]
+        g = parse_fiba_game(mid, d, fases[mid], ((t1, names.get(t1)), (t2, names.get(t2))))
+        g["date"] = str(d.get("matchDate") or "")[:10] or None
+        for side, k in zip(g["teams"], ("1", "2")):
+            side["code"] = d["tm"][k].get("nameLocal")
+            pls = {str(p.get("personId")): p for p in d["tm"][k]["pl"].values()}
+            for line in side["players"]:
+                p = pls.get(line["player_id"]) or {}
+                line["name"] = p.get("name") or line.get("name")
+                if p.get("dateOfBirth"):
+                    line["fecha_nacimiento"] = p["dateOfBirth"]
+                if p.get("height"):
+                    line["altura_cm"] = p["height"]
+        n_split += all(d.get("rebotes_desglosados", {}).values())
+        games.append(g)
+    if not games:
+        raise AdapterError("cba: el bruto no contiene partidos de liga regular ni playoffs")
+    notes.append(f"{len(games)} partidos QQ; {n_split} con rebotes OF/DEF de Sina en los dos equipos; "
+                 f"{sum(1 for d in docs.values() if d['pbp'])} con jugada a jugada")
+    return aggregate_by_phase(games, notes)

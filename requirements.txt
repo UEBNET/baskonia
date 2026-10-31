@@ -3,6 +3,8 @@ pandas>=2.0
 numpy>=1.24
 beautifulsoup4>=4.12
 lxml>=4.9
+# CBA: nombres latinos (pinyin) de los jugadores chinos (bbstats/adapters/cba.py; opcional en ejecución)
+pypinyin>=0.50
 # Modelos (bbmodel): algoritmo A y evaluación de ligas
 scipy>=1.10
 scikit-learn>=1.3

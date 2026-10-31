@@ -34,7 +34,8 @@
       "baloncestoenvivo.feb.es": 1.0,
       "intrafeb.feb.es": 1.0,
       "prod.rosetta.nbl.com.au": 0.3,
-      "site.api.espn.com": 0.2
+      "site.api.espn.com": 0.2,
+      "org.infobasket.su": 1.0
     },
     "dominios_curl": [
       "www.basketball-reference.com"
@@ -3806,6 +3807,46 @@
           "ranking": "T-Rank de PRETEMPORADA 2026-27 (barttorvik.com/2027_team_results.csv, 0-0, descargado 2026-10-31): sustituir por el final al acabar la temporada",
           "sin_datos": true,
           "motivo": "la temporada 2026-27 aún no ha empezado (31-10-2026): quitar sin_datos cuando haya partidos"
+        }
+      }
+    },
+    "vtb": {
+      "adaptador": "vtb",
+      "activa": true,
+      "nombre": "VTB United League (Liga VTB)",
+      "pais": "Rusia",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "fuente": "https://org.infobasket.su (Infobasket, backend de vtb-league.com: Comp/GetCalendar por fase y Widget/GetOnline por partido con boxscore + jugada a jugada; ids = vtb-league.com/ru/game/<GameID>/)",
+      "tag": "vtb",
+      "plazas_playoffs": 0,
+      "partidos_por_paquete": 400,
+      "pbp": "vtb",
+      "entrenadores": "vtb",
+      "_fases": "Hijos directos de la temporada en Widget/CompIssue: nodos CompType 10 (Playoff, Play-in) = playoffs (play-in + cuartos + semifinales + final + 3.er puesto, como el play-in de la EuroLeague); el resto (Round Robin / Regular season / First stage / Second stage. Group A|B) = regular. 'Final standing' no tiene partidos. Copa (WINLINE Basket Cup) y Supercopa son otro tag de Infobasket: fuera. Sin jugada a jugada (sólo boxscore): 2020-21 entera y 2021-22 hasta el 07-03-2022.",
+      "estado_verificacion": "verificado con datos reales (2020-21 parcial, 2025-26 y 2026-27 completas; muestras 2021-22 a 2024-25)",
+      "temporadas": {
+        "2020-21": {
+          "comp_id": 34829
+        },
+        "2021-22": {
+          "comp_id": 37492
+        },
+        "2022-23": {
+          "comp_id": 39799
+        },
+        "2023-24": {
+          "comp_id": 42729
+        },
+        "2024-25": {
+          "comp_id": 46399
+        },
+        "2025-26": {
+          "comp_id": 50714
+        },
+        "2026-27": {
+          "comp_id": 55613,
+          "fecha_corte": "2026-10-29"
         }
       }
     }
