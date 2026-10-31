@@ -1,9 +1,9 @@
 {
-  "generado": "2026-10-31T17:57:37.796920+00:00",
+  "generado": "2026-10-31T18:18:59.210578+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
-      "generado": "2026-10-31T17:40:55.351228+00:00",
+      "generado": "2026-10-31T18:17:53.024580+00:00",
       "fases": [
         "regular",
         "total"
@@ -68,12 +68,16 @@
         "nbl": {
           "regular": 154,
           "total": 154
+        },
+        "vtb": {
+          "regular": 158,
+          "total": 158
         }
       }
     },
     {
       "temporada": "2025-26",
-      "generado": "2026-10-31T17:54:32.718580+00:00",
+      "generado": "2026-10-31T18:12:12.242984+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -159,12 +163,17 @@
           "playoffs": 74,
           "regular": 168,
           "total": 168
+        },
+        "ncaa": {
+          "playoffs": 667,
+          "regular": 766,
+          "total": 766
         }
       }
     },
     {
       "temporada": "2024-25",
-      "generado": "2026-10-22T18:20:41.448301+00:00",
+      "generado": "2026-10-31T18:18:58.978535+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -240,12 +249,22 @@
           "playoffs": 219,
           "regular": 654,
           "total": 655
+        },
+        "nbl": {
+          "playoffs": 78,
+          "regular": 157,
+          "total": 157
+        },
+        "ncaa": {
+          "playoffs": 689,
+          "regular": 804,
+          "total": 804
         }
       }
     },
     {
       "temporada": "2023-24",
-      "generado": "2026-10-22T18:24:29.590540+00:00",
+      "generado": "2026-10-31T18:14:22.568918+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -321,6 +340,11 @@
           "playoffs": 214,
           "regular": 657,
           "total": 657
+        },
+        "nbl": {
+          "playoffs": 80,
+          "regular": 157,
+          "total": 157
         }
       }
     },

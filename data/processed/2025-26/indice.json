@@ -1,6 +1,6 @@
 {
   "temporada": "2025-26",
-  "generado": "2026-10-31T17:54:32.718580+00:00",
+  "generado": "2026-10-31T18:12:12.242984+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -170,6 +170,16 @@
         "playoffs": 74,
         "regular": 168,
         "total": 168
+      }
+    },
+    "ncaa": {
+      "nombre": "NCAA Division I (top-50 T-Rank)",
+      "archivo": "ligas/ncaa.csv",
+      "fecha_extraccion": "2026-10-31T18:04:20.983455+00:00",
+      "fases": {
+        "playoffs": 667,
+        "regular": 766,
+        "total": 766
       }
     }
   },

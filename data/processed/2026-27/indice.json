@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-10-31T17:40:55.351228+00:00",
+  "generado": "2026-10-31T18:17:53.024580+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -144,6 +144,15 @@
       "fases": {
         "regular": 154,
         "total": 154
+      }
+    },
+    "vtb": {
+      "nombre": "VTB United League (Liga VTB)",
+      "archivo": "ligas/vtb.csv",
+      "fecha_extraccion": "2026-10-31T18:17:09.103302+00:00",
+      "fases": {
+        "regular": 158,
+        "total": 158
       }
     }
   },

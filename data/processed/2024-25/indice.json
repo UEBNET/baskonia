@@ -1,6 +1,6 @@
 {
   "temporada": "2024-25",
-  "generado": "2026-10-22T18:20:41.448301+00:00",
+  "generado": "2026-10-31T18:18:58.978535+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -150,6 +150,26 @@
         "playoffs": 219,
         "regular": 654,
         "total": 655
+      }
+    },
+    "nbl": {
+      "nombre": "National Basketball League (NBL)",
+      "archivo": "ligas/nbl.csv",
+      "fecha_extraccion": "2026-10-31T17:54:33.051115+00:00",
+      "fases": {
+        "playoffs": 78,
+        "regular": 157,
+        "total": 157
+      }
+    },
+    "ncaa": {
+      "nombre": "NCAA Division I (top-50 T-Rank)",
+      "archivo": "ligas/ncaa.csv",
+      "fecha_extraccion": "2026-10-31T18:12:12.441049+00:00",
+      "fases": {
+        "playoffs": 689,
+        "regular": 804,
+        "total": 804
       }
     }
   },

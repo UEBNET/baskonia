@@ -1,6 +1,6 @@
 {
   "temporada": "2023-24",
-  "generado": "2026-10-22T18:24:29.590540+00:00",
+  "generado": "2026-10-31T18:14:22.568918+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -150,6 +150,16 @@
         "playoffs": 214,
         "regular": 657,
         "total": 657
+      }
+    },
+    "nbl": {
+      "nombre": "National Basketball League (NBL)",
+      "archivo": "ligas/nbl.csv",
+      "fecha_extraccion": "2026-10-31T18:06:17.544975+00:00",
+      "fases": {
+        "playoffs": 80,
+        "regular": 157,
+        "total": 157
       }
     }
   },

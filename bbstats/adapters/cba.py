@@ -156,7 +156,7 @@ def entrenador_latino(cn: str | None, override: dict | None = None) -> dict | No
 def equipo_latino(en: str | None, cn: str | None) -> str:
     """enName de QQ ("LIAO NING") -> "Liaoning"; si no hay, el nombre chino."""
     en = (en or "").strip()
-    return "".join(w.capitalize() for w in en.split()) if en else (cn or "")
+    return "".join(en.split()).capitalize() if en else (cn or "")
 
 
 # =============================================================================================== Sina
@@ -311,6 +311,25 @@ _RE_FOUL_ON = re.compile(r"对(.+?)(?:的)?(?:打手|个人|进攻|防守|技术
 _RE_SUB = re.compile(r"(.+?)上场，换下(.+)$")
 
 
+def _quarter(e: dict) -> int:
+    q = str(e.get("quarter") or (e.get("match") or {}).get("quarter") or "1").upper().lstrip("Q")
+    return int(q) if q.isdigit() else 1
+
+
+def _clock_s(v: Any) -> float:
+    m = re.fullmatch(r"(\d+):(\d+)", str(v or ""))
+    return int(m.group(1)) * 60 + int(m.group(2)) if m else 0.0
+
+
+def _chrono(ids: list[str], evs: dict) -> list[str]:
+    """Orden real de los eventos: periodo y reloj (descendente); a igualdad, el orden del índice de QQ (el
+    índice invertido casi siempre es cronológico, pero QQ intercala a veces eventos de otro periodo)."""
+    pos = {i: n for n, i in enumerate(ids)}
+    ok = [i for i in ids if isinstance(evs.get(i), dict)]
+    return sorted(ok, key=lambda i: (_quarter(evs[i]), -_clock_s(evs[i].get("time") or evs[i].get("quarterTime")),
+                                     pos[i]))
+
+
 def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> dict:
     """Partido del bruto (QQ + Sina) -> estructura del data.json de FIBA LiveStats (tm, pbp)."""
     cfg = cfg or {}
@@ -399,26 +418,15 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
                 m_, a_ = _ma(row.get("leftExt" if k == "1" else "rightExt"))
                 if m_ is not None:
                     t["tot_" + TEAM_STAT_MA[lab][0]], t["tot_" + TEAM_STAT_MA[lab][1]] = m_, a_
-        if ss and ok and ss.get("total"):
-            tot = ss["total"]
-            pl_or = sum(p.get("sReboundsOffensive") or 0 for p in t["pl"].values())
-            pl_dr = sum(p.get("sReboundsDefensive") or 0 for p in t["pl"].values())
-            team_reb = (t.get("tot_sReboundsTotal") or 0) - pl_or - pl_dr
-            if tot.get("oreb") is not None and tot.get("dreb") is not None and \
-                    tot["oreb"] + tot["dreb"] == (t.get("tot_sReboundsTotal") or -1):
-                t["tot_sReboundsOffensive"], t["tot_sReboundsDefensive"] = tot["oreb"], tot["dreb"]
-            elif team_reb == 0:
-                t["tot_sReboundsOffensive"], t["tot_sReboundsDefensive"] = pl_or, pl_dr
         if not ok:
             for p in t["pl"].values():
                 p.pop("sReboundsOffensive", None)
                 p.pop("sReboundsDefensive", None)
-            notes.append(f"lado {k}: sin desglose de rebotes OF/DEF ({'Sina no casa' if ss else 'sin Sina'})")
         tm[k] = t
 
     # ------------------------------------------------------------------ jugada a jugada
-    order = list(reversed(g.get("pbp_index") or []))            # el índice viene del más reciente al primero
     evs = g.get("pbp") or {}
+    order = _chrono(list(reversed(g.get("pbp_index") or [])), evs)
     pbp: list[dict] = []
     last_made: dict[str, int] = {}
     drawn: dict[str, int] = {}
@@ -444,6 +452,41 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
         pbp.append(a)
         return a
 
+    def on_court(e: dict) -> dict[str, set]:
+        """Cinco en pista que da QQ en el evento (desde 2025-26), sólo si son 5 jugadores del boxscore."""
+        pl = (e.get("match") or {}).get("playerList") or {}
+        out = {}
+        for k, lr in (("1", "left"), ("2", "right")):
+            ids_ = {str(x) for x in pl.get(lr) or []}
+            if len(ids_) == 5 and all(pno.get(x, ("",))[0] == k for x in ids_):
+                out[k] = ids_
+        return out
+
+    for eid in order:                                         # quinteto inicial = el primero que da QQ
+        e = evs.get(eid)
+        if isinstance(e, dict):
+            for k, v in on_court(e).items():
+                first_five.setdefault(k, sorted(v))
+        if len(first_five) == 2:
+            break
+    cur = {k: set(v) for k, v in first_five.items()}
+    n_sync = 0
+    period_start: dict[int, Any] = {}
+    played: set[int] = set()
+
+    def sync(e: dict, base: dict) -> None:
+        """Cambios que QQ no anota (entre periodos, o con nombres que no casan): si el quinteto en pista del
+        evento difiere del que se lleva, se emiten las salidas y entradas que faltan, antes del evento."""
+        nonlocal n_sync
+        for k, v in on_court(e).items():
+            if k in cur and v != cur[k]:
+                for x in sorted(cur[k] - v):
+                    add("substitution", k, x, base, subType="out", qualifier=["sincronizado"])
+                for x in sorted(v - cur[k]):
+                    add("substitution", k, x, base, subType="in", qualifier=["sincronizado"])
+                n_sync += 1
+                cur[k] = set(v)
+
     for eid in order:
         e = evs.get(eid)
         if not isinstance(e, dict):
@@ -451,21 +494,24 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
         b = e.get("broadcast") or {}
         at = str(b.get("actionType") or "")
         txt = str(e.get("content") or "")
-        pl = (e.get("match") or {}).get("playerList") or {}
-        for k, lr in (("1", "left"), ("2", "right")):
-            if k not in first_five and len(pl.get(lr) or []) == 5:
-                first_five[k] = [str(x) for x in pl[lr]]
         tid = str((b.get("team") or {}).get("id") or e.get("teamId") or "")
         k = side_of.get(tid)
         pid = str((b.get("player") or {}).get("id") or "") or None
         rid = str((b.get("relatedPlayer") or {}).get("id") or "") or None
         if pid and pid in pno and k is None:
             k = pno[pid][0]
-        q = str(e.get("quarter") or (e.get("match") or {}).get("quarter") or "1").upper().lstrip("Q")
-        per = int(q) if q.isdigit() else 1
+        per = _quarter(e)
+        if at == "13":
+            period_start[per] = e.get("time") or e.get("quarterTime")
         base = {"period": per - 4 if per > 4 else per, "periodType": "OVERTIME" if per > 4 else "REGULAR",
                 "gt": e.get("time") or e.get("quarterTime") or "00:00", "s1": e.get("leftGoal"),
                 "s2": e.get("rightGoal"), "qqId": eid}
+        if at not in ("9", "13", "14", "15") and per not in played:
+            # cambios entre periodos (QQ no los anota): los cinco en pista del primer evento del periodo, con el
+            # reloj del inicio del periodo. Dentro del periodo mandan los cambios del texto (la lista de QQ a
+            # veces no aplica un cambio anotado y deja a un jugador «en pista» que ya no actúa).
+            sync(e, {**base, "gt": period_start.get(per, base["gt"])})
+            played.add(per)
         if at in ("1", "2") and k:
             v = "3pt" if "三分" in txt else "2pt"
             made = at == "1"
@@ -518,8 +564,11 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
             p_out = p_out or (pid if pid in pno else None)
             if p_out:
                 add("substitution", k, p_out, base, subType="out")
+                cur.get(k, set()).discard(p_out)
             if p_in:
                 add("substitution", k, p_in, base, subType="in")
+                if k in cur:
+                    cur[k].add(p_in)
         elif at == "10":
             add("timeout", k, None, base)
         elif at == "11" and k:
@@ -528,6 +577,42 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
             add("period", None, None, base, subType="start" if at == "13" else "end")
         elif at == "15":
             add("game", None, None, base, subType="end")
+    # rebotes OF/DEF: Sina si cuadra con el total de QQ; si no, el jugada a jugada (también tipado OF/DEF) si cuadra
+    reb_pbp: dict[str, list] = {}
+    team_reb: dict[str, list] = {"1": [0, 0], "2": [0, 0]}
+    for a in pbp:
+        if a["actionType"] == "rebound" and a["tno"]:
+            i = 0 if a["subType"] == "offensive" else 1
+            if a["pno"]:
+                pid_ = tm[str(a["tno"])]["pl"][str(a["pno"])]["personId"]
+                reb_pbp.setdefault(pid_, [0, 0])[i] += 1
+            else:
+                team_reb[str(a["tno"])][i] += 1
+    for k in ("1", "2"):
+        t = tm[k]
+        if not split_ok[k] and pbp:
+            good = True
+            for p in t["pl"].values():
+                o, d_ = reb_pbp.get(p["personId"], [0, 0])
+                if o + d_ != (p.get("sReboundsTotal") or 0):
+                    good = False
+                    break
+            if good:
+                for p in t["pl"].values():
+                    p["sReboundsOffensive"], p["sReboundsDefensive"] = reb_pbp.get(p["personId"], [0, 0])
+                split_ok[k] = True
+                notes.append(f"lado {k}: rebotes OF/DEF del jugada a jugada (Sina no cuadra)")
+        if split_ok[k]:
+            pl_or = sum(p.get("sReboundsOffensive") or 0 for p in t["pl"].values())
+            pl_dr = sum(p.get("sReboundsDefensive") or 0 for p in t["pl"].values())
+            tr = (t.get("tot_sReboundsTotal") or 0) - pl_or - pl_dr
+            if tr == 0:
+                t["tot_sReboundsOffensive"], t["tot_sReboundsDefensive"] = pl_or, pl_dr
+            elif pbp and sum(team_reb[k]) == tr:          # rebotes de equipo del jugada a jugada
+                t["tot_sReboundsOffensive"] = pl_or + team_reb[k][0]
+                t["tot_sReboundsDefensive"] = pl_dr + team_reb[k][1]
+        else:
+            notes.append(f"lado {k}: sin desglose de rebotes OF/DEF")
     for pid, (k, n) in pno.items():
         p = tm[k]["pl"][n]
         if pbp:
@@ -535,6 +620,8 @@ def to_fls(g: dict, jugadores: dict | None = None, cfg: dict | None = None) -> d
             p["sBlocksReceived"] = blocked.get(pid, 0)
         if "starter" not in p and first_five.get(k):
             p["starter"] = 1 if pid in first_five[k] else 0
+    if n_sync:
+        notes.append(f"{n_sync} cambios entre periodos sin anotar en QQ, reconstruidos con los cinco en pista")
     pbp.reverse()                       # FIBA LiveStats: orden descendente de actionNumber
     final = str(cal.get("matchPeriod") or "2") == "2"
     return {"tm": tm, "pbp": pbp, "status": "complete" if final else "live", "matchDate": cal.get("startTime"),
