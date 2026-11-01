@@ -1,144 +1,144 @@
 {
  "uso_eficiencia": {
-  "personas": 15049,
-  "con_estimacion_propia_ts": 175,
+  "personas": 22203,
+  "con_estimacion_propia_ts": 209,
   "beta_ts_grupo": {
-   "A": -0.17,
-   "E": -0.0138,
-   "I": -0.1589,
-   "NA": -0.0762
+   "A": -0.2896,
+   "E": 0.0954,
+   "I": -0.0626,
+   "NA": 0.0051
   },
   "tau2_ts_grupo": {
    "A": 0.0,
    "E": 0.0,
    "I": 0.0,
-   "NA": NaN
+   "NA": 0.0
   },
   "beta_tov_grupo": {
-   "A": 0.0431,
-   "E": -0.0851,
-   "I": -0.0682,
+   "A": 0.0096,
+   "E": -0.1003,
+   "I": -0.1118,
    "NA": NaN
   },
-  "w_media_ts": 5.120443144745022e-10,
+  "w_media_ts": 1.8621254980619436e-10,
   "beta_ts_partido_grupo_mco": {
-   "A": 0.1416,
-   "E": 0.2337,
-   "I": -0.0074,
-   "NA": -0.0515
+   "A": 0.1624,
+   "E": 0.2317,
+   "I": -0.0043,
+   "NA": 0.0484
   },
   "beta_ts_tramos_grupo_mco": {
-   "A": 0.0389,
-   "E": 0.1039,
-   "I": 0.0634,
+   "A": 0.0465,
+   "E": 0.1152,
+   "I": 0.0716,
    "NA": NaN
   },
   "iv_grupos": [
    {
     "pos3_p": "A",
-    "beta_iv": -0.17,
-    "beta_iv_sd": 0.2593,
-    "beta_iv_lo": -0.5808,
-    "beta_iv_hi": 0.2649,
-    "primera_etapa": 3.3635,
-    "n_filas": 77318,
-    "n_personas": 1736
+    "beta_iv": -0.2896,
+    "beta_iv_sd": 0.287,
+    "beta_iv_lo": -0.8045,
+    "beta_iv_hi": 0.1315,
+    "primera_etapa": 3.1859,
+    "n_filas": 86216,
+    "n_personas": 1957
    },
    {
     "pos3_p": "E",
-    "beta_iv": -0.0138,
-    "beta_iv_sd": 0.1288,
-    "beta_iv_lo": -0.2193,
-    "beta_iv_hi": 0.204,
-    "primera_etapa": 4.4779,
-    "n_filas": 245889,
-    "n_personas": 5409
+    "beta_iv": 0.0954,
+    "beta_iv_sd": 0.1048,
+    "beta_iv_lo": -0.0895,
+    "beta_iv_hi": 0.2626,
+    "primera_etapa": 4.2413,
+    "n_filas": 300154,
+    "n_personas": 6641
    },
    {
     "pos3_p": "I",
-    "beta_iv": -0.1589,
-    "beta_iv_sd": 0.1979,
-    "beta_iv_lo": -0.4864,
-    "beta_iv_hi": 0.1588,
-    "primera_etapa": 3.0667,
-    "n_filas": 193041,
-    "n_personas": 4416
+    "beta_iv": -0.0626,
+    "beta_iv_sd": 0.166,
+    "beta_iv_lo": -0.3503,
+    "beta_iv_hi": 0.2003,
+    "primera_etapa": 2.966,
+    "n_filas": 233763,
+    "n_personas": 5377
    },
    {
     "pos3_p": "NA",
-    "beta_iv": 2.8969,
-    "beta_iv_sd": 30.7664,
-    "beta_iv_lo": -19.0862,
-    "beta_iv_hi": 19.9416,
-    "primera_etapa": -1.862,
-    "n_filas": 1239,
-    "n_personas": 616
+    "beta_iv": 9.7111,
+    "beta_iv_sd": 17.6978,
+    "beta_iv_lo": -23.9835,
+    "beta_iv_hi": 19.4608,
+    "primera_etapa": 0.8049,
+    "n_filas": 7596,
+    "n_personas": 2896
    },
    {
     "pos3_p": "todos",
-    "beta_iv": -0.0762,
-    "beta_iv_sd": 0.0933,
-    "beta_iv_lo": -0.2227,
-    "beta_iv_hi": 0.0771,
-    "primera_etapa": 3.8108,
-    "n_filas": 517487,
-    "n_personas": 12177
+    "beta_iv": 0.0051,
+    "beta_iv_sd": 0.0802,
+    "beta_iv_lo": -0.1297,
+    "beta_iv_hi": 0.1375,
+    "primera_etapa": 3.6342,
+    "n_filas": 627729,
+    "n_personas": 16871
    }
   ]
  },
  "libro": {
-  "transiciones_club": 1332,
-  "cierre_identidad_max": 1.0125233984581428e-13,
-  "relleno_clave_mediana": 0.9557662670942944,
+  "transiciones_club": 1842,
+  "cierre_identidad_max": 1.0480505352461478e-13,
+  "relleno_clave_mediana": 0.9587873474187477,
   "estrategias_clave": {
-   "externa": 1236,
-   "interna_rol": 76,
-   "interna_minutos": 16
+   "externa": 1662,
+   "interna_rol": 138,
+   "interna_minutos": 27
   },
   "asociacion": [
    {
     "medida": "delta_net_medio",
     "grupo": "externa",
-    "n": 932,
-    "valor": -0.10080815450643778,
-    "ic_lo": -0.44958687231759664,
-    "ic_hi": 0.22665829399141624,
+    "n": 1194,
+    "valor": -0.12693726968174207,
+    "ic_lo": -0.4344349246231155,
+    "ic_hi": 0.18849628978224442,
     "nota": "asociación descriptiva, no causal"
    },
    {
     "medida": "delta_net_medio",
     "grupo": "interna_minutos",
-    "n": 13,
-    "valor": 3.815969230769231,
-    "ic_lo": 2.127297692307692,
-    "ic_hi": 5.650805769230769,
+    "n": 15,
+    "valor": 4.568046666666667,
+    "ic_lo": 2.71829,
+    "ic_hi": 6.287326333333334,
     "nota": "asociación descriptiva, no causal"
    },
    {
     "medida": "delta_net_medio",
     "grupo": "interna_rol",
-    "n": 70,
-    "valor": -3.2169957142857144,
-    "ic_lo": -4.309635928571428,
-    "ic_hi": -2.1422046428571426,
+    "n": 84,
+    "valor": -2.534109523809524,
+    "ic_lo": -3.6544463095238093,
+    "ic_hi": -1.4720796428571428,
     "nota": "asociación descriptiva, no causal"
    },
    {
     "medida": "delta_net_medio",
     "grupo": "todas",
-    "n": 1015,
-    "valor": -0.26555201970443354,
-    "ic_lo": -0.5869853004926109,
-    "ic_hi": 0.03982759113300494,
+    "n": 1293,
+    "valor": -0.2288535189481825,
+    "ic_lo": -0.540406558391338,
+    "ic_hi": 0.06435806651198764,
     "nota": "asociación descriptiva, no causal"
    },
    {
     "medida": "spearman_relleno_delta_net",
     "grupo": "todas",
-    "n": 1015,
-    "valor": -0.0779829836498496,
-    "ic_lo": -0.1290434450463639,
-    "ic_hi": -0.027254542654456405,
+    "n": 1293,
+    "valor": -0.05480255433361912,
+    "ic_lo": -0.1014418578278468,
+    "ic_hi": -0.008588494244530212,
     "nota": "asociación descriptiva, no causal"
    }
   ]
@@ -146,47 +146,47 @@
  "transiciones": {
   "persistencia": {
    "RESIDUAL": NaN,
-   "PROFUNDIDAD": 0.49184149184149184,
-   "ROTACION": 0.6045548654244306,
-   "TITULAR": 0.6256038647342995,
-   "GO_TO_GUY": 0.6774941995359629
+   "PROFUNDIDAD": 0.4387596899224806,
+   "ROTACION": 0.5633595284872298,
+   "TITULAR": 0.6555935515388374,
+   "GO_TO_GUY": 0.6791171477079796
   },
-  "n_retornos": 3551
+  "n_retornos": 5317
  },
  "calidad_companeros": {
-  "filas": 38824,
-  "con_L_pct": 0.9927106944158253,
+  "filas": 49039,
+  "con_L_pct": 0.9286486266033157,
   "efecto": [
    {
     "produccion": "ts_pct",
-    "pendiente_por_unidad_L": 6.453074067898667,
-    "ic_lo": 5.902797619938948,
-    "ic_hi": 7.045496992878022,
-    "n_filas": 12999,
-    "n_personas": 3731,
+    "pendiente_por_unidad_L": 5.485298386237292,
+    "ic_lo": 5.038595851777933,
+    "ic_hi": 5.939867156696324,
+    "n_filas": 15293,
+    "n_personas": 4421,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "usg_pct",
-    "pendiente_por_unidad_L": -2.3099815386391893,
-    "ic_lo": -2.7017872806214687,
-    "ic_hi": -1.9445408020949397,
-    "n_filas": 13000,
-    "n_personas": 3731,
+    "pendiente_por_unidad_L": -2.369618995611705,
+    "ic_lo": -2.6565418695446597,
+    "ic_hi": -2.0266494189406026,
+    "n_filas": 15294,
+    "n_personas": 4421,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "pts_100",
-    "pendiente_por_unidad_L": 0.8486655712336719,
-    "ic_lo": 0.3662206814607049,
-    "ic_hi": 1.336491751796895,
-    "n_filas": 13000,
-    "n_personas": 3731,
+    "pendiente_por_unidad_L": 0.36496773387412,
+    "ic_lo": -0.10312291688894148,
+    "ic_hi": 0.7490333585924357,
+    "n_filas": 15294,
+    "n_personas": 4421,
     "nota": "asociación dentro de jugador, no causal"
    }
   ]
  },
  "tendencias": {
-  "entrenadores": 949
+  "entrenadores": 1086
  }
 }
