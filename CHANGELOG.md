@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## 2026-11-01 — 20 ligas: CBA, BNXT, NCAA D-I (top-50), NBL y VTB
+
+* Extracción 2020-21 → 2026-27 (corte 29-10-2026) desde el jugada a jugada, con adaptadores que traducen cada partido
+  al data.json de FIBA LiveStats (`bbstats/adapters/{nbl,vtb,ncaa,cba}.py`; BNXT por configuración de FIBA LiveStats).
+  Fuentes, cobertura, controles y huecos: `docs/fuentes_ligas_nuevas.md`.
+* Crosswalk: regla inicial + apellido + fecha de nacimiento. Nacionalidad y fecha de nacimiento de VTB y CBA.
+* Normalización v3.1 rehecha con 20 ligas (tramo de desarrollo NCAA, escalones nuevos), roles, estilos (mapa 3D con
+  la taxonomía unificada), adaptación (grupo `NCAA_a_profesional`) y simulador cruzado; examen y auditorías.
+* Artifact CERNO publicado en la misma URL con las 20 ligas en todas las pestañas (compactación sin pérdida).
+
 ## Lectura de fichaje v3.1 → v3.3 (29-10-2026, publicada en el enlace vigente)
 
 Solo cambia `artifact/atlas/informe_v3.js` (versión publicada 1793286109-fca7). Detalle y verificación:

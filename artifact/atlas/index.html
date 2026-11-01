@@ -1460,7 +1460,11 @@ function percentil(q, v) { if (!q || v == null) return null; if (v <= q[0]) retu
 function js2(p, q) { const kl = (a, b) => a.reduce((s, x, i) => s + x * (Math.log2(x + 1e-12) - Math.log2(b[i] + 1e-12)), 0); const m = p.map((x, i) => (x + q[i]) / 2); return 0.5 * kl(p, m) + 0.5 * kl(q, m); }
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const XYZ = (r) => [r.x, r.y, r.z];
-const eNom = (k) => META.estilos[k].nombre;
+// k = índice del estilo del mapa; con el mapa unificado, los análisis del modelo VaDE siguen refiriéndose a sus perfiles
+// por id («E01»…): eIdx devuelve entonces ese id y eNom/glyph lo rotulan «Perfil de mapa X» (sin color de estilo)
+const eIdx = (id) => { const k = META.estilos.findIndex((s) => s.id === id); return k >= 0 ? k : id; };
+const eNom = (k) => { if (typeof k === "string") { const i = (META.estilos_vade || []).findIndex((s) => s.id === k); return i >= 0 ? "Perfil de mapa " + "ABCDEFGH"[i] : k; }
+  const s = META.estilos[k]; return s ? s.nombre : "sin estilo"; };
 
 // ---- escalas ±100 del Atlas (sobre el bloque compartido ESC)
 // Nivel de club: el índice de club (8 métricas de caja de la plantilla) se pasa a L de jugador con la recta que mejor une
@@ -1520,7 +1524,7 @@ const parBanda = (v) => v >= 80 ? [4, "muy parecidos"] : v >= 60 ? [3, "parecido
 const variedad = (p) => p == null ? "–" : p < 33 ? "Muy homogénea" : p < 66 ? "Normal" : p < 80 ? "Variada" : "Muy variada";
 const durPartido = (liga) => (liga === "nba" || liga === "gleague" ? 48 : 40) * 5;
 const argmax = (v) => v.indexOf(Math.max(...v));
-function glyph(k, s = 12) { return `<span class="sw" style="background:${COL[k]};width:${s}px;height:${s}px"></span>`; }
+function glyph(k, s = 12) { return `<span class="sw" style="background:${typeof k === "number" && COL[k] ? COL[k] : "var(--faint)"};width:${s}px;height:${s}px"></span>`; }
 function chipE(k, p) { return `<span class="st"${p != null ? ` data-tip="Afinidad con «${esc(eNom(k))}»: ${afin(p)} de 100 (${claridad(p)}). Es la salida de la red para ese estilo; las 6 afinidades suman 100."` : ""}>${glyph(k)}${esc(eNom(k))}${p != null ? ` <span class="muted num">${afin(p)}</span>` : ""}</span>`; }
 
 // ---------------------------------------------------------------- entidades del comparador (clubes y ligas)
@@ -1563,7 +1567,14 @@ function unificarMapa() {
     else { o.e = -1; o.x = o.y = o.z = NaN; } };
   CL.forEach((c) => { pasar(c); (Array.isArray(c.entrenadores) ? c.entrenadores : []).forEach(pasar); });
   JG.forEach(pasar);
-  META.estilos.forEach((s, k) => { s.clubes = CL.filter((c) => c.e === k && !c.provisional).length; });
+  // perfil (media de los rasgos de entrada de sus clubes), reparto por ligas y nivel medio de cada estilo unificado
+  META.estilos.forEach((s, k) => {
+    const cs = CL.filter((c) => c.e === k && !c.provisional), n = cs.length || 1;
+    s.clubes = cs.length;
+    s.perfil = META.rasgos.map((_, i) => cs.reduce((a, c) => a + (Array.isArray(c.X) && fin(c.X[i]) ? c.X[i] : 0), 0) / n);
+    s.ligas = {}; cs.forEach((c) => { s.ligas[c.liga] = (s.ligas[c.liga] || 0) + 1 / n; });
+    const nv = cs.map((c) => c.nivel).filter(fin); s.nivel_medio = nv.length ? nv.reduce((a, b) => a + b, 0) / nv.length : null;
+  });
   const DX = U.desde_x;
   if (DX && DX.W_xyz) {
     red = (x) => {
@@ -1732,7 +1743,7 @@ function pintarResumen() {
   if (A.barrido_k) { const x = A.barrido_k, ic = x.k_optimo_icl_rasgos, bi = x.k_optimo_bic_rasgos;
     F.push(`${KE} perfiles es lo que piden los datos: el ICL sobre los ${META.rasgos.length} rasgos elige ${ic}${bi !== ic ? ` (el BIC, que no penaliza los grupos solapados, llegaría a ${bi})` : ""}, y el modelo de ${KE} es más estable que los de 12 y 8 que se probaron antes (ver «Hallazgos y modelo»).`); }
   F.push(`El estilo no mide calidad: sólo explica el ${pct(ev.eta2_nivel, 1)} del nivel del club${v1 ? ` (en la primera versión, sin neutralizar, el ${pct(v1.eta2_nivel, 0)})` : ""}, y apenas depende de la liga (NMI ${fmt(ev.nmi_estilo_liga, 2)}).`);
-  if (A.exito) { const x = A.exito, sig = x.p_estilo_dado_nivel < 0.05, por = x.por_estilo.slice().sort((a, b) => b.resid - a.resid), id = (r) => META.estilos.findIndex((s) => s.id === r.estilo);
+  if (A.exito) { const x = A.exito, sig = x.p_estilo_dado_nivel < 0.05, por = x.por_estilo.slice().sort((a, b) => b.resid - a.resid), id = (r) => eIdx(r.estilo);
     F.push(sig ? `A igual nivel, el estilo sí se asocia con ganar (η² parcial ${pct(x.eta2_parcial_estilo, 0)}, ${pv(x.p_estilo_dado_nivel)}): «${esc(eNom(id(por[0])))}» suma ${sg(por[0].resid)} σ de net rating y «${esc(eNom(id(por[por.length - 1])))}» resta ${fmt(Math.abs(por[por.length - 1].resid), 2)} σ.` : `A igual nivel, el estilo no se asocia con el net rating (${pv(x.p_estilo_dado_nivel)}).`); }
   if (A.encaje) { const x = A.encaje["d_nivel~distancia"]; F.push(`Parecerse al estilo del nuevo club no mejora el rendimiento del jugador (${A.encaje.casos.toLocaleString("es-ES")} cambios de club; ${x.coef > 0 && x.p < 0.05 ? `quien llega a un estilo más distinto mejora algo más, ${pv(x.p)}` : `sin efecto, ${pv(x.p)}`}): el encaje sirve para decidir entre reforzar la identidad o cubrir un rasgo, no para predecir rendimiento.`); }
   if (A.continuidad) F.push(`La continuidad sostiene la identidad: cada 10 puntos más de minutos que repiten multiplican por ${fmt(A.continuidad.or_mismo_estilo_por_10pp, 2)} la probabilidad de conservar el estilo (${pv(A.continuidad.p_logit)}).`);
@@ -1746,7 +1757,7 @@ function pintarResumen() {
   const al = META.clubes_con_nombre.baskonia, claves = al ? al.claves : [];
   const bk = (A.baskonia && A.baskonia.temporadas) || [];
   const ult = (l) => [...bk].reverse().find((r) => r.liga === l && !r.provisional);
-  const lin = claves.map((k) => { const l = k.split(":")[0], r = ult(l); if (!r) return ""; const e = META.estilos.findIndex((s) => s.id === r.estilo);
+  const lin = claves.map((k) => { const l = k.split(":")[0], r = ult(l); if (!r) return ""; const e = eIdx(r.estilo);
     return `<div style="display:grid;gap:4px"><span class="label">${LIGAS[l]} ${r.temporada}</span><div>${chipE(e, r.p)}</div><p class="note">Más parecidos: ${r.mas_parecidos.slice(0, 3).map((m) => `${esc(m.club)} (${LC[m.liga]}, ${fmt(m.d)})`).join(", ")}.</p></div>`; }).join("");
   const tira = claves.map((k) => { const l = k.split(":")[0]; return `<div style="display:grid;gap:4px"><span class="note">${LIGAS[l]}</span><div class="strip">${TEMPS.map((t) => { const c = BY.get(`${k}:${t}`); return c ? `<div class="cell" data-tip="${esc(LIGAS[l])} ${t}: ${esc(eNom(c.e))} (p ${fmt(c.p)})${c.provisional ? " · provisional" : ""}"><i style="background:${COL[c.e]};${c.provisional ? "opacity:.45" : ""}"></i><small>${tC(t)}</small></div>` : ""; }).join("")}</div></div>`; }).join("");
   $("#bask").innerHTML = `<h3>Saski Baskonia</h3>${lin}<span class="label">Trayectoria de perfiles del mapa</span>${tira}`;
@@ -2200,7 +2211,7 @@ function pintarLigas() {
 function pintarTrayectoria() {
   const bk = (META.analisis && META.analisis.baskonia && META.analisis.baskonia.temporadas) || [];
   $("#trTabla").innerHTML = `<thead><tr><th>Temporada</th><th>Competición</th><th>Estilo</th><th style="text-align:right">Nivel</th><th>Clubes más parecidos esa temporada</th><th style="text-align:right">Cambio de estilo frente al año anterior</th></tr></thead><tbody>` +
-    bk.map((r) => { const k = META.estilos.findIndex((s) => s.id === r.estilo); return `<tr><td class="num">${r.temporada}${r.provisional ? "*" : ""}</td><td>${LIGAS[r.liga]}</td><td>${chipE(k, r.p)}</td><td class="n">${sg(r.nivel)}</td><td class="note">${r.mas_parecidos.slice(0, 3).map((m) => `${esc(m.club)} (${LC[m.liga]}, ${fmt(m.d)})`).join(", ")}</td><td class="n">${r.desplazamiento != null ? `<span data-tip="Desplazamiento ${fmt(r.desplazamiento)} en el mapa (percentil ${fmt(r.pct_desplazamiento, 0)} entre parejas de clubes)">${CAMBIO[banda(r.pct_desplazamiento)][0]}</span> <span class="muted">p${fmt(r.pct_desplazamiento, 0)}</span>` : "–"}</td></tr>`; }).join("") + `</tbody>`;
+    bk.map((r) => { const k = eIdx(r.estilo); return `<tr><td class="num">${r.temporada}${r.provisional ? "*" : ""}</td><td>${LIGAS[r.liga]}</td><td>${chipE(k, r.p)}</td><td class="n">${sg(r.nivel)}</td><td class="note">${r.mas_parecidos.slice(0, 3).map((m) => `${esc(m.club)} (${LC[m.liga]}, ${fmt(m.d)})`).join(", ")}</td><td class="n">${r.desplazamiento != null ? `<span data-tip="Desplazamiento ${fmt(r.desplazamiento)} en el mapa (percentil ${fmt(r.pct_desplazamiento, 0)} entre parejas de clubes)">${CAMBIO[banda(r.pct_desplazamiento)][0]}</span> <span class="muted">p${fmt(r.pct_desplazamiento, 0)}</span>` : "–"}</td></tr>`; }).join("") + `</tbody>`;
 }
 function barras(s) {
   const W = 320, rh = 14, H = META.rasgos.length * rh + 6, x0 = 104, w2 = (W - x0 - 8) / 2, mid = x0 + w2, lim = 2;
@@ -2218,7 +2229,7 @@ function pintarHallazgos() {
   const out = [];
   if (A.exito) { const x = A.exito, por = x.por_estilo.slice().sort((a, b) => a.estilo.localeCompare(b.estilo)), W = 360, rh = 24, H = por.length * rh + 30, x0 = 120, lim = 0.8, X = (v) => x0 + (Math.max(-lim, Math.min(lim, v)) + lim) / (2 * lim) * (W - x0 - 10);
     let g = `<line x1="${X(0)}" x2="${X(0)}" y1="4" y2="${H - 18}" stroke="${DK ? "#3B434C" : "#C2C3BF"}"/><text x="${X(-lim)}" y="${H - 4}" font-size="10" font-family="Geist Mono, system-ui, sans-serif" fill="${MUTED}">−${lim}σ</text><text x="${X(lim)}" y="${H - 4}" text-anchor="end" font-size="10" font-family="Geist Mono, system-ui, sans-serif" fill="${MUTED}">+${lim}σ</text>`;
-    por.forEach((r, i) => { const k = META.estilos.findIndex((s) => s.id === r.estilo), y = 8 + i * rh;
+    por.forEach((r, i) => { const k = eIdx(r.estilo), y = 8 + i * rh;
       g += `<text x="${x0 - 6}" y="${y + 9}" text-anchor="end" font-size="11" font-family="Mona Sans, system-ui, sans-serif" fill="${INK}">${esc(eNom(k))}</text><line x1="${X(r.resid - r.ic95)}" x2="${X(r.resid + r.ic95)}" y1="${y + 5}" y2="${y + 5}" stroke="${COL[k]}" stroke-width="2"/><circle cx="${X(r.resid)}" cy="${y + 5}" r="5" fill="${COL[k]}" stroke="${SURF}" stroke-width="2" data-tip="${esc(eNom(k))}: ${sg(r.resid, 3)} σ (±${fmt(r.ic95, 3)}), n = ${r.n}"/>`; });
     out.push(`<div class="fact"><h3>¿Hay estilos ganadores a igual nivel?</h3><p>Net rating del equipo (z en su liga y temporada) que no explica el nivel, por estilo, con IC 95 %. ${x.p_estilo_dado_nivel < 0.05 ? `El estilo añade información (F = ${fmt(x.f_estilo_dado_nivel, 1)}, ${pv(x.p_estilo_dado_nivel)}, η² parcial ${pct(x.eta2_parcial_estilo, 1)}).` : `El estilo no añade información significativa (${pv(x.p_estilo_dado_nivel)}).`} El nivel sólo explica el ${pct(x.r2_nivel, 0)} del net rating. Parte de la asociación es mecánica: el triple de esquina, el tiro en el aro, las pérdidas y el rebote son factores de eficiencia.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net rating residual por estilo">${g}</svg></div>`); }
   if (A.encaje) { const x = A.encaje, t = x.por_tercil, a = x["d_nivel~distancia"], b = x["d_cuota~distancia"];

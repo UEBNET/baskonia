@@ -98,3 +98,34 @@ Control contra los recuentos oficiales (Wikipedia + betexplorer; `scratchpad/son
   «doméstica media» = BNXT y CBA; escalón propio «universitaria» = NCAA.
 * **Adaptación:** grupo nuevo `NCAA_a_profesional` (va primero; Python y simulador JS).
 * **Nivel provisional — DECISIÓN:** las ligas con pocos puentes se muestran con marca de nivel provisional.
+
+## 7. Resultados con las 20 ligas (cadena completa del 01-11-2026) [DATO]
+
+Cadena: `scripts/actualizar_20ligas.sh` (copia aislada, reanudable por pasos) e importación con
+`scripts/importar_20ligas.sh`. La v3.1 de 15 ligas (`data/modelos/v3_1_20261029`) se retira (historial de git);
+la nueva es `data/modelos/v3_1_20261031` (enlace a `v3_1`).
+
+* **Niveles A (PER, DT de la EuroLeague, temporada de referencia 2025-26), puentes y error típico:** ACB −0,41;
+  NCAA −0,61 (484 puentes, ±0,07); NBL −0,67 (183, ±0,09); VTB −0,95 (327, ±0,08); BNXT −1,40 (202, ±0,08);
+  CBA −1,51 (88, ±0,12). La CBA tiene puentes gracias a la regla inicial + apellido + fecha de nacimiento.
+* **Nivel provisional** (regla fijada de antemano: < 50 puentes o error típico del nivel PER > 0,25 σ): con los datos
+  completos ninguna liga lo cumple; la marca queda en la Mesa (ranking y ficha de normalización) para cuando ocurra.
+* **Desarrollo NCAA:** la deriva NCAA → NCAA estimada es ≈ 0 (pts/100 +0,01, PER −0,03). [LECTURA] Con métricas
+  relativas a la propia liga, quien repite curso apenas progresa frente a la media (y los que más progresan se van):
+  el tramo propio evita además que la deriva adulta se aplique a los universitarios.
+* **Simulador v3.1 cruzado** (las 20 ligas como origen y destino; examen temporal 2021-22 → 2024-25, 6.028
+  fichajes): MAE de minutos 4,87; acierto de rol 0,431; MAE de pts/100 3,91; cobertura del 90 % en pts/100 0,86.
+  Por segmentos (cálculo directo sobre `predicciones.csv.gz`): entre las 15 ligas anteriores MAE de minutos 4,82;
+  con origen o destino en una liga nueva 5,46 (NCAA y CBA, las más difíciles). Auditorías: 0 fallos.
+* **Mapa 3D del Atlas:** agrupado con los 6 estilos unificados (LDA de los 12 rasgos; acierto 0,81); los equipos que
+  calcula el navegador usan la aplicación lineal exportada (`estilos_unificados.desde_x`).
+
+## 8. Artifact (límite de 256 MB por versión)
+
+Con 20 ligas los datos no cabían (306 MB). Se publicó sin perder lo que leen las páginas:
+`artifact/herramientas/compactar.py` (tablas por columnas a 4 cifras significativas; fuera las columnas `_am` de los
+normalizados, copias exactas; normalizados y explorador con ≥ 100 minutos, el filtro por defecto de la Mesa),
+`artifact/empaquetar.py` con zopfli (gzip estándar ≈ 4 % menor) y sin la evaluación de ligas de la fase de playoffs
+(la de regular y total, completa). Versión publicada: 235 ficheros, ≈ 247 MB. El generador de la evaluación de
+equipos de Quintetos (`artifact/herramientas/gen_equipos_quintetos.py`) se reconstruyó (no estaba en el repositorio)
+y se comprobó contra la versión publicada.
