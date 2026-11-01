@@ -501,6 +501,7 @@ td.nac.otra { color: var(--muted); }
 .nl-cell { display: grid; font: 500 13.5px var(--f-data); text-align: right; font-variant-numeric: tabular-nums; }
 .nl-cell small { font: 600 9px var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .nl-chip { font-weight: 600; }
+.nl-prov { margin-left: 8px; font: 600 9.5px var(--f-data); letter-spacing: .08em; text-transform: uppercase; color: var(--warn-ink); background: var(--warn-bg); border: 1px dashed var(--warn-line); border-radius: 2px; padding: 1px 6px; white-space: nowrap; }
 @media (max-width: 760px) {
   .nl-rrow { grid-template-columns: 28px repeat(3, minmax(0, 1fr)) 64px; grid-template-areas: "p n n n d" "b b b b b" "c1 c1 c2 c3 c3"; row-gap: 8px; column-gap: 8px; }
   .nl-pos { grid-area: p; } .nl-lname { grid-area: n; } .nl-dval { grid-area: d; } .nl-dbar { grid-area: b; }
@@ -2714,6 +2715,11 @@ function nlPrepare() {
     info[l] = { l, d: nAB ? Math.sqrt(sAB / nAB) : null, dA: nA ? Math.sqrt(sA / nA) : null, dB: nB ? Math.sqrt(sB / nB) : null, n: nAB,
       per: nlLevel("per", l), puentes: l === "euroleague" ? puentesTot : puentesEL[l] || 0,
       p50: eq && eq.AB ? eq.AB[2] : null, p90: eq && eq.AB ? eq.AB[4] : null, top: imp ? imp.pctAB_top : null, nTop: imp ? imp.n_top : null };
+    // nivel provisional (decisión del usuario, 31-10-2026): pocos jugadores puente (< 50 en el algoritmo A) o nivel muy
+    // incierto (error típico del nivel PER > 0,25 σ). Regla fijada de antemano; se muestra la marca, no se oculta la liga.
+    const pA = ((R.A && R.A.nivel && R.A.nivel.per) || {})[l], nPu = pA ? pA[4] : 0, se = info[l].per ? info[l].per.ase : 0;
+    info[l].prov = l !== "euroleague" && ((nPu || 0) < 50 || (se || 0) > 0.25);
+    info[l].provTxt = info[l].prov ? `Nivel provisional: ${(nPu || 0) < 50 ? `sólo ${nPu || 0} jugadores puente` : `error típico del nivel ±${evN(se, 2)} σ`}. La estimación puede moverse al llegar más datos.` : "";
   });
   nlSt.info = info;
   nlSt.rank = R.ligas.filter((l) => l !== "euroleague" && info[l].d != null).sort((a, b) => info[a].d - info[b].d);
@@ -2753,7 +2759,7 @@ function nlRank() {
     const f = I[l], ref = l === "euroleague";
     return `<button type="button" role="listitem" class="nl-rrow${l === nlSt.sel ? " on" : ""}${ref ? " ref" : ""}" data-nlsel="${l}" aria-pressed="${l === nlSt.sel}">
       <span class="nl-pos">${ref ? "ref." : k + 1}</span>
-      <span class="nl-lname"><i class="evsw" style="background:${EV_COL[l]}"></i>${esc(nlLg(l))}</span>
+      <span class="nl-lname"><i class="evsw" style="background:${EV_COL[l]}"></i>${esc(nlLg(l))}${f.prov ? ` <span class="nl-prov" data-tip="${esc(f.provTxt)}" title="${esc(f.provTxt)}">Provisional</span>` : ""}</span>
       <span class="nl-dbar">${ref ? `<span class="nl-reftxt">Vara de medir</span>` : `<i class="fill" style="width:${pct(f.d)}%"></i>${f.dA != null ? `<u class="tA" style="left:${pct(f.dA)}%" title="Algoritmo A: ${evN(f.dA, 2)} σ"></u>` : ""}${f.dB != null ? `<u class="tB" style="left:${pct(f.dB)}%" title="Algoritmo B: ${evN(f.dB, 2)} σ"></u>` : ""}`}</span>
       <span class="nl-dval">${ref ? "0" : evN(f.d, 2)}<small> σ</small></span>
       <span class="nl-cell"><small>Nivel PER</small>${ref ? "0" : lvl(f.per.AB)}</span>
@@ -2803,7 +2809,7 @@ function nlFicha() {
   const lead = ref
     ? `La EuroLeague es la vara de medir: nivel 0 en todas las métricas. Su ficha sirve de control. Sus mejores jugadores también bajan al traducirlos (quitar la suerte de una gran temporada), así que ese descenso hay que restarlo al de cualquier otra liga.`
     : `Más parecida a la EuroLeague en ${near}. Donde más se aleja: ${far} (σ, A+B).`;
-  $("nlFichaBody").innerHTML = `
+  $("nlFichaBody").innerHTML = (f.prov ? `<div class="ev-warn" role="note">${esc(f.provTxt)}</div>` : "") + `
     <div class="nl-fhead"><h3><i class="evsw" style="background:${EV_COL[l]}"></i>${esc(nlLg(l))}</h3><p>${lead}</p></div>
     <div class="nl-tiles">${tiles.map(([a, b, c]) => `<div><span>${a}</span><b>${b}</b>${c ? `<small>${c}</small>` : ""}</div>`).join("")}</div>
     ${T.texto ? `<p class="nl-scout"><span class="label">Lectura</span>${T.texto}</p>` : ""}
