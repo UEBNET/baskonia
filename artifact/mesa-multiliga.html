@@ -1229,11 +1229,18 @@ const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<
 // tamaño); si no existe (servidor local) se lee el .json tal cual.
 async function _jsonDe(r) {
   const txt = (await r.text()).trim();
-  if (!txt.startsWith("H4sI")) return JSON.parse(txt);
+  if (!txt.startsWith("H4sI")) return porFilas(JSON.parse(txt));
   const bin = atob(txt), u8 = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
   if (typeof DecompressionStream === "undefined") throw new Error("este navegador no sabe descomprimir gzip (DecompressionStream)");
-  return JSON.parse(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
+  return porFilas(JSON.parse(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).text()));
+}
+// tablas compactadas por columnas (artifact/herramientas/compactar.py): {columnas, por_columna} → {columnas, filas}
+function porFilas(d) {
+  if (!d || !Array.isArray(d.por_columna) || d.filas) return d;
+  const C = d.por_columna, n = C.length ? C[0].length : 0, filas = new Array(n);
+  for (let i = 0; i < n; i++) { const f = new Array(C.length); for (let j = 0; j < C.length; j++) f[j] = C[j][i]; filas[i] = f; }
+  d.filas = filas; delete d.por_columna; return d;
 }
 async function cargarJSON(path) {
   try { const r = await fetch(path + ".gz.txt"); if (r.ok) return await _jsonDe(r); } catch (e) { /* sin versión comprimida */ }

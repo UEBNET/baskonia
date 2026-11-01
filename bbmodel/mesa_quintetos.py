@@ -86,6 +86,18 @@ def _opcional(ruta: str, temporada: str) -> pd.DataFrame:
     return pd.read_csv(p, dtype={"player_id": str, "team_id": str}, low_memory=False) if p.exists() else pd.DataFrame()
 
 
+def _equipos_alcance(liga: str, temporada: str) -> set[str] | None:
+    """Equipos que la liga incluye en sus salidas cuando sólo cubre una parte de la competición (NCAA: top-50 del
+    T-Rank de la temporada, config/sources.json → ligas.ncaa.temporadas.<t>.top50). None = todos."""
+    try:
+        cfg = json.loads((Path(__file__).resolve().parent.parent / "config" / "sources.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    t = ((cfg.get("ligas", {}).get(liga) or {}).get("temporadas") or {}).get(temporada) or {}
+    top = t.get("top50")
+    return {str(x.get("espn_id")) for x in top if isinstance(x, dict)} if isinstance(top, list) else None
+
+
 def exportar_liga(liga: str, temporada: str, extras: dict) -> dict | None:
     d = DIR_PROC / temporada / "quintetos" / liga
     if not d.exists():
@@ -99,6 +111,12 @@ def exportar_liga(liga: str, temporada: str, extras: dict) -> dict | None:
     pa = _leer(d / "parejas.csv.gz", dtype={"team_id": str, "jugador_a_id": str, "jugador_b_id": str})
     asi = _leer(d / "asistencias.csv", dtype={"team_id": str, "pasador_id": str, "receptor_id": str})
     eqp = _leer(d / "equipos.csv", dtype={"team_id": str})
+    alcance = _equipos_alcance(liga, temporada)
+    if alcance:     # NCAA: sólo los equipos del top-50 (los rivales estaban para saber quién está en pista)
+        jug, q5, q3, pa, asi, eqp = (x[x["team_id"].isin(alcance)] if "team_id" in x else x
+                                     for x in (jug, q5, q3, pa, asi, eqp))
+        if jug.empty:
+            return None
     val = _leer(d / "validacion.csv")
 
     # catálogo de jugadores (índice compacto)

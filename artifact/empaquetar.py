@@ -25,12 +25,24 @@ UMBRAL = 256 * 1024
 MAX_LOTE, MAX_FICHEROS = 58e6, 250
 
 
+def _gzip(b: bytes) -> bytes:
+    """gzip estándar (lo descomprime DecompressionStream); con zopfli, si está instalado, ≈ 4 % más pequeño (20 ligas:
+    la versión del Artifact no puede pasar de 256 MB)."""
+    try:
+        import zopfli.gzip as zg
+        return zg.compress(b, numiterations=1)
+    except ImportError:
+        return gzip.compress(b, 9)
+
+
 def mapa() -> dict[str, Path]:
+    # (el Atlas enlaza atlas/articulo/estilos_de_juego_vade.pdf, ya publicado: no se vuelve a subir)
     m = {"atlas/index.html": RAIZ / "artifact/atlas/index.html",
-         "quintetos/index.html": RAIZ / "artifact/quintetos/index.html",
-         "atlas/articulo/estilos_de_juego_baskonia.pdf": RAIZ / "docs/articulo/estilos_de_juego_baskonia.pdf"}
+         "quintetos/index.html": RAIZ / "artifact/quintetos/index.html"}
     for p in sorted((DA / "atlas" / "estilos").glob("*.json")):
         m[f"atlas/estilos/{p.name}"] = p
+    for p in sorted((DA / "atlas" / "informe").glob("*.json")):      # lectura de fichaje (bbestilo informe)
+        m[f"atlas/informe/{p.name}"] = p
     m["atlas/simulador_v2.js"] = RAIZ / "artifact/atlas/simulador_v2.js"        # motor del simulador de encaje v2.1 (rol asignado)
     m["atlas/informe_v3.js"] = RAIZ / "artifact/atlas/informe_v3.js"            # lectura de fichaje (informe PDF v3)
     # estilos unificados para Equipos y quintetos (generados con artifact/herramientas/gen_eu_*.py)
@@ -47,6 +59,9 @@ def mapa() -> dict[str, Path]:
             m[f"datos/{nombre}"] = DA / nombre
     for p in sorted(DA.rglob("*.json")):
         rel = p.relative_to(DA).as_posix()
+        if p.name == "evaluacion_playoffs.json":
+            continue    # 20 ligas: no cabe en los 256 MB de una versión; la fase de playoffs tiene pocos jugadores por
+            #             liga (la evaluación de regular y total se publica entera; la página ya lo trata como en 2026-27)
         if rel.split("/")[0][:2] == "20" or rel.startswith(("normalizados/", "normalizacion/")):
             m[f"datos/{rel}"] = p
     return m
@@ -62,7 +77,7 @@ def main(salida: str) -> None:
         if src.suffix == ".json":
             dst = comp / (pub.replace("/", "__") + ".gz.txt")
             if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
-                dst.write_bytes(base64.b64encode(gzip.compress(src.read_bytes(), 9)))
+                dst.write_bytes(base64.b64encode(_gzip(src.read_bytes())))
             final[pub + ".gz.txt"] = dst
             if src.stat().st_size > UMBRAL:
                 borrar.append(pub)
