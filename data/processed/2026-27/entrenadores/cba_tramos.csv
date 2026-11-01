@@ -1,0 +1,21 @@
+liga,temporada,equipo_id,equipo,orden,entrenador_id,entrenador,n_partidos,n_regular,n_playoffs,n_otras,n_imputados,primer_partido,ultimo_partido,victorias,derrotas,victorias_regular,derrotas_regular,victorias_playoffs,derrotas_playoffs,n_tramos_consecutivos,interino,entrenadores_equipo,validacion_vd,fuente,partidos_ids
+cba,2026-27,40309,Shanghai,1,chunjiang-li,Chunjiang Li,5,5,0,0,0,2026-10-16,2026-10-26,4,1,4,1,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110655;100110739;100110839;100110899;100110946
+cba,2026-27,40314,Shenzhen,1,biao-qiu,Biao Qiu,5,5,0,0,0,2026-10-16,2026-10-28,2,3,2,3,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110655;100110746;100110842;100110935;100110963
+cba,2026-27,40321,Jiangsu,1,nan-li,Nan Li,6,6,0,0,0,2026-10-17,2026-10-29,1,5,1,5,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110666;100110746;100110854;100110929;100110951;100110966
+cba,2026-27,40307,Fujian,1,shilong-zhu,Shilong Zhu,6,6,0,0,0,2026-10-17,2026-10-29,3,3,3,3,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110666;100110757;100110820;100110899;100110951;100110965
+cba,2026-27,61596,Ningbo,1,ke-li,Ke Li,5,5,0,0,0,2026-10-17,2026-10-26,0,5,0,5,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110677;100110776;100110820;100110894;100110944
+cba,2026-27,40323,Beikong,1,buli-ma,Buli Ma,6,6,0,0,0,2026-10-17,2026-10-29,4,2,4,2,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110677;100110739;100110854;100110935;100110949;100110964
+cba,2026-27,40304,Sichuan,1,kui-yin,Kui Yin,6,6,0,0,0,2026-10-17,2026-10-29,2,4,2,4,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110682;100110768;100110861;100110943;100110957;100110964
+cba,2026-27,40316,Tianjin,1,degui-zhang,Degui Zhang,5,5,0,0,0,2026-10-17,2026-10-27,1,4,1,4,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110682;100110787;100110877;100110925;100110953
+cba,2026-27,40310,Xinjiang,1,adijiang,Adijiang,6,6,0,0,0,2026-10-17,2026-10-29,3,3,3,3,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110691;100110787;100110831;100110911;100110958;100110968
+cba,2026-27,40320,Qingdao,1,qinglong-wu,Qinglong Wu,6,6,0,0,0,2026-10-17,2026-10-29,2,4,2,4,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110691;100110794;100110888;100110918;100110953;100110967
+cba,2026-27,40305,Guangsha,1,bo-wang,Bo Wang,5,5,0,0,0,2026-10-17,2026-10-27,3,2,3,2,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110698;100110757;100110827;100110903;100110961
+cba,2026-27,40317,Shanxi,1,xuezeng-yang,Xuezeng Yang,5,5,0,0,0,2026-10-17,2026-10-28,3,2,3,2,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110698;100110776;100110839;100110929;100110963
+cba,2026-27,40322,Nanjing,1,xirelijiang,Xirelijiang,6,6,0,0,0,2026-10-18,2026-10-29,2,4,2,4,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110709;100110763;100110869;100110918;100110957;100110968
+cba,2026-27,40313,Guangdong,1,feng-du,Feng Du,6,6,0,0,0,2026-10-18,2026-10-29,3,3,3,3,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110709;100110783;100110827;100110894;100110946;100110966
+cba,2026-27,40315,Longshi,1,shiqiang-guo,Shiqiang Guo,5,5,0,0,0,2026-10-18,2026-10-27,3,2,3,2,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110717;100110763;100110877;100110941;100110949
+cba,2026-27,40312,Zhejiang,1,weiwei-liu,Weiwei Liu,5,5,0,0,0,2026-10-18,2026-10-27,4,1,4,1,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110717;100110801;100110888;100110943;100110958
+cba,2026-27,40318,Shandong,1,changsuo-xu,Changsuo Xu,6,6,0,0,0,2026-10-18,2026-10-29,2,4,2,4,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110724;100110801;100110869;100110925;100110955;100110965
+cba,2026-27,40308,Liaoning,1,wuge,Wuge,5,5,0,0,0,2026-10-18,2026-10-27,4,1,4,1,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110724;100110794;100110861;100110911;100110961
+cba,2026-27,40311,Jilin,1,han-wang,Han Wang,5,5,0,0,0,2026-10-18,2026-10-26,3,2,3,2,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110729;100110768;100110831;100110903;100110944
+cba,2026-27,40319,Beijing,1,yanisi,Yanisi,6,6,0,0,0,2026-10-18,2026-10-29,6,0,6,0,0,0,1,0,1,,"Sina (主教练, entrenador por partido)",100110729;100110783;100110842;100110941;100110955;100110967
