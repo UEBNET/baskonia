@@ -64,13 +64,17 @@ escalones:                      # mismos escalones que configs/normalization.yam
 
 prediccion:
   muestras: 200                 # Monte Carlo por jugador (posterior de z, de μ, η, equipo, ψ y ruido de muestra)
-  margen_soporte: 0.25          # el valor traducido se acota al rango observado en la liga de destino ± 0,25 DT
+  margen_soporte: 0.25          # soporte = rango observado en la liga de destino ± 0,25 DT
+  recorte_centro: false         # v3.2 (§11c): el soporte sólo marca la extrapolación; no recorta el centro (la
+                                # distancia fuera del soporte se suma como varianza)
   intervalo: 0.80
 
 combinacion:                    # mezcla de la v2 (<m>_am) y la CVAE, en la escala de trabajo de cada métrica
   peso_v3: 0.5                  # reparto general de la v3.1 (punto de partida y valor para métricas sin decisión)
   peso_por_metrica: true        # B2: peso de la CVAE por métrica, elegido con cortes anidados entre pesos_candidatos
-                                # (mínimo MAE de la métrica en los cortes anteriores; empate → el más cercano a 0,5)
+  peso_por: metrica             # §9 (02-11-2026): ŵ = argmin MAE en los cortes anteriores, pero sólo se aparta de 0,5
+  mejora_minima: 0.01           # si IC95,sup[MAE(ŵ)/MAE(0,5) − 1] < −1 % (bootstrap por persona × corte)
+  bootstrap: 1000
   min_temporadas_liga: 2        # salvaguarda: liga de origen o destino con < 2 temporadas en el ajuste → sólo v2
   max_discrepancia_redes: 0.5   # salvaguarda: sd entre las 5 redes de la CVAE > 0,5 DT en esa métrica → sólo v2
   ligas_conocimiento: [feb3]    # ajuste ESPECÍFICO por conocimiento previo (con sobreajuste asumido por el CEO; igual
@@ -102,9 +106,21 @@ ablacion:                       # B1 + B4 + B6 (bbnorm3/ablacion.py)
   cortes_decision: [2022, 2023, 2024]  # cortes anidados: la decisión que se aplica en t usa sólo los cortes < t
   hilos: 1                      # hilos de torch por proceso (4 procesos × 1 hilo ≈ 4,6 veces más rápido que 1 × 4)
   procesos: 4
-  # pieza: variante SIN la pieza (cambios sobre esta configuración). Regla (fijada de antemano): la pieza se quita si
-  # quitarla no empeora de forma significativa: IC 95 % bootstrap por persona de MAE_sin/MAE_con − 1 con extremo
-  # inferior ≤ 0, y la cobertura media del 80 % (recalibrada) de la variante sin la pieza sigue en cobertura_objetivo.
+  # Regla (criterios matemáticos del 02-11-2026, §8, aprobados ANTES de ver resultados; sustituye a la navaja
+  # «IC95,inf ≤ 0» del primer plan): se evalúa la MEZCLA con peso fijo 0,5 (no la red sola), con la media por
+  # familias de métricas y un bootstrap anidado (personas × corte y semillas con reemplazo, por separado para «con» y
+  # «sin»). Se QUITA la pieza si IC95,sup(Δ_mezcla) < margen (no inferioridad), la cobertura recalibrada del 80 % sin
+  # ella sigue en cobertura_objetivo y pasan las salvaguardas (ciclo: todas; niveles: obligatoria para la IPW). Se
+  # CONSERVA si IC95,inf > 0; entre medias, «indeterminada» (se conserva). Si se quitan ≥ 2 piezas, la combinación
+  # debe cumplir la regla frente a la completa en el corte siguiente (si no, se reincorporan una a una).
+  evaluar_sobre: mezcla_w05
+  media: familias               # bbnorm3.ablacion.FAMILIAS (7 familias de las 33 métricas)
+  margen: 0.005                 # no inferioridad: +0,5 %
+  bootstrap: 1000
+  bootstrap_semillas: true
+  salvaguardas: {ciclo_ratio: 1.25, ciclo_umbral_dt: 0.5, niveles_sd: 1.0}
+  salvaguarda_niveles_obligatoria: [ipw]
+  # pieza: variante SIN la pieza (cambios sobre esta configuración)
   piezas:
     ciclo: {entrenamiento.ciclo_peso: 0.0}
     film: {red.film: false}

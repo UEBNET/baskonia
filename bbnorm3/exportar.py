@@ -173,7 +173,8 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
     from .flujo import DIR_CACHE, _huella
     for i_red, (m, P) in enumerate(cj):
         K = m.K
-        f_cache = DIR_CACHE / f"traducir_{_huella(cfg)}_{len(t)}_red{i_red}.npz"
+        f_cache = DIR_CACHE / (f"traducir_{_huella(cfg)}_{len(t)}_red{i_red}.npz" if cfg.get("version", "") < "v3.2"
+                               else f"traducir_{_huella(cfg)}_{len(t)}_{len(D.ps)}_{R}_red{i_red}.npz")
         if f_cache.exists():                           # reanudación: lo ya calculado para esta red
             x = np.load(f_cache)
             partes.append((m, P, x["media"], x["var"], x["z"], x["vz"]))
@@ -222,7 +223,11 @@ def traducir_filas(tabla: pd.DataFrame, D, cj, cfg) -> pd.DataFrame:
             yh = yh.reshape(nb, S, -1).astype(float)
             yh = yh + z[sl_, None, :] + np.sqrt(vz[sl_])[:, None, :] * rng.standard_normal(yh.shape)
             if margen is not None:
-                yh = np.clip(yh, lo_s[lR][None, None, :], hi_s[lR][None, None, :])
+                yc = np.clip(yh, lo_s[lR][None, None, :], hi_s[lR][None, None, :])
+                if cfg["prediccion"].get("recorte_centro", True):
+                    yh = yc
+                else:       # v3.2 (§11c): sin recortar el centro; la distancia fuera del soporte entra como varianza
+                    yh = yh + np.abs(yh - yc) * rng.standard_normal(yh.shape)
             cent_b.append(yh.mean(1)); mues_b.append(yh)
         centro[sl_] = np.mean(cent_b, 0)
         entre[sl_] = np.std(cent_b, 0)                  # discrepancia entre las redes (salvaguarda de la v3.1)

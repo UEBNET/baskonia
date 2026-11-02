@@ -79,7 +79,15 @@ def muestras_traduccion(modelo: CVAE, post: Posterior, D: Datos, ps: np.ndarray,
     margen = cfg["prediccion"].get("margen_soporte")
     if margen is not None:
         lo, hi = soporte(D, float(margen))
-        yhat = np.clip(yhat, lo[liga_b][:, None, :], hi[liga_b][:, None, :])
+        recortado = np.clip(yhat, lo[liga_b][:, None, :], hi[liga_b][:, None, :])
+        if cfg["prediccion"].get("recorte_centro", True):
+            yhat = recortado
+        else:
+            # v3.2 (§11c): sin recortar el centro; la distancia fuera del soporte se suma como varianza (cada muestra
+            # se desplaza por un término aleatorio de esa escala) y queda la marca de extrapolación
+            dist = yhat - recortado
+            yhat = yhat + np.abs(dist) * rng.standard_normal(yhat.shape)
+            muestras_traduccion.extrapolacion = (np.abs(dist) > 0).mean(1)
     if modelo.student:          # B6: ruido de contexto y de muestra con colas t (ν por métrica), equipo normal
         nu = modelo.nu().detach().numpy().astype(float)[None, None, :]
         e = rng.standard_t(np.broadcast_to(nu, yhat.shape))
@@ -116,10 +124,13 @@ def predecir_cambios(conjunto: list[tuple[CVAE, Posterior]], D: Datos, tabla: pd
     _, Md, Vd = matrices_filas(dest, D.esc)
     S = int(cfg["prediccion"]["muestras"])
     rng = np.random.default_rng(semilla)
-    centros, obs = [], []
+    centros, obs, sds, extra = [], [], [], []
     for modelo, post in conjunto:
+        muestras_traduccion.extrapolacion = None
         yh, yo = muestras_traduccion(modelo, post, D, ps, cb, gb, np.ones(len(ps)), S, rng, V_obs=Vd)
-        centros.append(yh.mean(1)); obs.append(yo)
+        centros.append(yh.mean(1)); obs.append(yo); sds.append(yo.std(1))
+        if muestras_traduccion.extrapolacion is not None:
+            extra.append(muestras_traduccion.extrapolacion)
     centro = np.mean(centros, 0)
     entre = np.std(centros, 0)                  # discrepancia entre las redes del ensemble
     mezcla = np.concatenate(obs, 1)
@@ -140,6 +151,14 @@ def predecir_cambios(conjunto: list[tuple[CVAE, Posterior]], D: Datos, tabla: pd
                           "v3_centro_z": centro[:, k], "v3_sd_z": sd[:, k], "v3_sd_entre_z": entre[:, k],
                           "real_z": y_std,
                           "dentro_80_v3": (y_std >= q10[:, k]) & (y_std <= q90[:, k]),
-                          "min_d": c["min_d"].to_numpy(float)})
+                          "min_d": c["min_d"].to_numpy(float), "min_o": c["min_o"].to_numpy(float),
+                          "poss_on_d": pd.to_numeric(c.get("poss_on_d"), errors="coerce").to_numpy(float)
+                          if "poss_on_d" in c else np.nan})
+        if cfg.get("version", "") >= "v3.2":
+            # v3.2 · bootstrap de semillas (§8b): centro y DT de cada red por separado (escala estandarizada)
+            for r_, (cz, sz) in enumerate(zip(centros, sds)):
+                f[f"cz_{r_}"], f[f"sz_{r_}"] = cz[:, k], sz[:, k]
+            if extra:
+                f["extrapolacion"] = np.mean(extra, 0)[:, k] > 0.5
         filas.append(f[ok])
     return pd.concat(filas, ignore_index=True)

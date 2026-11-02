@@ -66,6 +66,8 @@ def main(argv=None):
     am.add_argument("--diagnostico", default=None, help="parametros.json de un ajuste del A: diagnóstico del esquema lineal")
     am.add_argument("--variante", default=None, help="variante de configs/normalization.yaml (por defecto, la elegida)")
     am.add_argument("--elegir", action="store_true", help="compara las variantes validadas y elige con el corte más antiguo")
+    ap_ = sub.add_parser("auditoria-puentes", help="§13: muestra de 100 jugadores puente para revisión manual")
+    ap_.add_argument("--evaluar", action="store_true", help="evalúa la muestra revisada (Clopper-Pearson)")
     dn = sub.add_parser("dataset-normalizado", help="dataset completo de equivalentes EuroLeague (A+B) y JSON de la Mesa")
     dn.add_argument("--salida", default="data/artifact", help="carpeta de los JSON de la Mesa (datos/)")
     args = ap.parse_args(argv)
@@ -76,6 +78,10 @@ def main(argv=None):
         from . import amortiguacion
         amortiguacion.main(validar=args.validar, diagnostico_params=args.diagnostico, variante=args.variante,
                            elegir=args.elegir)
+        return
+    if args.orden == "auditoria-puentes":
+        from . import auditoria_puentes
+        auditoria_puentes.main(args.evaluar)
         return
     if args.orden == "mesa-quintetos":
         from . import mesa_quintetos

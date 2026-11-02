@@ -136,10 +136,14 @@ def covarianza_destino(m: str) -> tuple[dict, np.ndarray] | None:
         return None
     doc = json.loads(f.read_text(encoding="utf-8"))
     n = len(doc["nodos"])
-    S = np.zeros((n, n))
-    S[np.tril_indices(n)] = doc["cov_triangular"]
-    S = S + S.T - np.diag(np.diag(S))
-    _COV[m] = ({k: i for i, k in enumerate(doc["nodos"])}, S)
+
+    def sim(v):
+        X = np.zeros((n, n))
+        X[np.tril_indices(n)] = [np.nan if x is None else x for x in v]
+        return X + X.T - np.diag(np.diag(X))
+    S = sim(doc["cov_triangular"])
+    P = sim(doc["sd_par_triangular"]) if "sd_par_triangular" in doc else None    # §11a: DT por par de la mezcla
+    _COV[m] = ({k: i for i, k in enumerate(doc["nodos"])}, S, P)
     return _COV[m]
 
 
@@ -148,10 +152,12 @@ def var_par(m: str, nodo_a: str, nodo_b: str) -> float:
     cv = covarianza_destino(m)
     if cv is None:
         return np.nan
-    ix, S = cv
+    ix, S, P = cv
     ia, ib = ix.get(nodo_a), ix.get(nodo_b)
     if ia is None or ib is None:
         return np.nan
+    if P is not None and np.isfinite(P[ia, ib]):
+        return float(P[ia, ib]) ** 2
     return float(max(S[ia, ia] + S[ib, ib] - 2 * S[ia, ib], 0.0))
 
 
@@ -230,6 +236,98 @@ def normalizacion_hasta(anio_corte: int, metricas: list[str] | None = None, prog
     dest.write_bytes(pickle.dumps(res))
     if progreso:
         progreso(f"normalización ≤ {anio_corte}: {len(th)} filas, {time.time() - t0:.0f} s")
+    return res
+
+
+def normalizacion_hasta_v32(anio_corte: int, metricas: list[str] | None = None, progreso=print) -> dict:
+    """§1 (A0, criterios del 02-11-2026) · fuente «V32_corte»: la normalización v3.2 ajustada SÓLO con temporadas ≤ t
+    para las filas de la temporada t (sin fuga en el examen del simulador). Mezcla, en la escala de trabajo:
+      * CVAE de la configuración final de la v3.2 entrenada con ≤ t (las 20 redes del corte, experimentos/v3/) y
+        traducida a la vara de la EuroLeague de la temporada t;
+      * v2 ≤ t = A amortiguado reajustado con ≤ t (la fuente «A_corte»; no hay traducciones del B por corte);
+      * pesos de la mezcla del corte (B2 anidado: examen_v32.json → pesos_por_corte; 0,5 si no hay) con las
+        salvaguardas y el ajuste de la Tercera FEB de la v3.2.
+    Constantes de traducción del corte: sustituto lineal (como «V31»/«V32») sobre las constantes del A ≤ t.
+    Caché: experimentos/cache_simulador_<versión>/norm_v32_hasta_<año>.pkl."""
+    from bbmodel.metricas import CATALOGO, destransformar, transformar
+    from bbnorm3 import combinacion as CB, config as C3, exportar, flujo
+    dest = DIR_CACHE / f"norm_v32_hasta_{anio_corte}.pkl"
+    if dest.exists():
+        return pickle.loads(dest.read_bytes())
+    t0 = time.time()
+    metricas = metricas or metricas_traduccion()
+    n_cfg = cfg_sim()["normalizacion"]
+    temp = temp_de(anio_corte)
+    z80 = 1.2815515655446004
+    # v2 ≤ t
+    nh = normalizacion_hasta(anio_corte, metricas, progreso=None)
+    th2, trad2 = nh["theta"], nh["traduccion"]
+    th2 = th2[th2["temporada"] == temp].drop_duplicates(["liga", "player_id"])
+    # CVAE ≤ t
+    cfg3 = C3.cargar(RAIZ / n_cfg.get("config_normalizacion", "configs/normalization_v32.yaml"))
+    cfg3 = C3.con(cfg3, **{"referencia_salida.temporada": temp})
+    f_tabla = RAIZ / "experimentos" / "v3" / "tabla_v32.pkl"
+    if f_tabla.exists():
+        tabla = pickle.loads(f_tabla.read_bytes())
+    else:
+        from bbmodel import modelo as A
+        tabla = A.preparar()[0]
+    D, cj = flujo.conjunto(tabla, cfg3, anio_corte, progreso=None)
+    filas = tabla[tabla["temporada"] == temp]
+    tr = exportar.traducir_filas(filas, D, cj, cfg3).drop_duplicates(["liga", "player_id"])
+    x = th2.merge(tr, on=["liga", "player_id"], how="inner", suffixes=("", "_cvae"))
+    if "min" not in x:
+        x = x.merge(filas[["liga", "player_id", "min"]].drop_duplicates(["liga", "player_id"]), on=["liga", "player_id"],
+                    how="left")
+    # pesos del corte (B2 anidado) y salvaguardas
+    ex = RAIZ / cfg3["salida"] / "validacion" / "examen_v32.json"
+    exj = json.loads(ex.read_text(encoding="utf-8")) if ex.exists() else {}
+    w_met = (exj.get("pesos_por_corte") or {}).get(str(anio_corte)) or {}
+    w_con = (exj.get("combinada_b2_con_conocimiento_feb3") or {}).get("peso_v3_conocimiento_elegido")
+    cb = cfg3["combinacion"]
+    temporadas = CB.temporadas_por_liga(tabla, cfg3, anio_corte)
+    const2 = trad2["constantes"]
+    th = x[["liga", "temporada", "player_id", "pos3"]].copy()
+    nv = x[["liga", "temporada", "player_id", "pos3", "min"]].copy()
+    for m in metricas:
+        if m not in const2 or f"{m}_th" not in x or f"{m}_v3" not in x:
+            continue
+        k, trf = const2[m], CATALOGO[m].transf
+        mu = np.array([entorno(k, "euroleague", temp, p)[0] if isinstance(p, str) else np.nan for p in x["pos3"]])
+        tau = np.array([entorno(k, "euroleague", temp, p)[1] if isinstance(p, str) else np.nan for p in x["pos3"]])
+        m2 = mu + tau * x[f"{m}_th"].to_numpy(float)
+        s2 = np.maximum(tau * x[f"{m}_thsd"].to_numpy(float), 1e-6)
+        m3 = transformar(x[f"{m}_v3"].to_numpy(float), trf)
+        s3 = np.maximum((transformar(x[f"{m}_v3_hi"].to_numpy(float), trf)
+                         - transformar(x[f"{m}_v3_lo"].to_numpy(float), trf)) / (2 * z80), 1e-6)
+        w = np.full(len(x), float(w_met.get(m, cb["peso_v3"])))
+        if w_con is not None:
+            w[x["liga"].isin(cb["ligas_conocimiento"]).to_numpy()] = float(w_con)
+        w[(x["liga"].map(temporadas).fillna(0) < cb["min_temporadas_liga"]).to_numpy()] = 0.0
+        w[x[f"{m}_v3_sd_entre_z"].to_numpy(float) > cb["max_discrepancia_redes"]] = 0.0
+        w[~np.isfinite(m3) | ~np.isfinite(s3)] = 0.0
+        m3, s3 = np.where(np.isfinite(m3), m3, m2), np.where(np.isfinite(s3), s3, s2)
+        media = w * m3 + (1 - w) * m2
+        lo, hi = CB._cuantiles_mezcla(w, m3, s3, m2, s2, (0.1, 0.9))
+        v, vlo, vhi = (destransformar(a, trf) for a in (media, lo, hi))
+        nv[f"{m}_am"], nv[f"{m}_am_v1"] = v, destransformar(m2, trf)
+        th[f"{m}_am"] = v
+        th[f"{m}_th"] = (media - mu) / tau
+        th[f"{m}_thsd"] = (hi - lo) / (2 * z80 * tau)
+    # constantes del corte: sustituto lineal sobre el A ≤ t (sólo la temporada t)
+    trad = sustituto_lineal(trad2, nv, [m for m in metricas if f"{m}_am" in nv], temp_ref=temp)
+    trad["fuente"] = f"V32_corte_{anio_corte}"
+    for m in metricas:
+        if f"{m}_thsd" in th:
+            vo = np.array([_nodo(trad["nodos"].get(m, {}), lg, tp)[1] for lg, tp in zip(th["liga"], th["temporada"])])
+            vo = np.where(np.isfinite(vo), vo, 0.0)
+            s_ = th[f"{m}_thsd"].to_numpy(float)
+            th[f"{m}_vj"] = np.maximum(s_ ** 2 - vo, 0.1 * s_ ** 2)
+    res = {"theta": th, "traduccion": trad, "pesos_cvae": w_met, "filas": int(len(th))}
+    DIR_CACHE.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(pickle.dumps(res))
+    if progreso:
+        progreso(f"normalización v3.2 ≤ {anio_corte} (sin fuga): {len(th)} filas, {time.time() - t0:.0f} s")
     return res
 
 
@@ -378,14 +476,27 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
         return pickle.loads(dest.read_bytes())
     metricas = metricas or metricas_traduccion()
     base = traduccion_completa(metricas)
+    cols = ["pos3", "min"] + [c for m in metricas for c in (f"{m}_am", f"{m}_am_v1")]
+    res = sustituto_lineal(base, _normalizado(cols), metricas)
+    dest.write_bytes(pickle.dumps(res))
+    if progreso:
+        ds = np.array([v["d"] for v in res["ajuste"].values() if v["d"] is not None])
+        progreso(f"traducción v3.1: {len(res['ajuste'])} métrica-liga, pendiente d mediana {np.median(ds):.3f} "
+                 f"(p10 {np.quantile(ds, 0.1):.3f}, p90 {np.quantile(ds, 0.9):.3f})")
+    return res
+
+
+def sustituto_lineal(base: dict, n: pd.DataFrame, metricas: list[str], temp_ref: str = "2025-26") -> dict:
+    """Núcleo de traduccion_v31: constantes de la v3.x como sustituto lineal E[θ_v2 | θ_v3x] = c_lt + d_l·θ_v3x
+    sobre las filas `n` (columnas <m>_am de la v3.x y <m>_am_v1 de la v2, en la vara EuroLeague de temp_ref)."""
+    import copy
+    base = copy.deepcopy(base)
     const, nodos = base["constantes"], base["nodos"]
     cfg_t = cfg_sim().get("traduccion", {})
     min_min = float(cfg_t.get("min_minutos", 400))
     min_filas = int(cfg_t.get("min_filas_liga", 30))
     d_min = float(cfg_t.get("pendiente_minima", 0.1))      # evita s' infinita si una liga no tuviera relación alguna
     r_min = float(cfg_t.get("r_minima", 0.0))               # correlación v3.1–v2 mínima para usar el sustituto lineal
-    cols = ["pos3", "min"] + [c for m in metricas for c in (f"{m}_am", f"{m}_am_v1")]
-    n = _normalizado(cols)
     n = n[pd.to_numeric(n["min"], errors="coerce") >= min_min]
     ajuste = {}
     for m in metricas:
@@ -398,8 +509,8 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
             if s_.any():
                 v31 = n.loc[s_, f"{m}_am"].to_numpy(float)
                 v2 = n.loc[s_, f"{m}_am_v1"].to_numpy(float)
-                t31[s_] = theta_desde_valor(v31, v31, v31, k, pos)[0]
-                t2[s_] = theta_desde_valor(v2, v2, v2, k, pos)[0]
+                t31[s_] = theta_desde_valor(v31, v31, v31, k, pos, temp_ref)[0]
+                t2[s_] = theta_desde_valor(v2, v2, v2, k, pos, temp_ref)[0]
         d = pd.DataFrame({"liga": n["liga"].to_numpy(), "temporada": n["temporada"].to_numpy(), "t31": t31, "t2": t2})
         d = d[np.isfinite(d["t31"]) & np.isfinite(d["t2"])]
         nod_m, s_m, m_m = dict(nodos.get(m, {})), dict(k["s"]), dict(k["m"])
@@ -432,13 +543,7 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
                                      "constantes": "v31"}
         nodos[m] = nod_m
         const[m] = {**k, "s": s_m, "m": m_m}
-    res = {"constantes": const, "nodos": nodos, "fuente": "v31_lineal", "ajuste": ajuste}
-    dest.write_bytes(pickle.dumps(res))
-    if progreso:
-        ds = np.array([v["d"] for v in ajuste.values() if v["d"] is not None])
-        progreso(f"traducción v3.1: {len(ajuste)} métrica-liga, pendiente d mediana {np.median(ds):.3f} "
-                 f"(p10 {np.quantile(ds, 0.1):.3f}, p90 {np.quantile(ds, 0.9):.3f})")
-    return res
+    return {"constantes": const, "nodos": nodos, "fuente": "v31_lineal", "ajuste": ajuste}
 
 
 def _normalizado(cols: list[str]) -> pd.DataFrame:

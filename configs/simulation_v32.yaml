@@ -12,7 +12,7 @@ version: "v3.2"                      # etiqueta de versión de los resultados (d
 carpeta: v3_2                        # data/modelos/simulador/<carpeta>/ (caché: experimentos/cache_simulador_v3_2)
 
 simulaciones: 1000                   # iteraciones Monte Carlo por jugador-club
-intervalos: [0.50, 0.90]             # intervalos centrales de la salida
+intervalos: [0.50, 0.80, 0.90]       # intervalos centrales de la salida (§5a: también el 80 %, el que publica la marca)
 
 normalizacion:
   fuente: V32                        # V32 = <m>_am de la v3.2 + constantes lineales (como «V31», sobre la v3.2)
@@ -48,12 +48,21 @@ pasos:                               # A1 · pasos del motor (true = activo, com
   adaptacion: true                   # adaptación (paso 2)
   ruido_personal: true               # ruido personal y de muestreo en los intervalos (paso 7)
 
-v32:                                 # decisiones del simulador v3.2 (bbfit/v32.py), fijadas de antemano por el usuario
-  regla_pasos: navaja                # A1: se quita el paso si quitarlo no empeora significativamente (IC 90 % por club)
-                                     #     el error de pts/100 ni el de TS%, ni los minutos ni el acierto de rol
-  criterio_produccion: [pts_p100, ts_pct]   # A2 frente a A3: menor media de errores relativos de pts/100 y TS%
-  recalibracion: {grupos: true, min_casos_grupo: 30}   # A4: factor por métrica × grupo de destino (≥ 30 casos)
+v32:                                 # decisiones del simulador v3.2 (bbfit/v32.py): criterios matemáticos del
+                                     # 02-11-2026 (docs/simulador_v32.md §2), aprobados ANTES de ver resultados
+  regla_pasos: no_inferioridad       # A1 (§2): sustituye a la «navaja» del primer plan
+  margenes: {pts: 0.005, ts: 0.005, min: 0.01, rol_pp: 0.005, secundarias: 0.01, euroleague: 0.02,
+             contribucion: 0.01, winkler: 0.01}
+  a3_regla: un_error_tipico          # A3 (§3): K₁ = {J(k) − J(k*) ≤ SE}; dentro de K₁, parsimonia (decisión del usuario)
+  a3_preferencia: parsimonia
+  criterio_a3: [pts_p100, ts_pct]    # J de A3 = media de MAE_pts/MAE_pts(ref) y MAE_TS/MAE_TS(ref)
+  criterio_produccion:               # A2 frente a A3 (§4): J_ω, A2 sólo si es mejor de forma significativa
+    metricas: [pts_p100, ts_pct, usg_pct, ast_pct, tov_pct]
+    pesos: [0.30, 0.30, 0.15, 0.15, 0.10]
+  recalibracion: {grupos: true, min_casos_grupo: 30, n0: 30, rho: 0.5, asimetrico: true, min_casos_origen: 15}
   variantes_motor: [sin_redistribuir_uso, sin_adaptacion]   # ejecuciones del examen con un paso apagado
+                                     # (+ «sin_redistribuir_uso+sin_adaptacion» si la regla quita los dos)
+  fuentes_examen: [V32, V32_corte]   # §1: A4 y cifras absolutas sólo con V32_corte; A1-A3 con las dos
   fichero_decisiones: data/modelos/simulador/v3_2/decisiones_v32.json
   # simulador publicado (histórico y exportación), DESPUÉS del examen: se fijan con el resultado de `v32-decidir`
   # (durante el examen deben quedar en motor / false: A2 y A4 se evalúan aparte, con cortes anidados)

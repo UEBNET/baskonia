@@ -146,6 +146,9 @@ def cargar_corte(temp: str, fuente: str | None = None, cfg: dict | None = None, 
             if fuente == "A_corte":
                 nh = SI.normalizacion_hasta(SI.anio(temp), mets)
                 theta, trad = nh["theta"], nh["traduccion"]
+            elif fuente == "V32_corte":                 # §1 · v3.2 sin fuga (normalización ≤ t)
+                nh = SI.normalizacion_hasta_v32(SI.anio(temp), mets)
+                theta, trad = nh["theta"], nh["traduccion"]
             else:
                 trad = SI.traduccion(fuente, mets)
                 theta = SI.theta_completa(fuente, mets, trad)
@@ -191,6 +194,11 @@ def referencias(reg: pd.DataFrame, eq: pd.DataFrame, temp: str) -> dict:
         out["sigma_p80"][liga] = float(s.quantile(0.8)) if len(s) else np.nan
         e = eq[eq["liga"] == liga]
         out["ritmo"][liga] = float(pd.to_numeric(e.get("lg_pace"), errors="coerce").median()) if len(e) else np.nan
+        # §6-§7 · contribución C = (min/partido ÷ minutos del partido) · pts/100 (0 si < 50 min) y su percentil 75
+        gm_l = minutos_partido(liga)
+        cc = (pd.to_numeric(g["min_pg"], errors="coerce") / gm_l) * pd.to_numeric(g.get("pts_100_obs"), errors="coerce")
+        cc = cc.where(pd.to_numeric(g["min_total"], errors="coerce") >= 50, 0.0)
+        out.setdefault("c75", {})[liga] = float(cc[g["gp"] >= 5].quantile(0.75)) if (g["gp"] >= 5).sum() > 10 else np.nan
     # composición de estilos de las plantillas por estilo del equipo (minutos de jugadores ≥ 100 min)
     j = reg[reg["min_total"] >= 100].dropna(subset=pc)
     comp = []
@@ -675,6 +683,8 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
                 if q2 is not None:
                     d["pts_p100"] = np.clip(q2 + ruido_pts, 0, None)
                     d["pts_p100_motor"] = q2
+                if q2 is not None:
+                    d["contribucion"] = _contribucion(m_f, gm, d["pts_p100"], G, disp)
                 rejilla[f"{kb}|{kc}"] = d
     # ---------------------------------------------------------------- roles
     mp_s = m_f / gm
@@ -710,6 +720,11 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
            "ritmo_destino": float(ritmo)}
     if rejilla:
         res["rejilla_ajustes_ts"] = {k: {m: resumen(v) for m, v in d.items()} for k, d in rejilla.items()}
+    if "pts_p100" in obs:              # §6 · contribución por Monte Carlo (producto de simulaciones, no de medias)
+        Cs = _contribucion(m_f, gm, obs["pts_p100"], G, disp)
+        c75 = c.ref.get("c75", {}).get(liga_d, np.nan)
+        res["contribucion"] = {**resumen(Cs), "c75_destino": c75,
+                               "p_top25": float(np.mean(Cs >= c75)) if np.isfinite(c75) else None}
     res["produccion_motor_p100"] = {m: resumen(prod[m]) for m in mets}    # sin ruido personal (A1)
     res["rol_asignado"], res["rol_origen"] = rol_asig, fila.get("rol")
     if fuerza:
@@ -747,6 +762,13 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     return res
 
 
+def _contribucion(m_f, gm, pts, G, disp):
+    """C = (min/partido ÷ minutos del partido) · pts/100, con pts/100 = 0 si la temporada simulada queda < 50 min."""
+    m_f = np.asarray(m_f, float)
+    pts = np.nan_to_num(np.asarray(pts, float))
+    return np.where(m_f * G * disp >= 50, (m_f / gm) * pts, 0.0)
+
+
 # =============================================================================================== calibración de salida
 def _calibrar_res(c: "Corte", res: dict, fila: dict, liga_d: str, gm: float) -> None:
     """Aplica la capa de calibración de salida (pesos de producción) a un resultado de `simular`."""
@@ -759,7 +781,8 @@ def _calibrar_res(c: "Corte", res: dict, fila: dict, liga_d: str, gm: float) -> 
     m0 = res["minutos"]
     P = np.array([[res["roles"][r] for r in ROLES]])
     m, iv, Pc = calibrar_salida(C, np.array([m0["mediana"]]), {a: (np.array([m0[f"lo{a}"]]), np.array([m0[f"hi{a}"]]))
-                                                             for a in ("50", "90")}, P, np.array([mo if np.isfinite(mo) else mb]),
+                                                             for a in ("50", "80", "90") if f"lo{a}" in m0},
+                                P, np.array([mo if np.isfinite(mo) else mb]),
                                 np.array([mb]), Pb)
     res["minutos_motor"], res["roles_motor"], res["indice_rol_motor"] = dict(m0), dict(res["roles"]), res["indice_rol"]
     res["minutos"] = {"media": float(m[0]), "mediana": float(m[0]), **{f"lo{a}": float(iv[a][0][0]) for a in iv},
@@ -784,32 +807,39 @@ def _factores_v32(cfg: dict) -> dict | None:
 
 
 def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str) -> None:
-    """A4 · recalibración conforme (factores por métrica × grupo de destino ajustados con todo el examen)."""
+    """A4 · recalibración conforme de dos colas (factores por métrica × grupo de destino × origen, con contracción,
+    ajustados con todo el examen sin fuga: bbfit.v32)."""
     from bbnorm3.examen import grupo
     fac = _factores_v32(c.cfg)
     if not fac:
         return
     g = str(grupo(pd.Series([str(liga_o)]), pd.Series([str(liga_d)])).iloc[0])
+    o = "feb3" if liga_o == "feb3" else ("ncaa" if liga_o == "ncaa" else "resto")
 
     def esc(d: dict, f: dict | None, centro: str) -> None:
         if not f or d.get(centro) is None:
             return
         cc = float(d[centro])
-        for a in ("50", "90"):
+        for a in ("50", "80", "90"):
             fa = f.get(a)
             if not fa or (d.get(f"lo{a}") is None and fa["tipo"] != "semiamplitud"):
                 continue
-            k = float(fa["grupo"].get(g, fa["global"]))
+            k = {lado: float(fa[lado]["grupo_origen"].get(f"{g}|{o}", fa[lado]["grupo"].get(g, fa[lado]["global"])))
+                 for lado in ("menos", "mas")}
             if fa["tipo"] == "semiamplitud":
-                d[f"lo{a}"], d[f"hi{a}"] = cc - k, cc + k
+                d[f"lo{a}"], d[f"hi{a}"] = cc - k["menos"], cc + k["mas"]
             else:
-                d[f"lo{a}"], d[f"hi{a}"] = cc - k * (cc - float(d[f"lo{a}"])), cc + k * (float(d[f"hi{a}"]) - cc)
+                d[f"lo{a}"] = cc - k["menos"] * (cc - float(d[f"lo{a}"]))
+                d[f"hi{a}"] = cc + k["mas"] * (float(d[f"hi{a}"]) - cc)
 
     for m, d in res["produccion_p100"].items():
         esc(d, fac.get(m), "media")
     esc(res["minutos"], fac.get("min"), "mediana")
-    res["min_pct"] = {k: (v / minutos_partido(liga_d) if v is not None else None) for k, v in res["minutos"].items()}
-    res["recalibrado_v32"] = g
+    if "contribucion" in res:
+        esc(res["contribucion"], fac.get("C"), "media")
+    res["min_pct"] = {k: (v / minutos_partido(liga_d) if isinstance(v, (int, float)) else v)
+                      for k, v in res["minutos"].items()}
+    res["recalibrado_v32"] = f"{g}|{o}"
 
 
 def _produccion_atlas(c: "Corte", res: dict, fila: dict, liga_d: str, Lbar_dest: float) -> None:
@@ -821,7 +851,7 @@ def _produccion_atlas(c: "Corte", res: dict, fila: dict, liga_d: str, Lbar_dest:
     ctx_o = _ctx_origen(c, fila)
     dctx = (Lbar_dest - ctx_o) if np.isfinite(Lbar_dest) and np.isfinite(ctx_o) else 0.0
     for m, d in res["produccion_p100"].items():
-        v = _f(fila.get(m))
+        v = _f(fila.get(m)) if c.fuente not in ("A_corte", "V32_corte") else _f(fila.get(f"{m}_am"))
         v = v if np.isfinite(v) else _f(fila.get(f"{m}_am"))
         k = c.trad["constantes"].get(m)
         if k is None or not np.isfinite(v) or liga_d not in k["m"]:

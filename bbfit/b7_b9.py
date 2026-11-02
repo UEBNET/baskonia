@@ -97,10 +97,34 @@ def b7(e: pd.DataFrame, X: pd.DataFrame, min_prod: float) -> dict:
         s = ev & np.isfinite(p)
         fila["mae_mezcla_motor_gbm"] = float(np.abs(p[s] - y[s]).mean())
         fila["mejora_gbm_frente_motor_%"] = 100 * (fila["mae_gbm"] / fila["mae_motor"] - 1)
+        from . import v32
+        s2 = ev & np.isfinite(preds["gbm"]) & np.isfinite(e[f"v_{m}_pred"].to_numpy(float))
+        _, lo, hi = v32.boot_cociente(e, np.abs(preds["gbm"] - y), np.abs(e[f"v_{m}_pred"].to_numpy(float) - y), s2,
+                                      1000, 20261102)
+        fila["ic90_inf_%"], fila["ic90_sup_%"] = 100 * lo, 100 * hi
         fila["mejora_mlp_frente_motor_%"] = 100 * (fila["mae_mlp"] / fila["mae_motor"] - 1)
         fila["mejora_gbm_frente_atlas_%"] = 100 * (fila["mae_gbm"] / fila["mae_atlas"] - 1)
         res[m] = fila
     return res
+
+
+def minutos_gbm(e: pd.DataFrame, X: pd.DataFrame) -> dict:
+    """§16 · línea base fuerte de minutos (gradient boosting; LightGBM no está instalado: HistGradientBoosting de
+    scikit-learn, equivalente) con cortes anidados. «Gana claramente» el motor sólo si IC90,sup[MAE_motor − MAE_GBM] < 0."""
+    from . import v32
+    cortes = sorted(e["corte"].unique())
+    y = pd.to_numeric(e["min_real"], errors="coerce").to_numpy(float)
+    ok = e["eval_min"].astype(bool).to_numpy() & np.isfinite(y)
+    pred = np.full(len(e), np.nan)
+    for k, t in enumerate(cortes[1:], 1):
+        tr = e["corte"].isin(cortes[:k]).to_numpy() & ok
+        te = (e["corte"] == t).to_numpy()
+        pred[te] = _aprendices()["gbm"]().fit(X[tr], y[tr]).predict(X[te])
+    ev = ok & e["corte"].isin(cortes[1:]).to_numpy() & np.isfinite(pred)
+    em, eg = np.abs(e["v_min_pred"].to_numpy(float) - y), np.abs(pred - y)
+    d, lo, hi = v32.boot_diferencia(e, em, eg, ev, 1000, 20261102)
+    return {"casos": int(ev.sum()), "mae_motor": float(em[ev].mean()), "mae_gbm": float(eg[ev].mean()),
+            "motor_menos_gbm": d, "ic90": [lo, hi], "motor_gana_claramente": bool(hi < 0)}
 
 
 def b9(e: pd.DataFrame, min_prod: float) -> dict:
@@ -139,7 +163,23 @@ def main(etiqueta: str | None = None, progreso=print) -> dict:
     X, _ = matriz(e, reg)
     mp = float(cfg["validacion"]["min_minutos_produccion"])
     out = {"etiqueta": etiqueta, "fichajes": int(len(e)), "cortes": sorted(e["corte"].unique()),
-           "B7": b7(e, X, mp), "B9": b9(e, mp)}
+           "B7": b7(e, X, mp), "B9": b9(e, mp), "minutos_gbm": minutos_gbm(e, X)}
+    # §16 · veredictos con los umbrales fijados de antemano
+    from . import v32
+    y = e["pts_p100_real"].to_numpy(float)
+    okp = (e["min_total_real"] >= mp).to_numpy() & e["corte"].isin(out["cortes"][1:]).to_numpy()
+    b7p = out["B7"]["pts_p100"]
+    out["veredicto_B7"] = {"mejora_gbm_pts_%": b7p["mejora_gbm_frente_motor_%"],
+                           "regla": "el límite está en la estructura del motor si B7 mejora el MAE de pts/100 en > 5 % "
+                                    "de forma significativa; si no, en el ruido",
+                           "limite_en_la_estructura": bool(b7p["mejora_gbm_frente_motor_%"] < -5 and
+                                                           b7p.get("ic90_sup_%", 0) < 0)}
+    b9p = out["B9"]["pts_p100"]
+    out["veredicto_B9"] = {"correlacion": b9p["correlacion_error_min_error_prod"], "cota_oraculo_%": b9p["cota_mejora_%"],
+                           "regla": "abrir B9 si corr(e_min, e_pts) > 0,3 o si la cota del oráculo reduce el MAE de "
+                                    "pts/100 en más de un 3 %",
+                           "abrir_B9": bool(abs(b9p["correlacion_error_min_error_prod"]) > 0.3 or
+                                            b9p["cota_mejora_%"] < -3)}
     dest = SI.DIR_MOD / "simulador" / "v3_2"            # la evaluación se guarda con la v3.2 (sobre el examen dado)
     dest.mkdir(parents=True, exist_ok=True)
     (dest / f"evaluacion_b7_b9_{etiqueta}.json").write_text(

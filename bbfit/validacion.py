@@ -44,6 +44,15 @@ def cfg_sim() -> dict:
     return cargar("simulation")
 
 
+def fuente_t1(fuente: str, solo_a_corte: bool = False) -> str:
+    """Fuente con la que se leen los datos de la temporada de destino t+1 (equipos, resultados): las fuentes por
+    corte (A_corte, V32_corte) no tienen normalización de t+1 y usan la de todas las temporadas (como hasta ahora:
+    en dos sitios sólo A_corte pasaba a AB, en los otros cualquier fuente «A…»)."""
+    if fuente.startswith("A_corte" if solo_a_corte else "A"):
+        return "AB"
+    return "V32" if fuente == "V32_corte" else fuente
+
+
 def fuente_base(cfg: dict | None = None) -> str:
     """Fuente de θ de producción: «AB» en la v2, la de la configuración («V31») en la v3."""
     f = str((cfg or cfg_sim())["normalizacion"].get("fuente", "AB"))
@@ -254,24 +263,30 @@ def _fila_pred(x, r: dict) -> dict:
     f["min_pred"] = r["minutos"]["mediana"]          # punto = mediana (óptima para el MAE)
     f["min_media"] = r["minutos"]["media"]
     f["p_titular"] = r["p_titular"]
-    for a in ("50", "90"):
+    niv = [a for a in ("50", "80", "90") if f"lo{a}" in r["minutos"]]
+    for a in niv:
         f[f"min_lo{a}"], f[f"min_hi{a}"] = r["minutos"][f"lo{a}"], r["minutos"][f"hi{a}"]
     for m, d in r["produccion_p100"].items():
         f[f"{m}_pred"] = d["media"]
-        for a in ("50", "90"):
+        for a in niv:
             f[f"{m}_lo{a}"], f[f"{m}_hi{a}"] = d[f"lo{a}"], d[f"hi{a}"]
+    if "contribucion" in r:                            # §6-§7
+        d = r["contribucion"]
+        f["C_pred"], f["C_p_top25"], f["C_c75"] = d["media"], d.get("p_top25"), d.get("c75_destino")
+        for a in niv:
+            f[f"C_lo{a}"], f[f"C_hi{a}"] = d[f"lo{a}"], d[f"hi{a}"]
     for m, v in r["traduccion_media"].items():
         f[f"{m}_trad"] = v
     for m, d in (r.get("produccion_motor_p100") or {}).items():       # v3.2 · A1 (sin ruido personal)
         f[f"{m}_motor_pred"] = d["media"]
-        for a in ("50", "90"):
+        for a in niv:
             f[f"{m}_motor_lo{a}"], f[f"{m}_motor_hi{a}"] = d[f"lo{a}"], d[f"hi{a}"]
     for k, dd in (r.get("rejilla_ajustes_ts") or {}).items():         # v3.2 · A3
         kb, kc = k.split("|")
         for m, d in dd.items():
             pre = f"g{kb}_{kc}_{m}"
             f[f"{pre}_pred"] = d["media"]
-            for a in ("50", "90"):
+            for a in niv:
                 f[f"{pre}_lo{a}"], f[f"{pre}_hi{a}"] = d[f"lo{a}"], d[f"hi{a}"]
     f["pts_pg_pred"] = r["por_partido"]["pts"]["media"]
     f["adapt_pct"] = r["adaptacion"]["adapt_pct_temporada"]["media"]
@@ -313,7 +328,9 @@ def baseline_a(c: S.Corte, x, fila: dict, Lbar_dest: float, mets: list[str], cfg
     dctx = (Lbar_dest - ctx_o) if np.isfinite(Lbar_dest) and np.isfinite(ctx_o) else 0.0
     out = {}
     for m in mets:
-        v = S._f(fila.get(m)) if c.fuente != "A_corte" or not np.isfinite(S._f(fila.get(f"{m}_am"))) else S._f(fila.get(f"{m}_am"))
+        # fuentes por corte (A_corte, V32_corte): el valor normalizado del corte (<m>_am), no el de todas las temporadas
+        v = S._f(fila.get(m)) if c.fuente not in ("A_corte", "V32_corte") or not np.isfinite(S._f(fila.get(f"{m}_am"))) \
+            else S._f(fila.get(f"{m}_am"))
         if not np.isfinite(v):
             v = S._f(fila.get(f"{m}_am"))
         k = c.trad["constantes"].get(m)
@@ -472,7 +489,7 @@ def preparar_corte(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, progreso
         return pickle.loads(dest.read_bytes())
     t1 = SI.siguiente(t)
     c = S.cargar_corte(t, fuente, pesos=False)
-    c1 = S.cargar_corte(t1, "AB" if fuente.startswith("A_corte") else fuente, pesos=False)
+    c1 = S.cargar_corte(t1, fuente_t1(fuente, True), pesos=False)
     casos = fichajes(c, roles, t1, cfg, c1.eq)
     real = resultados_reales(casos, c1)
     casos = casos[["persona_id", "nombre", "liga_o", "team_o", "liga_d", "team_d", "club_t", "temporada_o", "temporada_d"]] \
@@ -536,7 +553,7 @@ def calibrar(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: dict, p
     casos = casos.sample(min(len(casos), int(cfg["validacion"]["calibracion_casos"])), random_state=int(cfg["semilla"]))
     c = S.cargar_corte(tp, fuente, pesos=False)
     c.w_util, c.fit = pesos["utilidad"], None
-    eq1 = S.cargar_corte(t, "AB" if fuente.startswith("A_corte") else fuente, pesos=False).eq
+    eq1 = S.cargar_corte(t, fuente_t1(fuente, True), pesos=False).eq
     r1 = roles[roles["temporada"] == t]
     filas = []
     for k_u in cfg["validacion"]["rejilla_escala"]:
@@ -656,7 +673,7 @@ def ejecutar_corte(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: d
     casos, t1 = pc["casos"], pc["t1"]
     c = S.cargar_corte(t, fuente, pesos=False)
     c.w_util, c.calib, c.fit = pesos["utilidad"], pesos["calibracion"], fit
-    eq1 = S.cargar_corte(t1, "AB" if fuente.startswith("A") else fuente, pesos=False).eq \
+    eq1 = S.cargar_corte(t1, fuente_t1(fuente), pesos=False).eq \
         if t1 <= cfg["historico"]["temporadas"][-1] else _eq_simple(roles, t1)
     r1 = roles[roles["temporada"] == t1]
     v2 = simular_fichajes(c, casos, r1, eq1, cfg, escenario, progreso=progreso, sin_adaptacion=sin_adaptacion)
@@ -735,15 +752,20 @@ def errores(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
             ok = out["min_total_real"] >= v["min_minutos_produccion"]
             e = out[f"{pre}_{m}_pred"] - out[f"{m}_real"]
             out[f"{pre}_err_{m}"] = np.where(ok, e, np.nan)
-            for a in ("50", "90"):
+            for a in ("50", "80", "90"):
                 if f"{pre}_{m}_lo{a}" in out:
                     dentro = (out[f"{m}_real"] >= out[f"{pre}_{m}_lo{a}"]) & (out[f"{m}_real"] <= out[f"{pre}_{m}_hi{a}"])
                     out[f"{pre}_cob{a}_{m}"] = np.where(ok & out[f"{pre}_{m}_lo{a}"].notna(), dentro.astype(float), np.nan)
-        for a in ("50", "90"):
+        for a in ("50", "80", "90"):
             if f"{pre}_min_lo{a}" in out:
                 dentro = (out["min_real"] >= out[f"{pre}_min_lo{a}"]) & (out["min_real"] <= out[f"{pre}_min_hi{a}"])
                 out[f"{pre}_cob{a}_min"] = np.where(out["min_real"].notna() & ok_rol, dentro.astype(float), np.nan)
     out["eval_min"] = out["min_real"].notna() & ok_rol
+    # §6 · contribución real C = (min/partido ÷ minutos del partido) · pts/100 (0 si < 50 min en la temporada)
+    gm = np.array([S.minutos_partido(l) for l in out["liga_d"]], float)
+    pts = pd.to_numeric(out["pts_p100_real"], errors="coerce").fillna(0).to_numpy(float)
+    out["C_real"] = np.where(pd.to_numeric(out["min_total_real"], errors="coerce").fillna(0) >= 50,
+                             out["min_real"].to_numpy(float) / gm * pts, 0.0)
     return out
 
 
@@ -985,7 +1007,7 @@ def dejar_fuera_liga(etiqueta: str = "AB_inicio", min_casos: int = 30, progreso=
         pc = preparar_corte(t, fuente, cfg, roles, progreso)
         c = S.cargar_corte(t, fuente, pesos=False)
         t1 = SI.siguiente(t)
-        eq1 = S.cargar_corte(t1, "AB" if fuente.startswith("A") else fuente, pesos=False).eq
+        eq1 = S.cargar_corte(t1, fuente_t1(fuente), pesos=False).eq
         r1 = roles[roles["temporada"] == t1]
         for L in ligas:
             casos = pc["casos"][pc["casos"]["liga_d"] == L]

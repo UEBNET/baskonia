@@ -42,12 +42,19 @@ export CERNO_SIMULADOR=v32
 paso python3 -m bbfit dataset-simulador
 paso python3 -m bbnorm3 --config $N32 destino                 # vara de destino (cualquier liga a 0)
 paso python3 -m bbfit backtest --fuente V32 --escenario inicio --adaptacion
-for v in sin_redistribuir_uso sin_adaptacion; do
-  paso env CERNO_SIM_VARIANTE=$v python3 -m bbfit backtest --fuente V32 --escenario inicio --adaptacion \
-    --pesos-de V32_inicio_adapt
+# §1 · fuente sin fuga: la normalización v3.2 ajustada con ≤ t en cada corte (con los pesos por corte de la V32)
+paso python3 -m bbfit backtest --fuente V32_corte --escenario inicio --adaptacion --pesos-de V32_inicio_adapt
+for f in V32 V32_corte; do
+  for v in sin_redistribuir_uso sin_adaptacion; do
+    paso env CERNO_SIM_VARIANTE=$v python3 -m bbfit backtest --fuente $f --escenario inicio --adaptacion \
+      --pesos-de V32_inicio_adapt
+  done
 done
 paso python3 -m bbfit v32-decidir
-paso python3 -m bbfit b7-b9
+# si decisiones_v32.json marca «falta_combinacion» (la regla quita los dos pasos con ejecución propia):
+#   CERNO_SIM_VARIANTE=sin_redistribuir_uso+sin_adaptacion python3 -m bbfit backtest --fuente <V32|V32_corte> …
+#   y se repite `bbfit v32-decidir`
+paso python3 -m bbfit b7-b9 --etiqueta V32_corte_inicio_adapt
 # (se fijan en configs/simulation_v32.yaml pasos, factor_ajustes_ts, produccion_publicada y aplicar_recalibracion)
 paso python3 -m bbfit pesos-simulador
 paso python3 -m bbfit historico

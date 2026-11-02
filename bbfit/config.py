@@ -26,9 +26,12 @@ def cargar(nombre: str) -> dict:
     var = os.environ.get("CERNO_SIM_VARIANTE")
     if nombre.startswith("simulation") and var:
         # v3.2 · A1: examen con un paso del motor apagado («sin_<paso>»); la etiqueta separa sus cachés y resultados
-        paso = var.removeprefix("sin_")
-        if paso not in (d.get("pasos") or {}):
-            raise KeyError(f"CERNO_SIM_VARIANTE={var}: el paso «{paso}» no está en pasos")
-        d["pasos"] = {**d["pasos"], paso: False}
+        pasos = {**(d.get("pasos") or {})}
+        for parte in var.split("+"):                 # «sin_a+sin_b»: combinación de pasos apagados (§2)
+            paso = parte.removeprefix("sin_")
+            if paso not in pasos:
+                raise KeyError(f"CERNO_SIM_VARIANTE={var}: el paso «{paso}» no está en pasos")
+            pasos[paso] = False
+        d["pasos"] = pasos
         d["variante"] = var
     return d

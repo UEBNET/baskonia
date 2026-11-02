@@ -71,6 +71,11 @@ def lineas_base(cfg: dict, anio: int) -> pd.DataFrame:
 def componentes(tabla: pd.DataFrame, cfg: dict, anio: int) -> pd.DataFrame:
     """Una fila por caso y métrica con las dos partes (CVAE y v2) en la escala de trabajo estandarizada."""
     r, esc = predicciones_cvae(tabla, cfg, anio)
+    return componentes_desde(r, esc, tabla, cfg, anio)
+
+
+def componentes_desde(r: pd.DataFrame, esc, tabla: pd.DataFrame, cfg: dict, anio: int) -> pd.DataFrame:
+    """Como `componentes`, a partir de unas predicciones de la CVAE ya hechas (p. ej. de una variante de la ablación)."""
     j = examen.unir(r, lineas_base(cfg, anio))
     out = []
     for col, g in j.groupby("metrica"):
@@ -328,24 +333,97 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
 
 
 # ---------------------------------------------------------------------------------------------- v3.2 · B2
-def elegir_pesos_metrica(comp: dict, anios: list[int], cfg: dict) -> dict:
-    """B2: peso de la CVAE por métrica que minimiza el MAE de la métrica en los cortes `anios` (casos generales: sin
-    ligas de conocimiento ni salvaguardas); a igualdad (diferencia < 0,1 %), el más cercano a `peso_v3`."""
+def elegir_pesos_metrica(comp: dict, anios: list[int], cfg: dict, informe: dict | None = None) -> dict:
+    """B2 (§9 de los criterios del 02-11-2026): para cada métrica, ŵ = argmin MAE_m(w) en la rejilla con los cortes
+    `anios` (casos generales); D = MAE(ŵ)/MAE(0,5) − 1 con IC 95 % bootstrap por persona × corte; w = ŵ sólo si
+    IC95,sup(D) < −mejora_minima (1 %); si no, 0,5."""
     cb = cfg["combinacion"]
     cand = [float(x) for x in cb["pesos_candidatos"]]
+    w0 = float(cb["peso_v3"])
     j = pd.concat([comp[a] for a in anios], ignore_index=True)
     j.attrs["esc"] = comp[anios[-1]].attrs["esc"]
-    mae = {}
+    err = {}
     for w in cand:
         r = combinar(j, cfg, None, {m: w for m in j["metrica"].unique()})
-        r = r[r["motivo_peso"] == "por_metrica"]
-        mae[w] = (r["v3"] - r["real"]).abs().groupby(r["metrica"]).mean()
-    tab = pd.DataFrame(mae)
+        err[w] = r.assign(e=(r["v3"] - r["real"]).abs())[["metrica", "persona_id", "anio", "e", "motivo_peso"]]
+    base = err[w0]
+    gen = (base["motivo_peso"] == "por_metrica").to_numpy()
+    unidad = pd.factorize(base["persona_id"].astype(str) + "|" + base["anio"].astype(str))[0]
+    rng = np.random.default_rng(int(cfg["validacion"]["semilla_bootstrap"]))
+    B = int(cb.get("bootstrap", 1000))
+    mejora = float(cb.get("mejora_minima", 0.01))
+    out, detalle = {}, {}
+    for m in sorted(base["metrica"].unique()):
+        s_ = gen & (base["metrica"] == m).to_numpy()
+        if s_.sum() < 30:
+            continue
+        mae = {w: float(err[w]["e"].to_numpy()[s_].mean()) for w in cand}
+        wh = min(cand, key=lambda w: (mae[w], abs(w - w0)))
+        if wh == w0:
+            out[m] = w0
+            detalle[m] = {"w_hat": wh, "D": 0.0, "ic95": [0.0, 0.0], "w": w0}
+            continue
+        u = unidad[s_]
+        nu = u.max() + 1
+        eh, e0 = err[wh]["e"].to_numpy()[s_], base["e"].to_numpy()[s_]
+        sh, s0 = np.bincount(u, eh, nu), np.bincount(u, e0, nu)
+        vals = np.empty(B)
+        for b in range(B):
+            wu = np.bincount(rng.integers(0, nu, nu), minlength=nu)
+            vals[b] = (wu @ sh) / (wu @ s0) - 1
+        lo, hi = np.quantile(vals, [0.025, 0.975])
+        w = wh if hi < -mejora else w0
+        out[m] = w
+        detalle[m] = {"w_hat": wh, "D": mae[wh] / mae[w0] - 1, "ic95": [float(lo), float(hi)], "w": w}
+    if informe is not None:
+        informe.update({"detalle": detalle, "apartadas_de_0_5": {m: d["w"] for m, d in detalle.items() if d["w"] != w0},
+                        "hacia_cvae": sum(d["w"] > w0 for d in detalle.values()),
+                        "hacia_v2": sum(d["w"] < w0 for d in detalle.values())})
+    return out
+
+
+def rapm_exposicion(r: pd.DataFrame) -> dict:
+    """§14 (adaptado: el RAPM de bbstats es ridge hacia 0, sin prior de caja) · con pocas posesiones el RAPM se encoge
+    hacia 0 y acertarlo puede ser acertar el encogimiento. Se repite la comparación con la v2 sólo en los jugadores
+    con exposición ALTA en destino (posesiones en pista ≥ mediana de los casos). Si la ganancia allí es menor que un
+    tercio de la ganancia total, la mejora del RAPM no se comunica como «impacto en pista»."""
     out = {}
-    for m, fila in tab.iterrows():
-        best = fila.min()
-        empatados = [w for w in cand if fila[w] <= best * 1.001]
-        out[m] = min(empatados, key=lambda w: abs(w - float(cb["peso_v3"])))
+    for m in ("rapm", "orapm", "drapm"):
+        g = r[r["metrica"] == m]
+        if not len(g) or "poss_on_d" not in g or g["poss_on_d"].isna().all():
+            continue
+        med = float(g["poss_on_d"].median())
+        alta = g[g["poss_on_d"] >= med]
+        f = lambda x: float((x["v3"] - x["real"]).abs().mean() / (x["am"] - x["real"]).abs().mean() - 1)  # noqa: E731
+        tot, al = f(g), f(alta)
+        out[m] = {"casos": int(len(g)), "posesiones_mediana": med, "ganancia_total": tot, "ganancia_exposicion_alta": al,
+                  "comunicar_como_impacto": bool(tot < 0 and al <= tot / 3)}
+    return out
+
+
+def nu_por_metrica(tabla: pd.DataFrame, cfg: dict) -> dict | None:
+    """B6 (§10): ν̂_m de la t de Student (media de las redes del ajuste final); aviso si alguna toca el límite inferior."""
+    if cfg["red"].get("verosimilitud", "normal") != "student":
+        return None
+    D, cj = flujo.conjunto(tabla, cfg, None, progreso=None)
+    nu = np.mean([m.nu().detach().numpy() for m, _ in cj], 0)
+    lo = float(cfg["red"].get("nu_rango", [3, 30])[0])
+    return {"nu": {k: float(v) for k, v in zip(datos.METRICAS, nu)},
+            "en_limite_inferior": [k for k, v in zip(datos.METRICAS, nu) if v < lo + 0.25]}
+
+
+def b5_discrepancia(comp: dict, cfg: dict) -> dict:
+    """B5 (§10): fracción de casos que activan «sd entre redes > umbral» con las 5 primeras redes y con las 20; si
+    difieren más de 2 puntos, el umbral recomendado es el cuantil 95 % de la sd entre redes de los cortes anteriores."""
+    umbral = float(cfg["combinacion"]["max_discrepancia_redes"])
+    j = pd.concat(comp.values(), ignore_index=True)
+    out = {"umbral": umbral, "con_20": float((j["v3_sd_entre_z"] > umbral).mean())}
+    cz5 = [f"cz_{k}" for k in range(5) if f"cz_{k}" in j]
+    if len(cz5) == 5:
+        out["con_5"] = float((j[cz5].std(1, ddof=0) > umbral).mean())
+        out["diferencia_pp"] = 100 * (out["con_20"] - out["con_5"])
+        out["umbral_cuantil_95"] = float(j["v3_sd_entre_z"].quantile(0.95))
+        out["cambiar_umbral"] = abs(out["diferencia_pp"]) > 2
     return out
 
 
@@ -358,15 +436,19 @@ def validar_combinada_v32(tabla: pd.DataFrame, cfg: dict) -> dict:
     anios = [int(v.get("anio_calibracion", dec[0] - 1))] + dec
     comp = {a: componentes(tabla, cfg, a) for a in anios}
     dv = flujo.dir_val(cfg)
-    pesos_por_corte = {}
+    pesos_por_corte, inf_pesos = {}, {}
     for k, a in enumerate(anios):
         prev = [x for x in dec if x < a]
-        pesos_por_corte[a] = elegir_pesos_metrica(comp, prev, cfg) if prev else None
-    final = elegir_pesos_metrica(comp, dec, cfg)
+        inf_pesos[a] = {}
+        pesos_por_corte[a] = elegir_pesos_metrica(comp, prev, cfg, inf_pesos[a]) if prev else None
+    inf_final = {}
+    final = elegir_pesos_metrica(comp, dec, cfg, inf_final)
     informe = {"aviso": "Cortes anidados: el peso por métrica de cada corte se eligió sólo con los cortes anteriores. "
                         "Los cortes 2023 y 2024 ya se habían mirado al diseñar la v3.1: el examen limpio será "
                         "2025-26 → 2026-27.",
-               "pesos_por_corte": {str(a): p for a, p in pesos_por_corte.items()}, "pesos_finales": final}
+               "pesos_por_corte": {str(a): p for a, p in pesos_por_corte.items()}, "pesos_finales": final,
+               "pesos_detalle_por_corte": {str(a): x for a, x in inf_pesos.items()}, "pesos_detalle_final": inf_final,
+               "B5_salvaguarda_discrepancia": b5_discrepancia(comp, cfg)}
 
     def evaluar(pc: dict, w_con, f_con=None):
         comb = {a: combinar(comp[a], cfg, w_con, pc[a]) for a in anios}
@@ -392,6 +474,8 @@ def validar_combinada_v32(tabla: pd.DataFrame, cfg: dict) -> dict:
     p3.update({"peso_v3_conocimiento_elegido": w_opt, "factor_intervalo_conocimiento_elegido": f_opt,
                "rejilla_conocimiento_frente_am": rejilla})
     informe["combinada_b2_con_conocimiento_feb3"] = p3
+    informe["rapm_exposicion"] = rapm_exposicion(r3)
+    informe["nu_por_metrica"] = nu_por_metrica(tabla, cfg)
     r3.round(5).to_csv(dv / "casos_combinada_v32.csv.gz", index=False)
     examen.resumen_metricas(r3).round(4).to_csv(dv / "resumen_metricas_v32.csv", index=False)
     (dv / "examen_v32.json").write_text(json.dumps(informe, indent=1, ensure_ascii=False, default=float),

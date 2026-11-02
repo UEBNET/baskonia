@@ -96,24 +96,40 @@ def test_pesos_por_metrica():
 
 
 def test_recalibracion_conforme_cubre_lo_nominal():
+    """A4 (§5): dos colas por separado, pesos por recencia, contracción por grupos y corrección de muestra finita."""
+    import os
+    os.environ["CERNO_SIMULADOR"] = "v32"
     from bbfit import v32
+    from bbfit.config import cargar
+    cargar.cache_clear()
+    c = cargar("simulation")
     rng = np.random.default_rng(0)
-    n = 4000
-    y = rng.normal(0, 2, n)
-    p = pd.DataFrame({"pred": np.zeros(n), "lo50": -0.5, "hi50": 0.5, "lo90": -1.0, "hi90": 1.0})
-    g = pd.Series(np.where(rng.random(n) < 0.5, "europa", "feb"))
+    n = 6000
+    y = rng.gamma(2.0, 1.0, n) - 2.0                     # residuo asimétrico (cola derecha larga)
+    p = pd.DataFrame({"pred": np.zeros(n), **{f"lo{a}": -0.5 for a in ("50", "80", "90")},
+                      **{f"hi{a}": 0.5 for a in ("50", "80", "90")}})
+    gd = pd.Series(np.where(rng.random(n) < 0.5, "europa", "feb"))
+    go = pd.Series(np.where(rng.random(n) < 0.2, "ncaa", "resto"))
     ok = np.ones(n, bool)
-    f = v32.ajustar_recalibracion(None, p, y, ok, g, 30)
-    q = v32.aplicar_recalibracion(p, f, g)
-    for a, nominal in (("50", 0.5), ("90", 0.9)):
-        cob = ((y >= q[f"lo{a}"]) & (y <= q[f"hi{a}"])).mean()
-        assert cob == pytest.approx(nominal, abs=0.02)
-    # sin intervalo propio (A2): semiamplitud = cuantil del error absoluto
-    p2 = p.assign(lo90=np.nan, hi90=np.nan, lo50=np.nan, hi50=np.nan)
-    f2 = v32.ajustar_recalibracion(None, p2, y, ok, g, 30)
+    w = np.ones(n)
+    f = v32.ajustar_recalibracion(p, y, ok, gd, go, w, c)
+    q = v32.aplicar_recalibracion(p, f, gd, go)
+    for a, nominal in (("50", 0.5), ("80", 0.8), ("90", 0.9)):
+        dentro = (y >= q[f"lo{a}"]) & (y <= q[f"hi{a}"])
+        assert dentro.mean() == pytest.approx(nominal, abs=0.02)
+        # cada cola deja fuera ≈ (1 − α)/2
+        assert (y < q[f"lo{a}"]).mean() == pytest.approx((1 - nominal) / 2, abs=0.015)
+    # sin intervalo propio (A2): semiamplitudes con signo
+    p2 = p.assign(**{f"{s_}{a}": np.nan for a in ("50", "80", "90") for s_ in ("lo", "hi")})
+    f2 = v32.ajustar_recalibracion(p2, y, ok, gd, go, w, c)
     assert f2["90"]["tipo"] == "semiamplitud"
-    q2 = v32.aplicar_recalibracion(p2, f2, g)
+    q2 = v32.aplicar_recalibracion(p2, f2, gd, go)
     assert ((y >= q2["lo90"]) & (y <= q2["hi90"])).mean() == pytest.approx(0.9, abs=0.02)
+    # pesos por recencia: el corte anterior pesa 1, el de antes ρ
+    wr = v32.pesos_recencia(pd.Series(["2021-22", "2022-23"]), "2023-24", ["2021-22", "2022-23", "2023-24"], 0.5)
+    assert list(wr) == [0.5, 1.0]
+    os.environ.pop("CERNO_SIMULADOR")
+    cargar.cache_clear()
 
 
 def test_vara_destino_invariante_en_el_centro():
