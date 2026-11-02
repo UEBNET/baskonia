@@ -55,7 +55,7 @@ def lineas_base(cfg: dict, anio: int) -> pd.DataFrame:
     v = cfg["validacion"]
     if v.get("lineas_base_dir"):          # v3.2: líneas base de la v2 rehechas con las 20 ligas en todos los cortes
         d = C.RAIZ / v["lineas_base_dir"]
-        base = examen.lineas_base(anio, d / f"sin_mapeo_{anio}.csv.gz", d / "b.csv")
+        base = examen.lineas_base(anio, d / f"sin_mapeo_{anio}.csv.gz", d / "b.csv.gz")
     elif anio == int(v["anio_seleccion"]):
         d = C.RAIZ / v["lineas_base_seleccion"]
         base = examen.lineas_base(anio, d / f"sin_mapeo_{anio}.csv.gz", d / f"b_{anio}.csv")

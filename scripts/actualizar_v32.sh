@@ -9,7 +9,7 @@
 # Paso 0 (aparte, en una copia aislada para no sobrescribir los ficheros versionados de la v2): líneas base de la v2
 # rehechas con las 20 ligas en los cortes 2021-2024 (`bbmodel amortiguar --validar --variante sin_mapeo` con
 # validacion.anios = [2021, 2022, 2023, 2024] y `bbmodel validar-b --anios 2021 2022 2023 2024`), copiadas a
-# data/modelos/v3_2/validacion/lineas_base/ (sin_mapeo_<año>.csv.gz y b.csv) y su caché del A por corte a
+# data/modelos/v3_2/validacion/lineas_base/ (sin_mapeo_<año>.csv.gz y b.csv.gz) y su caché del A por corte a
 # experimentos/cache_normalizacion/ (la usa F0).
 set -euo pipefail
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
