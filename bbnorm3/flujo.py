@@ -12,11 +12,15 @@ from . import datos, examen, modelo, niveles, prediccion
 
 DIR_CACHE = C.RAIZ / "experimentos" / "v3"
 # claves que no cambian las redes entrenadas (no entran en la huella de la caché)
-NO_MODELO = ("validacion", "prediccion", "semillas", "version", "salida", "combinacion")
+NO_MODELO = ("validacion", "prediccion", "semillas", "version", "salida", "combinacion", "ablacion", "destino")
+# v3.2: la inferencia semiamortizada (B4) y la vara de salida se aplican DESPUÉS de entrenar: no cambian las redes
+# (en la v3.0/v3.1 sí entraban en la huella; se conserva para no invalidar sus cachés)
+NO_MODELO_V32 = ("inferencia", "referencia_salida")
 
 
 def _huella(cfg: dict) -> str:
-    cfg = {k: v for k, v in cfg.items() if k not in NO_MODELO}
+    fuera = NO_MODELO + (NO_MODELO_V32 if str(cfg.get("version", "")) >= "v3.2" else ())
+    cfg = {k: v for k, v in cfg.items() if k not in fuera}
     return hashlib.sha1(json.dumps(cfg, sort_keys=True, default=str).encode()).hexdigest()[:10]
 
 

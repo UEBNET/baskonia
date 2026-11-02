@@ -16,6 +16,9 @@
   auditar     identidades: personas coherentes en roles y plantillas exportadas = las reales [--simulador carpeta]
   dataset-simulador  simulador v3.1: dataset normalizado que lee (v3.1; Tercera FEB con la v2) → normalizacion.dir
   adaptacion-v3  adaptación v3 (ADAPT% ascendente hacia el nivel adaptado) → data/modelos/adaptacion/v3/
+  b7-b9       evaluación del impacto posible de B7 (modelo supervisado directo) y B9 (minutos + producción)
+  v32-decidir  simulador v3.2: decisiones A1-A4 con cortes anidados → data/modelos/simulador/v3_2/decisiones_v32.json
+               (variantes de un paso apagado: CERNO_SIM_VARIANTE=sin_<paso> python -m bbfit backtest … --pesos-de …)
   (simulador v3: CERNO_SIMULADOR=v3 python -m bbfit <orden> usa configs/simulation_v3.yaml → data/modelos/simulador/v3/)
   adaptacion  fase 7: adaptación al cambio de liga (Δ jerárquico, curva, censura, ADAPT%) → data/modelos/adaptacion/
               (reanudable: caché en experimentos/cache_adaptacion; --rehacer la ignora; --sin-validacion)
@@ -86,6 +89,18 @@ def _backtest(a):
     return {"resumen": r["resumen"], "bootstrap": r["bootstrap"]}
 
 
+def _b7b9(a):
+    from . import b7_b9
+    r = b7_b9.main(a.etiqueta)
+    return {"B7": r["B7"], "B9": r["B9"]}
+
+
+def _v32(a):
+    from . import v32
+    r = v32.main()
+    return {"final": {k: r["final"][k] for k in ("quitar", "produccion", "A3")}}
+
+
 def _pesos(a):
     from . import validacion as V
     return V.pesos_produccion()
@@ -103,7 +118,8 @@ def _exportar_sim(a):
 
 ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "estilos": _estilos,
            "adaptacion": _adaptacion, "adaptacion-v3": _adaptacion_v3, "dataset-simulador": _dataset_simulador, "auditar": _auditar, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
-           "historico": _historico, "exportar-simulador": _exportar_sim}
+           "historico": _historico, "exportar-simulador": _exportar_sim,
+           "v32-decidir": _v32, "b7-b9": _b7b9}
 
 
 def main(argv=None) -> int:
@@ -126,6 +142,7 @@ def main(argv=None) -> int:
     p.add_argument("--pesos-de", default=None, help="backtest: reutiliza los pesos por corte de otra ejecución")
     p.add_argument("--cortes", nargs="*", default=None, help="backtest: temporadas t de examen (t → t+1)")
     p.add_argument("--salida", default=None, help="exportar-simulador: carpeta de salida")
+    p.add_argument("--etiqueta", default=None, help="b7-b9: etiqueta del examen (por defecto, el de producción)")
     p.add_argument("--simulador", default=None, help="auditar: carpeta de exportar-simulador (clubes.json, jugadores.json)")
     p.add_argument("--sin-validacion", action="store_true", help="adaptacion: omite el examen temporal y dejar fuera una liga")
     a = p.parse_args(argv)

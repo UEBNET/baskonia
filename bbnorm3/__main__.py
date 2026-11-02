@@ -10,6 +10,9 @@ v3.1 (combinación v2 + CVAE corregida, configs/normalization_v31.yaml):
     python -m bbnorm3 --config configs/normalization_v31.yaml validar-combinada
     python -m bbnorm3 --config configs/normalization_v31.yaml ajustar-combinada
 
+v3.2 (B1/B4/B6 con cortes anidados, B2, B5; configs/normalization_v32.yaml):
+    python -m bbnorm3 --config configs/normalization_v32.yaml ablacion [--fase entrenar|predecir|decidir]
+
 Las redes entrenadas se guardan en experimentos/v3/ (no versionado) para poder reanudar sin reentrenar.
 """
 from __future__ import annotations
@@ -38,7 +41,12 @@ def main(argv=None):
     sub.add_parser("f0", help="cobertura de la línea base F0 (grafo amortiguado con covarianza completa)")
     sub.add_parser("ajustar")
     sub.add_parser("validar-combinada", help="v3.1: examen de la combinación v2 + CVAE")
-    sub.add_parser("ajustar-combinada", help="v3.1: ajuste final y dataset normalizado combinado")
+    sub.add_parser("ajustar-combinada", help="v3.1/v3.2: ajuste final y dataset normalizado combinado")
+    sub.add_parser("validar-v32", help="v3.2: examen anidado de la combinación con pesos por métrica (B2)")
+    sub.add_parser("destino-covarianza", help="v3.2: covarianza conjunta de los niveles de la v2 (vara de destino)")
+    sub.add_parser("destino", help="v3.2: capacidad y constantes para expresar todo en la vara de la liga de destino")
+    ab = sub.add_parser("ablacion", help="v3.2: ablación B1/B4/B6 con cortes anidados (bbnorm3/ablacion.py)")
+    ab.add_argument("--fase", default="todo", choices=["todo", "entrenar", "predecir", "decidir"])
     ap.add_argument("--config", help="configuración (por defecto configs/normalization_v3.yaml, la v3.0)")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
@@ -57,6 +65,18 @@ def main(argv=None):
     elif a.orden == "validar-combinada":
         from . import combinacion
         combinacion.validar_combinada(tabla, cfg)
+    elif a.orden == "destino-covarianza":
+        from . import destino
+        destino.covarianza_v2(cfg, tabla)
+    elif a.orden == "destino":
+        from . import destino
+        destino.exportar(tabla, cfg)
+    elif a.orden == "ablacion":
+        from . import ablacion
+        ablacion.main(tabla, cfg, a.fase)
+    elif a.orden == "validar-v32":
+        from . import combinacion
+        combinacion.validar_combinada_v32(tabla, cfg)
     elif a.orden == "ajustar-combinada":
         from . import combinacion
         combinacion.ajustar_combinada(tabla, cfg)

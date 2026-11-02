@@ -96,7 +96,7 @@ def expertos_refinados(modelo: CVAE, pasos: int, lr: float = 0.05, sd_previa: fl
         yhat = modelo.decodificar(r, modelo.i_liga, modelo.i_grupo, modelo.i_equipo)
         if modelo.usar_unicidad:
             yhat = yhat + modelo.Z[modelo.i_persona_id].detach()
-        loss = (0.5 * modelo.Mk * (modelo.Y - yhat) ** 2 / var).sum() + 0.5 * (r ** 2).sum() / sd_previa ** 2
+        loss = -modelo.log_verosimilitud(modelo.Y, yhat, var, modelo.Mk).sum() + 0.5 * (r ** 2).sum() / sd_previa ** 2
         loss.backward()
         opt.step()
     with torch.no_grad():
@@ -104,10 +104,12 @@ def expertos_refinados(modelo: CVAE, pasos: int, lr: float = 0.05, sd_previa: fl
         base = modelo.decodificar(r, modelo.i_liga, modelo.i_grupo, modelo.i_equipo)
         h = 1e-3
         H = torch.zeros_like(r)
+        # información de Fisher: normal → 1/var; t de Student (B6) → (ν+1)/((ν+3)·escala²)
+        fisher = ((modelo.nu() + 1) / (modelo.nu() + 3))[None, :] if modelo.student else 1.0
         for k in range(r.shape[1]):
             e = torch.zeros_like(r); e[:, k] = h
             d = (modelo.decodificar(r + e, modelo.i_liga, modelo.i_grupo, modelo.i_equipo) - base) / h
-            H[:, k] = (modelo.Mk * d ** 2 / var).sum(1)
+            H[:, k] = (fisher * modelo.Mk * d ** 2 / var).sum(1)
         H = H.clamp(min=1e-3)
         media = r + r / sd_previa ** 2 / H
     return media.numpy().astype(float), H.numpy().astype(float)

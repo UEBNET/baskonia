@@ -47,7 +47,7 @@ def cfg_sim() -> dict:
 def fuente_base(cfg: dict | None = None) -> str:
     """Fuente de θ de producción: «AB» en la v2, la de la configuración («V31») en la v3."""
     f = str((cfg or cfg_sim())["normalizacion"].get("fuente", "AB"))
-    return f if f.startswith("V31") else "AB"
+    return f if f.startswith(("V31", "V32")) else "AB"
 
 
 def ruta_produccion(cfg: dict | None = None) -> tuple[str, str, bool]:
@@ -262,6 +262,17 @@ def _fila_pred(x, r: dict) -> dict:
             f[f"{m}_lo{a}"], f[f"{m}_hi{a}"] = d[f"lo{a}"], d[f"hi{a}"]
     for m, v in r["traduccion_media"].items():
         f[f"{m}_trad"] = v
+    for m, d in (r.get("produccion_motor_p100") or {}).items():       # v3.2 · A1 (sin ruido personal)
+        f[f"{m}_motor_pred"] = d["media"]
+        for a in ("50", "90"):
+            f[f"{m}_motor_lo{a}"], f[f"{m}_motor_hi{a}"] = d[f"lo{a}"], d[f"hi{a}"]
+    for k, dd in (r.get("rejilla_ajustes_ts") or {}).items():         # v3.2 · A3
+        kb, kc = k.split("|")
+        for m, d in dd.items():
+            pre = f"g{kb}_{kc}_{m}"
+            f[f"{pre}_pred"] = d["media"]
+            for a in ("50", "90"):
+                f[f"{pre}_lo{a}"], f[f"{pre}_hi{a}"] = d[f"lo{a}"], d[f"hi{a}"]
     f["pts_pg_pred"] = r["por_partido"]["pts"]["media"]
     f["adapt_pct"] = r["adaptacion"]["adapt_pct_temporada"]["media"]
     f["adapt_pct_primeros"] = r["adaptacion"]["adapt_pct_primeros"]["media"]
@@ -637,7 +648,8 @@ def ejecutar_corte(t: str, fuente: str, cfg: dict, roles: pd.DataFrame, pesos: d
                    trans: pd.DataFrame | None, escenario: str = "inicio", progreso=print, sin_adaptacion=False,
                    etiqueta: str = "") -> pd.DataFrame:
     """Predicciones (v2, baselines a y b) de los fichajes del corte t. Caché por (corte, fuente, escenario, etiqueta)."""
-    dest = SI.DIR_CACHE / f"pred_{t}_{fuente}_{escenario}{etiqueta}.pkl"
+    var = cfg.get("variante")
+    dest = SI.DIR_CACHE / f"pred_{t}_{fuente}_{escenario}{etiqueta}{'_' + var if var else ''}.pkl"
     if dest.exists():
         return pickle.loads(dest.read_bytes())
     pc = preparar_corte(t, fuente, cfg, roles, progreso)
@@ -864,7 +876,8 @@ def _motor(d: pd.DataFrame) -> pd.DataFrame:
 
 
 def _etiqueta(fuente: str, escenario: str, adaptacion: bool) -> str:
-    return f"{fuente.replace(':', '_')}_{escenario}{'' if not adaptacion else '_adapt'}"
+    var = cfg_sim().get("variante")              # v3.2 · A1: «sin_<paso>»
+    return f"{fuente.replace(':', '_')}_{escenario}{'' if not adaptacion else '_adapt'}{'_' + var if var else ''}"
 
 
 def backtest(fuente: str = "AB", escenario: str = "inicio", cortes: list[str] | None = None, progreso=print,

@@ -111,6 +111,40 @@ def _nodo(nodos: dict, liga: str, temp: str, ref: str = "euroleague") -> tuple[f
     return float(d.mean()), float(np.mean([v[1] for v in vs]) + d.var())
 
 
+_COV: dict = {}
+
+
+def covarianza_destino(m: str) -> tuple[dict, np.ndarray] | None:
+    """v3.2 · covarianza conjunta Σ' de los niveles δ' (constantes lineales v3.2) de la métrica m: ({nodo: índice}, Σ').
+    Fichero de bbnorm3.destino (configs/simulation_v32.yaml → destino.covarianza); None si no existe."""
+    if m in _COV:
+        return _COV[m]
+    d = (cfg_sim().get("destino") or {}).get("covarianza")
+    f = RAIZ / d / f"{m}.json" if d else None
+    if f is None or not f.exists():
+        _COV[m] = None
+        return None
+    doc = json.loads(f.read_text(encoding="utf-8"))
+    n = len(doc["nodos"])
+    S = np.zeros((n, n))
+    S[np.tril_indices(n)] = doc["cov_triangular"]
+    S = S + S.T - np.diag(np.diag(S))
+    _COV[m] = ({k: i for i, k in enumerate(doc["nodos"])}, S)
+    return _COV[m]
+
+
+def var_par(m: str, nodo_a: str, nodo_b: str) -> float:
+    """Var(δ'_a − δ'_b) = Σ'_aa + Σ'_bb − 2Σ'_ab de la métrica m (NaN si falta la covarianza o algún nodo)."""
+    cv = covarianza_destino(m)
+    if cv is None:
+        return np.nan
+    ix, S = cv
+    ia, ib = ix.get(nodo_a), ix.get(nodo_b)
+    if ia is None or ib is None:
+        return np.nan
+    return float(max(S[ia, ia] + S[ib, ib] - 2 * S[ia, ib], 0.0))
+
+
 def entorno(c: dict, liga: str, temp: str, pos: str) -> tuple[float, float]:
     """(μ, τ) del grupo liga-temporada-posición en la escala transformada (temporada más cercana si falta)."""
     mu = c["mu"].get(f"{liga}|{temp}|{pos}")
@@ -219,7 +253,8 @@ def theta_completa(fuente: str, metricas: list[str], trad: dict) -> pd.DataFrame
     """θ por jugador-liga-temporada con todas las temporadas: «AB» desde <m>_am (normalizado) o «A» desde
     traducciones amortiguadas (<m>_am_a, <m>_am_sd)."""
     DIR_CACHE.mkdir(parents=True, exist_ok=True)
-    dest = DIR_CACHE / f"theta_{fuente}.pkl"
+    dest = DIR_CACHE / (f"theta_{fuente}.pkl" if set(metricas) == set(metricas_traduccion())
+                        else f"theta_{fuente}_{len(metricas)}m.pkl")
     if dest.exists():
         return pickle.loads(dest.read_bytes())
     partes = []
@@ -250,6 +285,11 @@ def theta_completa(fuente: str, metricas: list[str], trad: dict) -> pd.DataFrame
                     t_[k], s_[k] = theta_desde_valor(v[k], lo[k], hi[k], c[m], pos)
             th[f"{m}_th"], th[f"{m}_thsd"] = t_, s_
             th[f"{m}_am"] = v
+            # v3.2 · vara de destino: varianza PROPIA del jugador (sin la del nivel de su competición frente a la
+            # EuroLeague, que entra después con su covarianza frente al destino); mínimo 10 % de la total
+            vo = np.array([_nodo(trad["nodos"].get(m, {}), lg, tp)[1] for lg, tp in zip(n["liga"], n["temporada"])])
+            vo = np.where(np.isfinite(vo), vo, 0.0)
+            th[f"{m}_vj"] = np.maximum(s_ ** 2 - vo, 0.1 * s_ ** 2)
     dest.write_bytes(pickle.dumps(th))
     return th
 
@@ -259,7 +299,7 @@ def _dir_norm() -> tuple[Path, str]:
     data/modelos/v3_1/normalizado/<t>.csv.gz, mismo esquema que el v1: sus <m>_am llevan la v3.1 y <m>_am_v1 el A+B
     amortiguado); resto = data/modelos/normalizado/<t>.csv."""
     n = cfg_sim()["normalizacion"]
-    if str(n["fuente"]).startswith("V31"):
+    if str(n["fuente"]).startswith(("V31", "V32")):
         return RAIZ / n.get("dir", "data/modelos/v3_1/normalizado"), ".csv.gz"
     return DIR_NORM, ".csv"
 
@@ -303,7 +343,7 @@ def dataset_simulador(progreso=print) -> Path:
 def traduccion(fuente: str, metricas: list[str] | None = None) -> dict:
     """Constantes de traducción a la liga de destino según la fuente de θ: «V31» = las de la v3.1 (traduccion_v31);
     el resto (AB, A y «V31A», diagnóstico) = las de la normalización amortiguada (traduccion_completa)."""
-    return traduccion_v31(metricas) if fuente == "V31" else traduccion_completa(metricas)
+    return traduccion_v31(metricas) if fuente in ("V31", "V32") else traduccion_completa(metricas)
 
 
 def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
@@ -322,7 +362,8 @@ def traduccion_v31(metricas: list[str] | None = None, progreso=print) -> dict:
     es lineal (correlación < traduccion.r_minima: sólo la Tercera FEB) se conservan las constantes amortiguadas.
     Caché: traduccion_v31.pkl (en la caché de la versión)."""
     DIR_CACHE.mkdir(parents=True, exist_ok=True)
-    dest = DIR_CACHE / "traduccion_v31.pkl"
+    dest = DIR_CACHE / ("traduccion_v31.pkl" if metricas is None or set(metricas) == set(metricas_traduccion())
+                        else f"traduccion_v31_{len(metricas)}m.pkl")
     if dest.exists():
         return pickle.loads(dest.read_bytes())
     metricas = metricas or metricas_traduccion()

@@ -18,6 +18,10 @@ temporada c = (l, t) con nivel μ_c ∈ ℝ^K y escala s_l > 0. Posición RELATI
     (todas sus ligas y temporadas). Recoge la parte de cada métrica que el latente común no explica (p. ej. el TL%
     propio de un tirador) y viaja con el jugador al traducirlo. ω² por bayes empírico (EM).
   * Verosimilitud heterocedástica: y_{r,m} ~ N(ŷ_{r,m} + ζ_{i,m}, v_{r,m} + ψ_{l,m}) con v conocido (σ²/n).
+    v3.2 (B6, `red.verosimilitud: student`): t de Student con escala² = v + ψ y grados de libertad ν_m por métrica,
+    estimados (ν_m = ν_min + (ν_max − ν_min)·sigmoide(·), acotados en [3, 30]): las temporadas atípicas pesan menos.
+  * v3.2 (B1): interruptores de ablación `red.film` y `red.cabezal_liga` (además de `red.unicidad`,
+    `entrenamiento.ciclo_peso`, `entrenamiento.ipw` y `latente.K`), para medir qué aporta cada pieza.
   * Selección: cada persona-temporada pesa w (IPW del logit de «ser puente»; 1 para quien no es puente).
   * Consistencia de ciclo: codificar(decodificar_b(r)) ≈ r para una liga b al azar (penalización).
 
@@ -99,6 +103,14 @@ class CVAE(nn.Module):
         self.Z = nn.Parameter(torch.zeros(self.nPer, Mm))
         self.register_buffer("s2Z", torch.full((Mm,), 0.05))
         self.log_psi = nn.Parameter(torch.full((self.nL, Mm), math.log(0.2)))
+        # v3.2 · B1 (ablación) y B6 (t de Student)
+        self.usar_film = bool(cfg["red"].get("film", True))
+        self.usar_cabezal = bool(cfg["red"].get("cabezal_liga", True))
+        self.student = str(cfg["red"].get("verosimilitud", "normal")) == "student"
+        nu_lo, nu_hi = (float(x) for x in cfg["red"].get("nu_rango", [3.0, 30.0]))
+        self.nu_lo, self.nu_hi = nu_lo, nu_hi
+        p0 = (float(cfg["red"].get("nu_inicial", 10.0)) - nu_lo) / (nu_hi - nu_lo)
+        self.nu_raw = nn.Parameter(torch.full((Mm,), math.log(p0 / (1 - p0))))
         # --- niveles y escalas
         self.mu_raw = nn.Parameter(torch.zeros(self.nC, K))
         self.mu_esc = nn.Parameter(torch.zeros(self.nEsc, K))
@@ -128,6 +140,19 @@ class CVAE(nn.Module):
             return torch.zeros_like(self.ls_raw)          # diagnóstico v3.1: sin escala latente por liga (s_l = 1)
         return self.ls_raw - (self.w_liga * self.ls_raw).sum()
 
+    def nu(self) -> torch.Tensor:
+        """Grados de libertad de la t de Student por métrica (B6), en [nu_lo, nu_hi]."""
+        return self.nu_lo + (self.nu_hi - self.nu_lo) * torch.sigmoid(self.nu_raw)
+
+    def log_verosimilitud(self, Y, yhat, var, Mk) -> torch.Tensor:
+        """Σ_m log p(y | ŷ, var) por fila: normal (v3.1) o t de Student con escala² = var (v3.2, B6)."""
+        if not self.student:
+            return -0.5 * (Mk * (torch.log(2 * math.pi * var) + (Y - yhat) ** 2 / var)).sum(1)
+        nu = self.nu()[None, :]
+        lp = (torch.lgamma((nu + 1) / 2) - torch.lgamma(nu / 2) - 0.5 * torch.log(nu * math.pi * var)
+              - (nu + 1) / 2 * torch.log1p((Y - yhat) ** 2 / (nu * var)))
+        return (Mk * lp).sum(1)
+
     def codificar(self, Y, Mk, V, liga, pos, logmin):
         x = torch.cat([Y * Mk, Mk, torch.log(V + 1e-3) * Mk, nn.functional.one_hot(liga, self.nL).float(),
                        nn.functional.one_hot(pos, 3).float(), logmin[:, None]], 1)
@@ -137,10 +162,13 @@ class CVAE(nn.Module):
 
     def decodificar(self, r, liga, grupo, equipo=None):
         h = torch.tanh(self.W1(r))
-        h = h * (1 + self.film_g[liga]) + self.film_b[liga]
-        # cabezal residual por liga: h · V_lᵀ para todas las ligas a la vez y se toma el bloque de la liga de la fila
-        todas = (h @ self.Vl.reshape(self.nL * self.Mm, self.H).T).view(-1, self.nL, self.Mm)
-        out = self.bG[grupo] + self.Lin(r) + self.W2(h) + todas[torch.arange(len(h)), liga]
+        if self.usar_film:
+            h = h * (1 + self.film_g[liga]) + self.film_b[liga]
+        out = self.bG[grupo] + self.Lin(r) + self.W2(h)
+        if self.usar_cabezal:
+            # cabezal residual por liga: h · V_lᵀ para todas las ligas a la vez y se toma el bloque de la liga de la fila
+            todas = (h @ self.Vl.reshape(self.nL * self.Mm, self.H).T).view(-1, self.nL, self.Mm)
+            out = out + todas[torch.arange(len(h)), liga]
         if equipo is not None:
             out = out + self.T[equipo]
         return out
@@ -171,7 +199,7 @@ class CVAE(nn.Module):
         if self.usar_unicidad:
             yhat = yhat + self.Z[self.i_persona_id]
         var = self.V + torch.exp(self.log_psi[self.i_liga]) + c["red"]["psi_minimo"]
-        ll_f = -0.5 * (self.Mk * (torch.log(2 * math.pi * var) + (self.Y - yhat) ** 2 / var)).sum(1)
+        ll_f = self.log_verosimilitud(self.Y, yhat, var, self.Mk)
         w = self.w_ps
         rec = (w[self.i_ps] * ll_f).sum()
         # prior por nivel y entropía de q
@@ -224,7 +252,8 @@ class CVAE(nn.Module):
         elbo = rec + kl + ltr
         N = float(len(self.Y))
         total = -(elbo - pen) / N + c["entrenamiento"]["ciclo_peso"] * cyc
-        return total, {"elbo_fila": float(elbo / N), "rec_fila": float(rec / N), "ciclo": float(cyc)}
+        return total, {"elbo_fila": float(elbo.detach() / N), "rec_fila": float(rec.detach() / N),
+                       "ciclo": float(cyc.detach())}
 
     @torch.no_grad()
     def precision_unicidad(self) -> torch.Tensor:

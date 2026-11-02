@@ -86,7 +86,12 @@ def f0_corte(tabla: pd.DataFrame, anio: int, bootstrap: int = 10) -> pd.DataFram
     from bbmodel import modelo
     cfg = AM.config()
     op = AM.opciones_variante(cfg, cfg.get("variante", "sin_mapeo"))
-    p = modelo.ajustar(tabla, hasta_anio=anio, n_boot=bootstrap, progreso=None)
+    import pickle
+    cache = AM.DIR_CACHE / f"A_hasta_{anio}.pkl"        # el A del corte que dejó `bbmodel amortiguar --validar`
+    if cache.exists():
+        p = pickle.loads(cache.read_bytes())
+    else:
+        p = modelo.ajustar(tabla, hasta_anio=anio, n_boot=bootstrap, progreso=None)
     aj = AM.ajustar(tabla[tabla["anio"] <= anio], p, cfg, hasta_anio=None, progreso=None, **op)
     aj["hasta_anio"] = anio
     return predecir_f0(tabla, anio, p, aj)

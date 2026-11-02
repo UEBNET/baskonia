@@ -53,7 +53,10 @@ def predicciones_cvae(tabla: pd.DataFrame, cfg: dict, anio: int) -> tuple[pd.Dat
 def lineas_base(cfg: dict, anio: int) -> pd.DataFrame:
     """<m>_am, F0 y mismo percentil del corte; para el corte de selección, las recalculadas con ≤ 2022."""
     v = cfg["validacion"]
-    if anio == int(v["anio_seleccion"]):
+    if v.get("lineas_base_dir"):          # v3.2: líneas base de la v2 rehechas con las 20 ligas en todos los cortes
+        d = C.RAIZ / v["lineas_base_dir"]
+        base = examen.lineas_base(anio, d / f"sin_mapeo_{anio}.csv.gz", d / "b.csv")
+    elif anio == int(v["anio_seleccion"]):
         d = C.RAIZ / v["lineas_base_seleccion"]
         base = examen.lineas_base(anio, d / f"sin_mapeo_{anio}.csv.gz", d / f"b_{anio}.csv")
     else:
@@ -82,10 +85,16 @@ def componentes(tabla: pd.DataFrame, cfg: dict, anio: int) -> pd.DataFrame:
     return j
 
 
-def pesos(j: pd.DataFrame, cfg: dict, peso_conocimiento: float | None) -> tuple[np.ndarray, pd.Series]:
+def pesos(j: pd.DataFrame, cfg: dict, peso_conocimiento: float | None,
+          peso_metrica: dict | None = None) -> tuple[np.ndarray, pd.Series]:
+    """Peso de la CVAE por caso. v3.2 (B2): `peso_metrica` = {métrica: peso} elegido con cortes anidados; las
+    métricas sin peso propio usan `peso_v3`. Ligas de conocimiento y salvaguardas, igual que en la v3.1."""
     cb = cfg["combinacion"]
     w = np.full(len(j), float(cb["peso_v3"]))
     motivo = pd.Series("general", index=j.index)
+    if peso_metrica:
+        w = j["metrica"].map(peso_metrica).fillna(float(cb["peso_v3"])).to_numpy(float).copy()
+        motivo[:] = "por_metrica"
     conoc = j["liga_o"].isin(cb["ligas_conocimiento"]) | j["liga_d"].isin(cb["ligas_conocimiento"])
     if peso_conocimiento is not None:
         w[conoc.to_numpy()] = float(peso_conocimiento)
@@ -101,11 +110,12 @@ def pesos(j: pd.DataFrame, cfg: dict, peso_conocimiento: float | None) -> tuple[
     return w, motivo
 
 
-def combinar(j: pd.DataFrame, cfg: dict, peso_conocimiento: float | None) -> pd.DataFrame:
+def combinar(j: pd.DataFrame, cfg: dict, peso_conocimiento: float | None,
+             peso_metrica: dict | None = None) -> pd.DataFrame:
     """Devuelve el mismo formato que las predicciones de la CVAE (columnas v3_*), con la combinación dentro, para
     reutilizar la calibración y la puerta de examen.py. Conserva la CVAE sola en cvae_* y el peso usado."""
     esc = j.attrs["esc"]
-    w, motivo = pesos(j, cfg, peso_conocimiento)
+    w, motivo = pesos(j, cfg, peso_conocimiento, peso_metrica)
     c3, s3 = j["v3_centro_z"].to_numpy(), j["v3_sd_z"].to_numpy()
     c2, s2 = j["v2_centro_z"].fillna(0).to_numpy(), j["v2_sd_z"].fillna(1).to_numpy()
     media = w * c3 + (1 - w) * c2
@@ -252,14 +262,16 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
     from . import exportar
     from .prediccion import Z80
     cb = cfg["combinacion"]
+    v32 = bool(cb.get("peso_por_metrica"))           # v3.2 · B2: pesos por métrica del examen anidado
+    fx = flujo.dir_val(cfg) / ("examen_v32.json" if v32 else "examen_v31.json")
+    clave = "combinada_b2_con_conocimiento_feb3" if v32 else "combinada_con_conocimiento_feb3"
     w_con = cb.get("peso_v3_conocimiento")
     if w_con is None:
-        f = flujo.dir_val(cfg) / "examen_v31.json"
-        w_con = json.loads(f.read_text())["combinada_con_conocimiento_feb3"]["peso_v3_conocimiento_elegido"]
+        w_con = json.loads(fx.read_text())[clave]["peso_v3_conocimiento_elegido"]
     f_con = cb.get("factor_intervalo_conocimiento")
     if f_con is None:
-        f = flujo.dir_val(cfg) / "examen_v31.json"
-        f_con = json.loads(f.read_text())["combinada_con_conocimiento_feb3"].get("factor_intervalo_conocimiento_elegido", 1.0)
+        f_con = json.loads(fx.read_text())[clave].get("factor_intervalo_conocimiento_elegido", 1.0)
+    w_met = json.loads(fx.read_text())["pesos_finales"] if v32 else {}
     D, cj = flujo.conjunto(tabla, cfg, None)
     if (C.dir_salida(cfg) / "niveles.csv").exists():   # niveles y traducciones ya exportados con estas mismas redes
         trad = exportar.traducir_filas(tabla, D, cj, cfg)
@@ -267,7 +279,8 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
     else:
         trad = exportar.todo(tabla, D, cj, cfg, normalizado=False)
     temporadas = temporadas_por_liga(tabla, cfg, int(tabla["anio"].max()))
-    resumen = {"peso_v3": cb["peso_v3"], "peso_v3_conocimiento": w_con, "factor_intervalo_conocimiento": f_con}
+    resumen = {"peso_v3": cb["peso_v3"], "peso_v3_conocimiento": w_con, "factor_intervalo_conocimiento": f_con,
+               "peso_cvae_por_metrica": w_met or None}
 
     def nuevas(base: pd.DataFrame, v3: pd.DataFrame) -> pd.DataFrame:
         out = v3.copy()
@@ -281,7 +294,7 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
             T = lambda x: transformar(pd.to_numeric(x, errors="coerce").to_numpy(float), tr)  # noqa: E731
             m2, s2 = T(base[f"{col}_am"]), (T(base[f"{col}_am_hi"]) - T(base[f"{col}_am_lo"])) / (2 * Z80)
             m3, s3 = T(v3[f"{col}_v3"]), (T(v3[f"{col}_v3_hi"]) - T(v3[f"{col}_v3_lo"])) / (2 * Z80)
-            w = np.full(len(v3), float(cb["peso_v3"]))
+            w = np.full(len(v3), float(w_met.get(col, cb["peso_v3"])))
             w[conoc] = float(w_con)
             w[pocas] = 0.0
             sz = v3[f"{col}_v3_sd_entre_z"].to_numpy(float)
@@ -297,8 +310,8 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
             lo, hi = _cuantiles_mezcla(w, m3, s3, m2, s2, (0.1, 0.9))
             fc = np.where(conoc, float(f_con), 1.0)          # anchura extra en la Tercera FEB (conocimiento)
             lo, hi = media - fc * (media - lo), media + fc * (hi - media)
-            out[f"{col}_v31"] = destransformar(media, tr)
-            out[f"{col}_v31_lo"] = destransformar(lo, tr)
+            out[f"{col}_v31"] = destransformar(media, tr)       # (columnas «_v31» = la combinación, también en
+            out[f"{col}_v31_lo"] = destransformar(lo, tr)       #  la v3.2: el esquema del dataset no cambia)
             out[f"{col}_v31_hi"] = destransformar(hi, tr)
             p2 = pd.to_numeric(base.get(f"{col}_am_pctel"), errors="coerce").to_numpy(float)
             p3 = v3[f"{col}_v3_pctel"].to_numpy(float)
@@ -308,7 +321,85 @@ def ajustar_combinada(tabla: pd.DataFrame, cfg: dict) -> None:
         return out
 
     exportar._normalizado(trad, C.dir_salida(cfg) / "normalizado", columnas_nuevas=nuevas, sufijo="_v31",
-                          fuente="V3.1")
+                          fuente="V3.2" if cfg.get("version") == "v3.2" else "V3.1")
     (C.dir_salida(cfg) / "resumen_combinada.json").write_text(json.dumps(resumen, indent=1, default=float),
                                                               encoding="utf-8")
     print("Dataset normalizado v3.1 en", C.dir_salida(cfg) / "normalizado", flush=True)
+
+
+# ---------------------------------------------------------------------------------------------- v3.2 · B2
+def elegir_pesos_metrica(comp: dict, anios: list[int], cfg: dict) -> dict:
+    """B2: peso de la CVAE por métrica que minimiza el MAE de la métrica en los cortes `anios` (casos generales: sin
+    ligas de conocimiento ni salvaguardas); a igualdad (diferencia < 0,1 %), el más cercano a `peso_v3`."""
+    cb = cfg["combinacion"]
+    cand = [float(x) for x in cb["pesos_candidatos"]]
+    j = pd.concat([comp[a] for a in anios], ignore_index=True)
+    j.attrs["esc"] = comp[anios[-1]].attrs["esc"]
+    mae = {}
+    for w in cand:
+        r = combinar(j, cfg, None, {m: w for m in j["metrica"].unique()})
+        r = r[r["motivo_peso"] == "por_metrica"]
+        mae[w] = (r["v3"] - r["real"]).abs().groupby(r["metrica"]).mean()
+    tab = pd.DataFrame(mae)
+    out = {}
+    for m, fila in tab.iterrows():
+        best = fila.min()
+        empatados = [w for w in cand if fila[w] <= best * 1.001]
+        out[m] = min(empatados, key=lambda w: abs(w - float(cb["peso_v3"])))
+    return out
+
+
+def validar_combinada_v32(tabla: pd.DataFrame, cfg: dict) -> dict:
+    """Examen de la v3.2 con cortes anidados: el peso por métrica (B2) que se aplica en el corte t se elige con los
+    cortes de decisión < t (el primero usa `peso_v3`); la calibración conforme, con el corte anterior (2021 → 2022…).
+    El ajuste de conocimiento de la Tercera FEB se rehace con el mismo procedimiento de la v3.1 (sobreajuste asumido)."""
+    v = cfg["validacion"]
+    dec = [int(x) for x in cfg["ablacion"]["cortes_decision"]]
+    anios = [int(v.get("anio_calibracion", dec[0] - 1))] + dec
+    comp = {a: componentes(tabla, cfg, a) for a in anios}
+    dv = flujo.dir_val(cfg)
+    pesos_por_corte = {}
+    for k, a in enumerate(anios):
+        prev = [x for x in dec if x < a]
+        pesos_por_corte[a] = elegir_pesos_metrica(comp, prev, cfg) if prev else None
+    final = elegir_pesos_metrica(comp, dec, cfg)
+    informe = {"aviso": "Cortes anidados: el peso por métrica de cada corte se eligió sólo con los cortes anteriores. "
+                        "Los cortes 2023 y 2024 ya se habían mirado al diseñar la v3.1: el examen limpio será "
+                        "2025-26 → 2026-27.",
+               "pesos_por_corte": {str(a): p for a, p in pesos_por_corte.items()}, "pesos_finales": final}
+
+    def evaluar(pc: dict, w_con, f_con=None):
+        comb = {a: combinar(comp[a], cfg, w_con, pc[a]) for a in anios}
+        c2 = dict(cfg)
+        c2["validacion"] = {**v, "anios": dec, "anio_seleccion": anios[0]}
+        return _evaluar(comb, c2, f_con)
+    _, p_cvae = evaluar({a: {m: 1.0 for m in datos.METRICAS} for a in anios}, None)
+    _, p_fijo = evaluar({a: None for a in anios}, None)
+    _, p_b2 = evaluar(pesos_por_corte, None)
+    informe["cvae_sola"], informe["combinada_peso_fijo_0_5"], informe["combinada_b2_anidada"] = p_cvae, p_fijo, p_b2
+    # Tercera FEB (conocimiento): mismo procedimiento que la v3.1, sobre la combinación B2
+    rejilla = {}
+    for w in cfg["combinacion"]["pesos_candidatos"]:
+        r3, _ = evaluar(pesos_por_corte, w)
+        conoc = _es_conocimiento(r3, cfg)
+        rejilla[w] = examen.mae_rel_medio(r3[conoc])
+    w_opt = min(rejilla, key=rejilla.get)
+    comb3 = {a: combinar(comp[a], cfg, w_opt, pesos_por_corte[a]) for a in anios}
+    c2 = dict(cfg)
+    c2["validacion"] = {**v, "anios": dec, "anio_seleccion": anios[0]}
+    f_opt = factor_intervalo_conocimiento(_calibrado(comb3, c2), c2)
+    r3, p3 = _evaluar(comb3, c2, f_opt)
+    p3.update({"peso_v3_conocimiento_elegido": w_opt, "factor_intervalo_conocimiento_elegido": f_opt,
+               "rejilla_conocimiento_frente_am": rejilla})
+    informe["combinada_b2_con_conocimiento_feb3"] = p3
+    r3.round(5).to_csv(dv / "casos_combinada_v32.csv.gz", index=False)
+    examen.resumen_metricas(r3).round(4).to_csv(dv / "resumen_metricas_v32.csv", index=False)
+    (dv / "examen_v32.json").write_text(json.dumps(informe, indent=1, ensure_ascii=False, default=float),
+                                        encoding="utf-8")
+    for k in ("cvae_sola", "combinada_peso_fijo_0_5", "combinada_b2_anidada", "combinada_b2_con_conocimiento_feb3"):
+        p = informe[k]
+        print(k, json.dumps({"frente_am": p["criterio_1_mae"]["estimacion"], "ic95": p["criterio_1_mae"]["ic95"],
+                             "cob": p["criterio_2_cobertura"]["cobertura_media"], "por_corte": p["por_corte"]},
+                            default=float), flush=True)
+    print("pesos finales por métrica:", final)
+    return informe

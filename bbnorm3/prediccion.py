@@ -69,7 +69,7 @@ def muestras_traduccion(modelo: CVAE, post: Posterior, D: Datos, ps: np.ndarray,
     yhat = modelo.decodificar(rt, lt, gt).numpy().reshape(n, S, -1).astype(float)
     psi = (np.exp(modelo.log_psi.numpy()[liga_b]) + cfg["red"]["psi_minimo"])[:, None, :]
     s2T = modelo.s2T.numpy()[None, None, :]
-    ruido = psi + s2T + (0.0 if V_obs is None else V_obs[:, None, :])
+    escala2 = psi + (0.0 if V_obs is None else V_obs[:, None, :])      # escala² de la verosimilitud (como al entrenar)
     if modelo.usar_unicidad:
         # factor específico de la persona: media a posteriori (entrenada) y su varianza (precisión de sus filas)
         per = D.ps_persona[ps]
@@ -80,7 +80,12 @@ def muestras_traduccion(modelo: CVAE, post: Posterior, D: Datos, ps: np.ndarray,
     if margen is not None:
         lo, hi = soporte(D, float(margen))
         yhat = np.clip(yhat, lo[liga_b][:, None, :], hi[liga_b][:, None, :])
-    yobs = yhat + np.sqrt(ruido) * rng.standard_normal(yhat.shape)
+    if modelo.student:          # B6: ruido de contexto y de muestra con colas t (ν por métrica), equipo normal
+        nu = modelo.nu().detach().numpy().astype(float)[None, None, :]
+        e = rng.standard_t(np.broadcast_to(nu, yhat.shape))
+    else:
+        e = rng.standard_normal(yhat.shape)
+    yobs = yhat + np.sqrt(escala2) * e + np.sqrt(s2T) * rng.standard_normal(yhat.shape)
     return yhat, yobs
 
 

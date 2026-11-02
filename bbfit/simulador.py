@@ -52,6 +52,9 @@ DIR_SIM = DIR_MOD / "simulador" / cargar("simulation").get("carpeta", "v2")   # 
 IDX_ROL = {r: i for i, r in enumerate(ROLES)}
 ADAPT_METRICA = {"pts_p100": "pts_p100", "ts_pct": "ts_pct", "usg_pct": "usg_pct", "ast_pct": "ast_pct",
                  "oreb_p100": "reb_p100", "dreb_p100": "reb_p100"}
+# v3.2 · A1: pasos del motor que se pueden apagar (configs/simulation_v32.yaml → pasos); por defecto, todos activos
+PASOS_DEFECTO = {"redistribuir_uso": True, "uso_eficiencia": True, "companeros": True, "adaptacion": True,
+                 "ruido_personal": True}
 RASGOS_UTIL = ["L", "lmin_club", "lmin_fuera", "nuevo", "sin_dato", "encaje_pos", "encaje_estilo", "edad_c", "edad_c2"]
 
 
@@ -233,6 +236,14 @@ def traducir(c: Corte, fila: pd.Series | dict, liga_d: str, metricas: list[str],
             d_d, v_d = k["m"].get(liga_d, 0.0), 0.05
         mu, tau = SI.entorno(k, liga_d, c.temp, pos)
         s_d, psi = k["s"][liga_d], k["psi"].get(liga_d, 0.0)
+        if (c.cfg.get("destino") or {}).get("vara") == "destino":
+            # v3.2 · vara de destino (liga de destino = 0): incertidumbre propia del jugador + Var(δ_o − δ_d) con la
+            # covarianza conjunta de los niveles (en vez de sumar las dos varianzas frente a la EuroLeague)
+            vj = float(fila.get(f"{m}_vj", np.nan))
+            vp = SI.var_par(m, f"{fila.get('liga')}:{fila.get('temporada')}", f"{liga_d}:{c.temp}")
+            if np.isfinite(vj) and np.isfinite(vp):
+                sd, v_d = math.sqrt(max(vj, 0.0)), vp
+                out[f"_{m}_vara"] = "destino"
         if z1 is None:
             zd = (th + der - d_d) / s_d
         else:
@@ -484,7 +495,8 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     pos3 = fila.get("pos3") if isinstance(fila.get("pos3"), str) else "A"
     G = int(cfg["adaptacion"]["partidos_temporada"].get(liga_d, cfg["adaptacion"]["partidos_temporada"]["defecto"]))
     ca = cfg["adaptacion"]
-    contr = 0.0 if sin_adaptacion else float(ca["contraccion"])
+    pasos = {**PASOS_DEFECTO, **(cfg.get("pasos") or {})}          # v3.2 · A1: pasos activos del motor
+    contr = 0.0 if (sin_adaptacion or not pasos["adaptacion"]) else float(ca["contraccion"])
     priors, fact = {}, {}
     for mp in set(ADAPT_METRICA.values()) | {"L", "L_rel"}:
         pr = prior_completo(lo, liga_d, grupo, pos3, mp, adaptacion_ruta)
@@ -576,11 +588,16 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     usg_f_s = np.asarray(tr.get("usg_pct", np.full(n_sim, usg_nat[i_f])), float) * fact["usg_pct"]["temporada"]
     USG = np.repeat(usg_nat[None, :], n_sim, 0)
     USG[:, i_f] = np.where(np.isfinite(usg_f_s), usg_f_s, usg_nat[i_f])
-    USG2, f_uso = redistribuir_uso(M, USG, float(cfg["produccion"]["usg_medio_pista"]),
-                                   float(cfg["produccion"]["amortiguar_uso"]))
+    if pasos["redistribuir_uso"]:
+        USG2, f_uso = redistribuir_uso(M, USG, float(cfg["produccion"]["usg_medio_pista"]),
+                                       float(cfg["produccion"]["amortiguar_uso"]))
+    else:                                       # A1: cada jugador conserva su uso natural traducido
+        USG2, f_uso = USG.copy(), np.ones(n_sim)
     d_usg = USG2[:, i_f] - USG[:, i_f]
     beta_m, beta_sd = c.mod["beta_uso"].get(pos3, c.mod["beta_uso"].get("todos", (-0.08, 0.1)))
     beta_s = beta_m + beta_sd * rng.standard_normal(n_sim)
+    if not pasos["uso_eficiencia"]:
+        beta_s = np.zeros(n_sim)
     # GO-TO-GUY: GTI proyectado y top-2 del equipo
     gc = cfg["rol_go_to_guy"]
     GTI = np.full((n_sim, len(P)), -np.inf)
@@ -600,6 +617,9 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     dL = Lbar - ctx_o if np.isfinite(ctx_o) else np.zeros(n_sim)
     b_ts, b_ts_sd = c.mod["companeros"].get("ts_pct", (0.0, 0.0))
     b_s = b_ts + b_ts_sd * rng.standard_normal(n_sim)
+    if not pasos["companeros"]:
+        b_s = np.zeros(n_sim)
+    k_beta, k_comp = (float(x) for x in cfg["produccion"].get("factor_ajustes_ts", [1.0, 1.0]))   # A3
     # ---------------------------------------------------------------- producción (pasos 2, 4, 5, 7, 8)
     prod = {}
     for m in mets:
@@ -610,12 +630,21 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
         prod[m] = v
     ts_b = prod.get("ts_pct", np.full(n_sim, np.nan))
     usg_b = USG[:, i_f]
-    ts2 = np.clip(ts_b + beta_s * d_usg + b_s * dL, cfg["produccion"]["ts_min"], cfg["produccion"]["ts_max"])
+    pts_b = prod.get("pts_p100")
+    ts_lim = (cfg["produccion"]["ts_min"], cfg["produccion"]["ts_max"])
+
+    def _ts_pts(kb, kc):
+        t2 = np.clip(ts_b + kb * beta_s * d_usg + kc * b_s * dL, *ts_lim)
+        if pts_b is None:
+            return t2, None
+        with np.errstate(invalid="ignore", divide="ignore"):
+            return t2, pts_b * (USG2[:, i_f] / usg_b) * (t2 / ts_b)
+
+    ts2, p2 = _ts_pts(k_beta, k_comp)
     prod["ts_pct"] = ts2
     prod["usg_pct"] = USG2[:, i_f]
-    if "pts_p100" in prod:
-        with np.errstate(invalid="ignore", divide="ignore"):
-            prod["pts_p100"] = prod["pts_p100"] * (USG2[:, i_f] / usg_b) * (ts2 / ts_b)
+    if p2 is not None:
+        prod["pts_p100"] = p2
     ritmo = ritmo if ritmo is not None and np.isfinite(ritmo) else c.ref["ritmo"].get(liga_d, 72.0)
     disp = float(c.calib.get("disponibilidad", 0.85))
     poss = m_f / gm * ritmo * G * disp
@@ -624,12 +653,29 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
     obs = {}
     for m in mets:
         v = prod[m]
-        if m == "pts_p100" and np.isfinite(sig):
+        if not pasos["ruido_personal"]:         # A1: sin ruido personal ni de muestreo (sólo la incertidumbre del motor)
+            obs[m] = v
+        elif m == "pts_p100" and np.isfinite(sig):
             obs[m] = np.clip(v + sig * np.sqrt(30.0 / np.maximum(poss, 5)) * rng.standard_normal(n_sim), 0, None)
         else:
             k = c.trad["constantes"].get(m, {})
             ex = poss * (USG2[:, i_f] / 100 if k.get("exposicion") in ("tsa", "fga", "fg2a", "fg3a") else 1.0)
             obs[m] = ruido_muestreo(c, m, liga_d, v, ex, rng) if m in c.trad["constantes"] else v
+    # v3.2 · A3: rejilla de factores (k_β de la curva uso-eficiencia, k_c del efecto compañeros) sobre las MISMAS
+    # simulaciones (mismos minutos, uso y ruido): el examen elige los factores con los cortes anteriores
+    rejilla = {}
+    kgrid = cfg["produccion"].get("rejilla_ajustes_ts")
+    if kgrid:
+        ruido_ts = obs["ts_pct"] - prod["ts_pct"]
+        ruido_pts = obs["pts_p100"] - prod["pts_p100"] if "pts_p100" in obs else None
+        for kb in kgrid:
+            for kc in kgrid:
+                t2, q2 = _ts_pts(float(kb), float(kc))
+                d = {"ts_pct": t2 + ruido_ts, "ts_pct_motor": t2}
+                if q2 is not None:
+                    d["pts_p100"] = np.clip(q2 + ruido_pts, 0, None)
+                    d["pts_p100_motor"] = q2
+                rejilla[f"{kb}|{kc}"] = d
     # ---------------------------------------------------------------- roles
     mp_s = m_f / gm
     gs = T5[:, i_f].astype(float)
@@ -662,6 +708,9 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
            "companeros": {"L_bar": float(np.mean(Lbar)), "L_origen": ctx_o if np.isfinite(ctx_o) else None,
                           "efecto_ts": float(np.mean(b_s * dL))},
            "ritmo_destino": float(ritmo)}
+    if rejilla:
+        res["rejilla_ajustes_ts"] = {k: {m: resumen(v) for m, v in d.items()} for k, d in rejilla.items()}
+    res["produccion_motor_p100"] = {m: resumen(prod[m]) for m in mets}    # sin ruido personal (A1)
     res["rol_asignado"], res["rol_origen"] = rol_asig, fila.get("rol")
     if fuerza:
         res["version"] = "v2.1"
