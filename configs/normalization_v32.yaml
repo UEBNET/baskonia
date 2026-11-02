@@ -101,6 +101,7 @@ inferencia:
                                 # 0 = amortizada (v3.1). Se somete a la regla de la navaja (ablacion.piezas)
 
 ablacion:                       # B1 + B4 + B6 (bbnorm3/ablacion.py)
+  quitadas: ["K8", "cabezal_liga", "film", "refinado", "student"]   # decisión final de la ablación (validacion/ablacion/decisiones.json)
   semillas: 5                   # redes por variante en la ablación (las 5 primeras de `semillas`); la final usa 20
   cortes: [2021, 2022, 2023, 2024]   # 2021 sólo calibra el corte 2022 (recalibración conforme con el corte anterior)
   cortes_decision: [2022, 2023, 2024]  # cortes anidados: la decisión que se aplica en t usa sólo los cortes < t
