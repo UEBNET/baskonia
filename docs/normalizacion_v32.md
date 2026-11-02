@@ -43,36 +43,67 @@ El examen informado de la v3.2 es el del **procedimiento**: lo que se aplica en 
 anteriores. Los cortes 2023 y 2024 ya se habían mirado al diseñar la v3.1, así que el examen limpio será
 2025-26 → 2026-27, cuando acabe la temporada.
 
-## 3. Regla de la navaja (B1, B4, B6)
+## 3. Regla de decisión de B1, B4 y B6
 
-La regla se fijó con el usuario antes de ver ningún resultado. Para cada pieza P se compara la CVAE **sola** (sin
-mezclar con la v2), completa, frente a la misma CVAE sin P. Así se mide la red, no la mezcla.
+La regla se fijó con el usuario antes de ver ningún resultado.
+- **02-11, primer plan.** Navaja sobre la CVAE sola: quitar si IC95,inf ≤ 0.
+- **Mismo día, sustituida** por los criterios matemáticos del documento `CERNO_v3.2_criterios_matematicos` (§8),
+  aprobados también antes de ver resultados.
 
-- **Diferencia de error.** Se calcula Δ = MAE_sin / MAE_con − 1 (media de las 33 métricas) con su intervalo del 95 %
-  bootstrap, remuestreando persona × corte.
-- **Cuándo se quita.** La pieza se **quita** si quitarla no empeora de forma significativa: el extremo inferior del
-  intervalo es ≤ 0 y la cobertura media del 80 % recalibrada sin ella sigue en [0,78, 0,85].
-- **Redes.** La ablación usa 5 redes por variante (las 5 primeras semillas). La configuración elegida se reentrena
-  con 20 redes (B5) en todos los cortes y con todos los datos.
-- **Piezas evaluadas.** Una por variante, frente a la completa: ciclo, FiLM, cabezal por liga, ζ, IPW, K8 (frente a
-  K = 4), t de Student (frente a la normal) y refinado (B4, solo inferencia: mismas redes).
-- **Piezas que se quitan a la vez.** Si la regla quita varias, la combinación se comprueba en el corte siguiente
-  (ver §6).
+Para cada pieza P se compara la configuración completa con la misma sin P:
+
+- **Qué se evalúa.** La **mezcla** con peso fijo w = 0,5, no la red sola. Lo que se publica es la mezcla, y una pieza
+  puede ser neutra sola y útil mezclada. El peso fijo separa B1 de B2.
+- **Medida.** Δ_P = MAE_F(sin P)/MAE_F(con P) − 1. Primero se calcula el cociente de cada métrica, luego la media
+  dentro de cada **familia** y luego entre familias.
+  - Familias: tiro, uso y creación, rebote, defensa, impacto, perfil de tiro y global (`bbnorm3.ablacion.FAMILIAS`).
+  - Así las seis métricas de tiro, que se mueven juntas, no pesan seis veces.
+- **Intervalo del 95 %.** Bootstrap anidado: en cada réplica se remuestrean personas × corte y, por separado para «con»
+  y «sin», las 5 semillas con reemplazo. Así entra la variabilidad del entrenamiento.
+- **Cuándo se QUITA.** Cuando se cumple todo esto:
+  - IC95,sup(Δ_P) < +0,5 % (no inferioridad);
+  - la cobertura del 80 % recalibrada de la mezcla sin P sigue en [0,78, 0,85];
+  - **salvaguarda de ciclo**, para todas las piezas: residuo medio de ciclo sin P ≤ 1,25 × con P, y no aumentan los
+    triángulos con algún |R| > 0,5 DT (muestra fija de 60 triángulos de la última temporada del corte);
+  - **salvaguarda de niveles**, obligatoria para la IPW: ningún nivel de competición se mueve más de una DT a
+    posteriori en pts/100, TS%, PER ni RAPM. La IPW corrige la selección de los puentes, y el examen (que solo usa
+    jugadores que cambian de liga) no puede mostrar su beneficio.
+- **Cuándo se conserva.** Si IC95,inf(Δ_P) > 0 se **conserva**. Entre medias, la pieza es **indeterminada** y también
+  se conserva.
+- **Si se quitan dos o más piezas,** la configuración sin todas ellas debe cumplir la regla frente a la completa en el
+  corte siguiente. Si no la cumple, se reincorporan una a una, empezando por la de mayor Δ, que es la que tiene la
+  evidencia más débil para quitarla.
+  - Lectura propia: el documento dice «en el orden de menor Δ». Lo he interpretado como devolver primero la pieza cuya
+    retirada está peor justificada.
+- **Redes.** La ablación usa 5 redes por variante. La configuración elegida se reentrena con 20 (B5).
+- **B4, además,** se informa por tramo de minutos de origen (100-300, 300-800, > 800). Se espera la ganancia en el
+  primer tramo; si solo aparece en el último, sería señal de sobreajuste del refinado.
 
 ## 4. Piezas nuevas
+
+**B5 · 20 redes.** Se informa de la fracción de casos que activan la salvaguarda «DT entre redes > 0,5» con 5 y con
+20 redes. Si difieren más de 2 puntos, el umbral pasa a ser el cuantil 95 % de los cortes anteriores.
 
 **B6 · t de Student.** La verosimilitud tiene escala² = v + ψ, que es la varianza de la v3.1. Los grados de
 libertad ν_m se estiman por métrica, acotados en [3, 30] (ν = 3 + 27·sigmoide(·), inicio en 10).
 - *En la inferencia semiamortizada:* el experto usa la información de Fisher de la t, (ν + 1)/((ν + 3)·escala²).
-- *En la predicción:* el ruido de contexto y de muestra sigue la t; el efecto equipo sigue siendo normal.
+- *En la predicción:* el ruido de contexto y de muestra sigue la t; el efecto equipo sigue siendo normal. Los
+  intervalos salen de cuantiles Monte Carlo de la mezcla de muestras, no de z de la normal.
+- *Posterior de los niveles:* deja de ser exacta. Con los expertos de información de Fisher es una aproximación de
+  Laplace/Fisher.
+- *Informe:* ν̂_m por métrica. Si alguna toca el límite inferior (3), hay que revisar la transformación de esa métrica.
 
 **B4 · inferencia semiamortizada.** Parte de la media del codificador y optimiza la posición relativa r de cada fila
 con el decodificador congelado (200 pasos). Así reduce el error del codificador en jugadores con pocas filas. No
 cambia el entrenamiento: la huella de la caché de redes de la v3.2 excluye `inferencia`, así que con y sin B4 se
 usan las mismas redes.
 
-**B2 · peso por métrica.** Para cada métrica, el peso de la CVAE se elige entre {0; 0,25; 0,5; 0,75; 1} por mínimo
-MAE en los cortes anteriores. En caso de empate (diferencia < 0,1 %) gana el más cercano a 0,5.
+**B2 · peso por métrica** (§9 de los criterios).
+- *Candidato:* ŵ_m = argmin del MAE en {0; 0,25; 0,5; 0,75; 1} con los cortes anteriores.
+- *Cuándo se aplica:* el peso solo se aparta de 0,5 si la mejora es de al menos un 1 % y está demostrada:
+  D = MAE(ŵ)/MAE(0,5) − 1 con IC95,sup(D) < −1 %, bootstrap por persona × corte.
+- *Informe:* se publica cuántas métricas se apartan y en qué dirección.
+- *Nivel de decisión:* por métrica, por decisión del usuario.
 - Se cuentan solo los casos generales.
 - Las salvaguardas de la v3.1 (liga con < 2 temporadas, discrepancia entre redes > 0,5 DT) y el ajuste por
   conocimiento de la Tercera FEB prevalecen sobre el peso por métrica.
@@ -110,6 +141,25 @@ nivel de X con d = 0:  δ_X − δ_d,  DT = √(Σ_XX + Σ_dd − 2 Σ_Xd)
   EuroLeague. En pts/100, la DT del par ACB–BBL pasa de 0,076 a 0,072; en TS%, de 0,129 a 0,116.
 - *Recorte de soporte:* pasa a ser el de la liga de destino.
 - *Con d = EuroLeague* se recupera la salida de siempre.
+
+**Criterios del 02-11 (§11), aplicados:**
+- **(a) Covarianza de la mezcla.** La DT por par usa la cota de Cauchy-Schwarz:
+  sd_mix(δ_o − δ_d) ≤ w_m·sd_CVAE + (1 − w_m)·sd_v2. Σ_CVAE se calcula por métrica a partir de las 20 redes:
+  J Σ̃ Jᵀ más la varianza entre redes. Se guarda como `sd_par_triangular` y el simulador la usa.
+- **(b) Varianza propia negativa.** Las filas con Var(θ) − Var(δ_o) < 0 son el 0,00-0,04 % (v3.1, 2024-25), por debajo
+  del umbral del 1 %. Además, el código no trunca a 0: deja como mínimo el 10 % de Var(θ). Se informa en
+  `constantes.json`.
+- **(c) Centro sin recortar.** La distancia fuera del soporte se suma como varianza:
+  sd_ext = √(sd² + (z − z*)²). Se añade la marca `extrapolacion`. Lo mismo en la CVAE (`prediccion.recorte_centro:
+  false`).
+- **(d) Comprobaciones.** Pruebas de invariancia y de recuperar la v3.1 con d = EuroLeague, y la tabla
+  `reduccion_varianza_pares.csv` (pts/100 y TS%, 2025-26).
+- **Peso del nivel de liga.** Es solo el 2-4 % de la varianza total de la capacidad de un jugador (mediana). La vara de
+  destino corrige las cuentas, pero apenas cambia la anchura de los intervalos.
+- **§12, ciclo.** Las traducciones publicadas son lineales y por construcción tienen residuo de ciclo exactamente 0. El
+  residuo de 0,065 DT de media (máximo 0,95 en pts/100 y 1,02 en TS%, 23 triángulos > 0,5 DT de 1.140) es del camino
+  codificar-decodificar de la CVAE, que no se publica desde que se descartó B3. Queda como diagnóstico y como
+  salvaguarda de B1.
 
 ## 6. Resultados
 
