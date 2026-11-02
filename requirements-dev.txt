@@ -1,3 +1,4 @@
 -r requirements.txt
 pytest>=7
 zopfli>=0.2   # artifact/empaquetar.py: gzip más compacto (opcional)
+pypdf>=5.0                      # artículo científico (cerno_articulo): fusión de la capa base Paper
