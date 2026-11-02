@@ -716,6 +716,11 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
         res["version"] = "v2.1"
     if c.calib_salida and not rol_asig:
         _calibrar_res(c, res, fila, liga_d, gm)
+    v32 = cfg.get("v32") or {}
+    if v32.get("produccion_publicada") == "atlas":           # A2 elegida por el examen
+        _produccion_atlas(c, res, fila, liga_d, float(np.mean(Lbar)))
+    if v32.get("aplicar_recalibracion"):                       # A4
+        _recalibrar_v32(c, res, lo, liga_d)
     # adaptación
     pa = priors["L_rel"]
     fl = fact["L_rel"]
@@ -764,6 +769,78 @@ def _calibrar_res(c: "Corte", res: dict, fila: dict, liga_d: str, gm: float) -> 
     res["rol_esperado"] = max(res["roles"], key=res["roles"].get)
     res["indice_rol"] = float(sum(IDX_ROL[r] * p for r, p in res["roles"].items()))
     res["calibrado"] = True
+
+_RECAL: dict = {}
+
+
+def _factores_v32(cfg: dict) -> dict | None:
+    f = (cfg.get("v32") or {}).get("fichero_decisiones")
+    if not f:
+        return None
+    if f not in _RECAL:
+        p = DIR_MOD.parent.parent / f
+        _RECAL[f] = json.loads(p.read_text(encoding="utf-8")).get("recalibracion_final") if p.exists() else None
+    return _RECAL[f]
+
+
+def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str) -> None:
+    """A4 · recalibración conforme (factores por métrica × grupo de destino ajustados con todo el examen)."""
+    from bbnorm3.examen import grupo
+    fac = _factores_v32(c.cfg)
+    if not fac:
+        return
+    g = str(grupo(pd.Series([str(liga_o)]), pd.Series([str(liga_d)])).iloc[0])
+
+    def esc(d: dict, f: dict | None, centro: str) -> None:
+        if not f or d.get(centro) is None:
+            return
+        cc = float(d[centro])
+        for a in ("50", "90"):
+            fa = f.get(a)
+            if not fa or (d.get(f"lo{a}") is None and fa["tipo"] != "semiamplitud"):
+                continue
+            k = float(fa["grupo"].get(g, fa["global"]))
+            if fa["tipo"] == "semiamplitud":
+                d[f"lo{a}"], d[f"hi{a}"] = cc - k, cc + k
+            else:
+                d[f"lo{a}"], d[f"hi{a}"] = cc - k * (cc - float(d[f"lo{a}"])), cc + k * (float(d[f"hi{a}"]) - cc)
+
+    for m, d in res["produccion_p100"].items():
+        esc(d, fac.get(m), "media")
+    esc(res["minutos"], fac.get("min"), "mediana")
+    res["min_pct"] = {k: (v / minutos_partido(liga_d) if v is not None else None) for k, v in res["minutos"].items()}
+    res["recalibrado_v32"] = g
+
+
+def _produccion_atlas(c: "Corte", res: dict, fila: dict, liga_d: str, Lbar_dest: float) -> None:
+    """A2 · producción del Atlas (la de la línea base «a» del examen: valor normalizado + contexto con β si es claro,
+    traducido con el tipo de cambio lineal), con los minutos y el rol del motor. Intervalos: A4 (semiamplitud)."""
+    from bbmodel.metricas import destransformar, transformar
+    sens = SI.sensibilidad_contexto()
+    pos = fila.get("pos3") if isinstance(fila.get("pos3"), str) else "A"
+    ctx_o = _ctx_origen(c, fila)
+    dctx = (Lbar_dest - ctx_o) if np.isfinite(Lbar_dest) and np.isfinite(ctx_o) else 0.0
+    for m, d in res["produccion_p100"].items():
+        v = _f(fila.get(m))
+        v = v if np.isfinite(v) else _f(fila.get(f"{m}_am"))
+        k = c.trad["constantes"].get(m)
+        if k is None or not np.isfinite(v) or liga_d not in k["m"]:
+            continue
+        if m in sens.index:
+            b, se = sens.loc[m, "beta_comp"], sens.loc[m, "beta_comp_se"]
+            if abs(b) > 2 * se:
+                mu_el, tau_el = SI.entorno(k, "euroleague", "2025-26", pos)
+                v = float(destransformar(transformar(v, k["transf"]) + tau_el * b * dctx, k["transf"]))
+        mu_el, tau_el = SI.entorno(k, "euroleague", "2025-26", pos)
+        th = (transformar(v, k["transf"]) - mu_el) / tau_el
+        edad = _f(fila.get("edad"))
+        der = k["deriva"].get(SI._tramo_edad(edad), 0.0) if np.isfinite(edad) else 0.0
+        zd = (th + der - k["m"][liga_d]) / k["s"][liga_d]
+        mu, tau = SI.entorno(k, liga_d, c.temp, pos)
+        x = float(destransformar(mu + tau * zd, k["transf"]))
+        d.update({"media": x, "mediana": x, "lo50": None, "hi50": None, "lo90": None, "hi90": None})
+    res["produccion_fuente"] = "atlas"
+
 
 def calibrar_salida(C: dict, min_med, intervalos: dict, P, min_o_dest, min_b, Pb):
     """Capa de calibración de las salidas del motor (ajustada con fichajes de cortes anteriores, bbfit.validacion):

@@ -111,6 +111,16 @@ def _nodo(nodos: dict, liga: str, temp: str, ref: str = "euroleague") -> tuple[f
     return float(d.mean()), float(np.mean([v[1] for v in vs]) + d.var())
 
 
+_SENS: list = []
+
+
+def sensibilidad_contexto() -> pd.DataFrame:
+    """β de contexto por métrica (bbmodel contexto), la que usa la producción del Atlas (A2)."""
+    if not _SENS:
+        _SENS.append(pd.read_csv(DIR_MOD / "contexto" / "sensibilidad.csv").set_index("metrica"))
+    return _SENS[0]
+
+
 _COV: dict = {}
 
 

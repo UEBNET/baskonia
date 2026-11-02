@@ -54,6 +54,11 @@ v32:                                 # decisiones del simulador v3.2 (bbfit/v32.
   criterio_produccion: [pts_p100, ts_pct]   # A2 frente a A3: menor media de errores relativos de pts/100 y TS%
   recalibracion: {grupos: true, min_casos_grupo: 30}   # A4: factor por métrica × grupo de destino (≥ 30 casos)
   variantes_motor: [sin_redistribuir_uso, sin_adaptacion]   # ejecuciones del examen con un paso apagado
+  fichero_decisiones: data/modelos/simulador/v3_2/decisiones_v32.json
+  # simulador publicado (histórico y exportación), DESPUÉS del examen: se fijan con el resultado de `v32-decidir`
+  # (durante el examen deben quedar en motor / false: A2 y A4 se evalúan aparte, con cortes anidados)
+  produccion_publicada: motor        # motor (A3) | atlas (A2)
+  aplicar_recalibracion: false       # A4 con los factores finales de fichero_decisiones
 
 utilidad:                            # utilidad Plackett-Luce de la asignación de minutos (se ajusta por verosimilitud)
   rasgos: [L, logit_min_previo, nuevo, encaje_pos, encaje_estilo, sin_dato]

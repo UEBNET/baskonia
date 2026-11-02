@@ -28,17 +28,17 @@ DIR_V31 = RAIZ / "data" / "modelos" / "v3_1" / "normalizado"
 PROC = RAIZ / "data" / "processed"
 
 
-def main(salida: str = "data/artifact") -> None:
+def main(salida: str = "data/artifact", origen: Path = DIR_V31, etiqueta: str = "V3.1") -> None:
     sal = Path(salida)
     indice = {"generado": datetime.now(timezone.utc).isoformat(timespec="seconds"), "temporadas": {},
-              "descripcion": "Equivalente EuroLeague 2025-26 de todos los jugadores con la normalización v3.1 "
-                             "(combinación de A+B amortiguado y la CVAE jerárquica), temporada regular",
+              "descripcion": "Equivalente EuroLeague 2025-26 de todos los jugadores con la normalización "
+                             f"{etiqueta.lower()} (combinación de A+B amortiguado y la CVAE jerárquica), temporada regular",
               "metricas": METRICAS}
-    for f in sorted(DIR_V31.glob("*.csv.gz")):
+    for f in sorted(Path(origen).glob("*.csv.gz")):
         temp = f.name[:7]
         cols = pd.read_csv(DIR_V1 / f"{temp}.csv", nrows=0).columns
         df = pd.read_csv(f, low_memory=False)[list(cols)]
-        df["fuente_norm"] = "V3.1"
+        df["fuente_norm"] = etiqueta
         _dump(_columnar(df), sal / "normalizados" / temp / "regular.json")
         _dump(explorador(df), sal / "normalizacion" / f"jugadores_{temp}.json")
         pi = PROC / temp / "indice.json"
@@ -55,4 +55,7 @@ def main(salida: str = "data/artifact") -> None:
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--salida", default="data/artifact")
-    main(ap.parse_args().salida)
+    ap.add_argument("--origen", default=str(DIR_V31), help="dataset normalizado (v3.2: data/modelos/v3_2/normalizado)")
+    ap.add_argument("--etiqueta", default="V3.1")
+    a = ap.parse_args()
+    main(a.salida, Path(a.origen), a.etiqueta)
