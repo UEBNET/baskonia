@@ -10,3 +10,7 @@ docs/articulo/_trabajo/
 # MLflow local (los resúmenes versionados están en data/modelos/)
 experimentos/
 data/modelos/roles/_cache/
+# v3.2: predicciones intermedias de la ablación (≈ 50 MB, regenerables con la caché de redes); se versionan las
+# decisiones y las salvaguardas
+data/modelos/v3_2/validacion/ablacion/pred_*.csv.gz
+data/modelos/v3_2/validacion/ablacion/escala_*.pkl
