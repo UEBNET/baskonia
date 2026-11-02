@@ -26,12 +26,20 @@ cfg = C.con(C.cargar(C.RAIZ / '$N32'), **{'validacion.anios': [2021, 2022, 2023,
 flujo.f0(A.preparar()[0], cfg)"
 # 2. B1 + B4 + B6: ablación con 5 redes por variante y cortes anidados → validacion/ablacion/decisiones.json
 paso python3 -m bbnorm3 --config $N32 ablacion
-# (la configuración final se fija en $N32 con las piezas que la regla quita: ver docs/normalizacion_v32.md §3)
+paso python3 -m bbnorm3 --config $N32 ablacion --fase aplicar      # ablacion.quitadas ← decisión final
 # 3. B5: 20 redes de la configuración final en los cortes 2021-2024 y con todos los datos
 paso python3 -c "
 from bbnorm3 import config as C, ablacion; from bbmodel import modelo as A
 cfg = C.cargar(C.RAIZ / '$N32'); t = A.preparar()[0]; f = ablacion.guardar_tabla(t, cfg)
 ablacion.entrenar([(cfg, a, s) for a in [None, 2024, 2023, 2022, 2021] for s in cfg['semillas']], cfg, f)"
+# predicciones de las 20 redes en cada corte, en paralelo (las lee el examen de B2 como predicciones_cvae_<año>)
+paso python3 -c "
+import shutil; from bbnorm3 import config as C, ablacion, flujo
+cfg = C.cargar(C.RAIZ / '$N32'); f = ablacion.guardar_tabla(None, cfg) if False else ablacion._tabla_cache(cfg)
+n = len(cfg['semillas'])
+ablacion.predecir([('final', cfg, a) for a in [2024, 2023, 2022, 2021]], cfg, f, n, salvaguardas_=False, procesos=2)
+for a in [2021, 2022, 2023, 2024]:
+    shutil.copy(ablacion.ruta_pred(cfg, 'final', a, n), flujo.dir_val(cfg) / f'predicciones_cvae_{a}.csv.gz')"
 # 4. B2: examen anidado de la combinación con pesos por métrica → validacion/examen_v32.json
 paso python3 -m bbnorm3 --config $N32 validar-v32
 # 5. ajuste final: niveles, traducción cruzada y dataset normalizado v3.2 (data/modelos/v3_2/normalizado)
@@ -55,7 +63,7 @@ paso python3 -m bbfit v32-decidir
 #   CERNO_SIM_VARIANTE=sin_redistribuir_uso+sin_adaptacion python3 -m bbfit backtest --fuente <V32|V32_corte> …
 #   y se repite `bbfit v32-decidir`
 paso python3 -m bbfit b7-b9 --etiqueta V32_corte_inicio_adapt
-# (se fijan en configs/simulation_v32.yaml pasos, factor_ajustes_ts, produccion_publicada y aplicar_recalibracion)
+paso python3 -m bbfit v32-aplicar        # pasos, factor_ajustes_ts, produccion_publicada y aplicar_recalibracion
 paso python3 -m bbfit pesos-simulador
 paso python3 -m bbfit historico
 paso python3 -m bbfit exportar-simulador --salida experimentos/v32_artifact/simulador

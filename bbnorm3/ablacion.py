@@ -127,7 +127,8 @@ def entrenar(tareas: list[tuple[dict, object, int]], cfg: dict, f_tabla: Path, p
 
 
 def _predecir_uno(args) -> str:
-    f_tabla, cfg_v, nombre, anio, semillas, destino, hilos = args
+    f_tabla, cfg_v, nombre, anio, semillas, destino, hilos, *resto = args
+    con_salv = resto[0] if resto else True
     _hilos(hilos)
     if Path(destino).exists():
         return f"{Path(destino).name} (ya estaba)"
@@ -140,8 +141,9 @@ def _predecir_uno(args) -> str:
     r.round(5).to_csv(str(destino) + ".tmp.csv.gz", index=False)
     Path(str(destino) + ".tmp.csv.gz").replace(destino)
     # salvaguardas de §8c (ciclo y niveles), con las mismas redes; y la escala del corte (para la mezcla)
-    sv = salvaguardas(cj, D, cfg_v, int(anio))
-    Path(str(destino).replace(".csv.gz", "_salvaguardas.json")).write_text(json.dumps(sv, default=float))
+    if con_salv:
+        sv = salvaguardas(cj, D, cfg_v, int(anio))
+        Path(str(destino).replace(".csv.gz", "_salvaguardas.json")).write_text(json.dumps(sv, default=float))
     f_esc = Path(destino).parent / f"escala_{anio}.pkl"
     if not f_esc.exists():
         f_esc.write_bytes(pickle.dumps(D.esc))
@@ -184,18 +186,19 @@ def ruta_pred(cfg: dict, nombre: str, anio: int, n_semillas: int) -> Path:
     return dir_ablacion(cfg) / f"pred_{nombre}_{anio}_n{n_semillas}.csv.gz"
 
 
-def predecir(trabajos: list[tuple[str, dict, int]], cfg: dict, f_tabla: Path, n_semillas: int, progreso=print) -> None:
+def predecir(trabajos: list[tuple[str, dict, int]], cfg: dict, f_tabla: Path, n_semillas: int, progreso=print,
+             salvaguardas_: bool = True, procesos: int | None = None) -> None:
     a = cfg["ablacion"]
     sem = list(cfg["semillas"][:n_semillas])
     pend = []
     for nombre, cfg_v, anio in trabajos:
         dst = ruta_pred(cfg, nombre, anio, n_semillas)
         if not dst.exists():
-            pend.append((str(f_tabla), cfg_v, nombre, anio, sem, dst, int(a.get("hilos", 1))))
+            pend.append((str(f_tabla), cfg_v, nombre, anio, sem, dst, int(a.get("hilos", 1)), salvaguardas_))
     if not pend:
         return
     t0 = time.time()
-    with ProcessPoolExecutor(max_workers=int(a.get("procesos", 4))) as ex:
+    with ProcessPoolExecutor(max_workers=int(procesos or a.get("procesos", 4))) as ex:
         fut = [ex.submit(_predecir_uno, p) for p in pend]
         for k, f in enumerate(as_completed(fut), 1):
             msg = f.result()
@@ -397,7 +400,29 @@ def por_tramo(con: pd.DataFrame, sin: pd.DataFrame) -> dict:
     return out
 
 
+def aplicar_decision(ruta_cfg: Path | None = None, progreso=print) -> list[str]:
+    """Escribe en la configuración (`ablacion.quitadas`) las piezas que la decisión FINAL de la ablación quita."""
+    import re
+    ruta = Path(ruta_cfg or C.RAIZ / "configs" / "normalization_v32.yaml")
+    cfg = C.cargar(ruta)
+    cfg = cfg.get("_completa", cfg)
+    d = json.loads((dir_ablacion(cfg) / "decisiones.json").read_text(encoding="utf-8"))
+    final = [x for x in d["decisiones"].values() if x["aplica_en"] == "final"][0]["quitar"]
+    t = ruta.read_text(encoding="utf-8")
+    linea = f"  quitadas: {json.dumps(sorted(final))}   # decisión final de la ablación (validacion/ablacion/decisiones.json)"
+    if re.search(r"^  quitadas:.*$", t, flags=re.M):
+        t = re.sub(r"^  quitadas:.*$", linea, t, flags=re.M)
+    else:
+        t = t.replace("ablacion:                       # B1 + B4 + B6 (bbnorm3/ablacion.py)\n",
+                      "ablacion:                       # B1 + B4 + B6 (bbnorm3/ablacion.py)\n" + linea + "\n")
+    ruta.write_text(t, encoding="utf-8")
+    if progreso:
+        progreso(f"  configuración final de la v3.2: sin {final or 'ninguna pieza'}", flush=True)
+    return final
+
+
 def main(tabla: pd.DataFrame, cfg: dict, fase: str = "todo", progreso=print) -> dict:
+    cfg = cfg.get("_completa", cfg)            # la ablación compara siempre con la configuración completa
     a = cfg["ablacion"]
     n = int(a["semillas"])
     sem = list(cfg["semillas"][:n])

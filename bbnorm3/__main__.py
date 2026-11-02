@@ -46,7 +46,7 @@ def main(argv=None):
     sub.add_parser("destino-covarianza", help="v3.2: covarianza conjunta de los niveles de la v2 (vara de destino)")
     sub.add_parser("destino", help="v3.2: capacidad y constantes para expresar todo en la vara de la liga de destino")
     ab = sub.add_parser("ablacion", help="v3.2: ablación B1/B4/B6 con cortes anidados (bbnorm3/ablacion.py)")
-    ab.add_argument("--fase", default="todo", choices=["todo", "entrenar", "predecir", "decidir"])
+    ab.add_argument("--fase", default="todo", choices=["todo", "entrenar", "predecir", "decidir", "aplicar"])
     ap.add_argument("--config", help="configuración (por defecto configs/normalization_v3.yaml, la v3.0)")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
@@ -73,7 +73,10 @@ def main(argv=None):
         destino.exportar(tabla, cfg)
     elif a.orden == "ablacion":
         from . import ablacion
-        ablacion.main(tabla, cfg, a.fase)
+        if a.fase == "aplicar":
+            ablacion.aplicar_decision(C.RAIZ / a.config if a.config else None)
+        else:
+            ablacion.main(tabla, cfg, a.fase)
     elif a.orden == "validar-v32":
         from . import combinacion
         combinacion.validar_combinada_v32(tabla, cfg)

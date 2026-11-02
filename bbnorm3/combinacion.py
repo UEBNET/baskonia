@@ -42,6 +42,8 @@ def temporadas_por_liga(tabla: pd.DataFrame, cfg: dict, anio: int) -> dict:
 
 def predicciones_cvae(tabla: pd.DataFrame, cfg: dict, anio: int) -> tuple[pd.DataFrame, datos.Escala]:
     f = flujo.dir_val(cfg) / f"predicciones_cvae_{anio}.csv.gz"
+    if f.exists() and cfg.get("version", "") >= "v3.2":     # v3.2: sin cargar las 20 redes (la escala basta)
+        return pd.read_csv(f), datos.construir(tabla, cfg, hasta_anio=anio).esc
     D, cj = flujo.conjunto(tabla, cfg, anio)
     if f.exists():
         return pd.read_csv(f), D.esc

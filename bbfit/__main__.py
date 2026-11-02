@@ -95,6 +95,11 @@ def _b7b9(a):
     return {"B7": r["B7"], "B9": r["B9"]}
 
 
+def _v32_aplicar(a):
+    from . import v32
+    return v32.aplicar_config()
+
+
 def _v32(a):
     from . import v32
     r = v32.main()
@@ -119,7 +124,8 @@ def _exportar_sim(a):
 ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "estilos": _estilos,
            "adaptacion": _adaptacion, "adaptacion-v3": _adaptacion_v3, "dataset-simulador": _dataset_simulador, "auditar": _auditar, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
            "historico": _historico, "exportar-simulador": _exportar_sim,
-           "v32-decidir": _v32, "b7-b9": _b7b9}
+           "v32-decidir": _v32, "b7-b9": _b7b9,
+           "v32-aplicar": _v32_aplicar}
 
 
 def main(argv=None) -> int:

@@ -670,3 +670,25 @@ def main(progreso=print) -> dict:
                              "v3.1": {k: v for k, v in tot["v3.1_motor"].items() if k.startswith(("mae", "cob"))}},
                             indent=1, default=float), flush=True)
     return informe
+
+
+def aplicar_config(ruta=None, progreso=print) -> dict:
+    """Escribe en configs/simulation_v32.yaml las decisiones FINALES (decisiones_v32.json): pasos quitados, factores
+    (k_β, k_c), producción publicada y recalibración A4 activa. Sólo para el simulador publicado (histórico y
+    exportación): el examen ya está hecho."""
+    import re
+    from .config import DIR_CONFIGS
+    ruta = ruta or DIR_CONFIGS / "simulation_v32.yaml"
+    d = json.loads((V.DIR_VAL.parent / "decisiones_v32.json").read_text(encoding="utf-8"))["final"]
+    t = ruta.read_text(encoding="utf-8")
+    for paso in ("redistribuir_uso", "uso_eficiencia", "companeros", "adaptacion", "ruido_personal"):
+        t = re.sub(rf"^(  {paso}: )(true|false)", rf"\g<1>{'false' if paso in d['quitar'] else 'true'}", t, flags=re.M)
+    t = re.sub(r"^(  factor_ajustes_ts: )\[[^\]]*\]", rf"\g<1>[{d['A3']['k_beta']}, {d['A3']['k_comp']}]", t,
+               flags=re.M)
+    t = re.sub(r"^(  produccion_publicada: )\w+", rf"\g<1>{d['produccion']}", t, flags=re.M)
+    t = re.sub(r"^(  aplicar_recalibracion: )\w+", r"\g<1>true", t, flags=re.M)
+    ruta.write_text(t, encoding="utf-8")
+    out = {"quitar": d["quitar"], "k": [d["A3"]["k_beta"], d["A3"]["k_comp"]], "produccion": d["produccion"]}
+    if progreso:
+        progreso(f"  simulador v3.2 publicado: {out}", flush=True)
+    return out

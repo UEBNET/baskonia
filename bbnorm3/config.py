@@ -11,8 +11,19 @@ DIR_SALIDA = RAIZ / "data" / "modelos" / "v3"
 
 
 def cargar(ruta: Path | None = None) -> dict:
+    """Configuración. v3.2: si `ablacion.quitadas` lista piezas (decisión de la ablación B1/B4/B6), se devuelven
+    ya quitadas; la configuración completa (la que compara la ablación) queda en `_completa`."""
     p = ruta or RAIZ / "configs" / "normalization_v3.yaml"
-    return yaml.safe_load(Path(p).read_text(encoding="utf-8"))
+    cfg = yaml.safe_load(Path(p).read_text(encoding="utf-8"))
+    quitadas = (cfg.get("ablacion") or {}).get("quitadas") or []
+    if quitadas:
+        cambios = {}
+        for pieza in quitadas:
+            cambios.update(cfg["ablacion"]["piezas"][pieza])
+        completa = copy.deepcopy(cfg)
+        cfg = con(cfg, **cambios)
+        cfg["_completa"] = completa
+    return cfg
 
 
 def dir_salida(cfg: dict) -> Path:

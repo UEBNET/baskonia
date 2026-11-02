@@ -12,7 +12,8 @@ from . import datos, examen, modelo, niveles, prediccion
 
 DIR_CACHE = C.RAIZ / "experimentos" / "v3"
 # claves que no cambian las redes entrenadas (no entran en la huella de la caché)
-NO_MODELO = ("validacion", "prediccion", "semillas", "version", "salida", "combinacion", "ablacion", "destino")
+NO_MODELO = ("validacion", "prediccion", "semillas", "version", "salida", "combinacion", "ablacion", "destino",
+             "_completa")
 # v3.2: la inferencia semiamortizada (B4) y la vara de salida se aplican DESPUÉS de entrenar: no cambian las redes
 # (en la v3.0/v3.1 sí entraban en la huella; se conserva para no invalidar sus cachés)
 NO_MODELO_V32 = ("inferencia", "referencia_salida")
