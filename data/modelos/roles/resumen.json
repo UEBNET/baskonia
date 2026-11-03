@@ -1,19 +1,19 @@
 {
- "filas_temporada": 55657,
+ "filas_temporada": 55658,
  "filas_tramos": 60625,
  "fuente": {
-  "pbp": 48603,
+  "pbp": 48604,
   "box": 7054
  },
- "rol_probabilistico_pct": 0.28567835133047054,
+ "rol_probabilistico_pct": 0.2856911854540228,
  "top10_anotadores_gtg_pct": 0.6675675675675675,
  "top10_anotadores_gtg_o_titular_pct": 0.9486486486486486,
  "menos5min_residual_pct": 1.0,
- "tramos_por_jugador_equipo": 1.0892610093968413,
+ "tramos_por_jugador_equipo": 1.089241438786877,
  "motivos_inicio": {
-  "inicio": 47102,
+  "inicio": 47103,
   "temporada_caja": 7054,
-  "entrenador": 2899,
+  "entrenador": 2898,
   "cambio_detectado": 2069,
   "traspaso": 1501
  },
