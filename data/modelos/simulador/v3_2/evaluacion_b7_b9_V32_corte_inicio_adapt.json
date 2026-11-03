@@ -10,106 +10,106 @@
  "B7": {
   "pts_p100": {
    "casos": 3720,
-   "mae_gbm": 3.705349081815913,
-   "mae_mlp": 3.998122909353789,
-   "mae_motor": 3.887538929577465,
-   "mae_atlas": 3.8502056848944237,
-   "mae_mezcla_motor_gbm": 3.7206988134179397,
-   "mejora_gbm_frente_motor_%": -4.686508638547682,
-   "ic90_inf_%": -5.854272250907438,
-   "ic90_sup_%": -3.411926710678697,
-   "mejora_mlp_frente_motor_%": 2.8445754956939684,
-   "mejora_gbm_frente_atlas_%": -3.762308170881079
+   "mae_gbm": 3.761876299810313,
+   "mae_mlp": 4.0141459789863,
+   "mae_motor": 3.886319014084507,
+   "mae_atlas": 3.853350162425555,
+   "mae_mezcla_motor_gbm": 3.736289072827481,
+   "mejora_gbm_frente_motor_%": -3.2020715186581006,
+   "ic90_inf_%": -4.453363658218223,
+   "ic90_sup_%": -1.843101580198723,
+   "mejora_mlp_frente_motor_%": 3.2891526516102276,
+   "mejora_gbm_frente_atlas_%": -2.3738788005101097
   },
   "ts_pct": {
    "casos": 3720,
-   "mae_gbm": 4.320557716568193,
-   "mae_mlp": 6.300182118625858,
-   "mae_motor": 5.244767239436619,
-   "mae_atlas": 4.844981212777477,
-   "mae_mezcla_motor_gbm": 4.512985605656602,
-   "mejora_gbm_frente_motor_%": -17.621554602444146,
-   "ic90_inf_%": -19.589727772875946,
-   "ic90_sup_%": -15.927407498526991,
-   "mejora_mlp_frente_motor_%": 20.123197675071825,
-   "mejora_gbm_frente_atlas_%": -10.824056341565214
+   "mae_gbm": 4.335849362261218,
+   "mae_mlp": 6.384229888792679,
+   "mae_motor": 5.257097408450704,
+   "mae_atlas": 4.86489721169464,
+   "mae_mezcla_motor_gbm": 4.525164623053683,
+   "mejora_gbm_frente_motor_%": -17.523891505388388,
+   "ic90_inf_%": -19.511890911798062,
+   "ic90_sup_%": -15.829865962978198,
+   "mejora_mlp_frente_motor_%": 21.440205359903096,
+   "mejora_gbm_frente_atlas_%": -10.874800153262287
   },
   "ast_pct": {
    "casos": 3720,
-   "mae_gbm": 3.8379578227175384,
-   "mae_mlp": 4.0540201218612015,
-   "mae_motor": 4.21083551942684,
-   "mae_atlas": 3.965165430427721,
-   "mae_mezcla_motor_gbm": 3.886595830787295,
-   "mejora_gbm_frente_motor_%": -8.855195007950723,
-   "ic90_inf_%": -10.753513489497694,
-   "ic90_sup_%": -6.957752391890512,
-   "mejora_mlp_frente_motor_%": -3.724092210255292,
-   "mejora_gbm_frente_atlas_%": -3.2081286378122353
+   "mae_gbm": 3.8103432071249004,
+   "mae_mlp": 4.012691552360679,
+   "mae_motor": 4.206649076880684,
+   "mae_atlas": 3.9605269626421227,
+   "mae_mezcla_motor_gbm": 3.8731691927134784,
+   "mejora_gbm_frente_motor_%": -9.420939624696533,
+   "ic90_inf_%": -11.30809862940849,
+   "ic90_sup_%": -7.609484513526114,
+   "mejora_mlp_frente_motor_%": -4.610736977942265,
+   "mejora_gbm_frente_atlas_%": -3.7920144701409253
   },
   "usg_pct": {
    "casos": 3700,
-   "mae_gbm": 2.9254265198260034,
-   "mae_mlp": 3.0228921672892737,
-   "mae_motor": 2.8580867297297297,
-   "mae_atlas": 2.7938369080021777,
-   "mae_mezcla_motor_gbm": 2.7980552532063556,
-   "mejora_gbm_frente_motor_%": 2.3561142982754024,
-   "ic90_inf_%": 0.7355086225813123,
-   "ic90_sup_%": 4.020634737459858,
-   "mejora_mlp_frente_motor_%": 5.766285391036008,
-   "mejora_gbm_frente_atlas_%": 4.70999618649619
+   "mae_gbm": 2.9339232372015585,
+   "mae_mlp": 3.030797292745931,
+   "mae_motor": 2.8592436216216215,
+   "mae_atlas": 2.7951267555797497,
+   "mae_mezcla_motor_gbm": 2.8059373914061063,
+   "mejora_gbm_frente_motor_%": 2.6118661248453634,
+   "ic90_inf_%": 1.0520216219546306,
+   "ic90_sup_%": 4.337065314288187,
+   "mejora_mlp_frente_motor_%": 5.999966908276688,
+   "mejora_gbm_frente_atlas_%": 4.965659655496379
   }
  },
  "B9": {
   "pts_p100": {
    "casos": 4303,
-   "correlacion_error_min_error_prod": 0.34814358772167797,
-   "mae_motor": 3.887538929577465,
-   "mae_oraculo_con_minutos_reales": 3.5884393233690797,
-   "cota_mejora_%": -7.693803499503327
+   "correlacion_error_min_error_prod": 0.3470707124701721,
+   "mae_motor": 3.886319014084507,
+   "mae_oraculo_con_minutos_reales": 3.5865525838842163,
+   "cota_mejora_%": -7.7133768255745245
   },
   "ts_pct": {
    "casos": 4303,
-   "correlacion_error_min_error_prod": 0.20381500353847656,
-   "mae_motor": 5.244767239436619,
-   "mae_oraculo_con_minutos_reales": 4.73950883858297,
-   "cota_mejora_%": -9.6335714777673
+   "correlacion_error_min_error_prod": 0.20247089527153891,
+   "mae_motor": 5.257097408450704,
+   "mae_oraculo_con_minutos_reales": 4.746307091454323,
+   "cota_mejora_%": -9.716204158121434
   },
   "ast_pct": {
    "casos": 4402,
-   "correlacion_error_min_error_prod": 0.17870006493272195,
-   "mae_motor": 4.21083551942684,
-   "mae_oraculo_con_minutos_reales": 4.154234221373456,
-   "cota_mejora_%": -1.3441821175928514
+   "correlacion_error_min_error_prod": 0.19375565094193214,
+   "mae_motor": 4.206649076880684,
+   "mae_oraculo_con_minutos_reales": 4.13821888275618,
+   "cota_mejora_%": -1.6267150616529613
   },
   "usg_pct": {
    "casos": 4501,
-   "correlacion_error_min_error_prod": 0.28840152339177544,
-   "mae_motor": 2.8580867297297297,
-   "mae_oraculo_con_minutos_reales": 2.7057881041795495,
-   "cota_mejora_%": -5.328691532204899
+   "correlacion_error_min_error_prod": 0.2873276084195277,
+   "mae_motor": 2.8592436216216215,
+   "mae_oraculo_con_minutos_reales": 2.707846266919195,
+   "cota_mejora_%": -5.295014162401501
   }
  },
  "minutos_gbm": {
   "casos": 4956,
-  "mae_motor": 4.859177118644068,
-  "mae_gbm": 4.673564529358219,
-  "motor_menos_gbm": 0.18561258928584856,
+  "mae_motor": 4.861681476997579,
+  "mae_gbm": 4.676814593387889,
+  "motor_menos_gbm": 0.1848668836096894,
   "ic90": [
-   0.1113311012186548,
-   0.26351035952697666
+   0.11007435000098,
+   0.26512889698686537
   ],
   "motor_gana_claramente": false
  },
  "veredicto_B7": {
-  "mejora_gbm_pts_%": -4.686508638547682,
+  "mejora_gbm_pts_%": -3.2020715186581006,
   "regla": "el límite está en la estructura del motor si B7 mejora el MAE de pts/100 en > 5 % de forma significativa; si no, en el ruido",
   "limite_en_la_estructura": false
  },
  "veredicto_B9": {
-  "correlacion": 0.34814358772167797,
-  "cota_oraculo_%": -7.693803499503327,
+  "correlacion": 0.3470707124701721,
+  "cota_oraculo_%": -7.7133768255745245,
   "regla": "abrir B9 si corr(e_min, e_pts) > 0,3 o si la cota del oráculo reduce el MAE de pts/100 en más de un 3 %",
   "abrir_B9": true
  }

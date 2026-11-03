@@ -38,13 +38,13 @@ produccion:
   amortiguar_uso: 0.5                # fracción del desajuste de uso del equipo que se redistribuye (0 = nada, 1 = todo)
   ts_min: 30.0
   ts_max: 80.0
-  factor_ajustes_ts: [1.0, 1.0]      # A3 · [k_β, k_c] del motor; los fija `bbfit v32-decidir` (1, 1 = v3.1)
+  factor_ajustes_ts: [0.0, 0.0]      # A3 · [k_β, k_c] del motor; los fija `bbfit v32-decidir` (1, 1 = v3.1)
   rejilla_ajustes_ts: [0.0, 0.25, 0.5, 0.75, 1.0]   # A3 · rejilla que se evalúa en el examen sobre las mismas simulaciones
 
 pasos:                               # A1 · pasos del motor (true = activo, como en la v3.1); los fija `bbfit v32-decidir`
   redistribuir_uso: true             # suma fija del uso del equipo (paso 4)
-  uso_eficiencia: true               # curva uso-eficiencia β (paso 4); equivale a k_β = 0 de la rejilla A3
-  companeros: true                   # calidad de compañeros b (paso 5); equivale a k_c = 0 de la rejilla A3
+  uso_eficiencia: false               # curva uso-eficiencia β (paso 4); equivale a k_β = 0 de la rejilla A3
+  companeros: false                   # calidad de compañeros b (paso 5); equivale a k_c = 0 de la rejilla A3
   adaptacion: true                   # adaptación (paso 2)
   ruido_personal: true               # ruido personal y de muestreo en los intervalos (paso 7)
 
@@ -66,8 +66,8 @@ v32:                                 # decisiones del simulador v3.2 (bbfit/v32.
   fichero_decisiones: data/modelos/simulador/v3_2/decisiones_v32.json
   # simulador publicado (histórico y exportación), DESPUÉS del examen: se fijan con el resultado de `v32-decidir`
   # (durante el examen deben quedar en motor / false: A2 y A4 se evalúan aparte, con cortes anidados)
-  produccion_publicada: motor        # motor (A3) | atlas (A2)
-  aplicar_recalibracion: false       # A4 con los factores finales de fichero_decisiones
+  produccion_publicada: atlas        # motor (A3) | atlas (A2)
+  aplicar_recalibracion: true       # A4 con los factores finales de fichero_decisiones
 
 utilidad:                            # utilidad Plackett-Luce de la asignación de minutos (se ajusta por verosimilitud)
   rasgos: [L, logit_min_previo, nuevo, encaje_pos, encaje_estilo, sin_dato]
