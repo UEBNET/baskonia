@@ -292,6 +292,8 @@ def main(salida: str, todas_las_ligas: bool = False) -> None:
     m = (cj.jugadores["min"] >= C.MIN_JUGADOR).to_numpy()
     J = cj.jugadores.loc[m, ["nombre", "clave", "nombre_club", "liga", "temporada", "pos3", "min", "nivel", "fuente_norm",
                              "provisional", "persona_id", "player_id"]].copy()
+    from bbmodel.nombres import aplicar
+    J = aplicar(J, fuente=False)                                     # nombres canónicos «Nombre Apellido»
     J["edad"] = J["temporada"].str[:4].astype(int) - pd.to_numeric(cj.jugadores.loc[m, "anio_nac"], errors="coerce")
     pos_R, pos_Q = {}, {}
     for _, (R, w, idx, Q) in cj.plantillas.items():

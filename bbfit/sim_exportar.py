@@ -89,7 +89,10 @@ def _registros(c: S.Corte, filas: pd.DataFrame, nombres: dict | None = None) -> 
     if nombres:
         f["nombre"] = f["nombre"].where(f["nombre"].notna() & (f["nombre"].astype(str).str.strip() != ""),
                                         f["persona_id"].map(nombres))
-    f["pid"] = id_modelo(f["liga"], f["player_id"].astype(str), f["nombre"].fillna(""))
+    f["pid"] = id_modelo(f["liga"], f["player_id"].astype(str), f["nombre"].fillna(""))   # id con el nombre de la fuente
+    from bbmodel.nombres import canonico_persona
+    can = f["persona_id"].astype(str).map(canonico_persona())          # nombre canónico «Nombre Apellido»
+    f["nombre"] = can.where(can.notna(), f["nombre"])
     out = []
     for r in f.to_dict("records"):
         r["persona_id"] = r["persona_id"]
@@ -109,6 +112,23 @@ def _registros(c: S.Corte, filas: pd.DataFrame, nombres: dict | None = None) -> 
 
 COLS_JUG = ["id", "pid", "persona", "nombre", "liga", "temporada", "team", "club", "pos3", "edad", "nac", "gp", "min_total",
             "min_pct", "gs_pct", "rol", "L", "L_sd", "kL", "ctx", "usg", "ast", "gti", "sigma", "hrol", "eu", "th", "sd"]
+
+
+def _min_gbm_v33(c: S.Corte, filas: pd.DataFrame, ligas: list[str]) -> dict:
+    """v3.3 · minutos/partido del GBM de cada registro en cada liga de destino (si la v3.3 los publica)."""
+    v33 = S._v33(c.cfg)
+    if not v33 or v33["dec"].get("minutos_publicados", "motor") == "motor" or not v33.get("gbm"):
+        return {}
+    ids, X = [], []
+    for r in filas.to_dict("records"):
+        for l in ligas:
+            ids.append((f"{r['liga']}|{r['temporada']}|{r['player_id']}", l))
+            X.append(S.fila_gbm(c, r, l))
+    pred = S.min_gbm(c, X, v33)
+    out: dict = {}
+    for (i, l), v in zip(ids, pred):
+        out.setdefault(i, {})[l] = float(v)
+    return out
 
 
 def _constantes_base(c: S.Corte, ligas: list[str]) -> dict:
@@ -259,10 +279,12 @@ def exportar(salida: str | Path = SALIDA) -> dict:
     salida = Path(salida)
     salida.mkdir(parents=True, exist_ok=True)
     roles = SI._leer_roles_temporada()
-    nombres = nombres_por_persona(roles)
+    from bbmodel.nombres import canonico_persona
+    nombres = {**nombres_por_persona(roles), **canonico_persona()}     # canónicos «Nombre Apellido» si existen
     P = json.loads((S.DIR_SIM / "pesos.json").read_text(encoding="utf-8")) if (S.DIR_SIM / "pesos.json").exists() else {}
     bases = {SI.siguiente(t): t for t in ex["temporadas_base"]}       # destino → base
     meta_bases, clubes, filas_jug, usados_por_base, stubs = {}, [], [], {}, {}
+    gbm_min: dict = {}                     # v3.3 · id de registro → {liga de destino: minutos/partido del GBM}
     ligas_todas = set()
     for dest, base in bases.items():
         c = S.cargar_corte(base)
@@ -280,11 +302,13 @@ def exportar(salida: str | Path = SALIDA) -> dict:
         # registros de la temporada base: candidatos (≥ min minutos) y miembros de alguna plantilla
         r = c.reg[(c.reg["min_total"] >= ex["minimo_minutos_jugador"]) | (c.reg["principal"] & c.reg["persona_id"].isin(usados))]
         filas_jug += _registros(c, r, nombres)
+        gbm_min.update(_min_gbm_v33(c, r, sorted(ligas)))
     # registros de la temporada en curso como candidatos (provisionales)
     for t in ex.get("temporadas_candidatas_extra", []):
         c = S.cargar_corte(t)
         r = c.reg[c.reg["min_total"] >= ex["minimo_minutos_jugador"]]
         filas_jug += _registros(c, r, nombres)
+        gbm_min.update(_min_gbm_v33(c, r, sorted(set(c.reg["liga"]))))
     filas_jug += list(stubs.values())
     vistos, jug = set(), []
     for f in filas_jug:
@@ -327,7 +351,22 @@ def exportar(salida: str | Path = SALIDA) -> dict:
             "avisos": cfg["avisos"], "estilos": estilos, "bases": meta_bases,
             "validacion": P.get("validacion_resumen"),
             "nota": "Motor en el navegador: port de bbfit.simulador.simular (docs/checkpoints/F8.md)."}
-    jcols = {"columnas": COLS_JUG, "filas": jug}
+    v33 = S._v33(cfg)
+    if v33:                                # v3.3 · minutos (GBM por liga de destino) y B9 para el motor del navegador
+        ligas_gbm = sorted(ligas_todas)
+        for f in jug:
+            g = gbm_min.get(f[0])
+            f.append([_r(g.get(l), 2) for l in ligas_gbm] if g else None)
+        meta["v33"] = {"minutos_publicados": v33["dec"].get("minutos_publicados"), "b9": bool(v33.get("b9")),
+                       "ligas_min_gbm": ligas_gbm, "b9_coeficientes": v33["dec"].get("b9_coeficientes"),
+                       "recalibracion_minutos": v33["dec"].get("recalibracion_minutos"),
+                       "franja_minutos": v33["dec"].get("franja_minutos"),
+                       "uso": "minutos publicados = motor | GBM (min_gbm[liga de destino]) | mezcla 50/50 del motor "
+                              "calibrado y el GBM, recalibrados con recalibracion_minutos. Con rol asignado (B9): "
+                              "producción + b_min·(minutos del rol − minutos publicados sin rol) + c_rol·(índice del rol "
+                              "− índice esperado sin rol). bbfit/simulador.py: _minutos_v33 y _b9_rol_asignado."}
+    cols_j = COLS_JUG + (["min_gbm"] if v33 else [])
+    jcols = {"columnas": cols_j, "filas": jug}
     cl = {"columnas": list(clubes[0].keys()) if clubes else [], "filas": [list(x.values()) for x in clubes]}
     tam = {}
     for nombre, obj in (("meta.json", meta), ("jugadores.json", jcols), ("clubes.json", cl)):

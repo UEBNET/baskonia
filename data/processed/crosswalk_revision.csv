@@ -84,7 +84,7 @@ bbl,2000747,Jaizec Lottie,1998,,2024-25,lba,7000,Jaizec Jordan Lottie,,,2023-24,
 bbl,55876,Ryan Taylor,1994,US,2022-23,fec,303549,Ryan Joshua  Taylor,,,"2021-22,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bbl,47589,Tayler Persons,,,2020-21,fec,272838,Tayler Anthony Persons,,,"2021-22,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bbl,2001374,Ty Charles Nichols,,,2024-25,fec,278464,Ty Nichols,,,"2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-bbl,2001374,Ty Charles Nichols,,,2024-25,gbl,nichols-ty,Τάι Νικολς,,,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+bbl,2001374,Ty Charles Nichols,,,2024-25,gbl,nichols-ty,Ty NICHOLS,,,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bbl,2000809,Vincent Trevon Mitchell,,,2024-25,eurocup,013898,"MITCHELL, VINCENT",2000,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bbl,57403,Xeyrius Williams,,,2023-24,fec,284077,Xeyrius Clifton Williams,,,"2022-23,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bbl,2001476,Yasiin Joseph,,,2024-25,feb1,2868750,YASIIN YOUSEF JOSEPH,1996-08-10,CA,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -138,7 +138,7 @@ bsl,freeman-javon,Javon Jaleen  Freeman,,,2026-27,nbl,a60fc635-7195-11f0-8b99-c1
 bsl,al-omer,Ömer Utku Al,,,"2020-21,2026-27",eurocup,006205,"AL, OMER UTKU",1998,,"2021-22,2022-23",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 eurocup,013519,"COSKUN, CENGIZ SARP",2007,,2025-26,fec,346169,Cengiz Coskun,,,2023-24,0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
 eurocup,015032,"EDGE, DARNELL",1997,,2026-27,fec,273656,Darnell Antonio Edge,,,"2023-24,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-eurocup,013393,"LASZEWSKI, NATHAN JAMES",1999,,2024-25,gbl,laszewski-nathan,Νέιτ Λαζέφσκι,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+eurocup,013393,"LASZEWSKI, NATHAN JAMES",1999,,2024-25,gbl,laszewski-nathan,Nathan Laszewski,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 eurocup,013309,"LOTTIE, JAIZEC",1998,,2024-25,lba,7000,Jaizec Jordan Lottie,,,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 eurocup,013516,"MOTEN, DARIOUS",1992,,2024-25,fec,222892,Darious Lee Moten,,,2021-22,0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
 eurocup,013916,"OSBORNE, MALIK",1998-04-09,US,2025-26,fec,323460,Malik James Osborne,,,"2022-23,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -147,14 +147,13 @@ eurocup,015245,"SCRUGGS, PAUL",1998,,2026-27,fec,348383,Paul Edwards Scruggs,,,2
 eurocup,012089,"TAYLOR, RYAN",1995,US,2022-23,fec,303549,Ryan Joshua  Taylor,,,"2021-22,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 eurocup,014098,"WILLIAMS, DEANE",1996,,"2025-26,2026-27",lba,7410,Deane Alexander Williams,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,1384223,ALBERTO MARTIN MARIN,1995-03-28,ES,"2024-25,2025-26",feb3,2269660,P. MARTIN MARIN,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-feb1,2371569,ALF SYLVESTER BERG PEDERSEN,1998-05-27,DK,2022-23,fec,211560,Sylvester Pedersen,,,"2023-24,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2894665,BRYCE ADEN BAEZ PIERSON,2002-12-03,ES,2026-27,feb3,2125409,K. BAEZ PIERSON,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,1899194,CARLOS TABOADA HEISKANEN,2003-09-26,ES,2025-26,fec,271189,Carlos Taboada,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2527922,CHANDLER CHARLES JACOBS,1999-04-12,US,2022-23,ncaa,4897513,Chandler Jacobs,,,2021-22,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,1251001,CRISTIAN DIAZ RODRIGUEZ,1992-03-23,ES,"2024-25,2025-26,2026-27",feb3,831122,A. RODRIGUEZ DIAZ,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2820639,D. ADDAE-WUSU,,,2025-26,fec,401481,Dylan Addae-Wusu,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2869662,DANIEL EVERETT LOVE,1999-05-03,SE,2025-26,fec,269189,Daniel Love,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-feb1,2524185,DELANEY LAMAR BLAYLOCK,1997-06-17,US,2022-23,gbl,blaylock-delaney,Ντιλέινι Μπλέιλοκ,,,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+feb1,2524185,DELANEY LAMAR BLAYLOCK,1997-06-17,US,2022-23,gbl,blaylock-delaney,Delaney Blaylock,,,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,1446122,FRANCISCO FERNANDO ALONSO MARTÍNEZ,1996-05-25,ES,"2023-24,2024-25",feb3,2557188,P. MARTINEZ ALONSO,,,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2643351,FRANCISCO JOSE RIBAU AMARANTE,2000-03-24,PT,"2023-24,2024-25",fec,219226,Francisco Amarante,,,"2021-22,2022-23,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2819327,GABRIEL MARVIN KALSCHEUR,1999-06-10,US,2025-26,fec,375611,Gabriel Kalscheur,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -544,7 +543,7 @@ bbl,49908,Fedor Zugic,,,2021-22,bbl,52491,Fedor Zugic,,,2022-23,0.65,nombre_igua
 bbl,49908,Fedor Zugic,,,2021-22,eurocup,009033,"ZUGIC, FEDOR",2003,,"2020-21,2021-22,2022-23",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,52491,Fedor Zugic,,,2022-23,eurocup,009033,"ZUGIC, FEDOR",2003,,"2020-21,2021-22,2022-23",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,56475,Fedor Zugic,,,2023-24,fec,252599,Fedor Zugic,2003,,2023-24,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
-bbl,2003991,Felipe Haase Thiers,,,2026-27,gbl,haase-felipe,Φελίπε Χασε,1998-03-19,CL,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+bbl,2003991,Felipe Haase Thiers,,,2026-27,gbl,haase-felipe,Felipe Haase,1998-03-19,CL,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bbl,2003991,Felipe Haase Thiers,,,2026-27,vtb,394902,Felipe Haase,1998-03-19,CL,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bbl,51617,Felix Hecker,,,2021-22,bbl,52571,Felix Hecker,,,2022-23,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,47293,Felix Hoffmann,,,2020-21,bbl,49383,Felix Hoffmann,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
@@ -1269,7 +1268,7 @@ bcl,224316,Juan Marcos,,,2026-27,feb1,2480701,JUAN IGNACIO MARCOS,2000-07-06,IT,
 bcl,238070,Justin Alston,,,2023-24,fec,238070,Justin Alexander Alston,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,227388,Kay Bruhnke,,,"2025-26,2026-27",fec,227388,Kay Patrick Bruhnke,2001,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,257708,Kendall Smith,1995-09-18,US,2023-24,gbl,kendall-smith,Smith Kendall,,,"2022-23,2023-24",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
-bcl,257708,Kendall Smith,1995-09-18,US,2023-24,gbl,smith-kendall,Κένταλ Σμιθ,,,"2023-24,2024-25",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+bcl,257708,Kendall Smith,1995-09-18,US,2023-24,gbl,smith-kendall,Kendall Smith,,,"2023-24,2024-25",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bcl,226866,Keye van der Vuurst de Vries,,,"2020-21,2021-22,2022-23",eurocup,013286,"VAN DER VUURST, KEYE",2001,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,226866,Keye van der Vuurst de Vries,,,"2020-21,2021-22,2022-23",fec,226866,Keye Van Der Vuurst,2001,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,258249,London Perrantes,1994,US,2024-25,fec,258249,London Tyus Perrantes,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1346,7 +1345,7 @@ feb1,2534405,L. SOUMBEY ALLEY,,,2022-23,feb1,2892262,LONLONVI EZEKIEL SOUMBEY-AL
 feb1,2648543,LOTANNA AFAM NWOGBO,1993-05-30,NG,"2023-24,2024-25,2025-26,2026-27",fec,228155,Lotanna Nwogbo,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2325442,M. ERRASTI URANGA,,,2022-23,feb2,2432734,E. ERRASTI URANGA,2006-09-13,ES,"2023-24,2024-25",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 feb1,2325442,M. ERRASTI URANGA,,,2022-23,feb3,2432734,ENEKO ERRASTI URANGA,2006-09-13,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-feb1,2839186,MARQUES RASHAAD TOWNES VILLAR,1995-09-03,DO,"2025-26,2026-27",gbl,townes-marques,Μαρκίς Τάουνς,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+feb1,2839186,MARQUES RASHAAD TOWNES VILLAR,1995-09-03,DO,"2025-26,2026-27",gbl,townes-marques,Marques Townes,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2814904,MARQUIS JUWAN JACKSON,1994-09-16,US,2025-26,fec,259022,Marquis Jackson,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2734242,MORGAN SIETSE STILMA,2000-06-19,NL,2025-26,fec,221834,Morgan Stilma,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2815273,NUNO MIGUEL CAMACHO DE SÁ,1997-03-25,PT,2025-26,fec,204747,Nuno Camacho de Sa,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1410,25 +1409,25 @@ fec,240917,Craig Adzeh,,,2024-25,lnb,54,Craig George Adzeh,2003-05-26,FR,"2020-2
 fec,324564,Jaizec Lottie,1998,,2025-26,lba,7000,Jaizec Jordan Lottie,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,287335,Jayce Ryback Johnson,,,2020-21,gleague,1631384,Jayce Johnson,1997,US,"2022-23,2023-24",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,287335,Jayce Ryback Johnson,,,2020-21,lba,7438,Jayce Johnson,1997,US,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-fec,271960,Joshua Henry Sharma,,,"2021-22,2024-25",gbl,sharma-joshua,Τζος Σαρμα,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-fec,238070,Justin Alexander Alston,,,2021-22,gbl,alston-justin,Τζάστον Άλστον,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+fec,271960,Joshua Henry Sharma,,,"2021-22,2024-25",gbl,sharma-joshua,Joshua-Hendry SHARMA,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+fec,238070,Justin Alexander Alston,,,2021-22,gbl,alston-justin,Justin Alston,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,238070,Justin Alexander Alston,,,2021-22,lba,7463,Justin Alston,,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,239527,Kingsley Moses,,,2021-22,gbl,kingsley-moses,Kingsley Moses,,,"2020-21,2021-22",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 fec,239527,Kingsley Moses,,,2021-22,gbl,moses-kingsley,Kingsley Moses,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 fec,288808,Kristian Dontae Doolittle,,,2021-22,nbl,75f4d047-410d-11f0-92f1-2902fc2f936f,Kristian Doolittle,1997,US,"2023-24,2024-25,2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-fec,258249,London Tyus Perrantes,,,2021-22,gbl,perrantes-london,Λόντον Περάντες,1994,US,"2023-24,2024-25,2025-26",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+fec,258249,London Tyus Perrantes,,,2021-22,gbl,perrantes-london,London Perrantes,1994,US,"2023-24,2024-25,2025-26",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,323460,Malik James Osborne,,,"2022-23,2026-27",lnb,10044,Malik Osborne,1998-04-09,US,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,323460,Malik James Osborne,,,"2022-23,2026-27",ncaa,4279098,Malik Osborne,1998-04-09,US,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,219008,Muhaymin Mustafa,,,2021-22,gbl,muhaymin-mustafa,Mustafa Muhaymin,,,2020-21,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 fec,219008,Muhaymin Mustafa,,,2021-22,gbl,mustafa-muhaymin,Muhaymin Mustafa,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 fec,348383,Paul Edwards Scruggs,,,2025-26,ncaa,4278591,Paul Scruggs,1998,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-fec,273123,Rashad Deandre Vaughn,,,"2020-21,2021-22",gbl,vaughn-rashad,Ρασάντ Βον,1996,US,"2023-24,2024-25",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+fec,273123,Rashad Deandre Vaughn,,,"2020-21,2021-22",gbl,vaughn-rashad,Rashad Vaughn,1996,US,"2023-24,2024-25",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,282625,Stephen Mark Thompson Jr.,,,2021-22,gleague,1629808,Stephen Thompson,1996,PR,"2023-24,2024-25,2025-26",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,228939,Terry Du'Aun Allen,,,2021-22,lba,6998,Terry Allen,1993-12-29,US,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,213471,Vincent Laron Sanford,,,2023-24,lnb,6853,Vincent Sanford,1990-12-05,US,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+gbl,fridriksson-elvar,Elvar Mar Fridriksson,1994,,"2023-24,2024-25",lba,6380,Elvar Mar Fridriksson,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 gbl,muhaymin-mustafa,Mustafa Muhaymin,,,2020-21,gbl,mustafa-muhaymin,Muhaymin Mustafa,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
-gbl,fridriksson-elvar,Έλβαρ Φρίντρικσον,1994,,"2023-24,2024-25",lba,6380,Elvar Mar Fridriksson,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-gbl,joseph-nelly,Νέλι Τζούνιορ Τζοσεφ,2001-11-20,NG,2026-27,ncaa,4703015,Nelly Junior Joseph,,,"2023-24,2024-25",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+gbl,joseph-nelly,Nelly Junior JOSEPH,2001-11-20,NG,2026-27,ncaa,4703015,Nelly Junior Joseph,,,"2023-24,2024-25",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 gleague,1628575,Jaylen Johnson,1996,US,"2021-22,2022-23",ncaa,4894462,Jaylen Crocker-Johnson,,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 gleague,1628992,Justin Jackson,1996,CA,"2020-21,2021-22,2023-24,2025-26",nba,jacksju01,Justin Jackson,1995,US,"2020-21,2021-22,2022-23,2023-24",0.65,nombre_igual+anio_nac+nacionalidad_distinta+trayectoria_contigua+club_comun,confianza bajo el umbral
 gleague,1628777,Maverick Rowan,1996,US,2022-23,lba,7417,Maverick Lewis Rowan,,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1670,7 +1669,7 @@ bbl,2003894,Darion Atkins,,,2026-27,bbl,50667,Darion Atkins,,,2021-22,0.6,nombre
 bbl,50667,Darion Atkins,,,2021-22,bsl,atkins-darion,Darion Ray Atkins,1992,,2020-21,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,50667,Darion Atkins,,,2021-22,lba,6608,Darion Atkins,1992,,"2022-23,2023-24",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,56752,Darius Perry,,,2023-24,bcl,323610,Darius Perry,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,56752,Darius Perry,,,2023-24,gbl,perry-darius,Ντάριους Πέρι,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,56752,Darius Perry,,,2023-24,gbl,perry-darius,Darius James Perry,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,58663,David DeJulius,1999,,2023-24,ncaa,4397202,David DeJulius,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,49284,David Krämer,,,2020-21,bbl,49649,David Krämer,,,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,49649,David Krämer,,,2021-22,euroleague,006482,"KRAMER, DAVID",1997,,"2020-21,2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -1698,9 +1697,9 @@ bbl,2000791,Deion Hammond,,,2024-25,bcl,303637,Deion Hammond,,,2023-24,0.6,nombr
 bbl,56950,Deion Hammond,,,2023-24,bnxt,hammond-deion,Deion Hammond,,,"2022-23,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,56950,Deion Hammond,,,2023-24,fec,303637,Deion Hammond,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2000790,Demajeo Wiggins,,,2024-25,bcl,292387,Demajeo Wiggins,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2000790,Demajeo Wiggins,,,2024-25,gbl,wiggins-demajeo,Ντιμάζιο Ουιγκινσ,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2000790,Demajeo Wiggins,,,2024-25,gbl,wiggins-demajeo,Demajeo WIGGINS,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2003833,Demajeo Wiggins,,,2026-27,bcl,292387,Demajeo Wiggins,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2003833,Demajeo Wiggins,,,2026-27,gbl,wiggins-demajeo,Ντιμάζιο Ουιγκινσ,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2003833,Demajeo Wiggins,,,2026-27,gbl,wiggins-demajeo,Demajeo WIGGINS,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,49679,Dennis Nawrocki,,,2021-22,bbl,53076,Dennis Nawrocki,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,50789,Derek Cooke Jr.,,,2021-22,bbl,55872,Derek Cooke Jr.,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,50789,Derek Cooke Jr.,,,2021-22,bcl,221402,Derek Cooke Jr,1991,,2020-21,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -1919,15 +1918,15 @@ bbl,2001367,Johnathan Stove,,,2024-25,bbl,2001592,Johnathan Stove,,,2025-26,0.6,
 bbl,2001367,Johnathan Stove,,,2024-25,bbl,56783,Johnathan Stove,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001367,Johnathan Stove,,,2024-25,bcl,305980,Johnathan Stove,1995,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001367,Johnathan Stove,,,2024-25,fec,305980,Johnathan Stove,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2001367,Johnathan Stove,,,2024-25,gbl,stove-johnathan,Τζόναθαν Στόουβ,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2001367,Johnathan Stove,,,2024-25,gbl,stove-johnathan,Johnathan Stove,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001592,Johnathan Stove,,,2025-26,bbl,2003802,Johnathan Stove,,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001592,Johnathan Stove,,,2025-26,eurocup,013503,"STOVE, JOHNATHAN",1995,,"2024-25,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001592,Johnathan Stove,,,2025-26,fec,305980,Johnathan Stove,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2001592,Johnathan Stove,,,2025-26,gbl,stove-johnathan,Τζόναθαν Στόουβ,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2001592,Johnathan Stove,,,2025-26,gbl,stove-johnathan,Johnathan Stove,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2003802,Johnathan Stove,,,2026-27,bcl,305980,Johnathan Stove,1995,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,56783,Johnathan Stove,,,2023-24,eurocup,013503,"STOVE, JOHNATHAN",1995,,"2024-25,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,56783,Johnathan Stove,,,2023-24,fec,305980,Johnathan Stove,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,56783,Johnathan Stove,,,2023-24,gbl,stove-johnathan,Τζόναθαν Στόουβ,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,56783,Johnathan Stove,,,2023-24,gbl,stove-johnathan,Johnathan Stove,1995,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,47837,Jon Axel Gudmundsson,,,2020-21,bbl,49503,Jon Axel Gudmundsson,,,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,47837,Jon Axel Gudmundsson,,,2020-21,fec,209906,Jon Axel Gudmundsson,1996-10-27,IS,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,47837,Jon Axel Gudmundsson,,,2020-21,lba,6146,Jon Axel Gudmundsson,1996-10-27,IS,"2021-22,2022-23",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -1973,7 +1972,7 @@ bbl,55883,Jordan Theodore,,,2022-23,vtb,307428,Jordan Theodore,1989-12-11,US,"20
 bbl,55412,Josh Hawley,,,2022-23,lnb,9581,Josh Hawley,1996-10-28,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001516,Joshua Obiesie,,,2025-26,bbl,2003820,Joshua Obiesie,,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001516,Joshua Obiesie,,,2025-26,bcl,251071,Joshua Obiesie,1999,DE,"2024-25,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2001516,Joshua Obiesie,,,2025-26,gbl,obiesie-joshua,Γιόσουα Ομπιέσε,1999,DE,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2001516,Joshua Obiesie,,,2025-26,gbl,obiesie-joshua,Joshua Obiesie,1999,DE,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2003820,Joshua Obiesie,,,2026-27,fec,251071,Joshua Obiesie,1999,DE,"2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,47342,Joshua Obiesie,,,2020-21,bbl,49349,Joshua Obiesie,,,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,49349,Joshua Obiesie,,,2021-22,bbl,52302,Joshua Obiesie,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2278,7 +2277,7 @@ bbl,2000820,Noé Bom,,,2024-25,eurocup,012696,"BOM, NOE",2006,,2023-24,0.6,nombr
 bbl,58382,Noé Bom,,,2023-24,fec,376732,Noe Bom,2006,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,49767,Ognjen Jaramaz,,,2021-22,eurocup,004058,"JARAMAZ, OGNJEN",1995,,"2020-21,2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2003061,Oluwasimisola Shittu,,,2025-26,bbl,2004145,Oluwasimisola Shittu,,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2003061,Oluwasimisola Shittu,,,2025-26,gbl,shittu-oluwasimisola,Σίμι Σίτου,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2003061,Oluwasimisola Shittu,,,2025-26,gbl,shittu-oluwasimisola,Oluwasimisola Shittu,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2000746,Osaro Rich Igbineweka,,,"2024-25,2025-26,2026-27",bbl,47160,Osaro Rich Igbineweka,,,2020-21,0.6,nombre_igual+club_comun,confianza bajo el umbral
 bbl,2000746,Osaro Rich Igbineweka,,,"2024-25,2025-26,2026-27",bbl,49470,Osaro Rich Igbineweka,,,2021-22,0.6,nombre_igual+club_comun,confianza bajo el umbral
 bbl,2000746,Osaro Rich Igbineweka,,,"2024-25,2025-26,2026-27",bbl,56799,Osaro Rich Igbineweka,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2484,7 +2483,7 @@ bbl,2003133,Tyger Campbell,,,2025-26,bcl,347884,Tyger Campbell,2000-01-09,US,202
 bbl,2003133,Tyger Campbell,,,2025-26,eurocup,015262,"CAMPBELL, TYGER",2000-01-09,US,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2003133,Tyger Campbell,,,2025-26,lnb,9544,Tyger Campbell,2000-01-09,US,"2023-24,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,56575,Tyler Nelson,,,"2023-24,2024-25",bcl,292386,Tyler Nelson,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,56575,Tyler Nelson,,,"2023-24,2024-25",gbl,nelson-tyler,Τάϊλερ Νέλσον,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,56575,Tyler Nelson,,,"2023-24,2024-25",gbl,nelson-tyler,Tyler Jeffrey Nelson,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,56627,Tyreese Blunt,,,2023-24,fec,318969,Tyreese Blunt,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,48014,Tyson Ward,,,2020-21,bbl,49519,Tyson Ward,,,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,52409,Tyson Ward,,,2022-23,eurocup,012610,"WARD, TYSON",1997-07-26,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2628,13 +2627,13 @@ feb3,2286357,W. BURGOS CABRERA,,,2023-24,feb3,2577614,W. BURGOS CABRERA,2002-10-
 fec,271152,James Thompson IV,,,2021-22,lnb,9355,James Thompson,1995-01-18,US,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 fec,271152,James Thompson IV,,,2021-22,vtb,343747,James Thompson,1995-01-18,US,"2021-22,2022-23,2023-24",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 fec,150846,Justin Robinson,1997-10-12,US,2021-22,lba,4754,Justin Robinson,,,"2020-21,2023-24",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+gbl,dejulius-david,David De Julius,1999,,"2023-24,2024-25",ncaa,4397202,David DeJulius,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+gbl,smith-kendall,Kendall Smith,,,"2023-24,2024-25",gleague,1629923,Kendall Smith,1995-09-18,US,"2021-22,2022-23",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+gbl,smith-kendall,Kendall Smith,,,"2023-24,2024-25",vtb,420204,Kendall Smith,1995-09-18,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gbl,taylor-ryan,Ryan Taylor,,,"2021-22,2022-23,2025-26",gleague,1629807,Ryan Taylor,1994,US,"2020-21,2021-22",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gbl,taylor-ryan,Ryan Taylor,,,"2021-22,2022-23,2025-26",lba,6856,Ryan Taylor,1994,US,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gbl,kendall-smith,Smith Kendall,,,"2022-23,2023-24",gleague,1629923,Kendall Smith,1995-09-18,US,"2021-22,2022-23",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gbl,kendall-smith,Smith Kendall,,,"2022-23,2023-24",vtb,420204,Kendall Smith,1995-09-18,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-gbl,smith-kendall,Κένταλ Σμιθ,,,"2023-24,2024-25",gleague,1629923,Kendall Smith,1995-09-18,US,"2021-22,2022-23",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-gbl,smith-kendall,Κένταλ Σμιθ,,,"2023-24,2024-25",vtb,420204,Kendall Smith,1995-09-18,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-gbl,dejulius-david,Ντέιβιντ Ντε Τζούλιους,1999,,"2023-24,2024-25",ncaa,4397202,David DeJulius,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1641992,Donald Carey,1999,US,"2023-24,2024-25",ncaa,5261195,Donald Carey,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1631495,Donovan Williams,2001,US,"2022-23,2023-24,2024-25,2025-26",ncaa,4432255,Donovan Williams,,,"2020-21,2021-22",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1630552,Jalen Johnson,2001,US,2021-22,ncaa,4066817,Jalen Johnson,,,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2955,7 +2954,7 @@ bbl,2003894,Darion Atkins,,,2026-27,bsl,atkins-darion,Darion Ray Atkins,1992,,20
 bbl,2003894,Darion Atkins,,,2026-27,lba,6608,Darion Atkins,1992,,"2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
 bbl,2003999,Darius Perry,,,2026-27,bbl,56752,Darius Perry,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003999,Darius Perry,,,2026-27,bcl,323610,Darius Perry,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
-bbl,2003999,Darius Perry,,,2026-27,gbl,perry-darius,Ντάριους Πέρι,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,2003999,Darius Perry,,,2026-27,gbl,perry-darius,Darius James Perry,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,58663,David DeJulius,1999,,2023-24,ncaa,4706245,David Dejulius,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bbl,49284,David Krämer,,,2020-21,bbl,52456,David Krämer,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,49284,David Krämer,,,2020-21,bcl,204689,David Kramer,1997,,2024-25,0.55,nombre_igual,confianza bajo el umbral
@@ -3059,9 +3058,9 @@ bbl,52447,Elias Lasisi,,,2022-23,bcl,182158,Elias Lasisi,,,2020-21,0.55,nombre_i
 bbl,52447,Elias Lasisi,,,2022-23,bnxt,lasisi-elias,Elias Lasisi,,,"2024-25,2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,56461,Elias Lasisi,,,2023-24,bcl,182158,Elias Lasisi,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bbl,57126,Elijah Childs,,,2023-24,fec,304390,Elijah Childs,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
-bbl,57126,Elijah Childs,,,2023-24,gbl,childs-elijah,Ελάιζα Τσαϊλντσ,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,57126,Elijah Childs,,,2023-24,gbl,childs-elijah,Elijah-Daron CHILDS,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,58681,Elijah Childs,,,2023-24,fec,304390,Elijah Childs,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
-bbl,58681,Elijah Childs,,,2023-24,gbl,childs-elijah,Ελάιζα Τσαϊλντσ,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,58681,Elijah Childs,,,2023-24,gbl,childs-elijah,Elijah-Daron CHILDS,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001796,Elijah Ndi,,,2025-26,bbl,49176,Elijah Ndi,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001796,Elijah Ndi,,,2025-26,bbl,49612,Elijah Ndi,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001796,Elijah Ndi,,,2025-26,bbl,52443,Elijah Ndi,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
@@ -3075,8 +3074,8 @@ bbl,52443,Elijah Ndi,,,2022-23,fec,315845,Elijah Ndi,,,2025-26,0.55,nombre_igual
 bbl,56459,Elijah Ndi,,,2023-24,bcl,315845,Elijah Ndi,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,56459,Elijah Ndi,,,2023-24,fec,315845,Elijah Ndi,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,51758,Emmanuel Ugbo,,,2021-22,ncaa,5195304,Emmanuel Ugbo,,,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
-bbl,2001891,Eric Reed II,,,2025-26,gbl,reed-eric,Έρικ Ριντ,2000,,2023-24,0.55,nombre_igual,confianza bajo el umbral
-bbl,2002942,Eric Reed II,,,2025-26,gbl,reed-eric,Έρικ Ριντ,2000,,2023-24,0.55,nombre_igual,confianza bajo el umbral
+bbl,2001891,Eric Reed II,,,2025-26,gbl,reed-eric,Eric Reed,2000,,2023-24,0.55,nombre_igual,confianza bajo el umbral
+bbl,2002942,Eric Reed II,,,2025-26,gbl,reed-eric,Eric Reed,2000,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,18421,Eric Washington,,,2021-22,bbl,2001899,Eric Washington,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,18421,Eric Washington,,,2021-22,gleague,1628698,Eric Washington,1992,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,18421,Eric Washington,,,2021-22,lba,7353,Eric Washington,1992,US,2023-24,0.55,nombre_igual,confianza bajo el umbral
@@ -3168,8 +3167,8 @@ bbl,52137,Harald Frey,,,2021-22,bbl,56515,Harald Frey,,,2023-24,0.55,nombre_igua
 bbl,52137,Harald Frey,,,2021-22,bcl,197509,Harald Frey,,,"2023-24,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,2000735,Ibi Watson,,,"2024-25,2025-26",gleague,1630801,Ibi Watson,1997,US,"2021-22,2022-23",0.55,nombre_igual,confianza bajo el umbral
 bbl,2003187,Ibi Watson,,,2026-27,gleague,1630801,Ibi Watson,1997,US,"2021-22,2022-23",0.55,nombre_igual,confianza bajo el umbral
-bbl,54380,Isaac Bonga,,,2022-23,gbl,bonga-isaac,Ιζακ Μπονγκα,1999,DE,2026-27,0.55,nombre_igual,confianza bajo el umbral
-bbl,56595,Isaac Bonga,,,2023-24,gbl,bonga-isaac,Ιζακ Μπονγκα,1999,DE,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,54380,Isaac Bonga,,,2022-23,gbl,bonga-isaac,Isaac BONGA,1999,DE,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,56595,Isaac Bonga,,,2023-24,gbl,bonga-isaac,Isaac BONGA,1999,DE,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,56595,Isaac Bonga,,,2023-24,gleague,1629067,Isaac Bonga,1999,DE,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,56595,Isaac Bonga,,,2023-24,nba,bongais01,Isaac Bonga,1999,DE,"2020-21,2021-22",0.55,nombre_igual,confianza bajo el umbral
 bbl,55835,Isaiah Washington,,,2022-23,lnb,10065,Isaiah Washington,1998-07-20,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
@@ -3258,7 +3257,7 @@ bbl,2001367,Johnathan Stove,,,2024-25,bbl,2003802,Johnathan Stove,,,2026-27,0.55
 bbl,2001592,Johnathan Stove,,,2025-26,bbl,56783,Johnathan Stove,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003802,Johnathan Stove,,,2026-27,bbl,56783,Johnathan Stove,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003802,Johnathan Stove,,,2026-27,fec,305980,Johnathan Stove,1995,,2024-25,0.55,nombre_igual,confianza bajo el umbral
-bbl,2003802,Johnathan Stove,,,2026-27,gbl,stove-johnathan,Τζόναθαν Στόουβ,1995,,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,2003802,Johnathan Stove,,,2026-27,gbl,stove-johnathan,Johnathan Stove,1995,,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,56783,Johnathan Stove,,,2023-24,bcl,305980,Johnathan Stove,1995,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,47837,Jon Axel Gudmundsson,,,2020-21,feb1,2892228,JON AXEL GUDMUNDSSON,1996-10-27,IS,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,49503,Jon Axel Gudmundsson,,,2021-22,feb1,2892228,JON AXEL GUDMUNDSSON,1996-10-27,IS,2026-27,0.55,nombre_igual,confianza bajo el umbral
@@ -3278,10 +3277,10 @@ bbl,2003192,Jonathan Bähre,,,2026-27,bbl,51264,Jonathan Bähre,,,2021-22,0.55,n
 bbl,2003192,Jonathan Bähre,,,2026-27,bbl,52554,Jonathan Bähre,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003192,Jonathan Bähre,,,2026-27,bbl,56494,Jonathan Bähre,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,2000758,Jordan Barnett,,,2024-25,bbl,47938,Jordan Barnett,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
-bbl,2000758,Jordan Barnett,,,2024-25,gbl,barnett-jordan,Τζόρνταν Μπαρνετ,1995-12-31,US,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,2000758,Jordan Barnett,,,2024-25,gbl,barnett-jordan,Jordan Kahlil BARNETT,1995-12-31,US,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,47938,Jordan Barnett,,,2020-21,eurocup,013312,"BARNETT, JORDAN",1995-12-31,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,47938,Jordan Barnett,,,2020-21,fec,273783,Jordan Barnett,1995-12-31,US,"2023-24,2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
-bbl,47938,Jordan Barnett,,,2020-21,gbl,barnett-jordan,Τζόρνταν Μπαρνετ,1995-12-31,US,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,47938,Jordan Barnett,,,2020-21,gbl,barnett-jordan,Jordan Kahlil BARNETT,1995-12-31,US,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,47938,Jordan Barnett,,,2020-21,lnb,10479,Jordan Barnett,1995-12-31,US,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001330,Jordan Roland,,,"2025-26,2026-27",bbl,52879,Jordan Roland,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,52879,Jordan Roland,,,2022-23,fec,292771,Jordan Roland,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
@@ -3298,20 +3297,20 @@ bbl,2001516,Joshua Obiesie,,,2025-26,gleague,1629697,Joshua Obiesie,1999,DE,2023
 bbl,2003820,Joshua Obiesie,,,2026-27,bbl,47342,Joshua Obiesie,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003820,Joshua Obiesie,,,2026-27,bbl,49349,Joshua Obiesie,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003820,Joshua Obiesie,,,2026-27,bbl,52302,Joshua Obiesie,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
-bbl,2003820,Joshua Obiesie,,,2026-27,gbl,obiesie-joshua,Γιόσουα Ομπιέσε,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,2003820,Joshua Obiesie,,,2026-27,gbl,obiesie-joshua,Joshua Obiesie,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003820,Joshua Obiesie,,,2026-27,gleague,1629697,Joshua Obiesie,1999,DE,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,47342,Joshua Obiesie,,,2020-21,bbl,52302,Joshua Obiesie,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,47342,Joshua Obiesie,,,2020-21,bcl,251071,Joshua Obiesie,1999,DE,"2024-25,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,47342,Joshua Obiesie,,,2020-21,fec,251071,Joshua Obiesie,1999,DE,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
-bbl,47342,Joshua Obiesie,,,2020-21,gbl,obiesie-joshua,Γιόσουα Ομπιέσε,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,47342,Joshua Obiesie,,,2020-21,gbl,obiesie-joshua,Joshua Obiesie,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,47342,Joshua Obiesie,,,2020-21,gleague,1629697,Joshua Obiesie,1999,DE,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,49349,Joshua Obiesie,,,2021-22,bcl,251071,Joshua Obiesie,1999,DE,"2024-25,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,49349,Joshua Obiesie,,,2021-22,fec,251071,Joshua Obiesie,1999,DE,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
-bbl,49349,Joshua Obiesie,,,2021-22,gbl,obiesie-joshua,Γιόσουα Ομπιέσε,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,49349,Joshua Obiesie,,,2021-22,gbl,obiesie-joshua,Joshua Obiesie,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,49349,Joshua Obiesie,,,2021-22,gleague,1629697,Joshua Obiesie,1999,DE,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,52302,Joshua Obiesie,,,2022-23,bcl,251071,Joshua Obiesie,1999,DE,"2024-25,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,52302,Joshua Obiesie,,,2022-23,fec,251071,Joshua Obiesie,1999,DE,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
-bbl,52302,Joshua Obiesie,,,2022-23,gbl,obiesie-joshua,Γιόσουα Ομπιέσε,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,52302,Joshua Obiesie,,,2022-23,gbl,obiesie-joshua,Joshua Obiesie,1999,DE,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,2004104,Julius Böhmer,,,2026-27,bbl,49100,Julius Böhmer,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bbl,2004104,Julius Böhmer,,,2026-27,bbl,49589,Julius Böhmer,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,2004104,Julius Böhmer,,,2026-27,bbl,52434,Julius Böhmer,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
@@ -3545,9 +3544,9 @@ bbl,2004437,Marcus Foster,,,2026-27,euroleague,010386,"FOSTER, MARCUS",1995,US,2
 bbl,2004437,Marcus Foster,,,2026-27,gleague,1630837,Marcus Foster,1994,US,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,2004437,Marcus Foster,,,2026-27,ncaa,4431953,Marcus Foster,1995,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,48497,Marcus Thornton,,,2020-21,bcl,220428,Marcus Thornton,1986,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
-bbl,48497,Marcus Thornton,,,2020-21,gbl,thornton-marcus,Μάρκους Θόρντον,1986,US,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
+bbl,48497,Marcus Thornton,,,2020-21,gbl,thornton-marcus,Marcus Alexander Thornton,1986,US,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
 bbl,49557,Marcus Thornton,,,2021-22,bcl,220428,Marcus Thornton,1986,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
-bbl,49557,Marcus Thornton,,,2021-22,gbl,thornton-marcus,Μάρκους Θόρντον,1986,US,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
+bbl,49557,Marcus Thornton,,,2021-22,gbl,thornton-marcus,Marcus Alexander Thornton,1986,US,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
 bbl,52616,Marios Giotis,,,2022-23,gbl,giotis-marios,Marios Giotis,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bbl,47413,Mark Mboya Kotieno,,,2020-21,fec,273844,Mark Mboya Kotieno,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,49327,Mark Mboya Kotieno,,,2021-22,fec,273844,Mark Mboya Kotieno,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
@@ -3616,9 +3615,9 @@ bbl,49376,Michael Kessens,,,2021-22,lnb,4132,Michael Kessens,1991-02-16,DE,"2023
 bbl,2003136,Michael Rataj,,,2025-26,bbl,51703,Michael Rataj,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,51703,Michael Rataj,,,2021-22,ncaa,5105627,Michael Rataj,2003,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,47756,Michal Michalak,,,2020-21,fec,168727,Michal Michalak,1993-11-02,PL,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
-bbl,47756,Michal Michalak,,,2020-21,gbl,michalak-michal,Μίκαλ Μίχαλακ,1993-11-02,PL,2023-24,0.55,nombre_igual,confianza bajo el umbral
+bbl,47756,Michal Michalak,,,2020-21,gbl,michalak-michal,Michal Michalak,1993-11-02,PL,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,49500,Michal Michalak,,,2021-22,fec,168727,Michal Michalak,1993-11-02,PL,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
-bbl,49500,Michal Michalak,,,2021-22,gbl,michalak-michal,Μίκαλ Μίχαλακ,1993-11-02,PL,2023-24,0.55,nombre_igual,confianza bajo el umbral
+bbl,49500,Michal Michalak,,,2021-22,gbl,michalak-michal,Michal Michalak,1993-11-02,PL,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,50618,Mindaugas Susinskas,,,2021-22,bcl,216811,Mindaugas Susinskas,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,52520,Mindaugas Susinskas,,,2022-23,bcl,216811,Mindaugas Susinskas,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,2000729,Moritz Krimmer,,,"2024-25,2025-26",bbl,47339,Moritz Krimmer,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
@@ -3691,7 +3690,7 @@ bbl,2001679,Norris Agbakoko,,,"2025-26,2026-27",bbl,47427,Norris Agbakoko,,,2020
 bbl,2001679,Norris Agbakoko,,,"2025-26,2026-27",bbl,49318,Norris Agbakoko,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001679,Norris Agbakoko,,,"2025-26,2026-27",bbl,52285,Norris Agbakoko,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,52485,Ognjen Jaramaz,,,2022-23,eurocup,004058,"JARAMAZ, OGNJEN",1995,,"2020-21,2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
-bbl,2004145,Oluwasimisola Shittu,,,2026-27,gbl,shittu-oluwasimisola,Σίμι Σίτου,,,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
+bbl,2004145,Oluwasimisola Shittu,,,2026-27,gbl,shittu-oluwasimisola,Oluwasimisola Shittu,,,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
 bbl,2000746,Osaro Rich Igbineweka,,,"2024-25,2025-26,2026-27",bbl,52384,Osaro Rich Igbineweka,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,2000746,Osaro Rich Igbineweka,,,"2024-25,2025-26,2026-27",eurocup,011256,"RICH, OSARO",1998,,"2021-22,2024-25,2025-26",0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,47160,Osaro Rich Igbineweka,,,2020-21,bbl,52384,Osaro Rich Igbineweka,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
@@ -3790,9 +3789,9 @@ bbl,2001809,Ralph Hounnou,,,2025-26,bbl,56451,Ralph Hounnou,,,2023-24,0.55,nombr
 bbl,49571,Ralph Hounnou,,,2021-22,bbl,56451,Ralph Hounnou,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,47894,Rasheed Moore,,,2020-21,fec,239383,Rasheed Moore,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,51779,Rawle Alkins,,,2021-22,eurocup,013375,"ALKINS, RAWLE",1997,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
-bbl,51779,Rawle Alkins,,,2021-22,gbl,alkins-rawle,Ρολ Άλκινς,1997,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,51779,Rawle Alkins,,,2021-22,gbl,alkins-rawle,Rawle Prince Alkins,1997,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,51933,Rawle Alkins,,,2021-22,eurocup,013375,"ALKINS, RAWLE",1997,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
-bbl,51933,Rawle Alkins,,,2021-22,gbl,alkins-rawle,Ρολ Άλκινς,1997,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,51933,Rawle Alkins,,,2021-22,gbl,alkins-rawle,Rawle Prince Alkins,1997,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,50294,Richmond Aririguzoh,,,2021-22,bbl,57721,Richmond Aririguzoh,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001410,Rihards Lomazs,,,2024-25,bbl,49258,Rihards Lomazs,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001410,Rihards Lomazs,,,2024-25,lnb,4723,Rihards Lomazs,1996-04-13,LV,2020-21,0.55,nombre_igual,confianza bajo el umbral
@@ -3827,7 +3826,7 @@ bbl,2003030,Ryan Mikesell,,,2025-26,lnb,9000,Ryan Mikesell,1996-12-29,US,"2022-2
 bbl,2005387,Ryan Mikesell,,,2026-27,lnb,9000,Ryan Mikesell,1996-12-29,US,"2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
 bbl,2002954,Ryan Schwieger,,,2025-26,ncaa,4279565,Ryan Schwieger,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,56772,Ryan Schwieger,,,"2023-24,2024-25",ncaa,4279565,Ryan Schwieger,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
-bbl,55876,Ryan Taylor,1994,US,2022-23,gbl,ryan-taylor,Τέιλορ Ραϊαν,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
+bbl,55876,Ryan Taylor,1994,US,2022-23,gbl,ryan-taylor,Taylor RYAN,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,2005281,Sacar Anim,,,2026-27,bbl,50012,Sacar Anim,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,2005281,Sacar Anim,,,2026-27,bcl,284347,Sacar Anim,1997,US,"2022-23,2024-25",0.55,nombre_igual,confianza bajo el umbral
 bbl,2005281,Sacar Anim,,,2026-27,fec,284347,Sacar Anim,1997,US,2021-22,0.55,nombre_igual,confianza bajo el umbral
@@ -3862,8 +3861,8 @@ bbl,56504,Sinan Mertcan Gerhardt,,,"2023-24,2024-25",fec,303719,Sinan Gerhardt,,
 bbl,2001161,Spencer Reaves,,,"2024-25,2025-26,2026-27",bbl,52798,Spencer Reaves,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001161,Spencer Reaves,,,"2024-25,2025-26,2026-27",fec,264037,Spencer Reaves,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,47222,Stefan Peno,,,2020-21,eurocup,004588,"PENO, STEFAN",1997,,2022-23,0.55,nombre_igual,confianza bajo el umbral
-bbl,47222,Stefan Peno,,,2020-21,gbl,peno-stefan,Στεφάν Πένο,1997,,2023-24,0.55,nombre_igual,confianza bajo el umbral
-bbl,49435,Stefan Peno,,,2021-22,gbl,peno-stefan,Στεφάν Πένο,1997,,2023-24,0.55,nombre_igual,confianza bajo el umbral
+bbl,47222,Stefan Peno,,,2020-21,gbl,peno-stefan,Stefan Peno,1997,,2023-24,0.55,nombre_igual,confianza bajo el umbral
+bbl,49435,Stefan Peno,,,2021-22,gbl,peno-stefan,Stefan Peno,1997,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003890,Stefan Smith,,,2026-27,fec,224228,Stefan Smith,1999-06-27,JM,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,2003890,Stefan Smith,,,2026-27,lnb,9640,Stefan Smith,1999-06-27,JM,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,56766,TJ Crockett Jr.,,,"2023-24,2024-25",eurocup,014892,"CROCKETT JR, TJ",1999,,2026-27,0.55,nombre_igual,confianza bajo el umbral
@@ -3937,7 +3936,7 @@ bbl,1000889,Tyger Campbell,,,2024-25,eurocup,015262,"CAMPBELL, TYGER",2000-01-09
 bbl,1000889,Tyger Campbell,,,2024-25,ncaa,4397128,Tyger Campbell,2000-01-09,US,"2020-21,2021-22,2022-23",0.55,nombre_igual,confianza bajo el umbral
 bbl,2003133,Tyger Campbell,,,2025-26,ncaa,4397128,Tyger Campbell,2000-01-09,US,"2020-21,2021-22,2022-23",0.55,nombre_igual,confianza bajo el umbral
 bbl,53579,Tyler Nelson,,,2022-23,bcl,292386,Tyler Nelson,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
-bbl,53579,Tyler Nelson,,,2022-23,gbl,nelson-tyler,Τάϊλερ Νέλσον,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
+bbl,53579,Tyler Nelson,,,2022-23,gbl,nelson-tyler,Tyler Jeffrey Nelson,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
 bbl,49158,Tyreese Blunt,,,2020-21,bbl,55642,Tyreese Blunt,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,49158,Tyreese Blunt,,,2020-21,bbl,56627,Tyreese Blunt,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,49158,Tyreese Blunt,,,2020-21,bcl,318969,Tyreese Blunt,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
@@ -3946,14 +3945,14 @@ bbl,48014,Tyson Ward,,,2020-21,bbl,52409,Tyson Ward,,,2022-23,0.55,nombre_igual,
 bbl,48014,Tyson Ward,,,2020-21,bcl,286188,Tyson Ward,1997-07-26,US,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,48014,Tyson Ward,,,2020-21,eurocup,012610,"WARD, TYSON",1997-07-26,US,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,48014,Tyson Ward,,,2020-21,euroleague,012610,"WARD, TYSON",1997-07-26,US,"2024-25,2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
-bbl,48014,Tyson Ward,,,2020-21,gbl,ward-tyson,Τάισον Ουορντ,1997-07-26,US,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
+bbl,48014,Tyson Ward,,,2020-21,gbl,ward-tyson,Tyson WARD,1997-07-26,US,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,48014,Tyson Ward,,,2020-21,lnb,9571,Tyson Ward,1997-07-26,US,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
 bbl,49519,Tyson Ward,,,2021-22,eurocup,012610,"WARD, TYSON",1997-07-26,US,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,49519,Tyson Ward,,,2021-22,euroleague,012610,"WARD, TYSON",1997-07-26,US,"2024-25,2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
-bbl,49519,Tyson Ward,,,2021-22,gbl,ward-tyson,Τάισον Ουορντ,1997-07-26,US,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
+bbl,49519,Tyson Ward,,,2021-22,gbl,ward-tyson,Tyson WARD,1997-07-26,US,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,49519,Tyson Ward,,,2021-22,lnb,9571,Tyson Ward,1997-07-26,US,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
 bbl,52409,Tyson Ward,,,2022-23,euroleague,012610,"WARD, TYSON",1997-07-26,US,"2024-25,2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
-bbl,52409,Tyson Ward,,,2022-23,gbl,ward-tyson,Τάισον Ουορντ,1997-07-26,US,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
+bbl,52409,Tyson Ward,,,2022-23,gbl,ward-tyson,Tyson WARD,1997-07-26,US,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,2001848,Urald King,,,2025-26,fec,228518,Urald King,1990,,"2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
 bbl,2003895,Urald King,,,2026-27,fec,228518,Urald King,1990,,"2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
 bbl,55626,Vincent Kesteloot,,,2022-23,bcl,189795,Vincent Kesteloot,1995,,2026-27,0.55,nombre_igual,confianza bajo el umbral
@@ -4028,7 +4027,7 @@ eurocup,013250,"DEJULIUS, DAVID",1999,,2024-25,ncaa,4397202,David DeJulius,,,202
 eurocup,013250,"DEJULIUS, DAVID",1999,,2024-25,ncaa,4706245,David Dejulius,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 eurocup,015063,"REID, EFTON",2002,,2026-27,ncaa,4433594,Efton Reid III,,,"2021-22,2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
 eurocup,015063,"REID, EFTON",2002,,2026-27,ncaa,5184333,Efton Reid,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
-eurocup,012089,"TAYLOR, RYAN",1995,US,2022-23,gbl,ryan-taylor,Τέιλορ Ραϊαν,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
+eurocup,012089,"TAYLOR, RYAN",1995,US,2022-23,gbl,ryan-taylor,Taylor RYAN,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 eurocup,013854,"THOMPSON, JAMES",1995-01-18,US,2025-26,fec,271152,James Thompson IV,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 euroleague,013250,"DEJULIUS, DAVID",1999,,"2024-25,2026-27",ncaa,4397202,David DeJulius,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 euroleague,013250,"DEJULIUS, DAVID",1999,,"2024-25,2026-27",ncaa,4706245,David Dejulius,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
@@ -4091,11 +4090,11 @@ fec,315895,Jarrod West,1999-03-29,US,2025-26,gbl,jarrod-west,West Jarrod,,,2022-
 fec,315895,Jarrod West,1999-03-29,US,2025-26,gbl,west-jarrod,Jarrod West,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 fec,150846,Justin Robinson,1997-10-12,US,2021-22,lba,7434,Justin Robinson,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
 fec,303549,Ryan Joshua  Taylor,,,"2021-22,2024-25",gbl,taylor-ryan,Ryan Taylor,,,"2021-22,2022-23,2025-26",0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
+gbl,dejulius-david,David De Julius,1999,,"2023-24,2024-25",ncaa,4706245,David Dejulius,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 gbl,west-jarrod,Jarrod West,,,2022-23,lnb,10864,Jarrod West,1999-03-29,US,2026-27,0.55,nombre_igual,confianza bajo el umbral
+gbl,ryan-taylor,Taylor RYAN,,,2025-26,gleague,1629807,Ryan Taylor,1994,US,"2020-21,2021-22",0.55,nombre_igual,confianza bajo el umbral
+gbl,ryan-taylor,Taylor RYAN,,,2025-26,lba,6856,Ryan Taylor,1994,US,2022-23,0.55,nombre_igual,confianza bajo el umbral
 gbl,jarrod-west,West Jarrod,,,2022-23,lnb,10864,Jarrod West,1999-03-29,US,2026-27,0.55,nombre_igual,confianza bajo el umbral
-gbl,dejulius-david,Ντέιβιντ Ντε Τζούλιους,1999,,"2023-24,2024-25",ncaa,4706245,David Dejulius,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
-gbl,ryan-taylor,Τέιλορ Ραϊαν,,,2025-26,gleague,1629807,Ryan Taylor,1994,US,"2020-21,2021-22",0.55,nombre_igual,confianza bajo el umbral
-gbl,ryan-taylor,Τέιλορ Ραϊαν,,,2025-26,lba,6856,Ryan Taylor,1994,US,2022-23,0.55,nombre_igual,confianza bajo el umbral
 gleague,1641992,Donald Carey,1999,US,"2023-24,2024-25",ncaa,4402802,Donald Carey,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 gleague,1631495,Donovan Williams,2001,US,"2022-23,2023-24,2024-25,2025-26",ncaa,4592304,Donovan Williams,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 gleague,1631378,Jalen Johnson,1997,US,2022-23,ncaa,4701230,Jalen Johnson,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
@@ -4304,4 +4303,4 @@ fec,324401,Anthony Joshua Roberts,,,2023-24,lnb,9630,Anthony Roberts,2000-01-02,
 fec,240382,Brandon Dwayne Brown,,,"2020-21,2021-22",lnb,1081,Brandon Brown,1989-08-14,US,2020-21,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 fec,220319,James Bernard Thompson Jr,,,2021-22,lnb,9355,James Thompson,1995-01-18,US,2022-23,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 fec,220319,James Bernard Thompson Jr,,,2021-22,vtb,343747,James Thompson,1995-01-18,US,"2021-22,2022-23,2023-24",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-fec,303549,Ryan Joshua  Taylor,,,"2021-22,2024-25",gbl,ryan-taylor,Τέιλορ Ραϊαν,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+fec,303549,Ryan Joshua  Taylor,,,"2021-22,2024-25",gbl,ryan-taylor,Taylor RYAN,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral

@@ -295,9 +295,38 @@ class _UF:
             self.ligas[lo] |= self.ligas.pop(hi)
 
 
+def ids_estables(nodos: pd.DataFrame, raiz: dict, previo: pd.DataFrame | None = None) -> dict:
+    """persona_id de cada grupo. Sin crosswalk previo: P000000… por orden de grupo. Con él (03-11-2026), cada grupo
+    conserva el persona_id que tenían la mayoría de sus nodos (y, si dos grupos lo reclaman, el de más nodos con ese
+    id); los grupos nuevos o separados reciben ids nuevos a continuación del mayor. Así una corrección de identidad
+    no renumera al resto de personas y las cachés, el artifact y las revisiones manuales siguen siendo válidos."""
+    grupos = sorted(set(raiz.values()))
+    if previo is None or previo.empty:
+        return {r: f"P{i:06d}" for i, r in enumerate(grupos)}
+    ant = dict(zip(zip(previo["fuente_liga"].astype(str), previo["fuente_id"].astype(str)), previo["persona_id"]))
+    votos = defaultdict(lambda: defaultdict(int))
+    for n in nodos.index:
+        v = ant.get((str(nodos.at[n, "liga"]), str(nodos.at[n, "player_id"])))
+        if v:
+            votos[raiz[n]][v] += 1
+    reclamos = sorted(((c, r, v) for r, d in votos.items() for v, c in d.items()), key=lambda x: (-x[0], x[2], x[1]))
+    pid, usados = {}, set()
+    for c, r, v in reclamos:
+        if r not in pid and v not in usados:
+            pid[r] = v
+            usados.add(v)
+    sig = 1 + max(int(str(v)[1:]) for v in previo["persona_id"] if str(v).startswith("P"))
+    for r in grupos:
+        if r not in pid:
+            pid[r] = f"P{sig:06d}"
+            sig += 1
+    return pid
+
+
 def resolver(nodos: pd.DataFrame, umbral_fusion: float = 0.80, umbral_revision: float = 0.50,
-             pasadas: int = 2) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """(crosswalk, revisión) a partir de la tabla de nodos."""
+             pasadas: int = 2, previo: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """(crosswalk, revisión) a partir de la tabla de nodos. `previo`: crosswalk anterior, para conservar los
+    persona_id (ids_estables)."""
     pares = sorted(set(candidatos(nodos)) | set(candidatos_inicial(nodos)))
     # unicidad: el nombre exacto sólo aparece una vez en cada una de las dos ligas y el nodo tiene una sola pareja
     # posible en la otra liga
@@ -364,9 +393,9 @@ def resolver(nodos: pd.DataFrame, umbral_fusion: float = 0.80, umbral_revision: 
                                  "confianza": round(conf, 2), "metodo": met,
                                  "motivo": "uniría dos ids de la misma liga" if conflicto else "confianza bajo el umbral"})
     raiz = {n: uf.find(n) for n in nodos.index}
-    orden = {r: i for i, r in enumerate(sorted(set(raiz.values())))}
+    pid = ids_estables(nodos, raiz, previo)
     cw = pd.DataFrame({"fuente_liga": nodos["liga"], "fuente_id": nodos["player_id"],
-                       "persona_id": [f"P{orden[raiz[n]]:06d}" for n in nodos.index],
+                       "persona_id": [pid[raiz[n]] for n in nodos.index],
                        "confianza": [round(enlace.get(n, (1.0, ""))[0], 2) for n in nodos.index],
                        "metodo": [enlace.get(n, (1.0, "propio"))[1] for n in nodos.index],
                        "nombre": nodos["nombre"], "fecha_nacimiento": nodos["fecha_nac"],
@@ -381,7 +410,10 @@ def resolver(nodos: pd.DataFrame, umbral_fusion: float = 0.80, umbral_revision: 
 def ejecutar(proc: Path = PROC, config: Path = RAIZ / "config" / "sources.json") -> dict:
     cfg = json.loads(Path(config).read_text(encoding="utf-8")).get("identidad") or {}
     nodos = cargar_nodos(proc)
-    cw, rev = resolver(nodos, float(cfg.get("umbral_fusion", 0.80)), float(cfg.get("umbral_revision", 0.50)))
+    f = proc / "player_id_crosswalk.csv"
+    previo = pd.read_csv(f, dtype=str, usecols=["fuente_liga", "fuente_id", "persona_id"]) if f.exists() else None
+    cw, rev = resolver(nodos, float(cfg.get("umbral_fusion", 0.80)), float(cfg.get("umbral_revision", 0.50)),
+                       previo=previo)
     cw.to_csv(proc / "player_id_crosswalk.csv", index=False, encoding="utf-8")
     rev.to_csv(proc / "crosswalk_revision.csv", index=False, encoding="utf-8")
     multi = cw.groupby("persona_id")["fuente_liga"].nunique()

@@ -17,6 +17,8 @@
   dataset-simulador  simulador v3.1: dataset normalizado que lee (v3.1; Tercera FEB con la v2) → normalizacion.dir
   adaptacion-v3  adaptación v3 (ADAPT% ascendente hacia el nivel adaptado) → data/modelos/adaptacion/v3/
   b7-b9       evaluación del impacto posible de B7 (modelo supervisado directo) y B9 (minutos + producción)
+  v33-decidir  simulador v3.3 (con CERNO_SIMULADOR=v32: examen de la v3.2): minutos GBM y B9 → data/modelos/simulador/v3_3
+  v33-aplicar  escribe las decisiones finales de la v3.3 en configs/simulation_v33.yaml
   v32-decidir  simulador v3.2: decisiones A1-A4 con cortes anidados → data/modelos/simulador/v3_2/decisiones_v32.json
                (variantes de un paso apagado: CERNO_SIM_VARIANTE=sin_<paso> python -m bbfit backtest … --pesos-de …)
   (simulador v3: CERNO_SIMULADOR=v3 python -m bbfit <orden> usa configs/simulation_v3.yaml → data/modelos/simulador/v3/)
@@ -100,6 +102,17 @@ def _v32_aplicar(a):
     return v32.aplicar_config()
 
 
+def _v33(a):
+    from . import v33
+    r = v33.main()
+    return {"final": {k: r["final"][k] for k in ("minutos_publicados", "b9")}}
+
+
+def _v33_aplicar(a):
+    from . import v33
+    return v33.aplicar_config()
+
+
 def _v32(a):
     from . import v32
     r = v32.main()
@@ -125,7 +138,7 @@ ORDENES = {"roles": _roles, "reemplazo": _reemplazo, "entropia": _entropia, "est
            "adaptacion": _adaptacion, "adaptacion-v3": _adaptacion_v3, "dataset-simulador": _dataset_simulador, "auditar": _auditar, "simular": _simular, "backtest": _backtest, "pesos-simulador": _pesos,
            "historico": _historico, "exportar-simulador": _exportar_sim,
            "v32-decidir": _v32, "b7-b9": _b7b9,
-           "v32-aplicar": _v32_aplicar}
+           "v32-aplicar": _v32_aplicar, "v33-decidir": _v33, "v33-aplicar": _v33_aplicar}
 
 
 def main(argv=None) -> int:

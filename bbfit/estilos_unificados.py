@@ -740,7 +740,8 @@ def fichas(eq: pd.DataFrame, jg: pd.DataFrame, ids: list[str], medias: np.ndarra
     est = c.get("estilos") or {}
     ej = c["ejemplos"]
     E = eq[eq["nivel"] == "temporada"]
-    J = jg[jg["nivel"] == "temporada"]
+    from bbmodel.nombres import aplicar
+    J = aplicar(jg[jg["nivel"] == "temporada"], fuente=False)          # nombres canónicos «Nombre Apellido»
     out = []
     for k, i in enumerate(ids):
         meta = est.get(i, {})
@@ -912,6 +913,8 @@ def ejecutar(c: dict | None = None, log=print, entrenadores: bool = True, reusar
     for col in cab_j:
         if col not in jg:
             jg[col] = np.nan
+    from bbmodel.nombres import aplicar
+    jg = aplicar(jg, fuente=False)                                      # nombres canónicos «Nombre Apellido»
     jg = jg.sort_values(["temporada", "liga", "team_id", "player_id", "nivel", "entrenador_id"], na_position="first")
     jg[cab_j].round(4).to_csv(DIR_SAL / "jugadores.csv.gz", index=False, compression={"method": "gzip", "mtime": 0})
     corr.to_csv(DIR_SAL / "correspondencia_vade.csv", index=False)

@@ -27,6 +27,8 @@ from .roles import ROLES
 
 METS = ["pts_p100", "ts_pct", "usg_pct", "ast_pct", "oreb_p100", "dreb_p100", "stl_p100", "blk_p100", "tov_pct"]
 OBJETIVOS = ["pts_p100", "ts_pct", "ast_pct", "usg_pct"]
+COLS_REG = ["edad", "min_pct", "gs_pct", "min_total", "L", "L_sd", "usg_tiro", "ts_tiro", "gti", "H_rol", "sigma"] \
+    + [f"{m}_obs" for m in METS] + [f"{m}_th" for m in METS]
 
 
 def registros_origen(e: pd.DataFrame, fuente: str) -> pd.DataFrame:
@@ -39,8 +41,7 @@ def registros_origen(e: pd.DataFrame, fuente: str) -> pd.DataFrame:
         if "principal" in reg:
             reg = reg[reg["principal"].astype(bool)]
         reg = reg.sort_values("min_total", ascending=False).drop_duplicates("persona_id")
-        cols = ["persona_id", "edad", "pos3", "min_pct", "gs_pct", "min_total", "L", "L_sd", "usg_tiro", "ts_tiro",
-                "gti", "H_rol", "sigma"] + [f"{m}_obs" for m in METS] + [f"{m}_th" for m in METS]
+        cols = ["persona_id", "pos3"] + COLS_REG
         r = reg[[c for c in cols if c in reg]].copy()
         r["temporada_o"] = t
         filas.append(r)

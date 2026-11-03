@@ -1,0 +1,174 @@
+# Simulador de encaje v3.3 (docs/simulador_v33.md): el simulador v3.2 (abajo, sin cambios) con dos piezas nuevas
+# aprobadas el 03-11-2026 y decididas con el examen sin fuga de la v3.2 (bbfit/v33.py, reglas en §2 del documento):
+#   * M: minutos del fichaje del motor, de un gradient boosting (GBM) o de la mezcla 50/50 (elige el examen),
+#   * B9: acoplamiento minutos-producción (Monte Carlo); con rol asignado, la producción se desplaza a ese rol.
+# Se activa con CERNO_SIMULADOR=v33. La v3.2 (configs/simulation_v32.yaml, data/modelos/simulador/v3_2) no cambia.
+# Simulador de encaje v3.2 (docs/simulador_v32.md): el motor de la v3.1 con
+#   * capacidad de los jugadores de la normalización v3.2 (data/modelos/v3_2/normalizado; fuente «V32», mismas
+#     constantes lineales que la v3.1, sim_insumos.traduccion_v31, recalculadas con la v3.2),
+#   * A1: pasos del motor que se pueden apagar (pasos), decididos con la regla de la navaja y cortes anidados,
+#   * A3: factores k_β (curva uso-eficiencia) y k_c (efecto compañeros) sobre el TS% (rejilla en el examen),
+#   * A2: producción alternativa del Atlas (bbfit.v32), elegida frente a A3 por el examen,
+#   * A4: recalibración conforme de los intervalos del 50 % y 90 % por métrica × grupo de destino,
+#   * vara de destino: cualquier liga a 0 (data/modelos/v3_2/destino).
+# Se activa con CERNO_SIMULADOR=v32. La v3.1 (configs/simulation_v31.yaml, data/modelos/simulador/v3_1) no cambia.
+semilla: 20261023
+version: "v3.3"                      # etiqueta de versión de los resultados (data/modelos/simulador/v3_3/)
+carpeta: v3_3                        # data/modelos/simulador/<carpeta>/ (caché: experimentos/cache_simulador_v3_3)
+
+simulaciones: 1000                   # iteraciones Monte Carlo por jugador-club
+intervalos: [0.50, 0.80, 0.90]       # intervalos centrales de la salida (§5a: también el 80 %, el que publica la marca)
+
+normalizacion:
+  fuente: V32                        # V32 = <m>_am de la v3.2 + constantes lineales (como «V31», sobre la v3.2)
+  dir: experimentos/cache_simulador_v3_2/normalizado   # dataset que lee el simulador (`bbfit dataset-simulador`)
+  origen_v31: data/modelos/v3_2/normalizado           # normalización v3.2 (20 ligas, datos al 29-10)
+  origen_v2: data/modelos/v3_1_20261031/base_v2/normalizado   # A+B amortiguado (base v2 común a la v3.1 y la v3.2)
+  ligas_v2: [feb3]                   # filas que el simulador toma de la v2 (DECISIÓN POST HOC, sim_insumos.dataset_simulador)
+  temporada_ref: "2025-26"           # vara de los <m>_am (μ/τ EuroLeague de esa temporada)
+  minimo_minutos_jugador: 100        # registro de origen con ≥ 100 min (por debajo: aviso de muestra pequeña)
+
+plantilla:
+  minimo_presencia: 0.15             # escenario «plantilla real»: compañeros presentes en ≥ 15 % de los partidos
+  nivel_sin_dato: banquillo          # compañero sin registro en t: L medio de los jugadores de < 300 min de su liga
+  sd_sin_dato: 0.6                   # incertidumbre de su nivel (unidades de L)
+  max_jugadores: 18                  # plantilla máxima (los de menos presencia fuera)
+  minimo_jugadores: 9                # plantilla mínima: se completa con jugadores de reemplazo (nivel de banquillo)
+
+produccion:
+  metricas: [pts_p100, ts_pct, usg_pct, ast_pct, oreb_p100, dreb_p100, stl_p100, blk_p100, tov_pct]
+  principal: pts_p100
+  por_partido: {pts: pts_p100, reb: [oreb_p100, dreb_p100], stl: stl_p100, blk: blk_p100}
+  usg_medio_pista: 20.0              # Σ min·USG% = 20 · Σ min (los 5 en pista suman el 100 % del uso)
+  amortiguar_uso: 0.5                # fracción del desajuste de uso del equipo que se redistribuye (0 = nada, 1 = todo)
+  ts_min: 30.0
+  ts_max: 80.0
+  factor_ajustes_ts: [0.0, 0.0]      # A3 · [k_β, k_c] del motor; los fija `bbfit v32-decidir` (1, 1 = v3.1)
+  rejilla_ajustes_ts: [0.0, 0.25, 0.5, 0.75, 1.0]   # A3 · rejilla que se evalúa en el examen sobre las mismas simulaciones
+
+pasos:                               # A1 · pasos del motor (true = activo, como en la v3.1); los fija `bbfit v32-decidir`
+  redistribuir_uso: true             # suma fija del uso del equipo (paso 4)
+  uso_eficiencia: false               # curva uso-eficiencia β (paso 4); equivale a k_β = 0 de la rejilla A3
+  companeros: false                   # calidad de compañeros b (paso 5); equivale a k_c = 0 de la rejilla A3
+  adaptacion: true                   # adaptación (paso 2)
+  ruido_personal: true               # ruido personal y de muestreo en los intervalos (paso 7)
+
+v32:                                 # decisiones del simulador v3.2 (bbfit/v32.py): criterios matemáticos del
+                                     # 02-11-2026 (docs/simulador_v32.md §2), aprobados ANTES de ver resultados
+  regla_pasos: no_inferioridad       # A1 (§2): sustituye a la «navaja» del primer plan
+  margenes: {pts: 0.005, ts: 0.005, min: 0.01, rol_pp: 0.005, secundarias: 0.01, euroleague: 0.02,
+             contribucion: 0.01, winkler: 0.01}
+  a3_regla: un_error_tipico          # A3 (§3): K₁ = {J(k) − J(k*) ≤ SE}; dentro de K₁, parsimonia (decisión del usuario)
+  a3_preferencia: parsimonia
+  criterio_a3: [pts_p100, ts_pct]    # J de A3 = media de MAE_pts/MAE_pts(ref) y MAE_TS/MAE_TS(ref)
+  criterio_produccion:               # A2 frente a A3 (§4): J_ω, A2 sólo si es mejor de forma significativa
+    metricas: [pts_p100, ts_pct, usg_pct, ast_pct, tov_pct]
+    pesos: [0.30, 0.30, 0.15, 0.15, 0.10]
+  recalibracion: {grupos: true, min_casos_grupo: 30, n0: 30, rho: 0.5, asimetrico: true, min_casos_origen: 15}
+  variantes_motor: [sin_redistribuir_uso, sin_adaptacion]   # ejecuciones del examen con un paso apagado
+                                     # (+ «sin_redistribuir_uso+sin_adaptacion» si la regla quita los dos)
+  fuentes_examen: [V32, V32_corte]   # §1: A4 y cifras absolutas sólo con V32_corte; A1-A3 con las dos
+  fichero_decisiones: data/modelos/simulador/v3_2/decisiones_v32.json
+  # simulador publicado (histórico y exportación), DESPUÉS del examen: se fijan con el resultado de `v32-decidir`
+  # (durante el examen deben quedar en motor / false: A2 y A4 se evalúan aparte, con cortes anidados)
+  produccion_publicada: atlas        # motor (A3) | atlas (A2)
+  aplicar_recalibracion: true       # A4 con los factores finales de fichero_decisiones
+
+utilidad:                            # utilidad Plackett-Luce de la asignación de minutos (se ajusta por verosimilitud)
+  rasgos: [L, logit_min_previo, nuevo, encaje_pos, encaje_estilo, sin_dato]
+  inicial: {L: 1.5, logit_min_previo: 0.8, nuevo: -0.2, encaje_pos: 0.3, encaje_estilo: 0.0, sin_dato: -0.5}
+  regularizacion: 0.01               # penalización L2 del ajuste
+  min_jugadores_equipo: 7
+  min_presencia: 0.3                 # jugadores del equipo-temporada que entran en la verosimilitud
+  logit_recorte: [0.02, 0.98]        # MIN% previo recortado antes del logit
+  min_previo_defecto: 0.25           # MIN% previo de quien no tiene registro en t
+
+rol_go_to_guy:                       # GO-TO-GUY proyectado: TITULAR por minutos + top-2 del equipo en GTI proyectado
+  top_equipo: 2
+  umbral_gti: 4.0                    # = umbral_absoluto_medio (1,0) × Σ pesos (4) de configs/roles.yaml
+  peso_uso: 2.0                      # el uso entra en dos componentes del GTI (USG% y USG% clutch)
+  min_minutos_pct: 0.55              # ≥ 22' de 40
+
+adaptacion:
+  partidos_temporada: {defecto: 34, nba: 82, gleague: 50, euroleague: 34, eurocup: 18, bcl: 14, fec: 12, feb3: 26,
+                       feb1: 32, feb2: 26, acb: 34, bbl: 34, lba: 28, lnb: 30, bsl: 30, gbl: 24,
+                       bnxt: 34, vtb: 30, cba: 42, nbl: 33, ncaa: 31}   # FEB1/FEB2 y resto: 2025-26
+  primeros_partidos: 10              # ADAPT% de los N primeros partidos
+  contraccion: 1.0                   # v3: la forma D, κ se mide directamente (curva dentro de jugador); sin contracción
+  priors: data/modelos/adaptacion/v3_1/adaptation_priors.csv   # adaptación v3 de la v3.1 (no cambia en la v3.2)
+  salida_v3: data/modelos/adaptacion/v3_1                      # (no se relanza `bbfit adaptacion-v3` en la v3.2)
+  curvas_fase7: data/modelos/adaptacion/v3_2/fase7/curvas.csv  # fase 7 rehecha con las identidades corregidas (03-11)
+  priors_fase7: data/modelos/adaptacion/v3_2/fase7/adaptation_priors.csv
+
+traduccion:                          # constantes v3.1 (sim_insumos.traduccion_v31)
+  min_minutos: 400                   # jugadores con ≥ 400 min en el ajuste E[θ_v2 | θ_v31] = c + d·θ_v31 de cada liga
+  pendiente_minima: 0.1              # d mínima (con d → 0 la escala s' = s/d no tendría límite)
+  r_minima: 0.95                     # correlación v3.1–v2 mínima en la liga-métrica para usar el sustituto lineal (por
+                                     # debajo, constantes amortiguadas); con la Tercera FEB tomada de la v2 no se activa
+  min_filas_liga: 30                 # por debajo, la liga conserva las constantes amortiguadas
+
+estilo:
+  minimo_minutos_equipo: 100         # jugadores que entran en la composición de estilos de la plantilla
+
+encaje:                              # índice Fit: regresión lineal del éxito sobre las componentes (cortes previos)
+  componentes: [nivel, rol, estilo, complementariedad, adaptacion, riesgo]
+  ridge: 1.0
+  exito: {minutos: 0.5, produccion: 0.5}   # éxito = 0,5·z(MIN%) + 0,5·z(pts/100) dentro de la liga-temporada destino
+
+avisos:
+  muestra_pequena_min: 300           # minutos de origen
+  muestra_pequena_partidos: 10
+  incertidumbre_alta_sd: 0.45        # sd de la capacidad (DT) en la métrica principal
+  distancia_liga_alta: 0.6           # |nivel destino − nivel origen| (DT EuroLeague)
+  cambio_rol: 2                      # |índice de rol esperado − índice de rol de origen| ≥ 2 escalones
+  volatilidad_alta_pct: 80           # σ_i por encima del percentil 80 de su liga
+
+validacion:
+  produccion: {fuente: V32, escenario: inicio, adaptacion: true}   # examen que ajusta el Fit y la calibración finales
+  cortes_examen: ["2021-22", "2022-23", "2023-24", "2024-25"]    # t (se simula t → t+1)
+  cortes_sin_fuga: ["2023-24", "2024-25"]                        # normalización reajustada con ≤ t
+  min_partidos_destino: 5
+  min_minutos_origen: 100
+  min_minutos_produccion: 300        # producción: ≥ 300 min en destino (como el examen de la fase 2)
+  bootstrap: 2000
+  nivel_ic: 0.90
+  simulaciones: 400                  # iteraciones por fichaje en el examen
+  calibracion_casos: 500             # fichajes del corte anterior para calibrar la temperatura y la rotación
+  calibracion_sim: 200
+  rejilla_escala: [0.5, 0.75, 1.0, 1.25]         # escala de la utilidad (inversa de la temperatura de Plackett-Luce)
+  rejilla_rotacion_extra: [0, 2, 4]              # jugadores extra en la rotación sobre la mediana medida (≥ 12,5 % MIN%)
+  rotacion_sd_factor: 0.3                        # la sd del entrenador es partido a partido; la de temporada es menor
+
+historico:
+  simulaciones: 400
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+
+exportar:
+  temporada_base: "2025-26"          # insumos por defecto (última temporada completa) → destino 2026-27
+  temporadas_base: ["2024-25", "2025-26"]          # destinos 2025-26 y 2026-27 (plantillas de esas temporadas)
+  temporadas_candidatas_extra: ["2026-27"]         # registros de la temporada en curso como candidatos (provisionales)
+  minimo_minutos_jugador: 100
+  simulaciones_navegador: 600
+  max_mb: 40
+
+destino:                             # vara de destino (liga de destino = 0; bbnorm3/destino.py)
+  vara: destino                      # destino = Var(z_d) con la varianza propia del jugador + Var(δ_o − δ_d) (covarianza
+                                     # conjunta de los niveles) | euroleague = como la v3.1 (varianzas frente a la EL sumadas)
+  covarianza: data/modelos/v3_2/destino/covarianza   # Σ' de los niveles δ' por métrica (`bbnorm3 … destino`)
+
+rol_asignado:                        # v2.1 · rol que asigna quien simula (faltaba en las configuraciones v3.1/v3.2: sin
+                                     # él, el motor Python no admitía rol asignado). Mismos valores que simulation.yaml
+  dispersion: 0.04                   # DT de los minutos (fracción del partido) alrededor del centro del rol (min_rol de la liga)
+  min_residual: 0.02                 # límite inferior de la franja RESIDUAL (fracción del partido)
+  tope_titular: 0.82                 # límite superior de la franja TITULAR (GO-TO-GUY llega al tope max_min_partido)
+  tope_fijos: 0.90                   # si los roles asignados suman más de esta fracción de los minutos del equipo, se escalan
+
+v33:                                 # decisiones del simulador v3.3 (bbfit/v33.py), fijadas ANTES de ver el examen
+  examen_base: v3_2                  # examen sin fuga de la v3.2 (V32_corte) sobre el que se decide
+  candidatos_minutos: [motor, gbm, mezcla]
+  margen_ts: 0.005                   # B9: TS% no peor que +0,5 % (IC90,sup) en el escenario de rol asignado
+  fichero_decisiones: data/modelos/simulador/v3_3/decisiones_v33.json
+  modelo_minutos: data/modelos/simulador/v3_3/gbm_minutos.pkl
+  # simulador publicado, DESPUÉS del examen (v33-aplicar):
+  minutos_publicados: motor          # motor | gbm | mezcla
+  b9: false                          # acoplamiento minutos-producción activo

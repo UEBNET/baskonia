@@ -20,7 +20,7 @@ Ids: jugador = clave de nombre (adapters.fiba_livestats.player_key), equipo = el
 """
 from __future__ import annotations
 
-from ...adapters.fiba_livestats import _is_final, phase_map, player_key, season_teams
+from ...adapters.fiba_livestats import _is_final, nombre_visible, phase_map, player_key, season_teams
 from ...utils import parse_minutes, to_float
 from ..model import Event, Game, clock_to_seconds, elapsed
 from .base import Ctx, PBPSource
@@ -77,7 +77,7 @@ class FibaLiveStatsPBP(PBPSource):
             for pno, p in ((tm.get(k) or {}).get("pl") or {}).items():
                 pid = str(p.get("personId") or player_key(p))
                 pid_of[(k, str(pno))] = pid
-                name = f"{p.get('firstName') or ''} {p.get('familyName') or ''}".strip() or p.get("name")
+                name = nombre_visible(p)
                 g.players[pid] = {"nombre": name, "team": tid_of[k]}
                 m = parse_minutes(p.get("sMinutes"))
                 g.box[pid] = {"sec": m * 60 if m is not None else None, "pm": to_float(p.get("sPlusMinusPoints"))}

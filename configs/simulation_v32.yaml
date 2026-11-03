@@ -92,8 +92,8 @@ adaptacion:
   contraccion: 1.0                   # v3: la forma D, κ se mide directamente (curva dentro de jugador); sin contracción
   priors: data/modelos/adaptacion/v3_1/adaptation_priors.csv   # adaptación v3 de la v3.1 (no cambia en la v3.2)
   salida_v3: data/modelos/adaptacion/v3_1                      # (no se relanza `bbfit adaptacion-v3` en la v3.2)
-  curvas_fase7: data/modelos/adaptacion/v3_1/fase7/curvas.csv  # fase 7 rehecha con los datos al 29-10 (entrada)
-  priors_fase7: data/modelos/adaptacion/v3_1/fase7/adaptation_priors.csv
+  curvas_fase7: data/modelos/adaptacion/v3_2/fase7/curvas.csv  # fase 7 rehecha con las identidades corregidas (03-11)
+  priors_fase7: data/modelos/adaptacion/v3_2/fase7/adaptation_priors.csv
 
 traduccion:                          # constantes v3.1 (sim_insumos.traduccion_v31)
   min_minutos: 400                   # jugadores con ≥ 400 min en el ajuste E[θ_v2 | θ_v31] = c + d·θ_v31 de cada liga

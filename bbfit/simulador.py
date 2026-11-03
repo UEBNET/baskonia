@@ -559,6 +559,7 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
                 fuerza[i] = roles[pid]
     if rol_asig:
         fuerza[i_f] = rol_asig
+    M_libre = M.copy() if (fuerza and rol_asig and (cfg.get("v33") or {}).get("b9")) else None   # v3.3 · B9
     if fuerza:
         T5 = forzar_roles(M, fuerza, total, gm, liga_d, c, rng)
     else:
@@ -731,11 +732,23 @@ def simular(c: Corte, persona_id: str, liga_d: str, team_d: str, miembros: list[
         res["version"] = "v2.1"
     if c.calib_salida and not rol_asig:
         _calibrar_res(c, res, fila, liga_d, gm)
+    v33 = _v33(cfg)
+    d_min33 = 0.0
+    if v33 and not rol_asig:                                   # v3.3 · M: minutos del motor, GBM o mezcla
+        d_min33 = _minutos_v33(c, res, fila, liga_d, tr0, gm, v33)
     v32 = cfg.get("v32") or {}
     if v32.get("produccion_publicada") == "atlas":           # A2 elegida por el examen
         _produccion_atlas(c, res, fila, liga_d, float(np.mean(Lbar)))
+        if d_min33 and "contribucion" in res:                  # C = min/partido ÷ min del partido · pts/100
+            dC = d_min33 / gm * _f(res["produccion_p100"]["pts_p100"].get("media"))
+            if np.isfinite(dC):
+                for k_, v_ in res["contribucion"].items():
+                    if k_ in ("media", "mediana") or k_[:2] in ("lo", "hi"):
+                        res["contribucion"][k_] = None if v_ is None else float(v_) + dC
+    if v33 and v33.get("b9") and rol_asig and M_libre is not None:   # v3.3 · B9 con rol asignado
+        _b9_rol_asignado(c, res, fila, liga_d, tr0, gm, v33, M_libre, i_f, es_gtg, resid, rng, rol_asig)
     if v32.get("aplicar_recalibracion"):                       # A4
-        _recalibrar_v32(c, res, lo, liga_d)
+        _recalibrar_v32(c, res, lo, liga_d, fac_min=(v33 or {}).get("recal_min"))
     # adaptación
     pa = priors["L_rel"]
     fl = fact["L_rel"]
@@ -806,7 +819,7 @@ def _factores_v32(cfg: dict) -> dict | None:
     return _RECAL[f]
 
 
-def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str) -> None:
+def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str, fac_min: dict | None = None) -> None:
     """A4 · recalibración conforme de dos colas (factores por métrica × grupo de destino × origen, con contracción,
     ajustados con todo el examen sin fuga: bbfit.v32)."""
     from bbnorm3.examen import grupo
@@ -832,14 +845,126 @@ def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str) -> None:
                 d[f"lo{a}"] = cc - k["menos"] * (cc - float(d[f"lo{a}"]))
                 d[f"hi{a}"] = cc + k["mas"] * (float(d[f"hi{a}"]) - cc)
 
+    def orden(d: dict) -> None:                       # v3.3 · intervalos anidados: lo90 ≤ lo80 ≤ lo50 ≤ hi50 ≤ hi80 ≤ hi90
+        lo = [d.get(f"lo{a}") for a in ("50", "80", "90")]
+        hi = [d.get(f"hi{a}") for a in ("50", "80", "90")]
+        if any(x is None for x in lo + hi):
+            return
+        for k in (1, 2):
+            d[f"lo{('50', '80', '90')[k]}"] = min(float(lo[k]), float(d[f"lo{('50', '80', '90')[k - 1]}"]))
+            d[f"hi{('50', '80', '90')[k]}"] = max(float(hi[k]), float(d[f"hi{('50', '80', '90')[k - 1]}"]))
+
     for m, d in res["produccion_p100"].items():
         esc(d, fac.get(m), "media")
-    esc(res["minutos"], fac.get("min"), "mediana")
+    esc(res["minutos"], fac_min or fac.get("min"), "mediana")
+    if c.cfg.get("v33"):
+        for d in list(res["produccion_p100"].values()) + [res["minutos"]] + ([res["contribucion"]] if "contribucion" in res else []):
+            orden(d)
     if "contribucion" in res:
         esc(res["contribucion"], fac.get("C"), "media")
     res["min_pct"] = {k: (v / minutos_partido(liga_d) if isinstance(v, (int, float)) else v)
                       for k, v in res["minutos"].items()}
     res["recalibrado_v32"] = f"{g}|{o}"
+
+
+# =============================================================================================== v3.3
+_V33: dict = {}
+
+
+def _v33(cfg: dict) -> dict | None:
+    """Bloque v33 de la configuración con las decisiones finales (bbfit.v33) y el GBM de minutos cargados."""
+    v = cfg.get("v33")
+    if not v:
+        return None
+    f = v.get("fichero_decisiones")
+    if f not in _V33:
+        raiz = DIR_MOD.parent.parent
+        pd_ = raiz / f
+        pm = raiz / v.get("modelo_minutos", "")
+        dec = json.loads(pd_.read_text(encoding="utf-8"))["final"] if pd_.exists() else None
+        _V33[f] = {"dec": dec, "gbm": pickle.loads(pm.read_bytes()) if pm.is_file() else None}
+    x = _V33[f]
+    if x["dec"] is None:
+        return None
+    return {**v, "dec": x["dec"], "gbm": x["gbm"], "recal_min": x["dec"].get("recalibracion_minutos")}
+
+
+def fila_gbm(c: "Corte", fila: dict, liga_d: str, tr0: dict | None = None) -> dict:
+    """Variables del GBM de minutos para un registro y una liga de destino (las mismas que en el examen)."""
+    from .b7_b9 import COLS_REG, METS as METS_B
+    lo = fila.get("liga")
+    row = {k: _f(fila.get(k)) for k in COLS_REG}
+    row.update({"pos3": fila.get("pos3"), "liga_o": lo, "liga_d": liga_d, "rol_o": fila.get("rol_mas_probable"),
+                "min_o": _f(fila.get("min_pg")), "min_pct_o": _f(fila.get("min_pct")),
+                "d_nivel": _nivel_liga(c, liga_d) - _nivel_liga(c, lo)})
+    tr0 = tr0 if tr0 is not None else traducir(c, fila, liga_d, METS_B)
+    for m in METS_B:
+        row[f"v_{m}_trad"] = _f(tr0.get(m, np.nan))
+    return row
+
+
+def min_gbm(c: "Corte", filas: list[dict], v33: dict) -> np.ndarray:
+    """Minutos/partido del GBM para filas de fila_gbm (vectorizado)."""
+    from .v33 import X_gbm
+    g = v33.get("gbm")
+    if not g or not filas:
+        return np.full(len(filas), np.nan)
+    return g["modelo"].predict(X_gbm(pd.DataFrame(filas), g["columnas"]))
+
+
+def _centro_v33(c, fila, liga_d, tr0, motor: float, v33: dict) -> float:
+    eleg = v33["dec"].get("minutos_publicados", "motor")
+    if eleg == "motor":
+        return motor
+    g = float(min_gbm(c, [fila_gbm(c, fila, liga_d, tr0)], v33)[0])
+    if not np.isfinite(g):
+        return motor
+    return g if eleg == "gbm" else 0.5 * (motor + g)
+
+
+def _minutos_v33(c: "Corte", res: dict, fila: dict, liga_d: str, tr0: dict, gm: float, v33: dict) -> float:
+    """M · centro de minutos publicado (motor, GBM o mezcla): desplaza la distribución de minutos. Devuelve Δ."""
+    m = res["minutos"]
+    motor = _f(m.get("mediana"))
+    nuevo = min(max(_centro_v33(c, fila, liga_d, tr0, motor, v33), 0.0), gm)
+    d = nuevo - motor if np.isfinite(motor) else 0.0
+    res["minutos_v33"] = {"motor": motor, "publicado": nuevo, "fuente": v33["dec"].get("minutos_publicados")}
+    if d:
+        res["minutos"] = {k: (min(max(float(v) + d, 0.0), gm) if isinstance(v, (int, float)) else v)
+                          for k, v in m.items()}
+        res["min_pct"] = {k: (v / gm if isinstance(v, (int, float)) else v) for k, v in res["minutos"].items()}
+    return d
+
+
+def _b9_rol_asignado(c, res, fila, liga_d, tr0, gm, v33, M_libre, i_f, es_gtg, resid, rng, rol_asig) -> None:
+    """B9 · con rol asignado, la producción se desplaza a lo que ese rol implica: Δy = b·Δmin + c·Δrol, con Δmin =
+    minutos del rol − minutos esperados sin asignar rol (v3.3) y Δrol = índice del rol − índice esperado."""
+    coef = v33["dec"].get("b9_coeficientes") or {}
+    m_l = M_libre[:, i_f].copy()
+    fuera = m_l <= 0
+    m_l[fuera] = resid * (0.5 + rng.random(fuera.sum()))
+    rol_l = clasificar(m_l / gm, _top5(M_libre)[:, i_f].astype(float), np.full(len(m_l), np.nan), es_gtg[:, i_f],
+                       cargar("roles"))
+    q = lambda v, a: float(np.nanquantile(v, a))  # noqa: E731
+    tmp = {"minutos": {"media": float(np.mean(m_l)), "mediana": q(m_l, 0.5),
+                       **{f"{s}{int(a * 100)}": q(m_l, (1 - a) / 2 if s == "lo" else 1 - (1 - a) / 2)
+                          for a in c.cfg["intervalos"] for s in ("lo", "hi")}},
+           "roles": {r: float(np.mean(rol_l == r)) for r in ROLES}}
+    tmp["indice_rol"] = float(sum(IDX_ROL[r] * p for r, p in tmp["roles"].items()))
+    if c.calib_salida:
+        _calibrar_res(c, tmp, fila, liga_d, gm)
+    libre = _centro_v33(c, fila, liga_d, tr0, _f(tmp["minutos"]["mediana"]), v33)
+    dmin = _f(res["minutos"].get("mediana")) - libre
+    drol = IDX_ROL[rol_asig] - tmp["indice_rol"]
+    for m, d in res["produccion_p100"].items():
+        k = coef.get(m)
+        if not k or not np.isfinite(dmin):
+            continue
+        dy = float(k["b_min"]) * dmin + float(k["c_rol"]) * drol
+        for kk, v in d.items():
+            if isinstance(v, (int, float)) and (kk in ("media", "mediana") or kk[:2] in ("lo", "hi")):
+                d[kk] = float(v) + dy
+    res["b9"] = {"d_min": dmin, "d_rol": drol, "minutos_libre": libre, "indice_rol_libre": tmp["indice_rol"]}
 
 
 def _produccion_atlas(c: "Corte", res: dict, fila: dict, liga_d: str, Lbar_dest: float) -> None:

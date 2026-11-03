@@ -39,6 +39,8 @@ def main(salida: str = "data/artifact", origen: Path = DIR_V31, etiqueta: str = 
         cols = pd.read_csv(DIR_V1 / f"{temp}.csv", nrows=0).columns
         df = pd.read_csv(f, low_memory=False)[list(cols)]
         df["fuente_norm"] = etiqueta
+        from bbmodel.nombres import aplicar
+        df = aplicar(df, fuente=False)              # nombres canónicos «Nombre Apellido»
         _dump(_columnar(df), sal / "normalizados" / temp / "regular.json")
         _dump(explorador(df), sal / "normalizacion" / f"jugadores_{temp}.json")
         pi = PROC / temp / "indice.json"

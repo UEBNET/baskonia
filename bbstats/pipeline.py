@@ -471,6 +471,11 @@ def export_artifact(processed_root: Path, season: str, out_root: Path) -> list[P
     if df.empty:
         raise FileNotFoundError(f"No hay CSV procesados en {src / 'ligas'}")
     df = pista_artifact(df, processed_root, season)
+    try:                                   # nombres canónicos «Nombre Apellido» (bbmodel/nombres.py, si existe la tabla)
+        from bbmodel.nombres import aplicar
+        df = aplicar(df, fuente=False)
+    except Exception:  # noqa: BLE001
+        pass
     dst = out_root / season
     dst.mkdir(parents=True, exist_ok=True)
     written = []

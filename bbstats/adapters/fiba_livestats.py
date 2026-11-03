@@ -62,13 +62,60 @@ def norm(s: Any) -> str:
 _SUFFIX = {"jr", "sr", "ii", "iii", "iv"}
 
 
+def _latino(s: str) -> bool:
+    letras = [c for c in str(s or "") if c.isalpha()]
+    return bool(letras) and all("LATIN" in unicodedata.name(c, "") for c in letras)
+
+
+def _nombre_distinto(intl: str, local: str) -> bool:
+    """El nombre internacional y el local (nombre + apellido) son de personas distintas: no comparten ninguna palabra
+    ni se parecen (transliteraciones, tildes y «Jr.» aparte). Pasa cuando el club reutiliza la ficha de otro jugador y
+    sólo reescribe el nombre local («Stefan Pot» internacional con «Maarten Vandenbossche» local). Se compara el nombre
+    completo para no separar a quien sólo tiene nombre y apellido invertidos («Harris Jordan»)."""
+    from difflib import SequenceMatcher
+    a = {t for t in norm(intl).split() if t not in _SUFFIX and len(t) > 1}
+    b = {t for t in norm(local).split() if t not in _SUFFIX and len(t) > 1}
+    if not a or not b or a & b:
+        return False
+    return SequenceMatcher(None, "".join(sorted(a)), "".join(sorted(b))).ratio() < 0.8
+
+
+# claves del nombre local que en un partido vienen con nombre y apellido invertidos (BNXT 2023-24) → clave principal
+ALIAS_CLAVE_LOCAL = {"jordan-harris": "harris-jordan", "volodymyr-shevchuk": "shevchuk-volodymyr",
+                     "d-styles": "styles-d"}
+
+
+def nombre_visible(p: dict) -> str:
+    """Nombre local (el que teclea el club); si no está en alfabeto latino (GBL: griego), el internacional."""
+    first = p.get("firstName") or p.get("internationalFirstName") or ""
+    family = p.get("familyName") or p.get("internationalFamilyName") or ""
+    if not _latino(f"{first}{family}"):
+        fi, ff = p.get("internationalFirstName") or "", p.get("internationalFamilyName") or ""
+        if _latino(f"{fi}{ff}"):
+            first, family = fi, ff
+    return f"{first} {family}".strip() or p.get("name")
+
+
 def player_key(p: dict) -> str:
     """Id de jugador: apellido (sin espacios ni sufijos Jr/II…) - primer nombre, internacionales y normalizados
-    (el data.json no trae personId y cada club teclea los nombres del rival a su manera)."""
-    fam = norm(p.get("internationalFamilyName") or p.get("familyName") or "").split()
+    (el data.json no trae personId y cada club teclea los nombres del rival a su manera).
+
+    Si el nombre local está en alfabeto latino y su apellido no tiene nada que ver con el internacional, la ficha
+    internacional es de otro jugador (03-11-2026: 6 identidades mezcladas en BNXT y GBL): la clave sale del nombre
+    local, el mismo que se muestra."""
+    fi, fl = p.get("internationalFamilyName"), p.get("familyName")
+    ni = f"{p.get('internationalFirstName') or ''} {fi or ''}"
+    nl = f"{p.get('firstName') or ''} {fl or ''}"
+    usar_local = bool(fi and fl and _latino(nl) and _nombre_distinto(ni, nl))
+    fam_src = (fl if usar_local else (fi or fl)) or ""
+    first_src = (p.get("firstName") if usar_local else (p.get("internationalFirstName") or p.get("firstName"))) or ""
+    fam = norm(fam_src).split()
     fam = "".join(t for t in fam if t not in _SUFFIX)          # "Mc Collum II" = "McCollum"
-    first = (norm(p.get("internationalFirstName") or p.get("firstName") or "").split() or [""])[0]
+    first = (norm(first_src).split() or [""])[0]
     k = f"{fam}-{first}"                                        # "Christian Angelo" = "Christian"
+    if usar_local:
+        # nombre local tecleado al revés en un partido («Harris Jordan»): la clave de su ficha principal
+        k = ALIAS_CLAVE_LOCAL.get(k, k)
     return k if k != "-" else norm(p.get("name") or p.get("scoreboardName")).replace(" ", "-")
 
 
@@ -219,9 +266,7 @@ def parse_fiba_game(match_id: str, doc: dict, phase: str = "regular",
             totals["pts"] = to_float(t.get("score"))
         players = []
         for p in (t.get("pl") or {}).values():
-            first = p.get("firstName") or p.get("internationalFirstName") or ""
-            family = p.get("familyName") or p.get("internationalFamilyName") or ""
-            full = f"{first} {family}".strip() or p.get("name")
+            full = nombre_visible(p)
             pid = p.get("personId") or player_key(p)
             line = {"player_id": str(pid), "name": full,
                     "dorsal": p.get("shirtNumber"), "posicion": p.get("playingPosition") or None,

@@ -1,9 +1,9 @@
 {
-  "generado": "2026-10-31T22:48:05.378175+00:00",
+  "generado": "2026-11-03T09:07:29.078124+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
-      "generado": "2026-10-31T22:43:41.739942+00:00",
+      "generado": "2026-11-03T09:03:53.530887+00:00",
       "fases": [
         "regular",
         "total"
@@ -85,7 +85,7 @@
     },
     {
       "temporada": "2025-26",
-      "generado": "2026-10-31T22:44:33.208987+00:00",
+      "generado": "2026-11-03T09:04:33.014963+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -110,7 +110,7 @@
         "bnxt": {
           "playoffs": 173,
           "regular": 353,
-          "total": 355
+          "total": 356
         },
         "bsl": {
           "playoffs": 102,
@@ -196,7 +196,7 @@
     },
     {
       "temporada": "2024-25",
-      "generado": "2026-10-31T22:45:16.227638+00:00",
+      "generado": "2026-11-03T09:05:14.159907+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -221,7 +221,7 @@
         "bnxt": {
           "playoffs": 173,
           "regular": 360,
-          "total": 361
+          "total": 362
         },
         "cba": {
           "playoffs": 165,
@@ -302,7 +302,7 @@
     },
     {
       "temporada": "2023-24",
-      "generado": "2026-10-31T22:46:18.114668+00:00",
+      "generado": "2026-11-03T09:05:53.734357+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -326,8 +326,8 @@
         },
         "bnxt": {
           "playoffs": 198,
-          "regular": 363,
-          "total": 369
+          "regular": 364,
+          "total": 370
         },
         "cba": {
           "playoffs": 165,
@@ -408,7 +408,7 @@
     },
     {
       "temporada": "2022-23",
-      "generado": "2026-10-31T22:47:13.163684+00:00",
+      "generado": "2026-11-03T09:06:33.882683+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -462,8 +462,8 @@
         },
         "gbl": {
           "playoffs": 106,
-          "regular": 228,
-          "total": 229
+          "regular": 227,
+          "total": 228
         },
         "gleague": {
           "playoffs": 123,
@@ -504,7 +504,7 @@
     },
     {
       "temporada": "2021-22",
-      "generado": "2026-10-31T22:47:54.703513+00:00",
+      "generado": "2026-11-03T09:07:14.820460+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -528,8 +528,8 @@
         },
         "bnxt": {
           "playoffs": 252,
-          "regular": 353,
-          "total": 355
+          "regular": 354,
+          "total": 356
         },
         "cba": {
           "playoffs": 249,
@@ -595,7 +595,7 @@
     },
     {
       "temporada": "2020-21",
-      "generado": "2026-10-31T22:48:05.036203+00:00",
+      "generado": "2026-11-03T09:07:28.706505+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -644,8 +644,8 @@
         },
         "gbl": {
           "playoffs": 100,
-          "regular": 229,
-          "total": 231
+          "regular": 230,
+          "total": 232
         },
         "gleague": {
           "playoffs": 83,
