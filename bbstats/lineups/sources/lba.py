@@ -185,6 +185,8 @@ class LbaPBP(PBPSource):
                 if SIMPLE[desc] in ("in", "out") and not pid:
                     continue
                 e = Event(kind=SIMPLE[desc], **kw)
+            elif desc == "Time Out" and tm in g.teams:
+                e = Event(kind="timeout", **{**kw, "player": None})
             elif desc == "Assist":
                 if pid and tm:
                     links.append((i, tm, pid, a.get("linked_action_id")))

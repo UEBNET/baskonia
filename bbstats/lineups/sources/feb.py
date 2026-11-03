@@ -229,6 +229,8 @@ class FebPBP(PBPSource):
                 e = Event(kind=SIMPLE[act], **kw)
                 if act == "lose":
                     last_miss_team = None
+            elif act == "timeout" and team in g.teams:
+                e = Event(kind="timeout", **{**kw, "player": None})
             elif act == "foul" and team:
                 e = Event(kind="foul", **kw)
                 drawn = lic.get(p4)

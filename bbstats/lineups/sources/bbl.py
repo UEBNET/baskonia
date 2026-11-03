@@ -183,6 +183,8 @@ class BblPBP(PBPSource):
                 evs.append(Event(kind=kind, player=pid if typ == "REBOUND" else None, **kw))
             elif typ in SIMPLE:
                 evs.append(Event(kind=SIMPLE[typ], player=pid if typ != "TEAM_TURN_OVER" else None, **kw))
+            elif typ == "TIME_OUT" and tm in g.teams:
+                evs.append(Event(kind="timeout", player=None, **kw))
         g.events = evs
         g.has_assists = any(e.assister for e in evs)
         g.has_shots = any(e.x is not None for e in evs if e.kind == "shot")

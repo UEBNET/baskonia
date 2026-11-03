@@ -258,3 +258,23 @@ def main(salida: str = "data/artifact") -> None:
     except Exception as e:  # noqa: BLE001
         print(f"escalas: no se pudieron calcular ({e})")
     (raiz / "indice.json").write_text(json.dumps(indice, ensure_ascii=False, indent=1), encoding="utf-8")
+    exportar_extras(salida)
+
+
+def exportar_extras(salida: str = "data/artifact") -> list[Path]:
+    """Extras de equipo (bbstats/lineups/equipo_extras.py: tiempos muertos, quintetos iniciales y posesiones
+    defensivas) en un fichero aparte por liga y temporada, <salida>/quintetos/datos/<temp>/<liga>.extras.gz.txt
+    (JSON con gzip y base64, como el resto). No toca los ficheros de quintetos: el informe de equipo lo lee si
+    existe. Los quintetos iniciales van con ids de jugador (player_id, el del catálogo de cada liga)."""
+    raiz = Path(salida) / "quintetos" / "datos"
+    out = []
+    for f in sorted(DIR_PROC.glob("*/quintetos/*/equipo_extras.json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        d.pop("errores", None)
+        p = raiz / d["temporada"] / f"{d['liga']}.extras.gz.txt"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        data = json.dumps(d, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        p.write_bytes(base64.b64encode(gzip.compress(data, 9)))
+        out.append(p)
+        print(f"{d['temporada']} {d['liga']}: extras {p.stat().st_size / 1024:.0f} KB")
+    return out
