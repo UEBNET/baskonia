@@ -571,7 +571,8 @@ def metricas_decision(r: dict) -> dict:
     filas, top = [], []
     for (l, t), g in e[em].groupby(["liga_d", "corte"]):
         ix = g.index.to_numpy()
-        if len(ix) >= 10 and np.isfinite(Ch[ix]).all():
+        ix = ix[np.isfinite(Ch[ix]) & np.isfinite(C[ix])]
+        if len(ix) >= 10:
             rho = spearmanr(Ch[ix], C[ix]).statistic
             filas.append((len(ix), rho, l, t))
             q = np.quantile(Ch[ix], 0.9)
