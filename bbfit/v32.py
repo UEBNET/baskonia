@@ -674,6 +674,24 @@ def main(progreso=print) -> dict:
     return informe
 
 
+def config_examen(ruta=None, progreso=print) -> None:
+    """Deja configs/simulation_v32.yaml en el estado del EXAMEN: motor completo (todos los pasos activos), k = (1, 1),
+    producción del motor y sin recalibración final. Los exámenes (backtest) deben correr así; `v32-aplicar` fija
+    después la configuración publicada. Sin esto, un examen repetido heredaría las decisiones anteriores."""
+    import re
+    from .config import DIR_CONFIGS
+    ruta = ruta or DIR_CONFIGS / "simulation_v32.yaml"
+    t = ruta.read_text(encoding="utf-8")
+    for paso in ("redistribuir_uso", "uso_eficiencia", "companeros", "adaptacion", "ruido_personal"):
+        t = re.sub(rf"^(  {paso}: )(true|false)", r"\g<1>true", t, flags=re.M)
+    t = re.sub(r"^(  factor_ajustes_ts: )\[[^\]]*\]", r"\g<1>[1.0, 1.0]", t, flags=re.M)
+    t = re.sub(r"^(  produccion_publicada: )\w+", r"\g<1>motor", t, flags=re.M)
+    t = re.sub(r"^(  aplicar_recalibracion: )\w+", r"\g<1>false", t, flags=re.M)
+    ruta.write_text(t, encoding="utf-8")
+    if progreso:
+        progreso(f"  {ruta.name}: estado de examen (motor completo, k = 1, sin A2 ni A4)", flush=True)
+
+
 def aplicar_config(ruta=None, progreso=print) -> dict:
     """Escribe en configs/simulation_v32.yaml las decisiones FINALES (decisiones_v32.json): pasos quitados, factores
     (k_β, k_c), producción publicada y recalibración A4 activa. Sólo para el simulador publicado (histórico y

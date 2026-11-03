@@ -90,6 +90,9 @@ paso python3 -m bbnorm3 --config $N32 ajustar-combinada
 export CERNO_SIMULADOR=v32
 paso python3 -m bbfit dataset-simulador
 paso python3 -m bbnorm3 --config $N32 destino
+# el examen corre con el motor completo (la configuración publicada de una ejecución anterior lo falsearía)
+paso python3 -c "from bbfit import v32; v32.config_examen()"
+rm -f experimentos/cache_simulador_v3_2/pred_*.pkl     # predicciones del examen en caché (dependen de la configuración)
 paso python3 -m bbfit backtest --fuente V32 --escenario inicio --adaptacion
 paso python3 -m bbfit backtest --fuente V32_corte --escenario inicio --adaptacion --pesos-de V32_inicio_adapt
 for f in V32 V32_corte; do
@@ -101,6 +104,8 @@ done
 paso python3 -m bbfit v32-decidir
 paso python3 -m bbfit b7-b9 --etiqueta V32_corte_inicio_adapt
 paso python3 -m bbfit v32-aplicar
+# la v3.3 es el simulador v3.2 publicado + M + B9: copia las decisiones publicadas de la v3.2 a su configuración
+paso python3 -c "from pathlib import Path; from bbfit import v32; v32.aplicar_config(Path('configs/simulation_v33.yaml'))"
 paso python3 -m bbfit pesos-simulador
 paso python3 -m bbfit historico
 paso python3 -m bbfit exportar-simulador --salida experimentos/v32_artifact/simulador
