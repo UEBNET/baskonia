@@ -186,9 +186,31 @@ def variantes_por_nodo(proc: Path = PROC) -> pd.DataFrame:
     return pd.concat(filas, ignore_index=True)
 
 
+def _apellidos_compatibles(acta: str, web: str) -> bool:
+    """El nombre de la plantilla web contiene los apellidos del acta («J. LÓPEZ YUSTE» ⊂ «JUAN LÓPEZ YUSTE»)."""
+    a = [w for w in clave_forma(reordenar(acta)) if len(w) > 1]
+    b = set(clave_forma(reordenar(web)))
+    return bool(a) and all(w in b for w in a)
+
+
+def variantes_web(proc: Path, v: pd.DataFrame) -> pd.DataFrame:
+    """Nombres completos de las plantillas de la web de la FEB (scripts/feb_nombres_web.py) para los nodos FEB, sólo
+    si contienen los apellidos que da el acta del mismo id."""
+    f = proc / "feb_nombres_web.csv"
+    if not f.exists():
+        return v.iloc[0:0]
+    w = pd.read_csv(f, dtype=str).dropna(subset=["player_id", "nombre"]).drop_duplicates(["player_id", "nombre"])
+    feb = v[v["fuente_liga"].isin(["feb1", "feb2", "feb3"])][["fuente_liga", "fuente_id", "nombre"]]
+    x = feb.merge(w.rename(columns={"player_id": "fuente_id", "nombre": "web"}), on="fuente_id")
+    x = x[[_apellidos_compatibles(a, b) for a, b in zip(x["nombre"], x["web"])]]
+    return x.drop_duplicates(["fuente_liga", "fuente_id", "web"]).assign(nombre=lambda d: d["web"], min=0.0)[
+        ["fuente_liga", "fuente_id", "nombre", "min"]]
+
+
 def construir(proc: Path = PROC) -> pd.DataFrame:
     cw = pd.read_csv(proc / "player_id_crosswalk.csv", dtype=str, usecols=["fuente_liga", "fuente_id", "persona_id"])
     v = variantes_por_nodo(proc).rename(columns={"liga": "fuente_liga", "player_id": "fuente_id"})
+    v = pd.concat([v, variantes_web(proc, v)], ignore_index=True)
     v = v.merge(cw, on=["fuente_liga", "fuente_id"], how="left")
     v["persona_id"] = v["persona_id"].fillna(v["fuente_liga"] + ":" + v["fuente_id"])
     nom = {p: canonico(list(zip(g["nombre"], g["min"]))) for p, g in v.groupby("persona_id")}
