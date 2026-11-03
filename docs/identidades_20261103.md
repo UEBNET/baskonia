@@ -77,9 +77,22 @@ Los nombres canónicos se aplican **solo al exportar** los datos del artifact (t
 Atlas de estilos y estilos unificados). La identidad (crosswalk, ids «n:nombre» de la BBL) sigue usando el nombre de
 la fuente.
 
-**Límite.** 2.990 personas solo aparecen con inicial en todas sus fuentes. Casi todas son de las actas de la FEB
-(Tercera FEB 2.026, Segunda 269, Primera 198) o de la CBA (217). La FEB solo da el nombre completo en la plantilla
-de la web del equipo, que falta en muchos equipos de Tercera FEB. Estas personas quedan como «J. Bocca».
+**Nombres completos de la web de la FEB** (`scripts/feb_nombres_web.py` → `data/processed/feb_nombres_web.csv`).
+- **Problema:** las actas FEB solo dan la inicial («J. BOCCA»).
+- **Fuente:** la página de cada equipo-temporada en baloncestoenvivo.feb.es (`/equipo/<id>`) da el nombre completo
+  con el mismo id de jugador. Aparece en la plantilla final y en las estadísticas acumuladas, que incluyen a quien se
+  fue a mitad de temporada.
+- **Descarga:** las 707 páginas de los equipos donde jugaron los jugadores con inicial, con pausa entre peticiones.
+- **Control:** el nombre de la web se usa solo si contiene los apellidos del acta del mismo id.
+- **Resultado:** se completan 2.045 de los 2.501 jugadores FEB con inicial. Quedan con inicial 488 de 6.452
+  personas FEB.
+
+**Límite.** Quedan 947 personas solo con inicial en todas sus fuentes:
+- 488 de la FEB, que no aparecen en ninguna página de su equipo;
+- 217 de la CBA, que publica a los extranjeros como «S. Gatling»;
+- unas pocas de otras ligas.
+
+Estas personas se muestran como «J. Bocca».
 
 ## 4. Cadena
 
