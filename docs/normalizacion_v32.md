@@ -10,11 +10,11 @@ una regla fijada de antemano:
 
 | Mejora | Qué es | Cómo se decide |
 |---|---|---|
-| B1 | Ablación de la CVAE: ciclo, FiLM por liga, cabezal por liga, factor propio ζ, IPW, K = 8 frente a 4 | Navaja (§3) |
-| B2 | Peso de la CVAE en la mezcla por métrica (antes 0,5 fijo) | Mínimo error por métrica en los cortes anteriores |
-| B4 | Inferencia semiamortizada (200 pasos con el decodificador congelado) | Navaja (§3) |
+| B1 | Ablación de la CVAE: ciclo, FiLM por liga, cabezal por liga, factor propio ζ, IPW, K = 8 frente a 4 | No inferioridad (§3) |
+| B2 | Peso de la CVAE en la mezcla por métrica (antes 0,5 fijo) | Mejora ≥ 1 % demostrada (§4) |
+| B4 | Inferencia semiamortizada (200 pasos con el decodificador congelado) | No inferioridad (§3) |
 | B5 | 20 redes en el conjunto (antes 5) | Se aplica siempre |
-| B6 | Verosimilitud t de Student con ν por métrica (antes normal) | Navaja (§3) |
+| B6 | Verosimilitud t de Student con ν por métrica (antes normal) | No inferioridad (§3) |
 | B3 | Decodificar en la liga de destino | **Descartada** por el usuario |
 | B8 | Modelo secuencial de trayectorias | **Descartada**; queda como trabajo futuro en el artículo |
 | Vara de destino | Cualquier liga a 0 cuando es la de destino | Datos para el artifact (§5) |
@@ -163,5 +163,83 @@ nivel de X con d = 0:  δ_X − δ_d,  DT = √(Σ_XX + Σ_dd − 2 Σ_Xd)
 
 ## 6. Resultados
 
-*(se completan al terminar el cálculo: decisiones de la ablación por corte, examen anidado de la v3.2 frente a la v3.1
-con 20 ligas y frente a la v2, pesos por métrica y vara de destino)*
+### 6.1 Ablación (B1, B4, B6)
+
+Tabla con la mezcla al 0,5 y 5 redes por variante; datos en `validacion/ablacion/decisiones.json`.
+- Δ = MAE sin la pieza / MAE con ella − 1, con media por familias y su IC del 95 %.
+- La salvaguarda de ciclo compara el residuo medio sin la pieza con el de la configuración completa.
+
+| Pieza | Corte 2022 | Cortes 2022-23 | Cortes 2022-24 (final) | Decisión |
+|---|---|---|---|---|
+| K = 8 (frente a 4) | −0,65 % [−1,12, −0,10] | −0,67 % [−1,00, −0,34] | −0,91 % [−1,21, −0,67] | Se quita: **K = 4** |
+| Inferencia semiamortizada (B4) | −0,38 % [−0,64, −0,09] | −0,51 % [−0,74, −0,30] | −0,67 % [−0,86, −0,51] | Se quita |
+| FiLM por liga | −0,12 % [−0,29, +0,05] | −0,32 % [−0,53, −0,18] | −0,24 % [−0,41, −0,08] | Se quita |
+| Cabezal por liga | +0,09 % [−0,12, +0,33] | −0,11 % [−0,31, +0,06] | +0,14 % [−0,03, +0,27] | Se quita (no inferior) |
+| t de Student (B6) | +0,08 % [−0,13, +0,27] | −0,02 % [−0,21, +0,16] | +0,03 % [−0,13, +0,21] | Se quita (no inferior) |
+| Factor propio ζ | +0,45 % [+0,21, +0,70] | +0,43 % [+0,19, +0,63] | +0,39 % [+0,18, +0,57] | **Se conserva** |
+| Consistencia de ciclo | +0,09 % [−0,07, +0,25] | −0,04 % [−0,24, +0,09] | +0,12 % [−0,06, +0,28] | Se conserva: sin ella el ciclo pasa de 0,13 a 0,36 |
+| IPW | −0,03 % [−0,32, +0,25] | −0,16 % [−0,39, +0,04] | −0,13 % [−0,33, +0,07] | Se conserva: sin ella los niveles se mueven hasta 4,8 DT |
+
+**Coherencia y combinación**
+- Las tres decisiones anidadas coinciden.
+- La combinación de las cinco piezas quitadas cumple la regla frente a la completa en el corte siguiente: −1,1 %
+  [−1,6, −0,7] en 2023 y −1,4 % [−1,9, −0,9] en 2024.
+
+**Lectura**
+- La red más simple (K = 4, sin ajustes por liga, amortizada y normal) predice mejor y con la misma cobertura.
+- Las dos piezas nuevas de la v3.2 (B4 y B6) no aportan y la regla las retira.
+- Las salvaguardas protegen dos piezas cuyo valor el error medio no distingue: la coherencia de ciclo y la IPW.
+- Configuración final: `ablacion.quitadas` en `configs/normalization_v32.yaml`. La configuración completa queda en
+  `_completa` al cargar.
+
+### 6.2 Examen anidado (B2, B5)
+
+Cortes 2022-2024, 1.427 personas × corte; datos en `validacion/examen_v32.json`. El error es la media de las 33
+métricas, relativa a la v2.
+
+| Variante | Error frente a la v2 [IC 95 %] | Cobertura del 80 % |
+|---|---|---|
+| Red sola (20 redes, configuración final) | −1,4 % [−2,1, −0,6] | 0,806 |
+| Mezcla con peso 0,5 | −2,8 % [−3,2, −2,4] | 0,809 |
+| Mezcla con B2 anidado | −2,8 % [−3,2, −2,4] | 0,809 |
+| **v3.2 publicada** (B2 y ajuste de la Tercera FEB) | **−2,8 % [−3,2, −2,4]** | **0,811** |
+
+**Lectura de la tabla**
+- **La red sola ya gana a la v2.** En la v3.1, con 15 ligas, quedaba +1,7 %.
+- **Por grupo de destino:**
+
+  | Grupo de destino | Error frente a la v2 |
+  |---|---|
+  | EuroLeague | −2,1 % [−3,3, −0,8] |
+  | Resto de Europa | −2,5 % |
+  | FEB | −2,5 % |
+  | NBA/G League | −3,4 % |
+
+- **Puerta de control de la v3.1:**
+  - Cumple el error global y el destino EuroLeague.
+  - Falla la cobertura en 4 de los pares con ≥ 30 personas: Segunda → Tercera FEB 0,774; G League → NBA 0,858;
+    NBA → G League 0,862; NCAA → NBA 0,769.
+  - Se informa y se mantiene como pendiente para el examen limpio.
+- **B2:**
+  - Peso final: solo el **RAPM** se aparta de 0,5 y pasa a 1 (solo la red), con −6,1 % [−8,4, −3,8].
+  - Ninguna otra métrica demuestra una mejora de al menos el 1 %. AST% (−1,0 % [−1,8, −0,2]) se queda justo en el
+    límite.
+  - En los cortes anidados 2023 y 2024 ninguna métrica se apartó de 0,5.
+- **B5.** Ningún caso activa la salvaguarda de discrepancia entre redes (> 0,5 DT), ni con 5 redes ni con 20. El
+  umbral no cambia; su cuantil 95 % es 0,10.
+- **B6.** No se informa de ν porque la t de Student quedó fuera.
+- **Tercera FEB** (conocimiento, mismo procedimiento que la v3.1): peso 0,5 y factor de intervalo 1,06.
+- **§14, RAPM.** La ganancia frente a la v2 es −10,4 % en todos los casos y −11,0 % con exposición alta en destino
+  (ORAPM −6,8 / −6,6 %; DRAPM −2,7 / −2,2 %). Se mantiene con exposición alta, así que se puede comunicar como impacto
+  en pista.
+
+### 6.3 Vara de destino
+
+**Reducción de la DT del nivel por par.** Datos en `destino/reduccion_varianza_pares.csv`. En pts/100, el par
+ACB–BBL pasa de 0,081 (sumando las marginales) a 0,076 (v2 con covarianza) y a 0,065 (mezcla).
+
+**§11b, filas en las que Var(θ) < Var(δ_o).**
+- Con la varianza de nivel de la v2, son menos del 1 % en todas las métricas salvo el **RAPM (44 %)**.
+- La v2 no tiene intervalo de RAPM, de modo que entre el 66 y el 95 % de sus filas usan solo la red.
+- Para el RAPM, el nivel se resta con el mismo modelo que da el valor de cada fila: w_fila·sd_red + (1 − w_fila)·sd_v2.
+  El resultado se informa en `constantes.json` (`v_j_negativa_tras_11b`).
