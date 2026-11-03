@@ -167,7 +167,9 @@ def exportar(tabla: pd.DataFrame, cfg: dict, progreso=print) -> Path:
         doc = {"metrica": m, "unidades": "constantes lineales v3.2 (DT de la vara EuroLeague)", "nodos": nd,
                "peso_cvae": w, "delta": [_sig(nodos.get(m, {}).get(x, (np.nan, np.nan))[0]) for x in nd],
                "cov_triangular": [_sig(v) for v in S2[np.tril_indices(len(nd))]],
-               "sd_par_triangular": [_sig(v) for v in sd_mix[np.tril_indices(len(nd))]]}
+               "sd_par_triangular": [_sig(v) for v in sd_mix[np.tril_indices(len(nd))]],
+               "sd_red_triangular": ([_sig(v) if np.isfinite(v) else None for v in M[np.tril_indices(len(nd))]]
+                                     if sc is not None else None)}
         (out / "covarianza" / f"{m}.json").write_text(json.dumps(doc, separators=(",", ":")), encoding="utf-8")
         if m in ("pts_p100", "ts_pct"):     # §11d · tabla de la reducción de varianza por par (2025-26)
             ix = {x: k for k, x in enumerate(nd)}
@@ -207,7 +209,8 @@ def exportar(tabla: pd.DataFrame, cfg: dict, progreso=print) -> Path:
             vo = np.array([SI._nodo(nodos.get(m, {}), lg, tp)[1] for lg, tp in zip(th["liga"], th["temporada"])])
             ok = np.isfinite(s2) & np.isfinite(vo)
             neg[m] = float(np.mean(s2[ok] < vo[ok])) if ok.any() else None
-    cdoc["v_j_negativa_fraccion"] = neg
+    cdoc["v_j_negativa_fraccion"] = neg                         # con la varianza de nivel de la v2
+    cdoc["v_j_negativa_tras_11b"] = th.attrs.get("vj_negativa")  # §11b: con la del mismo modelo que la fila
     (out / "constantes.json").write_text(json.dumps(cdoc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     base = SI._normalizado(["persona_id", "team_id", "edad", "min"])
     th = th.merge(base, on=["liga", "temporada", "player_id"], how="left")

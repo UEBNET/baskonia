@@ -574,7 +574,8 @@ def metricas_decision(r: dict) -> dict:
         ix = ix[np.isfinite(Ch[ix]) & np.isfinite(C[ix])]
         if len(ix) >= 10:
             rho = spearmanr(Ch[ix], C[ix]).statistic
-            filas.append((len(ix), rho, l, t))
+            if np.isfinite(rho):              # un grupo con C constante (todos 0) no ordena nada
+                filas.append((len(ix), rho, l, t))
             q = np.quantile(Ch[ix], 0.9)
             sel = ix[Ch[ix] >= q]
             top.append(np.c_[Ch[sel] - C[sel]])

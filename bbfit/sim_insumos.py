@@ -143,7 +143,8 @@ def covarianza_destino(m: str) -> tuple[dict, np.ndarray] | None:
         return X + X.T - np.diag(np.diag(X))
     S = sim(doc["cov_triangular"])
     P = sim(doc["sd_par_triangular"]) if "sd_par_triangular" in doc else None    # §11a: DT por par de la mezcla
-    _COV[m] = ({k: i for i, k in enumerate(doc["nodos"])}, S, P)
+    Q = sim(doc["sd_red_triangular"]) if "sd_red_triangular" in doc else None    # §11b: DT por par de la red sola
+    _COV[m] = ({k: i for i, k in enumerate(doc["nodos"])}, S, P, Q)
     return _COV[m]
 
 
@@ -152,7 +153,7 @@ def var_par(m: str, nodo_a: str, nodo_b: str) -> float:
     cv = covarianza_destino(m)
     if cv is None:
         return np.nan
-    ix, S, P = cv
+    ix, S, P = cv[:3]
     ia, ib = ix.get(nodo_a), ix.get(nodo_b)
     if ia is None or ib is None:
         return np.nan
@@ -378,7 +379,7 @@ def theta_completa(fuente: str, metricas: list[str], trad: dict) -> pd.DataFrame
         pos = _normalizado(["pos3"])
         th = th.merge(pos, on=["liga", "temporada", "player_id"], how="left")
     else:
-        cols = ["pos3"] + [c for m in metricas for c in (f"{m}_am", f"{m}_am_lo", f"{m}_am_hi")]
+        cols = ["pos3"] + [c for m in metricas for c in (f"{m}_am", f"{m}_am_lo", f"{m}_am_hi", f"{m}_v31_peso_cvae")]
         n = _normalizado(cols)
         th = n[["liga", "temporada", "player_id", "pos3"]].copy()
         c = trad["constantes"]
@@ -397,7 +398,23 @@ def theta_completa(fuente: str, metricas: list[str], trad: dict) -> pd.DataFrame
             # EuroLeague, que entra después con su covarianza frente al destino); mínimo 10 % de la total
             vo = np.array([_nodo(trad["nodos"].get(m, {}), lg, tp)[1] for lg, tp in zip(n["liga"], n["temporada"])])
             vo = np.where(np.isfinite(vo), vo, 0.0)
+            ok = np.isfinite(s_)
+            neg = float(np.mean(s_[ok] ** 2 < vo[ok])) if ok.any() else 0.0
+            cv = covarianza_destino(m) if fuente == "V32" else None
+            if neg > 0.01 and cv is not None and len(cv) > 3 and cv[3] is not None:
+                # §11b (criterios del 02-11-2026): más del 1 % de filas con Var(θ) < Var(δ_o) de la v2 ⇒ el nivel de
+                # liga se resta con el MISMO modelo que da el valor de la fila: DT del nivel frente a la EuroLeague de
+                # la mezcla w_fila · sd_red + (1 − w_fila) · sd_v2 (w_fila = peso de la red en esa fila)
+                ix, _, _, Sc = cv
+                w = pd.to_numeric(n.get(f"{m}_v31_peso_cvae"), errors="coerce").fillna(0.5).to_numpy(float)
+                sdc = np.array([Sc[ix[f"{lg}:{tp}"], ix[f"euroleague:{tp}"]]
+                                if f"{lg}:{tp}" in ix and f"euroleague:{tp}" in ix else np.nan
+                                for lg, tp in zip(n["liga"], n["temporada"])], float)
+                sdl = np.where(np.isfinite(sdc), w * sdc + (1 - w) * np.sqrt(vo), np.sqrt(vo))
+                vo = sdl ** 2
             th[f"{m}_vj"] = np.maximum(s_ ** 2 - vo, 0.1 * s_ ** 2)
+            th.attrs.setdefault("vj_negativa", {})[m] = {"antes": neg, "despues": float(np.mean(s_[ok] ** 2 < vo[ok]))
+                                                         if ok.any() else 0.0}
     dest.write_bytes(pickle.dumps(th))
     return th
 

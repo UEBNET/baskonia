@@ -17,7 +17,9 @@ CFG32 = config.RAIZ / "configs" / "normalization_v32.yaml"
 def _cfg(**c):
     base = {"entrenamiento.pasos": 60, "latente.K": 3, "red.oculta_codificador": 32, "red.oculta_decodificador": 16,
             "entrenamiento.ipw": False, "inferencia.refinar_pasos": 0}
-    return config.con(config.cargar(CFG32), **{**base, **c})
+    c32 = config.cargar(CFG32)
+    c32 = c32.get("_completa", c32)          # las pruebas usan la configuración completa (antes de la ablación)
+    return config.con(c32, **{**base, **c})
 
 
 @pytest.fixture(scope="module")
@@ -81,7 +83,8 @@ def test_huella_v32_ignora_inferencia():
 
 def test_variantes_ablacion():
     from bbnorm3 import ablacion
-    V = ablacion.variantes(config.cargar(CFG32))
+    c32 = config.cargar(CFG32)
+    V = ablacion.variantes(c32.get("_completa", c32))
     assert "completa" in V and V["sin_student"]["red"]["verosimilitud"] == "normal"
     assert V["sin_K8"]["latente"]["K"] == 4 and V["sin_ciclo"]["entrenamiento"]["ciclo_peso"] == 0.0
 
@@ -151,3 +154,13 @@ def test_vara_destino_invariante_en_el_centro():
     assert r["sd_z"] == pytest.approx(math.sqrt(0.05 + 0.004) / 1.1)
     el = a_destino(fila, "pts_p100", "euroleague", "2025-26", cdoc, cov)
     assert el["z"] == pytest.approx(-0.2) and el["sd_z"] == pytest.approx(math.sqrt(0.05 + 0.006))
+
+
+def test_configuracion_final_quita_las_piezas():
+    """La decisión de la ablación se aplica al cargar la configuración v3.2 (y la completa queda en _completa)."""
+    c = config.cargar(CFG32)
+    q = c["ablacion"].get("quitadas") or []
+    if "student" in q:
+        assert c["red"]["verosimilitud"] == "normal" and c["_completa"]["red"]["verosimilitud"] == "student"
+    if "K8" in q:
+        assert c["latente"]["K"] == 4
