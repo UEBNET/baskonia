@@ -264,6 +264,8 @@ class LnbPBP(PBPSource):
                     evs.append(Event(kind="oreb" if sub == "offensive" else "dreb", **kw))
                 elif typ in SIMPLE:
                     evs.append(Event(kind=SIMPLE[typ], **kw))
+                elif typ == "timeOut" and tm in g.teams:
+                    evs.append(Event(kind="timeout", **{**kw, "player": None}))
                 elif typ == "foul":
                     if sub == "drawn":
                         if pid:

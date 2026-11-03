@@ -215,6 +215,8 @@ class AcbPBP(PBPSource):
             elif pt == AST_FT:
                 if pid:
                     ft_markers.append((i, tm, pid))
+            elif pt == 113:
+                evs.append(Event(kind="timeout", **{**kw, "player": None}))
             elif pt in IGNORED:
                 continue
             elif pid and delta:

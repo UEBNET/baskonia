@@ -129,6 +129,8 @@ class EuroleaguePBP(PBPSource):
                     evs.append(Event(kind="foul", **kw))
                 elif pt == "RV":
                     evs.append(Event(kind="foul_drawn", **kw))
+                elif pt == "TOUT" and tm in g.teams:
+                    evs.append(Event(kind="timeout", **{**kw, "player": None}))
                 elif pt == "AS" and pid and tm:
                     markers.append((seq, tm, pid, t))
         # Se respeta el orden de la lista aunque la numeración (NUMBEROFPLAY) o el reloj no sean correlativos:

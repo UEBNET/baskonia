@@ -16,12 +16,15 @@ Convenciones:
   * Robos "stl" (jugador que roba), tapones "blk" (jugador que tapona), faltas "foul" (comete) y
     "foul_drawn" (recibe), pérdidas "tov", rebotes "oreb"/"dreb".
   * `order` = posición en la lista original (desempata eventos con el mismo `t`).
+  * Tiempos muertos "timeout": `team` = equipo que lo pide, `player=None`. No cambian quién está en pista ni la
+    posesión: stints y posesiones los ignoran (las salidas de quintetos no cambian); los usa
+    bbstats/lineups/equipo_extras.py. Sólo los pedidos por un equipo (no los oficiales ni los de televisión).
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-KINDS = {"in", "out", "shot", "ft", "oreb", "dreb", "tov", "stl", "blk", "foul", "foul_drawn"}
+KINDS = {"in", "out", "shot", "ft", "oreb", "dreb", "tov", "stl", "blk", "foul", "foul_drawn", "timeout"}
 
 
 @dataclass

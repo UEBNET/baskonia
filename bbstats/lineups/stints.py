@@ -32,6 +32,7 @@ class GameResult:
     seconds: Counter = field(default_factory=Counter)
     pm: Counter = field(default_factory=Counter)
     anomalies: Counter = field(default_factory=Counter)
+    first_five: dict = field(default_factory=dict)          # equipo -> quinteto al empezar el partido
 
     def validation(self) -> dict:
         g = self.game
@@ -118,7 +119,7 @@ def build(game: Game, game_min: float = 40) -> GameResult:
         res.anomalies["equipos"] += 1
         return res
     a, b = teams
-    evs = sorted(game.events, key=lambda e: e.order)
+    evs = sorted((e for e in game.events if e.kind != "timeout"), key=lambda e: e.order)  # no cambian el quinteto
     by_period: dict[int, list[Event]] = defaultdict(list)
     for e in evs:
         by_period[e.period].append(e)
@@ -150,6 +151,7 @@ def build(game: Game, game_min: float = 40) -> GameResult:
                     res.anomalies["quinteto_inicial_incompleto"] += 1
             if per == min(by_period):
                 first_five.update({t: set(on[t]) for t in teams})
+                res.first_five = {t: sorted(on[t]) for t in teams}
         seg = {"t0": p0, "st": {a: _empty(), b: _empty()}, "margin": score[a] - score[b]}
         last_t = max(last_t, p0)
 
