@@ -29,6 +29,11 @@ if [ ! -f "$M/cache" ]; then
     [ -e "experimentos/$d" ] && mv "experimentos/$d" "experimentos/${d}_antes_id_$(date +%Y%m%d%H%M)"
   done
   rm -rf data/modelos/roles/_cache
+  # salidas que sus pasos reutilizan si existen (se saltan lo ya hecho): con datos nuevos hay que borrarlas
+  rm -f data/modelos/v3_2/validacion/f0_20*.csv.gz data/modelos/v3_2/validacion/ablacion/pred_final_*.csv.gz \
+    data/modelos/v3_2/validacion/ablacion/escala_*.pkl data/modelos/v3_2/niveles.csv \
+    data/modelos/v3_2/destino/covarianza_v2/_hecho data/modelos/simulador/v3_2/historico_20*.csv.gz \
+    data/modelos/simulador/v3_3/historico_20*.csv.gz
   touch "$M/cache"
 fi
 # 1. capas v2 y nombres canónicos (el crosswalk ya está rehecho)
