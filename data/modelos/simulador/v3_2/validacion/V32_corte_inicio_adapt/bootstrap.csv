@@ -1,0 +1,19 @@
+metrica,baseline,n,v2,base,diferencia,ic90_lo,ic90_hi,veredicto
+mae_min,a,6027,4.8664,6.2819,-1.4155,-1.5089,-1.3248,v2 mejor
+mae_min,b,6027,4.8664,5.9136,-1.0471,-1.1185,-0.9727,v2 mejor
+logloss_rol,a,6027,1.2639,2.6985,-1.4346,-1.4791,-1.3917,v2 mejor
+logloss_rol,b,6027,1.2639,1.2698,-0.0059,-0.0128,0.0010,sin diferencia clara
+acierto_rol,a,6027,0.4254,0.3888,0.0367,0.0238,0.0492,v2 mejor
+acierto_rol,b,6027,0.4254,0.3907,0.0347,0.0225,0.0471,v2 mejor
+mae_pts_p100,a,4303,3.8543,3.8229,0.0315,-0.0239,0.0852,sin diferencia clara
+mae_pts_p100,b,4303,3.8543,3.8506,0.0038,-0.0214,0.0290,sin diferencia clara
+rmse_pts_p100,a,4303,4.9113,4.8665,0.0449,-0.0315,0.1168,sin diferencia clara
+rmse_pts_p100,b,4303,4.9113,4.9283,-0.0170,-0.0432,0.0090,sin diferencia clara
+mae_ts_pct,a,4303,5.2362,4.7926,0.4435,0.3634,0.5236,v2 peor
+mae_ts_pct,b,4303,5.2362,4.9148,0.3214,0.2764,0.3680,v2 peor
+rmse_ts_pct,a,4303,6.6297,6.1154,0.5143,0.4152,0.6087,v2 peor
+rmse_ts_pct,b,4303,6.6297,6.2655,0.3642,0.3144,0.4116,v2 peor
+mae_usg_pct,a,4461,2.8322,2.7844,0.0479,0.0088,0.0882,v2 peor
+mae_usg_pct,b,4346,2.7919,2.8364,-0.0445,-0.0663,-0.0230,v2 mejor
+rmse_usg_pct,a,4461,3.6196,3.5700,0.0496,-0.0068,0.1017,sin diferencia clara
+rmse_usg_pct,b,4346,3.5541,3.6405,-0.0865,-0.1082,-0.0627,v2 mejor
