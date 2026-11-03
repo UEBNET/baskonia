@@ -243,3 +243,7 @@ ACB–BBL pasa de 0,081 (sumando las marginales) a 0,076 (v2 con covarianza) y a
 - La v2 no tiene intervalo de RAPM, de modo que entre el 66 y el 95 % de sus filas usan solo la red.
 - Para el RAPM, el nivel se resta con el mismo modelo que da el valor de cada fila: w_fila·sd_red + (1 − w_fila)·sd_v2.
   El resultado se informa en `constantes.json` (`v_j_negativa_tras_11b`).
+- **Resultado.** En el RAPM la fracción baja del 44,4 % al 8,4 %. Sigue por encima del 1 %, porque en las filas que
+  usan solo la red la varianza del nivel es comparable a la del propio RAPM. En esas filas no se trunca a 0: Var(θ)
+  conserva el 10 %, de modo que su intervalo es algo más estrecho de lo que debería. Queda señalado para el examen
+  limpio. En el resto de métricas no cambia nada (< 1 %).

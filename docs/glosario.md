@@ -2,8 +2,9 @@
 
 Qué significa cada etiqueta y cada número de los modelos de encaje, dicho en lenguaje de banquillo y de despacho.
 Las cifras y los ejemplos salen de los informes de fase (`docs/checkpoints/F3.md`, `F5.md`, `F6.md`, `F7.md`) y están
-comprobados en los datos salvo que se diga lo contrario. La formulación matemática está en la Parte II del artículo
-(`docs/articulo/estilos_de_juego_baskonia.pdf`, secciones 17-22) y el detalle de cada columna en
+comprobados en los datos salvo que se diga lo contrario. La formulación matemática estaba en la Parte II del artículo anterior de estilos
+(secciones 17-22; se regenera con `python -m bbestilo articulo`); el artículo vigente es
+`docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf` y el detalle de cada columna en
 [`data_dictionary.md`](data_dictionary.md).
 
 ---

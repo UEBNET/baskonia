@@ -14,9 +14,9 @@ adaptación y simulador, §17).
 - **Diccionario de datos** de todas las tablas (claves, granularidad, columnas, unidades, banderas):
   [`docs/data_dictionary.md`](docs/data_dictionary.md). **Glosario** de roles, estilos y medidas en lenguaje de
   dirección deportiva: [`docs/glosario.md`](docs/glosario.md).
-- **Artículo técnico** (estilos de juego; sin actualizar con las fases 1-8 por decisión del usuario):
-  [`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf). Informes de cada
-  fase: `docs/checkpoints/F*.md`.
+- **Artículo científico v3.2** (datos, normalización hasta la v3.2, vara de destino, estilos y simulador v3.2;
+  sustituye al artículo de estilos de juego): [`docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf`](docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf) (`python -m cerno_articulo`). Informes de cada fase:
+  `docs/checkpoints/F*.md`.
 
 **Jugadores (filas jugador-equipo) descargados — temporada regular / playoffs:**
 
@@ -376,13 +376,13 @@ python -m bbestilo analisis         # K óptimo, nivel, éxito, efecto del encaj
 python -m bbestilo encaje --jugador "A" "B" --baja "C" --club baskonia --competicion euroleague --temporada 2025-26
 python -m bbestilo parecidos --club baskonia --jugador "Nombre" --alcance 30
 python -m bbestilo exportar         # datos del Atlas de Estilos (artifact/estilos/)
-python -m bbestilo articulo         # artículo científico en PDF (docs/articulo/estilos_de_juego_baskonia.pdf)
+python -m bbestilo articulo         # artículo anterior de estilos (ya no se versiona; lo sustituye python -m cerno_articulo)
 ```
 
 Escalas de lectura ±100 (Euroliga = 0) del Atlas y de Quintetos: `python -m bbmodel escalas`, explicadas en [`docs/contexto_y_quimica.md`](docs/contexto_y_quimica.md) §7.
 
-Documentación técnica: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md). Artículo completo:
-[`docs/articulo/estilos_de_juego_baskonia.pdf`](docs/articulo/estilos_de_juego_baskonia.pdf).
+Documentación técnica: [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md). Artículo científico v3.2:
+[`docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf`](docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf).
 
 
 **Estilo por entrenador** (`python -m bbestilo entrenadores`, y automáticamente al exportar el Atlas): cada tramo
@@ -686,10 +686,10 @@ Las cachés reanudables también viven en `experimentos/` (`cache_normalizacion/
 
 ## 20. Artículo técnico y documentación
 
-`python -m bbestilo articulo` compone el artículo de estilos de juego (estilos VaDE, contexto de nivel y química;
-`bbestilo/articulo.py`) y lo imprime a PDF: `docs/articulo/estilos_de_juego_baskonia.pdf` (copia en
-`artifact/articulo/`). Por decisión del usuario (26-10-2026) el artículo **no** se ha ampliado con las fases 1-8;
-la documentación de esas fases está en `docs/checkpoints/F*.md`.
+`python -m cerno_articulo` compone el artículo científico v3.2 (`cerno_articulo/`; marca Cerno) y lo imprime a
+PDF: `docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf`. Sustituye (03-11-2026) al artículo de estilos de juego, que se puede regenerar con
+`python -m bbestilo articulo`; la copia publicada en `artifact/articulo/` no cambia hasta que se edite el artifact.
+La documentación de cada fase sigue en `docs/checkpoints/F*.md`.
 
 Otros documentos: [`docs/data_dictionary.md`](docs/data_dictionary.md) (todas las tablas),
 [`docs/glosario.md`](docs/glosario.md) (roles, estilos y medidas en lenguaje de dirección deportiva),

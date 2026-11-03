@@ -1,6 +1,6 @@
 # Estilos de juego: VaDE con 6 estilos sin nivel, 17 rasgos (con jugada a jugada) y mapa 3D
 
-> Código: `bbestilo/` · Artículo completo (PDF): [`docs/articulo/estilos_de_juego_baskonia.pdf`](articulo/estilos_de_juego_baskonia.pdf) ·
+> Código: `bbestilo/` · Artículo completo (PDF): [`docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf`](articulo/cerno_lectura_entre_ligas_v3_2.pdf) (sección 07; el artículo anterior de estilos se regenera con `python -m bbestilo articulo`) ·
 > Atlas interactivo: Artifact «Atlas de Estilos» (`artifact/mapa-estilos.html`, datos `artifact/estilos/`) ·
 > Modelo final: `data/modelos/estilos/` · Iteraciones anteriores (métricas y asignaciones): `data/modelos/estilos/historial/`
 

@@ -368,7 +368,7 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   para la pestaña del Artifact (publicarlos con el resto de datos, ruta `datos/<temporada>/`).
 - Dato a saber: en la LNB la columna `edad` es la edad ACTUAL (no la de cada temporada); usar
   `fecha_nacimiento`.
-- **Estilos de juego** (`bbestilo/`, `docs/estilos_de_juego.md`, artículo `docs/articulo/estilos_de_juego_baskonia.pdf`):
+- **Estilos de juego** (`bbestilo/`, `docs/estilos_de_juego.md`, artículo anterior regenerable con `python -m bbestilo articulo`; artículo vigente `docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf`):
   modelo final = **VaDE de 6 estilos** por club-competición-temporada (mezcla de 6 gaussianas de covarianza completa en
   un latente 3D = mapa; consenso de 10 semillas y ajuste fino con la mezcla fijada), sobre los equivalentes EuroLeague
   A+B agregados por minutos (17 rasgos: 13 de caja + 4 del jugada a jugada: % aro, % media, % triple de esquina,

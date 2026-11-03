@@ -122,7 +122,7 @@ def n(x, d: int = 2, signo: bool = False, pct: bool = False) -> str:
 
 
 def rango(c, lo, hi, d: int = 2, pct: bool = False, signo: bool = False) -> str:
-    return f'{n(c, d, signo, pct)} <span class="mono">[{n(lo, d, signo, pct)}–{n(hi, d, signo, pct)}]</span>'
+    return f'{n(c, d, signo, pct)} <span class="mono">[{n(lo, d, signo, pct)}, {n(hi, d, signo, pct)}]</span>'
 
 
 def tabla(cab: list[str], filas: list[list], num: set[int] | None = None, dest: set[int] | None = None) -> str:

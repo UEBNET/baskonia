@@ -173,8 +173,12 @@ Si IC95,inf &gt; 0 se conserva; entre medias, se conserva como indeterminada.</l
 <h3>t de Student y semiamortización</h3>
 <div class="eq">log p(y | ŷ, σ²) = log Γ((ν+1)/2) − log Γ(ν/2) − ½ log(νπσ²) − (ν+1)/2 · log(1 + (y − ŷ)²/(νσ²))
 ν_m = 3 + 27 · sigmoide(θ_m)        Fisher del experto: (ν + 1)/((ν + 3)·σ²)</div>
-<p>{ev("lectura")}Con la t, la posterior conjunta de los niveles deja de ser exacta: es una aproximación de
-Laplace con la información de Fisher. Los intervalos salen de cuantiles Monte Carlo de la mezcla de muestras.</p>"""
+<p>{ev("lectura")}Con la t, la posterior conjunta de los niveles deja de ser exacta y pasa a ser una aproximación
+de Laplace con la información de Fisher. La semiamortización (B4) refina el latente de cada persona con 200 pasos de
+gradiente sobre la verosimilitud, partiendo de la salida del codificador.</p>
+<p>{ev("dato")}Las dos piezas se evaluaron con la regla de la ablación y <b>ninguna se queda</b> (sección 05): la
+configuración publicada usa verosimilitud normal e inferencia amortizada, de modo que la posterior conjunta de los
+niveles vuelve a ser exacta. El código conserva las dos piezas como interruptores.</p>"""
     return ("Método v3.2", "Cada pieza de la red se queda solo si quitarla empeora el examen", cuerpo)
 
 
@@ -198,21 +202,46 @@ def resultados_v32(R: dict) -> tuple[str, str, str]:
                         ", ".join(DT.PIEZAS.get(p, p) for p in d["quitar"]) or "ninguna"]
                        for k, d in ab["decisiones"].items()])
     cuerpo += tabla_dec
+    fin = [d for d in ab["decisiones"].values() if d["aplica_en"] == "final"]
+    conservadas = [DT.PIEZAS.get(p, p) for p, x in (fin[0]["piezas"].items() if fin else []) if not x["quitar"]]
+    cuerpo += f"""<p>{ev("dato")}Las tres decisiones anidadas coinciden. La combinación de las cinco piezas quitadas cumple
+la regla frente a la configuración completa en el corte siguiente: −1,1 % [−1,6, −0,7] en 2023 y −1,4 % [−1,9, −0,9]
+en 2024. Se conservan {", ".join(conservadas) or "ninguna"}.</p>
+<div class="indice-linea"><div class="etq">Lectura</div><p>La red más simple (K = 4, sin ajustes por liga, amortizada
+y con verosimilitud normal) predice mejor y con la misma cobertura. Las dos piezas nuevas de la v3.2 (B4 y B6) no
+aportan y la regla las retira. El factor propio ζ es la única pieza que el error medio defiende por sí solo; la
+consistencia de ciclo y la IPW se quedan por sus salvaguardas: sin la primera el residuo de ciclo pasa de 0,13 a
+0,36 DT y sin la segunda los niveles de liga se mueven hasta 4,8 DT.</p></div>"""
     if ex:
         p = ex["combinada_b2_con_conocimiento_feb3"]
         fj = ex.get("pesos_detalle_final", {})
+        b5 = ex.get("B5_salvaguarda_discrepancia", {})
+        rap = fj.get("detalle", {}).get("rapm", {})
         cuerpo += f"""<h3>Peso por métrica (B2)</h3>
-<p>{ev("dato")}{fj.get("hacia_cvae", 0)} métricas se apartan de 0,5 hacia la red y {fj.get("hacia_v2", 0)} hacia la
-v2; el resto queda en 0,5 porque su mejora no supera el 1 % con significación.</p>
+<p>{ev("dato")}{fj.get("hacia_cvae", 0)} métrica{"s" if fj.get("hacia_cvae", 0) != 1 else ""} se aparta de 0,5 hacia
+la red y {fj.get("hacia_v2", 0)} hacia la v2: solo el RAPM, que pasa a w = 1 (solo la red), con
+{rango(rap.get("D", 0), *rap.get("ic95", [0, 0]), 1, pct=True, signo=True)}.
+El resto queda en 0,5 porque su mejora no llega al 1 % con significación; AST% (−1,0 % [−1,8, −0,2]) se queda justo en
+el límite. En los cortes anidados 2023 y 2024 ninguna métrica se apartó de 0,5.</p>
+<h3>Conjunto de 20 redes (B5)</h3>
+<p>{ev("dato")}La salvaguarda de discrepancia entre redes (&gt; 0,5 DT) no se activa en ningún caso, ni con 5 redes
+ni con 20 ({n(100 * b5.get("con_5", 0), 1)} % y {n(100 * b5.get("con_20", 0), 1)} %). Su cuantil 95 % es
+{n(b5.get("umbral_cuantil_95"), 2)} DT, de modo que el umbral no cambia.</p>
 <h3>Examen de la v3.2</h3>
 {tabla(["Variante", "Error medio frente a la v2", "Cobertura 80 %"],
        [[nom, rango(x["criterio_1_mae"]["estimacion"], *x["criterio_1_mae"]["ic95"], 1, pct=True, signo=True),
          n(x["criterio_2_cobertura"]["cobertura_media"], 3)]
-        for nom, x in (("Red sola", ex["cvae_sola"]), ("Mezcla 0,5", ex["combinada_peso_fijo_0_5"]),
+        for nom, x in (("Red sola (20 redes)", ex["cvae_sola"]), ("Mezcla 0,5", ex["combinada_peso_fijo_0_5"]),
                        ("Mezcla con B2 anidado", ex["combinada_b2_anidada"]),
                        ("v3.2 publicada (con la Tercera FEB)", p))], {1, 2}, {3})}
+<p>{ev("dato")}Cortes 2022-2024, 1.427 personas × corte; el error es la media de las 33 métricas relativa a la v2. La
+red sola ya gana a la v2 (en la v3.1, con 15 ligas, quedaba +1,7 %). Por grupo de destino: EuroLeague −2,1 %
+[−3,3, −0,8]; resto de Europa −2,5 %; FEB −2,5 %; NBA/G League −3,4 %.</p>
+<p>{ev("lectura")}<b>Puerta de control.</b> Se cumplen el error global y el destino EuroLeague, pero falla la
+cobertura del 80 % en 4 de los pares con ≥ 30 personas: Segunda → Tercera FEB 0,774; G League → NBA 0,858;
+NBA → G League 0,862; NCAA → NBA 0,769. Se informa y queda pendiente para el examen limpio.</p>
 <p>{_rapm_texto(ex)}</p>{_nu_texto(ex)}"""
-    return ("Resultados v3.2", "La ablación decide con evidencia; lo indeterminado se conserva", cuerpo)
+    return ("Resultados v3.2", "La red más simple gana; dos piezas se quedan por sus salvaguardas", cuerpo)
 
 
 def _rapm_texto(ex: dict) -> str:
@@ -269,12 +298,45 @@ covarianza del par de ligas en vez de sumar dos varianzas frente a la EuroLeague
 el de la liga de destino y solo marca la extrapolación.</p></div>
 {pares}
 <p>{ev("dato")}El nivel de la liga pesa poco en la incertidumbre de un jugador: entre el 2 y el 4 % de la varianza
-total (mediana), y las filas en las que restar esa parte daría un valor negativo son menos del 0,05 %. {ev("dato")}
-Las traducciones publicadas son lineales y tienen residuo de ciclo exactamente 0. El residuo de la red al codificar y
+total (mediana). La vara de destino corrige las cuentas, pero apenas cambia la anchura de los intervalos.
+{_vj_texto(R)}</p>
+<p>{ev("dato")}Las traducciones publicadas son lineales y tienen residuo de ciclo exactamente 0. El residuo de la red al codificar y
 decodificar es de {n(ci["medio"], 3)} DT de media ({ci["triangulos"]} triángulos; máximo {n(ci["max_pts"], 2)} en
-pts/100 y {n(ci["max_ts"], 2)} en TS%; {ci["altos"]} por encima de 0,5 DT): se usa como salvaguarda de la ablación,
-no se publica.</p>"""
+pts/100 y {n(ci["max_ts"], 2)} en TS%; {ci["altos"]} por encima de 0,5 DT). Es el camino codificar-decodificar de la
+red, que no se publica desde que se descartó B3: queda como diagnóstico (criterio §12) y como salvaguarda de la
+ablación.</p>
+<h3>Qué recibe el artifact</h3>
+<ul><li><b>Constantes por liga de destino</b> (δ_d, s_d, μ_d,t,pos, τ_d,pos y soporte) en
+<span class="mono">destino/constantes.json</span>.</li>
+<li><b>Covarianza del nivel por par</b> de ligas (v2 con covarianza, red y mezcla) en
+<span class="mono">destino/covarianza/</span>, por métrica.</li>
+<li><b>Capacidad de cada jugador</b> (θ, v_j) sin la incertidumbre del nivel de su liga, en
+<span class="mono">destino/capacidad/</span>.</li>
+<li>Con ellas, el artifact pone a 0 la liga que se elija como destino (ACB = 0, BBL = 0…) y calcula valor, rango y
+marca de extrapolación sin volver a ajustar nada.</li></ul>"""
     return ("Vara de destino", "Cualquier liga puede ser la vara sin mover el centro de ningún jugador", cuerpo)
+
+
+def _vj_texto(R: dict) -> str:
+    c = R.get("constantes_destino") or {}
+    fr, tr = c.get("v_j_negativa_fraccion") or {}, c.get("v_j_negativa_tras_11b") or {}
+    if not fr:
+        return ""
+    resto = max((v for k, v in fr.items() if k != "rapm"), default=0.0)
+    t = (f"{ev('dato')}Restar a Var(θ) la parte del nivel daría un valor negativo, como mucho, en el "
+         f"{n(resto, 2, pct=True)} de las filas de cada métrica, salvo en el RAPM")
+    r = tr.get("rapm")
+    if isinstance(r, dict):
+        t += (f" ({n(r['antes'], 0, pct=True)} con la varianza de nivel de la v2, que no tiene intervalo de RAPM). "
+              f"Para el RAPM el nivel se resta con el mismo modelo que da el valor de cada fila "
+              f"(w_fila·sd_red + (1 − w_fila)·sd_v2, criterio §11b) y la fracción queda en "
+              f"{n(r['despues'], 1, pct=True)}. Sigue por encima del 1 %: en las filas que usan solo la red, la "
+              f"varianza del nivel es comparable a la del propio RAPM. En ningún caso se trunca a 0 (Var(θ) conserva "
+              f"al menos el 10 %), así que en esas filas el intervalo del RAPM es algo estrecho; queda señalado para "
+              f"el examen limpio.")
+    else:
+        t += "."
+    return t
 
 
 # ================================================================================================== 07 estilos
@@ -343,7 +405,10 @@ niveles del 50, 80 y 90 %.</li>
     fil = []
     for k, nom in (("mae_min", "Error medio de minutos"), ("acierto_rol", "Acierto de rol"),
                    ("mae_pts_p100", "Error medio de pts/100"), ("mae_ts_pct", "Error medio de TS%"),
-                   ("mae_C", "Error medio de la contribución C"), ("cob80_pts_p100", "Cobertura 80 % pts/100"),
+                   ("mae_ast_pct", "Error medio de AST%"), ("mae_C", "Error medio de la contribución C"),
+                   ("sesgo_C", "Sesgo de C (previsto − real)"), ("cob50_pts_p100", "Cobertura 50 % pts/100"),
+                   ("cob80_pts_p100", "Cobertura 80 % pts/100"), ("cob90_pts_p100", "Cobertura 90 % pts/100"),
+                   ("winkler80_pts_p100", "Winkler 80 % pts/100"), ("cob80_min", "Cobertura 80 % minutos"),
                    ("cob90_min", "Cobertura 90 % minutos")):
         fil.append([nom, n(t["v3.1_motor"].get(k), 3), n(t["v3.2"].get(k), 3)])
     f = s["final"]
@@ -358,8 +423,39 @@ niveles del 50, 80 y 90 %.</li>
                  f"de destino × corte {rango(dm['spearman_medio'], *dm['spearman_ic90'], 2)} (IC 90 %, {dm['pools']} "
                  f"grupos). Brier de P(cuartil superior): {n(dm.get('brier'), 3)} (referencia sin modelo "
                  f"{n(dm.get('base_brier'), 3)}).</p>")
-    cuerpo = metodo + f"""<h3>Resultados</h3>
-{tabla(["Medida (examen sin fuga)", "Motor v3.1", "v3.2"], fil, {1, 2}, {2})}{dec}{extra}"""
+    nombres = {"uso_eficiencia": "Curva uso-eficiencia (k_β)", "companeros": "Efecto compañeros (k_c)",
+               "redistribuir_uso": "Redistribución del uso", "adaptacion": "Adaptación", "ruido_personal": "Ruido personal"}
+    estado = {"quitar": "Se quita", "conservar": "Se conserva", "indeterminado": "Indeterminado: se conserva"}
+    pasos = []
+    for k, x in f["pasos"].items():
+        pts, ts = x["pts_p100"], x["ts_pct"]
+        extra_p = ""
+        if "winkler80_pts" in x and x["winkler80_pts"].get("peor"):
+            extra_p = f"; Winkler 80 % {n(x['winkler80_pts']['delta'], 1, pct=True, signo=True)}"
+        pasos.append([nombres.get(k, k), rango(pts["delta"], *pts["ic90"], 1, pct=True, signo=True),
+                      rango(ts["delta"], *ts["ic90"], 1, pct=True, signo=True) + extra_p, estado.get(x["estado"], x["estado"])])
+    a2 = f["A2"]
+    cuerpo = metodo + f"""<h3>Decisión sobre cada paso (A1, A3)</h3>
+<p>Δ = MAE sin el paso / MAE con él − 1; IC 90 % por club. Un Δ negativo significa que quitar el paso mejora.</p>
+{tabla(["Paso", "pts/100", "TS%", "Decisión"], pasos, {1, 2})}
+<p>{ev("dato")}Con la curva uso-eficiencia y el efecto compañeros fuera, la rejilla de A3 queda en k = (0, 0). La
+producción del Atlas (A2) mejora el criterio ponderado J_ω {rango(a2["J_omega_A2_menos_A3"], *a2["ic90"], 1, pct=True, signo=True)}
+(IC 90 %), también con destino EuroLeague ({n(a2["delta_pts_euroleague"], 1, pct=True, signo=True)}), y se publica con
+los minutos y el rol del motor.</p>
+<h3>Examen anidado sin fuga</h3>
+<p>6.028 fichajes de 2021-22 a 2024-25 (4.525 con ≥ 300 minutos en destino). En cada corte se aplica lo decidido con
+los cortes anteriores; el primero usa el motor tal cual.</p>
+{tabla(["Medida (examen sin fuga)", "Motor v3.1", "v3.2"], fil, {1, 2}, {2})}{dec}{extra}
+<ul><li>{ev("dato")}<b>§5e, aceptación de la recalibración.</b> pts/100 cumple en los tres niveles y en los cuatro
+grupos de destino. En minutos, el 50 % queda ancho (cobertura 0,57) y el 80 % de NBA/G League sale 0,84: los
+intervalos de minutos todavía son algo conservadores.</li>
+<li>{ev("dato")}<b>§6a, banda de 50-300 minutos</b> (1.445 casos). Error tipificado medio de pts/100 −0,30 (DT 0,87) y
+de TS% −0,16: sobrestimamos a quien acaba jugando poco. La cobertura predictiva del 80 % es 0,84-0,86.</li>
+<li>{ev("dato")}<b>§7, decil superior.</b> Error medio de la contribución 6,22, con un sesgo de −3,85: el modelo es
+prudente con los mejores fichajes.</li>
+<li>{ev("lectura")}<b>Fuga.</b> Con la fuente con fuga la cobertura del 90 % de pts/100 era 0,862 y sin ella 0,835
+antes de recalibrar: los intervalos con fuga eran optimistas. Por eso las cifras absolutas salen solo de la fuente
+sin fuga.</li></ul>"""
     return ("Simulador v3.2", "Menos mecanismo en la producción y rangos que cubren lo que dicen", cuerpo)
 
 
@@ -375,9 +471,10 @@ IC 90 % {n(b7.get("ic90_inf_%"), 1, signo=True)} a {n(b7.get("ic90_sup_%"), 1, s
 {"el límite está en la estructura del motor" if b["veredicto_B7"]["limite_en_la_estructura"] else "el límite está en el ruido, no en la estructura"}.</p>
 <p>{ev("dato")}B9 (minutos y producción en un solo modelo): correlación entre el error de minutos y el de pts/100
 {n(b9["correlacion_error_min_error_prod"], 2)}; cota del oráculo {n(b9["cota_mejora_%"], 1, signo=True)} %.
-{"Se abre B9." if b["veredicto_B9"]["abrir_B9"] else "No compensa abrir B9."}</p>
+{"Se cumplen las dos condiciones de apertura: la regla dice abrir B9, que queda propuesto para una v3.3 pendiente de aprobación (no se aplica en la v3.2)." if b["veredicto_B9"]["abrir_B9"] else "No compensa abrir B9."}</p>
 <p>{ev("dato")}Línea base de minutos con gradient boosting: {n(b["minutos_gbm"]["mae_gbm"], 2)} frente a
-{n(b["minutos_gbm"]["mae_motor"], 2)} del motor ({"el motor gana con claridad" if b["minutos_gbm"]["motor_gana_claramente"] else "sin ventaja clara del motor"}).</p>"""
+{n(b["minutos_gbm"]["mae_motor"], 2)} del motor ({"el motor gana con claridad" if b["minutos_gbm"]["motor_gana_claramente"] else "sin ventaja clara del motor: un modelo de minutos con gradient boosting es candidato para la v3.3, pendiente de aprobación"}).</p>
+<p>{ev("dato")}La red pequeña (MLP) supervisada queda peor que el motor ({n(b["B7"]["pts_p100"].get("mejora_mlp_frente_motor_%"), 1, signo=True)} %).</p>"""
     cuerpo = f"""<p>Dos ideas más ambiciosas se evaluaron sin cambiar el simulador, con umbrales fijados de antemano: un
 modelo supervisado directo sobre los fichajes (B7) y un modelo conjunto de minutos y producción (B9).</p>{res}
 <h3>Descartadas</h3>
@@ -396,13 +493,29 @@ def limites(R: dict) -> tuple[str, str, str]:
 orientativas hasta el examen 2025-26 → 2026-27, prerregistrado con las huellas SHA-256 de las configuraciones.</li>
 <li>{ev("dato")}<b>Cobertura desigual de jugada a jugada.</b> NCAA sin cambios de quinteto hasta 2023-24; CBA sin
 coordenadas de tiro y con quintetos del 61-93 %; VTB sin jugada a jugada antes de marzo de 2022.</li>
-<li>{ev("hipotesis")}<b>Identidad de los puentes.</b> Una fusión errónea mueve niveles enteros. La auditoría de 100
-puentes exige una precisión con cota inferior de Clopper-Pearson ≥ 0,95; si no se cumple, se sube el umbral de fusión
-a 0,85.</li>
+<li>{ev("hipotesis")}<b>Identidad de los puentes.</b> Una fusión errónea mueve niveles enteros. La muestra de 100
+puentes de las ligas con pocos puentes (criterio §13) está preparada para revisión manual; la regla exige una precisión
+con cota inferior de Clopper-Pearson ≥ 0,95 y, si no se cumple, se sube el umbral de fusión a 0,85. {_auditoria_texto(R)}</li>
+<li>{ev("dato")}<b>Cobertura por par.</b> La normalización falla la cobertura del 80 % en 4 pares con ≥ 30 personas
+(Segunda → Tercera FEB, G League ↔ NBA y NCAA → NBA). Las traducciones de esos pares deben leerse con más cautela.</li>
+<li>{ev("dato")}<b>Minutos conservadores.</b> Tras recalibrar, el intervalo del 50 % de minutos cubre un 57 %, y en la
+banda de 50-300 minutos el simulador sobrestima la producción de quien acaba jugando poco.</li>
 <li>{ev("lectura")}<b>Fuga en los pesos del simulador.</b> La fuente sin fuga reajusta la normalización por corte, pero
 los pesos de utilidad y calibración se aprenden con la fuente completa.</li>
-<li>{ev("lectura")}<b>Rol ordinal (C1)</b> y <b>B8</b> quedan como trabajo futuro.</li></ul>"""
+<li>{ev("lectura")}<b>Trabajo futuro.</b> El rol como variable ordinal (C1), el modelo secuencial de trayectorias
+(B8) y, si se aprueban, el modelo conjunto de minutos y producción (B9) y los minutos con gradient boosting (v3.3).</li></ul>"""
     return ("Límites", "Dónde termina lo que sabemos", cuerpo)
+
+
+def _auditoria_texto(R: dict) -> str:
+    a = (R.get("auditoria_identidades") or {}).get("roles")
+    if not a:
+        return ""
+    ej = a.get("ejemplos") or []
+    nom = " / ".join(ej[0]["nombres"]) if ej else ""
+    return (f"{ev('dato')}La auditoría automática de identidades encuentra {a['mezcladas']} personas con nombres "
+            f"distintos fusionados de {n(a['personas'], 0)} ({n(a['tasa'], 2, pct=True)})" +
+            (f", por ejemplo {esc(nom)}" if nom else "") + "; su corrección en el crosswalk está pendiente de decisión.")
 
 
 # ================================================================================================== 12 reproducibilidad

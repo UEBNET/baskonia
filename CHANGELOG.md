@@ -1,5 +1,44 @@
 # Registro de cambios
 
+## 2026-11-03 — Normalización v3.2 y simulador v3.2 (versiones nuevas, la v3.1 queda intacta)
+
+Configuraciones nuevas, que no sustituyen a las anteriores: `configs/normalization_v32.yaml` (salida
+`data/modelos/v3_2/`) y `configs/simulation_v32.yaml` (`CERNO_SIMULADOR=v32`, salida `data/modelos/simulador/v3_2/`).
+Criterios fijados antes de ver los resultados (documento de criterios del 02-11-2026; paquete aprobado). Detalle y
+cifras: `docs/normalizacion_v32.md`, `docs/simulador_v32.md`. Cadena reanudable: `scripts/actualizar_v32.sh`.
+
+**Normalización v3.2**
+* **B1, B4, B6 · ablación** con cortes anidados 2022-2024, 5 redes por variante y regla de no inferioridad (IC95,sup
+  < +0,5 %, cobertura en [0,78, 0,85], salvaguardas de ciclo y de niveles) (`python -m bbnorm3 ablacion`).
+  Se quitan K = 8 (queda K = 4), la inferencia semiamortizada (B4), FiLM, el cabezal por liga y la t de Student (B6).
+  Se conservan ζ, la consistencia de ciclo (salvaguarda) y la IPW (salvaguarda de niveles). La combinación de las cinco
+  bajas cumple en 2023 (−1,1 %) y 2024 (−1,4 %). Las piezas siguen en el código y en `_completa`.
+* **B5 · ensemble de 20 redes**; la salvaguarda de discrepancia (> 0,5 DT) no se activa en ningún caso.
+* **B2 · peso de mezcla por métrica** (regla del 1 %): solo el RAPM pasa a w = 1; el resto se queda en 0,5.
+* **Examen anidado**: red sola −1,4 % frente a la v2; v3.2 publicada −2,8 % [−3,2, −2,4], cobertura 0,811.
+  Falla la cobertura en 4 pares (Segunda → Tercera FEB, G League ↔ NBA, NCAA → NBA): pendiente del examen limpio.
+* **Vara de destino (clave)**: cualquier liga a 0. `python -m bbnorm3 destino` exporta en `data/modelos/v3_2/destino/`
+  las constantes por liga de destino (δ_d, s_d), la covarianza del nivel por par (v2 con covarianza, red y mezcla con
+  la cota de Cauchy-Schwarz), la capacidad de cada jugador (θ, v_j) y la marca de extrapolación, sin recortar el
+  centro. §11b: la varianza propia del RAPM resta el nivel con el mismo modelo que da el valor de la fila.
+* **§13** muestra de 100 puentes para revisión manual (`python -m bbmodel auditoria-puentes`) y página interactiva.
+
+**Simulador v3.2**
+* **Fuente sin fuga `V32_corte`**: normalización ajustada solo con temporadas ≤ t en cada corte.
+* **A1** (pasos con no inferioridad): fuera la curva uso-eficiencia y el efecto compañeros; se conservan la
+  redistribución del uso, la adaptación y el ruido personal. **A3**: la rejilla queda en k = (0, 0).
+* **A2**: se publica la producción del Atlas (J_ω −1,0 %), con los minutos y el rol del motor.
+* **A4**: recalibración conformal de dos colas por métrica × grupo de destino, con recencia y contracción
+  (n0 = 30). Cobertura de pts/100 50/80/90 %: 0,42/0,71/0,84 → 0,50/0,80/0,90.
+* Examen anidado: pts/100 3,85 → 3,81; TS% 5,24 → 4,97; contribución C 4,66 → 4,50; Spearman por liga 0,44 → 0,47.
+* **B7 y B9** evaluados sin aplicarse (`python -m bbfit b7-b9`): B7 −4,7 % (no llega al −5 %); B9 cumple la regla de
+  apertura y queda propuesto para una v3.3, pendiente de aprobación.
+* Descartados B3 y B8 (B8 figura como trabajo futuro en el artículo).
+
+**Artículo científico v3.2**: `docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf` (`python -m cerno_articulo`)
+sustituye a `docs/articulo/estilos_de_juego_baskonia.pdf`. Prerregistro del examen limpio 2026-27:
+`docs/preregistro_2026-27.md`.
+
 ## 2026-11-01 — 20 ligas: CBA, BNXT, NCAA D-I (top-50), NBL y VTB
 
 * Extracción 2020-21 → 2026-27 (corte 29-10-2026) desde el jugada a jugada, con adaptadores que traducen cada partido
