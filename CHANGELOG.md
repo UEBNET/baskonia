@@ -1,5 +1,25 @@
 # Registro de cambios
 
+## 2026-11-04 — CERNO v4.0 · F3: función de conjunto (examen acotado, puerta dura §11.3)
+
+Detalle: `docs/checkpoints/V40_F3.md`, `docs/modelo_equipo_v40.md` §4. Puerta F2 aprobada por el CEO con la orden de ejecutar
+F3 como examen acotado («opción (a)»).
+
+* **Modelo** (`bbequipo/conjunto.py`): deep sets g(S) = ρ(Σ_i ϕ(z_i)) sobre el residuo de F1 + F2 (β y M_r congelados);
+  ϕ 44→16→16, ρ 16→16→1, AdamW, 5 semillas promediadas. Examen §11.3 en quintetos no vistos de t+1 (99 % de los tramos) con
+  IC95 por bootstrap de partidos.
+* **Resultado**: **pasa** en los tres cortes de decisión (cocientes 0,99926 / 0,99933 / 0,99951; IC95 superiores < 1).
+  Reducción del RMSE por tramo 0,05–0,07 %; señal común de g ≈ 2,8 pts/100 en la diferencia entre quintetos, calibrada.
+* **Ablación aditiva [POST HOC]** (ρ lineal, g = Σ h(z_i)): gana lo mismo (0,99921 / 0,99942 / 0,99942). **Diagnóstico**:
+  g es una corrección por jugador, dominada por el nº de jugadores sin perfil donde la cobertura es baja (corte 2022:
+  R² 0,94 con los agregados; +2,4 pts/100 por jugador con perfil). Los jugadores en su primera temporada tienen β 1,3 pts/100
+  por debajo de la media de su liga (−4,1 en Euroliga): F1 les imputa la media y F3 lo corrige.
+* **Lectura**: no hay estructura de quinteto más allá de lo aditivo con estos datos («la red más simple gana»). Puerta
+  presentada al CEO con tres opciones: publicar la red completa, publicar la variante aditiva (recomendada, post hoc por
+  parsimonia) o no publicar y llevar la imputación de «jugador nuevo» a F4.
+* Salidas: `data/modelos/v4_0/conjunto/examen/` (resumen, redes por corte, ablación, diagnósticos) y producto en
+  `conjunto/` (red completa, a la espera de la decisión).
+
 ## 2026-11-04 — CERNO v4.0 · F2: sinergia de pares y efectos dirigidos sobre compañeros
 
 Detalle: `docs/checkpoints/V40_F2.md`, `docs/modelo_equipo_v40.md` §3. Puerta F1 aprobada por el CEO y orden de arrancar
