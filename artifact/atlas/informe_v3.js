@@ -480,13 +480,13 @@ ${raw}`;
 
     // 6 · contexto y conexiones
     const necT = nec ? `<table class="r3t nec"><thead><tr><th>Aspecto del juego</th><th>${E(d.nombre_club)} · percentil en su liga</th><th>${E(apeJ)} · percentil en su puesto</th><th>Lectura</th></tr></thead><tbody>${nec.map((x) => `<tr><td><b>${E(x.n)}</b><small>${E(x.det)}</small></td><td>${barraPR(x.e, null, null, { ref: 50, w: 110, cls: x.estilo ? "neu" : x.e >= 65 ? "up" : x.e <= 35 ? "dn" : "" })}</td><td>${barraPR(x.p, null, null, { ref: 50, w: 110, cls: x.estilo ? "neu" : x.p >= 65 ? "up" : x.p <= 35 ? "dn" : "" })}</td><td class="ver ${x.v[0]}">${E(x.v[1])}</td></tr>`).join("")}</tbody></table>` : "";
-    const rankV = (orden, yoF, temp, simu) => `<ol class="r3rank">${orden.slice(0, 14).map((o, i) => { const S = sNivL(o.L, temp) ?? 0; return `<li class="${yoF(o) ? "yo" : ""}"><span>${i + 1}</span><span>${E(nom(o.j.nombre))}${simu && o.el ? " · simulado" : ""}</span><b>${ESC.txt(S)}</b></li>`; }).join("")}</ol>`;
+    const rankV = (orden, yoF, temp, simu) => `<ol class="r3rank">${orden.slice(0, 14).map((o, i) => { const S = sNivCL(o.L, temp) ?? 0; return `<li class="${yoF(o) ? "yo" : ""}"><span>${i + 1}</span><span>${E(nom(o.j.nombre))}${simu && o.el ? " · simulado" : ""}</span><b>${ESC.txt(S)}</b></li>`; }).join("")}</ol>`;
     if (d) {
       const c6 = c.c6, est = s2ok ? s2.estilo : null, hueco = est && est.hueco_cubierto ? simEu(est.hueco_cubierto) : null, peu = est ? euDeVec(est.jugador) : null, teu = est ? euDeVec(est.equipo) : null;
       const dU = est ? 100 * (est.d_entropia_uso || 0) : null, dPs = est ? 100 * (est.d_entropia_pases || 0) : null;
       const QA = c6 && c6.qa != null ? c6.qa : sim.qa, QD = c6 && c6.qd != null ? c6.qd : sim.qd;
       const qd = QA != null && QD != null ? Math.round(ESC.dS("sinergia_rapm", QD)) - Math.round(ESC.dS("sinergia_rapm", QA)) : null;
-      const sa = c6 && c6.nivSin != null ? sNivL(c6.nivSin, d.temporada) : sNivL(sim.antes.L, d.temporada), sd = c6 && c6.nivCon != null ? sNivL(c6.nivCon, d.temporada) : sNivL(sim.despues.L, d.temporada);
+      const sa = c6 && c6.nivSin != null ? sNivCL(c6.nivSin, d.temporada) : sNivCL(sim.antes.L, d.temporada), sd = c6 && c6.nivCon != null ? sNivCL(c6.nivCon, d.temporada) : sNivCL(sim.despues.L, d.temporada);
       const cubreN = nec ? nec.filter((x) => x.v[1] === "Cubre una carencia" || x.v[1] === "Refuerza un punto fuerte").map((x) => x.n.toLowerCase()) : [], noN = nec ? nec.filter((x) => x.v[1] === "No corrige la carencia").map((x) => x.n.toLowerCase()) : [];
       const lead6a = `${cubreN.length ? `Con ${E(apeJ)}, ${E(d.nombre_club)} gana en <b>${E(cubreN.join(", "))}</b>.` : `${E(apeJ)} no cubre con claridad ninguna carencia de ${E(d.nombre_club)}.`}${noN.length ? ` Sigue sin corregir: ${E(noN.join(", "))}.` : ""}${eqv ? ` Net del equipo con él: <b>${SG0(eqv.d_net, 2)} pts/100</b> (rango 90 %: ${SG0(eqv.d_net_lo90, 1)} a ${SG0(eqv.d_net_hi90, 1)}).` : ""}`;
       const kTeam = `<div class="r3kp t4">

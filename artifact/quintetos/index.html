@@ -380,7 +380,7 @@ body { background: var(--bg); }
       <h1>¿Quién juega con quién, y cuánto rinden juntos?</h1>
       <p class="sub">Quintetos, parejas, tríos, impacto en pista y red de pases de cada equipo, reconstruidos del jugada a jugada. <b>Las cifras de rendimiento se leen en una escala de −100 a +100</b> (0 = la media; la vara es la Euroliga) y su valor original por 100 posesiones aparece al pasar el ratón. Cómo se calcula, en «Aprende».</p>
     </div>
-    <div class="row" style="gap:10px;align-items:center;flex-wrap:wrap"><span class="escsw" data-tip="Escala ±100: 0 = media de la Euroliga (nivel) o unidad media (net, sinergia, efectos), con la dispersión de la Euroliga como vara. Pasa el ratón por cualquier cifra para ver su valor original y su percentil. «Originales» muestra los pts/100 tal cual."><span>Cifras</span><span class="seg" id="escModo" role="group" aria-label="Cifras"><button class="segb" type="button" data-v="escala" aria-pressed="true">Escala ±100</button><button class="segb" type="button" data-v="original" aria-pressed="false">Originales</button></span></span>
+    <div class="row" style="gap:10px;align-items:center;flex-wrap:wrap"><span class="escsw" data-tip="Escala ±100: 0 = media de su propia liga (nivel: jugador medio para jugadores y unidades, club medio para equipos y plantillas) o unidad media (net, sinergia, efectos), con la dispersión de la Euroliga como vara. Pasa el ratón por cualquier cifra para ver su valor original y su percentil. «Originales» muestra los pts/100 tal cual."><span>Cifras</span><span class="seg" id="escModo" role="group" aria-label="Cifras"><button class="segb" type="button" data-v="escala" aria-pressed="true">Escala ±100</button><button class="segb" type="button" data-v="original" aria-pressed="false">Originales</button></span></span>
     <button class="switch" type="button" id="btnAprende" aria-pressed="true" data-tip="Muestra u oculta los recuadros «¿Cómo se lee?» junto a cada gráfico."><i></i>Modo aprendizaje</button></div>
   </header>
 
@@ -466,7 +466,12 @@ const ESC = (() => {
   const sgn = (v, d) => { if (!okn(v)) return "–"; const r = Number(v.toFixed(d)); return (r > 0 ? "+" : r < 0 ? "−" : "±") + num(r, d); };
   function usar(b) { if (b && b.familias) E = { ...DEF, ...b, familias: { ...DEF.familias, ...Object.fromEntries(Object.entries(b.familias).map(([k, f]) => [k, { ...(DEF.familias[k] || {}), ...f }])) } }; }
   const fam = (k) => E.familias[k] || DEF.familias[k] || DEF.familias.z;
-  function ref(k, t) { const f = fam(k), r = f.ref && t ? f.ref[t] : null; return okn(r) ? r : okn(f.ref_defecto) ? f.ref_defecto : 0; }
+  // referencia del nivel por contexto (04-11-2026): la página da, con setRef, la media de la liga propia (jugadores o clubes)
+  let HR = null;
+  const setRef = (h) => { HR = h || null; };
+  const hrOn = (k) => k === "nivel" && HR && HR.on();
+  function refEL(k, t) { const f = fam(k), r = f.ref && t ? f.ref[t] : null; return okn(r) ? r : okn(f.ref_defecto) ? f.ref_defecto : 0; }
+  function ref(k, t) { if (hrOn(k)) { const r = HR.ref(t); if (okn(r)) return r; } return refEL(k, t); }
   function z(k, v, t) { const f = fam(k); return okn(v) && f.dt > 0 ? (v - ref(k, t)) / f.dt : null; }
   const S = (k, v, t) => { const q = z(k, v, t); return q == null ? null : 100 * Math.tanh(q / (E.factor || 2)); };
   // diferencia (o desviación respecto a otra media) en puntos de escala: sin referencia
@@ -474,7 +479,7 @@ const ESC = (() => {
   const inv = (k, s, t) => ref(k, t) + (E.factor || 2) * fam(k).dt * Math.atanh(Math.max(-0.999, Math.min(0.999, s / 100)));
   // percentil (0-100) en una lista de cuantiles 0..100
   function pq(q, v) { if (!q || !q.length || !okn(v)) return null; const n = q.length - 1; if (v <= q[0]) return 0; if (v >= q[n]) return 100; let i = 0; while (i < n - 1 && q[i + 1] < v) i++; return (100 / n) * (i + (v - q[i]) / Math.max(1e-9, q[i + 1] - q[i])); }
-  function pEL(k, v, t) { const f = fam(k), q = Array.isArray(f.q_el) ? f.q_el : f.q_el ? (f.q_el[t] || f.q_el[Object.keys(f.q_el).filter((x) => !/2026-27/.test(x)).sort().pop()]) : null; return pq(q, v); }
+  function pEL(k, v, t) { if (hrOn(k)) return HR.p ? HR.p(v, t) : null; const f = fam(k), q = Array.isArray(f.q_el) ? f.q_el : f.q_el ? (f.q_el[t] || f.q_el[Object.keys(f.q_el).filter((x) => !/2026-27/.test(x)).sort().pop()]) : null; return pq(q, v); }
   // percentil de v dentro de una muestra (opcionalmente ponderada): [[valor, peso], ...] ya ordenada o no
   function pDe(vals, v) { if (!vals || !vals.length || !okn(v)) return null; let a = 0, w = 0; vals.forEach((x) => { const [y, p] = Array.isArray(x) ? x : [x, 1]; if (!okn(y)) return; w += p; if (y < v) a += p; else if (y === v) a += p / 2; }); return w ? 100 * a / w : null; }
   const txt = (s) => { if (!okn(s)) return "–"; const r = Math.round(s); return (r > 0 ? "+" : r < 0 ? "−" : "±") + Math.abs(r); };
@@ -485,8 +490,9 @@ const ESC = (() => {
   // texto del tooltip: valor en la escala, valor original y percentiles
   function tip(k, v, t, o = {}) {
     const f = fam(k), s = o.S != null ? o.S : S(k, v, t), p = o.pEL !== undefined ? o.pEL : pEL(k, v, t);
-    return `<b>${he(o.nombre || f.nombre)}: ${txt(s)}</b> <span style="opacity:.75">(escala ±100, Euroliga = 0${s != null ? " · " + palabra(s) : ""})</span><br>Valor original: <b>${he(o.raw || raw(k, v))}</b>` +
-      (okn(p) ? `<br>Percentil en la Euroliga${t ? " " + he(t) : ""}: ${Math.round(p)}` : "") + (okn(o.pLiga) ? `<br>Percentil en su liga: ${Math.round(o.pLiga)}` : "") + (o.extra ? `<br>${o.extra}` : "");
+    const hk = hrOn(k), lab = hk ? HR.lab() : "Euroliga", donde = hk ? HR.donde() : "en la Euroliga";
+    return `<b>${he(o.nombre || f.nombre)}: ${txt(s)}</b> <span style="opacity:.75">(escala ±100, ${he(lab)} = 0${s != null ? " · " + palabra(s) : ""})</span><br>Valor original: <b>${he(o.raw || raw(k, v))}</b>` +
+      (okn(p) ? `<br>Percentil ${he(donde)}${t ? " " + he(t) : ""}: ${Math.round(p)}` : "") + (okn(o.pLiga) ? `<br>Percentil en su liga: ${Math.round(o.pLiga)}` : "") + (o.extra ? `<br>${o.extra}` : "");
   }
   // cifra lista para pintar: escala (o valor original si así se ha elegido) con el otro en el tooltip
   function html(k, v, t, o = {}) {
@@ -507,7 +513,7 @@ const ESC = (() => {
   function ligasNivel(t) { const f = fam("nivel"), L = (f.ligas || {})[t] || {}; return ordenLigas(Object.keys(L)).map((l) => ({ l, L: L[l], S: S("nivel", L[l], t) })); }
   // cambio de afinidad entre dos repartos de estilo (p, 0-1): [{k, d}] de mayor a menor |d| en puntos (0-100)
   function cambioAfinidad(pa, pb, min = 3) { return pa.map((p, k) => ({ k, d: 100 * ((pb[k] || 0) - p) })).filter((o) => Math.abs(o.d) >= min).sort((a, b) => Math.abs(b.d) - Math.abs(a.d)); }
-  return { DEF, usar, fam, ref, z, S, dS, inv, pq, pEL, pDe, txt, cls, palabra, pctTxt, raw, sgn, tip, html, barra, get modo() { return modo; }, setModo, familias: () => E.familias, formula: () => E.formula || DEF.formula,
+  return { DEF, usar, fam, ref, refEL, setRef, z, S, dS, inv, pq, pEL, pDe, txt, cls, palabra, pctTxt, raw, sgn, tip, html, barra, get modo() { return modo; }, setModo, familias: () => E.familias, formula: () => E.formula || DEF.formula,
     LIGAS_INFO, ligaNom, ligaCorto, ordenLigas, ligaCol, ligasNivel, cambioAfinidad, he };
 })();
 // =====================================================================================================
@@ -540,6 +546,33 @@ const escItems = (items, fam) => items.map((it) => { const fm_ = it.fam || fam; 
 // nivel conjunto de una unidad (quinteto, trío, pareja): media simple de L de sus jugadores, en la escala de Nivel
 function nivelConjunto(u) { const Ls = u.map((j) => J(j).L).filter(ok); return Ls.length === u.length && Ls.length ? Ls.reduce((a, b) => a + b, 0) / Ls.length : null; }
 function nivelEquipo(eq) { let s = 0, w = 0; D.on.filter((r) => r.team_id === eq && r.fase === "regular").forEach((r) => { const L = J(r.j).L; if (ok(L) && r.min_on > 0) { s += L * r.min_on; w += r.min_on; } }); return w ? s / w : null; }
+// ---- referencia del nivel (decisión del usuario, 04-11-2026): su propia liga = 0.
+//   jugadores y unidades (quintetos, tríos, parejas): 0 = jugador medio de su liga (L medio por minutos de sus jugadores,
+//     escalas.familias.nivel.ligas), percentil entre sus jugadores;
+//   equipos y plantillas: 0 = club medio de su liga (media del nivel de sus equipos), percentil entre sus equipos.
+//   «Nivel de su liga» y la guía comparan ligas entre sí: siguen con la Euroliga = 0 (enEL), rotulado.
+let QREF = null;
+const qCtx = () => QREF || (D ? { liga: D.liga, temp: D.temp, tipo: "jugador" } : null);
+function conRef(ctx, fn) { const prev = QREF; QREF = ctx; try { return fn(); } finally { QREF = prev; } }
+const enEquipo = (fn) => { const c = qCtx(); return conRef(c ? { liga: c.liga, temp: c.temp, tipo: "equipo" } : null, fn); };
+const enClubEV = (l, t, fn) => conRef({ liga: l, temp: t, tipo: "club" }, fn);
+const enJugEV = (l, t, fn) => conRef({ liga: l, temp: t, tipo: "jugador" }, fn);
+const enEL = (fn) => conRef({ liga: "euroleague", temp: null, tipo: "euroleague" }, fn);
+const media_ = (v) => (v.length ? v.reduce((a, b) => a + b, 0) / v.length : null);
+function refJugQ(l, t) { const f = ESC.fam("nivel"), L = f.ligas || {}, v = (L[t] || {})[l]; if (ok(v)) return v;
+  let s = 0, n = 0; Object.keys(L).forEach((x) => { const a = L[x][l], b = (f.ref || {})[x]; if (ok(a) && ok(b)) { s += a - b; n++; } }); return n ? ESC.refEL("nivel", t) + s / n : null; }
+const QMED = new Map();
+const eqLiga = () => (D ? (D.equipos || []).map(nivelEquipo).filter(ok) : []);
+function refEqD() { if (!D) return null; const k = `D|${D.liga}|${D.temp}`; if (!QMED.has(k)) QMED.set(k, media_(eqLiga())); return QMED.get(k); }
+const clubsEV = (l, t) => (EV ? [...new Map(EV.F.filter((x) => x.liga === l && x.t === t && ok(x.L)).map((x) => [x.k, x.L])).values()] : []);
+function refClubEV(l, t) { const k = `EV|${l}|${t}`; if (!QMED.has(k) && EV) QMED.set(k, media_(clubsEV(l, t))); return QMED.get(k) ?? null; }
+const jugLiga = () => (D ? D.on.filter((r) => r.fase === "regular" && ok(J(r.j).L) && r.min_on > 0).map((r) => [J(r.j).L, r.min_on]) : []);
+const qLab = () => { const c = qCtx(); if (!c || c.tipo === "euroleague") return "Euroliga"; const n = ESC.ligaNom(c.liga); return c.tipo === "jugador" ? n : "club medio de la " + n; };
+const qN = () => { const c = qCtx(); return !c || c.tipo === "euroleague" ? "la Euroliga" : "la " + ESC.ligaNom(c.liga); };
+ESC.setRef({ on: () => !!qCtx() && qCtx().tipo !== "euroleague",
+  ref: (t) => { const c = qCtx(), tt = c.temp || t; return c.tipo === "jugador" ? refJugQ(c.liga, tt) : c.tipo === "equipo" ? refEqD() : refClubEV(c.liga, tt); },
+  p: (v) => { const c = qCtx(); return ESC.pDe(c.tipo === "jugador" ? (D && D.liga === c.liga ? jugLiga() : []) : c.tipo === "equipo" ? eqLiga() : clubsEV(c.liga, c.temp), v); },
+  lab: qLab, donde: () => { const c = qCtx(); return (c.tipo === "jugador" ? "en " : "entre los equipos de ") + qN(); } });
 const nivHtml = (L, extra = "") => nv("nivel", L, { raw: `L ${fs(L, 2)}`, extra });
 
 const signCls = (v, dir = 1) => (!ok(v) || dir === 0 || Math.abs(v) < 0.05 ? "" : v * dir > 0 ? "good" : "bad");
@@ -991,7 +1024,7 @@ function pistaQuinteto(u, T, opts = {}) {
     const [x, y] = slots[k] || [160, 125], o = J(j), r = T && T.by.get(j);
     const sub = opts.sub ? opts.sub(j, r) : "";
     const tip = `<b>${esc(o.nm)}</b>${o.pos3 ? ` · ${esc(POSN[o.pos3])}` : ""}${euJ(j) ? `<br>Estilo: ${esc(euJ(j)[2])}` : ""}` +
-      (r ? `<br>${fm(r.min_on)} en ${esc(FNOM[S.f])} · RAPM ${ESC.txt(nS("rapm_liga", r.rapm))} (${fs(r.rapm, 1)})<br>On−off ${ESC.txt(nS("onoff", r.net_rtg_onoff))} (${fs(r.net_rtg_onoff, 1)})` : "") + (ok(o.L) ? `<br>Nivel ${ESC.txt(nS("nivel", o.L))} (Euroliga = 0)` : "") + "<br><i>Clic: ficha del jugador</i>";
+      (r ? `<br>${fm(r.min_on)} en ${esc(FNOM[S.f])} · RAPM ${ESC.txt(nS("rapm_liga", r.rapm))} (${fs(r.rapm, 1)})<br>On−off ${ESC.txt(nS("onoff", r.net_rtg_onoff))} (${fs(r.net_rtg_onoff, 1)})` : "") + (ok(o.L) ? `<br>Nivel ${ESC.txt(nS("nivel", o.L))} (${esc(qLab())} = 0)` : "") + "<br><i>Clic: ficha del jugador</i>";
     const lx = x;
     return `<g class="hit" data-a="j" data-v="${esc(pid(j))}" ${tipA(tip)} tabindex="0" role="button" aria-label="${esc(o.nm)}">` +
       `<circle cx="${x}" cy="${y}" r="17" fill="${colJug(j)}" stroke="var(--surface)" stroke-width="2.5"/>` +
@@ -1115,7 +1148,7 @@ R.equipo = (el) => {
     kpi("DRtg", r.drtg, 1, "drtg", -1, "<b>Rating defensivo</b>: puntos recibidos por 100 posesiones. Más bajo es mejor (el puesto ya lo tiene en cuenta).") +
     kpi("Ritmo", r.ritmo, 1, "ritmo", 1, `<b>Ritmo</b>: posesiones por partido de ${D.qlen * 4} minutos. Puesto 1 = el más rápido.`) +
     kpi("Net en clutch", r.clutch_net_rtg, 1, "clutch_net_rtg", 1, "<b>Clutch</b>: últimos 5 minutos del último cuarto o de la prórroga con el marcador a 5 puntos o menos.", ` · ${fm(r.min_clutch)}`) +
-    (ok(Leq) ? `<div class="kpi"><span ${tipA("<b>Nivel de la plantilla</b>: media del nivel L de sus jugadores ponderada por minutos, en la escala ±100 (0 = media de la Euroliga de esa temporada).")}>Nivel</span><b>${nivHtml(Leq)}</b><small>Euroliga = 0</small></div>` : "");
+    (ok(Leq) ? `<div class="kpi"><span ${tipA("<b>Nivel de la plantilla</b>: media del nivel L de sus jugadores ponderada por minutos, en la escala ±100 (0 = equipo medio de su liga esa temporada).")}>Nivel</span><b>${enEquipo(() => nivHtml(Leq))}</b><small>${esc(enEquipo(qLab))} = 0</small></div>` : "");
   // lectura rápida
   const ins = [];
   if (ok(suerte) && Math.abs(suerte) >= 1) ins.push(`Su Net es <b>${fs(r.net_rtg)}</b> por 100 posesiones (${nv("net_equipo", r.net_rtg)} en la escala); si los rivales hubieran tirado triples y libres al promedio de la liga sería <b>${fs(r.net_rtg_suerte)}</b>: ${suerte < 0 ? `han tenido <b>mala suerte</b> (los rivales les han acertado más de lo normal, ${fs(-suerte)} por 100 posesiones)` : `les ha <b>sonreído la suerte</b> (los rivales han fallado más de lo normal, ${fs(suerte)} por 100 posesiones)`}.`);
@@ -1138,7 +1171,7 @@ R.equipo = (el) => {
     const q = m.q;
     return `<div class="dcard"><div class="cardhead"><h2 ${tipA(tip)}>${titulo}</h2>${q ? `<button class="btn ghost sm" type="button" data-a="q" data-v="${esc(qKey(q))}">Ver ficha →</button>` : ""}</div>
       ${pistaQuinteto(m.u, T, { sub: (j, rr) => (rr ? `${fm(rr.min_on)}` : "") })}
-      <div class="kv">${extra}${q ? `<div><span>Minutos</span><b>${fm(q.min)}</b></div><div><span>Net ajustado</span><b>${nv("net_quinteto", q.net_rtg_aj)}</b></div><div><span>ORtg / DRtg</span><b>${f(q.ortg, 0)} / ${f(q.drtg, 0)}</b></div>` : `<div><span>Minutos</span><b>&lt; 10'</b></div>`}${ok(nivelConjunto(m.u)) ? `<div ${tipA("Nivel conjunto: media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de la Euroliga)")}><span>Nivel conjunto</span><b>${nivHtml(nivelConjunto(m.u))}</b></div>` : ""}</div></div>`;
+      <div class="kv">${extra}${q ? `<div><span>Minutos</span><b>${fm(q.min)}</b></div><div><span>Net ajustado</span><b>${nv("net_quinteto", q.net_rtg_aj)}</b></div><div><span>ORtg / DRtg</span><b>${f(q.ortg, 0)} / ${f(q.drtg, 0)}</b></div>` : `<div><span>Minutos</span><b>&lt; 10'</b></div>`}${ok(nivelConjunto(m.u)) ? `<div ${tipA("Nivel conjunto: media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de su liga)")}><span>Nivel conjunto</span><b>${nivHtml(nivelConjunto(m.u))}</b></div>` : ""}</div></div>`;
   };
   const tit = tarjetaQ("Quinteto titular habitual", r.quinteto_titular_habitual,
     `<div ${tipA("Partidos que empezó este quinteto y quintetos iniciales distintos usados")}><span>Partidos de titular</span><b>${fi(r.partidos_quinteto_titular)} de ${fi(r.gp)}</b></div><div><span>Net (bruto)</span><b>${nv("net_quinteto", r.net_rtg_quinteto_titular)}</b></div>`,
@@ -1289,7 +1322,7 @@ function qTabla(T) {
     .concat([N("fg3a_rate", "% T3", "ff", 1, "% de los tiros de campo que son triples"), N("ast_pct", "% asist.", "ff", 1, "% de canastas asistidas"),
       N("ritmo", "Ritmo", "ctx", 1, "Posesiones por partido completo"), N("min_clutch", "Min clutch", "ctx", 1, "Minutos en clutch (últimos 5 min, ±5)"),
       N("min_basura", "Min basura", "ctx", 1, "Minutos de la basura (partido decidido)"), N("rapm_suma", "Σ RAPM", "ctx", 1, "Suma del RAPM de los cinco jugadores (pts/100, valor original)", { fmt: (v) => fs(v) }),
-      N("nivel_q", "Nivel conjunto", "ctx", 0, "Media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de la Euroliga)", { get: (q) => nivelConjunto(q.u), fmt: (v) => (ok(v) ? nivHtml(v) : "–") }),
+      N("nivel_q", "Nivel conjunto", "ctx", 0, "Media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de su liga)", { get: (q) => nivelConjunto(q.u), fmt: (v) => (ok(v) ? nivHtml(v) : "–") }),
       N("net_esperado", "Net esperado", "ctx", 1, "Net que predice el RAPM de los 10 jugadores en pista, escala ±100", { fmt: (v) => nv("net_quinteto", v, { nombre: "Net esperado", sinColor: true }) }),
       N("sinergia", "Sinergia", "ctx", 1, "(Net − esperado) contraída por la muestra, escala ±100: > 0 = rinde más que la suma de sus piezas", { fmt: (v) => `<b>${nv("sinergia_quinteto", v)}</b>` })]);
   const vis = cols.filter((c) => !c.g || grupos.includes(c.g));
@@ -1353,7 +1386,7 @@ function qFicha(T) {
     ${pistaQuinteto(q.u, T, { sub: (j, r) => (r && ok(r.rapm) ? `RAPM ${nTxt("rapm_liga", r.rapm)}` : "") })}
     ${avisoMuestra(q.poss)}
     <div class="stack" style="gap:2px"><div class="label">Frente a su equipo y a la liga</div>${puntos("ORtg", [["Quinteto", q.ortg, "q"], ["Equipo", tr.ortg, "e"], ["Liga", lgA.ortg, "l"]], 1)}${puntos("DRtg", [["Quinteto", q.drtg, "q"], ["Equipo", tr.drtg, "e"], ["Liga", lgA.drtg, "l"]], -1)}${puntos("Net", [["Quinteto", q.net_rtg, "q"], ["Equipo", tr.net_rtg, "e"], ["Liga", 0, "l"]], 1)}${leyendaPuntos()}</div>
-    ${ok(Lq) ? `<div class="kv"><div ${tipA("Media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de la Euroliga de la temporada)")}><span>Nivel conjunto</span><b>${nivHtml(Lq)}</b></div>${ok(Le) ? `<div ${tipA("Nivel de toda la plantilla (media por minutos)")}><span>Nivel del equipo</span><b>${nivHtml(Le)}</b></div><div ${tipA("Puntos de la escala de Nivel que el quinteto está por encima (o por debajo) de su equipo")}><span>Frente al equipo</span><b>${(() => { const d_ = nS("nivel", Lq) - nS("nivel", Le); return `${d_ >= 0 ? "+" : "−"}${Math.abs(Math.round(d_))}`; })()}</b></div>` : ""}</div>` : ""}
+    ${ok(Lq) ? `<div class="kv"><div ${tipA("Media del nivel L de los cinco, en la escala ±100 (0 = jugador medio de su liga en la temporada)")}><span>Nivel conjunto</span><b>${nivHtml(Lq)}</b></div>${ok(Le) ? `<div ${tipA("Nivel de toda la plantilla (media por minutos)")}><span>Nivel del equipo</span><b>${enEquipo(() => nivHtml(Le))}</b></div><div ${tipA("Puntos de la escala de Nivel que el quinteto está por encima (o por debajo) de su equipo")}><span>Frente al equipo</span><b>${(() => { const d_ = nS("nivel", Lq) - nS("nivel", Le); return `${d_ >= 0 ? "+" : "−"}${Math.abs(Math.round(d_))}`; })()}</b></div>` : ""}</div>` : ""}
     <div class="stack" style="gap:6px"><div class="label">Real frente a esperado (escala ±100)</div>${barras(items, { W, sc: 100, aria: "Net real, ajustado, esperado y sinergia", lw: 140 })}
       <p class="note">${ok(esp) ? `Por el RAPM de sus cinco jugadores y de los rivales que tuvo delante, se esperaba un Net de <b>${fs(esp)}</b> por 100 posesiones; ha hecho <b>${fs(q.net_rtg)}</b>. Con ${fi(q.poss)} posesiones esa diferencia pesa un ${fp(100 * w, 0)}, así que la sinergia es <b class="${signCls(sin)}">${fs(sin)}</b> (${nv("sinergia_quinteto", sin)} en la escala): ${!ok(sin) ? "" : sin > 2 ? "juntos funcionan <b>mejor</b> de lo que dicen sus piezas." : sin < -2 ? "juntos funcionan <b>peor</b> de lo que dicen sus piezas." : "rinden más o menos lo esperado."}` : "Sin RAPM para calcular el Net esperado."}</p>
       ${aprende("Si la sinergia es grande y la muestra decente, el encaje entre ellos aporta algo que no se ve en cada jugador por separado (o les resta). Ojo: el RAPM también es una estimación con error.", "sinergia")}</div>
@@ -1455,7 +1488,7 @@ function pFicha(T) {
   const sg = v("sinergia"), esperado = ok(v("net_rtg_aj_a_sin_b")) && ok(v("net_rtg_aj_b_sin_a")) && ok(v("net_rtg_aj_ninguno")) ? v("net_rtg_aj_a_sin_b") + v("net_rtg_aj_b_sin_a") - v("net_rtg_aj_ninguno") : null;
   const lectura = !ok(sg) ? "" : Math.abs(sg) < 1.5 ? `Juntos rinden <b>más o menos lo que suman por separado</b> (sinergia ${fs(sg)}).` : `Juntos rinden <b class="${signCls(sg)}">${f(Math.abs(sg))} puntos por 100 posesiones ${sg > 0 ? "mejor" : "peor"}</b> de lo que suman por separado (${nv("sinergia_pareja", sg)} en la escala).`;
   box.innerHTML = `<div class="cardhead"><h2>${btnJ(a, T)} + ${btnJ(b, T)}</h2><span class="pill acc">${fm(v("min"))} juntos</span></div>
-    <div class="kv"><div ${tipA(`% de los minutos de ${esc(A)} que juega con ${esc(B)}`)}><span>% min. ${esc(trunc(A, 12))}</span><b>${fp(v("pct_min_a_con_b"), 0)}</b></div><div ${tipA(`% de los minutos de ${esc(B)} que juega con ${esc(A)}`)}><span>% min. ${esc(trunc(B, 12))}</span><b>${fp(v("pct_min_b_con_a"), 0)}</b></div><div><span>Asist. ${esc(trunc(A, 10))} → ${esc(trunc(B, 10))}</span><b>${fi(v("ast_a_a_b"))}</b></div><div><span>Asist. ${esc(trunc(B, 10))} → ${esc(trunc(A, 10))}</span><b>${fi(v("ast_b_a_a"))}</b></div><div><span>ORtg / DRtg</span><b>${f(v("ortg"), 0)} / ${f(v("drtg"), 0)}</b></div><div><span>Net bruto</span><b>${nv("net_pareja", v("net_rtg"))}</b></div>${ok(Lp) ? `<div ${tipA("Nivel conjunto de la pareja: media del nivel L de los dos, escala ±100 (0 = jugador medio de la Euroliga)")}><span>Nivel conjunto</span><b>${nivHtml(Lp)}</b></div>` : ""}</div>
+    <div class="kv"><div ${tipA(`% de los minutos de ${esc(A)} que juega con ${esc(B)}`)}><span>% min. ${esc(trunc(A, 12))}</span><b>${fp(v("pct_min_a_con_b"), 0)}</b></div><div ${tipA(`% de los minutos de ${esc(B)} que juega con ${esc(A)}`)}><span>% min. ${esc(trunc(B, 12))}</span><b>${fp(v("pct_min_b_con_a"), 0)}</b></div><div><span>Asist. ${esc(trunc(A, 10))} → ${esc(trunc(B, 10))}</span><b>${fi(v("ast_a_a_b"))}</b></div><div><span>Asist. ${esc(trunc(B, 10))} → ${esc(trunc(A, 10))}</span><b>${fi(v("ast_b_a_a"))}</b></div><div><span>ORtg / DRtg</span><b>${f(v("ortg"), 0)} / ${f(v("drtg"), 0)}</b></div><div><span>Net bruto</span><b>${nv("net_pareja", v("net_rtg"))}</b></div>${ok(Lp) ? `<div ${tipA("Nivel conjunto de la pareja: media del nivel L de los dos, escala ±100 (0 = jugador medio de su liga)")}><span>Nivel conjunto</span><b>${nivHtml(Lp)}</b></div>` : ""}</div>
     ${avisoMuestra(v("poss"))}
     <div class="stack" style="gap:6px"><div class="label">Con y sin el otro (WOWY) · Net ajustado, escala ±100</div>${barras(items, { W, sc: 100, aria: "Net con y sin cada jugador", lw: 165 })}
       <div class="formula" ${tipA("Modelo aditivo (valores originales, pts/100): si no hubiera química, el Net juntos sería lo que aporta A solo más lo que aporta B solo, partiendo de la base «ninguno»")}>Sinergia = ${fs(v("net_rtg_aj"))} − (${fs(v("net_rtg_aj_a_sin_b"))} + ${fs(v("net_rtg_aj_b_sin_a"))} − ${fs(v("net_rtg_aj_ninguno"))}) = <b class="${signCls(sg)}">${fs(sg)}</b></div>
@@ -1617,13 +1650,13 @@ function nEfectos(T, x, efo) {
 // =====================================================================================================
 // campos opcionales del catálogo (modelos de nivel y RAPM traducido): se muestran solo si vienen en el fichero
 const CAMPOS_PERFIL = [
-  ["L", "Nivel", "Nivel del jugador (índice L en la vara EuroLeague), escala ±100: 0 = jugador medio de la Euroliga de la temporada", 2],
-  ["ctx_comp", "Nivel compañeros", "Nivel medio (L) de los 4 compañeros con los que comparte pista, ponderado por el tiempo; escala ±100 (Euroliga = 0)", 2],
+  ["L", "Nivel", "Nivel del jugador (índice L en la vara EuroLeague), escala ±100: 0 = jugador medio de su liga en la temporada", 2],
+  ["ctx_comp", "Nivel compañeros", "Nivel medio (L) de los 4 compañeros con los que comparte pista, ponderado por el tiempo; escala ±100 (0 = jugador medio de su liga)", 2],
   ["ctx_comp_dev", "Compañeros vs. media", "Nivel de sus compañeros en pista menos el de un jugador medio de su liga y temporada, en puntos de la escala de Nivel: > 0 = juega rodeado de mejores", 2],
-  ["ctx_riv", "Nivel rivales", "Nivel medio (L) de los 5 rivales que tiene enfrente; escala ±100 (Euroliga = 0)", 2],
+  ["ctx_riv", "Nivel rivales", "Nivel medio (L) de los 5 rivales que tiene enfrente; escala ±100 (0 = jugador medio de su liga)", 2],
   ["ctx_plantilla", "Nivel plantilla", "Nivel medio de sus compañeros de plantilla, ponderado por minutos (sin él); escala ±100", 2],
   ["ctx_plantilla_dev", "Plantilla vs. media", "Nivel de su plantilla menos el de un jugador medio de su liga y temporada, en puntos de la escala de Nivel", 2],
-  ["rapm_el", "RAPM EL", "RAPM traducido a la EuroLeague, escala ±100 (0 = jugador medio de la Euroliga)", 1],
+  ["rapm_el", "RAPM EL", "RAPM traducido a la EuroLeague, escala ±100 (0 = jugador medio de su liga)", 1],
   ["orapm_el", "ORAPM EL", "Parte ofensiva del RAPM traducido, escala ±100", 1],
   ["drapm_el", "DRAPM EL", "Parte defensiva del RAPM traducido, escala ±100 (> 0 = mejor defensa)", 1],
   ["rapm_pct_el", "Percentil RAPM EL", "Percentil de su RAPM traducido entre los jugadores de la EuroLeague", 0],
@@ -1684,7 +1717,7 @@ function jTabla(T, grupos, liga) {
       N("net_rtg_onoff_sin_basura", "On−off sin basura", "imp", 1, "On−off quitando los minutos de la basura, escala ±100", sgn("onoff")),
       N("rapm", "RAPM", "imp", 1, "Impacto ajustado (ridge) sobre un jugador medio, en unidades de su liga; escala ±100", sgn("rapm_liga")),
       N("orapm", "ORAPM", "imp", 1, "Parte ofensiva del RAPM, escala ±100", sgn("orapm_liga")), N("drapm", "DRAPM", "imp", 1, "Parte defensiva del RAPM (> 0 = mejor defensa), escala ±100", sgn("drapm_liga")),
-    ].concat(D.campos.has("rapm_el") ? [{ k: "rapm_el", l: "RAPM EL", g: "imp", get: (r) => J(r.j).rapm_el, tip: "RAPM traducido a la EuroLeague, escala ±100 (0 = jugador medio de la Euroliga)", ...sgn("rapm") }] : []) : [])
+    ].concat(D.campos.has("rapm_el") ? [{ k: "rapm_el", l: "RAPM EL", g: "imp", get: (r) => J(r.j).rapm_el, tip: "RAPM traducido a la EuroLeague, escala ±100 (0 = jugador medio de su liga)", ...sgn("rapm") }] : []) : [])
     .concat(grupos.includes("rot") ? [
       N("titular_partidos", "Titular", "rot", 0, "Partidos de titular"), N("cierra_partidos", "Cierra", "rot", 0, "Partidos en pista en el último tramo"),
       N("relevos_por_partido", "Relevos/p", "rot", 1, "Entradas a pista por partido"), N("min_por_relevo", "Min/relevo", "rot", 1, "Duración media de cada turno"),
@@ -1850,7 +1883,8 @@ const evDT = (rows, k) => { const v = rows.map((x) => x[k]).filter(ok); if (v.le
 const evSliga = (v, m, dt, dir) => (ok(v) && ok(m) && ok(dt) && dt > 0 ? 100 * Math.tanh(((v - m) / dt) * (dir === -1 ? -1 : 1) / 2) : null);
 const evStxt = (s, dir) => `<span class="esc ${dir === 0 ? "" : ESC.cls(s)}">${ESC.txt(s)}</span>`;
 
-R.evaluacion = (el) => {
+R.evaluacion = (el) => enClubEV(S.l, S.t, () => evaluacion_(el));   // 0 = club medio de su liga (04-11-2026)
+const evaluacion_ = (el) => {
   if (!EV) {
     el.innerHTML = `<div class="dcard"><div class="loading">Cargando la evaluación de todos los equipos…</div></div>`;
     cargarEV().then(() => { if (S.tab === "evaluacion") pintar(); }).catch((err) => { el.innerHTML = vacio("No se pudo cargar la evaluación de equipos", `${esc(err.message)}. Recarga la página.`); });
@@ -1864,8 +1898,8 @@ R.evaluacion = (el) => {
   const lg = EV.F.filter((x) => x.t === t && x.f === fz && x.liga === l), n = lg.length;
   const club = EV.C[r.k] || null, pl = EV.P[r.k] || null, L = r.L, Lliga = evLiga(t, l);
   const nom = esc(D.eqn[id] || r.eq);
-  // ligas por nivel (Euroliga = 0)
-  const ligas = ESC.ligasNivel(t).filter((x) => ok(x.S)).sort((a, b) => b.S - a.S), rkLiga = ligas.findIndex((x) => x.l === l) + 1;
+  // ligas por nivel (comparación entre ligas: Euroliga = 0)
+  const ligas = enEL(() => ESC.ligasNivel(t)).filter((x) => ok(x.S)).sort((a, b) => b.S - a.S), rkLiga = ligas.findIndex((x) => x.l === l) + 1;
   // plantilla frente a los equipos de la Euroliga
   const el_ = EV.F.filter((x) => x.t === t && x.f === "regular" && x.liga === "euroleague" && ok(x.L));
   const rkEL = ok(L) ? el_.filter((x) => x.L > L && !(x.liga === l && x.id === id)).length + 1 : null;
@@ -1874,10 +1908,10 @@ R.evaluacion = (el) => {
   const py = evPyth(r), dPy = ok(py) && ok(r.w) && r.wl === "oficial" ? r.w - py : ok(py) && ok(r.w) && r.wl === "entrenadores" ? r.w - py : null;
   const kp = (lab, val, sub, tip) => `<div class="kpi"><span ${tipA(tip)}>${lab}</span><b>${val}</b><small>${sub || ""}</small></div>`;
   const kpis =
-    kp("Nivel de su liga", evNiv(Lliga), Lliga != null ? `${rkLiga ? `${ord(rkLiga)} de ${ligas.length} ligas` : ""} · Euroliga = 0` : "sin dato",
+    kp("Nivel de su liga", enEL(() => evNiv(Lliga)), Lliga != null ? `${rkLiga ? `${ord(rkLiga)} de ${ligas.length} ligas` : ""} · Euroliga = 0` : "sin dato",
       `<b>Nivel de la liga</b>: media del nivel L de todos sus jugadores (ponderada por minutos) en la escala ±100, con la Euroliga ${esc(t)} como 0. Es la vara para leer todo lo demás: un mismo rendimiento vale más en una liga de nivel alto.`) +
     kp("Nivel de la plantilla", evNiv(L), ok(L) ? `${rkPl ? `${ord(rkPl)} de ${nPl} en su liga` : ""}${l !== "euroleague" && rkEL ? ` · sería ${ord(rkEL)} de ${el_.length + 1} en la Euroliga` : ""}` : "sin jugadores normalizados",
-      `<b>Nivel de la plantilla</b>: media del nivel L de sus jugadores ponderada por minutos (temporada regular), en la escala ±100 con la Euroliga como 0. Se puede comparar entre ligas: el nivel L ya está traducido a la vara de la Euroliga.`) +
+      `<b>Nivel de la plantilla</b>: media del nivel L de sus jugadores ponderada por minutos (temporada regular), en la escala ±100 con el club medio de ${esc(LNOM[l] || l)} ${esc(t)} como 0. El puesto frente a la Euroliga compara el nivel L directamente.`) +
     kp("Balance", evWL(r), ok(r.wp) ? `${f(r.wp, 0)} % · ${rkW ? `${ord(rkW)} de ${n}` : ""}` : "sin dato", `<b>Victorias y derrotas</b> en ${esc(FNOM[fz])}. ${evWLsrc(r)}`) +
     kp("Net", nv("net_equipo", r.net, { nombre: "Net de equipo" }), `${fs(r.net)} por 100 pos. · ${rkN ? `${ord(rkN)} de ${n}` : ""}`,
       "<b>Net</b>: puntos anotados menos recibidos por 100 posesiones, en su liga. En la escala ±100 (vara: los equipos de la Euroliga). Para comparar entre ligas, súmale el nivel de la liga: un +5 en la FIBA Europe Cup no es un +5 en la Euroliga.") +
@@ -1888,8 +1922,8 @@ R.evaluacion = (el) => {
 
   // lectura rápida
   const ins = [];
-  if (ok(L) && ok(Lliga)) { const dl = nS("nivel", L) - nS("nivel", Lliga);
-    ins.push(`Su plantilla está <b>${Math.abs(dl) < 8 ? "en la media" : dl > 0 ? "por encima de la media" : "por debajo de la media"}</b> de ${esc(LNOM[l])} (${ESC.txt(nS("nivel", L))} frente a ${ESC.txt(nS("nivel", Lliga))}, Euroliga = 0)${l !== "euroleague" && rkEL ? ` y, por nivel, sería la ${ord(rkEL)} de ${el_.length + 1} plantillas de la Euroliga` : ""}.`); }
+  if (ok(L)) { const dl = nS("nivel", L);
+    ins.push(`Su plantilla está <b>${Math.abs(dl) < 8 ? "en la media" : dl > 0 ? "por encima de la media" : "por debajo de la media"}</b> de ${esc(LNOM[l])} (${ESC.txt(dl)}; 0 = club medio de su liga)${l !== "euroleague" && rkEL ? ` y, por nivel, sería la ${ord(rkEL)} de ${el_.length + 1} plantillas de la Euroliga` : ""}.`); }
   if (rkPl && rkW) { const d = rkPl - rkW;
     ins.push(Math.abs(d) <= 2 ? `Rinde <b>lo que corresponde a su plantilla</b>: ${ord(rkPl)} por nivel y ${ord(rkW)} por balance.` : d > 0 ? `<b>Rinde por encima de su plantilla</b>: ${ord(rkPl)} por nivel de jugadores pero ${ord(rkW)} por balance (${d} puestos mejor). El colectivo suma más que las piezas.` : `<b>Rinde por debajo de su plantilla</b>: ${ord(rkPl)} por nivel de jugadores pero ${ord(rkW)} por balance (${-d} puestos peor).`); }
   if (ok(dPy) && Math.abs(dPy) >= 1.5) ins.push(`Ha ganado <b>${f(Math.abs(dPy), 1)} partidos ${dPy > 0 ? "más" : "menos"}</b> de los que sugieren sus ratings: ${dPy > 0 ? "buen cierre de partidos igualados o algo de suerte" : "ha perdido partidos igualados o le ha faltado suerte"}.`);
@@ -1912,7 +1946,7 @@ R.evaluacion = (el) => {
   <div class="dcard"><h2>Estilo del club <span class="note" style="font-weight:500">· informativo</span></h2><div id="evEst"></div></div>
   <div class="dcard"><div class="cardhead"><h2>Rendimiento frente a su liga</h2><span class="note">${n} equipos · ${esc(FNOM[fz])}</span></div><div id="evMet"></div>
     ${aprende("Cada cifra frente al equipo medio de su liga, en la escala ±100 (la vara es la dispersión entre los equipos de esa liga): +46 es una desviación típica mejor que la media. El color ya tiene en cuenta si más es mejor o peor; las cifras de estilo (ritmo, peso del triple, asistencias) van en gris porque no son buenas ni malas.")}</div>
-  <div class="dcard"><div class="cardhead"><h2>Plantilla</h2><span class="note">temporada regular · 100+ minutos · nivel L en la escala ±100 (Euroliga = 0)</span></div><div id="evPl"></div></div>
+  <div class="dcard"><div class="cardhead"><h2>Plantilla</h2><span class="note">temporada regular · 100+ minutos · nivel L en la escala ±100 (0 = jugador medio de su liga)</span></div><div id="evPl"></div></div>
   <div class="dcard"><div class="cardhead"><h2>Todos los equipos de ${esc(t)}</h2>
       <div class="seg" role="group" aria-label="Qué equipos">${[["liga", `Su liga`], ["el", "Su liga + Euroliga"], ["todas", "Todas las ligas"]].map(([k, tx]) => `<button class="segb" type="button" data-set="evAmb" data-v="${k}" aria-pressed="${ui("evAmb", "liga") === k}">${tx}</button>`).join("")}</div></div>
     <div class="chartbox" id="evScat"></div><div id="evTabla"></div>
@@ -1931,13 +1965,13 @@ R.evaluacion = (el) => {
 function evPintarStrip(t, l, id, r, lg) {
   const box = $("#evStrip"); if (!box) return;
   const W = ancho(box), m = { l: 112, r: 20 }, pw = W - m.l - m.r, X = (s) => m.l + ((clamp(s, -100, 100) + 100) / 200) * pw;
-  const ligas = ESC.ligasNivel(t).filter((x) => ok(x.S));
-  const filas = [["Ligas (media)", ligas.map((x) => ({ s: x.S, lab: ESC.ligaCorto(x.l), col: ESC.ligaCol(x.l), me: x.l === l, tip: `<b>${esc(ESC.ligaNom(x.l))}</b><br>Nivel medio: ${ESC.txt(x.S)} (L ${fs(x.L, 2)})` }))],
-    [`Plantillas · ${ESC.ligaCorto(l)}`, lg.filter((x) => ok(x.L)).map((x) => ({ s: nS("nivel", x.L), col: ESC.ligaCol(l), me: x.id === id, act: `${x.liga}|${x.id}`, tip: `<b>${esc(x.eq)}</b><br>Plantilla: ${ESC.txt(nS("nivel", x.L))} · ${evWL(x)}` }))]];
-  if (l !== "euroleague") filas.push(["Plantillas · EL", EV.F.filter((x) => x.t === t && x.f === "regular" && x.liga === "euroleague" && ok(x.L)).map((x) => ({ s: nS("nivel", x.L), col: ESC.ligaCol("euroleague"), act: `${x.liga}|${x.id}`, tip: `<b>${esc(x.eq)}</b> (Euroliga)<br>Plantilla: ${ESC.txt(nS("nivel", x.L))}` }))]);
+  const ligas = enEL(() => ESC.ligasNivel(t)).filter((x) => ok(x.S));
+  const filas = [["Ligas (EL = 0)", ligas.map((x) => ({ s: x.S, lab: ESC.ligaCorto(x.l), col: ESC.ligaCol(x.l), me: x.l === l, tip: `<b>${esc(ESC.ligaNom(x.l))}</b><br>Nivel medio: ${ESC.txt(x.S)} (L ${fs(x.L, 2)})` }))],
+    [`Plantillas ${ESC.ligaCorto(l)} (club medio = 0)`, lg.filter((x) => ok(x.L)).map((x) => ({ s: nS("nivel", x.L), col: ESC.ligaCol(l), me: x.id === id, act: `${x.liga}|${x.id}`, tip: `<b>${esc(x.eq)}</b><br>Plantilla: ${ESC.txt(nS("nivel", x.L))} · ${evWL(x)}` }))]];
+  if (l !== "euroleague") filas.push(["Plantillas EL (club medio = 0)", EV.F.filter((x) => x.t === t && x.f === "regular" && x.liga === "euroleague" && ok(x.L)).map((x) => ({ s: enClubEV("euroleague", t, () => nS("nivel", x.L)), col: ESC.ligaCol("euroleague"), act: `${x.liga}|${x.id}`, tip: `<b>${esc(x.eq)}</b> (Euroliga)<br>Plantilla: ${ESC.txt(nS("nivel", x.L))}` }))]);
   const rh = 52, H = filas.length * rh + 30;
   let g = "";
-  [-100, -50, 0, 50, 100].forEach((v) => { g += `<line class="grid" x1="${X(v)}" y1="8" x2="${X(v)}" y2="${H - 22}" ${v === 0 ? 'stroke="var(--faint)" stroke-width="1.5"' : ""}/><text class="ax" x="${X(v)}" y="${H - 6}" text-anchor="middle">${v === 0 ? "Euroliga = 0" : (v > 0 ? "+" : "−") + Math.abs(v)}</text>`; });
+  [-100, -50, 0, 50, 100].forEach((v) => { g += `<line class="grid" x1="${X(v)}" y1="8" x2="${X(v)}" y2="${H - 22}" ${v === 0 ? 'stroke="var(--faint)" stroke-width="1.5"' : ""}/><text class="ax" x="${X(v)}" y="${H - 6}" text-anchor="middle">${v === 0 ? "0 = media de la fila" : (v > 0 ? "+" : "−") + Math.abs(v)}</text>`; });
   filas.forEach(([lab, pts], i) => {
     const y = 22 + i * rh;
     g += `<text class="lab" x="${m.l - 10}" y="${y + 4}" text-anchor="end" font-size="11.5" fill="var(--muted)">${esc(lab)}</text><line x1="${m.l}" x2="${m.l + pw}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-dasharray="2 3"/>`;
@@ -1950,7 +1984,7 @@ function evPintarStrip(t, l, id, r, lg) {
       g += `<g ${p.act ? `class="hit" data-a="ev" data-v="${esc(p.act)}" role="button" tabindex="0"` : ""} ${tipA(p.tip)}><circle cx="${cx}" cy="${y}" r="${p.me ? 8 : i === 0 ? 6 : 4.5}" fill="${p.me ? "var(--sim)" : p.col}" fill-opacity="${p.me ? 1 : i === 0 ? 0.95 : 0.6}" stroke="${p.me ? "var(--ink)" : "var(--surface)"}" stroke-width="1.5"/>${p.lab && c != null ? `<text class="lab" x="${cx}" y="${c === 0 ? y - 11 : y + 19}" text-anchor="middle" font-size="${p.me ? 11.5 : 10}" font-weight="${p.me ? 700 : 500}" fill="${p.me ? "var(--ink)" : "var(--muted)"}">${esc(p.lab)}</text>` : ""}</g>`;
     });
   });
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Nivel de las ligas y de las plantillas, Euroliga = 0">${g}</svg>`;
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Nivel de las ligas (Euroliga = 0) y de las plantillas (club medio de su liga = 0)">${g}</svg>`;
 }
 
 function evPintarEnt(club, r, t) {
@@ -1963,7 +1997,7 @@ function evPintarEnt(club, r, t) {
   const linea = ok(t0) && ok(t1) ? `<div class="evtl">${ent.map((e, i) => { const a = Date.parse(e.de), b = Date.parse(e.a); if (!ok(a) || !ok(b)) return ""; const x = (100 * (a - t0)) / span, w = Math.max(1.5, (100 * (b - a)) / span);
     return `<i style="left:${x}%;width:${w}%;background:${COLS[i % COLS.length]}" ${tipA(`<b>${esc(e.n)}</b>${e.int ? " (interino)" : ""}<br>${evFecha(e.de)} – ${evFecha(e.a)} · ${fi(e.pj)} partidos${ok(e.w) ? ` · ${e.w}-${e.l}` : ""}`)}></i>`; }).join("")}</div><div class="evtl-ax"><span>${evFecha(new Date(t0).toISOString().slice(0, 10))}</span><span>${evFecha(new Date(t1).toISOString().slice(0, 10))}</span></div>` : "";
   const met = { club_unico: "Un solo entrenador: su etapa es la temporada entera.", "minutos_tramo+equipo": "Nivel y estilo calculados solo con los partidos que dirigió (minutos de sus jugadores en esos partidos).", club: "Sin desglose por partidos: nivel y estilo son los de toda la temporada." };
-  box.innerHTML = linea + `<div class="tablebox flat"><table aria-label="Entrenadores"><thead><tr><th class="txt sticky">Entrenador</th><th>PJ</th><th>Balance</th><th>% vict.</th><th class="txt">Etapa</th><th ${tipA("Nivel L de los jugadores que usó en sus partidos, ponderado por minutos, en la escala ±100 (Euroliga = 0). Convertido desde el índice de nivel del club (r = " + (EV.conv ? f(EV.conv.r, 3) : "–") + ").")}>Nivel plantilla</th><th class="txt">Estilo en su etapa</th></tr></thead><tbody>` +
+  box.innerHTML = linea + `<div class="tablebox flat"><table aria-label="Entrenadores"><thead><tr><th class="txt sticky">Entrenador</th><th>PJ</th><th>Balance</th><th>% vict.</th><th class="txt">Etapa</th><th ${tipA("Nivel L de los jugadores que usó en sus partidos, ponderado por minutos, en la escala ±100 (0 = club medio de su liga). Convertido desde el índice de nivel del club (r = " + (EV.conv ? f(EV.conv.r, 3) : "–") + ").")}>Nivel plantilla</th><th class="txt">Estilo en su etapa</th></tr></thead><tbody>` +
     ent.map((e, i) => `<tr><td class="txt name sticky"><i class="evdot" style="background:${COLS[i % COLS.length]}"></i>${esc(e.n)}${e.int ? ` <span class="pill" ${tipA("Entrenador interino")}>interino</span>` : ""}</td><td>${fi(e.pj)}${e.pp ? ` <span class="muted" ${tipA(`${fi(e.pr)} de liga regular y ${fi(e.pp)} de playoffs`)}>(${fi(e.pp)} PO)</span>` : ""}</td><td>${ok(e.w) ? `${e.w}-${e.l}` : "–"}</td><td>${ok(e.w) && e.w + e.l ? f((100 * e.w) / (e.w + e.l), 0) + " %" : "–"}</td><td class="txt">${evFecha(e.de)} – ${evFecha(e.a)}</td><td ${tipA(met[e.met] || "")}>${evNiv(e.L)}</td><td class="txt">${euSpan(evUent(r.k, e.id), true)}</td></tr>`).join("") +
     `</tbody></table></div>${ent.length > 1 ? `<p class="note">Con varios entrenadores, el nivel y el estilo de cada etapa se calculan solo con los partidos que dirigió cada uno. Una etapa corta (un interino de pocos partidos) es poco fiable.</p>` : ""}`;
 }
@@ -1996,7 +2030,7 @@ function evPintarPl(pl, t, k) {
   const conc = tot ? (100 * top5.reduce((a, j) => a + j[3], 0)) / tot : null;
   box.innerHTML = `<div class="kv"><div><span>Nivel de la plantilla</span><b>${evNiv(pl.L)}</b></div><div ${tipA("Los cinco jugadores con más minutos")}><span>Nivel de los 5 que más juegan</span><b>${evNiv(nivDe(top5))}</b></div><div><span>Nivel del resto</span><b>${evNiv(nivDe(banq))}</b></div>
       <div><span>Jugadores (100'+)</span><b>${fi(pl.n)}</b></div><div ${tipA("Media ponderada por minutos")}><span>Edad media</span><b>${f(pl.edad, 1)}</b></div><div ${tipA("% de los minutos que juegan los cinco con más minutos: alto = rotación corta")}><span>Minutos del top 5</span><b>${fp(conc, 0)}</b></div></div>
-    <div class="tablebox flat" style="margin-top:4px"><table aria-label="Plantilla"><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Pos.</th><th>Edad</th><th>Min</th><th ${tipA("% del tiempo de juego del equipo que pasa en pista")}>% en pista</th><th ${tipA("Nivel L del jugador en la escala ±100 (Euroliga = 0)")}>Nivel</th><th class="txt">Estilo propio</th></tr></thead><tbody>${js.map((j, i) => `<tr><td class="txt name sticky">${esc(nombreBonito(j[0]).full)}</td><td class="txt">${esc(POSN[j[1]] || "–")}</td><td>${ok(j[2]) ? fi(j[2]) : "–"}</td><td>${fi(j[3])}</td><td>${tot ? f(Math.min(100, (500 * j[3]) / tot), 0) + " %" : "–"}</td><td>${evNiv(j[4])}${ok(j[4]) ? ESC.barra(nS("nivel", j[4])) : ""}</td><td class="txt">${euSpan(evUpl(k, i), true, false)}</td></tr>`).join("")}</tbody></table></div>`;
+    <div class="tablebox flat" style="margin-top:4px"><table aria-label="Plantilla"><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Pos.</th><th>Edad</th><th>Min</th><th ${tipA("% del tiempo de juego del equipo que pasa en pista")}>% en pista</th><th ${tipA("Nivel L del jugador en la escala ±100 (0 = jugador medio de su liga)")}>Nivel</th><th class="txt">Estilo propio</th></tr></thead><tbody>${js.map((j, i) => `<tr><td class="txt name sticky">${esc(nombreBonito(j[0]).full)}</td><td class="txt">${esc(POSN[j[1]] || "–")}</td><td>${ok(j[2]) ? fi(j[2]) : "–"}</td><td>${fi(j[3])}</td><td>${tot ? f(Math.min(100, (500 * j[3]) / tot), 0) + " %" : "–"}</td><td>${enJugEV(S.l, S.t, () => evNiv(j[4]))}${ok(j[4]) ? ESC.barra(enJugEV(S.l, S.t, () => nS("nivel", j[4]))) : ""}</td><td class="txt">${euSpan(evUpl(k, i), true, false)}</td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function evPintarTodos(t, fz, l, id) {
@@ -2007,22 +2041,23 @@ function evPintarTodos(t, fz, l, id) {
   const pts = rows.filter((x) => ok(x.L) && ok(x.wp));
   if (pts.length >= 3) {
     const W = ancho(box), H = Math.round(clamp(W * 0.42, 260, 400)), m = { l: 44, r: 16, t: 12, b: 38 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
-    const sx = pts.map((x) => nS("nivel", x.L)); let x0 = Math.min(...sx, -10), x1 = Math.max(...sx, 10); const px = (x1 - x0) * 0.06; x0 -= px; x1 += px;
+    // cada plantilla frente al club medio de su liga
+    const nsx = (x) => enClubEV(x.liga, x.t, () => nS("nivel", x.L)), sx = pts.map(nsx); let x0 = Math.min(...sx, -10), x1 = Math.max(...sx, 10); const px = (x1 - x0) * 0.06; x0 -= px; x1 += px;
     const X = (v) => m.l + ((v - x0) / (x1 - x0)) * pw, Y = (v) => m.t + (1 - v / 100) * ph;
     let g = "";
     [0, 25, 50, 75, 100].forEach((v) => { g += `<line class="grid" x1="${m.l}" y1="${Y(v)}" x2="${m.l + pw}" y2="${Y(v)}"/><text class="ax" x="${m.l - 6}" y="${Y(v) + 3.5}" text-anchor="end">${v} %</text>`; });
     const st = Math.abs(x1 - x0) > 120 ? 50 : 25; for (let v = Math.ceil(x0 / st) * st; v <= x1; v += st) g += `<line class="grid" x1="${X(v)}" y1="${m.t}" x2="${X(v)}" y2="${m.t + ph}" ${v === 0 ? 'stroke="var(--faint)" stroke-width="1.5"' : ""}/><text class="ax" x="${X(v)}" y="${H - 22}" text-anchor="middle">${v === 0 ? "EL = 0" : (v > 0 ? "+" : "−") + Math.abs(v)}</text>`;
-    g += `<text class="ax lab" x="${m.l + pw}" y="${H - 6}" text-anchor="end">Nivel de la plantilla (Euroliga = 0) →</text><text class="ax lab" transform="translate(11 ${m.t}) rotate(-90)" text-anchor="end">% de victorias ↑</text>`;
+    g += `<text class="ax lab" x="${m.l + pw}" y="${H - 6}" text-anchor="end">Nivel de la plantilla (club medio de su liga = 0) →</text><text class="ax lab" transform="translate(11 ${m.t}) rotate(-90)" text-anchor="end">% de victorias ↑</text>`;
     pts.slice().sort((a, b) => (a.liga === l && a.id === id) - (b.liga === l && b.id === id)).forEach((x) => { const me = x.liga === l && x.id === id;
-      g += `<g class="hit" data-a="ev" data-v="${esc(x.liga + "|" + x.id)}" role="button" tabindex="0" ${tipA(`<b>${esc(x.eq)}</b> · ${esc(ESC.ligaCorto(x.liga))}<br>Plantilla ${ESC.txt(nS("nivel", x.L))} · ${evWL(x)} (${f(x.wp, 0)} %)<br>Net en su liga ${fs(x.net)}<br><i>Clic: evaluar este equipo</i>`)}><circle cx="${X(nS("nivel", x.L))}" cy="${Y(x.wp)}" r="${me ? 8 : 5}" fill="${me ? "var(--sim)" : ESC.ligaCol(x.liga)}" fill-opacity="${me ? 1 : 0.7}" stroke="${me ? "var(--ink)" : "var(--surface)"}" stroke-width="1.5"/>${me ? `<text class="lab" x="${X(nS("nivel", x.L)) + 11}" y="${Y(x.wp) + 4}" font-size="12" font-weight="700" fill="var(--ink)">${esc(corto(x.id) === x.id && x.eq ? x.eq.slice(0, 18) : corto(x.id))}</text>` : ""}</g>`; });
+      g += `<g class="hit" data-a="ev" data-v="${esc(x.liga + "|" + x.id)}" role="button" tabindex="0" ${tipA(`<b>${esc(x.eq)}</b> · ${esc(ESC.ligaCorto(x.liga))}<br>Plantilla ${ESC.txt(nsx(x))} · ${evWL(x)} (${f(x.wp, 0)} %)<br>Net en su liga ${fs(x.net)}<br><i>Clic: evaluar este equipo</i>`)}><circle cx="${X(nS("nivel", x.L))}" cy="${Y(x.wp)}" r="${me ? 8 : 5}" fill="${me ? "var(--sim)" : ESC.ligaCol(x.liga)}" fill-opacity="${me ? 1 : 0.7}" stroke="${me ? "var(--ink)" : "var(--surface)"}" stroke-width="1.5"/>${me ? `<text class="lab" x="${X(nS("nivel", x.L)) + 11}" y="${Y(x.wp) + 4}" font-size="12" font-weight="700" fill="var(--ink)">${esc(corto(x.id) === x.id && x.eq ? x.eq.slice(0, 18) : corto(x.id))}</text>` : ""}</g>`; });
     const ls = [...new Set(pts.map((x) => x.liga))];
     box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Nivel de la plantilla frente a % de victorias">${g}</svg>${ls.length > 1 ? `<div class="legend">${ESC.ordenLigas(ls).map((x) => `<span><i class="evdot" style="background:${ESC.ligaCol(x)}"></i>${esc(ESC.ligaNom(x))}</span>`).join("")}</div>` : ""}`;
   } else box.innerHTML = "";
   const cols = [
     { k: "eq", l: "Equipo", txt: true, fmt: (v, x) => `${esc(v)}${(EV.C[x.k] || {}).ent && EV.C[x.k].ent.length > 1 ? ` <span class="pill" ${tipA("Varios entrenadores esta temporada")}>${EV.C[x.k].ent.length} entr.</span>` : ""}` },
     { k: "liga", l: "Liga", txt: true, fmt: (v) => esc(ESC.ligaCorto(v)) },
-    { k: "Lliga", l: "Nivel liga", get: (x) => { const L = evLiga(t, x.liga); return ok(L) ? nS("nivel", L) : null; }, fmt: (v) => (ok(v) ? `<span class="esc ${ESC.cls(v)}">${ESC.txt(v)}</span>` : "–"), tip: "Nivel medio de la liga, escala ±100 (Euroliga = 0)" },
-    { k: "SL", l: "Plantilla", get: (x) => (ok(x.L) ? nS("nivel", x.L) : null), fmt: (v, x) => (ok(v) ? evNiv(x.L) : "–"), tip: "Nivel de la plantilla, escala ±100 (Euroliga = 0). Comparable entre ligas." },
+    { k: "Lliga", l: "Nivel liga", get: (x) => { const L = evLiga(t, x.liga); return ok(L) ? enEL(() => nS("nivel", L)) : null; }, fmt: (v) => (ok(v) ? `<span class="esc ${ESC.cls(v)}">${ESC.txt(v)}</span>` : "–"), tip: "Nivel medio de la liga, escala ±100 (Euroliga = 0)" },
+    { k: "SL", l: "Plantilla", get: (x) => (ok(x.L) ? enClubEV(x.liga, t, () => nS("nivel", x.L)) : null), fmt: (v, x) => (ok(v) ? enClubEV(x.liga, t, () => evNiv(x.L)) : "–"), tip: "Nivel de la plantilla, escala ±100 (0 = club medio de su liga)." },
     { k: "wp", l: "% vict.", fmt: (v, x) => (ok(v) ? `${f(v, 0)} % <span class="muted">${evWL(x)}</span>` : "–"), tip: "Porcentaje de victorias (balance entre paréntesis)" },
     { k: "net", l: "Net", fmt: (v) => (ok(v) ? fs(v) : "–"), tip: "Net en su liga, por 100 posesiones" },
     { k: "ent", l: "Entrenador", txt: true, get: (x) => ((EV.C[x.k] || {}).ent || []).map((e) => e.n).join(" → "), fmt: (v) => esc(v || "–") },
@@ -2038,10 +2073,10 @@ function evPintarHist(club, r) {
   if (!cc) { box.innerHTML = `<p class="note">Sin historial en el Atlas de Estilos.</p>`; return; }
   const filas = EV.F.filter((x) => x.f === "regular" && EV.C[x.k] && EV.C[x.k].club === cc).sort((a, b) => a.t.localeCompare(b.t));
   if (filas.length < 2) { box.innerHTML = `<p class="note">Solo hay una temporada de este club en los datos.</p>`; return; }
-  box.innerHTML = `<div class="tablebox flat"><table aria-label="Evolución del club"><thead><tr><th class="txt sticky">Temporada</th><th ${tipA("Nivel medio de su liga esa temporada (Euroliga = 0)")}>Nivel liga</th><th ${tipA("Nivel de la plantilla (Euroliga = 0)")}>Plantilla</th><th>Balance</th><th>Net</th><th class="txt">Entrenador</th><th class="txt">Estilo</th></tr></thead><tbody>` +
+  box.innerHTML = `<div class="tablebox flat"><table aria-label="Evolución del club"><thead><tr><th class="txt sticky">Temporada</th><th ${tipA("Nivel medio de su liga esa temporada (Euroliga = 0)")}>Nivel liga</th><th ${tipA("Nivel de la plantilla (0 = club medio de su liga esa temporada)")}>Plantilla</th><th>Balance</th><th>Net</th><th class="txt">Entrenador</th><th class="txt">Estilo</th></tr></thead><tbody>` +
     filas.map((x) => { const c = EV.C[x.k], Ll = evLiga(x.t, x.liga);
-      return `<tr class="${x.t === r.t ? "sel" : ""}"><td class="txt name sticky">${esc(x.t)}${c.prov ? " <small class=\"muted\">(en curso)</small>" : ""}</td><td>${ok(Ll) ? `<span class="esc ${ESC.cls(ESC.S("nivel", Ll, x.t))}">${ESC.txt(ESC.S("nivel", Ll, x.t))}</span>` : "–"}</td><td>${ok(x.L) ? `<span class="esc ${ESC.cls(ESC.S("nivel", x.L, x.t))}" ${tipA(ESC.tip("nivel", x.L, x.t))}>${ESC.txt(ESC.S("nivel", x.L, x.t))}</span>` : "–"}</td><td>${evWL(x)}${ok(x.wp) ? ` <span class="muted">${f(x.wp, 0)} %</span>` : ""}</td><td>${fs(x.net)}</td><td class="txt">${esc((c.ent || []).map((e) => e.n).join(" → ") || "–")}</td><td class="txt">${euSpan(evU(x.k), true)}</td></tr>`; }).join("") +
-    `</tbody></table></div><p class="note">Temporada regular de ${esc(LNOM[r.liga])}. Cada temporada, el nivel se mide con la Euroliga de ese año como 0.</p>`;
+      return `<tr class="${x.t === r.t ? "sel" : ""}"><td class="txt name sticky">${esc(x.t)}${c.prov ? " <small class=\"muted\">(en curso)</small>" : ""}</td><td>${ok(Ll) ? enEL(() => `<span class="esc ${ESC.cls(ESC.S("nivel", Ll, x.t))}">${ESC.txt(ESC.S("nivel", Ll, x.t))}</span>`) : "–"}</td><td>${ok(x.L) ? enClubEV(x.liga, x.t, () => `<span class="esc ${ESC.cls(ESC.S("nivel", x.L, x.t))}" ${tipA(ESC.tip("nivel", x.L, x.t))}>${ESC.txt(ESC.S("nivel", x.L, x.t))}</span>`) : "–"}</td><td>${evWL(x)}${ok(x.wp) ? ` <span class="muted">${f(x.wp, 0)} %</span>` : ""}</td><td>${fs(x.net)}</td><td class="txt">${esc((c.ent || []).map((e) => e.n).join(" → ") || "–")}</td><td class="txt">${euSpan(evU(x.k), true)}</td></tr>`; }).join("") +
+    `</tbody></table></div><p class="note">Temporada regular de ${esc(LNOM[r.liga])}. Cada temporada, el nivel de la liga se mide con la Euroliga de ese año como 0 y el de la plantilla con el club medio de su liga ese año.</p>`;
 }
 
 function lScatter(lg, xk, yk) {
@@ -2134,7 +2169,7 @@ function diagRed() {
 const CONCEPTOS = [
   { id: "escalas", t: "Escalas ±100 (cómo se leen las cifras)", def: "Las cifras de rendimiento de esta página (Net, on/off, RAPM, sinergia, efectos X → Y, nivel) se leen en una misma escala de <b>−100 a +100</b>. 0 es la media; la vara es la dispersión de esa cifra en la Euroliga, así que ±46 es una desviación típica y ±76, dos. El nivel (L) usa la Euroliga de esa temporada como 0, de modo que las medias de las ligas se leen directamente. Los valores originales no cambian: aparecen al pasar el ratón y con el selector «Originales».", diag: diagEscalas,
     form: "S = 100 · tanh(z / 2) · z = (valor − referencia) / DT", lee: "+60 o más: muy por encima · +25: por encima · ±8: en la media · −25: por debajo · −60 o menos: muy por debajo. Junto a cada cifra, su percentil en la Euroliga. Diferencias (por ejemplo, «compañeros sobre su liga»): 100 · tanh(Δ / (2 · DT)).", cu: "La escala es una forma de leer, no un modelo nuevo: comprime los extremos (de +80 a +90 hay más distancia real que de 0 a +10). Para sumar o restar (por ejemplo, el desglose de una sinergia) usa los valores originales.",
-    ej: (T) => T && T.row ? `El Net de ${nomEq()} es ${fs(T.row.net_rtg)} por 100 posesiones: en la escala, <b>${ESC.txt(nS("net_equipo", T.row.net_rtg))}</b>${ok(nivelEquipo(S.e)) ? `; su nivel, <b>${ESC.txt(nS("nivel", nivelEquipo(S.e)))}</b> (L ${fs(nivelEquipo(S.e), 2)})` : ""}.` : "" },
+    ej: (T) => T && T.row ? `El Net de ${nomEq()} es ${fs(T.row.net_rtg)} por 100 posesiones: en la escala, <b>${ESC.txt(nS("net_equipo", T.row.net_rtg))}</b>${ok(nivelEquipo(S.e)) ? `; su nivel, <b>${ESC.txt(enEquipo(() => nS("nivel", nivelEquipo(S.e))))}</b> (0 = equipo medio de su liga) (L ${fs(nivelEquipo(S.e), 2)})` : ""}.` : "" },
   { id: "tramo", t: "Tramo y quinteto", def: "El partido se parte en <b>tramos</b>: intervalos en los que no cambia ninguno de los 10 jugadores en pista. Cada tramo tiene su tiempo, sus posesiones y su marcador. Un quinteto, un trío o una pareja suma todos los tramos en los que coincide.", diag: diagTramos,
     form: "Estadística de una unidad = Σ de los tramos en los que está en pista", lee: "Los quintetos son la unidad básica: todo lo demás (parejas, on/off, RAPM) se construye sumando tramos.", cu: "Si el jugada a jugada no registra bien un cambio, el tramo queda mal asignado. Por eso se valida cada partido (ver «Validación»).",
     ej: (T) => T && `${nomEq()} ha usado <b>${fi(T.row.quintetos_distintos)}</b> quintetos distintos; solo ${fi(T.Q.length)} llegan a 10 minutos juntos.` },
@@ -2187,7 +2222,8 @@ const CONCEPTOS = [
     form: "Muestra · contexto · colinealidad · calidad del jugada a jugada", lee: "Úsalos para hacer preguntas (¿por qué este quinteto funciona?) y contrástalos con vídeo y con el conocimiento del equipo.", cu: "1) Los quintetos tienen poca muestra; los tríos y parejas, algo más. 2) Todo es asociación: el rival, el marcador y el momento influyen. 3) Jugadores que siempre juegan juntos no se pueden separar bien (colinealidad), ni con RAPM. 4) Las ligas difieren en cómo registran asistencias y cambios. 5) En la temporada en curso las cifras cambian cada jornada.",
     ej: (T) => T && `Ningún quinteto de ${nomEq()} supera las ${fi(Math.max(...T.Q.map((q) => q.poss)))} posesiones en ${esc(FNOM[S.f])}: cualquier Net de quinteto lleva un error de varios puntos.` },
 ];
-function diagEscalas() {
+function diagEscalas() { return enEL(() => diagEscalas_()); }   // guía: comparación entre ligas (Euroliga = 0)
+function diagEscalas_() {
   const F = ESC.familias(), t = D ? D.temp : null, N = F.nivel || {}, temps = Object.keys(N.ligas || {}).sort(), ligas = ESC.ordenLigas(temps.flatMap((x) => Object.keys(N.ligas[x] || {})));
   const fams = ["nivel", "net_equipo", "net_quinteto", "net_trio", "net_pareja", "onoff", "rapm_liga", "orapm_liga", "drapm_liga", "rapm", "sinergia_quinteto", "sinergia_pareja", "sinergia_rapm", "d_cuota_tiro", "d_efg", "d_pct_asistidas", "d_pct_aro", "d_pts100"].filter((k) => F[k]);
   return `<div class="stack" style="gap:10px"><div class="tablebox flat"><table class="esctab" aria-label="Escala frente a desviaciones típicas"><thead><tr><th class="txt">Desviaciones típicas (z)</th>${[0.25, 0.5, 1, 2, 3].map((z) => `<th>${f(z, 2)}</th>`).join("")}</tr></thead><tbody><tr><td class="txt">Escala</td>${[0.25, 0.5, 1, 2, 3].map((z) => `<td>${ESC.txt(100 * Math.tanh(z / 2))}</td>`).join("")}</tr></tbody></table></div>

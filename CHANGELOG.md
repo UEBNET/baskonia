@@ -1,5 +1,19 @@
 # Registro de cambios
 
+## 2026-11-04 — Equipos y quintetos con su propia liga = 0 y clubes frente al club medio
+
+Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.
+
+* **Clubes y plantillas: 0 = club medio de la liga de referencia** (antes, el jugador medio por minutos, que dejaba el
+  club medio en torno a +10). Atlas: `enClub`/`sNivCL` y `ESC` con `HV.refClub` (media del nivel de los clubes de esa
+  liga y temporada; percentil entre sus clubes) en tarjetas, mapa, comparador, simulador, equipo completo (nivel,
+  ranking, aporte, plantilla) e informe de fichaje. «EuroLeague (media)» marca ahora ±0 y Baskonia 2025-26 −5.
+* **Equipos y quintetos** (`artifact/quintetos/index.html`): su propia liga = 0. Jugadores, quintetos, tríos y parejas
+  frente al jugador medio de su liga; equipo y plantillas (Evaluación, historial, todos los equipos, entrenadores)
+  frente al club medio de su liga, con percentiles dentro de ella. Las cifras que comparan ligas entre sí («Nivel de su
+  liga», franja «Ligas», columna «Nivel liga», guía de escalas) siguen con la Euroliga = 0 y lo dicen.
+* Mesa: ayuda de «Liga = 0» con el alcance de cada pestaña.
+
 ## 2026-11-04 — Referencia de nivel por contexto (liga del club elegido / liga propia) y recorte a 0 ampliado
 
 Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.

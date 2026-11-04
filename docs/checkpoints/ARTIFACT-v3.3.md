@@ -75,10 +75,11 @@ elegible y corregir la «Zona que ocupa cada estilo» del mapa 3D. Antes de publ
 ## Referencia por contexto (petición del 04-11-2026)
 
 - Planificación e informe de fichaje: 0 = la liga del club elegido (destino). Estilos: cada equipo y jugador frente a su
-  propia liga. Jugadores y Metodología: la «Liga = 0» de Ajustes. Equipos y quintetos (página de Quintetos) no cambia.
+  propia liga. Jugadores y Metodología: la «Liga = 0» de Ajustes. Equipos y quintetos: ver abajo.
 - Recorte a 0 también en tapones/100, rebotes ofensivos/100 y AST%.
-- Observado (sin cambiar): en la escala de nivel el 0 es el jugador medio de la liga (por minutos); el «club medio»
-  de una liga queda algo por encima (EuroLeague media +10), porque el nivel de club se lee como L equivalente.
+- Equipos y quintetos: su propia liga = 0 (jugadores: jugador medio; equipos y plantillas: club medio); las cifras que
+  comparan ligas («Nivel de su liga», franja de ligas, guía) siguen con la Euroliga = 0, rotuladas.
+- Clubes y plantillas en toda la herramienta: 0 = club medio de la liga de referencia (EuroLeague media ±0).
 
 ## Lo que no cambia (para tu decisión)
 
