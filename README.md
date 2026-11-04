@@ -236,21 +236,24 @@ anterior y reutilización de partidos.
 ## 10. Artifact "Mesa Multiliga Baskonia"
 
 Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN
-(fuente en `artifact/mesa-multiliga.html`; los datos son los `data/artifact/<temporada>/<fase>.json` que genera `python -m bbstats artifact`).
+(fuente en `artifact/mesa-multiliga.html`, `artifact/atlas/` y `artifact/quintetos/`). Copia de revisión de la
+v3.3, pendiente de visto bueno: https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a (`docs/checkpoints/ARTIFACT-v3.3.md`).
 
 * Selector de temporada y pestañas de fase (Temporada regular / Playoffs / Total), filtros por liga,
   búsqueda, minutos mínimos y vistas de columnas (básico, tiro, por 40/100, avanzada, ratings,
   on/off, playoffs frente a regular, métricas oficiales, contexto de equipo). Ficha del jugador
   con la comparación playoffs/regular. Columna y filtro de **nacionalidad** (`datos/<temporada>/nacionalidades.json`).
-* Pestañas: Tabla de datos · **Datos Normalizados** (la misma tabla con los equivalentes EuroLeague de
-  `datos/normalizados/<temporada>/regular.json`; vistas de tiro, creación, defensa, ratings, percentil EuroLeague y
-  valor en su liga; ficha con intervalo y algoritmos A y B) · Evaluación de ligas · Normalización de ligas ·
-  Atlas de Estilos (marco con `atlas/index.html`). La pestaña Comparador se retiró.
-* **EJECUTAR** lanza la Routine de Claude Code `EJECUTAR Mesa Multiliga Baskonia`
-  (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda) mediante el conector Claude Code Remote:
-  descarga las ligas elegidas de **la temporada elegida (sólo esa)**, sube los datos a esta rama
-  y republica los datos de esa temporada en el Artifact. La sesión de la Routine adjunta el
-  repositorio con permiso de escritura (`add_repo`) antes de subir los datos.
+* **Datos normalizados** (normalización v3.2): equivalentes en la **vara** que se elija («esta liga = 0»; EuroLeague
+  por defecto = valores publicados), convertidos en el navegador con `datos/normalizados/vara.json`. La pestaña
+  «Normalización de ligas» usa la misma vara.
+* Atlas de Estilos, Equipos y quintetos, Planificación (simulador de encaje **v3.3**, motor `atlas/simulador.js`) e
+  informes PDF de fichaje y de equipo. Nombres de jugador «Nombre Apellido(s)» en todas las pestañas.
+* Publicación: los datos salen de `scripts/rehacer_identidades.sh` (pasos 7 y 8) en `experimentos/v33_artifact/`;
+  `python artifact/empaquetar.py <salida> experimentos/v33_artifact` prepara los lotes (≤ 58 MB y 250 ficheros, JSON
+  como `.gz.txt`; la versión no puede pasar de 256 MB). Pruebas: `node tests/js/paridad_simulador.js`,
+  `node tests/js/atlas_simulador.js <url local>`, `node tests/js/mesa_vara.js <url local>`.
+* El botón EJECUTAR se retiró en la v2 del artifact (29-10-2026); la actualización de datos se lanza desde Claude Code
+  (habilidad `actualizar-temporada`).
 
 ---
 

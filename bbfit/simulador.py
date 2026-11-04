@@ -1133,7 +1133,7 @@ def forzar_roles(M: np.ndarray, fuerza: dict, total: float, gm: float, liga_d: s
     """v2.1 · impone los roles asignados {índice: rol} sobre cada simulación de minutos M (n_sim × jugadores, se modifica
     en sitio) y devuelve los titulares T5. Minutos del rol: centro = min_rol de la liga de destino, dispersión
     `rol_asignado.dispersion`, recortado a la franja; titular si TITULAR o GO_TO_GUY; el resto de la plantilla reparte
-    los minutos que quedan (con el tope por jugador). Misma lógica que forzarRoles en artifact/atlas/simulador_v2.js."""
+    los minutos que quedan (con el tope por jugador). Misma lógica que forzarRoles en artifact/atlas/simulador.js."""
     from .roles import umbrales_pct
     cr = c.cfg["rol_asignado"]
     u = umbrales_pct(cargar("roles"))

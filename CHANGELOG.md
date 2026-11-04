@@ -1,5 +1,21 @@
 # Registro de cambios
 
+## 2026-11-04 — Artifact v3.3 (copia de revisión): datos nuevos, vara «liga = 0» y simulador v3.3 en el navegador
+
+Detalle: `docs/checkpoints/ARTIFACT-v3.3.md`. Copia de revisión https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a;
+la URL de siempre no cambia hasta el visto bueno.
+
+* Datos de todas las pestañas con identidades corregidas, nombres «Nombre Apellido(s)» y normalización v3.2.
+* Mesa: selector de vara (cualquier liga = 0) en «Datos normalizados» y en «Normalización de ligas»
+  (`datos/normalizados/vara.json`, `bbnorm3.destino.vara_artifact`; conversión JS = referencia Python `desde_el`).
+* Atlas: motor `atlas/simulador.js` v3.3 (minutos mezcla motor + GBM, B9 con rol asignado), con paridad 12/12 con
+  Python. Sustituye a `atlas/simulador_v2.js`, que se retira del repositorio y de la publicación junto a su prueba
+  (`artifact/herramientas/test_paridad_simulador.js`).
+* `artifact/empaquetar.py` con origen de datos configurable; paso 8 de `scripts/rehacer_identidades.sh` (quintetos,
+  escalas, equipos, estilos, compactación, paridad y lotes).
+* Pruebas: `tests/js/paridad_simulador.js` (v3.3), `tests/js/atlas_simulador.js` (al día con la interfaz actual) y
+  `tests/js/mesa_vara.js` (nueva).
+
 ## 2026-11-04 — Identidades corregidas, nombres canónicos y simulador v3.3
 
 Detalle: `docs/identidades_20261103.md` y `docs/simulador_v33.md`. Cadena completa: `scripts/rehacer_identidades.sh`.

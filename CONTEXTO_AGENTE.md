@@ -295,24 +295,21 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 ## 8. Artifact asociado: "Mesa Multiliga Baskonia"
 
 - URL: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (privado del propietario; se comparte desde su menú Compartir).
-- Código: `artifact/mesa-multiliga.html`. Datos publicados junto a la página como ficheros:
-  `datos/<temporada>/{indice,regular,playoffs,total}.json`, `datos/diccionario_columnas.json` y `datos/temporadas.json`,
-  generados con `python -m bbstats artifact` en `data/artifact/` (no versionado).
-- Funciones: selector de temporada (lista leída de `datos/temporadas.json`: 2026-27 … 2020-21); pestañas de fase **Temporada regular / Playoffs / Total**;
-  filtros por liga, búsqueda y minutos mínimos; vistas (básico, tiro, por 40'/100, avanzada, ratings, on/off,
-  playoffs vs regular, métricas oficiales, contexto de equipo); tabla ordenable; ficha del jugador con barras
-  playoffs frente a regular.
-- **Botón EJECUTAR**: la página no puede ejecutar Python, así que usa la capacidad `mcp` con el conector
-  **Claude Code Remote** (herramientas `get_trigger` y `fire_trigger`) para lanzar la Routine
-  `EJECUTAR Mesa Multiliga Baskonia` (`trig_01VA8u4RqAzGbKy4v4bFn1mw`, sólo bajo demanda). El mensaje que envía es
-  `temporada=<T> ligas=<l1 l2 …>` y **sólo se actualiza esa temporada**. La Routine abre una sesión de Claude Code que:
-  adjunta el repositorio con permiso de escritura (`add_repo`), clona/actualiza la rama, ejecuta
-  `python -m bbstats ejecutar --temporada <T>`, hace commit y push de `data/` y `config/sources.json`, y republica
-  en el Artifact (misma URL) `datos/temporadas.json` y los ficheros `datos/<T>/*.json` de esa temporada.
-  Primera ejecución real (12-10-2026, 2026-27): descarga y republicación correctas; el push falló (403) porque la
-  sesión no tenía el repositorio autorizado, de ahí el paso `add_repo` añadido después.
-- Para editar la página: pedirlo a Claude con la URL (lee la versión publicada y republica en la misma URL), o editar
-  `artifact/mesa-multiliga.html` y republicarlo con `url` = la del Artifact.
+  Copia de revisión de la v3.3 (04-11-2026, pendiente de visto bueno): https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a.
+  Estado y decisiones: `docs/checkpoints/ARTIFACT-v3.3.md`.
+- Código: `artifact/mesa-multiliga.html` (= `index.html` publicado), `artifact/atlas/{index.html,simulador.js,
+  informe_v3.js,informe_equipo.js}`, `artifact/quintetos/`. Motor del simulador en el navegador: `atlas/simulador.js`
+  (v3.3, paridad con `bbfit.simulador` en `tests/js/paridad_simulador.js`).
+- Datos: carpeta de origen `experimentos/v33_artifact/` (no versionada; `scripts/rehacer_identidades.sh`, pasos 7-8)
+  con `datos/` (Mesa: temporadas, normalizados v3.2 + `vara.json`, normalización, evaluación), `atlas/`, `quintetos/`
+  y `simulador/`. `python artifact/empaquetar.py <salida> experimentos/v33_artifact` → `lote<N>.json` (JSON como
+  `.gz.txt`, límite de 256 MB por versión) para publicar por lotes con la herramienta Artifact.
+- Vara «liga = 0»: la Mesa convierte el equivalente EuroLeague a la liga elegida con `vara.json`
+  (`bbnorm3.destino.vara_artifact`; referencia Python `desde_el`).
+- Botón EJECUTAR: retirado en la v2 del artifact (29-10-2026). La actualización de una temporada se hace desde
+  Claude Code (habilidad `actualizar-temporada`).
+- Para editar la página: leer la versión publicada (puede tener cambios hechos fuera del repositorio), fusionar y
+  republicar en la misma URL; publicar antes una copia de revisión si el cambio es grande.
 
 ---
 

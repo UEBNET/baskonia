@@ -1,0 +1,59 @@
+# Artifact · datos con identidades corregidas, normalización v3.2 con vara elegible y simulador v3.3 (04-11-2026)
+
+**Estado: copia de revisión, pendiente del visto bueno del usuario.** La URL de siempre no se ha tocado.
+
+| | |
+|---|---|
+| Copia de revisión | https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a (versión 1793782011-0fa0, 265 ficheros, ≈ 250 MB, capacidades `downloads` y `sample`, runtime 0.2.96) |
+| Versión vigente (sin cambios) | https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (versión 1793709008-72df, 264 ficheros, runtime 0.2.92) |
+| Alcance aprobado | Datos + motor v3.3 + liga a 0; informe de equipo integrado en esta rama; copia de revisión primero |
+| Origen de los datos | `experimentos/v33_artifact/` (no versionado), generado por `scripts/rehacer_identidades.sh` (pasos 7 y 8) |
+| Lotes | `python artifact/empaquetar.py experimentos/v33_artifact/_publicacion experimentos/v33_artifact` → `lote0…4.json` |
+
+## Qué cambia frente a la versión vigente
+
+**Datos (todas las pestañas).**
+- Identidades corregidas (BNXT y GBL reprocesadas, crosswalk con persona_id estables): `docs/identidades_20261103.md`.
+- Nombres canónicos «Nombre Apellido(s)» en la Mesa, el Atlas, Quintetos y el simulador (`bbmodel/nombres.py`). Los
+  miembros de una plantilla sin registro ni nombre canónico también se escriben así (un caso: «MAJAUSKAS, AURIMAS» →
+  «Aurimas Majauskas»).
+- Normalización v3.2 (`data/modelos/v3_2/normalizado`) en «Datos normalizados», «Normalización de ligas» y el Atlas.
+- Evaluación de equipos de Quintetos, escalas ±100, estilos unificados de Quintetos y extras del informe de equipo,
+  regenerados con estos datos. El generador de estilos unificados ignora ahora los ficheros `.extras`.
+
+**Liga a 0 (vara elegible).**
+- `datos/normalizados/vara.json` (`bbnorm3.destino.vara_artifact`): constantes por métrica para expresar el
+  equivalente EuroLeague en la vara de cualquier liga:
+  - z_EL = (T(v) − μ_EL,pos)/τ_EL,pos; z_d = (z_EL − δ_d)/s_d; valor = T⁻¹(μ_d + τ_d·z_d);
+  - cada cola del intervalo del 80 %: v_j = sd_EL² − sd_par(o,EL)² (≥ 10 % de sd_EL²) y
+    sd_d² = (v_j + sd_par(o,d)²)/s_d² + (distancia fuera del soporte)².
+- Mesa · «Datos normalizados»: selector «Vara (esta liga = 0)». Con la EuroLeague se muestran los valores publicados.
+- «Normalización de ligas»: la vara es la fila de referencia, la EuroLeague entra en el ranking y los niveles y
+  distancias se miden respecto a la vara. Las conclusiones redactadas frente a la EuroLeague se ocultan con otra vara.
+- Comprobado: conversión JS = referencia Python `desde_el` (diferencia máxima 2·10⁻¹⁴ en 40 jugadores × 3 ligas ×
+  3 métricas); prueba en navegador `tests/js/mesa_vara.js` en verde.
+
+**Simulador de encaje v3.3 en el navegador** (`atlas/simulador.js`, sustituye a `atlas/simulador_v2.js`).
+- Minutos publicados: mezcla 50/50 del motor y el GBM (`min_gbm` por registro y liga de destino); intervalos
+  desplazados, recortados y recalibrados.
+- B9 con rol asignado: Δy = b·Δmin + c·Δrol sobre la producción del Atlas.
+- Producción del Atlas con contexto y recalibración A4 de dos colas, como en la v3.2 publicada.
+- Paridad con Python: 12/12 casos dentro de tolerancia (`tests/js/paridad_simulador.js`), con rol libre, ROTACION y
+  TITULAR. Corregido durante la paridad: sin edad conocida, la producción del Atlas no aplica deriva (como Python).
+- Etiquetas visibles «simulador v3.3»; prueba del Atlas en navegador `tests/js/atlas_simulador.js` en verde.
+
+## Lo que no cambia (para tu decisión)
+
+- «Simular equipo completo» reparte los 200' con el motor (Plackett-Luce y roles asignados), sin la mezcla GBM: la
+  mezcla es una predicción por fichaje y no suma 200' por equipo. Igual que en la versión vigente.
+- Los intervalos de pts/100 de un fichaje con producción muy baja pueden bajar de 0 (semiamplitud A4 sin recorte;
+  caso de paridad: Pablo Gimeno → NBA, [−2,8; 10,0]). Igual en Python y en la versión vigente.
+- Los nombres de club conservan el formato de la fuente (p. ej. «SILBÖ SAN PABLO BURGOS»): la unificación pedida era
+  de jugadores.
+- El Atlas sigue mostrando los normalizados en la vara EuroLeague; la vara elegible está en la Mesa.
+
+## Al aprobarla
+
+Publicar en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (leerla antes y fusionar si cambió), con los mismos
+lotes y las rutas marcadas a `null` en el último (`.json` grandes ya servidos como `.gz.txt` y
+`atlas/simulador_v2.js`). La versión 1793709008-72df queda en su historial.
