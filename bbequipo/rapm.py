@@ -505,15 +505,19 @@ def ajustar(D: Diseno, T: pd.DataFrame | None, cfg: dict, tipo_prior: str = "rid
     hist, cache = [], {}
     tau2, alpha = float(eb["tau2_inicial"]), rejilla_alpha[0]
     res = None
-    for it in range(int(eb["iteraciones"])):
+    tau_fijo = eb.get("tau_fijo")                    # O/D del producto: τ y α heredados del modelo net (la verosimilitud
+    for it in range(int(eb["iteraciones"])):         # marginal exige la LU de una matriz de 2·nJ con relleno excesivo)
         ll = {}
         x0 = None
-        for a_ in rejilla_alpha:                         # γ ~ N(0, I/α) y δ ~ N(0, τ²): los dos por verosimilitud marginal
-            for tau in rejilla:
-                r = resolver_conjunto(D, Z, tau ** 2, sigma2, a_, x0=x0)
-                x0 = r["x"]
-                ll[(a_, tau)] = log_marginal_conjunto(D, Z, r, tau ** 2, a_, sigma2, cache)
-        alpha, tau_best = max(ll, key=ll.get)
+        if tau_fijo is not None:
+            alpha, tau_best = float(eb.get("alpha_fijo", rejilla_alpha[0])), float(tau_fijo)
+        else:
+            for a_ in rejilla_alpha:                     # γ ~ N(0, I/α) y δ ~ N(0, τ²): los dos por verosimilitud marginal
+                for tau in rejilla:
+                    r = resolver_conjunto(D, Z, tau ** 2, sigma2, a_, x0=x0)
+                    x0 = r["x"]
+                    ll[(a_, tau)] = log_marginal_conjunto(D, Z, r, tau ** 2, a_, sigma2, cache)
+            alpha, tau_best = max(ll, key=ll.get)
         tau2 = tau_best ** 2
         res = resolver_conjunto(D, Z, tau2, sigma2, alpha, x0=x0)
         sigma2 = max(res["sigma2_residual"], 1e-6)
@@ -548,10 +552,13 @@ def ajustar(D: Diseno, T: pd.DataFrame | None, cfg: dict, tipo_prior: str = "rid
                 g_new[sl] = gc; priors.append(pr)
             g = g_new
             ll = {}
-            for tau in rejilla:
-                b_, f_, info = resolver(D, g, tau ** 2, sigma2)
-                ll[tau] = log_marginal(D, {"resid": info["resid"], "delta": b_ - g}, tau ** 2, sigma2, cache)
-            tau2 = max(ll, key=ll.get) ** 2
+            if eb.get("tau_fijo_gbm") is not None:
+                tau2 = float(eb["tau_fijo_gbm"]) ** 2
+            else:
+                for tau in rejilla:
+                    b_, f_, info = resolver(D, g, tau ** 2, sigma2)
+                    ll[tau] = log_marginal(D, {"resid": info["resid"], "delta": b_ - g}, tau ** 2, sigma2, cache)
+                tau2 = max(ll, key=ll.get) ** 2
             beta, fijos, info = resolver(D, g, tau2, sigma2, varianza="diagonal")
             v = info["v"]
             sigma2 = max(info["sigma2_residual"], 1e-6)
@@ -644,7 +651,12 @@ def exportar(cfg: dict, progreso=print) -> dict:
                 if progreso:
                     progreso(f"    {comp}: ajuste reutilizado de {cache.name}", flush=True)
             else:
-                r = ajustar(D, T, cfg, tipo, bloques_fuera, progreso=progreso)
+                cfg_c = cfg
+                if comp == "od" and (pr.get("od") or {}):
+                    od = pr["od"]
+                    cfg_c = C.con(cfg, **{"f1.bayes_empirico.tau_fijo": od.get("tau_fijo"), "f1.bayes_empirico.alpha_fijo": od.get("alpha_fijo"),
+                                          "f1.bayes_empirico.tau_fijo_gbm": od.get("tau_fijo_gbm")})
+                r = ajustar(D, T, cfg_c, tipo, bloques_fuera, progreso=progreso)
                 cache.parent.mkdir(parents=True, exist_ok=True)
                 cache.write_bytes(pickle.dumps({k: v for k, v in r.items() if k != "XZ"}))
             res[comp] = (D, r)

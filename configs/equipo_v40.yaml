@@ -125,6 +125,8 @@ f1:
   producto:                                           # ajuste con todas las temporadas: hiperparámetros fijados por el examen
     tau_rejilla: [1.0, 2.0, 3.0]                      # los cuatro cortes eligieron τ* = 1,0 (base lineal) y 2,0 (tras el GBM)
     ridge_alpha_rejilla: [1.0]                        # y α* = 1,0; la rejilla completa (24 combinaciones) costaba 2 h por ajuste
+    od: {tau_fijo: 1.0, alpha_fijo: 1.0, tau_fijo_gbm: 2.0}   # O/D: τ y α heredados del net (su verosimilitud marginal exige la LU
+                                                      # de una matriz de 2·nJ ≈ 82.000 con relleno que agotaba la memoria)
   salidas: {rapm: data/modelos/v4_0/rapm_multiliga, prior: data/modelos/v4_0/rapm_multiliga/g_prior.json}
   mascara_rasgos: true                                # aviso 2 de la F0: indicador «rasgo con dato de fuente» por bloque entra en g
   comprobaciones_d2:                                  # aprobación de D2 por el CEO (04-11-2026): dos comprobaciones prerregistradas
