@@ -1,5 +1,29 @@
 # Registro de cambios
 
+## 2026-11-04 — CERNO v4.0 · F1: RAPM multiliga con prior del perfil (+ F1-D)
+
+Detalle: `docs/checkpoints/V40_F1.md`, `docs/modelo_equipo_v40.md` §2. Puerta F0 aprobada por el CEO (D1–D8; D2 con
+dos comprobaciones) y orden de arrancar F1 el 04-11-2026.
+
+* **Modelo** (`bbequipo/rapm.py`): y_s = c_{ℓ,t} + clutch + playoffs + Σβ_A − Σβ_B, ε ~ N(0, σ²/n_s); β por
+  persona-temporada = prior lineal del perfil (γ estimado CONJUNTAMENTE con β, LSQR) + desviación N(0, τ²); τ y α por
+  verosimilitud marginal exacta (log-determinante disperso); candidato GBM por retroajuste; descomposición O/D; varianza
+  de β por sondas de Hutchinson.
+* **Corte de calibración 2021** (decisiones antes de los cortes de decisión): contrato con ≥ 1 posesión por tramo (los
+  tramos de 0,5–0,75 posesiones, el 11 %, acaparaban el 32 % de la pérdida); el RAPM normalizado de la MISMA temporada no
+  entra en el prior (circular); entra el de la temporada anterior; momentos y validación cruzada descartados para τ.
+* **Examen prerregistrado §11.1** (`bbequipo/examen_f1.py`, cortes 2021–2024, 24.057 partidos de decisión): RMSE del
+  margen por partido de t+1 **14,50** frente a 15,45 (interceptos de equipo), **14,68** (RAPM traducido v3.2, el del
+  impacto actual), 15,14 (RAPM crudo de liga) y 15,69 (sólo ventaja local); diferencias con IC95 que excluyen el 0:
+  −0,95, **−0,18** [−0,26, −0,09], −0,64 y −1,19. Fichajes: corr(prior, β en destino) 0,55 / 0,70 / 0,78 (IC95 > 0).
+  Prior elegido: **GBM** (−9,3 % de error frente al ridge, IC95 [−12,8, −5,8]).
+* **D2 cerrada**: sensibilidad a la red de referencia del latente −0,02 % (umbral 0,5 %); ablación del latente +3,5 %
+  [−0,9, +7,9]: indeterminada, se conserva.
+* Corrección declarada: la primera lectura imputaba 0 a los jugadores sin RAPM en las líneas base y hacía parecer roto
+  el RAPM traducido en la Tercera FEB (nivel −11 pts/100); corregido a la media de liga.
+* Salidas: `data/modelos/v4_0/rapm_multiliga/` (β por persona-temporada con sd, prior y peso del prior; O/D;
+  `g_prior.json`; `examen/`; `f1d_contaminacion.json`).
+
 ## 2026-11-04 — CERNO v4.0 · F0 (preparación): perfil ampliado, contrato de datos y configuración única
 
 Encargo v4.0 (rev. 1.2); detalle en `docs/checkpoints/V40_F0.md` y `docs/modelo_equipo_v40.md`. La v4.0 **añade**

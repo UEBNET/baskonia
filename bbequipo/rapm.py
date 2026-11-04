@@ -140,47 +140,41 @@ class Diseno:
 
 
 def construir_diseno(tr: pd.DataFrame, componente: str = "net") -> Diseno:
+    """Matriz dispersa del modelo (vectorizada: con ≈ 1 M de tramos las listas de Python agotaban la memoria)."""
     jug = sorted(set(k for q in tr["A"] for k in q) | set(k for q in tr["B"] for k in q))
     ij = {k: i for i, k in enumerate(jug)}
     lt = (tr["liga"] + "|" + tr["temporada"]).to_numpy()
     lts = sorted(set(lt))
     ilt = {k: i for i, k in enumerate(lts)}
     nJ, n = len(jug), len(tr)
-    A = [[ij[k] for k in q] for q in tr["A"]]
-    B = [[ij[k] for k in q] for q in tr["B"]]
+    A = np.array([[ij[k] for k in q] for q in tr["A"]], dtype=np.int64)      # n × 5
+    B = np.array([[ij[k] for k in q] for q in tr["B"]], dtype=np.int64)
     clutch, po = tr["clutch"].to_numpy(bool), tr["playoffs"].to_numpy(bool)
+    ilt_s = np.array([ilt[k] for k in lt], dtype=np.int64)
+    poss = tr["poss"].to_numpy(float)
+    ar = np.arange(n)
     if componente == "net":
         comps, fijos = ["net"], [f"c_{k}" for k in lts] + ["clutch", "playoffs"]
         base = nJ
-        rows, cols, vals = [], [], []
-        for s in range(n):
-            rows += [s] * 10 + [s] + ([s] if clutch[s] else []) + ([s] if po[s] else [])
-            cols += A[s] + B[s] + [base + ilt[lt[s]]] + ([base + len(lts)] if clutch[s] else []) + ([base + len(lts) + 1] if po[s] else [])
-            vals += [1.0] * 5 + [-1.0] * 5 + [1.0] + ([1.0] if clutch[s] else []) + ([1.0] if po[s] else [])
-        y, w, lt_f = tr["y"].to_numpy(float), tr["poss"].to_numpy(float), lt
+        rows = [np.repeat(ar, 5), np.repeat(ar, 5), ar, ar[clutch], ar[po]]
+        cols = [A.ravel(), B.ravel(), base + ilt_s, np.full(clutch.sum(), base + len(lts)), np.full(po.sum(), base + len(lts) + 1)]
+        vals = [np.ones(5 * n), -np.ones(5 * n), np.ones(n), np.ones(clutch.sum()), np.ones(po.sum())]
+        y, w, lt_f, partido = tr["y"].to_numpy(float), poss, lt, lt + "|" + tr["game_id"].astype(str).to_numpy()
         nf = n
     else:   # od: dos filas por tramo; columnas [β^O (nJ), β^D (nJ), c_of liga|temp, local, clutch, playoffs]
         comps, fijos = ["of", "def"], [f"c_{k}" for k in lts] + ["local", "clutch", "playoffs"]
         base = 2 * nJ
-        rows, cols, vals = [], [], []
-        y, w, lt_f = [], [], []
-        for s in range(n):
-            r = 2 * s
-            # ataque de A (local) contra defensa de B
-            rows += [r] * 11 + ([r] if clutch[s] else []) + ([r] if po[s] else [])
-            cols += A[s] + [nJ + j for j in B[s]] + [base + ilt[lt[s]]] + ([base + len(lts) + 1] if clutch[s] else []) + ([base + len(lts) + 2] if po[s] else [])
-            vals += [1.0] * 11 + ([1.0] if clutch[s] else []) + ([1.0] if po[s] else [])
-            rows.append(r); cols.append(base + len(lts)); vals.append(1.0)          # local
-            # ataque de B contra defensa de A
-            rows += [r + 1] * 11 + ([r + 1] if clutch[s] else []) + ([r + 1] if po[s] else [])
-            cols += B[s] + [nJ + j for j in A[s]] + [base + ilt[lt[s]]] + ([base + len(lts) + 1] if clutch[s] else []) + ([base + len(lts) + 2] if po[s] else [])
-            vals += [1.0] * 11 + ([1.0] if clutch[s] else []) + ([1.0] if po[s] else [])
-        poss = tr["poss"].to_numpy(float)
+        ra, rb = 2 * ar, 2 * ar + 1                                              # ataque de A (local) / ataque de B
+        rows = [np.repeat(ra, 5), np.repeat(ra, 5), ra, ra, ra[clutch], ra[po],
+                np.repeat(rb, 5), np.repeat(rb, 5), rb, rb[clutch], rb[po]]
+        cols = [A.ravel(), nJ + B.ravel(), base + ilt_s, np.full(n, base + len(lts)), np.full(clutch.sum(), base + len(lts) + 1), np.full(po.sum(), base + len(lts) + 2),
+                B.ravel(), nJ + A.ravel(), base + ilt_s, np.full(clutch.sum(), base + len(lts) + 1), np.full(po.sum(), base + len(lts) + 2)]
+        vals = [np.ones(5 * n), np.ones(5 * n), np.ones(n), np.ones(n), np.ones(clutch.sum()), np.ones(po.sum()),
+                np.ones(5 * n), np.ones(5 * n), np.ones(n), np.ones(clutch.sum()), np.ones(po.sum())]
         y = np.empty(2 * n); y[0::2] = 100.0 * tr["a_pts"].to_numpy(float) / poss; y[1::2] = 100.0 * tr["b_pts"].to_numpy(float) / poss
-        w = np.repeat(poss, 2); lt_f = np.repeat(lt, 2); nf = 2 * n
-    X = sp.csr_matrix((np.array(vals), (np.array(rows), np.array(cols))), shape=(nf, len(comps) * nJ + len(fijos)))
-    partido = (lt + "|" + tr["game_id"].astype(str).to_numpy())
-    partido = partido if componente == "net" else np.repeat(partido, 2)
+        w, lt_f, nf = np.repeat(poss, 2), np.repeat(lt, 2), 2 * n
+        partido = np.repeat(lt + "|" + tr["game_id"].astype(str).to_numpy(), 2)
+    X = sp.csr_matrix((np.concatenate(vals), (np.concatenate(rows), np.concatenate(cols))), shape=(nf, len(comps) * nJ + len(fijos)))
     return Diseno(X=X, y=np.asarray(y, float), w=np.asarray(w, float), jugadores=jug, fijos=fijos, componentes=comps,
                   liga_temp=np.asarray(lt_f), partido=np.asarray(partido), idx_jugador=ij)
 
@@ -644,8 +638,17 @@ def exportar(cfg: dict, progreso=print) -> dict:
             if progreso:
                 progreso(f"  ajuste {comp}: diseño…", flush=True)
             D = construir_diseno(tr, comp)
-            r = ajustar(D, T, cfg, tipo, bloques_fuera, progreso=progreso)
+            cache = C.RAIZ / "experimentos" / "v4_0" / f"producto_f1_{comp}_{tipo}_{C.huella(cfg, ('f1', 'contrato'))}.pkl"
+            if cache.exists():                         # reanudable: el ajuste de cada componente se guarda al terminar
+                r = pickle.loads(cache.read_bytes())
+                if progreso:
+                    progreso(f"    {comp}: ajuste reutilizado de {cache.name}", flush=True)
+            else:
+                r = ajustar(D, T, cfg, tipo, bloques_fuera, progreso=progreso)
+                cache.parent.mkdir(parents=True, exist_ok=True)
+                cache.write_bytes(pickle.dumps({k: v for k, v in r.items() if k != "XZ"}))
             res[comp] = (D, r)
+            import gc; gc.collect()
         tb = tabla_beta(res["net"][1], res["net"][0]).merge(
             tabla_beta(res["od"][1], res["od"][0])[["clave", "beta_of", "beta_sd_of", "prior_of", "beta_def", "beta_sd_def", "prior_def",
                                                    "orapm", "drapm", "rapm_od"]], on="clave", how="left")
