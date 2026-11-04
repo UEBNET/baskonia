@@ -83,6 +83,9 @@ def examen_corte(cfg: dict, a: int, tr_all: pd.DataFrame, rangos: list, progreso
     e0 = wpar * Rp ** 2
     out["parejas_nuevas"] = int(len(par)); out["parejas_con_perfil"] = int(con_perfil.sum())
     out["mse_f1_pareja"] = float(e0.sum() / wpar.sum())
+    tr1_t = tr1.copy()                                   # mismas filas con claves persona|t (perfil ≤ t) para los rasgos
+    tr1_t["A"] = tr1_t["A"].map(lambda q: tuple(k.rsplit("|", 1)[0] + "|" + temp_t for k in q))
+    tr1_t["B"] = tr1_t["B"].map(lambda q: tuple(k.rsplit("|", 1)[0] + "|" + temp_t for k in q))
     nuevos_par = set(zip(par["i"], par["j"]))
     tiene = np.array([any(((q[x], q[y]) if q[x] < q[y] else (q[y], q[x])) in nuevos_par for q in (row.A, row.B)
                           for x in range(5) for y in range(x + 1, 5)) for row in tr1.itertuples()])
@@ -101,7 +104,7 @@ def examen_corte(cfg: dict, a: int, tr_all: pd.DataFrame, rangos: list, progreso
         # nivel de tramo: tramos de t+1 con alguna pareja nueva
         m = Mr[np.triu_indices(R.p)]
         e_tr0, e_tr1 = 0.0, 0.0
-        for idx, U in SG.rasgos_tramos(tr1, R):
+        for idx, U in SG.rasgos_tramos(tr1_t, R):           # tramos de t+1 con las claves de perfil de la temporada t
             pred = U @ m
             sel = tiene[idx]
             e_tr0 += float(np.sum(w1[idx][sel] * r1[idx][sel] ** 2)); e_tr1 += float(np.sum(w1[idx][sel] * (r1[idx][sel] - pred[sel]) ** 2))
