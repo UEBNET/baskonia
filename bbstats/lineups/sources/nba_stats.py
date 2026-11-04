@@ -335,6 +335,9 @@ class _StatsV3PBP(PBPSource):
             elif at_ == "Foul":
                 if tid is not None:
                     add("foul", tid, pid)
+            elif at_ == "Timeout":
+                if tid is not None and "official" not in desc.lower():
+                    add("timeout", tid)
             elif at_ == "" and pid is not None:
                 if "STEAL" in desc:
                     add("stl", tid, pid)

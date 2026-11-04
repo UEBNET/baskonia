@@ -512,13 +512,13 @@ ${raw}`;
         const tops = (arr) => arr.map((x) => `<li class="${Math.round(x.S) > 0 ? "up" : Math.round(x.S) < 0 ? "dn" : ""}"><b>${E(nomC(x.o))}</b><span>${ESC.txt(x.S)} · por estilo ${ESC.txt(x.est)} · por nivel ${ESC.txt(x.niv)}</span></li>`).join("");
         const q5 = c6.q5;
         pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Sinergias de pareja con la plantilla", lead6b)}
-          ${P.length ? `<div class="r3blk"><h3>Cómo se entendería con cada compañero</h3>${svgSinergias(filasP)}<p class="r3n">Sinergia prevista de cada pareja (${E(apeJ)} + compañero) frente a una pareja media de la Euroliga, escala ±100; combina el encaje de sus estilos y el nivel de los dos. Junto al nombre, minutos por partido del compañero con él en la plantilla y su estilo (color). Valor central del modelo de química, sin rango por pareja.</p></div>` : ""}
+          ${P.length ? `<div class="r3blk"><h3>Cómo se entendería con cada compañero</h3>${svgSinergias(filasP)}<p class="r3n">Sinergia prevista de cada pareja (${E(apeJ)} + compañero) frente a una pareja media de la Euroliga, escala ±100; combina el encaje de sus estilos y el nivel de los dos. Junto al nombre, minutos por partido del compañero con él en la plantilla y su estilo (color). Valor central del modelo de química, sin rango por pareja.${notaMin()}</p></div>` : ""}
           <div class="r3cols c2">${q5 ? `<div class="r3blk"><h3>${q5.modo === "con" ? "Quinteto más probable con él" : "El quinteto principal, con él dentro"}</h3>${svgQuinteto(q5.q, q5.sel, j)}<p class="r3n">${q5.modo === "con" ? `Aparece en el ${Math.round(100 * q5.prob)} % de las temporadas simuladas.` : `Con el rol de ${E(ROLN[rolA].toLowerCase())} no entra en los quintetos más repetidos. El principal (${Math.round(100 * q5.prob)} % de las temporadas simuladas) tiene un Net previsto de ${SG(q5.base.total, 1)}; con ${E(apeJ)} en lugar de ${E(ape(q5.fuera.j.nombre))} (su puesto, menos minutos), ${SG(q5.q.total, 1)}.`} Net previsto = impacto de cada jugador (RAPM-EL) + química de sus 10 parejas, frente a un quinteto medio de la Euroliga. Valor central, sin rango.${q5.q.falta.length ? " *Sin jugada a jugada: cuenta 0." : ""}</p></div>` : "<div></div>"}
             ${P.length ? `<div class="r3blk"><h3>Qué explica cada química</h3><span class="r3lab">Sus tres parejas con más química</span><ul class="r3l sg">${tops(P.slice(0, 3))}</ul><span class="r3lab" style="margin-top:8px">Las tres que menos suman</span><ul class="r3l sg">${tops(P.slice(-3).reverse())}</ul><p class="r3n">«Por estilo»: cómo se complementan sus formas de jugar. «Por nivel»: lo que añade o resta el nivel de los dos.</p></div>` : ""}</div>` });
       }
       // 06 · C · impacto en la plantilla y en sus compañeros
       if (c6) {
-        const gm = (d.liga === "nba" || d.liga === "gleague") ? 48 : 40, mins = s2.plantilla.filter((p) => p.minutos >= 0.5 || (p.minutos_sin || 0) >= 0.5).map((p) => ({ nom: p.fichaje ? apeJ : nom(p.nombre || "").split(" ").slice(-1)[0], sin: p.fichaje ? null : p.minutos_sin, con: p.minutos, yo: p.fichaje }));
+        const gm = (d.liga === "nba" || d.liga === "gleague") ? 48 : 40, mins = s2.plantilla.filter((p) => (p.minutos >= 0.5 || (p.minutos_sin || 0) >= 0.5) && (p.fichaje || !mmIn() || c6.okPer.has(p.persona))).map((p) => ({ nom: p.fichaje ? apeJ : nom(p.nombre || "").split(" ").slice(-1)[0], sin: p.fichaje ? null : p.minutos_sin, con: p.minutos, yo: p.fichaje }));
         const pierde = mins.filter((m) => !m.yo && m.sin != null && m.con - m.sin <= -1).sort((x, y) => (x.con - x.sin) - (y.con - y.sin));
         const ddM = c6.imp.length ? c6.imp.reduce((acc, x) => acc + (x.dd.ortg ? x.dd.ortg.v : 0), 0) / c6.imp.length : null;
         const lead6c = `${pierde.length ? `Sus ${N(c6.fich ? c6.fich.minutos : 0, 0)} minutos salen sobre todo de <b>${E(pierde.slice(0, 3).map((m) => `${m.nom} (${N(m.sin, 0)}' → ${N(m.con, 0)}')`).join(", "))}</b>.` : "Entra sin quitar minutos de forma apreciable a nadie."}${ddM != null ? ` Con él, el ORtg de sus compañeros cambia de media ${SG0(ddM, 1)} puntos por 100 posesiones: ${Math.abs(ddM) < 0.5 ? "su llegada apenas mueve sus números" : ddM > 0 ? "les sube el nivel del entorno" : "les baja el nivel del entorno"}.` : ""}`;
@@ -527,19 +527,19 @@ ${raw}`;
         const maxEnt = c6.imp.length ? Math.max(...c6.imp.map((x) => Math.abs(ESC.dS("nivel", x.ddev)))) : 0;
         const impT = c6.imp.length ? `<table class="r3t imp"><thead><tr><th>Compañero</th><th class="num">Minutos</th><th class="num">Entorno</th><th class="num">ORtg</th><th class="num">DRtg</th><th class="num">TS%</th><th class="num">RAPM</th></tr></thead><tbody>${c6.imp.slice(0, 8).map((x) => `<tr><td><b>${E(nom(x.o.j.nombre))}</b></td><td class="num">${x.o.p.minutos_sin != null ? `${N(x.o.p.minutos_sin, 0)}' → ${N(x.o.p.minutos, 0)}'` : `${N(x.o.p.minutos, 0)}'`}</td><td class="num">${SG0(ESC.dS("nivel", x.ddev), 1)}</td>${CTX6.map((k) => fmtD(k, x.dd[k])).join("")}</tr>`).join("")}</tbody></table>` : "";
         pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Impacto en la plantilla y en sus compañeros", lead6c)}
-          <div class="r3cols mn"><div class="r3blk"><h3>Minutos por partido, sin y con él</h3>${svgMinutos(mins, gm)}<p class="r3n">Gris: minutos de cada jugador en la plantilla actual simulada; negro: con ${E(apeJ)} dentro y su rol asignado. Medias de las temporadas simuladas.</p></div>
-            <div class="r3blk"><h3>Lugar en la plantilla por nivel</h3>${rankV(c6.orden || sim.orden, (o) => o.el, d.temporada, true)}<p class="r3n">Nivel Cerno, escala ±100. De arriba abajo, de más a menos nivel.</p>
+          <div class="r3cols mn"><div class="r3blk"><h3>Minutos por partido, sin y con él</h3>${svgMinutos(mins, gm)}<p class="r3n">Gris: minutos de cada jugador en la plantilla actual simulada; negro: con ${E(apeJ)} dentro y su rol asignado. Medias de las temporadas simuladas.${notaMin()}</p></div>
+            <div class="r3blk"><h3>Lugar en la plantilla por nivel</h3>${rankV(c6.orden || sim.orden, (o) => o.el, d.temporada, true)}<p class="r3n">Nivel Cerno, escala ±100. De arriba abajo, de más a menos nivel.${notaMin()}</p>
               ${(() => { const PN = { E: "Exteriores", A: "Aleros", I: "Interiores" }, acc = { E: [0, 0], A: [0, 0], I: [0, 0] };
                 s2.plantilla.forEach((p) => { const k = p.pos3 in acc ? p.pos3 : null; if (!k) return; acc[k][0] += p.fichaje ? 0 : (p.minutos_sin || 0); acc[k][1] += p.minutos || 0; });
                 const fl = Object.keys(acc).filter((k) => acc[k][0] + acc[k][1] > 0); if (!fl.length) return "";
                 return `<h3 style="margin-top:14px!important">Minutos por puesto</h3><table class="r3t sim"><thead><tr><th>Puesto</th><th class="num">Sin él</th><th class="num">Con él</th><th class="num">Cambio</th></tr></thead><tbody>${fl.map((k) => { const dlt = acc[k][1] - acc[k][0]; return `<tr class="${k === j.pos3 ? "yo" : ""}"><td>${PN[k]}</td><td class="num">${N(acc[k][0], 0)}'</td><td class="num"><b>${N(acc[k][1], 0)}'</b></td><td class="num">${SG0(dlt, 0)}'</td></tr>`; }).join("")}</tbody></table><p class="r3n">Suma de minutos por partido de cada puesto en la plantilla simulada (${(d.liga === "nba" || d.liga === "gleague") ? 240 : 200}' por partido). En amarillo, su puesto.</p>`; })()}</div></div>
-          ${impT ? `<div class="r3blk"><h3>Cómo cambian los números de sus compañeros</h3>${impT}${maxEnt < 1 ? `<p class="r3p r3lec">Su llegada apenas mueve los números de sus compañeros: el nivel medio de su entorno cambia menos de un punto en la escala ±100, porque su nivel es parecido al de los minutos que ocupa.</p>` : ""}<p class="r3n">Cambio previsto en cada compañero al entrar ${E(apeJ)}, con los minutos de la simulación. «Entorno»: cuánto mejora (+) o empeora (−) el nivel medio de los compañeros de cada uno, escala ±100. Azul: mejora; naranja: empeora; gris: sin cambio apreciable. Los ocho compañeros con más minutos. Valores centrales del modelo de contexto, sin rango.</p></div>` : ""}
+          ${impT ? `<div class="r3blk"><h3>Cómo cambian los números de sus compañeros</h3>${impT}${maxEnt < 1 ? `<p class="r3p r3lec">Su llegada apenas mueve los números de sus compañeros: el nivel medio de su entorno cambia menos de un punto en la escala ±100, porque su nivel es parecido al de los minutos que ocupa.</p>` : ""}<p class="r3n">Cambio previsto en cada compañero al entrar ${E(apeJ)}, con los minutos de la simulación. «Entorno»: cuánto mejora (+) o empeora (−) el nivel medio de los compañeros de cada uno, escala ±100. Azul: mejora; naranja: empeora; gris: sin cambio apreciable. Los ocho compañeros con más minutos. Valores centrales del modelo de contexto, sin rango.${notaMin()}</p></div>` : ""}
 ` });
       }
     } else {
       const A = c.actual || {}, sa = A.sim, nA = A.nec, cl = A.club;
       const tabla = nA ? `<table class="r3t nec"><thead><tr><th>Aspecto del juego</th><th>${E(cl ? cl.nombre_club : "Su equipo")} en su liga</th><th>${E(apeJ)}</th></tr></thead><tbody>${nA.map((x) => `<tr><td><b>${E(x.n)}</b><small>${E(x.det)}</small></td><td>${barraPR(x.e, null, null, { ref: 50, w: 150, cls: x.estilo ? "neu" : x.e >= 65 ? "up" : x.e <= 35 ? "dn" : "" })}</td><td>${barraPR(x.p, null, null, { ref: 50, w: 150, cls: x.estilo ? "neu" : x.p >= 65 ? "up" : x.p <= 35 ? "dn" : "" })}</td></tr>`).join("")}</tbody></table><p class="r3n">Equipo: percentil entre los clubes de su liga. Jugador: percentil frente a su puesto en la Euroliga. Muestra en qué se apoya hoy su equipo y qué pone él.</p>` : "";
-      const rank = sa && sa.orden ? `<div class="r3cols c2"><div class="r3blk"><h3>Su lugar en la plantilla actual por nivel</h3>${rankV(sa.orden, (o) => o.j === j, j.temporada)}${sa.qa != null ? `<p class="r3n"><b>Química de su plantilla actual:</b> ${ESC.txt(ESC.dS("sinergia_rapm", sa.qa))} en escala ±100.</p>` : ""}</div><div></div></div>` : "";
+      const rank = sa && sa.orden ? `<div class="r3cols c2"><div class="r3blk"><h3>Su lugar en la plantilla actual por nivel</h3>${rankV(sa.orden, (o) => o.j === j, j.temporada)}${mmIn() ? `<p class="r3n">${notaMin().trim()}</p>` : ""}${sa.qa != null ? `<p class="r3n"><b>Química de su plantilla actual:</b> ${ESC.txt(ESC.dS("sinergia_rapm", sa.qa))} en escala ±100.</p>` : ""}</div><div></div></div>` : "";
       pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Papel en su equipo actual", "El baloncesto no es una suma de individualidades: un jugador se entiende junto a sus compañeros. Así encaja hoy en su equipo.")}${tabla}${rank}<p class="r3n">Esta lectura no incluye club de destino: describe su papel en ${E(clubN)}. Con un destino, se añade cómo cambiaría ese equipo con él dentro.</p>` });
     }
 
@@ -574,6 +574,10 @@ ${raw}`;
   const CTX6 = ["ortg", "drtg", "ts_pct", "rapm"];
   const yLista = (xs) => xs.length <= 1 ? xs.join("") : `${xs.slice(0, -1).join(", ")} y ${xs[xs.length - 1]}`;
   const CTXN_R = { ortg: ["ORtg"], drtg: ["DRtg"], ts_pct: ["TS%"], usg_pct: ["USG%"], ast_pct: ["AST%"], rapm: ["RAPM-EL"] };
+  // minutos mínimos (temporada) para que un compañero entre en el informe; el jugador del informe siempre entra
+  const mmIn = () => (typeof ifMinMin === "function" ? ifMinMin() : 0);
+  const okMin = (x) => { const m = mmIn(); return !m || !!(x && (x.min || 0) >= m); };
+  const notaMin = () => { const m = mmIn(); return m ? ` Solo compañeros con ${m} minutos o más en la temporada.` : ""; };
   function contexto6(j, d, s2, extras, bajas) {
     try {
       const club = simClub(d); if (!club || !s2 || !Array.isArray(s2.plantilla)) return null;
@@ -584,9 +588,9 @@ ${raw}`;
       const filasSin = tm.filter((o) => o.p.minutos_sin > 0).map((o) => ({ j: o.j, w: o.p.minutos_sin }));
       const filasCon = tm.filter((o) => o.p.minutos > 0).map((o) => ({ j: o.j, w: o.p.minutos })).concat([{ j, w: fich ? fich.minutos : 0 }]);
       const q = hayQ(), ref = q ? synRef() : null;
-      const pares = q ? tm.filter((o) => o.p.minutos > 0.5).map((o) => { const r = sinJ(j, o.j), v = r.total - ref, pp = partes(r); return { o, v, S: ESC.dS("sinergia_rapm", v), est: ESC.dS("sinergia_rapm", pp.est), niv: ESC.dS("sinergia_rapm", pp.niv) }; }).sort((a, b) => b.v - a.v) : [];
+      const pares = q ? tm.filter((o) => o.p.minutos > 0.5 && okMin(o.j)).map((o) => { const r = sinJ(j, o.j), v = r.total - ref, pp = partes(r); return { o, v, S: ESC.dS("sinergia_rapm", v), est: ESC.dS("sinergia_rapm", pp.est), niv: ESC.dS("sinergia_rapm", pp.niv) }; }).sort((a, b) => b.v - a.v) : [];
       const c = hayC();
-      const imp = c && filasSin.length ? tm.filter((o) => o.p.minutos > 0.5).slice(0, 10).map((o) => { const ds = devDestino(filasSin, o.j, temp), dc = devDestino(filasCon, o.j, temp), A = proyectar(o.j, ds), B = proyectar(o.j, dc), dd = {};
+      const imp = c && filasSin.length ? tm.filter((o) => o.p.minutos > 0.5 && okMin(o.j)).slice(0, 10).map((o) => { const ds = devDestino(filasSin, o.j, temp), dc = devDestino(filasCon, o.j, temp), A = proyectar(o.j, ds), B = proyectar(o.j, dc), dd = {};
         CTX6.forEach((k) => { const a = A.out[k], b = B.out[k]; dd[k] = a && b && a.y != null && b.y != null ? { v: b.y - a.y, m: b.m } : null; }); return { o, dd, ddev: dc - ds }; }) : [];
       const yo = c ? proyectar(j, devDestino(filasCon, j, temp)) : null;
       const qs = (s2.equipo && s2.equipo.quintetos) || [], q1 = qs.find((x) => x.con_fichaje);
@@ -598,9 +602,10 @@ ${raw}`;
           q5 = { q: quinteto(alt), sel: alt, prob: qs[0].prob, modo: "por", fuera, base: quinteto(base) }; } }
       const refPar = q && filasSin.length > 1 ? quimicaPlantilla(filasSin).pares.sort((a, b) => b.v - a.v)[0] : null;
       const lw = (f) => { let a = 0, w = 0; f.forEach((o) => { a += o.w * Lof(o.j); w += o.w; }); return w ? a / w : null; };
-      const orden = tm.filter((o) => o.p.minutos > 0.5).map((o) => ({ j: o.j, L: Lof(o.j) })).concat([{ j, L: Lof(j), el: true }]).sort((a, b) => b.L - a.L);
+      const orden = tm.filter((o) => o.p.minutos > 0.5 && okMin(o.j)).map((o) => ({ j: o.j, L: Lof(o.j) })).concat([{ j, L: Lof(j), el: true }]).sort((a, b) => b.L - a.L);
       const quitados = (club.plantilla || []).filter((x) => bajas && bajas.has(x[3])).map((x) => (SIMD.jug.get(x[0]) || {}).nombre).filter(Boolean);
-      return { tm, pares, imp, yo, q5, fich, refPar, orden, qa: q && filasSin.length > 1 ? quimicaPlantilla(filasSin).idx : null, qd: q && filasCon.length > 1 ? quimicaPlantilla(filasCon).idx : null,
+      const okPer = new Set(tm.filter((o) => okMin(o.j)).map((o) => o.p.persona));
+      return { tm, okPer, pares, imp, yo, q5, fich, refPar, orden, qa: q && filasSin.length > 1 ? quimicaPlantilla(filasSin).idx : null, qd: q && filasCon.length > 1 ? quimicaPlantilla(filasCon).idx : null,
         nivSin: lw(filasSin), nivCon: lw(filasCon), quitados, anadidos: (extras || []).map((r) => r.nombre) };
     } catch (e) { console.warn("Sección 06:", e); return null; }
   }
@@ -623,6 +628,7 @@ ${raw}`;
     const recJ = (await (cargarSim().catch(() => null)), simRec(j));
     const rolBox = $1("#ifRolBox"); if (rolBox) rolBox.hidden = !s.sim;
     if (s.sim) { d = ifClub(s.dClub, s.dTemp); await ifCargarEq(); if (d) sim = ifSimular(j, d); }
+    if (sim && sim.orden) sim.orden = sim.orden.filter((o) => o.el || o.j === j || okMin(o.j));
     // rol asignado: el elegido para este jugador-destino; por defecto, su rol de partida
     const rol0 = rolDeRec(recJ) || rolEstimado(j, R0 && R0.b) || "ROTACION";
     const rol = (st.inf.rol && st.inf.rolDe === claveNota() && ROLES.includes(st.inf.rol)) ? st.inf.rol : rol0;
@@ -641,7 +647,7 @@ ${raw}`;
     const fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
     const notaFin = ($1("#ifPorqueFinal") && $1("#ifPorqueFinal").value.trim()) || ($1("#ifPorque") && $1("#ifPorque").value.trim()) || "";
     const nacT = tray.map((x) => (simRec(x) || {}).nac).find(Boolean);
-    let actual = null; if (!(sim && !sim.mismo)) { try { await ifCargarEq(); const cl = BY.get(j.clave); if (cl) { const sa = ifSimular(j, cl); actual = { club: cl, nec: ifNecesidades(cl, R), sim: sa }; } } catch (e) { actual = null; } }
+    let actual = null; if (!(sim && !sim.mismo)) { try { await ifCargarEq(); const cl = BY.get(j.clave); if (cl) { const sa = ifSimular(j, cl); if (sa && sa.orden) sa.orden = sa.orden.filter((o) => o.el || o.j === j || okMin(o.j)); actual = { club: cl, nec: ifNecesidades(cl, R), sim: sa }; } } catch (e) { actual = null; } }
     let esc = [];
     if (s2 && !s2.error) { const club = simClub(d); esc = ROLES.map((r) => { try { const x = r === rol ? s2 : SIM2.simular({ rec: recJ, club, bajas, extras, rol: r }); return x && !x.error ? { rol: r, r: x } : null; } catch (e) { return null; } }).filter(Boolean); }
     const c6 = s2 && !s2.error && d ? contexto6(j, d, s2, extras, bajas) : null;

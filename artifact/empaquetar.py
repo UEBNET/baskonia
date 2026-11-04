@@ -45,6 +45,7 @@ def mapa() -> dict[str, Path]:
         m[f"atlas/informe/{p.name}"] = p
     m["atlas/simulador_v2.js"] = RAIZ / "artifact/atlas/simulador_v2.js"        # motor del simulador de encaje v2.1 (rol asignado)
     m["atlas/informe_v3.js"] = RAIZ / "artifact/atlas/informe_v3.js"            # lectura de fichaje (informe PDF v3)
+    m["atlas/informe_equipo.js"] = RAIZ / "artifact/atlas/informe_equipo.js"    # informe de equipo (PDF)
     # estilos unificados para Equipos y quintetos (generados con artifact/herramientas/gen_eu_*.py)
     for nombre in ("estilos_unificados.gz.txt", "estilos_unificados_clubes.gz.txt"):
         m[f"quintetos/{nombre}"] = RAIZ / "artifact/quintetos" / nombre

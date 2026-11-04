@@ -164,6 +164,8 @@ class FibaWebPBP(PBPSource):
                     evs.append(Event(kind="foul", **kw))
                 elif ac == "RFOUL":
                     evs.append(Event(kind="foul_drawn", **kw))
+                elif ac == "TIMO" and tm in g.teams:
+                    evs.append(Event(kind="timeout", **{**kw, "player": None}))
                 elif ac == "SUBST" and pid:
                     n_sub += 1
                     evs.append(Event(kind="in" if str(a.get("in")).upper() == "IN" else "out", **kw))

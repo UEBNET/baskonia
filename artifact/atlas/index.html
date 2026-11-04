@@ -498,7 +498,7 @@ section.block > div:first-child > h2, .side-r h2 { font: 600 13px var(--f-body) 
 @media (max-width: 1000px) { #p-quimica > section.block:first-child { grid-template-columns: minmax(0, 1fr); } #p-quimica .qctl, #p-quimica .qgrid { grid-column: 1; } }
 
 /* ===================== Cerno Analytics · Informe de jugador (hojas A4: igual en pantalla y en PDF) ===================== */
-:root[data-tab="informe"] .cheat { display: none !important; }
+:root[data-tab="informe"] .cheat, :root[data-tab="informeq"] .cheat { display: none !important; }
 .ifg { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
 @media (max-width: 1000px) { .ifg { grid-template-columns: minmax(0, 1fr); } }
 .ifg .ctl { display: grid; gap: 10px; position: sticky; top: 8px; }
@@ -515,6 +515,11 @@ section.block > div:first-child > h2, .side-r h2 { font: 600 13px var(--f-body) 
 .ifalt.realce { outline: 2px solid var(--warn); outline-offset: 4px; border-radius: 2px; }
 .ifbus { position: relative; }
 .ifbus .sugs { position: absolute; left: 0; right: 0; top: 100%; z-index: 20; }
+/* minutos mínimos para entrar en los informes (jugador y equipo) */
+.ifmin { display: grid; gap: 6px; }
+.ifmin-r { display: grid; grid-template-columns: minmax(0, 1fr) 84px; gap: 8px; align-items: center; }
+.ifmin-r input[type="number"] { text-align: right; font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.ifmin .note b { font-family: var(--f-data); font-weight: 600; }
 #ifPages { --k: 1; display: grid; gap: 18px; justify-items: center; padding: 18px 0 30px; border-radius: 4px; background: var(--surface-3, #E8E5DD); min-height: 300px; transition: opacity .2s; }
 #ifPages.cargando { opacity: .45; }
 .ifwrap { width: calc(794px * var(--k)); height: calc(1123px * var(--k)); position: relative; }
@@ -735,6 +740,7 @@ section.block > div:first-child > h2, .side-r h2 { font: 600 13px var(--f-body) 
     <button role="tab" class="only-atlas" id="t-simulador" aria-controls="p-simulador" aria-selected="false">Simular fichajes<small>¿Qué pasa si ficho a…?</small></button>
     <button role="tab" class="only-atlas" id="t-equipo" aria-controls="p-equipo" aria-selected="false">Simular equipo completo<small>¿Cómo jugaría esta plantilla?</small></button>
     <button role="tab" class="only-atlas" id="t-parecidos" aria-controls="p-parecidos" aria-selected="false">Buscar parecidos<small>¿Quién juega como…?</small></button>
+    <button role="tab" class="only-atlas" id="t-informeq" aria-controls="p-informeq" aria-selected="false">Informe equipo<small>el estado de un equipo, en PDF</small></button>
     <button role="tab" class="only-atlas" id="t-informe" aria-controls="p-informe" aria-selected="false">Informe<small>todo de un jugador, en PDF</small></button>
     <button role="tab" class="only-atlas" id="t-quimica" aria-controls="p-quimica" aria-selected="false">Química de estilos<small>¿Cómo se influyen?</small></button>
     <button role="tab" class="only-claves" id="t-resumen" aria-controls="p-resumen" aria-selected="false">Resumen<small>lo esencial</small></button>
@@ -963,6 +969,39 @@ section.block > div:first-child > h2, .side-r h2 { font: 600 13px var(--f-body) 
   </div>
 
   <!-- ============================================================ informe de jugador -->
+  <!-- ============================================================ informe de equipo (Cerno Analytics) -->
+  <div class="panel only-atlas" role="tabpanel" id="p-informeq" aria-labelledby="t-informeq" hidden>
+    <section class="block" aria-labelledby="ieqT">
+      <div><h2 id="ieqT">Informe de equipo</h2><p class="sub" style="margin-top:4px">El documento para la dirección deportiva sobre el estado de un equipo frente a su liga: identidad, conclusiones, ataque, defensa, rotación, quintetos, conexiones y jugadores. Vista previa a la derecha; descárgalo en PDF o ábrelo en una pestaña nueva.</p></div>
+      <div class="ifg">
+        <div class="ctl">
+          <span class="label">Equipo</span>
+          <div class="ifbus"><input type="search" id="ieqBus" placeholder="Buscar equipo por nombre" autocomplete="off" aria-label="Buscar equipo por nombre"><div class="sugs" id="ieqBusS" hidden></div></div>
+          <div class="row2"><select id="ieqTemp" aria-label="Temporada"></select><select id="ieqLiga" aria-label="Competición"></select></div>
+          <select id="ieqEq" aria-label="Equipo"></select>
+          <select id="ieqFase" aria-label="Fase de la temporada"></select>
+          <div class="ifmin"><label class="label" for="ieqMin">Minutos mínimos para entrar en el informe</label><div class="ifmin-r"><input type="range" id="ieqMin" min="0" max="1500" step="25" aria-describedby="ieqMinNota"><input type="number" id="ieqMinN" min="0" max="4000" step="25" inputmode="numeric" aria-label="Minutos mínimos, valor exacto"></div><p class="note" id="ieqMinNota"></p></div>
+          <hr>
+          <label class="label" for="ieqPara">Preparado para</label>
+          <input type="text" id="ieqPara" maxlength="60" placeholder="Dirección deportiva" autocomplete="off">
+          <hr>
+          <div id="ieqNotaBox"><span class="label">Valoración del equipo · nota del analista</span>
+            <textarea id="ieqNota" rows="5" placeholder="En tus palabras: cómo ves al equipo, qué le funciona, qué le falta, qué harías. Se reescribe en tono Cerno para el bloque de conclusiones."></textarea>
+            <div class="ifpq-acc"><button class="btn ghost sm" id="ieqRedactar" type="button">Redactar en tono Cerno</button><button class="btn ghost sm" id="ieqNotaBorrar" type="button">Borrar</button></div>
+            <p class="note" id="ieqNotaMsg" aria-live="polite"></p>
+            <label class="label" for="ieqNotaFin">Valoración Cerno · texto que irá en el informe (puedes retocarlo)</label>
+            <textarea id="ieqNotaFin" rows="6" placeholder="Aparecerá aquí tras «Redactar en tono Cerno». Si lo dejas vacío, el informe usa tu nota tal cual."></textarea></div>
+          <hr>
+          <button class="btn" id="ieqPdf" type="button">Descargar PDF</button>
+          <div class="ifalt" id="ieqAlt"><span class="label">Otras opciones</span><button class="btn ghost sm" id="ieqHtml" type="button">HTML imprimible</button><button class="btn ghost sm" id="ieqAbrir" type="button">Abrir en pestaña nueva</button></div>
+          <p class="note" id="ieqMsg" aria-live="polite"></p>
+          <p class="note" id="ieqResumen"></p>
+        </div>
+        <div id="ieqPages" aria-live="polite"></div>
+      </div>
+    </section>
+  </div>
+
   <div class="panel only-atlas" role="tabpanel" id="p-informe" aria-labelledby="t-informe" hidden>
     <section class="block" aria-labelledby="ifT">
       <div><h2 id="ifT">Lectura de fichaje</h2><p class="sub" style="margin-top:4px">El documento para la dirección deportiva: el jugador, sus conclusiones, ataque, defensa, contexto y conexiones con el club de destino y el rol que elijas, con su margen de error. Vista previa a la derecha; descárgalo en PDF o ábrelo en una pestaña nueva.</p></div>
@@ -973,6 +1012,7 @@ section.block > div:first-child > h2, .side-r h2 { font: 600 13px var(--f-body) 
           <div class="row2"><select id="ifTemp" aria-label="Temporada del jugador"></select><select id="ifLiga" aria-label="Competición del jugador"></select></div>
           <select id="ifClub" aria-label="Club del jugador"></select>
           <select id="ifJug" aria-label="Jugador"></select>
+          <div class="ifmin"><label class="label" for="ifMin">Minutos mínimos para entrar en el informe</label><div class="ifmin-r"><input type="range" id="ifMin" min="0" max="1500" step="25" aria-describedby="ifMinNota"><input type="number" id="ifMinN" min="0" max="4000" step="25" inputmode="numeric" aria-label="Minutos mínimos, valor exacto"></div><p class="note" id="ifMinNota"></p></div>
           <hr>
           <label class="tog"><input type="checkbox" id="ifSim"> Simular su incorporación a un club</label>
           <div id="ifDest" hidden>
@@ -1377,7 +1417,7 @@ const LIGAS = {}, LC = {};
 function prepararLigas(codigos) { ESC.ordenLigas(codigos).forEach((l) => { LIGAS[l] = ESC.ligaNom(l); LC[l] = ESC.ligaCorto(l); }); document.querySelectorAll(".nLigas").forEach((e) => e.textContent = Object.keys(LIGAS).length); }
 const POS = { E: "Exteriores", A: "Aleros", I: "Interiores" };
 const VISTA = document.documentElement.dataset.vista === "claves" ? "claves" : "atlas";
-const TABS = VISTA === "claves" ? ["resumen", "lectura", "estilos", "ligas", "quimicac", "modelo"] : ["comparar", "simulador", "equipo", "parecidos", "quimica", "informe"];
+const TABS = VISTA === "claves" ? ["resumen", "lectura", "estilos", "ligas", "quimicac", "modelo"] : ["comparar", "simulador", "equipo", "parecidos", "quimica", "informeq", "informe"];
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? "–" : x.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -1639,6 +1679,7 @@ function irA(t, guardarHash = true) {
   if (t === "quimica") pintarQuimica();
   document.documentElement.dataset.tab = t;
   if (t === "informe") pintarInforme();
+  if (t === "informeq" && window.CernoInformeEquipo) window.CernoInformeEquipo.pintar();
   try { if (window.parent !== window) window.parent.postMessage({ ebateTab: { app: VISTA === "claves" ? "claves" : "atlas", tab: t } }, "*"); } catch (e) { /* */ }
 }
 
@@ -3287,22 +3328,28 @@ function ifEstado() {
   if (!ligas.includes(s.liga)) s.liga = ligas.includes("euroleague") ? "euroleague" : ligas[0];
   const clubs = CL.filter((c) => c.liga === s.liga && c.temporada === s.temp);
   if (!clubs.some((c) => c.clave_club === s.club)) { const al = META.clubes_con_nombre.baskonia, k = al && al.claves.find((c) => c.startsWith(s.liga + ":")); s.club = clubs.some((c) => c.clave_club === k) ? k : (clubs[0] && clubs[0].clave_club); }
-  const ro = (ROSTER.get(`${s.club}:${s.temp}`) || []).slice().sort((a, b) => b.min - a.min);
-  if (!ro.some((j) => jKey(j) === s.jug)) s.jug = ro[0] ? jKey(ro[0]) : null;
+  const roT = (ROSTER.get(`${s.club}:${s.temp}`) || []).slice().sort((a, b) => b.min - a.min), mm = ifMinMin();
+  if (!roT.some((j) => jKey(j) === s.jug)) { const p = roT.find((j) => (j.min || 0) >= mm) || roT[0]; s.jug = p ? jKey(p) : null; }
+  const ro = roT.filter((j) => (j.min || 0) >= mm || jKey(j) === s.jug), roN = roT.length;
   if (!TEMPS.includes(s.dTemp)) s.dTemp = s.temp;
   const dl = [...new Set(CL.filter((c) => c.temporada === s.dTemp).map((c) => c.liga))];
   if (!dl.includes(s.dLiga)) s.dLiga = dl.includes("euroleague") ? "euroleague" : dl[0];
   const dc = CL.filter((c) => c.liga === s.dLiga && c.temporada === s.dTemp);
   if (!dc.some((c) => c.clave_club === s.dClub)) { const al = META.clubes_con_nombre.baskonia, k = al && al.claves.find((c) => c.startsWith(s.dLiga + ":")); s.dClub = dc.some((c) => c.clave_club === k) ? k : (dc[0] && dc[0].clave_club); }
-  return { s, ligas, clubs, ro, dl, dc };
+  return { s, ligas, clubs, ro, roN, dl, dc };
 }
+// minutos mínimos (en la temporada) para que un jugador entre en la lectura de fichaje; 0 = todos
+function ifMinMin() { const v = Math.round(+((st.inf || {}).minMin) || 0); return v > 0 ? Math.min(v, 4000) : 0; }
 function ifOpts(sel, items, val) { sel.innerHTML = items.map(([v, t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join(""); if (val != null) sel.value = val; }
 function ifControles() {
-  const { s, ligas, clubs, ro, dl, dc } = ifEstado(), tt = (t) => [t, t + (META.temporadas_provisionales.includes(t) ? " (en curso)" : "")];
+  const { s, ligas, clubs, ro, roN, dl, dc } = ifEstado(), tt = (t) => [t, t + (META.temporadas_provisionales.includes(t) ? " (en curso)" : "")];
   ifOpts($("#ifTemp"), TEMPS.slice().reverse().map(tt), s.temp);
   ifOpts($("#ifLiga"), ESC.ordenLigas(ligas).map((l) => [l, LIGAS[l] || l]), s.liga);
   ifOpts($("#ifClub"), clubs.slice().sort((a, b) => a.nombre_club.localeCompare(b.nombre_club)).map((c) => [c.clave_club, c.nombre_club]), s.club);
   ifOpts($("#ifJug"), ro.map((j) => [jKey(j), `${ifNom(j.nombre)} · ${POS[j.pos3] ? IF_POS1[j.pos3] : "s/d"} · ${Math.round(j.min)}'`]), s.jug);
+  const mm = ifMinMin(), nOk = ro.filter((j) => (j.min || 0) >= mm).length;
+  $("#ifMin").value = String(Math.min(mm, 1500)); if (document.activeElement !== $("#ifMinN")) $("#ifMinN").value = String(mm);
+  $("#ifMinNota").innerHTML = (mm ? `Entran los jugadores con <b>${mm}'</b> o más en la temporada: ${nOk} de ${roN} en su club.` : `Sin mínimo: entran todos los jugadores con minutos (${roN} en su club).`) + " Se aplica a la lista de jugadores y a los compañeros que aparecen en el informe (plantilla por nivel, sinergias, minutos e impacto). El jugador elegido y la simulación no cambian.";
   $("#ifSim").checked = !!s.sim; $("#ifDest").hidden = !s.sim;
   ifOpts($("#ifDTemp"), TEMPS.slice().reverse().map(tt), s.dTemp);
   ifOpts($("#ifDLiga"), ESC.ordenLigas(dl).map((l) => [l, LIGAS[l] || l]), s.dLiga);
@@ -3315,6 +3362,9 @@ function construirInforme() {
   $("#ifLiga").onchange = (e) => { st.inf.liga = e.target.value; st.inf.club = null; cambia(); };
   $("#ifClub").onchange = (e) => { st.inf.club = e.target.value; st.inf.jug = null; cambia(); };
   $("#ifJug").onchange = (e) => { st.inf.jug = e.target.value; cambia(); };
+  let tMin = null; const fijaMin = (v, ya) => { st.inf.minMin = Math.max(0, Math.min(4000, Math.round(+v || 0))); clearTimeout(tMin); if (ya) cambia(); else { ifControles(); tMin = setTimeout(cambia, 450); } };
+  $("#ifMin").oninput = (e) => fijaMin(e.target.value, false);
+  $("#ifMinN").onchange = (e) => fijaMin(e.target.value, true);
   $("#ifSim").onchange = (e) => { st.inf.sim = e.target.checked; cambia(); };
   $("#ifDTemp").onchange = (e) => { st.inf.dTemp = e.target.value; cambia(); };
   $("#ifDLiga").onchange = (e) => { st.inf.dLiga = e.target.value; st.inf.dClub = null; cambia(); };
@@ -3964,5 +4014,6 @@ details.mas > summary, details.more > summary { font: 500 10.5px var(--cn-mono) 
 }
 </style>
 <script src="informe_v3.js"></script>
+<script src="informe_equipo.js"></script>
 </body>
 </html>

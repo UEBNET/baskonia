@@ -3179,6 +3179,7 @@ const EB_AREAS = [
     ["simulador", "Simular fichajes", "Qué le pasa al estilo y al nivel de tu club si ficha o pierde jugadores, con el rol que tú le asignas a cada fichaje."],
     ["equipo", "Simular equipo completo", "Monta una plantilla desde cero o desde tu club, asigna el rol de cada jugador y mira su estilo y su nivel frente a la Euroliga."]] },
   { k: "informe", n: "Informe", tools: [
+    ["informeq", "Informe equipo", "El documento para la dirección deportiva sobre el estado de un equipo frente a su liga: identidad, conclusiones, ataque, defensa, rotación, quintetos, conexiones y jugadores. Descárgalo en PDF."],
     ["informe", "Lectura de fichaje", "El documento para la dirección deportiva: jugador, conclusiones, ataque, defensa, contexto y conexiones en el club de destino con el rol que elijas. Descárgalo en PDF."]] },
   { k: "metodologia", n: "Metodología", ro: true, tools: [
     ["evaluacion", "Evaluación de ligas", ""],
@@ -3188,7 +3189,7 @@ const EB_AREAS = [
 ];
 const EB = { area: null, tool: null, atlas: null, quint: null };
 const ebArea = (k) => EB_AREAS.find((a) => a.k === k);
-const ebDeAtlas = { comparar: ["estilos", "comparar"], quimica: ["estilos", "quimica"], simulador: ["planificacion", "simulador"], equipo: ["planificacion", "equipo"], parecidos: ["jugadores", "parecidos"], informe: ["informe", "informe"] };
+const ebDeAtlas = { comparar: ["estilos", "comparar"], quimica: ["estilos", "quimica"], simulador: ["planificacion", "simulador"], equipo: ["planificacion", "equipo"], parecidos: ["jugadores", "parecidos"], informeq: ["informe", "informeq"], informe: ["informe", "informe"] };
 const ebDeQuint = (t) => (t === "aprende" ? ["metodologia", "guia"] : ["equipos", t]);
 function ebPintarNav() {
   $("ebAreas").innerHTML = EB_AREAS.map((a) => `${a.ro ? `<span class="eb-sep" aria-hidden="true"></span>` : ""}<button class="eb-area" role="tab" type="button" data-area="${a.k}" aria-selected="${a.k === EB.area}">${a.n}${a.ro ? ` <span class="ro">solo lectura</span>` : ""}</button>`).join("");

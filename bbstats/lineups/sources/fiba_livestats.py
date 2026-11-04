@@ -124,6 +124,8 @@ class FibaLiveStatsPBP(PBPSource):
                 e = Event(kind=sub, **kw)
             elif at in SIMPLE and team:
                 e = Event(kind=SIMPLE[at], **kw)
+            elif at == "timeout" and team:
+                e = Event(kind="timeout", **{**kw, "player": None})
             elif at == "assist" and pid and team:
                 assists.append((team, pid, a.get("previousAction")))
             if e is not None:
