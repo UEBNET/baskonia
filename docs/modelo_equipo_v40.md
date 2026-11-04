@@ -127,8 +127,55 @@ coordenadas) y sí a los rasgos de zona, que ya llegan normalizados por la v3.2.
 - El latente de quien juega poco viene del codificador (más incertidumbre); la capa 1 lo sabe por `u_fuente` y por
   su sd. El sesgo heredado con quien acaba jugando poco (v3.3) se trata en F4 (§9.2 del encargo).
 
-## 2. F1 … F5
+## 2. F1 · RAPM multiliga con prior del perfil (capa 1)
+
+Orden del CEO: 04-11-2026, tras aprobar la puerta de la F0. Código: `bbequipo/rapm.py` (modelo), `bbequipo/examen_f1.py`
+(examen, D2, F1-D). Checkpoint: `docs/checkpoints/V40_F1.md`.
+
+### 2.1 Modelo
+
+```
+y_s = c_{ℓ,t} + κ·clutch_s + π·playoffs_s + Σ_{i∈A_s} β_i − Σ_{j∈B_s} β_j + ε_s,   ε_s ~ N(0, σ²/n_s)
+β_i = g(x̃_i) + δ_i,   g(x̃_i) = γ₀ + γᵀ z_i,   δ_i ~ N(0, τ²)
+```
+
+- Tramo s: quintetos A (equipo local) y B (visitante) con 5 contra 5, n_s posesiones (contrato), y_s = 100·(pts_A − pts_B)/n_s.
+  Como A es siempre el local, c_{ℓ,t} es la ventaja local de la liga-temporada (h_s y c_{ℓ,t} del encargo coinciden).
+- β por **persona-temporada** (crosswalk): quien juega dos ligas la misma temporada tiene un solo β informado por las dos
+  (puente en pista). Dentro de una liga, Σβ no es identificable con diferenciales: el nivel entre ligas lo pone el prior
+  **[HIPÓTESIS declarada en el encargo]**.
+- Prior g(x̃): lineal en los rasgos estandarizados del perfil ampliado (latente u, estilos, θ de caja y de pista, rol,
+  edad, posición, máscara de bloques con dato) **estimado conjuntamente con β** (γ y δ en el mismo sistema de mínimos
+  cuadrados penalizados, LSQR). Estimar γ a la vez evita la atenuación de la alternativa iterativa (regresar β̂ encogidos
+  sobre x̃ y repetir), que con la poca información por jugador de un RAPM se queda donde empieza. Candidato alternativo
+  (GBM por retroajuste) comparado en el corte de selección.
+- τ² (dispersión de β alrededor de g) y α (precisión a priori de γ) por **máxima verosimilitud marginal** en una rejilla,
+  con σ² del residuo; dos ciclos. Varianza de β: diagonal de (AᵀA)⁻¹ por sondas de Hutchinson (32).
+- Descomposición O/D: dos filas por tramo (ataque de A frente a defensa de B y viceversa), β^O y β^D con el mismo prior.
+
+### 2.2 Decisiones tomadas en el corte de calibración 2021 [DECISIÓN, antes de los cortes de decisión]
+
+El corte 2021 → 2022-23 es, por prerregistro, el que calibra. Se usó para fijar la maquinaria, no para juzgarla:
+
+1. **Mínimo de 1 posesión por tramo** (contrato, antes 0,5). Con 0,5–0,75 posesiones estimadas la varianza del diferencial
+   por posesión es 18 frente a 3–5 en el resto (artefacto del estimador fga + 0,44·fta − oreb + tov): el 11 % de los tramos
+   acaparaba el 32 % de la pérdida ponderada. Quedan 960.245 tramos válidos (antes 1.152.179).
+2. **El RAPM normalizado de la misma temporada no entra en el prior** (`orapm_th`, `drapm_th` fuera de g). Es circular: son
+   los propios tramos que F1 ajusta. Con ellos, el prior se sobredispersaba (DT 4,8 pts/100 dentro de liga) y predecía el
+   margen de 2022-23 peor que la sola ventaja local (15,94 frente a 15,90); sin ellos, 15,14, al nivel del RAPM traducido
+   de la v3.2 (15,13). El resto de rasgos de x̃ se mantiene; `orapm_th`/`drapm_th` siguen en el perfil para F2–F3.
+3. **El RAPM normalizado de la temporada anterior sí entra** (`orapm_th_prev`, `drapm_th_prev`, con máscara): información
+   legítima del pasado del jugador, que respeta el espíritu del §5.1 sin circularidad.
+4. Estimación de τ: se examinaron momentos con varianza diagonal (colapsa τ) y validación cruzada por partido (curva plana)
+   antes de fijar la verosimilitud marginal conjunta.
+
+### 2.3 Examen prerregistrado (§11.1) y comprobaciones D2
+
+Ver `docs/checkpoints/V40_F1.md`: margen por partido de t+1 frente a (a) interceptos liga-equipo-temporada, (b) RAPM
+traducido de la v3.2 (`rapm_am`, el «L actual» del impacto) y (c) sólo ventaja local; test-retest; correlación prior–β de
+los fichajes; D2 (sensibilidad a la red de referencia del latente y ablación del latente) en el corte 2022; F1-D.
+
+## 3. F2 … F5
 
 Pendientes de la orden del CEO para cada fase. Los hiperparámetros, las salidas y los criterios prerregistrados de todas
-ellas están ya en `configs/equipo_v40.yaml` (`f1`, `f2`, `f3`, `f4` con `a5`, `f5` y `criterios`), de modo que las
-fases se ejecutan sin tocar criterios después de ver resultados.
+ellas están ya en `configs/equipo_v40.yaml` (`f2`, `f3`, `f4` con `a5`, `f5` y `criterios`).

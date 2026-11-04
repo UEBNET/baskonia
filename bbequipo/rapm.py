@@ -207,10 +207,23 @@ def tabla_prior(perf: pd.DataFrame, cfg: dict) -> pd.DataFrame:
     out["m_theta_caja"] = out[[f"{m}_th" for m in caja]].notna().all(axis=1).astype(float)
     out["m_theta_pista"] = out[[f"{m}_th" for m in pista]].notna().all(axis=1).astype(float) if pista else 1.0
     out["m_rol"] = out["rol_indice_esperado"].notna().astype(float)
+    # rasgos de la TEMPORADA ANTERIOR de la misma persona (p. ej. su RAPM normalizado de t−1): información legítima para el
+    # prior de la temporada t, al contrario que el RAPM de la propia temporada (circular con los tramos que se ajustan)
+    prev_cols = list(cfg["f1"]["prior"].get("rasgos_temporada_anterior", []))
+    if prev_cols:
+        ant = out[["persona_id", "temporada"] + [c for c in prev_cols if c in out]].copy()
+        ant["temporada"] = ant["temporada"].map(lambda t: f"{int(t[:4]) + 1}-{str(int(t[:4]) + 2)[-2:]}")
+        ant = ant.rename(columns={c: f"{c}_prev" for c in prev_cols})
+        out = out.merge(ant, on=["persona_id", "temporada"], how="left")
+        for c in prev_cols:
+            if f"{c}_prev" not in out:
+                out[f"{c}_prev"] = np.nan
+        out["m_prev"] = out[[f"{c}_prev" for c in prev_cols]].notna().all(axis=1).astype(float)
     out.attrs["bloques"] = {"latente": [f"u{k + 1}" for k in range(K)], "estilos": [f"p_{e}" for e in E],
                             "rasgos": [f"{m}_th" for m in X], "rol": [f"p_{r}" for r in R] + ["rol_indice_esperado", "min_pct", "gs_pct"],
                             "edad": ["edad"], "pos3": ["pos_E", "pos_A", "pos_I"],
-                            "mascara": ["m_latente", "m_estilos", "m_theta_caja", "m_theta_pista", "m_rol"]}
+                            **({"temporada_anterior": [f"{c}_prev" for c in prev_cols]} if prev_cols else {}),
+                            "mascara": ["m_latente", "m_estilos", "m_theta_caja", "m_theta_pista", "m_rol"] + (["m_prev"] if prev_cols else [])}
     return out.reset_index(drop=True)
 
 

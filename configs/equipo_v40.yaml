@@ -100,9 +100,13 @@ f1:
   fase_playoffs: covariable
   prior:
     candidatos: [ridge, gbm]                          # g(x̃; γ): se elige en el corte de selección (2022)
-    ridge_alpha_rejilla: [1.0, 10.0, 100.0, 1000.0, 10000.0]   # precisión a priori de γ (rasgos estandarizados), elegida con τ por verosimilitud marginal
     gbm: {max_iter: 300, learning_rate: 0.05, max_depth: 3, min_samples_leaf: 40, l2_regularization: 1.0, retroajustes: 2}
-    rasgos: [latente, estilos, rasgos, rol, edad, pos3]   # bloques de x̃ que entran en g
+    rasgos: [latente, estilos, rasgos, rol, edad, pos3, temporada_anterior]   # bloques de x̃ que entran en g
+    rasgos_fuera: [orapm_th, drapm_th]                # el RAPM normalizado de la MISMA temporada no entra en g: es circular con los
+                                                      # tramos que F1 ajusta (en el corte de calibración 2021 sobredispersaba el prior,
+                                                      # DT 4,8 pts/100 dentro de liga, y predecía t+1 peor que la ventaja local sola)
+    rasgos_temporada_anterior: [orapm_th, drapm_th]   # en su lugar, el RAPM normalizado de la temporada ANTERIOR de la persona (+ máscara)
+    ridge_alpha_rejilla: [1.0, 10.0, 100.0]           # precisión a priori de γ (rasgos estandarizados), elegida con τ por verosimilitud marginal
     sin_latente_si_falta: true                        # filas sin u (sin_latente) usan sólo el resto del perfil
   bayes_empirico:                                     # τ², σ² (y γ) dados los datos, iterando β | (g, τ², σ²) y (γ, τ², σ²) | β̂
     metodo: verosimilitud_marginal                    # τ por máxima verosimilitud marginal p(y | τ², σ²) en una rejilla, con el

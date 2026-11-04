@@ -244,31 +244,30 @@ def test_retest(cfg: dict, tb_prod: pd.DataFrame, perf_all: pd.DataFrame, min_po
 
 
 def fichajes(cfg: dict, aj_t: dict, tb_t1: pd.DataFrame, min_poss: float = 300.0) -> dict:
-    """Personas que cambian de liga principal entre t y t+1: corr(g_t(x̃_t), β̂_{t+1}) e IC95 por bootstrap de personas."""
+    """Personas que cambian de liga principal entre t y t+1: corr(g_t(x̃_t), β̂_{t+1}) e IC95 por bootstrap de personas;
+    como referencia, corr(β̂_t, β̂_{t+1}) en las mismas personas."""
     a = aj_t["corte"]
     temp_t, temp_t1 = f"{a}-{str(a + 1)[-2:]}", f"{a + 1}-{str(a + 2)[-2:]}"
     T, pr = aj_t["T"], aj_t["res"]["priors"][0]
-    Tt = T[T["temporada"] == temp_t].copy()
-    Tt["g"] = pr.predecir(Tt) if pr is not None else np.nan
-    bt = aj_t["tb"][aj_t["tb"]["temporada"] == temp_t][["persona_id", "beta", "liga_principal"]]
-    b1 = tb_t1[(tb_t1["temporada"] == temp_t1) & (tb_t1["poss"] >= min_poss)][["persona_id", "beta", "liga_principal"]]
-    x = Tt[["persona_id", "g", "liga"]].merge(b1, on="persona_id", suffixes=("", "_t1")).merge(bt, on="persona_id", how="left", suffixes=("", "_t"))
-    x = x[x["liga"] != x["liga_principal_t1"]] if "liga_principal_t1" in x else x[x["liga"] != x["liga_principal"]]
-    col_b1 = "beta_t1" if "beta_t1" in x else "beta"
-    x = x[x["g"].notna() & x[col_b1].notna()]
+    Tt = T[T["temporada"] == temp_t][["persona_id", "liga"]].copy()
+    Tt["g"] = pr.predecir(T[T["temporada"] == temp_t]) if pr is not None else np.nan
+    bt = aj_t["tb"][aj_t["tb"]["temporada"] == temp_t][["persona_id", "beta"]].rename(columns={"beta": "beta_t"})
+    b1 = tb_t1[(tb_t1["temporada"] == temp_t1) & (tb_t1["poss"] >= min_poss)][["persona_id", "beta", "liga_principal"]] \
+        .rename(columns={"beta": "beta_t1", "liga_principal": "liga_t1"})
+    x = Tt.merge(b1, on="persona_id").merge(bt, on="persona_id", how="left")
+    x = x[(x["liga"] != x["liga_t1"]) & x["g"].notna() & x["beta_t1"].notna()]
     if len(x) < 20:
         return {"corte": a, "n": int(len(x)), "nota": "pocos fichajes"}
     rng = np.random.default_rng(int(cfg["criterios"]["comunes"]["semilla_bootstrap"]))
-    g, b = x["g"].to_numpy(float), x[col_b1].to_numpy(float)
+    g, b = x["g"].to_numpy(float), x["beta_t1"].to_numpy(float)
     rs = []
     for _ in range(int(cfg["criterios"]["comunes"]["bootstrap"])):
         ii = rng.integers(0, len(x), len(x)); rs.append(np.corrcoef(g[ii], b[ii])[0, 1])
     out = {"corte": a, "temporada_destino": temp_t1, "n": int(len(x)), "corr_prior_beta_t1": float(np.corrcoef(g, b)[0, 1]),
-           "ic95": [float(np.quantile(rs, 0.025)), float(np.quantile(rs, 0.975))]}
-    bt_col = "beta_t" if "beta_t" in x else None
-    if bt_col and x[bt_col].notna().sum() > 20:
-        ok = x[bt_col].notna()
-        out["corr_beta_t_beta_t1"] = float(np.corrcoef(x.loc[ok, bt_col], x.loc[ok, col_b1])[0, 1]); out["n_con_beta_t"] = int(ok.sum())
+           "ic95": [float(np.quantile(rs, 0.025)), float(np.quantile(rs, 0.975))], "positiva_ic95": bool(np.quantile(rs, 0.025) > 0)}
+    ok = x["beta_t"].notna()
+    if ok.sum() > 20:
+        out["corr_beta_t_beta_t1"] = float(np.corrcoef(x.loc[ok, "beta_t"], x.loc[ok, "beta_t1"])[0, 1]); out["n_con_beta_t"] = int(ok.sum())
     return out
 
 
