@@ -56,11 +56,23 @@ def grupo_liga(cfg: dict) -> dict:
 # =============================================================================================== ajuste de un corte
 def ajuste_corte(cfg: dict, a: int, tr_all: pd.DataFrame, tipo_prior: str, bloques_fuera=(), T: pd.DataFrame | None = None,
                  progreso=print) -> dict:
+    """Ajuste F1 del corte a (tramos ≤ a, perfiles de corte_<a>). Caché en experimentos/v4_0/ajuste_f1_<a>_<prior>_<huella>.pkl
+    (reanudable: un examen interrumpido no repite los ajustes ya hechos)."""
+    import pickle
     tr = tr_all[tr_all["anio"] <= a].reset_index(drop=True)
+    huella = C.huella(cfg, ("f1", "contrato")) + ("_" + "-".join(bloques_fuera) if bloques_fuera else "")
+    cache = C.RAIZ / "experimentos" / "v4_0" / f"ajuste_f1_{a}_{tipo_prior}_{huella}.pkl"
     if T is None:
         T = RP.tabla_prior(perfiles_corte(cfg, a), cfg)
     D = RP.construir_diseno(tr, "net")
-    res = RP.ajustar(D, T, cfg, tipo_prior, bloques_fuera, progreso=progreso)
+    if cache.exists():
+        res = pickle.loads(cache.read_bytes())
+        if progreso:
+            progreso(f"    corte {a} ({tipo_prior}): ajuste reutilizado de {cache.name}", flush=True)
+    else:
+        res = RP.ajustar(D, T, cfg, tipo_prior, bloques_fuera, progreso=progreso)
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_bytes(pickle.dumps({k: v for k, v in res.items() if k != "XZ"}))
     tb = RP.tabla_beta(res, D).merge(RP.ligas_jugador(tr), on="clave", how="left")
     return {"corte": a, "D": D, "res": res, "tb": tb, "T": T, "tramos": len(tr)}
 
@@ -281,10 +293,11 @@ def error_prior(aj_t: dict, tb_t1: pd.DataFrame, cfg: dict, min_poss: float = 30
     T = aj_t["T"].copy()
     if latente_alt is not None:
         K = int(cfg["perfil"]["latente"]["K"])
-        la = latente_alt.copy(); la["persona_norm"] = la["persona_norm"].astype(str)
-        la = la.sort_values("min", ascending=False).drop_duplicates(["persona_norm", "temporada"])
-        T = T.drop(columns=[f"u{k + 1}" for k in range(K)]).merge(la[["persona_norm", "temporada"] + [f"u{k + 1}" for k in range(K)]],
-                                                                 on=["persona_norm", "temporada"], how="left")
+        la = latente_alt.copy()
+        la["liga"], la["temporada"], la["player_id"] = la["liga"].astype(str), la["temporada"].astype(str), la["player_id"].astype(str)
+        la = la.sort_values("min", ascending=False).drop_duplicates(["liga", "temporada", "player_id"])
+        T = T.drop(columns=[f"u{k + 1}" for k in range(K)]).merge(la[["liga", "temporada", "player_id"] + [f"u{k + 1}" for k in range(K)]],
+                                                                 on=["liga", "temporada", "player_id"], how="left")
         T.attrs = aj_t["T"].attrs
     res, D = aj_t["res"], aj_t["D"]
     if tipo is None and not bloques_fuera and latente_alt is None:

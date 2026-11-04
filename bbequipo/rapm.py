@@ -193,7 +193,9 @@ def tabla_prior(perf: pd.DataFrame, cfg: dict) -> pd.DataFrame:
     p = perf.sort_values("min", ascending=False).drop_duplicates(["persona_id", "temporada"]).copy()
     out = pd.DataFrame({"clave": p["persona_id"].astype(str) + "|" + p["temporada"].astype(str),
                         "persona_id": p["persona_id"].astype(str), "temporada": p["temporada"].astype(str),
-                        "liga": p["liga"].astype(str), "min": pd.to_numeric(p["min"], errors="coerce").to_numpy(float)})
+                        "liga": p["liga"].astype(str), "min": pd.to_numeric(p["min"], errors="coerce").to_numpy(float),
+                        "persona_norm": p["persona_norm"].astype(str) if "persona_norm" in p else "",
+                        "player_id": p["player_id"].astype(str) if "player_id" in p else ""})
     num = [f"u{k + 1}" for k in range(K)] + [f"p_{e}" for e in E] + [f"{m}_th" for m in X] + [f"p_{r}" for r in R] \
         + ["rol_indice_esperado", "min_pct", "gs_pct", "edad"]
     for c in num:
