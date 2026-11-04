@@ -144,12 +144,16 @@ f1:
 f2:
   sinergia:
     modelo: φ(i,j) = z_iᵀ W z_j + ψ_ij;  z_i = P x̃_i;  ψ_ij ~ N(0, κ²) contraído
-    r_candidatos: [4, 6, 8]                           # dimensión de la proyección (elegida en el corte de selección)
-    ridge_W: [0.3, 1.0, 3.0, 10.0]
-    kappa2: bayes_empirico
+    # φ por perfiles = z_iᵀ M z_j con M simétrica p × p (ridge exacto sobre el residuo de F1; la suma de las 10 parejas de
+    # un quinteto es ⟨M, Q⟩ con Q = ((Σz)(Σz)ᵀ − Σzzᵀ)/2); M_r = proyección de rango r por autovectores
+    r_candidatos: [4, 6, 8, completa]                 # rango de la proyección, elegido en el corte de selección (§11.2)
+    lambda_rejilla: [0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0]   # precisión a priori de vec(M): verosimilitud marginal
+    kappa_rejilla: [0.5, 1.0, 2.0, 4.0]               # DT a priori de ψ_ij (pts/100): validación cruzada por partido
+    pliegues: 3
+    min_posesiones_pareja_psi: 100                    # parejas con ψ publicado
     congelar_beta: true                               # sobre F1, β fijos
-    pareja_nueva: solo_perfiles                       # φ̂ = z_iᵀ W z_j (sin ψ): la sinergia se predice por perfiles
-    min_posesiones_pareja_validacion: 100
+    pareja_nueva: solo_perfiles                       # φ̂ = z_iᵀ M_r z_j (sin ψ): la sinergia se predice por perfiles
+    min_posesiones_pareja_validacion: 100             # parejas nuevas del examen con ≥ 100 posesiones juntas en t+1
   dirigidos:
     efectos: [d_cuota_tiro, d_efg, d_pct_asistidas, d_pct_aro, d_pts100]
     modelo_candidatos: [ridge, gbm]

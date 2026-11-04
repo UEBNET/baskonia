@@ -29,6 +29,9 @@ def main(argv=None):
     sub.add_parser("rapm-examen", help="F1: examen prerregistrado §11.1, comprobaciones D2 y elección del prior (cortes)")
     sub.add_parser("rapm-f1d", help="F1-D: diagnóstico de contaminación del RAPM de origen")
     sub.add_parser("rapm-producto", help="F1: ajuste con todas las temporadas → data/modelos/v4_0/rapm_multiliga/<t>.csv.gz")
+    sub.add_parser("sinergia-examen", help="F2-A: examen de parejas nuevas (§11.2) y elección del rango")
+    sub.add_parser("dirigidos-examen", help="F2-B: examen de los efectos dirigidos X→Y (§11.2)")
+    sub.add_parser("sinergia-producto", help="F2: ajuste con todas las temporadas → data/modelos/v4_0/sinergia/")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -66,6 +69,15 @@ def main(argv=None):
     elif a.orden == "rapm-producto":
         from . import rapm
         rapm.exportar(cfg)
+    elif a.orden == "sinergia-examen":
+        from . import examen_f2
+        examen_f2.main(cfg)
+    elif a.orden == "dirigidos-examen":
+        from . import dirigidos
+        dirigidos.examen(cfg)
+    elif a.orden == "sinergia-producto":
+        from . import sinergia
+        sinergia.exportar(cfg)
     print(json.dumps({"tiempo_s": round(time.time() - t0)}))
 
 
