@@ -1,0 +1,61 @@
+{
+ "2020-21→2021-22": {
+  "n_beta": 1216,
+  "corr_beta": 0.7594061937347086,
+  "corr_prior_t_beta_t1": 0.7651294424953078,
+  "corr_beta_misma_liga": 0.7946506921396249,
+  "n_rapm": 1120,
+  "corr_rapm_liga": 0.210961171167054,
+  "corr_rapm_misma_liga": 0.2233957964502888
+ },
+ "2021-22→2022-23": {
+  "n_beta": 1781,
+  "corr_beta": 0.831028728274183,
+  "corr_prior_t_beta_t1": 0.8430680998034241,
+  "corr_beta_misma_liga": 0.8578876222131523,
+  "n_rapm": 1704,
+  "corr_rapm_liga": 0.24764081577752886,
+  "corr_rapm_misma_liga": 0.27981396866836045
+ },
+ "2022-23→2023-24": {
+  "n_beta": 2020,
+  "corr_beta": 0.8503458999597021,
+  "corr_prior_t_beta_t1": 0.8570829560153526,
+  "corr_beta_misma_liga": 0.86456862963721,
+  "n_rapm": 1964,
+  "corr_rapm_liga": 0.3198952145053513,
+  "corr_rapm_misma_liga": 0.3474428471129375
+ },
+ "2023-24→2024-25": {
+  "n_beta": 3009,
+  "corr_beta": 0.935985404765155,
+  "corr_prior_t_beta_t1": 0.9385571714849514,
+  "corr_beta_misma_liga": 0.9427457989606199,
+  "n_rapm": 3108,
+  "corr_rapm_liga": 0.26763222589392505,
+  "corr_rapm_misma_liga": 0.3199361956034099
+ },
+ "2024-25→2025-26": {
+  "n_beta": 2945,
+  "corr_beta": 0.93501966663272,
+  "corr_prior_t_beta_t1": 0.9390881666700366,
+  "corr_beta_misma_liga": 0.9432300125954532,
+  "n_rapm": 3206,
+  "corr_rapm_liga": 0.2572622323499003,
+  "corr_rapm_misma_liga": 0.3399462012913997
+ },
+ "2025-26→2026-27": {
+  "n_beta": 365,
+  "corr_beta": 0.7330176543636638,
+  "corr_prior_t_beta_t1": 0.7373365775218323,
+  "corr_beta_misma_liga": 0.8102735713211361,
+  "n_rapm": 195,
+  "corr_rapm_liga": 0.3011498129959869,
+  "corr_rapm_misma_liga": 0.38098912849531036
+ },
+ "resumen": {
+  "corr_beta_media": 0.8408005912883555,
+  "corr_rapm_misma_liga_media": 0.3152540229369511,
+  "beta_no_peor": true
+ }
+}

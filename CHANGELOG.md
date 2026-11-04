@@ -21,7 +21,9 @@ dos comprobaciones) y orden de arrancar F1 el 04-11-2026.
   [−0,9, +7,9]: indeterminada, se conserva.
 * Corrección declarada: la primera lectura imputaba 0 a los jugadores sin RAPM en las líneas base y hacía parecer roto
   el RAPM traducido en la Tercera FEB (nivel −11 pts/100); corregido a la media de liga.
-* Salidas: `data/modelos/v4_0/rapm_multiliga/` (β por persona-temporada con sd, prior y peso del prior; O/D;
+* Test-retest: corr(β_t, β_{t+1}) 0,84 de media frente a 0,32 del RAPM de liga. F1-D: arrastre del Net del equipo
+  sobre el RAPM de origen 0,085 pts por punto (0,17 en quienes juegan 800–1.500 min); con β de F1, 0,057.
+* Salidas: `data/modelos/v4_0/rapm_multiliga/` (40.597 personas-temporada con β, sd, prior, peso del prior y O/D;
   `g_prior.json`; `examen/`; `f1d_contaminacion.json`).
 
 ## 2026-11-04 — CERNO v4.0 · F0 (preparación): perfil ampliado, contrato de datos y configuración única
