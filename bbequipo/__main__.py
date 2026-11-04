@@ -59,6 +59,10 @@ def main(argv=None):
         tb = pd.concat([pd.read_csv(p_, low_memory=False) for p_ in sorted(d.glob("20*.csv.gz"))], ignore_index=True) if list(d.glob("20*.csv.gz")) else None
         res = examen_f1.f1d_contaminacion(cfg, perf, tb)
         (C.RAIZ / cfg["f1"]["f1d"]["salida"]).write_text(_j.dumps(res, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+        if tb is not None:                            # test-retest (§11.1 b) con el ajuste producto
+            rt = examen_f1.test_retest(cfg, tb, perf)
+            (examen_f1.dir_examen(cfg) / "test_retest.json").write_text(_j.dumps(rt, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+            print(_j.dumps(rt.get("resumen"), ensure_ascii=False))
     elif a.orden == "rapm-producto":
         from . import rapm
         rapm.exportar(cfg)
