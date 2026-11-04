@@ -657,10 +657,11 @@ def theta_corte(anio: int, temporadas: list[str], tabla: pd.DataFrame, cfg: dict
     filas = tabla[tabla["temporada"].isin(temporadas)]
     tr = traducir_corte(filas, D, cj, cfg3, X, rapidas=rapidas, progreso=progreso)
     tr = tr.drop_duplicates(["liga", "temporada", "player_id"])
-    x = th2.merge(tr, on=["liga", "temporada", "player_id"], how="inner", suffixes=("", "_cvae"))
-    if "min" not in x:
-        x = x.merge(filas[["liga", "temporada", "player_id", "min"]].drop_duplicates(["liga", "temporada", "player_id"]),
-                    on=["liga", "temporada", "player_id"], how="left")
+    # como en bbnorm3.combinacion.ajustar_combinada: todas las filas que la CVAE traduce; donde falta la v2 ≤ t, la red sola
+    x = tr.merge(th2, on=["liga", "temporada", "player_id"], how="left", suffixes=("_cvae", ""))
+    x = x.drop(columns=[c for c in ("pos3", "min") if c in x]).merge(
+        filas[["liga", "temporada", "player_id", "pos3", "min"]].drop_duplicates(["liga", "temporada", "player_id"]),
+        on=["liga", "temporada", "player_id"], how="left")
     ex = C.RAIZ / cfg3["salida"] / "validacion" / "examen_v32.json"
     exj = json.loads(ex.read_text(encoding="utf-8")) if ex.exists() else {}
     w_met = (exj.get("pesos_por_corte") or {}).get(str(anio)) or {}
@@ -686,8 +687,11 @@ def theta_corte(anio: int, temporadas: list[str], tabla: pd.DataFrame, cfg: dict
             w[x["liga"].isin(cb["ligas_conocimiento"]).to_numpy()] = float(w_con)
         w[(x["liga"].map(temporadas_liga).fillna(0) < cb["min_temporadas_liga"]).to_numpy()] = 0.0
         w[x[f"{m}_v3_sd_entre_z"].to_numpy(float) > cb["max_discrepancia_redes"]] = 0.0
-        w[~np.isfinite(m3) | ~np.isfinite(s3)] = 0.0
-        m3, s3 = np.where(np.isfinite(m3), m3, m2), np.where(np.isfinite(s3), s3, s2)
+        sin_v2 = ~np.isfinite(m2) | ~np.isfinite(s2)
+        m2, s2 = np.where(sin_v2, m3, m2), np.where(sin_v2, s3, s2)          # sin v2 ≤ t: la red sola (v3.2)
+        sin_v3 = ~np.isfinite(m3) | ~np.isfinite(s3)
+        w[sin_v3] = 0.0                                                    # sin CVAE: sólo la v2
+        m3, s3 = np.where(sin_v3, m2, m3), np.where(sin_v3, s2, s3)
         media = w * m3 + (1 - w) * m2
         lo, hi = CB._cuantiles_mezcla(w, m3, s3, m2, s2, (0.1, 0.9))
         nv[f"{m}_am"], nv[f"{m}_am_v1"] = destransformar(media, trf), destransformar(m2, trf)

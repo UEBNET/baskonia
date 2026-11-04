@@ -74,6 +74,8 @@ está fijada en `perfil.rasgos` del YAML antes de entrenar nada.
   alineamiento por red y dimensión en `perfiles/meta.json`; una red con R² medio < 0,90 queda señalada. El
   alineamiento no cambia nada de la v3.2 (sus salidas usan cada red por separado); sólo define las coordenadas en que
   las capas 1-3 leen el latente.
+- Los pesos B2 de la mezcla en el corte t son los que ese corte había decidido (0,5 en todas las métricas en 2023 y 2024;
+  sin decisión en 2021 y 2022 → 0,5): el RAPM del corte mezcla v2 y red, mientras que el ajuste completo usa la red sola.
 - Las coordenadas de los perfiles de corte (≤ t) son las de su propio ensemble ≤ t: las capas que se examinen en el
   corte t se entrenan y evalúan con esas coordenadas, nunca con las del ajuste completo.
 
@@ -84,8 +86,9 @@ está fijada en `perfil.rasgos` del YAML antes de entrenar nada.
 - θ/v_j con la **fuente `V32_corte`** del simulador generalizada a cualquier temporada ≤ t (`bbequipo.perfiles.theta_corte`):
   v2 ≤ t (algoritmo A ajustado ≤ t y amortiguación ≤ t, `bbfit.sim_insumos.normalizacion_hasta`) mezclada con la CVAE
   ≤ t traducida a la vara EuroLeague de la temporada t, pesos B2 del corte (0,5 si el corte no decidió), salvaguardas
-  de la v3.2 (liga con < 2 temporadas, redes que discrepan) y constantes del sustituto lineal del corte; varianza propia
-  v_j = max(sd² − Var(δ_o), 0,1·sd²) como en `destino`;
+  de la v3.2 (liga con < 2 temporadas, redes que discrepan) y constantes del sustituto lineal del corte; donde falta la
+  v2 ≤ t (fila o métrica sin enlace del A) se usa la red sola y donde falta la CVAE sólo la v2, como hace
+  `bbnorm3.combinacion.ajustar_combinada`; varianza propia v_j = max(sd² − Var(δ_o), 0,1·sd²) como en `destino`;
 - rol, estilos, edad y pista: por temporada (no cambian con el corte).
 Regla de uso en las fases siguientes: en el examen del corte t, la fila de la temporada s ≤ t toma el perfil de
 `corte_<t>/`. Cualquier otro uso del ajuste completo en un examen es fuga y se declara.
