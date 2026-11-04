@@ -65,7 +65,11 @@ contrato:
     posesiones: fga + 0.44·fta − oreb + tov           # estimación por lado, media de los dos lados del tramo
     localia: covariable_h                             # h_s: team_a del tramo es el local (bbstats.lineups: teams = [local, visitante])
     quintetos_completos: true                         # sólo tramos con 5 contra 5 (n_a = n_b = 5)
-    min_posesiones_tramo: 0.5                         # tramos con menos de media posesión estimada no entran
+    min_posesiones_tramo: 1.0                         # tramos con menos de 1 posesión estimada no entran. Fijado en el corte de
+                                                      # calibración 2021 de F1 (antes 0,5): con 0,5–0,75 posesiones la varianza del
+                                                      # diferencial por posesión es 18 frente a 3–5 en el resto (artefacto del
+                                                      # estimador fga + 0,44·fta − oreb + tov) y esos tramos (11 %) acaparaban el 32 %
+                                                      # de la pérdida ponderada (V40_F1 §3)
     fases: [regular, playoffs]                        # playoffs entran con indicador de fase
   cobertura:                                          # tratamiento de las lagunas del §3 (decidido en F0, antes de F1)
     min_partidos_con_quintetos: 0.50                  # liga-temporada con < 50 % de partidos con quintetos → EXCLUIDA de F1-F3
@@ -96,11 +100,22 @@ f1:
   fase_playoffs: covariable
   prior:
     candidatos: [ridge, gbm]                          # g(x̃; γ): se elige en el corte de selección (2022)
-    ridge_alpha_rejilla: [0.1, 0.3, 1.0, 3.0, 10.0]
-    gbm: {max_iter: 300, learning_rate: 0.05, max_depth: 3, min_samples_leaf: 40, l2_regularization: 1.0}
+    ridge_alpha_rejilla: [1.0, 10.0, 100.0, 1000.0, 10000.0]   # precisión a priori de γ (rasgos estandarizados), elegida con τ por verosimilitud marginal
+    gbm: {max_iter: 300, learning_rate: 0.05, max_depth: 3, min_samples_leaf: 40, l2_regularization: 1.0, retroajustes: 2}
     rasgos: [latente, estilos, rasgos, rol, edad, pos3]   # bloques de x̃ que entran en g
     sin_latente_si_falta: true                        # filas sin u (sin_latente) usan sólo el resto del perfil
-  bayes_empirico: {iteraciones: 10, tau2_inicial: 4.0, sigma2_inicial: 11000.0, tau2_minimo: 0.25}
+  bayes_empirico:                                     # τ², σ² (y γ) dados los datos, iterando β | (g, τ², σ²) y (γ, τ², σ²) | β̂
+    metodo: verosimilitud_marginal                    # τ por máxima verosimilitud marginal p(y | τ², σ²) en una rejilla, con el
+                                                      # prior lineal γ y los efectos fijos estimados A LA VEZ que β (ajuste conjunto:
+                                                      # sin atenuación del prior). Alternativas examinadas en el corte de calibración
+                                                      # 2021 y descartadas (V40_F1 §3): momentos con varianza diagonal (colapsa τ) y
+                                                      # validación cruzada por partido (curva plana).
+    tau_rejilla: [1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0, 12.0]   # pts/100 (DT a priori de β alrededor de g)
+    iteraciones: 2                                    # ciclos τ ↔ σ²
+    tau2_inicial: 4.0
+    tau2_minimo: 0.25
+    varianza_final: hutchinson                        # sd de β: diagonal de (AᵀA)⁻¹ estimada (32 sondas); «diagonal» = cota inferior
+    sondas_hutchinson: 32
   descomposicion_od: true                             # β^O (ataque) y β^D (defensa) con el mismo esquema
   min_posesiones_jugador: 50                          # por debajo, β se queda casi en el prior (se informa del peso)
   salidas: {rapm: data/modelos/v4_0/rapm_multiliga, prior: data/modelos/v4_0/rapm_multiliga/g_prior.json}

@@ -1,7 +1,7 @@
 {
  "version": "v4.0",
- "generado": "2026-11-04T08:35:50",
- "huella_config": "94d7558813",
+ "generado": "2026-11-04T12:07:28",
+ "huella_config": "dee22d77e7",
  "reglas": {
   "tramos": {
    "basura": "excluir",
@@ -10,7 +10,7 @@
    "posesiones": "fga + 0.44·fta − oreb + tov",
    "localia": "covariable_h",
    "quintetos_completos": true,
-   "min_posesiones_tramo": 0.5,
+   "min_posesiones_tramo": 1.0,
    "fases": [
     "regular",
     "playoffs"
@@ -78,37 +78,37 @@
   "incluidas": 99,
   "incluidas_con_aviso": 12,
   "excluidas": 4,
-  "tramos_validos_incluidos": 1152179,
-  "posesiones_incluidas": 2986419.82,
+  "tramos_validos_incluidos": 960245,
+  "posesiones_incluidas": 2863868.8600000003,
   "partidos_pbp_incluidos": 38679
  },
  "por_temporada": {
   "2020-21": {
-   "tramos_validos": 85820,
+   "tramos_validos": 72334,
    "ligas": 11,
    "excluidas": [
     "bcl"
    ]
   },
   "2021-22": {
-   "tramos_validos": 133712,
+   "tramos_validos": 113307,
    "ligas": 14,
    "excluidas": [
     "vtb"
    ]
   },
   "2022-23": {
-   "tramos_validos": 152583,
+   "tramos_validos": 127933,
    "ligas": 15,
    "excluidas": []
   },
   "2023-24": {
-   "tramos_validos": 229877,
+   "tramos_validos": 192234,
    "ligas": 18,
    "excluidas": []
   },
   "2024-25": {
-   "tramos_validos": 241972,
+   "tramos_validos": 200648,
    "ligas": 19,
    "excluidas": [
     "cba",
@@ -116,12 +116,12 @@
    ]
   },
   "2025-26": {
-   "tramos_validos": 291639,
+   "tramos_validos": 240227,
    "ligas": 20,
    "excluidas": []
   },
   "2026-27": {
-   "tramos_validos": 37090,
+   "tramos_validos": 30060,
    "ligas": 18,
    "excluidas": []
   }
@@ -235,7 +235,7 @@
    "motivo_declarado": "cobertura 61-93 % y sin coordenadas",
    "decision": "incluida",
    "fraccion_partidos_con_quintetos": 0.9090909090909091,
-   "tramos_por_partido": 30.7
+   "tramos_por_partido": 26.594594594594593
   },
   {
    "liga": "cba",
@@ -243,7 +243,7 @@
    "motivo_declarado": "cobertura 61-93 % y sin coordenadas",
    "decision": "incluida_con_aviso",
    "fraccion_partidos_con_quintetos": 0.8803611738148984,
-   "tramos_por_partido": 31.21794871794872
+   "tramos_por_partido": 26.838461538461537
   },
   {
    "liga": "cba",
@@ -251,7 +251,7 @@
    "motivo_declarado": "cobertura 61-93 % y sin coordenadas",
    "decision": "incluida_con_aviso",
    "fraccion_partidos_con_quintetos": 0.7464285714285714,
-   "tramos_por_partido": 30.811004784688997
+   "tramos_por_partido": 26.516746411483254
   },
   {
    "liga": "cba",
@@ -259,7 +259,7 @@
    "motivo_declarado": "cobertura 61-93 % y sin coordenadas",
    "decision": "excluida",
    "fraccion_partidos_con_quintetos": 0.32193158953722334,
-   "tramos_por_partido": 31.15
+   "tramos_por_partido": 26.46875
   },
   {
    "liga": "cba",
@@ -267,7 +267,7 @@
    "motivo_declarado": "cobertura 61-93 % y sin coordenadas",
    "decision": "incluida_con_aviso",
    "fraccion_partidos_con_quintetos": 0.7947019867549668,
-   "tramos_por_partido": 23.730555555555554
+   "tramos_por_partido": 19.95277777777778
   },
   {
    "liga": "cba",
@@ -275,7 +275,7 @@
    "motivo_declarado": "cobertura 61-93 % y sin coordenadas",
    "decision": "incluida",
    "fraccion_partidos_con_quintetos": 0.9636363636363636,
-   "tramos_por_partido": 30.07547169811321
+   "tramos_por_partido": 24.81132075471698
   },
   {
    "liga": "vtb",
@@ -289,7 +289,7 @@
    "motivo_declarado": "sin PBP antes de 03-2022",
    "decision": "excluida",
    "fraccion_partidos_con_quintetos": 0.48760330578512395,
-   "tramos_por_partido": 32.52542372881356
+   "tramos_por_partido": 26.1864406779661
   },
   {
    "liga": "bbl",
@@ -1318,5 +1318,5 @@
    "crosswalk_fraccion": 1.0
   }
  },
- "tiempo_s": 21
+ "tiempo_s": 29
 }

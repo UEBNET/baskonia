@@ -270,3 +270,76 @@ def test_contrato_filtra_tramos_segun_las_reglas():
     assert list(d["decision"]) == ["incluida", "incluida_con_aviso", "excluida", "excluida"]
     inv2 = inv.assign(fraccion_partidos_con_quintetos=0.99, tramos_por_partido=[40, 3.5, 40, 40])
     assert list(K.decidir(inv2, CFG)["decision"]) == ["incluida", "excluida", "incluida", "incluida"]
+
+
+# ------------------------------------------------------------------------------------------ F1 · RAPM multiliga sintético
+def _tramos_sinteticos(semilla=3, n_por_liga=4000):
+    """Dos ligas, 12 equipos de 9 jugadores; β verdadero = g(x) + ruido; tramos 5 contra 5 con y = Σβ_A − Σβ_B + local + ruido."""
+    from bbequipo import rapm as RP
+    rng = np.random.default_rng(semilla)
+    jug, filas = [], []
+    for liga, nivel in (("lg", 1.0), ("lh", -1.0)):
+        for e in range(6):
+            for j in range(9):
+                pid = f"P{liga}{e}{j}"
+                x1, x2 = rng.normal(), rng.normal()
+                g = nivel + 1.5 * x1 - 0.8 * x2
+                jug.append({"persona_id": pid, "temporada": "2024-25", "liga": liga, "team": f"{liga}_T{e}", "x1": x1, "x2": x2,
+                            "g": g, "beta": g + rng.normal(0, 0.7), "pocos": j == 8})
+    J = pd.DataFrame(jug)
+    b = J.set_index("persona_id")["beta"]
+    for liga in ("lg", "lh"):
+        eq = [f"{liga}_T{e}" for e in range(6)]
+        for s in range(n_por_liga):
+            ta, tb = rng.choice(eq, 2, replace=False)
+            pa = J[J.team == ta]; pb = J[J.team == tb]
+            w_a = np.where(pa.pocos, 0.05, 1.0); w_b = np.where(pb.pocos, 0.05, 1.0)
+            A = tuple(rng.choice(pa.persona_id, 5, replace=False, p=w_a / w_a.sum()) + "|2024-25")
+            B = tuple(rng.choice(pb.persona_id, 5, replace=False, p=w_b / w_b.sum()) + "|2024-25")
+            poss = float(rng.uniform(1, 6))
+            mu = 3.0 + sum(b[k.split("|")[0]] for k in A) - sum(b[k.split("|")[0]] for k in B)
+            y = mu + rng.normal(0, 90 / np.sqrt(poss))
+            filas.append({"liga": liga, "temporada": "2024-25", "anio": 2024, "game_id": s, "fase": "regular", "team_a": ta, "team_b": tb,
+                          "clutch": bool(rng.random() < 0.05), "playoffs": False, "poss": poss, "y": y,
+                          "a_pts": poss * (1.1 + y / 200), "b_pts": poss * 1.1, "A": A, "B": B})
+    return J, pd.DataFrame(filas)
+
+
+def _tabla_prior_sintetica(J, cfg):
+    from bbequipo import rapm as RP
+    T = pd.DataFrame({"clave": J["persona_id"] + "|2024-25", "persona_id": J["persona_id"], "temporada": "2024-25", "liga": J["liga"],
+                      "min": 500.0, "u1": J["x1"], "u2": J["x2"], "pos_E": 1.0, "m_latente": 1.0})
+    T.attrs["bloques"] = {"latente": ["u1", "u2"], "pos3": ["pos_E"], "mascara": ["m_latente"]}
+    return T
+
+
+def test_rapm_recupera_beta_y_prior():
+    from bbequipo import rapm as RP
+    J, tr = _tramos_sinteticos()
+    D = RP.construir_diseno(tr, "net")
+    assert D.X.shape == (len(tr), D.nJ + len(D.fijos)) and D.nJ == len(J)
+    fila = D.X[0].toarray().ravel()
+    assert fila[:D.nJ].sum() == 0 and (fila[:D.nJ] != 0).sum() == 10         # +5 −5
+    cfg = C.con(CFG, **{"f1.bayes_empirico.iteraciones": 4})
+    T = _tabla_prior_sintetica(J, cfg)
+    res = RP.ajustar(D, T, cfg, "ridge", progreso=None)
+    tb = RP.tabla_beta(res, D).merge(J, on="persona_id")
+    r_beta = np.corrcoef(tb["beta_x"], tb["beta_y"])[0, 1]
+    r_prior = np.corrcoef(tb["prior"], tb["g"])[0, 1]
+    # con el prior VERDADERO y τ = 0,7 la cota es 0,957; sin prior, 0,41 (la información por jugador es limitada:
+    # error típico ≈ 1,7 frente a sd(β) ≈ 2,2). El bayes empírico debe quedar cerca de la cota y lejos de «sin prior».
+    assert r_beta > 0.8 and r_prior > 0.85, (r_beta, r_prior)
+    # el prior pesa más en quien juega poco; la ventaja local se recupera; τ y σ en el orden correcto
+    assert tb.loc[tb.pocos, "peso_prior"].mean() > tb.loc[~tb.pocos, "peso_prior"].mean()
+    assert abs(np.mean([v for k, v in res["fijos"].items() if k.startswith("c_")]) - 3.0) < 1.0
+    assert 0.3 < np.sqrt(res["tau2"][0]) < 1.5 and 60 < np.sqrt(res["sigma2"]) < 130
+    # O/D: el diseño tiene dos filas por tramo y β^O − β^D reproduce la escala del net
+    Dod = RP.construir_diseno(tr, "od")
+    assert Dod.X.shape[0] == 2 * len(tr) and Dod.nC == 2
+    rod = RP.ajustar(Dod, T, cfg, "ridge", progreso=None)
+    tod = RP.tabla_beta(rod, Dod).merge(J, on="persona_id")
+    assert np.corrcoef(tod["rapm_od"], tod["beta"])[0, 1] > 0.8
+    # sin perfil (T = None): el prior es constante y β sigue correlacionando con la verdad
+    res0 = RP.ajustar(D, None, cfg, "ridge", progreso=None)
+    r0 = np.corrcoef(res0["beta"][:D.nJ], tb.sort_values("clave")["beta_y"])[0, 1]
+    assert 0.3 < r0 < r_beta - 0.2, (r0, r_beta)

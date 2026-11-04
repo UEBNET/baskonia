@@ -2,6 +2,7 @@
 
     python -m bbequipo perfiles [--cortes] [--solo-cortes] [--temporadas T …]   # F0: perfiles ampliados x̃
     python -m bbequipo contrato                                                  # F0: contrato de datos (tramos)
+    python -m bbequipo rapm-examen | rapm-producto | rapm-f1d                   # F1: examen, ajuste producto, F1-D
 
 Las redes CVAE de la v3.2 se leen de experimentos/v3/ (no versionado); si faltan, se reentrenan con la configuración
 final de configs/normalization_v32.yaml (misma semilla por red).
@@ -25,6 +26,9 @@ def main(argv=None):
                     help="sólo estos cortes (sin el ajuste completo); sin valores: todos los de perfil.cortes")
     pf.add_argument("--temporadas", nargs="*", default=None)
     sub.add_parser("contrato", help="F0: contrato de datos (inventario de tramos y decisión de cobertura)")
+    sub.add_parser("rapm-examen", help="F1: examen prerregistrado §11.1, comprobaciones D2 y elección del prior (cortes)")
+    sub.add_parser("rapm-f1d", help="F1-D: diagnóstico de contaminación del RAPM de origen")
+    sub.add_parser("rapm-producto", help="F1: ajuste con todas las temporadas → data/modelos/v4_0/rapm_multiliga/<t>.csv.gz")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -42,6 +46,22 @@ def main(argv=None):
     elif a.orden == "contrato":
         from . import contrato
         contrato.generar(cfg)
+    elif a.orden == "rapm-examen":
+        from . import examen_f1
+        examen_f1.main(cfg)
+    elif a.orden == "rapm-f1d":
+        import json as _j
+        import pandas as pd
+        from . import examen_f1, rapm
+        temps = list(cfg["perfil"]["temporadas"])
+        perf = examen_f1.perfiles_completo(cfg, [t for t in temps if (C.dir_salida(cfg) / "perfiles" / f"{t}.csv.gz").exists()])
+        d = rapm.dir_salida(cfg)
+        tb = pd.concat([pd.read_csv(p_, low_memory=False) for p_ in sorted(d.glob("20*.csv.gz"))], ignore_index=True) if list(d.glob("20*.csv.gz")) else None
+        res = examen_f1.f1d_contaminacion(cfg, perf, tb)
+        (C.RAIZ / cfg["f1"]["f1d"]["salida"]).write_text(_j.dumps(res, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    elif a.orden == "rapm-producto":
+        from . import rapm
+        rapm.exportar(cfg)
     print(json.dumps({"tiempo_s": round(time.time() - t0)}))
 
 
