@@ -49,6 +49,13 @@ def temp_de(a: int) -> str:
     return f"{a}-{str(a + 1)[-2:]}"
 
 
+def metricas_corte(cfg: dict) -> list[str]:
+    """Métricas que pide la normalización v2 ≤ t: los rasgos del perfil más las de traducción del simulador (entre
+    ellas las de nivel, pts/100 y TS%, sin las cuales la amortiguación no puede medir la distancia entre ligas)."""
+    from bbfit import sim_insumos as SI
+    return sorted(set(rasgos(cfg)) | set(SI.metricas_traduccion()))
+
+
 def dir_perfiles(cfg: dict, corte: int | None = None) -> Path:
     d = C.dir_salida(cfg) / "perfiles"
     if corte is not None:
@@ -128,25 +135,63 @@ def _inversa_bloques(Quu) -> "sp.csr_matrix":
     return sp.csr_matrix((np.concatenate(vals), (np.concatenate(rows), np.concatenate(cols))), shape=(n, n))
 
 
+class PosteriorRapida:
+    """Covarianzas exactas de la posterior conjunta (bbnorm3.niveles.Posterior) por complemento de Schur. Q_uu
+    (latentes) es diagonal por bloques (una persona por bloque, unida por sus transiciones) y el bloque de niveles
+    (μ_c, μ_escalón) es pequeño:
+        Q⁻¹_uu = Q_uu⁻¹ + W S⁻¹ Wᵀ,   Q⁻¹_uμ = −W S⁻¹,   Q⁻¹_μμ = S⁻¹,   W = Q_uu⁻¹ Q_uμ,   S = Q_μμ − Q_μu W.
+    Con ello Var(u_i), Var(μ_c), Cov(u_i, μ_c) y Var(u_i − μ_c) salen en segundos para todas las variables."""
+
+    def __init__(self, P):
+        self.nPS, self.n = P.nPS, P.media.shape[0]
+        self.K = len(P.lu)
+        self.diag_u, self.WS, self.Sinv = [], [], []
+        for f in P.lu:
+            Q = _matriz_Q(f)
+            Quu, Qum, Qmm = Q[:self.nPS, :self.nPS], Q[:self.nPS, self.nPS:], Q[self.nPS:, self.nPS:].toarray()
+            Binv = _inversa_bloques(Quu)
+            W = (Binv @ Qum).toarray()
+            Sinv = np.linalg.inv(Qmm - Qum.T @ W)
+            WS = W @ Sinv
+            self.diag_u.append(np.maximum(Binv.diagonal() + np.einsum("ij,ij->i", WS, W), 0.0))
+            self.WS.append(WS)      # float64: Var(u − μ) = Var(u) + Var(μ) − 2·Cov cancela casi todo y float32 no basta
+            self.Sinv.append(Sinv)
+
+    def diag(self) -> np.ndarray:
+        """diag(Q_k⁻¹) de todas las variables (n × K)."""
+        out = np.zeros((self.n, self.K))
+        for k in range(self.K):
+            out[:self.nPS, k] = self.diag_u[k]
+            out[self.nPS:, k] = np.maximum(np.diag(self.Sinv[k]), 0.0)
+        return out
+
+    def var_u_menos_mu(self, ips: np.ndarray, c: int) -> np.ndarray:
+        """Var(u_i − μ_c) = Var(u_i) + Var(μ_c) − 2 Cov(u_i, μ_c), con Cov(u_i, μ_c) = −(W S⁻¹)[i, c]  (len(ips) × K)."""
+        ips = np.asarray(ips, int)
+        j = c - self.nPS
+        out = np.zeros((len(ips), self.K))
+        for k in range(self.K):
+            out[:, k] = self.diag_u[k][ips] + self.Sinv[k][j, j] + 2.0 * self.WS[k][ips, j]
+        return np.maximum(out, 0.0)
+
+    def var_mu_menos_mu(self, cs: np.ndarray, c: int) -> np.ndarray:
+        """Var(μ_a − μ_c) para varias competiciones a (len(cs) × K)."""
+        cs = np.asarray(cs, int) - self.nPS
+        j = c - self.nPS
+        out = np.zeros((len(cs), self.K))
+        for k in range(self.K):
+            S = self.Sinv[k]
+            out[:, k] = S[cs, cs] + S[j, j] - 2.0 * S[cs, j]
+        return np.maximum(out, 0.0)
+
+
 def diag_posterior_completa(P) -> np.ndarray:
-    """diag(Q_k⁻¹) de TODAS las variables (n × K), exacta y rápida, por complemento de Schur: Q_uu (latentes) es
-    diagonal por bloques (una persona por bloque, unida por sus transiciones) y el bloque de niveles es pequeño:
-      Q⁻¹_uu = Q_uu⁻¹ + W S⁻¹ Wᵀ,  W = Q_uu⁻¹ Q_uμ,  S = Q_μμ − Q_μu W;   Q⁻¹_μμ = S⁻¹."""
-    nPS, n = P.nPS, P.media.shape[0]
-    out = np.zeros((n, len(P.lu)))
-    for k, f in enumerate(P.lu):
-        Q = _matriz_Q(f)
-        Quu, Qum, Qmm = Q[:nPS, :nPS], Q[:nPS, nPS:], Q[nPS:, nPS:].toarray()
-        Binv = _inversa_bloques(Quu)
-        W = (Binv @ Qum).toarray()                                  # n_u × (nC + nEsc)
-        S = Qmm - Qum.T @ W
-        Sinv = np.linalg.inv(S)
-        out[:nPS, k] = Binv.diagonal() + np.einsum("ij,jk,ik->i", W, Sinv, W)
-        out[nPS:, k] = np.diag(Sinv)
-    return np.maximum(out, 0.0)
+    """diag(Q_k⁻¹) de TODAS las variables (n × K), exacta y rápida (PosteriorRapida)."""
+    return PosteriorRapida(P).diag()
 
 
-def latente_red(m, P, D, t: pd.DataFrame, cfg_norm: dict, lote: int = 1000, diag: np.ndarray | None = None):
+def latente_red(m, P, D, t: pd.DataFrame, cfg_norm: dict, lote: int = 1000, diag: np.ndarray | None = None,
+                rapida: "PosteriorRapida | None" = None):
     """u (coordenadas absolutas de la red) de cada fila de `t` para una red del ensemble.
     Filas con persona-temporada en el ajuste: media y varianza de la posterior conjunta. Resto: codificador ⊗ prior
     N(μ_c, s_l²) (precisión del experto + 1 en coordenadas relativas), con Var(μ_c) y, si la competición-temporada no
@@ -155,7 +200,7 @@ def latente_red(m, P, D, t: pd.DataFrame, cfg_norm: dict, lote: int = 1000, diag
     from bbnorm3.datos import POSICIONES, matrices_filas
     K, n = m.K, len(t)
     if diag is None:
-        diag = diag_posterior_completa(P)
+        diag = (rapida or PosteriorRapida(P)).diag()
     media = np.full((n, K), np.nan)
     var = np.full((n, K), np.nan)
     fuente = np.full(n, "sin_latente", dtype=object)
@@ -203,11 +248,13 @@ def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso
     L = cfg["perfil"]["latente"]
     lote, iref = int(L.get("lote_varianza", 1000)), int(L.get("red_referencia", 0))
     ref = cj[iref][1].media[:cj[iref][1].nPS]
-    medias, vars_, r2s, fuente = [], [], [], None
+    medias, vars_, r2s, fuente, rapidas = [], [], [], None, []
     t0 = time.time()
     for k, (m, P) in enumerate(cj):
         A, b, r2 = alinear(ref, P.media[:P.nPS])
-        med, var, fu = latente_red(m, P, D, t, cfg_norm, lote)
+        PR = PosteriorRapida(P)
+        rapidas.append(PR)
+        med, var, fu = latente_red(m, P, D, t, cfg_norm, lote, rapida=PR)
         med, var = aplicar_afin(A, b, med, var)
         medias.append(med); vars_.append(var); r2s.append(r2)
         fuente = fu if fuente is None else fuente
@@ -236,7 +283,118 @@ def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso
             "redes_con_r2_bajo": [k for k in range(len(cj)) if k != iref and float(r2[k].mean()) < float(L["r2_minimo_aviso"])],
             "fuentes": {k: int((fuente == k).sum()) for k in FUENTES_LATENTE},
             "discrepancia_redes_mediana": float(np.nanmedian(out["u_discrepancia_redes"]))}
+    meta["_rapidas"] = rapidas          # posteriores rápidas (no se serializan): las reutiliza theta_corte
     return out, meta
+
+
+# =============================================================================================== traducción rápida (cortes)
+def traducir_corte(filas: pd.DataFrame, D, cj, cfg3: dict, metricas: list[str], rapidas: list | None = None,
+                   progreso=None) -> pd.DataFrame:
+    """Equivalente en la competición de referencia (EuroLeague de `cfg3.referencia_salida.temporada`) de cada fila,
+    con la MISMA lógica que bbnorm3.exportar.traducir_filas (posterior conjunta para las filas del ajuste; codificador ⊗
+    prior para el resto; factor específico ζ; soporte sin recortar el centro, §11c; deep ensemble) pero con las varianzas
+    de (u − μ_R) por complemento de Schur (PosteriorRapida) en vez de una resolución por persona. Sólo `metricas`.
+    Devuelve liga, temporada, player_id y <m>_v3, <m>_v3_lo, <m>_v3_hi, <m>_v3_sd_entre_z."""
+    import torch
+    from bbmodel.metricas import CATALOGO, destransformar
+    from bbnorm3.datos import METRICAS, POSICIONES, matrices_filas
+    from bbnorm3.prediccion import soporte
+    ref = f"{cfg3['referencia_salida']['liga']}|{cfg3['referencia_salida']['temporada']}"
+    R = D.comps.index(ref)
+    lR = int(D.comp_liga[R])
+    t = filas[filas["pos3"].notna()].copy()
+    t["comp"] = t["liga"] + "|" + t["temporada"]
+    ultima = {}
+    for c in D.comps:
+        l, tt = c.split("|")
+        if l not in ultima or tt > ultima[l].split("|")[1]:
+            ultima[l] = c
+    t["comp_ajuste"] = np.where(t["comp"].isin(D.comps), t["comp"], t["liga"].map(ultima))
+    t = t[t["comp_ajuste"].notna() & t["liga"].isin(D.ligas)]
+    extra_kappa = np.where(t["comp"] == t["comp_ajuste"], 0.0, cfg3["prior"]["kappa"] ** 2)
+    ps_idx = {p: i for i, p in enumerate(D.ps)}
+    en_ent = (t["persona_id"].astype(str) + "|" + t["anio"].astype(int).astype(str)).map(ps_idx)
+    grupos_R = np.array([D.grupos.index(f"{ref}|{p}") for p in t["pos3"]])
+    S = int(cfg3["prediccion"]["muestras"])
+    rng = np.random.default_rng(int(cfg3["semillas"][0]))
+    Yn, Mn, Vn = matrices_filas(t, D.esc)
+    liga_n = np.array([D.ligas.index(l) for l in t["liga"]])
+    comp_n = np.array([D.comps.index(c) for c in t["comp_ajuste"]])
+    pos_n = t["pos3"].map({p: i for i, p in enumerate(POSICIONES)}).to_numpy(int)
+    logmin = np.log(np.clip(t["min"].to_numpy(float), 1, None)) / 7.0
+    ok = en_ent.notna().to_numpy()
+    ips = en_ent[ok].astype(int).to_numpy()
+    per_idx = {p: i for i, p in enumerate(D.personas)}
+    pi = t["persona_id"].map(per_idx)
+    okp = pi.notna().to_numpy()
+    margen = cfg3["prediccion"].get("margen_soporte")
+    lo_s, hi_s = soporte(D, float(margen)) if margen is not None else (None, None)
+    kk = [METRICAS.index(m) for m in metricas]
+    partes = []
+    for i_red, (m, P) in enumerate(cj):
+        PR = rapidas[i_red] if rapidas is not None else PosteriorRapida(P)
+        K = m.K
+        media = np.zeros((len(t), K)); var = np.zeros((len(t), K))
+        media[ok] = P.media[ips] - P.media[P.nPS + R]
+        var[ok] = PR.var_u_menos_mu(ips, P.nPS + R)
+        if (~ok).any():
+            with torch.no_grad():
+                mm_, lp = m.codificar(torch.as_tensor(Yn[~ok]), torch.as_tensor(Mn[~ok]), torch.as_tensor(Vn[~ok]),
+                                      torch.as_tensor(liga_n[~ok].copy()), torch.as_tensor(pos_n[~ok].copy()),
+                                      torch.as_tensor(logmin[~ok], dtype=torch.float32))
+            prec = np.exp(lp.numpy().astype(float)) + 1.0
+            rmed = mm_.numpy().astype(float) * np.exp(lp.numpy().astype(float)) / prec
+            sl = P.s[liga_n[~ok]][:, None]
+            media[~ok] = P.media[P.nPS + comp_n[~ok]] + sl * rmed - P.media[P.nPS + R]
+            var[~ok] = sl ** 2 / prec + PR.var_mu_menos_mu(P.nPS + comp_n[~ok], P.nPS + R) + extra_kappa[~ok][:, None]
+        z = np.zeros((len(t), len(METRICAS))); vz = np.zeros_like(z)
+        if m.usar_unicidad:
+            vz[:] = m.s2Z.numpy()[None, :]
+            prec_z = m.precision_unicidad().numpy()
+            z[okp] = m.Z.detach().numpy()[pi[okp].astype(int)]
+            vz[okp] = 1.0 / (prec_z[pi[okp].astype(int)] + 1.0 / m.s2Z.numpy()[None, :])
+        partes.append((m, P, media, var, z, vz))
+        if progreso:
+            progreso(f"      red {i_red + 1}/{len(cj)}: posterior de (u − μ_R) lista", flush=True)
+    n = len(t)
+    centro = np.zeros((n, len(METRICAS))); entre = np.zeros_like(centro)
+    lo = np.zeros_like(centro); hi = np.zeros_like(centro)
+    bloque = 1000
+    with torch.no_grad():
+        for a in range(0, n, bloque):
+            sl_ = slice(a, min(a + bloque, n))
+            nb = sl_.stop - sl_.start
+            cent_b, mues_b = [], []
+            for m, P, media, var, z, vz in partes:
+                K = m.K
+                eps = rng.standard_normal((nb, S, K))
+                r = (media[sl_, None, :] + np.sqrt(np.maximum(var[sl_], 0))[:, None, :] * eps) / P.s[lR]
+                yh = m.decodificar(torch.as_tensor(r.reshape(-1, K), dtype=torch.float32),
+                                   torch.full((nb * S,), lR), torch.as_tensor(np.repeat(grupos_R[sl_], S))).numpy()
+                yh = yh.reshape(nb, S, -1).astype(float)
+                yh = yh + z[sl_, None, :] + np.sqrt(vz[sl_])[:, None, :] * rng.standard_normal(yh.shape)
+                if margen is not None:
+                    yc = np.clip(yh, lo_s[lR][None, None, :], hi_s[lR][None, None, :])
+                    if cfg3["prediccion"].get("recorte_centro", True):
+                        yh = yc
+                    else:
+                        yh = yh + np.abs(yh - yc) * rng.standard_normal(yh.shape)
+                cent_b.append(yh.mean(1)); mues_b.append(yh[:, :, kk])
+            centro[sl_] = np.mean(cent_b, 0)
+            entre[sl_] = np.std(cent_b, 0)
+            q = np.quantile(np.concatenate(mues_b, 1), [0.1, 0.9], axis=1)
+            lo[sl_, kk], hi[sl_, kk] = q[0], q[1]
+    out = {"liga": t["liga"].to_numpy(), "temporada": t["temporada"].to_numpy(), "player_id": t["player_id"].to_numpy(),
+           "fuente_v3": np.where(ok, "posterior_conjunta", np.where(extra_kappa > 0, "codificador_nivel_temporada_anterior",
+                                                                    "codificador"))}
+    for k, col in zip(kk, metricas):
+        tr = CATALOGO[col].transf
+        c, s_ = D.esc.c[col], D.esc.s[col]
+        out[f"{col}_v3"] = destransformar(c + s_ * centro[:, k], tr)
+        out[f"{col}_v3_lo"] = destransformar(c + s_ * lo[:, k], tr)
+        out[f"{col}_v3_hi"] = destransformar(c + s_ * hi[:, k], tr)
+        out[f"{col}_v3_sd_entre_z"] = entre[:, k]
+    return pd.DataFrame(out, index=t.index)
 
 
 # =============================================================================================== bloques
@@ -422,18 +580,19 @@ def resumen_perfil(p: pd.DataFrame, cfg: dict) -> dict:
 
 
 # =============================================================================================== θ por corte (sin fuga)
-def theta_corte(anio: int, temporadas: list[str], tabla: pd.DataFrame, cfg: dict, D, cj, progreso=print) -> pd.DataFrame:
+def theta_corte(anio: int, temporadas: list[str], tabla: pd.DataFrame, cfg: dict, D, cj, progreso=print,
+                rapidas: list | None = None) -> pd.DataFrame:
     """θ y v_j de las filas de `temporadas` (≤ anio) con la normalización v3.2 ajustada SÓLO con temporadas ≤ anio
     (fuente «V32_corte» del simulador, generalizada a cualquier temporada ≤ t): mezcla v2 ≤ t (A amortiguado) con la
     CVAE ≤ t (las redes del corte), pesos B2 del corte, salvaguardas y constantes del sustituto lineal del corte.
-    Reutiliza bbfit.sim_insumos (CERNO_SIMULADOR=v32) y bbnorm3.exportar.traducir_filas. Devuelve las columnas de
+    Reutiliza bbfit.sim_insumos (CERNO_SIMULADOR=v32) y la lógica de bbnorm3.exportar.traducir_filas (traducir_corte). Devuelve las columnas de
     `capacidad` (persona_norm, liga, temporada, player_id, team_id, pos3, edad, min, <m>_th, <m>_vj)."""
     os.environ.setdefault("CERNO_SIMULADOR", cfg["insumos"].get("simulador_env_corte", "v32"))
     from bbfit import sim_insumos as SI
     from bbmodel import amortiguacion as AM
     from bbmodel import modelo as A2
     from bbmodel.metricas import CATALOGO, destransformar, transformar
-    from bbnorm3 import combinacion as CB, exportar
+    from bbnorm3 import combinacion as CB
     from bbnorm3 import config as C3
     t0 = time.time()
     temp = temp_de(anio)
@@ -446,13 +605,14 @@ def theta_corte(anio: int, temporadas: list[str], tabla: pd.DataFrame, cfg: dict
         AM.DIR_CACHE.mkdir(parents=True, exist_ok=True)
         nb = int((AM.config().get("validacion") or {}).get("bootstrap", 10))
         pa.write_bytes(pickle.dumps(A2.ajustar(tabla, hasta_anio=anio, n_boot=nb, progreso=None)))
-    nh = SI.normalizacion_hasta(anio, X, progreso=None)
+    nh = SI.normalizacion_hasta(anio, metricas_corte(cfg), progreso=None)
     th2, trad2 = nh["theta"], nh["traduccion"]
     th2 = th2[th2["temporada"].isin(temporadas)].drop_duplicates(["liga", "temporada", "player_id"])
     # CVAE ≤ t traducida a la vara EuroLeague de la temporada t
     cfg3 = C3.con(C3.cargar(C.ruta(cfg, "normalizacion")), **{"referencia_salida.temporada": temp})
     filas = tabla[tabla["temporada"].isin(temporadas)]
-    tr = exportar.traducir_filas(filas, D, cj, cfg3).drop_duplicates(["liga", "temporada", "player_id"])
+    tr = traducir_corte(filas, D, cj, cfg3, X, rapidas=rapidas, progreso=progreso)
+    tr = tr.drop_duplicates(["liga", "temporada", "player_id"])
     x = th2.merge(tr, on=["liga", "temporada", "player_id"], how="inner", suffixes=("", "_cvae"))
     if "min" not in x:
         x = x.merge(filas[["liga", "temporada", "player_id", "min"]].drop_duplicates(["liga", "temporada", "player_id"]),
@@ -554,6 +714,7 @@ def exportar(cfg: dict, cortes: list[int] | None = None, temporadas: list[str] |
             lat, meta_lat = latente_ensemble(D, cj, t, cfg, cfg_norm, progreso)
             lat = pd.concat([t[["persona_id", "liga", "temporada", "player_id", "min"]].rename(
                 columns={"persona_id": "persona_norm"}), lat], axis=1)
+            meta_lat.pop("_rapidas", None)
             meta = {"version": cfg["version"], "ajuste": "completo", "huella_config": res["huella"], "latente": meta_lat,
                     "filas_ajuste": int(len(D.t)), "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "temporadas": {}}
             out = dir_perfiles(cfg)
@@ -584,7 +745,7 @@ def exportar(cfg: dict, cortes: list[int] | None = None, temporadas: list[str] |
                     "latente": meta_lat, "filas_ajuste": int(len(D.t)), "generado": time.strftime("%Y-%m-%dT%H:%M:%S"),
                     "temporadas": {}, "theta": "V32_corte"}
             try:
-                th = theta_corte(a, temps_a, tabla, cfg, D, cj, progreso)
+                th = theta_corte(a, temps_a, tabla, cfg, D, cj, progreso, rapidas=meta_lat.pop("_rapidas", None))
             except Exception as exc:  # noqa: BLE001 — se informa en meta; los perfiles salen sin θ (aviso sin_theta)
                 th = None
                 meta["theta"] = f"ERROR: {type(exc).__name__}: {exc}"

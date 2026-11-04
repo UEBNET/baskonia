@@ -109,6 +109,37 @@ def test_diag_posterior_completa_es_exacta(ensemble_sintetico):
     assert np.allclose(d[idx], P.diag_posterior(P_, idx, lote=7), rtol=1e-7, atol=1e-10)
 
 
+def test_posterior_rapida_contrastes_exactos(ensemble_sintetico):
+    """Var(u_i − μ_c) y Var(μ_a − μ_c) por Schur coinciden con los contrastes exactos de la posterior."""
+    _, _, D, cj = ensemble_sintetico
+    P_ = cj[1][1]
+    PR = P.PosteriorRapida(P_)
+    R = P_.nPS + 2
+    ips = np.array([0, 3, 10, P_.nPS - 1])
+    exacto = P_.var_contrastes(ips, np.full(len(ips), R))
+    assert np.allclose(PR.var_u_menos_mu(ips, R), exacto, rtol=1e-6, atol=1e-10)
+    cs = P_.nPS + np.array([0, 1, 3])
+    assert np.allclose(PR.var_mu_menos_mu(cs, R), P_.var_contrastes(cs, np.full(3, R)), rtol=1e-5, atol=1e-9)
+    assert np.allclose(PR.diag(), P.diag_posterior(P_, np.arange(P_.media.shape[0]), lote=500), rtol=1e-6, atol=1e-10)
+
+
+def test_traducir_corte_reproduce_traducir_filas(ensemble_sintetico):
+    """La traducción rápida da las mismas fuentes y centros (salvo ruido Monte Carlo) que bbnorm3.exportar.traducir_filas."""
+    from bbnorm3 import config as C3, exportar
+    cfg3, t, D, cj = ensemble_sintetico
+    cfg3 = C3.con(cfg3, **{"prediccion.muestras": 400, "referencia_salida.temporada": "2024-25"})
+    nueva = t.iloc[[0]].copy(); nueva["persona_id"] = 99999; nueva["player_id"] = "p99999"; nueva["min"] = 50.0
+    filas = pd.concat([t[t["anio"] == 2024].head(60), nueva], ignore_index=True)
+    mets = ["usg_pct", "ast_pct", "orapm"]
+    a = P.traducir_corte(filas, D, cj, cfg3, mets)
+    b = exportar.traducir_filas(filas, D, cj, cfg3)
+    assert list(a["fuente_v3"]) == list(b["fuente_v3"]) and a["fuente_v3"].iloc[-1] == "codificador"
+    for m in mets:
+        sd = (b[f"{m}_v3_hi"] - b[f"{m}_v3_lo"]).to_numpy(float) / 2.563
+        d = np.abs(a[f"{m}_v3"].to_numpy(float) - b[f"{m}_v3"].to_numpy(float)) / np.maximum(sd, 1e-9)
+        assert np.median(d) < 0.15, (m, np.median(d))        # diferencia ≪ anchura del intervalo: sólo ruido MC
+
+
 def test_latente_ensemble_sintetico(ensemble_sintetico):
     cfg3, t, D, cj = ensemble_sintetico
     cfg = C.con(CFG, **{"perfil.latente.K": 3, "perfil.latente.lote_varianza": 50})
