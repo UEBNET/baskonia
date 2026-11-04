@@ -1,8 +1,9 @@
 # Registro de cambios
 
-## 2026-11-04 — Atlas con liga = 0 elegible y zona de los estilos corregida
+## 2026-11-04 — Atlas con liga = 0 elegible y zona de los estilos corregida · v3.3 publicada
 
-Detalle: `docs/checkpoints/ARTIFACT-v3.3.md` (§ Atlas con liga = 0).
+Detalle: `docs/checkpoints/ARTIFACT-v3.3.md` (§ Atlas con liga = 0). **Publicada en la URL de siempre**
+(https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN, versión 91, 265 ficheros), con todo lo de la entrada siguiente.
 
 * **Liga = 0 en toda la herramienta**: selector en Ajustes de la Mesa (`#ebVara`), sincronizado con los de «Datos
   normalizados» y «Normalización de ligas» y enviado al Atlas (mensaje `{vara}` y `localStorage mm.vara`).
@@ -24,8 +25,8 @@ Detalle: `docs/checkpoints/ARTIFACT-v3.3.md` (§ Atlas con liga = 0).
 
 ## 2026-11-04 — Artifact v3.3 (copia de revisión): datos nuevos, vara «liga = 0» y simulador v3.3 en el navegador
 
-Detalle: `docs/checkpoints/ARTIFACT-v3.3.md`. Copia de revisión https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a;
-la URL de siempre no cambia hasta el visto bueno.
+Detalle: `docs/checkpoints/ARTIFACT-v3.3.md`. Revisada primero en una copia (https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a)
+y publicada después en la URL de siempre (entrada anterior).
 
 * Datos de todas las pestañas con identidades corregidas, nombres «Nombre Apellido(s)» y normalización v3.2.
 * Mesa: selector de vara (cualquier liga = 0) en «Datos normalizados» y en «Normalización de ligas»

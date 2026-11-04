@@ -295,8 +295,7 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
 ## 8. Artifact asociado: "Mesa Multiliga Baskonia"
 
 - URL: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (privado del propietario; se comparte desde su menú Compartir).
-  Copia de revisión de la v3.3 (04-11-2026, pendiente de visto bueno): https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a.
-  Estado y decisiones: `docs/checkpoints/ARTIFACT-v3.3.md`.
+  v3.3 publicada el 04-11-2026 (versión 91, 1793784482-11a0). Estado y decisiones: `docs/checkpoints/ARTIFACT-v3.3.md`.
 - Código: `artifact/mesa-multiliga.html` (= `index.html` publicado), `artifact/atlas/{index.html,simulador.js,
   informe_v3.js,informe_equipo.js}`, `artifact/quintetos/`. Motor del simulador en el navegador: `atlas/simulador.js`
   (v3.3, paridad con `bbfit.simulador` en `tests/js/paridad_simulador.js`).

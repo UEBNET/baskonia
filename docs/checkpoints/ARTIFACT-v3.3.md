@@ -1,11 +1,13 @@
 # Artifact · datos con identidades corregidas, normalización v3.2 con vara elegible y simulador v3.3 (04-11-2026)
 
-**Estado: copia de revisión, pendiente del visto bueno del usuario.** La URL de siempre no se ha tocado.
+**Estado (04-11-2026): publicada en la URL de siempre** por indicación del usuario, tras añadir al Atlas la liga = 0
+elegible y corregir la «Zona que ocupa cada estilo» del mapa 3D. Antes de publicar se comprobó que la versión vigente
+(1793709008-72df) era idéntica a la integrada en Git (`f539a39`): no había cambios externos que fusionar.
 
 | | |
 |---|---|
-| Copia de revisión | https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a (versión 1793782011-0fa0, 265 ficheros, ≈ 250 MB, capacidades `downloads` y `sample`, runtime 0.2.96) |
-| Versión vigente (sin cambios) | https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (versión 1793709008-72df, 264 ficheros, runtime 0.2.92) |
+| Publicada | https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (versión 91, 1793784482-11a0, 265 ficheros, capacidades `downloads` y `sample`, runtime 0.2.92); la anterior, 1793709008-72df, queda en su historial |
+| Copia de revisión | https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a (versión 1793782011-0fa0; sin el Atlas con liga = 0 ni la corrección del mapa; queda como duplicado de revisión) |
 | Alcance aprobado | Datos + motor v3.3 + liga a 0; informe de equipo integrado en esta rama; copia de revisión primero |
 | Origen de los datos | `experimentos/v33_artifact/` (no versionado), generado por `scripts/rehacer_identidades.sh` (pasos 7 y 8) |
 | Lotes | `python artifact/empaquetar.py experimentos/v33_artifact/_publicacion experimentos/v33_artifact` → `lote0…4.json` |
@@ -68,8 +70,9 @@
 - Los nombres de club conservan el formato de la fuente (p. ej. «SILBÖ SAN PABLO BURGOS»): la unificación pedida era
   de jugadores.
 
-## Al aprobarla
+## Publicación
 
-Publicar en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN (leerla antes y fusionar si cambió), con los mismos
-lotes y las rutas marcadas a `null` en el último (`.json` grandes ya servidos como `.gz.txt` y
-`atlas/simulador_v2.js`). La versión 1793709008-72df queda en su historial.
+Cinco lotes (`lote0…4`, versiones 87-91) en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN; `atlas/simulador_v2.js`
+borrado en el último. Las fuentes y el PDF del artículo de estilos ya estaban publicados. Para volver a publicar:
+`python artifact/empaquetar.py <salida> experimentos/v33_artifact` y los lotes con la herramienta Artifact (`url` = la de
+siempre).

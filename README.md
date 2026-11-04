@@ -236,8 +236,8 @@ anterior y reutilización de partidos.
 ## 10. Artifact "Mesa Multiliga Baskonia"
 
 Página interactiva publicada en claude.ai: https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN
-(fuente en `artifact/mesa-multiliga.html`, `artifact/atlas/` y `artifact/quintetos/`). Copia de revisión de la
-v3.3, pendiente de visto bueno: https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a (`docs/checkpoints/ARTIFACT-v3.3.md`).
+(fuente en `artifact/mesa-multiliga.html`, `artifact/atlas/` y `artifact/quintetos/`). Versión v3.3 publicada el
+04-11-2026: `docs/checkpoints/ARTIFACT-v3.3.md`.
 
 * Selector de temporada y pestañas de fase (Temporada regular / Playoffs / Total), filtros por liga,
   búsqueda, minutos mínimos y vistas de columnas (básico, tiro, por 40/100, avanzada, ratings,
