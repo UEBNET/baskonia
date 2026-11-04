@@ -42,6 +42,23 @@
   TITULAR. Corregido durante la paridad: sin edad conocida, la producción del Atlas no aplica deriva (como Python).
 - Etiquetas visibles «simulador v3.3»; prueba del Atlas en navegador `tests/js/atlas_simulador.js` en verde.
 
+## Atlas con liga = 0 y zona de los estilos (petición del 04-11-2026, tras la revisión)
+
+- Alcance aprobado: nivel + rasgos + normalizados en el Atlas; selector compartido con la Mesa.
+- Selector «Liga = 0» en Ajustes de la Mesa; los de «Datos normalizados» y «Normalización de ligas» son el mismo.
+- `ESC` (bloque de escalas del Atlas): `setVara(liga, ganchos)`. Familias que siguen a la vara: `nivel`, `rapm`,
+  `orapm`, `drapm`. Nivel: referencia = media de L de la liga en la temporada (`familias.nivel.ligas`; sin dato,
+  referencia Euroliga + diferencia media). RAPM: media por minutos del RAPM-EL de sus jugadores. Percentiles: sobre
+  sus jugadores (nivel con `muestra`, RAPM con la muestra de RAPM). El resto de familias no cambia.
+- Rasgos: media de los clubes de la liga en la temporada (`XREF.por`). Ranking y desglose de «Simular equipo
+  completo»: clubes de la liga en la última temporada completa.
+- Métricas normalizadas mostradas: `enVara` (valor central de `desde_el`) en las tablas de contexto, el ejemplo de
+  Claves y el informe de fichaje; el RAPM-EL se muestra siempre en la vara Euroliga.
+- No cambian: Net, on/off, sinergias, quintetos, comparaciones del informe con los jugadores de la Euroliga de su
+  puesto y la página de Quintetos (Equipos), que mantiene su escala.
+- Mapa 3D: corregida la «Zona que ocupa cada estilo» (Cholesky con valores de prueba en el triángulo superior).
+- Pruebas en verde: `tests/js/atlas_vara.js`, `mesa_vara.js`, `atlas_simulador.js`, `paridad_simulador.js`.
+
 ## Lo que no cambia (para tu decisión)
 
 - «Simular equipo completo» reparte los 200' con el motor (Plackett-Luce y roles asignados), sin la mezcla GBM: la
@@ -50,7 +67,6 @@
   caso de paridad: Pablo Gimeno → NBA, [−2,8; 10,0]). Igual en Python y en la versión vigente.
 - Los nombres de club conservan el formato de la fuente (p. ej. «SILBÖ SAN PABLO BURGOS»): la unificación pedida era
   de jugadores.
-- El Atlas sigue mostrando los normalizados en la vara EuroLeague; la vara elegible está en la Mesa.
 
 ## Al aprobarla
 

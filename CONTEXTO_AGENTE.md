@@ -304,8 +304,9 @@ del equipo, Opp* = de los rivales, lg* = suma de la liga en la fase. Todas son d
   con `datos/` (Mesa: temporadas, normalizados v3.2 + `vara.json`, normalización, evaluación), `atlas/`, `quintetos/`
   y `simulador/`. `python artifact/empaquetar.py <salida> experimentos/v33_artifact` → `lote<N>.json` (JSON como
   `.gz.txt`, límite de 256 MB por versión) para publicar por lotes con la herramienta Artifact.
-- Vara «liga = 0»: la Mesa convierte el equivalente EuroLeague a la liga elegida con `vara.json`
-  (`bbnorm3.destino.vara_artifact`; referencia Python `desde_el`).
+- Vara «liga = 0» (Ajustes de la Mesa, `localStorage mm.vara`, mensaje `{vara}` a los marcos): la Mesa convierte el
+  equivalente EuroLeague a la liga elegida con `vara.json` (`bbnorm3.destino.vara_artifact`; referencia Python
+  `desde_el`); el Atlas mueve el 0 de nivel y RAPM (`ESC.setVara`), percentiles, rasgos y métricas normalizadas mostradas.
 - Botón EJECUTAR: retirado en la v2 del artifact (29-10-2026). La actualización de una temporada se hace desde
   Claude Code (habilidad `actualizar-temporada`).
 - Para editar la página: leer la versión publicada (puede tener cambios hechos fuera del repositorio), fusionar y

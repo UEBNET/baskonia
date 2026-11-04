@@ -1,5 +1,27 @@
 # Registro de cambios
 
+## 2026-11-04 — Atlas con liga = 0 elegible y zona de los estilos corregida
+
+Detalle: `docs/checkpoints/ARTIFACT-v3.3.md` (§ Atlas con liga = 0).
+
+* **Liga = 0 en toda la herramienta**: selector en Ajustes de la Mesa (`#ebVara`), sincronizado con los de «Datos
+  normalizados» y «Normalización de ligas» y enviado al Atlas (mensaje `{vara}` y `localStorage mm.vara`).
+* **Atlas** (decisión del usuario: nivel + rasgos + normalizados; selector compartido):
+  * escala ±100 de **nivel** (jugadores, clubes, plantillas, ligas) con 0 = media de L de la liga elegida en esa
+    temporada (`escalas.familias.nivel.ligas`), percentiles y ranking frente a sus jugadores y clubes;
+  * **RAPM-EL**: 0 = media por minutos de los jugadores de esa liga; el valor original sigue en la vara Euroliga;
+  * **rasgos** y desglose por métricas frente al club medio de esa liga;
+  * **métricas normalizadas** mostradas (contexto, informe de fichaje) convertidas con `vara.json` (misma fórmula que
+    la Mesa); los cálculos internos (mapa, estilo, química, proyección) no cambian;
+  * Net, on/off, sinergias y quintetos siguen como estaban (su 0 ya es la media de cada liga).
+  Con la Euroliga elegida, las cifras son exactamente las publicadas.
+* **Mapa 3D · «Zona que ocupa cada estilo»**: la descomposición de Cholesky partía de una matriz con valores de prueba
+  en el triángulo superior (`[[18, 22, 27], …]`), así que cada elipsoide se estiraba decenas de unidades y aplastaba el
+  mapa. Ahora parte de ceros: elipsoides de 1 desviación típica alrededor del centro de cada estilo.
+* Mesa: la carga de la vara ya no cambia `st.vara` mientras lee los equivalentes EL (la pestaña «Normalización de
+  ligas» podía pintarse con la Euroliga durante la carga).
+* Pruebas: `tests/js/atlas_vara.js` (nueva) y `tests/js/mesa_vara.js`, `atlas_simulador.js`, `paridad_simulador.js`.
+
 ## 2026-11-04 — Artifact v3.3 (copia de revisión): datos nuevos, vara «liga = 0» y simulador v3.3 en el navegador
 
 Detalle: `docs/checkpoints/ARTIFACT-v3.3.md`. Copia de revisión https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a;

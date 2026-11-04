@@ -243,15 +243,17 @@ v3.3, pendiente de visto bueno: https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6
   búsqueda, minutos mínimos y vistas de columnas (básico, tiro, por 40/100, avanzada, ratings,
   on/off, playoffs frente a regular, métricas oficiales, contexto de equipo). Ficha del jugador
   con la comparación playoffs/regular. Columna y filtro de **nacionalidad** (`datos/<temporada>/nacionalidades.json`).
-* **Datos normalizados** (normalización v3.2): equivalentes en la **vara** que se elija («esta liga = 0»; EuroLeague
-  por defecto = valores publicados), convertidos en el navegador con `datos/normalizados/vara.json`. La pestaña
-  «Normalización de ligas» usa la misma vara.
+* **Liga = 0** (Ajustes): una sola liga de referencia para toda la herramienta. «Datos normalizados» (normalización
+  v3.2) muestra los equivalentes en esa liga (EuroLeague por defecto = valores publicados), convertidos en el navegador
+  con `datos/normalizados/vara.json`; «Normalización de ligas» la usa como referencia; en el Atlas fija el 0 de la escala
+  ±100 de nivel y RAPM, sus percentiles, los rasgos y las métricas normalizadas que se muestran.
 * Atlas de Estilos, Equipos y quintetos, Planificación (simulador de encaje **v3.3**, motor `atlas/simulador.js`) e
   informes PDF de fichaje y de equipo. Nombres de jugador «Nombre Apellido(s)» en todas las pestañas.
 * Publicación: los datos salen de `scripts/rehacer_identidades.sh` (pasos 7 y 8) en `experimentos/v33_artifact/`;
   `python artifact/empaquetar.py <salida> experimentos/v33_artifact` prepara los lotes (≤ 58 MB y 250 ficheros, JSON
   como `.gz.txt`; la versión no puede pasar de 256 MB). Pruebas: `node tests/js/paridad_simulador.js`,
-  `node tests/js/atlas_simulador.js <url local>`, `node tests/js/mesa_vara.js <url local>`.
+  `node tests/js/atlas_simulador.js <url local>`, `node tests/js/mesa_vara.js <url local>`,
+  `node tests/js/atlas_vara.js <url local>`.
 * El botón EJECUTAR se retiró en la v2 del artifact (29-10-2026); la actualización de datos se lanza desde Claude Code
   (habilidad `actualizar-temporada`).
 
