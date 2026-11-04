@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## 2026-11-04 — Química e impacto frente a la liga de referencia
+
+Decisión del usuario (04-11-2026): «aplica también la liga de destino en la química y todo lo que reste».
+
+* Pareja media (`synRefP`) de la liga de referencia de cada vista (destino en Planificación e informe; liga del primer
+  jugador en la calculadora de Química de perfiles; la de Ajustes en Jugadores y Claves), con caché por liga.
+* Quinteto previsto e impacto de la rotación: RAPM-EL menos el RAPM medio por minutos de esa liga (`rapmMedio`), así
+  que 0 = quinteto/rotación media de esa liga; percentil frente a quintetos reales solo con la Euroliga.
+* Informe de fichaje: simulaciones y contexto de química calculados con la liga del destino; todos los textos de química
+  nombran esa liga. Claves: «Química de las plantillas de» la liga de Ajustes.
+* Artículo: párrafo «Química e impacto» en «Lectura en la herramienta»; PDF regenerado.
+
 ## 2026-11-04 — PDF con «su liga = 0»: informe de fichaje y artículo científico
 
 Decisiones del usuario (04-11-2026): actualizar los dos PDF; percentiles del informe frente a la liga de destino.

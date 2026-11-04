@@ -326,7 +326,7 @@ ${raw}`;
     const yT = top + items.length * fila;
     return `<svg class="r3q5" viewBox="0 0 ${W} ${H}" role="img" aria-label="Net previsto del quinteto"><line x1="${X(0)}" x2="${X(0)}" y1="${top}" y2="${yT + fila}" class="z"/>${rows}
       <g><text x="0" y="${yT + 14}" class="nm t">Net previsto</text><rect x="${Math.min(X(0), X(q.total))}" y="${yT + 3}" width="${Math.max(1, Math.abs(X(q.total) - X(0)))}" height="${fila - 6}" class="tt"/><text x="${W}" y="${yT + 14}" class="vv t" text-anchor="end">${SG(q.total, 1)}</text></g>
-      <text x="${X(0)}" y="${H - 4}" class="ax" text-anchor="middle">0 = quinteto medio de la Euroliga · pts/100</text></svg>`;
+      <text x="${X(0)}" y="${H - 4}" class="ax" text-anchor="middle">0 = quinteto medio de ${E(VN())} · pts/100</text></svg>`;
   }
 
   // ------------------------------------------------------------------------------------------- 4. textos de lectura
@@ -413,7 +413,7 @@ ${raw}`;
       <div class="r3read"><span class="r3lab">Cómo leer las cifras de esta lectura</span><div>
         <div><b>Punto y rango</b>${barraPR(62, 48, 74, { ref: 50, w: 120 })}<span>El punto es lo más probable; la franja, entre dónde se moverá. Cuanto más ancha, menos seguros estamos.</span></div>
         <div><b>Percentil</b><p class="r3big">80</p><span>Supera al 80 % de los jugadores de su puesto en ${E(IFPN())}; 50 es el mediano. En los bloques (anotación, rebote…), media de sus percentiles.</span></div>
-        <div><b>Escala ±100</b><p class="r3big">0</p><span>La media de ${esc(VN())} (nivel e impacto; la de la Euroliga en química). Positivo, por encima; negativo, por debajo. Se usa para nivel, impacto y química.</span></div>
+        <div><b>Escala ±100</b><p class="r3big">0</p><span>La media de ${esc(VN())} (nivel, impacto y química). Positivo, por encima; negativo, por debajo. Se usa para nivel, impacto y química.</span></div>
         <div><b>Colores</b><p class="r3cols3"><i style="background:#2A6FA8"></i>mejor<i style="background:#C4552E"></i>peor<i style="background:#7A5BC8"></i>rasgo de estilo</p><span>El violeta no es bueno ni malo: describe cómo juega (cuánto tira de tres, cuánto usa el balón).</span></div></div></div>
       <div class="r3vals"><span class="r3lab">Lo que guía cada lectura</span><div>
         <div><b>Contexto antes que promedios</b><span>Un jugador no es bueno en abstracto. Es bueno para un sistema, un rol y un presupuesto.</span></div>
@@ -518,7 +518,7 @@ ${raw}`;
       const kTeam = `<div class="r3kp t4">
           <div class="idx"><span>Net del equipo</span><b class="${eqv && eqv.d_net > 0.5 ? "up" : eqv && eqv.d_net < -0.5 ? "dn" : ""}">${eqv ? SG0(eqv.d_net, 2) : "–"}</b><small>${eqv ? `pts/100 · ${SG0(eqv.net_sin, 1)} → ${SG0(eqv.net_con, 1)} · rango 90 %: ${SG0(eqv.d_net_lo90, 1)} a ${SG0(eqv.d_net_hi90, 1)}` : ""}</small></div>
           <div><span>Nivel de la plantilla</span><b>${ESC.txt(sa)} → ${ESC.txt(sd)}</b><small>${c6 && c6.nivSin != null ? "nivel medio por minutos · escala ±100" : `escala ±100 · ${sim.antes.rk}.º → ${sim.despues.rk}.º de ${sim.n} en su liga`}</small></div>
-          <div><span>Química de la plantilla</span><b>${QA != null && QD != null ? `${ESC.txt(ESC.dS("sinergia_rapm", QA))} → ${ESC.txt(ESC.dS("sinergia_rapm", QD))}` : "–"}</b><small>escala ±100 · 0 = pareja media de la Euroliga</small></div>
+          <div><span>Química de la plantilla</span><b>${QA != null && QD != null ? `${ESC.txt(ESC.dS("sinergia_rapm", QA))} → ${ESC.txt(ESC.dS("sinergia_rapm", QD))}` : "–"}</b><small>escala ±100 · 0 = pareja media de ${E(VN())}</small></div>
           <div><span>Reparto del balón</span><b>${est ? `${N(100 * est.entropia_uso[0], 0)} → ${N(100 * est.entropia_uso[1], 0)}` : "–"}</b><small>de 100 · más alto = uso del balón más repartido${est ? ` · pase ${N(100 * est.entropia_pases[0], 0)} → ${N(100 * est.entropia_pases[1], 0)}` : ""}</small></div></div>`;
       const barras = est && est.composicion_sin && est.composicion_con ? barrasEstilo([["Plantilla sin él", est.composicion_sin], [`Con ${apeJ}`, est.composicion_con, true]].concat(est.objetivo ? [["Referencia de su estilo", est.objetivo]] : [])) : "";
         const yoT = c6 && c6.yo ? ["ortg", "drtg", "ts_pct", "usg_pct", "ast_pct", "rapm"].map((k) => { const o = c6.yo.out[k]; if (!o || o.x == null) return ""; const f = (v) => k === "rapm" ? SG(v, 2) : N(v, 1), dif = o.y - o.x, sen = o.m.sentido, cls = Math.abs(dif) < (k === "rapm" ? 0.05 : 0.1) ? "eq" : sen === 0 ? "neu" : dif * sen > 0 ? "up" : "dn";
@@ -533,13 +533,13 @@ ${raw}`;
       if (c6 && (c6.pares.length || c6.q5)) {
         const P = c6.pares, b1 = P[0], w1 = P[P.length - 1], nomC = (o) => nom(o.j.nombre);
         const nPos = P.filter((x) => Math.round(x.S) > 0).length, rp = c6.refPar;
-        const lead6b = P.length ? `La pareja que más sumaría en ${E(d.nombre_club)} es con <b>${E(nomC(b1.o))}</b> (${ESC.txt(b1.S)}) y la que menos suma, con <b>${E(nomC(w1.o))}</b> (${ESC.txt(w1.S)}). ${nPos === 0 ? `Ninguna de sus ${P.length} parejas suma` : nPos === 1 ? `Una de sus ${P.length} parejas suma` : `${nPos} de sus ${P.length} parejas suman`} frente a una pareja media de la Euroliga.${rp ? ` Como referencia, la pareja de la plantilla actual que más suma (${E(ape(rp.A.j.nombre))} + ${E(ape(rp.B.j.nombre))}) está en ${ESC.txt(ESC.dS("sinergia_rapm", rp.v))}.` : ""}` : "";
+        const lead6b = P.length ? `La pareja que más sumaría en ${E(d.nombre_club)} es con <b>${E(nomC(b1.o))}</b> (${ESC.txt(b1.S)}) y la que menos suma, con <b>${E(nomC(w1.o))}</b> (${ESC.txt(w1.S)}). ${nPos === 0 ? `Ninguna de sus ${P.length} parejas suma` : nPos === 1 ? `Una de sus ${P.length} parejas suma` : `${nPos} de sus ${P.length} parejas suman`} frente a una pareja media de ${E(VN())}.${rp ? ` Como referencia, la pareja de la plantilla actual que más suma (${E(ape(rp.A.j.nombre))} + ${E(ape(rp.B.j.nombre))}) está en ${ESC.txt(ESC.dS("sinergia_rapm", rp.v))}.` : ""}` : "";
         const filasP = P.map((x) => ({ nom: `${nomC(x.o)} · ${N(x.o.p.minutos, 0)}'`, S: x.S, sw: (euOf(x.o.j) || {}).color }));
         const tops = (arr) => arr.map((x) => `<li class="${Math.round(x.S) > 0 ? "up" : Math.round(x.S) < 0 ? "dn" : ""}"><b>${E(nomC(x.o))}</b><span>${ESC.txt(x.S)} · por estilo ${ESC.txt(x.est)} · por nivel ${ESC.txt(x.niv)}</span></li>`).join("");
         const q5 = c6.q5;
         pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Sinergias de pareja con la plantilla", lead6b)}
-          ${P.length ? `<div class="r3blk"><h3>Cómo se entendería con cada compañero</h3>${svgSinergias(filasP)}<p class="r3n">Sinergia prevista de cada pareja (${E(apeJ)} + compañero) frente a una pareja media de la Euroliga, escala ±100; combina el encaje de sus estilos y el nivel de los dos. Junto al nombre, minutos por partido del compañero con él en la plantilla y su estilo (color). Valor central del modelo de química, sin rango por pareja.${notaMin()}</p></div>` : ""}
-          <div class="r3cols c2">${q5 ? `<div class="r3blk"><h3>${q5.modo === "con" ? "Quinteto más probable con él" : "El quinteto principal, con él dentro"}</h3>${svgQuinteto(q5.q, q5.sel, j)}<p class="r3n">${q5.modo === "con" ? `Aparece en el ${Math.round(100 * q5.prob)} % de las temporadas simuladas.` : `Con el rol de ${E(ROLN[rolA].toLowerCase())} no entra en los quintetos más repetidos. El principal (${Math.round(100 * q5.prob)} % de las temporadas simuladas) tiene un Net previsto de ${SG(q5.base.total, 1)}; con ${E(apeJ)} en lugar de ${E(ape(q5.fuera.j.nombre))} (su puesto, menos minutos), ${SG(q5.q.total, 1)}.`} Net previsto = impacto de cada jugador (RAPM-EL) + química de sus 10 parejas, frente a un quinteto medio de la Euroliga. Valor central, sin rango.${q5.q.falta.length ? " *Sin jugada a jugada: cuenta 0." : ""}</p></div>` : "<div></div>"}
+          ${P.length ? `<div class="r3blk"><h3>Cómo se entendería con cada compañero</h3>${svgSinergias(filasP)}<p class="r3n">Sinergia prevista de cada pareja (${E(apeJ)} + compañero) frente a una pareja media de ${E(VN())}, escala ±100; combina el encaje de sus estilos y el nivel de los dos. Junto al nombre, minutos por partido del compañero con él en la plantilla y su estilo (color). Valor central del modelo de química, sin rango por pareja.${notaMin()}</p></div>` : ""}
+          <div class="r3cols c2">${q5 ? `<div class="r3blk"><h3>${q5.modo === "con" ? "Quinteto más probable con él" : "El quinteto principal, con él dentro"}</h3>${svgQuinteto(q5.q, q5.sel, j)}<p class="r3n">${q5.modo === "con" ? `Aparece en el ${Math.round(100 * q5.prob)} % de las temporadas simuladas.` : `Con el rol de ${E(ROLN[rolA].toLowerCase())} no entra en los quintetos más repetidos. El principal (${Math.round(100 * q5.prob)} % de las temporadas simuladas) tiene un Net previsto de ${SG(q5.base.total, 1)}; con ${E(apeJ)} en lugar de ${E(ape(q5.fuera.j.nombre))} (su puesto, menos minutos), ${SG(q5.q.total, 1)}.`} Net previsto = impacto de cada jugador (RAPM-EL) + química de sus 10 parejas, frente a un quinteto medio de ${E(VN())}. Valor central, sin rango.${q5.q.falta.length ? " *Sin jugada a jugada: cuenta 0." : ""}</p></div>` : "<div></div>"}
             ${P.length ? `<div class="r3blk"><h3>Qué explica cada química</h3><span class="r3lab">Sus tres parejas con más química</span><ul class="r3l sg">${tops(P.slice(0, 3))}</ul><span class="r3lab" style="margin-top:8px">Las tres que menos suman</span><ul class="r3l sg">${tops(P.slice(-3).reverse())}</ul><p class="r3n">«Por estilo»: cómo se complementan sus formas de jugar. «Por nivel»: lo que añade o resta el nivel de los dos.</p></div>` : ""}</div>` });
       }
       // 06 · C · impacto en la plantilla y en sus compañeros
@@ -571,7 +571,7 @@ ${raw}`;
 
     // 7 · glosario
     const G = [["Lectura", "La conclusión de Cerno sobre un jugador para un club concreto, con su razonamiento y su margen de error."], ["Rango", "Entre qué valores es probable que esté una cifra. El rango del 90 % deja fuera solo los escenarios más extremos; el del 50 %, el tramo central."], ["Confianza", "Alta, moderada o baja según la muestra del jugador, el salto de liga y la regularidad de su rendimiento."],
-      ["Liga de referencia", `Las cifras se traducen a lo que valdrían en ${IFPN()} (la del club de destino o, sin destino, la suya): su liga = 0. Así se compara con la misma regla a jugadores de competiciones distintas.`], ["Percentil", `De 0 a 100 frente a su puesto en ${IFPN()}: 80 = supera al 80 % de ellos; 50 = el mediano. En los bloques, media de sus percentiles.`], ["Escala ±100", `Nivel, impacto y química se expresan de −100 a +100; 0 es la media de ${VN()} en nivel e impacto, y de la Euroliga en química.`],
+      ["Liga de referencia", `Las cifras se traducen a lo que valdrían en ${IFPN()} (la del club de destino o, sin destino, la suya): su liga = 0. Así se compara con la misma regla a jugadores de competiciones distintas.`], ["Percentil", `De 0 a 100 frente a su puesto en ${IFPN()}: 80 = supera al 80 % de ellos; 50 = el mediano. En los bloques, media de sus percentiles.`], ["Escala ±100", `Nivel, impacto y química se expresan de −100 a +100; 0 es la media de ${VN()} en nivel, impacto y química.`],
       ["Nivel Cerno", `Valoración global del jugador a partir de su eficiencia y producción, en la escala ±100 con ${IFPN()} = 0.`], ["Índice Fit", "Éxito esperado del fichaje en ese club con el rol asignado: minutos que sostendría y nivel que daría frente a un fichaje medio (0)."], ["ADAPT%", "Qué parte de su rendimiento traducido mantendría al cambiar de liga y país. 100 = todo; 95 = pierde un 5 %."],
       ["Rol", "Residual (menos de 5'), Profundidad (5–15'), Rotación (15–22'), Titular (más de 22' y de inicio) y Go-to-guy (referencia ofensiva). En la simulación lo asigna el club."], ["Química", "Cómo se combinan los perfiles de la plantilla por parejas, en escala ±100."], ["Reparto del balón", "Lo concentrado o repartido que está el uso del balón y el pase: más repartido es más difícil de defender."],
       ["RAPM-EL", "Puntos por 100 posesiones que suma su equipo con él en pista, descontando compañeros y rivales."], ["ORtg / DRtg", "Puntos que produce y que encaja su equipo por 100 posesiones."], ["TS% / eFG%", "Acierto real (cuenta triples y libres) y acierto de campo con el triple valiendo uno y medio."],
@@ -653,7 +653,7 @@ ${raw}`;
     let sim = null, nec = null, d = null, s2 = null;
     const recJ = (await (cargarSim().catch(() => null)), simRec(j));
     const rolBox = $1("#ifRolBox"); if (rolBox) rolBox.hidden = !s.sim;
-    if (s.sim) { d = ifClub(s.dClub, s.dTemp); await ifCargarEq(); if (d) sim = ifSimular(j, d); }
+    if (s.sim) { d = ifClub(s.dClub, s.dTemp); await ifCargarEq(); if (d) sim = conVara(d.liga, () => ifSimular(j, d)); }   // química y nivel frente a la liga de destino
     if (sim && sim.orden) sim.orden = sim.orden.filter((o) => o.el || o.j === j || okMin(o.j));
     // rol asignado: el elegido para este jugador-destino; por defecto, su rol de partida
     const rol0 = rolDeRec(recJ) || rolEstimado(j, R0 && R0.b) || "ROTACION";
@@ -673,10 +673,10 @@ ${raw}`;
     const fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
     const notaFin = ($1("#ifPorqueFinal") && $1("#ifPorqueFinal").value.trim()) || ($1("#ifPorque") && $1("#ifPorque").value.trim()) || "";
     const nacT = tray.map((x) => (simRec(x) || {}).nac).find(Boolean);
-    let actual = null; if (!(sim && !sim.mismo)) { try { await ifCargarEq(); const cl = BY.get(j.clave); if (cl) { const sa = ifSimular(j, cl); if (sa && sa.orden) sa.orden = sa.orden.filter((o) => o.el || o.j === j || okMin(o.j)); actual = { club: cl, nec: ifNecesidades(cl, R), sim: sa }; } } catch (e) { actual = null; } }
+    let actual = null; if (!(sim && !sim.mismo)) { try { await ifCargarEq(); const cl = BY.get(j.clave); if (cl) { const sa = conVara(cl.liga, () => ifSimular(j, cl)); if (sa && sa.orden) sa.orden = sa.orden.filter((o) => o.el || o.j === j || okMin(o.j)); actual = { club: cl, nec: ifNecesidades(cl, R), sim: sa }; } } catch (e) { actual = null; } }
     let esc = [];
     if (s2 && !s2.error) { const club = simClub(d); esc = ROLES.map((r) => { try { const x = r === rol ? s2 : SIM2.simular({ rec: recJ, club, bajas, extras, rol: r }); return x && !x.error ? { rol: r, r: x } : null; } catch (e) { return null; } }).filter(Boolean); }
-    const c6 = s2 && !s2.error && d ? contexto6(j, d, s2, extras, bajas) : null;
+    const c6 = s2 && !s2.error && d ? conVara(d.liga, () => contexto6(j, d, s2, extras, bajas)) : null;
     // referencia del informe (decisión del usuario, 04-11-2026): 0 = la liga del club de destino; sin destino, la de su liga
     const ligaRef = sim && !sim.mismo && d ? d.liga : j.liga;
     const Rv = enLigaR(R, j, ligaRef);

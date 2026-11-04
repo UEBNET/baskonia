@@ -599,6 +599,12 @@ referencia de un club o plantilla = media del nivel de los clubes de esa liga en
 <p>{ev("dato")}Antes, el 0 de los clubes era el jugador medio, que queda unos 10 puntos por debajo del club medio. La media
 de los clubes de la EuroLeague 2025-26 marcaba +10 y ahora marca 0, y Baskonia pasa de +6 a −5. Los percentiles de los
 clubes se calculan entre los clubes de esa liga, y los de los jugadores, entre sus jugadores.</p>
+<p>{ev("dato")}<b>Química e impacto.</b> La sinergia de cada pareja se mide frente a la pareja media de la liga de
+referencia (antes, siempre la de la EuroLeague), y el quinteto previsto, frente a su quinteto medio. El impacto
+individual (RAPM traducido a la EuroLeague) se resta del RAPM medio por minutos de los jugadores de esa liga. Con la ACB
+como referencia, la pareja media vale 0,27 pts/100 (EuroLeague 0,34; Tercera FEB −1,57) y el jugador medio, −0,73 de
+RAPM (EuroLeague +0,28). El percentil del quinteto entre quintetos reales solo se da con la EuroLeague, la única liga
+con esa distribución en la herramienta.</p>
 <h3>Informe de fichaje</h3>
 <p>Cada métrica se traduce a la liga de referencia y se compara con los jugadores de su posición en esa liga (300+
 minutos), con 21 cuantiles por liga y posición exportados en <span class="mono">atlas/informe/&lt;temporada&gt;.json</span>.

@@ -16,12 +16,12 @@ const comprobar = (c, txt) => { if (!c) fallos.push(txt); console.log(`${c ? "ok
     if (dest) { const c = CL.find((x) => x.liga === dest[0] && x.temporada === "2025-26" && new RegExp(dest[1]).test(x.nombre_club)); st.inf.dLiga = dest[0]; st.inf.dTemp = "2025-26"; st.inf.dClub = c.clave_club; }
     await pintarInforme(); await new Promise((r) => setTimeout(r, 1500));
     const t = document.getElementById("ifPages").innerText.replace(/\s+/g, " ");
-    const fuera = (t.match(/[^.;]{0,40}Euroliga[^.;]{0,30}/g) || []).filter((x) => !/pareja media|quinteto medio|química|Euroliga = 0\)/.test(x));
+    const fuera = (t.match(/[^.;]{0,40}Euroliga[^.;]{0,30}/g) || []).filter((x) => !/Euroliga = 0\)/.test(x));
     return { pool: IF_POOL, puesto: /frente a los [a-z]+ de la (Liga Endesa|Tercera FEB)/.test(t), supera: (t.match(/Supera al 80 % de los jugadores de su puesto en la [A-Za-z ]+/) || [""])[0], fuera };
   }, dest);
   const a = await caso(["acb", "Bilbao"]);
   comprobar(a.pool === "acb" && a.puesto && /Liga Endesa/.test(a.supera), "con destino Bilbao: percentiles y textos frente a la Liga Endesa");
-  comprobar(!a.fuera.length, "sin «Euroliga» como grupo de referencia (sólo química y comparación entre ligas)" + (a.fuera.length ? ": " + a.fuera.slice(0, 2).join(" | ") : ""));
+  comprobar(!a.fuera.length, "sin «Euroliga» como referencia (sólo en la tabla que compara ligas), también en la química" + (a.fuera.length ? ": " + a.fuera.slice(0, 2).join(" | ") : ""));
   const s = await caso(null);
   comprobar(s.pool === "feb3" && /Tercera FEB/.test(s.supera), "sin destino: frente a su propia liga (Tercera FEB)");
   comprobar(!errores.length, "sin errores de página" + (errores.length ? ": " + errores.slice(0, 3).join(" | ") : ""));
