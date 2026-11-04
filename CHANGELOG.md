@@ -1,5 +1,33 @@
 # Registro de cambios
 
+## 2026-11-04 — CERNO v4.0 · F0 (preparación): perfil ampliado, contrato de datos y configuración única
+
+Encargo v4.0 (rev. 1.2); detalle en `docs/checkpoints/V40_F0.md` y `docs/modelo_equipo_v40.md`. La v4.0 **añade**
+(`bbequipo/`, `configs/equipo_v40.yaml`, `data/modelos/v4_0/`); nada de la v3.2/v3.3 cambia. Rama rebasada sobre
+`claude/focused-dijkstra-mpqa3u` (v3.2/v3.3 cerradas), que `main` no contenía.
+
+* **`configs/equipo_v40.yaml`**: todos los hiperparámetros de F0–F5 y A5 y los criterios de aceptación del §11
+  (prerregistrados, congelados antes de ver resultados); decisiones del CEO del §10.4 copiadas en `f5`.
+* **Perfil ampliado x̃** (`bbequipo/perfiles.py` → `data/modelos/v4_0/perfiles/<t>.csv.gz`, 52.392 filas, 2020-21 →
+  2026-27): latente u ∈ ℝ⁴ (media y DT) de la posterior conjunta de las 20 redes de la v3.2 final, alineadas afínmente
+  antes de promediar (R² medio 0,991, mínimo 0,929); pertenencias a los 6 estilos; θ y varianza propia de 16 rasgos
+  (`destino/capacidad`); rol (probabilidades, índice esperado, MIN%, GS%, H_rol); edad y posición; RAPM observado como
+  contraste. Nada se imputa con 0: avisos por bloque ausente. Para ≥ 300 min, completo en latente, estilos, θ de caja
+  y rol en todas las temporadas cerradas; la Tercera FEB 2023-24 no tiene los rasgos de pista (PBP sin coordenadas).
+* **Perfiles por corte** ≤ t (`perfiles/corte_<t>/`, t = 2021…2024) para los exámenes sin fuga: latente del ensemble
+  ≤ t y θ de la fuente `V32_corte` generalizada a cualquier temporada ≤ t (`theta_corte`, `traducir_corte`). Se
+  exportan con `scripts/perfiles_v40.sh` a medida que se entrenan las redes de cada corte.
+* **Varianzas exactas de la posterior conjunta por complemento de Schur** (`PosteriorRapida`): Var(u), Var(μ) y
+  Cov(u, μ) de todas las variables en ≈ 1,5 min por red (la vía directa costaba 15 min), error relativo < 3·10⁻⁹.
+* **Redes CVAE reentrenadas** (la caché `experimentos/v3` no está versionada): misma configuración y semillas de la
+  v3.2 final; coherencia con `v3_2/niveles.csv`: correlación 0,99995, diferencia mediana 0,004 DT (0,05 DT de la
+  incertidumbre publicada).
+* **Contrato de datos** (`bbequipo/contrato.py` → `data/modelos/v4_0/contrato/`): 115 liga-temporadas con tramos;
+  basura fuera, clutch covariable, exposición = posesiones, localía h_s (team_a = local), 5 contra 5; 99 incluidas, 12
+  con aviso, 4 excluidas (< 50 % de partidos con quintetos); 1.152.179 tramos válidos, ≈ 2,99 M de posesiones;
+  mediana de 3-5 posesiones por quinteto.
+* `tests/test_equipo_v40.py` (9, sintéticos); diccionario de datos (tablas `v4_0/`); MLflow `equipo_v40`.
+
 ## 2026-11-04 — Identidades corregidas, nombres canónicos y simulador v3.3
 
 Detalle: `docs/identidades_20261103.md` y `docs/simulador_v33.md`. Cadena completa: `scripts/rehacer_identidades.sh`.

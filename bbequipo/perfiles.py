@@ -576,16 +576,24 @@ def perfil_temporada(temp: str, lat: pd.DataFrame | None, cfg: dict, theta: pd.D
     return base[[c for c in orden if c in base]].reset_index(drop=True)
 
 
+RASGOS_PISTA = ("pct_aro", "pct_corta", "pct_media", "pct_t3_esquina", "pct_asistidas", "orapm", "drapm", "rapm")
+
+
 def resumen_perfil(p: pd.DataFrame, cfg: dict) -> dict:
-    """Cobertura de cada bloque (global y por liga) para meta.json."""
+    """Cobertura de cada bloque (global y por liga) para meta.json. θ se desglosa en rasgos de caja y de pista (zonas
+    de tiro, % asistidas y RAPM): las ligas sin coordenadas de tiro en el jugada a jugada no tienen los de pista."""
     E, X = estilos(cfg), rasgos(cfg)
     K = int(cfg["perfil"]["latente"]["K"])
+    caja = [m for m in X if m not in RASGOS_PISTA]
+    pista = [m for m in X if m in RASGOS_PISTA]
 
     def cob(g):
         return {"filas": int(len(g)), "latente": float(g["u1"].notna().mean()) if "u1" in g else 0.0,
                 "latente_posterior": float((g["u_fuente"] == "posterior_conjunta").mean()),
                 "estilos": float(g[f"p_{E[0]}"].notna().mean()),
                 "theta": float(g[[f"{m}_th" for m in X]].notna().all(axis=1).mean()),
+                "theta_caja": float(g[[f"{m}_th" for m in caja]].notna().all(axis=1).mean()) if caja else None,
+                "theta_pista": float(g[[f"{m}_th" for m in pista]].notna().all(axis=1).mean()) if pista else None,
                 "rol": float(g["rol_mas_probable"].notna().mean()), "rapm_obs": float(g["rapm_obs"].notna().mean()),
                 "persona_crosswalk": float((~g["avisos"].str.contains("sin_persona_crosswalk")).mean()),
                 "completo": float(g["completo"].mean())}
