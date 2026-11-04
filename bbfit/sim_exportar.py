@@ -266,7 +266,9 @@ def _stub(sid: str, persona: str, liga: str, team, temp: str, r1: pd.DataFrame, 
     """Fila de jugadores.json para un miembro de la plantilla sin registro en la temporada base: sólo identidad."""
     x = r1[(r1["persona_id"] == persona) & (r1["liga"] == liga) & (r1["team_id"].astype(str) == str(team))]
     x = (x if len(x) else r1[r1["persona_id"] == persona]).dropna(subset=["nombre"])
-    nombre = x.sort_values("min_total").iloc[-1]["nombre"] if len(x) else nombres.get(persona)
+    from bbmodel.nombres import canonico_persona
+    nombre = canonico_persona().get(str(persona)) or (x.sort_values("min_total").iloc[-1]["nombre"] if len(x)
+                                                        else nombres.get(persona))
     fila = {k: None for k in COLS_JUG}
     fila.update({"id": sid, "persona": str(persona), "nombre": nombre if isinstance(nombre, str) else None, "liga": liga,
                  "temporada": temp, "team": str(team), "min_pct": 0.5})

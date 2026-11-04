@@ -78,6 +78,8 @@ def reordenar(nombre: str) -> str:
         a, b = (x.strip() for x in n.split(","))
         if a and b:
             n = f"{b} {a}"
+    elif n.count(",") > 1:                    # «Kylian, Jimmy, Issa Patrick»: sin orden reconocible, sólo sin comas
+        n = " ".join(x.strip() for x in n.split(",") if x.strip())
     return n
 
 
