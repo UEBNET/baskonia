@@ -67,11 +67,18 @@ elegible y corregir la «Zona que ocupa cada estilo» del mapa 3D. Antes de publ
   del caso (nivel, rol y minutos, adaptación, estilo, tipo de traspaso). Ejemplo: Pablo Gimeno (Tercera FEB) a la NBA
   como Profundidad: 3,6 pts/100, rango 90 % 0–13,2; pesan nivel −86 frente a +15 de la NBA, 12,6' por partido,
   adaptación 94 % y traspaso desde la Tercera FEB.
-- Pendiente de decisión: los intervalos de tapones/100, rebotes ofensivos/100 y AST% también bajan de 0 a veces (en
-  600 simulaciones de prueba: 280, 70 y 12 casos); no se han tocado.
+- Tapones/100, rebotes ofensivos/100 y AST%: mismo recorte (decisión del usuario, 04-11-2026).
 - «Simular equipo completo» siempre a 200' dentro de las franjas de rol (decisión: ajuste en la franja); rojo y cambio
   de rol a mano cuando no cabe. Con una plantilla real de 15 jugadores y los roles estimados por defecto sobran 33'
   (el cuadro sale en rojo hasta ajustar roles); con 5 titulares, 4 de rotación y 6 de profundidad cuadra en 200'.
+
+## Referencia por contexto (petición del 04-11-2026)
+
+- Planificación e informe de fichaje: 0 = la liga del club elegido (destino). Estilos: cada equipo y jugador frente a su
+  propia liga. Jugadores y Metodología: la «Liga = 0» de Ajustes. Equipos y quintetos (página de Quintetos) no cambia.
+- Recorte a 0 también en tapones/100, rebotes ofensivos/100 y AST%.
+- Observado (sin cambiar): en la escala de nivel el 0 es el jugador medio de la liga (por minutos); el «club medio»
+  de una liga queda algo por encima (EuroLeague media +10), porque el nivel de club se lee como L equivalente.
 
 ## Lo que no cambia (para tu decisión)
 

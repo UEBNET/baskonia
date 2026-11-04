@@ -288,7 +288,8 @@
     if (["nba", "gleague"].includes(lo) || ["nba", "gleague"].includes(ld)) return "nba_gleague";
     return "europa";
   }
-  // v3.3 · pts/100 no puede ser negativo: los extremos inferiores se recortan a 0 y se marca recorte_cero (= Python)
+  // v3.3 · puntos/100, tapones/100, rebotes ofensivos/100 y AST% no pueden ser negativos: los extremos inferiores se
+  // recortan a 0 y se marca recorte_cero (= Python, bbfit.simulador.RECORTE_CERO)
   function recorteCero(d) {
     if (!d) return;
     ["50", "80", "90"].forEach((a) => { if (d["lo" + a] != null && d["lo" + a] < 0) { d["lo" + a] = 0; d.recorte_cero = true; } });
@@ -311,7 +312,7 @@
     };
     Object.entries(res.produccion_p100).forEach(([m, d]) => esc(d, fac[m], "media"));
     esc(res.minutos, facMin || fac.min, "mediana");
-    if (D.meta.v33) { Object.values(res.produccion_p100).forEach(orden); orden(res.minutos); recorteCero(res.produccion_p100.pts_p100); }
+    if (D.meta.v33) { Object.values(res.produccion_p100).forEach(orden); orden(res.minutos); ["pts_p100", "blk_p100", "oreb_p100", "ast_pct"].forEach((m) => recorteCero(res.produccion_p100[m])); }
     res.min_pct = Object.fromEntries(Object.entries(res.minutos).map(([k, v]) => [k, fin(v) ? v / gm : v]));
     res.recalibrado_v32 = `${g}|${o}`;
   }

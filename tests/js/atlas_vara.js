@@ -1,4 +1,5 @@
-// Prueba en navegador del Atlas con liga = 0 elegible (vara compartida con la Mesa) y de la «Zona que ocupa cada estilo».
+// Prueba en navegador del Atlas: referencia de la escala por contexto (la vara global de Ajustes sólo rige en «Jugadores»;
+// Planificación = liga del club elegido; Estilos = la propia liga de cada equipo y jugador) y «Zona que ocupa cada estilo».
 // Requiere una carpeta servida con la forma del Artifact (index.html = artifact/mesa-multiliga.html, atlas/, datos/ con
 // normalizados/vara.json; ver artifact/empaquetar.py) y Playwright con Chromium:
 //   node tests/js/atlas_vara.js http://localhost:8765
@@ -19,15 +20,20 @@ const plantillas = () => { const v = []; document.querySelectorAll("body *:not(s
   const p = await ctx.newPage(); p.on("pageerror", (e) => errores.push(e.message));
   await p.goto(`${base}/atlas/index.html#comparar`); await p.waitForSelector("#cargando", { state: "hidden", timeout: 120000 }); await p.waitForTimeout(2500);
   const e = await p.evaluate(() => { const L = ESC.fam("nivel").ligas["2025-26"];
-    return { vara: ESC.vara, sACB: ESC.S("nivel", L.acb, "2025-26"), sEL: ESC.S("nivel", L.euroleague, "2025-26"), varaj: !!VARAJ,
-      nota: document.querySelector(".nivNota").textContent }; });
-  comprobar(e.vara === "acb" && Math.abs(e.sACB) < 1e-9 && e.sEL > 0, `nivel: ACB = 0 y Euroliga ${e.sEL.toFixed(1)} en la escala ±100`);
-  comprobar(/Liga Endesa/.test(e.nota) && e.varaj, "textos de la escala y vara.json con la liga elegida");
+    return { vara: ESC.vara, sACB: ESC.S("nivel", L.acb, "2025-26"), sEL: ESC.S("nivel", L.euroleague, "2025-26"), varaj: !!VARAJ }; });
+  comprobar(e.vara === "acb" && Math.abs(e.sACB) < 1e-9 && e.sEL > 0, `vara global (Jugadores): ACB = 0 y Euroliga ${e.sEL.toFixed(1)}`);
   let lit = 0;
   for (const t of ["comparar", "simulador", "equipo", "parecidos", "quimica", "informe"]) { await p.evaluate((t) => irA(t), t); await p.waitForTimeout(t === "comparar" || t === "quimica" ? 2500 : 7000); lit += await p.evaluate(plantillas); }
   comprobar(lit === 0, "ninguna plantilla sin resolver en las seis pestañas");
-  const eq = await p.evaluate(() => document.querySelector("#p-equipo").innerText);
-  comprobar(/Ranking frente a la Liga Endesa/.test(eq) && /club medio de la Liga Endesa/.test(eq), "equipo completo: ranking y nivel frente a la Liga Endesa");
+  const c = await p.evaluate(() => { irA("comparar"); return { nota: document.querySelector("#p-comparar .nivNota").textContent, ents: [...document.querySelectorAll("#ents .ent")].map((x) => x.innerText) }; });
+  comprobar(/su propia liga/.test(c.nota) && c.ents.some((t) => /Liga Endesa = 0/.test(t)) && c.ents.some((t) => /Euroliga = 0/.test(t)), "Estilos: cada club frente a su propia liga (no la vara global)");
+  const eq = await p.evaluate(() => { st.eq.liga = "euroleague"; irA("equipo"); return document.querySelector("#p-equipo").innerText; });
+  comprobar(/Ranking frente a la Euroliga/.test(eq), "Simular equipo completo: referencia = liga del club (Euroliga), no la vara global (ACB)");
+  const sim = await p.evaluate(async () => { await cargarSim(); const g = JG.filter((j) => /Gimeno/.test(j.nombre)).sort((a, b) => b.temporada.localeCompare(a.temporada))[0];
+    const cl = CL.find((x) => x.liga === "feb3" && x.temporada === "2025-26" && /BASKONIA|Baskonia/.test(x.nombre_club)); st.sim.liga = "feb3"; st.sim.temp = "2025-26"; st.sim.club = cl.clave_club; st.sim.fich = [{ k: jKey(g), m: null }]; st.sim.bajas = []; st.sim.ejemplo = false;
+    irA("simulador"); await new Promise((r) => setTimeout(r, 2500)); pintarSim();
+    return { tip: [...document.querySelectorAll("#sV2 [data-tip]")].map((e) => e.getAttribute("data-tip")).find((t) => /Nivel:/.test(t)) || "", vara: ESC.vara }; });
+  comprobar(/Tercera FEB = 0/.test(sim.tip) && sim.vara === "acb", "Simular fichajes: Pablo Gimeno a Baskonia (Tercera FEB) con Tercera FEB = 0; la vara global no cambia");
   await ctx.close();
   // 2 · zona de cada estilo (elipsoides dentro del rango de los datos)
   const q = await b.newPage({ viewport: { width: 1400, height: 1000 } }); q.on("pageerror", (x) => errores.push(x.message));
@@ -45,7 +51,7 @@ const plantillas = () => { const v = []; document.querySelectorAll("body *:not(s
   await m.click("#cxSetBtn"); await m.selectOption("#ebVara", "lnb"); await m.waitForTimeout(4000);
   const fr = m.frames().find((f) => /atlas\/index.html/.test(f.url()) && !/vista=claves/.test(f.url()));
   const v = await fr.evaluate(() => ESC.vara), sel = await m.evaluate(() => document.getElementById("varaSel").value);
-  comprobar(v === "lnb" && sel === "lnb", "Ajustes · Liga = 0 cambia el Atlas y los selectores de la Mesa");
+  comprobar(v === "lnb" && sel === "lnb", "Ajustes · Liga = 0 llega al Atlas (Jugadores) y a los selectores de la Mesa");
   comprobar(!errores.length, "sin errores de página" + (errores.length ? ": " + errores.slice(0, 3).join(" | ") : ""));
   await b.close();
   console.log(fallos.length ? `${fallos.length} comprobaciones fallidas` : "todas las comprobaciones pasan");

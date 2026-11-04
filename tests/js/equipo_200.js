@@ -29,7 +29,7 @@ const comprobar = (c, txt) => { if (!c) fallos.push(txt); console.log(`${c ? "ok
   const n = await p.evaluate(async () => { await cargarSim(); const rec = [...SIMD.jug.values()].find((x) => /Gimeno/.test(x.nombre) && x.temporada === "2025-26");
     const club = [...SIMD.porClub.values()].find((c) => c.liga === "nba" && c.temporada === "2026-27");
     const s = SIM2.simular({ rec, club, rol: "PROFUNDIDAD" }), d = s.produccion_p100.pts_p100; return { lo: d.lo90, marca: d.recorte_cero, nota: notaCero(s) }; });
-  comprobar(n.lo === 0 && n.marca && /nadie anota puntos negativos/.test(n.nota) && /nivel/.test(n.nota), "puntos/100: rango desde 0 con nota al pie y sus factores");
+  comprobar(n.lo === 0 && n.marca && /no pueden? ser negativos?/.test(n.nota) && /puntos\/100/.test(n.nota) && /nivel/.test(n.nota), "puntos/100: rango desde 0 con nota al pie y sus factores");
   comprobar(!errores.length, "sin errores de página" + (errores.length ? ": " + errores.slice(0, 3).join(" | ") : ""));
   await b.close();
   console.log(fallos.length ? `${fallos.length} comprobaciones fallidas` : "todas las comprobaciones pasan");

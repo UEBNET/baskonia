@@ -1,5 +1,20 @@
 # Registro de cambios
 
+## 2026-11-04 — Referencia de nivel por contexto (liga del club elegido / liga propia) y recorte a 0 ampliado
+
+Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.
+
+* **Referencia de la escala ±100 por contexto** (`conVara`, `enPropia`, `refEnt` en `atlas/index.html`):
+  * **Planificación** (Simular fichajes, Simular equipo completo): 0 = la liga del club elegido. Pablo Gimeno a Surne
+    Bilbao: nivel −83 con ACB = 0 (antes −86 frente a la Euroliga); al Baskonia de Tercera FEB: +5 con Tercera FEB = 0.
+    El ranking y el desglose del equipo completo son frente a los clubes de esa liga.
+  * **Informe de fichaje (PDF)**: 0 = la liga del club de destino (sin destino, la del jugador).
+  * **Estilos** (Mapa y comparador, Química de perfiles): cada equipo y cada jugador frente a su propia liga
+    (tarjetas, tooltips del mapa, perfil de rasgos, química).
+  * **Jugadores** (Datos normalizados, Buscar parecidos) y Metodología: la «Liga = 0» de Ajustes, como antes.
+* **Recorte a 0** ampliado a tapones/100, rebotes ofensivos/100 y AST% (`RECORTE_CERO`), con la misma nota al pie, que
+  ahora nombra cada métrica recortada y mide el nivel frente a la liga de destino.
+
 ## 2026-11-04 — Puntos/100 sin rangos negativos y «Simular equipo completo» siempre a 200'
 
 Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.

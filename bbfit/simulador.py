@@ -819,8 +819,11 @@ def _factores_v32(cfg: dict) -> dict | None:
     return _RECAL[f]
 
 
+RECORTE_CERO = ("pts_p100", "blk_p100", "oreb_p100", "ast_pct")     # métricas que no pueden ser negativas (04-11-2026)
+
+
 def recorte_cero(d: dict | None) -> None:
-    """v3.3 · pts/100 no puede ser negativo: los extremos inferiores de los intervalos (semiamplitud A4 fija alrededor de
+    """v3.3 · puntos/100, tapones/100, rebotes ofensivos/100 y AST% no pueden ser negativos: los extremos inferiores de los intervalos (semiamplitud A4 fija alrededor de
     una producción esperada baja) se recortan a 0 y se marca `recorte_cero` para que la interfaz lo explique. El centro
     no cambia, así que el error y la cobertura del examen no se ven afectados (un valor real nunca es negativo)."""
     if not d:
@@ -873,7 +876,8 @@ def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str, fac_min: di
     if c.cfg.get("v33"):
         for d in list(res["produccion_p100"].values()) + [res["minutos"]] + ([res["contribucion"]] if "contribucion" in res else []):
             orden(d)
-        recorte_cero(res["produccion_p100"].get("pts_p100"))
+        for m in RECORTE_CERO:
+            recorte_cero(res["produccion_p100"].get(m))
     if "contribucion" in res:
         esc(res["contribucion"], fac.get("C"), "media")
     res["min_pct"] = {k: (v / minutos_partido(liga_d) if isinstance(v, (int, float)) else v)

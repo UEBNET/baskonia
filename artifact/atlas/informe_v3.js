@@ -447,7 +447,7 @@ ${raw}`;
     const cp = ifCampo(R, pos, b), K4 = ["pts_p100", "usg_pct", "ts_pct", "fg3_pct", "ft_pct", "fg3a_rate", "fta_rate", "ast_pct", "tov_pct", "orapm"];
     const prod = s2ok ? s2.produccion_p100 : null, pp = s2ok ? s2.por_partido : null;
     const simAt = prod ? `<table class="r3t sim"><thead><tr><th>En ${E(d.nombre_club)} · ${E(ROLN[rolA])}</th><th class="num">Media</th><th class="num">Rango 90 %</th></tr></thead><tbody>
-        ${[["Minutos por partido", s2.minutos, 0], ["Posesiones en pista por partido", pp && pp.posesiones, 1], ["Puntos por partido", pp && pp.pts, 1], ["Puntos / 100 posesiones", prod.pts_p100, 1], ["TS% · acierto real", prod.ts_pct, 1], ["USG% · peso en el ataque", prod.usg_pct, 1], ["AST% · asistencias", prod.ast_pct, 1], ["TOV% · pérdidas", prod.tov_pct, 1], ["Rebotes de ataque / 100 posesiones", prod.oreb_p100, 1]].filter(([, o]) => o && o.media != null).map(([n, o, dd]) => `<tr><td>${n}${o.recorte_cero ? "*" : ""}</td><td class="num"><b>${N(o.media, dd)}</b></td><td class="num">${rng(o, 90, dd)}${o.recorte_cero ? "*" : ""}</td></tr>`).join("")}</tbody></table>${prod.pts_p100 && prod.pts_p100.recorte_cero ? notaCero(s2).replace('class="note"', 'class="r3n"') : ""}` : "";
+        ${[["Minutos por partido", s2.minutos, 0], ["Posesiones en pista por partido", pp && pp.posesiones, 1], ["Puntos por partido", pp && pp.pts, 1], ["Puntos / 100 posesiones", prod.pts_p100, 1], ["TS% · acierto real", prod.ts_pct, 1], ["USG% · peso en el ataque", prod.usg_pct, 1], ["AST% · asistencias", prod.ast_pct, 1], ["TOV% · pérdidas", prod.tov_pct, 1], ["Rebotes de ataque / 100 posesiones", prod.oreb_p100, 1]].filter(([, o]) => o && o.media != null).map(([n, o, dd]) => `<tr><td>${n}${o.recorte_cero ? "*" : ""}</td><td class="num"><b>${N(o.media, dd)}</b></td><td class="num">${rng(o, 90, dd)}${o.recorte_cero ? "*" : ""}</td></tr>`).join("")}</tbody></table>${notaCero(s2).replace('class="note"', 'class="r3n"')}` : "";
     const fAt = ["anotacion", "creacion"].map((k) => bloques.find((o) => o.bk.k === k)).filter(Boolean);
     const leadAt = `${E(cp.txt || "")}${fAt.length ? ` Bloques: <b>anotación, ${pctN(fAt[0].sc)}</b>${fAt[1] ? ` · <b>creación, ${pctN(fAt[1].sc)}</b>` : ""}.` : ""}`;
     pags.push({ sec: "Ataque y tiro", cls: "dense", html: `${ceja(4, "Ataque y tiro", "Anotación, tiro y creación", leadAt)}
@@ -651,7 +651,9 @@ ${raw}`;
     let esc = [];
     if (s2 && !s2.error) { const club = simClub(d); esc = ROLES.map((r) => { try { const x = r === rol ? s2 : SIM2.simular({ rec: recJ, club, bajas, extras, rol: r }); return x && !x.error ? { rol: r, r: x } : null; } catch (e) { return null; } }).filter(Boolean); }
     const c6 = s2 && !s2.error && d ? contexto6(j, d, s2, extras, bajas) : null;
-    const hojas = paginas({ j, R, pos, sim, s2: s2 && !s2.error ? s2 : null, nec, fecha, tray, medias: med, nota: notaFin, rol, nac: pais(nacT), esc, ritmo: D.ritmo_el || 72, actual, c6 });
+    // referencia del informe (decisión del usuario, 04-11-2026): 0 = la liga del club de destino; sin destino, la de su liga
+    const ligaRef = sim && !sim.mismo && d ? d.liga : j.liga;
+    const hojas = conVara(ligaRef, () => { const h = paginas({ j, R, pos, sim, s2: s2 && !s2.error ? s2 : null, nec, fecha, tray, medias: med, nota: notaFin, rol, nac: pais(nacT), esc, ritmo: D.ritmo_el || 72, actual, c6 }); rotular("p-informe"); return h; });
     box.innerHTML = hojas.map((h) => `<div class="ifwrap">${h}</div>`).join("");
     box.classList.remove("cargando"); ifEscalar();
     $1("#ifSimNota").innerHTML = s.sim ? (sim && sim.mismo ? `<span class="warn">Ya juega en ese club esa temporada: elige otro destino.</span>` : s2 && s2.error ? `<span class="warn">No se pudo simular (${E(s2.error)}).</span>` : !s2 && sim ? `<span class="warn">El simulador no tiene plantilla de ese club y temporada (hay de 2025-26 y 2026-27): se muestra la lectura sin simulación de rol.</span>` : "") : "";
