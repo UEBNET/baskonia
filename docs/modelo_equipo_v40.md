@@ -38,7 +38,7 @@ x̃_i = [ u_i ∈ ℝ⁴ (media y sd) · p_i^estilo ∈ Δ⁶ · θ de 16 rasgos
 
 | Bloque | Columnas | Procedencia | Ajuste |
 |---|---|---|---|
-| Latente | `u1…u4`, `u1_sd…u4_sd`, `u_fuente`, `u_discrepancia_redes` | posterior conjunta de las 20 redes CVAE de la configuración final de la v3.2 (K = 4) | completo (producto) / ≤ t (cortes) |
+| Latente | `u1…u4`, `u1_sd…u4_sd` (absoluta), `u1_sd_rel…u4_sd_rel` (relativa a su competición), `u_fuente`, `u_discrepancia_redes` | posterior conjunta de las 20 redes CVAE de la configuración final de la v3.2 (K = 4) | completo (producto) / ≤ t (cortes) |
 | Estilos | `p_circulacion, p_pintura, p_spacing, p_old_school, p_pistons, p_isolation`, `estilo`, `estilo_p`, `estilo_fiable` | `estilos_unificados/jugadores.csv.gz` (nivel temporada) | todas las temporadas **[HIPÓTESIS declarada]** |
 | Rasgos | `<m>_th`, `<m>_vj` para `usg_pct, ast_pct, tov_pct, fg3a_rate, fta_rate, pct_aro, pct_corta, pct_media, pct_t3_esquina, pct_asistidas, oreb_pct, dreb_pct, stl_pct, blk_pct, orapm, drapm` | `v3_2/destino/capacidad/<t>.csv.gz` (completo) · normalización v3.2 ≤ t, fuente `V32_corte` (cortes) | completo / ≤ t |
 | Rol | `rol_mas_probable`, `rol_indice`, `rol_indice_esperado`, `p_RESIDUAL…p_GO_TO_GUY`, `min_pct`, `gs_pct`, `H_rol`, `rol_fuente` | `roles/player_role_season.csv.gz` | por temporada (sin fuga) |
@@ -59,6 +59,9 @@ está fijada en `perfil.rasgos` del YAML antes de entrenar nada.
 - Para las personas-temporada del ajuste (≥ 100 min) u es la media de la **posterior conjunta** de la v3.2
   (`bbnorm3.niveles.posterior`: latentes y niveles resueltos juntos) y su varianza es la diagonal de Q⁻¹ en esas
   coordenadas (exacta dado el modelo de medida).
+- Dos incertidumbres: `u_sd` es la DT a posteriori absoluta e incluye la del nivel μ_c de la competición (común a sus
+  jugadores; ≈ 0,67 frente a una dispersión de medias de 0,13–0,20); `u_sd_rel` es la DT de u − μ_c (0,03–0,04), la que
+  compara jugadores dentro de una liga. Ambas exactas por complemento de Schur (`PosteriorRapida`).
 - Filas fuera del ajuste (< 100 min, o posición sin estimar) usan el **codificador** de cada red combinado con el prior
   N(μ_c, s_l²) de su competición, con Var(μ_c) y, si la competición-temporada no está en el ajuste, el nivel de la
   última temporada de esa liga más el paso κ² (`u_fuente = codificador_nivel_temporada_anterior`). Es el mismo

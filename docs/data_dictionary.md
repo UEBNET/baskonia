@@ -1799,7 +1799,7 @@ alineamiento de las redes, fuentes del latente).
 | `persona_id` | persona del crosswalk (`P…`); si falta, `<liga>:<player_id>` (aviso `sin_persona_crosswalk`) |
 | `persona_norm` | id entero de la normalización (tabla de `bbmodel.modelo.preparar`), sólo para unir con el latente |
 | `team_id`, `pos3`, `edad`, `tramo_edad`, `min` | equipo principal, posición (E/A/I), edad y tramo (`s/d` si falta), minutos de la temporada |
-| `u1…u4`, `u1_sd…u4_sd` | latente CVAE (K = 4) de la v3.2 final: media y DT a posteriori, promedio de las 20 redes tras alinearlas afínmente con la red de referencia |
+| `u1…u4`, `u1_sd…u4_sd`, `u1_sd_rel…u4_sd_rel` | latente CVAE (K = 4) de la v3.2 final: media, DT a posteriori absoluta (incluye la incertidumbre del nivel de su competición, común a sus jugadores) y DT relativa de u − μ_c (la que compara jugadores dentro de una liga); promedio de las 20 redes tras alinearlas afínmente con la red de referencia |
 | `u_fuente` | `posterior_conjunta` (≥ 100 min, en el ajuste), `codificador`, `codificador_nivel_temporada_anterior`, `sin_latente` |
 | `u_discrepancia_redes` | DT entre redes del latente alineado (media de las 4 dimensiones); > 0,5 → aviso `red_discrepante` |
 | `estilo`, `estilo_p`, `estilo_fiable`, `estilo_min`, `p_<estilo>` (6) | estilo unificado principal, su probabilidad, fiable (≥ 300 min), minutos y pertenencias ∈ Δ⁶ |
