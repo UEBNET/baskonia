@@ -214,3 +214,79 @@ def renormalizar_cuotas(cuotas: np.ndarray) -> np.ndarray:
     """Cuotas de tiro de los cinco de un quinteto, renormalizadas al 100 %."""
     c = np.maximum(np.asarray(cuotas, float), 0.0)
     return 100.0 * c / c.sum() if c.sum() > 0 else c
+
+
+# =============================================================================================== producto
+def exportar(cfg: dict, progreso=print) -> dict:
+    """Ajuste con todas las temporadas de los efectos PUBLICADOS por el examen (modelo por efecto elegido en la selección),
+    calibración del intervalo del 80 % con residuos fuera de muestra (5 pliegues por equipo-temporada) y predicción para
+    todas las parejas observadas. Salidas en data/modelos/v4_0/sinergia/dirigidos/."""
+    from bbfit.registro import experimento
+    from .examen_f1 import perfiles_completo
+    f2 = cfg["f2"]["dirigidos"]
+    t0 = time.time()
+    out = dir_salida(cfg)
+    ex = json.loads((out / "examen" / "resumen_examen_f2b.json").read_text(encoding="utf-8"))
+    publicados = ex["puerta_11_2_dirigidos"]["publicados"]
+    temps = list(cfg["perfil"]["temporadas"])
+    E = cargar_interacciones(cfg, temps)
+    E = E[E["poss_con"] >= float(f2["min_poss_con"])].reset_index(drop=True)
+    T = RP.tabla_prior(perfiles_completo(cfg, [t for t in temps if (C.dir_salida(cfg) / "perfiles" / f"{t}.csv.gz").exists()]), cfg)
+    R = SG.Rasgos(T, cfg)
+    X, ok = rasgos_pareja(E, R)
+    E, X = E[ok].reset_index(drop=True), X[ok]
+    clus = (E["liga"] + "|" + E["temporada"] + "|" + E["team_id"].astype(str)).to_numpy()
+    u, inv = np.unique(clus, return_inverse=True)
+    rng = np.random.default_rng(int(cfg["semilla"]))
+    fold_c = rng.integers(0, 5, len(u)); fold = fold_c[inv]
+    modelos, calib, doc_ef = {}, {}, {}
+    pred_cols = {}
+    with experimento(cfg["mlflow"], "F2B_producto", params={"publicados": publicados, "parejas": len(E)}):
+        for k in publicados:
+            cand = ex["decisiones"][k]["candidato"]
+            y, w = E[k].to_numpy(float), E[f"w_{k}"].to_numpy(float)
+            oos = np.full(len(E), np.nan)
+            for f in range(5):
+                tr_, te_ = fold != f, fold == f
+                m = ModeloEfecto(cand, cfg).ajustar(X[tr_], y[tr_], w[tr_])
+                oos[te_] = y[te_] - m.predecir(X[te_])
+            cal = calibracion(oos, w, int(f2["bins_calibracion"]))
+            mod = ModeloEfecto(cand, cfg).ajustar(X, y, w)
+            pred = mod.predecir(X)
+            lo, hi = aplicar_calibracion(cal, w)
+            okk = np.isfinite(y)
+            modelos[k], calib[k] = mod, cal
+            pred_cols[k] = (pred, pred + lo, pred + hi)
+            doc_ef[k] = {"candidato": cand, "n": int(okk.sum()), "mae_cv": float(np.average(np.abs(oos[okk]), weights=w[okk])),
+                         "mae_0": float(np.average(np.abs(y[okk]), weights=w[okk])),
+                         "cobertura_80_cv": float(np.average(((oos >= lo) & (oos <= hi))[okk], weights=w[okk])),
+                         "sd_pred": float(np.std(pred)), "sd_real": float(np.std(y[okk]))}
+            if progreso:
+                progreso(f"    {k} ({cand}): MAE CV {doc_ef[k]['mae_cv']:.3f} frente a 0 {doc_ef[k]['mae_0']:.3f} · cobertura CV {doc_ef[k]['cobertura_80_cv']:.3f}", flush=True)
+        (out / "modelos.pkl").write_bytes(pickle.dumps({"modelos": modelos, "rasgos": R, "calibracion": calib, "publicados": publicados}))
+        tab = E[["liga", "temporada", "team_id", "persona_x", "persona_y", "poss_con", "poss_sin"]].copy()
+        for k in publicados:
+            tab[f"{k}_real"] = E[k]
+            tab[f"{k}_pred"], tab[f"{k}_lo80"], tab[f"{k}_hi80"] = pred_cols[k]
+        for t, g in tab.groupby("temporada"):
+            g.round(3).to_csv(out / f"efectos_{t}.csv.gz", index=False)
+        doc = {"version": cfg["version"], "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "publicados": publicados, "no_publicados": [k for k in EFECTOS if k not in publicados],
+               "parejas": int(len(E)), "efectos": doc_ef, "calibracion": {k: {kk: vv for kk, vv in v.items() if kk != "cortes"} for k, v in calib.items()},
+               "rasgos": R.exportable(), "tiempo_s": round(time.time() - t0)}
+        (out / "resumen_producto.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    if progreso:
+        progreso(f"  F2-B producto: {publicados} · {doc['tiempo_s']} s", flush=True)
+    return doc
+
+
+def predecir(modelos: dict, zx: np.ndarray, zy: np.ndarray) -> dict:
+    """d̂_k(X → Y) para parejas nuevas a partir de sus z (F4): {efecto: (pred, lo80, hi80)} con la calibración global
+    (tramo de peso medio)."""
+    X = np.hstack([zx, zy, zx * zy])
+    out = {}
+    for k, mod in modelos["modelos"].items():
+        pred = mod.predecir(X)
+        cal = modelos["calibracion"][k]
+        mid = len(cal["lo"]) // 2
+        out[k] = (pred, pred + cal["lo"][mid], pred + cal["hi"][mid])
+    return out

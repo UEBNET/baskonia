@@ -31,7 +31,8 @@ def main(argv=None):
     sub.add_parser("rapm-producto", help="F1: ajuste con todas las temporadas → data/modelos/v4_0/rapm_multiliga/<t>.csv.gz")
     sub.add_parser("sinergia-examen", help="F2-A: examen de parejas nuevas (§11.2) y elección del rango")
     sub.add_parser("dirigidos-examen", help="F2-B: examen de los efectos dirigidos X→Y (§11.2)")
-    sub.add_parser("sinergia-producto", help="F2: ajuste con todas las temporadas → data/modelos/v4_0/sinergia/")
+    sub.add_parser("sinergia-producto", help="F2-A: ajuste con todas las temporadas → data/modelos/v4_0/sinergia/")
+    sub.add_parser("dirigidos-producto", help="F2-B: efectos publicados con todas las temporadas → sinergia/dirigidos/")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -78,6 +79,9 @@ def main(argv=None):
     elif a.orden == "sinergia-producto":
         from . import sinergia
         sinergia.exportar(cfg)
+    elif a.orden == "dirigidos-producto":
+        from . import dirigidos
+        dirigidos.exportar(cfg)
     print(json.dumps({"tiempo_s": round(time.time() - t0)}))
 
 

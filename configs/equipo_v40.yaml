@@ -150,6 +150,7 @@ f2:
     lambda_rejilla: [0.01, 0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0]   # precisión a priori de vec(M): verosimilitud marginal
     kappa_rejilla: [0.5, 1.0, 2.0, 4.0]               # DT a priori de ψ_ij (pts/100): validación cruzada por partido
     pliegues: 3
+    psi: true                                         # ψ por pareja observada en el producto (F4: compañeros con historia)
     min_posesiones_pareja_psi: 100                    # parejas con ψ publicado
     congelar_beta: true                               # sobre F1, β fijos
     pareja_nueva: solo_perfiles                       # φ̂ = z_iᵀ M_r z_j (sin ψ): la sinergia se predice por perfiles

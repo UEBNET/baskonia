@@ -260,3 +260,51 @@ def ajustar(cfg: dict, aj_f1: dict, tr: pd.DataFrame, R: Rasgos, progreso=print,
                          float(f2["min_posesiones_pareja_psi"]), progreso)
         out["psi"] = ps
     return out
+
+
+# =============================================================================================== producto
+def exportar(cfg: dict, progreso=print) -> dict:
+    """Ajuste con todas las temporadas sobre el residuo del F1 producto: M (rango del examen), ψ de las parejas observadas,
+    y los rasgos z para predecir φ̂ de cualquier pareja (F4). Salidas en data/modelos/v4_0/sinergia/."""
+    from bbfit.registro import experimento
+    from .examen_f1 import perfiles_completo
+    t0 = time.time()
+    out = dir_salida(cfg)
+    tr = RP.tramos(cfg, None, progreso)
+    temps = sorted(tr["temporada"].unique())
+    T = RP.tabla_prior(perfiles_completo(cfg, temps), cfg)
+    # F1 producto (caché del ajuste net)
+    tipo = cfg["f1"]["prior"].get("elegido") or json.loads((RP.dir_salida(cfg) / "examen" / "resumen_examen.json").read_text())["decisiones"]["prior"]["elegido"]
+    pr = cfg["f1"].get("producto") or {}
+    cfg_p = C.con(cfg, **{"f1.bayes_empirico.tau_rejilla": pr.get("tau_rejilla", cfg["f1"]["bayes_empirico"]["tau_rejilla"]),
+                          "f1.prior.ridge_alpha_rejilla": pr.get("ridge_alpha_rejilla", cfg["f1"]["prior"]["ridge_alpha_rejilla"])}) if pr else cfg
+    cache = C.RAIZ / "experimentos" / "v4_0" / f"producto_f1_net_{tipo}_{RP.huella_ajuste(cfg_p)}.pkl"
+    if not cache.exists():
+        raise FileNotFoundError(f"falta el ajuste producto de F1 ({cache.name}): ejecute `python -m bbequipo rapm-producto`")
+    res = pickle.loads(cache.read_bytes())
+    D = RP.construir_diseno(tr, "net")
+    tb = RP.tabla_beta(res, D).merge(RP.ligas_jugador(tr), on="clave", how="left")
+    aj = {"corte": None, "D": D, "res": res, "T": T, "tb": tb}
+    R = Rasgos(T, cfg)
+    ex = json.loads((out / "examen" / "resumen_examen_f2a.json").read_text(encoding="utf-8")) if (out / "examen" / "resumen_examen_f2a.json").exists() else {}
+    rango = ex.get("decisiones", {}).get("rango", "4")
+    r_ = None if rango in ("completa", None) else int(rango)
+    with experimento(cfg["mlflow"], "F2A_producto", params={"rango": rango, "tramos": len(tr)}) as run:
+        fit = ajustar(cfg, aj, tr, R, progreso=progreso, con_psi=bool(cfg["f2"]["sinergia"].get("psi", True)))
+        Mr, proy = truncar(fit["M"], r_)
+        np.save(out / "M_completa.npy", fit["M"]); np.save(out / "M_rango.npy", Mr)
+        doc = {"version": cfg["version"], "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "rango": rango, "lambda": fit["lambda"],
+               "log_marginal": fit["log_marginal"], "p": R.p, "tramos": int(len(tr)), "rasgos": R.exportable(),
+               "P": proy["P"].tolist(), "w": proy["w"].tolist(), "autovalores_M": fit["autovalores_M"],
+               "formula": "φ̂(i,j) = z_iᵀ M_r z_j, z = (x − media)/sd (NaN → 0); M_r = P diag(w) Pᵀ; sin perfil → z = 0 → φ̂ = 0",
+               "sigma2_f1": fit["sigma2"]}
+        if "psi" in fit:
+            ps = fit["psi"]
+            pd.DataFrame([{"i": k[0], "j": k[1], "psi": v[0], "poss": v[1]} for k, v in ps["psi"].items()]).round(4).to_csv(out / "psi.csv.gz", index=False)
+            doc["psi"] = {"kappa": ps["kappa"], "error_cv": ps["error_cv"], "parejas": ps["parejas"], "publicadas": ps["parejas_publicadas"]}
+        doc["tiempo_s"] = round(time.time() - t0)
+        (out / "W_sinergia.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+        run.metricas({"lambda": fit["lambda"], "autovalor_max": float(np.max(np.abs(fit["autovalores_M"])))})
+    if progreso:
+        progreso(f"  F2-A producto: rango {rango} · λ {fit['lambda']} · {doc['tiempo_s']} s", flush=True)
+    return doc
