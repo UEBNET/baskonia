@@ -170,5 +170,5 @@ v33:                                 # decisiones del simulador v3.3 (bbfit/v33.
   fichero_decisiones: data/modelos/simulador/v3_3/decisiones_v33.json
   modelo_minutos: data/modelos/simulador/v3_3/gbm_minutos.pkl
   # simulador publicado, DESPUÉS del examen (v33-aplicar):
-  minutos_publicados: motor          # motor | gbm | mezcla
-  b9: false                          # acoplamiento minutos-producción activo
+  minutos_publicados: mezcla          # motor | gbm | mezcla
+  b9: true                          # acoplamiento minutos-producción activo
