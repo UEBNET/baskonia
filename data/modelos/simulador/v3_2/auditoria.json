@@ -1,22 +1,9 @@
 {
  "roles": {
-  "personas": 19328,
-  "mezcladas": 7,
-  "tasa": 0.00036216887417218544,
+  "personas": 19330,
+  "mezcladas": 2,
+  "tasa": 0.00010346611484738747,
   "ejemplos": [
-   {
-    "persona_id": "P003025",
-    "nombres": [
-     "Maarten Vandenbossche",
-     "Stefan Pot"
-    ],
-    "registros": [
-     "bcl:2020-21:2734",
-     "gbl:2021-22:kolossos-h-hotels",
-     "bcl:2022-23:1753",
-     "bcl:2023-24:1753"
-    ]
-   },
    {
     "persona_id": "P003137",
     "nombres": [
@@ -28,51 +15,6 @@
      "vtb:2020-21:tsmoki-minsk",
      "fec:2021-22:8687",
      "vtb:2021-22:tsmoki-minsk"
-    ]
-   },
-   {
-    "persona_id": "P004567",
-    "nombres": [
-     "Evert Vaneyk",
-     "Vic De Wilde"
-    ],
-    "registros": [
-     "bnxt:2022-23:belfius-mons-hainaut",
-     "bnxt:2024-25:kangoeroes-basket-mechelen",
-     "bnxt:2025-26:kangoeroes-basket-mechelen"
-    ]
-   },
-   {
-    "persona_id": "P004898",
-    "nombres": [
-     "Mathias Ciccioni",
-     "Paolo Marinelli"
-    ],
-    "registros": [
-     "bnxt:2021-22:belfius-mons-hainaut",
-     "fec:2021-22:1021"
-    ]
-   },
-   {
-    "persona_id": "P005255",
-    "nombres": [
-     "Boris Borst",
-     "Liam Van Der Schalie"
-    ],
-    "registros": [
-     "bnxt:2023-24:zz-leiden",
-     "bnxt:2025-26:rotterdam-city-basketball"
-    ]
-   },
-   {
-    "persona_id": "P006972",
-    "nombres": [
-     "FASASI, TUNDE",
-     "Joe Thomasson"
-    ],
-    "registros": [
-     "eurocup:2021-22:PAT",
-     "gbl:2022-23:promitheas-patras"
     ]
    },
    {
@@ -90,28 +32,28 @@
  },
  "simulador": {
   "miembros": 23676,
-  "bien": 15178,
-  "equivocados": 158,
-  "tasa_equivocados": 0.010302556077203965,
+  "bien": 15773,
+  "equivocados": 154,
+  "tasa_equivocados": 0.00966911533873297,
   "sin_nombre": 0,
   "tasa_sin_nombre": 0.0,
-  "no_comparables": 8340,
+  "no_comparables": 7749,
   "ejemplos_equivocados": [
    "acb 2025-26 Real Madrid: Mady Sissoko (P000987)",
    "bcl 2025-26 Asisa Joventut: Humberto Ruiz (P000576)",
    "bcl 2025-26 Promitheas Patras BC Vikos Cola: Grigorios Prekas (P004145)",
-   "bcl 2025-26 MLP Academics Heidelberg: MIKESELL, RYAN (P003823)",
-   "bcl 2025-26 KK Spartak Office Shoes: J. Hawkins (P003545)",
+   "bcl 2025-26 MLP Academics Heidelberg: Ryan Mikesell (P003823)",
+   "bcl 2025-26 KK Spartak Office Shoes: Javontae Hawkins (P003545)",
    "bnxt 2025-26 Brussels Basketball: Ruben Fofana (P004633)",
-   "bnxt 2025-26 Kangoeroes Basket Mechelen: Evert Vaneyk (P004567)",
-   "bnxt 2025-26 Spirou Basket: Hugo Giaux (P004661)",
    "cba 2025-26 Guangsha: Xu Ke (P006105)",
    "cba 2025-26 Fujian: Liu Li (P006613)",
    "cba 2025-26 Liaoning: Fu Hao (P005979)",
    "cba 2025-26 Liaoning: J. Le Dee (P006467)",
    "cba 2025-26 Xinjiang: Qi Lin (P005887)",
    "cba 2025-26 Jilin: Jia Hao (P006187)",
-   "cba 2025-26 Guangdong: Xu Jie (P005936)"
+   "cba 2025-26 Guangdong: Xu Jie (P005936)",
+   "cba 2025-26 Longshi: Xu Xin (P006172)",
+   "cba 2025-26 Shanxi: Lu Jun (P006373)"
   ],
   "ejemplos_sin_nombre": []
  },

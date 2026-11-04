@@ -50,13 +50,13 @@ def html_articulo(R: dict, fuentes: str) -> str:
 <div class="portada"><img class="logo" src="{E.logo('hn')}" alt="Cerno">
 <div class="ceja">Artículo científico · 2026 · Confidencial</div>
 <h1>Traducir el rendimiento entre 20 ligas con su <span class="sub-index">incertidumbre</span> declarada</h1>
-<div class="sub">Normalización v3.2 y simulador de encaje v3.2: datos, métodos, exámenes fuera de muestra y decisiones
+<div class="sub">Normalización v3.2 y simulador de encaje v3.3: datos, métodos, exámenes fuera de muestra y decisiones
 tomadas con reglas fijadas de antemano.</div>
 <div class="firma ceja">Preparado por Cerno Analytics<br>{hoy}</div><div class="escala">{E.escala_svg()}</div></div>
 <section><div class="sec-cab"><div><div class="ceja">Índice</div><h2>Contenido</h2></div></div>
 <table class="indice">{indice}</table>
 <p class="entradilla">Versión 3.2 del artículo científico de Cerno Analytics. Sustituye al artículo de estilos de juego
-en ocho ligas y documenta todas las versiones de la normalización y del simulador hasta la v3.2.</p></section>
+en ocho ligas y documenta todas las versiones de la normalización hasta la v3.2 y del simulador hasta la v3.3.</p></section>
 {cuerpo}
 <section class="sec"><div class="sec-cab"><div><div class="ceja">Referencias</div><h2>Referencias</h2></div></div>
 <ol class="refs">{refs}</ol></section>
@@ -74,6 +74,7 @@ ENTRADILLAS = {
     "Estilos de juego": "Cómo juega un equipo, separado de cuánto rinde.",
     "Simulador": "Minutos, rol y producción de un fichaje en su club de destino.",
     "Simulador v3.2": "Examen sin fuga, reglas de no inferioridad y rangos recalibrados.",
+    "Simulador v3.3": "Minutos con un segundo modelo y producción acoplada al rol.",
     "Evaluaciones": "Ideas que no se aplican, medidas con el mismo rigor.",
     "Límites": "Lo que podría cambiar nuestra lectura.",
     "Reproducibilidad": "Órdenes, configuraciones y semillas.",

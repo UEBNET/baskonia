@@ -46,7 +46,10 @@ def cargar() -> dict:
     R["ciclo"] = pd.read_csv(MOD / "v3_1" / "ciclo.csv")
     R["estilos"] = _json(MOD / "estilos_unificados" / "estilos.json")
     R["auditoria"] = (v32 / "auditoria_puentes" / "muestra_puentes.csv").exists()
-    R["auditoria_identidades"] = _json(MOD / "simulador" / "v3_2" / "auditoria.json")
+    R["auditoria_identidades"] = _json(MOD / "simulador" / "v3_3" / "auditoria.json") or \
+        _json(MOD / "simulador" / "v3_2" / "auditoria.json")
+    R["evaluacion_puentes"] = _json(v32 / "auditoria_puentes" / "evaluacion.json")
+    R["sim_v33"] = _json(MOD / "simulador" / "v3_3" / "decisiones_v33.json")
     return R
 
 

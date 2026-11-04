@@ -1,0 +1,85 @@
+{
+ "roles": {
+  "personas": 19330,
+  "mezcladas": 2,
+  "tasa": 0.00010346611484738747,
+  "ejemplos": [
+   {
+    "persona_id": "P003137",
+    "nombres": [
+     "Evgeniy Belyankov",
+     "Yauheni Beliankou"
+    ],
+    "registros": [
+     "bcl:2020-21:8687",
+     "vtb:2020-21:tsmoki-minsk",
+     "fec:2021-22:8687",
+     "vtb:2021-22:tsmoki-minsk"
+    ]
+   },
+   {
+    "persona_id": "P013122",
+    "nombres": [
+     "S. TRAORE",
+     "T. SEKOU MOUSSA"
+    ],
+    "registros": [
+     "feb3:2023-24:921572",
+     "feb3:2025-26:980001"
+    ]
+   }
+  ]
+ },
+ "simulador": {
+  "miembros": 23676,
+  "bien": 15773,
+  "equivocados": 154,
+  "tasa_equivocados": 0.00966911533873297,
+  "sin_nombre": 0,
+  "tasa_sin_nombre": 0.0,
+  "no_comparables": 7749,
+  "ejemplos_equivocados": [
+   "acb 2025-26 Real Madrid: Mady Sissoko (P000987)",
+   "bcl 2025-26 Asisa Joventut: Humberto Ruiz (P000576)",
+   "bcl 2025-26 Promitheas Patras BC Vikos Cola: Grigorios Prekas (P004145)",
+   "bcl 2025-26 MLP Academics Heidelberg: Ryan Mikesell (P003823)",
+   "bcl 2025-26 KK Spartak Office Shoes: Javontae Hawkins (P003545)",
+   "bnxt 2025-26 Brussels Basketball: Ruben Fofana (P004633)",
+   "cba 2025-26 Guangsha: Xu Ke (P006105)",
+   "cba 2025-26 Fujian: Liu Li (P006613)",
+   "cba 2025-26 Liaoning: Fu Hao (P005979)",
+   "cba 2025-26 Liaoning: J. Le Dee (P006467)",
+   "cba 2025-26 Xinjiang: Qi Lin (P005887)",
+   "cba 2025-26 Jilin: Jia Hao (P006187)",
+   "cba 2025-26 Guangdong: Xu Jie (P005936)",
+   "cba 2025-26 Longshi: Xu Xin (P006172)",
+   "cba 2025-26 Shanxi: Lu Jun (P006373)"
+  ],
+  "ejemplos_sin_nombre": []
+ },
+ "fichas": {
+  "ligas_temporadas": 56,
+  "cobertura_minima": 1.0,
+  "por_debajo": {},
+  "fichas_por_liga": {
+   "acb 2026-27": 71,
+   "bbl 2026-27": 93,
+   "bnxt 2026-27": 20,
+   "bsl 2026-27": 60,
+   "cba 2026-27": 99,
+   "eurocup 2026-27": 126,
+   "euroleague 2026-27": 172,
+   "feb1 2026-27": 72,
+   "feb2 2026-27": 42,
+   "feb3 2026-27": 170,
+   "fec 2026-27": 90,
+   "gbl 2026-27": 21,
+   "lba 2026-27": 75,
+   "lnb 2026-27": 76,
+   "nba 2026-27": 123,
+   "nbl 2026-27": 77,
+   "vtb 2026-27": 65
+  }
+ },
+ "fallos": []
+}

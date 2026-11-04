@@ -98,9 +98,19 @@ inicial + apellido + fecha de nacimiento llevó la CBA de 3 a 88 jugadores puent
 más personas en común son {", ".join(f"{DT.NOMBRES.get(r.liga_a, r.liga_a)}–{DT.NOMBRES.get(r.liga_b, r.liga_b)} "
 f"({r.personas})" for r in top.itertuples())}.</p>
 <p>{ev("lectura")}Los puentes son la materia prima de la normalización: el nivel de una liga se mide con los jugadores
-que han jugado en ella y en otra. Por eso se audita su identidad (sección 11): {"hay preparada una muestra de 100 "
-"jugadores puente de las ligas con pocos puentes para revisión manual" if R["auditoria"] else "pendiente"}.</p>"""
+que han jugado en ella y en otra. Por eso se audita su identidad (sección 12): {_puentes_texto(R)}.</p>
+<p>{ev("dato")}<b>Nombres.</b> Al exportar se usa una forma por persona, «Nombre Apellido(s)», elegida entre todas
+sus variantes; las iniciales de las actas FEB se completan con la web de la FEB (quedan 488 de 2.501).</p>"""
     return ("Datos", "Veinte ligas comparables porque se miden igual, jugada a jugada", cuerpo)
+
+
+def _puentes_texto(R: dict) -> str:
+    e = R.get("evaluacion_puentes")
+    if not e:
+        return "hay preparada una muestra de 100 jugadores puente para revisión manual"
+    return (f"en una muestra de {e['revisados']} jugadores puente de las ligas con pocos puentes, revisada a mano, "
+            f"{e['correctos']} son correctos (cota inferior de Clopper-Pearson {n(e['cota_inferior_95'], 3)}), así "
+            f"que el umbral de fusión no cambia")
 
 
 # ================================================================================================== 03 normalización previa
@@ -221,7 +231,7 @@ consistencia de ciclo y la IPW se quedan por sus salvaguardas: sin la primera el
 <p>{ev("dato")}{fj.get("hacia_cvae", 0)} métrica{"s" if fj.get("hacia_cvae", 0) != 1 else ""} se aparta de 0,5 hacia
 la red y {fj.get("hacia_v2", 0)} hacia la v2: solo el RAPM, que pasa a w = 1 (solo la red), con
 {rango(rap.get("D", 0), *rap.get("ic95", [0, 0]), 1, pct=True, signo=True)}.
-El resto queda en 0,5 porque su mejora no llega al 1 % con significación; AST% (−1,0 % [−1,8, −0,2]) se queda justo en
+El resto queda en 0,5 porque su mejora no llega al 1 % con significación; AST% (−1,4 % [−2,3, −0,6]) se queda justo en
 el límite. En los cortes anidados 2023 y 2024 ninguna métrica se apartó de 0,5.</p>
 <h3>Conjunto de 20 redes (B5)</h3>
 <p>{ev("dato")}La salvaguarda de discrepancia entre redes (&gt; 0,5 DT) no se activa en ningún caso, ni con 5 redes
@@ -234,12 +244,13 @@ ni con 20 ({n(100 * b5.get("con_5", 0), 1)} % y {n(100 * b5.get("con_20", 0), 1)
         for nom, x in (("Red sola (20 redes)", ex["cvae_sola"]), ("Mezcla 0,5", ex["combinada_peso_fijo_0_5"]),
                        ("Mezcla con B2 anidado", ex["combinada_b2_anidada"]),
                        ("v3.2 publicada (con la Tercera FEB)", p))], {1, 2}, {3})}
-<p>{ev("dato")}Cortes 2022-2024, 1.427 personas × corte; el error es la media de las 33 métricas relativa a la v2. La
-red sola ya gana a la v2 (en la v3.1, con 15 ligas, quedaba +1,7 %). Por grupo de destino: EuroLeague −2,1 %
-[−3,3, −0,8]; resto de Europa −2,5 %; FEB −2,5 %; NBA/G League −3,4 %.</p>
+<p>{ev("dato")}Cortes 2022-2024, 1.431 personas × corte; el error es la media de las 33 métricas relativa a la v2. La
+red sola ya gana a la v2 (en la v3.1, con 15 ligas, quedaba +1,7 %). Por grupo de destino: EuroLeague −2,2 %
+[−3,2, −1,0]; resto de Europa −2,9 %; FEB −2,5 %; NBA/G League −4,1 %. Cifras con las identidades corregidas del
+03-11-2026 (antes de la corrección, la v3.2 publicada daba −2,8 %).</p>
 <p>{ev("lectura")}<b>Puerta de control.</b> Se cumplen el error global y el destino EuroLeague, pero falla la
-cobertura del 80 % en 4 de los pares con ≥ 30 personas: Segunda → Tercera FEB 0,774; G League → NBA 0,858;
-NBA → G League 0,862; NCAA → NBA 0,769. Se informa y queda pendiente para el examen limpio.</p>
+cobertura del 80 % en 4 de los pares con ≥ 30 personas: Segunda → Tercera FEB 0,778; G League → NBA 0,857;
+NBA → G League 0,855; NCAA → NBA 0,771. Se informa y queda pendiente para el examen limpio.</p>
 <p>{_rapm_texto(ex)}</p>{_nu_texto(ex)}"""
     return ("Resultados v3.2", "La red más simple gana; dos piezas se quedan por sus salvaguardas", cuerpo)
 
@@ -451,12 +462,51 @@ grupos de destino. En minutos, el 50 % queda ancho (cobertura 0,57) y el 80 % de
 intervalos de minutos todavía son algo conservadores.</li>
 <li>{ev("dato")}<b>§6a, banda de 50-300 minutos</b> (1.445 casos). Error tipificado medio de pts/100 −0,30 (DT 0,87) y
 de TS% −0,16: sobrestimamos a quien acaba jugando poco. La cobertura predictiva del 80 % es 0,84-0,86.</li>
-<li>{ev("dato")}<b>§7, decil superior.</b> Error medio de la contribución 6,22, con un sesgo de −3,85: el modelo es
+<li>{ev("dato")}<b>§7, decil superior.</b> Error medio de la contribución 6,21, con un sesgo de −3,85: el modelo es
 prudente con los mejores fichajes.</li>
-<li>{ev("lectura")}<b>Fuga.</b> Con la fuente con fuga la cobertura del 90 % de pts/100 era 0,862 y sin ella 0,835
+<li>{ev("lectura")}<b>Fuga.</b> Con la fuente con fuga la cobertura del 90 % de pts/100 era 0,863 y sin ella 0,836
 antes de recalibrar: los intervalos con fuga eran optimistas. Por eso las cifras absolutas salen solo de la fuente
 sin fuga.</li></ul>"""
     return ("Simulador v3.2", "Menos mecanismo en la producción y rangos que cubren lo que dicen", cuerpo)
+
+
+# ================================================================================================== simulador v3.3
+def simulador_v33(R: dict) -> tuple[str, str, str]:
+    s = R.get("sim_v33")
+    metodo = f"""<p>La v3.3 es el simulador v3.2 publicado con dos piezas que abrió la sección siguiente (B9 y la línea
+base de minutos) y que el usuario aprobó. Las dos se deciden con el mismo examen sin fuga y reglas fijadas antes.</p>
+<ul><li><b>M · minutos.</b> El examen elige entre el motor, un gradient boosting supervisado (GBM) y la media de los
+dos: se adopta el que mejora al motor de forma significativa (IC 90 % del error) con menor error. Plackett-Luce sigue
+repartiendo los minutos del resto de la plantilla y dando el rol.</li>
+<li><b>B9 · acoplamiento minutos-producción.</b> En cada simulación, Δy = b·Δmin + c·Δrol. Sin rol asignado el centro
+no cambia; cuando el club fija el rol, la producción se desplaza a lo que ese rol implica. Se adopta si mejora el
+error de pts/100 de forma significativa en el escenario de rol asignado sin empeorar el TS% más de un 0,5 %.</li></ul>"""
+    if not s:
+        return ("Simulador v3.3", "Minutos y producción en un solo modelo", metodo + _pendiente("el examen de la v3.3"))
+    f, t = s["final"], s["examen"]["total"]
+    dm = s["examen"]["minutos_v33_menos_v32"]
+    fil = [[nom, n(t["v3.2"][k], 2), n(t["v3.3"][k], 2)] for k, nom in (
+        ("mae_min", "Error medio de minutos"), ("acierto_rol", "Acierto de rol"),
+        ("cob80_min", "Cobertura 80 % minutos"), ("mae_C", "Error medio de la contribución C"))]
+    b9 = s["b9_rol_asignado"]
+    filb = [[m, n(x["mae_v32"], 2), n(x["mae_b9_rol_asignado"], 2), n(x["mae_oraculo_minutos_reales"], 2),
+             rango(x["cociente_menos_1"], *x["ic90"], 1, pct=True, signo=True)]
+            for m, x in b9.items() if m in ("pts_p100", "ts_pct", "usg_pct", "ast_pct", "tov_pct")]
+    cuerpo = metodo + f"""<h3>Minutos</h3>
+{tabla(["Medida (examen anidado sin fuga)", "v3.2", "v3.3"], fil, {1, 2}, {0})}
+<p>{ev("dato")}Decisión final: <b>{ {"mezcla": "mezcla del motor y el GBM", "gbm": "GBM", "motor": "motor"}[f["minutos_publicados"]] }</b>
+(error de minutos con todos los cortes: motor {n(f["minutos"]["mae"]["motor"], 2)}, GBM {n(f["minutos"]["mae"]["gbm"], 2)},
+mezcla {n(f["minutos"]["mae"]["mezcla"], 2)}). v3.3 − v3.2 en el examen anidado: {rango(dm["d"], dm["lo"], dm["hi"], 2, signo=True)}
+minutos (IC 90 %).</p>
+<h3>B9 con rol asignado</h3>
+{tabla(["Métrica", "v3.2", "v3.3 (B9)", "Oráculo", "Cambio [IC 90 %]"], filb, {1, 2, 3})}
+<p>{ev("dato")}B9 {"se adopta" if f["b9"] else "no se adopta"}. Casi toda la mejora viene del rol: con los coeficientes
+finales, un escalón de rol más alto suma {n(f["b9_coeficientes"]["pts_p100"]["c_rol"], 2)} pts/100 y un minuto más,
+{n(f["b9_coeficientes"]["pts_p100"]["b_min"], 2)}. La v3.3 queda prácticamente en la cota del oráculo con los minutos
+reales.</p>
+<p>{ev("lectura")}Para el artifact, la exportación de la v3.3 trae los minutos del GBM de cada jugador en cada liga
+de destino y los coeficientes de B9, de modo que el navegador no tiene que evaluar el modelo.</p>"""
+    return ("Simulador v3.3", "Los minutos mejoran con un segundo modelo y la producción sigue al rol", cuerpo)
 
 
 # ================================================================================================== 10 B7, B9, B3, B8
@@ -471,9 +521,9 @@ IC 90 % {n(b7.get("ic90_inf_%"), 1, signo=True)} a {n(b7.get("ic90_sup_%"), 1, s
 {"el límite está en la estructura del motor" if b["veredicto_B7"]["limite_en_la_estructura"] else "el límite está en el ruido, no en la estructura"}.</p>
 <p>{ev("dato")}B9 (minutos y producción en un solo modelo): correlación entre el error de minutos y el de pts/100
 {n(b9["correlacion_error_min_error_prod"], 2)}; cota del oráculo {n(b9["cota_mejora_%"], 1, signo=True)} %.
-{"Se cumplen las dos condiciones de apertura: la regla dice abrir B9, que queda propuesto para una v3.3 pendiente de aprobación (no se aplica en la v3.2)." if b["veredicto_B9"]["abrir_B9"] else "No compensa abrir B9."}</p>
+{"Se cumplen las dos condiciones de apertura: la regla dice abrir B9, que el usuario aprobó y entra en el simulador v3.3 (sección siguiente)." if b["veredicto_B9"]["abrir_B9"] else "No compensa abrir B9."}</p>
 <p>{ev("dato")}Línea base de minutos con gradient boosting: {n(b["minutos_gbm"]["mae_gbm"], 2)} frente a
-{n(b["minutos_gbm"]["mae_motor"], 2)} del motor ({"el motor gana con claridad" if b["minutos_gbm"]["motor_gana_claramente"] else "sin ventaja clara del motor: un modelo de minutos con gradient boosting es candidato para la v3.3, pendiente de aprobación"}).</p>
+{n(b["minutos_gbm"]["mae_motor"], 2)} del motor ({"el motor gana con claridad" if b["minutos_gbm"]["motor_gana_claramente"] else "sin ventaja clara del motor: el gradient boosting de minutos entra en el simulador v3.3"}).</p>
 <p>{ev("dato")}La red pequeña (MLP) supervisada queda peor que el motor ({n(b["B7"]["pts_p100"].get("mejora_mlp_frente_motor_%"), 1, signo=True)} %).</p>"""
     cuerpo = f"""<p>Dos ideas más ambiciosas se evaluaron sin cambiar el simulador, con umbrales fijados de antemano: un
 modelo supervisado directo sobre los fichajes (B7) y un modelo conjunto de minutos y producción (B9).</p>{res}
@@ -493,17 +543,20 @@ def limites(R: dict) -> tuple[str, str, str]:
 orientativas hasta el examen 2025-26 → 2026-27, prerregistrado con las huellas SHA-256 de las configuraciones.</li>
 <li>{ev("dato")}<b>Cobertura desigual de jugada a jugada.</b> NCAA sin cambios de quinteto hasta 2023-24; CBA sin
 coordenadas de tiro y con quintetos del 61-93 %; VTB sin jugada a jugada antes de marzo de 2022.</li>
-<li>{ev("hipotesis")}<b>Identidad de los puentes.</b> Una fusión errónea mueve niveles enteros. La muestra de 100
-puentes de las ligas con pocos puentes (criterio §13) está preparada para revisión manual; la regla exige una precisión
-con cota inferior de Clopper-Pearson ≥ 0,95 y, si no se cumple, se sube el umbral de fusión a 0,85. {_auditoria_texto(R)}</li>
+<li>{ev("dato")}<b>Identidad de los jugadores.</b> Una fusión errónea mueve niveles enteros. La revisión manual de
+100 puentes dio 100 correctos. La auditoría automática encontró 5 mezclas reales en BNXT y GBL (fichas de FIBA
+LiveStats reutilizadas por los clubes); se corrigieron en el adaptador el 03-11-2026 y toda la cadena se rehízo.
+{_auditoria_texto(R)}</li>
 <li>{ev("dato")}<b>Cobertura por par.</b> La normalización falla la cobertura del 80 % en 4 pares con ≥ 30 personas
 (Segunda → Tercera FEB, G League ↔ NBA y NCAA → NBA). Las traducciones de esos pares deben leerse con más cautela.</li>
 <li>{ev("dato")}<b>Minutos conservadores.</b> Tras recalibrar, el intervalo del 50 % de minutos cubre un 57 %, y en la
 banda de 50-300 minutos el simulador sobrestima la producción de quien acaba jugando poco.</li>
 <li>{ev("lectura")}<b>Fuga en los pesos del simulador.</b> La fuente sin fuga reajusta la normalización por corte, pero
 los pesos de utilidad y calibración se aprenden con la fuente completa.</li>
-<li>{ev("lectura")}<b>Trabajo futuro.</b> El rol como variable ordinal (C1), el modelo secuencial de trayectorias
-(B8) y, si se aprueban, el modelo conjunto de minutos y producción (B9) y los minutos con gradient boosting (v3.3).</li></ul>"""
+<li>{ev("lectura")}<b>B9 sin rol asignado.</b> El acoplamiento de la v3.3 sólo mueve la producción cuando el club fija
+el rol; en la simulación libre la producción publicada es la de la v3.2.</li>
+<li>{ev("lectura")}<b>Trabajo futuro.</b> El rol como variable ordinal (C1) y el modelo secuencial de trayectorias
+(B8).</li></ul>"""
     return ("Límites", "Dónde termina lo que sabemos", cuerpo)
 
 
@@ -515,7 +568,8 @@ def _auditoria_texto(R: dict) -> str:
     nom = " / ".join(ej[0]["nombres"]) if ej else ""
     return (f"{ev('dato')}La auditoría automática de identidades encuentra {a['mezcladas']} personas con nombres "
             f"distintos fusionados de {n(a['personas'], 0)} ({n(a['tasa'], 2, pct=True)})" +
-            (f", por ejemplo {esc(nom)}" if nom else "") + "; su corrección en el crosswalk está pendiente de decisión.")
+            (f", por ejemplo {esc(nom)}" if nom else "") + ", que en los dos casos es la misma persona "
+            "(transliteración; mismo id de la FEB).")
 
 
 # ================================================================================================== 12 reproducibilidad
@@ -524,13 +578,17 @@ def reproducibilidad(R: dict) -> tuple[str, str, str]:
 scripts/actualizar_v32.sh            normalización v3.2 + simulador v3.2 (reanudable)
 python -m bbnorm3 --config configs/normalization_v32.yaml ablacion | validar-v32 | ajustar-combinada | destino
 CERNO_SIMULADOR=v32 python -m bbfit backtest --fuente V32_corte … | v32-decidir | b7-b9 | v32-aplicar
+CERNO_SIMULADOR=v32 python -m bbfit v33-decidir ; python -m bbfit v33-aplicar     simulador v3.3
+scripts/rehacer_identidades.sh       cadena completa con las identidades corregidas (03-11-2026)
+python -m bbmodel crosswalk | nombres ; python scripts/feb_nombres_web.py          identidad y nombres
 python -m bbmodel auditoria-puentes [--evaluar]
 python -m cerno_articulo              este documento</div>
 <p>Todas las semillas son fijas. La v3.1 (configs/normalization_v31.yaml, data/modelos/v3_1,
-data/modelos/simulador/v3_1) no cambia: la v3.2 vive en sus propias carpetas.</p>"""
-    return ("Reproducibilidad", "Todo se reconstruye con dos órdenes y semillas fijas", cuerpo)
+data/modelos/simulador/v3_1) no cambia: la v3.2 y la v3.3 viven en sus propias carpetas.</p>"""
+    return ("Reproducibilidad", "Todo se reconstruye con unas pocas órdenes y semillas fijas", cuerpo)
 
 
 def todas(R: dict) -> list[tuple[str, str, str]]:
     return [resumen(R), datos_seccion(R), normalizacion_previa(R), metodo_v32(R), resultados_v32(R), vara_destino(R),
-            estilos(R), simulador(R), simulador_v32(R), evaluaciones(R), limites(R), reproducibilidad(R)]
+            estilos(R), simulador(R), simulador_v32(R), simulador_v33(R), evaluaciones(R), limites(R),
+            reproducibilidad(R)]
