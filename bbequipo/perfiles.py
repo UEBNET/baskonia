@@ -142,9 +142,12 @@ class PosteriorRapida:
         Q⁻¹_uu = Q_uu⁻¹ + W S⁻¹ Wᵀ,   Q⁻¹_uμ = −W S⁻¹,   Q⁻¹_μμ = S⁻¹,   W = Q_uu⁻¹ Q_uμ,   S = Q_μμ − Q_μu W.
     Con ello Var(u_i), Var(μ_c), Cov(u_i, μ_c) y Var(u_i − μ_c) salen en segundos para todas las variables."""
 
-    def __init__(self, P):
+    def __init__(self, P, comps_ref: list[int] | None = None):
+        """`comps_ref`: índices (en D.comps) de las competiciones de referencia cuyas covarianzas con los latentes se
+        conservan (W S⁻¹ entero ocupa n_u × n_μ × K × 8 bytes por red: con 20 redes no cabe en memoria). None = todas."""
         self.nPS, self.n = P.nPS, P.media.shape[0]
         self.K = len(P.lu)
+        self.cols = None if comps_ref is None else {int(c) - self.nPS: k for k, c in enumerate(comps_ref)}
         self.diag_u, self.WS, self.Sinv = [], [], []
         for f in P.lu:
             Q = _matriz_Q(f)
@@ -152,10 +155,19 @@ class PosteriorRapida:
             Binv = _inversa_bloques(Quu)
             W = (Binv @ Qum).toarray()
             Sinv = np.linalg.inv(Qmm - Qum.T @ W)
-            WS = W @ Sinv
+            WS = W @ Sinv           # float64: Var(u − μ) = Var(u) + Var(μ) − 2·Cov cancela casi todo y float32 no basta
             self.diag_u.append(np.maximum(Binv.diagonal() + np.einsum("ij,ij->i", WS, W), 0.0))
-            self.WS.append(WS)      # float64: Var(u − μ) = Var(u) + Var(μ) − 2·Cov cancela casi todo y float32 no basta
+            self.WS.append(WS if self.cols is None else WS[:, sorted(self.cols, key=self.cols.get)].copy())
             self.Sinv.append(Sinv)
+            del Q, Quu, Qum, Binv, W, WS
+
+    def _col(self, c: int) -> int:
+        j = c - self.nPS
+        if self.cols is None:
+            return j
+        if j not in self.cols:
+            raise KeyError(f"competición {c} no está entre las referencias conservadas")
+        return self.cols[j]
 
     def diag(self) -> np.ndarray:
         """diag(Q_k⁻¹) de todas las variables (n × K)."""
@@ -168,10 +180,10 @@ class PosteriorRapida:
     def var_u_menos_mu(self, ips: np.ndarray, c: int) -> np.ndarray:
         """Var(u_i − μ_c) = Var(u_i) + Var(μ_c) − 2 Cov(u_i, μ_c), con Cov(u_i, μ_c) = −(W S⁻¹)[i, c]  (len(ips) × K)."""
         ips = np.asarray(ips, int)
-        j = c - self.nPS
+        j, jc = c - self.nPS, self._col(c)
         out = np.zeros((len(ips), self.K))
         for k in range(self.K):
-            out[:, k] = self.diag_u[k][ips] + self.Sinv[k][j, j] + 2.0 * self.WS[k][ips, j]
+            out[:, k] = self.diag_u[k][ips] + self.Sinv[k][j, j] + 2.0 * self.WS[k][ips, jc]
         return np.maximum(out, 0.0)
 
     def var_mu_menos_mu(self, cs: np.ndarray, c: int) -> np.ndarray:
@@ -242,18 +254,23 @@ def latente_red(m, P, D, t: pd.DataFrame, cfg_norm: dict, lote: int = 1000, diag
     return media, var, fuente
 
 
-def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso=print) -> tuple[pd.DataFrame, dict]:
+def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso=print,
+                     liberar_lu: bool = False) -> tuple[pd.DataFrame, dict]:
     """u (media y sd) de cada fila de `t` promediando el deep ensemble tras alinear cada red con la de referencia.
     sd² = media de las varianzas alineadas (dentro de cada red) + varianza entre redes de las medias alineadas."""
     L = cfg["perfil"]["latente"]
     lote, iref = int(L.get("lote_varianza", 1000)), int(L.get("red_referencia", 0))
     ref = cj[iref][1].media[:cj[iref][1].nPS]
     medias, vars_, r2s, fuente, rapidas = [], [], [], None, []
+    comp_ref = f"{cfg_norm['referencia_salida']['liga']}|{cfg_norm['referencia_salida']['temporada']}"
+    refs = [D.comps.index(comp_ref)] if comp_ref in D.comps else []
     t0 = time.time()
     for k, (m, P) in enumerate(cj):
         A, b, r2 = alinear(ref, P.media[:P.nPS])
-        PR = PosteriorRapida(P)
+        PR = PosteriorRapida(P, comps_ref=refs)          # sólo la covarianza con la competición de referencia
         rapidas.append(PR)
+        if liberar_lu:
+            P.lu = None                                   # las factorizaciones (≈ 35 MB × K por red) ya no hacen falta
         med, var, fu = latente_red(m, P, D, t, cfg_norm, lote, rapida=PR)
         med, var = aplicar_afin(A, b, med, var)
         medias.append(med); vars_.append(var); r2s.append(r2)
@@ -711,7 +728,7 @@ def exportar(cfg: dict, cortes: list[int] | None = None, temporadas: list[str] |
                 progreso("  ajuste completo: redes y posterior…", flush=True)
             D, cj = flujo.conjunto(tabla, cfg_norm, None, progreso=progreso)
             t = _filas_latente(tabla, temporadas)
-            lat, meta_lat = latente_ensemble(D, cj, t, cfg, cfg_norm, progreso)
+            lat, meta_lat = latente_ensemble(D, cj, t, cfg, cfg_norm, progreso, liberar_lu=True)
             lat = pd.concat([t[["persona_id", "liga", "temporada", "player_id", "min"]].rename(
                 columns={"persona_id": "persona_norm"}), lat], axis=1)
             meta_lat.pop("_rapidas", None)
@@ -738,7 +755,7 @@ def exportar(cfg: dict, cortes: list[int] | None = None, temporadas: list[str] |
             cfg_a = C3.con(cfg_norm, **{"referencia_salida.temporada": temp_de(a)})
             D, cj = flujo.conjunto(tabla, cfg_a, a, progreso=progreso)
             t = _filas_latente(tabla, temps_a)
-            lat, meta_lat = latente_ensemble(D, cj, t, cfg, cfg_norm, progreso)
+            lat, meta_lat = latente_ensemble(D, cj, t, cfg, cfg_a, progreso, liberar_lu=True)
             lat = pd.concat([t[["persona_id", "liga", "temporada", "player_id", "min"]].rename(
                 columns={"persona_id": "persona_norm"}), lat], axis=1)
             meta = {"version": cfg["version"], "ajuste": f"<= {a}", "corte": a, "huella_config": res["huella"],
