@@ -135,10 +135,15 @@ def examen_margen(cfg: dict, aj: dict, tr_all: pd.DataFrame, progreso=print) -> 
     c_media = float(np.mean([v for k, v in c.items() if k.startswith("c_")]))
     kcl, kpo = c.get("clutch", 0.0), c.get("playoffs", 0.0)
     rapm_tr = _rapm_traducido(cfg, temp_t)
-    rapm_raw = {}
     perf_t = perfiles_corte(cfg, a)
     pt = perf_t[perf_t["temporada"] == temp_t].sort_values("min", ascending=False).drop_duplicates("persona_id")
-    rapm_raw = dict(zip(pt["persona_id"].astype(str), pd.to_numeric(pt["rapm_obs"], errors="coerce")))
+    rapm_raw = {k: v for k, v in zip(pt["persona_id"].astype(str), pd.to_numeric(pt["rapm_obs"], errors="coerce")) if np.isfinite(v)}
+    # jugadores sin RAPM en t (nuevos o sin dato): media de su liga en t, como hace F1 con la media de β̂ de la liga
+    # (imputar 0 sesgaría a las ligas cuyo nivel traducido está lejos de 0, p. ej. la Tercera FEB a −11 pts/100)
+    lig_t = dict(zip(pt["persona_id"].astype(str), pt["liga"].astype(str)))
+    med_tr = pd.Series(rapm_tr).groupby(pd.Series(rapm_tr).index.map(lig_t)).mean().to_dict()
+    med_raw = pd.Series(rapm_raw).groupby(pd.Series(rapm_raw).index.map(lig_t)).mean().to_dict()
+    med_tr_g, med_raw_g = float(np.mean(list(rapm_tr.values()))), float(np.mean(list(rapm_raw.values())))
     # línea base (a): interceptos liga-equipo-temporada ajustados en t
     eq = _efectos_equipo(tr_t)
 
@@ -159,14 +164,15 @@ def examen_margen(cfg: dict, aj: dict, tr_all: pd.DataFrame, progreso=print) -> 
         for s, row in enumerate(g.itertuples()):
             fuentes = []
             dA = 0.0; dB = 0.0; bA = 0.0; bB = 0.0; rA = 0.0; rB = 0.0
+            mt, mr = med_tr.get(liga, med_tr_g), med_raw.get(liga, med_raw_g)
             for k in row.A:
                 p = k.rsplit("|", 1)[0]
                 v, f = val(p, liga); dA += v; fuentes.append(f)
-                bA += rapm_tr.get(p, 0.0); rA += rapm_raw.get(p, 0.0) if np.isfinite(rapm_raw.get(p, np.nan)) else 0.0
+                bA += rapm_tr.get(p, mt); rA += rapm_raw.get(p, mr)
             for k in row.B:
                 p = k.rsplit("|", 1)[0]
                 v, f = val(p, liga); dB += v; fuentes.append(f)
-                bB += rapm_tr.get(p, 0.0); rB += rapm_raw.get(p, 0.0) if np.isfinite(rapm_raw.get(p, np.nan)) else 0.0
+                bB += rapm_tr.get(p, mt); rB += rapm_raw.get(p, mr)
             n_nuevo += sum(1 for f in fuentes if f == "nuevo"); n_tot_j += 10
             mu = cl + (kcl if row.clutch else 0.0) + (kpo if row.playoffs else 0.0) + dA - dB
             pred += poss[s] / 100.0 * mu
@@ -492,4 +498,39 @@ def main(cfg: dict, progreso=print) -> dict:
         run.metricas({"rmse_f1": resultado.get("margen_global", {}).get("rmse", {}).get("f1", {}).get("rmse", 0.0)})
     if progreso:
         progreso(f"  examen F1: {resultado.get('puerta_11_1')} · {resultado['tiempo_s']} s", flush=True)
+    return resultado
+
+
+def recalcular_margenes(cfg: dict, progreso=print) -> dict:
+    """Vuelve a calcular los márgenes de los cuatro cortes (y el resumen global) con los ajustes en caché, sin reajustar."""
+    out = dir_examen(cfg)
+    res_path = out / "resumen_examen.json"
+    resultado = json.loads(res_path.read_text(encoding="utf-8"))
+    tr_all = RP.tramos(cfg, None, progreso)
+    cortes = [int(a) for a in cfg["criterios"]["comunes"]["cortes"]]
+    elegido = resultado["decisiones"]["prior"]["elegido"]
+    bloques_fuera = tuple(resultado["decisiones"].get("bloques_fuera", []))
+    B, sem = int(cfg["criterios"]["comunes"]["bootstrap"]), int(cfg["criterios"]["comunes"]["semilla_bootstrap"])
+    margenes = []
+    for a in cortes:
+        aj = ajuste_corte(cfg, a, tr_all, elegido, bloques_fuera, progreso=progreso)
+        m, rex = examen_margen(cfg, aj, tr_all, progreso)
+        if len(m):
+            margenes.append(m)
+        resultado["cortes"][str(a)]["margen"] = rex
+    pd.concat(margenes, ignore_index=True).round(3).to_csv(out / "margen_partidos.csv.gz", index=False)
+    dec = [a for a in cortes if a != int(cfg["criterios"]["comunes"]["corte_calibracion"])]
+    mm = pd.concat([mg for mg in margenes if int(mg["temporada"].iloc[0][:4]) - 1 in dec], ignore_index=True)
+    clus = (mm["liga"] + "|" + mm["team_a"].astype(str) + "|" + mm["temporada"]).to_numpy()
+    e = {k: (mm[f"pred_{k}"] - mm["real"]).to_numpy() for k in ("f1", "equipos", "rapm_v32", "rapm_liga", "local")}
+    resultado["margen_global"] = {"cortes": dec, "partidos": int(len(mm)), "rmse": {k: _bootstrap_rmse(e[k], None, clus, B, sem) for k in e},
+                                  "f1_frente_a": {k: _bootstrap_rmse(e["f1"], e[k], clus, B, sem) for k in ("equipos", "rapm_v32", "rapm_liga", "local")}}
+    fa = resultado["margen_global"]["f1_frente_a"]
+    resultado["puerta_11_1"] = {"mejor_que_equipos": bool(fa["equipos"]["dif_ic95"][1] < 0),
+                                "mejor_que_rapm_v32_ic95_excluye_0": bool(fa["rapm_v32"]["dif_ic95"][1] < 0)}
+    resultado["nota_margenes"] = "recalculados con imputación de la media de liga en las líneas base (antes 0)"
+    res_path.write_text(json.dumps(resultado, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    if progreso:
+        progreso(f"  márgenes recalculados: {resultado['puerta_11_1']} · {resultado['margen_global']['rmse']['f1']['rmse']:.3f} vs "
+                 f"rapm_v32 {resultado['margen_global']['rmse']['rapm_v32']['rmse']:.3f}", flush=True)
     return resultado
