@@ -1,0 +1,649 @@
+{
+ "version": "v4.0",
+ "ajuste": "<= 2021",
+ "corte": 2021,
+ "huella_config": "94d7558813",
+ "latente": {
+  "K": 4,
+  "redes": 20,
+  "alineacion": "afin_red_referencia",
+  "red_referencia": 0,
+  "r2_alineamiento_por_red": [
+   [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   [
+    0.9799,
+    0.9932,
+    0.9546,
+    0.9819
+   ],
+   [
+    0.9701,
+    0.9922,
+    0.9408,
+    0.9817
+   ],
+   [
+    0.9616,
+    0.9924,
+    0.9473,
+    0.9777
+   ],
+   [
+    0.9147,
+    0.9922,
+    0.9188,
+    0.9728
+   ],
+   [
+    0.9786,
+    0.9936,
+    0.9544,
+    0.9845
+   ],
+   [
+    0.9375,
+    0.991,
+    0.8657,
+    0.9789
+   ],
+   [
+    0.9815,
+    0.9924,
+    0.9584,
+    0.9815
+   ],
+   [
+    0.9809,
+    0.9926,
+    0.9539,
+    0.9844
+   ],
+   [
+    0.8788,
+    0.9843,
+    0.6102,
+    0.9387
+   ],
+   [
+    0.9779,
+    0.9915,
+    0.9527,
+    0.9839
+   ],
+   [
+    0.9736,
+    0.9921,
+    0.9564,
+    0.9806
+   ],
+   [
+    0.9708,
+    0.9918,
+    0.9563,
+    0.9823
+   ],
+   [
+    0.98,
+    0.9894,
+    0.9269,
+    0.9825
+   ],
+   [
+    0.9799,
+    0.9912,
+    0.9571,
+    0.9806
+   ],
+   [
+    0.9681,
+    0.9895,
+    0.952,
+    0.9764
+   ],
+   [
+    0.9549,
+    0.9904,
+    0.9342,
+    0.9808
+   ],
+   [
+    0.9824,
+    0.9929,
+    0.9299,
+    0.9838
+   ],
+   [
+    0.9783,
+    0.9912,
+    0.9025,
+    0.9779
+   ],
+   [
+    0.9768,
+    0.9919,
+    0.9561,
+    0.9819
+   ]
+  ],
+  "r2_alineamiento_medio": 0.9643,
+  "r2_alineamiento_minimo": 0.6102,
+  "redes_con_r2_bajo": [
+   9
+  ],
+  "fuentes": {
+   "posterior_conjunta": 8392,
+   "codificador": 2704,
+   "codificador_nivel_temporada_anterior": 0,
+   "sin_latente": 0
+  },
+  "discrepancia_redes_mediana": 0.03384949626259533,
+  "sd_mediana_por_dim": [
+   0.868243534756862,
+   0.8134431855646672,
+   0.8164625123254161,
+   0.823253510311526
+  ],
+  "sd_rel_mediana_por_dim": [
+   0.07540383941532969,
+   0.04689701015551752,
+   0.07655333568773484,
+   0.06612460169272454
+  ],
+  "dispersion_medias_por_dim": [
+   0.3103168676881354,
+   0.309757033304262,
+   0.2155669384030823,
+   0.31491117591739587
+  ]
+ },
+ "filas_ajuste": 7812,
+ "generado": "2026-11-04T11:04:20",
+ "temporadas": {
+  "2020-21": {
+   "global": {
+    "filas": 5315,
+    "latente": 1.0,
+    "latente_posterior": 0.7369708372530573,
+    "estilos": 0.7510818438381938,
+    "theta": 1.0,
+    "theta_caja": 1.0,
+    "theta_pista": 1.0,
+    "rol": 0.9138287864534337,
+    "rapm_obs": 0.5981185324553151,
+    "persona_crosswalk": 0.9429915333960489,
+    "completo": 0.5128880526810913
+   },
+   "por_liga": {
+    "acb": {
+     "filas": 355,
+     "latente": 1.0,
+     "latente_posterior": 0.7605633802816901,
+     "estilos": 0.8112676056338028,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.952112676056338,
+     "rapm_obs": 0.952112676056338,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8112676056338028
+    },
+    "bbl": {
+     "filas": 303,
+     "latente": 1.0,
+     "latente_posterior": 0.801980198019802,
+     "estilos": 0.0,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.0,
+     "rapm_obs": 0.0,
+     "persona_crosswalk": 0.0,
+     "completo": 0.0
+    },
+    "bcl": {
+     "filas": 453,
+     "latente": 1.0,
+     "latente_posterior": 0.6644591611479028,
+     "estilos": 0.717439293598234,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9448123620309051,
+     "rapm_obs": 0.8520971302428256,
+     "persona_crosswalk": 1.0,
+     "completo": 0.6865342163355408
+    },
+    "bsl": {
+     "filas": 285,
+     "latente": 1.0,
+     "latente_posterior": 0.7228070175438597,
+     "estilos": 0.8140350877192982,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9964912280701754,
+     "rapm_obs": 0.9964912280701754,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8140350877192982
+    },
+    "cba": {
+     "filas": 385,
+     "latente": 1.0,
+     "latente_posterior": 0.7480519480519481,
+     "estilos": 0.8389610389610389,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9428571428571428,
+     "rapm_obs": 0.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.0
+    },
+    "eurocup": {
+     "filas": 339,
+     "latente": 1.0,
+     "latente_posterior": 0.7728613569321534,
+     "estilos": 0.8377581120943953,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 0.9970501474926253,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8377581120943953
+    },
+    "euroleague": {
+     "filas": 297,
+     "latente": 1.0,
+     "latente_posterior": 0.8956228956228957,
+     "estilos": 0.8821548821548821,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 0.9966329966329966,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8821548821548821
+    },
+    "fec": {
+     "filas": 255,
+     "latente": 1.0,
+     "latente_posterior": 0.14901960784313725,
+     "estilos": 0.5843137254901961,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.8352941176470589,
+     "rapm_obs": 0.7372549019607844,
+     "persona_crosswalk": 1.0,
+     "completo": 0.5019607843137255
+    },
+    "gbl": {
+     "filas": 216,
+     "latente": 1.0,
+     "latente_posterior": 0.7314814814814815,
+     "estilos": 0.8333333333333334,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 1.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8333333333333334
+    },
+    "gleague": {
+     "filas": 246,
+     "latente": 1.0,
+     "latente_posterior": 0.8577235772357723,
+     "estilos": 0.9227642276422764,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9878048780487805,
+     "rapm_obs": 0.9878048780487805,
+     "persona_crosswalk": 1.0,
+     "completo": 0.9227642276422764
+    },
+    "lba": {
+     "filas": 224,
+     "latente": 1.0,
+     "latente_posterior": 0.78125,
+     "estilos": 0.8303571428571429,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9732142857142857,
+     "rapm_obs": 0.9732142857142857,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8303571428571429
+    },
+    "lnb": {
+     "filas": 307,
+     "latente": 1.0,
+     "latente_posterior": 0.742671009771987,
+     "estilos": 0.5798045602605864,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 0.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.0
+    },
+    "nba": {
+     "filas": 540,
+     "latente": 1.0,
+     "latente_posterior": 0.9351851851851852,
+     "estilos": 0.9481481481481482,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 1.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.9481481481481482
+    },
+    "nbl": {
+     "filas": 133,
+     "latente": 1.0,
+     "latente_posterior": 0.7894736842105263,
+     "estilos": 0.8721804511278195,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9924812030075187,
+     "rapm_obs": 0.9924812030075187,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8721804511278195
+    },
+    "ncaa": {
+     "filas": 745,
+     "latente": 1.0,
+     "latente_posterior": 0.6496644295302013,
+     "estilos": 0.7181208053691275,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9557046979865772,
+     "rapm_obs": 0.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.0
+    },
+    "vtb": {
+     "filas": 232,
+     "latente": 1.0,
+     "latente_posterior": 0.7629310344827587,
+     "estilos": 0.8405172413793104,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.978448275862069,
+     "rapm_obs": 0.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.0
+    }
+   },
+   "K": 4,
+   "filas_min_300": 2371,
+   "cobertura_min_300": {
+    "filas": 2371,
+    "latente": 1.0,
+    "latente_posterior": 1.0,
+    "estilos": 0.9223956136651202,
+    "theta": 1.0,
+    "theta_caja": 1.0,
+    "theta_pista": 1.0,
+    "rol": 0.9257697174188106,
+    "rapm_obs": 0.5609447490510333,
+    "persona_crosswalk": 0.9257697174188106,
+    "completo": 0.5609447490510333
+   }
+  },
+  "2021-22": {
+   "global": {
+    "filas": 5781,
+    "latente": 1.0,
+    "latente_posterior": 0.7740875281093237,
+    "estilos": 0.7784120394395433,
+    "theta": 1.0,
+    "theta_caja": 1.0,
+    "theta_pista": 1.0,
+    "rol": 0.9157585192873205,
+    "rapm_obs": 0.7834284725825982,
+    "persona_crosswalk": 0.9463760595052759,
+    "completo": 0.6758346306867324
+   },
+   "por_liga": {
+    "acb": {
+     "filas": 317,
+     "latente": 1.0,
+     "latente_posterior": 0.7917981072555205,
+     "estilos": 0.8548895899053628,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9589905362776026,
+     "rapm_obs": 0.9526813880126183,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8548895899053628
+    },
+    "bbl": {
+     "filas": 310,
+     "latente": 1.0,
+     "latente_posterior": 0.7741935483870968,
+     "estilos": 0.0,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.0,
+     "rapm_obs": 0.0,
+     "persona_crosswalk": 0.0,
+     "completo": 0.0
+    },
+    "bcl": {
+     "filas": 442,
+     "latente": 1.0,
+     "latente_posterior": 0.6877828054298643,
+     "estilos": 0.7352941176470589,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9479638009049773,
+     "rapm_obs": 0.9298642533936652,
+     "persona_crosswalk": 1.0,
+     "completo": 0.7352941176470589
+    },
+    "bnxt": {
+     "filas": 333,
+     "latente": 1.0,
+     "latente_posterior": 0.7387387387387387,
+     "estilos": 0.8138138138138138,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.960960960960961,
+     "rapm_obs": 0.9579579579579579,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8138138138138138
+    },
+    "cba": {
+     "filas": 398,
+     "latente": 1.0,
+     "latente_posterior": 0.7462311557788944,
+     "estilos": 0.8291457286432161,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.914572864321608,
+     "rapm_obs": 0.914572864321608,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8291457286432161
+    },
+    "eurocup": {
+     "filas": 309,
+     "latente": 1.0,
+     "latente_posterior": 0.7896440129449838,
+     "estilos": 0.8705501618122977,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 1.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8705501618122977
+    },
+    "euroleague": {
+     "filas": 292,
+     "latente": 1.0,
+     "latente_posterior": 0.8664383561643836,
+     "estilos": 0.863013698630137,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 1.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.863013698630137
+    },
+    "fec": {
+     "filas": 411,
+     "latente": 1.0,
+     "latente_posterior": 0.6715328467153284,
+     "estilos": 0.7907542579075426,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9562043795620438,
+     "rapm_obs": 0.9513381995133819,
+     "persona_crosswalk": 1.0,
+     "completo": 0.7907542579075426
+    },
+    "gbl": {
+     "filas": 244,
+     "latente": 1.0,
+     "latente_posterior": 0.7418032786885246,
+     "estilos": 0.8237704918032787,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9836065573770492,
+     "rapm_obs": 0.9836065573770492,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8237704918032787
+    },
+    "gleague": {
+     "filas": 490,
+     "latente": 1.0,
+     "latente_posterior": 0.8653061224489796,
+     "estilos": 0.8959183673469387,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9918367346938776,
+     "rapm_obs": 0.9897959183673469,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8959183673469387
+    },
+    "lba": {
+     "filas": 256,
+     "latente": 1.0,
+     "latente_posterior": 0.79296875,
+     "estilos": 0.8359375,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.96875,
+     "rapm_obs": 0.96484375,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8359375
+    },
+    "lnb": {
+     "filas": 279,
+     "latente": 1.0,
+     "latente_posterior": 0.7670250896057348,
+     "estilos": 0.8458781362007168,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 0.996415770609319,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8458781362007168
+    },
+    "nba": {
+     "filas": 605,
+     "latente": 1.0,
+     "latente_posterior": 0.9735537190082645,
+     "estilos": 0.8760330578512396,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 1.0,
+     "rapm_obs": 1.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.8760330578512396
+    },
+    "nbl": {
+     "filas": 157,
+     "latente": 1.0,
+     "latente_posterior": 0.732484076433121,
+     "estilos": 0.821656050955414,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9681528662420382,
+     "rapm_obs": 0.9681528662420382,
+     "persona_crosswalk": 1.0,
+     "completo": 0.821656050955414
+    },
+    "ncaa": {
+     "filas": 746,
+     "latente": 1.0,
+     "latente_posterior": 0.6702412868632708,
+     "estilos": 0.739946380697051,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.9302949061662198,
+     "rapm_obs": 0.0,
+     "persona_crosswalk": 1.0,
+     "completo": 0.0
+    },
+    "vtb": {
+     "filas": 192,
+     "latente": 1.0,
+     "latente_posterior": 0.71875,
+     "estilos": 0.8125,
+     "theta": 1.0,
+     "theta_caja": 1.0,
+     "theta_pista": 1.0,
+     "rol": 0.984375,
+     "rapm_obs": 0.6979166666666666,
+     "persona_crosswalk": 1.0,
+     "completo": 0.5989583333333334
+    }
+   },
+   "K": 4,
+   "filas_min_300": 2810,
+   "cobertura_min_300": {
+    "filas": 2810,
+    "latente": 1.0,
+    "latente_posterior": 1.0,
+    "estilos": 0.9373665480427046,
+    "theta": 1.0,
+    "theta_caja": 1.0,
+    "theta_pista": 1.0,
+    "rol": 0.9373665480427046,
+    "rapm_obs": 0.7889679715302491,
+    "persona_crosswalk": 0.9373665480427046,
+    "completo": 0.7889679715302491
+   }
+  }
+ },
+ "theta": "V32_corte"
+}

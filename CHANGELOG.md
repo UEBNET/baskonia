@@ -15,8 +15,9 @@ Encargo v4.0 (rev. 1.2); detalle en `docs/checkpoints/V40_F0.md` y `docs/modelo_
   contraste. Nada se imputa con 0: avisos por bloque ausente. Para ≥ 300 min, completo en latente, estilos, θ de caja
   y rol en todas las temporadas cerradas; la Tercera FEB 2023-24 no tiene los rasgos de pista (PBP sin coordenadas).
 * **Perfiles por corte** ≤ t (`perfiles/corte_<t>/`, t = 2021…2024) para los exámenes sin fuga: latente del ensemble
-  ≤ t y θ de la fuente `V32_corte` generalizada a cualquier temporada ≤ t (`theta_corte`, `traducir_corte`). Se
-  exportan con `scripts/perfiles_v40.sh` a medida que se entrenan las redes de cada corte.
+  ≤ t y θ de la fuente `V32_corte` generalizada a cualquier temporada ≤ t (`theta_corte`, `traducir_corte`; donde falta
+  la v2 ≤ t, la red sola, como la combinación v3.2). Exportados los cuatro cortes (34.820 / 25.912 / 17.087 / 11.096
+  filas); cadena reanudable `scripts/perfiles_v40.sh`.
 * **Varianzas exactas de la posterior conjunta por complemento de Schur** (`PosteriorRapida`): Var(u), Var(μ) y
   Cov(u, μ) de todas las variables en ≈ 1,5 min por red (la vía directa costaba 15 min), error relativo < 3·10⁻⁹.
 * **Redes CVAE reentrenadas** (la caché `experimentos/v3` no está versionada): misma configuración y semillas de la
