@@ -104,6 +104,12 @@ f1:
   descomposicion_od: true                             # β^O (ataque) y β^D (defensa) con el mismo esquema
   min_posesiones_jugador: 50                          # por debajo, β se queda casi en el prior (se informa del peso)
   salidas: {rapm: data/modelos/v4_0/rapm_multiliga, prior: data/modelos/v4_0/rapm_multiliga/g_prior.json}
+  mascara_rasgos: true                                # aviso 2 de la F0: indicador «rasgo con dato de fuente» por bloque entra en g
+  comprobaciones_d2:                                  # aprobación de D2 por el CEO (04-11-2026): dos comprobaciones prerregistradas
+    corte: 2022                                       # corte de selección
+    referencia_alternativa: 1                         # semilla alternativa de alineamiento del latente
+    umbral_sensibilidad: 0.005                        # Δ error relativo del prior > 0,5 % → el latente sólo entra por ridge
+    ablacion_latente_margen: 0.005                    # no inferioridad (IC95,sup < +0,5 %): sin aporte → F1 prescinde de u
   f1d:                                                # diagnóstico de contaminación del RAPM de origen (nuevo)
     modelo: rapm_origen ~ net_equipo_origen + prior_caja + log(minutos) + liga
     bins_exposicion: [0, 300, 800, 1500, 100000]      # minutos de origen
@@ -221,6 +227,8 @@ criterios:
     ic95_frente_a_aditivo_excluye_0: true
     test_retest_beta_no_peor_que_rapm_liga: true
     fichajes_correlacion_prior_beta_t1_positiva_ic95: true
+    d2_sensibilidad_referencia_latente: {corte: 2022, umbral_relativo: 0.005, si_supera: latente_solo_ridge}
+    d2_ablacion_latente: {corte: 2022, regla: no_inferioridad, margen: 0.005, si_no_aporta: sin_latente}
   f2:
     parejas_nuevas_ic95_superior_reduccion_error_menor_que_0: true
     dirigidos_mae_mejor_que_0_y_media_liga_en: 3       # de 5 efectos, con IC95
