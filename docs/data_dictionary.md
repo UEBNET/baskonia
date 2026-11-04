@@ -1823,6 +1823,35 @@ roles/estilos/pista/capacidad y del crosswalk por liga-temporada).
 | `con_coordenadas`, `parejas`, `equipos`, `efectos_dirigidos` | fracción de partidos con coordenadas; ficheros presentes; pares X→Y de `interacciones/` |
 | `decision`, `motivo` | `incluida`, `incluida_con_aviso` (50-90 % de partidos con quintetos) o `excluida` (< 50 %, o < 4 tramos por partido) |
 
+### CERNO v4.0 · F1: RAPM multiliga con prior del perfil (`v4_0/rapm_multiliga/`)
+
+**`v4_0/rapm_multiliga/<temporada>.csv.gz`**: grano persona-temporada (crosswalk). Detalle en `docs/checkpoints/V40_F1.md`.
+
+| Columna | Significado |
+|---|---|
+| `persona_id`, `temporada`, `liga_principal`, `n_ligas` | persona, temporada, liga con más posesiones y nº de ligas jugadas |
+| `beta`, `beta_sd` | RAPM multiliga (pts/100, escala común entre ligas) y su DT a posteriori (Hutchinson) |
+| `prior`, `peso_prior` | g(x̃): lo que el perfil predice; fracción del β que viene del prior (1 = sin tramos) |
+| `poss` | posesiones de los tramos válidos del contrato |
+| `orapm`, `drapm`, `rapm_od` | descomposición ataque / defensa (`beta_of`, `beta_def` con `*_sd_*`, `prior_*`) |
+| `con_perfil` | tiene perfil x̃ en la temporada (si no, prior = media) |
+
+Además: `g_prior.json` / `g_prior_gbm.pkl` (prior publicado), `examen/` (§11.1, D2), `f1d_contaminacion.json` (F1-D).
+
+### CERNO v4.0 · F2: sinergia de pares y efectos dirigidos (`v4_0/sinergia/`)
+
+Detalle en `docs/checkpoints/V40_F2.md`. Todo opera sobre el residuo de F1 (β congelados).
+
+| Fichero | Contenido |
+|---|---|
+| `W_sinergia.json` | M_r (proyección `P`, pesos `w`), rango, λ, columnas de rasgos con media y DT, fórmula φ̂(i,j) = z_iᵀ M_r z_j, resumen de ψ (κ, error CV por κ incluida la línea base ψ = 0) |
+| `M_completa.npy`, `M_rango.npy` | M 44 × 44 completa y proyectada a rango r |
+| `psi.csv.gz` | `i, j` (claves persona&#124;temporada ordenadas), `psi` (pts/100), `poss` juntos; sólo parejas con ≥ 100 posesiones (vacío si κ = 0) |
+| `examen/resumen_examen_f2a.json`, `examen/M_corte_<t>.npy`, `examen/diagnostico_lambda_2021.json` | examen §11.2 de parejas nuevas por corte, M de cada corte y diagnóstico de λ |
+| `dirigidos/modelos.pkl`, `dirigidos/resumen_producto.json` | GBM por efecto publicado, calibración conformal, MAE y cobertura por validación cruzada |
+| `dirigidos/efectos_<temporada>.csv.gz` | `liga, temporada, team_id, persona_x, persona_y, poss_con, poss_sin` y por efecto publicado `<k>_real, <k>_pred, <k>_lo80, <k>_hi80` (X → Y: cambio en la métrica de Y con X en pista) |
+| `dirigidos/examen/resumen_examen_f2b.json` | examen §11.2 de los cinco efectos por corte y decisión de publicación |
+
 ## 4. Banderas frecuentes
 
 | Bandera | Dónde | Significado |

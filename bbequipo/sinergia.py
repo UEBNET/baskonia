@@ -190,7 +190,8 @@ def truncar(M: np.ndarray, r: int | None) -> tuple[np.ndarray, dict]:
 def psi_parejas(tr: pd.DataFrame, r2: np.ndarray, w: np.ndarray, sigma2: float, rejilla_kappa: list[float], pliegues: int,
                 semilla: int, min_poss: float, progreso=None) -> dict:
     """ψ_ij ~ N(0, κ²) por pareja observada (ridge disperso sobre indicadores, sobre el residuo r2 tras M); κ por validación
-    cruzada por partido. Devuelve {clave_pareja: (ψ, posesiones)} y κ."""
+    cruzada por partido, con la línea base ψ = 0 (κ = 0) como candidato: si no mejora, no se publica ψ.
+    Devuelve {clave_pareja: (ψ, posesiones)} y κ."""
     pares = {}
     rows, cols, vals = [], [], []
     for s, row in enumerate(tr.itertuples()):
@@ -219,7 +220,9 @@ def psi_parejas(tr: pd.DataFrame, r2: np.ndarray, w: np.ndarray, sigma2: float, 
         bb = np.r_[yw[filas], np.zeros(nP)]
         return spla.lsqr(A, bb, atol=1e-8, btol=1e-8, iter_lim=2000)[0]
 
-    err = {}
+    err = {0.0: float(np.sum(w * r2 ** 2))}   # línea base ψ = 0 (mismo error en todos los pliegues)
+    if progreso:
+        progreso(f"    ψ · κ = 0 (sin ψ): error CV {err[0.0] / w.sum():.4f}", flush=True)
     for kappa in rejilla_kappa:
         e = 0.0
         for k in range(pliegues):
@@ -230,6 +233,8 @@ def psi_parejas(tr: pd.DataFrame, r2: np.ndarray, w: np.ndarray, sigma2: float, 
         if progreso:
             progreso(f"    ψ · κ = {kappa}: error CV {e / w.sum():.4f}", flush=True)
     kappa = min(err, key=err.get)
+    if kappa == 0.0:   # ψ no mejora la validación cruzada: no se publica ninguna pareja
+        return {"psi": {}, "kappa": 0.0, "error_cv": err, "parejas": nP, "parejas_publicadas": 0}
     psi = resolver(kappa, np.arange(n))
     out = {k: (float(psi[j]), float(poss_par[j])) for k, j in pares.items() if poss_par[j] >= min_poss}
     return {"psi": out, "kappa": kappa, "error_cv": err, "parejas": nP, "parejas_publicadas": len(out)}
@@ -300,7 +305,8 @@ def exportar(cfg: dict, progreso=print) -> dict:
                "sigma2_f1": fit["sigma2"]}
         if "psi" in fit:
             ps = fit["psi"]
-            pd.DataFrame([{"i": k[0], "j": k[1], "psi": v[0], "poss": v[1]} for k, v in ps["psi"].items()]).round(4).to_csv(out / "psi.csv.gz", index=False)
+            pd.DataFrame([{"i": k[0], "j": k[1], "psi": v[0], "poss": v[1]} for k, v in ps["psi"].items()],
+                         columns=["i", "j", "psi", "poss"]).round(4).to_csv(out / "psi.csv.gz", index=False)
             doc["psi"] = {"kappa": ps["kappa"], "error_cv": ps["error_cv"], "parejas": ps["parejas"], "publicadas": ps["parejas_publicadas"]}
         doc["tiempo_s"] = round(time.time() - t0)
         (out / "W_sinergia.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False, default=float), encoding="utf-8")

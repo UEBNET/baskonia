@@ -175,7 +175,56 @@ Ver `docs/checkpoints/V40_F1.md`: margen por partido de t+1 frente a (a) interce
 traducido de la v3.2 (`rapm_am`, el «L actual» del impacto) y (c) sólo ventaja local; test-retest; correlación prior–β de
 los fichajes; D2 (sensibilidad a la red de referencia del latente y ablación del latente) en el corte 2022; F1-D.
 
-## 3. F2 … F5
+## 3. F2 · Sinergia de pares (F2-A) y efectos dirigidos sobre compañeros (F2-B) (capa 2)
+
+Orden del CEO: 04-11-2026, tras aprobar la puerta de la F1. Código: `bbequipo/sinergia.py`, `bbequipo/dirigidos.py`,
+`bbequipo/examen_f2.py`. Checkpoint: `docs/checkpoints/V40_F2.md`. Salidas: `data/modelos/v4_0/sinergia/`.
+
+### 3.1 F2-A · Sinergia simétrica de pares
+
+```
+y_s = [F1] + Σ_{(i,j)∈A_s} φ(i,j) − Σ_{(i,j)∈B_s} φ(i,j) + ε_s,     φ(i,j) = z_iᵀ M_r z_j + ψ_ij
+```
+
+- z_i: los 44 rasgos estandarizados del perfil ampliado (las columnas del prior de F1: sin el RAPM de la misma temporada);
+  sin perfil → z = 0 → φ = 0. β de F1 congelados: F2 aprende el **residuo**.
+- M simétrica 44 × 44. La suma de las 10 parejas de un quinteto es ⟨M, Q⟩ con Q = ((Σz)(Σz)ᵀ − Σzzᵀ)/2, así que por tramo
+  u_s = vec(Q_A − Q_B) y el modelo es lineal en vec(M): ridge exacto (autovalores del Gram 990 × 990) con λ por
+  verosimilitud marginal. Proyección de rango r por autovectores de mayor |autovalor|; r elegido en el corte de selección
+  2021 (menor error de pareja nueva; a igualdad, el menor): **r = 4**.
+- ψ_ij ~ N(0, κ²): efecto propio de cada pareja observada, ridge disperso sobre indicadores de pareja sobre el residuo tras
+  M; κ por validación cruzada por partido con la línea base ψ = 0 como candidato. Sólo en el producto (compañeros con
+  historia, F4); una **pareja nueva se predice sólo por perfiles** (φ̂ = z_iᵀ M_r z_j).
+- Examen §11.2 (`examen_f2.py`): parejas de t+1 con ≥ 100 posesiones juntas que no compartieron tramo en ≤ t; reducción
+  del MSE ponderado por pareja del residuo de F1 al restar φ̂; IC95 por bootstrap de equipos-temporada. Resultado: pasa en
+  los tres cortes de decisión con magnitud despreciable (reducción ≈ 0,001 % del error; DT de φ̂ 0,03–0,17 pts/100 por
+  pareja). El diagnóstico de λ muestra que sin contracción los perfiles explican el 0,3 % del residuo en muestra y empeoran
+  las parejas nuevas: la sinergia predecible por perfiles es de segundo orden [LECTURA].
+
+### 3.2 F2-B · Efectos dirigidos X → Y
+
+```
+d_k(X → Y) = m_k(z_X, z_Y) + ε,   k ∈ {cuota de tiro, eFG%, % asistidas, % en el aro, pts/100}
+```
+
+- Dato: `data/modelos/interacciones/` (v3.x): por pareja de compañeros X, Y de un equipo-temporada, la diferencia de la
+  métrica k de Y con X en pista frente a sin X, con las posesiones de cada lado. Parejas con ≥ 100 posesiones juntas.
+- Rasgos [z_X, z_Y, z_X ⊙ z_Y]; candidatos ridge y GBM por efecto (elegido en el corte de selección 2022: GBM en los
+  cinco); peso n_ef = 1/(1/n_con + 1/n_sin); intervalos del 80 % conformales (cuantiles del residuo fuera de muestra del
+  corte anterior, por cinco tramos de peso).
+- Examen §11.2: MAE ponderado en t+1 frente a Δ = 0 y frente a la media de liga de t, con IC95 por bootstrap de
+  equipos-temporada, en los tres cortes de decisión; cobertura del 80 % en [0,75, 0,85]. Se publican los efectos que pasan
+  en los tres cortes: **cuota de tiro, % asistidas y pts/100**; eFG% y % en el aro quedan como ablación negativa.
+- Producto: `dirigidos/modelos.pkl` (un GBM por efecto publicado + calibración), `dirigidos/efectos_<t>.csv.gz` (pareja
+  observada: real, predicho e intervalo del 80 %) y `dirigidos.predecir` para parejas nuevas (F4). Las cuotas de tiro de
+  un quinteto se renormalizan al 100 % al aplicarlas.
+
+### 3.3 Qué se lleva la capa 4
+
+`sinergia/W_sinergia.json` (M_r, medias y DT de los rasgos, fórmula) y `sinergia/psi.csv.gz` para el término de sinergia;
+`dirigidos/modelos.pkl` para los efectos sobre compañeros. Ambos operan sobre β de F1 congelados.
+
+## 4. F3 … F5
 
 Pendientes de la orden del CEO para cada fase. Los hiperparámetros, las salidas y los criterios prerregistrados de todas
-ellas están ya en `configs/equipo_v40.yaml` (`f2`, `f3`, `f4` con `a5`, `f5` y `criterios`).
+ellas están ya en `configs/equipo_v40.yaml` (`f3`, `f4` con `a5`, `f5` y `criterios`).

@@ -1,5 +1,24 @@
 # Registro de cambios
 
+## 2026-11-04 — CERNO v4.0 · F2: sinergia de pares y efectos dirigidos sobre compañeros
+
+Detalle: `docs/checkpoints/V40_F2.md`, `docs/modelo_equipo_v40.md` §3. Puerta F1 aprobada por el CEO y orden de arrancar
+F2 el 04-11-2026. β de F1 congelados; F2 aprende el residuo.
+
+* **F2-A sinergia** (`bbequipo/sinergia.py`): φ(i,j) = z_iᵀ M_r z_j con los 44 rasgos estandarizados del perfil; ridge
+  exacto sobre vec(M) (la suma de las 10 parejas de un quinteto es ⟨M, Q⟩) con λ por verosimilitud marginal; rango r = 4
+  elegido en el corte de selección 2021; ψ por pareja observada con κ por validación cruzada (línea base ψ = 0 incluida).
+  Examen §11.2 de parejas nuevas (`bbequipo/examen_f2.py`, cortes 2022–2024): **pasa formalmente** (IC95 de la reducción
+  del error < 0 en los tres cortes) **con magnitud despreciable** (≈ 0,001 % del error; DT de φ̂ 0,03–0,17 pts/100 por
+  pareja). Diagnóstico de λ: sin contracción los perfiles explican el 0,3 % del residuo en muestra y empeoran las parejas
+  nuevas. La expectativa del encargo «sinergia 2–5 % sobre lo aditivo» queda anotada como hipótesis no confirmada.
+* **F2-B efectos dirigidos** (`bbequipo/dirigidos.py`): d_k(X → Y) = GBM([z_X, z_Y, z_X ⊙ z_Y]) con peso n_ef, intervalos
+  del 80 % conformales por tramos de peso. Examen §11.2 (tres cortes, 22–34 mil parejas por corte): **se publican cuota de
+  tiro (−5 a −7 % de MAE frente a Δ = 0), % asistidas (−2 a −4 %) y pts/100 (−3 a −4 %)**, con cobertura 0,79–0,82; eFG% y
+  % en el aro no pasan (ablación negativa). Producto: 249.094 parejas con efecto real, predicho e intervalo
+  (`sinergia/dirigidos/efectos_<t>.csv.gz`), modelos y calibración (`modelos.pkl`, `resumen_producto.json`).
+* Salidas F2-A: `sinergia/{M_completa.npy, M_rango.npy, W_sinergia.json, psi.csv.gz, examen/}`. [[PSI_CHANGELOG]]
+
 ## 2026-11-04 — CERNO v4.0 · F1: RAPM multiliga con prior del perfil (+ F1-D)
 
 Detalle: `docs/checkpoints/V40_F1.md`, `docs/modelo_equipo_v40.md` §2. Puerta F0 aprobada por el CEO (D1–D8; D2 con

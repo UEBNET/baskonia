@@ -344,3 +344,69 @@ def test_rapm_recupera_beta_y_prior():
     res0 = RP.ajustar(D, None, cfg, "ridge", progreso=None)
     r0 = np.corrcoef(res0["beta"][:D.nJ], tb.sort_values("clave")["beta_y"])[0, 1]
     assert 0.3 < r0 < r_beta - 0.2, (r0, r_beta)
+
+
+# ---------------------------------------------------------------------------------------------- F2-A · sinergia de pares
+class _RasgosSinteticos:
+    """Sustituto mínimo de sinergia.Rasgos: z por clave desde un diccionario (sin perfil → 0)."""
+
+    def __init__(self, Z: dict[str, np.ndarray], p: int):
+        self.Z, self.p = Z, p
+
+    def de(self, claves):
+        return np.array([self.Z.get(k, np.zeros(self.p)) for k in claves])
+
+
+def _tramos_sinteticos(rng, n_jug=60, n_tramos=6000, p=5):
+    from bbequipo import sinergia as S
+    Z = {f"j{i}": rng.normal(size=p) for i in range(n_jug)}
+    R = _RasgosSinteticos(Z, p)
+    B = rng.normal(size=(p, 2)); M = B @ B.T - 0.5 * np.eye(p)   # simétrica, rango bajo + diagonal
+    ids = list(Z)
+    A = [list(rng.choice(ids, 5, replace=False)) for _ in range(n_tramos)]
+    Bq = [list(rng.choice([j for j in ids if j not in a], 5, replace=False)) for a in A]
+    tr = pd.DataFrame({"A": A, "B": Bq, "poss": rng.uniform(2, 20, n_tramos),
+                       "liga": "x", "temporada": "t", "game_id": rng.integers(0, 300, n_tramos)})
+    phi = np.zeros(n_tramos)
+    for s, (qa, qb) in enumerate(zip(A, Bq)):
+        for q, sg in ((qa, 1.0), (qb, -1.0)):
+            for a in range(5):
+                for b in range(a + 1, 5):
+                    phi[s] += sg * float(Z[q[a]] @ M @ Z[q[b]])
+    return S, tr, R, M, phi
+
+
+def test_sinergia_recupera_M_por_quintetos():
+    """y = Σ_{A} φ − Σ_{B} φ + ruido con φ = zᵢᵀ M zⱼ: la fila lineal ⟨M, Q_A − Q_B⟩ y el ridge exacto recuperan M."""
+    rng = np.random.default_rng(3)
+    S, tr, R, M, phi = _tramos_sinteticos(rng)
+    sigma2 = 4.0
+    w = tr["poss"].to_numpy(float)
+    r = phi + rng.normal(size=len(tr)) * np.sqrt(sigma2 / w)
+    # la fila u_s reproduce la suma de las 10 parejas de cada quinteto
+    idx, U = next(S.rasgos_tramos(tr, R, lote=len(tr)))
+    iu, _ = S._iu(R.p)
+    assert np.allclose(U @ M[iu], phi, atol=1e-9)
+    G, b, rr = S.acumular(tr, R, r, w)
+    fit = S.ajustar_M(G, b, rr, len(tr), sigma2, [1e-3, 1e-2, 1e-1, 1.0, 10.0])
+    Mh = S.vec_a_matriz(fit["m"], R.p)
+    assert np.corrcoef(Mh[iu], M[iu])[0, 1] > 0.95
+    Mr, proy = S.truncar(Mh, 3)
+    assert np.allclose(Mr, (proy["P"] * proy["w"]) @ proy["P"].T)
+    assert np.linalg.norm(Mr - M) < 0.5 * np.linalg.norm(M)   # M tiene rango 2 + diagonal: rango 3 la aproxima
+
+
+def test_psi_no_se_publica_si_el_residuo_es_ruido():
+    """Con residuo puro ruido, la línea base ψ = 0 gana la validación cruzada y no se publica ninguna pareja; con un efecto
+    propio de pareja real, se publica y recupera el signo."""
+    rng = np.random.default_rng(5)
+    S, tr, R, M, phi = _tramos_sinteticos(rng, n_jug=20, n_tramos=4000)
+    w = tr["poss"].to_numpy(float)
+    ruido = rng.normal(size=len(tr)) * np.sqrt(4.0 / w)
+    out = S.psi_parejas(tr, ruido, w, 4.0, [0.5, 1.0, 2.0, 4.0], 3, 0, 100.0)
+    assert out["kappa"] == 0.0 and out["parejas_publicadas"] == 0
+    assert min(out["error_cv"], key=out["error_cv"].get) == 0.0
+    # efecto propio grande en la pareja (j0, j1)
+    psi_real = np.array([3.0 * sum(sg for q, sg in ((a, 1.0), (b, -1.0)) if "j0" in q and "j1" in q) for a, b in zip(tr["A"], tr["B"])])
+    out2 = S.psi_parejas(tr, ruido + psi_real, w, 4.0, [0.5, 1.0, 2.0, 4.0], 3, 0, 100.0)
+    assert out2["kappa"] > 0 and out2["psi"][("j0", "j1")][0] > 1.0
