@@ -146,3 +146,47 @@ def main(cfg: dict, progreso=print) -> dict:
     if progreso:
         progreso(f"  examen F2-A: rango {mejor} · {resultado['puerta_11_2_parejas']} · {resultado['tiempo_s']} s", flush=True)
     return resultado
+
+
+def diagnostico_lambda(cfg: dict, a: int, lambdas: list[float], progreso=print) -> dict:
+    """Diagnóstico (corte de calibración): ¿hay señal de sinergia por perfiles con λ menores que el que elige la
+    verosimilitud marginal? Para cada λ, M forzada y el mismo examen de parejas nuevas en t+1."""
+    f2 = cfg["f2"]["sinergia"]
+    tr_all = RP.tramos(cfg, None, progreso=None)
+    aj = EX.ajuste_corte(cfg, a, tr_all, "gbm", progreso=None)
+    R = SG.Rasgos(aj["T"], cfg)
+    tr = tr_all[tr_all["anio"] <= a].reset_index(drop=True)
+    mu, _ = SG.mu_f1(cfg, aj, tr)
+    r = tr["y"].to_numpy(float) - mu; w = tr["poss"].to_numpy(float)
+    sigma2 = float(aj["res"]["sigma2"])
+    G, b, rr = SG.acumular(tr, R, r, w)
+    g, V = np.linalg.eigh(G); g = np.maximum(g, 0); bv = V.T @ b
+    tr1 = tr_all[tr_all["anio"] == a + 1].reset_index(drop=True)
+    mu1, _ = SG.mu_f1(cfg, aj, tr1)
+    r1 = tr1["y"].to_numpy(float) - mu1; w1 = tr1["poss"].to_numpy(float)
+    vistas = {(k[0].rsplit("|", 1)[0], k[1].rsplit("|", 1)[0]) for k in parejas_observadas(tr)}
+    par = residuo_parejas(tr1, r1, w1, vistas)
+    par = par[par["poss"] >= float(f2["min_posesiones_pareja_validacion"])].reset_index(drop=True)
+    temp_t = f"{a}-{str(a + 1)[-2:]}"
+    zi = R.de([k.rsplit("|", 1)[0] + "|" + temp_t for k in par["i"]]); zj = R.de([k.rsplit("|", 1)[0] + "|" + temp_t for k in par["j"]])
+    wpar, Rp = par["poss"].to_numpy(float), par["R"].to_numpy(float)
+    e0 = float(np.sum(wpar * Rp ** 2))
+    rng = np.random.default_rng(int(cfg["criterios"]["comunes"]["semilla_bootstrap"]))
+    out = {"corte": a, "parejas_nuevas": int(len(par)), "lambdas": {}}
+    for lam in lambdas:
+        m = V @ (bv / sigma2 / (g / sigma2 + lam))
+        M = SG.vec_a_matriz(m, R.p)
+        phi = SG.phi_pareja(M, zi, zj)
+        e1 = wpar * (Rp - phi) ** 2
+        ratios = [e1[ii].sum() / (wpar[ii] * Rp[ii] ** 2).sum() - 1 for ii in (rng.integers(0, len(par), len(par)) for _ in range(500))]
+        # error en muestra (ajuste) para ver el sobreajuste
+        e_in = 0.0
+        for idx, U in SG.rasgos_tramos(tr, R):
+            e_in += float(np.sum(w[idx] * (r[idx] - U @ m) ** 2))
+        out["lambdas"][str(lam)] = {"delta_pareja_nueva": float(e1.sum() / e0 - 1), "ic95": [float(np.quantile(ratios, 0.025)), float(np.quantile(ratios, 0.975))],
+                                    "sd_phi": float(np.std(phi)), "corr_phi_R": float(np.corrcoef(phi, Rp)[0, 1]) if np.std(phi) > 0 else 0.0,
+                                    "reduccion_en_muestra_pct": float(100 * (1 - e_in / float(np.sum(w * r ** 2))))}
+        if progreso:
+            d = out["lambdas"][str(lam)]
+            progreso(f"    λ = {lam}: en muestra −{d['reduccion_en_muestra_pct']:.3f} % · parejas nuevas Δ {d['delta_pareja_nueva']:+.4f} {np.round(d['ic95'], 4).tolist()} · sd φ {d['sd_phi']:.3f} · corr {d['corr_phi_R']:+.3f}", flush=True)
+    return out

@@ -156,10 +156,13 @@ f2:
     min_posesiones_pareja_validacion: 100             # parejas nuevas del examen con ≥ 100 posesiones juntas en t+1
   dirigidos:
     efectos: [d_cuota_tiro, d_efg, d_pct_asistidas, d_pct_aro, d_pts100]
-    modelo_candidatos: [ridge, gbm]
-    peso_por_tamano: poss_con                         # peso del par X→Y por posesiones juntos
+    modelo_candidatos: [ridge, gbm]                   # por efecto, elegido en el corte de selección
+    ridge_alpha_rejilla: [1.0, 10.0, 100.0, 1000.0]
+    gbm: {max_iter: 300, learning_rate: 0.05, max_depth: 3, min_samples_leaf: 50, l2_regularization: 1.0}
+    peso_por_tamano: n_efectivo                       # 1/(1/n_con + 1/n_sin) con la exposición de cada efecto
     min_poss_con: 100
-    renormalizar_cuotas: true                         # las cuotas de tiro del equipo suman el 100 %
+    bins_calibracion: 5                               # tramos de peso para el intervalo del 80 % (conformal, corte anterior)
+    renormalizar_cuotas: true                         # las cuotas de tiro del equipo suman el 100 % (al aplicar, F4)
   salida: data/modelos/v4_0/sinergia
 
 # ------------------------------------------------------------------------------------------- F3 · función de conjunto (CONDICIONAL)
