@@ -1,0 +1,28 @@
+{
+ "sensibilidad_referencia": {
+  "referencia_alternativa": 1,
+  "mse_ref0": 13.195805273849743,
+  "mse_ref1": 13.19253555590883,
+  "delta": -0.00024778464618546714,
+  "ic95": [
+   -0.013977102689644397,
+   0.01322129791729733
+  ],
+  "umbral": 0.005,
+  "supera": false,
+  "consecuencia": "ninguna"
+ },
+ "ablacion_latente": {
+  "mse_con": 13.195805273849743,
+  "mse_sin": 13.650816079886331,
+  "delta_sin_frente_a_con": 0.034481473210148605,
+  "ic95": [
+   -0.009183402077896216,
+   0.07936179339535135
+  ],
+  "margen": 0.005,
+  "latente_aporta": false,
+  "se_quita": false,
+  "regla": "se quita el latente si IC95,sup(MSE_sin/MSE_con − 1) < +0,5 % (no inferioridad)"
+ }
+}

@@ -630,6 +630,10 @@ def exportar(cfg: dict, progreso=print) -> dict:
         tipo = tipo or d.get("prior", {}).get("elegido")
         bloques_fuera = tuple(d.get("bloques_fuera", []))
     tipo = tipo or cfg["f1"]["prior"]["candidatos"][0]
+    pr = cfg["f1"].get("producto") or {}
+    if pr:                                             # rejillas reducidas a lo que eligió el examen (cfg local a esta función)
+        cfg = C.con(cfg, **{"f1.bayes_empirico.tau_rejilla": pr.get("tau_rejilla", cfg["f1"]["bayes_empirico"]["tau_rejilla"]),
+                            "f1.prior.ridge_alpha_rejilla": pr.get("ridge_alpha_rejilla", cfg["f1"]["prior"]["ridge_alpha_rejilla"])})
     perf = pd.concat([pd.read_csv(C.dir_salida(cfg) / "perfiles" / f"{t}.csv.gz", low_memory=False)
                       for t in sorted(tr["temporada"].unique())], ignore_index=True)
     T = tabla_prior(perf, cfg)
