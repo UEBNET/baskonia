@@ -61,12 +61,22 @@ elegible y corregir la «Zona que ocupa cada estilo» del mapa 3D. Antes de publ
 - Mapa 3D: corregida la «Zona que ocupa cada estilo» (Cholesky con valores de prueba en el triángulo superior).
 - Pruebas en verde: `tests/js/atlas_vara.js`, `mesa_vara.js`, `atlas_simulador.js`, `paridad_simulador.js`.
 
+## Puntos/100 y 200 minutos (petición del 04-11-2026)
+
+- Puntos/100: extremos inferiores recortados a 0 en Python y JS, con asterisco y nota al pie que nombra los factores
+  del caso (nivel, rol y minutos, adaptación, estilo, tipo de traspaso). Ejemplo: Pablo Gimeno (Tercera FEB) a la NBA
+  como Profundidad: 3,6 pts/100, rango 90 % 0–13,2; pesan nivel −86 frente a +15 de la NBA, 12,6' por partido,
+  adaptación 94 % y traspaso desde la Tercera FEB.
+- Pendiente de decisión: los intervalos de tapones/100, rebotes ofensivos/100 y AST% también bajan de 0 a veces (en
+  600 simulaciones de prueba: 280, 70 y 12 casos); no se han tocado.
+- «Simular equipo completo» siempre a 200' dentro de las franjas de rol (decisión: ajuste en la franja); rojo y cambio
+  de rol a mano cuando no cabe. Con una plantilla real de 15 jugadores y los roles estimados por defecto sobran 33'
+  (el cuadro sale en rojo hasta ajustar roles); con 5 titulares, 4 de rotación y 6 de profundidad cuadra en 200'.
+
 ## Lo que no cambia (para tu decisión)
 
-- «Simular equipo completo» reparte los 200' con el motor (Plackett-Luce y roles asignados), sin la mezcla GBM: la
-  mezcla es una predicción por fichaje y no suma 200' por equipo. Igual que en la versión vigente.
-- Los intervalos de pts/100 de un fichaje con producción muy baja pueden bajar de 0 (semiamplitud A4 sin recorte;
-  caso de paridad: Pablo Gimeno → NBA, [−2,8; 10,0]). Igual en Python y en la versión vigente.
+- «Simular equipo completo» reparte con el motor y las franjas de rol, sin la mezcla GBM (la mezcla es una predicción
+  por fichaje y no suma 200' por equipo).
 - Los nombres de club conservan el formato de la fuente (p. ej. «SILBÖ SAN PABLO BURGOS»): la unificación pedida era
   de jugadores.
 

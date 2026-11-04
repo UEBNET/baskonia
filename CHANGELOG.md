@@ -1,5 +1,22 @@
 # Registro de cambios
 
+## 2026-11-04 — Puntos/100 sin rangos negativos y «Simular equipo completo» siempre a 200'
+
+Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.
+
+* **Puntos/100**: los extremos inferiores de sus intervalos (50/80/90 %) se recortan a 0 (`bbfit.simulador.recorte_cero`
+  y `recorteCero` en `atlas/simulador.js`, marca `recorte_cero`); el centro no cambia, así que error y cobertura del
+  examen tampoco. Asterisco y **nota al pie** en la tarjeta del simulador y en el informe de fichaje (`notaCero`): explica
+  que el rango llegaba a 0 por una producción esperada baja con un margen de error amplio, y nombra los factores de ese
+  fichaje: nivel frente a la media de la liga de destino, rol y minutos, adaptación de primera temporada, estilo (Fit) y
+  tipo de traspaso (Tercera FEB, NCAA, NBA/G League, los de más error en el examen). Sólo puntos/100, como se pidió.
+* **«Simular equipo completo» reparte siempre 200'** (`cuadrarRoles` en `atlas/simulador.js`; la simulación de un
+  fichaje no cambia): cada jugador se mueve sólo dentro de la franja de su rol, en la misma proporción para todos,
+  hasta sumar exactamente 200'. Si ni con el mínimo de cada franja se baja de 200' (sobran) o ni con el máximo se llega
+  (faltan), el cuadro se pone **en rojo** y pide **cambiar a mano el rol de algún jugador** (o añadir jugadores). Antes,
+  los minutos de los roles se recortaban en silencio al 90 % del partido.
+* Prueba nueva: `tests/js/equipo_200.js`.
+
 ## 2026-11-04 — Atlas con liga = 0 elegible y zona de los estilos corregida · v3.3 publicada
 
 Detalle: `docs/checkpoints/ARTIFACT-v3.3.md` (§ Atlas con liga = 0). **Publicada en la URL de siempre**

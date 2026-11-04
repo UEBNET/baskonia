@@ -819,6 +819,19 @@ def _factores_v32(cfg: dict) -> dict | None:
     return _RECAL[f]
 
 
+def recorte_cero(d: dict | None) -> None:
+    """v3.3 · pts/100 no puede ser negativo: los extremos inferiores de los intervalos (semiamplitud A4 fija alrededor de
+    una producción esperada baja) se recortan a 0 y se marca `recorte_cero` para que la interfaz lo explique. El centro
+    no cambia, así que el error y la cobertura del examen no se ven afectados (un valor real nunca es negativo)."""
+    if not d:
+        return
+    for a in ("50", "80", "90"):
+        x = d.get(f"lo{a}")
+        if x is not None and float(x) < 0:
+            d[f"lo{a}"] = 0.0
+            d["recorte_cero"] = True
+
+
 def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str, fac_min: dict | None = None) -> None:
     """A4 · recalibración conforme de dos colas (factores por métrica × grupo de destino × origen, con contracción,
     ajustados con todo el examen sin fuga: bbfit.v32)."""
@@ -860,6 +873,7 @@ def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str, fac_min: di
     if c.cfg.get("v33"):
         for d in list(res["produccion_p100"].values()) + [res["minutos"]] + ([res["contribucion"]] if "contribucion" in res else []):
             orden(d)
+        recorte_cero(res["produccion_p100"].get("pts_p100"))
     if "contribucion" in res:
         esc(res["contribucion"], fac.get("C"), "media")
     res["min_pct"] = {k: (v / minutos_partido(liga_d) if isinstance(v, (int, float)) else v)

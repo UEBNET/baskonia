@@ -244,6 +244,12 @@ tr.ref td { background: var(--c4); }
 .etot b { font: 600 17px var(--f-data); }
 .etot .bar { height: 8px; }
 .etot.over .bar i { background: var(--bad); } .etot.under .bar i { background: var(--warn); } .etot.ok .bar i { background: var(--good); }
+/* v3.3 · el reparto no cuadra con los roles asignados: cuadro en rojo hasta que se cambie un rol a mano */
+.etot.mal { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 9%, var(--surface)); }
+.etot.mal .bar i { background: var(--bad); }
+.etot.mal b, .etot .malt { color: var(--bad); }
+.etot .malt { font-size: 12.5px; line-height: 1.45; }
+.etot .malt strong { font-weight: 700; }
 .erow { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 6px 8px; align-items: center; border: 1px solid var(--line); border-radius: 4px; padding: 7px 8px; background: var(--surface); }
 .erow.dim { opacity: .55; }
 .erow .who { min-width: 0; }
@@ -2083,6 +2089,24 @@ const COMP_NOM = { nivel: "Nivel", rol: "Rol", estilo: "Estilo", complementaried
 const COMP_TIP = { nivel: "Nivel traducido al destino frente al de sus compañeros (ponderado por minutos)", rol: "Rol esperado (0 = residual … 4 = go-to-guy)",
   estilo: "Cercanía entre su estilo y el del equipo (Jensen-Shannon)", complementariedad: "Cubre un hueco de estilo de la plantilla frente a los equipos de su estilo, y cambio en la entropía del reparto de uso y de la red de pases",
   adaptacion: "ADAPT% esperado frente a 100", riesgo: "Volatilidad partido a partido, incertidumbre del nivel y entropía de rol (más = más riesgo, resta)" };
+// v3.3 · nota al pie cuando el extremo inferior de puntos/100 se recorta a 0 (recorte_cero del simulador): explica por
+// qué el rango llegaba a 0 con los factores de este fichaje (nivel, rol y minutos, adaptación, estilo, tipo de traspaso)
+function notaCero(r, d = r && r.produccion_p100 && r.produccion_p100.pts_p100) {
+  if (!d || !d.recorte_cero) return "";
+  const f = [], t = "2025-26", ld = r.liga_destino, Lm = ((ESC.fam("nivel").ligas || {})[t] || {})[ld];
+  if (r.L_efectivo != null && isFinite(r.L_efectivo) && Lm != null && r.L_efectivo < Lm)
+    f.push(`<b>nivel</b>: ${ESC.txt(ESC.S("nivel", r.L_efectivo, t))} en la escala ±100, por debajo de la media de ${esc(ESC.ligaNom(ld))} (${ESC.txt(ESC.S("nivel", Lm, t))})`);
+  const mm = r.minutos && r.minutos.media, rol = r.rol_asignado;
+  if ((rol && ["RESIDUAL", "PROFUNDIDAD"].includes(rol)) || (mm != null && mm < 15))
+    f.push(`<b>rol y minutos</b>: ${rol ? esc(ROL_NOM[rol] || rol) + ", " : ""}${fmt(mm, 1)}' por partido, con pocos tiros y una muestra corta`);
+  const ad = r.adaptacion && r.adaptacion.adapt_pct_temporada && r.adaptacion.adapt_pct_temporada.media;
+  if (ad != null && ad < 97) f.push(`<b>adaptación</b>: rinde al ${fmt(ad, 0)} % de su nivel en su primera temporada en la liga`);
+  const ce = r.fit && r.fit.componentes && r.fit.componentes.estilo;
+  if (ce != null && ce < 0) f.push(`<b>estilo</b>: encaja poco con el del club (componente de estilo del Fit ${sg(ce, 2)})`);
+  const [g, o] = String(r.recalibrado_v32 || "").split("|");
+  if (o === "feb3" || o === "ncaa" || g === "nba_gleague") f.push(`<b>tipo de traspaso</b>: ${o === "feb3" ? "desde la Tercera FEB" : o === "ncaa" ? "desde la NCAA" : "hacia la NBA o la G League"}, el caso con más margen de error en el examen del simulador`);
+  return `<p class="note">* El rango de puntos/100 empieza en 0 porque nadie anota puntos negativos: el cálculo daba un extremo inferior por debajo de 0 al combinar una producción esperada baja (${fmt(d.media, 1)} pts/100) con un margen de error amplio${f.length ? `. Pesa${f.length > 1 ? "n" : ""}: ${f.join("; ")}` : ""}.</p>`;
+}
 const MET_V2 = [["pts_p100", "Puntos/100", 1], ["ts_pct", "TS%", 1], ["usg_pct", "USG%", 1], ["ast_pct", "AST%", 1], ["oreb_p100", "Reb. of./100", 1], ["dreb_p100", "Reb. def./100", 1], ["stl_p100", "Robos/100", 1], ["blk_p100", "Tapones/100", 1]];
 const PP_V2 = [["pts", "Puntos"], ["reb", "Rebotes"], ["stl", "Robos"], ["blk", "Tapones"], ["posesiones", "Posesiones en pista"]];
 function tarjetaV2(o, n, s) {
@@ -2092,7 +2116,7 @@ function tarjetaV2(o, n, s) {
   const F = r.fit, a = r.adaptacion, eq = r.equipo, e = r.estilo, t = r.temporada_destino;
   const fitTot = F.total != null ? ESC.html("z", F.total, null, { nombre: "Fit (éxito esperado)", raw: `${sg(F.total, 2)} DT del éxito`, extra: "Éxito = 0,5·z(minutos) + 0,5·z(nivel) en la liga de destino; 0 = fichaje medio" }) : "–";
   const prod = `<table class="v2t"><thead><tr><th>Por 100 posesiones</th><th>Media</th><th>50 %</th><th>90 %</th></tr></thead><tbody>` +
-    MET_V2.map(([m, nm]) => { const d = r.produccion_p100[m]; return d && d.media != null ? `<tr><td>${nm}</td><td>${fmt(d.media, 1)}</td><td class="iv">${ivTxt(d, 50)}</td><td class="iv">${ivTxt(d, 90)}</td></tr>` : ""; }).join("") + `</tbody></table>`;
+    MET_V2.map(([m, nm]) => { const d = r.produccion_p100[m], ast = d && d.recorte_cero ? "*" : ""; return d && d.media != null ? `<tr><td>${nm}${ast}</td><td>${fmt(d.media, 1)}</td><td class="iv">${ivTxt(d, 50)}${d.lo50 === 0 ? ast : ""}</td><td class="iv">${ivTxt(d, 90)}${ast}</td></tr>` : ""; }).join("") + `</tbody></table>${notaCero(r)}`;
   const pp = `<table class="v2t"><thead><tr><th>Por partido (ritmo del club)</th><th>Media</th><th>50 %</th><th>90 %</th></tr></thead><tbody>` +
     PP_V2.map(([k, nm]) => { const d = r.por_partido[k]; return d && d.media != null ? `<tr><td>${nm}</td><td>${fmt(d.media, 1)}</td><td class="iv">${ivTxt(d, 50)}</td><td class="iv">${ivTxt(d, 90)}</td></tr>` : ""; }).join("") + `</tbody></table>`;
   const comps = Object.entries(F.componentes || {}).map(([k, v]) => `<div class="fitrow" data-tip="${esc(COMP_TIP[k])}"><span>${COMP_NOM[k]}</span>${v != null ? ESC.barra(ESC.dS("z", v)) : "<span></span>"}<em>${v != null ? sg(v, 2) : "–"}</em></div>`).join("");
@@ -2553,6 +2577,8 @@ function eqEstado() {
   const mv = eqMinutosV2(jug, d);
   if (mv) jug.forEach((o, i) => { o.m = mv[i].minutos * 200 / (5 * (SIMD.meta.min_partido[mv.liga] || 40)); o.v2 = mv[i]; });
   const M = jug.reduce((s, o) => s + o.m, 0), k = M > 0 ? 200 / M : 1;
+  const cq = mv && mv.cuadre, aE = (x) => x * 200 / (5 * cq.gm);       // cuadre del motor, en la escala de 200'
+  const cuadre = cq ? { estado: cq.estado, minimo: aE(cq.minimo), maximo: aE(cq.maximo) } : null;
   jug.forEach((o) => { o.w = o.m * k; o.pos = posJ(o.j, o.modo); o.niv = nivelJ(o.j, o.modo); });
   const eq = jug.length && M > 0 ? equipoDe(jug) : null;
   if (eq) eq.euc = euComp(jug.map((o) => ({ j: o.j, w: o.w })));
@@ -2560,7 +2586,7 @@ function eqEstado() {
     o.aporte = sin ? eq.L - sin.L : null; o.mueve = sin ? dist(eq.xyz, sin.xyz) : null; o.pm = o.mueve != null ? percentil(META.referencias.club_club, o.mueve) : null;
     o.d = dist(o.pos.xyz, eq.xyz); o.pd = percentil(META.referencias.jugador_su_club, o.d); });
   const antes = d ? { p: d.probs, xyz: XYZ(d), e: d.e, L: d.nivel, X: d.X, Q: medias(d.SQ, d.WQ, d.SQ.length), euc: d.eu != null ? { eu: d.eu, eu_p: d.eu_p, eu_etiqueta: d.eu_etiqueta || euNom(d.eu), club: true } : null } : null;
-  return { d, jug, M, k, eq, antes };
+  return { d, jug, M, k, eq, antes, cuadre };
 }
 // «Simular equipo completo»: minutos por partido de cada jugador con el motor v3.3 (no se teclean)
 const EQV2 = new Map();
@@ -2643,8 +2669,16 @@ function ejemploBrutosEL() {
   return BRUTO_EJ;
 }
 function pintarEqTot(s) {
-  const M = s.M, cls = Math.abs(M - 200) < 0.5 ? "ok" : M > 200 ? "over" : "under";
+  const M = s.M, c = s.cuadre, cls = c && c.estado !== "cuadra" ? "mal" : Math.abs(M - 200) < 0.5 ? "ok" : M > 200 ? "over" : "under";
   $("#eTot").className = "etot " + cls;
+  if (c && c.estado !== "cuadra") {        // v3.3 · no cabe en 200' sin salirse de las franjas: se cambia un rol a mano
+    const sob = c.estado === "sobran";
+    $("#eTot").innerHTML = `<div class="row"><span><b>${fmt(M, 1)}'</b> <span class="note">de 200' por partido · ${sob ? "mínimo" : "máximo"} posible con estos roles</span></span><span class="pill bad">No cuadra</span></div><div class="bar"><i style="width:${Math.min(100, M / 2)}%"></i></div>` +
+      `<span class="malt" role="alert"><strong>${sob ? `Sobran ${fmt(c.minimo - 200, 1)}'` : `Faltan ${fmt(200 - c.maximo, 1)}'`}.</strong> ${sob
+        ? `Aun con cada jugador en el mínimo de su rol, el equipo suma ${fmt(c.minimo, 1)}' y un partido reparte 200'. <strong>Cambia a mano el rol de algún jugador</strong> a uno de menos minutos (por ejemplo, de Titular a Rotación o de Rotación a Profundidad) hasta que cuadre.`
+        : `Aun con cada jugador en el máximo de su rol, el equipo sólo llega a ${fmt(c.maximo, 1)}'. <strong>Cambia a mano el rol de algún jugador</strong> a uno de más minutos o añade jugadores.`} Franjas por partido de 40': Residual 1–5', Profundidad 5–15', Rotación 15–22', Titular 22–33', Go-to-guy 25–36'. Mientras no cuadre, el mapa y el nivel usan estos minutos escalados a 200' (×${fmt(s.k, 2)}).</span>`;
+    return;
+  }
   $("#eTot").innerHTML = `<div class="row"><span><b>${fmt(M, 1)}'</b> <span class="note">de 200' por partido · minutos de cada rol asignado (simulador v3.3)</span></span>${cls === "ok" ? `<span class="pill good">Cuadra</span>` : ""}</div><div class="bar"><i style="width:${Math.min(100, M / 2)}%"></i></div>` +
     (cls === "ok" || !M ? "" : `<span class="note warn">${cls === "over" ? `Sobran ${fmt(M - 200, 1)}'` : `Faltan ${fmt(200 - M, 1)}' (nadie puede pasar de 36' por partido: con tan pocos jugadores no se llega a 200')`}. Para el mapa se escalan todos a prorrata (×${fmt(s.k, 2)}).</span>`);
 }

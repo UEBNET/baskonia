@@ -288,6 +288,11 @@
     if (["nba", "gleague"].includes(lo) || ["nba", "gleague"].includes(ld)) return "nba_gleague";
     return "europa";
   }
+  // v3.3 · pts/100 no puede ser negativo: los extremos inferiores se recortan a 0 y se marca recorte_cero (= Python)
+  function recorteCero(d) {
+    if (!d) return;
+    ["50", "80", "90"].forEach((a) => { if (d["lo" + a] != null && d["lo" + a] < 0) { d["lo" + a] = 0; d.recorte_cero = true; } });
+  }
   function recalibrar(res, lo, ligaD, gm, facMin) {
     const fac = D.meta.v32.recalibracion, g = grupoDestino(lo, ligaD), o = lo === "feb3" ? "feb3" : lo === "ncaa" ? "ncaa" : "resto";
     const esc = (d, f, centro) => {
@@ -306,7 +311,7 @@
     };
     Object.entries(res.produccion_p100).forEach(([m, d]) => esc(d, fac[m], "media"));
     esc(res.minutos, facMin || fac.min, "mediana");
-    if (D.meta.v33) { Object.values(res.produccion_p100).forEach(orden); orden(res.minutos); }
+    if (D.meta.v33) { Object.values(res.produccion_p100).forEach(orden); orden(res.minutos); recorteCero(res.produccion_p100.pts_p100); }
     res.min_pct = Object.fromEntries(Object.entries(res.minutos).map(([k, v]) => [k, fin(v) ? v / gm : v]));
     res.recalibrado_v32 = `${g}|${o}`;
   }
@@ -499,6 +504,35 @@
     return out;
   }
   // Minutos endógenos de una plantilla completa (sin fichaje): «Simular equipo completo»
+  // v3.3 · «Simular equipo completo»: el reparto suma SIEMPRE los minutos del partido × 5 (200' en 40'). Cada jugador
+  // se mueve sólo dentro de la franja de su rol (sin rol: entre 0 y el tope por jugador), desde su valor de partida
+  // hacia el máximo (si faltan minutos) o hacia el mínimo (si sobran), en la misma proporción para todos:
+  //   x' = x + λ·(b − x) si Σx < total, x' = x − λ·(x − a) si Σx > total, con λ ∈ [0, 1] tal que Σx' = total.
+  // Si ni con el mínimo de cada franja se baja del total (Σa > total) o ni con el máximo se llega (Σb < total), no se
+  // fuerza: se devuelve el estado («sobran» / «faltan») para que quien simula cambie a mano el rol de algún jugador.
+  function cuadrarRoles(M, T5, fuerza, total, gm, LB) {
+    const n = M[0] ? M[0].length : 0, tope = D.meta.asignacion.max_min_partido * gm / 40, minRol = (LB && LB.min_rol) || {};
+    const a = new Array(n).fill(0), b = new Array(n).fill(tope), c = new Array(n).fill(null);
+    (fuerza || new Map()).forEach((rol, i) => { const f = franjaRol(rol); if (!f) return; a[i] = f[0] * gm; b[i] = Math.min(f[1] * gm, tope);
+      c[i] = Math.min(b[i], Math.max(a[i], num(minRol[rol], (f[0] + f[1]) / 2) * gm)); });
+    const A = a.reduce((x, y) => x + y, 0), B = b.reduce((x, y) => x + y, 0);
+    const estado = A > total + 1e-6 ? "sobran" : B < total - 1e-6 ? "faltan" : "cuadra";
+    for (let s = 0; s < M.length; s++) {
+      const fila = M[s], t5 = T5[s];
+      for (let i = 0; i < n; i++) fila[i] = Math.min(b[i], Math.max(a[i], c[i] != null ? c[i] : fila[i]));
+      if (estado === "sobran") { for (let i = 0; i < n; i++) fila[i] = a[i]; }
+      else if (estado === "faltan") { for (let i = 0; i < n; i++) fila[i] = b[i]; }
+      else { const S = fila.reduce((x, y) => x + y, 0);
+        if (S < total) { const l = (total - S) / Math.max(B - S, 1e-9); for (let i = 0; i < n; i++) fila[i] += l * (b[i] - fila[i]); }
+        else if (S > total) { const l = (S - total) / Math.max(S - A, 1e-9); for (let i = 0; i < n; i++) fila[i] -= l * (fila[i] - a[i]); } }
+      // titulares: 5 exactos; los forzados como titulares entran primero, el resto por minutos
+      const forz = [...(fuerza || new Map()).entries()].filter(([, r]) => r === "TITULAR" || r === "GO_TO_GUY").map(([i]) => i);
+      const noTit = new Set([...(fuerza || new Map()).entries()].filter(([, r]) => r !== "TITULAR" && r !== "GO_TO_GUY").map(([i]) => i));
+      const otros = fila.map((m, i) => [m, i]).filter(([, i]) => !(fuerza && fuerza.has(i))).sort((x, y) => y[0] - x[0]).map((x) => x[1]);
+      const tit = forz.slice(0, 5).concat(otros).filter((i) => !noTit.has(i)).slice(0, 5); t5.fill(false); tit.forEach((i) => (t5[i] = true));
+    }
+    return { estado, minimo: A, maximo: B, total };
+  }
   function minutosEquipo(recs, club, nSim, roles) {
     const base = club.base, ligaD = club.liga, gm = minPartido(ligaD), total = 5 * gm, rng = rngDe(crc(`${club.liga}|${club.team}|equipo`));
     const lmc = new Map((club.plantilla || []).map((x) => [x[3], x[2]]));
@@ -509,8 +543,10 @@
     const [rot, rotSd, curva] = tendencia(club), n = nSim || D.meta.n_sim;
     const { M, T5 } = asignar(P, null, P.map(() => 1), total, gm, rot, rotSd, curva, n, rng);
     // v2.1 · roles asignados por quien simula (roles: Map persona → rol)
-    if (roles) { const fz = new Map(); P.forEach((p, i) => { const r = roles.get ? roles.get(p.persona) : roles[p.persona]; if (ROLES.includes(r)) fz.set(i, r); }); forzarRoles(M, T5, fz, total, gm, ligaBase(base, ligaD), rng); }
-    return P.map((p, i) => ({ persona: p.persona, minutos: media(M.map((f) => f[i])), mediana: cuantil(M.map((f) => f[i]), 0.5), lo50: cuantil(M.map((f) => f[i]), 0.25), hi50: cuantil(M.map((f) => f[i]), 0.75), p_titular: T5.filter((t) => t[i]).length / n }));
+    const fz = new Map(); if (roles) P.forEach((p, i) => { const r = roles.get ? roles.get(p.persona) : roles[p.persona]; if (ROLES.includes(r)) fz.set(i, r); });
+    const cuadre = cuadrarRoles(M, T5, fz, total, gm, ligaBase(base, ligaD));
+    const out = P.map((p, i) => ({ persona: p.persona, minutos: media(M.map((f) => f[i])), mediana: cuantil(M.map((f) => f[i]), 0.5), lo50: cuantil(M.map((f) => f[i]), 0.25), hi50: cuantil(M.map((f) => f[i]), 0.75), p_titular: T5.filter((t) => t[i]).length / n }));
+    out.cuadre = { ...cuadre, gm }; return out;
   }
   const api = { cargar, simular, minutosEquipo, prior, grupoNac, traducir, clasificar, franjaRol, ROLES, VERSION: "v3.3", get datos() { return D; } };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else { raiz.SIM = api; raiz.SIM2 = api; }
