@@ -143,8 +143,8 @@ class PosteriorRapida:
     Con ello Var(u_i), Var(μ_c), Cov(u_i, μ_c) y Var(u_i − μ_c) salen en segundos para todas las variables."""
 
     def __init__(self, P, comps_ref: list[int] | None = None):
-        """`comps_ref`: índices (en D.comps) de las competiciones de referencia cuyas covarianzas con los latentes se
-        conservan (W S⁻¹ entero ocupa n_u × n_μ × K × 8 bytes por red: con 20 redes no cabe en memoria). None = todas."""
+        """`comps_ref`: índices GLOBALES (nPS + posición en D.comps) de las competiciones de referencia cuyas
+        covarianzas con los latentes se conservan (W S⁻¹ entero ocupa n_u × n_μ × K × 8 bytes por red: con 20 redes no cabe en memoria). None = todas."""
         self.nPS, self.n = P.nPS, P.media.shape[0]
         self.K = len(P.lu)
         self.cols = None if comps_ref is None else {int(c) - self.nPS: k for k, c in enumerate(comps_ref)}
@@ -263,7 +263,7 @@ def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso
     ref = cj[iref][1].media[:cj[iref][1].nPS]
     medias, vars_, r2s, fuente, rapidas = [], [], [], None, []
     comp_ref = f"{cfg_norm['referencia_salida']['liga']}|{cfg_norm['referencia_salida']['temporada']}"
-    refs = [D.comps.index(comp_ref)] if comp_ref in D.comps else []
+    refs = [cj[0][1].nPS + D.comps.index(comp_ref)] if comp_ref in D.comps else []     # índices globales
     t0 = time.time()
     for k, (m, P) in enumerate(cj):
         A, b, r2 = alinear(ref, P.media[:P.nPS])

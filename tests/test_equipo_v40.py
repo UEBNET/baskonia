@@ -121,6 +121,12 @@ def test_posterior_rapida_contrastes_exactos(ensemble_sintetico):
     cs = P_.nPS + np.array([0, 1, 3])
     assert np.allclose(PR.var_mu_menos_mu(cs, R), P_.var_contrastes(cs, np.full(3, R)), rtol=1e-5, atol=1e-9)
     assert np.allclose(PR.diag(), P.diag_posterior(P_, np.arange(P_.media.shape[0]), lote=500), rtol=1e-6, atol=1e-10)
+    # versión acotada a una referencia (la que usa la exportación): mismos valores para esa referencia, error para otra
+    PR2 = P.PosteriorRapida(P_, comps_ref=[R])
+    assert np.allclose(PR2.var_u_menos_mu(ips, R), exacto, rtol=1e-6, atol=1e-10)
+    assert PR2.WS[0].shape[1] == 1 and np.allclose(PR2.diag(), PR.diag())
+    with pytest.raises(KeyError):
+        PR2.var_u_menos_mu(ips, R + 1)
 
 
 def test_traducir_corte_reproduce_traducir_filas(ensemble_sintetico):
