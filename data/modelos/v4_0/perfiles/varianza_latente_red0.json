@@ -1,0 +1,34 @@
+{
+ "red": 20261029,
+ "sd_u_mediana_por_dim": [
+  0.675,
+  0.675,
+  0.675,
+  0.675
+ ],
+ "sd_mu_comp_mediana_por_dim": [
+  0.674,
+  0.674,
+  0.674,
+  0.674
+ ],
+ "sd_u_menos_mu_comp_mediana_por_dim": [
+  0.027,
+  0.041,
+  0.038,
+  0.039
+ ],
+ "dispersion_medias_u_por_dim": [
+  0.259,
+  0.137,
+  0.153,
+  0.199
+ ],
+ "dispersion_medias_u_menos_mu_comp_por_dim": [
+  0.141,
+  0.135,
+  0.134,
+  0.199
+ ],
+ "nota": "sd_u incluye la incertidumbre del nivel μ_c de la competición (común a sus jugadores); sd_u_menos_mu es la relevante dentro de una liga"
+}

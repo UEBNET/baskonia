@@ -127,6 +127,12 @@ def test_posterior_rapida_contrastes_exactos(ensemble_sintetico):
     assert PR2.WS[0].shape[1] == 1 and np.allclose(PR2.diag(), PR.diag())
     with pytest.raises(KeyError):
         PR2.var_u_menos_mu(ips, R + 1)
+    # varianza relativa a la competición principal de cada persona-temporada
+    PR3 = P.PosteriorRapida(P_, comps_ref=[R], comp_de_u=D.ps_comp_principal)
+    vr = np.stack(PR3.var_rel_u, 1)
+    for i in (0, 7, P_.nPS - 1):
+        c = P_.nPS + int(D.ps_comp_principal[i])
+        assert np.allclose(vr[i], P_.var_contrastes(np.array([i]), np.array([c]))[0], rtol=1e-6, atol=1e-10)
 
 
 def test_traducir_corte_reproduce_traducir_filas(ensemble_sintetico):
@@ -158,7 +164,9 @@ def test_latente_ensemble_sintetico(ensemble_sintetico):
     assert len(lat) == len(filas) and meta["K"] == 3 and meta["redes"] == 2
     u = lat[["u1", "u2", "u3"]].to_numpy(float)
     sd = lat[["u1_sd", "u2_sd", "u3_sd"]].to_numpy(float)
-    assert np.isfinite(u).all() and (sd > 0).all()
+    sd_rel = lat[["u1_sd_rel", "u2_sd_rel", "u3_sd_rel"]].to_numpy(float)
+    assert np.isfinite(u).all() and (sd > 0).all() and (sd_rel > 0).all() and (sd_rel <= sd + 1e-9).all()
+    assert len(meta["sd_rel_mediana_por_dim"]) == 3
     assert (lat["u_fuente"].iloc[:len(t)] == "posterior_conjunta").all()
     assert lat["u_fuente"].iloc[-2] == "codificador"
     assert lat["u_fuente"].iloc[-1] == "codificador_nivel_temporada_anterior"
@@ -189,6 +197,7 @@ def _bloques_sinteticos(cfg, temp="2024-25"):
                         "player_id": ["a1", "a2", "b1"], "min": [900.0, 400.0, 500.0],
                         "u1": [0.3, -0.1, 1.0], "u2": [0.0, 0.2, -0.4], "u3": [1, 1, 1], "u4": [0, 0, 0],
                         "u1_sd": 0.1, "u2_sd": 0.1, "u3_sd": 0.1, "u4_sd": 0.1,
+                        "u1_sd_rel": 0.02, "u2_sd_rel": 0.02, "u3_sd_rel": 0.02, "u4_sd_rel": 0.02,
                         "u_fuente": ["posterior_conjunta", "posterior_conjunta", "posterior_conjunta"],
                         "u_discrepancia_redes": [0.05, 0.9, 0.02]})
     roles = pd.DataFrame({"liga": ["lg", "lg", "lh"], "temporada": temp, "team_id": ["T1", "T1", "T9"],

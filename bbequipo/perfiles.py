@@ -142,13 +142,15 @@ class PosteriorRapida:
         Q⁻¹_uu = Q_uu⁻¹ + W S⁻¹ Wᵀ,   Q⁻¹_uμ = −W S⁻¹,   Q⁻¹_μμ = S⁻¹,   W = Q_uu⁻¹ Q_uμ,   S = Q_μμ − Q_μu W.
     Con ello Var(u_i), Var(μ_c), Cov(u_i, μ_c) y Var(u_i − μ_c) salen en segundos para todas las variables."""
 
-    def __init__(self, P, comps_ref: list[int] | None = None):
+    def __init__(self, P, comps_ref: list[int] | None = None, comp_de_u: np.ndarray | None = None):
         """`comps_ref`: índices GLOBALES (nPS + posición en D.comps) de las competiciones de referencia cuyas
-        covarianzas con los latentes se conservan (W S⁻¹ entero ocupa n_u × n_μ × K × 8 bytes por red: con 20 redes no cabe en memoria). None = todas."""
+        covarianzas con los latentes se conservan (W S⁻¹ entero ocupa n_u × n_μ × K × 8 bytes por red: con 20 redes no
+        cabe en memoria). None = todas. `comp_de_u`: competición principal (posición en D.comps) de cada persona-temporada;
+        si se da, se guarda Var(u_i − μ_{c(i)}) (`var_rel_u`), la incertidumbre del jugador DENTRO de su competición."""
         self.nPS, self.n = P.nPS, P.media.shape[0]
         self.K = len(P.lu)
         self.cols = None if comps_ref is None else {int(c) - self.nPS: k for k, c in enumerate(comps_ref)}
-        self.diag_u, self.WS, self.Sinv = [], [], []
+        self.diag_u, self.WS, self.Sinv, self.var_rel_u = [], [], [], []
         for f in P.lu:
             Q = _matriz_Q(f)
             Quu, Qum, Qmm = Q[:self.nPS, :self.nPS], Q[:self.nPS, self.nPS:], Q[self.nPS:, self.nPS:].toarray()
@@ -156,7 +158,11 @@ class PosteriorRapida:
             W = (Binv @ Qum).toarray()
             Sinv = np.linalg.inv(Qmm - Qum.T @ W)
             WS = W @ Sinv           # float64: Var(u − μ) = Var(u) + Var(μ) − 2·Cov cancela casi todo y float32 no basta
-            self.diag_u.append(np.maximum(Binv.diagonal() + np.einsum("ij,ij->i", WS, W), 0.0))
+            du = np.maximum(Binv.diagonal() + np.einsum("ij,ij->i", WS, W), 0.0)
+            self.diag_u.append(du)
+            if comp_de_u is not None:
+                c = np.asarray(comp_de_u, int)
+                self.var_rel_u.append(np.maximum(du + Sinv[c, c] + 2.0 * WS[np.arange(self.nPS), c], 0.0))
             self.WS.append(WS if self.cols is None else WS[:, sorted(self.cols, key=self.cols.get)].copy())
             self.Sinv.append(Sinv)
             del Q, Quu, Qum, Binv, W, WS
@@ -211,10 +217,13 @@ def latente_red(m, P, D, t: pd.DataFrame, cfg_norm: dict, lote: int = 1000, diag
     import torch
     from bbnorm3.datos import POSICIONES, matrices_filas
     K, n = m.K, len(t)
+    if rapida is None:
+        rapida = PosteriorRapida(P, comp_de_u=D.ps_comp_principal)
     if diag is None:
-        diag = (rapida or PosteriorRapida(P)).diag()
+        diag = rapida.diag()
     media = np.full((n, K), np.nan)
     var = np.full((n, K), np.nan)
+    var_rel = np.full((n, K), np.nan)                 # Var(u − μ_c): incertidumbre del jugador dentro de su competición
     fuente = np.full(n, "sin_latente", dtype=object)
     ps_idx = {p: i for i, p in enumerate(D.ps)}
     ps = (t["persona_id"].astype(str) + "|" + t["anio"].astype(int).astype(str)).map(ps_idx)
@@ -223,6 +232,7 @@ def latente_red(m, P, D, t: pd.DataFrame, cfg_norm: dict, lote: int = 1000, diag
         ips = ps[ok].astype(int).to_numpy()
         media[ok] = P.media[ips]
         var[ok] = diag[ips]
+        var_rel[ok] = np.stack(rapida.var_rel_u, 1)[ips] if rapida.var_rel_u else np.nan
         fuente[ok] = "posterior_conjunta"
     resto = ~ok & t["liga"].isin(D.ligas).to_numpy() & t["pos3"].isin(POSICIONES).to_numpy()
     if resto.any():
@@ -250,8 +260,9 @@ def latente_red(m, P, D, t: pd.DataFrame, cfg_norm: dict, lote: int = 1000, diag
         vmu = diag[P.nPS + comp_n]
         media[resto] = P.media[P.nPS + comp_n] + sl * rmed
         var[resto] = sl ** 2 / prec + vmu + extra[:, None]
+        var_rel[resto] = sl ** 2 / prec                # sin la incertidumbre del nivel (común a la competición)
         fuente[resto] = np.where(extra > 0, "codificador_nivel_temporada_anterior", "codificador")
-    return media, var, fuente
+    return media, var, fuente, var_rel
 
 
 def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso=print,
@@ -261,19 +272,20 @@ def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso
     L = cfg["perfil"]["latente"]
     lote, iref = int(L.get("lote_varianza", 1000)), int(L.get("red_referencia", 0))
     ref = cj[iref][1].media[:cj[iref][1].nPS]
-    medias, vars_, r2s, fuente, rapidas = [], [], [], None, []
+    medias, vars_, vrels, r2s, fuente, rapidas = [], [], [], [], None, []
     comp_ref = f"{cfg_norm['referencia_salida']['liga']}|{cfg_norm['referencia_salida']['temporada']}"
     refs = [cj[0][1].nPS + D.comps.index(comp_ref)] if comp_ref in D.comps else []     # índices globales
     t0 = time.time()
     for k, (m, P) in enumerate(cj):
         A, b, r2 = alinear(ref, P.media[:P.nPS])
-        PR = PosteriorRapida(P, comps_ref=refs)          # sólo la covarianza con la competición de referencia
+        PR = PosteriorRapida(P, comps_ref=refs, comp_de_u=D.ps_comp_principal)   # covarianza sólo con la referencia
         rapidas.append(PR)
         if liberar_lu:
             P.lu = None                                   # las factorizaciones (≈ 35 MB × K por red) ya no hacen falta
-        med, var, fu = latente_red(m, P, D, t, cfg_norm, lote, rapida=PR)
+        med, var, fu, vrel = latente_red(m, P, D, t, cfg_norm, lote, rapida=PR)
         med, var = aplicar_afin(A, b, med, var)
-        medias.append(med); vars_.append(var); r2s.append(r2)
+        vrel = aplicar_afin(A, b, med * 0, vrel)[1]
+        medias.append(med); vars_.append(var); vrels.append(vrel); r2s.append(r2)
         fuente = fu if fuente is None else fuente
         if progreso:
             progreso(f"    red {k + 1}/{len(cj)}: R² alineamiento {np.round(r2, 3).tolist()} · {time.time() - t0:.0f} s",
@@ -284,10 +296,13 @@ def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso
     dentro = np.nanmean(V, 0)
     entre = np.nanvar(M, 0)
     sd = np.sqrt(dentro + entre)
+    sd_rel = np.sqrt(np.nanmean(np.stack(vrels), 0) + entre)
     K = u.shape[1]
     out = pd.DataFrame({f"u{k + 1}": u[:, k] for k in range(K)}, index=t.index)
     for k in range(K):
         out[f"u{k + 1}_sd"] = sd[:, k]
+    for k in range(K):
+        out[f"u{k + 1}_sd_rel"] = sd_rel[:, k]       # DT de u − μ_c: la relevante para comparar dentro de una liga
     out["u_fuente"] = fuente
     out["u_discrepancia_redes"] = np.sqrt(entre).mean(1)
     r2 = np.array(r2s)
@@ -299,7 +314,10 @@ def latente_ensemble(D, cj, t: pd.DataFrame, cfg: dict, cfg_norm: dict, progreso
             if len(cj) > 1 else None,
             "redes_con_r2_bajo": [k for k in range(len(cj)) if k != iref and float(r2[k].mean()) < float(L["r2_minimo_aviso"])],
             "fuentes": {k: int((fuente == k).sum()) for k in FUENTES_LATENTE},
-            "discrepancia_redes_mediana": float(np.nanmedian(out["u_discrepancia_redes"]))}
+            "discrepancia_redes_mediana": float(np.nanmedian(out["u_discrepancia_redes"])),
+            "sd_mediana_por_dim": [float(np.nanmedian(sd[:, k])) for k in range(K)],
+            "sd_rel_mediana_por_dim": [float(np.nanmedian(sd_rel[:, k])) for k in range(K)],
+            "dispersion_medias_por_dim": [float(np.nanstd(u[:, k])) for k in range(K)]}
     meta["_rapidas"] = rapidas          # posteriores rápidas (no se serializan): las reutiliza theta_corte
     return out, meta
 
@@ -515,7 +533,8 @@ def perfil_temporada(temp: str, lat: pd.DataFrame | None, cfg: dict, theta: pd.D
     base["tramo_edad"] = _tramo_edad(pd.to_numeric(base["edad"], errors="coerce"))
     # latente
     K = int(cfg["perfil"]["latente"]["K"])
-    ucols = [f"u{k + 1}" for k in range(K)] + [f"u{k + 1}_sd" for k in range(K)] + ["u_fuente", "u_discrepancia_redes"]
+    ucols = [f"u{k + 1}" for k in range(K)] + [f"u{k + 1}_sd" for k in range(K)] + [f"u{k + 1}_sd_rel" for k in range(K)] \
+        + ["u_fuente", "u_discrepancia_redes"]
     if lat is not None and len(lat):
         l = lat[lat["temporada"] == temp].copy()
         l["persona_norm"] = l["persona_norm"].astype(str)
