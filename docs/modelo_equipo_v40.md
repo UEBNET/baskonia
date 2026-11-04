@@ -224,7 +224,36 @@ d_k(X → Y) = m_k(z_X, z_Y) + ε,   k ∈ {cuota de tiro, eFG%, % asistidas, % 
 `sinergia/W_sinergia.json` (M_r, medias y DT de los rasgos, fórmula) y `sinergia/psi.csv.gz` para el término de sinergia;
 `dirigidos/modelos.pkl` para los efectos sobre compañeros. Ambos operan sobre β de F1 congelados.
 
-## 4. F3 … F5
+## 4. F3 · Función de conjunto (capa 3, condicional)
 
-Pendientes de la orden del CEO para cada fase. Los hiperparámetros, las salidas y los criterios prerregistrados de todas
-ellas están ya en `configs/equipo_v40.yaml` (`f3`, `f4` con `a5`, `f5` y `criterios`).
+Orden del CEO: 04-11-2026, tras aprobar la puerta de la F2 («opción (a)»: ejecutar F3 como examen acotado con la regla dura
+§11.3). Código: `bbequipo/conjunto.py`. Checkpoint: `docs/checkpoints/V40_F3.md`. Salidas: `data/modelos/v4_0/conjunto/`.
+
+### 4.1 Modelo
+
+```
+y_s = [F1] + [F2: Σφ_A − Σφ_B] + g(S_A) − g(S_B) + ε_s,      g(S) = ρ( Σ_{i∈S} ϕ(z_i) )
+```
+
+- z_i: los 44 rasgos estandarizados del perfil (los de F2; sin perfil → 0). β de F1 y M_r de F2 congelados: F3 aprende el
+  residuo del quinteto completo.
+- Deep sets: ϕ (44 → 16 → 16) por jugador, suma sobre los cinco (invariante a permutaciones), ρ (16 → 16 → 1). 1.300
+  parámetros; AdamW con decaimiento de pesos 0,01, 2.000 pasos de 8.192 tramos, pérdida cuadrática ponderada por
+  posesiones; 5 semillas promediadas (la red individual es inestable: en el corte 2024 dos de cinco empeoran por separado).
+- Examen §11.3 (`conjunto.examen_corte`): quintetos no vistos de t+1 (conjunto de cinco personas ausente de los tramos ≤ t;
+  son el 99 % de los tramos de t+1), perfiles de la temporada t; cociente RMSE(F1+F2+F3)/RMSE(F1+F2) con IC95 por bootstrap
+  de partidos; se publica sólo si el IC95 superior < 1 en los tres cortes de decisión.
+- Resultado: pasa en los tres cortes (cocientes 0,99926 / 0,99933 / 0,99951, IC95 superiores < 0,9997). Reducción del RMSE
+  por tramo 0,05–0,07 %; g tiene una señal común de ≈ 2,8 pts/100 en la diferencia entre dos quintetos (DT total 3–4, de la
+  que 1,6–3,1 es desacuerdo entre semillas), calibrada. Ablación con ρ lineal (g aditiva por jugador) y diagnóstico de qué
+  agregados del quinteto explican g: ver el checkpoint.
+
+### 4.2 Qué se lleva la capa 4
+
+`conjunto/redes.pkl` (estado de las cinco redes y los rasgos) y `conjunto/F3_conjunto.json`; `ConjuntoNet.cargar` y
+`predecir` devuelven g(S_A) − g(S_B) para cualquier par de quintetos con perfiles (sin perfil → z = 0).
+
+## 5. F4 … F5
+
+Pendientes de la orden del CEO para cada fase. Los hiperparámetros, las salidas y los criterios prerregistrados están ya en
+`configs/equipo_v40.yaml` (`f4` con `a5`, `f5` y `criterios`).

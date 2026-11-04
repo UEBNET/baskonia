@@ -1852,6 +1852,18 @@ Detalle en `docs/checkpoints/V40_F2.md`. Todo opera sobre el residuo de F1 (β c
 | `dirigidos/efectos_<temporada>.csv.gz` | `liga, temporada, team_id, persona_x, persona_y, poss_con, poss_sin` y por efecto publicado `<k>_real, <k>_pred, <k>_lo80, <k>_hi80` (X → Y: cambio en la métrica de Y con X en pista) |
 | `dirigidos/examen/resumen_examen_f2b.json` | examen §11.2 de los cinco efectos por corte y decisión de publicación |
 
+### CERNO v4.0 · F3: función de conjunto (`v4_0/conjunto/`)
+
+Detalle en `docs/checkpoints/V40_F3.md`. Sobre el residuo de F1 + F2 (β y M_r congelados).
+
+| Fichero | Contenido |
+|---|---|
+| `examen/resumen_examen_f3.json` | por corte: RMSE en muestra, tramos de t+1, fracción de quintetos no vistos, DT de g y entre semillas, cocientes e IC95 por subconjunto (quinteto no visto, ambos no vistos, todos), RMSE por semilla; `puerta_11_3` y `decisiones` |
+| `examen/red_corte_<t>.pkl` | estado de las cinco redes del corte t (para reproducir el examen o diagnosticar g) |
+| `examen/ablacion_aditiva_f3.json` | misma red con ρ lineal (g aditiva por jugador) frente a la completa, por corte |
+| `examen/diagnostico_g_<t>.json` | correlaciones de g con agregados del quinteto (suma y máximo de cada rasgo, nº sin perfil) y R² de un ridge sobre ellos |
+| `redes.pkl`, `F3_conjunto.json` | producto (sólo si pasa §11.3): estado de las redes, rasgos (columnas, media, DT), fórmula; o `publicado: false` con el motivo |
+
 ## 4. Banderas frecuentes
 
 | Bandera | Dónde | Significado |
