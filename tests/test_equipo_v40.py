@@ -410,3 +410,34 @@ def test_psi_no_se_publica_si_el_residuo_es_ruido():
     psi_real = np.array([3.0 * sum(sg for q, sg in ((a, 1.0), (b, -1.0)) if "j0" in q and "j1" in q) for a, b in zip(tr["A"], tr["B"])])
     out2 = S.psi_parejas(tr, ruido + psi_real, w, 4.0, [0.5, 1.0, 2.0, 4.0], 3, 0, 100.0)
     assert out2["kappa"] > 0 and out2["psi"][("j0", "j1")][0] > 1.0
+
+
+# ---------------------------------------------------------------------------------------------- F3 · función de conjunto
+def test_conjunto_aprende_una_funcion_no_aditiva_del_quinteto():
+    """y = g(S_A) − g(S_B) + ruido con g no aditiva (cuadrado de la suma de un rasgo): la red deep sets reduce el RMSE
+    fuera de muestra frente a 0 y frente a una red sin entrenar; con residuo puro ruido no inventa estructura."""
+    from bbequipo import conjunto as CJ
+    rng = np.random.default_rng(11)
+    n_jug, p, n = 80, 6, 12000
+    Z = rng.normal(size=(n_jug, p))
+    idx = np.array([rng.choice(n_jug, 10, replace=False) for _ in range(n)])
+    g = lambda q: 0.6 * (Z[q, 0].sum(-1) ** 2 - 5) + Z[q, 1].sum(-1) * Z[q, 2].sum(-1) / 3
+    y = g(idx[:, :5]) - g(idx[:, 5:]) + rng.normal(size=n) * 1.0
+    w = np.ones(n)
+    cfg = {"f3": {"oculta_phi": 16, "oculta_rho": 16, "decaimiento_pesos": 1e-3, "semillas": 2, "pasos": 1500, "lote": 1024, "lr": 3e-3}}
+    red = CJ.ConjuntoNet(Z, cfg)
+    tr, te = np.arange(0, 9000), np.arange(9000, n)
+    red.ajustar(idx[tr], y[tr], w[tr], 0)
+    pred = red.predecir(idx[te])
+    rmse0, rmse1 = np.sqrt(np.mean(y[te] ** 2)), np.sqrt(np.mean((y[te] - pred) ** 2))
+    assert rmse1 < 0.7 * rmse0, (rmse0, rmse1)
+    assert np.corrcoef(pred, y[te])[0, 1] > 0.7
+    # sin perfil → índice extra → fila 0 → g constante: la diferencia A−B de dos quintetos sin perfil es 0
+    sin = np.full((3, 10), n_jug)
+    assert np.allclose(red.predecir(sin), 0.0, atol=1e-6)
+    # ruido puro: la red muy regularizada no debe empeorar fuera de muestra de forma apreciable
+    ruido = rng.normal(size=n)
+    red2 = CJ.ConjuntoNet(Z, {"f3": {**cfg["f3"], "decaimiento_pesos": 1e-2}})
+    red2.ajustar(idx[tr], ruido[tr], w[tr], 0)
+    pr2 = red2.predecir(idx[te])
+    assert np.sqrt(np.mean((ruido[te] - pr2) ** 2)) < 1.03 * np.sqrt(np.mean(ruido[te] ** 2))

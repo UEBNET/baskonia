@@ -33,6 +33,9 @@ def main(argv=None):
     sub.add_parser("dirigidos-examen", help="F2-B: examen de los efectos dirigidos X→Y (§11.2)")
     sub.add_parser("sinergia-producto", help="F2-A: ajuste con todas las temporadas → data/modelos/v4_0/sinergia/")
     sub.add_parser("dirigidos-producto", help="F2-B: efectos publicados con todas las temporadas → sinergia/dirigidos/")
+    sub.add_parser("conjunto-examen", help="F3: examen §11.3 de la función de conjunto en quintetos no vistos (puerta dura)")
+    sub.add_parser("conjunto-producto", help="F3: ajuste con todas las temporadas, sólo si el examen lo autoriza")
+    sub.add_parser("conjunto-ablacion", help="F3: ablación diagnóstica con ρ lineal (g aditiva por jugador)")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -82,6 +85,15 @@ def main(argv=None):
     elif a.orden == "dirigidos-producto":
         from . import dirigidos
         dirigidos.exportar(cfg)
+    elif a.orden == "conjunto-examen":
+        from . import conjunto
+        conjunto.main(cfg)
+    elif a.orden == "conjunto-producto":
+        from . import conjunto
+        conjunto.exportar(cfg)
+    elif a.orden == "conjunto-ablacion":
+        from . import conjunto
+        conjunto.ablacion_aditiva(cfg)
     print(json.dumps({"tiempo_s": round(time.time() - t0)}))
 
 

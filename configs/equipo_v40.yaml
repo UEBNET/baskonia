@@ -172,8 +172,13 @@ f3:
   oculta_phi: 16
   oculta_rho: 16
   decaimiento_pesos: 1.0e-2
-  semillas: 5
-  pasos: 2000
+  semillas: 5                                       # promedio de 5 redes (semillas distintas)
+  pasos: 2000                                       # pasos de AdamW por semilla
+  lote: 8192                                        # tramos por paso
+  lr: 1.0e-3
+  congelar_f1_f2: true                              # sobre F1 + F2 (β, M_r): F3 aprende el residuo del quinteto completo
+  quinteto_no_visto: conjunto_de_personas           # quinteto de t+1 cuyo conjunto de 5 personas no aparece en ningún tramo ≤ t
+  bootstrap_por: partido                            # IC95 del cociente de RMSE por bootstrap de partidos de t+1
   publicar_solo_si_mejora: true                       # regla dura (§11.3); si no, ablación negativa al artículo
   salida: data/modelos/v4_0/conjunto
 
