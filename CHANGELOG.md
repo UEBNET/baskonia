@@ -1,5 +1,23 @@
 # Registro de cambios
 
+## 2026-11-04 — PDF con «su liga = 0»: informe de fichaje y artículo científico
+
+Decisiones del usuario (04-11-2026): actualizar los dos PDF; percentiles del informe frente a la liga de destino.
+
+* **Informe de fichaje (PDF)**: percentiles y textos frente a los jugadores de su posición en la **liga del club de
+  destino** (sin destino, la suya), con sus cifras traducidas a esa liga (`enVara`) o, en su propia liga, su valor real.
+  `bbestilo/informe.py` exporta en `atlas/informe/<t>.json → ligas` 21 cuantiles por liga y posición (300+ minutos) y
+  el ritmo de cada liga, y los extremos del intervalo (3 cifras); ya no exporta percentiles frente a la Euroliga (los
+  calcula la página: `enLigaR` en `informe_v3.js`). Textos: «frente a los aleros de la Liga Endesa», «Qué produce por
+  cada 25 minutos en la Tercera FEB»… Siguen con la Euroliga, rotulados, la química (pareja/quinteto medio) y la tabla
+  que compara ligas. Grupos de menos de 15 jugadores de su posición: todas las posiciones; métricas sin normalizar
+  (PIE, STOP%…): frente a su propia liga.
+* **Artículo científico** (`docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf`, 21 páginas): sección nueva «Lectura en
+  la herramienta» (su liga = 0 por vista, club medio, informe, recortes a 0, equipo a 200'); el resumen y la vara de
+  destino dejan de hablar de «EuroLeague = 0» salvo en el gráfico que compara ligas, rotulado así; límite nuevo sobre
+  los percentiles por liga.
+* `bbestilo/informe.py` lee también las tablas compactadas (formato por columnas). Prueba: `tests/js/informe_liga.js`.
+
 ## 2026-11-04 — Equipos y quintetos con su propia liga = 0 y clubes frente al club medio
 
 Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.

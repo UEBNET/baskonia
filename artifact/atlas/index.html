@@ -2134,6 +2134,9 @@ const COMP_TIP = { nivel: "Nivel traducido al destino frente al de sus compañer
 // v3.3 · nota al pie cuando el extremo inferior de puntos/100, tapones/100, rebotes ofensivos/100 o AST% se recorta a 0
 // (recorte_cero del simulador): explica por qué el rango llegaba a 0 con los factores de este fichaje (nivel frente a la
 // liga de destino, rol y minutos, adaptación, estilo, tipo de traspaso)
+// grupo de referencia del informe de fichaje (lo fija informe_v3.js: liga del club de destino o la del jugador)
+let IF_POOL = "euroleague";
+const IFPN = () => (IF_POOL === "euroleague" ? "la Euroliga" : "la " + ESC.ligaNom(IF_POOL)), IFPL = () => (IF_POOL === "euroleague" ? "Euroliga" : ESC.ligaNom(IF_POOL));
 const RECORTE_NOM = { pts_p100: ["puntos/100", "pts/100"], blk_p100: ["tapones/100", "tapones/100"], oreb_p100: ["rebotes ofensivos/100", "reb. of./100"], ast_pct: ["AST%", "AST%"] };
 function notaCero(r) {
   const P = (r && r.produccion_p100) || {}, ms = Object.keys(RECORTE_NOM).filter((m) => P[m] && P[m].recorte_cero);
@@ -3417,7 +3420,7 @@ const IF_POS1 = { E: "exterior", A: "alero", I: "interior" }, IF_POSN = { E: "ex
 // métricas: n nombre, u unidad, dec decimales, dir 1 más es mejor · −1 menos es mejor · 0 rasgo de estilo (ni mejor ni peor),
 // raw 1 = sin normalizar (valor en su liga, percentil frente a los valores brutos de la Euroliga)
 const IFM = {
-  L: { n: "Nivel Cerno", dir: 1, d: "Valoración global del jugador en la vara Euroliga (0 = jugador medio de la Euroliga)." },
+  L: { n: "Nivel Cerno", dir: 1, d: "Valoración global del jugador en la escala ±100 de la liga de referencia del informe (su liga = 0: la del club de destino o la suya)." },
   rapm: { n: "RAPM-EL", u: " pts", dec: 1, sg: 1, d: "Puntos por 100 posesiones que suma a su equipo en pista, descontando compañeros y rivales.", bien: "su equipo es claramente mejor con él en pista", mal: "su equipo no mejora con él en pista" },
   orapm: { n: "RAPM ofensivo", u: " pts", dec: 1, sg: 1, d: "La parte de ese impacto que llega en ataque.", bien: "mejora el ataque de su equipo", mal: "no mejora el ataque de su equipo" },
   drapm: { n: "RAPM defensivo", u: " pts", dec: 1, sg: 1, d: "La parte que llega en defensa (positivo = su equipo defiende mejor).", bien: "su equipo defiende mejor con él", mal: "su equipo defiende peor con él" },
@@ -3582,7 +3585,7 @@ function ifCampo(R, pos, b) {
     pct_media: `M ${X(-6.6)} ${Y(0)} L ${X(-6.6)} ${Y(yc)} A ${6.75 * 26} ${6.75 * 26} 0 0 0 ${X(6.6)} ${Y(yc)} L ${X(6.6)} ${Y(0)} Z ${circ(3)}`,
     pct_corta: `${circ(3)} ${circ(1.25)}`, pct_aro: circ(1.25) };
   const lab = (k, x, y, px) => { const o = z[k]; if (o.v == null) return ""; const fg = fz(fgz[k]), cx = px != null ? px : X(x);
-    return `<g class="zl"><text x="${cx}" y="${Y(y) - 14}" class="zn">${k === "pct_t3_esquina" ? "Esquina" : k === "pct_media" ? "Media" : IFM[k].n}</text><text x="${cx}" y="${Y(y)}" class="zv">${ifN(o.v, 0)}%</text><text x="${cx}" y="${Y(y) + 14}" class="zm">Euroliga ${ifN(o.med, 0)}%</text>${fg != null ? `<text x="${cx}" y="${Y(y) + 27}" class="zf">acierto ${ifN(fg, 0)}%</text>` : ""}</g>`; };
+    return `<g class="zl"><text x="${cx}" y="${Y(y) - 14}" class="zn">${k === "pct_t3_esquina" ? "Esquina" : k === "pct_media" ? "Media" : IFM[k].n}</text><text x="${cx}" y="${Y(y)}" class="zv">${ifN(o.v, 0)}%</text><text x="${cx}" y="${Y(y) + 14}" class="zm">${esc(IFPL())} ${ifN(o.med, 0)}%</text>${fg != null ? `<text x="${cx}" y="${Y(y) + 27}" class="zf">acierto ${ifN(fg, 0)}%</text>` : ""}</g>`; };
   const svg = `<svg viewBox="0 0 520 288" class="ifcourt" role="img" aria-label="Reparto de tiros por zona"><defs><clipPath id="ifclip"><rect x="${X(-7.5)}" y="${Y(0)}" width="${15 * 26}" height="${H * 26}"/></clipPath></defs>
     <g clip-path="url(#ifclip)">${Object.entries(paths).map(([k, d]) => `<path d="${d}" fill="${fill(z[k])}" fill-rule="evenodd" stroke="#F3F0E8" stroke-width="2"/>`).join("")}
     <path d="M ${X(-2.45)} ${Y(0)} L ${X(-2.45)} ${Y(5.8)} L ${X(2.45)} ${Y(5.8)} L ${X(2.45)} ${Y(0)}" fill="none" stroke="rgba(18,22,27,.18)" stroke-width="1"/>
@@ -3592,7 +3595,7 @@ function ifCampo(R, pos, b) {
     <path d="M ${X(-7.5) - 4} ${Y(1.5)} L ${X(-7.5) - 12} ${Y(1.5)}" stroke="rgba(18,22,27,.35)"/>${lab("pct_aro", 0, 2.66)}${lab("pct_corta", -2.15, 3.85)}${lab("pct_media", 4.3, 3.2)}${lab("pct_t3_esquina", 0, 1.6, 32)}${lab("pct_t3_frontal", 0, 8.3)}</svg>`;
   const top = zv.filter((o) => o.v != null).sort((a, b) => b.v - a.v)[0];
   const mas = zv.filter((o) => o.p != null && o.p >= 75).map((o) => IFM[o.k].n.toLowerCase()), menos = zv.filter((o) => o.p != null && o.p <= 25).map((o) => IFM[o.k].n.toLowerCase());
-  const txt = top ? `De cada 10 tiros, ${ifN(top.v / 10, 0)} los hace desde ${top.k === "pct_aro" ? "el aro" : top.k === "pct_corta" ? "cerca del aro" : top.k === "pct_media" ? "media distancia" : top.k === "pct_t3_esquina" ? "el triple de esquina" : "el triple frontal"}.${mas.length ? ` Tira más que la mayoría de ${IF_POSN[pos]} de la Euroliga desde: ${mas.join(", ")}.` : ""}${menos.length ? ` Menos que la mayoría desde: ${menos.join(", ")}.` : ""}` : "";
+  const txt = top ? `De cada 10 tiros, ${ifN(top.v / 10, 0)} los hace desde ${top.k === "pct_aro" ? "el aro" : top.k === "pct_corta" ? "cerca del aro" : top.k === "pct_media" ? "media distancia" : top.k === "pct_t3_esquina" ? "el triple de esquina" : "el triple frontal"}.${mas.length ? ` Tira más que la mayoría de ${IF_POSN[pos]} de ${IFPN()} desde: ${mas.join(", ")}.` : ""}${menos.length ? ` Menos que la mayoría desde: ${menos.join(", ")}.` : ""}` : "";
   return { svg, txt, nba };
 }
 // --------------------------------------------------------------------------------------------- simulación
@@ -3635,14 +3638,14 @@ function ifNecesidades(d, R) {
     return { n, e, p, det, estilo, v }; });
 }
 // --------------------------------------------------------------------------------------------- texto
-function ifEtiqueta(p) { return p == null ? "sin referencia en la Euroliga" : p >= 85 ? "de los mejores de la Euroliga en su puesto" : p >= 60 ? "con nivel de titular en la Euroliga" : p >= 35 ? "con nivel de rotación en la Euroliga" : p >= 15 ? "de fondo de armario en la Euroliga" : "por debajo del nivel habitual de la Euroliga"; }
+function ifEtiqueta(p) { const L = IFPN(); return p == null ? `sin referencia en ${L}` : p >= 85 ? `de los mejores de ${L} en su puesto` : p >= 60 ? `con nivel de titular en ${L}` : p >= 35 ? `con nivel de rotación en ${L}` : p >= 15 ? `de fondo de armario en ${L}` : `por debajo del nivel habitual de ${L}`; }
 function ifRasgos(R) {
   const L = Object.keys(R.m).filter((k) => IFM[k] && (IFM[k].dir ?? 1) !== 0 && IFM[k].bien && R.m[k][2] != null && !["oreb_p100", "dreb_p100", "stl_p100", "blk_p100", "efg_pct", "orapm", "drapm"].includes(k)).map((k) => ({ k, op: ifOp(k, R.m[k][2]) }));
   const top = L.filter((o) => o.op >= 70).sort((a, b) => b.op - a.op).slice(0, 4), bot = L.filter((o) => o.op <= 30).sort((a, b) => a.op - b.op).slice(0, 4);
   return { top, bot };
 }
 function ifFraseRasgo(o, R, pos, bien) { const s = IFM[o.k], m = R.m[o.k], v = s.raw ? m[1] : m[0];
-  return `<li><b>${esc(s[bien ? "bien" : "mal"].charAt(0).toUpperCase() + s[bien ? "bien" : "mal"].slice(1))}</b><span>${esc(s.n)} ${ifV(o.k, v)} · ${bien ? "mejor" : "peor"} que el ${Math.round(bien ? o.op : 100 - o.op)} % de los ${IF_POSN[pos]} de la Euroliga</span></li>`; }
+  return `<li><b>${esc(s[bien ? "bien" : "mal"].charAt(0).toUpperCase() + s[bien ? "bien" : "mal"].slice(1))}</b><span>${esc(s.n)} ${ifV(o.k, v)} · ${bien ? "mejor" : "peor"} que el ${Math.round(bien ? o.op : 100 - o.op)} % de los ${IF_POSN[pos]} de ${IFPN()}</span></li>`; }
 function ifEsperado(R, ritmo, min = 25, P = null) {
   const g = (k) => R.m[k] ? R.m[k][0] : null, pos = ritmo * min / 40, pr = (k) => P && P.out[k] && P.out[k].y != null ? P.out[k].y : g(k);
   const pts = pr("pts_p100"), reb = (g("oreb_p100") ?? 0) + (g("dreb_p100") ?? 0), b = R.b || {};
