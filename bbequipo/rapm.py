@@ -619,6 +619,15 @@ def ligas_jugador(tr: pd.DataFrame) -> pd.DataFrame:
 
 
 # =============================================================================================== producto
+def huella_ajuste(cfg: dict) -> str:
+    """Huella de lo que cambia un ajuste (modelo, prior, bayes empírico, contrato): no de producto, f1d, D2 ni salidas."""
+    sub = {"f1": {k: v for k, v in cfg["f1"].items() if k in ("modelo", "unidad", "intercepto_liga_temporada", "localia", "clutch",
+                                                             "fase_playoffs", "prior", "bayes_empirico", "descomposicion_od",
+                                                             "min_posesiones_jugador", "mascara_rasgos")},
+           "contrato": cfg["contrato"]}
+    return C.huella(sub, ("f1", "contrato"))
+
+
 def exportar(cfg: dict, progreso=print) -> dict:
     """Ajuste con todas las temporadas incluidas (producto): β por persona-temporada (net y O/D) y el prior g."""
     from bbfit.registro import experimento
@@ -645,7 +654,7 @@ def exportar(cfg: dict, progreso=print) -> dict:
             if progreso:
                 progreso(f"  ajuste {comp}: diseño…", flush=True)
             D = construir_diseno(tr, comp)
-            cache = C.RAIZ / "experimentos" / "v4_0" / f"producto_f1_{comp}_{tipo}_{C.huella(cfg, ('f1', 'contrato'))}.pkl"
+            cache = C.RAIZ / "experimentos" / "v4_0" / f"producto_f1_{comp}_{tipo}_{huella_ajuste(cfg)}.pkl"
             if cache.exists():                         # reanudable: el ajuste de cada componente se guarda al terminar
                 r = pickle.loads(cache.read_bytes())
                 if progreso:

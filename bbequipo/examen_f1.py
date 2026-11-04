@@ -60,11 +60,7 @@ def ajuste_corte(cfg: dict, a: int, tr_all: pd.DataFrame, tipo_prior: str, bloqu
     (reanudable: un examen interrumpido no repite los ajustes ya hechos)."""
     import pickle
     tr = tr_all[tr_all["anio"] <= a].reset_index(drop=True)
-    sub = {"f1": {k: v for k, v in cfg["f1"].items() if k in ("modelo", "unidad", "intercepto_liga_temporada", "localia", "clutch",
-                                                             "fase_playoffs", "prior", "bayes_empirico", "descomposicion_od",
-                                                             "min_posesiones_jugador", "mascara_rasgos")},
-           "contrato": cfg["contrato"]}                      # sólo lo que cambia el ajuste de un corte (no producto, f1d, d2, salidas)
-    huella = C.huella(sub, ("f1", "contrato")) + ("_" + "-".join(bloques_fuera) if bloques_fuera else "")
+    huella = RP.huella_ajuste(cfg) + ("_" + "-".join(bloques_fuera) if bloques_fuera else "")   # sólo lo que cambia el ajuste
     cache = C.RAIZ / "experimentos" / "v4_0" / f"ajuste_f1_{a}_{tipo_prior}_{huella}.pkl"
     if T is None:
         T = RP.tabla_prior(perfiles_corte(cfg, a), cfg)
