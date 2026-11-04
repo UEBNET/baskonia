@@ -1,0 +1,252 @@
+# CERNO v4.0 · modelo de equipo y métricas ancla (ENCARGO v4.0, revisión 1.2 del 04-11-2026).
+# CERNO v4.0 = normalización v3.2 + simulador v3.3 + modelo de equipo (capas 1-4) + métricas ancla (capa 5).
+# Todo hiperparámetro de F0–F5 y A5 vive AQUÍ; el código no fija ninguno. Los criterios del §11 están prerregistrados
+# (congelados antes de ver resultados) en la sección `criterios`. Nada de v3_1*, v3_2, v3_3 ni simulador/v2|v3* se toca.
+# Fases: F0 preparación · F1 RAPM multiliga con prior del perfil (+F1-D) · F2 sinergia y efectos dirigidos ·
+#        F3 función de conjunto (condicional) · F4 composición y Δ de equipo (+A5) · F5 anclas NIVEL CERNO e IMPACTO.
+version: "v4.0"
+salida: data/modelos/v4_0
+mlflow: equipo_v40                       # experimento MLflow (experimentos/mlruns, no versionado; bbfit.registro)
+semilla: 20261104                        # semilla general (bootstrap, Monte Carlo); cada fase puede derivar las suyas
+checkpoints: docs/checkpoints            # V40_F<k>.md
+
+# ------------------------------------------------------------------------------------------- insumos cerrados (v3.2/v3.3)
+insumos:
+  normalizacion: configs/normalization_v32.yaml       # configuración FINAL de la v3.2 (K = 4 tras la ablación B1)
+  destino: data/modelos/v3_2/destino                  # capacidad θ/v_j, constantes, covarianza del nivel por par
+  normalizado: data/modelos/v3_2/normalizado          # dataset normalizado v3.2 (identidad y valores observados)
+  simulador: configs/simulation_v33.yaml              # CERNO_SIMULADOR=v33: minutos mezcla motor+GBM y B9
+  simulador_env: v33
+  roles: data/modelos/roles/player_role_season.csv.gz
+  estilos: data/modelos/estilos_unificados/jugadores.csv.gz
+  estilos_catalogo: data/modelos/estilos_unificados/estilos.json
+  pista: data/modelos/pista                           # RAPM/ORAPM/DRAPM por jugador-equipo-temporada (contraste F1)
+  interacciones: data/modelos/interacciones           # efectos dirigidos X→Y (F2-B)
+  quintetos: data/processed/{temporada}/quintetos     # tramos.csv.gz, parejas.csv.gz, equipos.csv, validacion.csv
+  crosswalk: data/processed/player_id_crosswalk.csv   # persona_id (identidades corregidas del 03-11-2026)
+  tabla_cache: experimentos/v3/tabla_v32.pkl          # tabla jugador-liga-temporada de bbmodel.modelo.preparar()
+  redes_cache: experimentos/v3                        # redes CVAE por corte (no versionadas; se reentrenan si faltan)
+
+# ------------------------------------------------------------------------------------------- F0 · perfil ampliado x̃
+perfil:
+  grano: jugador-liga-temporada                       # una fila por (liga, temporada, player_id); persona_id cruza ligas
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26", "2026-27"]
+  cortes: [2021, 2022, 2023, 2024]                    # exámenes sin fuga: perfiles de las temporadas ≤ t con el ajuste ≤ t
+  latente:
+    K: 4                                              # configuración final de la v3.2 (ablación B1: K = 8 se quitó)
+    redes: 20                                         # B5: las 20 semillas de normalization_v32.yaml
+    # El espacio latente de cada red es arbitrario (identificado sólo hasta una transformación afín, que el
+    # decodificador absorbe): para promediar el ensemble, cada red se alinea por mínimos cuadrados (afín, K×K + b)
+    # con la red de referencia sobre las personas-temporada del ajuste; se publica el R² del alineamiento por red.
+    alineacion: afin_red_referencia
+    red_referencia: 0                                 # índice en `semillas` de normalization_v32.yaml
+    r2_minimo_aviso: 0.90                             # red con R² medio de alineamiento por debajo → aviso en meta
+    lote_varianza: 1000                               # columnas por lote al extraer diag(Q⁻¹) de la posterior
+  estilos: [circulacion, pintura, spacing, old_school, pistons, isolation]   # orden de estilos.json (p_<estilo> ∈ Δ⁶)
+  # rasgos normalizados: θ (DT de la vara EuroLeague, v3.2) y varianza propia v_j, de destino/capacidad/<t>.csv.gz.
+  # Lista EXACTA del §5.1 del encargo (uso, creación, pérdidas, 3PAr, FTr, zonas de tiro, % asistidas, rebote,
+  # defensa, RAPM ofensivo y defensivo). pts/100 y TS% NO entran en x̃: son lo que las capas predicen.
+  rasgos: [usg_pct, ast_pct, tov_pct, fg3a_rate, fta_rate, pct_aro, pct_corta, pct_media, pct_t3_esquina,
+           pct_asistidas, oreb_pct, dreb_pct, stl_pct, blk_pct, orapm, drapm]
+  roles: [RESIDUAL, PROFUNDIDAD, ROTACION, TITULAR, GO_TO_GUY]   # índice ordinal 0..4 (como B9 de la v3.3)
+  rol_sin_dato: null                                  # sin rol (p. ej. sin PBP ni caja): NaN + aviso, nunca 0
+  edad_sin_dato: null
+  min_minutos_completo: 100                           # ≥ 100 min: latente de la posterior conjunta; por debajo, codificador
+  avisos: [sin_latente, latente_codificador, sin_estilo, sin_rol, sin_rapm, sin_theta, sin_persona_crosswalk,
+           muestra_corta, red_discrepante]
+  max_discrepancia_redes: 0.5                         # sd entre redes del latente alineado (DT) por encima → aviso
+
+# ------------------------------------------------------------------------------------------- F0 · contrato de datos (§3)
+contrato:
+  tramos:
+    basura: excluir                                   # fijado en el encargo: fuera los tramos de basura
+    clutch: covariable                                # fijado: entra como covariable, no se excluye
+    exposicion: posesiones                            # peso del tramo = posesiones (ε_s ~ N(0, σ²/n_s))
+    posesiones: fga + 0.44·fta − oreb + tov           # estimación por lado, media de los dos lados del tramo
+    localia: covariable_h                             # h_s: team_a del tramo es el local (bbstats.lineups: teams = [local, visitante])
+    quintetos_completos: true                         # sólo tramos con 5 contra 5 (n_a = n_b = 5)
+    min_posesiones_tramo: 0.5                         # tramos con menos de media posesión estimada no entran
+    fases: [regular, playoffs]                        # playoffs entran con indicador de fase
+  cobertura:                                          # tratamiento de las lagunas del §3 (decidido en F0, antes de F1)
+    min_partidos_con_quintetos: 0.50                  # liga-temporada con < 50 % de partidos con quintetos → EXCLUIDA de F1-F3
+    min_tramos_por_partido: 4                         # media de tramos por partido por debajo (quintetos casi fijos) → excluida
+    ponderar_por_posesiones: true                     # dentro de las incluidas, cada tramo pesa sus posesiones
+    aviso_cobertura_parcial: 0.90                     # entre el 50 y el 90 % de partidos: incluida con aviso
+    ligas_sin_pbp_declaradas:                         # [DATO §3] huecos conocidos; el contrato los comprueba con los ficheros
+      - {liga: ncaa, temporadas: ["2020-21", "2021-22", "2022-23"], motivo: sin cambios de quinteto}
+      - {liga: cba, motivo: cobertura 61-93 % y sin coordenadas}
+      - {liga: vtb, temporadas: ["2020-21", "2021-22"], motivo: sin PBP antes de 03-2022}
+      - {liga: bbl, temporadas: ["2020-21", "2021-22", "2022-23"], motivo: sin PBP}
+      - {liga: lnb, temporadas: ["2020-21"], motivo: sin PBP}
+  identidad:
+    clave_fila: [liga, temporada, player_id]
+    persona: crosswalk                                # persona_id del crosswalk (P…); sin él, «<liga>:<player_id>» marcado
+    persona_norm: tabla_v32                           # id entero de la normalización (sólo para unir con el latente)
+  estilos_ajuste: todas_las_temporadas                # [HIPÓTESIS declarada] las pertenencias de estilo (no supervisadas)
+                                                      # se ajustaron con todas las temporadas; no se reajustan por corte
+  roles_ajuste: por_temporada                         # los roles sólo usan datos de su temporada (sin fuga)
+
+# ------------------------------------------------------------------------------------------- F1 · RAPM multiliga con prior
+f1:
+  modelo: y_s = h_s + c_lt + Σβ_A − Σβ_B + ε_s;  β_i ~ N(g(x̃_i; γ), τ²);  ε_s ~ N(0, σ²/n_s)
+  unidad: pts/100 posesiones (diferencial por posesión × 100)
+  intercepto_liga_temporada: true                     # c_{ℓ,t}; el nivel entre ligas lo pone la capa 0 vía g [HIPÓTESIS]
+  localia: true                                       # h_s
+  clutch: covariable                                  # indicador del tramo
+  fase_playoffs: covariable
+  prior:
+    candidatos: [ridge, gbm]                          # g(x̃; γ): se elige en el corte de selección (2022)
+    ridge_alpha_rejilla: [0.1, 0.3, 1.0, 3.0, 10.0]
+    gbm: {max_iter: 300, learning_rate: 0.05, max_depth: 3, min_samples_leaf: 40, l2_regularization: 1.0}
+    rasgos: [latente, estilos, rasgos, rol, edad, pos3]   # bloques de x̃ que entran en g
+    sin_latente_si_falta: true                        # filas sin u (sin_latente) usan sólo el resto del perfil
+  bayes_empirico: {iteraciones: 10, tau2_inicial: 4.0, sigma2_inicial: 11000.0, tau2_minimo: 0.25}
+  descomposicion_od: true                             # β^O (ataque) y β^D (defensa) con el mismo esquema
+  min_posesiones_jugador: 50                          # por debajo, β se queda casi en el prior (se informa del peso)
+  salidas: {rapm: data/modelos/v4_0/rapm_multiliga, prior: data/modelos/v4_0/rapm_multiliga/g_prior.json}
+  f1d:                                                # diagnóstico de contaminación del RAPM de origen (nuevo)
+    modelo: rapm_origen ~ net_equipo_origen + prior_caja + log(minutos) + liga
+    bins_exposicion: [0, 300, 800, 1500, 100000]      # minutos de origen
+    bootstrap: 2000
+    salida: data/modelos/v4_0/rapm_multiliga/f1d_contaminacion.json
+
+# ------------------------------------------------------------------------------------------- F2 · sinergia y efectos dirigidos
+f2:
+  sinergia:
+    modelo: φ(i,j) = z_iᵀ W z_j + ψ_ij;  z_i = P x̃_i;  ψ_ij ~ N(0, κ²) contraído
+    r_candidatos: [4, 6, 8]                           # dimensión de la proyección (elegida en el corte de selección)
+    ridge_W: [0.3, 1.0, 3.0, 10.0]
+    kappa2: bayes_empirico
+    congelar_beta: true                               # sobre F1, β fijos
+    pareja_nueva: solo_perfiles                       # φ̂ = z_iᵀ W z_j (sin ψ): la sinergia se predice por perfiles
+    min_posesiones_pareja_validacion: 100
+  dirigidos:
+    efectos: [d_cuota_tiro, d_efg, d_pct_asistidas, d_pct_aro, d_pts100]
+    modelo_candidatos: [ridge, gbm]
+    peso_por_tamano: poss_con                         # peso del par X→Y por posesiones juntos
+    min_poss_con: 100
+    renormalizar_cuotas: true                         # las cuotas de tiro del equipo suman el 100 %
+  salida: data/modelos/v4_0/sinergia
+
+# ------------------------------------------------------------------------------------------- F3 · función de conjunto (CONDICIONAL)
+f3:
+  modelo: f(S) = [F1 + F2] + ρ(Σ_i ϕ(x̃_i))           # permutación-invariante
+  oculta_phi: 16
+  oculta_rho: 16
+  decaimiento_pesos: 1.0e-2
+  semillas: 5
+  pasos: 2000
+  publicar_solo_si_mejora: true                       # regla dura (§11.3); si no, ablación negativa al artículo
+  salida: data/modelos/v4_0/conjunto
+
+# ------------------------------------------------------------------------------------------- F4 · composición y Δ de equipo
+f4:
+  rotaciones:
+    minutos: v33_mezcla                               # mezcla motor + GBM de la v3.3 (fichaje) + Plackett-Luce (resto)
+    restricciones_posicionales: {max_interiores: 3, min_exteriores: 1}
+    coocurrencia: loglineal                           # P(quinteto | plantilla, entrenador)
+    top_quintetos_validacion: 5                       # reproducir la cuota de posesiones de los 5 quintetos más usados
+    pesos_por_corte: true
+  monte_carlo:
+    simulaciones: 1000
+    intervalos: [0.50, 0.80, 0.90]
+    propagar: [beta, phi, minutos, traduccion, a5]
+    metricas: [net, ortg, drtg, efg_pct, tov_pct, oreb_pct, ft_rate]   # Net, ORtg, DRtg y Four Factors
+  sesgo_minutos:                                      # sesgo heredado de la v3.3 (quien acaba jugando poco)
+    terciles_por: minutos_proyectados_altas
+    umbral_calibracion_net: 0.5                       # |sesgo de Δ̂T| > 0,5 puntos de Net en algún tercil → capa de calibración
+    calibracion_con: cortes_anteriores
+  simulador_v40: {config: configs/simulation_v40.yaml, env: v40, carpeta: data/modelos/simulador/v4_0,
+                  no_degradacion: true}               # las salidas v3.3 no cambian: la v4.0 AÑADE
+  salida: data/modelos/v4_0/equipo
+  a5:                                                 # producción no lineal en minutos y rol (generaliza B9, sin redes nuevas)
+    metricas: [pts_p100, ts_pct, usg_pct, ast_pct, oreb_p100, dreb_p100, stl_p100, blk_p100, tov_pct]
+    transicion_rol:
+      matriz: 5x5                                     # coeficientes libres por par (rol_origen → rol_destino)
+      contraccion: jerarquica_a_recta_ordinal_b9      # contracción hacia Δy = c·Δrol de B9
+      min_casos_par_aviso: 30
+      tau2_contraccion: bayes_empirico
+    minutos:
+      spline: monotono_libre                          # sin imponer signo ni linealidad
+      nudos: 3
+      cuantiles_nudos: [0.25, 0.5, 0.75]
+    carga:
+      diagnostico: curva_dentro_de_jugador            # eficiencia por minuto frente a minutos por partido (proxy de fatiga)
+      entra_como_covariable_si_estable: true          # señal estable en los cortes de selección → covariable del spline
+    k_beta_k_c: [0.0, 0.0]                            # NO se tocan (v3.2 A3): A5 no resucita la curva uso-eficiencia
+    ruido_personal_sigma_i: true                      # σ_i ensancha el rango (límite declarado: forma, vestuario, entrenador)
+
+# ------------------------------------------------------------------------------------------- F5 · métricas ancla [0, 100]
+f5:
+  nivel_cerno:
+    definicion: NC = 100 · E_pred[F_ref(C)]           # percentil esperado de la contribución C bajo la predictiva completa
+    contribucion: minutos × producción por posesión (motor v3.3 + A5, con adaptación, encaje, compañeros, entrenador)
+    referencia:                                       # DECISIÓN 1 del CEO (04-11-2026): liga de destino × puesto (pos3)
+      por: [liga_destino, pos3]
+      temporadas: 3                                   # últimas 3 temporadas
+      ponderacion: minutos
+    horizontes: {titular: 1, secundario: 2}           # DECISIÓN 2: NC₁ (primera temporada) titular; NC₂ al lado
+    rango: [0.10, 0.90]                               # NC_lo80 / NC_hi80 = F_ref de los cuantiles predictivos de C
+    descomposicion_orden: [traduccion_pura, adaptacion, encaje_estilo_rol, companeros_hueco_uso, entrenador_minutos]
+  impacto:
+    definicion: IM = 100 · E_pred[F_mov(Δ̂Net)]         # percentil esperado del Δ contrafactual entre movimientos reales
+    delta: capa_4                                     # aditivo + sinergia + dirigidos + redistribución de minutos + estilo
+    referencia:                                       # DECISIÓN 3: fichajes históricos reales del mismo grupo de liga
+      por: grupo_liga_destino
+      grupos:
+        elite: [euroleague, nba]
+        domestica_alta: [acb, lba, bbl, lnb, bsl, gbl, vtb, nbl]
+        resto: [eurocup, bcl, fec, gleague, bnxt, cba, ncaa, feb1, feb2, feb3]
+      temporadas: todas_las_del_examen
+    rango: [0.10, 0.90]
+    descomposicion_orden: [aditivo_beta_minutos, coste_oportunidad, sinergia_phi, efectos_companeros, estilo_entropia,
+                           split_ortg_drtg]
+    varios_fichajes: {im_paquete: true, contribucion_por_alta: true}
+  salida: data/modelos/v4_0/equipo                    # anclas_<t>.csv.gz; F_ref y F_mov versionadas con su fecha de corte
+
+# ------------------------------------------------------------------------------------------- §11 · criterios PRERREGISTRADOS
+criterios:
+  comunes:
+    cortes: [2021, 2022, 2023, 2024]                  # exámenes ≤ t → t+1; el primero calibra
+    corte_calibracion: 2021
+    cortes_decision: [2022, 2023, 2024]
+    bootstrap: 2000
+    bootstrap_por: equipo_temporada
+    semilla_bootstrap: 20261104
+    perfiles_sin_fuga: true                           # perfiles de corte_<t>/ para el corte t
+    pesos_composicion_por_corte: true
+    escepticismo: resultado demasiado bueno = fuga o error hasta demostrar lo contrario (§11.7)
+  f1:
+    rmse_margen_partido_mejor_que: [interceptos_liga_equipo_temporada, aditivo_L_actual]
+    ic95_frente_a_aditivo_excluye_0: true
+    test_retest_beta_no_peor_que_rapm_liga: true
+    fichajes_correlacion_prior_beta_t1_positiva_ic95: true
+  f2:
+    parejas_nuevas_ic95_superior_reduccion_error_menor_que_0: true
+    dirigidos_mae_mejor_que_0_y_media_liga_en: 3       # de 5 efectos, con IC95
+    dirigidos_cobertura_80: [0.75, 0.85]
+    publicar_solo_lo_que_pasa: true
+  f3:
+    cociente_rmse_quintetos_no_vistos_ic95_superior_menor_que: 1.0
+  f4:
+    lineas_base: [persistencia_delta_0, aditivo_f1, gbm_directo_transiciones]
+    metricas: [mae_delta_net, spearman, cobertura_80]
+    cobertura_80: [0.75, 0.85]
+    por_grupo_liga_y_global: true
+    aviso_corredores_debiles_v32: [feb2->feb3, gleague<->nba, ncaa->nba]
+    publicable_si: mejora persistencia con IC95 que excluya 0; no empeora aditivo; no detrás de GBM de forma significativa; cobertura en rango
+    expectativa_hipotesis: {mae_net: [2.5, 3.5], sinergia_sobre_aditivo_pct: [2, 5], sospecha_fuga_si_mejora_mayor: true}
+  f5:
+    nc_separacion: {diferencia_minima: 10, fraccion_minima: 0.62, ic95_inferior_minimo: 0.55}
+    nc_calibracion_deciles_tolerancia: 7
+    im_monotonia: spearman(IM, ΔNet realizado) ≥ aditivo (b), IC95 de la diferencia frente a persistencia excluye 0
+    im_calibracion_deciles_tolerancia: 7
+    cobertura_80_rangos: [0.75, 0.85]
+    anti_manipulacion: recalcular con el examen limpio 2025-26 → 2026-27 antes de comunicar cifras de acierto
+    sin_pasar_no_se_publican_como_referente: true
+  a5:
+    frente_a: b9_lineal
+    mejora_mae_pts_y_ts_ic90_en_al_menos_una: true
+    no_empeorar_otra_mas_de_pct: 0.5
+    contraccion_efectiva_pares_menos_de_30_casos_error_tipico_max: 1.0
+    si_no_pasa: conservar_b9_lineal_y_documentar_ablacion

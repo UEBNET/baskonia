@@ -1784,6 +1784,45 @@ Plackett-Luce, calibración de temperatura y rotación, pesos del índice Fit), 
 `validacion/` (examen temporal sin fuga frente a los dos modelos de referencia: métricas por corte, desgloses, dejar
 fuera una liga, intervalos bootstrap). La exportación al navegador va a `data/artifact/simulador/` (no versionado).
 
+### CERNO v4.0 · F0: perfiles ampliados y contrato de datos (`v4_0/`, `bbequipo/`)
+
+Encargo v4.0 (rev. 1.2, 04-11-2026); configuración `configs/equipo_v40.yaml`; detalle en `docs/modelo_equipo_v40.md` y
+`docs/checkpoints/V40_F0.md`. La v4.0 **añade** carpetas nuevas; nada de `v3_2/`, `v3_3/` ni `simulador/` cambia.
+
+**`v4_0/perfiles/<temporada>.csv.gz`** (ajuste completo, producto) y **`v4_0/perfiles/corte_<t>/<temporada>.csv.gz`**
+(temporadas ≤ t con la normalización ajustada ≤ t, para los exámenes sin fuga). Grano: jugador-liga-temporada; clave
+`liga, temporada, player_id`. Recuentos en `meta.json` de cada carpeta (cobertura por bloque y por liga, R² del
+alineamiento de las redes, fuentes del latente).
+
+| Columna | Significado |
+|---|---|
+| `persona_id` | persona del crosswalk (`P…`); si falta, `<liga>:<player_id>` (aviso `sin_persona_crosswalk`) |
+| `persona_norm` | id entero de la normalización (tabla de `bbmodel.modelo.preparar`), sólo para unir con el latente |
+| `team_id`, `pos3`, `edad`, `tramo_edad`, `min` | equipo principal, posición (E/A/I), edad y tramo (`s/d` si falta), minutos de la temporada |
+| `u1…u4`, `u1_sd…u4_sd` | latente CVAE (K = 4) de la v3.2 final: media y DT a posteriori, promedio de las 20 redes tras alinearlas afínmente con la red de referencia |
+| `u_fuente` | `posterior_conjunta` (≥ 100 min, en el ajuste), `codificador`, `codificador_nivel_temporada_anterior`, `sin_latente` |
+| `u_discrepancia_redes` | DT entre redes del latente alineado (media de las 4 dimensiones); > 0,5 → aviso `red_discrepante` |
+| `estilo`, `estilo_p`, `estilo_fiable`, `estilo_min`, `p_<estilo>` (6) | estilo unificado principal, su probabilidad, fiable (≥ 300 min), minutos y pertenencias ∈ Δ⁶ |
+| `<m>_th`, `<m>_vj` (16 rasgos) | capacidad θ (DT de la vara EuroLeague) y varianza propia de `usg_pct, ast_pct, tov_pct, fg3a_rate, fta_rate, pct_aro, pct_corta, pct_media, pct_t3_esquina, pct_asistidas, oreb_pct, dreb_pct, stl_pct, blk_pct, orapm, drapm` |
+| `rol_mas_probable`, `rol_indice`, `rol_indice_esperado`, `p_RESIDUAL…p_GO_TO_GUY` | rol de la temporada, su índice ordinal (0-4), índice esperado Σ p·índice y probabilidades |
+| `min_pct`, `gs_pct`, `H_rol`, `rol_fuente`, `rol_gp`, `rol_min_total`, `persona_cw_roles` | MIN%, GS%, entropía de rol, fuente (pbp/caja), partidos y minutos del libro de rol, persona según roles |
+| `rapm_obs`, `orapm_obs`, `drapm_obs`, `poss_on_obs` | RAPM observado en su liga (`pista/`): **contraste** para F1 y F1-D, no forma parte de x̃ |
+| `completo`, `avisos` | perfil completo; avisos separados por `;` (`sin_latente`, `latente_codificador`, `sin_estilo`, `sin_rol`, `sin_rapm`, `sin_theta`, `sin_persona_crosswalk`, `muestra_corta`, `red_discrepante`) |
+
+**`v4_0/contrato/inventario_tramos.csv`** (una fila por liga-temporada con tramos de quinteto) y
+**`contrato_datos.json`** (reglas aplicadas, totales, excluidas, con aviso, huecos declarados comprobados, cobertura de
+roles/estilos/pista/capacidad y del crosswalk por liga-temporada).
+
+| Columna | Significado |
+|---|---|
+| `partidos_total`, `partidos_pbp`, `fraccion_partidos_con_quintetos` | partidos de `validacion.csv`, con tramos y fracción `usado_en_quintetos` |
+| `tramos`, `tramos_validos`, `tramos_por_partido` | tramos del fichero y los que cumplen el contrato (sin basura, 5 contra 5, fase admitida, ≥ 0,5 posesiones) |
+| `fraccion_5v5`, `fraccion_basura`, `fraccion_clutch` | fracciones medidas |
+| `posesiones`, `segundos` | exposición total de los tramos válidos (posesiones = media de los dos lados de fga + 0,44·fta − oreb + tov) |
+| `quintetos_distintos`, `posesiones_por_quinteto_mediana` | tamaño de muestra por quinteto (lo que justifica el aprendizaje residual) |
+| `con_coordenadas`, `parejas`, `equipos`, `efectos_dirigidos` | fracción de partidos con coordenadas; ficheros presentes; pares X→Y de `interacciones/` |
+| `decision`, `motivo` | `incluida`, `incluida_con_aviso` (50-90 % de partidos con quintetos) o `excluida` (< 50 %, o < 4 tramos por partido) |
+
 ## 4. Banderas frecuentes
 
 | Bandera | Dónde | Significado |
@@ -1801,3 +1840,5 @@ fuera una liga, intervalos bootstrap). La exportación al navegador va a `data/a
 | `calidad_contexto` | ligas | `completo`, `parcial` (sin rival), `sin_contexto` |
 | `valido`, `usado_en_quintetos` | quintetos/validacion | partido con minutos reconstruidos a ≤ 120 s |
 | `fuera_de_alcance` | feb_cobertura | temporada FEB fuera del alcance decidido |
+| `avisos`, `completo` | v4_0/perfiles | bloques ausentes del perfil x̃ (NaN, nunca 0) y perfil completo |
+| `decision` | v4_0/contrato | liga-temporada incluida, con aviso o excluida de las capas 1-3 |
