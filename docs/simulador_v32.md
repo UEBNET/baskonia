@@ -95,12 +95,16 @@ Sustituyen a las del primer plan del mismo día.
 Examen 2021-22 → 2024-25: 6.028 fichajes, de los que 4.525 tienen ≥ 300 minutos en destino. Datos en
 `data/modelos/simulador/v3_2/decisiones_v32.json`; examen por fuente en `validacion/<etiqueta>/`.
 
+**Cifras con las identidades corregidas** (03/04-11-2026, `docs/identidades_20261103.md`). El examen se repitió
+entero, con el motor completo (`v32.config_examen`): las decisiones son las mismas que antes de la corrección y las
+cifras apenas cambian.
+
 ### 4.1 Las dos fuentes, con el motor completo
 
 | Fuente | Minutos | Rol | pts/100 | TS% | Cobertura 90 % pts/100 |
 |---|---|---|---|---|---|
-| V32 (con fuga) | 4,86 | 42,8 % | 3,87 | 5,82 | 0,862 |
-| **V32_corte (sin fuga)** | 4,87 | 42,5 % | 3,85 | 5,24 | 0,835 |
+| V32 (con fuga) | 4,86 | 42,8 % | 3,86 | 5,97 | 0,863 |
+| **V32_corte (sin fuga)** | 4,87 | 42,7 % | 3,85 | 5,24 | 0,836 |
 
 **Lectura sobre la fuga**
 - Quitar la fuga baja la cobertura, como se esperaba: los intervalos con fuga eran optimistas.
@@ -113,14 +117,14 @@ Examen 2021-22 → 2024-25: 6.028 fichajes, de los que 4.525 tienen ≥ 300 minu
 
 | Paso | Efecto de quitarlo | Decisión |
 |---|---|---|
-| Curva uso-eficiencia (k_β) | pts −0,10 % [−0,14, −0,06]; TS −0,38 % [−0,45, −0,30] | **Se quita** (k_β = 0) |
-| Efecto compañeros (k_c) | pts −2,85 % [−3,27, −2,44]; TS −5,75 % [−6,54, −5,00]; C −1,0 % | **Se quita** (k_c = 0) |
+| Curva uso-eficiencia (k_β) | pts −0,10 % [−0,14, −0,06]; TS −0,38 % [−0,46, −0,31] | **Se quita** (k_β = 0) |
+| Efecto compañeros (k_c) | pts −2,76 % [−3,17, −2,36]; TS −5,56 % [−6,33, −4,83]; C −1,0 % | **Se quita** (k_c = 0) |
 | Redistribución del uso | pts **+2,72 %** [+2,20, +3,21]; USG +2,1 %; C +1,0 % | Se conserva |
-| Adaptación | Sin diferencias significativas (TOV +0,2 %) | Indeterminado: se conserva |
-| Ruido personal | Winkler del 80 % **+12,0 %** [+10,9, +13,0] | Indeterminado: se conserva |
+| Adaptación | Sin diferencias significativas | Indeterminado: se conserva |
+| Ruido personal | Winkler del 80 % **+12,1 %** [+11,1, +13,2] | Indeterminado: se conserva |
 
 - **A3.** Con los dos pasos quitados, la rejilla queda en k = (0, 0).
-- **A2.** La producción del Atlas mejora J_ω −1,0 % [IC 90 % −2,0, −0,1], también con destino EuroLeague (−4,2 %), y
+- **A2.** La producción del Atlas mejora J_ω −0,9 % [IC 90 % −1,9, −0,03], también con destino EuroLeague (−4,3 %), y
   cumple §6c. **Se publica la producción del Atlas**, con los minutos y el rol del motor.
 
 ### 4.3 Examen anidado sin fuga: motor v3.1 frente a v3.2
@@ -130,15 +134,15 @@ En cada corte se aplica lo decidido con los cortes anteriores; el primero usa el
 | Medida | Motor v3.1 | v3.2 |
 |---|---|---|
 | Error medio de minutos | 4,87 | 4,87 |
-| Acierto de rol | 42,5 % | 42,5 % |
+| Acierto de rol | 42,7 % | 42,7 % |
 | Error medio de pts/100 | 3,85 | **3,81** |
-| Error medio de TS% | 5,24 | **4,97** |
-| Error medio de AST% | 4,29 | **4,23** |
-| Error medio de la contribución C (P_all) | 4,66 | **4,50** |
-| Sesgo de C (Ĉ − C) | −2,47 | −2,18 |
-| Cobertura 50 / 80 / 90 % de pts/100 | 0,42 / 0,71 / 0,84 | **0,50 / 0,80 / 0,90** |
-| Cobertura 80 / 90 % de minutos | 0,92 / 0,97 | **0,83 / 0,92** |
-| Winkler del 80 % de pts/100 | 17,99 | **17,37** |
+| Error medio de TS% | 5,24 | **4,98** |
+| Error medio de AST% | 4,26 | **4,20** |
+| Error medio de la contribución C (P_all) | 4,65 | **4,50** |
+| Sesgo de C (Ĉ − C) | −2,47 | −2,17 |
+| Cobertura 50 / 80 / 90 % de pts/100 | 0,42 / 0,72 / 0,84 | **0,50 / 0,80 / 0,90** |
+| Cobertura 80 / 90 % de minutos | 0,92 / 0,97 | **0,83 / 0,93** |
+| Winkler del 80 % de pts/100 | 17,97 | **17,39** |
 
 **§5e, aceptación de la recalibración**
 - pts/100 cumple en los tres niveles y en los cuatro grupos de destino.
@@ -152,21 +156,22 @@ En cada corte se aplica lo decidido con los cortes anteriores; el primero usa el
 
 **§7, métricas de decisión**
 - Spearman medio entre Ĉ y C por liga de destino × corte: 0,47 [IC 90 % 0,45, 0,50] en 69 grupos (motor v3.1: 0,44).
-- Decil superior: error medio de C 6,22, con un sesgo de −3,85.
+- Decil superior: error medio de C 6,21, con un sesgo de −3,85.
 - Brier de P(cuartil superior) 0,177, frente a 0,234 sin modelo.
 
 ### 4.4 B7, B9 y la línea base de minutos (examen sin fuga)
 
 **B7, gradient boosting supervisado**
-- pts/100 3,71 frente a 3,89 del motor: −4,7 % [IC 90 % −5,9, −3,4].
+- pts/100 3,76 frente a 3,89 del motor: −3,2 % [IC 90 % −4,5, −1,8].
 - No llega al −5 % exigido, así que el límite está en el ruido, no en la estructura del motor.
-- La red pequeña (MLP) queda peor: +2,8 %.
+- La red pequeña (MLP) queda peor: +3,3 %.
 
 **B9, minutos y producción juntos**
 - Correlación entre el error de minutos y el de pts/100: 0,35. Cota del oráculo: −7,7 %.
 - Se cumplen las dos condiciones de apertura, así que **la regla dice abrir B9**.
-- Queda propuesto para una v3.3, pendiente de aprobación.
+- El usuario lo aprobó el 03-11-2026: **simulador v3.3** (`docs/simulador_v33.md`).
 
 **Línea base de minutos**
-- El gradient boosting predice mejor los minutos que la utilidad de Plackett-Luce: 4,67 frente a 4,86.
-- Motor − GBM = +0,19 [+0,11, +0,26]. El motor no gana con claridad.
+- El gradient boosting predice mejor los minutos que la utilidad de Plackett-Luce: 4,68 frente a 4,86.
+- Motor − GBM = +0,18 [+0,11, +0,27]. El motor no gana con claridad.
+- El usuario aprobó llevarlo al simulador v3.3, donde el examen elige entre motor, GBM y la mezcla de los dos.

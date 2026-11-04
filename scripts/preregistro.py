@@ -14,7 +14,8 @@ from datetime import date
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-FICHEROS = ["configs/normalization_v32.yaml", "configs/simulation_v32.yaml", "configs/normalization.yaml",
+FICHEROS = ["configs/normalization_v32.yaml", "configs/simulation_v32.yaml", "configs/simulation_v33.yaml",
+            "configs/normalization.yaml",
             "configs/roles.yaml", "configs/reemplazo.yaml", "configs/adaptacion.yaml"]
 
 
@@ -49,7 +50,10 @@ permiten comprobar que no ha habido cambios.
   - cobertura del 80 % recalibrada en [0,78, 0,85] en cada par origen → destino con ≥ 30 personas;
   - no peor frente a la v2 con destino EuroLeague.
 
-## Simulador v3.2
+## Simulador v3.3 (y v3.2)
+
+El examen limpio se hace con el simulador v3.3 publicado (minutos de la mezcla motor + GBM y B9) y, como referencia,
+con la v3.2. B9 se evalúa además en el escenario de rol asignado (rol real en destino).
 
 - **Fichajes.** Cambios de club de 2025-26 a 2026-27. Normalización ajustada con ≤ 2025-26 (fuente sin fuga).
 - **Poblaciones.**

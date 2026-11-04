@@ -1,5 +1,37 @@
 # Registro de cambios
 
+## 2026-11-04 — Identidades corregidas, nombres canónicos y simulador v3.3
+
+Detalle: `docs/identidades_20261103.md` y `docs/simulador_v33.md`. Cadena completa: `scripts/rehacer_identidades.sh`.
+
+**Identidades**
+* Adaptador FIBA LiveStats: si la ficha internacional es de otro jugador (nombre local latino sin ninguna palabra en
+  común), la clave sale del nombre local; nombre visible latino en la GBL (antes en griego). BNXT y GBL reprocesadas.
+* Crosswalk con persona_id estables: ningún nodo existente cambia de persona. Se separan las 5 identidades mezcladas
+  (Pot/Vandenbossche, De Wilde/Vaneyk, Marinelli/Ciccioni, Van Der Schalie/Borst, Fasasi/Thomasson) y se reasignan
+  27 apariciones de un partido atribuidas a otro jugador. Auditoría: 2 marcas de 19.330, las dos la misma persona.
+* Revisión manual de los 100 puentes (§13): 100/100 correctos, cota inferior 0,964 ≥ 0,95; el umbral no cambia.
+
+**Nombres «Nombre Apellido(s)»** (`bbmodel/nombres.py`, `data/processed/nombres_canonicos.csv`)
+* Una forma por persona en todas las exportaciones del artifact: «APELLIDO, NOMBRE» → «Nombre Apellido», mayúsculas
+  capitalizadas con tildes recuperadas, dos apellidos cuando la fuente los da, griego y cirílico transliterados.
+* Nombres completos de la web de la FEB (`scripts/feb_nombres_web.py`): de 2.501 jugadores FEB con inicial quedan 488.
+  Quedan con inicial 947 personas en total (sobre todo la CBA y la FEB sin página de equipo).
+
+**Normalización v3.2 y simulador v3.2 rehechos con los datos corregidos** (la ablación conserva su decisión)
+* Normalización: v3.2 publicada −3,2 % [−3,6, −2,8] frente a la v2 (antes −2,8 %), cobertura 0,811; red sola −2,0 %.
+* Simulador v3.2: mismas decisiones (fuera uso-eficiencia y compañeros, producción del Atlas, A4); pts/100 3,85 →
+  3,81, TS% 5,24 → 4,98, cobertura 80 % de pts/100 0,72 → 0,80. B7 −3,2 %; B9 sigue abierto.
+* Corregido: la cadena reutilizaba salidas ya existentes (F0, predicciones de las redes, niveles, histórico) y los
+  exámenes del simulador corrían con la configuración publicada; ahora se borran al empezar y
+  `v32.config_examen` deja el motor completo antes de los backtests.
+
+**Simulador v3.3** (`configs/simulation_v33.yaml`, `CERNO_SIMULADOR=v33`; la v3.2 no cambia)
+* M: minutos de la **mezcla motor + GBM** (elegida por el examen): 4,87 → 4,70 min (IC 90 % −0,20, −0,14).
+* B9: acoplamiento minutos-producción; con rol asignado, pts/100 −4,6 % [−5,7, −3,7] y TS% −2,2 % [−3,1, −1,5].
+* Rol asignado en la configuración (faltaba en v3.1/v3.2), intervalos anidados, exportación con `meta.v33` y minutos
+  del GBM por liga de destino (`jugadores.json → min_gbm`).
+
 ## 2026-11-03 — Normalización v3.2 y simulador v3.2 (versiones nuevas, la v3.1 queda intacta)
 
 Configuraciones nuevas, que no sustituyen a las anteriores: `configs/normalization_v32.yaml` (salida

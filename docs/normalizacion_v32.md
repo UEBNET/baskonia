@@ -157,7 +157,8 @@ nivel de X con d = 0:  δ_X − δ_d,  DT = √(Σ_XX + Σ_dd − 2 Σ_Xd)
 - **Peso del nivel de liga.** Es solo el 2-4 % de la varianza total de la capacidad de un jugador (mediana). La vara de
   destino corrige las cuentas, pero apenas cambia la anchura de los intervalos.
 - **§12, ciclo.** Las traducciones publicadas son lineales y por construcción tienen residuo de ciclo exactamente 0. El
-  residuo de 0,065 DT de media (máximo 0,95 en pts/100 y 1,02 en TS%, 23 triángulos > 0,5 DT de 1.140) es del camino
+  residuo de 0,045 DT de media (máximo 0,86 en pts/100 y 0,63 en TS%, 25 triángulos > 0,5 DT de 1.140; con la
+  configuración final y las identidades corregidas) es del camino
   codificar-decodificar de la CVAE, que no se publica desde que se descartó B3. Queda como diagnóstico y como
   salvaguarda de B1.
 
@@ -194,15 +195,19 @@ Tabla con la mezcla al 0,5 y 5 redes por variante; datos en `validacion/ablacion
 
 ### 6.2 Examen anidado (B2, B5)
 
-Cortes 2022-2024, 1.427 personas × corte; datos en `validacion/examen_v32.json`. El error es la media de las 33
+Cortes 2022-2024, 1.431 personas × corte; datos en `validacion/examen_v32.json`. El error es la media de las 33
 métricas, relativa a la v2.
+
+**Cifras con las identidades corregidas** (03-11-2026, `docs/identidades_20261103.md`). La normalización v3.2 se
+rehízo entera con los mismos datos, salvo la ablación (§6.1), que conserva su decisión. Antes de la corrección, la
+v3.2 publicada daba −2,8 % [−3,2, −2,4] y la red sola −1,4 %.
 
 | Variante | Error frente a la v2 [IC 95 %] | Cobertura del 80 % |
 |---|---|---|
-| Red sola (20 redes, configuración final) | −1,4 % [−2,1, −0,6] | 0,806 |
-| Mezcla con peso 0,5 | −2,8 % [−3,2, −2,4] | 0,809 |
-| Mezcla con B2 anidado | −2,8 % [−3,2, −2,4] | 0,809 |
-| **v3.2 publicada** (B2 y ajuste de la Tercera FEB) | **−2,8 % [−3,2, −2,4]** | **0,811** |
+| Red sola (20 redes, configuración final) | −2,0 % [−2,7, −1,2] | 0,804 |
+| Mezcla con peso 0,5 | −3,2 % [−3,6, −2,8] | 0,808 |
+| Mezcla con B2 anidado | −3,2 % [−3,6, −2,8] | 0,808 |
+| **v3.2 publicada** (B2 y ajuste de la Tercera FEB) | **−3,2 % [−3,6, −2,8]** | **0,811** |
 
 **Lectura de la tabla**
 - **La red sola ya gana a la v2.** En la v3.1, con 15 ligas, quedaba +1,7 %.
@@ -210,40 +215,40 @@ métricas, relativa a la v2.
 
   | Grupo de destino | Error frente a la v2 |
   |---|---|
-  | EuroLeague | −2,1 % [−3,3, −0,8] |
-  | Resto de Europa | −2,5 % |
+  | EuroLeague | −2,2 % [−3,2, −1,0] |
+  | Resto de Europa | −2,9 % |
   | FEB | −2,5 % |
-  | NBA/G League | −3,4 % |
+  | NBA/G League | −4,1 % |
 
 - **Puerta de control de la v3.1:**
   - Cumple el error global y el destino EuroLeague.
-  - Falla la cobertura en 4 de los pares con ≥ 30 personas: Segunda → Tercera FEB 0,774; G League → NBA 0,858;
-    NBA → G League 0,862; NCAA → NBA 0,769.
+  - Falla la cobertura en 4 de los pares con ≥ 30 personas: Segunda → Tercera FEB 0,778; G League → NBA 0,857;
+    NBA → G League 0,855; NCAA → NBA 0,771.
   - Se informa y se mantiene como pendiente para el examen limpio.
 - **B2:**
-  - Peso final: solo el **RAPM** se aparta de 0,5 y pasa a 1 (solo la red), con −6,1 % [−8,4, −3,8].
-  - Ninguna otra métrica demuestra una mejora de al menos el 1 %. AST% (−1,0 % [−1,8, −0,2]) se queda justo en el
-    límite.
+  - Peso final: solo el **RAPM** se aparta de 0,5 y pasa a 1 (solo la red), con −6,2 % [−8,5, −3,9].
+  - Ninguna otra métrica demuestra una mejora de al menos el 1 %. AST% (−1,4 % [−2,3, −0,6]) no llega: la regla
+    exige que el extremo superior del IC quede por debajo de −1 %.
   - En los cortes anidados 2023 y 2024 ninguna métrica se apartó de 0,5.
 - **B5.** Ningún caso activa la salvaguarda de discrepancia entre redes (> 0,5 DT), ni con 5 redes ni con 20. El
-  umbral no cambia; su cuantil 95 % es 0,10.
+  umbral no cambia; su cuantil 95 % es 0,11.
 - **B6.** No se informa de ν porque la t de Student quedó fuera.
 - **Tercera FEB** (conocimiento, mismo procedimiento que la v3.1): peso 0,5 y factor de intervalo 1,06.
-- **§14, RAPM.** La ganancia frente a la v2 es −10,4 % en todos los casos y −11,0 % con exposición alta en destino
-  (ORAPM −6,8 / −6,6 %; DRAPM −2,7 / −2,2 %). Se mantiene con exposición alta, así que se puede comunicar como impacto
+- **§14, RAPM.** La ganancia frente a la v2 es −10,3 % en todos los casos y −10,6 % con exposición alta en destino
+  (ORAPM −6,6 / −6,7 %; DRAPM −2,4 / −1,9 %). Se mantiene con exposición alta, así que se puede comunicar como impacto
   en pista.
 
 ### 6.3 Vara de destino
 
 **Reducción de la DT del nivel por par.** Datos en `destino/reduccion_varianza_pares.csv`. En pts/100, el par
-ACB–BBL pasa de 0,081 (sumando las marginales) a 0,076 (v2 con covarianza) y a 0,065 (mezcla).
+ACB–BBL pasa de 0,081 (sumando las marginales) a 0,077 (v2 con covarianza) y a 0,066 (mezcla).
 
 **§11b, filas en las que Var(θ) < Var(δ_o).**
-- Con la varianza de nivel de la v2, son menos del 1 % en todas las métricas salvo el **RAPM (44 %)**.
+- Con la varianza de nivel de la v2, son menos del 1 % en todas las métricas salvo el **RAPM (45 %)**.
 - La v2 no tiene intervalo de RAPM, de modo que entre el 66 y el 95 % de sus filas usan solo la red.
 - Para el RAPM, el nivel se resta con el mismo modelo que da el valor de cada fila: w_fila·sd_red + (1 − w_fila)·sd_v2.
   El resultado se informa en `constantes.json` (`v_j_negativa_tras_11b`).
-- **Resultado.** En el RAPM la fracción baja del 44,4 % al 8,4 %. Sigue por encima del 1 %, porque en las filas que
+- **Resultado.** En el RAPM la fracción baja del 45,0 % al 8,4 %. Sigue por encima del 1 %, porque en las filas que
   usan solo la red la varianza del nivel es comparable a la del propio RAPM. En esas filas no se trunca a 0: Var(θ)
   conserva el 10 %, de modo que su intervalo es algo más estrecho de lo que debería. Queda señalado para el examen
   limpio. En el resto de métricas no cambia nada (< 1 %).

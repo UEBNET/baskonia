@@ -113,4 +113,75 @@ v3.3 lo incluye con los mismos valores que `simulation.yaml`.
 
 ## 5. Resultados
 
-Se completan al terminar la cadena (`scripts/rehacer_identidades.sh`, con los datos de identidades corregidos).
+Examen sin fuga de la v3.2 rehecho con las identidades corregidas (`scripts/rehacer_identidades.sh`, 04-11-2026).
+Datos en `data/modelos/simulador/v3_3/decisiones_v33.json`.
+
+### 5.1 M · minutos
+
+**Decisión por corte** (con los cortes anteriores que tienen GBM fuera de muestra):
+
+| Corte | Decisión | Error de minutos con los cortes anteriores (motor / GBM / mezcla) |
+|---|---|---|
+| 2021-22 y 2022-23 | Motor | Sin cortes anteriores con GBM fuera de muestra |
+| 2023-24 | **Mezcla** | 4,99 / 4,82 / 4,76 |
+| 2024-25 | **Mezcla** | 4,92 / 4,74 / 4,65 |
+
+**Decisión final** (cortes 2022-23 a 2024-25, 4.956 fichajes): **mezcla 50/50 del motor y el GBM**.
+- Error de minutos: motor 4,86; GBM 4,67; mezcla 4,59.
+- Motor − mezcla = +0,27 [IC 90 % +0,23, +0,31]. Motor − GBM = +0,19 [+0,11, +0,27].
+- Entre los dos que mejoran al motor, la mezcla es la de menor error.
+
+**Examen anidado** (cada corte con su decisión):
+
+| Medida | v3.2 | v3.3 |
+|---|---|---|
+| Error medio de minutos | 4,87 | **4,70** |
+| v3.3 − v3.2 en minutos [IC 90 %] | | −0,17 [−0,20, −0,14] |
+| Acierto de rol | 42,7 % | 42,7 % |
+| Cobertura 50 / 80 / 90 % de minutos | 0,57 / 0,83 / 0,93 | 0,57 / 0,83 / 0,93 |
+| Error medio de la contribución C | 4,50 | **4,45** |
+| Cobertura del 80 % de C | 0,78 | 0,79 |
+
+**Lectura.**
+- El GBM aporta información que el motor no tiene, y la media de los dos es mejor que cada uno por separado.
+- Los intervalos de minutos siguen algo anchos en el nivel del 50 % (cobertura 0,57), igual que en la v3.2.
+- La producción sin rol asignado no cambia, así que el error de pts/100 y de TS% es el de la v3.2.
+
+### 5.2 B9 · rol asignado
+
+Cortes 2022-23 a 2024-25 (coeficientes con los cortes anteriores). Error medio absoluto en el escenario en que el
+club fija el rol real:
+
+| Métrica | v3.2 | v3.3 (B9) | Oráculo (minutos reales) | Cambio [IC 90 %] |
+|---|---|---|---|---|
+| pts/100 | 3,83 | **3,65** | 3,65 | **−4,6 %** [−5,7, −3,7] |
+| TS% | 4,93 | **4,82** | 4,82 | **−2,2 %** [−3,1, −1,5] |
+| USG% | 2,86 | **2,77** | 2,77 | −3,1 % [−3,9, −2,4] |
+| AST% | 4,13 | 4,11 | 4,09 | −0,6 % [−1,2, −0,02] |
+| Rebotes of. /100 | 0,75 | 0,74 | 0,74 | −0,9 % [−1,4, −0,4] |
+| Tapones /100 | 0,354 | 0,351 | 0,352 | −0,7 % [−1,2, −0,2] |
+| Pérdidas % | 2,77 | 2,76 | 2,76 | −0,4 % [−0,8, −0,1] |
+| Rebotes def. y robos | | | | sin cambio significativo |
+
+**Regla.** Se cumplen las dos condiciones (pts/100 mejora de forma significativa y TS% no empeora): **B9 se
+adopta**.
+
+**Coeficientes finales** (todos los cortes): por cada minuto más de lo esperado y por cada escalón de rol más alto,
+- pts/100: +0,09 y +0,95;
+- TS%: +0,07 y +0,64;
+- USG%: +0,06 y +0,55.
+
+**Lectura.**
+- Casi toda la mejora viene del rol (Δrol), no de los minutos.
+- La v3.3 en el escenario de rol asignado está prácticamente en la cota del oráculo con los minutos reales: el rol
+  real ya resume casi toda la información de los minutos.
+
+### 5.3 Simulador publicado
+
+`configs/simulation_v33.yaml`:
+- `minutos_publicados: mezcla` y `b9: true`;
+- los pasos y la producción de la v3.2 publicada: sin uso-eficiencia ni compañeros, producción del Atlas,
+  recalibración A4.
+
+La auditoría de identidades de la exportación v3.3 (`bbfit auditar`) pasa sin fallos. Hay 2 personas con nombres
+distintos, y las dos son la misma persona (§1 de `docs/identidades_20261103.md`).
