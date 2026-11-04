@@ -1,0 +1,30 @@
+{
+ "filas": 4092,
+ "correlacion": 0.9999518544842404,
+ "dif_abs_media": 0.005509486239421794,
+ "dif_abs_mediana": 0.0041517581758950955,
+ "dif_abs_p95": 0.014829505417826242,
+ "dif_en_sd_abs_mediana": 0.050349326446974055,
+ "fraccion_dentro_1sd": 1.0,
+ "fraccion_dentro_2sd": 1.0,
+ "sd_niveles_versionados_mediana": 0.082395,
+ "por_metrica_pts_ts_rapm": {
+  "pts_p100": {
+   "dif_abs_media": 0.004043616698070338,
+   "corr": 0.9999807854422219
+  },
+  "rapm": {
+   "dif_abs_media": 0.0082674168822348,
+   "corr": 0.9999683388798636
+  },
+  "ts_pct": {
+   "dif_abs_media": 0.004687051393539188,
+   "corr": 0.9999765557407573
+  },
+  "usg_pct": {
+   "dif_abs_media": 0.004140881303113973,
+   "corr": 0.9999551493299811
+  }
+ },
+ "tiempo_s": 72
+}
