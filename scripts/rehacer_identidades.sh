@@ -9,7 +9,9 @@
 #      (ablacion.quitadas se conserva: decisión del 02/03-11-2026),
 #   5. simulador v3.2 (examen con y sin fuga, variantes, decisiones, B7/B9, histórico, exportación, auditoría),
 #   6. simulador v3.3 (minutos GBM y B9: v33-decidir, v33-aplicar, histórico, exportación, auditoría),
-#   7. datos del artifact (sin publicar) en experimentos/v33_artifact/.
+#   7. datos del artifact (sin publicar) en experimentos/v33_artifact/,
+#   8. quintetos, escalas, evaluación de equipos, estilos unificados de Quintetos, compactación y lotes de publicación
+#      (experimentos/v33_artifact/_publicacion/lote*.json, para la herramienta Artifact).
 # La v3.1 (data/modelos/v3_1, simulador/v3_1, adaptacion/v3_1) no se rehace ni se toca.
 # Reanudable: cada paso deja una marca en experimentos/.pasos_id/.
 #
@@ -128,4 +130,17 @@ paso python3 -m bbstats artifact --salida "$ART/datos"
 paso python3 -m bbestilo informe --atlas "$ART/atlas/estilos" --datos "$ART/datos" \
   --normalizado data/modelos/v3_2/normalizado --salida "$ART/atlas/informe"
 paso python3 -m bbmodel escalas --salida "$ART"
+# 8. Equipos y quintetos, compactación y empaquetado (origen experimentos/v33_artifact; motor atlas/simulador.js)
+paso python3 -m bbmodel mesa-quintetos --salida "$ART"
+paso python3 -m bbmodel escalas --salida "$ART"        # tras los quintetos: escribe también su indice.json
+paso python3 artifact/herramientas/gen_equipos_quintetos.py "$ART" "$ART/quintetos/datos/equipos.gz.txt"
+paso bash -c "O=\$(mktemp -d) && mkdir -p \$O/atlas/estilos && for f in jugadores clubes; do \
+  ln -s $RAIZ/$ART/atlas/estilos/\$f.json \$O/atlas/estilos/\$f.json.gz.txt; done && \
+  ln -s $RAIZ/$ART/atlas/estilos/meta.json \$O/atlas/estilos/meta.json && ln -s $RAIZ/$ART/quintetos \$O/quintetos && \
+  python3 artifact/herramientas/gen_eu_quintetos.py \$O artifact/quintetos/estilos_unificados.gz.txt && \
+  python3 artifact/herramientas/gen_eu_clubes_quintetos.py \$O artifact/quintetos/estilos_unificados_clubes.gz.txt"
+paso python3 artifact/herramientas/compactar.py "$ART/datos"
+paso env CERNO_SIMULADOR=v33 python3 -c "from bbfit import sim_exportar as E; E.paridad('$ART/simulador')"
+paso node tests/js/paridad_simulador.js "$ART/simulador" artifact/atlas/simulador.js
+paso python3 artifact/empaquetar.py "$ART/_publicacion" "$ART"
 echo "=== $(date +%H:%M:%S) FIN identidades"

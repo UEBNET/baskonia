@@ -1,4 +1,14 @@
-/* Simulador de encaje v2.1 — motor en el navegador.
+/* Simulador de encaje v3.3 — motor en el navegador (port de bbfit.simulador.simular con CERNO_SIMULADOR=v33).
+ * v3.3 (04-11-2026, docs/simulador_v33.md), sobre la v3.2 (docs/simulador_v32.md):
+ *   · pasos del motor según meta.pasos (v3.2: sin curva uso-eficiencia ni efecto compañeros: k_β = k_c = 0),
+ *   · producción publicada del Atlas (meta.v32.produccion_publicada; punto de partida «az» de cada registro en la escala
+ *     EuroLeague, ajuste de contexto β con la calidad de los compañeros de destino, constante de nivel de la liga),
+ *   · recalibración A4 de dos colas por métrica × grupo de destino × origen (meta.v32.recalibracion; minutos: meta.v33),
+ *     con intervalos anidados (lo90 ≤ lo80 ≤ lo50 ≤ hi50 ≤ hi80 ≤ hi90),
+ *   · M: minutos publicados = mezcla 50/50 del motor calibrado y el gradient boosting (columna «min_gbm» por liga),
+ *   · B9: con rol asignado, la producción se desplaza b·Δmin + c·Δrol respecto a la simulación sin rol.
+ * Lo que sigue describe la v2.1, que la v3.3 conserva:
+ * Simulador de encaje v2.1 — motor en el navegador.
  * v2.1 (29-10-2026): ROL ASIGNADO. Quien simula elige el rol de cada fichaje (y de cada jugador en «equipo completo»);
  * el motor ya no lo decide. Con rol asignado: los minutos de ese jugador salen de la franja de minutos de ese rol en la
  * liga de destino (centro = min_rol de la liga, dispersión 0,04 del partido, recortada a los umbrales del rol), es
@@ -208,6 +218,98 @@
   // ------------------------------------------------------------------ simulación principal
   /* op = { rec (registro del fichaje), club (fila de clubes.json), bajas: Set(persona), extras: [registros] (otros fichajes
    *        que entran como compañeros), nSim, semilla, sinAdaptacion } */
+  // ------------------------------------------------------------------ v2 · capa de calibración de salida
+  function calibrarSalida(res, rec, LB, gm) {
+    const CS = D.meta.calibracion_salida;
+    const ro = ROLES.includes(rec.rol) ? rec.rol : "ROTACION", mb = num((LB.min_rol || {})[ro], 0.4) * gm, mo = fin(rec.min_pct) ? rec.min_pct * gm : mb;
+    const tr = (CS.transicion || {})[ro], Pb = ROLES.map((r) => (tr ? num(tr[r], 0.2) : 0.2)), m0 = res.minutos, c = CS.min.c;
+    const m = Math.max(0, c[0] + c[1] * m0.mediana + c[2] * mo + c[3] * mb);
+    const mi = { media: m, mediana: m };
+    ["50", "80", "90"].forEach((a) => { if (m0["lo" + a] == null) return; const s_ = num(CS.min["s" + a], 1); mi["lo" + a] = Math.max(0, m + s_ * (m0["lo" + a] - m0.mediana)); mi["hi" + a] = m + s_ * (m0["hi" + a] - m0.mediana); });
+    const pRol = res.roles, R = CS.roles, z = ROLES.map((r, k) => R.theta[k] + R.alfa * Math.log(Math.min(1, Math.max(1e-3, pRol[r]))) + R.beta * Math.log(Math.min(1, Math.max(1e-3, Pb[k])))), zm = Math.max(...z), ez = z.map((x) => Math.exp(x - zm)), se = ez.reduce((a, b) => a + b, 0);
+    res.minutos_motor = m0; res.roles_motor = { ...pRol };
+    res.minutos = mi; res.min_pct = Object.fromEntries(Object.entries(mi).map(([k, v]) => [k, v / gm]));
+    res.roles = Object.fromEntries(ROLES.map((r, k) => [r, ez[k] / se]));
+    res.rol_esperado = ROLES.reduce((a, r) => (res.roles[r] > res.roles[a] ? r : a), ROLES[0]);
+    res.indice_rol = ROLES.reduce((a, r, i) => a + i * res.roles[r], 0); res.calibrado = true;
+  }
+  // ------------------------------------------------------------------ v3.3 · M (minutos) y B9
+  function minGbm(rec, ligaD) {
+    const v = D.meta.v33, k = v ? v.ligas_min_gbm.indexOf(ligaD) : -1;
+    return k >= 0 && Array.isArray(rec.min_gbm) && fin(rec.min_gbm[k]) ? rec.min_gbm[k] : NaN;
+  }
+  function centroV33(rec, ligaD, motor) {
+    const el = (D.meta.v33 || {}).minutos_publicados || "motor";
+    if (el === "motor") return motor;
+    const g = minGbm(rec, ligaD);
+    if (!fin(g)) return motor;
+    return el === "gbm" ? g : 0.5 * (motor + g);
+  }
+  function minutosV33(res, rec, ligaD, gm) {
+    const m = res.minutos, motor = m.mediana, nuevo = Math.min(Math.max(centroV33(rec, ligaD, motor), 0), gm), d = fin(motor) ? nuevo - motor : 0;
+    res.minutos_v33 = { motor, publicado: nuevo, fuente: D.meta.v33.minutos_publicados };
+    if (d) {
+      res.minutos = Object.fromEntries(Object.entries(m).map(([k, v]) => [k, fin(v) ? Math.min(Math.max(v + d, 0), gm) : v]));
+      res.min_pct = Object.fromEntries(Object.entries(res.minutos).map(([k, v]) => [k, fin(v) ? v / gm : v]));
+    }
+    return d;
+  }
+  function b9RolAsignado(res, rec, LB, gm, Ml, T5l, iF, esGtg, resid, rng, rolAsig, ligaD) {
+    const coef = D.meta.v33.b9_coeficientes || {}, niveles = D.meta.intervalos;
+    const ml = Ml.map((f) => (f[iF] > 0 ? f[iF] : resid * (0.5 + rng.u())));
+    const rl = ml.map((m, s) => clasificar(m / gm, T5l[s][iF] ? 1 : 0, esGtg[s]));
+    const tmp = { minutos: resumen(ml, niveles), roles: Object.fromEntries(ROLES.map((r) => [r, rl.filter((x) => x === r).length / ml.length])) };
+    tmp.indice_rol = ROLES.reduce((a, r, i) => a + i * tmp.roles[r], 0);
+    if (D.meta.calibracion_salida) calibrarSalida(tmp, rec, LB, gm);
+    const libre = centroV33(rec, ligaD, tmp.minutos.mediana), dmin = res.minutos.mediana - libre, drol = ROLES.indexOf(rolAsig) - tmp.indice_rol;
+    Object.entries(res.produccion_p100).forEach(([m, d]) => {
+      const k = coef[m]; if (!k || !fin(dmin)) return;
+      const dy = k.b_min * dmin + k.c_rol * drol;
+      Object.keys(d).forEach((kk) => { if (fin(d[kk]) && (kk === "media" || kk === "mediana" || kk.startsWith("lo") || kk.startsWith("hi"))) d[kk] += dy; });
+    });
+    res.b9 = { d_min: dmin, d_rol: drol, minutos_libre: libre, indice_rol_libre: tmp.indice_rol };
+  }
+  // ------------------------------------------------------------------ v3.2 · producción del Atlas (A2) y A4
+  function produccionAtlas(res, rec, LB, ligaD, LbarDest, ctxO) {
+    const meta = D.meta, sens = (meta.v32 || {}).sens_atlas || {}, pos = ["E", "A", "I"].includes(rec.pos3) ? rec.pos3 : "A";
+    const dctx = fin(LbarDest) && fin(ctxO) ? LbarDest - ctxO : 0;
+    Object.entries(res.produccion_p100).forEach(([m, d]) => {
+      const k = meta.metricas.indexOf(m), K = LB.metricas[m], th = Array.isArray(rec.az) ? rec.az[k] : NaN;
+      if (!K || !fin(th) || !fin(K.m)) return;
+      const der = fin(rec.edad) ? num((meta.deriva[m] || {})[tramo(rec.edad)], 0) : 0;   // Python: sin edad, sin deriva
+      const zd = (th + num(sens[m], 0) * dctx + der - K.m) / K.s, x = TRinv(K.mu[pos] + K.tau[pos] * zd, meta.transf[m]);
+      Object.assign(d, { media: x, mediana: x, lo50: null, hi50: null, lo80: null, hi80: null, lo90: null, hi90: null });
+    });
+    res.produccion_fuente = "atlas";
+  }
+  function grupoDestino(lo, ld) {
+    if (ld === "euroleague") return "a_euroleague";
+    if (String(lo).startsWith("feb") || String(ld).startsWith("feb")) return "feb";
+    if (["nba", "gleague"].includes(lo) || ["nba", "gleague"].includes(ld)) return "nba_gleague";
+    return "europa";
+  }
+  function recalibrar(res, lo, ligaD, gm, facMin) {
+    const fac = D.meta.v32.recalibracion, g = grupoDestino(lo, ligaD), o = lo === "feb3" ? "feb3" : lo === "ncaa" ? "ncaa" : "resto";
+    const esc = (d, f, centro) => {
+      if (!f || d[centro] == null) return;
+      const cc = d[centro];
+      ["50", "80", "90"].forEach((a) => {
+        const fa = f[a]; if (!fa || (d["lo" + a] == null && fa.tipo !== "semiamplitud")) return;
+        const k = {}; ["menos", "mas"].forEach((l) => { const x = fa[l]; k[l] = num(x.grupo_origen[`${g}|${o}`], num(x.grupo[g], x.global)); });
+        if (fa.tipo === "semiamplitud") { d["lo" + a] = cc - k.menos; d["hi" + a] = cc + k.mas; }
+        else { d["lo" + a] = cc - k.menos * (cc - d["lo" + a]); d["hi" + a] = cc + k.mas * (d["hi" + a] - cc); }
+      });
+    };
+    const orden = (d) => {
+      const L = ["50", "80", "90"]; if (L.some((a) => d["lo" + a] == null || d["hi" + a] == null)) return;
+      for (let i = 1; i < 3; i++) { d["lo" + L[i]] = Math.min(d["lo" + L[i]], d["lo" + L[i - 1]]); d["hi" + L[i]] = Math.max(d["hi" + L[i]], d["hi" + L[i - 1]]); }
+    };
+    Object.entries(res.produccion_p100).forEach(([m, d]) => esc(d, fac[m], "media"));
+    esc(res.minutos, facMin || fac.min, "mediana");
+    if (D.meta.v33) { Object.values(res.produccion_p100).forEach(orden); orden(res.minutos); }
+    res.min_pct = Object.fromEntries(Object.entries(res.minutos).map(([k, v]) => [k, fin(v) ? v / gm : v]));
+    res.recalibrado_v32 = `${g}|${o}`;
+  }
   function simular(op) {
     const meta = D.meta, rec = op.rec, club = op.club, base = club.base, ligaD = club.liga, gm = minPartido(ligaD), total = 5 * gm;
     const nSim = op.nSim || meta.n_sim, semilla = op.semilla ?? meta.semilla;
@@ -246,6 +348,8 @@
     const rolAsig = ROLES.includes(op.rol) ? op.rol : null, fuerza = new Map();
     if (op.roles) P.forEach((p, i) => { const r = op.roles.get ? op.roles.get(p.persona) : op.roles[p.persona]; if (i !== iF && ROLES.includes(r)) fuerza.set(i, r); });
     if (rolAsig) fuerza.set(iF, rolAsig);
+    const v33 = meta.v33 || null;
+    const Mlibre = rolAsig && v33 && v33.b9 ? M.map((f) => f.slice()) : null, T5libre = Mlibre ? T5.map((f) => f.slice()) : null;   // v3.3 · B9
     forzarRoles(M, T5, fuerza, total, gm, LB, rng);
     const P0 = P.slice(0, iF), n0 = Math.max(200, Math.floor(nSim / 2));
     const M0 = P0.length >= 5 ? asignar(P0, null, pres.slice(0, iF), total, gm, rot, rotSd, curva, n0, rng).M : null;
@@ -275,12 +379,14 @@
     }
     // 5. compañeros
     const ctxO = fin(rec.ctx) ? rec.ctx : NaN, dL = Lbar.map((x) => (fin(ctxO) ? x - ctxO : 0));
-    const bS = Array.from({ length: nSim }, () => bc[0] + bc[1] * rng.n()), betaS = Array.from({ length: nSim }, () => beta[0] + beta[1] * rng.n());
+    const pasos = { uso_eficiencia: true, companeros: true, ...(meta.pasos || {}) }, kts = meta.factor_ajustes_ts || [1, 1];
+    const bS = Array.from({ length: nSim }, () => (bc[0] + bc[1] * rng.n()) * (pasos.companeros ? 1 : 0)),
+      betaS = Array.from({ length: nSim }, () => (beta[0] + beta[1] * rng.n()) * (pasos.uso_eficiencia ? 1 : 0));
     // producción
     const prod = {};
     mets.forEach((m) => { const v = tr[m] || new Array(nSim).fill(NaN); prod[m] = AM[m] ? v.map((x, s) => x * fact[AM[m]].temporada[s]) : v.slice(); });
     const tsB = prod.ts_pct.slice();
-    prod.ts_pct = tsB.map((t, s) => Math.min(pr.ts_max, Math.max(pr.ts_min, t + betaS[s] * (USG2f[s] - usgB[s]) + bS[s] * dL[s])));
+    prod.ts_pct = tsB.map((t, s) => Math.min(pr.ts_max, Math.max(pr.ts_min, t + kts[0] * betaS[s] * (USG2f[s] - usgB[s]) + kts[1] * bS[s] * dL[s])));
     prod.usg_pct = USG2f.slice();
     prod.pts_p100 = prod.pts_p100.map((v, s) => v * (USG2f[s] / usgB[s]) * (prod.ts_pct[s] / tsB[s]));
     const ritmo = fin(club.ritmo) ? club.ritmo : num(LB.ref.ritmo, 72), disp = num(cal.disponibilidad, 0.85);
@@ -310,19 +416,21 @@
     // capa de calibración de salida (minutos y roles; ajustada con fichajes reales anteriores: bbfit.validacion)
     res.rol_asignado = rolAsig; res.rol_origen = rec.rol || null; res.version_motor = rolAsig || fuerza.size ? "v2.1" : "v2.0";
     const CS = meta.calibracion_salida;
-    if (CS && !rolAsig) {
-      const ro = ROLES.includes(rec.rol) ? rec.rol : "ROTACION", mb = num((LB.min_rol || {})[ro], 0.4) * gm, mo = fin(rec.min_pct) ? rec.min_pct * gm : mb;
-      const tr = (CS.transicion || {})[ro], Pb = ROLES.map((r) => (tr ? num(tr[r], 0.2) : 0.2)), m0 = res.minutos, c = CS.min.c;
-      const m = Math.max(0, c[0] + c[1] * m0.mediana + c[2] * mo + c[3] * mb);
-      const mi = { media: m, mediana: m };
-      ["50", "90"].forEach((a) => { const s_ = num(CS.min["s" + a], 1); mi["lo" + a] = Math.max(0, m + s_ * (m0["lo" + a] - m0.mediana)); mi["hi" + a] = m + s_ * (m0["hi" + a] - m0.mediana); });
-      const R = CS.roles, z = ROLES.map((r, k) => R.theta[k] + R.alfa * Math.log(Math.min(1, Math.max(1e-3, pRol[r]))) + R.beta * Math.log(Math.min(1, Math.max(1e-3, Pb[k])))), zm = Math.max(...z), ez = z.map((x) => Math.exp(x - zm)), se = ez.reduce((a, b) => a + b, 0);
-      res.minutos_motor = m0; res.roles_motor = { ...pRol };
-      res.minutos = mi; res.min_pct = Object.fromEntries(Object.entries(mi).map(([k, v]) => [k, v / gm]));
-      ROLES.forEach((r, k) => (res.roles[r] = ez[k] / se));
-      res.rol_esperado = ROLES.reduce((a, r) => (res.roles[r] > res.roles[a] ? r : a), ROLES[0]);
-      res.indice_rol = ROLES.reduce((a, r, i) => a + i * res.roles[r], 0); res.calibrado = true;
+    if (CS && !rolAsig) calibrarSalida(res, rec, LB, gm);
+    // v3.3 · M: minutos publicados (motor, GBM o mezcla), desplazando la distribución
+    let dMin33 = 0;
+    if (v33 && !rolAsig) dMin33 = minutosV33(res, rec, ligaD, gm);
+    // v3.2 · producción publicada del Atlas (A2)
+    const v32 = meta.v32 || {};
+    if (v32.produccion_publicada === "atlas") {
+      produccionAtlas(res, rec, LB, ligaD, media(Lbar), ctxO);
+      if (dMin33 && res.contribucion) { /* (el motor del navegador no calcula la contribución C) */ }
     }
+    // v3.3 · B9 con rol asignado
+    if (v33 && v33.b9 && rolAsig && Mlibre) b9RolAsignado(res, rec, LB, gm, Mlibre, T5libre, iF, esGtg, resid, rng, rolAsig, ligaD);
+    // v3.2 · A4: recalibración de dos colas (factores finales) e intervalos anidados
+    if (v32.aplicar_recalibracion && v32.recalibracion) recalibrar(res, lo, ligaD, gm, v33 ? v33.recalibracion_minutos : null);
+    res.version_motor = v33 ? "v3.3" : (v32.produccion_publicada ? "v3.2" : res.version_motor);
     // por partido
     const possPg = mF.map((m) => (m / gm) * ritmo);
     res.por_partido = { posesiones: resumen(possPg, niveles) };
@@ -404,6 +512,6 @@
     if (roles) { const fz = new Map(); P.forEach((p, i) => { const r = roles.get ? roles.get(p.persona) : roles[p.persona]; if (ROLES.includes(r)) fz.set(i, r); }); forzarRoles(M, T5, fz, total, gm, ligaBase(base, ligaD), rng); }
     return P.map((p, i) => ({ persona: p.persona, minutos: media(M.map((f) => f[i])), mediana: cuantil(M.map((f) => f[i]), 0.5), lo50: cuantil(M.map((f) => f[i]), 0.25), hi50: cuantil(M.map((f) => f[i]), 0.75), p_titular: T5.filter((t) => t[i]).length / n }));
   }
-  const api = { cargar, simular, minutosEquipo, prior, grupoNac, traducir, clasificar, franjaRol, ROLES, VERSION: "v2.1", get datos() { return D; } };
-  if (typeof module !== "undefined" && module.exports) module.exports = api; else raiz.SIM2 = api;
+  const api = { cargar, simular, minutosEquipo, prior, grupoNac, traducir, clasificar, franjaRol, ROLES, VERSION: "v3.3", get datos() { return D; } };
+  if (typeof module !== "undefined" && module.exports) module.exports = api; else { raiz.SIM = api; raiz.SIM2 = api; }
 })(typeof window !== "undefined" ? window : globalThis);

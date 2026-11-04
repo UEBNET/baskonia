@@ -11,7 +11,7 @@
    - Los ficheros informe/<temporada>.json usan otra numeración de persona_id que el fichero de jugadores del Atlas
      (solo coincidía el 0,2 % de las claves → «Sin datos detallados…»). Resolución: clave exacta si existe; si no,
      emparejamiento dentro del mismo club-temporada por minutos jugados (asignación voraz por |Δminutos|).
-   - Simulación del destino: motor v2.1 con el ROL QUE ASIGNA EL USUARIO (selector «Rol en el club de destino»).
+   - Simulación del destino: motor del simulador (v3.3 desde el 04-11-2026) con el ROL QUE ASIGNA EL USUARIO (selector «Rol en el club de destino»).
    Nada de metodología interna en el documento: solo lectura, cifras con su margen y lenguaje de baloncesto.
 
    v3.1 · 29-10-2026 (decisión del CEO, cambios definitivos):

@@ -8,7 +8,7 @@
 <script>try { if (window.parent !== window) document.documentElement.dataset.embed = "1"; } catch (e) {}</script>
 <script>document.documentElement.dataset.vista = /[?&]vista=claves\b/.test(location.search) ? "claves" : "atlas";</script>
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-gl3d-dist-min@2.35.2/plotly-gl3d.min.js"></script>
-<script src="simulador_v2.js"></script>
+<script src="simulador.js"></script>
 <style>
 /* Layout: resumen ejecutivo arriba y cinco pestañas de trabajo: mapa y comparación de clubes · simulador de fichajes
    (varios jugadores y bajas) · buscar parecidos · ligas y estilos · hallazgos y modelo. */
@@ -942,9 +942,9 @@ section.block > div:first-child > h2, .side-r h2 { font: 600 13px var(--f-body) 
         </div>
         <div class="res">
           <div id="sBanner"></div>
-          <div class="lvlhead"><h3>Encaje del fichaje · simulador v2.1</h3><p class="note">Con el rol que asignas a cada fichaje (simulador v2.1): nivel traducido al destino, adaptación al cambio de liga, minutos de ese rol, uso compartido, compañeros, estilo y ritmo. Intervalos del 50 % y del 90 % de 600 temporadas simuladas.</p></div>
+          <div class="lvlhead"><h3>Encaje del fichaje · simulador v3.3</h3><p class="note">Con el rol que asignas a cada fichaje (simulador v3.3): nivel traducido al destino, adaptación al cambio de liga, minutos de ese rol, uso compartido, estilo y ritmo; la producción es la del Atlas desplazada a lo que implica ese rol (B9) y los intervalos del 50 % y del 90 % están recalibrados con fichajes reales (600 temporadas simuladas).</p></div>
           <div class="v2" id="sV2"><p class="note">Cargando el simulador…</p></div>
-          <div class="lvlhead"><h3>Estilo con los cambios</h3><p class="note">Cada fichaje entra con los minutos de su rol asignado (simulador v2.1). Arriba, el estilo de juego; debajo, el perfil del mapa.</p></div>
+          <div class="lvlhead"><h3>Estilo con los cambios</h3><p class="note">Cada fichaje entra con los minutos de su rol asignado (simulador v3.3). Arriba, el estilo de juego; debajo, el perfil del mapa.</p></div>
           <div class="outcome" id="sOutcome"></div>
           <div class="grid2">
             <div class="mapbox"><div class="maphead"><span class="label">La plantilla en el mapa</span><label class="tog note"><input type="checkbox" id="sOtros"> Clubes de la misma competición</label></div><div id="sMapa"></div>
@@ -1937,7 +1937,7 @@ function pintarComparacion() {
 }
 
 // ---------------------------------------------------------------- simulador de fichajes
-// ---------------------------------------------------------------- simulador de encaje v2 (motor: simulador_v2.js = bbfit.simulador)
+// ---------------------------------------------------------------- simulador de encaje v3.3 (motor: simulador.js = bbfit.simulador, CERNO_SIMULADOR=v33)
 // Datos: simulador/{meta,jugadores,clubes}.json (bbfit/sim_exportar.py). Sin minutos manuales: el rol y los minutos son endógenos.
 let SIMD = null, SIMP = null, SIMPID = null;
 const SIMV2 = new Map();
@@ -2020,7 +2020,7 @@ const MET_V2 = [["pts_p100", "Puntos/100", 1], ["ts_pct", "TS%", 1], ["usg_pct",
 const PP_V2 = [["pts", "Puntos"], ["reb", "Rebotes"], ["stl", "Robos"], ["blk", "Tapones"], ["posesiones", "Posesiones en pista"]];
 function tarjetaV2(o, n, s) {
   const r = o.v2, nom = o.j ? o.j.nombre : o.rec ? o.rec.nombre : "?";
-  if (!r) return `<div class="v2card"><h3><span class="badge" style="background:${FICH_COL[n % FICH_COL.length]}">${n + 1}</span>${esc(nom)}</h3><p class="note">${o.rec ? "Sin plantilla del simulador v2 para este club y temporada (hay plantillas de 2025-26 y 2026-27)." : "Sin insumos del simulador v2 para esta temporada del jugador: elige otra de sus temporadas (2024-25 a 2026-27)."}</p></div>`;
+  if (!r) return `<div class="v2card"><h3><span class="badge" style="background:${FICH_COL[n % FICH_COL.length]}">${n + 1}</span>${esc(nom)}</h3><p class="note">${o.rec ? "Sin plantilla del simulador para este club y temporada (hay plantillas de 2025-26 y 2026-27)." : "Sin insumos del simulador para esta temporada del jugador: elige otra de sus temporadas (2024-25 a 2026-27)."}</p></div>`;
   if (r.error) return `<div class="v2card"><h3>${esc(nom)}</h3><p class="note">No se pudo simular (${esc(r.error)}).</p></div>`;
   const F = r.fit, a = r.adaptacion, eq = r.equipo, e = r.estilo, t = r.temporada_destino;
   const fitTot = F.total != null ? ESC.html("z", F.total, null, { nombre: "Fit (éxito esperado)", raw: `${sg(F.total, 2)} DT del éxito`, extra: "Éxito = 0,5·z(minutos) + 0,5·z(nivel) en la liga de destino; 0 = fichaje medio" }) : "–";
@@ -2054,7 +2054,7 @@ function tarjetaV2(o, n, s) {
 function pintarV2(s) {
   const box = $("#sV2"); if (!box) return;
   if (!SIMD) { box.innerHTML = `<p class="note">Cargando el simulador…</p>`; return; }
-  if (SIMD.error) { box.innerHTML = `<p class="note">No se pudo cargar el simulador v2 (${esc(SIMD.error)}).</p>`; return; }
+  if (SIMD.error) { box.innerHTML = `<p class="note">No se pudo cargar el simulador (${esc(SIMD.error)}).</p>`; return; }
   if (!s.todos.length) { box.innerHTML = `<p class="note">Añade un fichaje para ver su rol, minutos, producción, Fit, adaptación e impacto.</p>`; return; }
   box.innerHTML = s.todos.map((o, n) => tarjetaV2(o, n, s)).join("");
 }
@@ -2087,7 +2087,7 @@ function construirSimulador() {
     const vistosS = new Set(res.map((x) => { const r = simRec(x); return r ? r.id : null; }).filter(Boolean));
     const soloS = SIMD && SIMD.jug ? [...SIMD.jug.values()].filter((r) => !vistosS.has(r.id) && !JK.has(`${r.liga}:${r.team}:${r.temporada}|${r.nombre}`) && (r.min_total || 0) >= 100 && q.every((p) => norm(r.nombre || "").includes(p))).sort((a, b) => b.temporada.localeCompare(a.temporada) || b.min_total - a.min_total).slice(0, 15) : [];
     box.innerHTML = res.map((x) => `<button data-k="${esc(jKey(x))}"><span>${esc(x.nombre)}</span><small>${LC[x.liga]} ${tC(x.temporada)} · ${esc(x.nombre_club)} · ${Math.round(x.min)}'</small></button>`).join("") +
-      soloS.map((r) => `<button data-k="s:${esc(r.id)}"><span>${esc(r.nombre)}</span><small>${esc(ESC.ligaCorto(r.liga))} ${tC(r.temporada)} · ${esc(r.club || r.team)} · ${Math.round(r.min_total)}' · sólo simulador v2</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados con ${META.min_jugador}+ minutos.</span>`; box.hidden = false; };
+      soloS.map((r) => `<button data-k="s:${esc(r.id)}"><span>${esc(r.nombre)}</span><small>${esc(ESC.ligaCorto(r.liga))} ${tC(r.temporada)} · ${esc(r.club || r.team)} · ${Math.round(r.min_total)}' · sólo simulador</small></button>`).join("") || `<span class="note" style="padding:6px">Sin resultados con ${META.min_jugador}+ minutos.</span>`; box.hidden = false; };
   $("#sBusS").onclick = (e) => { const b = e.target.closest("[data-k]"); if (!b) return; $("#sBusS").hidden = true; $("#sBus").value = "";
     if (b.dataset.k.startsWith("s:")) { if (st.sim.ejemplo) { st.sim.fich = []; st.sim.ejemplo = false; } if (!st.sim.fich.some((f) => f.k === b.dataset.k)) st.sim.fich.push({ k: b.dataset.k }); st.sim.fich = st.sim.fich.slice(0, 8); guardar(); pintarSim(); return; }
     addFichaje(JK.get(b.dataset.k)); };
@@ -2123,7 +2123,7 @@ function simEstado() {
   const d = simDestino(); if (!d) return null;
   const T = d.min_total, roster = (ROSTER.get(d.clave) || []).slice().sort((a, b) => b.min - a.min);
   const bajas = roster.filter((x) => st.sim.bajas.includes(jKey(x)));
-  // fichajes: filas del Atlas (j) o registros sólo del simulador v2 (k = «s:<id>»)
+  // fichajes: filas del Atlas (j) o registros sólo del simulador (k = «s:<id>»)
   const todos = st.sim.fich.map((f, n) => { const j = f.k.startsWith("s:") ? null : JK.get(f.k), rec = j ? simRec(j) : (SIMD && SIMD.jug ? SIMD.jug.get(f.k.slice(2)) : null), r0 = rolDe(j, rec); return { f, n, j, rec, rol: ROLES_V21.includes(f.rol) ? f.rol : r0.rol, rol0: r0 }; })
     .filter((o) => (o.j && o.j.clave !== d.clave) || (!o.j && o.f.k.startsWith("s:")));
   const v2 = v2Estado(d, todos, bajas);
@@ -2481,7 +2481,7 @@ const elClubs = () => { const t = ultCompleta(); return CL.filter((c) => c.liga 
 function eqEstado() {
   const d = eqRef();
   const jug = st.eq.jug.map((f, n) => { const j = JK.get(f.k); if (!j) return null; const modo = f.modo || modoDef(j), r0 = rolDe(j); return { f, n, j, modo, m: mpgDef(j), rol: ROLES_V21.includes(f.rol) ? f.rol : r0.rol, rol0: r0, ...valsJ(j, modo) }; }).filter(Boolean);
-  // minutos endógenos (simulador v2): Plackett-Luce con la utilidad de cada jugador y las costumbres del entrenador
+  // minutos endógenos (simulador v3.3: mezcla 50/50 del motor y el GBM): Plackett-Luce con la utilidad de cada jugador y las costumbres del entrenador
   const mv = eqMinutosV2(jug, d);
   if (mv) jug.forEach((o, i) => { o.m = mv[i].minutos * 200 / (5 * (SIMD.meta.min_partido[mv.liga] || 40)); o.v2 = mv[i]; });
   const M = jug.reduce((s, o) => s + o.m, 0), k = M > 0 ? 200 / M : 1;
@@ -2494,7 +2494,7 @@ function eqEstado() {
   const antes = d ? { p: d.probs, xyz: XYZ(d), e: d.e, L: d.nivel, X: d.X, Q: medias(d.SQ, d.WQ, d.SQ.length), euc: d.eu != null ? { eu: d.eu, eu_p: d.eu_p, eu_etiqueta: d.eu_etiqueta || euNom(d.eu), club: true } : null } : null;
   return { d, jug, M, k, eq, antes };
 }
-// «Simular equipo completo»: minutos por partido de cada jugador con el motor v2 (no se teclean)
+// «Simular equipo completo»: minutos por partido de cada jugador con el motor v3.3 (no se teclean)
 const EQV2 = new Map();
 function eqMinutosV2(jug, d) {
   if (!SIMD || SIMD.error || !SIMD.meta || jug.length < 5) return null;
@@ -2577,7 +2577,7 @@ function ejemploBrutosEL() {
 function pintarEqTot(s) {
   const M = s.M, cls = Math.abs(M - 200) < 0.5 ? "ok" : M > 200 ? "over" : "under";
   $("#eTot").className = "etot " + cls;
-  $("#eTot").innerHTML = `<div class="row"><span><b>${fmt(M, 1)}'</b> <span class="note">de 200' por partido · minutos de cada rol asignado (simulador v2.1)</span></span>${cls === "ok" ? `<span class="pill good">Cuadra</span>` : ""}</div><div class="bar"><i style="width:${Math.min(100, M / 2)}%"></i></div>` +
+  $("#eTot").innerHTML = `<div class="row"><span><b>${fmt(M, 1)}'</b> <span class="note">de 200' por partido · minutos de cada rol asignado (simulador v3.3)</span></span>${cls === "ok" ? `<span class="pill good">Cuadra</span>` : ""}</div><div class="bar"><i style="width:${Math.min(100, M / 2)}%"></i></div>` +
     (cls === "ok" || !M ? "" : `<span class="note warn">${cls === "over" ? `Sobran ${fmt(M - 200, 1)}'` : `Faltan ${fmt(200 - M, 1)}' (nadie puede pasar de 36' por partido: con tan pocos jugadores no se llega a 200')`}. Para el mapa se escalan todos a prorrata (×${fmt(s.k, 2)}).</span>`);
 }
 function pintarEq(soloRes = false) {

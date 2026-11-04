@@ -967,6 +967,27 @@ def _b9_rol_asignado(c, res, fila, liga_d, tr0, gm, v33, M_libre, i_f, es_gtg, r
     res["b9"] = {"d_min": dmin, "d_rol": drol, "minutos_libre": libre, "indice_rol_libre": tmp["indice_rol"]}
 
 
+def atlas_z(c: "Corte", fila: dict, m: str) -> float:
+    """Valor del registro en la escala de trabajo de la EuroLeague 2025-26 (z), el punto de partida de la producción del
+    Atlas (_produccion_atlas). Lo exporta sim_exportar para el motor del navegador (columna «az»)."""
+    from bbmodel.metricas import transformar
+    v = _f(fila.get(m)) if c.fuente not in ("A_corte", "V32_corte") else _f(fila.get(f"{m}_am"))
+    v = v if np.isfinite(v) else _f(fila.get(f"{m}_am"))
+    k = c.trad["constantes"].get(m)
+    if k is None or not np.isfinite(v):
+        return float("nan")
+    pos = fila.get("pos3") if isinstance(fila.get("pos3"), str) else "A"
+    mu_el, tau_el = SI.entorno(k, "euroleague", "2025-26", pos)
+    return float((transformar(v, k["transf"]) - mu_el) / tau_el)
+
+
+def sens_atlas() -> dict:
+    """β de contexto de cada métrica que usa la producción del Atlas (0 si no es claro: |β| ≤ 2·se)."""
+    sens = SI.sensibilidad_contexto()
+    return {m: float(sens.loc[m, "beta_comp"]) if abs(sens.loc[m, "beta_comp"]) > 2 * sens.loc[m, "beta_comp_se"] else 0.0
+            for m in sens.index}
+
+
 def _produccion_atlas(c: "Corte", res: dict, fila: dict, liga_d: str, Lbar_dest: float) -> None:
     """A2 · producción del Atlas (la de la línea base «a» del examen: valor normalizado + contexto con β si es claro,
     traducido con el tipo de cambio lineal), con los minutos y el rol del motor. Intervalos: A4 (semiamplitud)."""
