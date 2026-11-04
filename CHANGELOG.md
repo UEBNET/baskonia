@@ -17,7 +17,7 @@ F2 el 04-11-2026. β de F1 congelados; F2 aprende el residuo.
   tiro (−5 a −7 % de MAE frente a Δ = 0), % asistidas (−2 a −4 %) y pts/100 (−3 a −4 %)**, con cobertura 0,79–0,82; eFG% y
   % en el aro no pasan (ablación negativa). Producto: 249.094 parejas con efecto real, predicho e intervalo
   (`sinergia/dirigidos/efectos_<t>.csv.gz`), modelos y calibración (`modelos.pkl`, `resumen_producto.json`).
-* Salidas F2-A: `sinergia/{M_completa.npy, M_rango.npy, W_sinergia.json, psi.csv.gz, examen/}`. [[PSI_CHANGELOG]]
+* Salidas F2-A: `sinergia/{M_completa.npy, M_rango.npy, W_sinergia.json, psi.csv.gz, examen/}`. **ψ no se publica**: la validación cruzada por partido elige la línea base ψ = 0 (11.526 frente a 11.528 con κ = 0,5); `psi.csv.gz` vacío.
 
 ## 2026-11-04 — CERNO v4.0 · F1: RAPM multiliga con prior del perfil (+ F1-D)
 

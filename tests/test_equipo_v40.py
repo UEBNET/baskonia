@@ -357,7 +357,7 @@ class _RasgosSinteticos:
         return np.array([self.Z.get(k, np.zeros(self.p)) for k in claves])
 
 
-def _tramos_sinteticos(rng, n_jug=60, n_tramos=6000, p=5):
+def _tramos_sinergia(rng, n_jug=60, n_tramos=6000, p=5):
     from bbequipo import sinergia as S
     Z = {f"j{i}": rng.normal(size=p) for i in range(n_jug)}
     R = _RasgosSinteticos(Z, p)
@@ -379,7 +379,7 @@ def _tramos_sinteticos(rng, n_jug=60, n_tramos=6000, p=5):
 def test_sinergia_recupera_M_por_quintetos():
     """y = Σ_{A} φ − Σ_{B} φ + ruido con φ = zᵢᵀ M zⱼ: la fila lineal ⟨M, Q_A − Q_B⟩ y el ridge exacto recuperan M."""
     rng = np.random.default_rng(3)
-    S, tr, R, M, phi = _tramos_sinteticos(rng)
+    S, tr, R, M, phi = _tramos_sinergia(rng)
     sigma2 = 4.0
     w = tr["poss"].to_numpy(float)
     r = phi + rng.normal(size=len(tr)) * np.sqrt(sigma2 / w)
@@ -400,7 +400,7 @@ def test_psi_no_se_publica_si_el_residuo_es_ruido():
     """Con residuo puro ruido, la línea base ψ = 0 gana la validación cruzada y no se publica ninguna pareja; con un efecto
     propio de pareja real, se publica y recupera el signo."""
     rng = np.random.default_rng(5)
-    S, tr, R, M, phi = _tramos_sinteticos(rng, n_jug=20, n_tramos=4000)
+    S, tr, R, M, phi = _tramos_sinergia(rng, n_jug=20, n_tramos=4000)
     w = tr["poss"].to_numpy(float)
     ruido = rng.normal(size=len(tr)) * np.sqrt(4.0 / w)
     out = S.psi_parejas(tr, ruido, w, 4.0, [0.5, 1.0, 2.0, 4.0], 3, 0, 100.0)
