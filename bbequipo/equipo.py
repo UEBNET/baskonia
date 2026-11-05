@@ -111,6 +111,8 @@ class Insumos:
         # F3 aditiva del corte (si está): h_i = g({i}) − g(∅)
         suf = "aditiva" if cfg["f3"].get("rho_lineal", False) else "completa"
         p3 = CJ.dir_salida(cfg) / "examen" / f"red_corte_{a}_{suf}.pkl"
+        if not p3.exists() and cfg["f4"].get("exigir_f3", True):
+            raise FileNotFoundError(f"falta la red F3 del corte {a} ({p3.name}): ejecute `python -m bbequipo conjunto-redes-corte`")
         self.red = CJ.ConjuntoNet(self.R.Z, cfg).cargar(pickle.loads(p3.read_bytes()), int(cfg["semilla"])) if p3.exists() else None
         self._h = {}
         # v3.3: corte, roles, pesos PL del corte
