@@ -1864,6 +1864,20 @@ Detalle en `docs/checkpoints/V40_F3.md`. Sobre el residuo de F1 + F2 (β y M_r c
 | `examen/diagnostico_g_<t>.json` | correlaciones de g con agregados del quinteto (suma y máximo de cada rasgo, nº sin perfil) y R² de un ridge sobre ellos |
 | `redes.pkl`, `F3_conjunto.json` | producto (sólo si pasa §11.3): estado de las redes, rasgos (columnas, media, DT), fórmula; o `publicado: false` con el motivo |
 
+### CERNO v4.0 · F4: capa de equipo y A5 (`v4_0/equipo/`)
+
+Detalle en `docs/checkpoints/V40_F4.md`. Sobre F1 + F2 + F3 congelados y el motor de minutos de la v3.3.
+
+| Fichero | Contenido |
+|---|---|
+| `examen/predicciones_f4.csv.gz` | una fila por transición equipo-temporada t → t+1: `corte, liga, grupo, club, net_ant, net_nuevo, delta_real`; fuerza proyectada centrada `T1` (media, sd y cuantiles del Monte Carlo), `T1_aditivo`, `T1_phi`, `T1_h`, `T1_oraculo` (minutos reales de t+1), `T0`; `delta_pred` (calibrado), `delta_pred_crudo` (T1' − T0'), `delta_aditivo`, `delta_gbm`, `delta_oraculo_minutos`, `lo80/hi80`, `c_cal, d_cal, s0_80, factor_80, factor_80_fuente, sesgo_tercil`; `min_altas` (cuota de minutos proyectada de las altas), `n_plantilla, n_sin_beta, n_nuevo`, rasgos del libro |
+| `examen/resumen_examen_f4.json` | métricas por corte, por grupo de liga, por liga y global de los cortes de decisión (MAE, Spearman, cobertura, diferencias con IC95 frente a persistencia / aditivo / GBM, sesgo por tercil); `puerta_11_4` |
+| `examen/predicciones_corte_<t>.pkl` | caché de las filas de un corte (sin calibrar) |
+| `calibracion.json` | producto: (c, d) de Net̂_{t+1} = c·T1' + d·Net_t y (s0, q) del intervalo del 80 %, conjuntos y por grupo de liga; sesgo por tercil de minutos de las altas |
+| `equipos_<temporada>.csv.gz` | Net̂ proyectado de los equipos de la última temporada con plantilla: `T, T_sd, T_aditivo, T_phi, T_h, T_centrada, net_proyectado_relativo, n_plantilla, n_sin_beta` |
+| `a5/resumen_a5.json` | examen §11.6: diagnóstico de carga, MAE A5 frente a B9 por métrica con IC90, coeficientes por corte, contracción, puerta y decisión por métrica |
+| `a5/coeficientes_producto_a5.json` | producto A5 por métrica (spline de Δmin, c_rol, pares con δ, coef_carga; o B9 lineal), franja de minutos por rol |
+
 ## 4. Banderas frecuentes
 
 | Bandera | Dónde | Significado |

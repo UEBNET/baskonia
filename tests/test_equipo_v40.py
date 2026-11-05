@@ -441,3 +441,54 @@ def test_conjunto_aprende_una_funcion_no_aditiva_del_quinteto():
     red2.ajustar(idx[tr], ruido[tr], w[tr], 0)
     pr2 = red2.predecir(idx[te])
     assert np.sqrt(np.mean((ruido[te] - pr2) ** 2)) < 1.03 * np.sqrt(np.mean(ruido[te] ** 2))
+
+
+# ---------------------------------------------------------------------------------------------- F4 · capa de equipo y A5
+def test_calibracion_f4_recupera_c_y_d_y_cubre():
+    """Net_{t+1} = c·T1' + d·Net_t + ruido: la calibración con cortes anteriores recupera (c, d) y el intervalo conformal
+    cubre ≈ 80 % en el corte siguiente; la primera pasada (sin cortes previos) se marca con sus propios coeficientes."""
+    from bbequipo import equipo as EQ
+    rng = np.random.default_rng(7)
+    filas = []
+    for corte in (2021, 2022, 2023):
+        n = 150
+        T1 = rng.normal(0, 8, n); n0 = rng.normal(0, 5, n); sd = rng.uniform(1, 2, n)
+        n1 = 0.5 * T1 + 0.3 * n0 + rng.normal(0, 3, n)
+        for i in range(n):
+            filas.append({"corte": corte, "grupo": "g" if i % 2 else "h", "liga": "x", "T1": T1[i], "T1_sd": sd[i], "T1_aditivo": T1[i], "T1_oraculo": T1[i],
+                          "net_ant": n0[i], "net_nuevo": n1[i], "delta_real": n1[i] - n0[i], "n_sin_beta": i % 5, "n_plantilla": 15, "min_altas": rng.uniform(0, 1),
+                          **{f"T1_{q}": T1[i] + z * sd[i] for q, z in (("p05", -1.64), ("p10", -1.28), ("p25", -0.67), ("p75", 0.67), ("p90", 1.28), ("p95", 1.64))}})
+    pred = pd.DataFrame(filas)
+    cal = EQ.calibrar_prediccion(pred, [2021, 2022, 2023])
+    u = cal[cal["corte"] == 2023]
+    assert abs(u["c_cal"].mean() - 0.5) < 0.08 and abs(u["d_cal"].mean() - 0.3) < 0.12
+    cal = EQ.calibrar_intervalos(cal, [2021, 2022, 2023])
+    cob = np.mean((u.index.map(lambda i: cal.loc[i, "delta_real"] >= cal.loc[i, "lo80"] and cal.loc[i, "delta_real"] <= cal.loc[i, "hi80"])))
+    assert 0.7 < cob < 0.9, cob
+    # el MAE calibrado debe batir a la persistencia con holgura en el corte fuera de muestra
+    mae_cal = np.mean(np.abs(u["delta_real"] - cal.loc[u.index, "delta_pred"])); mae_pers = np.mean(np.abs(u["delta_real"]))
+    assert mae_cal < 0.8 * mae_pers
+
+
+def test_a5_recupera_spline_y_matriz_contraida():
+    """Residuo = spline cóncavo de Δmin + c·Δrol + δ sólo en un par: A5 recupera la curvatura, c y la δ del par poblado, y
+    deja ≈ 0 los pares con pocos casos (contracción)."""
+    from bbequipo import a5 as A
+    rng = np.random.default_rng(3)
+    n = 4000
+    roles = np.array(A.ROLES[1:])
+    ro = rng.choice(roles, n); rd = rng.choice(roles, n)
+    dm = rng.normal(0, 5, n); drol = np.array([A.IDX[b] - A.IDX[a] for a, b in zip(ro, rd)], float) + rng.normal(0, 0.3, n)
+    s = np.where(dm < 0, 0.3 * dm, 0.1 * dm)                      # cóncavo: más pendiente a la izquierda
+    delta = np.where((ro == "ROTACION") & (rd == "GO_TO_GUY"), 2.0, 0.0)
+    r = s + 0.8 * drol + delta + rng.normal(0, 1.0, n)
+    cfg = {"minutos": {"cuantiles_nudos": [0.25, 0.5, 0.75]}, "transicion_rol": {"min_casos_par_aviso": 30}}
+    mod = A.A5(cfg).ajustar(r, dm, drol, ro, rd, np.full(n, 25.0))
+    assert abs(mod.coef_lin[4] - 0.8) < 0.1
+    pend = np.cumsum(mod.coef_lin[:4])                            # pendientes por tramo
+    assert pend[0] > pend[-1] + 0.1                               # cóncava
+    assert mod.pares["ROTACION>GO_TO_GUY"]["delta"] > 1.2
+    otros = [v["delta"] for k, v in mod.pares.items() if k != "ROTACION>GO_TO_GUY"]
+    assert max(abs(x) for x in otros) < 0.6
+    pred = mod.predecir(dm, drol, ro, rd, np.full(n, 25.0))
+    assert np.mean(np.abs(r - pred)) < np.mean(np.abs(r - (0.2 * dm + 0.8 * drol)))   # mejor que una recta
