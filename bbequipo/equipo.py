@@ -376,19 +376,57 @@ def calibrar_prediccion(pred: pd.DataFrame, cortes: list[int]) -> pd.DataFrame:
     return pred
 
 
-def calibrar_intervalos(pred: pd.DataFrame, cortes: list[int], nivel: float = 0.8) -> pd.DataFrame:
-    """Intervalo del 80 % conformal: Δ̂ ± q con q el cuantil 0,8 de |residuo| de los cortes anteriores, escalado por la sd
-    del Monte Carlo (q = cuantil de |residuo|/sd_MC); el primer corte usa sus propios residuos (sólo informativo)."""
+def corregir_sesgo_minutos(pred: pd.DataFrame, cortes: list[int], umbral: float) -> pd.DataFrame:
+    """Capa de calibración del sesgo por minutos de las altas (encargo §9.2, prerregistrada): si en los cortes anteriores el
+    sesgo medio de Δ̂ en algún tercil de minutos proyectados de las altas supera ±umbral, se resta ese sesgo por tercil
+    (terciles y sesgos de los cortes ANTERIORES; el primer corte, sin corrección)."""
+    pred = pred.copy(); pred["sesgo_tercil"] = 0.0; pred["tercil_altas"] = None
+    for k_, a in enumerate(cortes):
+        if k_ == 0:
+            continue
+        prev = pred[pred["corte"].isin(cortes[:k_])]
+        q1, q2 = prev["min_altas"].quantile([1 / 3, 2 / 3])
+        terc = lambda x: np.where(x <= q1, "bajo", np.where(x <= q2, "medio", "alto"))
+        tp = terc(prev["min_altas"].to_numpy(float))
+        sesgo = {t: float(np.mean((prev["delta_pred"] - prev["delta_real"])[tp == t])) for t in ("bajo", "medio", "alto")}
+        if max(abs(v) for v in sesgo.values()) <= umbral:
+            continue
+        sel = pred["corte"] == a
+        tt = terc(pred.loc[sel, "min_altas"].to_numpy(float))
+        corr = np.array([sesgo[t] for t in tt])
+        pred.loc[sel, "tercil_altas"] = tt; pred.loc[sel, "sesgo_tercil"] = corr
+        for c in ("delta_pred", "delta_p05", "delta_p10", "delta_p25", "delta_p75", "delta_p90", "delta_p95"):
+            pred.loc[sel, c] = pred.loc[sel, c] - corr
+    return pred
+
+
+def calibrar_intervalos(pred: pd.DataFrame, cortes: list[int], nivel: float = 0.8, min_grupo: int = 40) -> pd.DataFrame:
+    """Intervalo del 80 % conformal: Δ̂ ± q·sd_MC con q el cuantil 0,8 de |residuo|/sd_MC en los cortes ANTERIORES, por grupo
+    de liga si el grupo tiene ≥ min_grupo transiciones previas; si no (grupo nuevo en el examen, p. ej. la FEB en 2023), por
+    tercil de la fracción de plantilla sin β (el factor que gobierna el error), con terciles de los cortes anteriores. El
+    primer corte usa sus propios residuos (sólo informativo)."""
     pred = pred.copy()
-    pred["lo80"] = np.nan; pred["hi80"] = np.nan; pred["factor_80"] = np.nan
+    pred["lo80"] = np.nan; pred["hi80"] = np.nan; pred["factor_80"] = np.nan; pred["factor_80_fuente"] = None
+    pred["frac_sin_beta"] = pred["n_sin_beta"] / pred["n_plantilla"].clip(lower=1)
+    r_all = lambda d: (np.abs(d["delta_real"] - d["delta_pred"]) / np.maximum(d["delta_sd"], 1e-6)).to_numpy(float)
     for k, a in enumerate(cortes):
         prev = pred[pred["corte"].isin(cortes[:k])] if k else pred[pred["corte"] == a]
-        r = (np.abs(prev["delta_real"] - prev["delta_pred"]) / np.maximum(prev["delta_sd"], 1e-6)).to_numpy(float)
-        q = float(np.quantile(r, nivel)) if len(r) else np.nan
-        sel = pred["corte"] == a
-        pred.loc[sel, "factor_80"] = q
-        pred.loc[sel, "lo80"] = pred.loc[sel, "delta_pred"] - q * pred.loc[sel, "delta_sd"]
-        pred.loc[sel, "hi80"] = pred.loc[sel, "delta_pred"] + q * pred.loc[sel, "delta_sd"]
+        q_pool = float(np.quantile(r_all(prev), nivel))
+        q1, q2 = prev["frac_sin_beta"].quantile([1 / 3, 2 / 3])
+        bins = lambda x: np.where(x <= q1, 0, np.where(x <= q2, 1, 2))
+        bp = bins(prev["frac_sin_beta"].to_numpy(float)); rp = r_all(prev)
+        q_bin = {b: float(np.quantile(rp[bp == b], nivel)) if (bp == b).sum() >= 20 else q_pool for b in (0, 1, 2)}
+        sel_c = pred["corte"] == a
+        for grp in pred.loc[sel_c, "grupo"].unique():
+            pg = prev[prev["grupo"] == grp]
+            sel = sel_c & (pred["grupo"] == grp)
+            if len(pg) >= min_grupo:
+                q = np.full(sel.sum(), float(np.quantile(r_all(pg), nivel))); fuente = "grupo"
+            else:
+                q = np.array([q_bin[b] for b in bins(pred.loc[sel, "frac_sin_beta"].to_numpy(float))]); fuente = "tercil_sin_beta"
+            pred.loc[sel, "factor_80"] = q; pred.loc[sel, "factor_80_fuente"] = fuente
+            pred.loc[sel, "lo80"] = pred.loc[sel, "delta_pred"] - q * pred.loc[sel, "delta_sd"]
+            pred.loc[sel, "hi80"] = pred.loc[sel, "delta_pred"] + q * pred.loc[sel, "delta_sd"]
     return pred
 
 
@@ -422,7 +460,11 @@ def metricas(e: pd.DataFrame, B: int, semilla: int) -> dict:
         out["cobertura_80"] = float(np.mean((d["delta_real"] >= d["lo80"]) & (d["delta_real"] <= d["hi80"])))
         out["cobertura_80_mc_crudo"] = float(np.mean((d["delta_real"] >= d["delta_p10"]) & (d["delta_real"] <= d["delta_p90"])))
         out["anchura_80_media"] = float(np.mean(d["hi80"] - d["lo80"]))
-    # sesgo por tercil de minutos proyectados de las altas
+    if "sesgo_tercil" in e:
+        out["correccion_sesgo_media_abs"] = float(np.mean(np.abs(e["sesgo_tercil"])))
+    if "factor_80_fuente" in e:
+        out["factor_80_fuente"] = {str(k): int(v) for k, v in e["factor_80_fuente"].value_counts().items()}
+    # sesgo por tercil de minutos proyectados de las altas (tras la corrección)
     if "min_altas" in e and len(e) >= 30:
         terc = pd.qcut(e["min_altas"].rank(method="first"), 3, labels=["bajo", "medio", "alto"])
         out["sesgo_por_tercil_min_altas"] = {str(k): {"n": int((terc == k).sum()), "sesgo": float(np.mean((e["delta_pred"] - e["delta_real"])[terc == k])),
@@ -452,6 +494,7 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
             partes.append(e)
         pred = pd.concat(partes, ignore_index=True)
         pred = calibrar_prediccion(pred, cortes)
+        pred = corregir_sesgo_minutos(pred, cortes, float(cfg["f4"]["sesgo_minutos"]["umbral_calibracion_net"]))
         pred["delta_gbm"] = gbm_directo(pred, cortes)
         pred = calibrar_intervalos(pred, cortes)
         res = {"version": cfg["version"], "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "cortes": cortes, "cortes_decision": dec,
