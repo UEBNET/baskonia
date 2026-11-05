@@ -1,28 +1,52 @@
 <script id="cerno-v2-ctx">
-/* CERNO Analytics v2.0 · contexto compartido: club de destino, simulador y lectura de fichaje de un jugador concreto.
-   Se aplica una vez por cada cambio (sello) que llega de la v2.0; después manda lo que el usuario elija aquí. */
+/* CERNO Analytics v2.x · contexto compartido (club · temporada) aplicado a todas las herramientas del Atlas:
+   simulador, parecidos, plantilla, lectura de fichaje (destino), informe de equipo, mapa de estilos y química.
+   Se aplica una vez por cada cambio (sello) que llega de la v2; después manda lo que el usuario elija aquí.
+   Usa los propios selectores de cada herramienta (valor + evento «change») para que repinten con su lógica. */
 (function () {
   let ultimo = null; try { ultimo = localStorage.getItem("cerno.ctx.atlas"); } catch (e) { /* */ }
-  const listo = () => typeof META !== "undefined" && META && Array.isArray(JG) && JG.length && document.getElementById("cargando") && document.getElementById("cargando").hidden;
+  const listo = () => typeof META !== "undefined" && META && Array.isArray(JG) && JG.length && Array.isArray(CL) && CL.length;
   const tokens = (s) => norm(String(s || "")).split(/[^a-z0-9]+/).filter(Boolean).sort().join(" ");
+  const fijar = (id, v) => { const el = document.getElementById(id); if (!el || v == null) return false; v = String(v);
+    if (![...el.options].some((o) => o.value === v)) return false;
+    if (el.value !== v) { el.value = v; el.dispatchEvent(new Event("change", { bubbles: true })); } return true; };
+  const intenta = (f) => { try { f(); } catch (e) { console.warn("cerno ctx", e); } };
   function aplicar(c) {
-    if (!c || c.stamp == null || String(c.stamp) === ultimo || typeof VISTA !== "undefined" && VISTA === "claves") return;
+    if (!c || c.stamp == null || String(c.stamp) === ultimo || (typeof VISTA !== "undefined" && VISTA === "claves")) return;
     if (!listo()) { setTimeout(() => aplicar(c), 400); return; }
     ultimo = String(c.stamp); try { localStorage.setItem("cerno.ctx.atlas", ultimo); } catch (e) { /* */ }
-    const hay = (k, t) => CL.some((x) => x.clave_club === k && x.temporada === t);
-    if (c.club) { const k = c.club.liga + ":" + c.club.id, t = c.club.temp;
-      if (hay(k, t)) {
-        if (st.sim.club !== k || st.sim.temp !== t) Object.assign(st.sim, { liga: c.club.liga, temp: t, club: k, bajas: [], ejemplo: false });
-        st.inf = st.inf || {}; Object.assign(st.inf, { dLiga: c.club.liga, dTemp: t, dClub: k });
-      } }
-    if (c.informe) { const i = c.informe, tk = tokens(i.nombre);
+    const z = c.club;
+    if (z && z.liga && z.id) {
+      const L = z.liga, T = TEMPS.includes(z.temp) ? z.temp : ultCompleta(), K = L + ":" + z.id, hay = CL.some((x) => x.clave_club === K && x.temporada === T);
+      if (hay) {
+        // simular fichajes
+        intenta(() => { if (st.sim.club !== K || st.sim.temp !== T) { Object.assign(st.sim, { liga: L, temp: T, club: K, bajas: [], ejemplo: false }); } construirSimulador(); });
+        // buscar parecidos (club de referencia)
+        intenta(() => { st.bus.liga = L; st.bus.temp = T; st.bus.club = K; st.bus.ref = null; fijar("bLiga", L); fijar("bTemp", T); fijar("bClubSel", K); });
+        // simular plantilla: desde la plantilla real del club elegido
+        intenta(() => { const cambia = st.eq.club !== K || st.eq.temp !== T; Object.assign(st.eq, { liga: L, temp: T, club: K });
+          fijar("eLiga", L); fijar("eTemp", T); fijar("eClub", K); if (cambia) { const b = document.getElementById("eTop5"); if (b) b.click(); else if (typeof eqDesdeClub === "function") eqDesdeClub(5); } });
+        // lectura de fichaje: el club elegido es el destino
+        intenta(() => { st.inf = st.inf || {}; Object.assign(st.inf, { dLiga: L, dTemp: T, dClub: K }); fijar("ifDTemp", T); fijar("ifDLiga", L); fijar("ifDClub", K); });
+        // informe de equipo
+        intenta(() => { st.ieq = Object.assign(st.ieq || {}, { temp: T, liga: L, eq: z.id }); fijar("ieqTemp", T); fijar("ieqLiga", L); fijar("ieqEq", z.id); });
+        // mapa de estilos: el club elegido es la primera entidad del comparador
+        intenta(() => { if (Array.isArray(st.ents)) { const ent = { t: "club", k: K, temp: T }, i = st.ents.findIndex((x) => x && x.t === "club");
+          if (i >= 0) st.ents[i] = ent; else st.ents.unshift(ent); st.ents = st.ents.filter((x, j, a) => a.findIndex((y) => y.t === x.t && y.k === x.k && y.temp === x.temp) === j).slice(0, 4); } });
+        // química: los dos jugadores con más minutos del club elegido
+        intenta(() => { const cc = BY.get(`${K}:${T}`), ro = cc ? (ROSTER.get(cc.clave) || []).slice().sort((a, b) => b.min - a.min) : [];
+          if (ro.length > 1) { st.qui.a = jKey(ro[0]); st.qui.b = jKey(ro[1]); } });
+      }
+    }
+    if (c.informe) intenta(() => { const i = c.informe, tk = tokens(i.nombre);
       const cand = JG.filter((x) => x.temporada === i.temp && x.liga === i.liga && (tokens(x.nombre) === tk || (i.persona != null && x.persona_id != null && String(x.persona_id) === String(i.persona))))
         .sort((a, b) => (b.min || 0) - (a.min || 0))[0];
-      if (cand) { const cc = BY.get(cand.clave); st.inf = st.inf || {}; Object.assign(st.inf, { temp: cand.temporada, liga: cand.liga, club: cc ? cc.clave_club : null, jug: jKey(cand), sim: !!i.destino }); } }
-    try { guardar(); } catch (e) { /* */ }
-    try { construirSimulador(); } catch (e) { /* */ }
-    try { ifControles(); } catch (e) { /* */ }
-    try { pintarTodo(); irA(st.tab, false); } catch (e) { console.error(e); }
+      if (cand) { const cc = BY.get(cand.clave); st.inf = st.inf || {}; Object.assign(st.inf, { temp: cand.temporada, liga: cand.liga, club: cc ? cc.clave_club : null, jug: jKey(cand), sim: !!i.destino }); } });
+    intenta(() => guardar());
+    intenta(() => construirSimulador());
+    intenta(() => ifControles());
+    intenta(() => { if (window.CernoInformeEquipo && typeof window.CernoInformeEquipo.pintar === "function" && st.tab === "informeq") window.CernoInformeEquipo.pintar(); });
+    intenta(() => { pintarTodo(); irA(st.tab, false); });
   }
   window.addEventListener("message", (e) => { const d = e.data && e.data.cernoCtx; if (d) aplicar(d); });
   try { const c = JSON.parse(localStorage.getItem("cerno.ctx") || "null"); if (c) aplicar(c); } catch (e) { /* */ }
