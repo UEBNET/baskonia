@@ -71,6 +71,51 @@ def transiciones(cfg: dict) -> pd.DataFrame:
               "delta_net"]].reset_index(drop=True)
 
 
+def transiciones_extra(cfg: dict, trans: pd.DataFrame, min_minutos: float = 100.0, min_comunes: int = 3) -> pd.DataFrame:
+    """Ligas con tramos pero ausentes del libro de roles (LBA y LNB: sus `team_id` cambian cada temporada): equipos enlazados
+    t → t+1 por plantilla compartida (≥ min_comunes jugadores con ≥ min_minutos; sin ambigüedad: el segundo candidato < min_comunes),
+    Net ajustado de la fase regular de `quintetos/<liga>/equipos.csv`. Mismas columnas que el libro."""
+    from bbfit import datos as D
+    r = pd.read_csv(C.RAIZ / cfg["insumos"]["roles"], usecols=["liga", "temporada", "team_id", "persona_id", "min_total", "usg_pct"],
+                    dtype={"team_id": str}, low_memory=False)
+    ligas = sorted(set(r["liga"]) - set(trans["liga"]) - {"ncaa"})
+    filas = []
+    for lg in ligas:
+        x = r[(r["liga"] == lg) & (r["min_total"] >= min_minutos)]
+        temps = sorted(x["temporada"].unique())
+        nets = {}
+        for t in temps:
+            try:
+                e = D.quintetos_fichero(lg, t, "equipos.csv")
+            except Exception:
+                continue
+            if e is None or e.empty or "net_rtg_aj" not in e:
+                continue
+            e = e[e["fase"] == "regular"]
+            nets.update({(t, str(k)): float(v) for k, v in zip(e["team_id"], e["net_rtg_aj"])})
+        for t0, t1 in zip(temps[:-1], temps[1:]):
+            if int(t1[:4]) != int(t0[:4]) + 1:          # sólo temporadas consecutivas
+                continue
+            A = x[x["temporada"] == t0].groupby("team_id"); B = x[x["temporada"] == t1].groupby("team_id")
+            sa = {k: set(g["persona_id"]) for k, g in A}; sb = {k: set(g["persona_id"]) for k, g in B}
+            ma = {k: g.set_index("persona_id")["min_total"] for k, g in A}; mb = {k: g.set_index("persona_id")["min_total"] for k, g in B}
+            for tb, pb in sb.items():
+                sc = sorted(((len(pa & pb), ta) for ta, pa in sa.items()), reverse=True)
+                if not sc or sc[0][0] < min_comunes or (len(sc) > 1 and sc[1][0] >= min_comunes):
+                    continue
+                ta = sc[0][1]
+                n0, n1 = nets.get((t0, ta)), nets.get((t1, tb))
+                if n0 is None or n1 is None:
+                    continue
+                pa = sa[ta]; salen = pa - pb; llegan = pb - pa
+                filas.append({"liga": lg, "grupo": GRUPOS_LIGA.get(lg, "otras"), "club": f"{lg}|{ta}", "temporada_ant": t0, "temporada_nueva": t1,
+                              "anio": int(t0[:4]), "team_id_ant": ta, "team_id_nuevo": tb, "n_retornos": len(pa & pb), "n_salidas": len(salen),
+                              "n_llegadas": len(llegan), "min_liberados": float(ma[ta][list(salen)].sum() / max(ma[ta].sum(), 1)),
+                              "min_absorbidos": float(mb[tb][list(llegan)].sum() / max(mb[tb].sum(), 1)), "uso_liberado": np.nan, "uso_absorbido": np.nan,
+                              "net_ant": n0, "net_nuevo": n1, "delta_net": n1 - n0})
+    return pd.DataFrame(filas)
+
+
 # =============================================================================================== insumos de un corte
 class Insumos:
     """Todo lo que F4 necesita del corte t: β (F1), z y M_r (F2), h (F3 aditiva), corte v3.3 (motor de minutos), roles."""
@@ -401,32 +446,35 @@ def corregir_sesgo_minutos(pred: pd.DataFrame, cortes: list[int], umbral: float)
 
 
 def calibrar_intervalos(pred: pd.DataFrame, cortes: list[int], nivel: float = 0.8, min_grupo: int = 40) -> pd.DataFrame:
-    """Intervalo del 80 % conformal: Δ̂ ± q·sd_MC con q el cuantil 0,8 de |residuo|/sd_MC en los cortes ANTERIORES, por grupo
-    de liga si el grupo tiene ≥ min_grupo transiciones previas; si no (grupo nuevo en el examen, p. ej. la FEB en 2023), por
-    tercil de la fracción de plantilla sin β (el factor que gobierna el error), con terciles de los cortes anteriores. El
+    """Intervalo del 80 % conformal con escala «Monte Carlo + ruido irreducible»: semianchura = q · √(sd_MC² + s0²), donde s0²
+    es la varianza del residuo de los cortes ANTERIORES no explicada por la sd del Monte Carlo (media(res²) − media(sd_MC²),
+    acotada en 0) y q el cuantil `nivel` de |res|/√(sd_MC² + s0²) en esos cortes. Ambos por grupo de liga si el grupo tiene
+    ≥ min_grupo transiciones previas; si no, conjuntos. Motivo [DECISIÓN en el corte de calibración]: la sd del Monte Carlo
+    (β y minutos) es pequeña frente al ruido de temporada de un equipo y, sola, infracubre donde ese ruido es grande. El
     primer corte usa sus propios residuos (sólo informativo)."""
     pred = pred.copy()
-    pred["lo80"] = np.nan; pred["hi80"] = np.nan; pred["factor_80"] = np.nan; pred["factor_80_fuente"] = None
+    pred["lo80"] = np.nan; pred["hi80"] = np.nan; pred["factor_80"] = np.nan; pred["s0_80"] = np.nan; pred["factor_80_fuente"] = None
     pred["frac_sin_beta"] = pred["n_sin_beta"] / pred["n_plantilla"].clip(lower=1)
-    r_all = lambda d: (np.abs(d["delta_real"] - d["delta_pred"]) / np.maximum(d["delta_sd"], 1e-6)).to_numpy(float)
+    def escala(d):
+        res = (d["delta_real"] - d["delta_pred"]).to_numpy(float); sd = d["delta_sd"].to_numpy(float)
+        s0 = float(np.sqrt(max(np.mean(res ** 2) - np.mean(sd ** 2), 0.0)))
+        q = float(np.quantile(np.abs(res) / np.sqrt(sd ** 2 + s0 ** 2), nivel))
+        return s0, q
     for k, a in enumerate(cortes):
         prev = pred[pred["corte"].isin(cortes[:k])] if k else pred[pred["corte"] == a]
-        q_pool = float(np.quantile(r_all(prev), nivel))
-        q1, q2 = prev["frac_sin_beta"].quantile([1 / 3, 2 / 3])
-        bins = lambda x: np.where(x <= q1, 0, np.where(x <= q2, 1, 2))
-        bp = bins(prev["frac_sin_beta"].to_numpy(float)); rp = r_all(prev)
-        q_bin = {b: float(np.quantile(rp[bp == b], nivel)) if (bp == b).sum() >= 20 else q_pool for b in (0, 1, 2)}
+        s0_pool, q_pool = escala(prev)
         sel_c = pred["corte"] == a
         for grp in pred.loc[sel_c, "grupo"].unique():
             pg = prev[prev["grupo"] == grp]
             sel = sel_c & (pred["grupo"] == grp)
             if len(pg) >= min_grupo:
-                q = np.full(sel.sum(), float(np.quantile(r_all(pg), nivel))); fuente = "grupo"
+                s0, q = escala(pg); fuente = "grupo"
             else:
-                q = np.array([q_bin[b] for b in bins(pred.loc[sel, "frac_sin_beta"].to_numpy(float))]); fuente = "tercil_sin_beta"
-            pred.loc[sel, "factor_80"] = q; pred.loc[sel, "factor_80_fuente"] = fuente
-            pred.loc[sel, "lo80"] = pred.loc[sel, "delta_pred"] - q * pred.loc[sel, "delta_sd"]
-            pred.loc[sel, "hi80"] = pred.loc[sel, "delta_pred"] + q * pred.loc[sel, "delta_sd"]
+                s0, q = s0_pool, q_pool; fuente = "conjunto"
+            semi = q * np.sqrt(pred.loc[sel, "delta_sd"] ** 2 + s0 ** 2)
+            pred.loc[sel, "factor_80"] = q; pred.loc[sel, "s0_80"] = s0; pred.loc[sel, "factor_80_fuente"] = fuente
+            pred.loc[sel, "lo80"] = pred.loc[sel, "delta_pred"] - semi
+            pred.loc[sel, "hi80"] = pred.loc[sel, "delta_pred"] + semi
     return pred
 
 
@@ -478,6 +526,11 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
     out_dir = dir_salida(cfg) / "examen"; out_dir.mkdir(parents=True, exist_ok=True)
     tr_all = RP.tramos(cfg, None, progreso)
     trans = transiciones(cfg)
+    extra = transiciones_extra(cfg, trans)
+    if len(extra):
+        trans = pd.concat([trans, extra], ignore_index=True)
+        if progreso:
+            progreso(f"  transiciones: {len(trans)} ({len(extra)} enlazadas por plantilla en {sorted(extra['liga'].unique())})", flush=True)
     cortes = [int(a) for a in (cortes or cfg["criterios"]["comunes"]["cortes"])]
     dec = [a for a in cortes if a in [int(x) for x in cfg["criterios"]["comunes"]["cortes_decision"]]]
     B, sem = int(cfg["criterios"]["comunes"]["bootstrap"]), int(cfg["criterios"]["comunes"]["semilla_bootstrap"])
