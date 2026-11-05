@@ -7,6 +7,11 @@ F0–F5 completadas con sus puertas (`docs/checkpoints/V40_F0.md` … `V40_F5.md
 equipo/a5, equipo/anclas) y `configs/simulation_v40.yaml`. Nada de la v3.2/v3.3 cambió. Pendientes fuera del encargo: integración
 en el flujo del simulador v4.0 y el artifact; examen limpio 2025-26 → 2026-27 antes de comunicar cifras de acierto.
 
+* **Informes con la v4.0 (05-11-2026, decisión del CEO)**: lectura de fichaje e informe de equipo con NIVEL CERNO e IMPACTO
+  como cifras principales de 02 y 03 (hoja propia de anclas en la lectura; Net proyectado y anclas por jugador en el informe de
+  equipo), vara de la liga del club de destino en toda la lectura, cálculo en el navegador (`artifact/atlas/v40.js` sobre el motor
+  v3.3 del Atlas, importado del artifact publicado) con las tablas de `python -m bbequipo exportar-atlas`. Detalle:
+  `docs/checkpoints/ARTIFACT-v40-informes.md`.
 * **Artifacts actualizados (05-11-2026)**: nueva sección «Modelo de equipo v4.0» en la página clásica (área «Modelo v4.0»:
   resumen y puertas, Nivel Cerno e Impacto, equipos 2026-27, método y límites) y en el panel v2.0 (sección «05 · Modelo de
   equipo»). Página propia `artifact/v40/index.html` (marca Cerno, claro/oscuro, punto + rango del 80 % en toda estimación) con

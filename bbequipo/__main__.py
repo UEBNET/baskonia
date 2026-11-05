@@ -48,6 +48,8 @@ def main(argv=None):
     an.add_argument("--solo-im", action="store_true")
     an.add_argument("--cortes", nargs="*", type=int, default=None)
     sub.add_parser("anclas-producto", help="F5: referencias versionadas F_ref (liga×pos3) y F_mov (grupo de liga) → equipo/anclas/")
+    ea = sub.add_parser("exportar-atlas", help="tablas v4.0 para el Atlas del artifact (β, parejas, red aditiva, referencias y calibraciones) → data/artifact/atlas_v40/")
+    ea.add_argument("--salida", default=None)
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -126,6 +128,9 @@ def main(argv=None):
             anclas.impacto_examen(cfg, cortes=a.cortes)
         else:
             anclas.main(cfg)
+    elif a.orden == "exportar-atlas":
+        from . import exportar_atlas as XA
+        print(XA.main(a.salida or XA.SALIDA))
     elif a.orden == "anclas-producto":
         from . import anclas
         anclas.exportar(cfg)

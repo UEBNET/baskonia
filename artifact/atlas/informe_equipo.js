@@ -197,6 +197,25 @@
     // nota del analista
     const n = lsGet()[claveNota(s)] || {}; c.nota = (n.fin || n.raw || "").trim();
     c.para = (s.para || "").trim() || "Dirección deportiva";
+    // v4.0 (05-11-2026) · capa 4: Net proyectado de la plantilla frente a su liga y anclas de cada jugador (atlas/v40.js)
+    c.v40 = null;
+    try {
+      if (window.CernoV40 && CernoV40.listo() && typeof SIMD !== "undefined" && SIMD && !SIMD.error && at && typeof simClub === "function") {
+        const cs = simClub(at);
+        if (cs) {
+          const recs = (cs.plantilla || []).map((x) => SIMD.jug.get(x[0])).filter(Boolean);
+          if (recs.length >= 7) {
+            const lg = CernoV40.ligaT(SIM2, SIMD, l, t, 300), out = SIM2.minutosEquipo(recs, cs, 600), eq = CernoV40.netEquipo(out, cs, lg);
+            const pl = CernoV40.anclasPlantilla(SIM2, out, cs, recs, null), porRec = new Map(), porPer = new Map(pl.map((x) => [x.persona, x]));
+            (cs.plantilla || []).forEach((x) => { const r = SIMD.jug.get(x[0]); if (r) porRec.set(`${r.liga}|${r.temporada}|${r.pid}`, porPer.get(x[3]) || null); });
+            const anDe = (j) => (j.jg ? porRec.get(`${j.jg.liga}|${j.jg.temporada}|${j.jg.pid}`) : null) || null;
+            (c.jugTodos || []).forEach((j) => { j.an = anDe(j); });
+            const nombres = new Map((cs.plantilla || []).map((x) => { const r = SIMD.jug.get(x[0]); return [x[3], r ? r.nombre : x[3]]; }));
+            c.v40 = { eq, liga: CernoV40.ligaNet(lg, l), pl: pl.map((x) => ({ ...x, nombre: nombres.get(x.persona) || x.persona })), club: cs, n_plantilla: recs.length, escenario: cs.escenario || "" };
+          }
+        }
+      }
+    } catch (e) { console.error("v4.0:", e); c.v40 = null; }
     return c;
   }
   // vista de un equipo en una fase dentro de los datos de quintetos
@@ -287,6 +306,23 @@
     const rows = items.map((x, i) => { if (!x.nom && !x.txt) return ""; const y = 3 + i * rh, bwid = Math.max(1, Math.abs(x.v || 0) / m * (bw / 2 - 4)), pos = (x.v || 0) >= 0, col = x.neu ? C.neu : pos ? C.up : C.dn;
       return `${x.yo ? `<rect x="0" y="${y - 1}" width="${w}" height="${rh}" class="hlr"/>` : ""}<text x="0" y="${y + rh / 2 + 2}" class="nm">${E(x.nom)}${x.sub ? `<tspan class="sb"> ${E(x.sub)}</tspan>` : ""}</text><rect x="${pos ? mid : mid - bwid}" y="${y + 4}" width="${bwid}" height="${rh - 10}" fill="${col}"/><text x="${w}" y="${y + rh / 2 + 2}" text-anchor="end" class="vv" fill="${col === C.up ? C.s700 : col}">${E(x.txt)}</text>`; }).join("");
     return `<svg class="ieq-dv" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${E(o.aria || "")}">${rows}<line x1="${mid}" x2="${mid}" y1="0" y2="${h}" stroke="${C.ink}" stroke-width=".8"/></svg>`;
+  }
+  // puntos con rango del 80 % en 0–100: [{nom, v, lo, hi, sub, yo}]
+  function puntosRango(items, o = {}) {
+    const w = o.w || 330, rh = o.rh || 19, lw = o.lw || 128, vw = 30, bw = w - lw - vw, h = items.length * rh + 14, X = (x) => lw + bw * Math.max(0, Math.min(1, x / 100));
+    const ejes = [0, 25, 50, 75, 100].map((k) => `<line x1="${X(k)}" x2="${X(k)}" y1="2" y2="${h - 12}" class="${k === (o.ref ?? 50) ? "rf" : "tr"}"/><text x="${X(k)}" y="${h - 2}" text-anchor="middle" class="ax">${k}</text>`).join("");
+    const rows = items.map((x, i) => { const y = 3 + i * rh; return `${x.yo ? `<rect x="0" y="${y - 1}" width="${w}" height="${rh}" class="hl"/>` : ""}<text x="0" y="${y + rh / 2 + 2}" class="nm">${E(x.nom)}${x.sub ? `<tspan class="sb"> ${E(x.sub)}</tspan>` : ""}</text>${ok(x.lo) && ok(x.hi) ? `<rect x="${X(x.lo)}" y="${y + 4}" width="${Math.max(2, X(x.hi) - X(x.lo))}" height="${rh - 9}" class="bd"/>` : ""}<circle cx="${X(x.v)}" cy="${y + rh / 2 - .5}" r="3.2" class="pt"/><text x="${w}" y="${y + rh / 2 + 2}" text-anchor="end" class="vv">${Math.round(x.v)}</text>`; }).join("");
+    return `<svg class="ieq-pr" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${E(o.aria || "")}">${ejes}${rows}</svg>`;
+  }
+  // la liga según la capa 4: Net proyectado de cada plantilla (punto y rango del 80 %) frente a la media de la liga
+  function ligaV40(c) {
+    const v = c.v40; if (!v || !v.liga || !v.liga.length) return "";
+    const eqs = v.liga, m = Math.max(4, ...eqs.map((e) => Math.max(Math.abs(e.lo80), Math.abs(e.hi80)))), w = 690, rh = eqs.length > 16 ? 12.2 : 14, lw = 150, vw = 60, bw = w - lw - vw, h = eqs.length * rh + 16, X = (x) => lw + bw * (0.5 + x / (2 * m));
+    const tk = [-m, -m / 2, 0, m / 2, m].map((k) => `<line x1="${X(k)}" x2="${X(k)}" y1="2" y2="${h - 12}" class="${k === 0 ? "rf" : "tr"}"/><text x="${X(k)}" y="${h - 2}" text-anchor="middle" class="ax">${SG0(k, 0)}</text>`).join("");
+    const rows = eqs.map((e, i) => { const y = 3 + i * rh, yo = e.team === v.club.team; return `${yo ? `<rect x="0" y="${y - 1}" width="${w}" height="${rh}" class="hl"/>` : ""}<text x="0" y="${y + rh / 2 + 2}" class="nm">${E(e.nombre)}</text><rect x="${X(e.lo80)}" y="${y + 3}" width="${Math.max(2, X(e.hi80) - X(e.lo80))}" height="${rh - 7}" class="bd"/><circle cx="${X(e.net)}" cy="${y + rh / 2 - .5}" r="2.8" class="pt"/><text x="${w}" y="${y + rh / 2 + 2}" text-anchor="end" class="vv">${SG0(e.net, 1)}</text>`; }).join("");
+    const svg = `<svg class="ieq-pr" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="La liga según la capa 4">${tk}${rows}</svg>`;
+    const eq = v.eq, real = ok(c.r.net) ? c.r.net : null, dif = real != null ? real - eq.net : null;
+    return `<div class="r3blk"><h3>Lo que proyectan las plantillas de ${E(c.ligaNom)} y lo que da ${E(c.nombre)}</h3>${svg}<p class="r3n">Net proyectado de cada plantilla (capa 4, v4.0): valor de cada jugador en una escala común a las 20 ligas, parejas y minutos del motor, encogido con la calibración (${N(eq.c, 2)}) aprendida en cambios de plantilla reales; punto y rango del 80 %, por 100 posesiones frente a la media de la liga. ${E(c.nombre)}: ${SG0(eq.net, 1)} (${ord(eq.puesto)} de ${eq.n})${real != null ? `; diferencia real ${SG0(real, 1)}, ${Math.abs(dif) < 2 ? "en línea con sus piezas" : dif > 0 ? `${N(dif, 1)} por encima de sus piezas` : `${N(-dif, 1)} por debajo de sus piezas`}` : ""}.${eq.n_sin_beta ? ` ${eq.n_sin_beta} jugador${eq.n_sin_beta > 1 ? "es" : ""} sin valor medido.` : ""}</p></div>`;
   }
   // barras simples desde cero: [{nom, v, txt, sub}]
   function barras(items, o = {}) {
@@ -524,6 +560,7 @@
     const balTxt = c.bal ? `${c.bal.w}-${c.bal.l}` : "–", pctW = c.bal && c.bal.w + c.bal.l ? 100 * c.bal.w / (c.bal.w + c.bal.l) : null;
     const balNota = c.bal && c.bal.src === "entrenadores" ? " La fuente oficial no publica el balance por fases: es el de sus entrenadores, que puede incluir playoffs." : c.bal && c.bal.src === "total" ? " Balance de toda la temporada (la fuente no lo separa por fases)." : "";
     const Snet = SV(r.net, c.vNet);
+    const v4 = c.v40 && c.v40.eq && ok(c.v40.eq.net) ? c.v40.eq : null;       // v4.0 · Net proyectado de la plantilla
     (c.jugTodos || c.jug || []).forEach((j) => { j.corto = j.j != null ? snJ(c, j.j) : j.ape; });
     const okI = (i) => !c.okI || c.okI.has(i);
 
@@ -563,17 +600,18 @@
     // 02 · identidad y plantilla (dos hojas: el equipo y sus jugadores)
     const S2 = "Identidad y plantilla";
     const verbo = c.prov ? "lleva" : "cerró";
-    const lead2 = `${E(nomE)} ${verbo} ${E(FNOM[c.s.fase])} con <b>${balTxt}</b>${pctW != null ? ` (${N(pctW, 0)} % de victorias${c.rkW ? `, ${ord(c.rkW)} de ${c.nW}` : ""})` : ""} en ${E(c.ligaNom)}. Su plantilla está en <b>${c.SL != null ? ESC.txt(c.SL) : "–"}</b> frente a las de su liga${c.rkPl ? `: la ${ordA(c.rkPl)} de ${c.nPl} por nivel` : ""}.`;
+    const lead2 = `${E(nomE)} ${verbo} ${E(FNOM[c.s.fase])} con <b>${balTxt}</b>${pctW != null ? ` (${N(pctW, 0)} % de victorias${c.rkW ? `, ${ord(c.rkW)} de ${c.nW}` : ""})` : ""} en ${E(c.ligaNom)}.${c.v40 && c.v40.eq && ok(c.v40.eq.net) ? ` Su plantilla proyecta un Net de <b>${SG0(c.v40.eq.net, 1)}</b> frente a la media de la liga (${ordA(c.v40.eq.puesto)} de ${c.v40.eq.n}), rango 80 % ${SG0(c.v40.eq.lo80, 1)} a ${SG0(c.v40.eq.hi80, 1)}.` : ` Su plantilla está en <b>${c.SL != null ? ESC.txt(c.SL) : "–"}</b> frente a las de su liga${c.rkPl ? `: la ${ordA(c.rkPl)} de ${c.nPl} por nivel` : ""}.`}`;
     const eu = c.eu, fu = c.fuertes[0], de = c.debiles[0];
     const hero = `<div class="r3inkhero"><span class="r3tag">Su equipo en una mirada</span>
         ${eu ? `<div class="r3inkheroE"><div><span>Estilo de juego</span><b>${swEst(eu.k)}${E(eu.etiqueta)}</b><small>${ok(eu.p) ? `claridad ${Math.round(100 * eu.p)} de 100` : ""}${c.club && ok(c.club.rob) ? ` · robustez ${Math.round(100 * c.club.rob)} de 100` : ""}</small></div><p>${E(eu.equipo || eu.definicion || "")}</p></div>` : ""}
-        <div class="r3inkheroK"><div><span>Nivel de la plantilla</span><b class="${ESC.cls(c.SL)}">${c.SL != null ? ESC.txt(c.SL) : "–"}</b><small>${c.pPl != null ? `${pTxt(c.pPl)} entre las plantillas de su liga` : "escala ±100 · 0 = plantilla media de su liga"}</small></div>
+        <div class="r3inkheroK">${v4 ? `<div class="anc"><span>Net proyectado · v4.0</span><b>${SG0(v4.net, 1)}</b><small>por 100 posesiones frente a la liga · ${ord(v4.puesto)} de ${v4.n} · rango 80 %: ${SG0(v4.lo80, 1)} a ${SG0(v4.hi80, 1)}</small></div>` : `<div><span>Nivel de la plantilla</span><b class="${ESC.cls(c.SL)}">${c.SL != null ? ESC.txt(c.SL) : "–"}</b><small>${c.pPl != null ? `${pTxt(c.pPl)} entre las plantillas de su liga` : "escala ±100 · 0 = plantilla media de su liga"}</small></div>`}
           <div><span>Diferencia de puntos</span><b class="${ESC.cls(Snet)}">${Snet != null ? ESC.txt(Snet) : "–"}</b><small>${ok(r.net) ? `${SG(r.net, 1)} por 100 posesiones · ${ord(c.rkN)} de ${c.n}` : ""}</small></div>
           <div><span>Punto fuerte</span><b class="w">${fu ? E(fu.nm) : "–"}</b><small>${fu ? `${pTxt(fu.p)} en su liga` : "ninguna faceta destaca con claridad"}</small></div>
           <div><span>A mejorar</span><b class="w">${de ? E(de.nm) : "–"}</b><small>${de ? `${pTxt(de.p)} en su liga` : "ninguna faceta queda claramente atrás"}</small></div></div></div>`;
-    const tiles = [["Balance", balTxt, pctW != null ? `${N(pctW, 0)} % de victorias${c.rkW ? ` · ${ord(c.rkW)} de ${c.nW}` : ""}` : ""], ["Nivel de la plantilla", c.SL != null ? ESC.txt(c.SL) : "–", c.rkPl ? `${ord(c.rkPl)} de ${c.nPl} en su liga` : ""], ["Partidos", N(r.gp, 0), FNOM[c.s.fase]], ["Edad media", c.pl && ok(c.pl.edad) ? N(c.pl.edad, 1) : "–", "ponderada por minutos"]];
+    const tiles = v4 ? [["Net proyectado · v4.0", SG0(v4.net, 1), `${ord(v4.puesto)} de ${v4.n} por plantilla · rango 80 %: ${SG0(v4.lo80, 1)} a ${SG0(v4.hi80, 1)}`], ["Balance", balTxt, pctW != null ? `${N(pctW, 0)} % de victorias${c.rkW ? ` · ${ord(c.rkW)} de ${c.nW}` : ""}` : ""], ["Nivel de la plantilla", c.SL != null ? ESC.txt(c.SL) : "–", c.rkPl ? `${ord(c.rkPl)} de ${c.nPl} en su liga · escala ±100` : "escala ±100"], ["Partidos", N(r.gp, 0), `${FNOM[c.s.fase]} · edad media ${c.pl && ok(c.pl.edad) ? N(c.pl.edad, 1) : "–"}`]]
+      : [["Balance", balTxt, pctW != null ? `${N(pctW, 0)} % de victorias${c.rkW ? ` · ${ord(c.rkW)} de ${c.nW}` : ""}` : ""], ["Nivel de la plantilla", c.SL != null ? ESC.txt(c.SL) : "–", c.rkPl ? `${ord(c.rkPl)} de ${c.nPl} en su liga` : ""], ["Partidos", N(r.gp, 0), FNOM[c.s.fase]], ["Edad media", c.pl && ok(c.pl.edad) ? N(c.pl.edad, 1) : "–", "ponderada por minutos"]];
     pags.push({ sec: S2, html: `${ceja(2, "", S2, lead2)}
-      <div class="ieq-tiles">${tiles.map(([a, b, s], i) => `<div class="${i === 0 ? "idx" : ""}"><span>${a}</span><b>${E(b)}</b><small>${E(s)}</small></div>`).join("")}</div>
+      <div class="ieq-tiles${v4 ? " v40" : ""}">${tiles.map(([a, b, s], i) => `<div class="${i === 0 ? "idx" : ""}"><span>${a}</span><b>${E(b)}</b><small>${E(s)}</small></div>`).join("")}</div>
       ${hero}
       <div class="r3blk"><h3>Cuerpo técnico</h3>${pizarraEnt(c)}</div>
       <div class="r3blk"><h3>Evolución del club, temporada a temporada</h3>${evolSVG(c.hist, t, { w: 690, h: 150 })}<p class="r3n">Nivel de la plantilla frente a las de su liga ese año (escala ±100, 0 = plantilla media); debajo, su balance y su liga.${c.hist.some((x) => x.prov) ? " *Temporada en curso." : ""}</p></div>` });
@@ -586,12 +624,15 @@
     const impSVG = imp.length >= 3 ? divergentes(imp.slice(0, nJ).map((j) => ({ nom: j.corto || j.ape, v: j.Srapm, txt: ESC.txt(j.Srapm), sub: ok(j.mpg) ? `${N(j.mpg, 0)}'` : "" })), { max: 100, lw: 120, w: 330, rh: rhJ, aria: "Impacto en pista" }) : "";
     const nivSVG = jsT.filter((j) => j.SL != null).length >= 3 ? divergentes(jsT.filter((j) => j.SL != null).sort((a, b) => b.SL - a.SL).slice(0, nJ).map((j) => ({ nom: j.corto || j.ape, v: j.SL, txt: ESC.txt(j.SL) })), { max: 100, lw: 120, w: 330, rh: rhJ, aria: "Nivel de cada jugador" }) : "";
     const notaJ = `Medias por partido de ${E(t)} (liga regular). Nivel: valoración global del jugador frente a los jugadores de su liga (escala ±100, 0 = jugador medio de su liga, ponderado por minutos). Impacto: puntos que suma su equipo con él en pista descontando compañeros y rivales (RAPM de su liga), en la misma escala${comp && (imp.length > nJ || jsT.length > nJ) ? `; en las barras, los ${nJ} primeros` : ""}. Color junto al nombre: su estilo de juego. Rol del simulador; «≈», estimado por minutos.${notaMinEq(c)}`;
-    const cards = jsT.slice(0, nCards).map((j) => `<div class="ieq-card"><div class="h">${swEst(j.euI)}<b>${E(j.nombre)}</b></div><small>${j.pos ? POSL[j.pos] || j.pos : "–"}${ok(j.edad) ? ` · ${Math.round(j.edad)} años` : ""} · ${j.eu ? E(j.eu) : "estilo s/d"}</small><div class="k"><span>${chipRol(j)}</span><span><em>Min</em>${ok(j.mpg) ? N(j.mpg, 0) : "–"}</span><span><em>Pts</em>${ok(j.pts) ? N(j.pts, 1) : "–"}</span><span><em>Nivel</em><b class="${ESC.cls(j.SL)}">${j.SL != null ? ESC.txt(j.SL) : "–"}</b></span><span><em>Impacto</em><b class="${ESC.cls(j.Srapm)}">${j.Srapm != null ? ESC.txt(j.Srapm) : "–"}</b></span></div></div>`).join("");
+    const cards = jsT.slice(0, nCards).map((j) => `<div class="ieq-card"><div class="h">${swEst(j.euI)}<b>${E(j.nombre)}</b></div><small>${j.pos ? POSL[j.pos] || j.pos : "–"}${ok(j.edad) ? ` · ${Math.round(j.edad)} años` : ""} · ${j.eu ? E(j.eu) : "estilo s/d"}</small><div class="k"><span>${chipRol(j)}</span><span><em>Min</em>${ok(j.mpg) ? N(j.mpg, 0) : "–"}</span><span><em>Pts</em>${ok(j.pts) ? N(j.pts, 1) : "–"}</span>${j.an && ok(j.an.NC) ? `<span><em class="v40">Nivel Cerno</em><b>${Math.round(j.an.NC)}</b></span><span><em class="v40">Impacto</em><b>${ok(j.an.IM) ? Math.round(j.an.IM) : "–"}</b></span>` : `<span><em>Nivel</em><b class="${ESC.cls(j.SL)}">${j.SL != null ? ESC.txt(j.SL) : "–"}</b></span><span><em>Impacto</em><b class="${ESC.cls(j.Srapm)}">${j.Srapm != null ? ESC.txt(j.Srapm) : "–"}</b></span>`}</div></div>`).join("");
+    const conAn = jsT.filter((j) => j.an && ok(j.an.NC));
+    const ncSVG = conAn.length >= 3 ? puntosRango(conAn.slice().sort((a, b) => b.an.NC - a.an.NC).slice(0, nJ).map((j) => ({ nom: j.corto || j.ape, v: j.an.NC, lo: j.an.NC_lo80, hi: j.an.NC_hi80, sub: ok(j.an.minutos) ? `${N(j.an.minutos, 0)}'` : "" })), { ref: 50, lw: 120, w: 330, rh: rhJ, aria: "Nivel Cerno de cada jugador" }) : "";
+    const imSVG = conAn.filter((j) => ok(j.an.IM)).length >= 3 ? puntosRango(conAn.filter((j) => ok(j.an.IM)).sort((a, b) => b.an.IM - a.an.IM).slice(0, nJ).map((j) => ({ nom: j.corto || j.ape, v: j.an.IM, lo: j.an.IM_lo80, hi: j.an.IM_hi80, sub: ok(j.an.delta_net) ? SG0(j.an.delta_net, 1) : "" })), { ref: 50, lw: 120, w: 330, rh: rhJ, aria: "Impacto de cada jugador" }) : "";
     pags.push({ sec: S2, html: `${ceja(2, "", "La plantilla, jugador a jugador", lead9)}
       <div class="ieq-cards">${cards}</div>
       ${jsT.length > nCards ? `<p class="r3n">Los ${nCards} jugadores con más minutos de ${jsT.length}.</p>` : ""}
-      <div class="r3cols c2">${nivSVG ? `<div class="r3blk"><h3>Nivel de cada jugador</h3>${nivSVG}</div>` : "<div></div>"}${impSVG ? `<div class="r3blk"><h3>Impacto en pista</h3>${impSVG}</div>` : "<div></div>"}</div>
-      <p class="r3n">${notaJ}</p>
+      <div class="r3cols c2">${ncSVG ? `<div class="r3blk"><h3>Nivel Cerno de cada jugador</h3>${ncSVG}</div>` : nivSVG ? `<div class="r3blk"><h3>Nivel de cada jugador</h3>${nivSVG}</div>` : "<div></div>"}${imSVG ? `<div class="r3blk"><h3>Impacto de cada jugador</h3>${imSVG}</div>` : impSVG ? `<div class="r3blk"><h3>Impacto en pista</h3>${impSVG}</div>` : "<div></div>"}</div>
+      <p class="r3n">${ncSVG || imSVG ? `Nivel Cerno: percentil esperado de su producción (minutos proyectados × puntos por 100 posesiones) entre los de su puesto en ${E(c.ligaNom)}; junto al nombre, sus minutos proyectados. Impacto: percentil de lo que pierde el equipo sin él (50 = nada; junto al nombre, el Net que cambia por 100 posesiones). Punto y rango del 80 %; minutos del motor del Atlas. ` : ""}${notaJ}</p>
       ${comp}` });
 
     // 03 · veredicto, rendimiento y riesgos
@@ -614,7 +655,7 @@
     if (dep && dep.onoff >= 6) cambiar.push(`Dependencia de ${dep.nombre}: con él en pista el equipo es ${SG(dep.onoff, 1)} por 100 posesiones mejor. Una lesión cambiaría la lectura.`);
     if (!cambiar.length) cambiar.push("Un cambio de entrenador o la baja de uno de sus tres jugadores con más minutos.");
     const largoNota = c.nota ? c.nota.length : 0, hMapa = Math.max(125, 205 - (largoNota ? 40 + Math.ceil(largoNota / 110) * 19 : 0)), mapa = largoNota <= 900 ? mapaLiga(c, { w: 690, h: hMapa }) : ""; // con una valoración muy larga, el mapa cede su sitio
-    const kpis3 = `<div class="r3kp big"><div class="idx"><span>Diferencia de puntos</span><b class="${ESC.cls(Snet)}">${Snet != null ? ESC.txt(Snet) : "–"}</b><small>${ok(r.net) ? `${SG(r.net, 1)} por 100 posesiones · escala de su liga` : ""}</small></div>
+    const kpis3 = `<div class="r3kp big${v4 ? " anc6" : ""}">${v4 ? `<div class="idx"><span>Net proyectado · v4.0</span><b class="${v4.net > 0.5 ? "up" : v4.net < -0.5 ? "dn" : ""}">${SG0(v4.net, 1)}</b><small>${ord(v4.puesto)} de ${v4.n} por plantilla · rango 80 %: ${SG0(v4.lo80, 1)} a ${SG0(v4.hi80, 1)}</small></div>` : ""}<div class="idx"><span>Diferencia de puntos</span><b class="${ESC.cls(Snet)}">${Snet != null ? ESC.txt(Snet) : "–"}</b><small>${ok(r.net) ? `${SG(r.net, 1)} por 100 posesiones · escala de su liga` : ""}</small></div>
         <div><span>Balance</span><b>${balTxt}</b><small>${pctW != null ? `${N(pctW, 0)} % · ${ord(c.rkW)} de ${c.nW}` : ""}</small></div>
         <div><span>Victorias esperadas</span><b>${ok(c.py) ? N(c.py, 1) : "–"}</b><small>${c.dPy != null ? `${SG(c.dPy, 1)} frente a las reales` : "por puntos a favor y en contra"}</small></div>
         <div><span>Sin la suerte rival</span><b>${suerte != null ? SG(T.row.net_rtg_suerte, 1) : "–"}</b><small>${suerte != null ? `${SG(suerte, 1)} de suerte` : "sin jugada a jugada"}</small></div>
@@ -625,7 +666,8 @@
       ${kpis3}
       <div class="r3cols c2"><div class="r3blk"><h3>Lo que prometen las piezas y lo que da el equipo</h3>${puestosSVG(c)}<p class="r3n">Puesto en su liga por nivel de la plantilla (arriba) y por balance (abajo). Si el punto de abajo está a la izquierda del de arriba, el equipo rinde por encima de sus jugadores.</p></div>
         <div class="r3blk"><h3>Facetas frente a su liga</h3>${[...c.fuertes, ...c.debiles.slice().reverse()].map((m) => `<div class="ieq-fac"><span>${E(m.nm)}</span>${barraP(m.p, { w: 120 })}<b class="${tono(m.p, m.dir)}">${Math.round(m.p)}</b></div>`).join("") || `<p class="r3n">Ninguna faceta se separa con claridad de la media.</p>`}<p class="r3n">Percentil en su liga. Arriba, lo que sostiene al equipo; abajo, lo que le cuesta.</p></div></div>
-      ${mapa ? `<div class="r3blk"><h3>Lo que vale su plantilla y lo que gana</h3>${mapa}<p class="r3n">Cada punto es un equipo de ${E(c.ligaNom)}: a la derecha, plantilla de más nivel frente a las de su liga (escala ±100, 0 = plantilla media); arriba, ${c.mapaY === "wp" ? "más victorias" : "más diferencia de puntos por 100 posesiones (sin balance oficial en esta fase)"}. La línea discontinua es lo esperable por nivel${c.esperado != null && c.mapaY === "wp" && pctW != null ? `: con su plantilla, lo esperable sería un ${N(c.esperado, 0)} % de victorias y lleva un ${N(pctW, 0)} %` : c.esperado != null && c.mapaY === "net" ? `: con su plantilla, lo esperable sería ${SG(c.esperado, 1)} y está en ${SG(r.net, 1)}` : ""}. Por encima de la línea, el equipo rinde más de lo que prometen sus jugadores.</p></div>` : ""}
+      ${v4 ? ligaV40(c) : ""}
+      ${mapa && !v4 ? `<div class="r3blk"><h3>Lo que vale su plantilla y lo que gana</h3>${mapa}<p class="r3n">Cada punto es un equipo de ${E(c.ligaNom)}: a la derecha, plantilla de más nivel frente a las de su liga (escala ±100, 0 = plantilla media); arriba, ${c.mapaY === "wp" ? "más victorias" : "más diferencia de puntos por 100 posesiones (sin balance oficial en esta fase)"}. La línea discontinua es lo esperable por nivel${c.esperado != null && c.mapaY === "wp" && pctW != null ? `: con su plantilla, lo esperable sería un ${N(c.esperado, 0)} % de victorias y lleva un ${N(pctW, 0)} %` : c.esperado != null && c.mapaY === "net" ? `: con su plantilla, lo esperable sería ${SG(c.esperado, 1)} y está en ${SG(r.net, 1)}` : ""}. Por encima de la línea, el equipo rinde más de lo que prometen sus jugadores.</p></div>` : ""}
       <div class="r3cols"><div class="r3blk"><h3>Qué nos haría cambiar de opinión</h3><ul class="r3l">${cambiar.slice(0, 4).map((x) => `<li><span>${E(x)}</span></li>`).join("")}</ul></div>
         <div class="r3blk"><h3>Cómo se ha leído</h3><p class="r3p">Cifras de ${E(FNOM[c.s.fase])} frente a los ${c.n} equipos de ${E(c.ligaNom)}: percentil y puesto dentro de su liga. Todas las escalas ±100 tienen 0 = media de su liga: un equipo se lee con la vara de su competición, nunca trasladado a otra.${balNota}</p></div></div>` });
 
@@ -730,7 +772,8 @@
     }
 
     // anexo · glosario
-    const G = [["Percentil", "De 0 a 100 frente a los equipos de su liga: 80 = supera al 80 % de ellos; 50 = el mediano. Si menos es mejor, ya está invertido."], ["Escala ±100", "Nivel, impacto, diferencia y sinergias se expresan de −100 a +100; 0 es la media de su liga y ±46, una desviación típica de su liga."], ["Nivel de la plantilla", "Media del nivel de sus jugadores ponderada por minutos, frente a las plantillas de su liga."], ["Diferencia de puntos", "Puntos anotados menos encajados por cada 100 posesiones (Net). Por 100 posesiones para comparar equipos rápidos y lentos."],
+    const G = [["Net proyectado · Nivel Cerno · Impacto", "v4.0: puntos por 100 posesiones que proyecta la plantilla frente a su liga (rango del 80 %); y por jugador, de 0 a 100, su producción esperada entre los de su puesto y lo que pierde el equipo sin él (50 = nada)."],
+      ["Percentil", "De 0 a 100 frente a los equipos de su liga: 80 = supera al 80 % de ellos; 50 = el mediano. Si menos es mejor, ya está invertido."], ["Escala ±100", "Nivel, impacto, diferencia y sinergias se expresan de −100 a +100; 0 es la media de su liga y ±46, una desviación típica de su liga."], ["Nivel de la plantilla", "Media del nivel de sus jugadores ponderada por minutos, frente a las plantillas de su liga."], ["Diferencia de puntos", "Puntos anotados menos encajados por cada 100 posesiones (Net). Por 100 posesiones para comparar equipos rápidos y lentos."],
       ["Sin la suerte rival", "La misma diferencia si los rivales hubieran tirado triples y libres al promedio de la liga, lo que menos controla la defensa."], ["Victorias esperadas", "Las que corresponden a sus puntos a favor y en contra (fórmula pitagórica, exponente 14)."], ["Final igualado", "Últimos 5 minutos con el marcador a 5 puntos o menos (clutch)."],
       ["Acierto efectivo (eFG%)", "Acierto de campo con el triple valiendo uno y medio."], ["Rebote ofensivo / defensivo", "Parte de los rebotes disponibles que captura en cada canasta."], ["Tiros libres provocados", "Tiros libres por cada 100 tiros de campo (FTr)."],
       ["Stop", "Posesión del rival que acaba sin puntos, contada en el jugada a jugada. % de stops: stops entre posesiones del rival."], ["Tiempo muerto: parcial", "Puntos propios menos los del rival en los 2 minutos anteriores o siguientes a un tiempo muerto pedido por el equipo."], ["Primera posesión tras tiempo muerto", "Puntos de la primera posesión propia que empieza en los 30 segundos siguientes (jugada de pizarra, ATO)."],
