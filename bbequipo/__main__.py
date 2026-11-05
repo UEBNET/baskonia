@@ -47,6 +47,7 @@ def main(argv=None):
     an.add_argument("--solo-nc", action="store_true")
     an.add_argument("--solo-im", action="store_true")
     an.add_argument("--cortes", nargs="*", type=int, default=None)
+    sub.add_parser("anclas-producto", help="F5: referencias versionadas F_ref (liga×pos3) y F_mov (grupo de liga) → equipo/anclas/")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -125,6 +126,9 @@ def main(argv=None):
             anclas.impacto_examen(cfg, cortes=a.cortes)
         else:
             anclas.main(cfg)
+    elif a.orden == "anclas-producto":
+        from . import anclas
+        anclas.exportar(cfg)
     elif a.orden == "equipo-examen":
         from . import equipo
         equipo.main(cfg, solo_ligas=a.ligas, cortes=a.cortes)

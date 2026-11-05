@@ -371,3 +371,68 @@ def main(cfg: dict, progreso=print) -> dict:
     if progreso:
         progreso(f"  F5 examen: NC {res['nc']['puerta']} · IM {res['im']['puerta']} · {res['tiempo_s']} s", flush=True)
     return res
+
+
+# =============================================================================================== producto
+def exportar(cfg: dict, progreso=print) -> dict:
+    """Referencias versionadas para producción: F_ref (liga × pos3, tres últimas temporadas) de la última temporada con datos y
+    F_mov por grupo de liga con todos los fichajes del examen (Δ̂Net calibrado), más la calibración c por grupo."""
+    v32, S, SI = _v()
+    out = dir_salida(cfg)
+    roles = SI._leer_roles_temporada()
+    temp = sorted(roles["temporada"].unique())[-1]
+    gm_de = {l: S.minutos_partido(l) for l in roles["liga"].unique()}
+    Fref = referencias_nc(cfg, roles, temp, gm_de)
+    ref = {"temporada": temp, "temporadas": int(cfg["f5"]["nivel_cerno"]["referencia"]["temporadas"]), "ponderacion": "minutos",
+           "F_ref": {f"{l}|{p or 'todas'}": F.exportable() for (l, p), F in Fref.items() if F.n >= 30}}
+    (out / f"referencias_nc_{temp}.json").write_text(json.dumps(ref, indent=1, ensure_ascii=False), encoding="utf-8")
+    im = pd.read_csv(out / "im_examen.csv.gz") if (out / "im_examen.csv.gz").exists() else None
+    mov = {"generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "F_mov": {}, "fichajes": 0}
+    if im is not None:
+        cal = json.loads((EQ.dir_salida(cfg) / "calibracion.json").read_text(encoding="utf-8"))
+        for g, d in im.groupby("grupo_im"):
+            mov["F_mov"][g] = Empirica(d["delta_net"]).exportable()
+            mov["F_mov"][g]["F_real_equipo"] = Empirica(d["delta_net_real_equipo"].dropna().drop_duplicates()).exportable()
+        mov["fichajes"] = int(len(im)); mov["c_por_grupo_f4"] = {g: v["prediccion"]["c"] for g, v in cal["por_grupo"].items()}
+        mov["c_conjunto_f4"] = cal["conjunto"]["prediccion"]["c"]
+    (out / "referencia_im.json").write_text(json.dumps(mov, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    doc = {"version": cfg["version"], "generado": mov["generado"], "referencias_nc": f"referencias_nc_{temp}.json", "referencia_im": "referencia_im.json",
+           "grupos_nc": len(ref["F_ref"]), "grupos_im": list(mov["F_mov"])}
+    (out / "F5_anclas.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False), encoding="utf-8")
+    if progreso:
+        progreso(f"  F5 producto: F_ref {len(ref['F_ref'])} liga×puesto ({temp}) · F_mov {list(mov['F_mov'])} con {mov['fichajes']} fichajes", flush=True)
+    return doc
+
+
+def _empirica_de(exp: dict) -> Empirica | None:
+    if not exp or exp.get("n", 0) == 0:
+        return None
+    F = Empirica([]); q = exp["cuantiles"]
+    F.F = np.array([float(k) for k in q]); F.x = np.array(list(q.values()), float); F.n = exp["n"]
+    return F
+
+
+def nivel_cerno(res_sim: dict, liga_d: str, pos3: str | None, ref: dict, n: int = 400, semilla: int = 0) -> dict:
+    """NC₁ (y rango) a partir de la salida del simulador v3.x (`res["contribucion"]` o `res["C"]` con cuantiles) y las
+    referencias versionadas (`referencias_nc_<t>.json`). Devuelve también el percentil de la mediana predictiva."""
+    F = _empirica_de(ref["F_ref"].get(f"{liga_d}|{pos3}")) or _empirica_de(ref["F_ref"].get(f"{liga_d}|todas"))
+    if F is None:
+        return {"NC": np.nan, "motivo": "sin población de referencia"}
+    c = res_sim.get("contribucion") or res_sim.get("C") or {}
+    fila = pd.Series({f"C_{k}": c.get(k if k != "pred" else "mediana", c.get(k, np.nan)) for k, _ in NIVELES_Q})
+    m = muestras_predictivas(fila, "C", n, np.random.default_rng(semilla))
+    nc, lo, hi = percentil_esperado(F, m)
+    return {"NC": nc, "NC_lo80": lo, "NC_hi80": hi, "pct_mediana": float(100 * F(np.nanmedian(m))), "n_ref": F.n}
+
+
+def impacto(delta: dict, liga_d: str, cfg: dict, ref_im: dict, n: int = 300, semilla: int = 0) -> dict:
+    """IM (y rango) a partir de la salida de `equipo.Equipo.delta` (Δ̂Net calibrado con lo80/hi80 y sd) y F_mov del grupo."""
+    g = grupo_im(cfg, liga_d)
+    F = _empirica_de((ref_im.get("F_mov") or {}).get(g))
+    if F is None:
+        return {"IM": np.nan, "motivo": f"sin fichajes de referencia en {g}"}
+    rng = np.random.default_rng(semilla)
+    sd = float(np.sqrt(delta.get("sd_mc", 0.0) ** 2 + delta.get("s0", 0.0) ** 2))
+    m = delta["delta_net"] + rng.normal(0, max(sd, 1e-6), n)
+    im, lo, hi = percentil_esperado(F, m)
+    return {"IM": im, "IM_lo80": lo, "IM_hi80": hi, "grupo": g, "n_mov": F.n, "delta_net": delta["delta_net"]}
