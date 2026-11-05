@@ -66,6 +66,7 @@ def transiciones(cfg: dict) -> pd.DataFrame:
     l = l[(l["rol"] == "TOTAL") & l["delta_net"].notna() & ~l["temporada_en_curso"].astype(bool)].copy()
     l["anio"] = l["temporada_ant"].str[:4].astype(int)
     l["grupo"] = l["liga"].map(GRUPOS_LIGA).fillna("otras")
+    l = filtrar_contrato(cfg, l)
     return l[["liga", "grupo", "club", "temporada_ant", "temporada_nueva", "anio", "team_id_ant", "team_id_nuevo", "n_retornos",
               "n_salidas", "n_llegadas", "min_liberados", "min_absorbidos", "uso_liberado", "uso_absorbido", "net_ant", "net_nuevo",
               "delta_net"]].reset_index(drop=True)
@@ -114,6 +115,16 @@ def transiciones_extra(cfg: dict, trans: pd.DataFrame, min_minutos: float = 100.
                               "min_absorbidos": float(mb[tb][list(llegan)].sum() / max(mb[tb].sum(), 1)), "uso_liberado": np.nan, "uso_absorbido": np.nan,
                               "net_ant": n0, "net_nuevo": n1, "delta_net": n1 - n0})
     return pd.DataFrame(filas)
+
+
+def filtrar_contrato(cfg: dict, trans: pd.DataFrame) -> pd.DataFrame:
+    """Sólo transiciones cuya liga-temporada de partida t está incluida en el contrato de datos (D6): si t no tiene tramos de
+    quinteto válidos (p. ej. NCAA 2024-25, CBA 2024-25, VTB 2021-22) ningún jugador tiene β y la capa 4 no tiene nada que
+    decir; la temporada t+1 sólo necesita el Net realizado."""
+    inv = pd.read_csv(C.dir_salida(cfg) / "contrato" / "inventario_tramos.csv", usecols=["liga", "temporada", "decision"])
+    ok = set(zip(inv.loc[inv["decision"] != "excluida", "liga"], inv.loc[inv["decision"] != "excluida", "temporada"]))
+    sel = [(l, t) in ok for l, t in zip(trans["liga"], trans["temporada_ant"])]
+    return trans[sel].reset_index(drop=True)
 
 
 # =============================================================================================== insumos de un corte
@@ -526,7 +537,7 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
     out_dir = dir_salida(cfg) / "examen"; out_dir.mkdir(parents=True, exist_ok=True)
     tr_all = RP.tramos(cfg, None, progreso)
     trans = transiciones(cfg)
-    extra = transiciones_extra(cfg, trans)
+    extra = filtrar_contrato(cfg, transiciones_extra(cfg, trans))
     if len(extra):
         trans = pd.concat([trans, extra], ignore_index=True)
         if progreso:
@@ -546,6 +557,7 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
                 cache.write_bytes(pickle.dumps(e))
             partes.append(e)
         pred = pd.concat(partes, ignore_index=True)
+        pred = pred.merge(trans[["liga", "temporada_ant", "club"]].drop_duplicates(), on=["liga", "temporada_ant", "club"], how="inner")
         pred = calibrar_prediccion(pred, cortes)
         pred = corregir_sesgo_minutos(pred, cortes, float(cfg["f4"]["sesgo_minutos"]["umbral_calibracion_net"]))
         pred["delta_gbm"] = gbm_directo(pred, cortes)
