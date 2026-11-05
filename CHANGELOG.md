@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## 2026-11-05 — CERNO v4.0 · ENCARGO CERRADO (puerta F5 aprobada por el CEO)
+
+F0–F5 completadas con sus puertas (`docs/checkpoints/V40_F0.md` … `V40_F5.md`), modelo documentado en
+`docs/modelo_equipo_v40.md`, productos en `data/modelos/v4_0/` (perfiles, contrato, rapm_multiliga, sinergia, conjunto, equipo,
+equipo/a5, equipo/anclas) y `configs/simulation_v40.yaml`. Nada de la v3.2/v3.3 cambió. Pendientes fuera del encargo: integración
+en el flujo del simulador v4.0 y el artifact; examen limpio 2025-26 → 2026-27 antes de comunicar cifras de acierto.
+
 ## 2026-11-05 — CERNO v4.0 · F5: anclas NIVEL CERNO e IMPACTO en [0, 100]
 
 Detalle: `docs/checkpoints/V40_F5.md`, `docs/modelo_equipo_v40.md` §6. Puerta F4 aprobada por el CEO y orden de arrancar F5.
