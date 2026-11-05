@@ -300,7 +300,35 @@ por par de roles contraída hacia la recta por Bayes empírico (τ² por momento
 dentro de jugador es estable. Puerta §11.6 frente a B9 lineal reajustado con los mismos insumos: pasa (pts/100 −2,3 %, TS%
 −2,2 %, IC90 < 0; contracción efectiva). Se publica A5 con carga en ocho métricas y B9 en OREB/100 (regla por métrica).
 
-## 6. F5
+## 6. F5 · Métricas ancla NIVEL CERNO e IMPACTO (capa 5)
 
-Pendiente de la orden del CEO. Hiperparámetros, salidas y criterios prerregistrados en `configs/equipo_v40.yaml` (`f5`,
-`criterios`).
+Orden del CEO: 05-11-2026, con la puerta de la F4. Código: `bbequipo/anclas.py`. Checkpoint: `docs/checkpoints/V40_F5.md`.
+Salidas: `data/modelos/v4_0/equipo/anclas/`.
+
+### 6.1 Definiciones operativas (encargo §10; decisiones §10.4 del CEO)
+
+```
+NC = 100 · E_pred[ F_ref(C) ]        C = (min/partido ÷ min del partido) · pts/100 del motor v3.2/v3.3
+IM = 100 · E_pred[ F_mov(Δ̂Net) ]     Δ̂Net = c_grupo · [ T(plantilla real de t+1) − T(sin el jugador) ]  (capa 4)
+```
+
+- F_ref: C realizada en la liga de destino × puesto (pos3), tres últimas temporadas ≤ t, ponderada por minutos
+  (`player_role_season`, ≥ 100 minutos; ≥ 30 jugadores-temporada, si no la liga entera). NC₁ con adaptación (titular), NC₂ con
+  la variante `sin_adaptacion` del examen v3.2 (en la v3.2 la adaptación apenas mueve C: NC₂ ≈ NC₁).
+- E_pred sobre la predictiva completa de C (siete cuantiles del examen, función cuantil lineal a trozos): la incertidumbre
+  empuja NC hacia 50.
+- F_mov: Δ̂Net de los fichajes reales del mismo grupo de liga (élite / doméstica alta / resto), cortes ≤ t; es una escala
+  (predicciones), no un resultado, así que no filtra información de t+1.
+- **Calibración de NC** [DECISIÓN en el corte 2021]: el percentil esperado crudo subestima en ≈ 10 puntos el percentil
+  realizado de quienes llegan a jugar (la predictiva incluye no jugar; el examen sólo ve a quien jugó). NC publicado =
+  isotónica(NC crudo) ajustada con los cortes anteriores; rango del 80 % = cuantiles 10/90 del percentil realizado
+  condicionados al decil de NC crudo (cortes anteriores). Misma lógica que la calibración de la capa 4.
+- Examen §11.5 (`anclas.main`): separación en pares del mismo corte y liga de destino (NC_a ≥ NC_b + 10 → C_real_a > C_real_b
+  en ≥ 62 %, IC95 inferior > 0,55), calibración por deciles (±7), cobertura del 80 %; IM: Spearman con el ΔNet realizado del
+  equipo frente a la línea base aditiva (β × minutos del jugador), IC95 > 0, calibración por deciles.
+
+### 6.2 Producto
+
+`anclas/referencias_nc_<t>.json` (F_ref por liga × puesto, versionada con su temporada), `anclas/referencia_im.json` (F_mov por
+grupo, F de los ΔNet realizados y c de F4), `anclas.nivel_cerno(res_sim, liga, pos3, ref)` e `anclas.impacto(delta, liga, cfg,
+ref_im)` sobre la salida del simulador y de `equipo.Equipo.delta`.
