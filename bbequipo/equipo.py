@@ -339,7 +339,9 @@ def calibrar_prediccion(pred: pd.DataFrame, cortes: list[int]) -> pd.DataFrame:
     correlaciona con el Net realizado de t+1 más que la persistencia pero está sobredispersa (β de t aplicados a otra
     plantilla y otra temporada). Predicción: Net̂_{t+1} = c·T1' + d·Net_t (sin intercepto; c, d por mínimos cuadrados con los
     cortes ANTERIORES; el primer corte usa los suyos, sólo informativo) y Δ̂ = Net̂_{t+1} − Net_t. La persistencia es el caso
-    c = 0, d = 1. Se aplica igual a la línea base aditiva (con T1'_aditivo) y al oráculo de minutos. `delta_pred_crudo` = T1' − T0'."""
+    c = 0, d = 1. Por grupo de liga cuando el grupo tiene ≥ 40 transiciones previas (los grupos difieren: NBA c ≈ 0,7, Europa
+    media c ≈ 0,2 y d ≈ 0,7 en el corte de calibración); si no, conjunta. Se aplica igual a la línea base aditiva (con
+    T1'_aditivo) y al oráculo de minutos. `delta_pred_crudo` = T1' − T0'."""
     pred = pred.copy()
     for col in ("c_cal", "d_cal", "c_cal_aditivo", "d_cal_aditivo"):
         pred[col] = np.nan
@@ -350,18 +352,25 @@ def calibrar_prediccion(pred: pd.DataFrame, cortes: list[int]) -> pd.DataFrame:
             return 1.0, 0.0
         cd = np.linalg.lstsq(A[ok], y[ok], rcond=None)[0]
         return float(np.clip(cd[0], 0.0, 1.5)), float(np.clip(cd[1], -0.5, 1.5))
+    MIN_GRUPO = 40                                     # transiciones previas del grupo de liga para calibrar por grupo; si no, conjunta
     for k_, a in enumerate(cortes):
         prev = pred[pred["corte"].isin(cortes[:k_])] if k_ else pred[pred["corte"] == a]
-        c, d = ajustar(prev, "T1"); ca, da = ajustar(prev, "T1_aditivo")
-        sel = pred["corte"] == a
-        n0 = pred.loc[sel, "net_ant"]
-        pred.loc[sel, ["c_cal", "d_cal", "c_cal_aditivo", "d_cal_aditivo"]] = [c, d, ca, da]
-        pred.loc[sel, "delta_pred"] = c * pred.loc[sel, "T1"] + (d - 1.0) * n0
-        pred.loc[sel, "delta_sd"] = c * pred.loc[sel, "T1_sd"]
-        for q in ("p05", "p10", "p25", "p75", "p90", "p95"):
-            pred.loc[sel, f"delta_{q}"] = c * pred.loc[sel, f"T1_{q}"] + (d - 1.0) * n0
-        pred.loc[sel, "delta_aditivo"] = ca * pred.loc[sel, "T1_aditivo"] + (da - 1.0) * n0
-        pred.loc[sel, "delta_oraculo_minutos"] = c * pred.loc[sel, "T1_oraculo"] + (d - 1.0) * n0
+        c0, d0 = ajustar(prev, "T1"); ca0, da0 = ajustar(prev, "T1_aditivo")
+        for grp in pred.loc[pred["corte"] == a, "grupo"].unique():
+            pg = prev[prev["grupo"] == grp]
+            if len(pg) >= MIN_GRUPO:
+                c, d = ajustar(pg, "T1"); ca, da = ajustar(pg, "T1_aditivo")
+            else:
+                c, d, ca, da = c0, d0, ca0, da0
+            sel = (pred["corte"] == a) & (pred["grupo"] == grp)
+            n0 = pred.loc[sel, "net_ant"]
+            pred.loc[sel, ["c_cal", "d_cal", "c_cal_aditivo", "d_cal_aditivo"]] = [c, d, ca, da]
+            pred.loc[sel, "delta_pred"] = c * pred.loc[sel, "T1"] + (d - 1.0) * n0
+            pred.loc[sel, "delta_sd"] = c * pred.loc[sel, "T1_sd"]
+            for q in ("p05", "p10", "p25", "p75", "p90", "p95"):
+                pred.loc[sel, f"delta_{q}"] = c * pred.loc[sel, f"T1_{q}"] + (d - 1.0) * n0
+            pred.loc[sel, "delta_aditivo"] = ca * pred.loc[sel, "T1_aditivo"] + (da - 1.0) * n0
+            pred.loc[sel, "delta_oraculo_minutos"] = c * pred.loc[sel, "T1_oraculo"] + (d - 1.0) * n0
     return pred
 
 
