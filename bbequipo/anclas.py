@@ -315,6 +315,40 @@ def calibrar_im(d: pd.DataFrame, pred_f4: pd.DataFrame, cfg: dict, cortes: list[
     return d
 
 
+def calibrar_nc(nc: pd.DataFrame, cortes: list[int], col: str = "NC1", min_prev: int = 300) -> pd.DataFrame:
+    """Capa de calibración de NC [DECISIÓN en el corte de calibración 2021]: el percentil esperado crudo subestima el percentil
+    realizado de los fichajes que llegan a jugar (la población del examen es la de quienes jugaron ≥ el mínimo; la predictiva
+    incluye la posibilidad de no jugar). NC publicado = g(NC crudo) con g isotónica (monótona) ajustada con los cortes
+    ANTERIORES sobre (NC crudo → percentil realizado); el primer corte usa la suya (informativo). Se aplica igual al rango
+    (lo80/hi80) y a NC₂. Las columnas `*_crudo` conservan el valor sin calibrar."""
+    from sklearn.isotonic import IsotonicRegression
+    nc = nc.copy()
+    for c in (col, f"{col}_lo80", f"{col}_hi80", "NC2", "NC2_lo80", "NC2_hi80"):
+        nc[f"{c}_crudo"] = nc[c]
+    nc["nc_calibrado_con"] = None
+    for k, a in enumerate(cortes):
+        prev = nc[nc["anio"].isin(cortes[:k]) & nc["eval"]] if k else nc[(nc["anio"] == a) & nc["eval"]]
+        sel = nc["anio"] == a
+        if len(prev) < min_prev:
+            continue
+        g = IsotonicRegression(y_min=0.0, y_max=100.0, out_of_bounds="clip").fit(prev[f"{col}_crudo"], prev["pct_realizado"])
+        # rango del 80 %: cuantiles 10 y 90 del percentil realizado condicionados al decil de NC crudo (cortes anteriores);
+        # el rango crudo (F_ref de los cuantiles de C) no es un intervalo del percentil realizado y la isotónica lo comprimiría
+        bordes = np.quantile(prev[f"{col}_crudo"], np.linspace(0, 1, 11)); bordes[0], bordes[-1] = -np.inf, np.inf
+        bins_prev = np.clip(np.searchsorted(bordes, prev[f"{col}_crudo"], side="right") - 1, 0, 9)
+        q10 = np.array([np.quantile(prev["pct_realizado"][bins_prev == b], 0.10) if (bins_prev == b).sum() >= 20 else np.nan for b in range(10)])
+        q90 = np.array([np.quantile(prev["pct_realizado"][bins_prev == b], 0.90) if (bins_prev == b).sum() >= 20 else np.nan for b in range(10)])
+        q10 = pd.Series(q10).interpolate(limit_direction="both").to_numpy(); q90 = pd.Series(q90).interpolate(limit_direction="both").to_numpy()
+        for base in (col, "NC2"):
+            v = nc.loc[sel, f"{base}_crudo"].to_numpy(float); ok = np.isfinite(v)
+            centro = np.full(len(v), np.nan); centro[ok] = g.predict(v[ok]); nc.loc[sel, base] = centro
+            b = np.clip(np.searchsorted(bordes, np.nan_to_num(v, nan=0.0), side="right") - 1, 0, 9)
+            lo = np.where(ok, q10[b], np.nan); hi = np.where(ok, q90[b], np.nan)
+            nc.loc[sel, f"{base}_lo80"] = np.minimum(lo, centro); nc.loc[sel, f"{base}_hi80"] = np.maximum(hi, centro)
+        nc.loc[sel, "nc_calibrado_con"] = "cortes_anteriores" if k else "propio_corte"
+    return nc
+
+
 # =============================================================================================== examen completo
 def main(cfg: dict, progreso=print) -> dict:
     from bbfit.registro import experimento
@@ -324,8 +358,12 @@ def main(cfg: dict, progreso=print) -> dict:
     crit = cfg["criterios"]["f5"]; B = int(cfg["criterios"]["comunes"]["bootstrap"]); sem = int(cfg["criterios"]["comunes"]["semilla_bootstrap"])
     cortes = [int(x) for x in cfg["criterios"]["comunes"]["cortes"]]; dec = [int(x) for x in cfg["criterios"]["comunes"]["cortes_decision"]]
     with experimento(cfg["mlflow"], "F5_examen", params={"cortes": cortes}):
-        nc = nivel_cerno_examen(cfg, progreso)
-        nc["anio"] = nc["corte"].str[:4].astype(int)
+        cache_nc = out / "nc_examen_crudo.csv.gz"
+        if cache_nc.exists():
+            nc = pd.read_csv(cache_nc)
+        else:
+            nc = nivel_cerno_examen(cfg, progreso); nc["anio"] = nc["corte"].str[:4].astype(int); nc.to_csv(cache_nc, index=False)
+        nc = calibrar_nc(nc, cortes)
         nc.round(3).to_csv(out / "nc_examen.csv.gz", index=False)
         im = impacto_examen(cfg, progreso)
         pred_f4 = pd.read_csv(EQ.dir_salida(cfg) / "examen" / "predicciones_f4.csv.gz")
@@ -339,6 +377,12 @@ def main(cfg: dict, progreso=print) -> dict:
         res["nc"]["calibracion"] = examen_calibracion(d, "NC1", "pct_realizado", float(crit["nc_calibracion_deciles_tolerancia"]))
         res["nc"]["cobertura_80"] = cobertura(d, "NC1_lo80", "NC1_hi80", "pct_realizado")
         res["nc"]["nc2"] = {"media": float(d["NC2"].mean()), "media_nc1": float(d["NC1"].mean()), "corr_nc1_nc2": float(d[["NC1", "NC2"]].corr().iloc[0, 1])}
+        res["nc"]["crudo"] = {"media_nc1": float(d["NC1_crudo"].mean()), "media_pct_realizado": float(d["pct_realizado"].mean()),
+                              "calibracion": examen_calibracion(d, "NC1_crudo", "pct_realizado", float(crit["nc_calibracion_deciles_tolerancia"])),
+                              "cobertura_80": cobertura(d, "NC1_lo80_crudo", "NC1_hi80_crudo", "pct_realizado"),
+                              "separacion": examen_separacion(d, "NC1_crudo", "C_real", ["corte", "liga_d"], float(sep["diferencia_minima"]), 100, sem)}
+        res["nc"]["anchura_80_media"] = float((d["NC1_hi80"] - d["NC1_lo80"]).mean())
+        res["nc"]["corr_nc1_pct_realizado"] = float(d[["NC1", "pct_realizado"]].corr().iloc[0, 1])
         res["nc"]["por_corte"] = {str(a): {"n": int((d["anio"] == a).sum()), "separacion": examen_separacion(d[d["anio"] == a], "NC1", "C_real", ["liga_d"], float(sep["diferencia_minima"]), 100, sem)["fraccion"],
                                            "cobertura_80": cobertura(d[d["anio"] == a], "NC1_lo80", "NC1_hi80", "pct_realizado")} for a in dec}
         s = res["nc"]["separacion"]
