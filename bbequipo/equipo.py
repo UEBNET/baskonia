@@ -90,7 +90,8 @@ class Insumos:
         pr = aj["res"]["priors"][0]
         T = aj["T"]
         self.prior = dict(zip(T["clave"], pr.predecir(T))) if pr is not None else {}
-        self.tau = float(np.sqrt(aj["res"].get("tau2", np.nan))) if np.isfinite(aj["res"].get("tau2", np.nan)) else float(np.nanmedian(tb["beta_sd"]))
+        t2 = np.atleast_1d(np.asarray(aj["res"].get("tau2", np.nan), float)).ravel()[0]
+        self.tau = float(np.sqrt(t2)) if np.isfinite(t2) and t2 > 0 else float(np.nanmedian(tb["beta_sd"]))
         # nivel de «jugador nuevo» por liga (primera temporada en los datos, ≤ t; 2020-21 no cuenta) y media de liga
         liga = tb["liga_principal"] if "liga_principal" in tb else None
         if liga is not None:
