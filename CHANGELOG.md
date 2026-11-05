@@ -14,11 +14,12 @@ F3 como examen acotado («opción (a)»).
   g es una corrección por jugador, dominada por el nº de jugadores sin perfil donde la cobertura es baja (corte 2022:
   R² 0,94 con los agregados; +2,4 pts/100 por jugador con perfil). Los jugadores en su primera temporada tienen β 1,3 pts/100
   por debajo de la media de su liga (−4,1 en Euroliga): F1 les imputa la media y F3 lo corrige.
-* **Lectura**: no hay estructura de quinteto más allá de lo aditivo con estos datos («la red más simple gana»). Puerta
-  presentada al CEO con tres opciones: publicar la red completa, publicar la variante aditiva (recomendada, post hoc por
-  parsimonia) o no publicar y llevar la imputación de «jugador nuevo» a F4.
+* **Lectura**: no hay estructura de quinteto más allá de lo aditivo con estos datos («la red más simple gana»).
+* **Puerta (CEO, 05-11-2026): opción (b)**: se publica la variante aditiva g(S) = Σ_i h(z_i) como «capa 3 reducida:
+  corrección no lineal por jugador» (`f3.rho_lineal: true`; decisión post hoc por parsimonia, declarada); la imputación de
+  nivel de jugador nuevo por liga se lleva a F4. Orden de arrancar F4.
 * Salidas: `data/modelos/v4_0/conjunto/examen/` (resumen, redes por corte, ablación, diagnósticos) y producto en
-  `conjunto/` (red completa, a la espera de la decisión).
+  `conjunto/` (`redes.pkl`, `F3_conjunto.json` con `variante`).
 
 ## 2026-11-04 — CERNO v4.0 · F2: sinergia de pares y efectos dirigidos sobre compañeros
 

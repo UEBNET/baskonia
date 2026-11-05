@@ -232,8 +232,17 @@ def main(cfg: dict, progreso=print) -> dict:
         return {"mejora_alguna_ic90": bool(mejora), "no_empeora_otra_mas_de_0_5pct": bool(no_empeora), "contraccion_ok": res["contraccion"]["ok"],
                 "pasa": bool(mejora and no_empeora and res["contraccion"]["ok"])}
     res["puerta_11_6"] = {k: puerta(k) for k in variantes}
-    elegida = next((k for k in ["a5_carga", "a5"] if k in res["puerta_11_6"] and res["puerta_11_6"][k]["pasa"]), None)
-    res["decisiones"] = {"publicar": elegida or "b9_lineal", "regla": "§11.6; si ninguna variante pasa, se conserva B9 lineal (ablación documentada)"}
+    # la covariable de carga sólo se adopta si mejora a la variante simple con IC90 que excluya 0 en pts/100 (parsimonia)
+    elegida = "a5" if res["puerta_11_6"]["a5"]["pasa"] else None
+    if "a5_carga" in variantes and res["puerta_11_6"]["a5_carga"]["pasa"]:
+        ya = pd.concat(acum["a5"]["pts_p100"], ignore_index=True); yc = pd.concat(acum["a5_carga"]["pts_p100"], ignore_index=True)
+        y = ya["y"].to_numpy(float); ok = ya["ok"].to_numpy(bool) & np.isfinite(y)
+        d, lo, hi = v32.boot_cociente(ec, np.abs(yc["pred"].to_numpy(float) - y), np.abs(ya["pred"].to_numpy(float) - y), ok, 1000, SEMILLA, nivel=0.9)
+        res["carga_frente_a_a5"] = {"cociente_menos_1_pts": d, "ic90": [lo, hi], "adoptar": bool(hi < 0)}
+        if hi < 0:
+            elegida = "a5_carga"
+    res["decisiones"] = {"publicar": elegida or "b9_lineal",
+                         "regla": "§11.6; si ninguna variante pasa, se conserva B9 lineal; la covariable de carga sólo si mejora a A5 simple con IC90 < 0"}
     res["tiempo_s"] = round(time.time() - t0)
     (out_dir / "resumen_a5.json").write_text(json.dumps(res, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
     if progreso:

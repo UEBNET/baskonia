@@ -248,10 +248,14 @@ y_s = [F1] + [F2: Σφ_A − Σφ_B] + g(S_A) − g(S_B) + ε_s,      g(S) = ρ(
   que 1,6–3,1 es desacuerdo entre semillas), calibrada. Ablación con ρ lineal (g aditiva por jugador) y diagnóstico de qué
   agregados del quinteto explican g: ver el checkpoint.
 
-### 4.2 Qué se lleva la capa 4
+### 4.2 Decisión y qué se lleva la capa 4
 
-`conjunto/redes.pkl` (estado de las cinco redes y los rasgos) y `conjunto/F3_conjunto.json`; `ConjuntoNet.cargar` y
-`predecir` devuelven g(S_A) − g(S_B) para cualquier par de quintetos con perfiles (sin perfil → z = 0).
+Puerta aprobada por el CEO (05-11-2026) con la **variante aditiva** (ρ lineal, `f3.rho_lineal: true`): g(S) = Σ_i h(z_i),
+«capa 3 reducida: corrección no lineal por jugador». La ablación mostró que la red completa y la aditiva pasan igual el
+§11.3; se elige la simple [DECISIÓN post hoc por parsimonia]. `conjunto/redes.pkl` (estado de las cinco redes y los
+rasgos) y `conjunto/F3_conjunto.json`; `ConjuntoNet.cargar` y `predecir` devuelven g(S_A) − g(S_B) para cualquier par de
+quintetos con perfiles (sin perfil → z = 0). Hallazgo que F4 incorpora: los jugadores en su primera temporada tienen β
+1,3 pts/100 por debajo de la media de su liga; a quien no tiene perfil ni β se le imputa ese nivel, no la media.
 
 ## 5. F4 … F5
 
