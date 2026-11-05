@@ -203,7 +203,12 @@ def pesos_pl(ins: "Insumos", progreso=print) -> dict:
         c_prev = S.cargar_corte(prev, fuente, pesos=False)
         bloques += V.bloques_utilidad(c_prev, ins.roles, s, cfg_sim)
         extras.append(V.rotacion_extra(c_prev, ins.roles, s))
-    w = V.ajustar_utilidad(bloques, cfg_sim) if bloques else dict(cfg_sim["utilidad"]["inicial"])
+    if bloques:
+        w = V.ajustar_utilidad(bloques, cfg_sim)
+    else:                                              # pesos iniciales: el peso de los minutos previos vale para club y fuera
+        w = dict(cfg_sim["utilidad"]["inicial"])
+        if "logit_min_previo" in w:
+            w.setdefault("lmin_club", w["logit_min_previo"]); w.setdefault("lmin_fuera", w["logit_min_previo"])
     res = {"utilidad": w, "calibracion": {"rotacion_extra": float(np.median(extras)) if extras else 1.0, "disponibilidad": 0.85},
            "equipos_entrenamiento": len(bloques), "temporadas": [s for s in temps[1:] if temps[temps.index(s) - 1] in disponibles]}
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -282,23 +287,24 @@ def examen_corte(cfg: dict, a: int, tr_all: pd.DataFrame, trans: pd.DataFrame, p
             if row.club not in T_t1 or row.club not in T_t:
                 continue
             x, y = T_t[row.club], T_t1[row.club]
-            d = (y["T"] - M1) - (x["T"] - m_t)
-            d_add = (y["T_aditivo"] - M1_add) - (x["T_aditivo"] - m_t_add)
+            T1 = y["T"] - M1; T1_add = y["T_aditivo"] - M1_add
+            T0 = x["T"] - m_t; T0_add = x["T_aditivo"] - m_t_add
+            q = lambda v, k: float(np.quantile(v, k))
             filas.append({"corte": a, "liga": liga, "grupo": row.grupo, "club": row.club, "temporada_ant": row.temporada_ant,
                           "temporada_nueva": row.temporada_nueva, "net_ant": row.net_ant, "net_nuevo": row.net_nuevo, "delta_real": row.delta_net,
-                          "delta_pred": float(d.mean()), "delta_sd": float(d.std()), "delta_p10": float(np.quantile(d, .10)), "delta_p90": float(np.quantile(d, .90)),
-                          "delta_p25": float(np.quantile(d, .25)), "delta_p75": float(np.quantile(d, .75)), "delta_p05": float(np.quantile(d, .05)), "delta_p95": float(np.quantile(d, .95)),
-                          "delta_aditivo": float(d_add.mean()), "delta_phi": float((y["T_phi"]).mean()), "delta_h": float(y["T_h"].mean()),
-                          "delta_oraculo_minutos": float((y["T_oraculo"] - m_or) - (x["T"] - m_t)) if np.isfinite(y["T_oraculo"]) else np.nan,
-                          "nethat_t": float(x["T"] - m_t), "nethat_t1": float((y["T"] - M1).mean()),
+                          "T0": float(T0), "T0_aditivo": float(T0_add), "T1": float(T1.mean()), "T1_sd": float(T1.std()),
+                          "T1_p05": q(T1, .05), "T1_p10": q(T1, .10), "T1_p25": q(T1, .25), "T1_p75": q(T1, .75), "T1_p90": q(T1, .90), "T1_p95": q(T1, .95),
+                          "T1_aditivo": float(T1_add.mean()), "T1_phi": float(y["T_phi"].mean()), "T1_h": float(y["T_h"].mean()),
+                          "T1_oraculo": float(y["T_oraculo"] - m_or) if np.isfinite(y["T_oraculo"]) else np.nan,
+                          "delta_pred_crudo": float(T1.mean() - T0), "delta_oraculo_crudo": float((y["T_oraculo"] - m_or) - T0) if np.isfinite(y["T_oraculo"]) else np.nan,
                           "min_altas": y["min_altas"], "n_plantilla": y["n_plantilla"], "n_sin_beta": y["n_sin_beta"], "n_nuevo": y["n_nuevo"],
                           "n_salidas": row.n_salidas, "n_llegadas": row.n_llegadas, "min_liberados": row.min_liberados, "min_absorbidos": row.min_absorbidos,
                           "uso_liberado": row.uso_liberado, "uso_absorbido": row.uso_absorbido})
         if progreso:
             e = pd.DataFrame([f for f in filas if f["liga"] == liga])
-            progreso(f"    corte {a} {liga}: {len(e)} equipos · MAE Δ̂ {np.mean(np.abs(e['delta_real'] - e['delta_pred'])):.2f} · "
-                     f"persistencia {np.mean(np.abs(e['delta_real'])):.2f} · oráculo minutos {np.nanmean(np.abs(e['delta_real'] - e['delta_oraculo_minutos'])):.2f} · "
-                     f"corr {np.corrcoef(e['delta_real'], e['delta_pred'])[0, 1] if len(e) > 2 else np.nan:+.2f} · {time.time() - t0:.0f} s", flush=True)
+            progreso(f"    corte {a} {liga}: {len(e)} equipos · MAE Δ̂ crudo {np.mean(np.abs(e['delta_real'] - e['delta_pred_crudo'])):.2f} · "
+                     f"persistencia {np.mean(np.abs(e['delta_real'])):.2f} · corr(T1', Net t+1) {np.corrcoef(e['T1'], e['net_nuevo'])[0, 1] if len(e) > 2 else np.nan:+.2f} "
+                     f"(persistencia {np.corrcoef(e['net_ant'], e['net_nuevo'])[0, 1] if len(e) > 2 else np.nan:+.2f}) · sd T1' {e['T1'].std():.1f} frente a {e['net_nuevo'].std():.1f} · {time.time() - t0:.0f} s", flush=True)
     return pd.DataFrame(filas)
 
 
@@ -315,7 +321,7 @@ def gbm_directo(pred: pd.DataFrame, cortes: list[int]) -> np.ndarray:
     """Línea base (c): GBM supervisado directo sobre las transiciones (rasgos del libro + Δ̂ aditivo), entrenado SÓLO con
     los cortes anteriores a cada corte (el primero: NaN)."""
     from sklearn.ensemble import HistGradientBoostingRegressor
-    cols = ["net_ant", "n_salidas", "n_llegadas", "min_liberados", "min_absorbidos", "uso_liberado", "uso_absorbido", "delta_aditivo", "min_altas"]
+    cols = ["net_ant", "n_salidas", "n_llegadas", "min_liberados", "min_absorbidos", "uso_liberado", "uso_absorbido", "T1_aditivo", "T0_aditivo", "min_altas"]
     X = pred[cols].apply(pd.to_numeric, errors="coerce").to_numpy(float)
     y = pred["delta_real"].to_numpy(float)
     out = np.full(len(pred), np.nan)
@@ -326,6 +332,37 @@ def gbm_directo(pred: pd.DataFrame, cortes: list[int]) -> np.ndarray:
         m = HistGradientBoostingRegressor(max_iter=200, learning_rate=0.05, max_depth=3, min_samples_leaf=20, l2_regularization=1.0, random_state=0)
         out[te] = m.fit(X[tr], y[tr]).predict(X[te])
     return out
+
+
+def calibrar_prediccion(pred: pd.DataFrame, cortes: list[int]) -> pd.DataFrame:
+    """Capa de calibración [DECISIÓN en el corte de calibración 2021]: la fuerza proyectada de t+1 (T1', centrada en su liga)
+    correlaciona con el Net realizado de t+1 más que la persistencia pero está sobredispersa (β de t aplicados a otra
+    plantilla y otra temporada). Predicción: Net̂_{t+1} = c·T1' + d·Net_t (sin intercepto; c, d por mínimos cuadrados con los
+    cortes ANTERIORES; el primer corte usa los suyos, sólo informativo) y Δ̂ = Net̂_{t+1} − Net_t. La persistencia es el caso
+    c = 0, d = 1. Se aplica igual a la línea base aditiva (con T1'_aditivo) y al oráculo de minutos. `delta_pred_crudo` = T1' − T0'."""
+    pred = pred.copy()
+    for col in ("c_cal", "d_cal", "c_cal_aditivo", "d_cal_aditivo"):
+        pred[col] = np.nan
+    def ajustar(prev, colT):
+        A = np.c_[prev[colT].to_numpy(float), prev["net_ant"].to_numpy(float)]; y = prev["net_nuevo"].to_numpy(float)
+        ok = np.isfinite(A).all(1) & np.isfinite(y)
+        if ok.sum() < 20:
+            return 1.0, 0.0
+        cd = np.linalg.lstsq(A[ok], y[ok], rcond=None)[0]
+        return float(np.clip(cd[0], 0.0, 1.5)), float(np.clip(cd[1], -0.5, 1.5))
+    for k_, a in enumerate(cortes):
+        prev = pred[pred["corte"].isin(cortes[:k_])] if k_ else pred[pred["corte"] == a]
+        c, d = ajustar(prev, "T1"); ca, da = ajustar(prev, "T1_aditivo")
+        sel = pred["corte"] == a
+        n0 = pred.loc[sel, "net_ant"]
+        pred.loc[sel, ["c_cal", "d_cal", "c_cal_aditivo", "d_cal_aditivo"]] = [c, d, ca, da]
+        pred.loc[sel, "delta_pred"] = c * pred.loc[sel, "T1"] + (d - 1.0) * n0
+        pred.loc[sel, "delta_sd"] = c * pred.loc[sel, "T1_sd"]
+        for q in ("p05", "p10", "p25", "p75", "p90", "p95"):
+            pred.loc[sel, f"delta_{q}"] = c * pred.loc[sel, f"T1_{q}"] + (d - 1.0) * n0
+        pred.loc[sel, "delta_aditivo"] = ca * pred.loc[sel, "T1_aditivo"] + (da - 1.0) * n0
+        pred.loc[sel, "delta_oraculo_minutos"] = c * pred.loc[sel, "T1_oraculo"] + (d - 1.0) * n0
+    return pred
 
 
 def calibrar_intervalos(pred: pd.DataFrame, cortes: list[int], nivel: float = 0.8) -> pd.DataFrame:
@@ -355,6 +392,10 @@ def metricas(e: pd.DataFrame, B: int, semilla: int) -> dict:
         d = e[e[col].notna()]
         out[f"mae_{nombre}"] = mae(d, col)
         out[f"spearman_{nombre}"] = float(spearmanr(d["delta_real"], d[col]).correlation) if len(d) > 3 else np.nan
+    if "delta_pred_crudo" in e:
+        out["mae_f4_sin_calibrar"] = mae(e, "delta_pred_crudo"); out["c_cal_medio"] = float(e["c_cal"].mean()); out["d_cal_medio"] = float(e["d_cal"].mean())
+        out["corr_T1_net_t1"] = float(np.corrcoef(e["T1"], e["net_nuevo"])[0, 1]) if len(e) > 3 else np.nan
+        out["corr_persistencia_net_t1"] = float(np.corrcoef(e["net_ant"], e["net_nuevo"])[0, 1]) if len(e) > 3 else np.nan
     out["mae_persistencia"] = float(np.mean(np.abs(y)))
     out["mae_media_liga_cero"] = out["mae_persistencia"]
     # diferencias con IC95 (bootstrap de transiciones)
@@ -399,6 +440,7 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
                 cache.write_bytes(pickle.dumps(e))
             partes.append(e)
         pred = pd.concat(partes, ignore_index=True)
+        pred = calibrar_prediccion(pred, cortes)
         pred["delta_gbm"] = gbm_directo(pred, cortes)
         pred = calibrar_intervalos(pred, cortes)
         res = {"version": cfg["version"], "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "cortes": cortes, "cortes_decision": dec,
@@ -406,6 +448,8 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
         for a in cortes:
             res["por_corte"][a] = metricas(pred[pred["corte"] == a], B, sem)
         d = pred[pred["corte"].isin(dec)]
+        if d.empty:                                   # prueba sin cortes de decisión: resumen con lo que hay (informativo)
+            d = pred; res["aviso"] = "sin cortes de decisión: resumen informativo con los cortes ejecutados"
         res["global_decision"] = metricas(d, B, sem)
         for g, x in d.groupby("grupo"):
             res["por_grupo"][g] = metricas(x, B, sem)
@@ -414,12 +458,13 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
                                                  "mae_persistencia": float(np.mean(np.abs(x["delta_real"])))}
         gd = res["global_decision"]
         lo, hi = crit["cobertura_80"]
+        gd.setdefault("mae_f4", np.nan); gd.setdefault("ic95_dif_persistencia", [np.nan, np.nan])
         res["puerta_11_4"] = {
             "mejora_persistencia_ic95_excluye_0": bool(gd["ic95_dif_persistencia"][1] < 0),
             "no_empeora_aditivo": bool(gd.get("ic95_dif_aditivo_f1", [0, 0])[0] <= 0) if "ic95_dif_aditivo_f1" in gd else None,
             "no_detras_gbm_significativo": bool(gd.get("ic95_dif_gbm_directo", [0, 0])[0] <= 0) if "ic95_dif_gbm_directo" in gd else None,
             "cobertura_en_rango": bool(lo <= gd.get("cobertura_80", np.nan) <= hi) if "cobertura_80" in gd else None,
-            "sospecha_fuga": bool(gd["mae_f4"] < 0.6 * gd["mae_persistencia"]),
+            "sospecha_fuga": bool(gd["mae_f4"] < 0.6 * gd["mae_persistencia"]) if np.isfinite(gd["mae_f4"]) else None,
         }
         res["puerta_11_4"]["pasa"] = bool(all(v for k, v in res["puerta_11_4"].items() if k not in ("sospecha_fuga",) and v is not None)) and not res["puerta_11_4"]["sospecha_fuga"]
         res["tiempo_s"] = round(time.time() - t0)
