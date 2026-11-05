@@ -291,6 +291,18 @@ criterios:
     nc_separacion: {diferencia_minima: 10, fraccion_minima: 0.62, ic95_inferior_minimo: 0.55}
     nc_calibracion_deciles_tolerancia: 7
     im_monotonia: spearman(IM, ΔNet realizado) ≥ aditivo (b), IC95 de la diferencia frente a persistencia excluye 0
+    # DECISIÓN CEO 05-11-2026 (opción b, tras el examen literal; POST HOC declarado): el ΔNet realizado existe por equipo, no por
+    # fichaje; el examen de IM se redefine frente a la contraparte realizada POR FICHAJE (Net on/off ajustado en el destino,
+    # ≥ 300 min) con capa de calibración isotónica como la de NC. Prerregistrado AQUÍ antes de ejecutar la versión calibrada
+    # (el diagnóstico sin calibrar sí se había visto: Spearman 0,161, 9 de 10 deciles dentro de ±7). Mientras no pase: IM «en examen».
+    im_onoff:
+      realizado: net_rtg_aj_onoff_destino            # percentil del on/off realizado entre los fichajes del mismo grupo de liga
+      min_minutos: 300
+      monotonia: spearman(IM, on/off) ≥ aditivo (β × minutos) con IC95 de la diferencia que excluye 0
+      calibracion_deciles_tolerancia: 7
+      cobertura_80: [0.75, 0.85]
+      calibracion: isotonica_cortes_anteriores        # IM publicado = g(IM crudo); rango = cuantiles 10/90 del percentil on/off por decil
+      estado_si_no_pasa: en_examen                    # NC referente; IM visible con etiqueta «en examen» (opción a)
     im_calibracion_deciles_tolerancia: 7
     cobertura_80_rangos: [0.75, 0.85]
     anti_manipulacion: recalcular con el examen limpio 2025-26 → 2026-27 antes de comunicar cifras de acierto
