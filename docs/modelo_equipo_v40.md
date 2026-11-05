@@ -257,7 +257,45 @@ rasgos) y `conjunto/F3_conjunto.json`; `ConjuntoNet.cargar` y `predecir` devuelv
 quintetos con perfiles (sin perfil → z = 0). Hallazgo que F4 incorpora: los jugadores en su primera temporada tienen β
 1,3 pts/100 por debajo de la media de su liga; a quien no tiene perfil ni β se le imputa ese nivel, no la media.
 
-## 5. F4 … F5
+## 5. F4 · Composición, Δ de equipo y A5 (capa 4)
 
-Pendientes de la orden del CEO para cada fase. Los hiperparámetros, las salidas y los criterios prerregistrados están ya en
-`configs/equipo_v40.yaml` (`f4` con `a5`, `f5` y `criterios`).
+Orden del CEO: 05-11-2026, con la puerta de la F3 (opción b). Código: `bbequipo/equipo.py`, `bbequipo/a5.py`. Checkpoint:
+`docs/checkpoints/V40_F4.md`. Salidas: `data/modelos/v4_0/equipo/`.
+
+### 5.1 Modelo de equipo
+
+```
+T(R) = E_{S ~ P(·|R)}[ f(S) ],   f(S) = Σ_{i∈S} β_i + Σ_{i<j∈S} φ_ij + Σ_{i∈S} h(z_i)
+Net̂(R) = T(R) − media de la liga-temporada;   Δ̂Net = Net̂(R'_{t+1}) − Net̂(R_t)
+```
+
+- P(S | R) a través de las cuotas de posesiones p_i (minutos / minutos de un puesto; Σ p_i = 5): observadas en t, proyectadas
+  en t+1 con el motor de minutos de la v3.3 (`bbfit.simulador.plantilla/utilidad/tendencia` + `bbfit.reemplazo.asignar_minutos`:
+  Plackett-Luce sobre nivel × encaje, rotación del entrenador, mínimos por posición), con los pesos de la utilidad ajustados
+  sólo con temporadas ≤ t (`equipo.pesos_pl`). Lo aditivo (β, h) es exacto en las cuotas; el término de parejas usa
+  P(i, j) ≈ p_i p_j renormalizado a 10 parejas.
+- Incertidumbre: β ~ N(β̂, sd) por jugador y simulación; minutos por simulación del motor; φ y h fijos. Intervalos del 80 %
+  del Monte Carlo ensanchados con los residuos de los cortes anteriores (conformal).
+- Jugador de t+1 sin β ≤ t: prior del perfil; sin perfil: nivel de «jugador nuevo» de su liga (media de β de los jugadores
+  en su primera temporada, ≤ t).
+- Examen §11.4 (`equipo.main`): transiciones reales equipo-temporada del libro de roles (mismo club y liga), plantilla
+  real de t+1, todo lo demás ≤ t; líneas base persistencia, aditivo F1 y GBM directo (cortes anteriores); MAE de ΔNet,
+  Spearman, cobertura del 80 %, por grupo de liga y global; sesgo por tercil de minutos proyectados de las altas; diagnóstico
+  con minutos reales de t+1 (oráculo).
+
+### 5.2 A5 · Producción no lineal en minutos y rol
+
+```
+y_real − ŷ = s(Δmin) + c·Δrol + δ[rol_o → rol_d] + (carga: minutos de destino por encima de 30') + ε
+```
+
+Generaliza B9 (Δy = b·Δmin + c·Δrol) con la misma maquinaria del examen v3.2/v3.3 (fuente V32_corte, cortes anidados,
+escenario «rol asignado»): spline lineal a trozos de Δmin con 3 nudos (cuantiles 0,25/0,5/0,75), matriz 5 × 5 de desviaciones
+por par de roles contraída hacia la recta por Bayes empírico (τ² por momentos), covariable de carga si el diagnóstico
+dentro de jugador es estable. Puerta §11.6 frente a B9 lineal reajustado con los mismos insumos: pasa (pts/100 −2,3 %, TS%
+−2,2 %, IC90 < 0; contracción efectiva). Se publica A5 con carga en ocho métricas y B9 en OREB/100 (regla por métrica).
+
+## 6. F5
+
+Pendiente de la orden del CEO. Hiperparámetros, salidas y criterios prerregistrados en `configs/equipo_v40.yaml` (`f5`,
+`criterios`).
