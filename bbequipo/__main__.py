@@ -43,6 +43,10 @@ def main(argv=None):
     sub.add_parser("a5-examen", help="A5: producción no lineal en minutos y rol frente a B9 lineal (§11.6), cortes anidados v3.3")
     sub.add_parser("a5-producto", help="A5: coeficientes con todos los cortes según la decisión por métrica → equipo/a5/")
     sub.add_parser("equipo-producto", help="F4: calibración con todos los cortes y Net̂ de los equipos de la última temporada → equipo/")
+    an = sub.add_parser("anclas-examen", help="F5: NC e IM de los fichajes reales del examen y puerta §11.5 → equipo/anclas/")
+    an.add_argument("--solo-nc", action="store_true")
+    an.add_argument("--solo-im", action="store_true")
+    an.add_argument("--cortes", nargs="*", type=int, default=None)
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -113,6 +117,14 @@ def main(argv=None):
     elif a.orden == "equipo-producto":
         from . import equipo
         equipo.exportar(cfg)
+    elif a.orden == "anclas-examen":
+        from . import anclas
+        if a.solo_nc:
+            d = anclas.nivel_cerno_examen(cfg); d.to_csv(anclas.dir_salida(cfg) / "nc_examen.csv.gz", index=False)
+        elif a.solo_im:
+            anclas.impacto_examen(cfg, cortes=a.cortes)
+        else:
+            anclas.main(cfg)
     elif a.orden == "equipo-examen":
         from . import equipo
         equipo.main(cfg, solo_ligas=a.ligas, cortes=a.cortes)

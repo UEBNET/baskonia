@@ -247,6 +247,7 @@ f5:
         resto: [eurocup, bcl, fec, gleague, bnxt, cba, ncaa, feb1, feb2, feb3]
       temporadas: todas_las_del_examen
     rango: [0.10, 0.90]
+    simulaciones: 200                                 # Monte Carlo por fichaje (con y sin) en el examen y el producto
     descomposicion_orden: [aditivo_beta_minutos, coste_oportunidad, sinergia_phi, efectos_companeros, estilo_entropia,
                            split_ortg_drtg]
     varios_fichajes: {im_paquete: true, contribucion_por_alta: true}
