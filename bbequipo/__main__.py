@@ -41,6 +41,8 @@ def main(argv=None):
     eq.add_argument("--ligas", nargs="*", default=None, help="sólo estas ligas (prueba rápida)")
     eq.add_argument("--cortes", nargs="*", type=int, default=None)
     sub.add_parser("a5-examen", help="A5: producción no lineal en minutos y rol frente a B9 lineal (§11.6), cortes anidados v3.3")
+    sub.add_parser("a5-producto", help="A5: coeficientes con todos los cortes según la decisión por métrica → equipo/a5/")
+    sub.add_parser("equipo-producto", help="F4: calibración con todos los cortes y Net̂ de los equipos de la última temporada → equipo/")
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -105,6 +107,12 @@ def main(argv=None):
     elif a.orden == "a5-examen":
         from . import a5
         a5.main(cfg)
+    elif a.orden == "a5-producto":
+        from . import a5
+        a5.exportar(cfg)
+    elif a.orden == "equipo-producto":
+        from . import equipo
+        equipo.exportar(cfg)
     elif a.orden == "equipo-examen":
         from . import equipo
         equipo.main(cfg, solo_ligas=a.ligas, cortes=a.cortes)

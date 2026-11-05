@@ -583,3 +583,177 @@ def main(cfg: dict, progreso=print, solo_ligas=None, cortes=None) -> dict:
                  f"aditivo {gd.get('mae_aditivo_f1', np.nan):.2f} · GBM {gd.get('mae_gbm_directo', np.nan):.2f} · cobertura {gd.get('cobertura_80', np.nan):.2f} · "
                  f"puerta {res['puerta_11_4']} · {res['tiempo_s']} s", flush=True)
     return res
+
+
+# =============================================================================================== producto
+def calibracion_producto(pred: pd.DataFrame, cfg: dict, nivel: float = 0.8, min_grupo: int = 40) -> dict:
+    """Coeficientes de la capa 4 para producción, con TODOS los cortes del examen: (c, d) de la predicción y (s0, q) de los
+    intervalos por grupo de liga (≥ min_grupo transiciones) y conjuntos; sesgo por tercil de minutos de las altas."""
+    def cd(d):
+        A = np.c_[d["T1"].to_numpy(float), d["net_ant"].to_numpy(float)]; y = d["net_nuevo"].to_numpy(float)
+        ok = np.isfinite(A).all(1) & np.isfinite(y)
+        if ok.sum() < 20:
+            return None
+        x = np.linalg.lstsq(A[ok], y[ok], rcond=None)[0]
+        return {"c": float(np.clip(x[0], 0, 1.5)), "d": float(np.clip(x[1], -0.5, 1.5)), "n": int(ok.sum())}
+    def esc(d):
+        res = (d["delta_real"] - d["delta_pred"]).to_numpy(float); sd = d["delta_sd"].to_numpy(float)
+        s0 = float(np.sqrt(max(np.mean(res ** 2) - np.mean(sd ** 2), 0.0)))
+        return {"s0": s0, "q": float(np.quantile(np.abs(res) / np.sqrt(sd ** 2 + s0 ** 2), nivel)), "n": int(len(d))}
+    out = {"conjunto": {"prediccion": cd(pred), "intervalo": esc(pred)}, "por_grupo": {}}
+    for g, d in pred.groupby("grupo"):
+        if len(d) >= min_grupo:
+            out["por_grupo"][g] = {"prediccion": cd(d), "intervalo": esc(d)}
+    q1, q2 = pred["min_altas"].quantile([1 / 3, 2 / 3])
+    terc = np.where(pred["min_altas"] <= q1, "bajo", np.where(pred["min_altas"] <= q2, "medio", "alto"))
+    out["sesgo_minutos_altas"] = {"cortes_terciles": [float(q1), float(q2)],
+                                  "sesgo": {t: float(np.mean((pred["delta_pred"] - pred["delta_real"])[terc == t])) for t in ("bajo", "medio", "alto")},
+                                  "umbral": float(cfg["f4"]["sesgo_minutos"]["umbral_calibracion_net"])}
+    return out
+
+
+class Equipo:
+    """Capa 4 en producción: Net̂ de una plantilla y Δ̂ de un cambio de plantilla (altas/bajas), con intervalos calibrados.
+    Insumos de producto: β de F1 (todas las temporadas), M_r de F2, redes F3 aditivas, motor de minutos v3.3 (pesos finales)
+    y la calibración de `calibracion.json`."""
+
+    def __init__(self, cfg: dict, temporada: str, progreso=print):
+        from .examen_f1 import perfiles_completo
+        self.cfg, self.temp = cfg, temporada
+        tr = RP.tramos(cfg, None, progreso=None)
+        temps = sorted(tr["temporada"].unique())
+        T = RP.tabla_prior(perfiles_completo(cfg, [t for t in temps if (C.dir_salida(cfg) / "perfiles" / f"{t}.csv.gz").exists()]), cfg)
+        tipo = cfg["f1"]["prior"].get("elegido") or json.loads((RP.dir_salida(cfg) / "examen" / "resumen_examen.json").read_text())["decisiones"]["prior"]["elegido"]
+        pr = cfg["f1"].get("producto") or {}
+        cfg_p = C.con(cfg, **{"f1.bayes_empirico.tau_rejilla": pr.get("tau_rejilla", cfg["f1"]["bayes_empirico"]["tau_rejilla"]),
+                              "f1.prior.ridge_alpha_rejilla": pr.get("ridge_alpha_rejilla", cfg["f1"]["prior"]["ridge_alpha_rejilla"])}) if pr else cfg
+        res = pickle.loads((C.RAIZ / "experimentos" / "v4_0" / f"producto_f1_net_{tipo}_{RP.huella_ajuste(cfg_p)}.pkl").read_bytes())
+        D = RP.construir_diseno(tr, "net")
+        tb = RP.tabla_beta(res, D).merge(RP.ligas_jugador(tr), on="clave", how="left")
+        tb["anio"] = tb["temporada"].str[:4].astype(int)
+        ult = tb.sort_values("anio").drop_duplicates("persona_id", keep="last").set_index("persona_id")
+        self.beta, self.beta_sd = ult["beta"].to_dict(), ult["beta_sd"].to_dict()
+        prior = res["priors"][0]
+        self.prior = dict(zip(T["clave"], prior.predecir(T))) if prior is not None else {}
+        t2 = np.atleast_1d(np.asarray(res.get("tau2", np.nan), float)).ravel()[0]
+        self.tau = float(np.sqrt(t2)) if np.isfinite(t2) and t2 > 0 else float(np.nanmedian(tb["beta_sd"]))
+        prim = tb.groupby("persona_id")["anio"].transform("min")
+        nuevos = tb[(tb["anio"] == prim) & (tb["anio"] > 2020)].assign(w=lambda d: np.maximum(d["poss"], 1.0))
+        self.nivel_nuevo = nuevos.groupby("liga_principal").apply(lambda g: np.average(g["beta"], weights=g["w"])).to_dict()
+        self.nivel_nuevo_global = float(np.mean(list(self.nivel_nuevo.values())))
+        self.R = SG.Rasgos(T, cfg)
+        self.Mr = np.load(SG.dir_salida(cfg) / "M_rango.npy")
+        est = pickle.loads((CJ.dir_salida(cfg) / "redes.pkl").read_bytes())
+        self.red = CJ.ConjuntoNet(self.R.Z, cfg).cargar(est["estado"], int(cfg["semilla"]))
+        self._h = {}
+        S, V, SI, RE = _sim()
+        self.S, self.V, self.SI, self.RE = S, V, SI, RE
+        self.c = S.cargar_corte(temporada, "V32")             # producción: fuente V32 y pesos finales de la utilidad
+        self.roles = SI._leer_roles_temporada()
+        self.cfg_re = RE._cfg()
+        self.cal = json.loads((dir_salida(cfg) / "calibracion.json").read_text(encoding="utf-8"))
+        if progreso:
+            progreso(f"  capa 4 ({temporada}): β de {len(self.beta)} personas · perfiles {len(T)} · nivel nuevo {self.nivel_nuevo_global:+.2f}", flush=True)
+
+    # mismas reglas que Insumos
+    valor = Insumos.valor
+    z = Insumos.z
+    h = Insumos.h
+
+    def _perfil_clave(self, pid):            # perfil más reciente ≤ temporada
+        for t in sorted({k.rsplit("|", 1)[1] for k in self.R.idx if k.startswith(pid + "|")}, reverse=True):
+            if t <= self.temp:
+                return f"{pid}|{t}"
+        return f"{pid}|{self.temp}"
+
+    def plantilla_minutos(self, liga: str, team_id: str, miembros: list[tuple[str, float]], n_sim: int, semilla: int, entrenador=None):
+        S, RE = self.S, self.RE
+        P = S.plantilla(self.c, f"{liga}|{team_id}", liga, miembros, team_d=team_id)
+        if P.empty or len(P) < 7:
+            raise ValueError("plantilla con menos de 7 jugadores")
+        P["encaje"] = pd.to_numeric(P.get("encaje_pos", 0.0), errors="coerce").fillna(0.0)
+        P["nivel"] = S.utilidad(self.c, P) * float(self.c.calib.get("escala_utilidad", 1.0))
+        ent = entrenador or S.entrenador_equipo(self.c, liga, team_id)
+        rot, rot_sd, curva = S.tendencia(self.c, ent, liga)
+        gm = S.minutos_partido(liga)
+        pl = pd.DataFrame({"player_id": P["persona_id"].to_numpy(), "nivel": P["nivel"].to_numpy(float), "pos3": P["pos3"].to_numpy(object)})
+        _, M = RE.asignar_minutos(pl, total_min=5 * gm, minutos_partido=gm, rotacion_media=rot, rotacion_sd=rot_sd, curva=curva, n_sim=n_sim,
+                                  semilla=semilla, cfg=self.cfg_re, devolver_simulaciones=True, presencia=P["presencia"].to_numpy(float))
+        return P.reset_index(drop=True), M / gm
+
+    def fuerza(self, liga: str, team_id: str, miembros: list[tuple[str, float]], n_sim: int | None = None, semilla: int = 0) -> dict:
+        """T(R) por simulación (pts/100 en la escala común de β) y detalle por jugador."""
+        n_sim = n_sim or int(self.cfg["f4"]["monte_carlo"]["simulaciones"])
+        P, Pm = self.plantilla_minutos(liga, team_id, miembros, n_sim, semilla)
+        rng = np.random.default_rng(semilla)
+        pids = list(P["persona_id"])
+        v = valor_equipo(self, liga, pids, Pm, rng)
+        det = pd.DataFrame({"persona_id": pids, "beta": v["beta"], "sd": v["sd"], "fuente": v["fuente"], "cuota_media": Pm.mean(0),
+                            "h": self.h(pids), "minutos_media": Pm.mean(0) * self.S.minutos_partido(liga)})
+        return {"T": v["T"], "T_aditivo": v["T_aditivo"], "T_phi": v["T_phi"], "T_h": v["T_h"], "detalle": det}
+
+    def delta(self, liga: str, team_id: str, plantilla: list[tuple[str, float]], altas: list[str], bajas: list[str],
+              net_actual: float, n_sim: int | None = None, semilla: int = 0) -> dict:
+        """Δ̂Net de pasar de `plantilla` a plantilla ∪ altas ∖ bajas, con la calibración del grupo de liga y el intervalo del 80 %."""
+        grp = GRUPOS_LIGA.get(liga, "otras")
+        cal = self.cal["por_grupo"].get(grp, self.cal["conjunto"])
+        c, d = cal["prediccion"]["c"], cal["prediccion"]["d"]; s0, q = cal["intervalo"]["s0"], cal["intervalo"]["q"]
+        R0 = [(p, x) for p, x in plantilla if p not in set(bajas)]
+        R1 = R0 + [(p, 1.0) for p in altas if p not in {x for x, _ in R0}]
+        f0 = self.fuerza(liga, team_id, plantilla, n_sim, semilla); f1 = self.fuerza(liga, team_id, R1, n_sim, semilla + 1)
+        # T' centrado: la media de la liga se aproxima con la fuerza actual del propio equipo frente a su Net actual
+        # (Net̂_act = T0' ⇒ media de liga ≈ T0 − Net_act / c'); Δ̂ = c·(T1' − T0') + (d − 1)·Net_act con T1' − T0' = T1 − T0
+        dT = f1["T"] - f0["T"].mean()
+        delta = c * dT + (d - 1.0) * net_actual
+        sd = float(c * dT.std()); semi = q * np.sqrt(sd ** 2 + s0 ** 2)
+        m = float(delta.mean())
+        return {"delta_net": m, "lo80": m - semi, "hi80": m + semi, "sd_mc": sd, "s0": s0, "q": q, "c": c, "d": d,
+                "delta_crudo": float(dT.mean()), "descomposicion": {"aditivo_beta": float(c * (f1["T_aditivo"] - f0["T_aditivo"].mean()).mean()),
+                                                                    "sinergia_phi": float(c * (f1["T_phi"] - f0["T_phi"].mean()).mean()),
+                                                                    "correccion_jugador_h": float(c * (f1["T_h"] - f0["T_h"].mean()).mean()),
+                                                                    "regresion_a_la_media": float((d - 1.0) * net_actual)},
+                "plantilla_nueva": f1["detalle"], "plantilla_actual": f0["detalle"]}
+
+
+def exportar(cfg: dict, progreso=print) -> dict:
+    """Producto de la capa 4: calibración con todos los cortes del examen (`calibracion.json`), Net̂ proyectado de todos los
+    equipos de la última temporada con plantilla (`equipos_<t>.csv.gz`) y resumen."""
+    from bbfit.registro import experimento
+    t0 = time.time()
+    out = dir_salida(cfg)
+    pred = pd.read_csv(out / "examen" / "predicciones_f4.csv.gz")
+    cal = calibracion_producto(pred, cfg)
+    cal["version"] = cfg["version"]; cal["generado"] = time.strftime("%Y-%m-%dT%H:%M:%S"); cal["transiciones"] = int(len(pred))
+    (out / "calibracion.json").write_text(json.dumps(cal, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    roles = pd.read_csv(C.RAIZ / cfg["insumos"]["roles"], usecols=["liga", "temporada", "team_id", "persona_id", "min_total"], dtype={"team_id": str}, low_memory=False)
+    temp = sorted(roles["temporada"].unique())[-1]
+    eq = Equipo(cfg, temp, progreso)
+    n_sim = int(cfg["f4"]["monte_carlo"]["simulaciones"])
+    filas = []
+    with experimento(cfg["mlflow"], "F4_producto", params={"temporada": temp, "simulaciones": n_sim}):
+        r1 = eq.roles[eq.roles["temporada"] == temp]
+        for (liga, team), g in r1.groupby(["liga", "team_id"]):
+            miembros = [(p, float(x)) for p, x in zip(g["persona_id"], g["presencia"])]
+            if len(miembros) < 7:
+                continue
+            try:
+                f = eq.fuerza(liga, str(team), miembros, n_sim=min(n_sim, 300), semilla=hash((liga, team)) % 10000)
+            except Exception as e:  # noqa: BLE001
+                if progreso:
+                    progreso(f"    {liga} {team}: {e}", flush=True)
+                continue
+            filas.append({"liga": liga, "temporada": temp, "team_id": str(team), "T": float(f["T"].mean()), "T_sd": float(f["T"].std()),
+                          "T_aditivo": float(f["T_aditivo"].mean()), "T_phi": float(f["T_phi"].mean()), "T_h": float(f["T_h"].mean()),
+                          "n_plantilla": int(len(f["detalle"])), "n_sin_beta": int((f["detalle"]["fuente"] != "beta").sum())})
+        e = pd.DataFrame(filas)
+        e["T_centrada"] = e["T"] - e.groupby("liga")["T"].transform("mean")
+        e["grupo"] = e["liga"].map(GRUPOS_LIGA).fillna("otras")
+        e["c_cal"] = [cal["por_grupo"].get(g, cal["conjunto"])["prediccion"]["c"] for g in e["grupo"]]
+        e["net_proyectado_relativo"] = e["c_cal"] * e["T_centrada"]       # parte de Net̂ que viene de la plantilla (sin el Net previo)
+        e.round(3).to_csv(out / f"equipos_{temp}.csv.gz", index=False)
+        doc = {"version": cfg["version"], "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "temporada": temp, "equipos": int(len(e)),
+               "calibracion": "calibracion.json", "tiempo_s": round(time.time() - t0)}
+        (out / "F4_equipo.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False), encoding="utf-8")
+    if progreso:
+        progreso(f"  F4 producto: {len(e)} equipos de {temp} · {doc['tiempo_s']} s", flush=True)
+    return doc

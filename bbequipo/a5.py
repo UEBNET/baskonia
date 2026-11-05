@@ -259,3 +259,59 @@ def main(cfg: dict, progreso=print) -> dict:
             progreso(f"  A5 [{k}]: pts/100 {res['metricas'][k]['pts_p100']} · TS% {res['metricas'][k]['ts_pct']} · puerta {res['puerta_11_6'][k]}", flush=True)
         progreso(f"  A5 decisión: {res['decisiones']} · {res['tiempo_s']} s", flush=True)
     return res
+
+
+# =============================================================================================== producto
+def exportar(cfg: dict, progreso=print) -> dict:
+    """A5 para producción: coeficientes ajustados con TODOS los cortes del examen v3.2 (misma preparación que el examen), por
+    métrica según la decisión (`a5/resumen_a5.json → decisiones.por_metrica`): A5 (variante elegida) o B9 lineal."""
+    v32, v33 = _v()
+    a5c = cfg["f4"]["a5"]
+    out_dir = dir_salida(cfg)
+    res = json.loads((out_dir / "resumen_a5.json").read_text(encoding="utf-8"))
+    dec = res["decisiones"]
+    c32 = v32.cfg()
+    EE = v32.cargar_ejecuciones(c32); E = EE["V32_corte"]
+    e_all = E["completo"].reset_index(drop=True)
+    cortes = sorted(e_all["corte"].unique())
+    d_f = v32.decidir_dos_fuentes(EE, cortes, c32)
+    r = v32.aplicar(e_all, E, d_f, None, c32, "final", cortes + ["final"])
+    e = r["e"]
+    dm = e["min_real"].to_numpy(float) - r["min"]["pred"].to_numpy(float)
+    dr = v33._delta_rol(e)
+    ok = v32.ok_produccion(e) & e["eval_min"].to_numpy(bool) & e["rol_real"].notna().to_numpy()
+    min_abs = e["min_real"].to_numpy(float)
+    coef = {}
+    for m in a5c["metricas"]:
+        if f"{m}_real" not in e:
+            continue
+        rr = e[f"{m}_real"].to_numpy(float) - r["prod"][m]["pred"].to_numpy(float)
+        eleccion = dec["por_metrica"].get(m, "b9_lineal")
+        b9 = ajustar_b9_lineal(rr[ok], dm[ok], dr[ok])
+        if eleccion == "b9_lineal":
+            coef[m] = {"modelo": "b9_lineal", **b9}
+        else:
+            mod = A5(a5c, con_carga=(eleccion == "a5_carga")).ajustar(rr[ok], dm[ok], dr[ok], e["rol_o"].to_numpy(object)[ok],
+                                                                      e["rol_real"].to_numpy(object)[ok], min_abs[ok])
+            coef[m] = {"modelo": eleccion, **mod.exportable(), "b9_referencia": b9}
+    doc = {"version": cfg["version"], "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "casos": int(ok.sum()), "cortes": cortes,
+           "formula": "y − ŷ = s(Δmin) + c·Δrol + δ[rol_o → rol_d] (+ coef_carga·max(min_destino − 30, 0)); B9: b·Δmin + c·Δrol",
+           "franja_minutos": v33.franja(e_all), "coeficientes": coef}
+    (out_dir / "coeficientes_producto_a5.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    if progreso:
+        progreso(f"  A5 producto: {len(coef)} métricas · {int(ok.sum())} casos", flush=True)
+    return doc
+
+
+def aplicar(coef_m: dict, dmin: np.ndarray, drol: np.ndarray, rol_o, rol_d, min_dest: np.ndarray) -> np.ndarray:
+    """Corrección de producción (unidades de la métrica) para un fichaje: A5 o B9 según `coef_m`."""
+    dmin, drol, min_dest = np.nan_to_num(np.asarray(dmin, float)), np.nan_to_num(np.asarray(drol, float)), np.nan_to_num(np.asarray(min_dest, float))
+    if coef_m["modelo"] == "b9_lineal":
+        return coef_m["b_min"] * dmin + coef_m["c_rol"] * drol
+    X = np.c_[_base_spline(dmin, np.array(coef_m["nudos"])), drol[:, None]]
+    out = X @ np.r_[coef_m["coef_spline"], coef_m["c_rol"]] + coef_m["intercepto"]
+    if coef_m.get("coef_carga") is not None:
+        out = out + coef_m["coef_carga"] * np.clip(min_dest - 30.0, 0, None)
+    pares = coef_m["pares"]
+    out = out + np.array([pares.get(f"{a}>{b}", {}).get("delta", 0.0) for a, b in zip(rol_o, rol_d)])
+    return out
