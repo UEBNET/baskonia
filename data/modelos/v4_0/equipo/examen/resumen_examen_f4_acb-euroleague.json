@@ -1,0 +1,173 @@
+{
+ "version": "v4.0",
+ "generado": "2026-11-05T08:59:57",
+ "cortes": [
+  2021
+ ],
+ "cortes_decision": [],
+ "transiciones": 31,
+ "por_corte": {
+  "2021": {
+   "n": 31,
+   "mae_f4": 3.3926358955682923,
+   "spearman_f4": 0.4112903225806452,
+   "mae_aditivo_f1": 3.393435541549025,
+   "spearman_aditivo_f1": 0.4112903225806452,
+   "mae_oraculo_minutos": 3.215482849166311,
+   "spearman_oraculo_minutos": 0.47459677419354845,
+   "mae_f4_sin_calibrar": 4.719776268838471,
+   "c_cal_medio": 0.49891774969905045,
+   "d_cal_medio": 0.29240662176806226,
+   "corr_T1_net_t1": 0.786523522539516,
+   "corr_persistencia_net_t1": 0.7144633735276773,
+   "mae_persistencia": 4.001841935483871,
+   "mae_media_liga_cero": 4.001841935483871,
+   "dif_mae_f4_menos_persistencia": -0.6092060399155783,
+   "ic95_dif_persistencia": [
+    -1.3823301361790719,
+    0.17517171246025964
+   ],
+   "dif_mae_f4_menos_aditivo_f1": -0.0007996459807326772,
+   "ic95_dif_aditivo_f1": [
+    -0.0027297875090235846,
+    0.0010370516005905209
+   ],
+   "cobertura_80": 0.8064516129032258,
+   "cobertura_80_mc_crudo": 0.5483870967741935,
+   "anchura_80_media": 9.739568240937515,
+   "sesgo_por_tercil_min_altas": {
+    "bajo": {
+     "n": 11,
+     "sesgo": -0.9955001878181989,
+     "min_altas_media": 0.3083328502314644
+    },
+    "medio": {
+     "n": 10,
+     "sesgo": -0.9726673068378229,
+     "min_altas_media": 0.4671597181688555
+    },
+    "alto": {
+     "n": 10,
+     "sesgo": -0.19698032419390887,
+     "min_altas_media": 0.6854088660636205
+    }
+   }
+  }
+ },
+ "por_grupo": {
+  "europa_top": {
+   "n": 31,
+   "mae_f4": 3.3926358955682923,
+   "spearman_f4": 0.4112903225806452,
+   "mae_aditivo_f1": 3.393435541549025,
+   "spearman_aditivo_f1": 0.4112903225806452,
+   "mae_oraculo_minutos": 3.215482849166311,
+   "spearman_oraculo_minutos": 0.47459677419354845,
+   "mae_f4_sin_calibrar": 4.719776268838471,
+   "c_cal_medio": 0.49891774969905045,
+   "d_cal_medio": 0.29240662176806226,
+   "corr_T1_net_t1": 0.786523522539516,
+   "corr_persistencia_net_t1": 0.7144633735276773,
+   "mae_persistencia": 4.001841935483871,
+   "mae_media_liga_cero": 4.001841935483871,
+   "dif_mae_f4_menos_persistencia": -0.6092060399155783,
+   "ic95_dif_persistencia": [
+    -1.3823301361790719,
+    0.17517171246025964
+   ],
+   "dif_mae_f4_menos_aditivo_f1": -0.0007996459807326772,
+   "ic95_dif_aditivo_f1": [
+    -0.0027297875090235846,
+    0.0010370516005905209
+   ],
+   "cobertura_80": 0.8064516129032258,
+   "cobertura_80_mc_crudo": 0.5483870967741935,
+   "anchura_80_media": 9.739568240937515,
+   "sesgo_por_tercil_min_altas": {
+    "bajo": {
+     "n": 11,
+     "sesgo": -0.9955001878181989,
+     "min_altas_media": 0.3083328502314644
+    },
+    "medio": {
+     "n": 10,
+     "sesgo": -0.9726673068378229,
+     "min_altas_media": 0.4671597181688555
+    },
+    "alto": {
+     "n": 10,
+     "sesgo": -0.19698032419390887,
+     "min_altas_media": 0.6854088660636205
+    }
+   }
+  }
+ },
+ "global_decision": {
+  "n": 31,
+  "mae_f4": 3.3926358955682923,
+  "spearman_f4": 0.4112903225806452,
+  "mae_aditivo_f1": 3.393435541549025,
+  "spearman_aditivo_f1": 0.4112903225806452,
+  "mae_oraculo_minutos": 3.215482849166311,
+  "spearman_oraculo_minutos": 0.47459677419354845,
+  "mae_f4_sin_calibrar": 4.719776268838471,
+  "c_cal_medio": 0.49891774969905045,
+  "d_cal_medio": 0.29240662176806226,
+  "corr_T1_net_t1": 0.786523522539516,
+  "corr_persistencia_net_t1": 0.7144633735276773,
+  "mae_persistencia": 4.001841935483871,
+  "mae_media_liga_cero": 4.001841935483871,
+  "dif_mae_f4_menos_persistencia": -0.6092060399155783,
+  "ic95_dif_persistencia": [
+   -1.3823301361790719,
+   0.17517171246025964
+  ],
+  "dif_mae_f4_menos_aditivo_f1": -0.0007996459807326772,
+  "ic95_dif_aditivo_f1": [
+   -0.0027297875090235846,
+   0.0010370516005905209
+  ],
+  "cobertura_80": 0.8064516129032258,
+  "cobertura_80_mc_crudo": 0.5483870967741935,
+  "anchura_80_media": 9.739568240937515,
+  "sesgo_por_tercil_min_altas": {
+   "bajo": {
+    "n": 11,
+    "sesgo": -0.9955001878181989,
+    "min_altas_media": 0.3083328502314644
+   },
+   "medio": {
+    "n": 10,
+    "sesgo": -0.9726673068378229,
+    "min_altas_media": 0.4671597181688555
+   },
+   "alto": {
+    "n": 10,
+    "sesgo": -0.19698032419390887,
+    "min_altas_media": 0.6854088660636205
+   }
+  }
+ },
+ "aviso": "sin cortes de decisión: resumen informativo con los cortes ejecutados",
+ "por_liga": {
+  "acb": {
+   "n": 16,
+   "mae_f4": 3.778465159849503,
+   "mae_persistencia": 4.914625
+  },
+  "euroleague": {
+   "n": 15,
+   "mae_f4": 2.981084680335001,
+   "mae_persistencia": 3.028206666666667
+  }
+ },
+ "puerta_11_4": {
+  "mejora_persistencia_ic95_excluye_0": false,
+  "no_empeora_aditivo": true,
+  "no_detras_gbm_significativo": null,
+  "cobertura_en_rango": true,
+  "sospecha_fuga": false,
+  "pasa": false
+ },
+ "tiempo_s": 40
+}
