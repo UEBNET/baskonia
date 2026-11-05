@@ -1,6 +1,6 @@
 {
  "version": "v4.0",
- "generado": "2026-11-05T08:37:22",
+ "generado": "2026-11-05T08:41:22",
  "cortes_examen": [
   "2022-23",
   "2023-24",
@@ -7392,7 +7392,18 @@
  },
  "decisiones": {
   "publicar": "a5_carga",
-  "regla": "§11.6; si ninguna variante pasa, se conserva B9 lineal; la covariable de carga sólo si mejora a A5 simple con IC90 < 0"
+  "por_metrica": {
+   "pts_p100": "a5_carga",
+   "ts_pct": "a5_carga",
+   "usg_pct": "a5_carga",
+   "ast_pct": "a5_carga",
+   "oreb_p100": "b9_lineal",
+   "dreb_p100": "a5_carga",
+   "stl_p100": "a5_carga",
+   "blk_p100": "a5_carga",
+   "tov_pct": "a5_carga"
+  },
+  "regla": "§11.6; si ninguna variante pasa, se conserva B9 lineal; la covariable de carga sólo si mejora a A5 simple con IC90 < 0; por métrica, B9 donde A5 empeora más de un +0,5 % (IC90)"
  },
- "tiempo_s": 44
+ "tiempo_s": 47
 }

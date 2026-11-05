@@ -117,7 +117,7 @@ class Insumos:
         self.S, self.V, self.SI, self.RE = S, V, SI, RE
         self.c = S.cargar_corte(self.temp, cfg["insumos"].get("fuente_corte", "V32_corte"), pesos=False)
         self.roles = SI._leer_roles_temporada()
-        pesos = V.entrenar_pesos(self.temp, cfg["insumos"].get("fuente_corte", "V32_corte"), S.cfg_sim(), self.roles, progreso=progreso)
+        pesos = pesos_pl(self, progreso)
         self.c.w_util = pesos["utilidad"]; self.c.calib = pesos.get("calibracion", {})
         self.cfg_re = RE._cfg()
         if progreso:
@@ -180,6 +180,36 @@ class Insumos:
                                   n_sim=n_sim, semilla=semilla, cfg=self.cfg_re, devolver_simulaciones=True,
                                   presencia=P["presencia"].to_numpy(float))
         return P[["persona_id", "pos3", "presencia", "nuevo", "sin_dato"]].reset_index(drop=True), M / gm
+
+
+def pesos_pl(ins: "Insumos", progreso=print) -> dict:
+    """Pesos de la utilidad Plackett-Luce ajustados SÓLO con temporadas s ≤ t cuyo corte s−1 existe (hay redes CVAE por corte
+    desde 2021-22: para t = 2021 no hay temporada de ajuste y se usan los pesos iniciales de la configuración). Misma
+    verosimilitud que validacion.entrenar_pesos. Caché en experimentos/v4_0/pesos_pl_<t>.json."""
+    S, V = ins.S, ins.V
+    cfg_sim = S.cfg_sim()
+    dest = C.RAIZ / "experimentos" / "v4_0" / f"pesos_pl_{ins.temp}.json"
+    if dest.exists():
+        return json.loads(dest.read_text())
+    temps = [x for x in cfg_sim["historico"]["temporadas"] if x <= ins.temp]
+    fuente = ins.cfg["insumos"].get("fuente_corte", "V32_corte")
+    disponibles = {"2021-22", "2022-23", "2023-24", "2024-25"}
+    bloques, extras = [], []
+    for s in temps[1:]:
+        prev = temps[temps.index(s) - 1]
+        if prev not in disponibles:
+            continue
+        c_prev = S.cargar_corte(prev, fuente, pesos=False)
+        bloques += V.bloques_utilidad(c_prev, ins.roles, s, cfg_sim)
+        extras.append(V.rotacion_extra(c_prev, ins.roles, s))
+    w = V.ajustar_utilidad(bloques, cfg_sim) if bloques else dict(cfg_sim["utilidad"]["inicial"])
+    res = {"utilidad": w, "calibracion": {"rotacion_extra": float(np.median(extras)) if extras else 1.0, "disponibilidad": 0.85},
+           "equipos_entrenamiento": len(bloques), "temporadas": [s for s in temps[1:] if temps[temps.index(s) - 1] in disponibles]}
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(res, indent=1))
+    if progreso:
+        progreso(f"  pesos PL ≤ {ins.temp}: {len(bloques)} equipos · " + ", ".join(f"{k} {v:+.2f}" for k, v in w.items() if not k.startswith("_")), flush=True)
+    return res
 
 
 # =============================================================================================== valor de un equipo

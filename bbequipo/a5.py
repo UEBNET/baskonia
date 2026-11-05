@@ -241,8 +241,17 @@ def main(cfg: dict, progreso=print) -> dict:
         res["carga_frente_a_a5"] = {"cociente_menos_1_pts": d, "ic90": [lo, hi], "adoptar": bool(hi < 0)}
         if hi < 0:
             elegida = "a5_carga"
-    res["decisiones"] = {"publicar": elegida or "b9_lineal",
-                         "regla": "§11.6; si ninguna variante pasa, se conserva B9 lineal; la covariable de carga sólo si mejora a A5 simple con IC90 < 0"}
+    # por métrica: A5 (variante elegida) donde no empeora a B9 más de un +0,5 % con IC90; B9 lineal en las demás
+    por_metrica = {}
+    if elegida:
+        for m in mets:
+            x = res["metricas"][elegida][m]
+            por_metrica[m] = elegida if x["ic90"][0] <= 0.005 and x["cociente_menos_1"] <= 0.005 else "b9_lineal"
+    else:
+        por_metrica = {m: "b9_lineal" for m in mets}
+    res["decisiones"] = {"publicar": elegida or "b9_lineal", "por_metrica": por_metrica,
+                         "regla": "§11.6; si ninguna variante pasa, se conserva B9 lineal; la covariable de carga sólo si mejora a A5 simple con IC90 < 0; "
+                                  "por métrica, B9 donde A5 empeora más de un +0,5 % (IC90)"}
     res["tiempo_s"] = round(time.time() - t0)
     (out_dir / "resumen_a5.json").write_text(json.dumps(res, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
     if progreso:
