@@ -1,6 +1,6 @@
 {
  "version": "v4.0",
- "generado": "2026-11-05T12:44:35",
+ "generado": "2026-11-05T13:39:27",
  "cortes": [
   2021,
   2022,
@@ -461,13 +461,222 @@
    "pasa_literal": false,
    "pasa_por_paquete": false,
    "pasa": false
+  },
+  "criterio_redefinido_onoff": {
+   "fichajes": 3598,
+   "por_corte": {
+    "2022": 897,
+    "2023": 1244,
+    "2024": 1457
+   },
+   "variantes": {
+    "im_onoff": {
+     "n": 3598,
+     "monotonia": {
+      "spearman": 0.14914778668183,
+      "ic95": [
+       0.11720030980220493,
+       0.18356642316064795
+      ],
+      "spearman_aditivo": 0.03078265613507067,
+      "ic95_diferencia_vs_aditivo": [
+       0.08125789235601505,
+       0.15475322097277716
+      ]
+     },
+     "calibracion": {
+      "deciles": {
+       "0": {
+        "n": 360,
+        "previsto": 42.6,
+        "realizado": 43.24,
+        "desvio": 0.64
+       },
+       "1": {
+        "n": 360,
+        "previsto": 46.16,
+        "realizado": 44.49,
+        "desvio": -1.67
+       },
+       "2": {
+        "n": 360,
+        "previsto": 48.5,
+        "realizado": 48.95,
+        "desvio": 0.45
+       },
+       "3": {
+        "n": 359,
+        "previsto": 48.91,
+        "realizado": 48.68,
+        "desvio": -0.23
+       },
+       "4": {
+        "n": 360,
+        "previsto": 49.48,
+        "realizado": 49.69,
+        "desvio": 0.21
+       },
+       "5": {
+        "n": 360,
+        "previsto": 49.9,
+        "realizado": 49.19,
+        "desvio": -0.72
+       },
+       "6": {
+        "n": 359,
+        "previsto": 50.99,
+        "realizado": 50.38,
+        "desvio": -0.61
+       },
+       "7": {
+        "n": 360,
+        "previsto": 51.99,
+        "realizado": 53.72,
+        "desvio": 1.73
+       },
+       "8": {
+        "n": 360,
+        "previsto": 54.8,
+        "realizado": 53.88,
+        "desvio": -0.92
+       },
+       "9": {
+        "n": 360,
+        "previsto": 61.57,
+        "realizado": 59.03,
+        "desvio": -2.54
+       }
+      },
+      "max_desvio_abs": 2.5415336799207395,
+      "tolerancia": 7.0,
+      "pasa": true
+     },
+     "cobertura_80": 0.7873818788215675,
+     "anchura_80_media": 77.81383249848054
+    },
+    "im_comp": {
+     "n": 3598,
+     "monotonia": {
+      "spearman": 0.1525123625140984,
+      "ic95": [
+       0.11930503503434048,
+       0.18296899682422013
+      ],
+      "spearman_aditivo": 0.03078265613507067,
+      "ic95_diferencia_vs_aditivo": [
+       0.08124817062160677,
+       0.15841423193645363
+      ]
+     },
+     "calibracion": {
+      "deciles": {
+       "0": {
+        "n": 360,
+        "previsto": 39.04,
+        "realizado": 42.99,
+        "desvio": 3.95
+       },
+       "1": {
+        "n": 360,
+        "previsto": 46.32,
+        "realizado": 43.81,
+        "desvio": -2.51
+       },
+       "2": {
+        "n": 360,
+        "previsto": 47.27,
+        "realizado": 49.84,
+        "desvio": 2.56
+       },
+       "3": {
+        "n": 359,
+        "previsto": 47.62,
+        "realizado": 48.34,
+        "desvio": 0.72
+       },
+       "4": {
+        "n": 360,
+        "previsto": 49.25,
+        "realizado": 48.72,
+        "desvio": -0.53
+       },
+       "5": {
+        "n": 360,
+        "previsto": 51.36,
+        "realizado": 50.4,
+        "desvio": -0.96
+       },
+       "6": {
+        "n": 359,
+        "previsto": 52.46,
+        "realizado": 51.69,
+        "desvio": -0.77
+       },
+       "7": {
+        "n": 360,
+        "previsto": 53.56,
+        "realizado": 51.84,
+        "desvio": -1.72
+       },
+       "8": {
+        "n": 360,
+        "previsto": 55.89,
+        "realizado": 54.57,
+        "desvio": -1.32
+       },
+       "9": {
+        "n": 360,
+        "previsto": 62.33,
+        "realizado": 59.06,
+        "desvio": -3.27
+       }
+      },
+      "max_desvio_abs": 3.948524586139577,
+      "tolerancia": 7.0,
+      "pasa": true
+     },
+     "cobertura_80": 0.7851584213451918,
+     "anchura_80_media": 77.6759708267702
+    }
+   },
+   "comp_frente_a_im": {
+    "dif_spearman": 0.003364575832268374,
+    "ic95": [
+     -0.015713294737983514,
+     0.02190661484702239
+    ],
+    "adoptar": false
+   },
+   "subindice_companeros": {
+    "n": 3598,
+    "spearman_onoff": 0.013598831844288188,
+    "spearman_con_im": -0.07129438940240594,
+    "media_comp_pts100": -0.10042920437068382,
+    "sd_comp_pts100": 1.0292039250151628
+   },
+   "puerta_im_onoff": {
+    "variante": "im_onoff",
+    "monotonia_mejor_que_aditivo_ic95": true,
+    "calibracion": true,
+    "cobertura_en_rango": true,
+    "pasa": true
+   },
+   "estado_im": "referente"
   }
  },
  "puerta_11_5": {
   "nc": true,
-  "im": false,
+  "im_literal": false,
+  "im_redefinido_onoff": {
+   "variante": "im_onoff",
+   "monotonia_mejor_que_aditivo_ic95": true,
+   "calibracion": true,
+   "cobertura_en_rango": true,
+   "pasa": true
+  },
+  "estado_im": "referente",
   "pasa": false,
   "anti_manipulacion": "recalcular con el examen limpio 2025-26 → 2026-27 antes de comunicar cifras (temporada en curso)"
  },
- "tiempo_s": 72
+ "tiempo_s": 94
 }

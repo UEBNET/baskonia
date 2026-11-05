@@ -1,6 +1,6 @@
 {
  "version": "v4.0",
- "generado": "2026-11-05T12:42:41",
+ "generado": "2026-11-05T13:41:47",
  "referencias_nc": "referencias_nc_2026-27.json",
  "referencia_im": "referencia_im.json",
  "grupos_nc": 80,
@@ -8,5 +8,11 @@
   "domestica_alta",
   "elite",
   "resto"
- ]
+ ],
+ "estado": {
+  "nivel_cerno": "referente",
+  "impacto": "referente",
+  "impacto_criterio": "criterios.f5.im_onoff (decisión b del CEO, 05-11-2026); el literal §11.5 no se cumple por construcción",
+  "complemento_companeros": "subíndice aparte (no se adopta dentro de IM: no mejora el Spearman con IC95)"
+ }
 }

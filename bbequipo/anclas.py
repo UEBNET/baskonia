@@ -619,8 +619,13 @@ def exportar(cfg: dict, progreso=print) -> dict:
         mov["fichajes"] = int(len(im)); mov["c_por_grupo_f4"] = {g: v["prediccion"]["c"] for g, v in cal["por_grupo"].items()}
         mov["c_conjunto_f4"] = cal["conjunto"]["prediccion"]["c"]
     (out / "referencia_im.json").write_text(json.dumps(mov, indent=1, ensure_ascii=False, default=float), encoding="utf-8")
+    res = json.loads((out / "resumen_anclas.json").read_text(encoding="utf-8")) if (out / "resumen_anclas.json").exists() else {}
+    estado_im = res.get("puerta_11_5", {}).get("estado_im", "en_examen")
     doc = {"version": cfg["version"], "generado": mov["generado"], "referencias_nc": f"referencias_nc_{temp}.json", "referencia_im": "referencia_im.json",
-           "grupos_nc": len(ref["F_ref"]), "grupos_im": list(mov["F_mov"])}
+           "grupos_nc": len(ref["F_ref"]), "grupos_im": list(mov["F_mov"]),
+           "estado": {"nivel_cerno": "referente" if res.get("nc", {}).get("puerta", {}).get("pasa") else "en_examen", "impacto": estado_im,
+                      "impacto_criterio": "criterios.f5.im_onoff (decisión b del CEO, 05-11-2026); el literal §11.5 no se cumple por construcción",
+                      "complemento_companeros": "subíndice aparte (no se adopta dentro de IM: no mejora el Spearman con IC95)"}}
     (out / "F5_anclas.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False), encoding="utf-8")
     if progreso:
         progreso(f"  F5 producto: F_ref {len(ref['F_ref'])} liga×puesto ({temp}) · F_mov {list(mov['F_mov'])} con {mov['fichajes']} fichajes", flush=True)

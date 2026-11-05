@@ -17,6 +17,13 @@ Detalle: `docs/checkpoints/V40_F5.md`, `docs/modelo_equipo_v40.md` §6. Puerta F
   on/off realizado del fichaje [POST HOC]: Spearman 0,161 frente a 0,031 del aditivo (IC95 de la diferencia > 0), calibrado en 9 de 10
   deciles. **Puerta de IM no cumplida en su forma literal**; presentada al CEO con tres opciones.
 * **Producto**: `anclas/referencias_nc_2026-27.json`, `anclas/referencia_im.json`, `anclas.nivel_cerno`, `anclas.impacto`.
+* **Puerta (CEO, 05-11-2026): opción (b) y, mientras, (a).** NC referente. El examen de IM se redefine frente al Net on/off
+  realizado del fichaje (prerregistrado en `criterios.f5.im_onoff` antes de ejecutar la versión calibrada; el diagnóstico sin
+  calibrar ya visto queda declarado) con calibración isotónica como la de NC: Spearman 0,149 [0,12, 0,18] frente a 0,031 del
+  aditivo (IC95 de la diferencia > 0), calibración por deciles (desvío máx. 2,5), cobertura 0,787 → **IM referente**. Complemento
+  ordenado por el CEO con los efectos sobre compañeros de F2-B (modelos por corte ≤ t, agregados con las cuotas proyectadas):
+  la variante IM+comp no mejora a IM (diferencia 0,003 [-0,02, 0,02]) y no se adopta; el «efecto sobre compañeros» se publica como
+  subíndice aparte (redistribución, no valor neto; Spearman con el on/off 0,014). No solapa con NC.
 
 ## 2026-11-05 — CERNO v4.0 · F4: composición, Δ de equipo (capa 4) y A5
 
