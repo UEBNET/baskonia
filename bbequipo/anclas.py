@@ -361,6 +361,8 @@ def main(cfg: dict, progreso=print) -> dict:
         cache_nc = out / "nc_examen_crudo.csv.gz"
         if cache_nc.exists():
             nc = pd.read_csv(cache_nc)
+            if "anio" not in nc:
+                nc["anio"] = nc["corte"].str[:4].astype(int)
         else:
             nc = nivel_cerno_examen(cfg, progreso); nc["anio"] = nc["corte"].str[:4].astype(int); nc.to_csv(cache_nc, index=False)
         nc = calibrar_nc(nc, cortes)
@@ -405,9 +407,57 @@ def main(cfg: dict, progreso=print) -> dict:
         res["im"]["calibracion"] = examen_calibracion(e, "IM", "pct_real_equipo", float(crit["nc_calibracion_deciles_tolerancia"]))
         # cobertura de IM: el ΔNet realizado del equipo frente al rango de Δ̂Net del fichaje (en pts/100)
         res["im"]["cobertura_80_delta"] = cobertura(e, "delta_net_p10", "delta_net_p90", "delta_net_real_equipo")
+        # nivel de paquete (equipo): el ΔNet realizado existe por EQUIPO, no por fichaje; IM del paquete = percentil de la suma de
+        # los Δ̂Net de las altas del equipo entre los paquetes del grupo (cortes ≤ t); percentil realizado del ΔNet del equipo
+        paq = e.groupby(["anio", "corte", "liga_d", "team_d", "grupo_im"]).agg(delta_paquete=("delta_net", "sum"), aditivo_paquete=("aditivo_b", "sum"),
+                                                                              n_altas=("persona_id", "size"), delta_real=("delta_net_real_equipo", "first")).reset_index()
+        paq["IM_paquete"] = np.nan; paq["IM_paquete_aditivo"] = np.nan; paq["pct_real"] = np.nan
+        for a in dec:
+            for g in paq["grupo_im"].unique():
+                prev = paq[(paq["anio"] <= a) & (paq["grupo_im"] == g)]
+                sel = (paq["anio"] == a) & (paq["grupo_im"] == g)
+                if len(prev) < 30:
+                    continue
+                Fp = Empirica(prev["delta_paquete"]); Fa = Empirica(prev["aditivo_paquete"]); Fr = Empirica(prev["delta_real"])
+                paq.loc[sel, "IM_paquete"] = 100 * Fp(paq.loc[sel, "delta_paquete"]); paq.loc[sel, "IM_paquete_aditivo"] = 100 * Fa(paq.loc[sel, "aditivo_paquete"])
+                paq.loc[sel, "pct_real"] = 100 * Fr(paq.loc[sel, "delta_real"])
+        pq = paq[paq["IM_paquete"].notna()]
+        rp = spearmanr(pq["IM_paquete"], pq["delta_real"]).correlation; rpa = spearmanr(pq["IM_paquete_aditivo"], pq["delta_real"]).correlation
+        bsp = []; bspd = []
+        for _ in range(min(B, 1000)):
+            ii = rng.integers(0, len(pq), len(pq)); x = pq.iloc[ii]
+            r1 = spearmanr(x["IM_paquete"], x["delta_real"]).correlation; r2 = spearmanr(x["IM_paquete_aditivo"], x["delta_real"]).correlation
+            bsp.append(r1); bspd.append(r1 - r2)
+        res["im"]["paquete"] = {"equipos": int(len(pq)), "altas_media": float(pq["n_altas"].mean()),
+                                "monotonia": {"spearman_im": float(rp), "ic95": [float(np.quantile(bsp, .025)), float(np.quantile(bsp, .975))], "spearman_aditivo": float(rpa),
+                                              "ic95_diferencia": [float(np.quantile(bspd, .025)), float(np.quantile(bspd, .975))]},
+                                "calibracion": examen_calibracion(pq, "IM_paquete", "pct_real", float(crit["nc_calibracion_deciles_tolerancia"]))}
+        pq.round(3).to_csv(out / "im_paquetes.csv.gz", index=False)
+        # [POST HOC, diagnóstico] contraparte realizada POR FICHAJE: Net on/off ajustado del jugador en el equipo de destino (t+1)
+        rr = pd.read_csv(C.RAIZ / cfg["insumos"]["roles"], usecols=["liga", "temporada", "team_id", "persona_id", "net_rtg_aj_onoff", "min_total"],
+                         dtype={"team_id": str}, low_memory=False).rename(columns={"liga": "liga_d", "team_id": "team_d", "temporada": "temporada_d"})
+        e2 = im[im["anio"].isin(dec) & im["IM"].notna()].copy()
+        e2["temporada_d"] = e2["anio"].map(lambda a: f"{a + 1}-{str(a + 2)[-2:]}")
+        e2 = e2.merge(rr, on=["liga_d", "team_d", "temporada_d", "persona_id"], how="left")
+        e2 = e2[e2["net_rtg_aj_onoff"].notna() & (e2["min_total"] >= 300)].copy()
+        e2["pct_onoff"] = e2.groupby("grupo_im")["net_rtg_aj_onoff"].rank(pct=True) * 100
+        ro = spearmanr(e2["IM"], e2["net_rtg_aj_onoff"]).correlation; roa = spearmanr(e2["IM_aditivo"], e2["net_rtg_aj_onoff"]).correlation
+        bso = []; bsod = []
+        for _ in range(min(B, 1000)):
+            ii = rng.integers(0, len(e2), len(e2)); x = e2.iloc[ii]
+            r1 = spearmanr(x["IM"], x["net_rtg_aj_onoff"]).correlation; r2 = spearmanr(x["IM_aditivo"], x["net_rtg_aj_onoff"]).correlation
+            bso.append(r1); bsod.append(r1 - r2)
+        res["im"]["onoff_fichaje"] = {"fichajes": int(len(e2)), "definicion": "Net on/off ajustado del fichaje en el destino (≥ 300 min); percentil entre los fichajes del grupo",
+                                      "monotonia": {"spearman_im": float(ro), "ic95": [float(np.quantile(bso, .025)), float(np.quantile(bso, .975))], "spearman_aditivo": float(roa),
+                                                    "ic95_diferencia": [float(np.quantile(bsod, .025)), float(np.quantile(bsod, .975))]},
+                                      "calibracion": examen_calibracion(e2, "IM", "pct_onoff", float(crit["nc_calibracion_deciles_tolerancia"]))}
         res["im"]["puerta"] = {"monotonia_no_peor_que_aditivo": bool(rho >= rho_b), "ic95_excluye_0": bool(res["im"]["monotonia"]["ic95"][0] > 0),
-                               "calibracion": res["im"]["calibracion"]["pasa"]}
-        res["im"]["puerta"]["pasa"] = all(res["im"]["puerta"].values())
+                               "calibracion_por_fichaje": res["im"]["calibracion"]["pasa"],
+                               "calibracion_por_paquete": res["im"]["paquete"]["calibracion"]["pasa"],
+                               "nota": "el ΔNet realizado es del equipo: la calibración por fichaje compara objetos distintos (POST HOC: se evalúa también por paquete)"}
+        res["im"]["puerta"]["pasa_literal"] = bool(res["im"]["puerta"]["monotonia_no_peor_que_aditivo"] and res["im"]["puerta"]["ic95_excluye_0"] and res["im"]["puerta"]["calibracion_por_fichaje"])
+        res["im"]["puerta"]["pasa_por_paquete"] = bool(res["im"]["puerta"]["monotonia_no_peor_que_aditivo"] and res["im"]["puerta"]["ic95_excluye_0"] and res["im"]["puerta"]["calibracion_por_paquete"])
+        res["im"]["puerta"]["pasa"] = res["im"]["puerta"]["pasa_literal"]
         res["puerta_11_5"] = {"nc": res["nc"]["puerta"]["pasa"], "im": res["im"]["puerta"]["pasa"], "pasa": res["nc"]["puerta"]["pasa"] and res["im"]["puerta"]["pasa"],
                               "anti_manipulacion": "recalcular con el examen limpio 2025-26 → 2026-27 antes de comunicar cifras (temporada en curso)"}
         res["tiempo_s"] = round(time.time() - t0)

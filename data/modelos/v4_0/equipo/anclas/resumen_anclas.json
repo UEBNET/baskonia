@@ -1,0 +1,473 @@
+{
+ "version": "v4.0",
+ "generado": "2026-11-05T12:44:35",
+ "cortes": [
+  2021,
+  2022,
+  2023,
+  2024
+ ],
+ "cortes_decision": [
+  2022,
+  2023,
+  2024
+ ],
+ "nc": {
+  "fichajes_decision": 4560,
+  "separacion": {
+   "fraccion": 0.7094468546637744,
+   "pares": 184400,
+   "ic95": [
+    0.692872056447178,
+    0.725803083865807
+   ],
+   "fichajes": 4560
+  },
+  "calibracion": {
+   "deciles": {
+    "0": {
+     "n": 456,
+     "previsto": 22.68,
+     "realizado": 25.93,
+     "desvio": 3.25
+    },
+    "1": {
+     "n": 456,
+     "previsto": 26.66,
+     "realizado": 28.11,
+     "desvio": 1.46
+    },
+    "2": {
+     "n": 456,
+     "previsto": 32.74,
+     "realizado": 32.64,
+     "desvio": -0.09
+    },
+    "3": {
+     "n": 456,
+     "previsto": 39.12,
+     "realizado": 39.74,
+     "desvio": 0.62
+    },
+    "4": {
+     "n": 456,
+     "previsto": 43.13,
+     "realizado": 43.33,
+     "desvio": 0.2
+    },
+    "5": {
+     "n": 456,
+     "previsto": 48.78,
+     "realizado": 50.35,
+     "desvio": 1.56
+    },
+    "6": {
+     "n": 456,
+     "previsto": 52.79,
+     "realizado": 51.11,
+     "desvio": -1.68
+    },
+    "7": {
+     "n": 456,
+     "previsto": 57.73,
+     "realizado": 58.58,
+     "desvio": 0.85
+    },
+    "8": {
+     "n": 456,
+     "previsto": 61.83,
+     "realizado": 64.83,
+     "desvio": 2.99
+    },
+    "9": {
+     "n": 456,
+     "previsto": 68.43,
+     "realizado": 64.83,
+     "desvio": -3.61
+    }
+   },
+   "max_desvio_abs": 3.605767130069907,
+   "tolerancia": 7.0,
+   "pasa": true
+  },
+  "cobertura_80": 0.7824561403508772,
+  "nc2": {
+   "media": 45.32052944385458,
+   "media_nc1": 45.389812732663614,
+   "corr_nc1_nc2": 0.9785129439921424
+  },
+  "crudo": {
+   "media_nc1": 35.263875810293825,
+   "media_pct_realizado": 45.944442962322874,
+   "calibracion": {
+    "deciles": {
+     "0": {
+      "n": 456,
+      "previsto": 7.75,
+      "realizado": 27.5,
+      "desvio": 19.75
+     },
+     "1": {
+      "n": 456,
+      "previsto": 18.52,
+      "realizado": 25.51,
+      "desvio": 6.99
+     },
+     "2": {
+      "n": 456,
+      "previsto": 24.01,
+      "realizado": 32.72,
+      "desvio": 8.71
+     },
+     "3": {
+      "n": 456,
+      "previsto": 28.6,
+      "realizado": 40.39,
+      "desvio": 11.78
+     },
+     "4": {
+      "n": 456,
+      "previsto": 32.61,
+      "realizado": 43.32,
+      "desvio": 10.7
+     },
+     "5": {
+      "n": 456,
+      "previsto": 36.43,
+      "realizado": 48.97,
+      "desvio": 12.54
+     },
+     "6": {
+      "n": 456,
+      "previsto": 40.75,
+      "realizado": 52.06,
+      "desvio": 11.3
+     },
+     "7": {
+      "n": 456,
+      "previsto": 45.78,
+      "realizado": 58.51,
+      "desvio": 12.73
+     },
+     "8": {
+      "n": 456,
+      "previsto": 51.93,
+      "realizado": 61.78,
+      "desvio": 9.85
+     },
+     "9": {
+      "n": 456,
+      "previsto": 66.24,
+      "realizado": 68.7,
+      "desvio": 2.46
+     }
+    },
+    "max_desvio_abs": 19.745315973685436,
+    "tolerancia": 7.0,
+    "pasa": false
+   },
+   "cobertura_80": 0.7868421052631579,
+   "separacion": {
+    "fraccion": 0.7130493213277785,
+    "pares": 186025,
+    "ic95": [
+     0.6963152544956182,
+     0.7276044556012442
+    ],
+    "fichajes": 4560
+   }
+  },
+  "anchura_80_media": 70.2270062248581,
+  "corr_nc1_pct_realizado": 0.4534723557306373,
+  "por_corte": {
+   "2022": {
+    "n": 1129,
+    "separacion": 0.7471559378468369,
+    "cobertura_80": 0.7617360496014172
+   },
+   "2023": {
+    "n": 1711,
+    "separacion": 0.6763046812610123,
+    "cobertura_80": 0.7726475745178258
+   },
+   "2024": {
+    "n": 1720,
+    "separacion": 0.729365276020814,
+    "cobertura_80": 0.8058139534883721
+   }
+  },
+  "puerta": {
+   "separacion": true,
+   "calibracion": true,
+   "cobertura": true,
+   "pasa": true
+  }
+ },
+ "im": {
+  "fichajes_decision": 3367,
+  "equipos": 840,
+  "monotonia": {
+   "spearman_im": 0.05430169638401825,
+   "ic95": [
+    0.019491334099945214,
+    0.08586559379205748
+   ],
+   "spearman_aditivo": 0.021722657937200518,
+   "ic95_diferencia": [
+    -0.007064084445705792,
+    0.07318584715127843
+   ]
+  },
+  "calibracion": {
+   "deciles": {
+    "0": {
+     "n": 337,
+     "previsto": 35.45,
+     "realizado": 48.03,
+     "desvio": 12.58
+    },
+    "1": {
+     "n": 337,
+     "previsto": 41.47,
+     "realizado": 49.23,
+     "desvio": 7.76
+    },
+    "2": {
+     "n": 336,
+     "previsto": 44.41,
+     "realizado": 48.25,
+     "desvio": 3.84
+    },
+    "3": {
+     "n": 337,
+     "previsto": 46.52,
+     "realizado": 46.11,
+     "desvio": -0.4
+    },
+    "4": {
+     "n": 337,
+     "previsto": 48.54,
+     "realizado": 47.76,
+     "desvio": -0.78
+    },
+    "5": {
+     "n": 336,
+     "previsto": 50.4,
+     "realizado": 50.7,
+     "desvio": 0.3
+    },
+    "6": {
+     "n": 337,
+     "previsto": 52.68,
+     "realizado": 49.13,
+     "desvio": -3.55
+    },
+    "7": {
+     "n": 336,
+     "previsto": 55.32,
+     "realizado": 50.17,
+     "desvio": -5.15
+    },
+    "8": {
+     "n": 337,
+     "previsto": 59.12,
+     "realizado": 49.68,
+     "desvio": -9.43
+    },
+    "9": {
+     "n": 337,
+     "previsto": 67.35,
+     "realizado": 55.26,
+     "desvio": -12.09
+    }
+   },
+   "max_desvio_abs": 12.576396195363593,
+   "tolerancia": 7.0,
+   "pasa": false
+  },
+  "cobertura_80_delta": 0.44490644490644493,
+  "paquete": {
+   "equipos": 840,
+   "altas_media": 4.008333333333334,
+   "monotonia": {
+    "spearman_im": 0.12800690639156304,
+    "ic95": [
+     0.06245732688677632,
+     0.19783360467642241
+    ],
+    "spearman_aditivo": 0.043770278743314524,
+    "ic95_diferencia": [
+     -0.0018174382225365116,
+     0.17190381922407996
+    ]
+   },
+   "calibracion": {
+    "deciles": {
+     "0": {
+      "n": 84,
+      "previsto": 3.69,
+      "realizado": 46.21,
+      "desvio": 42.52
+     },
+     "1": {
+      "n": 84,
+      "previsto": 12.63,
+      "realizado": 43.48,
+      "desvio": 30.85
+     },
+     "2": {
+      "n": 84,
+      "previsto": 23.31,
+      "realizado": 48.67,
+      "desvio": 25.36
+     },
+     "3": {
+      "n": 84,
+      "previsto": 34.4,
+      "realizado": 49.94,
+      "desvio": 15.54
+     },
+     "4": {
+      "n": 84,
+      "previsto": 45.59,
+      "realizado": 47.11,
+      "desvio": 1.53
+     },
+     "5": {
+      "n": 84,
+      "previsto": 56.24,
+      "realizado": 50.41,
+      "desvio": -5.83
+     },
+     "6": {
+      "n": 84,
+      "previsto": 66.69,
+      "realizado": 52.51,
+      "desvio": -14.17
+     },
+     "7": {
+      "n": 84,
+      "previsto": 76.78,
+      "realizado": 50.17,
+      "desvio": -26.61
+     },
+     "8": {
+      "n": 84,
+      "previsto": 86.97,
+      "realizado": 57.43,
+      "desvio": -29.53
+     },
+     "9": {
+      "n": 84,
+      "previsto": 96.48,
+      "realizado": 56.67,
+      "desvio": -39.81
+     }
+    },
+    "max_desvio_abs": 42.51542096938917,
+    "tolerancia": 7.0,
+    "pasa": false
+   }
+  },
+  "onoff_fichaje": {
+   "fichajes": 3598,
+   "definicion": "Net on/off ajustado del fichaje en el destino (≥ 300 min); percentil entre los fichajes del grupo",
+   "monotonia": {
+    "spearman_im": 0.16050538589970084,
+    "ic95": [
+     0.12725040173482316,
+     0.1908028524406295
+    ],
+    "spearman_aditivo": 0.03078265613507067,
+    "ic95_diferencia": [
+     0.09263352192738432,
+     0.16714311101417223
+    ]
+   },
+   "calibracion": {
+    "deciles": {
+     "0": {
+      "n": 360,
+      "previsto": 35.34,
+      "realizado": 41.78,
+      "desvio": 6.44
+     },
+     "1": {
+      "n": 360,
+      "previsto": 41.69,
+      "realizado": 45.37,
+      "desvio": 3.68
+     },
+     "2": {
+      "n": 360,
+      "previsto": 44.89,
+      "realizado": 47.36,
+      "desvio": 2.47
+     },
+     "3": {
+      "n": 359,
+      "previsto": 47.17,
+      "realizado": 48.19,
+      "desvio": 1.02
+     },
+     "4": {
+      "n": 360,
+      "previsto": 49.4,
+      "realizado": 49.91,
+      "desvio": 0.5
+     },
+     "5": {
+      "n": 360,
+      "previsto": 51.5,
+      "realizado": 49.76,
+      "desvio": -1.74
+     },
+     "6": {
+      "n": 359,
+      "previsto": 53.93,
+      "realizado": 49.71,
+      "desvio": -4.22
+     },
+     "7": {
+      "n": 360,
+      "previsto": 56.79,
+      "realizado": 53.7,
+      "desvio": -3.1
+     },
+     "8": {
+      "n": 360,
+      "previsto": 60.77,
+      "realizado": 56.57,
+      "desvio": -4.2
+     },
+     "9": {
+      "n": 360,
+      "previsto": 69.12,
+      "realizado": 58.07,
+      "desvio": -11.05
+     }
+    },
+    "max_desvio_abs": 11.049619979356116,
+    "tolerancia": 7.0,
+    "pasa": false
+   }
+  },
+  "puerta": {
+   "monotonia_no_peor_que_aditivo": true,
+   "ic95_excluye_0": true,
+   "calibracion_por_fichaje": false,
+   "calibracion_por_paquete": false,
+   "nota": "el ΔNet realizado es del equipo: la calibración por fichaje compara objetos distintos (POST HOC: se evalúa también por paquete)",
+   "pasa_literal": false,
+   "pasa_por_paquete": false,
+   "pasa": false
+  }
+ },
+ "puerta_11_5": {
+  "nc": true,
+  "im": false,
+  "pasa": false,
+  "anti_manipulacion": "recalcular con el examen limpio 2025-26 → 2026-27 antes de comunicar cifras (temporada en curso)"
+ },
+ "tiempo_s": 72
+}

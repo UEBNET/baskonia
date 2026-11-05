@@ -1,5 +1,23 @@
 # Registro de cambios
 
+## 2026-11-05 — CERNO v4.0 · F5: anclas NIVEL CERNO e IMPACTO en [0, 100]
+
+Detalle: `docs/checkpoints/V40_F5.md`, `docs/modelo_equipo_v40.md` §6. Puerta F4 aprobada por el CEO y orden de arrancar F5.
+
+* **Definiciones operativas** (`bbequipo/anclas.py`, encargo §10): NC = 100·E_pred[F_ref(C)] con C la contribución del motor
+  (minutos × pts/100) y F_ref liga de destino × puesto (3 temporadas, minutos); IM = 100·E_pred[F_mov(Δ̂Net)] con Δ̂Net el Δ
+  contrafactual de la capa 4 (plantilla real de t+1 con y sin el jugador, calibración c de F4) y F_mov los fichajes reales del
+  mismo grupo de liga. Esperanzas sobre la predictiva completa (la incertidumbre empuja a 50).
+* **NC** (4560 fichajes de decisión): el percentil crudo subestima ≈ 10 puntos a quienes llegan a jugar (selección del examen);
+  capa de calibración isotónica + rango condicionado con cortes anteriores (decisión en el corte 2021). **Pasa §11.5**: separación
+  70,9 % [69,3, 72,6], calibración por deciles (desvío máx. 3,6), cobertura 0,782. NC₂ ≈ NC₁ (la adaptación del
+  motor v3.2 apenas mueve C).
+* **IM** (3367 fichajes, 840 equipos; Δ̂ contrafactual con 200 simulaciones por fichaje): monotonía frente al ΔNet del equipo
+  pasa (0,054 ≥ 0,022, IC95 > 0) pero la calibración literal no (el ΔNet realizado es del equipo). Frente al
+  on/off realizado del fichaje [POST HOC]: Spearman 0,161 frente a 0,031 del aditivo (IC95 de la diferencia > 0), calibrado en 9 de 10
+  deciles. **Puerta de IM no cumplida en su forma literal**; presentada al CEO con tres opciones.
+* **Producto**: `anclas/referencias_nc_2026-27.json`, `anclas/referencia_im.json`, `anclas.nivel_cerno`, `anclas.impacto`.
+
 ## 2026-11-05 — CERNO v4.0 · F4: composición, Δ de equipo (capa 4) y A5
 
 Detalle: `docs/checkpoints/V40_F4.md`, `docs/modelo_equipo_v40.md` §5. Puerta F3 aprobada por el CEO (opción b) y orden de
