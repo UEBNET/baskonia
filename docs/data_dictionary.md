@@ -1878,6 +1878,20 @@ Detalle en `docs/checkpoints/V40_F4.md`. Sobre F1 + F2 + F3 congelados y el moto
 | `a5/resumen_a5.json` | examen §11.6: diagnóstico de carga, MAE A5 frente a B9 por métrica con IC90, coeficientes por corte, contracción, puerta y decisión por métrica |
 | `a5/coeficientes_producto_a5.json` | producto A5 por métrica (spline de Δmin, c_rol, pares con δ, coef_carga; o B9 lineal), franja de minutos por rol |
 
+### CERNO v4.0 · F5: anclas NIVEL CERNO e IMPACTO (`v4_0/equipo/anclas/`)
+
+Detalle en `docs/checkpoints/V40_F5.md`. Percentiles esperados en [0, 100] con definición operativa (encargo §10).
+
+| Fichero | Contenido |
+|---|---|
+| `nc_examen.csv.gz` | un fichaje real del examen v3.2 por fila: `corte, temporada_d, persona_id, liga_d, team_d, pos3, n_ref`; `C_pred, C_real` (contribución), `NC1, NC1_lo80, NC1_hi80` (calibrados), `NC2*`, `*_crudo` (percentil esperado sin calibrar), `pct_realizado` (100·F_ref(C_real)), `eval`, `nc_calibrado_con` |
+| `nc_examen_crudo.csv.gz` | caché del cálculo crudo |
+| `im_examen.csv.gz` | un fichaje por fila: `delta_raw*` (Δ̂ contrafactual sin calibrar: media, sd, cuantiles), `c`, `delta_net*` (calibrado con c de F4 del corte y grupo), `aditivo_jugador, coste_oportunidad, sinergia_phi, correccion_h` (descomposición), `beta, beta_sd, fuente_beta, cuota_minutos, minutos_proyectados`, `grupo_im, IM, IM_lo80, IM_hi80, IM_aditivo, n_mov`, `delta_net_real_equipo, pct_real_equipo` |
+| `im_corte_<t>.pkl` | caché del Δ̂ contrafactual de un corte |
+| `resumen_anclas.json` | examen §11.5: separación, calibración por deciles, cobertura y NC₂ (NC); monotonía, calibración y cobertura (IM); `puerta_11_5` |
+| `referencias_nc_<t>.json` | F_ref por `liga|pos3` (cuantiles 0–1 cada 0,05 y n), tres temporadas ≤ t, ponderada por minutos |
+| `referencia_im.json` | F_mov por grupo de liga (Δ̂Net de los fichajes del examen) y F de los ΔNet realizados de sus equipos; c de F4 por grupo |
+
 ## 4. Banderas frecuentes
 
 | Bandera | Dónde | Significado |
