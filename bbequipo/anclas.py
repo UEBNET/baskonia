@@ -222,6 +222,8 @@ def impacto_corte(cfg: dict, a: int, tr_all: pd.DataFrame, e_all: pd.DataFrame, 
     mapa = V.mapa_clubes(ins.roles, ins.temp, ins.temp1)
     rng = np.random.default_rng(int(cfg["semilla"]) + a)
     real = trans[(trans["anio"] == a)].set_index(["liga", "team_id_nuevo"])["delta_net"]
+    from . import dirigidos as DG
+    mods_f2b = DG.modelos_corte(cfg, a, ins.R, progreso=progreso)
     filas = []
     for (liga, team), g in e_t.groupby(["liga_d", "team_d"]):
         team = str(team)
@@ -254,11 +256,15 @@ def impacto_corte(cfg: dict, a: int, tr_all: pd.DataFrame, e_all: pd.DataFrame, 
             i = pids.index(pid)
             b, sd, fuente = ins.valor(pid, liga)
             p_new = float(Pm[:, i].mean())
+            # complemento F2-B: efecto de X sobre los números de sus compañeros, agregado con sus cuotas proyectadas (sin X)
+            otros = [j for j in range(len(pids)) if j != i]
+            comp = DG.efectos_sobre_companeros(mods_f2b, ins.z([pid])[0], ins.z([pids[j] for j in otros]), Pm[:, otros].mean(0))
             filas.append({"corte": t, "anio": a, "persona_id": pid, "liga_d": liga, "team_d": team, "grupo_im": grupo_im(cfg, liga),
                           "delta_raw": float(d_raw.mean()), "delta_raw_sd": float(d_raw.std()),
                           **{f"delta_raw_p{int(q * 100):02d}": float(np.quantile(d_raw, q)) for q in (0.05, 0.10, 0.25, 0.75, 0.90, 0.95)},
                           "aditivo_jugador": float(p_new * b), "coste_oportunidad": float((v_con["T_aditivo"] - v_sin["T_aditivo"]).mean() - p_new * b),
                           "sinergia_phi": float((v_con["T_phi"] - v_sin["T_phi"]).mean()), "correccion_h": float((v_con["T_h"] - v_sin["T_h"]).mean()),
+                          "comp_pts100": comp.get("d_pts100", np.nan), "comp_cuota_tiro": comp.get("d_cuota_tiro", np.nan), "comp_pct_asistidas": comp.get("d_pct_asistidas", np.nan),
                           "beta": b, "beta_sd": sd, "fuente_beta": fuente, "cuota_minutos": p_new, "minutos_proyectados": p_new * gm,
                           "n_plantilla": len(pids), "delta_net_real_equipo": float(real.get((liga, team), np.nan))})
         if progreso and len(filas) % 200 < len(g):
@@ -347,6 +353,119 @@ def calibrar_nc(nc: pd.DataFrame, cortes: list[int], col: str = "NC1", min_prev:
             nc.loc[sel, f"{base}_lo80"] = np.minimum(lo, centro); nc.loc[sel, f"{base}_hi80"] = np.maximum(hi, centro)
         nc.loc[sel, "nc_calibrado_con"] = "cortes_anteriores" if k else "propio_corte"
     return nc
+
+
+def examen_im_onoff(im: pd.DataFrame, cfg: dict, cortes: list[int], dec: list[int], B: int, sem: int) -> tuple[dict, pd.DataFrame]:
+    """Criterio prerregistrado `criterios.f5.im_onoff` (decisión b del CEO): IM frente al Net on/off realizado del fichaje en el
+    destino. Calibración isotónica de IM crudo con cortes anteriores; variante IM+comp (combinación lineal de Δ̂Net y comp_pts100
+    ajustada con cortes anteriores sobre el on/off, → percentil → isotónica); se adopta sólo si mejora el Spearman con IC95 > 0.
+    Devuelve el resumen y las filas con IM_onoff, IM_comp y el subíndice «efecto sobre compañeros»."""
+    from scipy.stats import spearmanr
+    from sklearn.isotonic import IsotonicRegression
+    crit = cfg["criterios"]["f5"]["im_onoff"]
+    rr = pd.read_csv(C.RAIZ / cfg["insumos"]["roles"], usecols=["liga", "temporada", "team_id", "persona_id", "net_rtg_aj_onoff", "min_total"],
+                     dtype={"team_id": str}, low_memory=False).rename(columns={"liga": "liga_d", "team_id": "team_d", "temporada": "temporada_d"})
+    e = im[im["IM"].notna()].copy()
+    e["temporada_d"] = e["anio"].map(lambda a: f"{a + 1}-{str(a + 2)[-2:]}")
+    e = e.merge(rr, on=["liga_d", "team_d", "temporada_d", "persona_id"], how="left")
+    e["onoff_ok"] = e["net_rtg_aj_onoff"].notna() & (e["min_total"] >= float(crit["min_minutos"]))
+    e["pct_onoff"] = np.nan
+    for (a, g), x in e[e["onoff_ok"]].groupby(["anio", "grupo_im"]):
+        e.loc[x.index, "pct_onoff"] = x["net_rtg_aj_onoff"].rank(pct=True) * 100
+    e["IM_crudo"] = e["IM"]
+    e["comp_pct"] = np.nan                                   # subíndice: percentil de comp_pts100 entre los fichajes del grupo (≤ t)
+    for col in ("IM_onoff", "IM_onoff_lo80", "IM_onoff_hi80", "IM_comp", "IM_comp_lo80", "IM_comp_hi80", "IM_comp_crudo"):
+        e[col] = np.nan
+    rng = np.random.default_rng(sem)
+    def rango(prev, col_c, col_y, v):
+        bordes = np.quantile(prev[col_c], np.linspace(0, 1, 11)); bordes[0], bordes[-1] = -np.inf, np.inf
+        bp = np.clip(np.searchsorted(bordes, prev[col_c], side="right") - 1, 0, 9)
+        q10 = pd.Series([np.quantile(prev[col_y][bp == b], .10) if (bp == b).sum() >= 20 else np.nan for b in range(10)]).interpolate(limit_direction="both").to_numpy()
+        q90 = pd.Series([np.quantile(prev[col_y][bp == b], .90) if (bp == b).sum() >= 20 else np.nan for b in range(10)]).interpolate(limit_direction="both").to_numpy()
+        b = np.clip(np.searchsorted(bordes, np.nan_to_num(v), side="right") - 1, 0, 9)
+        return q10[b], q90[b]
+    for k, a in enumerate(cortes):
+        sel = e["anio"] == a
+        prev = e[e["anio"].isin(cortes[:k]) & e["onoff_ok"]] if k else e[sel & e["onoff_ok"]]
+        hasta = e[e["anio"] <= a]
+        for g in e["grupo_im"].unique():
+            sg = sel & (e["grupo_im"] == g)
+            Fc = Empirica(hasta.loc[hasta["grupo_im"] == g, "comp_pts100"])
+            if Fc.n >= 30:
+                e.loc[sg, "comp_pct"] = 100 * Fc(e.loc[sg, "comp_pts100"])
+        if len(prev) < 300:
+            continue
+        g1 = IsotonicRegression(y_min=0, y_max=100, out_of_bounds="clip").fit(prev["IM_crudo"], prev["pct_onoff"])
+        v = e.loc[sel, "IM_crudo"].to_numpy(float)
+        e.loc[sel, "IM_onoff"] = g1.predict(np.nan_to_num(v, nan=50.0))
+        lo, hi = rango(prev, "IM_crudo", "pct_onoff", v); e.loc[sel, "IM_onoff_lo80"] = np.minimum(lo, e.loc[sel, "IM_onoff"]); e.loc[sel, "IM_onoff_hi80"] = np.maximum(hi, e.loc[sel, "IM_onoff"])
+        # variante IM+comp: y = on/off ~ Δ̂Net + comp_pts100 (cortes anteriores) → puntuación → percentil entre los fichajes del grupo → isotónica
+        A = np.c_[prev["delta_net"], prev["comp_pts100"].fillna(0.0), np.ones(len(prev))]
+        coef = np.linalg.lstsq(A, prev["net_rtg_aj_onoff"], rcond=None)[0]
+        sc_prev = A @ coef
+        e.loc[sel, "IM_comp_crudo"] = np.nan
+        for g in e["grupo_im"].unique():
+            pg = prev["grupo_im"] == g
+            sg = sel & (e["grupo_im"] == g)
+            if pg.sum() < 30 or sg.sum() == 0:
+                continue
+            Fs = Empirica(sc_prev[pg.to_numpy()])
+            sc = np.c_[e.loc[sg, "delta_net"], e.loc[sg, "comp_pts100"].fillna(0.0), np.ones(sg.sum())] @ coef
+            e.loc[sg, "IM_comp_crudo"] = 100 * Fs(sc)
+        prev_c = prev.copy(); prev_c["sc_pct"] = np.nan
+        for g in prev["grupo_im"].unique():
+            pg = (prev["grupo_im"] == g).to_numpy()
+            if pg.sum() >= 30:
+                prev_c.loc[prev.index[pg], "sc_pct"] = 100 * Empirica(sc_prev[pg])(sc_prev[pg])
+        okp = prev_c["sc_pct"].notna()
+        if okp.sum() >= 300:
+            g2 = IsotonicRegression(y_min=0, y_max=100, out_of_bounds="clip").fit(prev_c.loc[okp, "sc_pct"], prev_c.loc[okp, "pct_onoff"])
+            v2 = e.loc[sel, "IM_comp_crudo"].to_numpy(float); ok2 = np.isfinite(v2)
+            outc = np.full(len(v2), np.nan); outc[ok2] = g2.predict(v2[ok2]); e.loc[sel, "IM_comp"] = outc
+            lo, hi = rango(prev_c[okp], "sc_pct", "pct_onoff", np.nan_to_num(v2, nan=50.0))
+            e.loc[sel, "IM_comp_lo80"] = np.where(ok2, np.minimum(lo, outc), np.nan); e.loc[sel, "IM_comp_hi80"] = np.where(ok2, np.maximum(hi, outc), np.nan)
+    d = e[e["anio"].isin(dec) & e["onoff_ok"] & e["IM_onoff"].notna()]
+    def mono(col):
+        r1 = spearmanr(d[col], d["net_rtg_aj_onoff"]).correlation; r0 = spearmanr(d["IM_aditivo"], d["net_rtg_aj_onoff"]).correlation
+        bs, bsd = [], []
+        for _ in range(min(B, 1000)):
+            ii = rng.integers(0, len(d), len(d)); x = d.iloc[ii]
+            a1 = spearmanr(x[col], x["net_rtg_aj_onoff"]).correlation; a0 = spearmanr(x["IM_aditivo"], x["net_rtg_aj_onoff"]).correlation
+            bs.append(a1); bsd.append(a1 - a0)
+        return {"spearman": float(r1), "ic95": [float(np.quantile(bs, .025)), float(np.quantile(bs, .975))], "spearman_aditivo": float(r0),
+                "ic95_diferencia_vs_aditivo": [float(np.quantile(bsd, .025)), float(np.quantile(bsd, .975))]}
+    res = {"fichajes": int(len(d)), "por_corte": {str(a): int((d["anio"] == a).sum()) for a in dec}, "variantes": {}}
+    for nombre, col in (("im_onoff", "IM_onoff"), ("im_comp", "IM_comp")):
+        dd = d[d[col].notna()]
+        if len(dd) < 100:
+            continue
+        res["variantes"][nombre] = {"n": int(len(dd)), "monotonia": mono(col),
+                                    "calibracion": examen_calibracion(dd, col, "pct_onoff", float(crit["calibracion_deciles_tolerancia"])),
+                                    "cobertura_80": cobertura(dd, f"{col}_lo80", f"{col}_hi80", "pct_onoff"), "anchura_80_media": float((dd[f"{col}_hi80"] - dd[f"{col}_lo80"]).mean())}
+    # ¿adoptar IM+comp? Spearman mayor con IC95 de la diferencia > 0
+    if "im_comp" in res["variantes"]:
+        dd = d[d["IM_comp"].notna()]
+        bs = []
+        for _ in range(min(B, 1000)):
+            ii = rng.integers(0, len(dd), len(dd)); x = dd.iloc[ii]
+            bs.append(spearmanr(x["IM_comp"], x["net_rtg_aj_onoff"]).correlation - spearmanr(x["IM_onoff"], x["net_rtg_aj_onoff"]).correlation)
+        res["comp_frente_a_im"] = {"dif_spearman": float(spearmanr(dd["IM_comp"], dd["net_rtg_aj_onoff"]).correlation - spearmanr(dd["IM_onoff"], dd["net_rtg_aj_onoff"]).correlation),
+                                   "ic95": [float(np.quantile(bs, .025)), float(np.quantile(bs, .975))]}
+        res["comp_frente_a_im"]["adoptar"] = bool(res["comp_frente_a_im"]["ic95"][0] > 0)
+    # subíndice «efecto sobre compañeros»: ¿añade algo al on/off más allá de IM? correlación parcial simple
+    dd = d[d["comp_pct"].notna()]
+    res["subindice_companeros"] = {"n": int(len(dd)), "spearman_onoff": float(spearmanr(dd["comp_pct"], dd["net_rtg_aj_onoff"]).correlation),
+                                   "spearman_con_im": float(spearmanr(dd["comp_pct"], dd["IM_onoff"]).correlation),
+                                   "media_comp_pts100": float(dd["comp_pts100"].mean()), "sd_comp_pts100": float(dd["comp_pts100"].std())}
+    elegida = "im_comp" if res.get("comp_frente_a_im", {}).get("adoptar") else "im_onoff"
+    v = res["variantes"].get(elegida) or res["variantes"]["im_onoff"]
+    lo_c, hi_c = crit["cobertura_80"]
+    res["puerta_im_onoff"] = {"variante": elegida,
+                              "monotonia_mejor_que_aditivo_ic95": bool(v["monotonia"]["ic95_diferencia_vs_aditivo"][0] > 0),
+                              "calibracion": v["calibracion"]["pasa"], "cobertura_en_rango": bool(lo_c <= v["cobertura_80"] <= hi_c)}
+    res["puerta_im_onoff"]["pasa"] = all(x for k2, x in res["puerta_im_onoff"].items() if k2 != "variante")
+    res["estado_im"] = "referente" if res["puerta_im_onoff"]["pasa"] else crit["estado_si_no_pasa"]
+    return res, e
 
 
 # =============================================================================================== examen completo
@@ -458,7 +577,17 @@ def main(cfg: dict, progreso=print) -> dict:
         res["im"]["puerta"]["pasa_literal"] = bool(res["im"]["puerta"]["monotonia_no_peor_que_aditivo"] and res["im"]["puerta"]["ic95_excluye_0"] and res["im"]["puerta"]["calibracion_por_fichaje"])
         res["im"]["puerta"]["pasa_por_paquete"] = bool(res["im"]["puerta"]["monotonia_no_peor_que_aditivo"] and res["im"]["puerta"]["ic95_excluye_0"] and res["im"]["puerta"]["calibracion_por_paquete"])
         res["im"]["puerta"]["pasa"] = res["im"]["puerta"]["pasa_literal"]
-        res["puerta_11_5"] = {"nc": res["nc"]["puerta"]["pasa"], "im": res["im"]["puerta"]["pasa"], "pasa": res["nc"]["puerta"]["pasa"] and res["im"]["puerta"]["pasa"],
+        # criterio redefinido (decisión b del CEO), prerregistrado en criterios.f5.im_onoff
+        if "comp_pts100" in im:
+            res_oo, im_oo = examen_im_onoff(im, cfg, cortes, dec, B, sem)
+            res["im"]["criterio_redefinido_onoff"] = res_oo
+            im_oo.round(3).to_csv(out / "im_examen.csv.gz", index=False)
+        else:
+            res_oo = None
+        estado_im = res_oo["estado_im"] if res_oo else "en_examen"
+        res["puerta_11_5"] = {"nc": res["nc"]["puerta"]["pasa"], "im_literal": res["im"]["puerta"]["pasa"],
+                              "im_redefinido_onoff": res_oo["puerta_im_onoff"] if res_oo else None, "estado_im": estado_im,
+                              "pasa": res["nc"]["puerta"]["pasa"] and res["im"]["puerta"]["pasa"],
                               "anti_manipulacion": "recalcular con el examen limpio 2025-26 → 2026-27 antes de comunicar cifras (temporada en curso)"}
         res["tiempo_s"] = round(time.time() - t0)
         (out / "resumen_anclas.json").write_text(json.dumps(res, indent=1, ensure_ascii=False, default=float), encoding="utf-8")

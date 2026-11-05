@@ -303,6 +303,13 @@ criterios:
       cobertura_80: [0.75, 0.85]
       calibracion: isotonica_cortes_anteriores        # IM publicado = g(IM crudo); rango = cuantiles 10/90 del percentil on/off por decil
       estado_si_no_pasa: en_examen                    # NC referente; IM visible con etiqueta «en examen» (opción a)
+      complemento_companeros:                         # ORDEN CEO 05-11-2026: complementar IM con los efectos sobre compañeros de F2-B
+        efectos: [d_pts100, d_cuota_tiro, d_pct_asistidas]   # los tres publicados en F2-B (pasaron §11.2); por corte, modelos ≤ t
+        agregacion: suma sobre compañeros Y de (cuota_Y / 5) · d_k(X → Y), con las cuotas proyectadas de la plantilla de destino
+        no_solapa_con_nc: NC mide la producción propia (C); el complemento sólo mide cambios en los números de los compañeros
+        variante_im_mas_comp: combinación lineal [Δ̂Net, comp_pts100] ajustada con cortes anteriores sobre el on/off → percentil → isotónica
+        adoptar_si: Spearman(IM+comp, on/off) > Spearman(IM, on/off) con IC95 de la diferencia que excluye 0; si no, IM solo
+        publicar_siempre: subíndice «efecto sobre compañeros» (percentil de comp_pts100 entre los fichajes del grupo), aparte de IM
     im_calibracion_deciles_tolerancia: 7
     cobertura_80_rangos: [0.75, 0.85]
     anti_manipulacion: recalcular con el examen limpio 2025-26 → 2026-27 antes de comunicar cifras de acierto

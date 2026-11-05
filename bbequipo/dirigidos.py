@@ -290,3 +290,39 @@ def predecir(modelos: dict, zx: np.ndarray, zy: np.ndarray) -> dict:
         mid = len(cal["lo"]) // 2
         out[k] = (pred, pred + cal["lo"][mid], pred + cal["hi"][mid])
     return out
+
+
+def modelos_corte(cfg: dict, a: int, R: SG.Rasgos, efectos=None, progreso=None) -> dict:
+    """Modelos publicados (GBM) ajustados SÓLO con interacciones de temporadas ≤ a y los rasgos del corte (para IM sin fuga).
+    Caché: dirigidos/examen/modelos_corte_<a>.pkl."""
+    import pickle
+    out_dir = dir_salida(cfg) / "examen"; out_dir.mkdir(parents=True, exist_ok=True)
+    dest = out_dir / f"modelos_corte_{a}.pkl"
+    if dest.exists():
+        return pickle.loads(dest.read_bytes())
+    f2 = cfg["f2"]["dirigidos"]
+    efectos = list(efectos or cfg["criterios"]["f5"]["im_onoff"]["complemento_companeros"]["efectos"])
+    E = cargar_interacciones(cfg, [t for t in cfg["perfil"]["temporadas"] if int(t[:4]) <= a])
+    tr = E[(E["anio"] <= a) & (E["poss_con"] >= float(f2["min_poss_con"]))].reset_index(drop=True)
+    X, ok = rasgos_pareja(tr, R)
+    mods = {}
+    for k in efectos:
+        y, w = tr[k].to_numpy(float), tr[f"w_{k}"].to_numpy(float)
+        mods[k] = ModeloEfecto("gbm", cfg).ajustar(X[ok], y[ok], w[ok])
+        if progreso:
+            progreso(f"    F2-B corte {a}: {k} ajustado con {int(ok.sum())} parejas", flush=True)
+    dest.write_bytes(pickle.dumps({"modelos": mods, "parejas": int(ok.sum()), "corte": a}))
+    return {"modelos": mods, "parejas": int(ok.sum()), "corte": a}
+
+
+def efectos_sobre_companeros(modelos: dict, zx: np.ndarray, Zy: np.ndarray, cuotas_y: np.ndarray) -> dict:
+    """Agregado del efecto de X sobre su plantilla: Σ_Y (cuota_Y / 5) · d̂_k(X → Y) para cada efecto k; y el detalle por Y."""
+    if len(Zy) == 0:
+        return {k: 0.0 for k in modelos["modelos"]} | {"detalle": {}}
+    X = np.hstack([np.repeat(zx[None, :], len(Zy), 0), Zy, zx[None, :] * Zy])
+    out = {"detalle": {}}
+    w = np.asarray(cuotas_y, float) / 5.0
+    for k, mod in modelos["modelos"].items():
+        d = mod.predecir(X)
+        out[k] = float(np.sum(w * d)); out["detalle"][k] = d
+    return out
