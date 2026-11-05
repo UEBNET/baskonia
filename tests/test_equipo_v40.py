@@ -492,3 +492,22 @@ def test_a5_recupera_spline_y_matriz_contraida():
     assert max(abs(x) for x in otros) < 0.6
     pred = mod.predecir(dm, drol, ro, rd, np.full(n, 25.0))
     assert np.mean(np.abs(r - pred)) < np.mean(np.abs(r - (0.2 * dm + 0.8 * drol)))   # mejor que una recta
+
+
+# ---------------------------------------------------------------------------------------------- F5 · anclas
+def test_anclas_percentil_esperado_y_complemento_companeros():
+    """E_pred[F_ref(C)] empuja hacia 50 con más incertidumbre; la agregación del efecto sobre compañeros pondera por cuotas."""
+    from bbequipo import anclas as A, dirigidos as DG
+    rng = np.random.default_rng(2)
+    F = A.Empirica(rng.normal(10, 3, 5000))
+    estrecha = pd.Series({"C_lo90": 13.5, "C_lo80": 13.7, "C_lo50": 13.9, "C_pred": 14.0, "C_hi50": 14.1, "C_hi80": 14.3, "C_hi90": 14.5})
+    ancha = pd.Series({"C_lo90": 4.0, "C_lo80": 6.0, "C_lo50": 10.0, "C_pred": 14.0, "C_hi50": 18.0, "C_hi80": 22.0, "C_hi90": 24.0})
+    nc_e, lo_e, hi_e = A.percentil_esperado(F, A.muestras_predictivas(estrecha, "C", 2000, rng))
+    nc_a, lo_a, hi_a = A.percentil_esperado(F, A.muestras_predictivas(ancha, "C", 2000, rng))
+    assert nc_e > 85 and 50 < nc_a < nc_e and lo_e <= nc_e <= hi_e and (hi_a - lo_a) > (hi_e - lo_e)
+    class Lineal:
+        def predecir(self, X): return X[:, 0] * 0 + X[:, -1]            # efecto = último rasgo del producto z_X ⊙ z_Y
+    mods = {"modelos": {"d_pts100": Lineal()}}
+    zx = np.array([1.0, 2.0]); Zy = np.array([[0.0, 1.0], [0.0, 3.0]]); cuotas = np.array([2.5, 2.5])
+    out = DG.efectos_sobre_companeros(mods, zx, Zy, cuotas)
+    assert abs(out["d_pts100"] - (0.5 * 2.0 + 0.5 * 6.0)) < 1e-9
