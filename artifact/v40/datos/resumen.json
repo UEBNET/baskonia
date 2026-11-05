@@ -1,0 +1,473 @@
+{
+ "version": "v4.0",
+ "cerrado": "2026-11-05",
+ "rama": "claude/encargo-v4-f0-startup-zw1jvo",
+ "fases": [
+  {
+   "id": "F1",
+   "nombre": "RAPM multiliga con prior del perfil",
+   "puerta": "cumple",
+   "dato": "RMSE del margen por partido 14,50 frente a 14,68 del RAPM traducido v3.2 y 15,45 de los interceptos de equipo; IC95 excluye 0",
+   "lectura": "Un valor por jugador en una escala común a las 20 ligas, informado por su perfil cuando faltan minutos."
+  },
+  {
+   "id": "F2",
+   "nombre": "Sinergia de pares y efectos sobre compañeros",
+   "puerta": "cumple (sinergia despreciable)",
+   "dato": "Parejas nuevas: pasa en 3 de 3 cortes con reducción del error ≈ 0,001 %; efectos dirigidos publicados: cuota de tiro, % asistidas y pts/100 (3 de 5)",
+   "lectura": "La química de pareja medible es de segundo orden; lo que cambia de forma predecible es el reparto (quién tira, quién recibe asistencias)."
+  },
+  {
+   "id": "F3",
+   "nombre": "Función de conjunto (condicional)",
+   "puerta": "cumple; se publica la variante aditiva",
+   "dato": "Cocientes de RMSE 0,99926 / 0,99933 / 0,99951 (IC95 < 1); la red aditiva por jugador gana lo mismo que la completa",
+   "lectura": "No hay estructura de quinteto más allá de lo aditivo: lo que se gana es una corrección por jugador (sobre todo quién llega sin valor medido)."
+  },
+  {
+   "id": "F4",
+   "nombre": "Composición y Δ de equipo",
+   "puerta": "cumple",
+   "dato": "1149 transiciones reales de equipo; cortes de decisión (n = 933): MAE 4.06 frente a 4.89 de persistencia (IC95 de la diferencia -1.02 a -0.65), GBM directo 4.23; cobertura 80 % 0.77",
+   "lectura": "El cambio de Net de un equipo se predice mejor que suponiendo que repite: β + minutos + una calibración que encoge la proyección."
+  },
+  {
+   "id": "A5",
+   "nombre": "Producción no lineal en minutos y rol",
+   "puerta": "cumple",
+   "dato": "pts/100 -2.5 % y TS% -2.2 % frente a B9 lineal (IC90 < 0)",
+   "lectura": "Más minutos rinden cada vez menos; el salto a referente da más volumen pero no más eficiencia."
+  },
+  {
+   "id": "F5",
+   "nombre": "Anclas NIVEL CERNO e IMPACTO",
+   "puerta": "NC cumple; IM cumple el criterio redefinido (on/off)",
+   "dato": "NC: separación 70.9 % [69.3, 72.6], desvío máx. 3.6, cobertura 0.78. IM: Spearman 0.149 frente a 0.031 del aditivo, desvío máx. 2.5, cobertura 0.79",
+   "lectura": "Dos notas de 0 a 100 con significado comprobable: percentiles esperados que ordenan bien, con rangos anchos porque el futuro de un fichaje lo es."
+  }
+ ],
+ "f4": {
+  "n_decision": 933,
+  "mae_f4": 4.058308042001169,
+  "mae_persistencia": 4.894961629153269,
+  "mae_aditivo": 4.0548647276351035,
+  "mae_gbm": 4.227022183663723,
+  "mae_oraculo": 4.000923007015454,
+  "spearman": 0.5406473818584648,
+  "cobertura_80": 0.7652733118971061,
+  "por_grupo": {
+   "eeuu_menor": {
+    "n": 91,
+    "mae_f4": 3.29619666792699,
+    "mae_persistencia": 3.91820989010989,
+    "ic95": [
+     -1.2446110341532262,
+     -0.010056599774247997
+    ]
+   },
+   "europa_media": {
+    "n": 147,
+    "mae_f4": 4.144108103854014,
+    "mae_persistencia": 4.748101360544218,
+    "ic95": [
+     -0.9552140477649457,
+     -0.2302567415377082
+    ]
+   },
+   "europa_menor": {
+    "n": 138,
+    "mae_f4": 4.810550856152332,
+    "mae_persistencia": 5.379110144927536,
+    "ic95": [
+     -0.9222026235577931,
+     -0.1839353723767568
+    ]
+   },
+   "europa_top": {
+    "n": 148,
+    "mae_f4": 3.231437604094461,
+    "mae_persistencia": 3.9010398648648654,
+    "ic95": [
+     -1.0096806128363724,
+     -0.3138874789919003
+    ]
+   },
+   "feb": {
+    "n": 271,
+    "mae_f4": 4.614137546992951,
+    "mae_persistencia": 5.77588966789668,
+    "ic95": [
+     -1.5997372016919573,
+     -0.7363131529170436
+    ]
+   },
+   "nba": {
+    "n": 90,
+    "mae_f4": 3.1484262968882675,
+    "mae_persistencia": 4.0658288888888885,
+    "ic95": [
+     -1.5012326411929258,
+     -0.3575674500506237
+    ]
+   },
+   "otras": {
+    "n": 48,
+    "mae_f4": 4.195108117274142,
+    "mae_persistencia": 5.450195833333333,
+    "ic95": [
+     -2.003833714114961,
+     -0.5415845840902969
+    ]
+   }
+  },
+  "por_corte": {
+   "2021": {
+    "n": 216,
+    "mae_f4": 3.6871964535901003,
+    "mae_persistencia": 4.44961574074074,
+    "cobertura_80": 0.7777777777777778
+   },
+   "2022": {
+    "n": 236,
+    "mae_f4": 3.3955498271642757,
+    "mae_persistencia": 4.141109745762712,
+    "cobertura_80": 0.7923728813559322
+   },
+   "2023": {
+    "n": 351,
+    "mae_f4": 4.227537607446966,
+    "mae_persistencia": 4.9668803418803416,
+    "cobertura_80": 0.7521367521367521
+   },
+   "2024": {
+    "n": 346,
+    "mae_f4": 4.338687698735366,
+    "mae_persistencia": 5.33619161849711,
+    "cobertura_80": 0.7601156069364162
+   }
+  },
+  "calibracion": {
+   "conjunto": {
+    "c": 0.42969447212209344,
+    "d": 0.3244150906564912,
+    "n": 1149
+   },
+   "por_grupo": {
+    "eeuu_menor": {
+     "c": 0.39703318265622883,
+     "d": 0.04686792445440795,
+     "n": 119
+    },
+    "europa_media": {
+     "c": 0.3396236109717852,
+     "d": 0.464663930491286,
+     "n": 193
+    },
+    "europa_menor": {
+     "c": 0.31330513803838567,
+     "d": 0.5406395060041174,
+     "n": 175
+    },
+    "europa_top": {
+     "c": 0.40257900459341467,
+     "d": 0.32076990211544604,
+     "n": 193
+    },
+    "feb": {
+     "c": 0.5126700975497728,
+     "d": 0.3073125712877188,
+     "n": 271
+    },
+    "nba": {
+     "c": 0.759330625092231,
+     "d": -0.12657778459693048,
+     "n": 120
+    },
+    "otras": {
+     "c": 0.40747857729718706,
+     "d": 0.16831590974734545,
+     "n": 78
+    }
+   }
+  }
+ },
+ "nc": {
+  "n": 4560,
+  "separacion": {
+   "fraccion": 0.7094468546637744,
+   "pares": 184400,
+   "ic95": [
+    0.692872056447178,
+    0.725803083865807
+   ],
+   "fichajes": 4560
+  },
+  "calibracion": {
+   "deciles": {
+    "0": {
+     "n": 456,
+     "previsto": 22.68,
+     "realizado": 25.93,
+     "desvio": 3.25
+    },
+    "1": {
+     "n": 456,
+     "previsto": 26.66,
+     "realizado": 28.11,
+     "desvio": 1.46
+    },
+    "2": {
+     "n": 456,
+     "previsto": 32.74,
+     "realizado": 32.64,
+     "desvio": -0.09
+    },
+    "3": {
+     "n": 456,
+     "previsto": 39.12,
+     "realizado": 39.74,
+     "desvio": 0.62
+    },
+    "4": {
+     "n": 456,
+     "previsto": 43.13,
+     "realizado": 43.33,
+     "desvio": 0.2
+    },
+    "5": {
+     "n": 456,
+     "previsto": 48.78,
+     "realizado": 50.35,
+     "desvio": 1.56
+    },
+    "6": {
+     "n": 456,
+     "previsto": 52.79,
+     "realizado": 51.11,
+     "desvio": -1.68
+    },
+    "7": {
+     "n": 456,
+     "previsto": 57.73,
+     "realizado": 58.58,
+     "desvio": 0.85
+    },
+    "8": {
+     "n": 456,
+     "previsto": 61.83,
+     "realizado": 64.83,
+     "desvio": 2.99
+    },
+    "9": {
+     "n": 456,
+     "previsto": 68.43,
+     "realizado": 64.83,
+     "desvio": -3.61
+    }
+   },
+   "max_desvio_abs": 3.605767130069907,
+   "tolerancia": 7.0,
+   "pasa": true
+  },
+  "cobertura_80": 0.7824561403508772,
+  "anchura_80": 70.2270062248581,
+  "crudo": {
+   "media_nc1": 35.263875810293825,
+   "media_pct_realizado": 45.944442962322874
+  }
+ },
+ "im": {
+  "n": 3598,
+  "monotonia": {
+   "spearman": 0.14914778668183,
+   "ic95": [
+    0.11720030980220493,
+    0.18356642316064795
+   ],
+   "spearman_aditivo": 0.03078265613507067,
+   "ic95_diferencia_vs_aditivo": [
+    0.08125789235601505,
+    0.15475322097277716
+   ]
+  },
+  "calibracion": {
+   "deciles": {
+    "0": {
+     "n": 360,
+     "previsto": 42.6,
+     "realizado": 43.24,
+     "desvio": 0.64
+    },
+    "1": {
+     "n": 360,
+     "previsto": 46.16,
+     "realizado": 44.49,
+     "desvio": -1.67
+    },
+    "2": {
+     "n": 360,
+     "previsto": 48.5,
+     "realizado": 48.95,
+     "desvio": 0.45
+    },
+    "3": {
+     "n": 359,
+     "previsto": 48.91,
+     "realizado": 48.68,
+     "desvio": -0.23
+    },
+    "4": {
+     "n": 360,
+     "previsto": 49.48,
+     "realizado": 49.69,
+     "desvio": 0.21
+    },
+    "5": {
+     "n": 360,
+     "previsto": 49.9,
+     "realizado": 49.19,
+     "desvio": -0.72
+    },
+    "6": {
+     "n": 359,
+     "previsto": 50.99,
+     "realizado": 50.38,
+     "desvio": -0.61
+    },
+    "7": {
+     "n": 360,
+     "previsto": 51.99,
+     "realizado": 53.72,
+     "desvio": 1.73
+    },
+    "8": {
+     "n": 360,
+     "previsto": 54.8,
+     "realizado": 53.88,
+     "desvio": -0.92
+    },
+    "9": {
+     "n": 360,
+     "previsto": 61.57,
+     "realizado": 59.03,
+     "desvio": -2.54
+    }
+   },
+   "max_desvio_abs": 2.5415336799207395,
+   "tolerancia": 7.0,
+   "pasa": true
+  },
+  "cobertura_80": 0.7873818788215675,
+  "anchura_80": 77.81383249848054,
+  "literal": {
+   "spearman_equipo": 0.05430169638401825,
+   "calibracion_pasa": false
+  },
+  "complemento": {
+   "dif_spearman": 0.003364575832268374,
+   "ic95": [
+    -0.015713294737983514,
+    0.02190661484702239
+   ],
+   "adoptar": false
+  },
+  "subindice_companeros": {
+   "n": 3598,
+   "spearman_onoff": 0.013598831844288188,
+   "spearman_con_im": -0.07129438940240594,
+   "media_comp_pts100": -0.10042920437068382,
+   "sd_comp_pts100": 1.0292039250151628
+  },
+  "estado": "referente"
+ },
+ "a5": {
+  "pts_p100": {
+   "mae_b9": 3.646611274982783,
+   "mae_a5": 3.5536937992799147,
+   "cociente_menos_1": -0.02548049920766693,
+   "ic90": [
+    -0.031693133203303366,
+    -0.019698101319095544
+   ]
+  },
+  "ts_pct": {
+   "mae_b9": 4.80298211478056,
+   "mae_a5": 4.695461914631261,
+   "cociente_menos_1": -0.022386133776850725,
+   "ic90": [
+    -0.02815050274626879,
+    -0.016940980689533695
+   ]
+  },
+  "usg_pct": {
+   "mae_b9": 2.7648199002711458,
+   "mae_a5": 2.6529294641255996,
+   "cociente_menos_1": -0.04046933984183687,
+   "ic90": [
+    -0.048487190074967754,
+    -0.03277709169891847
+   ]
+  },
+  "ast_pct": {
+   "mae_b9": 4.113608481012323,
+   "mae_a5": 4.091941020648677,
+   "cociente_menos_1": -0.005267263635724939,
+   "ic90": [
+    -0.011159834828296812,
+    0.0008058834832775806
+   ]
+  },
+  "oreb_p100": {
+   "mae_b9": 0.7413628840608582,
+   "mae_a5": 0.7453962825343886,
+   "cociente_menos_1": 0.005440518483252443,
+   "ic90": [
+    0.0005480991844120428,
+    0.010843450943379573
+   ]
+  },
+  "dreb_p100": {
+   "mae_b9": 1.2626844483651585,
+   "mae_a5": 1.2571004569853943,
+   "cociente_menos_1": -0.004422317378655727,
+   "ic90": [
+    -0.00791155667845438,
+    -0.00096860728240461
+   ]
+  },
+  "stl_p100": {
+   "mae_b9": 0.4932082454465974,
+   "mae_a5": 0.4907658969177137,
+   "cociente_menos_1": -0.004951962079774552,
+   "ic90": [
+    -0.008077519518870485,
+    -0.0018005571566938625
+   ]
+  },
+  "blk_p100": {
+   "mae_b9": 0.3506056973614918,
+   "mae_a5": 0.35179857519562496,
+   "cociente_menos_1": 0.0034023344261380206,
+   "ic90": [
+    -0.002358548646536585,
+    0.008996211038425848
+   ]
+  },
+  "tov_pct": {
+   "mae_b9": 2.754751986039772,
+   "mae_a5": 2.7657412528996286,
+   "cociente_menos_1": 0.003989203716177281,
+   "ic90": [
+    0.0010660457922292976,
+    0.0071055463150095696
+   ]
+  }
+ },
+ "limites": [
+  "Sin datos de coste ni de contrato: nada sobre el valor económico.",
+  "C de NIVEL CERNO es puntos: la defensa y el juego sin balón entran por IMPACTO, no por NC.",
+  "Los rangos del 80 % son anchos (≈ 70–80 puntos de percentil): es lo que se puede saber de un fichaje antes de que juegue.",
+  "Recálculo antimanipulación pendiente con el examen limpio 2025-26 → 2026-27 al cerrar la temporada.",
+  "La capa 4 y las anclas aún no corren dentro del simulador de la página: las lecturas de esta sección vienen de los exámenes históricos y de la proyección de plantillas 2026-27."
+ ]
+}

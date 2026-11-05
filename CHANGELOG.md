@@ -7,6 +7,12 @@ F0–F5 completadas con sus puertas (`docs/checkpoints/V40_F0.md` … `V40_F5.md
 equipo/a5, equipo/anclas) y `configs/simulation_v40.yaml`. Nada de la v3.2/v3.3 cambió. Pendientes fuera del encargo: integración
 en el flujo del simulador v4.0 y el artifact; examen limpio 2025-26 → 2026-27 antes de comunicar cifras de acierto.
 
+* **Artifacts actualizados (05-11-2026)**: nueva sección «Modelo de equipo v4.0» en la página clásica (área «Modelo v4.0»:
+  resumen y puertas, Nivel Cerno e Impacto, equipos 2026-27, método y límites) y en el panel v2.0 (sección «05 · Modelo de
+  equipo»). Página propia `artifact/v40/index.html` (marca Cerno, claro/oscuro, punto + rango del 80 % en toda estimación) con
+  sus datos en `artifact/v40/datos/` (ver `artifact/v40/README.md`). Las lecturas vienen de los exámenes históricos y de la
+  proyección de plantillas 2026-27; la capa 4 y las anclas no corren aún dentro del simulador de la página.
+
 ## 2026-11-05 — CERNO v4.0 · F5: anclas NIVEL CERNO e IMPACTO en [0, 100]
 
 Detalle: `docs/checkpoints/V40_F5.md`, `docs/modelo_equipo_v40.md` §6. Puerta F4 aprobada por el CEO y orden de arrancar F5.

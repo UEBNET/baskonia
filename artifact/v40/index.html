@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Modelo de equipo v4.0</title>
+<style>
+@font-face { font-family: "Mona Sans"; src: url("../cerno/fonts/MonaSans-Variable.woff2") format("woff2"); font-weight: 200 900; font-stretch: 75% 125%; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("../cerno/fonts/Newsreader-Variable.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("../cerno/fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+:root {
+  --bg: #F3F0E8; --fg: #12161B; --fg2: #3B434C; --muted: #545D67; --faint: #737B84;
+  --surface: #F3F0E8; --surface2: #E8E5DD; --surface3: #E2DED4; --line: #DAD7CF; --line2: #C2C3BF; --grid: #DAD7CF;
+  --steel: #2A6FA8; --steel700: #1F4F78; --clay: #C4552E; --good: #2E8540; --warn: #B7810C;
+  --index: #F2CC2F; --band: rgba(42, 111, 168, .18); --hl: rgba(242, 204, 47, .28);
+  --callout: #12161B; --callout-fg: #F3F0E8; --tag-ink: #12161B;
+  --sans: "Mona Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --serif: "Newsreader", Georgia, "Times New Roman", serif; --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161B; --fg: #F3F0E8; --fg2: #DAD7CF; --muted: #9AA0A6; --faint: #737B84;
+  --surface: #12161B; --surface2: #262C33; --surface3: #3B434C; --line: #3B434C; --line2: #545D67; --grid: #3B434C;
+  --steel: #4A8CC4; --steel700: #9DBEDD; --clay: #D9693F; --good: #5BB46E; --warn: #D9A531;
+  --band: rgba(74, 140, 196, .22); --hl: rgba(242, 204, 47, .22); --callout: #262C33; --callout-fg: #F3F0E8; --tag-ink: #F3F0E8;
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #12161B; --fg: #F3F0E8; --fg2: #DAD7CF; --muted: #9AA0A6; --faint: #737B84;
+  --surface: #12161B; --surface2: #262C33; --surface3: #3B434C; --line: #3B434C; --line2: #545D67; --grid: #3B434C;
+  --steel: #4A8CC4; --steel700: #9DBEDD; --clay: #D9693F; --good: #5BB46E; --warn: #D9A531;
+  --band: rgba(74, 140, 196, .22); --hl: rgba(242, 204, 47, .22); --callout: #262C33; --callout-fg: #F3F0E8; --tag-ink: #F3F0E8;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 15.5px/22px var(--sans); padding-block: 8px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1280px; margin: 0 auto; }
+h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 620; }
+h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.07; letter-spacing: -.02em; }
+h2 { font-size: 25px; line-height: 29px; letter-spacing: -.01em; }
+h3 { font-size: 18px; line-height: 24px; letter-spacing: -.005em; }
+p { margin: 0; }
+.label { font: 500 12px/14px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.lead { font-family: var(--serif); font-size: 20px; line-height: 28px; color: var(--fg2); max-width: 66ch; }
+.ul { background: linear-gradient(transparent 12%, var(--index) 12%, var(--index) 92%, transparent 92%); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding-inline: 2px; }
+:root[data-theme="dark"] .ul { color: var(--fg); }
+
+header.top { display: flex; flex-direction: column; gap: 14px; padding-block: 16px 20px; border-bottom: 1px solid var(--line); }
+.eyebrow { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.eyebrow .label b { color: var(--fg); font-weight: 600; }
+.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-top: 4px; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { position: relative; appearance: none; border: 0; background: transparent; color: var(--muted); font: 600 12.5px/16px var(--sans); letter-spacing: .08em; text-transform: uppercase; padding: 10px 14px; cursor: pointer; white-space: nowrap; }
+.tab::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -1px; height: 2px; background: transparent; transition: background .16s var(--ease); }
+.tab[aria-selected="true"] { color: var(--fg); }
+.tab[aria-selected="true"]::after { background: var(--fg); }
+.tab:hover { color: var(--fg); }
+.tab:focus-visible { outline: 2px solid var(--steel); outline-offset: -2px; }
+
+section.view { padding-block: 24px 8px; display: grid; gap: 28px; }
+.sec-head { display: grid; gap: 10px; max-width: 72ch; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.card { border-top: 1.2px solid var(--fg); padding-top: 12px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.card .big { font: 500 clamp(24px, 2.6vw, 34px)/1.12 var(--mono); overflow-wrap: anywhere; letter-spacing: -.02em; color: var(--fg); font-variant-numeric: tabular-nums; }
+.card .big small { font-size: 18px; color: var(--muted); letter-spacing: 0; }
+.card p { color: var(--fg2); }
+.tag { display: inline-block; font: 500 11px/14px var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border: 1px solid var(--faint); border-radius: 3px; color: var(--muted); vertical-align: middle; }
+.tag.dato { border-color: var(--steel); color: var(--steel700); }
+.tag.hip { border-style: dashed; }
+.callout { background: var(--callout); color: var(--callout-fg); padding: 20px 22px; border-radius: 4px; display: grid; gap: 10px; }
+.callout .label { color: var(--index); border: 1px solid var(--index); display: inline-block; padding: 2px 7px; border-radius: 3px; width: max-content; }
+.callout ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.callout li { color: var(--callout-fg); opacity: .92; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; }
+.ctl { display: grid; gap: 5px; }
+select, input[type="search"] { font: 400 14.5px/20px var(--sans); color: var(--fg); background: var(--surface); border: 1px solid var(--line2); border-radius: 4px; padding: 7px 10px; min-width: 0; }
+input[type="search"] { width: 240px; max-width: 100%; }
+.seg { display: inline-flex; border: 1px solid var(--line2); border-radius: 4px; overflow: hidden; }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--muted); font: 600 12px/16px var(--sans); letter-spacing: .04em; padding: 8px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.btn { appearance: none; border: 1px solid var(--line2); background: transparent; color: var(--fg); font: 600 13px/18px var(--sans); padding: 8px 14px; border-radius: 4px; cursor: pointer; }
+.btn:hover { background: var(--surface2); }
+
+.tblwrap { overflow-x: auto; border-top: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; min-width: 720px; }
+th { text-align: left; font: 500 11.5px/14px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 10px 10px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th.r, td.r { text-align: right; }
+td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+td .sub { display: block; color: var(--muted); font-size: 13px; line-height: 17px; }
+tr.hl td { background: var(--hl); }
+tr.hl td:first-child { box-shadow: inset 2px 0 0 var(--fg); }
+tbody tr:hover td { background: color-mix(in srgb, var(--fg) 4%, transparent); }
+tr.hl:hover td { background: var(--hl); }
+.rg { position: relative; display: inline-block; width: 140px; height: 14px; vertical-align: middle; margin-right: 8px; }
+.rg::before { content: ""; position: absolute; inset: 6px 0; background: var(--surface2); border-radius: 2px; }
+.rg i { position: absolute; top: 4px; bottom: 4px; background: var(--band); border-radius: 2px; }
+.rg b { position: absolute; top: 1px; bottom: 1px; width: 2px; margin-left: -1px; background: var(--fg); }
+.rg .z { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line2); }
+.rgtxt { font: 500 13.5px/18px var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.card .rgtxt, .card p.rgtxt { white-space: normal; }
+.rgtxt small { color: var(--muted); font-weight: 400; }
+.pos, .neg { font-family: var(--mono); }
+.note { color: var(--muted); font-size: 13.5px; line-height: 19px; max-width: 80ch; }
+.src { font: 400 12.5px/17px var(--mono); color: var(--faint); }
+
+.chart { display: grid; gap: 8px; min-width: 0; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .ttl { font-weight: 620; font-size: 17px; line-height: 22px; }
+.scale { display: flex; align-items: flex-end; gap: 0; height: 14px; margin-top: 8px; }
+.scale i { flex: 1; border-left: 1px solid var(--line2); height: 6px; }
+.scale i:nth-child(5n+1) { height: 12px; }
+.scale i.cur { border-left: 2px solid var(--fg); height: 14px; }
+footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 6px; }
+.loading { padding: 40px 0; color: var(--muted); font-family: var(--mono); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.pager { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding-top: 8px; }
+dl.kv { display: grid; grid-template-columns: minmax(120px, max-content) minmax(0, 1fr); min-width: 0; gap: 6px 16px; margin: 0; }
+dl.kv dt { color: var(--muted); font: 500 12px/18px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+dl.kv dd { margin: 0; color: var(--fg2); }
+@media (max-width: 640px) { .rg { width: 90px; } .lead { font-size: 18px; line-height: 26px; } dl.kv { grid-template-columns: 1fr; gap: 2px 0; } dl.kv dd { margin-bottom: 8px; } .card .big { font-size: 26px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">
+    <span class="label">Cerno Analytics · <b>Modelo de equipo v4.0</b></span>
+    <span class="label">Encargo cerrado · <b id="fechaCierre">5 nov 2026</b></span>
+    <span class="label">Estado · <b>Nivel Cerno referente · Impacto referente (criterio on/off)</b></span>
+  </div>
+  <h1>Dos notas de 0 a 100 con significado comprobable, y una proyección de equipo que gana a repetir el curso anterior</h1>
+  <p class="lead">Nivel Cerno dice qué percentil de producción esperar de un fichaje en su liga y posición. Impacto dice cuánto cambiará el equipo con él en pista frente a sin él. Las dos llevan su rango del 80 % y se han examinado sobre 4 560 fichajes reales de 2022 a 2026.</p>
+  <nav class="tabs" role="tablist" aria-label="Secciones del modelo v4.0">
+    <button class="tab" role="tab" data-v="resumen" aria-selected="true" type="button">Resumen y puertas</button>
+    <button class="tab" role="tab" data-v="anclas" aria-selected="false" type="button">Nivel Cerno e Impacto</button>
+    <button class="tab" role="tab" data-v="equipos" aria-selected="false" type="button">Equipos 2026-27</button>
+    <button class="tab" role="tab" data-v="metodo" aria-selected="false" type="button">Método y límites</button>
+  </nav>
+</header>
+<section class="view" id="view"><div class="loading">Cargando el modelo v4.0</div></section>
+<footer>
+  <div class="scale" aria-hidden="true" id="escala"></div>
+  <p class="src">Datos públicos · ligas oficiales · exámenes 2021-22 a 2025-26 sin fuga (perfiles ≤ t) · intervalo del 80 % · Cerno Analytics · Confidencial</p>
+</footer>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const LS = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, json(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } } };
+const N = (x, d = 1) => (x == null || !isFinite(x)) ? "–" : Number(x).toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
+const Nz = (x, d = 1) => (x == null || !isFinite(x)) ? "–" : (x > 0 ? "+" : "") + N(x, d);
+const Ni = (x) => (x == null) ? "–" : Number(x).toLocaleString("es-ES");
+const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB" };
+const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3"];
+const ligaN = (l) => LIGA_N[l] || String(l || "").toUpperCase();
+const ligaOrd = (a, b) => (LIGA_ORD.indexOf(a) + 1 || 99) - (LIGA_ORD.indexOf(b) + 1 || 99);
+const GRUPO_N = { europa_top: "Europa top (EuroLeague, EuroCup, Liga Endesa)", europa_media: "Europa media (LBA, LNB, BSL, VTB, BCL)", europa_menor: "Europa menor (BBL, BNXT, GBL, FIBA Europe Cup)", feb: "FEB (Primera, Segunda y Tercera)", nba: "NBA", eeuu_menor: "EE. UU. menor (G League, NCAA)", otras: "Otras (CBA, NBL)" };
+const POS = { E: "Exterior", A: "Alero", I: "Interior" };
+
+// ---- tema y contexto: los comparte la página principal por almacenamiento local (mismo origen)
+function aplicarTema() {
+  const t = LS.get("mm.theme");
+  if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+}
+aplicarTema();
+const EMBED = new URLSearchParams(location.search).get("embed") === "1";
+if (EMBED) document.querySelector("header.top").hidden = true;
+window.addEventListener("storage", (e) => { if (e.key === "mm.theme") aplicarTema(); });
+window.addEventListener("message", (e) => {
+  const d = e.data || {};
+  if (d.tema === "dark" || d.tema === "light") document.documentElement.dataset.theme = d.tema;
+  if (d.cernoCtx && d.cernoCtx.tema) document.documentElement.dataset.theme = d.cernoCtx.tema;
+  if (d.irV40) { location.hash = d.irV40; }
+});
+const CTX = LS.json("cerno.ctx", {});
+const CLUB = (CTX && CTX.club) || LS.json("cerno.v2.ctx", null) && { liga: LS.json("cerno.v2.ctx", {}).liga, id: LS.json("cerno.v2.ctx", {}).id } || { liga: "euroleague", id: "BAS" };
+
+// ---- altura para el marco de la página principal
+function publicarAlto() { if (window.parent !== window) { try { window.parent.postMessage({ atlasAlto: document.documentElement.scrollHeight }, "*"); } catch (e) { /* */ } } }
+new ResizeObserver(publicarAlto).observe(document.body);
+
+// ---- datos
+async function jsonDe(r, gz) {
+  if (!gz) return r.json();
+  const b64 = (await r.text()).trim(); const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  const ds = new DecompressionStream("gzip"); const txt = await new Response(new Blob([bin]).stream().pipeThrough(ds)).text();
+  return JSON.parse(txt);
+}
+async function cargar(path) { const r = await fetch(path); if (!r.ok) throw new Error(`${path} (${r.status})`); return jsonDe(r, path.endsWith(".gz.txt")); }
+function tabla(d) { const I = {}; d.columnas.forEach((c, i) => { I[c] = i; }); let filas = d.filas; if (!filas && d.por_columna) { const C = d.por_columna, n = C.length ? C[0].length : 0; filas = new Array(n); for (let i = 0; i < n; i++) { const r = new Array(C.length); for (let j = 0; j < C.length; j++) r[j] = C[j][i]; filas[i] = r; } } return { I, filas, g: (r, c) => r[I[c]] }; }
+const D = { resumen: null, fich: null, eq: null, cal: null };
+let P = null;
+function datos() { if (!P) P = Promise.all([cargar("resumen.json"), cargar("fichajes.json.gz.txt"), cargar("equipos_2026-27.json"), cargar("calibracion.json")]).then(([r, f, e, c]) => { D.resumen = r; D.fich = tabla(f); D.eq = tabla(e); D.cal = c; }); return P; }
+
+// ---- componentes
+function rango(lo, pt, hi, min, max, cero) {
+  const w = max - min, x = (v) => Math.max(0, Math.min(100, (v - min) / w * 100));
+  return `<span class="rg" aria-hidden="true">${cero != null ? `<span class="z" style="left:${x(cero)}%"></span>` : ""}<i style="left:${x(lo)}%;width:${Math.max(0.5, x(hi) - x(lo))}%"></i><b style="left:${x(pt)}%"></b></span>`;
+}
+const rtxt = (pt, lo, hi, d = 0, signo = false) => `<span class="rgtxt">${signo ? Nz(pt, d) : N(pt, d)} <small>[${signo ? Nz(lo, d) : N(lo, d)}–${signo ? Nz(hi, d) : N(hi, d)}]</small></span>`;
+const tag = (k) => ({ DATO: `<span class="tag dato">Dato</span>`, LECTURA: `<span class="tag">Lectura</span>`, HIPOTESIS: `<span class="tag hip">Hipótesis</span>` }[k] || "");
+function pintarEscala(pos) { $("escala").innerHTML = Array.from({ length: 17 }, (_, i) => `<i${i === pos ? ' class="cur"' : ""}></i>`).join(""); }
+
+// ---- vistas
+const V = {};
+const VISTAS = ["resumen", "anclas", "equipos", "metodo"];
+V.resumen = () => {
+  const R = D.resumen, f4 = R.f4, nc = R.nc, im = R.im;
+  return `
+  <div class="sec-head"><span class="label">Resumen</span><h2>Las cinco capas pasaron su examen prerregistrado; la química de quinteto resultó despreciable y se publica como corrección por jugador</h2>
+  <p class="note">Cada fase tuvo un criterio fijado antes de ejecutar y una puerta aprobada por la dirección. Lo que se muestra aquí es lo que salió, no lo que se esperaba.</p></div>
+  <div class="grid3">
+    <div class="card"><span class="label">Nivel Cerno · pares bien ordenados</span><div class="big">${N(nc.separacion.fraccion * 100, 1)} %</div><p class="rgtxt"><small>IC95 [${N(nc.separacion.ic95[0] * 100, 1)}–${N(nc.separacion.ic95[1] * 100, 1)}] · n = ${Ni(nc.n)} fichajes</small></p><p>De cada dos fichajes, el que Nivel Cerno puso más alto rindió más en 7 de cada 10 pares. El azar daría 5.</p>${tag("DATO")}</div>
+    <div class="card"><span class="label">Impacto · relación con el on/off realizado</span><div class="big">ρ ${N(im.monotonia.spearman, 3)}</div><p class="rgtxt"><small>IC95 [${N(im.monotonia.ic95[0], 3)}–${N(im.monotonia.ic95[1], 3)}] · aditivo ${N(im.monotonia.spearman_aditivo, 3)} · n = ${Ni(im.n)}</small></p><p>Impacto sigue al on/off del fichaje en su nueva casa; la suma simple de valores individuales casi no lo hace.</p>${tag("DATO")}</div>
+    <div class="card"><span class="label">Equipo · error medio del Net proyectado</span><div class="big">${N(f4.mae_f4, 2)} <small>frente a ${N(f4.mae_persistencia, 2)}</small></div><p class="rgtxt"><small>IC95 de la diferencia [${N(-1.02, 2)}, ${N(-0.65, 2)}] · ${Ni(f4.n_decision)} transiciones de decisión</small></p><p>Proyectar la plantilla nueva se equivoca menos que suponer que el equipo repite su Net del curso anterior.</p>${tag("DATO")}</div>
+  </div>
+  <div class="tblwrap"><table><thead><tr><th>Fase</th><th>Qué aporta</th><th>Puerta</th><th>Dato del examen</th><th>Lectura</th></tr></thead><tbody>
+  ${R.fases.map((f) => `<tr><td class="mono">${esc(f.id)}</td><td>${esc(f.nombre)}</td><td>${esc(f.puerta)}</td><td class="num" style="text-align:left;white-space:normal;font-size:13px;line-height:18px;min-width:280px">${esc(f.dato)}</td><td style="min-width:260px">${esc(f.lectura)}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="callout"><span class="label">Dónde termina lo que sabemos</span><ul>${R.limites.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div>`;
+};
+
+const AN = { t: "2025-26", liga: "", q: "", orden: "NC", n: 60 };
+V.anclas = () => {
+  const F = D.fich, g = F.g;
+  const temps = [...new Set(F.filas.map((r) => g(r, "temporada")))].sort();
+  if (!temps.includes(AN.t)) AN.t = temps[temps.length - 1];
+  const ligas = [...new Set(F.filas.filter((r) => g(r, "temporada") === AN.t).map((r) => g(r, "liga")))].sort(ligaOrd);
+  const q = AN.q.trim().toLowerCase();
+  let rows = F.filas.filter((r) => g(r, "temporada") === AN.t && (!AN.liga || g(r, "liga") === AN.liga) && (!q || String(g(r, "nombre") || "").toLowerCase().includes(q) || String(g(r, "equipo") || "").toLowerCase().includes(q)));
+  const key = { NC: "NC", IM: "IM", real: "pct_realizado", onoff: "pct_onoff", comp: "comp_pts100" }[AN.orden] || "NC";
+  rows.sort((a, b) => ((g(b, key) ?? -1e9) - (g(a, key) ?? -1e9)));
+  const total = rows.length; rows = rows.slice(0, AN.n);
+  const nc = D.resumen.nc, im = D.resumen.im;
+  return `
+  <div class="sec-head"><span class="label">Nivel Cerno e Impacto · ${esc(AN.t)}</span><h2>Lo que se dijo de cada fichaje antes de verlo jugar, junto a lo que después hizo</h2>
+  <p class="note">Nivel Cerno es el percentil esperado de producción (minutos × puntos por 100 posesiones) entre jugadores de su liga y posición de las tres temporadas anteriores. Impacto es el percentil del cambio esperado en el Net del equipo con él frente a sin él, en la escala de todos los movimientos examinados. Los dos se calcularon con perfiles anteriores a la temporada; el realizado es lo que ocurrió esa temporada.</p></div>
+  <div class="grid2">
+    <div class="card"><span class="label">Cómo leer Nivel Cerno</span><h3>50 es un fichaje mediano de su liga y posición; 70, uno que suele acabar entre el 30 % que más produce</h3><p>El rango del 80 % es ancho a propósito: con minutos aún sin repartir, una horquilla de 60 puntos es lo honesto. La nota cruda subestimaba unos 10 puntos por la selección del examen; se corrigió con una calibración isotónica sobre los cortes anteriores.</p></div>
+    <div class="card"><span class="label">Cómo leer Impacto</span><h3>50 es un movimiento que no cambia el equipo; por encima, lo mejora; por debajo, lo empeora en Net</h3><p>El criterio literal del encargo (acertar el cambio de Net de todo el equipo con un solo fichaje) no se cumple por construcción. El criterio redefinido y prerregistrado compara con el on/off realizado del jugador y sí se cumple. El efecto sobre compañeros (quién tira y quién recibe asistencias) se publica aparte y no entra en la nota.</p></div>
+  </div>
+  <div class="controls">
+    <div class="ctl"><label class="label" for="anT">Temporada del fichaje</label><select id="anT">${temps.map((t) => `<option value="${t}"${t === AN.t ? " selected" : ""}>${t}</option>`).join("")}</select></div>
+    <div class="ctl"><label class="label" for="anL">Liga de destino</label><select id="anL"><option value="">Todas (${ligas.length})</option>${ligas.map((l) => `<option value="${l}"${l === AN.liga ? " selected" : ""}>${esc(ligaN(l))}</option>`).join("")}</select></div>
+    <div class="ctl"><label class="label" for="anQ">Jugador o equipo</label><input type="search" id="anQ" value="${esc(AN.q)}" placeholder="Buscar"></div>
+    <div class="ctl"><span class="label">Ordenar por</span><div class="seg" id="anO">${[["NC", "Nivel Cerno"], ["IM", "Impacto"], ["real", "Realizado"], ["onoff", "On/off"], ["comp", "Compañeros"]].map(([k, n]) => `<button type="button" data-o="${k}" aria-pressed="${AN.orden === k}">${n}</button>`).join("")}</div></div>
+  </div>
+  <div class="tblwrap"><table><thead><tr><th>Jugador</th><th>Destino</th><th>Nivel Cerno <span style="text-transform:none;letter-spacing:0">· punto [80 %]</span></th><th class="r">Realizado</th><th>Impacto <span style="text-transform:none;letter-spacing:0">· punto [80 %]</span></th><th class="r">On/off real.</th><th class="r">Compañeros</th><th class="r">Min./partido prev.</th></tr></thead><tbody>
+  ${rows.map((r) => { const im = g(r, "IM"); const cp = g(r, "comp_pts100"); return `<tr><td><b>${esc(g(r, "nombre") || g(r, "persona_id"))}</b><span class="sub">${esc(POS[g(r, "pos3")] || "")}</span></td><td>${esc(g(r, "equipo"))}<span class="sub">${esc(ligaN(g(r, "liga")))}</span></td>
+    <td>${rango(g(r, "NC_lo80"), g(r, "NC"), g(r, "NC_hi80"), 0, 100)}${rtxt(g(r, "NC"), g(r, "NC_lo80"), g(r, "NC_hi80"))}</td><td class="num">${N(g(r, "pct_realizado"), 0)}</td>
+    <td>${im == null ? `<span class="note">sin proyección</span>` : rango(g(r, "IM_lo80"), im, g(r, "IM_hi80"), 0, 100, 50) + rtxt(im, g(r, "IM_lo80"), g(r, "IM_hi80"))}</td><td class="num">${N(g(r, "pct_onoff"), 0)}</td>
+    <td class="num" title="Efecto previsto sobre los pts/100 de los compañeros (F2-B); subíndice aparte, no entra en Impacto">${cp == null ? "–" : Nz(cp, 1)}</td><td class="num">${N(g(r, "minutos_proyectados"), 1)}</td></tr>`; }).join("")}
+  </tbody></table></div>
+  <div class="pager"><span class="note">${Ni(Math.min(AN.n, total))} de ${Ni(total)} fichajes de ${esc(AN.t)}${AN.liga ? " en " + esc(ligaN(AN.liga)) : ""}. Realizado y on/off son percentiles de la misma temporada; «sin proyección» cuando el equipo de destino no tenía plantilla suficiente para simular.</span>${total > AN.n ? `<button class="btn" id="anMas" type="button">Mostrar 60 más</button>` : ""}</div>
+  <div class="grid2">
+    ${calibChart("Nivel Cerno acierta su propio nivel: ningún decil se desvía más de 3,6 puntos", nc.calibracion, nc.cobertura_80, nc.anchura_80, "nivel Cerno previsto → percentil de producción realizado")}
+    ${calibChart("Impacto también: desvío máximo 2,5 puntos entre lo previsto y el on/off realizado", im.calibracion, im.cobertura_80, im.anchura_80, "impacto previsto → percentil de on/off realizado")}
+  </div>`;
+};
+function calibChart(ttl, cal, cob, anch, sub) {
+  const W = 420, H = 300, P0 = 44, P1 = 26, x = (v) => P0 + (v / 100) * (W - P0 - P1), y = (v) => (H - 34) - (v / 100) * (H - 34 - P1);
+  const dec = Object.values(cal.deciles), tol = cal.tolerancia;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(ttl)}">`;
+  [0, 25, 50, 75, 100].forEach((v) => { s += `<line x1="${x(0)}" x2="${x(100)}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/><text x="${x(0) - 8}" y="${y(v) + 4}" text-anchor="end" font-family="var(--mono)" font-size="11" fill="var(--muted)">${v}</text><text x="${x(v)}" y="${H - 16}" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--muted)">${v}</text>`; });
+  s += `<polygon points="${x(0)},${y(tol)} ${x(100 - tol)},${y(100)} ${x(100)},${y(100)} ${x(100)},${y(100 - tol)} ${x(tol)},${y(0)} ${x(0)},${y(0)}" fill="var(--band)"/>`;
+  s += `<line x1="${x(0)}" y1="${y(0)}" x2="${x(100)}" y2="${y(100)}" stroke="var(--line2)" stroke-dasharray="4 3"/>`;
+  dec.forEach((d) => { s += `<circle cx="${x(d.previsto)}" cy="${y(d.realizado)}" r="4.5" fill="var(--fg)"><title>previsto ${N(d.previsto, 1)} · realizado ${N(d.realizado, 1)} · n = ${d.n}</title></circle>`; });
+  s += `<text x="${x(100)}" y="${H - 2}" text-anchor="end" font-family="var(--mono)" font-size="11" fill="var(--muted)">PREVISTO (DECILES)</text><text x="${P0 - 36}" y="${P1 - 10}" font-family="var(--mono)" font-size="11" fill="var(--muted)">REALIZ.</text></svg>`;
+  return `<div class="chart"><div class="ttl">${esc(ttl)}</div><span class="label">${esc(sub)} · banda = tolerancia ±${N(tol, 0)}</span>${s}<span class="note">Cobertura del intervalo del 80 %: ${N(cob * 100, 1)} % · anchura media ${N(anch, 0)} puntos de percentil · desvío máximo ${N(cal.max_desvio_abs, 1)} · ${cal.pasa ? "pasa" : "no pasa"} el criterio prerregistrado.</span></div>`;
+}
+
+const EQ = { liga: null };
+V.equipos = () => {
+  const E = D.eq, g = E.g;
+  const ligas = [...new Set(E.filas.map((r) => g(r, "liga")))].sort(ligaOrd);
+  if (!EQ.liga) EQ.liga = ligas.includes(CLUB.liga) ? CLUB.liga : ligas[0];
+  const rows = E.filas.filter((r) => g(r, "liga") === EQ.liga).sort((a, b) => g(a, "puesto") - g(b, "puesto"));
+  const ext = Math.max(6, ...rows.map((r) => Math.max(Math.abs(g(r, "lo80")), Math.abs(g(r, "hi80")))));
+  const grupo = rows.length ? g(rows[0], "grupo") : null, cal = grupo && D.cal.por_grupo[grupo];
+  const propio = rows.find((r) => String(g(r, "team_id")) === String(CLUB.id));
+  const cab = propio ? `${esc(g(propio, "equipo"))} se proyecta ${g(propio, "puesto")}.º de ${rows.length} en ${esc(ligaN(EQ.liga))}: Net ${Nz(g(propio, "net_proyectado_relativo"), 1)} [${Nz(g(propio, "lo80"), 1)}, ${Nz(g(propio, "hi80"), 1)}] frente a la media de la liga` : `${esc(ligaN(EQ.liga))}: ${rows.length} plantillas proyectadas a Net relativo a la liga, con su rango del 80 %`;
+  return `
+  <div class="sec-head"><span class="label">Equipos 2026-27 · proyección de plantillas</span><h2>${cab}</h2>
+  <p class="note">La capa 4 reparte los minutos de la plantilla con el motor v3.3, suma el valor de cada jugador (β de la capa 1, efectos dirigidos de la 2 y corrección aditiva de la 3) y encoge la proyección con la calibración aprendida en 1 149 transiciones reales de equipo. Net relativo: puntos por 100 posesiones por encima o por debajo de la media de la liga en la temporada regular. Plantillas a 5 de noviembre de 2026.</p></div>
+  <div class="controls"><div class="ctl"><label class="label" for="eqL">Liga</label><select id="eqL">${ligas.map((l) => `<option value="${l}"${l === EQ.liga ? " selected" : ""}>${esc(ligaN(l))} (${E.filas.filter((r) => g(r, "liga") === l).length})</option>`).join("")}</select></div>
+  ${cal ? `<dl class="kv"><dt>Grupo</dt><dd>${esc(GRUPO_N[grupo] || grupo)}</dd><dt>Encogimiento c</dt><dd class="mono">${N(cal.prediccion.c, 2)} · n = ${Ni(cal.prediccion.n)}</dd><dt>Error irreducible s₀</dt><dd class="mono">${N(cal.intervalo.s0, 1)} pts/100</dd></dl>` : ""}</div>
+  <div class="tblwrap"><table><thead><tr><th class="r">#</th><th>Equipo</th><th>Net proyectado frente a la liga <span style="text-transform:none;letter-spacing:0">· punto [80 %]</span></th><th class="r">Fuerza T</th><th class="r">Plantilla</th><th class="r">Sin β</th></tr></thead><tbody>
+  ${rows.map((r) => `<tr${String(g(r, "team_id")) === String(CLUB.id) ? ' class="hl"' : ""}><td class="num">${g(r, "puesto")}</td><td><b>${esc(g(r, "equipo"))}</b></td><td>${rango(g(r, "lo80"), g(r, "net_proyectado_relativo"), g(r, "hi80"), -ext, ext, 0)}${rtxt(g(r, "net_proyectado_relativo"), g(r, "lo80"), g(r, "hi80"), 1, true)}</td><td class="num">${N(g(r, "T"), 1)} <span class="note">± ${N(g(r, "T_sd"), 1)}</span></td><td class="num">${g(r, "n_plantilla")}</td><td class="num">${g(r, "n_sin_beta")}</td></tr>`).join("")}
+  </tbody></table></div>
+  <p class="note">Fuerza T es la suma de valor proyectada antes de calibrar (± desviación del Monte Carlo de minutos). «Sin β» cuenta jugadores sin valor medido en ninguna liga, a los que se asigna el nivel medio de los recién llegados a esa liga. Un orden parecido entre dos equipos con rangos solapados no es una diferencia que el modelo pueda afirmar.</p>`;
+};
+
+V.metodo = () => {
+  const R = D.resumen, f4 = R.f4, a5 = R.a5, im = R.im;
+  const A5N = { pts_p100: "Puntos / 100", ts_pct: "TS %", usg_pct: "Uso %", ast_pct: "Asistencias %", oreb_p100: "Reb. of. / 100", dreb_p100: "Reb. def. / 100", stl_p100: "Robos / 100", blk_p100: "Tapones / 100", tov_pct: "Pérdidas %" };
+  return `
+  <div class="sec-head"><span class="label">Método y límites</span><h2>Cada número de esta sección sale de un examen con el criterio fijado antes de mirar los datos</h2>
+  <p class="note">Los exámenes usan cortes temporales anidados: para predecir la temporada t solo se emplean perfiles, valores y redes estimados con datos hasta t − 1. Las etiquetas distinguen hechos con fuente (Dato), criterio de Cerno (Lectura) e hipótesis pendientes.</p></div>
+  <div class="grid2">
+    <div class="card"><span class="label">Capa 4 · por grupo de liga</span><div class="tblwrap"><table style="min-width:520px"><thead><tr><th>Grupo</th><th class="r">n</th><th class="r">Error v4.0</th><th class="r">Error repetir</th><th class="r">IC95 diferencia</th></tr></thead><tbody>
+    ${Object.entries(f4.por_grupo).sort((a, b) => b[1].n - a[1].n).map(([k, v]) => `<tr><td>${esc(GRUPO_N[k] || k)}</td><td class="num">${v.n}</td><td class="num">${N(v.mae_f4, 2)}</td><td class="num">${N(v.mae_persistencia, 2)}</td><td class="num">[${N(v.ic95[0], 2)}, ${N(v.ic95[1], 2)}]</td></tr>`).join("")}
+    </tbody></table></div><p class="note">En los siete grupos el intervalo queda por debajo de cero: proyectar gana a repetir en todos. Spearman entre Net previsto y realizado ${N(f4.spearman, 2)}; minutos reales en vez de proyectados bajarían el error solo hasta ${N(f4.mae_oraculo, 2)}.</p>${tag("DATO")}</div>
+    <div class="card"><span class="label">Capa 4 · por corte temporal</span><div class="tblwrap"><table style="min-width:420px"><thead><tr><th>Predice</th><th class="r">n</th><th class="r">Error v4.0</th><th class="r">Error repetir</th><th class="r">Cobertura 80 %</th></tr></thead><tbody>
+    ${Object.entries(f4.por_corte).map(([k, v]) => `<tr><td class="mono">${k}-${String(Number(k) + 1).slice(2)} → ${Number(k) + 1}-${String(Number(k) + 2).slice(2)}</td><td class="num">${v.n}</td><td class="num">${N(v.mae_f4, 2)}</td><td class="num">${N(v.mae_persistencia, 2)}</td><td class="num">${N(v.cobertura_80 * 100, 0)} %</td></tr>`).join("")}
+    </tbody></table></div><p class="note">Un modelo de gradiente directo sobre las mismas variables da ${N(f4.mae_gbm, 2)}; la versión aditiva sin red de conjunto, ${N(f4.mae_aditivo, 2)}. La estructura explícita (valor + minutos + calibración) no pierde frente a la caja negra.</p>${tag("DATO")}</div>
+  </div>
+  <div class="grid2">
+    <div class="card"><span class="label">A5 · producción no lineal en minutos y rol</span><div class="tblwrap"><table style="min-width:480px"><thead><tr><th>Métrica</th><th class="r">Error lineal</th><th class="r">Error A5</th><th class="r">Cambio</th><th class="r">IC90</th><th>Decisión</th></tr></thead><tbody>
+    ${Object.entries(a5).map(([k, v]) => { const gana = v.ic90[1] < 0; return `<tr><td>${esc(A5N[k] || k)}</td><td class="num">${N(v.mae_b9, 2)}</td><td class="num">${N(v.mae_a5, 2)}</td><td class="num">${Nz(v.cociente_menos_1 * 100, 1)} %</td><td class="num">[${Nz(v.ic90[0] * 100, 1)}, ${Nz(v.ic90[1] * 100, 1)}]</td><td>${gana ? "A5 con carga" : (k === "oreb_p100" ? "Se mantiene el lineal" : "A5 con carga (sin ganancia clara)")}</td></tr>`; }).join("")}
+    </tbody></table></div><p class="note">Spline de 3 nudos en el cambio de minutos, salto por cambio de rol encogido por parejas de roles y covariable de carga por encima de 30 minutos. La pendiente positiva de la carga sobre el TS % es selección (juegan más los que tiran mejor), no fatiga: se declara y no se interpreta como efecto causal.</p>${tag("DATO")} ${tag("LECTURA")}</div>
+    <div class="card"><span class="label">Impacto · criterio literal frente a criterio redefinido</span>
+      <dl class="kv"><dt>Literal §11.5</dt><dd>Correlación del Δ Net previsto por fichaje con el Δ Net realizado de todo el equipo: ρ ${N(im.literal.spearman_equipo, 3)}, calibración ${im.literal.calibracion_pasa ? "pasa" : "no pasa"}. Un equipo cambia por diez movimientos a la vez; atribuir su Δ a uno solo no es un examen de ese uno.</dd>
+      <dt>Redefinido (prerregistrado antes de calcular)</dt><dd>Monotonía y calibración frente al percentil de on/off realizado del propio fichaje en su destino: ρ ${N(im.monotonia.spearman, 3)} [${N(im.monotonia.ic95[0], 3)}–${N(im.monotonia.ic95[1], 3)}], frente a ${N(im.monotonia.spearman_aditivo, 3)} del valor aditivo; diferencia IC95 [${N(im.monotonia.ic95_diferencia_vs_aditivo[0], 3)}, ${N(im.monotonia.ic95_diferencia_vs_aditivo[1], 3)}]. Desvío máximo por decil ${N(im.calibracion.max_desvio_abs, 1)} (tolerancia ${N(im.calibracion.tolerancia, 0)}).</dd>
+      <dt>Complemento compañeros (F2-B)</dt><dd>Sumar el efecto previsto sobre los compañeros a Impacto cambia ρ en ${Nz(im.complemento.dif_spearman, 3)} [${Nz(im.complemento.ic95[0], 3)}, ${Nz(im.complemento.ic95[1], 3)}]: no se adopta. Se publica como subíndice aparte (media ${Nz(im.subindice_companeros.media_comp_pts100, 2)}, desviación ${N(im.subindice_companeros.sd_comp_pts100, 2)} pts/100), sin solapar con Nivel Cerno.</dd></dl>
+      ${tag("DATO")} ${tag("LECTURA")}</div>
+  </div>
+  <div class="callout"><span class="label">Límites declarados</span><ul>${R.limites.map((l) => `<li>${esc(l)}</li>`).join("")}<li>Nivel Cerno e Impacto son percentiles esperados, no promesas: un 70 con rango [30–95] se lee como «probablemente alto, con una de cada cinco veces fuera de ese rango».</li></ul></div>`;
+};
+
+// ---- navegación
+let vista = "resumen";
+function leerHash() {
+  const h = location.hash.replace(/^#/, ""); const [v, ...rest] = h.split("&"); const p = new URLSearchParams(rest.join("&"));
+  if (p.get("liga")) { EQ.liga = p.get("liga"); AN.liga = AN.liga || ""; }
+  if (p.get("t")) AN.t = p.get("t");
+  return VISTAS.includes(v) ? v : "resumen";
+}
+async function pintar() {
+  vista = leerHash();
+  document.querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-selected", b.dataset.v === vista));
+  pintarEscala([3, 7, 11, 15][VISTAS.indexOf(vista)]);
+  try { await datos(); } catch (e) { $("view").innerHTML = `<div class="callout"><span class="label">No se pudieron cargar los datos</span><p>${esc(e.message || e)}. Recarga la página; si persiste, el archivo no está publicado junto a la herramienta.</p></div>`; return; }
+  $("view").innerHTML = V[vista]();
+  bind(); publicarAlto();
+}
+function bind() {
+  const on = (id, ev, fn) => { const el = $(id); if (el) el.addEventListener(ev, fn); };
+  on("anT", "change", (e) => { AN.t = e.target.value; AN.n = 60; repintar(); });
+  on("anL", "change", (e) => { AN.liga = e.target.value; AN.n = 60; repintar(); });
+  on("anQ", "input", (e) => { AN.q = e.target.value; AN.n = 60; clearTimeout(bind.t); bind.t = setTimeout(repintar, 180); });
+  on("anO", "click", (e) => { const b = e.target.closest("[data-o]"); if (!b) return; AN.orden = b.dataset.o; repintar(); });
+  on("anMas", "click", () => { AN.n += 60; repintar(); });
+  on("eqL", "change", (e) => { EQ.liga = e.target.value; repintar(); });
+}
+function repintar() { const foco = document.activeElement && document.activeElement.id; const pos = foco === "anQ" ? document.activeElement.selectionStart : null; $("view").innerHTML = V[vista](); bind(); if (foco && $(foco)) { $(foco).focus(); if (pos != null) try { $(foco).setSelectionRange(pos, pos); } catch (e) { /* */ } } publicarAlto(); }
+document.querySelector(".tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-v]"); if (!b) return; if (location.hash.replace(/^#/, "").split("&")[0] === b.dataset.v) pintar(); else location.hash = b.dataset.v; });
+window.addEventListener("hashchange", pintar);
+pintar();
+</script>
+</body>
+</html>
