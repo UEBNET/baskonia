@@ -281,6 +281,22 @@ def ablacion_aditiva(cfg: dict, progreso=print) -> dict:
     return res
 
 
+def redes_corte(cfg: dict, progreso=print) -> None:
+    """Redes por corte con la configuración vigente (p. ej. la variante aditiva elegida), para los exámenes de F4 sin fuga:
+    examen/red_corte_<t>_<variante>.pkl (la red del examen §11.3 se guarda aparte como red_corte_<t>.pkl)."""
+    out_dir = dir_salida(cfg) / "examen"
+    suf = "aditiva" if cfg["f3"].get("rho_lineal", False) else "completa"
+    tr_all = RP.tramos(cfg, None, progreso=None)
+    for a in [int(x) for x in cfg["criterios"]["comunes"]["cortes"]]:
+        dest = out_dir / f"red_corte_{a}_{suf}.pkl"
+        if dest.exists():
+            continue
+        r, red = examen_corte(cfg, a, tr_all, progreso)
+        dest.write_bytes(pickle.dumps(red.estado()))
+        if progreso:
+            progreso(f"  red {suf} corte {a} guardada", flush=True)
+
+
 def main(cfg: dict, progreso=print) -> dict:
     from bbfit.registro import experimento
     t0 = time.time()
@@ -343,7 +359,9 @@ def exportar(cfg: dict, progreso=print) -> dict:
         red = ConjuntoNet(R.Z, cfg)
         aj3 = red.ajustar(indices_z(tr, R), r, w, int(cfg["semilla"]), progreso)
         (out / "redes.pkl").write_bytes(pickle.dumps({"estado": red.estado(), "rasgos": R.exportable(), "cfg_f3": cfg["f3"]}))
+        aditiva = bool(cfg["f3"].get("rho_lineal", False))
         doc = {"version": cfg["version"], "generado": time.strftime("%Y-%m-%dT%H:%M:%S"), "publicado": True, "tramos": int(len(tr)),
+               "variante": "aditiva (ρ lineal): g(S) = Σ_i h(z_i), corrección no lineal por jugador" if aditiva else "completa (deep sets)",
                "curvas": aj3["curvas"], "formula": "g(S) = ρ(Σ_i ϕ(z_i)); Δ = g(S_A) − g(S_B) sobre F1 + F2; z sin perfil = 0",
                "tiempo_s": round(time.time() - t0)}
         (out / "F3_conjunto.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False, default=float), encoding="utf-8")

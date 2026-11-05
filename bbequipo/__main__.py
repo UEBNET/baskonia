@@ -36,6 +36,10 @@ def main(argv=None):
     sub.add_parser("conjunto-examen", help="F3: examen §11.3 de la función de conjunto en quintetos no vistos (puerta dura)")
     sub.add_parser("conjunto-producto", help="F3: ajuste con todas las temporadas, sólo si el examen lo autoriza")
     sub.add_parser("conjunto-ablacion", help="F3: ablación diagnóstica con ρ lineal (g aditiva por jugador)")
+    sub.add_parser("conjunto-redes-corte", help="F3: redes por corte con la variante vigente (para los exámenes de F4)")
+    eq = sub.add_parser("equipo-examen", help="F4: examen §11.4 de transiciones de equipo t → t+1 (ΔNet) por cortes")
+    eq.add_argument("--ligas", nargs="*", default=None, help="sólo estas ligas (prueba rápida)")
+    eq.add_argument("--cortes", nargs="*", type=int, default=None)
     a = ap.parse_args(argv)
     cfg = C.cargar(C.RAIZ / a.config if a.config else None)
     t0 = time.time()
@@ -94,6 +98,12 @@ def main(argv=None):
     elif a.orden == "conjunto-ablacion":
         from . import conjunto
         conjunto.ablacion_aditiva(cfg)
+    elif a.orden == "conjunto-redes-corte":
+        from . import conjunto
+        conjunto.redes_corte(cfg)
+    elif a.orden == "equipo-examen":
+        from . import equipo
+        equipo.main(cfg, solo_ligas=a.ligas, cortes=a.cortes)
     print(json.dumps({"tiempo_s": round(time.time() - t0)}))
 
 

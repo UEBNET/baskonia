@@ -17,6 +17,8 @@ insumos:
   normalizado: data/modelos/v3_2/normalizado          # dataset normalizado v3.2 (identidad y valores observados)
   simulador: configs/simulation_v33.yaml              # CERNO_SIMULADOR=v33: minutos mezcla motor+GBM y B9
   simulador_env: v33
+  simulador_env_corte: v32                            # exámenes por corte: cachés de la v3.2 (experimentos/cache_simulador_v3_2)
+  fuente_corte: V32_corte                             # normalización ≤ t (sin fuga) para el motor de minutos de la v3.3 en F4
   roles: data/modelos/roles/player_role_season.csv.gz
   estilos: data/modelos/estilos_unificados/jugadores.csv.gz
   estilos_catalogo: data/modelos/estilos_unificados/estilos.json
@@ -177,6 +179,9 @@ f3:
   lote: 8192                                        # tramos por paso
   lr: 1.0e-3
   congelar_f1_f2: true                              # sobre F1 + F2 (β, M_r): F3 aprende el residuo del quinteto completo
+  rho_lineal: true                                  # DECISIÓN CEO 05-11-2026 (post hoc, parsimonia): variante aditiva g(S) = Σ_i h(z_i);
+                                                    # la red completa y la aditiva pasan igual el §11.3 (V40_F3 §3); se publica la aditiva
+                                                    # como «capa 3 reducida: corrección no lineal por jugador»
   quinteto_no_visto: conjunto_de_personas           # quinteto de t+1 cuyo conjunto de 5 personas no aparece en ningún tramo ≤ t
   bootstrap_por: partido                            # IC95 del cociente de RMSE por bootstrap de partidos de t+1
   publicar_solo_si_mejora: true                       # regla dura (§11.3); si no, ablación negativa al artículo
