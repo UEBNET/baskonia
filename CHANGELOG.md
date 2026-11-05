@@ -1,5 +1,33 @@
 # Registro de cambios
 
+## 2026-11-05 — CERNO v4.0 · F4: composición, Δ de equipo (capa 4) y A5
+
+Detalle: `docs/checkpoints/V40_F4.md`, `docs/modelo_equipo_v40.md` §5. Puerta F3 aprobada por el CEO (opción b) y orden de
+arrancar F4 el 05-11-2026.
+
+* **Capa 4** (`bbequipo/equipo.py`): T(R) = E_S[Σβ + Σφ + Σh] con las cuotas de posesiones de la plantilla (observadas en t,
+  proyectadas en t+1 con el motor Plackett-Luce de la v3.3 y pesos ≤ t); Net̂ centrado en la liga; Δ̂Net = Net̂_{t+1} − Net̂_t;
+  β ~ N(β̂, sd) y minutos por Monte Carlo; jugador sin β ni perfil → nivel de «jugador nuevo» de su liga (F3 c).
+* **Examen §11.4** (1149 transiciones reales equipo-temporada t → t+1 en 18 ligas; libro de roles + LBA/LNB/BSL enlazadas por
+  plantilla; filtro del contrato D6 en la temporada de partida). Cortes de decisión (n = 933): **MAE 4,06** frente a
+  **4,89** de persistencia (IC95 de la diferencia -1,02 a -0,65), aditivo F1 4,05, GBM directo 4,23 (IC95 ≠ 0),
+  minutos reales de t+1 4,00; Spearman 0,54; cobertura del 80 % 0,77. **Puerta cumplida.** Por grupo: NBA 3,15 / 4,07,
+  Europa top 3,23 / 3,90, FEB 4,61 / 5,78, Europa media 4,14 / 4,75, Europa menor 4,81 / 5,38, EE. UU. menor 3,30 / 3,92.
+* **Decisiones en el corte de calibración 2021**: capa de calibración Net̂_{t+1} = c·T1' + d·Net_t (c ≈ 0,3–0,4, d ≈ 0,3–0,4; por
+  grupo de liga con ≥ 40 transiciones previas): sin ella la proyección es peor que la persistencia; intervalos conformales con
+  escala MC + ruido irreducible por grupo; capa de sesgo por tercil de minutos de las altas (§9.2) activada por regla.
+* **Lectura**: la capa 4 es β + minutos + calibración; φ (F2) y h (F3) no mueven el Net de equipo de forma medible (sinergia
+  sobre aditivo ≈ 0 %: hipótesis del encargo no confirmada); los minutos no son el cuello de botella.
+* **A5** (`bbequipo/a5.py`, §9.6): spline de Δmin (3 nudos), matriz 5 × 5 de transición de rol contraída a la recta B9 (Bayes
+  empírico), covariable de carga (adoptada por mejora significativa, pequeña y no causal). Examen §11.6 (3.594 fichajes, cortes
+  anidados v3.2): pts/100 −2,5 % y TS% −2,2 % frente a B9 lineal (IC90 < 0); **pasa**. Publicado por métrica: A5 en ocho, B9
+  en OREB/100.
+* **Producto**: `equipo/calibracion.json`, `equipo/equipos_<t>.csv.gz`, clase `equipo.Equipo` (fuerza y Δ̂ de un cambio de
+  plantilla con intervalo del 80 %), `equipo/a5/coeficientes_producto_a5.json` y `a5.aplicar`; `configs/simulation_v40.yaml`
+  (v3.3 + bloque `v40`) y `CERNO_SIMULADOR=v40` aceptado (cambio aditivo en `bbfit/config.py`; la v3.3 no cambia).
+* Pendiente declarado: integrar la capa 4 y A5 dentro de `simular()` bajo v40 y la paridad JS (encargo del artifact, §9.4);
+  Four Factors de equipo por agregación sin examen.
+
 ## 2026-11-04 — CERNO v4.0 · F3: función de conjunto (examen acotado, puerta dura §11.3)
 
 Detalle: `docs/checkpoints/V40_F3.md`, `docs/modelo_equipo_v40.md` §4. Puerta F2 aprobada por el CEO con la orden de ejecutar

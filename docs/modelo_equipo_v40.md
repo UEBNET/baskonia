@@ -283,6 +283,11 @@ Net̂(R) = T(R) − media de la liga-temporada;   Δ̂Net = Net̂(R'_{t+1}) − 
   Spearman, cobertura del 80 %, por grupo de liga y global; sesgo por tercil de minutos proyectados de las altas; diagnóstico
   con minutos reales de t+1 (oráculo).
 
+- Resultado del examen §11.4 (1149 transiciones; cortes de decisión n = 933): MAE 4,06 frente a 4,89 de persistencia
+  (IC95 de la diferencia -1,02 a -0,65), aditivo F1 4,05, GBM directo 4,23; cobertura del 80 % 0,77. Puerta cumplida.
+  Capa de calibración Net̂_{t+1} = c·T1' + d·Net_t (c, d ≈ 0,3–0,4 por grupo de liga, cortes anteriores), intervalos conformales
+  «MC + ruido irreducible» y capa de sesgo por tercil de minutos de las altas, todo decidido en el corte de calibración 2021.
+
 ### 5.2 A5 · Producción no lineal en minutos y rol
 
 ```
