@@ -308,6 +308,64 @@ ${raw}`;
         <text x="${W}" y="${y + 3}" class="vv${d != null && d < -0.5 ? " dn" : ""}" text-anchor="end">${a != null ? `${N(a, 0)}' → ${N(b, 0)}'` : `${N(b, 0)}' nuevo`}</text></g>`; }).join("");
     return `<svg class="r3mn" viewBox="0 0 ${W} ${H}" role="img" aria-label="Minutos por partido sin y con el fichaje">${ticks}${rows}</svg>`;
   }
+  // v2.0 · «Cómo cambian los números de sus compañeros» (sustituye a la tabla): por compañero, su peso en el ataque
+  // (jugadas del equipo que acaba por partido = USG% × minutos / duración), el nivel de su entorno y el cambio de cada
+  // métrica individual como barra divergente; barra completa = cambio de referencia de la columna (más allá, se corta).
+  const REF6 = { usg_pct: 2, pts_p100: 3, efg_pct: 2, ast_pct: 3, tov_pct: 2, oreb_pct: 2, dreb_pct: 3, pct_asistidas: 5 };
+  function datos6(c6, j, gm) {
+    const sh = (u, m) => (u == null || m == null || !isFinite(u) || !isFinite(m)) ? null : u * m / gm;
+    const filas = c6.imp.slice(0, 8).map((x) => { const u = x.di && x.di.usg_pct, uCon = u ? u.y : null, uSin = u ? u.y - u.v : null;
+      return { x, nom: nom(x.o.j.nombre), sin: sh(uSin, x.o.p.minutos_sin), con: sh(uCon, x.o.p.minutos), ent: ESC.dS("nivel", x.ddev) }; });
+    let yo = null; try { const o = c6.yo && c6.yo.out && c6.yo.out.usg_pct; if (o && o.y != null && c6.fich) yo = sh(enVara("usg_pct", o.y, j), c6.fich.minutos); } catch (e) { yo = null; }
+    return { filas, yo };
+  }
+  // A · de dónde sale su balón: barras divergentes en un mismo eje (él suma; cada compañero cede; total cedido)
+  function svgBalon(D, apeJ) {
+    const F = D.filas.filter((f) => f.sin != null && f.con != null).map((f) => ({ ...f, d: f.con - f.sin })); if (!F.length) return "";
+    const tot = F.reduce((s, f) => s + f.d, 0), yo = D.yo != null ? D.yo : 0;
+    const W = 690, fila = 23, top = 20, n = F.length + (D.yo != null ? 1 : 0) + 1, H = top + fila * n + 10, nameW = 150, labW = 132;
+    const neg = Math.max(2, -tot, ...F.map((f) => -f.d)), pos = Math.max(2, yo), span = W - nameW - labW - 16, x0 = nameW + span * neg / (neg + pos), k = span / (neg + pos), X = (v) => x0 + v * k;
+    let y = top, out = "";
+    const fila_ = (nm, v, cls, lab, extra) => { const cy = y + fila / 2, w = Math.max(1, Math.abs(X(v) - x0)); const r = `<g>${extra || ""}<text x="0" y="${cy + 3.5}" class="nm${cls === "yo" || cls === "tt" ? " b" : ""}">${nm}</text>
+      <rect x="${v >= 0 ? x0 : x0 - w}" y="${cy - 6}" width="${w}" height="12" class="${cls}"/>${cls !== "yo" ? `<text x="${v >= 0 ? x0 + w + 4 : x0 - w - 4}" y="${cy + 3}" class="vv${cls === "dn" || cls === "tt" ? " dn" : ""}" text-anchor="${v >= 0 ? "start" : "end"}">${SG0(v, 1)}</text>` : ""}
+      <text x="${W}" y="${cy + 3}" class="vl" text-anchor="end">${lab}</text></g>`; y += fila; return r; };
+    if (D.yo != null) out += fila_(`${E(apeJ)} · llega`, yo, "yo", `<tspan class="b">${N(yo, 1)} %</tspan> de las jugadas`, `<rect x="0" y="${y}" width="${W}" height="${fila}" class="hlr"/>`);
+    F.sort((p, q) => p.d - q.d).forEach((f) => { out += fila_(E(f.nom), f.d, f.d <= -0.05 ? "dn" : f.d >= 0.05 ? "up" : "eq", `${N(f.sin, 1)} % → ${N(f.con, 1)} %`); });
+    out += `<line x1="0" x2="${W}" y1="${y + 1}" y2="${y + 1}" class="hl"/>`; y += 3;
+    out += fila_(`Cedido entre los ${F.length}`, tot, "tt", D.yo != null && yo > 0 ? `${N(Math.min(100, 100 * -tot / yo), 0)} % de lo que él asume` : "");
+    return `<svg class="r3im" viewBox="0 0 ${W} ${H + 3}" role="img" aria-label="De dónde sale su balón">
+      <text x="${x0 - 6}" y="10" class="ax" text-anchor="end">← cede balón</text><text x="${x0 + 6}" y="10" class="ax">asume balón →</text>
+      <line x1="${x0}" x2="${x0}" y1="${top - 2}" y2="${H - 4}" class="z0"/>${out}</svg>`;
+  }
+  // B · cómo cambia el juego de cada compañero: entorno + métricas, barra divergente sobre un carril de ± referencia
+  function svgJuego(D) {
+    const F = D.filas; if (!F.length) return "";
+    const W = 690, top = 34, fila = 27, H = top + fila * F.length + 4, nameW = 128, eX = nameW + 6, eW = 64, mX = eX + eW + 14, cw = (W - mX) / CTX6I.length, hw = cw / 2 - 6;
+    const mxE = Math.max(5, ...F.map((f) => Math.abs(f.ent || 0)));
+    const cls = (k, o) => { const dec = k === "pct_asistidas" ? 0 : 1, tol = dec ? 0.05 : 0.5, sen = o.m ? o.m.sentido : 1; return Math.abs(o.v) < tol ? "eq" : sen === 0 ? "neu" : o.v * sen > 0 ? "up" : "dn"; };
+    const head = `<text x="0" y="${top - 9}" class="hd">Compañero</text><text x="${eX}" y="${top - 18}" class="hd">Entorno</text><text x="${eX}" y="${top - 9}" class="rf">nivel ±100</text>
+      ${CTX6I.map(([, k, nm], i) => { const cx = mX + cw * (i + 0.5); return `<text x="${cx}" y="${top - 18}" class="hd" text-anchor="middle">${E(nm)}</text><text x="${cx}" y="${top - 9}" class="rf" text-anchor="middle">carril ±${REF6[k]}</text>`; }).join("")}
+      <line x1="0" x2="${W}" y1="${top - 3}" y2="${top - 3}" class="hl"/>`;
+    const rows = F.map((f, r) => { const y = top + r * fila, cy = y + 10, x = f.x;
+      const ent = f.ent != null && isFinite(f.ent) ? (() => { const w = Math.max(1, eW * Math.min(1, Math.abs(f.ent) / mxE)); return `<rect x="${eX}" y="${cy - 4}" width="${eW}" height="8" class="tr"/><rect x="${f.ent >= 0 ? eX : eX + eW - w}" y="${cy - 4}" width="${w}" height="8" class="${f.ent >= 0.5 ? "up" : f.ent <= -0.5 ? "dn" : "eq"}"/><text x="${eX}" y="${cy + 13}" class="vs">${SG0(f.ent, 0)}</text>`; })() : "";
+      const met = CTX6I.map(([, k, , dec], i) => { const o = x.di && x.di[k], cx = mX + cw * (i + 0.5); if (!o) return `<text x="${cx}" y="${cy + 3}" class="vs na" text-anchor="middle">–</text>`;
+        const c = cls(k, o), w = c === "eq" ? 0 : Math.max(1.5, hw * Math.min(1, Math.abs(o.v) / REF6[k])), cut = Math.abs(o.v) > REF6[k];
+        return `<rect x="${cx - hw}" y="${cy - 4}" width="${2 * hw}" height="8" class="tr"/><line x1="${cx}" x2="${cx}" y1="${cy - 6}" y2="${cy + 6}" class="z"/>${w ? `<rect x="${o.v >= 0 ? cx : cx - w}" y="${cy - 4}" width="${w}" height="8" class="${c}"/>` : ""}${cut ? `<text x="${o.v >= 0 ? cx + hw + 3 : cx - hw - 3}" y="${cy + 3}" class="vs ${c}" text-anchor="middle">›</text>` : ""}<text x="${cx}" y="${cy + 13}" class="vs ${c}" text-anchor="middle">${SG0(o.v, dec)}</text>`; }).join("");
+      return `<g><text x="0" y="${cy + 3.5}" class="nm">${E(f.nom)}</text>${ent}${met}<line x1="0" x2="${W}" y1="${y + fila - 1}" y2="${y + fila - 1}" class="sep"/></g>`; }).join("");
+    return `<svg class="r3im" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cómo cambia el juego de cada compañero">${head}${rows}</svg>`;
+  }
+  function lectura6(D, apeJ) {
+    const F = D.filas.filter((f) => f.sin != null && f.con != null); if (!F.length) return "";
+    const ced = F.map((f) => ({ f, d: f.con - f.sin })).sort((a, b) => a.d - b.d), tot = -ced.reduce((s, o) => s + o.d, 0), top2 = ced.filter((o) => o.d <= -0.1).slice(0, 2);
+    let mx = null; D.filas.forEach((f) => CTX6I.forEach(([, k, nm, dec]) => { const o = f.x.di && f.x.di[k]; if (!o) return; const r = Math.abs(o.v) / REF6[k]; if (!mx || r > mx.r) mx = { r, f, nm, o, dec }; }));
+    const ent = D.filas.map((f) => f.ent).filter((v) => v != null && isFinite(v)), entM = ent.length ? ent.reduce((a, b) => a + b, 0) / ent.length : null;
+    const t = [];
+    if (D.yo != null) t.push(`${E(apeJ)} acabaría el <b>${N(D.yo, 1)} %</b> de las jugadas del equipo por partido.`);
+    t.push(tot >= 0.1 ? `Sus ocho compañeros con más minutos ceden ${N(tot, 1)} puntos de ese reparto${top2.length ? `, sobre todo ${yLista(top2.map((o) => `${E(o.f.nom.split(" ").slice(-1)[0])} (${SG0(o.d, 1)})`))}` : ""}: es el cambio real, menos minutos y menos balón.` : "Apenas resta balón a sus compañeros con más minutos.");
+    if (entM != null && Math.abs(entM) >= 1) t.push(`Juegan rodeados de ${entM > 0 ? "más" : "menos"} nivel (${SG0(entM, 0)} de media en la escala ±100).`);
+    if (mx) t.push(mx.r < 0.5 ? `Su forma de jugar apenas cambia: el mayor movimiento es ${E(mx.nm)} de ${E(mx.f.nom.split(" ").slice(-1)[0])} (${SG0(mx.o.v, mx.dec)}), lejos de la referencia de la columna.` : `El cambio de papel más claro: ${E(mx.nm)} de ${E(mx.f.nom.split(" ").slice(-1)[0])} (${SG0(mx.o.v, mx.dec)}).`);
+    return t.join(" ");
+  }
   // composición de estilos de la plantilla (barras apiladas, una por escenario)
   function barrasEstilo(filas) {
     const eus = EUS(); if (!filas.length || !eus.length) return "";
@@ -655,7 +713,7 @@ ${raw}`;
         const fmtI = (dec, o) => { if (!o) return `<td class="num">–</td>`; const v = o.v, sen = o.m ? o.m.sentido : 1, tol = dec ? 0.05 : 0.5, cls = Math.abs(v) < tol ? "eq" : (sen === 0 ? "neu" : v * sen > 0 ? "up" : "dn");
           return `<td class="num"><b class="${cls}">${SG0(v, dec)}</b><small>${N(o.y, dec)}</small></td>`; };
         const grp = CTX6I.reduce((a, [g]) => { const l = a[a.length - 1]; if (l && l[0] === g) l[1]++; else a.push([g, 1]); return a; }, []);
-        const impT = c6.imp.length ? `<table class="r3t imp ind"><thead><tr class="g"><th colspan="3"></th>${grp.map(([g, n]) => `<th colspan="${n}">${E(g)}</th>`).join("")}</tr><tr><th>Compañero</th><th class="num">Minutos</th><th class="num">Entorno</th>${CTX6I.map(([, , n]) => `<th class="num">${E(n)}</th>`).join("")}</tr></thead><tbody>${c6.imp.slice(0, 8).map((x) => `<tr><td><b>${E(nom(x.o.j.nombre))}</b></td><td class="num">${x.o.p.minutos_sin != null ? `${N(x.o.p.minutos_sin, 0)}' → ${N(x.o.p.minutos, 0)}'` : `${N(x.o.p.minutos, 0)}'`}</td><td class="num">${SG0(ESC.dS("nivel", x.ddev), 1)}</td>${CTX6I.map(([, k, , dec]) => fmtI(dec, x.di && x.di[k])).join("")}</tr>`).join("")}</tbody></table>` : "";
+        const D6 = c6.imp.length ? datos6(c6, j, gm) : null;
         pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Impacto en la plantilla y en sus compañeros", lead6c)}
           <div class="r3cols mn"><div class="r3blk"><h3>Minutos por partido, sin y con él</h3>${svgMinutos(mins, gm)}<p class="r3n">Gris: minutos de cada jugador en la plantilla actual simulada; negro: con ${E(apeJ)} dentro y su rol asignado. Medias de las temporadas simuladas.${notaMin()}</p></div>
             <div class="r3blk"><h3>Lugar en la plantilla por nivel</h3>${rankV(c6.orden || sim.orden, (o) => o.el, d.temporada, true)}<p class="r3n">Nivel por minutos (±100). De arriba abajo, de más a menos nivel.${notaMin()}</p>
@@ -663,8 +721,12 @@ ${raw}`;
                 s2.plantilla.forEach((p) => { const k = p.pos3 in acc ? p.pos3 : null; if (!k) return; acc[k][0] += p.fichaje ? 0 : (p.minutos_sin || 0); acc[k][1] += p.minutos || 0; });
                 const fl = Object.keys(acc).filter((k) => acc[k][0] + acc[k][1] > 0); if (!fl.length) return "";
                 return `<h3 style="margin-top:14px!important">Minutos por puesto</h3><table class="r3t sim"><thead><tr><th>Puesto</th><th class="num">Sin él</th><th class="num">Con él</th><th class="num">Cambio</th></tr></thead><tbody>${fl.map((k) => { const dlt = acc[k][1] - acc[k][0]; return `<tr class="${k === j.pos3 ? "yo" : ""}"><td>${PN[k]}</td><td class="num">${N(acc[k][0], 0)}'</td><td class="num"><b>${N(acc[k][1], 0)}'</b></td><td class="num">${SG0(dlt, 0)}'</td></tr>`; }).join("")}</tbody></table><p class="r3n">Suma de minutos por partido de cada puesto en la plantilla simulada (${(d.liga === "nba" || d.liga === "gleague") ? 240 : 200}' por partido). En amarillo, su puesto.</p>`; })()}</div></div>
-          ${impT ? `<div class="r3blk"><h3>Cómo cambian los números de sus compañeros</h3>${impT}${maxEnt < 1 ? `<p class="r3p r3lec">Su llegada apenas mueve los números de sus compañeros: el nivel medio de su entorno cambia menos de un punto en la escala ±100, porque su nivel es parecido al de los minutos que ocupa.</p>` : ""}<p class="r3n">Cambio previsto al entrar ${E(apeJ)} (negrita) y valor con él (debajo), en ${E(IFPN())}. «Entorno»: nivel medio de los compañeros de cada uno, escala ±100. USG%: jugadas que acaba; AST%: canastas de compañeros que asiste; TOV%: pérdidas por 100 jugadas (menos es mejor); % asistidas: canastas suyas tras pase. Azul, mejora; naranja, empeora; violeta, cambio de papel; gris, sin cambio. Ocho compañeros con más minutos; valores centrales del modelo de contexto, sin rango.${notaMin()}</p></div>` : ""}
+
 ` });
+        if (D6) { const svB = svgBalon(D6, apeJ), svJ = svgJuego(D6);
+          pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Cómo cambian los números de sus compañeros", lectura6(D6, apeJ))}
+          ${svB ? `<div class="r3blk"><h3>De dónde sale su balón</h3>${svB}<p class="r3n">Peso en el ataque: jugadas del equipo que acaba cada uno por partido (USG% × minutos ÷ ${gm}'), sin y con ${E(apeJ)}. Barra naranja, lo que cede cada compañero; negra, lo que asume él; abajo, lo que ceden entre todos. El resto lo ceden compañeros con menos minutos. Medias de las temporadas simuladas.${notaMin()}</p></div>` : ""}
+          ${svJ ? `<div class="r3blk"><h3>Cómo cambia el juego de cada compañero</h3>${svJ}<p class="r3n">Cambio previsto de cada métrica al entrar ${E(apeJ)}, en ${E(IFPN())}. El carril gris va de menos a más el cambio de referencia de la columna (±); la barra que llega al borde es un cambio grande y, si lo supera, se corta (›). Azul, mejora; naranja, empeora; violeta, cambio de papel (ni mejor ni peor); sin barra, sin cambio. TOV%: menos es mejor. Entorno: nivel medio de los compañeros de cada uno, escala ±100. Ocho compañeros con más minutos; valores centrales del modelo de contexto, sin rango.${notaMin()}</p></div>` : ""}` }); }
       }
     } else {
       const A = c.actual || {}, sa = A.sim, nA = A.nec, cl = A.club;
@@ -961,7 +1023,7 @@ ${raw}`;
 .r3eb{display:grid;gap:7px}.r3eb>div{display:grid;grid-template-columns:104px 1fr;gap:8px;align-items:center}.r3eb>div>span{font-size:9.6px;color:#3B434C}.r3eb>div.yo>span{font-weight:620;color:#12161B}
 .r3eb p{display:flex;height:17px;margin:0!important;background:#E8E5DD}.r3eb i{display:flex;align-items:center;justify-content:center;font:600 7.4px "Geist Mono",monospace;font-style:normal;color:#F3F0E8;border-right:1px solid #F3F0E8}
 .r3ebl{display:flex!important;flex-wrap:wrap;gap:4px 10px;grid-template-columns:none!important;margin-top:2px}.r3ebl span{font-size:8.4px;color:#3B434C;display:inline-flex;align-items:center;gap:4px}.r3ebl i{width:8px;height:8px;border-radius:50%;display:inline-block;border:0}
-.r3t.imp td{padding:4px 6px 4px 0}.r3t.imp.ind td{padding:1.6px 5px 1.6px 0;line-height:1.15}.r3t.imp.ind td.num small{display:block;font:500 7.4px "Geist Mono",monospace;color:#737B84;margin-top:0}.r3t.imp.ind tr.g th{font-size:6.8px;color:#737B84;border-bottom:.5px solid #C2C3BF;padding-bottom:2px;text-align:center}.r3t.imp.ind th{padding-right:5px}.r3t.imp td b.up{color:var(--up)}.r3t.imp td b.dn{color:var(--dn)}.r3t.imp td b.eq{color:#737B84;font-weight:500}.r3t.imp td b.neu{color:var(--vi)}
+.r3im{display:block;width:100%;height:auto}.r3im .nm{font:500 9.6px "Mona Sans",sans-serif;fill:#12161B}.r3im .nm.b{font-weight:700}.r3im .gp{font:600 6.8px "Geist Mono",monospace;letter-spacing:.08em;text-transform:uppercase;fill:#12161B}.r3im .hd{font:500 6.8px "Geist Mono",monospace;letter-spacing:.06em;text-transform:uppercase;fill:#545D67}.r3im .rf{font:500 6.4px "Geist Mono",monospace;fill:#9AA0A6}.r3im .hl{stroke:#12161B;stroke-width:.9}.r3im .sep{stroke:#DAD7CF;stroke-width:.5}.r3im .g{stroke:#E8E5DD;stroke-width:.6}.r3im .z{stroke:#C2C3BF;stroke-width:.6}.r3im .cn{stroke:#9AA0A6;stroke-width:1.6}.r3im .s0{fill:#F3F0E8;stroke:#737B84;stroke-width:1.2}.r3im .s1{fill:#12161B}.r3im rect.yo{fill:#12161B}.r3im .hlr{fill:rgba(242,204,47,.28)}.r3im .vv{font:600 8.6px "Geist Mono",monospace;fill:#12161B}.r3im .vl{font:500 8.6px "Geist Mono",monospace;fill:#545D67}.r3im .vl .b,.r3im tspan.b{font-weight:700;fill:#12161B}.r3im .ax{font:500 7px "Geist Mono",monospace;fill:#545D67}.r3im .z0{stroke:#12161B;stroke-width:.9}.r3im rect.tt{fill:#8A3A1E}.r3im rect.tr{fill:#E8E5DD}.r3im .vv.dn{fill:#C4552E}.r3im .vs{font:600 7.2px "Geist Mono",monospace;fill:#545D67}.r3im .ob{font:italic 400 8.4px "Mona Sans",sans-serif;fill:#737B84}.r3im rect.up{fill:#2A6FA8}.r3im rect.dn{fill:#C4552E}.r3im rect.neu{fill:#7A5BC8}.r3im rect.eq{fill:#C2C3BF}.r3im .vs.up{fill:#1F4F78}.r3im .vs.dn{fill:#C4552E}.r3im .vs.neu{fill:#7A5BC8}.r3im .vs.eq,.r3im .vs.na{fill:#9AA0A6}.r3t.imp td{padding:4px 6px 4px 0}.r3t.imp.ind td{padding:1.6px 5px 1.6px 0;line-height:1.15}.r3t.imp.ind td.num small{display:block;font:500 7.4px "Geist Mono",monospace;color:#737B84;margin-top:0}.r3t.imp.ind tr.g th{font-size:6.8px;color:#737B84;border-bottom:.5px solid #C2C3BF;padding-bottom:2px;text-align:center}.r3t.imp.ind th{padding-right:5px}.r3t.imp td b.up{color:var(--up)}.r3t.imp td b.dn{color:var(--dn)}.r3t.imp td b.eq{color:#737B84;font-weight:500}.r3t.imp td b.neu{color:var(--vi)}
 .r3yo{display:grid;grid-template-columns:repeat(6,1fr);border-top:.5px solid #C2C3BF;border-bottom:.5px solid #C2C3BF}.r3yo div{padding:6px 8px 6px 0}
 .r3yo span{display:block;font:500 7px "Geist Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:#545D67}.r3yo b{display:block;font:500 11.6px "Geist Mono",monospace;margin-top:3px}.r3yo b i{font-style:normal;color:#9AA0A6}
 .r3yo em{font-style:normal;font-weight:700}.r3yo em.up{color:var(--up)}.r3yo em.dn{color:var(--dn)}.r3yo em.neu{color:var(--vi)}.r3yo em.eq{color:#12161B}
