@@ -1,0 +1,128 @@
+{
+ "version": "a",
+ "segmento": "elite_club",
+ "sds": [
+  1.0,
+  2.0,
+  3.0
+ ],
+ "replicas": 1,
+ "ruido": {
+  "modelo": "ampliado",
+  "margen_cortes": [
+   -14.5,
+   -7.5,
+   -2.5,
+   2.5,
+   7.5,
+   14.5
+  ],
+  "interaccion_ultimo_cuarto": true,
+  "varianza": "σ²·(1/n + c/n²), c por ℓt",
+  "lambda_primer_ajuste": 3000
+ },
+ "resultados": {
+  "1.0": {
+   "ligas_temporada": 18,
+   "tramos": 131753,
+   "unidades": 36758,
+   "sigma": 0.0,
+   "varianza": 0.0,
+   "sigma_r80_perfil": [
+    0.0,
+    0.483
+   ],
+   "sigma_ic95_perfil": [
+    0.0,
+    0.732
+   ],
+   "sigma_r80_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "sigma_ic95_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "frac_bootstrap_en_cero": 1.0,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 0.0,
+   "p_sigma_0": 0.5,
+   "sigma0_mediana": 175.3639583215779,
+   "fiabilidad_unidad": {
+    "150": 0.0,
+    "500": 0.0,
+    "1000": 0.0,
+    "3000": 0.0
+   }
+  },
+  "2.0": {
+   "ligas_temporada": 18,
+   "tramos": 131753,
+   "unidades": 36758,
+   "sigma": 0.0,
+   "varianza": 0.0,
+   "sigma_r80_perfil": [
+    0.0,
+    0.62
+   ],
+   "sigma_ic95_perfil": [
+    0.0,
+    0.937
+   ],
+   "sigma_r80_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "sigma_ic95_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "frac_bootstrap_en_cero": 0.996,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 0.0,
+   "p_sigma_0": 0.5,
+   "sigma0_mediana": 175.5429618762726,
+   "fiabilidad_unidad": {
+    "150": 0.0,
+    "500": 0.0,
+    "1000": 0.0,
+    "3000": 0.0
+   }
+  },
+  "3.0": {
+   "ligas_temporada": 18,
+   "tramos": 131753,
+   "unidades": 36758,
+   "sigma": 1.25,
+   "varianza": 1.5625,
+   "sigma_r80_perfil": [
+    0.0,
+    1.823
+   ],
+   "sigma_ic95_perfil": [
+    0.0,
+    2.107
+   ],
+   "sigma_r80_bootstrap": [
+    0.0,
+    2.0
+   ],
+   "sigma_ic95_bootstrap": [
+    0.0,
+    2.0
+   ],
+   "frac_bootstrap_en_cero": 0.156,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 0.7679972568221274,
+   "p_sigma_0": 0.19041866544322145,
+   "sigma0_mediana": 175.83718455381387,
+   "fiabilidad_unidad": {
+    "150": 0.007523330637519499,
+    "500": 0.024645137254004176,
+    "1000": 0.0481047269107271,
+    "3000": 0.13164836357604204
+   }
+  }
+ }
+}

@@ -164,6 +164,9 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 - **Prueba de orden F0 (§2.2 reproducido)**: ver V41_F0 §4. La varianza propia de pareja que se mide en pista está
   **inflada** por el error de β, que es común a los dos tercios de medida (calibración nula), y a la vez **atenuada**,
   porque la absorben los efectos de jugador (calibración plantada).
+- **Modelo mixto REML (V41_F0 §4.7)**: σ̂ = 0 en parejas, tríos y quintetos. La calibración plantada sobre datos reales
+  muestra que ninguna química propia de pareja por debajo de ≈ 2–3 pts/100 es medible en pista, con ningún método. Sólo la
+  química **predicha por perfiles** (φ) es utilizable.
 - **Estado**: validado (segundo orden). **Sello propuesto**: BAJA como cifra propia; el producto no promete «química».
 
 ## 13 · Estilo

@@ -1,0 +1,164 @@
+{
+ "version": "a",
+ "segmento": "global",
+ "sds": [
+  1.0,
+  2.0,
+  3.0,
+  4.0
+ ],
+ "replicas": 1,
+ "ruido": {
+  "modelo": "ampliado",
+  "margen_cortes": [
+   -14.5,
+   -7.5,
+   -2.5,
+   2.5,
+   7.5,
+   14.5
+  ],
+  "interaccion_ultimo_cuarto": true,
+  "varianza": "σ²·(1/n + c/n²), c por ℓt",
+  "lambda_primer_ajuste": 3000
+ },
+ "resultados": {
+  "1.0": {
+   "ligas_temporada": 89,
+   "tramos": 760832,
+   "unidades": 200272,
+   "sigma": 0.0,
+   "varianza": 0.0,
+   "sigma_r80_perfil": [
+    0.0,
+    0.201
+   ],
+   "sigma_ic95_perfil": [
+    0.0,
+    0.325
+   ],
+   "sigma_r80_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "sigma_ic95_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "frac_bootstrap_en_cero": 1.0,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 0.0,
+   "p_sigma_0": 0.5,
+   "sigma0_mediana": 175.1155525971835,
+   "fiabilidad_unidad": {
+    "150": 0.0,
+    "500": 0.0,
+    "1000": 0.0,
+    "3000": 0.0
+   }
+  },
+  "2.0": {
+   "ligas_temporada": 89,
+   "tramos": 760832,
+   "unidades": 200272,
+   "sigma": 0.0,
+   "varianza": 0.0,
+   "sigma_r80_perfil": [
+    0.0,
+    0.381
+   ],
+   "sigma_ic95_perfil": [
+    0.0,
+    0.561
+   ],
+   "sigma_r80_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "sigma_ic95_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "frac_bootstrap_en_cero": 0.99,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 0.0,
+   "p_sigma_0": 0.5,
+   "sigma0_mediana": 175.3740648314199,
+   "fiabilidad_unidad": {
+    "150": 0.0,
+    "500": 0.0,
+    "1000": 0.0,
+    "3000": 0.0
+   }
+  },
+  "3.0": {
+   "ligas_temporada": 89,
+   "tramos": 760832,
+   "unidades": 200272,
+   "sigma": 2.0,
+   "varianza": 4.0,
+   "sigma_r80_perfil": [
+    1.667,
+    2.11
+   ],
+   "sigma_ic95_perfil": [
+    1.472,
+    2.173
+   ],
+   "sigma_r80_bootstrap": [
+    1.5,
+    2.0
+   ],
+   "sigma_ic95_bootstrap": [
+    1.25,
+    2.0
+   ],
+   "frac_bootstrap_en_cero": 0.0,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 41.14426100282435,
+   "p_sigma_0": 7.06989113138722e-11,
+   "sigma0_mediana": 175.44880589728,
+   "fiabilidad_unidad": {
+    "150": 0.019119067615849254,
+    "500": 0.06100856276721575,
+    "1000": 0.11500107521865678,
+    "3000": 0.28048993697556407
+   }
+  },
+  "4.0": {
+   "ligas_temporada": 89,
+   "tramos": 760832,
+   "unidades": 200272,
+   "sigma": 3.0,
+   "varianza": 9.0,
+   "sigma_r80_perfil": [
+    2.975,
+    3.0
+   ],
+   "sigma_ic95_perfil": [
+    2.942,
+    3.0
+   ],
+   "sigma_r80_bootstrap": [
+    3.0,
+    3.0
+   ],
+   "sigma_ic95_bootstrap": [
+    3.0,
+    3.0
+   ],
+   "frac_bootstrap_en_cero": 0.0,
+   "en_borde_superior": true,
+   "lrt_sigma_0": 329.18491979786813,
+   "p_sigma_0": 7.232418909607467e-74,
+   "sigma0_mediana": 175.7052424642453,
+   "fiabilidad_unidad": {
+    "150": 0.041896408689109106,
+    "500": 0.12721807459043774,
+    "1000": 0.22572043060374278,
+    "3000": 0.4665441837209151
+   }
+  }
+ },
+ "lectura": "umbral de detección del modelo mixto sobre datos reales (89 ℓt): σ = 2 no se detecta; σ = 3 sí (σ̂ 2,0, p < 1e-10)"
+}

@@ -1,0 +1,593 @@
+{
+ "version": "v4.1",
+ "config": {
+  "modelo": "y = F·f + Σβ_A − Σβ_B + Σu_A − Σu_B + ε;  β ~ N(m, τ²) (τ por ℓt);  u_o ~ N(0, σ_o²) común entre ℓt",
+  "etapas": {
+   "a": [
+    2
+   ],
+   "b": [
+    2,
+    3,
+    5
+   ]
+  },
+  "rejilla": {
+   "2": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    2.0,
+    2.5,
+    3.0
+   ],
+   "3": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    2.0,
+    2.5,
+    3.0
+   ],
+   "5": [
+    0.0,
+    0.5,
+    1.0,
+    2.0,
+    3.0,
+    4.0
+   ]
+  },
+  "q_max_denso": {
+   "2": 12000,
+   "3": 14500,
+   "5": 17500
+  },
+  "segmento_por_etapa": {
+   "2": "global",
+   "3": "elite_club",
+   "5": "elite_club"
+  },
+  "plantada": {
+   "version": "a",
+   "sds": [
+    1.0,
+    2.0
+   ],
+   "segmento": "global"
+  },
+  "ruido": {
+   "modelo": "ampliado",
+   "margen_cortes": [
+    -14.5,
+    -7.5,
+    -2.5,
+    2.5,
+    7.5,
+    14.5
+   ],
+   "interaccion_ultimo_cuarto": true,
+   "varianza": "σ²·(1/n + c/n²), c por ℓt",
+   "lambda_primer_ajuste": 3000
+  },
+  "intervalos": [
+   "perfil_verosimilitud",
+   "bootstrap_ligas_temporada"
+  ],
+  "contraste_cero": "lrt_mezcla_chi2_0_1"
+ },
+ "versiones": {
+  "a": {
+   "pareja": {
+    "global": {
+     "ligas_temporada": 89,
+     "tramos": 760832,
+     "unidades": 200272,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      0.177
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      0.295
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 175.10287329870508,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.25,
+       0.5,
+       0.75,
+       1.0,
+       1.25,
+       1.5,
+       2.0,
+       2.5,
+       3.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       2.852877628094575,
+       11.746330743986618,
+       26.948604813853308,
+       48.90914225996312,
+       79.4669474998409,
+       119.0708160714239,
+       232.2812026465872,
+       400.2055154429145,
+       634.0015325545792
+      ]
+     }
+    },
+    "elite_club": {
+     "ligas_temporada": 18,
+     "tramos": 131753,
+     "unidades": 36758,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      0.448
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      0.68
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 175.3784698779774,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.25,
+       0.5,
+       0.75,
+       1.0,
+       1.25,
+       1.5,
+       2.0,
+       2.5,
+       3.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       0.49689696156565333,
+       2.0405635562128737,
+       4.66948182714259,
+       8.35636448310106,
+       13.440917451087444,
+       19.957757385673176,
+       38.193384878730285,
+       64.8352167963094,
+       101.7351593760468
+      ]
+     }
+    },
+    "omitidas": [
+     "feb3 2023-24",
+     "feb3 2024-25",
+     "feb3 2025-26",
+     "ncaa 2025-26"
+    ],
+    "condicion": {},
+    "segmento_calculado": "global"
+   }
+  },
+  "b": {
+   "pareja": {
+    "global": {
+     "ligas_temporada": 89,
+     "tramos": 760832,
+     "unidades": 200272,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      0.121
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      0.197
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 174.8977744120674,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.25,
+       0.5,
+       0.75,
+       1.0,
+       1.25,
+       1.5,
+       2.0,
+       2.5,
+       3.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       5.584733969122681,
+       22.81713535162453,
+       53.440098923680125,
+       100.21022882166108,
+       167.94845253345738,
+       262.31150024377166,
+       547.7938928226959,
+       978.7790425696203,
+       1560.8005021256995
+      ]
+     }
+    },
+    "elite_club": {
+     "ligas_temporada": 18,
+     "tramos": 131753,
+     "unidades": 36758,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      0.34700000000000003
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      0.52
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 175.22772959485667,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.25,
+       0.5,
+       0.75,
+       1.0,
+       1.25,
+       1.5,
+       2.0,
+       2.5,
+       3.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       0.8665709863125812,
+       3.5552969991476857,
+       8.330276391068764,
+       15.734012540873664,
+       26.35282002179156,
+       40.84393767068104,
+       84.5234356574947,
+       150.95867384546,
+       242.2297118518327
+      ]
+     }
+    },
+    "omitidas": [
+     "feb3 2023-24",
+     "feb3 2024-25",
+     "feb3 2025-26",
+     "ncaa 2025-26"
+    ],
+    "condicion": {},
+    "segmento_calculado": "global"
+   },
+   "trio": {
+    "global": {
+     "ligas_temporada": 18,
+     "tramos": 131753,
+     "unidades": 119219,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      0.388
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      0.585
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 175.22772959485667,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.25,
+       0.5,
+       0.75,
+       1.0,
+       1.25,
+       1.5,
+       2.0,
+       2.5,
+       3.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       0.6737492585598375,
+       2.7773038030791213,
+       6.545565922097012,
+       12.33406281225325,
+       20.57672793645179,
+       31.74355839601776,
+       64.70572348880523,
+       114.58290241476789,
+       183.9605019630908
+      ]
+     }
+    },
+    "elite_club": {
+     "ligas_temporada": 18,
+     "tramos": 131753,
+     "unidades": 119219,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      0.388
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      0.585
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 175.22772959485667,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.25,
+       0.5,
+       0.75,
+       1.0,
+       1.25,
+       1.5,
+       2.0,
+       2.5,
+       3.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       0.6737492585598375,
+       2.7773038030791213,
+       6.545565922097012,
+       12.33406281225325,
+       20.57672793645179,
+       31.74355839601776,
+       64.70572348880523,
+       114.58290241476789,
+       183.9605019630908
+      ]
+     }
+    },
+    "omitidas": [],
+    "condicion": {
+     "pareja": 0.0
+    },
+    "segmento_calculado": "elite_club"
+   },
+   "quinteto": {
+    "global": {
+     "ligas_temporada": 18,
+     "tramos": 131753,
+     "unidades": 81594,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      1.696
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      2.532
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 175.22772959485667,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.5,
+       1.0,
+       2.0,
+       3.0,
+       4.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       0.13385365730937338,
+       0.5433825986401644,
+       2.298459198209457,
+       5.620929544485989,
+       11.047521401633276
+      ]
+     }
+    },
+    "elite_club": {
+     "ligas_temporada": 18,
+     "tramos": 131753,
+     "unidades": 81594,
+     "sigma": 0.0,
+     "varianza": 0.0,
+     "sigma_r80_perfil": [
+      0.0,
+      1.696
+     ],
+     "sigma_ic95_perfil": [
+      0.0,
+      2.532
+     ],
+     "sigma_r80_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "sigma_ic95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "frac_bootstrap_en_cero": 1.0,
+     "en_borde_superior": false,
+     "lrt_sigma_0": 0.0,
+     "p_sigma_0": 0.5,
+     "sigma0_mediana": 175.22772959485667,
+     "fiabilidad_unidad": {
+      "150": 0.0,
+      "500": 0.0,
+      "1000": 0.0,
+      "3000": 0.0
+     },
+     "curva_total": {
+      "rejilla": [
+       0.0,
+       0.5,
+       1.0,
+       2.0,
+       3.0,
+       4.0
+      ],
+      "m2ll_rel": [
+       0.0,
+       0.13385365730937338,
+       0.5433825986401644,
+       2.298459198209457,
+       5.620929544485989,
+       11.047521401633276
+      ]
+     }
+    },
+    "omitidas": [],
+    "condicion": {
+     "pareja": 0.0,
+     "trio": 0.0
+    },
+    "segmento_calculado": "elite_club"
+   }
+  }
+ },
+ "generado": "2026-11-06T14:09:21"
+}

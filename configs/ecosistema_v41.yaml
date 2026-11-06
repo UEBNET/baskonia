@@ -74,7 +74,19 @@ sinergia_mixta:                                       # estimador PRINCIPAL de l
     "2": [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
     "3": [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
     "5": [0.0, 0.5, 1.0, 2.0, 3.0, 4.0]
-  q_max_denso: {"2": 22000, "3": 14500, "5": 17500}   # efectos por ℓt que caben en Cholesky densa (memoria del contenedor)
+  q_max_denso: {"2": 12000, "3": 14500, "5": 17500}   # efectos por ℓt en Cholesky densa; parejas ≤ 12.000 deja fuera NCAA 2025-26 y
+                                                      # FEB3 2023-24 a 2025-26 (17–21 mil efectos; ≈ 30 min por ℓt), declarado
+  segmento_por_etapa: {"2": global, "3": elite_club, "5": elite_club}   # tríos y quintetos en EL + EC + ACB: coste y, sobre todo,
+                                                      # la calibración plantada (la pareja ya no es identificable; el trío menos)
+  plantada: {version: a, sds: [1.0, 2.0, 3.0, 4.0], segmento: global}   # umbral de detección sobre el diseño y el ruido REALES
+                                                      # (se ejecutó en dos tandas: 1–2 y 3–4; plantada_a_global_ampliado.json las une)
+  ruido:                                              # [añadido tras la calibración plantada sobre datos reales, 06-11-2026]
+    modelo: ampliado                                  # «simple» = σ²/n e independencia: sesgaba σ_o hacia 0 (sembrando σ = 1 en
+                                                      # el segmento élite, devolvía 0). «ampliado» = estado del marcador + varianza
+    margen_cortes: [-14.5, -7.5, -2.5, 2.5, 7.5, 14.5]  # margen del local al inicio del tramo; tramo base (−2,5, 2,5]
+    interaccion_ultimo_cuarto: true                   # efectos de marcador distintos en el último cuarto y la prórroga
+    varianza: "σ²·(1/n + c/n²), c por ℓt"             # exceso de ruido de los tramos cortos (estimador de posesiones)
+    lambda_primer_ajuste: 3000                        # ridge del ajuste aditivo previo que estima c
   intervalos: [perfil_verosimilitud, bootstrap_ligas_temporada]
   contraste_cero: lrt_mezcla_chi2_0_1
 

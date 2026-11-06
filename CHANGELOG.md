@@ -1,5 +1,26 @@
 # Registro de cambios
 
+## 2026-11-06 (tarde) — CERNO v4.1 · F0: decisiones del CEO y modelo mixto de sinergias
+
+* **Decisiones del CEO aplicadas y criterios congelados** (`configs/ecosistema_v41.yaml → criterios.estado:
+  congelado_06-11-2026`):
+  * P1: rotación ≥ 7,5 % de los minutos del equipo.
+  * P2: ausencia y decisión técnica no se separan.
+  * P3: bancos V-AUS (17.061 partidos con un único ausente; 2.462 en élite) y V-AUS-M (4.693).
+  * P4: contraparte del Impacto en pista = on/off ajustado bruto.
+  * P5, con workaround: la capa E recorta y recalibra sus propios rangos de minutos sin tocar el motor v3.3.
+* **Modelo mixto REML** (`bbequipo/ecosistema/sinergia_mixta.py`): jugadores y unidades estimados a la vez, con intervalos
+  de perfil y de bootstrap y contraste en la frontera.
+  * La calibración plantada sobre datos reales reveló que el modelo de ruido de la v4.0 (σ²/posesiones, tramos
+    independientes) sesgaba la química hacia 0. Se añade un modelo de ruido ampliado: estado del marcador y varianza
+    1/n + c/n².
+  * Resultado: σ̂ = 0 en parejas, tríos y quintetos.
+  * Ni el modelo mixto ni la prueba predictiva detectan una química de pareja sembrada de σ = 2 pts/100: la química
+    propia no es medible en pista por debajo de ≈ 2–3 pts/100. La «DT ≈ 1,3» del §2.2 no está respaldada; el producto
+    se apoya sólo en la química por perfiles (φ).
+* `orden_sinergias.potencia_predictiva`: potencia de la prueba predictiva con química sembrada.
+* 4 tests nuevos (16 en total en `tests/test_ecosistema_v41.py`).
+
 ## 2026-11-06 — CERNO v4.1 · F0 Cimientos del ecosistema del club (puerta pendiente del CEO)
 
 Encargo `docs/encargos/v4.1_ecosistema.md` (rev. 1.0). Base: v4.0 cerrada (`6fb6abd`), verificada: `V40_F5` aprobada y

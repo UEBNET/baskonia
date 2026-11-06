@@ -26,7 +26,8 @@ ligas-temporada (B del YAML) sobre las curvas, robusto a la mala especificación
 σ_o = 0: razón de verosimilitudes con la mezcla ½χ²₀ + ½χ²₁ (parámetro en la frontera).
 Fiabilidad de una unidad con n posesiones: σ̂_o² / (σ̂_o² + σ̂²/n).
 
-Límites declarados: σ_o común entre ligas; en las etapas 3 y 5 τ y los órdenes inferiores quedan fijos (perfil
+Límites declarados: la etapa 5 (quintetos) sólo se calcula en el segmento élite (`segmento_por_etapa`; coste y decisión 8);
+σ_o común entre ligas; en las etapas 3 y 5 τ y los órdenes inferiores quedan fijos (perfil
 condicional); las ℓt cuyo sistema no cabe en memoria densa (q > máximo del YAML) se omiten en esa etapa y se listan.
 
 Salidas: data/modelos/v4_1/sinergia_mixta/{curvas_<v>.json, resumen.json}; caché por ℓt en experimentos/v4_1/sinergia_mixta/.
@@ -232,10 +233,91 @@ def _ult(c: dict) -> str:
     return list(c["dims"])[-1]
 
 
+# =============================================================================================== modelo de ruido ampliado
+def tramos_ampliados(cfg: dict) -> pd.DataFrame:
+    """Tramos del contrato v4.0 (mismos filtros que bbequipo.rapm.tramos) con el periodo y el margen del local al inicio
+    del tramo, que la caché de la v4.0 no guarda. Caché: experimentos/v4_1/tramos_ampliados.pkl."""
+    import pickle
+    from .. import config as C40, rapm
+    from ..contrato import filtrar_tramos
+    cache = CE.RAIZ / "experimentos" / "v4_1" / "tramos_ampliados.pkl"
+    if cache.exists():
+        return pickle.loads(cache.read_bytes())
+    cfg40 = CE.cargar_v40(cfg)
+    temps = set(cfg["orden_sinergias"]["temporadas"])
+    partes = []
+    for r in rapm.ligas_incluidas(cfg40).itertuples():
+        if r.temporada not in temps:
+            continue
+        p = C40.ruta(cfg40, "quintetos", temporada=r.temporada) / r.liga / "tramos.csv.gz"
+        df = pd.read_csv(p, usecols=lambda c: c in rapm.COLS_TRAMOS + ["periodo", "margen_inicio"], low_memory=False)
+        tr, _ = filtrar_tramos(df, cfg40)
+        if tr.empty:
+            continue
+        ids = pd.concat([tr["quinteto_a"].str.split("|").explode(), tr["quinteto_b"].str.split("|").explode()])
+        mp = rapm._mapa_persona(r.liga, ids)
+        conv = lambda q, t=r.temporada: tuple(f"{mp[x]}|{t}" for x in q.split("|"))  # noqa: E731
+        o = pd.DataFrame({"liga": r.liga, "temporada": r.temporada, "game_id": tr["game_id"].to_numpy(),
+                          "fase": tr["fase"].to_numpy(), "team_a": tr["team_a"].astype(str).to_numpy(),
+                          "team_b": tr["team_b"].astype(str).to_numpy(),
+                          "clutch": tr["clutch"].astype(str).str.lower().isin(["true", "1"]).to_numpy(),
+                          "playoffs": (tr["fase"] != "regular").to_numpy(), "poss": tr["poss"].to_numpy(float),
+                          "periodo": pd.to_numeric(tr["periodo"], errors="coerce").fillna(1).to_numpy(int),
+                          "margen": pd.to_numeric(tr["margen_inicio"], errors="coerce").fillna(0).to_numpy(float),
+                          "A": tr["quinteto_a"].map(conv).to_numpy(), "B": tr["quinteto_b"].map(conv).to_numpy(),
+                          "y": (100.0 * (pd.to_numeric(tr["a_pts"]) - pd.to_numeric(tr["b_pts"])) / tr["poss"]).to_numpy()})
+        partes.append(o)
+    t = pd.concat(partes, ignore_index=True)
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    cache.write_bytes(pickle.dumps(t))
+    return t
+
+
+def preparar_ampliado(d: pd.DataFrame, semilla: int, cfg: dict) -> tuple[OS.LT, dict]:
+    """LT con (i) efectos fijos del estado del marcador (margen del local al inicio del tramo por tramos, y su interacción
+    con el último cuarto y la prórroga) y (ii) varianza de tramo σ²·(1/n + c/n²), c estimado en la propia ℓt con los
+    residuos de un primer ajuste aditivo (los tramos cortos son más ruidosos de lo que dice 1/n: error del estimador de
+    posesiones). Con el modelo «simple» devuelve el LT de siempre (varianza σ²/n, sin marcador)."""
+    lt = OS.preparar(d, semilla)
+    cr = cfg["sinergia_mixta"].get("ruido", {})
+    if cr.get("modelo", "simple") != "ampliado":
+        return lt, {"modelo": "simple"}
+    m = d["margen"].to_numpy(float)
+    cortes = [float(x) for x in cr["margen_cortes"]]
+    bin_ = np.digitize(m, cortes)                               # 0 … len(cortes)
+    base = int(np.digitize([0.0], cortes)[0])
+    ult = (d["periodo"].to_numpy(int) >= 4).astype(float)
+    cols = [(bin_ == k).astype(float) for k in range(len(cortes) + 1) if k != base]
+    if cr.get("interaccion_ultimo_cuarto", True):
+        cols += [c * ult for c in cols] + [ult]
+    F = np.c_[lt.F, np.column_stack(cols)] if cols else lt.F
+    lt = OS.LT(lt.liga, lt.temporada, lt.PA, lt.PB, lt.ta, lt.tb, lt.y, lt.w, F, lt.partido, lt.tercio, lt.claves, lt.equipos)
+    # varianza: n·r² = a + b/n  →  Var(y_s) ∝ 1/n + c/n², c = b/a (≥ 0)
+    X = sp.hstack([OS.diseno(lt)[:, :lt.nP], sp.csr_matrix(F)]).tocsr()
+    G = (X.T @ X.multiply(lt.w[:, None])).toarray()
+    G[np.arange(lt.nP), np.arange(lt.nP)] += float(cr.get("lambda_primer_ajuste", 3000.0))
+    G[np.arange(lt.nP, G.shape[0]), np.arange(lt.nP, G.shape[0])] += 1e-6
+    coef = np.linalg.solve(G, np.asarray(X.T @ (lt.w * lt.y)).ravel())
+    r = lt.y - X @ coef
+    n = lt.w
+    Z = np.c_[np.ones(len(n)), 1.0 / n]
+    a, b = np.linalg.lstsq(Z, n * r * r, rcond=None)[0]
+    c = float(max(b / a, 0.0)) if a > 0 else 0.0
+    w = 1.0 / (1.0 / n + c / n ** 2)
+    lt = OS.LT(lt.liga, lt.temporada, lt.PA, lt.PB, lt.ta, lt.tb, lt.y, w, F, lt.partido, lt.tercio, lt.claves, lt.equipos)
+    # diagnóstico: dispersión del error por partido frente a la que supone el modelo (1 = coherente)
+    e = r * w
+    vr = float((pd.Series(e).groupby(lt.partido).sum() ** 2).sum() / (np.sum(w * r * r) / len(r) * w.sum()))
+    return lt, {"modelo": "ampliado", "c": c, "a": float(a), "fijos_marcador": len(cols), "razon_var_partido": vr}
+
+
 # =============================================================================================== orquestación
 def _lts(cfg: dict, ligas=None) -> list[pd.DataFrame]:
-    from .. import rapm
-    tr = rapm.tramos(CE.cargar_v40(cfg), progreso=None)
+    if cfg["sinergia_mixta"].get("ruido", {}).get("modelo", "simple") == "ampliado":
+        tr = tramos_ampliados(cfg)
+    else:
+        from .. import rapm
+        tr = rapm.tramos(CE.cargar_v40(cfg), progreso=None)
     tr = tr[tr["temporada"].isin(cfg["orden_sinergias"]["temporadas"])]
     if ligas:
         tr = tr[tr["liga"].isin(ligas)]
@@ -280,21 +362,24 @@ def ejecutar(cfg: dict, versiones=("a", "b"), etapas=(2, 3, 5), ligas=None, prog
                 condicion["trio"] = rv["trio"]["global"]["sigma"]
             curvas = []
             t0 = time.time()
-            for i, d in enumerate(sorted(grupos, key=len)):
+            seg_e = cm.get("segmento_por_etapa", {}).get(str(e), "global")
+            grupos_e = [d for d in grupos if seg_e == "global" or str(d["liga"].iloc[0]) in elite]
+            for i, d in enumerate(sorted(grupos_e, key=len)):
                 lg, tp = str(d["liga"].iloc[0]), str(d["temporada"].iloc[0])
-                fc = dcache / f"{v}_{e}_{lg}_{tp}.json"
+                fc = dcache / f"{cm.get('ruido', {}).get('modelo', 'simple')}_{v}_{e}_{lg}_{tp}.json"
                 if fc.exists():
                     c = json.loads(fc.read_text())
                 else:
-                    lt = OS.preparar(d, CE.semilla(cfg, f"tercios|{lg}|{tp}"))
+                    lt, ruido = preparar_ampliado(d, CE.semilla(cfg, f"tercios|{lg}|{tp}"), cfg)
                     if e >= 3 and f"{lg}|{tp}" not in condicion["tau"]:
                         c = {"liga": lg, "temporada": tp, "n": lt.n, "omitida": "sin etapa 2"}
                     else:
                         c = curvas_lt(lt, v, e, cm, _g(lt, priors) if v == "b" else None, condicion, cm["q_max_denso"])
+                        c["ruido"] = ruido
                     fc.write_text(json.dumps(c, default=float))
                 curvas.append(c)
                 if progreso:
-                    progreso(f"  [{v}·{NOMBRE[e]}] {i + 1}/{len(grupos)} {lg} {tp} "
+                    progreso(f"  [{v}·{NOMBRE[e]}] {i + 1}/{len(grupos_e)} {lg} {tp} "
                              f"{c.get('omitida') or str(c.get('segundos')) + ' s'} · {time.time() - t0:.0f} s", flush=True)
             if not ligas:
                 (dsal / f"curvas_{v}_{e}.json").write_text(json.dumps(curvas, default=float, ensure_ascii=False),
@@ -304,6 +389,7 @@ def ejecutar(cfg: dict, versiones=("a", "b"), etapas=(2, 3, 5), ligas=None, prog
                 "elite_club": agregar([c for c in curvas if c["liga"] in elite], B, sem),
                 "omitidas": sorted(f"{c['liga']} {c['temporada']}" for c in curvas if "omitida" in c),
                 "condicion": {k: v_ for k, v_ in condicion.items() if k != "tau"},
+                "segmento_calculado": seg_e,
             }
             if progreso:
                 gg = rv[NOMBRE[e]]["global"]
@@ -314,3 +400,38 @@ def ejecutar(cfg: dict, versiones=("a", "b"), etapas=(2, 3, 5), ligas=None, prog
                 resumen["generado"] = time.strftime("%Y-%m-%dT%H:%M:%S")
                 p_res.write_text(json.dumps(resumen, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
     return resumen
+
+
+# =============================================================================================== calibración plantada sobre datos reales
+def plantada(cfg: dict, version: str = "a", sds=(0.5, 1.0), segmento: str = "elite_club", replicas: int = 1,
+             progreso=print) -> dict:
+    """Control de validez sobre el diseño y el ruido REALES: y* = y + Σ_A u − Σ_B u con u ~ N(0, sd²) por pareja, y se
+    vuelve a estimar σ_2. Si el modelo mixto está bien calibrado con el ruido real, σ̂_2(y*)² ≈ σ̂_2(y)² + sd². Si el ruido
+    real tuviera estructura que el modelo no recoge (p. ej. dependencia entre tramos de un mismo partido), σ̂ se quedaría
+    corto y este cociente lo mediría."""
+    cm, co = cfg["sinergia_mixta"], cfg["comunes"]
+    elite = set(co["segmentos"]["elite_club"])
+    priors, _ = OS._priors(cfg)
+    grupos = [d for d in _lts(cfg) if segmento == "global" or str(d["liga"].iloc[0]) in elite]
+    out = {"version": version, "segmento": segmento, "sds": list(sds), "replicas": replicas,
+           "ruido": cm.get("ruido", {}), "resultados": {}}
+    for sd in sds:
+        curvas = []
+        for rep in range(replicas):
+            for d in sorted(grupos, key=len):
+                lg, tp = str(d["liga"].iloc[0]), str(d["temporada"].iloc[0])
+                lt, ruido = preparar_ampliado(d, CE.semilla(cfg, f"tercios|{lg}|{tp}"), cfg)
+                rng = np.random.default_rng(CE.semilla(cfg, f"plantada|{lg}|{tp}|{sd}|{rep}"))
+                lt2 = lt.con_y(lt.y + OS.efecto_plantado(lt, 2, float(sd), rng))
+                c = curvas_lt(lt2, version, 2, cm, _g(lt, priors) if version == "b" else None, {}, cm["q_max_denso"])
+                c["ruido"] = ruido
+                curvas.append(c)
+                if progreso:
+                    progreso(f"  [plantada sd={sd} rep={rep}] {lg} {tp} {c.get('segundos')} s", flush=True)
+        ag = agregar(curvas, 500, int(co["semilla_bootstrap"]))
+        ag.pop("curva_total", None)
+        out["resultados"][str(sd)] = ag
+    d = CE.dir_salida(cfg, "sinergia_mixta")
+    (d / f"plantada_{version}_{segmento}_{cm.get('ruido', {}).get('modelo', 'simple')}.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float),
+                                                         encoding="utf-8")
+    return out

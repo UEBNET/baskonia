@@ -1,0 +1,79 @@
+{
+ "version": "a",
+ "segmento": "elite_club",
+ "sds": [
+  0.5,
+  1.0
+ ],
+ "replicas": 1,
+ "resultados": {
+  "0.5": {
+   "ligas_temporada": 18,
+   "tramos": 131753,
+   "unidades": 36758,
+   "sigma": 0.0,
+   "varianza": 0.0,
+   "sigma_r80_perfil": [
+    0.0,
+    0.454
+   ],
+   "sigma_ic95_perfil": [
+    0.0,
+    0.6940000000000001
+   ],
+   "sigma_r80_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "sigma_ic95_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "frac_bootstrap_en_cero": 1.0,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 0.0,
+   "p_sigma_0": 0.5,
+   "sigma0_mediana": 182.36274980557369,
+   "fiabilidad_unidad": {
+    "150": 0.0,
+    "500": 0.0,
+    "1000": 0.0,
+    "3000": 0.0
+   }
+  },
+  "1.0": {
+   "ligas_temporada": 18,
+   "tramos": 131753,
+   "unidades": 36758,
+   "sigma": 0.0,
+   "varianza": 0.0,
+   "sigma_r80_perfil": [
+    0.0,
+    0.48
+   ],
+   "sigma_ic95_perfil": [
+    0.0,
+    0.733
+   ],
+   "sigma_r80_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "sigma_ic95_bootstrap": [
+    0.0,
+    0.0
+   ],
+   "frac_bootstrap_en_cero": 1.0,
+   "en_borde_superior": false,
+   "lrt_sigma_0": 0.0,
+   "p_sigma_0": 0.5,
+   "sigma0_mediana": 182.449021821416,
+   "fiabilidad_unidad": {
+    "150": 0.0,
+    "500": 0.0,
+    "1000": 0.0,
+    "3000": 0.0
+   }
+  }
+ }
+}

@@ -1,0 +1,131 @@
+{
+ "sds": [
+  0.0,
+  0.5,
+  1.0,
+  2.0
+ ],
+ "replicas": 1,
+ "resultados": {
+  "0.0": {
+   "global": {
+    "delta_rel_agregado": -9.524800445137593e-06,
+    "delta_rel_agregado_ic95": [
+     -1.6406835552582044e-05,
+     -2.2919919233810376e-06
+    ],
+    "delta_rel_reajuste_jugadores": -0.0018330431817319415,
+    "ligas_temporada": 93,
+    "lt_mejora_ic95": 21,
+    "lt_empeora_ic95": 11,
+    "lt_sin_diferencia": 61,
+    "lambda_en_borde_superior_frac": 0.9390681003584229,
+    "lambda_mediana": 1000000.0
+   },
+   "elite_club": {
+    "delta_rel_agregado": -7.344143647336487e-06,
+    "delta_rel_agregado_ic95": [
+     -2.6188153584991158e-05,
+     1.0535952713730533e-05
+    ],
+    "delta_rel_reajuste_jugadores": -0.0012789050170597394,
+    "ligas_temporada": 18,
+    "lt_mejora_ic95": 3,
+    "lt_empeora_ic95": 2,
+    "lt_sin_diferencia": 13,
+    "lambda_en_borde_superior_frac": 0.9074074074074074,
+    "lambda_mediana": 1000000.0
+   }
+  },
+  "0.5": {
+   "global": {
+    "delta_rel_agregado": -7.40136201737851e-06,
+    "delta_rel_agregado_ic95": [
+     -1.455788899168975e-05,
+     -1.6805439625456113e-07
+    ],
+    "delta_rel_reajuste_jugadores": -0.0019013265828862203,
+    "ligas_temporada": 93,
+    "lt_mejora_ic95": 22,
+    "lt_empeora_ic95": 13,
+    "lt_sin_diferencia": 58,
+    "lambda_en_borde_superior_frac": 0.9516129032258065,
+    "lambda_mediana": 1000000.0
+   },
+   "elite_club": {
+    "delta_rel_agregado": -4.242147760069592e-06,
+    "delta_rel_agregado_ic95": [
+     -2.4724255907881965e-05,
+     1.5086920452445074e-05
+    ],
+    "delta_rel_reajuste_jugadores": -0.0012405052669076655,
+    "ligas_temporada": 18,
+    "lt_mejora_ic95": 3,
+    "lt_empeora_ic95": 2,
+    "lt_sin_diferencia": 13,
+    "lambda_en_borde_superior_frac": 0.9351851851851852,
+    "lambda_mediana": 1000000.0
+   }
+  },
+  "1.0": {
+   "global": {
+    "delta_rel_agregado": -1.3546292632393708e-05,
+    "delta_rel_agregado_ic95": [
+     -2.1263741953470026e-05,
+     -6.811866879125051e-06
+    ],
+    "delta_rel_reajuste_jugadores": -0.002033064161103826,
+    "ligas_temporada": 93,
+    "lt_mejora_ic95": 21,
+    "lt_empeora_ic95": 11,
+    "lt_sin_diferencia": 61,
+    "lambda_en_borde_superior_frac": 0.9283154121863799,
+    "lambda_mediana": 1000000.0
+   },
+   "elite_club": {
+    "delta_rel_agregado": -7.947112077411056e-06,
+    "delta_rel_agregado_ic95": [
+     -2.431761212859651e-05,
+     6.960901170594002e-06
+    ],
+    "delta_rel_reajuste_jugadores": -0.0015636686148353673,
+    "ligas_temporada": 18,
+    "lt_mejora_ic95": 3,
+    "lt_empeora_ic95": 2,
+    "lt_sin_diferencia": 13,
+    "lambda_en_borde_superior_frac": 0.8981481481481481,
+    "lambda_mediana": 1000000.0
+   }
+  },
+  "2.0": {
+   "global": {
+    "delta_rel_agregado": -1.6570412475824803e-05,
+    "delta_rel_agregado_ic95": [
+     -2.147793841414114e-05,
+     -1.1492885265854127e-05
+    ],
+    "delta_rel_reajuste_jugadores": -0.0024536351854342886,
+    "ligas_temporada": 93,
+    "lt_mejora_ic95": 26,
+    "lt_empeora_ic95": 10,
+    "lt_sin_diferencia": 57,
+    "lambda_en_borde_superior_frac": 0.921146953405018,
+    "lambda_mediana": 1000000.0
+   },
+   "elite_club": {
+    "delta_rel_agregado": -1.336529932127739e-05,
+    "delta_rel_agregado_ic95": [
+     -3.342243116178089e-05,
+     6.362581445107373e-06
+    ],
+    "delta_rel_reajuste_jugadores": -0.0019714810039883623,
+    "ligas_temporada": 18,
+    "lt_mejora_ic95": 5,
+    "lt_empeora_ic95": 1,
+    "lt_sin_diferencia": 12,
+    "lambda_en_borde_superior_frac": 0.8796296296296297,
+    "lambda_mediana": 1000000.0
+   }
+  }
+ }
+}

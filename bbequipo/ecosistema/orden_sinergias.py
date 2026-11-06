@@ -608,3 +608,51 @@ def resumir(cfg: dict, filas: pd.DataFrame, pred: pd.DataFrame) -> dict:
             mp_ = pred["liga"].isin(elite) if seg == "elite_club" else np.ones(len(pred), bool)
             out[seg]["predictiva"] = resumen_predictiva(pred[mp_], B, sem)
     return out
+
+
+# =============================================================================================== potencia de la prueba predictiva
+def _trabajo_potencia(args):
+    tr_lt, cfg, sd, rep = args
+    os.environ.setdefault("OMP_NUM_THREADS", "1")
+    lg, tp = str(tr_lt["liga"].iloc[0]), str(tr_lt["temporada"].iloc[0])
+    lt = preparar(tr_lt, CE.semilla(cfg, f"tercios|{lg}|{tp}"))
+    if sd > 0:
+        rng = np.random.default_rng(CE.semilla(cfg, f"potencia|{lg}|{tp}|{sd}|{rep}"))
+        lt = lt.con_y(lt.y + efecto_plantado(lt, 2, sd, rng))
+    res = procesar_lt(lt, "a", cfg, con_nulo=False, con_predictiva=True)
+    p = res["predictiva"]
+    p["sd"], p["rep"] = sd, rep
+    return p
+
+
+def potencia_predictiva(cfg: dict, sds=(0.5, 1.0, 2.0), replicas: int = 1, procesos: int = 3, progreso=print) -> dict:
+    """Umbral de detección de la prueba predictiva (robusta al modelo de ruido: sólo compara errores en partidos no vistos):
+    se siembra una química propia de pareja u ~ N(0, sd²) sobre los datos REALES y se repite la prueba (versión a, pareja).
+    Si una química de DT sd se detecta (IC95 superior del Δ relativo < 0) y la de los datos reales no, la química real es
+    menor que sd con esa garantía."""
+    from .. import rapm
+    cfg = CE.con(cfg, **{"orden_sinergias.prueba_predictiva.ordenes": [2]})
+    tr = rapm.tramos(CE.cargar_v40(cfg), progreso=None)
+    tr = tr[tr["temporada"].isin(cfg["orden_sinergias"]["temporadas"])]
+    grupos = sorted([d for _, d in tr.groupby(["liga", "temporada"])], key=lambda d: -len(d))
+    import multiprocessing as mp
+    out = {"sds": list(sds), "replicas": replicas, "resultados": {}}
+    B, sem = int(cfg["comunes"]["bootstrap"]), int(cfg["comunes"]["semilla_bootstrap"])
+    elite = set(cfg["comunes"]["segmentos"]["elite_club"])
+    for sd in sds:
+        partes = []
+        for rep in range(replicas):
+            with mp.get_context("fork").Pool(procesos) as pool:
+                partes += list(pool.imap_unordered(_trabajo_potencia, [(d, cfg, float(sd), rep) for d in grupos]))
+        P = pd.concat(partes, ignore_index=True)
+        r = {"global": resumen_predictiva(P, B, sem).get("pareja", {}),
+             "elite_club": resumen_predictiva(P[P["liga"].isin(elite)], B, sem).get("pareja", {})}
+        for s in r.values():
+            s.pop("por_lt", None)
+        out["resultados"][str(sd)] = r
+        if progreso:
+            progreso(f"  potencia sd={sd}: Δ rel {r['global'].get('delta_rel_agregado')} IC95 "
+                     f"{r['global'].get('delta_rel_agregado_ic95')}", flush=True)
+    d = CE.dir_salida(cfg, "orden_sinergias")
+    (d / "potencia_predictiva.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+    return out

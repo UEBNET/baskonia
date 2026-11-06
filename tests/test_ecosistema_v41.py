@@ -282,3 +282,21 @@ def test_mixto_recupera_la_sinergia_de_pareja_plantada():
 def test_mixto_sin_sinergia_no_inventa():
     r = _mixto(0.0, 11)
     assert r["sigma_ic95_perfil"][0] == 0.0 and r["sigma"] < 1.5
+
+
+def test_ruido_ampliado_recupera_la_heterocedasticidad():
+    """Var(y_s) = σ²·(1/n + c/n²) con c = 1,5: preparar_ampliado estima c y añade los efectos fijos del marcador."""
+    from bbequipo.ecosistema import sinergia_mixta as SM
+    tr = liga_sintetica(0.0, partidos=300, sigma=110.0, semilla=41)
+    rng = np.random.default_rng(41)
+    n = tr["poss"].to_numpy()
+    tr["y"] = tr["y"] + rng.normal(0, 110.0 * np.sqrt(1.5) / n)          # término c/n² con c = 1,5
+    tr["margen"] = rng.integers(-20, 21, len(tr)).astype(float)
+    tr["periodo"] = rng.integers(1, 5, len(tr))
+    cfg = CE.con(CFG, **{"sinergia_mixta.ruido.modelo": "ampliado"})
+    lt, info = SM.preparar_ampliado(tr, 0, cfg)
+    assert info["modelo"] == "ampliado" and info["fijos_marcador"] == 13
+    assert 0.9 < info["c"] < 2.3
+    assert lt.F.shape[1] == 3 + 13 and np.all(lt.w < n)                  # pesos 1/(1/n + c/n²) < n
+    lt0, info0 = SM.preparar_ampliado(tr, 0, CE.con(CFG, **{"sinergia_mixta.ruido.modelo": "simple"}))
+    assert info0 == {"modelo": "simple"} and np.allclose(lt0.w, n)
