@@ -148,6 +148,10 @@ dl.kv dd { margin: 0; color: var(--fg2); }
   <p class="src">Datos públicos · ligas oficiales · exámenes 2021-22 a 2025-26 sin fuga (perfiles ≤ t) · intervalo del 80 % · Cerno Analytics · Confidencial</p>
 </footer>
 </div>
+<style id="cerno-index-titulos">
+/* Marca Index (amarillo corporativo) en los títulos de sección, igual que en las vistas principales de la v2.0 */
+.sec-head h2::before { content: "" !important; display: inline-block !important; width: 9px !important; height: 9px !important; border-radius: 0 !important; background: #F2CC2F !important; flex: none; margin-right: 12px; vertical-align: 5px; }
+</style>
 <script>
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
