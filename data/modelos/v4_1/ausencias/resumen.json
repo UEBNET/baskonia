@@ -1,54 +1,22 @@
 {
  "version": "v4.1",
- "generado": "2026-11-06T10:35:59",
+ "generado": "2026-11-06T11:20:58",
  "definicion": {
-  "rotacion_min_cuota_minutos": 0.15,
+  "rotacion_min_cuota_minutos": 0.075,
   "umbrales_alternativos": [
-   0.075,
+   0.15,
    0.03
   ],
   "fase": "regular",
   "jugo_antes_y_despues": true,
-  "varios_ausentes": "separar",
+  "varios_ausentes": "banco_aparte_V-AUS-M",
   "decision_tecnica": {
-   "señales": [
-    "en_acta_sin_minutos",
-    "fuera_del_acta"
-   ]
+   "separar": false,
+   "diagnostico": "longitud_racha",
+   "acta_en_extraccion": "no_autorizada"
   }
  },
  "por_umbral": {
-  "0.15": {
-   "min_por_partido_fiba_aprox": 30.0,
-   "global": {
-    "ligas_temporada": 93,
-    "ausencias": 120,
-    "equipo_partidos_un_ausente": 116,
-    "equipo_partidos_varios_ausentes": 2,
-    "tasa_ausencia_media": 0.010035962197875722,
-    "frac_aisladas_1_partido": 0.8166666666666667,
-    "tasa_tramo_final_sobre_resto": 1.7853626128216038,
-    "con_tramos_contrato": 93
-   },
-   "elite_club": {
-    "ligas_temporada": 18,
-    "ausencias": 3,
-    "equipo_partidos_un_ausente": 3,
-    "equipo_partidos_varios_ausentes": 0,
-    "tasa_ausencia_media": 0.004934210526315789,
-    "frac_aisladas_1_partido": 1.0,
-    "tasa_tramo_final_sobre_resto": 0.0,
-    "con_tramos_contrato": 18
-   },
-   "un_ausente_por_tipo": {
-    "aislada_1_partido": 94,
-    "racha_2_o_mas": 22
-   },
-   "un_ausente_por_tipo_elite": {
-    "aislada_1_partido": 3
-   },
-   "carga_previa_ratio_mediana": 1.0044601251135434
-  },
   "0.075": {
    "min_por_partido_fiba_aprox": 15.0,
    "global": {
@@ -81,6 +49,37 @@
    },
    "carga_previa_ratio_mediana": 0.95097491047153
   },
+  "0.15": {
+   "min_por_partido_fiba_aprox": 30.0,
+   "global": {
+    "ligas_temporada": 93,
+    "ausencias": 120,
+    "equipo_partidos_un_ausente": 116,
+    "equipo_partidos_varios_ausentes": 2,
+    "tasa_ausencia_media": 0.010035962197875722,
+    "frac_aisladas_1_partido": 0.8166666666666667,
+    "tasa_tramo_final_sobre_resto": 1.7853626128216038,
+    "con_tramos_contrato": 93
+   },
+   "elite_club": {
+    "ligas_temporada": 18,
+    "ausencias": 3,
+    "equipo_partidos_un_ausente": 3,
+    "equipo_partidos_varios_ausentes": 0,
+    "tasa_ausencia_media": 0.004934210526315789,
+    "frac_aisladas_1_partido": 1.0,
+    "tasa_tramo_final_sobre_resto": 0.0,
+    "con_tramos_contrato": 18
+   },
+   "un_ausente_por_tipo": {
+    "aislada_1_partido": 94,
+    "racha_2_o_mas": 22
+   },
+   "un_ausente_por_tipo_elite": {
+    "aislada_1_partido": 3
+   },
+   "carga_previa_ratio_mediana": 1.0044601251135434
+  },
   "0.03": {
    "min_por_partido_fiba_aprox": 6.0,
    "global": {
@@ -112,6 +111,22 @@
     "aislada_1_partido": 1038
    },
    "carga_previa_ratio_mediana": 0.8875307729104107
+  }
+ },
+ "umbral_principal": 0.075,
+ "bancos": {
+  "V-AUS": {
+   "partidos": 17061,
+   "elite_club": 2462,
+   "por_tipo": {
+    "racha_2_o_mas": 11251,
+    "aislada_1_partido": 5810
+   }
+  },
+  "V-AUS-M": {
+   "equipo_partidos": 4693,
+   "ausencias": 10324,
+   "elite_club_equipo_partidos": 512
   }
  }
 }

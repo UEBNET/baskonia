@@ -2,6 +2,7 @@
 
     python -m bbequipo.ecosistema orden-sinergias [--version a b] [--ligas L …] [--procesos 3] [--sin-nulo] [--sin-predictiva]
     python -m bbequipo.ecosistema orden-sinergias-resumen          # rehace resumen.json desde las filas guardadas
+    python -m bbequipo.ecosistema sinergia-mixta [--version a b] [--etapas 2 3 5]   # modelo mixto REML (estimador principal)
     python -m bbequipo.ecosistema benchmark                        # F0.3 benchmark de decisión sobre la v4.0
     python -m bbequipo.ecosistema ausencias                        # F0.5 auditoría de ausencias (banco V-AUS)
     python -m bbequipo.ecosistema inventario                       # F0.6/F0.7 Fit, ADAPT y referencias fijas a club/temporada
@@ -39,6 +40,10 @@ def main(argv=None):
     o.add_argument("--sin-nulo", action="store_true")
     o.add_argument("--sin-predictiva", action="store_true")
     sub.add_parser("orden-sinergias-resumen", help="F0.4: resumen.json desde las filas guardadas")
+    sm = sub.add_parser("sinergia-mixta", help="F0.4 (CEO 06-11-2026): prueba de orden por modelo mixto (REML)")
+    sm.add_argument("--version", nargs="*", default=["a", "b"])
+    sm.add_argument("--etapas", nargs="*", type=int, default=[2, 3, 5])
+    sm.add_argument("--ligas", nargs="*", default=None)
     sub.add_parser("benchmark", help="F0.3: benchmark de decisión sobre la v4.0")
     sub.add_parser("ausencias", help="F0.5: auditoría de ausencias (banco V-AUS)")
     sub.add_parser("inventario", help="F0.6/F0.7: residuos de Fit y ADAPT; referencias fijas a club y temporada")
@@ -54,6 +59,15 @@ def main(argv=None):
                   f"· {r['segundos']} s")
         if not a.ligas:
             _resumen_orden(cfg)
+    elif a.orden == "sinergia-mixta":
+        from . import sinergia_mixta as SM
+        r = SM.ejecutar(cfg, versiones=a.version, etapas=a.etapas, ligas=a.ligas)
+        met = {f"{v}_{o}_{s}_sigma": r["versiones"][v][o][s].get("sigma") for v in r["versiones"] for o in r["versiones"][v]
+               for s in ("global", "elite_club") if isinstance(r["versiones"][v][o], dict) and s in r["versiones"][v][o]}
+        if not a.ligas:
+            _registro(cfg, "F0_sinergia_mixta", {"etapas": cfg["sinergia_mixta"]["etapas"]},
+                      {k: v for k, v in met.items() if v is not None},
+                      [CE.dir_salida(cfg, "sinergia_mixta") / "resumen.json"])
     elif a.orden == "orden-sinergias-resumen":
         _resumen_orden(cfg)
     elif a.orden == "benchmark":

@@ -22,7 +22,7 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 
 | # | Salida visible | Versión | Estado | Sello propuesto | Qué hacer en la v4.1 |
 |---|---|---|---|---|---|
-| 1 | Minutos por partido (y uso) | v3.3 (mezcla motor + GBM) | validado | MEDIA | Recortar a [0, duración]; revisar la cola superior del 90 % |
+| 1 | Minutos por partido (y uso) | v3.3 (mezcla motor + GBM) | validado | MEDIA | Recorte a [0, duración] y rangos recalibrados en la capa E (P5) |
 | 2 | Producción por 100 posesiones (pts/100, TS %, USG %, AST %, rebote…) | v3.3 + A5 (v4.0) | validado | MEDIA | Sin cambios |
 | 3 | Rol previsto | v3.3 | uso interno | — | Deja de ser salida (decisión 1) |
 | 4 | Índice Fit | v2–v3.3 | **retirar** | — | Baja aprobada (decisión 3) |
@@ -61,8 +61,10 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
     intervalos del examen, no del producto, pero indican que el motor no recorta.
 - **Fugas conocidas**: el histórico del producto se calcula con los pesos finales (en muestra): su cobertura es optimista.
 - **Estado**: validado. **Sello propuesto**: MEDIA (cobertura del 80 % en rango; la del 90 % no, por la saturación).
-- **Para la v4.1**: el motor de escenarios (F1) recortará a [0, duración] y comprobará Σ minutos = 200/240 en el 100 % de los
-  escenarios; la cola superior se documenta como límite del motor v3.3, que no se toca.
+- **Para la v4.1** [DECISIÓN CEO 06-11-2026, P5 con workaround]: el motor v3.3 no se toca. El motor de escenarios (F1)
+  recorta a [0, duración], fuerza Σ minutos = 200/240 en el 100 % de los escenarios y **recalibra sus propios rangos de
+  minutos** (conformal con los cortes anteriores) para corregir la cola superior. Criterio: cobertura del 80 % en
+  [0,75, 0,85] y del 90 % en [0,85, 0,95].
 
 ## 2 · Producción por 100 posesiones
 

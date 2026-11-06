@@ -233,3 +233,52 @@ def test_configuracion_y_criterios_prerregistrados():
     assert set(cr["f3_sellos"]) >= {"alta", "media", "baja", "lineas_base"}
     assert c["comunes"]["bootstrap"] == 2000
     assert CE.semilla(c, "x") == CE.semilla(c, "x") != CE.semilla(c, "y")
+
+
+# =============================================================================================== modelo mixto (REML)
+def test_mixto_formula_rapida_igual_a_reml_por_fuerza_bruta():
+    """−2ℓ_R por las ecuaciones del modelo mixto (Henderson) = REML con V explícita, salvo la constante Σ log w."""
+    from bbequipo.ecosistema import sinergia_mixta as SM
+    tr = liga_sintetica(1.0, equipos=4, plantilla=7, partidos=24, tramos_partido=6, semilla=31)
+    lt = OS.preparar(tr, 0)
+    S = SM.Sistema(lt, (2,), g=None)
+    S.preparar("pareja")
+    gt, g2 = 4.0 / 110 ** 2, 1.0 / 110 ** 2
+    rapido, _ = S.m2ll({"jugadores": gt, "pareja": g2})
+    A = S.A.toarray()
+    F, X, Z = A[:, :S.p], A[:, S.ini[1]:S.ini[2]], A[:, S.ini[2]:S.ini[3]]
+    V1 = np.diag(1.0 / lt.w) + gt * X @ X.T + g2 * Z @ Z.T
+    Vi = np.linalg.inv(V1)
+    FtVF = F.T @ Vi @ F
+    P = Vi - Vi @ F @ np.linalg.solve(FtVF, F.T @ Vi)
+    n, p = lt.n, S.p
+    s2 = float(S.y @ P @ S.y) / (n - p)
+    bruto = (n - p) * np.log(s2) + np.linalg.slogdet(V1)[1] + np.linalg.slogdet(FtVF)[1] + (n - p)
+    assert rapido - bruto == pytest.approx(np.sum(np.log(lt.w)), abs=1e-6)
+    # γ → 0 es el modelo sin el bloque
+    sin, _ = S.m2ll({"jugadores": gt})
+    casi, _ = S.m2ll({"jugadores": gt, "pareja": 1e-14})
+    assert casi == pytest.approx(sin, abs=1e-4)
+
+
+def _mixto(sd, semilla):
+    from bbequipo.ecosistema import sinergia_mixta as SM
+    tr = liga_sintetica(sd, semilla=semilla)
+    lt = OS.preparar(tr, 0)
+    cm = CFG["sinergia_mixta"]
+    c = SM.curvas_lt(lt, "a", 2, cm, None, {}, cm["q_max_denso"])
+    return SM.agregar([c], 200, 1)
+
+
+def test_mixto_recupera_la_sinergia_de_pareja_plantada():
+    """Sinergia de pareja de DT 3: el modelo mixto la recupera sin atenuación (la medida «propia» del §2.2 veía ≈ 1/10)."""
+    r = _mixto(3.0, 12)
+    lo, hi = r["sigma_ic95_perfil"]
+    assert lo <= 3.0 <= hi and lo > 0.5
+    assert 2.0 < r["sigma"] < 4.0
+    assert r["p_sigma_0"] < 1e-3
+
+
+def test_mixto_sin_sinergia_no_inventa():
+    r = _mixto(0.0, 11)
+    assert r["sigma_ic95_perfil"][0] == 0.0 and r["sigma"] < 1.5

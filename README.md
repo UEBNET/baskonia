@@ -718,7 +718,8 @@ capas de la v4.0. Subpaquete `bbequipo/ecosistema/`, configuración `configs/eco
 [`docs/estado_modelos.md`](docs/estado_modelos.md) y checkpoints `docs/checkpoints/V41_F<k>.md`.
 
 ```bash
-python -m bbequipo.ecosistema orden-sinergias     # F0.4: prueba de orden de sinergias, (a) ridge y (b) β de F1 (≈ 30 min)
+python -m bbequipo.ecosistema sinergia-mixta      # F0.4: prueba de orden por modelo mixto REML (estimador principal; horas)
+python -m bbequipo.ecosistema orden-sinergias     # F0.4: réplica del §2.2 por tercios, (a) ridge y (b) β de F1 (≈ 15 min)
 python -m bbequipo.ecosistema benchmark           # F0.3: benchmark de decisión sobre la v4.0 (≈ 1,5 min)
 python -m bbequipo.ecosistema ausencias           # F0.5: auditoría de ausencias para el banco V-AUS (≈ 20 s)
 python -m bbequipo.ecosistema inventario          # F0.6/F0.7: Fit, ADAPT y referencias fijas a club y temporada

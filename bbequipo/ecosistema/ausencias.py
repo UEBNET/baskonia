@@ -7,8 +7,11 @@ Definición propuesta (§5.4, configs/ecosistema_v41.yaml → ausencias):
 * tipo: la tabla por partido NO trae el acta (las filas jugo = False están imputadas entre la primera y la última aparición
   del jugador), así que «decisión técnica» frente a «lesión» no es observable. Indicio [HIPÓTESIS]: ausencia aislada
   (1 partido) frente a racha (≥ 2 partidos consecutivos);
-* los partidos con más de un ausente de rotación se cuentan aparte (en F3 el CEO decide excluirlos o tratarlos como
-  escenario de varias bajas).
+* los partidos con más de un ausente de rotación van al banco aparte V-AUS-M (escenario de varias bajas, informativo).
+
+Decisiones del CEO (06-11-2026): P1 umbral principal 7,5 % de los minutos totales de jugador del equipo (≈ 15'/partido;
+el 15 % literal y el 3 % se auditan sólo para la trazabilidad); P2 no se separa ausencia de decisión técnica (diagnóstico
+por longitud de racha); P3 V-AUS sólo con un ausente y V-AUS-M aparte. Bancos: banco_v_aus.csv.gz, banco_v_aus_m.csv.gz.
 
 Fuente: data/modelos/roles/partidos_jugador/<t>.csv.gz (una fila por jugador y partido del acta, desde el jugada a jugada;
 las ligas sin PBP no figuran). Cobertura de tramos: inventario del contrato v4.0.
@@ -177,6 +180,22 @@ def ejecutar(cfg: dict, progreso=print) -> dict:
             r["un_ausente_por_tipo_elite"] = a1[a1["liga"].isin(elite)]["tipo"].value_counts().to_dict()
             r["carga_previa_ratio_mediana"] = float(np.nanmedian(Au["min_prev"] / Au["min_medio"]))
         res["por_umbral"][str(umb)] = r
+    # bancos de la F3 (decisiones del CEO del 06-11-2026: P1 umbral principal 7,5 %; P3 V-AUS = un ausente, V-AUS-M aparte)
+    principal = float(cfg_a["rotacion_min_cuota_minutos"])
+    res["umbral_principal"] = principal
+    if len(A):
+        Ap = A[A["umbral"] == principal]
+        cols_b = ["liga", "temporada", "team_id", "game_id", "player_id", "persona_id", "cuota_min_equipo", "tipo",
+                  "long_episodio", "final", "ausentes_rotacion_en_partido"]
+        v1 = Ap[Ap["ausentes_rotacion_en_partido"] == 1][cols_b]
+        vm = Ap[Ap["ausentes_rotacion_en_partido"] > 1][cols_b]
+        v1.to_csv(ds / "banco_v_aus.csv.gz", index=False)
+        vm.to_csv(ds / "banco_v_aus_m.csv.gz", index=False)
+        res["bancos"] = {"V-AUS": {"partidos": int(len(v1)), "elite_club": int(v1["liga"].isin(elite).sum()),
+                                   "por_tipo": v1["tipo"].value_counts().to_dict()},
+                         "V-AUS-M": {"equipo_partidos": int(vm.groupby(["liga", "temporada", "team_id", "game_id"]).ngroups),
+                                     "ausencias": int(len(vm)), "elite_club_equipo_partidos": int(
+                                         vm[vm["liga"].isin(elite)].groupby(["liga", "temporada", "team_id", "game_id"]).ngroups)}}
     (ds / "resumen.json").write_text(json.dumps(res, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
     if progreso:
         progreso(json.dumps(res["por_umbral"], ensure_ascii=False, indent=1, default=float))

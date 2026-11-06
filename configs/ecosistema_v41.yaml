@@ -66,6 +66,18 @@ orden_sinergias:
     elite_club: {pareja: [1.28, 0.66, 1.92], trio: [1.35, 0.23, 2.40], n_pareja: 8167, n_trio: 1472, n_quinteto: 8}
     fiabilidad_pareja_150: [0.03, 0.05]
 
+# ---------------------------------------------------------------------------------------- F0 · modelo mixto (orden del CEO, 06-11-2026)
+sinergia_mixta:                                       # estimador PRINCIPAL de la prueba de orden: REML con jugadores y unidades
+  modelo: y = F·f + Σβ_A − Σβ_B + Σu_A − Σu_B + ε;  β ~ N(m, τ²) (τ por ℓt);  u_o ~ N(0, σ_o²) común entre ℓt
+  etapas: {a: [2], b: [2, 3, 5]}                      # (b) β de F1 como media a priori = modelo aditivo del producto
+  rejilla:                                            # DT del efecto propio verdadero (pts/100); 0 = sin el bloque
+    "2": [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+    "3": [0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+    "5": [0.0, 0.5, 1.0, 2.0, 3.0, 4.0]
+  q_max_denso: {"2": 22000, "3": 14500, "5": 17500}   # efectos por ℓt que caben en Cholesky densa (memoria del contenedor)
+  intervalos: [perfil_verosimilitud, bootstrap_ligas_temporada]
+  contraste_cero: lrt_mezcla_chi2_0_1
+
 # ---------------------------------------------------------------------------------------- F0 · benchmark de decisión sobre la v4.0 (F0.3)
 benchmark:
   insumos:
@@ -81,14 +93,18 @@ benchmark:
 
 # ---------------------------------------------------------------------------------------- F0 · auditoría de ausencias (F0.5, §5.4)
 ausencias:
-  rotacion_min_cuota_minutos: 0.15                    # ≥ 15 % de los minutos de su equipo en la temporada (literal §5.4: cuota de los
-                                                      # minutos TOTALES de jugador, Σ = 1 → ≈ 30 min por partido de 40')
-  umbrales_alternativos: [0.075, 0.03]                # sólo auditoría (propuesta al CEO): ≈ 15' y ≈ 6' por partido
+  rotacion_min_cuota_minutos: 0.075                   # DECISIÓN CEO 06-11-2026 (P1): ≥ 7,5 % de los minutos TOTALES de jugador del
+                                                      # equipo (Σ = 1) ≈ 15 min por partido de 40' (18' en la NBA). El 15 % literal
+                                                      # del §5.4 (≈ 30') dejaba 116 partidos con un único ausente: V-AUS inviable
+  umbrales_alternativos: [0.15, 0.03]                 # sólo auditoría (el literal y ≈ 6'), para la trazabilidad
   fase: regular
   jugo_antes_y_despues: true                          # 0 minutos en el partido, con partidos jugados antes y después
-  varios_ausentes: separar                            # se cuentan aparte; en F3 decide el CEO (excluir o escenario de varias bajas)
-  decision_tecnica:                                   # ¿se distingue ausencia de decisión técnica (DNP-CD)?
-    señales: [en_acta_sin_minutos, fuera_del_acta]    # en el acta con 0 min ≈ decisión técnica; fuera del acta ≈ baja/lesión
+  varios_ausentes: banco_aparte_V-AUS-M               # DECISIÓN CEO 06-11-2026 (P3): V-AUS = partidos con UN ausente; los de varios,
+                                                      # banco V-AUS-M (escenario de varias bajas, informativo, sin decidir sellos)
+  decision_tecnica:                                   # DECISIÓN CEO 06-11-2026 (P2): no se separa (el acta no está en los datos)
+    separar: false
+    diagnostico: longitud_racha                       # aislada (1 partido) frente a racha (≥ 2) [HIPÓTESIS], sólo estratificación
+    acta_en_extraccion: no_autorizada                 # opción abierta si en F3 los resultados quedan ambiguos
 
 # ---------------------------------------------------------------------------------------- F1 · motor de escenarios (§3.1–3.2)
 f1:
@@ -96,6 +112,12 @@ f1:
   minutos: motor_v33                                  # condicionado al rol fijado de las altas; existentes con su rol de partida
   rol_partida: {verano: ultima_temporada, mitad_temporada: temporada_en_curso}
   minutos_partido: {fiba: 200, nba: 240}
+  minutos_intervalos:                                 # DECISIÓN CEO 06-11-2026 (P5, workaround): el motor v3.3 NO se toca
+    recorte: [0, duracion_partido]                    # cada jugador en [0, 40|48] y Σ = 200|240 en cada simulación
+    recalibracion: conformal_cortes_anteriores        # la capa E recalibra SUS rangos de minutos (50/80/90 %) con los residuos
+                                                      # de los cortes anteriores (como la capa 4), corrigiendo la cola superior
+                                                      # saturada del v3.3 (extremo 90 % = 80 % en el 97,7 % de las fichas)
+    objetivo_cobertura: {"0.8": [0.75, 0.85], "0.9": [0.85, 0.95]}
   uso_suma: 1.0
   monte_carlo: {simulaciones: 1000, semilla_derivada: escenarios}
   shapley:
@@ -136,7 +158,7 @@ f4:
 # Transcripción literal del §6 del encargo. Estado: «propuesto en F0» → se congela al aprobar el CEO la puerta F0 (con o sin
 # los ajustes de `propuestas_ajuste`). Ningún resultado de F1–F3 se ha calculado al escribir este bloque.
 criterios:
-  estado: propuesto_F0_pendiente_de_congelar_por_el_CEO
+  estado: congelado_06-11-2026                        # DECISIÓN CEO 06-11-2026: P1–P5 aprobadas (P5 con el workaround) y criterios congelados
   comunes:
     cortes_decision: [2022, 2023, 2024]
     corte_calibracion: 2021
@@ -144,10 +166,15 @@ criterios:
     ic95: bootstrap_equipo_temporada
   f1:
     paridad_capa4_pts100: 0.01
-    restricciones_fisicas: 1.0                        # 100 % de los escenarios: Σ minutos exacta, uso = 100 %, minutos en [0, 40|48]
+    restricciones_fisicas: 1.0                        # 100 % de los escenarios: Σ minutos exacta, uso = 100 %, minutos de cada
+                                                      # jugador en [0, 40|48] tras el recorte de la capa E (P5)
+    minutos_cobertura_recalibrada: {"0.8": [0.75, 0.85], "0.9": [0.85, 0.95]}   # P5: cobertura de los rangos recalibrados
     shapley_suma_delta_tolerancia: 1.0e-9
   f2:
     monotonia_no_peor_que_im_v40: {spearman_ref: 0.149, ic95_inferior_diferencia: -0.02}
+    realizado: net_rtg_aj_onoff                       # P4: Net on/off ajustado BRUTO del jugador (≥ 300 min), el del 0,149 de la v4.0
+    realizado_min_minutos: 300
+    elite_club_informado: true                        # P4: el segmento élite se informa (v4.0: 0,159), no es puerta
     monotonia_frente_aditivo: ic95_diferencia_excluye_0
     calibracion_deciles_tolerancia: 7
     cobertura_80: [0.75, 0.85]
@@ -163,11 +190,13 @@ criterios:
     lineas_base: [delta_0, redistribucion_proporcional]
     metrica: mae_ponderado
     bancos_minimos: [V-AUS, otro]
+    v_aus: {rotacion_min_cuota_minutos: 0.075, ausentes_por_partido: 1, fase: regular}   # P1 y P3
+    v_aus_m: informativo                              # P3: varias bajas, sin decidir sellos
     alta: mejora a (i) y (ii) con IC95 que excluye 0 en los tres cortes de decisión y cobertura 80 % en [0,75, 0,85]
     media: mejora a (i) y (ii) con IC95 que excluye 0 en los cortes agregados, no en cada corte; cobertura en rango
     baja: no cumple lo anterior; se muestra con su rango; si el rango del 80 % incluye 0 → «sin cambio apreciable»
     delta_net_bajas: V-AUS frente a (i), mismos criterios que la capa 4 (§11.4 v4.0)
-  propuestas_ajuste:                                  # V41_F0 §8 · NO aplicadas: las decide el CEO en la puerta F0, antes de congelar
+  propuestas_ajuste:                                  # V41_F0 §8 · APROBADAS por el CEO el 06-11-2026 (P5 con el workaround) y aplicadas
     P1: {criterio: "§5.4 rotación", propuesta: "≥ 7,5 % de los minutos totales del equipo (≈ 15'/partido) en lugar del 15 %",
          motivo: "con el 15 % literal sólo hay 116 partidos con un único ausente (3 en élite): V-AUS inviable"}
     P2: {criterio: "§5.4 ausencia frente a decisión técnica", propuesta: "no separar; diagnóstico por longitud de racha; opcional: acta en la extracción (requiere autorización)",
