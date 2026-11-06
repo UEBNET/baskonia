@@ -589,8 +589,8 @@ ${raw}`;
           : dR < 0 ? `Con ${E(apeJ)}, ${E(d.nombre_club)} bajaría del <b>${R.sin.rk}.º al ${R.con.rk}.º</b> de ${R.n} por nivel en ${E(R.ligaN)} ${E(R.tEL)}.`
           : `Con ${E(apeJ)}, ${E(d.nombre_club)} se mantendría <b>${R.con.rk}.º de ${R.n}</b> por nivel en ${E(R.ligaN)} ${E(R.tEL)}${dV ? `: ${dV > 0 ? "gana" : "pierde"} ${Math.abs(dV)} punto${Math.abs(dV) === 1 ? "" : "s"} sin cambiar de puesto` : ""}.`;
         const txt2 = sobre ? ` El siguiente escalón, ${E(sobre.nom)}, queda a ${Math.max(1, Math.round(sobre.v) - Math.round(R.con.v))} punto${Math.max(1, Math.round(sobre.v) - Math.round(R.con.v)) === 1 ? "" : "s"}.` : ` Sería el club de más nivel de la liga.`;
-        const txt3 = R.real ? ` Como referencia, el ${E(R.real.nom)} real de ${E(R.tEL)} fue ${R.real.rk}.º (${ESC.txt(R.real.v)})${Math.abs(Math.round(R.real.v) - Math.round(R.sin.v)) >= 3 ? `; la diferencia con la plantilla sin él sale de los jugadores y minutos que se consideran ahora` : ""}.` : "";
-        const txt4 = d.temporada !== R.tEL ? ` La plantilla es la de ${E(d.temporada)}; los demás clubes, los de ${E(R.tEL)}, la última temporada completa.` : "";
+        const txt3 = R.real ? ` Como referencia, el ${E(R.real.nom)} real de ${E(R.tEL)} ${R.prov ? "va" : "fue"} ${R.real.rk}.º (${ESC.txt(R.real.v)})${Math.abs(Math.round(R.real.v) - Math.round(R.sin.v)) >= 3 ? `; la diferencia con la plantilla sin él sale de los jugadores y minutos que se consideran ahora` : ""}.` : "";
+        const txt4 = d.temporada !== R.tEL ? ` La plantilla es la de ${E(d.temporada)}; los demás clubes, los de ${E(R.tEL)}, la última temporada completa (${E(d.temporada)} aún no tiene clubes con datos).` : R.prov ? ` Temporada en curso: los clubes de ${E(R.ligaN)} ${E(R.tEL)} con sus datos hasta hoy.` : "";
         return `<div class="r3cols at r3rkb"><div class="r3blk"><h3>Ranking frente a ${E(R.ligaN)} ${E(R.tEL)}</h3>${svg}</div>
           <div class="r3blk"><h3>Su sitio en la liga, sin y con él</h3><div class="r3kp t2"><div><span>Puesto por nivel</span><b>${R.sin.rk}.º <i>→</i> ${R.con.rk}.º</b><small>de ${R.n} clubes</small></div><div><span>Nivel del equipo</span><b>${ESC.txt(R.sin.v)} <i>→</i> ${ESC.txt(R.con.v)}</b><small>escala ±100 · 0 = club medio</small></div></div>
             <p class="r3p">${txt1}${txt2}${txt3}${txt4}</p>
@@ -756,14 +756,17 @@ ${raw}`;
       // clubes de la liga de referencia en su última temporada completa (elClubs), en la escala ±100 (sNivCL(Lclub(·))).
       let rkL = null;
       try {
-        const EL = elClubs(), tEL = ultCompleta();
+        // Temporada del ranking (CEO, 06-11-2026): SIEMPRE la liga de la temporada en la que se integra el jugador (la del club de
+        // destino), aunque esté en curso; solo si esa temporada no tiene clubes con nivel se usa la última completa.
+        const ELd = CL.filter((c) => c.liga === d.liga && c.temporada === d.temporada && c.nivel != null && isFinite(c.nivel)), usarD = ELd.length >= 3;
+        const EL = usarD ? ELd.slice().sort((a, b) => b.nivel - a.nivel) : elClubs(), tEL = usarD ? d.temporada : ultCompleta(), prov = usarD && META.temporadas_provisionales.includes(tEL);
         const nv = (fs) => { const fl = fs.filter((o) => o.w > 0), e = fl.length ? equipoDe(fl.map((o) => ({ ...valsJ(o.j, "n"), w: o.w }))) : null;
           return e ? { v: sNivCL(Lclub(e.L), tEL), eu: (euComp(fl) || {}).eu } : null; };
         const S = nv(filasSin), C2 = nv(filasCon), propio = EL.find((c) => c.clave_club === d.clave_club) || null;
         if (S && C2 && EL.length > 2) {
           const clubs = EL.filter((c) => c !== propio).map((c) => ({ nom: c.nombre_club, v: sNivCL(Lclub(c.nivel), tEL), eu: c.eu })).filter((c) => c.v != null);
           const rk = (v) => 1 + clubs.filter((c) => c.v > v).length;
-          rkL = { tEL, liga: EL[0].liga, ligaN: ESC.varaNom(EL[0].liga), clubs, sin: { ...S, rk: rk(S.v) }, con: { ...C2, rk: rk(C2.v) }, n: clubs.length + 1,
+          rkL = { tEL, prov, liga: EL[0].liga, ligaN: ESC.varaNom(EL[0].liga), clubs, sin: { ...S, rk: rk(S.v) }, con: { ...C2, rk: rk(C2.v) }, n: clubs.length + 1,
             real: propio ? { v: sNivCL(Lclub(propio.nivel), tEL), rk: rk(sNivCL(Lclub(propio.nivel), tEL)), nom: propio.nombre_club } : null };
         }
       } catch (e) { rkL = null; }
