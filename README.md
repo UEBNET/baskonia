@@ -662,6 +662,8 @@ Todos los umbrales e hiperparámetros de las capas nuevas viven en YAML (el cód
 | `configs/styles.yaml` | estilos unificados (fase 6) | temporadas, mínimos de minutos, contracción m/(m+150), los 12 rasgos, regla de selección de K, umbrales «puro»/mezcla, tramos de entrenador, firmas y nombres de los estilos |
 | `configs/adaptacion.yaml` | adaptación (fase 7) | definición de traspaso, país de cada liga, grupos de nacionalidad, métricas, modelo jerárquico (previas, Gibbs, pesos por minutos), curva (previas de κ y D, bootstrap, control), censura (IPCW), jerarquía de priors, validación |
 | `configs/simulation.yaml` | simulador (fase 8) | iteraciones, intervalos, fuente de la normalización, plantilla, producción y suma fija de uso, utilidad de Plackett-Luce, GO-TO-GUY proyectado, contracción de la adaptación (0,55), índice Fit, avisos, validación y exportación |
+| `configs/equipo_v40.yaml` | CERNO v4.0 (`bbequipo`) | perfiles, contrato de tramos, RAPM multiliga con prior (F1), sinergia y efectos dirigidos (F2), función de conjunto (F3), capa 4 y A5 (F4), anclas NC/IM (F5) y criterios §11 prerregistrados |
+| `configs/ecosistema_v41.yaml` | CERNO v4.1 (`bbequipo.ecosistema`) | prueba de orden de sinergias, benchmark sobre la v4.0, auditoría de ausencias, motor de escenarios (F1), Impacto en pista (F2), impacto cruzado y tríos (F3), producto (F4) y criterios §6 |
 
 ## 19. Registro de experimentos (MLflow)
 
@@ -679,6 +681,8 @@ MLflow no está instalado, el registro se degrada a `experimentos/registro_local
 | `estilos_unificados` | `bbfit estilos` | `gmm_k<K>_<covarianza>` |
 | `adaptacion` | `bbfit adaptacion` | `fase7` |
 | `simulador_v2` | examen temporal del simulador (fase 8) | `examen_<fuente>_<escenario>…` |
+| `equipo_v40` | `python -m bbequipo …` (v4.0) | exámenes y productos F1–F5 |
+| `ecosistema_v41` | `python -m bbequipo.ecosistema …` (v4.1) | `F0_orden_sinergias`, … |
 
 Consulta: `mlflow ui --backend-store-uri experimentos/mlruns` (o `mlflow.search_runs(experiment_names=[...])`).
 Las cachés reanudables también viven en `experimentos/` (`cache_normalizacion/`, `cache_adaptacion/`,
@@ -696,3 +700,28 @@ Otros documentos: [`docs/data_dictionary.md`](docs/data_dictionary.md) (todas la
 [`docs/normalizacion_amortiguada.md`](docs/normalizacion_amortiguada.md), [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md),
 [`docs/contexto_y_quimica.md`](docs/contexto_y_quimica.md), [`docs/AUDIT_2026-10-21.md`](docs/AUDIT_2026-10-21.md)
 (línea base del proyecto multifase) y [`CHANGELOG.md`](CHANGELOG.md).
+
+## 21. CERNO v4.0 (modelo de equipo) y v4.1 (ecosistema del club)
+
+**v4.0 · cerrada (05-11-2026).** Paquete `bbequipo/` (`python -m bbequipo …`), configuración `configs/equipo_v40.yaml`,
+productos en `data/modelos/v4_0/`. Capas: perfiles comparables (F0), RAPM multiliga con prior del perfil β (F1), sinergia de
+parejas por perfiles φ y efectos dirigidos X → Y (F2), corrección no lineal por jugador h (F3), composición y Δ de equipo con
+el motor de minutos v3.3 + A5 (F4) y anclas NIVEL CERNO e IMPACTO en [0, 100] (F5). Modelo: [`docs/modelo_equipo_v40.md`](docs/modelo_equipo_v40.md);
+fases: `docs/checkpoints/V40_F0.md` … `V40_F5.md`.
+
+**v4.1 · ecosistema del club (en curso; encargo [`docs/encargos/v4.1_ecosistema.md`](docs/encargos/v4.1_ecosistema.md)).**
+Capa E encima de la capa 4: escenarios de altas (con rol fijado por el analista), bajas y combinados; recálculo de minutos,
+NIVEL CERNO e «Impacto en pista» de toda la plantilla; impacto cruzado por compañero y métrica, atribuido a cada movimiento
+(Shapley); sello de fiabilidad ALTA · MEDIA · BAJA. La v4.1 **añade**: no toca la normalización v3.2, el motor v3.3 ni las
+capas de la v4.0. Subpaquete `bbequipo/ecosistema/`, configuración `configs/ecosistema_v41.yaml`, salidas en
+`data/modelos/v4_1/`, tests `tests/test_ecosistema_v41.py`, estado de cada salida visible en
+[`docs/estado_modelos.md`](docs/estado_modelos.md) y checkpoints `docs/checkpoints/V41_F<k>.md`.
+
+```bash
+python -m bbequipo.ecosistema orden-sinergias     # F0.4: prueba de orden de sinergias, (a) ridge y (b) β de F1 (≈ 30 min)
+python -m bbequipo.ecosistema benchmark           # F0.3: benchmark de decisión sobre la v4.0 (≈ 1,5 min)
+python -m bbequipo.ecosistema ausencias           # F0.5: auditoría de ausencias para el banco V-AUS (≈ 20 s)
+python -m bbequipo.ecosistema inventario          # F0.6/F0.7: Fit, ADAPT y referencias fijas a club y temporada
+python -m pytest tests/test_ecosistema_v41.py -q
+```
+

@@ -1,0 +1,479 @@
+{
+ "version": "v4.1",
+ "generado": "2026-11-06T10:36:15",
+ "cortes_decision": [
+  2022,
+  2023,
+  2024
+ ],
+ "segmentos": {
+  "elite_club": [
+   "acb",
+   "eurocup",
+   "euroleague"
+  ],
+  "global": "todas"
+ },
+ "bootstrap": 2000,
+ "A_nivel_cerno": {
+  "global": {
+   "n": 4560,
+   "spearman_NC1_pct": 0.45444957952221765,
+   "spearman_NC1_pct_ic95": [
+    0.4294884991576591,
+    0.4787481993690576
+   ],
+   "spearman_Cpred_Creal": 0.4674635604172784,
+   "spearman_Coraculo_Creal": 0.8915391141696127,
+   "cobertura_80": 0.7824561403508772,
+   "anchura_80_media": 70.2269528508772,
+   "topk_NC1": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.13333333333333333,
+     "azar": 0.006838628257802963,
+     "lift": 19.49708747235943,
+     "real_medio_topk": 84.18,
+     "real_medio_todos": 45.69413117519438
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.10666666666666667,
+     "azar": 0.017096570644507408,
+     "lift": 6.239067991155017,
+     "real_medio_topk": 78.89120000000001,
+     "real_medio_todos": 45.69413117519438
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.14,
+     "azar": 0.034193141289014815,
+     "lift": 4.09438836919548,
+     "real_medio_topk": 72.83078666666667,
+     "real_medio_todos": 45.69413117519438
+    }
+   },
+   "topk_Cpred_frente_Creal": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.3,
+     "azar": 0.006838628257802963,
+     "lift": 43.86844681280871,
+     "real_medio_topk": 23.7132,
+     "real_medio_todos": 11.700816507336251
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.26666666666666666,
+     "azar": 0.017096570644507408,
+     "lift": 15.597669977887543,
+     "real_medio_topk": 21.27326666666667,
+     "real_medio_todos": 11.700816507336251
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.25333333333333335,
+     "azar": 0.034193141289014815,
+     "lift": 7.408893239496583,
+     "real_medio_topk": 19.573753333333332,
+     "real_medio_todos": 11.700816507336251
+    }
+   },
+   "topk_Coraculo_frente_Creal": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.5333333333333333,
+     "azar": 0.007048487489139847,
+     "lift": 75.66635170383455,
+     "real_medio_topk": 29.029366666666665,
+     "real_medio_todos": 11.651131126570727
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.44,
+     "azar": 0.017621218722849618,
+     "lift": 24.9698960622654,
+     "real_medio_topk": 25.847626666666667,
+     "real_medio_todos": 11.651131126570727
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.45999999999999996,
+     "azar": 0.035242437445699236,
+     "lift": 13.052445668911458,
+     "real_medio_topk": 23.615166666666667,
+     "real_medio_todos": 11.651131126570727
+    }
+   },
+   "frac_con_oraculo": 0.9675438596491228,
+   "dif_oraculo_menos_pred_ic95": [
+    0.4007050848989965,
+    0.44675698651382467
+   ]
+  },
+  "elite_club": {
+   "n": 650,
+   "spearman_NC1_pct": 0.36748985400130935,
+   "spearman_NC1_pct_ic95": [
+    0.30053612280234254,
+    0.43432386649755433
+   ],
+   "spearman_Cpred_Creal": 0.4176521624426924,
+   "spearman_Coraculo_Creal": 0.885434298716837,
+   "cobertura_80": 0.76,
+   "anchura_80_media": 71.21407538461538,
+   "topk_NC1": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.10000000000000002,
+     "azar": 0.046584263689526846,
+     "lift": 2.146647646219687,
+     "real_medio_topk": 65.14973333333333,
+     "real_medio_todos": 45.15729386629453
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.26666666666666666,
+     "azar": 0.11646065922381711,
+     "lift": 2.2897574893009986,
+     "real_medio_topk": 65.50506666666666,
+     "real_medio_todos": 45.15729386629453
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.4133333333333334,
+     "azar": 0.23292131844763422,
+     "lift": 1.7745620542082743,
+     "real_medio_topk": 59.468273333333336,
+     "real_medio_todos": 45.15729386629453
+    }
+   },
+   "topk_Cpred_frente_Creal": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.13333333333333333,
+     "azar": 0.046584263689526846,
+     "lift": 2.862196861626248,
+     "real_medio_topk": 15.0419,
+     "real_medio_todos": 11.260521145667198
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.25333333333333335,
+     "azar": 0.11646065922381711,
+     "lift": 2.175269614835949,
+     "real_medio_topk": 15.131973333333335,
+     "real_medio_todos": 11.260521145667198
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.40666666666666673,
+     "azar": 0.23292131844763422,
+     "lift": 1.7459400855920117,
+     "real_medio_topk": 14.22298,
+     "real_medio_todos": 11.260521145667198
+    }
+   },
+   "topk_Coraculo_frente_Creal": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.5333333333333333,
+     "azar": 0.04819540872817052,
+     "lift": 11.066061008869433,
+     "real_medio_topk": 21.20393333333333,
+     "real_medio_todos": 11.254644364098512
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.6133333333333334,
+     "azar": 0.12048852182042628,
+     "lift": 5.09038806407994,
+     "real_medio_topk": 19.3792,
+     "real_medio_todos": 11.254644364098512
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.7533333333333333,
+     "azar": 0.24097704364085257,
+     "lift": 3.126162235005615,
+     "real_medio_topk": 17.69956,
+     "real_medio_todos": 11.254644364098512
+    }
+   },
+   "frac_con_oraculo": 0.9661538461538461,
+   "dif_oraculo_menos_pred_ic95": [
+    0.410506031702164,
+    0.5244445607527316
+   ]
+  }
+ },
+ "B_impacto": {
+  "global": {
+   "n": 3598,
+   "spearman_IM_onoff": 0.14914981725001705,
+   "spearman_IM_onoff_ic95": [
+    0.11474168663503995,
+    0.182668274700669
+   ],
+   "spearman_aditivo_onoff": 0.03077758721797825,
+   "dif_IM_menos_aditivo_onoff_ic95": [
+    0.08242706463385463,
+    0.1552045880605618
+   ],
+   "spearman_IM_pct_grupo": 0.1465908593414055,
+   "spearman_IM_pct_grupo_ic95": [
+    0.11252220988777618,
+    0.1804312544581573
+   ],
+   "spearman_aditivo_pct_grupo": 0.06088596155736074,
+   "dif_IM_menos_aditivo_pct_grupo_ic95": [
+    0.04934055625667765,
+    0.12232061349092693
+   ],
+   "cobertura_80": 0.7873818788215675,
+   "topk_IM": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.03333333333333333,
+     "azar": 0.008683425069665188,
+     "lift": 3.8387310382605264,
+     "real_medio_topk": 60.2678,
+     "real_medio_todos": 50.13025110809213
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.05333333333333334,
+     "azar": 0.021708562674162973,
+     "lift": 2.456787864486737,
+     "real_medio_topk": 58.11425333333333,
+     "real_medio_todos": 50.13025110809213
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.10000000000000002,
+     "azar": 0.043417125348325945,
+     "lift": 2.303238622956316,
+     "real_medio_topk": 60.72347333333334,
+     "real_medio_todos": 50.13025110809213
+    }
+   },
+   "IM_rango_publicado_p05_p95": [
+    42.506,
+    60.655
+   ]
+  },
+  "elite_club": {
+   "n": 484,
+   "spearman_IM_onoff": 0.15908750099372362,
+   "spearman_IM_onoff_ic95": [
+    0.062332493273092246,
+    0.2535463618922931
+   ],
+   "spearman_aditivo_onoff": 0.08232052919252209,
+   "dif_IM_menos_aditivo_onoff_ic95": [
+    0.0016113177933424956,
+    0.14891772029575423
+   ],
+   "spearman_IM_pct_grupo": 0.15308146639904271,
+   "spearman_IM_pct_grupo_ic95": [
+    0.058204615624205515,
+    0.24543156294634366
+   ],
+   "spearman_aditivo_pct_grupo": 0.10534975186197466,
+   "dif_IM_menos_aditivo_pct_grupo_ic95": [
+    -0.025445527165433284,
+    0.11776115663902328
+   ],
+   "cobertura_80": 0.7892561983471075,
+   "topk_IM": {
+    "10": {
+     "grupos": 3,
+     "precision": 0.10000000000000002,
+     "azar": 0.06265447690273931,
+     "lift": 1.5960551415221842,
+     "real_medio_topk": 64.43176666666668,
+     "real_medio_todos": 54.2974371393926
+    },
+    "25": {
+     "grupos": 3,
+     "precision": 0.22666666666666666,
+     "azar": 0.1566361922568483,
+     "lift": 1.4470899949801133,
+     "real_medio_topk": 58.20630666666667,
+     "real_medio_todos": 54.2974371393926
+    },
+    "50": {
+     "grupos": 3,
+     "precision": 0.41333333333333333,
+     "azar": 0.3132723845136966,
+     "lift": 1.3194055836583385,
+     "real_medio_topk": 58.46459333333333,
+     "real_medio_todos": 54.2974371393926
+    }
+   },
+   "IM_rango_publicado_p05_p95": [
+    44.042,
+    60.208499999999994
+   ]
+  }
+ },
+ "C_delta_net": {
+  "global": {
+   "n": 933,
+   "mae_f4": 4.058307609860664,
+   "mae_persistencia": 4.894961629153269,
+   "mae_aditivo": 4.054865702036442,
+   "mae_oraculo_minutos": 4.000921757770632,
+   "dif_f4_persistencia_ic95": [
+    -1.0236830680600213,
+    -0.655322004287245
+   ],
+   "dif_oraculo_f4_ic95": [
+    -0.11626090032154371,
+    0.004047406216505689
+   ],
+   "spearman": 0.5406503301348933,
+   "cobertura_80": 0.7652733118971061,
+   "anchura_80_media": 11.97635969989282
+  },
+  "elite_club": {
+   "n": 148,
+   "mae_f4": 3.2314358108108108,
+   "mae_persistencia": 3.9010398648648654,
+   "mae_aditivo": 3.186174324324324,
+   "mae_oraculo_minutos": 3.249145945945946,
+   "dif_f4_persistencia_ic95": [
+    -1.02030581081081,
+    -0.3173038006756757
+   ],
+   "dif_oraculo_f4_ic95": [
+    -0.11270988175675646,
+    0.14139403716216167
+   ],
+   "spearman": 0.5271769509545157,
+   "cobertura_80": 0.8040540540540541,
+   "anchura_80_media": 10.640922972972971
+  }
+ },
+ "D_minutos": {
+  "examen_corte_global": {
+   "n": 5188,
+   "fuera_de_limites": 1425,
+   "min_lo90": 0.0,
+   "max_hi90": 63.8373,
+   "max_hi90_sobre_duracion": 1.3503825,
+   "orden_incoherente_lo80_gt_pred_o_pred_gt_hi80": 12,
+   "saturacion_cola_superior_frac": 0.05319969159599075,
+   "hi80_mediana": 30.0912,
+   "hi90_mediana": 38.2087,
+   "cobertura_80": 0.9134541249036238,
+   "cobertura_90": 0.9633770239013107,
+   "frac_real_por_encima_hi90": 0.00963762528912876,
+   "frac_real_por_debajo_lo90": 0.026985350809560524
+  },
+  "examen_corte_elite_club": {
+   "n": 674,
+   "fuera_de_limites": 85,
+   "min_lo90": 0.0,
+   "max_hi90": 45.8357,
+   "max_hi90_sobre_duracion": 1.1458925,
+   "orden_incoherente_lo80_gt_pred_o_pred_gt_hi80": 0,
+   "saturacion_cola_superior_frac": 0.004451038575667656,
+   "hi80_mediana": 26.4566,
+   "hi90_mediana": 36.442750000000004,
+   "cobertura_80": 0.9362017804154302,
+   "cobertura_90": 0.973293768545994,
+   "frac_real_por_encima_hi90": 0.002967359050445104,
+   "frac_real_por_debajo_lo90": 0.02373887240356083
+  },
+  "producto_v33_global": {
+   "n": 9066,
+   "fuera_de_limites": 1,
+   "min_lo90": 2.5007,
+   "max_hi90": 40.0798,
+   "max_hi90_sobre_duracion": 1.001995,
+   "orden_incoherente_lo80_gt_pred_o_pred_gt_hi80": 0,
+   "saturacion_cola_superior_frac": 0.9770571365541584,
+   "hi80_mediana": 29.09905,
+   "hi90_mediana": 29.1115,
+   "cobertura_80": 0.8046547540260314,
+   "cobertura_90": 0.872049415398191,
+   "frac_real_por_encima_hi90": 0.07092433267151997,
+   "frac_real_por_debajo_lo90": 0.05702625193028899
+  },
+  "producto_v33_elite_club": {
+   "n": 1407,
+   "fuera_de_limites": 0,
+   "min_lo90": 2.5007,
+   "max_hi90": 33.4003,
+   "max_hi90_sobre_duracion": 0.8350075,
+   "orden_incoherente_lo80_gt_pred_o_pred_gt_hi80": 0,
+   "saturacion_cola_superior_frac": 0.997867803837953,
+   "hi80_mediana": 26.899,
+   "hi90_mediana": 26.9045,
+   "cobertura_80": 0.851457000710732,
+   "cobertura_90": 0.9203980099502488,
+   "frac_real_por_encima_hi90": 0.047619047619047616,
+   "frac_real_por_debajo_lo90": 0.031982942430703626
+  }
+ },
+ "E_avisos": {
+  "global": {
+   "fichas": 9066,
+   "frac_con_aviso": 0.6453783366424002,
+   "avisos_medios": 0.9767262298698434,
+   "frac_2_o_mas": 0.29086697551290536,
+   "por_tipo_frac_fichas": {
+    "incertidumbre_alta": 0.43073020075005514,
+    "muestra_pequena": 0.2229208030002206,
+    "volatilidad_alta": 0.17163026693139202,
+    "liga_lejana": 0.12089124200308846,
+    "cambio_rol": 0.030553717185087138
+   }
+  },
+  "elite_club": {
+   "fichas": 1407,
+   "frac_con_aviso": 0.5728500355366027,
+   "avisos_medios": 0.835820895522388,
+   "frac_2_o_mas": 0.2345415778251599,
+   "por_tipo_frac_fichas": {
+    "volatilidad_alta": 0.25302061122956643,
+    "incertidumbre_alta": 0.2459132906894101,
+    "muestra_pequena": 0.20113717128642503,
+    "liga_lejana": 0.09808102345415778,
+    "cambio_rol": 0.037668798862828715
+   }
+  }
+ },
+ "F_club_cliente": {
+  "nota": "sólo agregados; ningún nombre ni identificador de jugador",
+  "cortes": [
+   2022,
+   2023,
+   2024
+  ],
+  "nc": {
+   "fichajes": 18,
+   "NC1_medio": 43.132666666666665,
+   "pct_realizado_medio": 39.54783333333333,
+   "error_medio": -3.5848333333333327,
+   "error_absoluto_medio": 25.527388888888886,
+   "cobertura_80": 0.7222222222222222,
+   "spearman": 0.49586803319240774
+  },
+  "im": {
+   "fichajes": 14,
+   "IM_medio": 51.72471428571429,
+   "pct_onoff_medio": 64.10650000000001,
+   "cobertura_80": 0.7142857142857143,
+   "spearman": -0.08388602728375531
+  },
+  "delta_net": {
+   "transiciones": 6,
+   "mae_f4": 3.2969500000000003,
+   "mae_persistencia": 4.450483333333333,
+   "cobertura_80": 0.6666666666666666
+  }
+ },
+ "segundos": 84
+}

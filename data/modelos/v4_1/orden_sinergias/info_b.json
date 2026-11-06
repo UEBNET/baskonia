@@ -1,0 +1,1397 @@
+[
+ {
+  "liga": "acb",
+  "temporada": "2020-21",
+  "tramos": 9008,
+  "jugadores": 335,
+  "partidos": 359,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.90417743500535,
+  "segundos": 6.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "acb",
+  "temporada": "2021-22",
+  "tramos": 8228,
+  "jugadores": 297,
+  "partidos": 324,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.039905083606,
+  "segundos": 6.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "acb",
+  "temporada": "2022-23",
+  "tramos": 8060,
+  "jugadores": 309,
+  "partidos": 324,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.04308808636966,
+  "segundos": 6.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "acb",
+  "temporada": "2023-24",
+  "tramos": 8399,
+  "jugadores": 303,
+  "partidos": 326,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.23646027208437,
+  "segundos": 6.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "acb",
+  "temporada": "2024-25",
+  "tramos": 8787,
+  "jugadores": 306,
+  "partidos": 325,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.05959095384344,
+  "segundos": 7.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "acb",
+  "temporada": "2025-26",
+  "tramos": 9102,
+  "jugadores": 320,
+  "partidos": 327,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.2552970446307,
+  "segundos": 7.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bbl",
+  "temporada": "2023-24",
+  "tramos": 7785,
+  "jugadores": 280,
+  "partidos": 289,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 184.09154698638673,
+  "segundos": 5.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bbl",
+  "temporada": "2024-25",
+  "tramos": 8248,
+  "jugadores": 286,
+  "partidos": 298,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.73324798746663,
+  "segundos": 6.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bbl",
+  "temporada": "2025-26",
+  "tramos": 9214,
+  "jugadores": 311,
+  "partidos": 326,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.79553689876417,
+  "segundos": 7.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bcl",
+  "temporada": "2021-22",
+  "tramos": 4246,
+  "jugadores": 424,
+  "partidos": 162,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.4784168566805,
+  "segundos": 4.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bcl",
+  "temporada": "2022-23",
+  "tramos": 4302,
+  "jugadores": 453,
+  "partidos": 167,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.78018126000325,
+  "segundos": 3.9,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bcl",
+  "temporada": "2023-24",
+  "tramos": 4454,
+  "jugadores": 438,
+  "partidos": 172,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.40560360078192,
+  "segundos": 4.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bcl",
+  "temporada": "2024-25",
+  "tramos": 4710,
+  "jugadores": 444,
+  "partidos": 177,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 185.8456437202516,
+  "segundos": 4.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bcl",
+  "temporada": "2025-26",
+  "tramos": 4741,
+  "jugadores": 462,
+  "partidos": 175,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.2509112646557,
+  "segundos": 4.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bnxt",
+  "temporada": "2021-22",
+  "tramos": 8405,
+  "jugadores": 322,
+  "partidos": 348,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 175.87161939978645,
+  "segundos": 6.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bnxt",
+  "temporada": "2022-23",
+  "tramos": 8292,
+  "jugadores": 314,
+  "partidos": 336,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 178.3696187334033,
+  "segundos": 6.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bnxt",
+  "temporada": "2023-24",
+  "tramos": 8011,
+  "jugadores": 317,
+  "partidos": 320,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 176.02174998191938,
+  "segundos": 5.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bnxt",
+  "temporada": "2024-25",
+  "tramos": 9400,
+  "jugadores": 321,
+  "partidos": 365,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.78474201667927,
+  "segundos": 6.5,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bnxt",
+  "temporada": "2025-26",
+  "tramos": 8730,
+  "jugadores": 313,
+  "partidos": 330,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.4532392437999,
+  "segundos": 6.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bsl",
+  "temporada": "2020-21",
+  "tramos": 5189,
+  "jugadores": 284,
+  "partidos": 219,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.558261224419,
+  "segundos": 4.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "bsl",
+  "temporada": "2025-26",
+  "tramos": 6467,
+  "jugadores": 312,
+  "partidos": 257,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.62842931367328,
+  "segundos": 5.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "cba",
+  "temporada": "2021-22",
+  "tramos": 9840,
+  "jugadores": 365,
+  "partidos": 370,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 178.96922293996133,
+  "segundos": 7.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "cba",
+  "temporada": "2022-23",
+  "tramos": 10467,
+  "jugadores": 385,
+  "partidos": 390,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.59544666618936,
+  "segundos": 7.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "cba",
+  "temporada": "2023-24",
+  "tramos": 11084,
+  "jugadores": 398,
+  "partidos": 418,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.0449206175736,
+  "segundos": 8.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "cba",
+  "temporada": "2025-26",
+  "tramos": 7183,
+  "jugadores": 366,
+  "partidos": 360,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.56330650107074,
+  "segundos": 6.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "eurocup",
+  "temporada": "2020-21",
+  "tramos": 4539,
+  "jugadores": 351,
+  "partidos": 182,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.73396659501893,
+  "segundos": 4.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "eurocup",
+  "temporada": "2021-22",
+  "tramos": 4649,
+  "jugadores": 303,
+  "partidos": 186,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.1207330527463,
+  "segundos": 4.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "eurocup",
+  "temporada": "2022-23",
+  "tramos": 5041,
+  "jugadores": 302,
+  "partidos": 194,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.69920251199275,
+  "segundos": 4.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "eurocup",
+  "temporada": "2023-24",
+  "tramos": 5215,
+  "jugadores": 303,
+  "partidos": 193,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.4468563107682,
+  "segundos": 4.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "eurocup",
+  "temporada": "2024-25",
+  "tramos": 5273,
+  "jugadores": 290,
+  "partidos": 192,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.9535190231828,
+  "segundos": 4.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "eurocup",
+  "temporada": "2025-26",
+  "tramos": 5513,
+  "jugadores": 312,
+  "partidos": 193,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.64756904723166,
+  "segundos": 4.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "euroleague",
+  "temporada": "2020-21",
+  "tramos": 7987,
+  "jugadores": 294,
+  "partidos": 326,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.85821049187132,
+  "segundos": 6.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "euroleague",
+  "temporada": "2021-22",
+  "tramos": 7328,
+  "jugadores": 287,
+  "partidos": 299,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.36542978631192,
+  "segundos": 5.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "euroleague",
+  "temporada": "2022-23",
+  "tramos": 7954,
+  "jugadores": 291,
+  "partidos": 328,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.4451251532701,
+  "segundos": 6.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "euroleague",
+  "temporada": "2023-24",
+  "tramos": 8007,
+  "jugadores": 286,
+  "partidos": 330,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.7402749403387,
+  "segundos": 6.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "euroleague",
+  "temporada": "2024-25",
+  "tramos": 8240,
+  "jugadores": 293,
+  "partidos": 330,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 184.42511853935568,
+  "segundos": 6.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "euroleague",
+  "temporada": "2025-26",
+  "tramos": 10423,
+  "jugadores": 334,
+  "partidos": 399,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.31938104374402,
+  "segundos": 7.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb1",
+  "temporada": "2022-23",
+  "tramos": 7990,
+  "jugadores": 283,
+  "partidos": 316,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 178.68391621333714,
+  "segundos": 5.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb1",
+  "temporada": "2023-24",
+  "tramos": 8359,
+  "jugadores": 284,
+  "partidos": 323,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 176.15621976040597,
+  "segundos": 6.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb1",
+  "temporada": "2024-25",
+  "tramos": 8541,
+  "jugadores": 295,
+  "partidos": 319,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.0993531196825,
+  "segundos": 6.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb1",
+  "temporada": "2025-26",
+  "tramos": 8089,
+  "jugadores": 274,
+  "partidos": 289,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.32308845103688,
+  "segundos": 6.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb2",
+  "temporada": "2023-24",
+  "tramos": 10161,
+  "jugadores": 429,
+  "partidos": 388,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 174.36000181803863,
+  "segundos": 7.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb2",
+  "temporada": "2024-25",
+  "tramos": 10600,
+  "jugadores": 434,
+  "partidos": 390,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 175.0171798513864,
+  "segundos": 7.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb2",
+  "temporada": "2025-26",
+  "tramos": 10377,
+  "jugadores": 420,
+  "partidos": 392,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.39232841969545,
+  "segundos": 7.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb3",
+  "temporada": "2023-24",
+  "tramos": 43255,
+  "jugadores": 2219,
+  "partidos": 1690,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 168.63303276640877,
+  "segundos": 34.9,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb3",
+  "temporada": "2024-25",
+  "tramos": 44843,
+  "jugadores": 2257,
+  "partidos": 1750,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 171.3180213359959,
+  "segundos": 36.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "feb3",
+  "temporada": "2025-26",
+  "tramos": 47145,
+  "jugadores": 2323,
+  "partidos": 1836,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 172.3673479248735,
+  "segundos": 38.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "fec",
+  "temporada": "2020-21",
+  "tramos": 759,
+  "jugadores": 232,
+  "partidos": 30,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 175.98594325214648,
+  "segundos": 2.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "fec",
+  "temporada": "2021-22",
+  "tramos": 3968,
+  "jugadores": 500,
+  "partidos": 156,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.113062679881,
+  "segundos": 3.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "fec",
+  "temporada": "2022-23",
+  "tramos": 4292,
+  "jugadores": 534,
+  "partidos": 165,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.62706921388593,
+  "segundos": 4.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "fec",
+  "temporada": "2023-24",
+  "tramos": 4083,
+  "jugadores": 472,
+  "partidos": 160,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 174.80640374824745,
+  "segundos": 3.9,
+  "sin_prior": 0
+ },
+ {
+  "liga": "fec",
+  "temporada": "2024-25",
+  "tramos": 4773,
+  "jugadores": 519,
+  "partidos": 180,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 178.61595873497484,
+  "segundos": 4.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "fec",
+  "temporada": "2025-26",
+  "tramos": 4849,
+  "jugadores": 539,
+  "partidos": 182,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.33511661110657,
+  "segundos": 4.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gbl",
+  "temporada": "2020-21",
+  "tramos": 3766,
+  "jugadores": 219,
+  "partidos": 156,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 178.16366704251377,
+  "segundos": 3.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gbl",
+  "temporada": "2021-22",
+  "tramos": 3961,
+  "jugadores": 239,
+  "partidos": 168,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.9488044219964,
+  "segundos": 3.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gbl",
+  "temporada": "2022-23",
+  "tramos": 3602,
+  "jugadores": 213,
+  "partidos": 149,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.2703476245357,
+  "segundos": 3.5,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gbl",
+  "temporada": "2023-24",
+  "tramos": 3714,
+  "jugadores": 213,
+  "partidos": 155,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.99003376473854,
+  "segundos": 3.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gbl",
+  "temporada": "2024-25",
+  "tramos": 3348,
+  "jugadores": 224,
+  "partidos": 139,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.1882368994185,
+  "segundos": 3.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gbl",
+  "temporada": "2025-26",
+  "tramos": 4127,
+  "jugadores": 235,
+  "partidos": 164,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.62188053526367,
+  "segundos": 3.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gleague",
+  "temporada": "2020-21",
+  "tramos": 3373,
+  "jugadores": 244,
+  "partidos": 120,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 187.1374864974384,
+  "segundos": 3.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gleague",
+  "temporada": "2021-22",
+  "tramos": 11593,
+  "jugadores": 488,
+  "partidos": 421,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 352.29053402129415,
+  "segundos": 8.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gleague",
+  "temporada": "2022-23",
+  "tramos": 12279,
+  "jugadores": 471,
+  "partidos": 460,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 192.46034434819222,
+  "segundos": 9.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gleague",
+  "temporada": "2023-24",
+  "tramos": 13158,
+  "jugadores": 512,
+  "partidos": 501,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 190.05738536432114,
+  "segundos": 9.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gleague",
+  "temporada": "2024-25",
+  "tramos": 13188,
+  "jugadores": 508,
+  "partidos": 506,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 190.6877400517148,
+  "segundos": 9.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "gleague",
+  "temporada": "2025-26",
+  "tramos": 14374,
+  "jugadores": 524,
+  "partidos": 532,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 190.9713105360246,
+  "segundos": 10.2,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lba",
+  "temporada": "2020-21",
+  "tramos": 5034,
+  "jugadores": 223,
+  "partidos": 202,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.54419314879536,
+  "segundos": 4.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lba",
+  "temporada": "2021-22",
+  "tramos": 6585,
+  "jugadores": 255,
+  "partidos": 263,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.90131498692284,
+  "segundos": 5.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lba",
+  "temporada": "2022-23",
+  "tramos": 6600,
+  "jugadores": 246,
+  "partidos": 265,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 179.5574505885894,
+  "segundos": 4.9,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lba",
+  "temporada": "2023-24",
+  "tramos": 6803,
+  "jugadores": 245,
+  "partidos": 268,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 186.13943380572707,
+  "segundos": 5.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lba",
+  "temporada": "2024-25",
+  "tramos": 6996,
+  "jugadores": 257,
+  "partidos": 266,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.53929626071658,
+  "segundos": 5.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lba",
+  "temporada": "2025-26",
+  "tramos": 6233,
+  "jugadores": 227,
+  "partidos": 239,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 182.4327724344709,
+  "segundos": 4.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lnb",
+  "temporada": "2021-22",
+  "tramos": 8135,
+  "jugadores": 279,
+  "partidos": 326,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 184.84304806016738,
+  "segundos": 5.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lnb",
+  "temporada": "2022-23",
+  "tramos": 8058,
+  "jugadores": 288,
+  "partidos": 321,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.32848278012847,
+  "segundos": 5.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lnb",
+  "temporada": "2023-24",
+  "tramos": 8301,
+  "jugadores": 293,
+  "partidos": 324,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.9908893857836,
+  "segundos": 6.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lnb",
+  "temporada": "2024-25",
+  "tramos": 7108,
+  "jugadores": 251,
+  "partidos": 266,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 183.35763801357848,
+  "segundos": 5.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "lnb",
+  "temporada": "2025-26",
+  "tramos": 7338,
+  "jugadores": 264,
+  "partidos": 261,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 181.42126467283032,
+  "segundos": 5.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nba",
+  "temporada": "2020-21",
+  "tramos": 27109,
+  "jugadores": 535,
+  "partidos": 1150,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 186.30712665333817,
+  "segundos": 17.6,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nba",
+  "temporada": "2021-22",
+  "tramos": 30994,
+  "jugadores": 590,
+  "partidos": 1297,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 196.07608669882535,
+  "segundos": 19.9,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nba",
+  "temporada": "2022-23",
+  "tramos": 30766,
+  "jugadores": 536,
+  "partidos": 1290,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 217.1894601765862,
+  "segundos": 20.7,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nba",
+  "temporada": "2023-24",
+  "tramos": 30208,
+  "jugadores": 560,
+  "partidos": 1288,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 186.96940317248323,
+  "segundos": 20.1,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nba",
+  "temporada": "2024-25",
+  "tramos": 30845,
+  "jugadores": 560,
+  "partidos": 1285,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 188.97095923453531,
+  "segundos": 20.5,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nba",
+  "temporada": "2025-26",
+  "tramos": 32604,
+  "jugadores": 575,
+  "partidos": 1295,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 188.71037502696527,
+  "segundos": 21.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nbl",
+  "temporada": "2020-21",
+  "tramos": 4013,
+  "jugadores": 131,
+  "partidos": 161,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.29900865136597,
+  "segundos": 3.5,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nbl",
+  "temporada": "2021-22",
+  "tramos": 3830,
+  "jugadores": 150,
+  "partidos": 143,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.20256696967576,
+  "segundos": 3.4,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nbl",
+  "temporada": "2022-23",
+  "tramos": 4027,
+  "jugadores": 148,
+  "partidos": 146,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.7626008991938,
+  "segundos": 3.5,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nbl",
+  "temporada": "2023-24",
+  "tramos": 2981,
+  "jugadores": 131,
+  "partidos": 107,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.90812798569058,
+  "segundos": 3.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nbl",
+  "temporada": "2024-25",
+  "tramos": 4161,
+  "jugadores": 149,
+  "partidos": 155,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 187.71476307663562,
+  "segundos": 3.9,
+  "sin_prior": 0
+ },
+ {
+  "liga": "nbl",
+  "temporada": "2025-26",
+  "tramos": 2538,
+  "jugadores": 150,
+  "partidos": 96,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.5050595512321,
+  "segundos": 2.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "ncaa",
+  "temporada": "2025-26",
+  "tramos": 34110,
+  "jugadores": 3663,
+  "partidos": 1352,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.82145087157298,
+  "segundos": 41.3,
+  "sin_prior": 0
+ },
+ {
+  "liga": "vtb",
+  "temporada": "2022-23",
+  "tramos": 6203,
+  "jugadores": 203,
+  "partidos": 227,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 178.28366198324298,
+  "segundos": 5.0,
+  "sin_prior": 0
+ },
+ {
+  "liga": "vtb",
+  "temporada": "2023-24",
+  "tramos": 8256,
+  "jugadores": 225,
+  "partidos": 306,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.8023782653595,
+  "segundos": 5.9,
+  "sin_prior": 0
+ },
+ {
+  "liga": "vtb",
+  "temporada": "2024-25",
+  "tramos": 8191,
+  "jugadores": 209,
+  "partidos": 297,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 177.9274315363234,
+  "segundos": 5.8,
+  "sin_prior": 0
+ },
+ {
+  "liga": "vtb",
+  "temporada": "2025-26",
+  "tramos": 7070,
+  "jugadores": 182,
+  "partidos": 254,
+  "lambdas": [
+   8599.198668157225,
+   8599.198668157225,
+   8599.198668157225
+  ],
+  "sigma_hat": 180.30326487701132,
+  "segundos": 5.1,
+  "sin_prior": 0
+ }
+]

@@ -1,0 +1,180 @@
+# CERNO v4.1 · Ecosistema del club: altas, bajas e impacto cruzado (ENCARGO v4.1, revisión 1.0 del 06-11-2026;
+# docs/encargos/v4.1_ecosistema.md). Capa E, ENCIMA de la capa 4 de la v4.0.
+# La v4.1 AÑADE; no sustituye: normalización v3.2, simulador/motor de minutos v3.3 y capas 1–5 de la v4.0 se CONSUMEN sin
+# tocarlas (configs/equipo_v40.yaml sigue siendo su única fuente). Todo hiperparámetro de la v4.1 vive AQUÍ; el código no fija
+# ninguno. Los criterios del §6 del encargo se transcriben en `criterios` (congelación en la puerta F0, §0.3.2).
+version: "v4.1"
+base:
+  rama: claude/encargo-v4-f0-startup-zw1jvo           # v4.0 cerrada (V40_F5 §6: «APROBADA … ENCARGO v4.0 CERRADO»)
+  commit: 6fb6abd
+  config_v40: configs/equipo_v40.yaml                 # β (F1), φ (F2-A), dirigidos (F2-B), h (F3), capa 4, A5, NC, IM
+salida: data/modelos/v4_1
+mlflow: ecosistema_v41                                # experimento MLflow (experimentos/mlruns, no versionado)
+semilla: 20261106                                     # semilla general de la v4.1; cada bloque deriva la suya (crc32 de su clave)
+checkpoints: docs/checkpoints                         # V41_F<k>.md
+
+# ---------------------------------------------------------------------------------------- comunes (§0.3.4, §6)
+comunes:
+  cortes: [2021, 2022, 2023, 2024]
+  corte_calibracion: 2021
+  cortes_decision: [2022, 2023, 2024]
+  fuente_perfiles_corte: V32_corte                    # perfiles ≤ t sin fuga
+  pesos_composicion_por_corte: true
+  bootstrap: 2000
+  bootstrap_por: equipo_temporada
+  semilla_bootstrap: 20261106
+  nivel_rango: 0.80                                   # todo valor visible: punto + rango del 80 % + sello (§0.3.8)
+  segmentos:
+    elite_club: [euroleague, eurocup, acb]            # «EuroLeague + EuroCup + ACB» del encargo
+    global: todas
+
+# ---------------------------------------------------------------------------------------- F0 · prueba de orden de sinergias (§2.2, F0.4)
+orden_sinergias:
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]   # §2.2: 2020-21 a 2025-26 (2026-27 en curso fuera)
+  tramos: contrato_v40                                # basura fuera, 5 contra 5, ≥ 1 posesión (configs/equipo_v40.yaml → contrato)
+  tercios_por: partido                                # por liga-temporada, los partidos se reparten en 3 tercios al azar
+  rotaciones: 3                                       # cada tercio ajusta una vez el modelo aditivo; los otros dos miden
+  ordenes: [1, 2, 3, 5]                               # 1 jugador (sub-unidad de la pareja), 2 pareja, 3 trío, 5 quinteto
+  min_posesiones_tercio: 150                          # unidades con ≥ 150 posesiones en CADA uno de los dos tercios de medida
+  peso: h_armonico                                    # h = 1/(1/n_A + 1/n_B)
+  propio: residuo_unidad_menos_media_subunidades      # pareja − media de sus 2 jugadores; trío − media de sus 3 parejas;
+                                                      # quinteto − media de sus 10 tríos (mismo tercio)
+  fijos: [intercepto, clutch, playoffs]               # efectos fijos sin penalizar en las dos versiones
+  version_a:                                          # (a) RAPM ridge simple, λ por validación interna
+    lambda_rejilla: [300, 1000, 3000, 10000, 30000, 100000]   # penalización en unidades de posesión (τ² = σ²/λ)
+    pliegues_validacion: 3                            # por partido, dentro del tercio de ajuste
+  version_b:                                          # (b) β de F1 v4.0 como modelo aditivo
+    prior: data/modelos/v4_0/rapm_multiliga           # g(x̃) del producto F1 (columna `prior`, por persona-temporada)
+    tau: 2.0                                          # τ del producto F1 (GBM; V40_F1) — se re-resuelve el posterior en cada tercio
+    sigma: null                                       # null → g_prior.json → net.sigma (185,46 pts/100 por posesión)
+  calibracion_nula:                                   # [añadido v4.1] sesgo del estimador bajo «sin sinergia»
+    replicas: 3                                       # y* = ŷ_aditivo(todo) + ε*, ε* ~ N(0, σ̂²_lt / n_s); misma tubería
+  calibracion_plantada:                               # [añadido v4.1] factor de atenuación k_o de la medida «propia»
+    sd: 2.0                                           # DT del efecto propio sembrado (pts/100), un orden cada vez
+    ordenes: [2, 3, 5]
+    replicas: 1
+  prueba_predictiva:                                  # segunda prueba del §2.2: efectos de unidad encima del aditivo
+    ordenes: [2, 3, 5]
+    lambda_rejilla: [100, 1000, 10000, 100000, 1000000]
+    pliegues_validacion: 3
+    bootstrap_partidos: 1000                          # IC95 por liga-temporada (bootstrap de partidos del tercio de medida)
+  fiabilidad_posesiones: [150, 500, 1000]             # fiabilidad de la unidad propia a estas exposiciones
+  tolerancia_reproduccion:                            # (a) frente a las cifras del §2.2 (calculadas en el chat del proyecto)
+    regla: el punto de (a) cae dentro del rango del 80 % publicado en el §2.2 y viceversa
+  referencia_chat:                                    # cifras del §2.2 [DATO del chat, pendiente de reproducir]
+    todas: {pareja: [1.66, 1.41, 1.89], trio: [0.82, 0.48, 1.18], quinteto: [0.73, -1.44, 2.72]}
+    elite_club: {pareja: [1.28, 0.66, 1.92], trio: [1.35, 0.23, 2.40], n_pareja: 8167, n_trio: 1472, n_quinteto: 8}
+    fiabilidad_pareja_150: [0.03, 0.05]
+
+# ---------------------------------------------------------------------------------------- F0 · benchmark de decisión sobre la v4.0 (F0.3)
+benchmark:
+  insumos:
+    nc_examen: data/modelos/v4_0/equipo/anclas/nc_examen.csv.gz
+    im_examen: data/modelos/v4_0/equipo/anclas/im_examen.csv.gz
+    f4_examen: data/modelos/v4_0/equipo/examen
+  top_k: [10, 25, 50]                                 # ordenación top-k por NC dentro de liga-corte
+  rol_oraculo: true                                   # minutos y rol reales de t+1 como si los fijara el analista
+  minutos_limites: {fiba: 40, nba: 48}                # intervalos del motor v3.3 dentro de [0, duración del partido]
+  club_cliente:                                       # backtest SOLO en agregados; nunca nombres (F0.7: única fuente del club)
+    club: baskonia
+    ids: {acb: "3", euroleague: "BAS"}                # team_id del club en cada competición (data/processed/<t>/quintetos/<liga>/equipos.csv)
+
+# ---------------------------------------------------------------------------------------- F0 · auditoría de ausencias (F0.5, §5.4)
+ausencias:
+  rotacion_min_cuota_minutos: 0.15                    # ≥ 15 % de los minutos de su equipo en la temporada (literal §5.4: cuota de los
+                                                      # minutos TOTALES de jugador, Σ = 1 → ≈ 30 min por partido de 40')
+  umbrales_alternativos: [0.075, 0.03]                # sólo auditoría (propuesta al CEO): ≈ 15' y ≈ 6' por partido
+  fase: regular
+  jugo_antes_y_despues: true                          # 0 minutos en el partido, con partidos jugados antes y después
+  varios_ausentes: separar                            # se cuentan aparte; en F3 decide el CEO (excluir o escenario de varias bajas)
+  decision_tecnica:                                   # ¿se distingue ausencia de decisión técnica (DNP-CD)?
+    señales: [en_acta_sin_minutos, fuera_del_acta]    # en el acta con 0 min ≈ decisión técnica; fuera del acta ≈ baja/lesión
+
+# ---------------------------------------------------------------------------------------- F1 · motor de escenarios (§3.1–3.2)
+f1:
+  api: ecosistema.simular(R, altas=[(id, rol)], bajas=[id], cfg)
+  minutos: motor_v33                                  # condicionado al rol fijado de las altas; existentes con su rol de partida
+  rol_partida: {verano: ultima_temporada, mitad_temporada: temporada_en_curso}
+  minutos_partido: {fiba: 200, nba: 240}
+  uso_suma: 1.0
+  monte_carlo: {simulaciones: 1000, semilla_derivada: escenarios}
+  shapley:
+    exacto_hasta: 4                                   # |M| ≤ 4 exacto; si no, permutaciones
+    permutaciones: 2000
+    error_mc_declarado: true
+  descomposicion: [reemplazo_beta_h_minutos, sinergia_parejas_phi, sinergia_trios_phi3]
+  valor_de_baja: delta_net_sin_el                     # nombre provisional «Valor de baja» (confirmar con el CEO)
+  paridad_capa4_tolerancia: 0.01                      # pts/100
+
+# ---------------------------------------------------------------------------------------- F2 · Impacto en pista (§3.3)
+f2:
+  definicion: v_j(R) = β_j + h(z_j) + Σ_k π_jk(R) φ_jk [+ Σ π_jkl φ_jkl] [+ γᵀ c_j(R)]
+  pi: P(S|R)_capa4                                    # fracción de posesiones de j con k en pista
+  escala: 100 · E_pred[F(v_j)]                        # percentil esperado
+  calibracion: isotonica_cortes_anteriores_frente_a_percentil_onoff
+  poblacion: grupo_liga                               # elite / domestica_alta / resto (como IM v4.0)
+  contexto_cj: {componentes: [nivel_medio_companeros_pi, perfil_medio_companeros_pi], ajuste: solo_datos_le_t}
+
+# ---------------------------------------------------------------------------------------- F3 · validación del impacto cruzado y bajas
+f3:
+  bancos: [V-AUS, V-MID, V-TRANS]
+  metricas_cruzadas: [minutos, usg_pct, cuota_tiro, pct_asistidas, pts_p100, ts_pct, efg_pct, ortg, ast_pct, reb_pct]
+  lineas_base: [delta_0, redistribucion_proporcional]
+  trios:
+    modelo: descomposicion_cp_sobre_z                 # φ_jkl de rango bajo sobre los perfiles z
+    rango_candidatos: [1, 2, 3]
+    ajuste_sobre: residuo_f1_f2_h
+    min_posesiones_tercio_unidad: 150                 # §5.3: por debajo, ruido; la sinergia de trío sale sólo de perfiles
+
+# ---------------------------------------------------------------------------------------- F4 · producto (sólo con orden expresa)
+f4:
+  retirar: [indice_fit, adapt_pct]                    # bajas aprobadas en la regla de oro
+  terminos_nuevos_pendientes_ceo: [Landing, "FIABILIDAD ALTA · MEDIA · BAJA", "Valor de baja", "Impacto en pista"]
+  capturas: {anchos: [1440, 390], temas: [claro, oscuro]}
+
+# ---------------------------------------------------------------------------------------- §6 · criterios PRERREGISTRADOS
+# Transcripción literal del §6 del encargo. Estado: «propuesto en F0» → se congela al aprobar el CEO la puerta F0 (con o sin
+# los ajustes de `propuestas_ajuste`). Ningún resultado de F1–F3 se ha calculado al escribir este bloque.
+criterios:
+  estado: propuesto_F0_pendiente_de_congelar_por_el_CEO
+  comunes:
+    cortes_decision: [2022, 2023, 2024]
+    corte_calibracion: 2021
+    segmentos: [elite_club, global]
+    ic95: bootstrap_equipo_temporada
+  f1:
+    paridad_capa4_pts100: 0.01
+    restricciones_fisicas: 1.0                        # 100 % de los escenarios: Σ minutos exacta, uso = 100 %, minutos en [0, 40|48]
+    shapley_suma_delta_tolerancia: 1.0e-9
+  f2:
+    monotonia_no_peor_que_im_v40: {spearman_ref: 0.149, ic95_inferior_diferencia: -0.02}
+    monotonia_frente_aditivo: ic95_diferencia_excluye_0
+    calibracion_deciles_tolerancia: 7
+    cobertura_80: [0.75, 0.85]
+    contextualidad: spearman(Δ predicho Impacto en pista, Δ percentil on/off realizado) > 0 con IC95 que excluye 0
+    contextualidad_si_falla: el IMPACTO se publica, pero su CAMBIO por altas/bajas lleva sello BAJA
+    termino_contexto_cj: entra solo si mejora la monotonía con IC95 que excluye 0
+  f3_trios:
+    poblacion: tríos nuevos en t+1 sin coincidencia previa ≤ t
+    reduccion_error_ic95_superior_menor_que_0_en_cortes: [2022, 2023, 2024]
+    dt_phi_trio_minima: 0.10                          # pts/100 en tríos reales
+    si_no_pasa: motor_orden_2
+  f3_sellos:
+    lineas_base: [delta_0, redistribucion_proporcional]
+    metrica: mae_ponderado
+    bancos_minimos: [V-AUS, otro]
+    alta: mejora a (i) y (ii) con IC95 que excluye 0 en los tres cortes de decisión y cobertura 80 % en [0,75, 0,85]
+    media: mejora a (i) y (ii) con IC95 que excluye 0 en los cortes agregados, no en cada corte; cobertura en rango
+    baja: no cumple lo anterior; se muestra con su rango; si el rango del 80 % incluye 0 → «sin cambio apreciable»
+    delta_net_bajas: V-AUS frente a (i), mismos criterios que la capa 4 (§11.4 v4.0)
+  propuestas_ajuste:                                  # V41_F0 §8 · NO aplicadas: las decide el CEO en la puerta F0, antes de congelar
+    P1: {criterio: "§5.4 rotación", propuesta: "≥ 7,5 % de los minutos totales del equipo (≈ 15'/partido) en lugar del 15 %",
+         motivo: "con el 15 % literal sólo hay 116 partidos con un único ausente (3 en élite): V-AUS inviable"}
+    P2: {criterio: "§5.4 ausencia frente a decisión técnica", propuesta: "no separar; diagnóstico por longitud de racha; opcional: acta en la extracción (requiere autorización)",
+         motivo: "la tabla por partido imputa las ausencias; el acta no está en los datos procesados"}
+    P3: {criterio: "§5.4 varios ausentes", propuesta: "banco principal sólo con un ausente; V-AUS-M aparte como escenario de varias bajas",
+         motivo: "4.693 partidos con varios ausentes al 7,5 %"}
+    P4: {criterio: "§6.2 monotonía", propuesta: "contraparte realizada = net_rtg_aj_onoff bruto (≥ 300 min), la del 0,149 de la v4.0; élite informado, no puerta",
+         motivo: "con el percentil del grupo la referencia sería 0,147: fijar cuál antes de mirar"}
+    P5: {criterio: "§6.1 restricciones físicas", propuesta: "minutos en [0, duración] tras el recorte de la capa E; saturación de la cola v3.3 declarada como límite",
+         motivo: "producto v3.3: 1 ficha > 40' y extremo del 90 % = extremo del 80 % en el 97,7 % de las fichas"}

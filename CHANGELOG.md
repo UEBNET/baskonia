@@ -1,5 +1,31 @@
 # Registro de cambios
 
+## 2026-11-06 — CERNO v4.1 · F0 Cimientos del ecosistema del club (puerta pendiente del CEO)
+
+Encargo `docs/encargos/v4.1_ecosistema.md` (rev. 1.0). Base: v4.0 cerrada (`6fb6abd`), verificada: `V40_F5` aprobada y
+`tests/test_equipo_v40.py` en verde. Detalle: `docs/checkpoints/V41_F0.md`. La v4.1 **añade**: no se ha modificado nada de la
+v3.2, la v3.3, la v4.0 ni el pipeline de extracción; Fit y ADAPT sólo se inventarían.
+
+* **Subpaquete `bbequipo/ecosistema/`** (capa E) con su configuración única `configs/ecosistema_v41.yaml` (hiperparámetros
+  F0–F4, semillas, criterios §6 transcritos para su congelación y propuestas P1–P5 sin aplicar), CLI
+  `python -m bbequipo.ecosistema …`, MLflow `ecosistema_v41` y 12 tests sintéticos (`tests/test_ecosistema_v41.py`).
+* **Prueba de orden de sinergias (§2.2) reproducida** (`orden_sinergias.py`; 930.185 tramos, 93 ligas-temporada) en dos
+  versiones: (a) RAPM ridge y (b) β de F1. Pareja y trío del §2.2 reproducidos (1,59 y 0,97 frente a 1,66 y 0,82). Se añaden
+  una calibración nula (sesgo por el error de β común a los tercios: ≈ 75 % de la varianza de pareja) y una plantada (factor de
+  atenuación de la medida «propia», k ≈ 0,3), y un control de jugadores en la prueba predictiva. Con β de F1 no hay estructura
+  propia de pareja ni de trío, y los efectos de unidad no mejoran la predicción. Quintetos más usados: parte propia estable no
+  atribuible a química (discrepancia con el §2.2, investigada).
+* **Benchmark de decisión sobre la v4.0 real** (`benchmark.py`), que sustituye al informe sobre `main`: NC (Spearman 0,454
+  global, 0,367 élite; top-k; rol oráculo), IMPACTO (0,149; élite 0,159 con ventaja sobre el aditivo en el límite), ΔNet
+  (MAE 4,06 / élite 3,23), límites físicos de los minutos v3.3 (1 ficha > 40'; cola superior saturada), avisos (64,5 % de las
+  fichas) y backtest agregado del club cliente.
+* **Auditoría de ausencias** (`ausencias.py`): el umbral literal del §5.4 deja 116 partidos (V-AUS inviable); al 7,5 %, 17.061.
+  El acta no está en los datos procesados (ausencia y decisión técnica no se distinguen).
+* **Inventarios** (`inventario.py`): Fit/ADAPT (453 apariciones; 89 en 5 ficheros de vista) y referencias fijas a club y
+  temporada, con su propuesta.
+* **`docs/estado_modelos.md`**: una ficha por salida visible (v3.3, v4.0 y v4.1) con examen, fugas, estado y sello propuesto.
+* README §18, §19 y §21 actualizados.
+
 ## 2026-11-05 — CERNO v4.0 · ENCARGO CERRADO (puerta F5 aprobada por el CEO)
 
 F0–F5 completadas con sus puertas (`docs/checkpoints/V40_F0.md` … `V40_F5.md`), modelo documentado en

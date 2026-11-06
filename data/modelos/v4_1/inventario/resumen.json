@@ -1,0 +1,130 @@
+{
+ "version": "v4.1",
+ "generado": "2026-11-06T10:35:38",
+ "fit_adapt": {
+  "apariciones": 455,
+  "por_clase": {
+   "documento_vigente": 145,
+   "codigo_cerrado": 139,
+   "identificador_vista": 68,
+   "historico": 64,
+   "texto_visible": 21,
+   "comentario_codigo": 11,
+   "prueba": 7
+  },
+  "por_metrica_y_clase": {
+   "codigo_cerrado": {
+    "ADAPT": 61,
+    "FIT": 78
+   },
+   "comentario_codigo": {
+    "ADAPT": 3,
+    "FIT": 8
+   },
+   "documento_vigente": {
+    "ADAPT": 116,
+    "FIT": 29
+   },
+   "historico": {
+    "ADAPT": 35,
+    "FIT": 29
+   },
+   "identificador_vista": {
+    "ADAPT": 29,
+    "FIT": 39
+   },
+   "prueba": {
+    "ADAPT": 1,
+    "FIT": 6
+   },
+   "texto_visible": {
+    "ADAPT": 6,
+    "FIT": 15
+   }
+  },
+  "ficheros_vista": [
+   "artifact/atlas/index.html",
+   "artifact/atlas/informe_v3.js",
+   "artifact/atlas/simulador.js",
+   "artifact/atlas/simulador_v2.js",
+   "artifact/mesa-multiliga.html"
+  ],
+  "por_fichero_vista": {
+   "artifact/atlas/index.html": 21,
+   "artifact/atlas/informe_v3.js": 47,
+   "artifact/atlas/simulador.js": 9,
+   "artifact/atlas/simulador_v2.js": 9,
+   "artifact/mesa-multiliga.html": 3
+  },
+  "blobs_de_datos_no_inspeccionados": [
+   "artifact/atlas/v40/jugadores_v40.json.gz.txt",
+   "artifact/atlas/v40/referencias_v40.json.gz.txt",
+   "artifact/v40/datos/fichajes.json.gz.txt"
+  ]
+ },
+ "club_temporada": {
+  "apariciones": 3500,
+  "por_ubicacion": {
+   "club": {
+    "codigo": 99,
+    "comentario": 3,
+    "configuracion": 1,
+    "datos": 43
+   },
+   "temporada": {
+    "codigo": 352,
+    "comentario": 33,
+    "configuracion": 191,
+    "datos": 2778
+   }
+  },
+  "ficheros_codigo_club": {
+   "artifact/atlas/index.html": 28,
+   "artifact/atlas/informe_equipo.js": 1,
+   "artifact/herramientas/prueba_informe.py": 2,
+   "artifact/herramientas/test_paridad_simulador.js": 1,
+   "artifact/mapa-estilos.html": 15,
+   "artifact/quintetos/index.html": 1,
+   "bbestilo/__main__.py": 4,
+   "bbestilo/analisis.py": 6,
+   "bbestilo/articulo.py": 29,
+   "bbestilo/datos.py": 2,
+   "bbestilo/encaje.py": 3,
+   "bbestilo/figuras.py": 5,
+   "bbestilo/similares.py": 1,
+   "bbstats/lineups/sources/nba_stats.py": 1
+  },
+  "ficheros_codigo_temporada": {
+   "artifact/mesa-multiliga.html": 59,
+   "artifact/atlas/index.html": 55,
+   "bbestilo/articulo.py": 40,
+   "artifact/mapa-estilos.html": 30,
+   "artifact/quintetos/index.html": 13,
+   "bbestilo/evaluar.py": 9,
+   "bbequipo/equipo.py": 8,
+   "bbmodel/contexto.py": 8,
+   "bbestilo/config.py": 7,
+   "bbstats/__main__.py": 7,
+   "bbestilo/__main__.py": 5,
+   "artifact/v40/index.html": 5,
+   "bbmodel/amortiguacion.py": 5,
+   "bbfit/sim_insumos.py": 5,
+   "bbstats/adapters/nbl.py": 5,
+   "bbstats/lineups/sources/fiba_web.py": 4,
+   "artifact/herramientas/prueba_informe.py": 4,
+   "bbmodel/algoritmo_b.py": 3,
+   "bbstats/adapters/bbl.py": 3,
+   "bbestilo/encaje.py": 3,
+   "bbstats/adapters/ncaa.py": 3,
+   "bbstats/adapters/cba.py": 3,
+   "bbstats/adapters/feb.py": 3,
+   "bbstats/config.py": 3,
+   "bbstats/lineups/sources/bbl.py": 3,
+   "bbstats/lineups/sources/feb.py": 3,
+   "artifact/herramientas/test_paridad_simulador.js": 2,
+   "artifact/atlas/informe_v3.js": 2,
+   "bbfit/validacion.py": 2,
+   "bbequipo/examen_f1.py": 2
+  }
+ }
+}
