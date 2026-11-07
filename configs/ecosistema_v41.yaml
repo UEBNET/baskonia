@@ -90,6 +90,107 @@ sinergia_mixta:                                       # estimador PRINCIPAL de l
   intervalos: [perfil_verosimilitud, bootstrap_ligas_temporada]
   contraste_cero: lrt_mezcla_chi2_0_1
 
+# ---------------------------------------------------------------------------------------- capa XP · puntos esperados (CEO, 07-11-2026)
+# Punto esperado de cada tiro y sus agregados (tiro → tramo → jugador). Planteamiento: docs/puntos_esperados.md.
+# AMPLIABLE: cada campo se declara en `catalogo` (grano, definición, unidad, estado) y se implementa con @campo en
+# bbequipo/ecosistema/puntos_esperados.py; tests/test_ecosistema_v41.py comprueba que catálogo y código coinciden.
+# Estados: validado (pasó un examen) · experimental (calculado, sin examen) · propuesto (sólo declarado, sin código).
+puntos_esperados:
+  version_modelo: xp1                                 # xp1 = acierto por zona × liga-temporada; TL por tirador contraído
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26", "2026-27"]
+  zonas: [aro, corta, media, t3_esquina, t3_frontal]  # bbmodel/zonas.py (distancia al aro y geometría de la línea)
+  sin_coordenadas: sin_zona                           # tiro sin coordenadas: tasa de su tipo (T2/T3) en la liga-temporada
+  calibracion_coordenadas: data/modelos/pista/calibracion.json
+  umbral_acierto_calibracion: 0.95                    # por debajo, la liga-temporada usa sólo el tipo (T2/T3)
+  contraccion:
+    zona_hacia_tipo: 200                              # p_zona = (anotados + m·p_tipo)/(intentos + m), m en intentos
+    tl_tirador_hacia_liga: 50                         # TL% del tirador = (TLa + m·p_liga)/(TLi + m)
+  tl_modelo: tirador_contraido                        # [tirador_contraido | liga]
+  resultado_tramo_capa_e: "0.75·y_real + 0.25·y_xp"   # adoptado por la regla de beneficio_xp (07-11-2026) para los modelos NUEVOS
+  emparejamiento_tramos: {por: [game_id, quinteto, quinteto_rival], ventana: [t0, t1]}
+  salidas:
+    versionado: data/modelos/v4_1/puntos_esperados   # modelo por liga-temporada, jugadores, calidad
+    no_versionado: experimentos/v4_1/puntos_esperados   # tiros y tramos anotados (≈ 9 M de tiros; regenerables)
+  catalogo:
+    # ---- grano tiro (una fila por tiro de campo o tiro libre)
+    zona:            {grano: tiro, unidad: categoria, estado: experimental, def: "zona del tiro de campo; TL = tiro_libre; sin coordenadas = sin_zona"}
+    dist_m:          {grano: tiro, unidad: m, estado: experimental, def: "distancia al aro (tiros con coordenadas calibradas)"}
+    p_acierto:       {grano: tiro, unidad: proporcion, estado: experimental, def: "probabilidad de anotar según el modelo (zona × liga-temporada; TL: tirador contraído)"}
+    xp:              {grano: tiro, unidad: puntos, estado: experimental, def: "punto esperado del tiro = p_acierto × valor (2, 3 o 1)"}
+    residuo_tiro:    {grano: tiro, unidad: puntos, estado: experimental, def: "puntos − xp (acierto por encima o por debajo de lo esperado)"}
+    asistido:        {grano: tiro, unidad: bool, estado: experimental, def: "canasta con asistencia registrada (sólo anotados)"}
+    # ---- grano tramo (una fila por tramo de quinteto del contrato v4.0)
+    xp_a:            {grano: tramo, unidad: puntos, estado: experimental, def: "puntos esperados del local en el tramo (campo + libres)"}
+    xp_b:            {grano: tramo, unidad: puntos, estado: experimental, def: "puntos esperados del visitante en el tramo"}
+    pts_tiros_a:     {grano: tramo, unidad: puntos, estado: experimental, def: "puntos del local reconstruidos desde los tiros (control de emparejamiento)"}
+    pts_tiros_b:     {grano: tramo, unidad: puntos, estado: experimental, def: "puntos del visitante reconstruidos desde los tiros"}
+    y_xp:            {grano: tramo, unidad: pts/100, estado: experimental, def: "100·(xp_a − xp_b)/posesiones: diferencial esperado del local (sin la suerte del tiro)"}
+    # ---- grano jugador (una fila por liga × temporada × equipo × jugador; fases del contrato juntas)
+    tiros_campo:     {grano: jugador, unidad: intentos, estado: experimental, def: "tiros de campo"}
+    tiros_libres:    {grano: jugador, unidad: intentos, estado: experimental, def: "tiros libres"}
+    intentos_ts:     {grano: jugador, unidad: intentos, estado: experimental, def: "tiros de campo + 0,44·tiros libres"}
+    puntos_tiro:     {grano: jugador, unidad: puntos, estado: experimental, def: "puntos anotados en sus tiros"}
+    xp_campo:        {grano: jugador, unidad: puntos, estado: experimental, def: "suma de xp de sus tiros de campo"}
+    xp_libres:       {grano: jugador, unidad: puntos, estado: experimental, def: "suma de xp de sus tiros libres"}
+    xp_total:        {grano: jugador, unidad: puntos, estado: experimental, def: "xp_campo + xp_libres"}
+    pps:             {grano: jugador, unidad: puntos/intento, estado: experimental, def: "puntos_tiro / intentos_ts"}
+    xpps:            {grano: jugador, unidad: puntos/intento, estado: experimental, def: "xp_total / intentos_ts: puntos esperados por intento"}
+    calidad_seleccion: {grano: jugador, unidad: puntos/tiro, estado: experimental, def: "xp_campo / tiros_campo: valor esperado medio de los tiros que elige"}
+    acierto_sobre_esperado: {grano: jugador, unidad: puntos/intento, estado: experimental, def: "(puntos_tiro − xp_total) / intentos_ts"}
+    acierto_sobre_esperado_campo: {grano: jugador, unidad: puntos/tiro, estado: experimental, def: "(puntos de campo − xp_campo) / tiros_campo"}
+    acierto_sobre_esperado_contraido: {grano: jugador, unidad: puntos/tiro, estado: experimental, def: "acierto_sobre_esperado_campo contraído por bayes empírico (varianza entre jugadores de la liga-temporada)"}
+    fiabilidad_acierto: {grano: jugador, unidad: proporcion, estado: experimental, def: "peso del jugador en la contracción: parte del acierto observado que no es ruido"}
+    tl_pct_contraido: {grano: jugador, unidad: proporcion, estado: experimental, def: "TL% contraído hacia la liga (el que usa el modelo)"}
+    pct_tc_aro:      {grano: jugador, unidad: proporcion, estado: experimental, def: "% de sus tiros de campo en el aro"}
+    pct_tc_corta:    {grano: jugador, unidad: proporcion, estado: experimental, def: "% en zona corta"}
+    pct_tc_media:    {grano: jugador, unidad: proporcion, estado: experimental, def: "% de media distancia"}
+    pct_tc_t3_esquina: {grano: jugador, unidad: proporcion, estado: experimental, def: "% de triples de esquina"}
+    pct_tc_t3_frontal: {grano: jugador, unidad: proporcion, estado: experimental, def: "% de triples frontales"}
+    pct_tc_sin_zona: {grano: jugador, unidad: proporcion, estado: experimental, def: "% sin coordenadas"}
+    poss_on:         {grano: jugador, unidad: posesiones, estado: experimental, def: "posesiones en pista (tramos del contrato v4.0)"}
+    xortg_on:        {grano: jugador, unidad: pts/100, estado: experimental, def: "puntos esperados del equipo por 100 posesiones con él en pista"}
+    xdrtg_on:        {grano: jugador, unidad: pts/100, estado: experimental, def: "puntos esperados del rival por 100 con él en pista"}
+    xnet_on:         {grano: jugador, unidad: pts/100, estado: experimental, def: "xortg_on − xdrtg_on: Net en pista sin la suerte del tiro"}
+    net_on:          {grano: jugador, unidad: pts/100, estado: experimental, def: "Net real en pista, mismos tramos (referencia de xnet_on)"}
+    # ---- propuestos (declarados para el futuro; sin código todavía)
+    xp_creado_asistencias: {grano: jugador, unidad: puntos, estado: propuesto, def: "xp de los tiros de compañeros que asiste (exige registrar también las asistencias de tiros fallados o un modelo de pase)"}
+    xp_permitido_defensor: {grano: jugador, unidad: pts/100, estado: propuesto, def: "xp concedido por el rival con él en pista, por zona (protección del aro, defensa del triple)"}
+    xp_distancia_continua: {grano: tiro, unidad: puntos, estado: propuesto, def: "xp2: acierto como función continua de la distancia y el ángulo (spline), no por zonas"}
+    xp_contexto:     {grano: tiro, unidad: puntos, estado: propuesto, def: "xp2: corrección por asistencia, marcador, cuarto y tiempo restante"}
+    xp_rebote_ofensivo: {grano: tiro, unidad: puntos, estado: propuesto, def: "valor esperado de la segunda oportunidad tras un fallo (rebote ofensivo esperado)"}
+    xnet_onoff:      {grano: jugador, unidad: pts/100, estado: propuesto, def: "xnet_on − xnet del equipo sin él: on/off sin la suerte del tiro (contraparte realizada de menor ruido para el Impacto en pista)"}
+
+# ---------------------------------------------------------------------------------------- efecto mínimo detectable (CEO, 07-11-2026)
+potencia:                                             # OBLIGATORIO en todo examen de F1–F3 antes de usarlo para decidir
+  objetivo: 0.80                                      # potencia con la que se define el efecto mínimo detectable (EMD)
+  replicas_minimas: 20                                # réplicas sembradas por δ
+  regla: >-
+    El EMD se mide sembrando el efecto sobre los datos REALES y repitiendo el examen tal y como está prerregistrado. Si el
+    EMD es mayor que el umbral que la puerta exige (o que el efecto plausible declarado), el examen NO es informativo: no
+    decide, y se declara así en el checkpoint junto con su curva de potencia.
+  trios:                                              # primera aplicación: puerta F3-T (§6.3)
+    umbral_dt: 0.10                                   # la puerta exige DT de φ̂_trío ≥ 0,10 pts/100
+    deltas: [0.10, 0.25, 0.50, 1.0, 2.0]              # DT sembradas (pts/100)
+    replicas: 20
+    bootstrap: 300                                    # partidos, estratificado por liga-temporada (por réplica)
+    lambda_rejilla: [1.0e+2, 1.0e+3, 1.0e+4, 1.0e+5, 1.0e+6, 1.0e+7, 1.0e+8]   # ridge de los rasgos de perfil estandarizados,
+                                                      # elegido por validación cruzada anidada (sin tocar el tercio de evaluación)
+    max_jugadores_lt: 1200                            # deja fuera FEB3 y NCAA por memoria (diseño denso)
+
+# ---------------------------------------------------------------------------------------- prueba de beneficio del punto esperado (07-11-2026)
+beneficio_xp:                                         # PRERREGISTRADO antes de ejecutar (bbequipo/ecosistema/beneficio_xp.py)
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+  alfas: [0.0, 0.25, 0.5, 0.75, 1.0]                  # y_α = α·y_real + (1 − α)·y_xp
+  min_pos_estabilidad: 300                            # posesiones del jugador en CADA mitad para la correlación de β
+  regla: >-
+    Se adopta y_α con α < 1 como resultado de tramo de los modelos NUEVOS de la capa E si su R² fuera de muestra del
+    diferencial REAL supera al de α = 1 con IC95 de la diferencia > 0 en el global y no es peor en el segmento élite
+    (IC95 inferior de la diferencia > −0,002); entre los que cumplen, el de mayor R² global. Si ninguno cumple, se mantiene
+    el resultado real. Los modelos cerrados de la v4.0 (β de F1 y demás) no se reajustan.
+  resultado: {alfa_adoptado: 0.75, fecha: 2026-11-07, por: regla_prerregistrada}   # [DECISIÓN por regla] V41_F0 §11.2:
+                                                      # R² del diferencial real +0,00039 [0,00017; 0,00059] global y +0,00038
+                                                      # [0,00013; 0,00067] élite frente a α = 1; α = 0 empeora (−0,0038)
+
 # ---------------------------------------------------------------------------------------- F0 · benchmark de decisión sobre la v4.0 (F0.3)
 benchmark:
   insumos:

@@ -1,5 +1,27 @@
 # Registro de cambios
 
+## 2026-11-07 — CERNO v4.1 · F0: mejoras del procedimiento (capa XP, efecto mínimo detectable, entorno)
+
+Aprobadas por el CEO (propuestas 1 y 2, y el cambio de entorno). Detalle: `docs/checkpoints/V41_F0.md` §11.
+
+* **Capa XP · punto esperado por tiro** (`bbequipo/ecosistema/puntos_esperados.py`, `docs/puntos_esperados.md`).
+  * Modelo xp1: acierto por zona × liga-temporada, contraído hacia su tipo; TL del tirador contraído.
+  * Granos tiro → tramo → jugador, con un **catálogo ampliable** en `configs/ecosistema_v41.yaml → puntos_esperados.catalogo`:
+    37 campos activos y 6 propuestos, registrados con `@campo`. Un test exige que catálogo y código coincidan.
+  * 115 ligas-temporada; tramos con los puntos reconstruidos exactos desde los tiros ≥ 99,6 %.
+* **Prueba de beneficio prerregistrada** (`beneficio_xp.py`).
+  * Sólo el punto esperado empeora la predicción del marcador real.
+  * La mezcla 0,75·real + 0,25·esperado la mejora (R² +0,0004, IC95 > 0, en el global y en el segmento élite) y queda
+    adoptada por regla para los modelos nuevos de la capa E.
+* **Efecto mínimo detectable obligatorio** (`potencia.py`, `configs → potencia`).
+  * Primera aplicación, la puerta F3-T: incluso en versión optimista, la sinergia de trío por perfiles no se detecta
+    por debajo de ≈ 2 pts/100 (potencia 0 hasta 1 pt/100; 0,55 a 2), frente al 0,10 que exige la puerta.
+  * El criterio «DT ≥ 0,10» lo cumple el ruido (DT ≈ 0,83 sin sembrar nada).
+  * Propuesta: cerrar la F3-T.
+* **Entorno personal «baskonia (modelado)»**: dependencias, PyTorch CPU y caché al arrancar. CHOLMOD se descartó tras
+  medirlo: es más lento que la Cholesky densa en este problema.
+* CLI: `puntos-esperados`, `beneficio-xp`, `potencia-trios`. 5 tests nuevos (21 en `tests/test_ecosistema_v41.py`).
+
 ## 2026-11-06 (tarde) — CERNO v4.1 · F0: decisiones del CEO y modelo mixto de sinergias
 
 * **Decisiones del CEO aplicadas y criterios congelados** (`configs/ecosistema_v41.yaml → criterios.estado:

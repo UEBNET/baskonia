@@ -41,7 +41,8 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 17 | Δ por métrica de cada compañero | v4.1 F1/F3 | experimental | — | Sello por métrica §6.4 |
 | 18 | Valor de baja | v4.1 F1/F3 | experimental | — | Examen en V-AUS (ΔNet frente a Δ = 0) |
 | 19 | Atribución por movimiento (Shapley) | v4.1 F1 | experimental (composición exacta) | hereda | Tests de suma exacta |
-| 20 | Sinergia de tríos (φ₃) | v4.1 F3-T | experimental, condicional | — | Sólo si pasa §6.3 |
+| 20 | Sinergia de tríos (φ₃) | v4.1 F3-T | experimental, condicional | — | EMD > 2 pts/100 frente a una puerta de 0,10: examen no informativo; propuesta: cerrar la F3-T (V41_F0 §11.3) |
+| 21 | Capa XP: punto esperado por tiro, tramo y jugador | v4.1 (xp1) | experimental (37 campos); resultado de tramo 0,75·real + 0,25·esperado adoptado por regla | — (sin sello hasta examinar cada campo) | Catálogo ampliable: `docs/puntos_esperados.md` |
 
 ---
 
@@ -195,6 +196,28 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 18 | Valor de baja | ΔNet del equipo sin el jugador, minutos redistribuidos por el motor | V-AUS frente a Δ = 0 (criterios de la capa 4) | Δ = 0 |
 | 19 | Atribución (Shapley) | φ_k exacto si \|M\| ≤ 4; permutaciones con error MC declarado si no | Tests: Σ φ_k = Δ total; determinismo | — |
 | 20 | Sinergia de tríos | φ_jkl por perfiles (CP de rango bajo) sobre el residuo F1 + F2 + h | §6.3: reducción de error con IC95 < 0 en los tres cortes y DT ≥ 0,10 | Motor de orden 2 |
+
+## 21 · Capa XP · punto esperado por tiro (nueva, 07-11-2026)
+
+- **Versión**: xp1, con acierto por zona × liga-temporada contraído hacia su tipo y TL del tirador contraído
+  (`bbequipo/ecosistema/puntos_esperados.py`). Planteamiento y catálogo: `docs/puntos_esperados.md`.
+- **Datos**: 115 ligas-temporada, 2020-21 a 2026-27. Tiros con zona: mediana 99,9 %. Sin coordenadas: CBA y FEB antes de
+  2024-25.
+- **Comprobaciones [DATO]**:
+  - xp total ≈ puntos totales;
+  - tramos con los puntos reconstruidos exactos desde los tiros: ≥ 99,6 % en todas las ligas-temporada.
+- **Examen [DATO]** (prerregistrado, V41_F0 §11.2): como resultado de tramo, sólo el esperado empeora la predicción del
+  marcador real; la mezcla 0,75·real + 0,25·esperado la mejora (+0,0004 de R², IC95 > 0, global y élite) → **adoptada**
+  para los modelos nuevos de la capa E.
+- **Fugas**: ninguna (las tasas de la temporada son su instrumento de medida, no una predicción).
+- **Estado**: experimental campo a campo. Cada métrica de jugador necesita su examen, con su efecto mínimo detectable,
+  antes de mostrarse con sello.
+
+## Regla común desde el 07-11-2026: efecto mínimo detectable
+
+Todo examen de F1–F3 declara su curva de potencia (efecto sembrado sobre datos reales) y su EMD antes de decidir. Si el
+EMD supera el umbral de la puerta, el examen no es informativo (`configs/ecosistema_v41.yaml → potencia`). Primera
+aplicación: la puerta F3-T, ficha 20.
 
 ## Cómo comprobarlo
 

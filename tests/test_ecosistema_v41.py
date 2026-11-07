@@ -300,3 +300,93 @@ def test_ruido_ampliado_recupera_la_heterocedasticidad():
     assert lt.F.shape[1] == 3 + 13 and np.all(lt.w < n)                  # pesos 1/(1/n + c/n²) < n
     lt0, info0 = SM.preparar_ampliado(tr, 0, CE.con(CFG, **{"sinergia_mixta.ruido.modelo": "simple"}))
     assert info0 == {"modelo": "simple"} and np.allclose(lt0.w, n)
+
+
+# =============================================================================================== capa XP (puntos esperados)
+def test_catalogo_xp_y_codigo_coinciden():
+    """Todo campo no «propuesto» del catálogo tiene implementación registrada, y no hay implementación sin catálogo."""
+    from bbequipo.ecosistema import puntos_esperados as PE
+    cat = CFG["puntos_esperados"]["catalogo"]
+    activos = {(v["grano"], k) for k, v in cat.items() if v["estado"] != "propuesto"}
+    assert activos == set(PE.CAMPOS)
+    for k, v in cat.items():
+        assert v["grano"] in ("tiro", "tramo", "jugador") and v["estado"] in ("validado", "experimental", "propuesto")
+        assert v.get("def") and v.get("unidad")
+
+
+def _tiros_sinteticos():
+    q_a, q_b = "1|2|3|4|5", "6|7|8|9|10"
+    filas = []
+    for i, (tipo, anot, x, y, t, eq) in enumerate([("T2", True, 0, 50, 10, 1), ("T2", False, 0, 60, 20, 1),
+                                                   ("T3", True, 0, 700, 30, 2), ("TL", True, None, None, 40, 1),
+                                                   ("TL", False, None, None, 40, 1), ("T2", True, None, None, 70, 2)]):
+        qo, qd = (q_a, q_b) if eq == 1 else (q_b, q_a)
+        filas.append({"game_id": 1, "periodo": 1, "t": float(t), "team_id": eq, "player_id": 1 if eq == 1 else 6,
+                      "nombre": "x", "tipo": tipo, "anotado": anot, "puntos": {"T2": 2, "T3": 3, "TL": 1}[tipo] * anot,
+                      "asistente_id": 2.0 if (anot and tipo != "TL") else np.nan, "x": x, "y": y,
+                      "quinteto": qo, "quinteto_rival": qd})
+    return pd.DataFrame(filas), q_a, q_b
+
+
+def test_xp_suma_y_emparejamiento_con_tramos():
+    """xp = p × valor; cada tiro cae en su tramo (incluido el que está justo en el cambio) y los puntos se reconstruyen."""
+    from bbequipo.ecosistema import puntos_esperados as PE
+    t, q_a, q_b = _tiros_sinteticos()
+    t["zona"] = np.where(t["tipo"] == "TL", "tiro_libre", np.where(t["tipo"] == "T3", "t3_frontal", "aro"))
+    t.loc[t["x"].isna() & (t["tipo"] != "TL"), "zona"] = "sin_zona"
+    mod = PE.modelo_lt(t, CFG)
+    a = PE.anotar_tiros(t, mod, CFG)
+    valor = a["tipo"].map({"T2": 2, "T3": 3, "TL": 1})
+    assert np.allclose(a["xp"], a["p_acierto"] * valor)
+    assert np.allclose(a["residuo_tiro"], a["puntos"] - a["xp"])
+    tr = pd.DataFrame({"game_id": [1, 1], "periodo": [1, 1], "t0": [0.0, 40.0], "t1": [40.0, 80.0], "team_a": ["1", "1"],
+                       "team_b": ["2", "2"], "quinteto_a": [q_a, q_a], "quinteto_b": [q_b, q_b], "a_pts": [3, 0], "b_pts": [3, 2]})
+    x = PE.tramos_xp(tr, a)
+    assert x.attrs["tiros_emparejados"] == 1.0
+    # los TL en t = 40 (justo en el cambio) pertenecen al tramo que termina en 40
+    assert list(x["pts_tiros_a"]) == [3.0, 0.0] and list(x["pts_tiros_b"]) == [3.0, 2.0]
+    assert np.isclose(x[["xp_a", "xp_b"]].to_numpy().sum(), a["xp"].sum())
+
+
+def test_xp_contraccion_de_zona_y_tiro_libre():
+    from bbequipo.ecosistema import puntos_esperados as PE
+    rng = np.random.default_rng(0)
+    n = 4000
+    t = pd.DataFrame({"tipo": rng.choice(["T2", "T3", "TL"], n, p=[0.5, 0.3, 0.2]), "player_id": rng.integers(0, 50, n),
+                      "asistente_id": np.nan})
+    t["zona"] = np.where(t["tipo"] == "TL", "tiro_libre", np.where(t["tipo"] == "T3", "t3_frontal", "aro"))
+    t.loc[t.index[:5], "zona"] = "media"                         # zona con 5 intentos: casi toda la tasa es la del tipo
+    t["anotado"] = rng.random(n) < t["tipo"].map({"T2": 0.55, "T3": 0.35, "TL": 0.75})
+    t["puntos"] = t["anotado"] * t["tipo"].map({"T2": 2, "T3": 3, "TL": 1})
+    mod = PE.modelo_lt(t, CFG)
+    p_t = mod["tipo"][t.loc[0, "tipo"]] if t.loc[0, "tipo"] != "TL" else None
+    pm = mod["zona"].get((t.loc[0, "tipo"], "media"))
+    if pm and p_t is not None:
+        assert abs(pm["p"] - p_t) < 0.03
+    a = PE.anotar_tiros(t, mod, CFG)
+    tl = a[a["tipo"] == "TL"]
+    assert tl["p_acierto"].between(0.6, 0.9).all()               # TL del tirador contraído hacia la liga
+    assert abs(a["xp"].sum() / a["puntos"].sum() - 1) < 0.02
+
+
+# =============================================================================================== efecto mínimo detectable
+def test_potencia_wilson_y_emd():
+    from bbequipo.ecosistema import potencia as PO
+    p, lo, hi = PO.wilson(16, 20)
+    assert p == 0.8 and lo < 0.8 < hi and 0.5 < lo and hi < 0.95
+    assert PO.emd({0.1: 0.0, 0.5: 0.5, 1.0: 1.0}) == pytest.approx(0.8)          # interpolación lineal entre 0,5 y 1
+    assert PO.emd({0.1: 0.1, 0.5: 0.3}) is None                                   # ningún δ llega al 80 %
+
+
+def test_rasgos_de_trio_contienen_la_sinergia_cp_sembrada():
+    """La sinergia CP (A·u_i)(A·u_j)(A·u_k) sumada sobre los 10 tríos de un quinteto es EXACTAMENTE lineal en los 20 rasgos
+    de trío, con coeficientes λ·A_a·A_b·A_c: el modelo del examen puede representarla sin error."""
+    from bbequipo.ecosistema import potencia as PO
+    rng = np.random.default_rng(3)
+    U5 = rng.normal(size=(50, 5, 4))
+    A = rng.normal(size=(1, 4)); lam = np.array([1.7])
+    phi = PO._phi_cp(U5, A, lam).sum(1)
+    _, Ft, Ft3 = PO.rasgos_lado(U5)
+    coef = np.array([lam[0] * A[0, a] * A[0, b] * A[0, c] for a, b, c in PO.SIM3])
+    assert np.allclose(Ft @ coef, phi)
+    assert np.allclose((Ft3 @ coef).sum(1), phi)

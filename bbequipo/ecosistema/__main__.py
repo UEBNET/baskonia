@@ -3,6 +3,9 @@
     python -m bbequipo.ecosistema orden-sinergias [--version a b] [--ligas L …] [--procesos 3] [--sin-nulo] [--sin-predictiva]
     python -m bbequipo.ecosistema orden-sinergias-resumen          # rehace resumen.json desde las filas guardadas
     python -m bbequipo.ecosistema sinergia-mixta [--version a b] [--etapas 2 3 5]   # modelo mixto REML (estimador principal)
+    python -m bbequipo.ecosistema puntos-esperados [--temporadas T …] [--ligas L …]   # capa XP (docs/puntos_esperados.md)
+    python -m bbequipo.ecosistema beneficio-xp [--segmento global|elite_club]      # beneficio del punto esperado
+    python -m bbequipo.ecosistema potencia-trios [--segmento elite_club|global]    # EMD de la puerta F3-T
     python -m bbequipo.ecosistema benchmark                        # F0.3 benchmark de decisión sobre la v4.0
     python -m bbequipo.ecosistema ausencias                        # F0.5 auditoría de ausencias (banco V-AUS)
     python -m bbequipo.ecosistema inventario                       # F0.6/F0.7 Fit, ADAPT y referencias fijas a club/temporada
@@ -44,6 +47,13 @@ def main(argv=None):
     sm.add_argument("--version", nargs="*", default=["a", "b"])
     sm.add_argument("--etapas", nargs="*", type=int, default=[2, 3, 5])
     sm.add_argument("--ligas", nargs="*", default=None)
+    xp = sub.add_parser("puntos-esperados", help="capa XP: punto esperado de cada tiro, tramos y jugadores (catálogo del YAML)")
+    xp.add_argument("--temporadas", nargs="*", default=None)
+    xp.add_argument("--ligas", nargs="*", default=None)
+    bx = sub.add_parser("beneficio-xp", help="prueba prerregistrada de beneficio del punto esperado como resultado de tramo")
+    bx.add_argument("--segmento", default="global", choices=["global", "elite_club"])
+    po = sub.add_parser("potencia-trios", help="efecto mínimo detectable de la puerta F3-T (tríos por perfiles)")
+    po.add_argument("--segmento", default="elite_club", choices=["global", "elite_club"])
     sub.add_parser("benchmark", help="F0.3: benchmark de decisión sobre la v4.0")
     sub.add_parser("ausencias", help="F0.5: auditoría de ausencias (banco V-AUS)")
     sub.add_parser("inventario", help="F0.6/F0.7: residuos de Fit y ADAPT; referencias fijas a club y temporada")
@@ -68,6 +78,18 @@ def main(argv=None):
             _registro(cfg, "F0_sinergia_mixta", {"etapas": cfg["sinergia_mixta"]["etapas"]},
                       {k: v for k, v in met.items() if v is not None},
                       [CE.dir_salida(cfg, "sinergia_mixta") / "resumen.json"])
+    elif a.orden == "puntos-esperados":
+        from . import puntos_esperados as PE
+        r = PE.ejecutar(cfg, temporadas=a.temporadas, ligas=a.ligas)
+        print(f"capa XP: {r['ligas_temporada']} ligas-temporada · {r['segundos']} s")
+    elif a.orden == "beneficio-xp":
+        from . import beneficio_xp as BX
+        r = BX.ejecutar(cfg, segmento=a.segmento)
+        print(json.dumps(r["segmentos"], ensure_ascii=False, indent=1, default=float)[:3000])
+    elif a.orden == "potencia-trios":
+        from . import potencia as PO
+        r = PO.potencia_trios(cfg, segmento=a.segmento)
+        print(json.dumps({k: r[k] for k in ("real", "emd", "informativo", "lectura")}, ensure_ascii=False, indent=1, default=float))
     elif a.orden == "orden-sinergias-resumen":
         _resumen_orden(cfg)
     elif a.orden == "benchmark":

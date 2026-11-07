@@ -717,9 +717,16 @@ capas de la v4.0. Subpaquete `bbequipo/ecosistema/`, configuración `configs/eco
 `data/modelos/v4_1/`, tests `tests/test_ecosistema_v41.py`, estado de cada salida visible en
 [`docs/estado_modelos.md`](docs/estado_modelos.md) y checkpoints `docs/checkpoints/V41_F<k>.md`.
 
+**Capa XP · puntos esperados** ([`docs/puntos_esperados.md`](docs/puntos_esperados.md)): punto esperado de cada tiro y sus
+agregados por tramo y jugador, con un catálogo de campos ampliable en `configs/ecosistema_v41.yaml → puntos_esperados`.
+Desde el 07-11-2026, todo examen de la v4.1 declara su **efecto mínimo detectable** (`configs → potencia`) antes de decidir.
+
 ```bash
 python -m bbequipo.ecosistema sinergia-mixta      # F0.4: prueba de orden por modelo mixto REML (estimador principal; horas)
 python -m bbequipo.ecosistema orden-sinergias     # F0.4: réplica del §2.2 por tercios, (a) ridge y (b) β de F1 (≈ 15 min)
+python -m bbequipo.ecosistema puntos-esperados    # capa XP: punto esperado por tiro, tramo y jugador (≈ 4 min)
+python -m bbequipo.ecosistema beneficio-xp        # prueba prerregistrada de beneficio del punto esperado (≈ 6 min)
+python -m bbequipo.ecosistema potencia-trios      # efecto mínimo detectable de la puerta F3-T (≈ 12 min)
 python -m bbequipo.ecosistema benchmark           # F0.3: benchmark de decisión sobre la v4.0 (≈ 1,5 min)
 python -m bbequipo.ecosistema ausencias           # F0.5: auditoría de ausencias para el banco V-AUS (≈ 20 s)
 python -m bbequipo.ecosistema inventario          # F0.6/F0.7: Fit, ADAPT y referencias fijas a club y temporada

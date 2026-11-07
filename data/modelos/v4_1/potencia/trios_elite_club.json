@@ -1,0 +1,81 @@
+{
+ "segmento": "elite_club",
+ "ligas_temporada": 18,
+ "omitidas_por_tamano": 0,
+ "examen": "cota optimista de la puerta F3-T (ver módulo)",
+ "real": {
+  "delta_rel": 0.00103565994692012,
+  "ic95_sup": 0.0012977010282530397,
+  "detecta_error": false,
+  "dt_phi": 0.8257922311082402,
+  "detecta_dt": true,
+  "detecta": false
+ },
+ "curva": {
+  "0.1": {
+   "replicas": 20,
+   "potencia": 0.0,
+   "potencia_ic95": [
+    0.0,
+    0.16113012549493322
+   ],
+   "potencia_solo_error": 0.0,
+   "potencia_solo_dt": 1.0,
+   "dt_phi_media": 0.8228522109363532,
+   "delta_rel_medio": 0.0010566877347187975
+  },
+  "0.25": {
+   "replicas": 20,
+   "potencia": 0.0,
+   "potencia_ic95": [
+    0.0,
+    0.16113012549493322
+   ],
+   "potencia_solo_error": 0.0,
+   "potencia_solo_dt": 1.0,
+   "dt_phi_media": 0.8563081611355361,
+   "delta_rel_medio": 0.001012172544711909
+  },
+  "0.5": {
+   "replicas": 20,
+   "potencia": 0.0,
+   "potencia_ic95": [
+    0.0,
+    0.16113012549493322
+   ],
+   "potencia_solo_error": 0.0,
+   "potencia_solo_dt": 1.0,
+   "dt_phi_media": 0.9262703832846132,
+   "delta_rel_medio": 0.0008968583925242024
+  },
+  "1.0": {
+   "replicas": 20,
+   "potencia": 0.0,
+   "potencia_ic95": [
+    0.0,
+    0.16113012549493322
+   ],
+   "potencia_solo_error": 0.0,
+   "potencia_solo_dt": 1.0,
+   "dt_phi_media": 1.2083913401162647,
+   "delta_rel_medio": 0.0005927050247910737
+  },
+  "2.0": {
+   "replicas": 20,
+   "potencia": 0.55,
+   "potencia_ic95": [
+    0.3420820083075997,
+    0.7418049791429071
+   ],
+   "potencia_solo_error": 0.55,
+   "potencia_solo_dt": 1.0,
+   "dt_phi_media": 1.8632567129011874,
+   "delta_rel_medio": -0.0004519530860925103
+  }
+ },
+ "emd": null,
+ "umbral_puerta_dt": 0.1,
+ "potencia_objetivo": 0.8,
+ "informativo": false,
+ "lectura": "el examen NO puede ver una sinergia de trío por perfiles del tamaño que pide la puerta: no es informativo"
+}

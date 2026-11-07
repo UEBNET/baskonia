@@ -1,0 +1,213 @@
+{
+ "version": "v4.1",
+ "generado": "2026-11-07T11:29:14",
+ "regla": "Se adopta y_α con α < 1 como resultado de tramo de los modelos NUEVOS de la capa E si su R² fuera de muestra del diferencial REAL supera al de α = 1 con IC95 de la diferencia > 0 en el global y no es peor en el segmento élite (IC95 inferior de la diferencia > −0,002); entre los que cumplen, el de mayor R² global. Si ninguno cumple, se mantiene el resultado real. Los modelos cerrados de la v4.0 (β de F1 y demás) no se reajustan.",
+ "segmentos": {
+  "global": {
+   "ligas_temporada": 97,
+   "por_alfa": {
+    "0.0": {
+     "ruido": 11979.649430329475,
+     "ruido_dif_frente_y_real": -21879.02287320943,
+     "ruido_dif_ic95": [
+      -24240.728302310898,
+      -20612.004056033213
+     ],
+     "ruido_lt_mejor": 97,
+     "estabilidad_beta": 0.32875138290034833,
+     "estabilidad_beta_dif_frente_y_real": -0.007054974978215498,
+     "estabilidad_beta_dif_ic95": [
+      -0.03737128419572496,
+      0.024713680356116288
+     ],
+     "estabilidad_beta_lt_mejor": 41,
+     "r2_fuera_muestra_y_real": 0.002996675180647628,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": -0.0038281812569053502,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      -0.0047333864208941295,
+      -0.0029135565171824413
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 15
+    },
+    "0.25": {
+     "ruido": 12422.130361936792,
+     "ruido_dif_frente_y_real": -21436.54194160211,
+     "ruido_dif_ic95": [
+      -23631.976429580267,
+      -20245.54195361874
+     ],
+     "ruido_lt_mejor": 97,
+     "estabilidad_beta": 0.3588318371045245,
+     "estabilidad_beta_dif_frente_y_real": 0.02302547922596064,
+     "estabilidad_beta_dif_ic95": [
+      0.0002517740218396645,
+      0.04614349910290251
+     ],
+     "estabilidad_beta_lt_mejor": 48,
+     "r2_fuera_muestra_y_real": 0.0054406067836805135,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": -0.0013842496538724641,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      -0.0019486394540641446,
+      -0.0007797198017190963
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 30
+    },
+    "0.5": {
+     "ruido": 16220.0977731402,
+     "ruido_dif_frente_y_real": -17638.574530398702,
+     "ruido_dif_ic95": [
+      -19400.054769103775,
+      -16690.4100087641
+     ],
+     "ruido_lt_mejor": 97,
+     "estabilidad_beta": 0.3620142793865868,
+     "estabilidad_beta_dif_frente_y_real": 0.026207921508022935,
+     "estabilidad_beta_dif_ic95": [
+      0.01096228221198445,
+      0.041322568596710955
+     ],
+     "estabilidad_beta_lt_mejor": 58,
+     "r2_fuera_muestra_y_real": 0.006803340287059082,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": -2.1516150493896616e-05,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      -0.0003805843012733118,
+      0.00034919064018413886
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 47
+    },
+    "0.75": {
+     "ruido": 23363.27836217088,
+     "ruido_dif_frente_y_real": -10495.39394136802,
+     "ruido_dif_ic95": [
+      -11528.806407765851,
+      -9941.583696046966
+     ],
+     "ruido_lt_mejor": 97,
+     "estabilidad_beta": 0.3468586703451677,
+     "estabilidad_beta_dif_frente_y_real": 0.011052312466603882,
+     "estabilidad_beta_dif_ic95": [
+      0.0015072005395641783,
+      0.02024346016238128
+     ],
+     "estabilidad_beta_lt_mejor": 58,
+     "r2_fuera_muestra_y_real": 0.007210509012512484,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": 0.00038565257495950535,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      0.00017129855588985713,
+      0.0005882361506697235
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 61
+    },
+    "1.0": {
+     "ruido": 33858.6723035389,
+     "estabilidad_beta": 0.33580635787856383,
+     "r2_fuera_muestra_y_real": 0.006824856437552978
+    }
+   },
+   "alfa_mejor_r2": 0.75
+  },
+  "elite_club": {
+   "ligas_temporada": 18,
+   "por_alfa": {
+    "0.0": {
+     "ruido": 12961.427078662,
+     "ruido_dif_frente_y_real": -19991.51144574679,
+     "ruido_dif_ic95": [
+      -20216.47953639687,
+      -19774.044089503608
+     ],
+     "ruido_lt_mejor": 18,
+     "estabilidad_beta": 0.28957037831360766,
+     "estabilidad_beta_dif_frente_y_real": -0.014821602163253086,
+     "estabilidad_beta_dif_ic95": [
+      -0.05984268102826049,
+      0.025899614233674505
+     ],
+     "estabilidad_beta_lt_mejor": 6,
+     "r2_fuera_muestra_y_real": 0.0015546298188904325,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": -0.0024895797449843993,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      -0.0036349453602707764,
+      -0.0014139639357351641
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 2
+    },
+    "0.25": {
+     "ruido": 13258.426197234681,
+     "ruido_dif_frente_y_real": -19694.51232717411,
+     "ruido_dif_ic95": [
+      -19909.463832250825,
+      -19475.398184476588
+     ],
+     "ruido_lt_mejor": 18,
+     "estabilidad_beta": 0.31437775827676545,
+     "estabilidad_beta_dif_frente_y_real": 0.009985777799904672,
+     "estabilidad_beta_dif_ic95": [
+      -0.029512041941067064,
+      0.04500709510551343
+     ],
+     "estabilidad_beta_lt_mejor": 8,
+     "r2_fuera_muestra_y_real": 0.003357773711041484,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": -0.0006864358528333478,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      -0.0014832895675668768,
+      7.515125475544283e-05
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 5
+    },
+    "0.5": {
+     "ruido": 16694.52440270476,
+     "ruido_dif_frente_y_real": -16258.41412170403,
+     "ruido_dif_ic95": [
+      -16430.152759546494,
+      -16080.038989211707
+     ],
+     "ruido_lt_mejor": 18,
+     "estabilidad_beta": 0.3274474153672716,
+     "estabilidad_beta_dif_frente_y_real": 0.02305543489041088,
+     "estabilidad_beta_dif_ic95": [
+      0.0003208799170559271,
+      0.04729699999048233
+     ],
+     "estabilidad_beta_lt_mejor": 11,
+     "r2_fuera_muestra_y_real": 0.004146687552884159,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": 0.0001024779890093271,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      -0.00030632691906663356,
+      0.0006005217854140443
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 9
+    },
+    "0.75": {
+     "ruido": 23257.642596754475,
+     "ruido_dif_frente_y_real": -9695.29592765432,
+     "ruido_dif_ic95": [
+      -9795.636281387,
+      -9587.610809442609
+     ],
+     "ruido_lt_mejor": 18,
+     "estabilidad_beta": 0.31676839116709377,
+     "estabilidad_beta_dif_frente_y_real": 0.012376410690233082,
+     "estabilidad_beta_dif_ic95": [
+      0.001189534347327382,
+      0.02432264434611288
+     ],
+     "estabilidad_beta_lt_mejor": 11,
+     "r2_fuera_muestra_y_real": 0.004421159615495209,
+     "r2_fuera_muestra_y_real_dif_frente_y_real": 0.00037695005162037705,
+     "r2_fuera_muestra_y_real_dif_ic95": [
+      0.00012654791762981704,
+      0.0006711608399153477
+     ],
+     "r2_fuera_muestra_y_real_lt_mejor": 10
+    },
+    "1.0": {
+     "ruido": 32952.9385244088,
+     "estabilidad_beta": 0.30439198047686067,
+     "r2_fuera_muestra_y_real": 0.004044209563874832
+    }
+   },
+   "alfa_mejor_r2": 0.75
+  }
+ }
+}

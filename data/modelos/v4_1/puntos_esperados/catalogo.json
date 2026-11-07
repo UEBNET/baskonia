@@ -1,0 +1,263 @@
+{
+ "version_modelo": "xp1",
+ "catalogo": {
+  "zona": {
+   "grano": "tiro",
+   "unidad": "categoria",
+   "estado": "experimental",
+   "def": "zona del tiro de campo; TL = tiro_libre; sin coordenadas = sin_zona"
+  },
+  "dist_m": {
+   "grano": "tiro",
+   "unidad": "m",
+   "estado": "experimental",
+   "def": "distancia al aro (tiros con coordenadas calibradas)"
+  },
+  "p_acierto": {
+   "grano": "tiro",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "probabilidad de anotar según el modelo (zona × liga-temporada; TL: tirador contraído)"
+  },
+  "xp": {
+   "grano": "tiro",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "punto esperado del tiro = p_acierto × valor (2, 3 o 1)"
+  },
+  "residuo_tiro": {
+   "grano": "tiro",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "puntos − xp (acierto por encima o por debajo de lo esperado)"
+  },
+  "asistido": {
+   "grano": "tiro",
+   "unidad": "bool",
+   "estado": "experimental",
+   "def": "canasta con asistencia registrada (sólo anotados)"
+  },
+  "xp_a": {
+   "grano": "tramo",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "puntos esperados del local en el tramo (campo + libres)"
+  },
+  "xp_b": {
+   "grano": "tramo",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "puntos esperados del visitante en el tramo"
+  },
+  "pts_tiros_a": {
+   "grano": "tramo",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "puntos del local reconstruidos desde los tiros (control de emparejamiento)"
+  },
+  "pts_tiros_b": {
+   "grano": "tramo",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "puntos del visitante reconstruidos desde los tiros"
+  },
+  "y_xp": {
+   "grano": "tramo",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "100·(xp_a − xp_b)/posesiones: diferencial esperado del local (sin la suerte del tiro)"
+  },
+  "tiros_campo": {
+   "grano": "jugador",
+   "unidad": "intentos",
+   "estado": "experimental",
+   "def": "tiros de campo"
+  },
+  "tiros_libres": {
+   "grano": "jugador",
+   "unidad": "intentos",
+   "estado": "experimental",
+   "def": "tiros libres"
+  },
+  "intentos_ts": {
+   "grano": "jugador",
+   "unidad": "intentos",
+   "estado": "experimental",
+   "def": "tiros de campo + 0,44·tiros libres"
+  },
+  "puntos_tiro": {
+   "grano": "jugador",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "puntos anotados en sus tiros"
+  },
+  "xp_campo": {
+   "grano": "jugador",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "suma de xp de sus tiros de campo"
+  },
+  "xp_libres": {
+   "grano": "jugador",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "suma de xp de sus tiros libres"
+  },
+  "xp_total": {
+   "grano": "jugador",
+   "unidad": "puntos",
+   "estado": "experimental",
+   "def": "xp_campo + xp_libres"
+  },
+  "pps": {
+   "grano": "jugador",
+   "unidad": "puntos/intento",
+   "estado": "experimental",
+   "def": "puntos_tiro / intentos_ts"
+  },
+  "xpps": {
+   "grano": "jugador",
+   "unidad": "puntos/intento",
+   "estado": "experimental",
+   "def": "xp_total / intentos_ts: puntos esperados por intento"
+  },
+  "calidad_seleccion": {
+   "grano": "jugador",
+   "unidad": "puntos/tiro",
+   "estado": "experimental",
+   "def": "xp_campo / tiros_campo: valor esperado medio de los tiros que elige"
+  },
+  "acierto_sobre_esperado": {
+   "grano": "jugador",
+   "unidad": "puntos/intento",
+   "estado": "experimental",
+   "def": "(puntos_tiro − xp_total) / intentos_ts"
+  },
+  "acierto_sobre_esperado_campo": {
+   "grano": "jugador",
+   "unidad": "puntos/tiro",
+   "estado": "experimental",
+   "def": "(puntos de campo − xp_campo) / tiros_campo"
+  },
+  "acierto_sobre_esperado_contraido": {
+   "grano": "jugador",
+   "unidad": "puntos/tiro",
+   "estado": "experimental",
+   "def": "acierto_sobre_esperado_campo contraído por bayes empírico (varianza entre jugadores de la liga-temporada)"
+  },
+  "fiabilidad_acierto": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "peso del jugador en la contracción: parte del acierto observado que no es ruido"
+  },
+  "tl_pct_contraido": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "TL% contraído hacia la liga (el que usa el modelo)"
+  },
+  "pct_tc_aro": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "% de sus tiros de campo en el aro"
+  },
+  "pct_tc_corta": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "% en zona corta"
+  },
+  "pct_tc_media": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "% de media distancia"
+  },
+  "pct_tc_t3_esquina": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "% de triples de esquina"
+  },
+  "pct_tc_t3_frontal": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "% de triples frontales"
+  },
+  "pct_tc_sin_zona": {
+   "grano": "jugador",
+   "unidad": "proporcion",
+   "estado": "experimental",
+   "def": "% sin coordenadas"
+  },
+  "poss_on": {
+   "grano": "jugador",
+   "unidad": "posesiones",
+   "estado": "experimental",
+   "def": "posesiones en pista (tramos del contrato v4.0)"
+  },
+  "xortg_on": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "puntos esperados del equipo por 100 posesiones con él en pista"
+  },
+  "xdrtg_on": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "puntos esperados del rival por 100 con él en pista"
+  },
+  "xnet_on": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "xortg_on − xdrtg_on: Net en pista sin la suerte del tiro"
+  },
+  "net_on": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "Net real en pista, mismos tramos (referencia de xnet_on)"
+  },
+  "xp_creado_asistencias": {
+   "grano": "jugador",
+   "unidad": "puntos",
+   "estado": "propuesto",
+   "def": "xp de los tiros de compañeros que asiste (exige registrar también las asistencias de tiros fallados o un modelo de pase)"
+  },
+  "xp_permitido_defensor": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "propuesto",
+   "def": "xp concedido por el rival con él en pista, por zona (protección del aro, defensa del triple)"
+  },
+  "xp_distancia_continua": {
+   "grano": "tiro",
+   "unidad": "puntos",
+   "estado": "propuesto",
+   "def": "xp2: acierto como función continua de la distancia y el ángulo (spline), no por zonas"
+  },
+  "xp_contexto": {
+   "grano": "tiro",
+   "unidad": "puntos",
+   "estado": "propuesto",
+   "def": "xp2: corrección por asistencia, marcador, cuarto y tiempo restante"
+  },
+  "xp_rebote_ofensivo": {
+   "grano": "tiro",
+   "unidad": "puntos",
+   "estado": "propuesto",
+   "def": "valor esperado de la segunda oportunidad tras un fallo (rebote ofensivo esperado)"
+  },
+  "xnet_onoff": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "propuesto",
+   "def": "xnet_on − xnet del equipo sin él: on/off sin la suerte del tiro (contraparte realizada de menor ruido para el Impacto en pista)"
+  }
+ }
+}
