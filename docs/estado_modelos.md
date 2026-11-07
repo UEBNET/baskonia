@@ -38,9 +38,11 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 14 | Quintetos más probables | v4.0 capa 4 | descriptivo | — | Sólo descripción de la rotación (decisión 8) |
 | 15 | Avisos de la ficha | v3.3 | provisional | — | Recalibrar: el 64,5 % de las fichas lleva alguno |
 | 16 | Impacto en pista | v4.1 F2 | experimental | — | Examen §6.2 |
-| 17 | Δ por métrica de cada compañero | v4.1 F1/F3 | experimental | — | Sello por métrica §6.4 |
-| 18 | Valor de baja | v4.1 F1/F3 | experimental | — | Examen en V-AUS (ΔNet frente a Δ = 0) |
-| 19 | Atribución por movimiento (Shapley) | v4.1 F1 | experimental (composición exacta) | hereda | Tests de suma exacta |
+| 17 | Δ por métrica de cada compañero | v4.1 F1 (motor) / F3 (sello) | calculado en F1; sin sello | — | Sello por métrica §6.4 (F3); cuota de tiro sin renormalizar (V41_F1 §5) |
+| 18 | Valor de baja | v4.1 F1 / F3 | calculado en F1; sin examen | — | Examen en V-AUS (ΔNet frente a Δ = 0) |
+| 19 | Atribución por movimiento (Shapley) | v4.1 F1 | validado (composición exacta: Σ = Δ a 10⁻¹⁴ en 472 escenarios) | hereda el de lo atribuido | — |
+| 19b | Net del escenario (altas con rol, bajas) | v4.1 F1 | validado como composición: paridad con la capa 4 exacta en 117/118 (el otro, corrección P5) | hereda la capa 4 (ALTA) | V41_F1 |
+| 19c | Rangos de minutos de la capa E | v4.1 F1 (P5) | validado: cobertura 80 %/90 % en rango en cada corte | ALTA (propuesto) | V41_F1 §3 |
 | 20 | Sinergia de tríos (φ₃) | v4.1 F3-T | experimental, condicional | — | EMD > 2 pts/100 frente a una puerta de 0,10: examen no informativo; propuesta: cerrar la F3-T (V41_F0 §11.3) |
 | 21 | Capa XP: punto esperado por tiro, tramo y jugador | v4.1 (xp1) | experimental (37 campos); resultado de tramo 0,75·real + 0,25·esperado adoptado por regla | — (sin sello hasta examinar cada campo) | Catálogo ampliable: `docs/puntos_esperados.md` |
 

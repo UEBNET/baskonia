@@ -6,6 +6,9 @@
     python -m bbequipo.ecosistema puntos-esperados [--temporadas T …] [--ligas L …]   # capa XP (docs/puntos_esperados.md)
     python -m bbequipo.ecosistema beneficio-xp [--segmento global|elite_club]      # beneficio del punto esperado
     python -m bbequipo.ecosistema potencia-trios [--segmento elite_club|global]    # EMD de la puerta F3-T
+    python -m bbequipo.ecosistema minutos-calibrar                 # F1 (P5): rangos de minutos recalibrados y su examen
+    python -m bbequipo.ecosistema escenarios-examen                # F1: examen §6.1 sobre equipos reales
+    python -m bbequipo.ecosistema escenario --liga acb --equipo 3 --altas P000805:TITULAR --bajas P000923
     python -m bbequipo.ecosistema benchmark                        # F0.3 benchmark de decisión sobre la v4.0
     python -m bbequipo.ecosistema ausencias                        # F0.5 auditoría de ausencias (banco V-AUS)
     python -m bbequipo.ecosistema inventario                       # F0.6/F0.7 Fit, ADAPT y referencias fijas a club/temporada
@@ -54,6 +57,16 @@ def main(argv=None):
     bx.add_argument("--segmento", default="global", choices=["global", "elite_club"])
     po = sub.add_parser("potencia-trios", help="efecto mínimo detectable de la puerta F3-T (tríos por perfiles)")
     po.add_argument("--segmento", default="elite_club", choices=["global", "elite_club"])
+    sub.add_parser("minutos-calibrar", help="F1 (P5): rangos de minutos recalibrados de la capa E y su examen por cortes")
+    sub.add_parser("escenarios-examen", help="F1: examen §6.1 del motor de escenarios sobre equipos reales")
+    es = sub.add_parser("escenario", help="F1: simular un escenario (altas con rol, bajas) y escribir el resultado en JSON")
+    es.add_argument("--temporada", default="2025-26")
+    es.add_argument("--liga", required=True)
+    es.add_argument("--equipo", required=True, help="team_id de la liga")
+    es.add_argument("--altas", nargs="*", default=[], help="persona_id[:ROL], p. ej. P000805:TITULAR")
+    es.add_argument("--bajas", nargs="*", default=[])
+    es.add_argument("--net-actual", type=float, default=None)
+    es.add_argument("--salida", default=None)
     sub.add_parser("benchmark", help="F0.3: benchmark de decisión sobre la v4.0")
     sub.add_parser("ausencias", help="F0.5: auditoría de ausencias (banco V-AUS)")
     sub.add_parser("inventario", help="F0.6/F0.7: residuos de Fit y ADAPT; referencias fijas a club y temporada")
@@ -90,6 +103,34 @@ def main(argv=None):
         from . import potencia as PO
         r = PO.potencia_trios(cfg, segmento=a.segmento)
         print(json.dumps({k: r[k] for k in ("real", "emd", "informativo", "lectura")}, ensure_ascii=False, indent=1, default=float))
+    elif a.orden == "minutos-calibrar":
+        import os
+        os.environ.setdefault("CERNO_SIMULADOR", "v32")
+        from . import minutos_cal as MC
+        r = MC.ejecutar(cfg, progreso=None)
+        print(json.dumps({"puerta": r["puerta"], "agregado": r["agregado"]}, ensure_ascii=False, indent=1))
+    elif a.orden == "escenarios-examen":
+        from . import examen_escenarios as XE
+        r = XE.ejecutar(cfg)
+        _registro(cfg, "F1_examen", {"temporada": r["temporada_base"], "n_sim": r["n_sim"]},
+                  {"paridad_max": r["paridad"]["max_abs_dif"] or 0.0, "fisicas_ok": r["restricciones_fisicas"]["frac_escenarios_ok"],
+                   "identidad_max": r["shapley"]["max_abs_identidad"]}, [CE.dir_salida(cfg, "escenarios") / "examen_f1.json"])
+        print(json.dumps({k: v for k, v in r.items() if k != "tiempo_por_escenario_mediana_s"}, ensure_ascii=False, indent=1, default=float))
+    elif a.orden == "escenario":
+        from .escenarios import Ecosistema
+        from .examen_escenarios import _net_actual
+        E = Ecosistema(cfg, a.temporada, progreso=None)
+        r = E.eq.roles[(E.eq.roles["temporada"] == a.temporada) & (E.eq.roles["liga"] == a.liga) &
+                       (E.eq.roles["team_id"].astype(str) == str(a.equipo))]
+        plant = [(p, float(x)) for p, x in zip(r["persona_id"], r["presencia"])]
+        altas = [(x.split(":")[0], x.split(":")[1] if ":" in x else None) for x in a.altas]
+        net = a.net_actual if a.net_actual is not None else _net_actual(a.temporada, a.liga, a.equipo)
+        s = E.simular(a.liga, a.equipo, plant, altas, a.bajas, net)
+        out = {k: (v.to_dict("records") if hasattr(v, "to_dict") else v) for k, v in s.items()}
+        txt = json.dumps(out, ensure_ascii=False, indent=1, default=float)
+        if a.salida:
+            open(a.salida, "w", encoding="utf-8").write(txt)
+        print(txt[:4000])
     elif a.orden == "orden-sinergias-resumen":
         _resumen_orden(cfg)
     elif a.orden == "benchmark":

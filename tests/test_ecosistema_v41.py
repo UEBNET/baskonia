@@ -390,3 +390,124 @@ def test_rasgos_de_trio_contienen_la_sinergia_cp_sembrada():
     coef = np.array([lam[0] * A[0, a] * A[0, b] * A[0, c] for a, b, c in PO.SIM3])
     assert np.allclose(Ft @ coef, phi)
     assert np.allclose((Ft3 @ coef).sum(1), phi)
+
+
+# =============================================================================================== F1 · motor de escenarios
+class _MotorFicticio:
+    """Imita lo que el motor de escenarios usa del simulador v3.3 (bbfit.simulador)."""
+    def minutos_partido(self, liga):
+        return 40.0
+
+    def forzar_roles(self, M, fuerza, total, gm, liga, c, rng):
+        cen = {"TITULAR": 28.0, "ROTACION": 18.0, "PROFUNDIDAD": 9.0, "RESIDUAL": 3.0, "GO_TO_GUY": 33.0}
+        libres = np.array([i not in fuerza for i in range(M.shape[1])])
+        for s in range(M.shape[0]):
+            for i, r in fuerza.items():
+                M[s, i] = cen[r] + rng.normal(0, 1.0)
+            fijo = M[s, list(fuerza)].sum()
+            M[s, libres] *= (total - fijo) / M[s, libres].sum()
+
+    def redistribuir_uso(self, M, USG, usg_medio=20.0, amortiguar=1.0):
+        from bbfit.simulador import redistribuir_uso
+        return redistribuir_uso(M, USG, usg_medio, amortiguar)
+
+    def _uso_natural(self, c, rr, liga):
+        return rr["usg"], np.nan
+
+
+class _EquipoFicticio:
+    """Capa 4 ficticia con la interfaz de bbequipo.equipo.Equipo (para usar sus métodos fuerza y delta reales)."""
+    def __init__(self, n_jug=30, semilla=0):
+        from bbequipo import config as C40
+        rng = np.random.default_rng(semilla)
+        self.cfg = C40.cargar()
+        self.S = _MotorFicticio()
+        self.c = type("C", (), {"ref": {"uso": {}}, "cfg": {"rol_asignado": {}}})()
+        self.cal = {"conjunto": {"prediccion": {"c": 0.4, "d": 0.3}, "intervalo": {"s0": 4.0, "q": 1.2}}, "por_grupo": {}}
+        self.jug = [f"P{i:03d}" for i in range(n_jug)]
+        self.b = dict(zip(self.jug, rng.normal(0, 3, n_jug)))
+        self.zz = dict(zip(self.jug, rng.normal(0, 1, (n_jug, 3))))
+        self.Mr = 0.05 * np.eye(3)
+        self.us = dict(zip(self.jug, rng.uniform(12, 30, n_jug)))
+
+    def valor(self, pid, liga):
+        return float(self.b[pid]), 1.0, "beta"
+
+    def z(self, pids):
+        return np.array([self.zz[p] for p in pids])
+
+    def h(self, pids):
+        return np.array([0.1 * self.b[p] for p in pids])
+
+    def plantilla_minutos(self, liga, team_id, miembros, n_sim, semilla):
+        rng = np.random.default_rng(semilla)
+        pids = [p for p, _ in miembros]
+        u = np.array([self.b[p] for p in pids])
+        W = np.exp(u / 3)[None, :] * rng.gamma(2.0, 1.0, (n_sim, len(pids)))
+        M = 200.0 * W / W.sum(1, keepdims=True)
+        from bbequipo.ecosistema.escenarios import ajustar_suma
+        M = ajustar_suma(M, 200.0, 36.0)
+        P = pd.DataFrame({"persona_id": pids, "_reg": [{"usg": self.us[p]} for p in pids]})
+        return P, M / 40.0
+
+    from bbequipo.equipo import Equipo as _E
+    fuerza = _E.fuerza
+    delta = _E.delta
+
+
+@pytest.fixture(scope="module")
+def ecosistema_ficticio():
+    from bbequipo.ecosistema.escenarios import Ecosistema
+    eq = _EquipoFicticio()
+    E = Ecosistema(CFG, "2025-26", equipo=eq, progreso=None)
+    E.cal_min = None
+    plant = [(p, 1.0) for p in eq.jug[:14]]
+    return E, eq, plant
+
+
+def test_escenarios_paridad_exacta_con_la_capa4(ecosistema_ficticio):
+    E, eq, plant = ecosistema_ficticio
+    s = E.simular("acb", "1", plant, [("P020", None)], [], 2.0, n_sim=300, semilla=5, paridad_capa4=True)
+    ref = eq.delta("acb", "1", plant, ["P020"], [], 2.0, n_sim=300, semilla=5)
+    assert abs(s["equipo"]["delta_net"] - ref["delta_net"]) <= CFG["criterios"]["f1"]["paridad_capa4_pts100"]
+    assert s["equipo"]["delta_net"] == pytest.approx(ref["delta_net"], abs=1e-12)
+
+
+@pytest.mark.parametrize("altas,bajas", [([("P020", "TITULAR"), ("P021", None)], ["P000"]),
+                                         ([("P020", "TITULAR"), ("P021", "ROTACION")], ["P000", "P001", "P002"])])
+def test_escenarios_shapley_y_restricciones_fisicas(ecosistema_ficticio, altas, bajas):
+    E, eq, plant = ecosistema_ficticio
+    s = E.simular("acb", "1", plant, altas, bajas, 1.5, n_sim=200, semilla=9)
+    c = s["control"]
+    assert abs(c["identidad_contable"]) < 1e-9                         # Δ = Σ Shapley + diferencia de la base + regresión
+    assert s["equipo"]["diferencia_mc_base"] == 0.0                     # números aleatorios comunes
+    assert c["suma_minutos_max_desvio"] < 1e-9 and c["minutos_fuera_de_limites"] == 0 and c["uso_desvio_max"] < 1e-9
+    assert c["shapley_exacto"] == (len(altas) + len(bajas) <= 4)
+    J = s["jugadores"]
+    assert set(J.loc[J["estado"] == "alta", "persona_id"]) == {a for a, _ in altas}
+    tit = J.loc[J["persona_id"] == "P020", "min_media_despues"].iloc[0]
+    assert 25 < tit < 31                                                # rol fijado TITULAR (centro 28')
+    aj = s["atribucion_jugadores"]
+    tot = aj.groupby("persona_id")["phi_min"].sum()                     # Shapley de minutos suma el cambio de minutos
+    for p, dm in zip(J["persona_id"], J["d_min"]):
+        if c["shapley_exacto"]:
+            assert tot[p] == pytest.approx(dm, abs=1e-8)
+
+
+def test_escenarios_deterministas(ecosistema_ficticio):
+    E, eq, plant = ecosistema_ficticio
+    a = E.simular("acb", "1", plant, [("P020", "TITULAR")], ["P000"], 0.0, n_sim=100, semilla=3)
+    b = E.simular("acb", "1", plant, [("P020", "TITULAR")], ["P000"], 0.0, n_sim=100, semilla=3)
+    assert a["equipo"] == b["equipo"]
+    pd.testing.assert_frame_equal(a["jugadores"], b["jugadores"])
+
+
+def test_ajustar_suma_y_pares_en_pista():
+    from bbequipo.ecosistema.escenarios import ajustar_suma, pares_en_pista
+    rng = np.random.default_rng(1)
+    M = rng.uniform(0, 45, (50, 12))
+    A = ajustar_suma(M, 200.0, 40.0)
+    assert np.allclose(A.sum(1), 200.0) and A.min() >= 0 and A.max() <= 40.0 + 1e-12
+    assert np.array_equal(ajustar_suma(A, 200.0, 40.0), A)             # ya válida: no cambia (paridad)
+    P = pares_en_pista(A / 40.0)
+    assert np.isclose(np.triu(P, 1).sum(), 10.0)                       # 10 parejas en pista

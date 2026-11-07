@@ -727,6 +727,9 @@ python -m bbequipo.ecosistema orden-sinergias     # F0.4: réplica del §2.2 por
 python -m bbequipo.ecosistema puntos-esperados    # capa XP: punto esperado por tiro, tramo y jugador (≈ 4 min)
 python -m bbequipo.ecosistema beneficio-xp        # prueba prerregistrada de beneficio del punto esperado (≈ 6 min)
 python -m bbequipo.ecosistema potencia-trios      # efecto mínimo detectable de la puerta F3-T (≈ 12 min)
+python -m bbequipo.ecosistema escenario --liga acb --equipo 10 --altas P000213:TITULAR --bajas P000061   # F1: un escenario
+python -m bbequipo.ecosistema escenarios-examen   # F1: examen §6.1 en 118 equipos reales (≈ 15 min)
+python -m bbequipo.ecosistema minutos-calibrar    # F1 (P5): rangos de minutos recalibrados (≈ 10 s)
 python -m bbequipo.ecosistema benchmark           # F0.3: benchmark de decisión sobre la v4.0 (≈ 1,5 min)
 python -m bbequipo.ecosistema ausencias           # F0.5: auditoría de ausencias para el banco V-AUS (≈ 20 s)
 python -m bbequipo.ecosistema inventario          # F0.6/F0.7: Fit, ADAPT y referencias fijas a club y temporada

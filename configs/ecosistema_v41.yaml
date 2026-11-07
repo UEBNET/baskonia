@@ -231,15 +231,23 @@ f1:
                                                       # de los cortes anteriores (como la capa 4), corrigiendo la cola superior
                                                       # saturada del v3.3 (extremo 90 % = 80 % en el 97,7 % de las fichas)
     objetivo_cobertura: {"0.8": [0.75, 0.85], "0.9": [0.85, 0.95]}
+    tramos_fraccion_partido: [0.25, 0.45, 0.65]       # tramos de m̂/duración para los cuantiles de residuo (bbequipo/ecosistema/minutos_cal.py)
   uso_suma: 1.0
+  uso_medio_pista: 20.0                               # Σ minutos·USG = 20·Σ minutos: los cinco en pista suman el 100 % del uso
+  uso_amortiguar: 1.0                                 # la capa E redistribuye TODO el desajuste (la v3.3 por fichaje usa 0,5); con 1
+                                                      # la suma del 100 % se cumple exactamente (test del encargo)
   monte_carlo: {simulaciones: 1000, semilla_derivada: escenarios}
   shapley:
     exacto_hasta: 4                                   # |M| ≤ 4 exacto; si no, permutaciones
-    permutaciones: 2000
+    permutaciones: 500                                # |M| > 4: permutaciones al azar (caché de subconjuntos; error MC declarado)
     error_mc_declarado: true
   descomposicion: [reemplazo_beta_h_minutos, sinergia_parejas_phi, sinergia_trios_phi3]
   valor_de_baja: delta_net_sin_el                     # nombre provisional «Valor de baja» (confirmar con el CEO)
   paridad_capa4_tolerancia: 0.01                      # pts/100
+  examen:                                             # examen de la F1 (§6.1) sobre equipos reales (examen_escenarios.py)
+    temporada_base: "2025-26"                         # última temporada completa con plantillas, β y motor de producto
+    simulaciones: 600
+    muestra_resto: 60                                 # equipos al azar fuera de EL + EC + ACB (todos los de élite entran)
 
 # ---------------------------------------------------------------------------------------- F2 · Impacto en pista (§3.3)
 f2:
@@ -282,6 +290,11 @@ criterios:
     restricciones_fisicas: 1.0                        # 100 % de los escenarios: Σ minutos exacta, uso = 100 %, minutos de cada
                                                       # jugador en [0, 40|48] tras el recorte de la capa E (P5)
     minutos_cobertura_recalibrada: {"0.8": [0.75, 0.85], "0.9": [0.85, 0.95]}   # P5: cobertura de los rangos recalibrados
+    resultado_examen_07-11-2026:                      # V41_F1 §2–3 (escenarios/examen_f1.json, minutos_calibracion.json)
+      paridad: "117/118 exactas; 1 difiere 0,0118 por la corrección P5; sin P5, 118/118 exactas"
+      restricciones_fisicas: "100 % de 472 escenarios"
+      shapley_identidad_max: 1.7e-14
+      minutos_cobertura: "80 %: 0,785–0,800; 90 %: 0,881–0,890 (cada corte de decisión): cumple"
     shapley_suma_delta_tolerancia: 1.0e-9
   f2:
     monotonia_no_peor_que_im_v40: {spearman_ref: 0.149, ic95_inferior_diferencia: -0.02}

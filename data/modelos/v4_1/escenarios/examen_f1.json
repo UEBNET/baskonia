@@ -1,0 +1,44 @@
+{
+ "version": "v4.1",
+ "generado": "2026-11-07T14:07:07",
+ "temporada_base": "2025-26",
+ "n_sim": 600,
+ "equipos": 118,
+ "escenarios": 472,
+ "errores": 0,
+ "paridad": {
+  "n": 118,
+  "max_abs_dif": 0.011800129745781263,
+  "exacta": 117,
+  "max_abs_dif_sin_p5": 0.0,
+  "casos_corregidos_por_p5": [
+   {
+    "liga": "gleague",
+    "team_id": "1612709926",
+    "paridad_dif": -0.011800129745781263,
+    "capa4_sims_sin_todos_los_minutos": 0.011666666666666667
+   }
+  ],
+  "tolerancia": 0.01,
+  "cumple": false,
+  "cumple_salvo_correccion_p5": true
+ },
+ "restricciones_fisicas": {
+  "frac_escenarios_ok": 1.0,
+  "cumple": true
+ },
+ "shapley": {
+  "max_abs_identidad": 1.687538997430238e-14,
+  "tolerancia": 1e-09,
+  "cumple": true,
+  "error_mc_permutaciones_mediana": 0.007067167013906131
+ },
+ "tiempo_por_escenario_mediana_s": {
+  "1_alta_paridad": 0.37,
+  "2_alta_rol_y_baja": 0.5,
+  "3_cuatro_movimientos": 1.98,
+  "4_cinco_movimientos": 4.04
+ },
+ "segundos": 861,
+ "puerta_6_1": false
+}

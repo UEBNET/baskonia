@@ -1,5 +1,27 @@
 # Registro de cambios
 
+## 2026-11-07 — CERNO v4.1 · F1 Motor de escenarios (puerta pendiente del CEO)
+
+Detalle: `docs/checkpoints/V41_F1.md`.
+
+* **Motor de escenarios** (`bbequipo/ecosistema/escenarios.py`), con la API del encargo
+  `simular(R, altas=[(id, rol)], bajas=[id])`.
+  * Minutos del motor v3.3 con el rol fijado de las altas (`forzar_roles`), recorte y Σ exacta (P5).
+  * Uso con suma fija al 100 % y Net de la capa 4 calibrado, con su descomposición: valor directo, minutos desplazados,
+    φ, h, regresión a la media y reparto ataque/defensa experimental.
+  * Impacto cruzado F2-B por compañero, Shapley exacto (≤ 4 movimientos) o por permutaciones, química entre altas y
+    Valor de baja. Ninguna capa cerrada se modifica.
+* **Rangos de minutos recalibrados** (P5, `minutos_cal.py`): cobertura del 80 % entre 0,785 y 0,800 y del 90 % entre
+  0,881 y 0,890 en cada corte de decisión. El motor sin recalibrar cubría 0,92 / 0,96.
+* **Examen §6.1** (`examen_escenarios.py`; 118 equipos reales, 472 escenarios):
+  * restricciones físicas en el 100 %;
+  * Shapley = Δ a 10⁻¹⁴;
+  * paridad con la capa 4 exacta en 117 de 118. El restante difiere en 0,012 por la corrección P5 de un fallo físico
+    del motor v3.3; sin P5, exacta en los 118.
+* CLI: `escenario`, `escenarios-examen`, `minutos-calibrar`. 5 tests nuevos (26 en `tests/test_ecosistema_v41.py`).
+* Regenerados en `experimentos/` (no versionado) el ajuste producto F1 de la v4.0 (reproduce los β publicados al
+  0,00005) y el dataset del simulador.
+
 ## 2026-11-07 — CERNO v4.1 · puerta F0 APROBADA por el CEO
 
 * Decisiones A, B, C y D (`docs/checkpoints/V41_F0.md` §9.1):

@@ -1,0 +1,82 @@
+{
+ "meta": {
+  "version": "v4.1",
+  "temporada": "2025-26",
+  "liga": "acb",
+  "team_id": "10",
+  "n_sim": 1000,
+  "semilla": 7,
+  "paridad_capa4": false,
+  "movimientos": [
+   "alta:P000213(TITULAR)",
+   "alta:P000896(ROTACION)",
+   "baja:P000061"
+  ]
+ },
+ "equipo": {
+  "net_actual": -4.5342,
+  "delta_net": 4.435823524997586,
+  "lo80": -0.8887508044579713,
+  "hi80": 9.760397854453142,
+  "net_proyectado": -0.09837647500241431,
+  "net_lo80": -5.4229508044579715,
+  "net_hi80": 5.226197854453143,
+  "sd_mc": 1.9397339680628563,
+  "s0": 4.099602510846997,
+  "q": 1.1740187876802115,
+  "c": 0.40257900459341467,
+  "d": 0.32076990211544604,
+  "descomposicion": {
+   "aditivo_beta": 1.4360986787624863,
+   "de_ello_valor_directo_altas_bajas": 2.472936429220656,
+   "de_ello_minutos_desplazados": -1.024804688514411,
+   "sinergia_phi": 0.19551593188331673,
+   "correccion_jugador_h": -0.2755561954763642,
+   "regresion_a_la_media": 3.079765109828145
+  },
+  "ataque_defensa": {
+   "d_ortg": 0.18762022475154141,
+   "d_drtg": -0.06777185379063233,
+   "nota": "reparto del aditivo con β de ataque y defensa (F1 v4.0); sin calibración propia: experimental, sello BAJA"
+  },
+  "suma_shapley": 1.3560584151694426,
+  "diferencia_mc_base": 0.0
+ },
+ "atribucion": [
+  {
+   "movimiento": "alta:P000213",
+   "phi_valor_equipo": 1.3665029084506428,
+   "error_mc": 0.0
+  },
+  {
+   "movimiento": "alta:P000896",
+   "phi_valor_equipo": 0.8539364959211038,
+   "error_mc": 0.0
+  },
+  {
+   "movimiento": "baja:P000061",
+   "phi_valor_equipo": -0.864380989202304,
+   "error_mc": 0.0
+  }
+ ],
+ "quimica_altas": {
+  "P000213+P000896": 0.14401180463761598
+ },
+ "valor_de_baja": {
+  "P000061": {
+   "valor_de_baja": 0.99560144020507,
+   "lo80": -2.5179369163812395,
+   "hi80": 4.8461428459568845,
+   "nota": "incertidumbre del modelo (β y minutos); sin examen (banco V-AUS, F3)"
+  }
+ },
+ "control": {
+  "escenarios_simulados": 8,
+  "shapley_exacto": true,
+  "identidad_contable": -1.7763568394002505e-15,
+  "suma_minutos_max_desvio": 8.526512829121202e-14,
+  "minutos_fuera_de_limites": 0,
+  "cuota_tiro_renormalizada": false,
+  "uso_desvio_max": 9.094947017729283e-15
+ }
+}
