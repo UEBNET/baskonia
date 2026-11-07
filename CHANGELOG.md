@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## 2026-11-07 — CERNO v4.1 · puerta F0 APROBADA por el CEO
+
+* Decisiones A, B, C y D (`docs/checkpoints/V41_F0.md` §9.1):
+  * A: puerta F0 aprobada y arranque de la F1 (motor de escenarios).
+  * B: F3-T cerrada sin ejecutar; el motor queda en orden 2.
+  * C: subpaquete `bbequipo/ecosistema/` aprobado.
+  * D: rama `claude/encargo-v41-ecosistema` creada.
+
 ## 2026-11-07 — CERNO v4.1 · F0: mejoras del procedimiento (capa XP, efecto mínimo detectable, entorno)
 
 Aprobadas por el CEO (propuestas 1 y 2, y el cambio de entorno). Detalle: `docs/checkpoints/V41_F0.md` §11.

@@ -295,6 +295,8 @@ criterios:
     contextualidad_si_falla: el IMPACTO se publica, pero su CAMBIO por altas/bajas lleva sello BAJA
     termino_contexto_cj: entra solo si mejora la monotonía con IC95 que excluye 0
   f3_trios:
+    estado: cerrada_sin_ejecutar_07-11-2026           # DECISIÓN CEO (D4): examen no informativo (EMD > 2 pts/100 frente a 0,10;
+                                                      # V41_F0 §11.3); motor en orden 2; ablación negativa en potencia/trios_elite_club.json
     poblacion: tríos nuevos en t+1 sin coincidencia previa ≤ t
     reduccion_error_ic95_superior_menor_que_0_en_cortes: [2022, 2023, 2024]
     dt_phi_trio_minima: 0.10                          # pts/100 en tríos reales
