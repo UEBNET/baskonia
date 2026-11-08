@@ -251,12 +251,47 @@ f1:
 
 # ---------------------------------------------------------------------------------------- F2 · Impacto en pista (§3.3)
 f2:
-  definicion: v_j(R) = β_j + h(z_j) + Σ_k π_jk(R) φ_jk [+ Σ π_jkl φ_jkl] [+ γᵀ c_j(R)]
-  pi: P(S|R)_capa4                                    # fracción de posesiones de j con k en pista
-  escala: 100 · E_pred[F(v_j)]                        # percentil esperado
-  calibracion: isotonica_cortes_anteriores_frente_a_percentil_onoff
+  # PRERREGISTRO de la F2 (08-11-2026), escrito ANTES de calcular nada. Decisiones del CEO del 08-11-2026: puerta F1
+  # aprobada (E1, E2, E5); F2-a opción (a); F2-b, F2-c, F2-d y F2-e aprobados.
+  definicion: v_j(R) = β_j + h(z_j) + Σ_k π_jk(R)·φ_jk [+ γᵀ c_j(R)] [+ δ·Σ_k π_jk·g(f_jk)]   # sin tríos (F3-T cerrada)
+  pi: fraccion_posesiones_de_j_con_k                  # π_jk = P_jk / p_j con P_jk ≈ p_j p_k · 10 / Σ_{i<l} p_i p_l (capa 4)
+  beta_sd: muestreado                                 # β_j ~ N(β̂_j, sd_j) por simulación → v_j tiene distribución predictiva
+  escala: 100 · E_pred[F_grupo(v_j)]                  # percentil esperado; F_grupo = v̂ de los jugadores del mismo grupo de liga y corte
+  calibracion: isotonica_cortes_anteriores_frente_a_percentil_onoff   # como el IM de la v4.0 (V40_F5 §3.1)
+  rango: deciles_cortes_anteriores                    # cuantiles 10/90 del percentil on/off por decil de crudo (cortes anteriores)
   poblacion: grupo_liga                               # elite / domestica_alta / resto (como IM v4.0)
-  contexto_cj: {componentes: [nivel_medio_companeros_pi, perfil_medio_companeros_pi], ajuste: solo_datos_le_t}
+  examen:
+    poblacion_principal: fichajes_del_examen_im_v40   # MISMAS filas que im_examen.csv.gz (comparación PAREADA con el IM v4.0)
+    poblacion_secundaria: todos_los_jugadores_300min  # informada, no decide
+    realizado: net_rtg_aj_onoff                       # P4: on/off ajustado bruto, ≥ 300 min en t+1 (player_role_season)
+    aditivo_referencia: IM_aditivo                    # «superior al aditivo» = la misma línea base del IM v4.0 (β × minutos, 0,031)
+    diagnostico_beta_solo: true                       # además, frente a β solo (¿aporta el contexto algo?); informado, no decide
+    bootstrap: equipo_temporada                       # B de comunes; IC95 de diferencias pareadas
+    contextualidad:
+      poblacion: jugadores que siguen en el mismo equipo de t a t+1, con ≥ 300 min en ambas y ≥ 1 alta o baja de rotación
+      prediccion: v_j(R_t+1) − v_j(R_t)               # R_t con sus minutos observados; R_t+1 real con minutos del motor (≤ t)
+      realizado: Δ del percentil on/off (dentro de temporada y grupo de liga, jugadores ≥ 300 min)
+  regla_si_no_alcanza_im_v40: >-                      # DECISIÓN F2-a del CEO (opción a)
+    Si el Impacto en pista no cumple la monotonía frente al IMPACTO v4.0 (o la calibración o la cobertura), el IMPACTO v4.0
+    sigue siendo el ancla publicada y el Impacto en pista se muestra como EXPERIMENTAL (sin sello) hasta que pase.
+  contexto_cj:                                        # candidato (§5.2 del encargo)
+    componentes: [nivel_medio_companeros, perfil_medio_companeros_4]   # Σ_k π_jk β_k / Σ π_jk y Σ_k π_jk u_k / Σ π_jk (u = 4 comp. de F2-A)
+    ajuste: regresion_cortes_anteriores               # γ por mínimos cuadrados ponderados con los cortes < t (sin fuga)
+    objetivo: on/off con 25 % menos de suerte de tiro # F2-e: net_rtg_aj_onoff − 0,25·(net_onoff_real − xnet_onoff), de la capa XP
+    entra_si: mejora la monotonía con IC95 de la diferencia > 0 (pareada, equipo-temporada)
+    riesgo_declarado: circularidad (el RAPM de la temporada absorbe parte del contexto, β ≈ +0,40 por unidad de nivel)
+  familiaridad:                                       # F2-c: candidato nuevo
+    definicion: f_jk = posesiones que j y k compartieron en pista (mismo lado) en la temporada t−1; g(f) = log(1 + f/100)
+    examen_tramo: >-
+      δ por tramo, conjunto con el RAPM ridge de cada liga-temporada (FWL: δ = x̃ᵀW y / x̃ᵀW x, x = Σ_{parejas A} g − Σ_{parejas B} g),
+      y = 0,75·y_real + 0,25·y_xp (F2-e), IC95 robusto por partido, agregado por inverso de la varianza
+    emd: analitico_estimador_lineal                   # (1,96 + 0,84)·EE agregado: exacto para un estimador lineal (sembrar δ·x lo desplaza en δ)
+    entra_si: δ con IC95 que excluye 0 Y mejora la monotonía del Impacto con IC95 > 0
+  diagnostico_xnet_onoff: true                        # F2-d: on/off sin la suerte del tiro (capa XP), sólo informativo
+  nivel_cerno_por_escenario: true                     # F2-b: NC₁/NC₂ de cada jugador con sus compañeros del escenario
+  potencia:                                           # regla de la F0: EMD antes de decidir
+    monotonia: sembrar una señal con Spearman conocido frente al on/off real (permutación parcial) y medir la tasa de detección
+    contextualidad: idem sobre el Δ realizado
 
 # ---------------------------------------------------------------------------------------- F3 · validación del impacto cruzado y bajas
 f3:
@@ -297,7 +332,7 @@ criterios:
       minutos_cobertura: "80 %: 0,785–0,800; 90 %: 0,881–0,890 (cada corte de decisión): cumple"
     shapley_suma_delta_tolerancia: 1.0e-9
   f2:
-    monotonia_no_peor_que_im_v40: {spearman_ref: 0.149, ic95_inferior_diferencia: -0.02}
+    monotonia_no_peor_que_im_v40: {spearman_ref: 0.149, ic95_inferior_diferencia: -0.02}   # pareada con el IM v4.0 en las mismas filas
     realizado: net_rtg_aj_onoff                       # P4: Net on/off ajustado BRUTO del jugador (≥ 300 min), el del 0,149 de la v4.0
     realizado_min_minutos: 300
     elite_club_informado: true                        # P4: el segmento élite se informa (v4.0: 0,159), no es puerta
