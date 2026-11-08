@@ -1,0 +1,619 @@
+liga,temporada,fase,team_id,equipo,pasador_id,pasador,receptor_id,receptor,gp,ast,ast_2,ast_3,ast_tl,pts_asistidos,pct_ast_pasador,pct_asistidas_receptor,min_juntos,ast_por40_juntos
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1629015,Zhaire Smith,1631205,Buddy Boeheim,1,1,0,1,0,3,16.6667,50,19.9233,2.0077
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1629015,Zhaire Smith,1642696,Kameron Warrens,2,2,0,2,0,6,33.3333,50,26.9333,2.9703
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1629015,Zhaire Smith,1643597,Robert McCray V,1,2,0,2,0,32,33.3333,28.5714,50.3883,1.5877
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1629015,Zhaire Smith,1643808,Andrew Holifield,1,1,1,0,0,9,16.6667,25,49.9583,0.8007
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1631205,Buddy Boeheim,1643208,Anthony Pritchard,1,1,1,0,0,2,50,50,25.24,1.5848
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1631205,Buddy Boeheim,1643597,Robert McCray V,1,1,0,1,0,3,50,14.2857,25.205,1.587
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1641727,Dariq Whitehead,1629015,Zhaire Smith,1,1,0,1,0,3,100,25,26.1367,1.5304
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1642260,Nikola Topić,1631205,Buddy Boeheim,1,1,0,1,0,3,33.3333,50,6.8933,5.8027
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1642260,Nikola Topić,1643754,Christoph Tilly,1,1,1,0,0,2,33.3333,50,12.75,3.1373
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1642260,Nikola Topić,1643808,Andrew Holifield,1,1,1,0,0,2,33.3333,25,4.5,8.8889
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1642696,Kameron Warrens,1643597,Robert McCray V,1,1,0,1,0,3,100,14.2857,19.1917,2.0842
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643208,Anthony Pritchard,1629015,Zhaire Smith,1,1,1,0,0,2,20,25,54.1717,0.7384
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643208,Anthony Pritchard,1641727,Dariq Whitehead,1,1,0,1,0,3,20,100,27.55,1.4519
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643208,Anthony Pritchard,1643597,Robert McCray V,2,2,0,2,0,6,40,28.5714,35.6483,2.2441
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643208,Anthony Pritchard,1643754,Christoph Tilly,1,1,1,0,0,2,20,50,27.6933,1.4444
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643597,Robert McCray V,1629015,Zhaire Smith,1,1,1,0,0,2,16.6667,25,50.3883,0.7938
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643597,Robert McCray V,1642260,Nikola Topić,1,1,1,0,0,2,16.6667,100,8.1267,4.9221
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643597,Robert McCray V,1642696,Kameron Warrens,1,1,0,1,0,3,16.6667,25,19.1917,2.0842
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643597,Robert McCray V,1643208,Anthony Pritchard,1,1,1,0,0,2,16.6667,50,35.6483,1.1221
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643597,Robert McCray V,1643808,Andrew Holifield,1,2,1,1,0,5,33.3333,50,37.205,2.1502
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643754,Christoph Tilly,1629015,Zhaire Smith,1,1,1,0,0,2,33.3333,25,26.83,1.4909
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643754,Christoph Tilly,1642696,Kameron Warrens,1,1,1,0,0,2,33.3333,25,16.6167,2.4072
+gleague,2026-27,total,1612709889,Oklahoma City Blue,1643754,Christoph Tilly,1643597,Robert McCray V,1,1,1,0,0,2,33.3333,14.2857,25.4333,1.5727
+gleague,2026-27,total,1612709890,Austin Spurs,1630534,Ochai Agbaji,1642013,Malik Williams,1,2,1,1,0,5,66.6667,50,9.285,8.616
+gleague,2026-27,total,1612709890,Austin Spurs,1630534,Ochai Agbaji,1643576,Maliq Brown,1,1,1,0,0,2,33.3333,50,25.765,1.5525
+gleague,2026-27,total,1612709890,Austin Spurs,1630678,Terry Taylor,1642013,Malik Williams,1,1,1,0,0,2,33.3333,25,10.2683,3.8955
+gleague,2026-27,total,1612709890,Austin Spurs,1630678,Terry Taylor,1643070,Jayden Nunn,1,1,0,1,0,3,33.3333,33.3333,16.0333,2.4948
+gleague,2026-27,total,1612709890,Austin Spurs,1630678,Terry Taylor,1643576,Maliq Brown,1,1,1,0,0,2,33.3333,50,31.3317,1.2767
+gleague,2026-27,total,1612709890,Austin Spurs,1642013,Malik Williams,1631399,Jon Elmore,1,1,0,1,0,3,100,33.3333,17.9017,2.2344
+gleague,2026-27,total,1612709890,Austin Spurs,1642930,R.J. Davis,1630534,Ochai Agbaji,1,1,1,0,0,2,25,16.6667,4.9833,8.0268
+gleague,2026-27,total,1612709890,Austin Spurs,1642930,R.J. Davis,1631399,Jon Elmore,1,1,0,1,0,3,25,33.3333,11.0167,3.6309
+gleague,2026-27,total,1612709890,Austin Spurs,1642930,R.J. Davis,1642013,Malik Williams,1,1,0,1,0,3,25,25,9.6,4.1667
+gleague,2026-27,total,1612709890,Austin Spurs,1642930,R.J. Davis,1643912,Daimion Collins,1,1,1,0,0,2,25,100,4.05,9.8765
+gleague,2026-27,total,1612709890,Austin Spurs,1643070,Jayden Nunn,1630678,Terry Taylor,1,1,1,0,0,2,100,33.3333,16.0333,2.4948
+gleague,2026-27,total,1612709890,Austin Spurs,1643551,Ja'Kobi Gillespie,1630534,Ochai Agbaji,1,5,3,2,0,12,62.5,83.3333,30.015,6.6633
+gleague,2026-27,total,1612709890,Austin Spurs,1643551,Ja'Kobi Gillespie,1642930,R.J. Davis,1,2,1,1,0,5,25,100,8.1,9.8765
+gleague,2026-27,total,1612709890,Austin Spurs,1643551,Ja'Kobi Gillespie,1643070,Jayden Nunn,1,1,0,1,0,3,12.5,33.3333,11.1983,3.572
+gleague,2026-27,total,1612709890,Austin Spurs,1643576,Maliq Brown,1630678,Terry Taylor,1,2,2,0,0,4,40,66.6667,31.3317,2.5533
+gleague,2026-27,total,1612709890,Austin Spurs,1643576,Maliq Brown,1631399,Jon Elmore,1,1,0,1,0,3,20,33.3333,19.9333,2.0067
+gleague,2026-27,total,1612709890,Austin Spurs,1643576,Maliq Brown,1643070,Jayden Nunn,1,1,0,1,0,3,20,33.3333,12.1483,3.2926
+gleague,2026-27,total,1612709890,Austin Spurs,1643576,Maliq Brown,1643551,Ja'Kobi Gillespie,1,1,0,1,0,3,20,100,29.7983,1.3424
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1631174,Tyler Burton,1642893,Alex Toohey,1,1,0,1,0,3,33.3333,25,22.2167,1.8005
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1631174,Tyler Burton,1642943,Chance McMillian,1,1,0,1,0,3,33.3333,16.6667,19.625,2.0382
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1631174,Tyler Burton,1643633,Graham Ike,1,1,1,0,0,2,33.3333,16.6667,17.1,2.3392
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1642893,Alex Toohey,1642943,Chance McMillian,1,2,2,0,0,4,50,33.3333,16.975,4.7128
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1642893,Alex Toohey,1643633,Graham Ike,1,2,2,0,0,4,50,33.3333,17.8833,4.4734
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1642939,Miles Kelly,1643592,Nick Boyd,1,1,1,0,0,2,100,50,12.125,3.299
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1642943,Chance McMillian,1642939,Miles Kelly,1,1,0,1,0,3,33.3333,100,6.1833,6.469
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1642943,Chance McMillian,1642946,Jacksen Moni,1,1,0,1,0,3,33.3333,50,12.1667,3.2877
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1642943,Chance McMillian,1643592,Nick Boyd,1,1,0,1,0,3,33.3333,50,14.625,2.735
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1642946,Jacksen Moni,1642893,Alex Toohey,1,1,1,0,0,2,100,25,14.4333,2.7714
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643090,Deivon Smith,1642943,Chance McMillian,1,2,0,2,0,6,40,33.3333,11.1,7.2072
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643090,Deivon Smith,1643633,Graham Ike,1,2,2,0,0,4,40,33.3333,14.9,5.3691
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643090,Deivon Smith,1643805,Elias Ralph,1,1,1,0,0,2,20,50,12.5333,3.1915
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643592,Nick Boyd,1642946,Jacksen Moni,1,1,0,1,0,3,33.3333,50,14.85,2.6936
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643592,Nick Boyd,1643633,Graham Ike,1,1,1,0,0,2,33.3333,16.6667,13.6667,2.9268
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643592,Nick Boyd,1643805,Elias Ralph,1,1,1,0,0,2,33.3333,50,5.2167,7.6677
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643633,Graham Ike,1642893,Alex Toohey,1,2,2,0,0,4,66.6667,50,17.8833,4.4734
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643633,Graham Ike,1642943,Chance McMillian,1,1,0,1,0,3,33.3333,16.6667,13.5583,2.9502
+gleague,2026-27,total,1612709902,Santa Cruz Warriors,1643855,Obi Agbim,1643090,Deivon Smith,1,2,0,2,0,6,100,100,5.3167,15.047
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1631127,Harrison Ingram,1631474,Terrell Brown Jr.,1,1,0,1,0,3,33.3333,100,17.3,2.3121
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1631127,Harrison Ingram,1641725,Trey Alexander,1,1,1,0,0,2,33.3333,100,32.5,1.2308
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1631127,Harrison Ingram,1641917,Taylor Funk,1,1,0,1,0,3,33.3333,33.3333,7.25,5.5172
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1631474,Terrell Brown Jr.,1641917,Taylor Funk,1,1,1,0,0,2,20,33.3333,11.8667,3.3708
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1631474,Terrell Brown Jr.,1642640,Justin Harmon,1,1,0,1,0,3,20,50,11.8667,3.3708
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1631474,Terrell Brown Jr.,1642926,Tamar Bates,1,1,0,1,0,3,20,50,15.7333,2.5424
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1631474,Terrell Brown Jr.,1643265,Jonas Aidoo,1,2,2,0,0,4,40,66.6667,18.9833,4.2142
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1641725,Trey Alexander,1631127,Harrison Ingram,1,1,1,0,0,2,25,100,32.5,1.2308
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1641725,Trey Alexander,1641802,Matthew Murrell,1,1,1,0,0,2,25,33.3333,14.4667,2.765
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1641725,Trey Alexander,1642926,Tamar Bates,1,1,0,1,0,3,25,50,31.8333,1.2565
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1641725,Trey Alexander,1643265,Jonas Aidoo,1,1,1,0,0,2,25,33.3333,20.6167,1.9402
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1641802,Matthew Murrell,1641917,Taylor Funk,1,1,0,1,0,3,50,33.3333,15.8,2.5316
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1641802,Matthew Murrell,1643753,Mohamed Wague,1,1,1,0,0,2,50,100,8.05,4.9689
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1641917,Taylor Funk,1641802,Matthew Murrell,1,2,1,1,0,5,100,66.6667,15.8,5.0633
+gleague,2026-27,total,1612709903,Salt Lake City Stars,1643265,Jonas Aidoo,1642640,Justin Harmon,1,1,0,1,0,3,100,50,11.2167,3.5661
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1628372,Dennis Smith Jr.,1630283,Kylor Kelley,1,2,2,0,0,4,22.2222,28.5714,9.6333,8.3045
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1628372,Dennis Smith Jr.,1642360,Tyon Grant-Foster,1,3,3,0,0,6,33.3333,100,16.7833,7.15
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1628372,Dennis Smith Jr.,1643016,Bez Mbeng,1,1,0,1,0,3,11.1111,20,3.6833,10.8597
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1628372,Dennis Smith Jr.,1643019,Gabe Madsen,1,2,0,2,0,6,22.2222,66.6667,23.4667,3.4091
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1628372,Dennis Smith Jr.,1643727,J'Vonne Hadley,1,1,0,1,0,3,11.1111,33.3333,17.9,2.2346
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1630283,Kylor Kelley,1643621,Tre Donaldson,1,1,0,1,0,3,100,9.0909,43.8667,0.9119
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1631311,Lester Quinones,1642884,Vladislav Goldin,1,1,1,0,0,2,16.6667,7.1429,52.2667,0.7653
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1631311,Lester Quinones,1643016,Bez Mbeng,1,1,1,0,0,2,16.6667,20,57.3333,0.6977
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1631311,Lester Quinones,1643019,Gabe Madsen,1,1,0,1,0,3,16.6667,33.3333,9.7167,4.1166
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1631311,Lester Quinones,1643621,Tre Donaldson,1,3,0,3,0,9,50,27.2727,61.5333,1.9502
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1642884,Vladislav Goldin,1631311,Lester Quinones,1,1,0,1,0,3,16.6667,14.2857,52.2667,0.7653
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1642884,Vladislav Goldin,1643016,Bez Mbeng,1,1,1,0,0,2,16.6667,20,55.7,0.7181
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1642884,Vladislav Goldin,1643621,Tre Donaldson,2,3,0,3,0,9,50,27.2727,56.7833,2.1133
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1642884,Vladislav Goldin,1643727,J'Vonne Hadley,1,1,0,1,0,3,16.6667,33.3333,26.8117,1.4919
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643016,Bez Mbeng,1630283,Kylor Kelley,1,1,1,0,0,2,5.8824,14.2857,37.3167,1.0719
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643016,Bez Mbeng,1631311,Lester Quinones,2,3,0,3,0,9,17.6471,42.8571,57.3333,2.093
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643016,Bez Mbeng,1642884,Vladislav Goldin,2,9,8,1,0,19,52.9412,64.2857,55.7,6.4632
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643016,Bez Mbeng,1643621,Tre Donaldson,2,3,3,0,0,6,17.6471,27.2727,60.1333,1.9956
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643016,Bez Mbeng,1643894,A.J. Staton-McCray,1,1,1,0,0,2,5.8824,100,1.6167,24.7423
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643019,Gabe Madsen,1643621,Tre Donaldson,1,1,0,1,0,3,100,9.0909,15.6333,2.5586
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643621,Tre Donaldson,1630283,Kylor Kelley,2,4,4,0,0,8,28.5714,57.1429,43.8667,3.6474
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643621,Tre Donaldson,1631311,Lester Quinones,1,2,1,1,0,5,14.2857,28.5714,61.5333,1.3001
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643621,Tre Donaldson,1642884,Vladislav Goldin,2,4,3,1,0,9,28.5714,28.5714,56.7833,2.8177
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643621,Tre Donaldson,1643016,Bez Mbeng,1,2,2,0,0,4,14.2857,40,60.1333,1.3304
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643621,Tre Donaldson,1643727,J'Vonne Hadley,1,1,1,0,0,2,7.1429,33.3333,30.8117,1.2982
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643621,Tre Donaldson,1643867,Ian Schieffelin,1,1,0,1,0,3,7.1429,100,9.5,4.2105
+gleague,2026-27,total,1612709904,Sioux Falls Skyforce,1643727,J'Vonne Hadley,1631311,Lester Quinones,1,1,0,1,0,3,100,14.2857,25.0283,1.5982
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1631306,Cole Swider,1642443,Jahmir Young,1,1,1,0,0,2,50,50,16.5167,2.4218
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1631306,Cole Swider,1643024,Chris Mañon,1,1,1,0,0,2,50,16.6667,22.8117,1.7535
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1641751,Arthur Kaluma,1643024,Chris Mañon,1,1,1,0,0,2,33.3333,16.6667,23.995,1.667
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1641751,Arthur Kaluma,1643418,Cameron Carr,1,2,2,0,0,4,66.6667,66.6667,17.0217,4.6999
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1641817,Anton Watson,1631306,Cole Swider,1,1,0,1,0,3,50,14.2857,24.5167,1.6315
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1641817,Anton Watson,1643024,Chris Mañon,1,1,1,0,0,2,50,16.6667,25.095,1.5939
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642355,Bronny James,1631306,Cole Swider,1,2,2,0,0,4,28.5714,28.5714,17.3333,4.6154
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642355,Bronny James,1641817,Anton Watson,1,1,0,1,0,3,14.2857,100,14.25,2.807
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642355,Bronny James,1643024,Chris Mañon,1,2,2,0,0,4,28.5714,33.3333,19.6783,4.0654
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642355,Bronny James,1643418,Cameron Carr,1,1,1,0,0,2,14.2857,33.3333,17.5383,2.2807
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642355,Bronny James,1643759,William Kyle,1,1,1,0,0,2,14.2857,100,20.1833,1.9818
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642443,Jahmir Young,1631306,Cole Swider,1,2,1,1,0,5,50,28.5714,16.5167,4.8436
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642443,Jahmir Young,1641751,Arthur Kaluma,1,1,1,0,0,2,25,100,6.3,6.3492
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1642443,Jahmir Young,1643024,Chris Mañon,1,1,1,0,0,2,25,16.6667,18.4667,2.1661
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1643024,Chris Mañon,1631306,Cole Swider,1,1,0,1,0,3,33.3333,14.2857,22.8117,1.7535
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1643024,Chris Mañon,1642355,Bronny James,1,1,0,1,0,3,33.3333,100,19.6783,2.0327
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1643024,Chris Mañon,1643758,AK Okereke,1,1,1,0,0,2,33.3333,100,12.5167,3.1957
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1643758,AK Okereke,1631306,Cole Swider,1,1,1,0,0,2,100,14.2857,11.45,3.4934
+gleague,2026-27,total,1612709905,Coachella Valley Lakers,1643759,William Kyle,1642443,Jahmir Young,1,1,1,0,0,2,100,50,4.75,8.4211
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1641799,Caleb McConnell,1641999,John Knight III,1,1,1,0,0,2,100,100,8.9,4.4944
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1641890,Tyler Smith,1641763,Julian Phillips,1,1,0,1,0,-63,50,25,26.6033,1.5036
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1641890,Tyler Smith,1643898,Jadin Booth,1,1,0,1,0,3,50,100,5.35,7.4766
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1641999,John Knight III,1630209,Omer Yurtseven,1,1,1,0,0,2,100,50,9.7667,4.0956
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643069,Cameron Matthews,1641763,Julian Phillips,1,1,1,0,0,2,50,25,10.2183,3.9145
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643069,Cameron Matthews,1641890,Tyler Smith,1,1,0,1,0,3,50,16.6667,16.435,2.4338
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643570,Bruce Thornton,1641890,Tyler Smith,1,3,0,3,0,42,60,50,32.585,3.6827
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643570,Bruce Thornton,1643069,Cameron Matthews,1,1,0,1,0,3,20,100,19.6667,2.0339
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643570,Bruce Thornton,1643595,Quadir Copeland,1,1,1,0,0,2,20,100,28.7,1.3937
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643595,Quadir Copeland,1641763,Julian Phillips,1,2,2,0,0,4,40,50,32.3667,2.4717
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643595,Quadir Copeland,1641890,Tyler Smith,1,2,0,2,0,6,40,33.3333,29.7183,2.6919
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643595,Quadir Copeland,1643570,Bruce Thornton,1,1,0,1,0,3,20,100,28.7,1.3937
+gleague,2026-27,total,1612709908,Rio Grande Valley Vipers,1643809,Bryce Harris,1630209,Omer Yurtseven,1,1,1,0,0,2,100,50,6.35,6.2992
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1630542,Marcus Bagley,1642392,Jameer Nelson Jr.,1,1,1,0,0,2,100,11.1111,15.5117,2.5787
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1641794,Dillon Jones,1630542,Marcus Bagley,1,3,0,3,0,9,27.2727,60,21.6383,5.5457
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1641794,Dillon Jones,1642392,Jameer Nelson Jr.,1,2,1,1,0,5,18.1818,22.2222,18.35,4.3597
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1641794,Dillon Jones,1643148,Saint Thomas,1,4,4,0,0,8,36.3636,36.3636,23.275,6.8743
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1641794,Dillon Jones,1643368,Damari Monsanto,1,1,0,1,0,3,9.0909,20,28.33,1.4119
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1641794,Dillon Jones,1643935,Guy Ragland Jr.,1,1,0,1,0,3,9.0909,25,11.8667,3.3708
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1642392,Jameer Nelson Jr.,1630542,Marcus Bagley,1,1,1,0,0,2,25,20,15.5117,2.5787
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1642392,Jameer Nelson Jr.,1641794,Dillon Jones,1,1,0,1,0,3,25,50,18.35,2.1798
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1642392,Jameer Nelson Jr.,1643148,Saint Thomas,1,1,1,0,0,2,25,9.0909,23.775,1.6824
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1642392,Jameer Nelson Jr.,1643935,Guy Ragland Jr.,1,1,1,0,0,2,25,25,13.95,2.8674
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643148,Saint Thomas,1642392,Jameer Nelson Jr.,1,3,3,0,0,6,60,33.3333,23.775,5.0473
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643148,Saint Thomas,1643368,Damari Monsanto,1,1,0,1,0,3,20,20,23.7,1.6878
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643148,Saint Thomas,1643935,Guy Ragland Jr.,1,1,0,1,0,3,20,25,15.6333,2.5586
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643368,Damari Monsanto,1630542,Marcus Bagley,1,1,0,1,0,3,25,20,22.5667,1.7725
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643368,Damari Monsanto,1643148,Saint Thomas,1,2,1,1,0,5,50,18.1818,23.7,3.3755
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643368,Damari Monsanto,1643935,Guy Ragland Jr.,1,1,1,0,0,2,25,25,9.8,4.0816
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643575,Duke Miles,1642392,Jameer Nelson Jr.,1,1,1,0,0,2,16.6667,11.1111,11.6833,3.4237
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643575,Duke Miles,1643148,Saint Thomas,1,1,1,0,0,2,16.6667,9.0909,19.125,2.0915
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643575,Duke Miles,1643368,Damari Monsanto,1,3,0,3,0,9,50,60,13.9633,8.5939
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643575,Duke Miles,1643985,Cris Carroll,1,1,1,0,0,2,16.6667,50,16.2467,2.462
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643818,Taye Fields,1643985,Cris Carroll,1,1,0,1,0,3,100,50,7.92,5.0505
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643935,Guy Ragland Jr.,1641794,Dillon Jones,1,1,1,0,0,2,25,50,11.8667,3.3708
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643935,Guy Ragland Jr.,1643148,Saint Thomas,1,3,3,0,0,6,75,27.2727,15.6333,7.6759
+gleague,2026-27,total,1612709909,Delaware Blue Coats,1643985,Cris Carroll,1642392,Jameer Nelson Jr.,1,2,1,1,0,5,100,22.2222,10.5367,7.5925
+gleague,2026-27,total,1612709910,Noblesville Boom,1642965,Wade Taylor IV,1642974,RJ Felton,1,1,0,1,0,3,9.0909,33.3333,14.0167,2.8537
+gleague,2026-27,total,1612709910,Noblesville Boom,1642965,Wade Taylor IV,1643161,M.J. Iraldi,1,1,1,0,0,2,9.0909,16.6667,25.5833,1.5635
+gleague,2026-27,total,1612709910,Noblesville Boom,1642965,Wade Taylor IV,1643627,Keba Keita,2,3,3,0,0,6,27.2727,60,35.075,3.4212
+gleague,2026-27,total,1612709910,Noblesville Boom,1642965,Wade Taylor IV,1643636,Kowacie Reeves Jr.,2,5,4,1,0,11,45.4545,50,47.15,4.2418
+gleague,2026-27,total,1612709910,Noblesville Boom,1642965,Wade Taylor IV,1643792,Rienk Mast,1,1,0,1,0,3,9.0909,33.3333,44.6933,0.895
+gleague,2026-27,total,1612709910,Noblesville Boom,1642974,RJ Felton,1642965,Wade Taylor IV,1,2,1,1,0,5,66.6667,40,14.0167,5.7075
+gleague,2026-27,total,1612709910,Noblesville Boom,1642974,RJ Felton,1643636,Kowacie Reeves Jr.,1,1,0,1,0,3,33.3333,10,18.5,2.1622
+gleague,2026-27,total,1612709910,Noblesville Boom,1643160,Cameron Hildreth,1643161,M.J. Iraldi,1,1,1,0,0,2,50,16.6667,25.2,1.5873
+gleague,2026-27,total,1612709910,Noblesville Boom,1643160,Cameron Hildreth,1643636,Kowacie Reeves Jr.,1,1,1,0,0,2,50,10,43.3333,0.9231
+gleague,2026-27,total,1612709910,Noblesville Boom,1643161,M.J. Iraldi,1642965,Wade Taylor IV,1,1,1,0,0,2,33.3333,20,25.5833,1.5635
+gleague,2026-27,total,1612709910,Noblesville Boom,1643161,M.J. Iraldi,1643636,Kowacie Reeves Jr.,1,1,1,0,0,2,33.3333,10,22.15,1.8059
+gleague,2026-27,total,1612709910,Noblesville Boom,1643161,M.J. Iraldi,1643792,Rienk Mast,1,1,1,0,0,2,33.3333,33.3333,30.5883,1.3077
+gleague,2026-27,total,1612709910,Noblesville Boom,1643627,Keba Keita,1642965,Wade Taylor IV,2,2,2,0,0,4,33.3333,40,35.075,2.2808
+gleague,2026-27,total,1612709910,Noblesville Boom,1643627,Keba Keita,1642974,RJ Felton,1,1,1,0,0,2,16.6667,33.3333,18.025,2.2191
+gleague,2026-27,total,1612709910,Noblesville Boom,1643627,Keba Keita,1643160,Cameron Hildreth,2,2,1,1,0,5,33.3333,20,29.475,2.7142
+gleague,2026-27,total,1612709910,Noblesville Boom,1643627,Keba Keita,1643161,M.J. Iraldi,1,1,1,0,0,2,16.6667,16.6667,27.6283,1.4478
+gleague,2026-27,total,1612709910,Noblesville Boom,1643636,Kowacie Reeves Jr.,1643160,Cameron Hildreth,1,1,0,1,0,3,50,10,43.3333,0.9231
+gleague,2026-27,total,1612709910,Noblesville Boom,1643636,Kowacie Reeves Jr.,1643627,Keba Keita,1,1,1,0,0,2,50,20,40.7967,0.9805
+gleague,2026-27,total,1612709910,Noblesville Boom,1643792,Rienk Mast,1642974,RJ Felton,1,1,0,1,0,3,10,33.3333,20.575,1.9441
+gleague,2026-27,total,1612709910,Noblesville Boom,1643792,Rienk Mast,1643160,Cameron Hildreth,2,5,5,0,0,10,50,50,47.3267,4.2259
+gleague,2026-27,total,1612709910,Noblesville Boom,1643792,Rienk Mast,1643161,M.J. Iraldi,2,2,1,1,0,5,20,33.3333,30.5883,2.6154
+gleague,2026-27,total,1612709910,Noblesville Boom,1643792,Rienk Mast,1643636,Kowacie Reeves Jr.,1,1,1,0,0,2,10,10,39.1717,1.0211
+gleague,2026-27,total,1612709910,Noblesville Boom,1643792,Rienk Mast,1643793,Jalen Warley,1,1,1,0,0,2,10,100,14.9667,2.6726
+gleague,2026-27,total,1612709910,Noblesville Boom,1643793,Jalen Warley,1643160,Cameron Hildreth,1,1,1,0,0,2,20,10,8.2983,4.8202
+gleague,2026-27,total,1612709910,Noblesville Boom,1643793,Jalen Warley,1643161,M.J. Iraldi,1,1,0,1,0,3,20,16.6667,23.6667,1.6901
+gleague,2026-27,total,1612709910,Noblesville Boom,1643793,Jalen Warley,1643627,Keba Keita,1,1,1,0,0,2,20,20,18.0333,2.2181
+gleague,2026-27,total,1612709910,Noblesville Boom,1643793,Jalen Warley,1643636,Kowacie Reeves Jr.,1,1,0,1,0,3,20,10,20.4983,1.9514
+gleague,2026-27,total,1612709910,Noblesville Boom,1643793,Jalen Warley,1643792,Rienk Mast,1,1,1,0,0,2,20,33.3333,14.9667,2.6726
+gleague,2026-27,total,1612709910,Noblesville Boom,1643962,Maleeck Harden-Hayes,1643160,Cameron Hildreth,1,1,0,1,0,3,100,10,26.2833,1.5219
+gleague,2026-27,total,1612709911,Iowa Wolves,1629391,Jordan Johnson,1629808,Stephen Thompson,1,1,0,1,0,3,20,33.3333,14.4833,2.7618
+gleague,2026-27,total,1612709911,Iowa Wolves,1629391,Jordan Johnson,1642362,Payton Sandfort,1,1,0,1,0,3,20,16.6667,9.9633,4.0147
+gleague,2026-27,total,1612709911,Iowa Wolves,1629391,Jordan Johnson,1642657,Cameron Martin,1,1,0,1,0,3,20,25,14.4633,2.7656
+gleague,2026-27,total,1612709911,Iowa Wolves,1629391,Jordan Johnson,1642957,Nate Santos,1,1,1,0,0,2,20,14.2857,9.3167,4.2934
+gleague,2026-27,total,1612709911,Iowa Wolves,1629391,Jordan Johnson,1643933,Alejandro Rama,1,1,0,1,0,3,20,100,7.7167,5.1836
+gleague,2026-27,total,1612709911,Iowa Wolves,1629808,Stephen Thompson,1642362,Payton Sandfort,1,1,0,1,0,3,25,16.6667,9.53,4.1973
+gleague,2026-27,total,1612709911,Iowa Wolves,1629808,Stephen Thompson,1642657,Cameron Martin,1,1,1,0,0,2,25,25,18.83,2.1243
+gleague,2026-27,total,1612709911,Iowa Wolves,1629808,Stephen Thompson,1643785,Toby Harris,1,2,1,1,0,5,50,100,2.9833,26.8156
+gleague,2026-27,total,1612709911,Iowa Wolves,1630231,KJ Martin,1630622,Jalen Crutcher,1,2,1,1,0,5,40,66.6667,23.95,3.3403
+gleague,2026-27,total,1612709911,Iowa Wolves,1630231,KJ Martin,1642362,Payton Sandfort,1,1,0,1,0,3,20,16.6667,21.9833,1.8196
+gleague,2026-27,total,1612709911,Iowa Wolves,1630231,KJ Martin,1642657,Cameron Martin,1,1,1,0,0,2,20,25,13.42,2.9806
+gleague,2026-27,total,1612709911,Iowa Wolves,1630231,KJ Martin,1642957,Nate Santos,1,1,0,1,0,3,20,14.2857,21.0033,1.9045
+gleague,2026-27,total,1612709911,Iowa Wolves,1630622,Jalen Crutcher,1629391,Jordan Johnson,1,1,0,1,0,3,11.1111,33.3333,8.82,4.5351
+gleague,2026-27,total,1612709911,Iowa Wolves,1630622,Jalen Crutcher,1630231,KJ Martin,1,5,5,0,0,10,55.5556,55.5556,23.95,8.3507
+gleague,2026-27,total,1612709911,Iowa Wolves,1630622,Jalen Crutcher,1642362,Payton Sandfort,1,1,0,1,0,3,11.1111,16.6667,23.48,1.7036
+gleague,2026-27,total,1612709911,Iowa Wolves,1630622,Jalen Crutcher,1642957,Nate Santos,1,2,2,0,0,4,22.2222,28.5714,23.2667,3.4384
+gleague,2026-27,total,1612709911,Iowa Wolves,1631262,Jules Bernard,1630231,KJ Martin,1,3,2,1,0,7,60,33.3333,17.57,6.8298
+gleague,2026-27,total,1612709911,Iowa Wolves,1631262,Jules Bernard,1642957,Nate Santos,1,2,0,2,0,6,40,28.5714,18.02,4.4395
+gleague,2026-27,total,1612709911,Iowa Wolves,1642362,Payton Sandfort,1629391,Jordan Johnson,1,1,0,1,0,3,25,33.3333,9.9633,4.0147
+gleague,2026-27,total,1612709911,Iowa Wolves,1642362,Payton Sandfort,1629808,Stephen Thompson,1,1,0,1,0,3,25,33.3333,9.53,4.1973
+gleague,2026-27,total,1612709911,Iowa Wolves,1642362,Payton Sandfort,1630231,KJ Martin,1,1,1,0,0,2,25,11.1111,21.9833,1.8196
+gleague,2026-27,total,1612709911,Iowa Wolves,1642362,Payton Sandfort,1642657,Cameron Martin,1,1,0,1,0,3,25,25,18.7833,2.1295
+gleague,2026-27,total,1612709911,Iowa Wolves,1642657,Cameron Martin,1629808,Stephen Thompson,1,1,1,0,0,2,33.3333,33.3333,18.83,2.1243
+gleague,2026-27,total,1612709911,Iowa Wolves,1642657,Cameron Martin,1642362,Payton Sandfort,1,1,0,1,0,3,33.3333,16.6667,18.7833,2.1295
+gleague,2026-27,total,1612709911,Iowa Wolves,1642657,Cameron Martin,1642957,Nate Santos,1,1,0,1,0,3,33.3333,14.2857,13.4833,2.9666
+gleague,2026-27,total,1612709911,Iowa Wolves,1642957,Nate Santos,1629391,Jordan Johnson,1,1,0,1,0,3,33.3333,33.3333,9.3167,4.2934
+gleague,2026-27,total,1612709911,Iowa Wolves,1642957,Nate Santos,1630622,Jalen Crutcher,1,1,0,1,0,3,33.3333,33.3333,23.2667,1.7192
+gleague,2026-27,total,1612709911,Iowa Wolves,1642957,Nate Santos,1642362,Payton Sandfort,1,1,1,0,0,2,33.3333,16.6667,23.4967,1.7024
+gleague,2026-27,total,1612709914,Stockton Kings,1629792,Gabe Levin,1642396,Blake Hinson,1,1,1,0,0,2,50,33.3333,13.85,2.8881
+gleague,2026-27,total,1612709914,Stockton Kings,1629792,Gabe Levin,1642951,Sean Pedulla,1,1,0,1,0,3,50,33.3333,11.4667,3.4884
+gleague,2026-27,total,1612709914,Stockton Kings,1641803,Tristen Newton,1642284,Alex Karaban,1,3,2,1,0,7,100,75,30.0333,3.9956
+gleague,2026-27,total,1612709914,Stockton Kings,1642284,Alex Karaban,1641803,Tristen Newton,1,1,0,1,0,3,33.3333,33.3333,30.0333,1.3319
+gleague,2026-27,total,1612709914,Stockton Kings,1642284,Alex Karaban,1642398,Sean East II,1,1,1,0,0,2,33.3333,25,14.2833,2.8005
+gleague,2026-27,total,1612709914,Stockton Kings,1642284,Alex Karaban,1642951,Sean Pedulla,1,1,0,1,0,3,33.3333,33.3333,19.5,2.0513
+gleague,2026-27,total,1612709914,Stockton Kings,1642367,Jonathan Mogbo,1641803,Tristen Newton,1,2,0,2,0,6,50,66.6667,25.0167,3.1979
+gleague,2026-27,total,1612709914,Stockton Kings,1642367,Jonathan Mogbo,1642398,Sean East II,1,1,0,1,0,3,25,25,14.4667,2.765
+gleague,2026-27,total,1612709914,Stockton Kings,1642367,Jonathan Mogbo,1642940,Viktor Lakhin,1,1,1,0,0,2,25,100,20.8167,1.9215
+gleague,2026-27,total,1612709914,Stockton Kings,1642396,Blake Hinson,1629792,Gabe Levin,1,1,1,0,0,2,33.3333,100,13.85,2.8881
+gleague,2026-27,total,1612709914,Stockton Kings,1642396,Blake Hinson,1642398,Sean East II,1,1,1,0,0,2,33.3333,25,19.9833,2.0017
+gleague,2026-27,total,1612709914,Stockton Kings,1642396,Blake Hinson,1642951,Sean Pedulla,1,1,1,0,0,2,33.3333,33.3333,16.2,2.4691
+gleague,2026-27,total,1612709914,Stockton Kings,1642398,Sean East II,1642284,Alex Karaban,1,1,0,1,0,3,33.3333,25,14.2833,2.8005
+gleague,2026-27,total,1612709914,Stockton Kings,1642398,Sean East II,1642367,Jonathan Mogbo,1,1,1,0,0,2,33.3333,33.3333,14.4667,2.765
+gleague,2026-27,total,1612709914,Stockton Kings,1642398,Sean East II,1642396,Blake Hinson,1,1,0,1,0,3,33.3333,33.3333,19.9833,2.0017
+gleague,2026-27,total,1612709914,Stockton Kings,1642940,Viktor Lakhin,1642367,Jonathan Mogbo,1,2,1,1,0,5,100,66.6667,20.8167,3.8431
+gleague,2026-27,total,1612709914,Stockton Kings,1642951,Sean Pedulla,1642396,Blake Hinson,1,1,1,0,0,2,50,33.3333,16.2,2.4691
+gleague,2026-27,total,1612709914,Stockton Kings,1642951,Sean Pedulla,1642398,Sean East II,1,1,1,0,0,2,50,25,14.4,2.7778
+gleague,2026-27,total,1612709914,Stockton Kings,1643838,Tayton Conerway,1641987,David Muoka,1,1,1,0,0,2,100,100,2.5,16
+gleague,2026-27,total,1612709915,Maine Celtics,1641759,Dillon Mitchell,1642870,Milos Uzan,1,1,1,0,0,2,20,14.2857,41.6667,0.96
+gleague,2026-27,total,1612709915,Maine Celtics,1641759,Dillon Mitchell,1642873,Amari Williams,1,1,1,0,0,2,20,16.6667,41.9117,0.9544
+gleague,2026-27,total,1612709915,Maine Celtics,1641759,Dillon Mitchell,1642934,Caleb Grill,1,1,0,1,0,3,20,33.3333,9.4883,4.2157
+gleague,2026-27,total,1612709915,Maine Celtics,1641759,Dillon Mitchell,1643416,Chris Cenac Jr.,1,1,0,1,0,3,20,16.6667,23.1167,1.7304
+gleague,2026-27,total,1612709915,Maine Celtics,1641759,Dillon Mitchell,1643620,Tucker DeVries,1,1,0,1,0,3,20,10,36.7167,1.0894
+gleague,2026-27,total,1612709915,Maine Celtics,1642269,Devin Carter,1641759,Dillon Mitchell,1,1,1,0,0,2,12.5,9.0909,11.6333,3.4384
+gleague,2026-27,total,1612709915,Maine Celtics,1642269,Devin Carter,1642870,Milos Uzan,1,1,1,0,0,2,12.5,14.2857,4.5667,8.7591
+gleague,2026-27,total,1612709915,Maine Celtics,1642269,Devin Carter,1642873,Amari Williams,1,3,3,0,0,6,37.5,50,23.6333,5.0776
+gleague,2026-27,total,1612709915,Maine Celtics,1642269,Devin Carter,1643060,Hayden Gray,1,1,0,1,0,3,12.5,25,19.5333,2.0478
+gleague,2026-27,total,1612709915,Maine Celtics,1642269,Devin Carter,1643620,Tucker DeVries,2,2,1,1,0,5,25,20,15.6167,5.1227
+gleague,2026-27,total,1612709915,Maine Celtics,1642440,Gabe McGlothan,1643060,Hayden Gray,1,1,0,1,0,3,100,25,37.7667,1.0591
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1641759,Dillon Mitchell,2,6,5,1,0,13,31.5789,54.5455,41.6667,5.76
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1642269,Devin Carter,1,1,1,0,0,2,5.2632,33.3333,4.5667,8.7591
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1642440,Gabe McGlothan,1,1,1,0,0,2,5.2632,25,22.7,1.7621
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1642873,Amari Williams,1,1,1,0,0,2,5.2632,16.6667,36.8117,1.0866
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1642934,Caleb Grill,1,1,0,1,0,3,5.2632,33.3333,14.5883,2.7419
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1643060,Hayden Gray,1,2,1,1,0,5,10.5263,50,43.4667,1.8405
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1643416,Chris Cenac Jr.,1,3,1,2,0,55,15.7895,50,35.7333,3.3582
+gleague,2026-27,total,1612709915,Maine Celtics,1642870,Milos Uzan,1643620,Tucker DeVries,1,4,0,4,0,12,21.0526,40,48.5667,3.2944
+gleague,2026-27,total,1612709915,Maine Celtics,1642873,Amari Williams,1641759,Dillon Mitchell,1,1,1,0,0,2,16.6667,9.0909,41.9117,0.9544
+gleague,2026-27,total,1612709915,Maine Celtics,1642873,Amari Williams,1642269,Devin Carter,1,1,0,1,0,3,16.6667,33.3333,23.6333,1.6925
+gleague,2026-27,total,1612709915,Maine Celtics,1642873,Amari Williams,1642870,Milos Uzan,1,1,0,1,0,3,16.6667,14.2857,36.8117,1.0866
+gleague,2026-27,total,1612709915,Maine Celtics,1642873,Amari Williams,1643264,Hank Morgan,1,1,0,1,0,3,16.6667,100,5.35,7.4766
+gleague,2026-27,total,1612709915,Maine Celtics,1642873,Amari Williams,1643620,Tucker DeVries,1,2,1,1,0,5,33.3333,20,38.045,2.1028
+gleague,2026-27,total,1612709915,Maine Celtics,1642934,Caleb Grill,1642440,Gabe McGlothan,1,1,1,0,0,2,100,25,24.3333,1.6438
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1641759,Dillon Mitchell,1,1,1,0,0,2,11.1111,9.0909,26.5167,1.5085
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1642269,Devin Carter,1,1,1,0,0,2,11.1111,33.3333,19.5333,2.0478
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1642440,Gabe McGlothan,1,1,1,0,0,2,11.1111,25,37.7667,1.0591
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1642870,Milos Uzan,1,1,1,0,0,2,11.1111,14.2857,43.4667,0.9202
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1642934,Caleb Grill,1,1,0,1,0,3,11.1111,33.3333,29.6883,1.3473
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1643416,Chris Cenac Jr.,2,2,2,0,0,4,22.2222,33.3333,32.8,2.439
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1643620,Tucker DeVries,1,1,0,1,0,3,11.1111,10,36.4833,1.0964
+gleague,2026-27,total,1612709915,Maine Celtics,1643060,Hayden Gray,1643851,Steven Jamerson,1,1,1,0,0,2,11.1111,100,3.8333,10.4348
+gleague,2026-27,total,1612709915,Maine Celtics,1643416,Chris Cenac Jr.,1641759,Dillon Mitchell,1,1,0,1,0,3,33.3333,9.0909,23.1167,1.7304
+gleague,2026-27,total,1612709915,Maine Celtics,1643416,Chris Cenac Jr.,1642870,Milos Uzan,2,2,1,1,0,5,66.6667,28.5714,35.7333,2.2388
+gleague,2026-27,total,1612709915,Maine Celtics,1643620,Tucker DeVries,1641759,Dillon Mitchell,1,1,1,0,0,2,25,9.0909,36.7167,1.0894
+gleague,2026-27,total,1612709915,Maine Celtics,1643620,Tucker DeVries,1642440,Gabe McGlothan,1,1,0,1,0,3,25,25,20.5333,1.9481
+gleague,2026-27,total,1612709915,Maine Celtics,1643620,Tucker DeVries,1642870,Milos Uzan,1,1,1,0,0,2,25,14.2857,48.5667,0.8236
+gleague,2026-27,total,1612709915,Maine Celtics,1643620,Tucker DeVries,1642873,Amari Williams,1,1,1,0,0,2,25,16.6667,38.045,1.0514
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1628974,Tony Carr,1641801,Emanuel Miller,1,1,1,0,0,2,50,10,28.0833,1.4243
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1628974,Tony Carr,1641863,Dane Goodwin,1,1,0,1,0,3,50,14.2857,20.9167,1.9124
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1630817,Pedro Bradshaw,1641863,Dane Goodwin,1,1,1,0,0,2,100,14.2857,33.3683,1.1987
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641746,Coleman Hawkins,1628974,Tony Carr,1,1,1,0,0,2,6.25,100,14.6667,2.7273
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641746,Coleman Hawkins,1641801,Emanuel Miller,1,4,4,0,0,8,25,40,49.15,3.2553
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641746,Coleman Hawkins,1641863,Dane Goodwin,2,4,1,3,0,11,25,57.1429,49.2,3.252
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641746,Coleman Hawkins,1643080,Steven Crowl,2,3,3,0,0,6,18.75,75,27.145,4.4207
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641746,Coleman Hawkins,1643849,Reese Dixon-Waters,1,1,1,0,0,2,6.25,33.3333,18.1383,2.2053
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641746,Coleman Hawkins,1643850,Keonte Jones,2,3,3,0,0,6,18.75,75,21.6983,5.5304
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641801,Emanuel Miller,1630817,Pedro Bradshaw,1,2,0,2,0,6,100,40,28.3017,2.8267
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641863,Dane Goodwin,1630817,Pedro Bradshaw,1,1,1,0,0,2,12.5,20,33.3683,1.1987
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641863,Dane Goodwin,1641746,Coleman Hawkins,1,1,1,0,0,2,12.5,25,49.2,0.813
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641863,Dane Goodwin,1641801,Emanuel Miller,2,2,1,1,0,5,25,20,50.6667,1.5789
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641863,Dane Goodwin,1643080,Steven Crowl,1,1,1,0,0,2,12.5,25,38.6783,1.0342
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1641863,Dane Goodwin,1643634,Boopie Miller,2,3,0,3,0,9,37.5,50,47.9667,2.5017
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643080,Steven Crowl,1643634,Boopie Miller,2,3,1,2,0,8,75,50,36.5617,3.2821
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643080,Steven Crowl,1643849,Reese Dixon-Waters,1,1,1,0,0,2,25,33.3333,12.735,3.141
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643634,Boopie Miller,1630817,Pedro Bradshaw,1,2,0,2,0,6,20,40,21.535,3.7149
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643634,Boopie Miller,1641746,Coleman Hawkins,2,3,0,3,0,9,30,75,56.15,2.1371
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643634,Boopie Miller,1641801,Emanuel Miller,2,3,2,1,0,7,30,30,53.65,2.2367
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643634,Boopie Miller,1643849,Reese Dixon-Waters,1,1,0,1,0,3,10,33.3333,23.4883,1.703
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643634,Boopie Miller,1643850,Keonte Jones,1,1,0,1,0,3,10,25,23.1983,1.7243
+gleague,2026-27,total,1612709917,Grand Rapids Gold,1643850,Keonte Jones,1641863,Dane Goodwin,1,1,0,1,0,3,100,14.2857,18.7983,2.1278
+gleague,2026-27,total,1612709919,Westchester Knicks,1641825,Dink Pate,1643022,Jaden Akins,1,1,1,0,0,2,50,25,32.35,1.2365
+gleague,2026-27,total,1612709919,Westchester Knicks,1641825,Dink Pate,1643589,Tyler Nickel,1,1,0,1,0,3,50,12.5,27.0667,1.4778
+gleague,2026-27,total,1612709919,Westchester Knicks,1641857,Liam Robbins,1641825,Dink Pate,1,1,1,0,0,2,33.3333,11.1111,12.4083,3.2236
+gleague,2026-27,total,1612709919,Westchester Knicks,1641857,Liam Robbins,1642945,"Igor Miličić, Jr.",1,1,1,0,0,2,33.3333,16.6667,26.15,1.5296
+gleague,2026-27,total,1612709919,Westchester Knicks,1641857,Liam Robbins,1643589,Tyler Nickel,1,1,1,0,0,2,33.3333,12.5,25.3,1.581
+gleague,2026-27,total,1612709919,Westchester Knicks,1642945,"Igor Miličić, Jr.",1641857,Liam Robbins,1,1,1,0,0,2,33.3333,33.3333,26.15,1.5296
+gleague,2026-27,total,1612709919,Westchester Knicks,1642945,"Igor Miličić, Jr.",1643112,Mitchell Mascari,1,1,1,0,0,2,33.3333,25,33.7667,1.1846
+gleague,2026-27,total,1612709919,Westchester Knicks,1642945,"Igor Miličić, Jr.",1643589,Tyler Nickel,1,1,0,1,0,3,33.3333,12.5,44.3333,0.9023
+gleague,2026-27,total,1612709919,Westchester Knicks,1643022,Jaden Akins,1641825,Dink Pate,1,3,1,2,0,8,37.5,33.3333,32.35,3.7094
+gleague,2026-27,total,1612709919,Westchester Knicks,1643022,Jaden Akins,1641857,Liam Robbins,1,1,1,0,0,2,12.5,33.3333,34.8583,1.1475
+gleague,2026-27,total,1612709919,Westchester Knicks,1643022,Jaden Akins,1642945,"Igor Miličić, Jr.",1,1,0,1,0,3,12.5,16.6667,32.1,1.2461
+gleague,2026-27,total,1612709919,Westchester Knicks,1643022,Jaden Akins,1643112,Mitchell Mascari,1,1,0,1,0,3,12.5,25,40.065,0.9984
+gleague,2026-27,total,1612709919,Westchester Knicks,1643022,Jaden Akins,1643253,Toby Okani,1,1,0,1,0,3,12.5,25,10.425,3.8369
+gleague,2026-27,total,1612709919,Westchester Knicks,1643022,Jaden Akins,1643589,Tyler Nickel,1,1,0,1,0,3,12.5,12.5,44.4333,0.9002
+gleague,2026-27,total,1612709919,Westchester Knicks,1643100,Nick Jourdain,1643022,Jaden Akins,1,1,0,1,0,3,100,25,21.7667,1.8377
+gleague,2026-27,total,1612709919,Westchester Knicks,1643112,Mitchell Mascari,1641857,Liam Robbins,1,1,1,0,0,2,50,33.3333,29.8833,1.3385
+gleague,2026-27,total,1612709919,Westchester Knicks,1643112,Mitchell Mascari,1643589,Tyler Nickel,1,1,0,1,0,3,50,12.5,47.3817,0.8442
+gleague,2026-27,total,1612709919,Westchester Knicks,1643224,Paul Zilinskas,1641825,Dink Pate,2,2,1,1,0,5,100,22.2222,29.095,2.7496
+gleague,2026-27,total,1612709919,Westchester Knicks,1643253,Toby Okani,1643948,David Dixon,1,1,1,0,0,2,100,50,8.1667,4.898
+gleague,2026-27,total,1612709919,Westchester Knicks,1643589,Tyler Nickel,1642945,"Igor Miličić, Jr.",1,3,2,1,0,7,37.5,50,44.3333,2.7068
+gleague,2026-27,total,1612709919,Westchester Knicks,1643589,Tyler Nickel,1643022,Jaden Akins,2,2,0,2,0,6,25,50,44.4333,1.8005
+gleague,2026-27,total,1612709919,Westchester Knicks,1643589,Tyler Nickel,1643112,Mitchell Mascari,1,1,0,1,0,3,12.5,25,47.3817,0.8442
+gleague,2026-27,total,1612709919,Westchester Knicks,1643589,Tyler Nickel,1643253,Toby Okani,1,2,2,0,0,4,25,50,5.95,13.4454
+gleague,2026-27,total,1612709919,Westchester Knicks,1643948,David Dixon,1643589,Tyler Nickel,1,1,0,1,0,3,100,12.5,10.8333,3.6923
+gleague,2026-27,total,1612709919,Westchester Knicks,1643964,Amir Spears,1641825,Dink Pate,1,1,1,0,0,2,12.5,11.1111,12.0167,3.3287
+gleague,2026-27,total,1612709919,Westchester Knicks,1643964,Amir Spears,1642945,"Igor Miličić, Jr.",1,1,0,1,0,3,12.5,16.6667,8.6,4.6512
+gleague,2026-27,total,1612709919,Westchester Knicks,1643964,Amir Spears,1643100,Nick Jourdain,1,2,1,1,0,5,25,50,15.95,5.0157
+gleague,2026-27,total,1612709919,Westchester Knicks,1643964,Amir Spears,1643112,Mitchell Mascari,1,1,0,1,0,3,12.5,25,13.1833,3.0341
+gleague,2026-27,total,1612709919,Westchester Knicks,1643964,Amir Spears,1643224,Paul Zilinskas,1,1,0,1,0,3,12.5,50,4.0333,9.9174
+gleague,2026-27,total,1612709919,Westchester Knicks,1643964,Amir Spears,1643589,Tyler Nickel,1,1,0,1,0,3,12.5,12.5,16.5167,2.4218
+gleague,2026-27,total,1612709919,Westchester Knicks,1643964,Amir Spears,1643948,David Dixon,1,1,1,0,0,2,12.5,50,2.75,14.5455
+gleague,2026-27,total,1612709919,Westchester Knicks,196700078,Primo Spears,1641825,Dink Pate,1,2,2,0,0,4,28.5714,22.2222,9.15,8.7432
+gleague,2026-27,total,1612709919,Westchester Knicks,196700078,Primo Spears,1643100,Nick Jourdain,1,2,1,1,0,5,28.5714,50,9.4167,8.4956
+gleague,2026-27,total,1612709919,Westchester Knicks,196700078,Primo Spears,1643224,Paul Zilinskas,1,1,0,1,0,3,14.2857,50,10.9433,3.6552
+gleague,2026-27,total,1612709919,Westchester Knicks,196700078,Primo Spears,1643253,Toby Okani,1,1,1,0,0,2,14.2857,25,3.8333,10.4348
+gleague,2026-27,total,1612709919,Westchester Knicks,196700078,Primo Spears,1643589,Tyler Nickel,1,1,0,1,0,3,14.2857,12.5,8.4167,4.7525
+gleague,2026-27,total,1612709920,Raptors 905,1641755,Kevin McCullar Jr.,1641869,Malachi Smith,1,1,1,0,0,2,16.6667,16.6667,41.7133,0.9589
+gleague,2026-27,total,1612709920,Raptors 905,1641755,Kevin McCullar Jr.,1642481,Jamarion Sharp,1,1,1,0,0,2,16.6667,25,25.25,1.5842
+gleague,2026-27,total,1612709920,Raptors 905,1641755,Kevin McCullar Jr.,1643091,Tyson Degenhart,1,1,1,0,0,2,16.6667,16.6667,25.6467,1.5597
+gleague,2026-27,total,1612709920,Raptors 905,1641755,Kevin McCullar Jr.,1643718,Nimari Burnett,1,3,2,1,0,7,50,50,27.0133,4.4423
+gleague,2026-27,total,1612709920,Raptors 905,1641869,Malachi Smith,1641755,Kevin McCullar Jr.,1,1,0,1,0,3,10,16.6667,41.7133,0.9589
+gleague,2026-27,total,1612709920,Raptors 905,1641869,Malachi Smith,1642481,Jamarion Sharp,2,2,2,0,0,4,20,50,32.5,2.4615
+gleague,2026-27,total,1612709920,Raptors 905,1641869,Malachi Smith,1642615,Tyreke Key,2,3,2,1,0,7,30,23.0769,58.95,2.0356
+gleague,2026-27,total,1612709920,Raptors 905,1641869,Malachi Smith,1643091,Tyson Degenhart,1,1,1,0,0,2,10,16.6667,45.7567,0.8742
+gleague,2026-27,total,1612709920,Raptors 905,1641869,Malachi Smith,1643230,Caleb Stone-Carrawell,1,2,1,1,0,5,20,66.6667,19.4333,4.1166
+gleague,2026-27,total,1612709920,Raptors 905,1641869,Malachi Smith,1643718,Nimari Burnett,1,1,0,1,0,3,10,16.6667,51.3167,0.7795
+gleague,2026-27,total,1612709920,Raptors 905,1642481,Jamarion Sharp,1643286,Olumide Adelodun,1,1,1,0,0,2,50,14.2857,16.4167,2.4365
+gleague,2026-27,total,1612709920,Raptors 905,1642481,Jamarion Sharp,1643718,Nimari Burnett,1,1,0,1,0,3,50,16.6667,30.2833,1.3209
+gleague,2026-27,total,1612709920,Raptors 905,1642615,Tyreke Key,1641755,Kevin McCullar Jr.,1,1,1,0,0,2,12.5,16.6667,35.0967,1.1397
+gleague,2026-27,total,1612709920,Raptors 905,1642615,Tyreke Key,1641869,Malachi Smith,2,3,0,3,0,9,37.5,50,58.95,2.0356
+gleague,2026-27,total,1612709920,Raptors 905,1642615,Tyreke Key,1642481,Jamarion Sharp,1,1,1,0,0,2,12.5,25,34.9,1.1461
+gleague,2026-27,total,1612709920,Raptors 905,1642615,Tyreke Key,1643091,Tyson Degenhart,1,2,0,2,0,6,25,33.3333,46.94,1.7043
+gleague,2026-27,total,1612709920,Raptors 905,1642615,Tyreke Key,1643101,AJ Hoggard,1,1,0,1,0,3,12.5,50,26.83,1.4909
+gleague,2026-27,total,1612709920,Raptors 905,1643091,Tyson Degenhart,1642615,Tyreke Key,1,1,1,0,0,2,20,7.6923,46.94,0.8522
+gleague,2026-27,total,1612709920,Raptors 905,1643091,Tyson Degenhart,1643101,AJ Hoggard,1,1,0,1,0,3,20,50,32.3633,1.236
+gleague,2026-27,total,1612709920,Raptors 905,1643091,Tyson Degenhart,1643286,Olumide Adelodun,2,3,3,0,0,6,60,42.8571,23.7167,5.0597
+gleague,2026-27,total,1612709920,Raptors 905,1643101,AJ Hoggard,1641755,Kevin McCullar Jr.,1,1,1,0,0,2,11.1111,16.6667,17.7,2.2599
+gleague,2026-27,total,1612709920,Raptors 905,1643101,AJ Hoggard,1642615,Tyreke Key,2,4,4,0,0,8,44.4444,30.7692,26.83,5.9635
+gleague,2026-27,total,1612709920,Raptors 905,1643101,AJ Hoggard,1643091,Tyson Degenhart,1,1,0,1,0,3,11.1111,16.6667,32.3633,1.236
+gleague,2026-27,total,1612709920,Raptors 905,1643101,AJ Hoggard,1643286,Olumide Adelodun,2,3,2,1,0,7,33.3333,42.8571,28.9667,4.1427
+gleague,2026-27,total,1612709920,Raptors 905,1643230,Caleb Stone-Carrawell,1641755,Kevin McCullar Jr.,1,1,0,1,0,3,50,16.6667,5.4667,7.3171
+gleague,2026-27,total,1612709920,Raptors 905,1643230,Caleb Stone-Carrawell,1643718,Nimari Burnett,1,1,0,1,0,3,50,16.6667,21.8833,1.8279
+gleague,2026-27,total,1612709920,Raptors 905,1643286,Olumide Adelodun,1642615,Tyreke Key,1,1,0,1,0,3,100,7.6923,19.7833,2.0219
+gleague,2026-27,total,1612709920,Raptors 905,1643718,Nimari Burnett,1641755,Kevin McCullar Jr.,2,2,0,2,0,6,20,33.3333,27.0133,2.9615
+gleague,2026-27,total,1612709920,Raptors 905,1643718,Nimari Burnett,1641869,Malachi Smith,2,2,1,1,0,5,20,33.3333,51.3167,1.5589
+gleague,2026-27,total,1612709920,Raptors 905,1643718,Nimari Burnett,1642615,Tyreke Key,2,4,2,2,0,10,40,30.7692,54.65,2.9277
+gleague,2026-27,total,1612709920,Raptors 905,1643718,Nimari Burnett,1643091,Tyson Degenhart,1,1,1,0,0,2,10,16.6667,39.6067,1.0099
+gleague,2026-27,total,1612709920,Raptors 905,1643718,Nimari Burnett,1643230,Caleb Stone-Carrawell,1,1,0,1,0,3,10,33.3333,21.8833,1.8279
+gleague,2026-27,total,1612709921,Long Island Nets,1631209,Isaiah Wong,1641761,Grant Nelson,1,1,1,0,0,2,20,20,21.15,1.8913
+gleague,2026-27,total,1612709921,Long Island Nets,1631209,Isaiah Wong,1642879,Ben Saraf,1,1,0,1,0,3,20,33.3333,47.5,0.8421
+gleague,2026-27,total,1612709921,Long Island Nets,1631209,Isaiah Wong,1643120,Dain Dainja,1,1,1,0,0,2,20,11.1111,37.5,1.0667
+gleague,2026-27,total,1612709921,Long Island Nets,1631209,Isaiah Wong,1643548,Tyler Bilodeau,1,1,0,1,0,3,20,16.6667,26.6167,1.5028
+gleague,2026-27,total,1612709921,Long Island Nets,1631209,Isaiah Wong,1643750,Ben Humrichous,1,1,0,1,0,3,20,100,8.1167,4.9281
+gleague,2026-27,total,1612709921,Long Island Nets,1641761,Grant Nelson,1642962,Drake Powell,1,1,1,0,0,2,50,100,20.2333,1.9769
+gleague,2026-27,total,1612709921,Long Island Nets,1641761,Grant Nelson,1643058,Aaron Scott,1,1,1,0,0,2,50,50,1.8333,21.8182
+gleague,2026-27,total,1612709921,Long Island Nets,1642605,"Dwight Murray, Jr.",1631209,Isaiah Wong,1,1,1,0,0,2,33.3333,16.6667,14.7833,2.7057
+gleague,2026-27,total,1612709921,Long Island Nets,1642605,"Dwight Murray, Jr.",1643538,Joshua Jefferson,1,1,0,1,0,3,33.3333,33.3333,2.0667,19.3548
+gleague,2026-27,total,1612709921,Long Island Nets,1642605,"Dwight Murray, Jr.",1643749,Dion Brown,1,1,1,0,0,2,33.3333,12.5,17.2333,2.3211
+gleague,2026-27,total,1612709921,Long Island Nets,1642879,Ben Saraf,1631209,Isaiah Wong,2,3,1,2,0,8,15.7895,50,47.5,2.5263
+gleague,2026-27,total,1612709921,Long Island Nets,1642879,Ben Saraf,1641761,Grant Nelson,1,1,1,0,0,2,5.2632,20,24.0333,1.6644
+gleague,2026-27,total,1612709921,Long Island Nets,1642879,Ben Saraf,1642485,DJ Rodman,1,1,1,0,0,2,5.2632,100,4.9833,8.0268
+gleague,2026-27,total,1612709921,Long Island Nets,1642879,Ben Saraf,1642605,"Dwight Murray, Jr.",1,1,1,0,0,2,5.2632,50,3.4167,11.7073
+gleague,2026-27,total,1612709921,Long Island Nets,1642879,Ben Saraf,1643120,Dain Dainja,2,6,6,0,0,12,31.5789,66.6667,34.4,6.9767
+gleague,2026-27,total,1612709921,Long Island Nets,1642879,Ben Saraf,1643548,Tyler Bilodeau,2,3,0,3,0,9,15.7895,50,31.4833,3.8115
+gleague,2026-27,total,1612709921,Long Island Nets,1642879,Ben Saraf,1643749,Dion Brown,2,4,2,2,0,10,21.0526,50,27.6667,5.7831
+gleague,2026-27,total,1612709921,Long Island Nets,1642952,Jonathan Pierre,1642879,Ben Saraf,1,1,0,1,0,3,100,33.3333,11.75,3.4043
+gleague,2026-27,total,1612709921,Long Island Nets,1642962,Drake Powell,1641761,Grant Nelson,1,1,1,0,0,2,33.3333,20,20.2333,1.9769
+gleague,2026-27,total,1612709921,Long Island Nets,1642962,Drake Powell,1643538,Joshua Jefferson,1,2,0,2,0,6,66.6667,66.6667,21.2167,3.7706
+gleague,2026-27,total,1612709921,Long Island Nets,1643120,Dain Dainja,1642605,"Dwight Murray, Jr.",1,1,1,0,0,2,20,50,23.3167,1.7155
+gleague,2026-27,total,1612709921,Long Island Nets,1643120,Dain Dainja,1642879,Ben Saraf,1,1,1,0,0,2,20,33.3333,34.4,1.1628
+gleague,2026-27,total,1612709921,Long Island Nets,1643120,Dain Dainja,1643058,Aaron Scott,1,1,1,0,0,2,20,50,23.9833,1.6678
+gleague,2026-27,total,1612709921,Long Island Nets,1643120,Dain Dainja,1643548,Tyler Bilodeau,1,1,1,0,0,2,20,16.6667,38.4,1.0417
+gleague,2026-27,total,1612709921,Long Island Nets,1643120,Dain Dainja,1643749,Dion Brown,1,1,1,0,0,2,20,12.5,30.55,1.3093
+gleague,2026-27,total,1612709921,Long Island Nets,1643538,Joshua Jefferson,1631209,Isaiah Wong,1,1,1,0,0,2,33.3333,16.6667,24.0333,1.6644
+gleague,2026-27,total,1612709921,Long Island Nets,1643538,Joshua Jefferson,1641761,Grant Nelson,1,1,1,0,0,2,33.3333,20,22.6,1.7699
+gleague,2026-27,total,1612709921,Long Island Nets,1643538,Joshua Jefferson,1643120,Dain Dainja,1,1,1,0,0,2,33.3333,11.1111,4.7167,8.4806
+gleague,2026-27,total,1612709921,Long Island Nets,1643548,Tyler Bilodeau,1631209,Isaiah Wong,1,1,1,0,0,2,50,16.6667,26.6167,1.5028
+gleague,2026-27,total,1612709921,Long Island Nets,1643548,Tyler Bilodeau,1643749,Dion Brown,1,1,0,1,0,3,50,12.5,27.7167,1.4432
+gleague,2026-27,total,1612709921,Long Island Nets,1643749,Dion Brown,1641761,Grant Nelson,1,1,1,0,0,2,33.3333,20,4.8833,8.1911
+gleague,2026-27,total,1612709921,Long Island Nets,1643749,Dion Brown,1643120,Dain Dainja,1,1,1,0,0,2,33.3333,11.1111,30.55,1.3093
+gleague,2026-27,total,1612709921,Long Island Nets,1643749,Dion Brown,1643548,Tyler Bilodeau,1,1,0,1,0,3,33.3333,16.6667,27.7167,1.4432
+gleague,2026-27,total,1612709921,Long Island Nets,1643750,Ben Humrichous,1643749,Dion Brown,1,1,0,1,0,3,100,12.5,16.4333,2.4341
+gleague,2026-27,total,1612709922,Greensboro Swarm,1630667,Kyle Mangas,1642369,Michael Ajayi,1,1,1,0,0,2,20,20,50.3167,0.795
+gleague,2026-27,total,1612709922,Greensboro Swarm,1630667,Kyle Mangas,1642547,DaJuan Gordon,1,1,0,1,0,3,20,20,3.8667,10.3448
+gleague,2026-27,total,1612709922,Greensboro Swarm,1630667,Kyle Mangas,1643225,Kobe Stewart,1,1,1,0,0,2,20,8.3333,42.2667,0.9464
+gleague,2026-27,total,1612709922,Greensboro Swarm,1630667,Kyle Mangas,1643251,Josiah Allick,2,2,2,0,0,4,40,28.5714,24.7333,3.2345
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641790,PJ Hall,1643225,Kobe Stewart,1,1,1,0,0,2,33.3333,8.3333,36.7733,1.0877
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641790,PJ Hall,1643736,Tre Carroll,2,2,1,1,0,5,66.6667,66.6667,16.8,4.7619
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641935,Jarkel Joiner,1630667,Kyle Mangas,1,1,0,1,0,3,12.5,33.3333,20.6167,1.9402
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641935,Jarkel Joiner,1641790,PJ Hall,1,1,0,1,0,3,12.5,12.5,17.0267,2.3493
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641935,Jarkel Joiner,1642547,DaJuan Gordon,1,1,0,1,0,3,12.5,20,28.2433,1.4163
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641935,Jarkel Joiner,1643225,Kobe Stewart,1,2,0,2,0,6,25,16.6667,22.8,3.5088
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641935,Jarkel Joiner,1643251,Josiah Allick,1,1,1,0,0,2,12.5,14.2857,40.5667,0.986
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641935,Jarkel Joiner,1643616,DJ Armstrong,1,1,0,1,0,3,12.5,100,12.1167,3.3012
+gleague,2026-27,total,1612709922,Greensboro Swarm,1641935,Jarkel Joiner,1643736,Tre Carroll,1,1,1,0,0,2,12.5,33.3333,29.9433,1.3359
+gleague,2026-27,total,1612709922,Greensboro Swarm,1642369,Michael Ajayi,1630667,Kyle Mangas,1,1,0,1,0,3,7.1429,33.3333,50.3167,0.795
+gleague,2026-27,total,1612709922,Greensboro Swarm,1642369,Michael Ajayi,1641790,PJ Hall,2,3,2,1,0,7,21.4286,37.5,34.25,3.5036
+gleague,2026-27,total,1612709922,Greensboro Swarm,1642369,Michael Ajayi,1641935,Jarkel Joiner,2,3,2,1,0,7,21.4286,75,28.7667,4.1715
+gleague,2026-27,total,1612709922,Greensboro Swarm,1642369,Michael Ajayi,1642547,DaJuan Gordon,1,1,1,0,0,2,7.1429,20,5.1667,7.7419
+gleague,2026-27,total,1612709922,Greensboro Swarm,1642369,Michael Ajayi,1643225,Kobe Stewart,1,5,2,3,0,13,35.7143,41.6667,50.85,3.9331
+gleague,2026-27,total,1612709922,Greensboro Swarm,1642369,Michael Ajayi,1643251,Josiah Allick,1,1,1,0,0,2,7.1429,14.2857,27.45,1.4572
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643225,Kobe Stewart,1642369,Michael Ajayi,1,1,0,1,0,3,33.3333,20,50.85,0.7866
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643225,Kobe Stewart,1643251,Josiah Allick,1,1,0,1,0,3,33.3333,14.2857,19.2667,2.0761
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643225,Kobe Stewart,1643573,Kylan Boswell,1,1,0,1,0,3,33.3333,100,39.4567,1.0138
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643251,Josiah Allick,1642369,Michael Ajayi,1,1,1,0,0,2,100,20,27.45,1.4572
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643573,Kylan Boswell,1630667,Kyle Mangas,1,1,0,1,0,3,10,33.3333,42.3833,0.9438
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643573,Kylan Boswell,1641790,PJ Hall,2,4,0,4,0,12,40,50,40.9167,3.9104
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643573,Kylan Boswell,1642369,Michael Ajayi,1,2,2,0,0,4,20,40,45.15,1.7719
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643573,Kylan Boswell,1643225,Kobe Stewart,2,3,3,0,0,6,30,25,39.4567,3.0413
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643616,DJ Armstrong,1643251,Josiah Allick,1,1,1,0,0,2,100,14.2857,8.2833,4.829
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643736,Tre Carroll,1641935,Jarkel Joiner,1,1,1,0,0,2,25,25,29.9433,1.3359
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643736,Tre Carroll,1642547,DaJuan Gordon,2,2,1,1,0,5,50,40,35.2667,2.2684
+gleague,2026-27,total,1612709922,Greensboro Swarm,1643736,Tre Carroll,1643251,Josiah Allick,1,1,1,0,0,2,25,14.2857,24.8667,1.6086
+gleague,2026-27,total,1612709923,Windy City Bulls,1631115,Orlando Robinson,1641779,Jalen Bridges,2,2,1,1,0,5,50,20,34.62,2.3108
+gleague,2026-27,total,1612709923,Windy City Bulls,1631115,Orlando Robinson,1643517,Dailyn Swain,1,1,0,1,0,3,25,50,13.2167,3.0265
+gleague,2026-27,total,1612709923,Windy City Bulls,1631115,Orlando Robinson,1643806,Marquel Sutton,1,1,0,1,0,3,25,33.3333,6.5667,6.0914
+gleague,2026-27,total,1612709923,Windy City Bulls,1631444,Remy Martin,1641809,Drew Peterson,1,1,1,0,0,2,50,14.2857,10.3167,3.8772
+gleague,2026-27,total,1612709923,Windy City Bulls,1631444,Remy Martin,1643744,Houston Mallette,1,1,0,1,0,3,50,11.1111,5.3833,7.4303
+gleague,2026-27,total,1612709923,Windy City Bulls,1641779,Jalen Bridges,1643591,Tobe Awaka,1,1,1,0,0,2,20,33.3333,10.4333,3.8339
+gleague,2026-27,total,1612709923,Windy City Bulls,1641779,Jalen Bridges,1643637,Jaylin Sellers,2,2,1,1,0,5,40,22.2222,42.6867,1.8741
+gleague,2026-27,total,1612709923,Windy City Bulls,1641779,Jalen Bridges,1643744,Houston Mallette,1,2,0,2,0,6,40,22.2222,33.1667,2.4121
+gleague,2026-27,total,1612709923,Windy City Bulls,1641809,Drew Peterson,1631115,Orlando Robinson,1,1,1,0,0,2,7.6923,16.6667,27.9333,1.432
+gleague,2026-27,total,1612709923,Windy City Bulls,1641809,Drew Peterson,1641779,Jalen Bridges,1,1,1,0,0,2,7.6923,10,45.1867,0.8852
+gleague,2026-27,total,1612709923,Windy City Bulls,1641809,Drew Peterson,1643517,Dailyn Swain,1,1,1,0,0,2,7.6923,50,13.3167,3.0038
+gleague,2026-27,total,1612709923,Windy City Bulls,1641809,Drew Peterson,1643614,Peter Suder,2,4,1,3,0,11,30.7692,66.6667,38.8333,4.1202
+gleague,2026-27,total,1612709923,Windy City Bulls,1641809,Drew Peterson,1643637,Jaylin Sellers,2,3,0,3,0,9,23.0769,33.3333,42.2833,2.838
+gleague,2026-27,total,1612709923,Windy City Bulls,1641809,Drew Peterson,1643744,Houston Mallette,2,2,1,1,0,5,15.3846,22.2222,27.3633,2.9236
+gleague,2026-27,total,1612709923,Windy City Bulls,1641809,Drew Peterson,1643806,Marquel Sutton,1,1,1,0,0,2,7.6923,33.3333,33.9167,1.1794
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1641779,Jalen Bridges,1,1,0,1,0,3,11.1111,10,16.6333,2.4048
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1641809,Drew Peterson,1,1,0,1,0,3,11.1111,14.2857,13.3167,3.0038
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1643591,Tobe Awaka,1,2,2,0,0,4,22.2222,66.6667,7.7667,10.3004
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1643614,Peter Suder,1,1,1,0,0,2,11.1111,16.6667,5.85,6.8376
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1643637,Jaylin Sellers,1,1,0,1,0,3,11.1111,11.1111,19.8167,2.0185
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1643744,Houston Mallette,1,1,1,0,0,2,11.1111,11.1111,7.4167,5.3933
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1643806,Marquel Sutton,1,1,0,1,0,3,11.1111,33.3333,6.4333,6.2176
+gleague,2026-27,total,1612709923,Windy City Bulls,1643517,Dailyn Swain,1643905,DJ Patrick,1,1,0,1,0,3,11.1111,50,2.35,17.0213
+gleague,2026-27,total,1612709923,Windy City Bulls,1643614,Peter Suder,1641779,Jalen Bridges,1,1,0,1,0,3,25,10,36.4367,1.0978
+gleague,2026-27,total,1612709923,Windy City Bulls,1643614,Peter Suder,1641809,Drew Peterson,1,1,0,1,0,3,25,14.2857,38.8333,1.03
+gleague,2026-27,total,1612709923,Windy City Bulls,1643614,Peter Suder,1643637,Jaylin Sellers,1,1,0,1,0,3,25,11.1111,24.4167,1.6382
+gleague,2026-27,total,1612709923,Windy City Bulls,1643614,Peter Suder,1643744,Houston Mallette,1,1,0,1,0,3,25,11.1111,29.7133,1.3462
+gleague,2026-27,total,1612709923,Windy City Bulls,1643637,Jaylin Sellers,1631115,Orlando Robinson,2,2,2,0,0,4,18.1818,33.3333,32.8333,2.4365
+gleague,2026-27,total,1612709923,Windy City Bulls,1643637,Jaylin Sellers,1641779,Jalen Bridges,2,5,1,4,0,14,45.4545,50,42.6867,4.6853
+gleague,2026-27,total,1612709923,Windy City Bulls,1643637,Jaylin Sellers,1641809,Drew Peterson,1,3,2,1,0,7,27.2727,42.8571,42.2833,2.838
+gleague,2026-27,total,1612709923,Windy City Bulls,1643637,Jaylin Sellers,1643744,Houston Mallette,1,1,1,0,0,2,9.0909,11.1111,18.23,2.1942
+gleague,2026-27,total,1612709923,Windy City Bulls,1643656,Grant Newell,1631444,Remy Martin,1,1,0,1,0,3,100,100,8.6833,4.6065
+gleague,2026-27,total,1612709923,Windy City Bulls,1643744,Houston Mallette,1631115,Orlando Robinson,1,3,3,0,0,6,50,50,25.1633,4.7688
+gleague,2026-27,total,1612709923,Windy City Bulls,1643744,Houston Mallette,1641809,Drew Peterson,1,1,0,1,0,3,16.6667,14.2857,27.3633,1.4618
+gleague,2026-27,total,1612709923,Windy City Bulls,1643744,Houston Mallette,1643614,Peter Suder,1,1,0,1,0,3,16.6667,16.6667,29.7133,1.3462
+gleague,2026-27,total,1612709923,Windy City Bulls,1643744,Houston Mallette,1643905,DJ Patrick,1,1,0,1,0,3,16.6667,50,20.1167,1.9884
+gleague,2026-27,total,1612709923,Windy City Bulls,1643806,Marquel Sutton,1643637,Jaylin Sellers,1,1,0,1,0,3,100,11.1111,18.15,2.2039
+gleague,2026-27,total,1612709923,Windy City Bulls,1643905,DJ Patrick,1643637,Jaylin Sellers,1,1,0,1,0,3,50,11.1111,9.4,4.2553
+gleague,2026-27,total,1612709923,Windy City Bulls,1643905,DJ Patrick,1643744,Houston Mallette,1,1,1,0,0,2,50,11.1111,20.1167,1.9884
+gleague,2026-27,total,1612709924,San Diego Clippers,1630554,Jason Preston,1631104,Blake Wesley,1,3,2,1,0,7,50,100,11.4333,10.4956
+gleague,2026-27,total,1612709924,San Diego Clippers,1630554,Jason Preston,1643568,Nick Martinelli,1,2,2,0,0,4,33.3333,33.3333,16.46,4.8603
+gleague,2026-27,total,1612709924,San Diego Clippers,1630554,Jason Preston,1643630,Fletcher Loyer,1,1,1,0,0,2,16.6667,16.6667,15.2617,2.6209
+gleague,2026-27,total,1612709924,San Diego Clippers,1631104,Blake Wesley,1630554,Jason Preston,1,1,0,1,0,3,12.5,33.3333,11.4333,3.4985
+gleague,2026-27,total,1612709924,San Diego Clippers,1631104,Blake Wesley,1641877,Nathan Mensah,1,1,1,0,0,2,12.5,50,7.8567,5.0912
+gleague,2026-27,total,1612709924,San Diego Clippers,1631104,Blake Wesley,1642282,Hunter Sallis,1,1,1,0,0,2,12.5,100,7.635,5.239
+gleague,2026-27,total,1612709924,San Diego Clippers,1631104,Blake Wesley,1643141,Jahmyl Telfort,1,1,0,1,0,3,12.5,14.2857,11.9167,3.3566
+gleague,2026-27,total,1612709924,San Diego Clippers,1631104,Blake Wesley,1643327,DeAndre Williams,1,2,2,0,0,4,25,100,13.7,5.8394
+gleague,2026-27,total,1612709924,San Diego Clippers,1631104,Blake Wesley,1643568,Nick Martinelli,1,1,1,0,0,2,12.5,16.6667,11.2267,3.5629
+gleague,2026-27,total,1612709924,San Diego Clippers,1631104,Blake Wesley,1643630,Fletcher Loyer,1,1,0,1,0,3,12.5,16.6667,11.4317,3.4991
+gleague,2026-27,total,1612709924,San Diego Clippers,1642282,Hunter Sallis,1643141,Jahmyl Telfort,1,1,1,0,0,2,100,14.2857,5.2017,7.6898
+gleague,2026-27,total,1612709924,San Diego Clippers,1642530,Yuki Kawamura,1643141,Jahmyl Telfort,1,1,1,0,0,2,33.3333,14.2857,5.7167,6.9971
+gleague,2026-27,total,1612709924,San Diego Clippers,1642530,Yuki Kawamura,1643220,Ileri Ayo-Faleye,1,1,0,1,0,3,33.3333,100,6.3333,6.3158
+gleague,2026-27,total,1612709924,San Diego Clippers,1642530,Yuki Kawamura,1643630,Fletcher Loyer,1,1,0,1,0,3,33.3333,16.6667,12.05,3.3195
+gleague,2026-27,total,1612709924,San Diego Clippers,1642967,John Poulakidas,1630554,Jason Preston,1,1,0,1,0,3,50,33.3333,11.5833,3.4532
+gleague,2026-27,total,1612709924,San Diego Clippers,1642967,John Poulakidas,1643141,Jahmyl Telfort,1,1,0,1,0,3,50,14.2857,9.5,4.2105
+gleague,2026-27,total,1612709924,San Diego Clippers,1643141,Jahmyl Telfort,1630554,Jason Preston,1,1,0,1,0,3,25,33.3333,22.3833,1.787
+gleague,2026-27,total,1612709924,San Diego Clippers,1643141,Jahmyl Telfort,1643568,Nick Martinelli,1,1,1,0,0,2,25,16.6667,21.6267,1.8496
+gleague,2026-27,total,1612709924,San Diego Clippers,1643141,Jahmyl Telfort,1643630,Fletcher Loyer,1,2,0,2,0,6,50,33.3333,21.845,3.6622
+gleague,2026-27,total,1612709924,San Diego Clippers,1643568,Nick Martinelli,1643141,Jahmyl Telfort,1,2,0,2,0,6,66.6667,28.5714,21.6267,3.6991
+gleague,2026-27,total,1612709924,San Diego Clippers,1643568,Nick Martinelli,1643630,Fletcher Loyer,1,1,0,1,0,3,33.3333,16.6667,15.705,2.547
+gleague,2026-27,total,1612709924,San Diego Clippers,1643630,Fletcher Loyer,1641877,Nathan Mensah,1,1,1,0,0,2,25,50,26.6233,1.5024
+gleague,2026-27,total,1612709924,San Diego Clippers,1643630,Fletcher Loyer,1643141,Jahmyl Telfort,1,1,0,1,0,3,25,14.2857,21.845,1.8311
+gleague,2026-27,total,1612709924,San Diego Clippers,1643630,Fletcher Loyer,1643568,Nick Martinelli,1,2,1,1,0,5,50,33.3333,15.705,5.0939
+gleague,2026-27,total,1612709925,Osceola Magic,1629600,Jarron Cumberland,1631421,Au'Diese Toney,1,1,1,0,0,2,50,20,14,2.8571
+gleague,2026-27,total,1612709925,Osceola Magic,1629600,Jarron Cumberland,1641814,Mike Sharavjamts,1,1,0,1,0,3,50,100,18.6667,2.1429
+gleague,2026-27,total,1612709925,Osceola Magic,1631103,Malaki Branham,1631421,Au'Diese Toney,1,1,0,1,0,3,50,20,20.8167,1.9215
+gleague,2026-27,total,1612709925,Osceola Magic,1631103,Malaki Branham,1641785,Johnell Davis,1,1,0,1,0,3,50,33.3333,9.4,4.2553
+gleague,2026-27,total,1612709925,Osceola Magic,1631120,JD Davison,1629600,Jarron Cumberland,1,1,0,1,0,3,25,33.3333,18.1,2.2099
+gleague,2026-27,total,1612709925,Osceola Magic,1631120,JD Davison,1641741,Ricky Council IV,1,1,0,1,0,3,25,100,12.3667,3.2345
+gleague,2026-27,total,1612709925,Osceola Magic,1631120,JD Davison,1641785,Johnell Davis,1,1,1,0,0,2,25,33.3333,12.1167,3.3012
+gleague,2026-27,total,1612709925,Osceola Magic,1631120,JD Davison,1643131,Ace Baldwin,1,1,0,1,0,3,25,100,18.3833,2.1759
+gleague,2026-27,total,1612709925,Osceola Magic,1641785,Johnell Davis,1631103,Malaki Branham,1,2,1,1,0,5,50,66.6667,9.4,8.5106
+gleague,2026-27,total,1612709925,Osceola Magic,1641785,Johnell Davis,1631120,JD Davison,1,1,1,0,0,2,25,33.3333,12.1167,3.3012
+gleague,2026-27,total,1612709925,Osceola Magic,1641785,Johnell Davis,1631421,Au'Diese Toney,1,1,1,0,0,2,25,20,9.4833,4.2179
+gleague,2026-27,total,1612709925,Osceola Magic,1641814,Mike Sharavjamts,1629600,Jarron Cumberland,1,1,1,0,0,2,50,33.3333,18.6667,2.1429
+gleague,2026-27,total,1612709925,Osceola Magic,1641814,Mike Sharavjamts,1631421,Au'Diese Toney,1,1,0,1,0,3,50,20,10.7333,3.7267
+gleague,2026-27,total,1612709925,Osceola Magic,1642573,Jordan Minor,1631421,Au'Diese Toney,1,1,1,0,0,2,100,20,4.2,9.5238
+gleague,2026-27,total,1612709925,Osceola Magic,1643131,Ace Baldwin,1629600,Jarron Cumberland,1,1,0,1,0,3,20,33.3333,19.2833,2.0743
+gleague,2026-27,total,1612709925,Osceola Magic,1643131,Ace Baldwin,1631103,Malaki Branham,1,1,1,0,0,2,20,33.3333,12.9333,3.0928
+gleague,2026-27,total,1612709925,Osceola Magic,1643131,Ace Baldwin,1631120,JD Davison,1,2,1,1,0,5,40,66.6667,18.3833,4.3518
+gleague,2026-27,total,1612709925,Osceola Magic,1643131,Ace Baldwin,1641785,Johnell Davis,1,1,1,0,0,2,20,33.3333,15.9333,2.5105
+gleague,2026-27,total,1612709927,Wisconsin Herd,1630585,Marcus Garrett,1642504,Cormac Ryan,1,1,1,0,0,2,50,12.5,15.2833,2.6172
+gleague,2026-27,total,1612709927,Wisconsin Herd,1630585,Marcus Garrett,1643075,Terrence Hargrove Jr.,1,1,1,0,0,2,50,50,9.9267,4.0296
+gleague,2026-27,total,1612709927,Wisconsin Herd,1631219,John Butler Jr.,1641868,Jake Stephens,1,1,0,1,0,3,50,33.3333,3.35,11.9403
+gleague,2026-27,total,1612709927,Wisconsin Herd,1631219,John Butler Jr.,1642504,Cormac Ryan,1,1,0,1,0,3,50,12.5,13.5833,2.9448
+gleague,2026-27,total,1612709927,Wisconsin Herd,1631250,Pete Nance,1642504,Cormac Ryan,1,2,0,2,0,6,66.6667,25,19.9333,4.0134
+gleague,2026-27,total,1612709927,Wisconsin Herd,1631250,Pete Nance,1642880,Kam Jones,1,1,1,0,0,2,33.3333,50,20.99,1.9057
+gleague,2026-27,total,1612709927,Wisconsin Herd,1641780,Johni Broome,1631250,Pete Nance,1,1,1,0,0,2,50,20,10.6333,3.7618
+gleague,2026-27,total,1612709927,Wisconsin Herd,1641780,Johni Broome,1642881,Bogoljub Marković,1,1,1,0,0,2,50,50,4.8067,8.3218
+gleague,2026-27,total,1612709927,Wisconsin Herd,1641868,Jake Stephens,1642504,Cormac Ryan,1,1,0,1,0,3,33.3333,12.5,17.8333,2.243
+gleague,2026-27,total,1612709927,Wisconsin Herd,1641868,Jake Stephens,1642880,Kam Jones,1,1,1,0,0,2,33.3333,50,14.4,2.7778
+gleague,2026-27,total,1612709927,Wisconsin Herd,1641868,Jake Stephens,1642881,Bogoljub Marković,1,1,0,1,0,3,33.3333,50,17.3,2.3121
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642504,Cormac Ryan,1631219,John Butler Jr.,1,3,2,1,0,7,50,60,13.5833,8.8344
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642504,Cormac Ryan,1631250,Pete Nance,1,1,1,0,0,2,16.6667,20,19.9333,2.0067
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642504,Cormac Ryan,1641780,Johni Broome,1,1,1,0,0,2,16.6667,50,10.5,3.8095
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642504,Cormac Ryan,1641868,Jake Stephens,1,1,0,1,0,3,16.6667,33.3333,17.8333,2.243
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642880,Kam Jones,1630585,Marcus Garrett,1,1,0,1,0,3,11.1111,100,13.8667,2.8846
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642880,Kam Jones,1631219,John Butler Jr.,1,2,0,2,0,6,22.2222,40,11.9,6.7227
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642880,Kam Jones,1631250,Pete Nance,1,2,1,1,0,5,22.2222,40,20.99,3.8113
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642880,Kam Jones,1641780,Johni Broome,1,1,1,0,0,2,11.1111,50,11.5433,3.4652
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642880,Kam Jones,1641868,Jake Stephens,1,1,1,0,0,2,11.1111,33.3333,14.4,2.7778
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642880,Kam Jones,1642504,Cormac Ryan,1,2,1,1,0,5,22.2222,25,14.0333,5.7007
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642881,Bogoljub Marković,1631250,Pete Nance,1,1,1,0,0,2,50,20,20.1167,1.9884
+gleague,2026-27,total,1612709927,Wisconsin Herd,1642881,Bogoljub Marković,1642504,Cormac Ryan,1,1,0,1,0,3,50,12.5,17.9667,2.2263
+gleague,2026-27,total,1612709927,Wisconsin Herd,1643930,Ty Berry,1643075,Terrence Hargrove Jr.,1,1,1,0,0,2,100,50,4.6333,8.6331
+gleague,2026-27,total,1612709928,Capital City Go-Go,1631211,Trevor Keels,1643590,Felix Okpara,1,1,1,0,0,2,100,33.3333,23.8,1.6807
+gleague,2026-27,total,1612709928,Capital City Go-Go,1631214,Alondes Williams,1631211,Trevor Keels,1,1,0,1,0,3,33.3333,16.6667,17.9667,2.2263
+gleague,2026-27,total,1612709928,Capital City Go-Go,1631214,Alondes Williams,1643126,Nolan Hickman,1,1,0,1,0,3,33.3333,25,18.1667,2.2018
+gleague,2026-27,total,1612709928,Capital City Go-Go,1631214,Alondes Williams,1643777,Barry Evans,1,1,1,0,0,2,33.3333,25,21.1667,1.8898
+gleague,2026-27,total,1612709928,Capital City Go-Go,1641789,Jazian Gortman,1631211,Trevor Keels,1,1,0,1,0,3,25,16.6667,19.9833,2.0017
+gleague,2026-27,total,1612709928,Capital City Go-Go,1641789,Jazian Gortman,1642925,Jabri Abdur-Rahim,1,1,1,0,0,2,25,50,14.4,2.7778
+gleague,2026-27,total,1612709928,Capital City Go-Go,1641789,Jazian Gortman,1643126,Nolan Hickman,1,1,0,1,0,3,25,25,6.3167,6.3325
+gleague,2026-27,total,1612709928,Capital City Go-Go,1641789,Jazian Gortman,1643590,Felix Okpara,1,1,1,0,0,2,25,33.3333,15.6333,2.5586
+gleague,2026-27,total,1612709928,Capital City Go-Go,1642925,Jabri Abdur-Rahim,1631211,Trevor Keels,1,2,1,1,0,5,33.3333,33.3333,24.3667,3.2832
+gleague,2026-27,total,1612709928,Capital City Go-Go,1642925,Jabri Abdur-Rahim,1641789,Jazian Gortman,1,1,0,1,0,3,16.6667,100,14.4,2.7778
+gleague,2026-27,total,1612709928,Capital City Go-Go,1642925,Jabri Abdur-Rahim,1643121,Steve Settle III,1,1,1,0,0,2,16.6667,33.3333,12.7,3.1496
+gleague,2026-27,total,1612709928,Capital City Go-Go,1642925,Jabri Abdur-Rahim,1643777,Barry Evans,1,2,1,1,0,5,33.3333,50,22.2167,3.6009
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643121,Steve Settle III,1643126,Nolan Hickman,1,1,0,1,0,3,50,25,17.65,2.2663
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643121,Steve Settle III,1643934,Jordan Derkack,1,1,1,0,0,2,50,100,5.3333,7.5
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643126,Nolan Hickman,1643777,Barry Evans,1,1,1,0,0,2,100,25,19.8333,2.0168
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643590,Felix Okpara,1631211,Trevor Keels,1,1,1,0,0,2,100,16.6667,23.8,1.6807
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643777,Barry Evans,1631211,Trevor Keels,1,1,0,1,0,3,33.3333,16.6667,23.3333,1.7143
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643777,Barry Evans,1642925,Jabri Abdur-Rahim,1,1,0,1,0,3,33.3333,50,22.2167,1.8005
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643777,Barry Evans,1643121,Steve Settle III,1,1,0,1,0,3,33.3333,33.3333,20.4167,1.9592
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643934,Jordan Derkack,1643121,Steve Settle III,1,1,1,0,0,2,33.3333,33.3333,5.3333,7.5
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643934,Jordan Derkack,1643126,Nolan Hickman,1,1,0,1,0,3,33.3333,25,5.3333,7.5
+gleague,2026-27,total,1612709928,Capital City Go-Go,1643934,Jordan Derkack,1643590,Felix Okpara,1,1,1,0,0,2,33.3333,33.3333,6.6667,6
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630553,Keon Johnson,1642045,Devon Higgs,2,3,3,0,0,6,42.8571,27.2727,29.435,4.0768
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630553,Keon Johnson,1642484,RayJ Dennis,1,1,0,1,0,3,14.2857,50,51.4617,0.7773
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630553,Keon Johnson,1643723,Cameron Corhen,1,2,1,1,0,5,28.5714,22.2222,54.3817,1.4711
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630553,Keon Johnson,1643724,Isaac McKneely,1,1,1,0,0,2,14.2857,33.3333,20.3383,1.9667
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630592,Jalen Wilson,1630553,Keon Johnson,1,1,0,1,0,3,16.6667,14.2857,26.06,1.5349
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630592,Jalen Wilson,1642484,RayJ Dennis,1,1,0,1,0,3,16.6667,50,34.9117,1.1457
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630592,Jalen Wilson,1642937,Kobe Johnson,1,2,1,1,0,5,33.3333,33.3333,25.86,3.0936
+gleague,2026-27,total,1612709929,College Park Skyhawks,1630592,Jalen Wilson,1643723,Cameron Corhen,1,2,1,1,0,5,33.3333,22.2222,24.125,3.3161
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642045,Devon Higgs,1630553,Keon Johnson,1,1,1,0,0,2,33.3333,14.2857,29.435,1.3589
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642045,Devon Higgs,1642937,Kobe Johnson,1,1,1,0,0,2,33.3333,16.6667,31.6017,1.2658
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642045,Devon Higgs,1643723,Cameron Corhen,1,1,1,0,0,2,33.3333,11.1111,25.0833,1.5947
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642484,RayJ Dennis,1630553,Keon Johnson,2,4,3,1,0,9,19.0476,57.1429,51.4617,3.1091
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642484,RayJ Dennis,1630592,Jalen Wilson,1,4,0,4,0,12,19.0476,80,34.9117,4.583
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642484,RayJ Dennis,1642045,Devon Higgs,2,7,6,1,0,15,33.3333,63.6364,47.1683,5.9362
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642484,RayJ Dennis,1642475,William Baker,1,1,1,0,0,2,4.7619,25,21.8,1.8349
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642484,RayJ Dennis,1642937,Kobe Johnson,1,2,1,1,0,5,9.5238,33.3333,58.8783,1.3587
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642484,RayJ Dennis,1643723,Cameron Corhen,1,2,2,0,0,4,9.5238,22.2222,50.01,1.5997
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642484,RayJ Dennis,1643724,Isaac McKneely,1,1,0,1,0,3,4.7619,33.3333,23.8,1.6807
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642937,Kobe Johnson,1642045,Devon Higgs,1,1,0,1,0,3,20,9.0909,31.6017,1.2658
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642937,Kobe Johnson,1642475,William Baker,1,2,2,0,0,4,40,50,10.7667,7.4303
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642937,Kobe Johnson,1643723,Cameron Corhen,1,1,1,0,0,2,20,11.1111,52.2983,0.7648
+gleague,2026-27,total,1612709929,College Park Skyhawks,1642937,Kobe Johnson,1643724,Isaac McKneely,1,1,0,1,0,3,20,33.3333,17.7217,2.2571
+gleague,2026-27,total,1612709929,College Park Skyhawks,1643720,Jestin Porter,1642475,William Baker,1,1,1,0,0,2,50,25,11.9833,3.338
+gleague,2026-27,total,1612709929,College Park Skyhawks,1643720,Jestin Porter,1643723,Cameron Corhen,1,1,1,0,0,2,50,11.1111,5.8333,6.8571
+gleague,2026-27,total,1612709929,College Park Skyhawks,1643723,Cameron Corhen,1630553,Keon Johnson,1,1,0,1,0,3,50,14.2857,54.3817,0.7355
+gleague,2026-27,total,1612709929,College Park Skyhawks,1643723,Cameron Corhen,1642937,Kobe Johnson,1,1,1,0,0,2,50,16.6667,52.2983,0.7648
+gleague,2026-27,total,1612709929,College Park Skyhawks,1643724,Isaac McKneely,1630592,Jalen Wilson,1,1,1,0,0,2,100,20,12.8983,3.1012
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1627383,Luke Martinez,1643827,Quinn Denker,1,1,0,1,0,3,100,100,9.215,4.3407
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1642088,David Sloan,1627383,Luke Martinez,1,1,0,1,0,7,25,50,11.1333,3.5928
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1642088,David Sloan,1643083,Zeke Mayo,1,3,1,2,0,8,75,60,20.3033,5.9104
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643009,Tomas Chapero,1643083,Zeke Mayo,1,1,0,1,0,3,100,20,16.92,2.3641
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643572,Rafael Castro,1643826,Chad Baker-Mazara,1,1,0,1,0,3,100,50,12.8333,3.1169
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643826,Chad Baker-Mazara,1643848,Daniel Rivera,1,2,2,0,0,4,100,100,23.71,3.3741
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643827,Quinn Denker,1627383,Luke Martinez,1,1,0,1,0,3,20,50,9.215,4.3407
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643827,Quinn Denker,1643083,Zeke Mayo,1,1,0,1,0,3,20,20,7.08,5.6497
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643827,Quinn Denker,1643572,Rafael Castro,1,1,1,0,0,2,20,100,9.2833,4.3088
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643827,Quinn Denker,1643830,Agapy de Melo Santos,1,2,2,0,0,-21,40,66.6667,6.6233,12.0785
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643828,"Terri Miller, Jr.",1643830,Agapy de Melo Santos,1,1,1,0,0,2,100,33.3333,3.6167,11.0599
+gleague,2026-27,total,1612709931,Mexico City Capitanes,1643848,Daniel Rivera,1643826,Chad Baker-Mazara,1,1,0,1,0,3,100,50,23.71,1.6871
+gleague,2026-27,total,1612709934,Valley Suns,1630648,Jordan Schakel,1630762,Phillip Wheeler,1,1,1,0,0,2,33.3333,20,17,2.3529
+gleague,2026-27,total,1612709934,Valley Suns,1630648,Jordan Schakel,1631166,Drew Timme,1,1,1,0,0,2,33.3333,20,16.235,2.4638
+gleague,2026-27,total,1612709934,Valley Suns,1630648,Jordan Schakel,1643655,John Camden,1,1,1,0,0,2,33.3333,33.3333,12.7167,3.1455
+gleague,2026-27,total,1612709934,Valley Suns,1630762,Phillip Wheeler,1643047,CJ Huntley,1,1,1,0,0,2,100,33.3333,23.575,1.6967
+gleague,2026-27,total,1612709934,Valley Suns,1631113,Kennedy Chandler,1630648,Jordan Schakel,1,1,0,1,0,3,16.6667,25,11.695,3.4203
+gleague,2026-27,total,1612709934,Valley Suns,1631113,Kennedy Chandler,1631166,Drew Timme,1,1,1,0,0,2,16.6667,20,18.1367,2.2055
+gleague,2026-27,total,1612709934,Valley Suns,1631113,Kennedy Chandler,1642886,Koby Brea,1,2,0,2,0,6,33.3333,50,17.8033,4.4935
+gleague,2026-27,total,1612709934,Valley Suns,1631113,Kennedy Chandler,1643047,CJ Huntley,1,1,1,0,0,2,16.6667,33.3333,22.3367,1.7908
+gleague,2026-27,total,1612709934,Valley Suns,1631113,Kennedy Chandler,1643655,John Camden,1,1,0,1,0,3,16.6667,33.3333,4.9833,8.0268
+gleague,2026-27,total,1612709934,Valley Suns,1631166,Drew Timme,1630762,Phillip Wheeler,1,1,1,0,0,2,14.2857,20,28.7917,1.3893
+gleague,2026-27,total,1612709934,Valley Suns,1631166,Drew Timme,1631113,Kennedy Chandler,1,1,1,0,0,2,14.2857,50,18.1367,2.2055
+gleague,2026-27,total,1612709934,Valley Suns,1631166,Drew Timme,1642886,Koby Brea,1,2,0,2,0,6,28.5714,50,28.9233,2.7659
+gleague,2026-27,total,1612709934,Valley Suns,1631166,Drew Timme,1643047,CJ Huntley,1,1,1,0,0,2,14.2857,33.3333,20.2233,1.9779
+gleague,2026-27,total,1612709934,Valley Suns,1631166,Drew Timme,1643778,Samuel Hoiberg,1,2,1,1,0,5,28.5714,66.6667,16.5967,4.8202
+gleague,2026-27,total,1612709934,Valley Suns,1642886,Koby Brea,1630762,Phillip Wheeler,1,1,1,0,0,2,25,20,20.025,1.9975
+gleague,2026-27,total,1612709934,Valley Suns,1642886,Koby Brea,1631166,Drew Timme,1,2,2,0,0,4,50,40,28.9233,2.7659
+gleague,2026-27,total,1612709934,Valley Suns,1642886,Koby Brea,1643655,John Camden,1,1,0,1,0,3,25,33.3333,6.7667,5.9113
+gleague,2026-27,total,1612709934,Valley Suns,1643047,CJ Huntley,1631113,Kennedy Chandler,1,1,1,0,0,2,50,50,22.3367,1.7908
+gleague,2026-27,total,1612709934,Valley Suns,1643047,CJ Huntley,1643778,Samuel Hoiberg,1,1,1,0,0,2,50,33.3333,11.2067,3.5693
+gleague,2026-27,total,1612709934,Valley Suns,1643129,Zhuric Phelps,1630762,Phillip Wheeler,1,1,1,0,0,2,100,20,3.4833,11.4833
+gleague,2026-27,total,1612709934,Valley Suns,1643778,Samuel Hoiberg,1630648,Jordan Schakel,1,3,0,3,0,9,60,75,16.8767,7.1104
+gleague,2026-27,total,1612709934,Valley Suns,1643778,Samuel Hoiberg,1630762,Phillip Wheeler,1,1,0,1,0,3,20,20,14.2,2.8169
+gleague,2026-27,total,1612709934,Valley Suns,1643778,Samuel Hoiberg,1631166,Drew Timme,1,1,1,0,0,2,20,20,16.5967,2.4101

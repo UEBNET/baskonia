@@ -50,3 +50,21 @@ game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugad
 2006871,regular,37,23,0.0,0.0,0.0,0.0,2,actua_fuera_de_pista=2,True,True,True,True,True,,True
 2006872,regular,43,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
 2006873,regular,38,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006869,regular,42,23,5.0,0.5,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+2006893,regular,36,23,7.0,0.6,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+2006894,regular,33,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006896,regular,50,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006895,regular,39,21,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006897,regular,50,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006908,regular,44,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006898,regular,34,22,4.0,0.7,0.0,0.0,0,,True,True,True,True,True,,True
+2006899,regular,36,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2007035,regular,35,23,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006857,regular,38,22,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006858,regular,43,21,14.0,1.7,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+2006860,regular,47,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True
+2006856,regular,46,22,0.0,0.0,0.0,0.0,1,sale_sin_estar=1,True,True,True,True,True,,True
+2006859,regular,46,22,0.0,0.0,0.0,0.0,1,actua_fuera_de_pista=1,True,True,True,True,True,,True
+2006861,regular,46,23,15.0,4.4,,,3,actua_fuera_de_pista=1;añadido_por_actuar=1;no_cinco_4=1,True,True,True,True,False,+/- oficial incoherente: validado sólo por minutos,True
+2006863,regular,51,22,0.0,0.0,3.0,2.0,0,,True,True,True,True,True,,True
+2006862,regular,30,24,0.0,0.0,0.0,0.0,0,,True,True,True,True,True,,True

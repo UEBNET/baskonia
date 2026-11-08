@@ -1,8 +1,8 @@
 liga,temporada,game_id,grupo_id,grupo,fase,jornada,fecha,jugado,descargado,con_box,formato_pbp,pbp_available,con_cambios,quintetos_validos,con_coordenadas,dif_min_max_s,equipo_1_id,equipo_1,pts_1,pos_box_1,pos_pbp_1,fgm_1,ast_1,equipo_2_id,equipo_2,pts_2,pos_box_2,pos_pbp_2,fgm_2,ast_2
 feb3,2026-27,2525751,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-12-16,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525752,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2027-01-03,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525753,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-11-03,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525754,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-12-16,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2525752,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-11-22,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2525753,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-11-03,True,True,True,estructurado,True,True,True,True,0.0,1009074,SHAD MOLLET,78.0,72.04,72.0,28.0,24.0,1008701,UE.MONTGAT,66.0,77.48,76.0,22.0,16.0
+feb3,2026-27,2525754,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-12-17,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2525755,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-12-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2525756,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-10-27,True,True,True,estructurado,True,True,True,True,3.0,1009587,EGLOBE TECLA SALA,53.0,80.48,79.0,19.0,12.0,1010575,IBERSOL CB TARRAGONA,80.0,79.2,79.0,28.0,14.0
 feb3,2026-27,2525757,90063,"Liga Regular ""C-A""",regular,Jornada 1(04/10/2026),2026-10-03,True,True,True,estructurado,True,True,True,True,0.0,1009154,C.B. CUARTE DE HUERVA,81.0,82.88,83.0,29.0,15.0,1008789,IMMO SA MARINA CIUTAT D’INCA BASQUET,57.0,78.4,80.0,18.0,12.0
@@ -27,20 +27,20 @@ feb3,2026-27,2525775,90063,"Liga Regular ""C-A""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2525776,90063,"Liga Regular ""C-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008403,TENEA-C.B. ESPARREGUERA,79.0,81.04,77.0,32.0,16.0,1010191,C.B. GRANOLLERS,88.0,81.16,79.0,37.0,17.0
 feb3,2026-27,2525777,90063,"Liga Regular ""C-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1009062,CB QUART FAI BERTI,82.0,78.12,80.0,30.0,12.0,1008680,TIBU-RON CASTELLDEFELS,67.0,83.12,83.0,24.0,8.0
 feb3,2026-27,2525778,90063,"Liga Regular ""C-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008788,BÀSQUET CALVIÀ,62.0,70.48,68.0,22.0,4.0,1009074,SHAD MOLLET,61.0,70.04,71.0,23.0,6.0
-feb3,2026-27,2525779,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525780,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525781,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525782,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525783,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525784,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525785,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525786,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525787,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525788,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525789,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525790,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525791,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2525792,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2525779,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008948,FLORANGE U.E.MATARÓ,74.0,86.96,87.0,22.0,19.0,1009074,SHAD MOLLET,72.0,85.52,85.0,28.0,17.0
+feb3,2026-27,2525780,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,14.0,1008680,TIBU-RON CASTELLDEFELS,90.0,79.48,81.0,37.0,29.0,1008788,BÀSQUET CALVIÀ,65.0,76.6,78.0,24.0,13.0
+feb3,2026-27,2525781,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,21.0,1010191,C.B. GRANOLLERS,70.0,79.68,84.0,27.0,12.0,1009062,CB QUART FAI BERTI,62.0,77.0,80.0,21.0,10.0
+feb3,2026-27,2525782,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009587,EGLOBE TECLA SALA,67.0,81.16,80.0,26.0,14.0,1008403,TENEA-C.B. ESPARREGUERA,78.0,78.44,82.0,27.0,19.0
+feb3,2026-27,2525783,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009154,C.B. CUARTE DE HUERVA,69.0,71.56,77.0,26.0,16.0,1008701,UE.MONTGAT,68.0,74.28,75.0,25.0,21.0
+feb3,2026-27,2525784,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008789,IMMO SA MARINA CIUTAT D’INCA BASQUET,69.0,79.36,79.0,25.0,15.0,1009918,C.B. VIC - UNIVERSITAT DE VIC,98.0,77.12,81.0,34.0,24.0
+feb3,2026-27,2525785,90063,"Liga Regular ""C-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,3.0,1010575,IBERSOL CB TARRAGONA,77.0,78.96,77.0,24.0,17.0,1009170,SESE A,73.0,78.56,80.0,24.0,17.0
+feb3,2026-27,2525786,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,7.0,1009170,SESE A,89.0,79.0,79.0,34.0,19.0,1008948,FLORANGE U.E.MATARÓ,78.0,79.36,80.0,27.0,17.0
+feb3,2026-27,2525787,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009918,C.B. VIC - UNIVERSITAT DE VIC,74.0,73.04,74.0,28.0,22.0,1010575,IBERSOL CB TARRAGONA,57.0,74.44,77.0,18.0,12.0
+feb3,2026-27,2525788,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008701,UE.MONTGAT,78.0,77.96,76.0,30.0,22.0,1008789,IMMO SA MARINA CIUTAT D’INCA BASQUET,68.0,80.6,79.0,26.0,12.0
+feb3,2026-27,2525789,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008403,TENEA-C.B. ESPARREGUERA,68.0,76.44,80.0,23.0,16.0,1009154,C.B. CUARTE DE HUERVA,75.0,76.68,78.0,28.0,5.0
+feb3,2026-27,2525790,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,7.0,1009062,CB QUART FAI BERTI,63.0,75.0,76.0,22.0,8.0,1009587,EGLOBE TECLA SALA,78.0,79.16,76.0,31.0,12.0
+feb3,2026-27,2525791,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008788,BÀSQUET CALVIÀ,72.0,76.88,79.0,25.0,11.0,1010191,C.B. GRANOLLERS,92.0,79.36,79.0,32.0,17.0
+feb3,2026-27,2525792,90063,"Liga Regular ""C-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009074,SHAD MOLLET,77.0,80.52,79.0,31.0,16.0,1008680,TIBU-RON CASTELLDEFELS,93.0,81.12,85.0,35.0,22.0
 feb3,2026-27,2525793,90063,"Liga Regular ""C-A""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2525794,90063,"Liga Regular ""C-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2525795,90063,"Liga Regular ""C-A""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -209,20 +209,20 @@ feb3,2026-27,2528271,90064,"Liga Regular ""C-B""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2528272,90064,"Liga Regular ""C-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008936,PUJOL MOLLERUSSA,90.0,76.68,76.0,30.0,18.0,1008699,MONBUS - CB IGUALADA,70.0,81.12,79.0,28.0,9.0
 feb3,2026-27,2528273,90064,"Liga Regular ""C-B""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1009144,CB NAVÀS VISCOLA,87.0,86.32,83.0,29.0,19.0,1009146,SA TINTINA CB ES CASTELL MENORCA,80.0,84.96,87.0,27.0,13.0
 feb3,2026-27,2528274,90064,"Liga Regular ""C-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008693,LETRA CORPOREA BARBASTRO,81.0,78.24,80.0,29.0,18.0,1008966,LA PARRÓQUIA - BÁSQUET SAMÁ,74.0,82.44,81.0,23.0,12.0
-feb3,2026-27,2528275,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528276,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528277,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528278,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528279,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528280,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528281,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528282,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528283,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528284,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528285,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528286,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528287,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528288,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2528275,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009701,CB ARTÉS,60.0,67.92,70.0,20.0,12.0,1008966,LA PARRÓQUIA - BÁSQUET SAMÁ,79.0,70.04,68.0,27.0,24.0
+feb3,2026-27,2528276,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,0.0,1009146,SA TINTINA CB ES CASTELL MENORCA,99.0,84.08,80.0,37.0,25.0,1008693,LETRA CORPOREA BARBASTRO,76.0,83.12,81.0,25.0,15.0
+feb3,2026-27,2528277,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008699,MONBUS - CB IGUALADA,76.0,74.92,75.0,27.0,16.0,1009144,CB NAVÀS VISCOLA,79.0,75.48,79.0,30.0,17.0
+feb3,2026-27,2528278,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008800,C.B.VALLS.TALLERS PABLO MARTÍNEZ,92.0,94.04,92.0,33.0,18.0,1008936,PUJOL MOLLERUSSA,88.0,88.68,91.0,31.0,17.0
+feb3,2026-27,2528279,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,88.0,1010576,SD ESPANYOL BÀSQUET CORNELLÀ,97.0,79.6,80.0,37.0,20.0,1009816,SANDÁ C.B. L´HOSPITALET,76.0,81.36,82.0,27.0,14.0
+feb3,2026-27,2528280,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009083,FUNDACION GRUPO JORGE BALONCESTO ZUERA,101.0,80.8,79.0,36.0,18.0,1009815,C.B.ROSER,95.0,79.24,82.0,37.0,21.0
+feb3,2026-27,2528281,90064,"Liga Regular ""C-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,11.0,1009932,OCA GLOBAL C.B. SALOU,82.0,85.24,84.0,28.0,24.0,1009928,SUPERMERCADOS DISKONT - CB CIUTADELLA PONENT,50.0,82.04,83.0,21.0,15.0
+feb3,2026-27,2528282,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,4.0,1009928,SUPERMERCADOS DISKONT - CB CIUTADELLA PONENT,107.0,88.52,90.0,38.0,18.0,1009701,CB ARTÉS,68.0,89.36,87.0,22.0,8.0
+feb3,2026-27,2528283,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,8.0,1009815,C.B.ROSER,61.0,78.44,84.0,22.0,11.0,1009932,OCA GLOBAL C.B. SALOU,87.0,82.84,85.0,36.0,18.0
+feb3,2026-27,2528284,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009816,SANDÁ C.B. L´HOSPITALET,84.0,82.64,84.0,29.0,17.0,1009083,FUNDACION GRUPO JORGE BALONCESTO ZUERA,53.0,90.48,88.0,20.0,9.0
+feb3,2026-27,2528285,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,21.0,1008936,PUJOL MOLLERUSSA,81.0,79.0,75.0,29.0,15.0,1010576,SD ESPANYOL BÀSQUET CORNELLÀ,76.0,74.44,74.0,26.0,9.0
+feb3,2026-27,2528286,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009144,CB NAVÀS VISCOLA,75.0,79.68,78.0,25.0,18.0,1008800,C.B.VALLS.TALLERS PABLO MARTÍNEZ,59.0,77.4,79.0,21.0,15.0
+feb3,2026-27,2528287,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008699,MONBUS - CB IGUALADA,87.0,78.44,80.0,32.0,27.0,1008693,LETRA CORPOREA BARBASTRO,65.0,79.6,82.0,27.0,13.0
+feb3,2026-27,2528288,90064,"Liga Regular ""C-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,2.0,1008966,LA PARRÓQUIA - BÁSQUET SAMÁ,84.0,81.0,82.0,27.0,19.0,1009146,SA TINTINA CB ES CASTELL MENORCA,82.0,87.0,84.0,26.0,13.0
 feb3,2026-27,2528289,90064,"Liga Regular ""C-B""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2528290,90064,"Liga Regular ""C-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2528291,90064,"Liga Regular ""C-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -249,7 +249,7 @@ feb3,2026-27,2528311,90064,"Liga Regular ""C-B""",regular,Jornada 10(06/12/2026)
 feb3,2026-27,2528312,90064,"Liga Regular ""C-B""",regular,Jornada 10(06/12/2026),2026-12-06,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2528313,90064,"Liga Regular ""C-B""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2528314,90064,"Liga Regular ""C-B""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2528315,90064,"Liga Regular ""C-B""",regular,Jornada 10(06/12/2026),2026-12-06,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2528315,90064,"Liga Regular ""C-B""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2528316,90064,"Liga Regular ""C-B""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2528317,90064,"Liga Regular ""C-B""",regular,Jornada 11(13/12/2026),2026-12-12,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2528318,90064,"Liga Regular ""C-B""",regular,Jornada 11(13/12/2026),2026-12-13,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -387,18 +387,18 @@ feb3,2026-27,2536503,90065,"Liga Regular ""D-A""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2536504,90065,"Liga Regular ""D-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1010331,CDBO BYSPANIA TÍJOLA,94.0,82.2,80.0,32.0,21.0,1010328,MOLINA OLEA CB COSTA MOTRIL,89.0,77.92,76.0,30.0,14.0
 feb3,2026-27,2536505,90065,"Liga Regular ""D-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008850,MELILLA CIUDAD DEL DEPORTE ENRIQUE SOLER,85.0,88.32,88.0,29.0,19.0,1010326,SURSEEDS - B. MURGI,92.0,92.76,93.0,35.0,20.0
 feb3,2026-27,2536506,90065,"Liga Regular ""D-A""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1010896,LA CARTONERA LUCENTINA COTO LUCENA,87.0,90.68,86.0,33.0,14.0,1010895,BALONCESTO COMARCA DE LA AXARQUIA,76.0,88.2,86.0,26.0,7.0
-feb3,2026-27,2536508,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536509,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536510,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536511,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536512,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536513,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536515,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536516,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536517,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536518,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536519,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536520,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2536508,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,8.0,1010326,SURSEEDS - B. MURGI,81.0,74.2,75.0,27.0,8.0,1010896,LA CARTONERA LUCENTINA COTO LUCENA,85.0,74.32,74.0,30.0,7.0
+feb3,2026-27,2536509,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,18.0,1010331,CDBO BYSPANIA TÍJOLA,96.0,78.72,79.0,31.0,17.0,1008850,MELILLA CIUDAD DEL DEPORTE ENRIQUE SOLER,80.0,78.92,77.0,29.0,15.0
+feb3,2026-27,2536510,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,25.0,1010332,CAJA RURAL JAEN PARAISO INTERIOR CB,81.0,78.8,80.0,32.0,13.0,1010328,MOLINA OLEA CB COSTA MOTRIL,66.0,81.68,81.0,21.0,10.0
+feb3,2026-27,2536511,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,5.0,1010894,ECOCULTURE CB ALMERÍA,65.0,74.32,72.0,20.0,13.0,1010198,COLEGIO EL PINAR,60.0,70.44,69.0,19.0,9.0
+feb3,2026-27,2536512,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010327,HOSPITAL OCHOA CB MARBELLA,76.0,79.76,79.0,24.0,13.0,1010197,CB LA ZUBIA,84.0,80.68,82.0,30.0,17.0
+feb3,2026-27,2536513,90065,"Liga Regular ""D-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,13.0,1010199,DEHESAS REUNIDAS CLIMANAVAS AGROMETAL PEÑARROYA,74.0,84.04,84.0,27.0,10.0,1010325,CB NOVASCHOOL RINCÓN DE LA VICTORIA,68.0,81.32,84.0,21.0,7.0
+feb3,2026-27,2536515,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,5.0,1010197,CB LA ZUBIA,81.0,90.56,91.0,28.0,15.0,1010199,DEHESAS REUNIDAS CLIMANAVAS AGROMETAL PEÑARROYA,86.0,91.28,90.0,26.0,16.0
+feb3,2026-27,2536516,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1010198,COLEGIO EL PINAR,83.0,72.28,73.0,34.0,19.0,1010327,HOSPITAL OCHOA CB MARBELLA,51.0,71.56,72.0,15.0,8.0
+feb3,2026-27,2536517,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,27.0,1010328,MOLINA OLEA CB COSTA MOTRIL,87.0,89.84,87.0,29.0,9.0,1010894,ECOCULTURE CB ALMERÍA,81.0,82.76,87.0,28.0,12.0
+feb3,2026-27,2536518,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,29.0,1008850,MELILLA CIUDAD DEL DEPORTE ENRIQUE SOLER,69.0,74.68,75.0,22.0,17.0,1010332,CAJA RURAL JAEN PARAISO INTERIOR CB,72.0,77.96,76.0,30.0,8.0
+feb3,2026-27,2536519,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,24.0,1010896,LA CARTONERA LUCENTINA COTO LUCENA,60.0,72.84,74.0,25.0,13.0,1010331,CDBO BYSPANIA TÍJOLA,89.0,74.48,73.0,33.0,20.0
+feb3,2026-27,2536520,90065,"Liga Regular ""D-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,19.0,1010895,BALONCESTO COMARCA DE LA AXARQUIA,88.0,91.08,93.0,33.0,21.0,1010326,SURSEEDS - B. MURGI,63.0,91.2,91.0,20.0,15.0
 feb3,2026-27,2536522,90065,"Liga Regular ""D-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2536523,90065,"Liga Regular ""D-A""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2536524,90065,"Liga Regular ""D-A""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -547,20 +547,20 @@ feb3,2026-27,2536685,90059,"Liga Regular ""A-A""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2536686,90059,"Liga Regular ""A-A""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1009106,ULACIA ZKE,84.0,75.44,72.0,31.0,19.0,1009137,UNIVERSIDAD DEUSTO LOIOLA INDAUTXU,68.0,78.6,79.0,28.0,6.0
 feb3,2026-27,2536687,90059,"Liga Regular ""A-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008399,IRUKI TAKE,86.0,78.16,80.0,34.0,14.0,1009704,DE MORRO FINO CANTBASKET04,99.0,84.36,81.0,37.0,21.0
 feb3,2026-27,2536688,90059,"Liga Regular ""A-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008869,MEGACALZADO ARDOI,62.0,81.08,79.0,25.0,14.0,1010577,CONSTRUCCIONES GONZALO CRESPO PAS PIÉLAGOS,67.0,83.92,82.0,26.0,10.0
-feb3,2026-27,2536689,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536690,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536691,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536692,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536693,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536694,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536695,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536696,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536697,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536698,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536699,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536700,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536701,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536702,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2536689,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008897,TABIRAKO BAQUE,70.0,81.36,76.0,25.0,12.0,1010577,CONSTRUCCIONES GONZALO CRESPO PAS PIÉLAGOS,76.0,78.44,79.0,25.0,12.0
+feb3,2026-27,2536690,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,21.0,1009704,DE MORRO FINO CANTBASKET04,98.0,86.68,86.0,39.0,14.0,1008869,MEGACALZADO ARDOI,87.0,85.4,82.0,32.0,24.0
+feb3,2026-27,2536691,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009137,UNIVERSIDAD DEUSTO LOIOLA INDAUTXU,70.0,80.8,80.0,25.0,14.0,1008399,IRUKI TAKE,83.0,78.76,83.0,27.0,11.0
+feb3,2026-27,2536692,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,14.0,1009714,TEKNEI BIZKAIA ZORNOTZA,75.0,75.36,73.0,24.0,16.0,1009106,ULACIA ZKE,70.0,75.48,73.0,27.0,13.0
+feb3,2026-27,2536693,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,0.0,1008697,RESTAURANTE LOS ARCOS CB SOLARES,104.0,82.72,81.0,42.0,29.0,1008627,BALONCESTO LA FLECHA,70.0,84.24,84.0,26.0,19.0
+feb3,2026-27,2536694,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,9.0,1008679,SAN PRUDENCIO,84.0,84.24,85.0,31.0,11.0,1009179,HOTEL 4POSTES - ÁVILA AUTÉNTICA - EL BULEVAR,81.0,84.16,84.0,32.0,15.0
+feb3,2026-27,2536695,90059,"Liga Regular ""A-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,9.0,1008735,ELABORADOS NATURALES VALLE DE EGÜÉS,89.0,80.44,83.0,32.0,19.0,1010898,LISDATA BEZANA,84.0,87.28,84.0,32.0,6.0
+feb3,2026-27,2536696,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,15.0,1010898,LISDATA BEZANA,78.0,81.92,82.0,28.0,14.0,1008897,TABIRAKO BAQUE,71.0,84.24,82.0,26.0,16.0
+feb3,2026-27,2536697,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009179,HOTEL 4POSTES - ÁVILA AUTÉNTICA - EL BULEVAR,91.0,86.16,84.0,29.0,12.0,1008735,ELABORADOS NATURALES VALLE DE EGÜÉS,90.0,83.68,85.0,28.0,19.0
+feb3,2026-27,2536698,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,14.0,1008627,BALONCESTO LA FLECHA,81.0,89.4,88.0,24.0,9.0,1008679,SAN PRUDENCIO,73.0,82.2,85.0,23.0,8.0
+feb3,2026-27,2536699,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1009106,ULACIA ZKE,92.0,81.56,83.0,32.0,17.0,1008697,RESTAURANTE LOS ARCOS CB SOLARES,71.0,83.48,86.0,26.0,9.0
+feb3,2026-27,2536700,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,23.0,1008399,IRUKI TAKE,68.0,78.72,81.0,27.0,11.0,1009714,TEKNEI BIZKAIA ZORNOTZA,85.0,78.16,80.0,31.0,19.0
+feb3,2026-27,2536701,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008869,MEGACALZADO ARDOI,71.0,80.88,85.0,23.0,12.0,1009137,UNIVERSIDAD DEUSTO LOIOLA INDAUTXU,78.0,84.56,85.0,27.0,13.0
+feb3,2026-27,2536702,90059,"Liga Regular ""A-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1010577,CONSTRUCCIONES GONZALO CRESPO PAS PIÉLAGOS,88.0,83.0,82.0,32.0,16.0,1009704,DE MORRO FINO CANTBASKET04,81.0,83.48,81.0,30.0,16.0
 feb3,2026-27,2536703,90059,"Liga Regular ""A-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2536704,90059,"Liga Regular ""A-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2536705,90059,"Liga Regular ""A-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -729,20 +729,20 @@ feb3,2026-27,2536867,90060,"Liga Regular ""A-B""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2536868,90060,"Liga Regular ""A-B""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1010206,TERRITORIO MINERO BALONCESTO VILLA DE MIERES,60.0,84.56,83.0,18.0,16.0,1008919,MARÍN ENCE PEIXEGALEGO,88.0,83.36,83.0,33.0,18.0
 feb3,2026-27,2536869,90060,"Liga Regular ""A-B""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1009446,INELTRON SANTO DOMINGO BETANZOS,81.0,85.68,80.0,30.0,10.0,1009920,TRAUMACOR CULLEREDO,86.0,81.44,81.0,30.0,15.0
 feb3,2026-27,2536870,90060,"Liga Regular ""A-B""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1008632,UNIVERSIDAD DE OVIEDO,95.0,86.68,83.0,35.0,12.0,1009817,RECOLETAS SALUD SALAMANCA,97.0,79.68,78.0,40.0,8.0
-feb3,2026-27,2536871,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536872,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536873,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536874,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536875,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536876,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536877,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536878,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536879,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536880,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536881,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536882,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536883,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2536884,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2536871,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,13.0,1009919,UCOGA SEGUROS C.B. CHANTADA,52.0,74.8,71.0,17.0,9.0,1009817,RECOLETAS SALUD SALAMANCA,78.0,76.44,78.0,28.0,19.0
+feb3,2026-27,2536872,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009920,TRAUMACOR CULLEREDO,67.0,80.12,79.0,23.0,15.0,1008632,UNIVERSIDAD DE OVIEDO,80.0,79.24,80.0,29.0,15.0
+feb3,2026-27,2536873,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008919,MARÍN ENCE PEIXEGALEGO,100.0,93.16,89.0,40.0,22.0,1009446,INELTRON SANTO DOMINGO BETANZOS,80.0,87.68,90.0,29.0,14.0
+feb3,2026-27,2536874,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,1.0,1010897,ULLA OIL ROSALIA,66.0,87.76,91.0,20.0,13.0,1010206,TERRITORIO MINERO BALONCESTO VILLA DE MIERES,117.0,94.4,89.0,43.0,26.0
+feb3,2026-27,2536875,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,9.0,1010490,CAJA RURAL RDL,97.0,81.92,85.0,29.0,12.0,1008382,USAL MEINS AVENIDA,80.0,84.8,82.0,31.0,5.0
+feb3,2026-27,2536876,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,7.0,1010578,NAIWAN DETAILING NOVOBASKET,74.0,81.48,83.0,28.0,14.0,1010503,CALVO BASKET XIRIA,93.0,87.52,87.0,33.0,12.0
+feb3,2026-27,2536877,90060,"Liga Regular ""A-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,5.0,1008981,OKTICKET CIRCULO GIJON,91.0,90.84,93.0,29.0,17.0,1010574,SIGALTEC BBC,58.0,92.4,90.0,22.0,12.0
+feb3,2026-27,2536878,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,35.0,1010574,SIGALTEC BBC,48.0,75.36,75.0,16.0,6.0,1009919,UCOGA SEGUROS C.B. CHANTADA,67.0,69.32,71.0,22.0,7.0
+feb3,2026-27,2536879,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,29.0,1010503,CALVO BASKET XIRIA,78.0,87.56,89.0,27.0,14.0,1008981,OKTICKET CIRCULO GIJON,100.0,87.64,87.0,36.0,21.0
+feb3,2026-27,2536880,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,False,True,515.0,1008382,USAL MEINS AVENIDA,87.0,88.44,93.0,32.0,12.0,1010578,NAIWAN DETAILING NOVOBASKET,71.0,83.92,83.0,24.0,9.0
+feb3,2026-27,2536881,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,11.0,1010206,TERRITORIO MINERO BALONCESTO VILLA DE MIERES,107.0,90.08,90.0,39.0,22.0,1010490,CAJA RURAL RDL,92.0,83.32,86.0,32.0,16.0
+feb3,2026-27,2536882,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1009446,INELTRON SANTO DOMINGO BETANZOS,92.0,83.2,85.0,33.0,21.0,1010897,ULLA OIL ROSALIA,67.0,88.16,86.0,23.0,16.0
+feb3,2026-27,2536883,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,17.0,1008632,UNIVERSIDAD DE OVIEDO,65.0,85.4,86.0,24.0,10.0,1008919,MARÍN ENCE PEIXEGALEGO,109.0,83.64,82.0,46.0,28.0
+feb3,2026-27,2536884,90060,"Liga Regular ""A-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009817,RECOLETAS SALUD SALAMANCA,101.0,82.48,82.0,39.0,23.0,1009920,TRAUMACOR CULLEREDO,63.0,79.6,78.0,22.0,13.0
 feb3,2026-27,2536885,90060,"Liga Regular ""A-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2536886,90060,"Liga Regular ""A-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2536887,90060,"Liga Regular ""A-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -911,20 +911,20 @@ feb3,2026-27,2537049,90061,"Liga Regular ""B-A""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2537050,90061,"Liga Regular ""B-A""",regular,Jornada 4(25/10/2026),2026-10-23,True,True,True,estructurado,True,True,True,True,0.0,1008407,CB ARIDANE,59.0,83.6,82.0,21.0,8.0,1009591,EL VENTERO CBV,76.0,75.92,77.0,26.0,16.0
 feb3,2026-27,2537051,90061,"Liga Regular ""B-A""",regular,Jornada 4(25/10/2026),2026-11-10,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537052,90061,"Liga Regular ""B-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,11.0,1010196,STOP BIOGÁS TOBARRA,82.0,82.16,79.0,31.0,12.0,1009575,QUALIS C.B VILLA DE VALDEMORO,87.0,79.84,80.0,27.0,16.0
-feb3,2026-27,2537053,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537054,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537055,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537056,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537057,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537058,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537059,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537060,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537061,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537062,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537063,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537064,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537065,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537066,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537053,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009835,AG MOVIALSA QUALITYSPORT CRIPTANA,80.0,80.8,78.0,28.0,7.0,1009575,QUALIS C.B VILLA DE VALDEMORO,71.0,79.24,81.0,24.0,7.0
+feb3,2026-27,2537054,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,13.0,1010323,BASKET GLOBALCAJA QUINTANAR,88.0,79.68,84.0,23.0,22.0,1010196,STOP BIOGÁS TOBARRA,62.0,78.4,81.0,17.0,14.0
+feb3,2026-27,2537055,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,6.0,1009591,EL VENTERO CBV,70.0,74.88,82.0,20.0,14.0,1010497,ZENTRO BASKET MADRID,68.0,81.12,84.0,26.0,11.0
+feb3,2026-27,2537056,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,17.0,1009119,CESUR DISTRITO OLIMPICO,74.0,83.64,82.0,24.0,12.0,1008407,CB ARIDANE,83.0,84.12,80.0,28.0,17.0
+feb3,2026-27,2537057,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008778,EB FELIPE ANTÓN,70.0,83.8,84.0,27.0,9.0,1010190,C.B. LAS ROZAS,78.0,79.32,81.0,27.0,15.0
+feb3,2026-27,2537058,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010189,C.B. DADARMO DE GÜIMAR,71.0,77.24,79.0,26.0,12.0,1009702,FUNDACION GLOBALCAJA LA RODA,73.0,75.72,76.0,26.0,21.0
+feb3,2026-27,2537059,90061,"Liga Regular ""B-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008408,C. D. MENSAJERO ISLA DE LA PALMA,84.0,76.28,76.0,34.0,13.0,1010498,ARISTOS PARTIZÁN DE FUENLABRADA,82.0,79.24,79.0,30.0,8.0
+feb3,2026-27,2537060,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1010498,ARISTOS PARTIZÁN DE FUENLABRADA,79.0,78.8,78.0,28.0,17.0,1009835,AG MOVIALSA QUALITYSPORT CRIPTANA,84.0,75.92,78.0,29.0,17.0
+feb3,2026-27,2537061,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009702,FUNDACION GLOBALCAJA LA RODA,75.0,67.92,69.0,28.0,10.0,1008408,C. D. MENSAJERO ISLA DE LA PALMA,59.0,66.44,68.0,16.0,7.0
+feb3,2026-27,2537062,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1010190,C.B. LAS ROZAS,66.0,84.04,81.0,24.0,12.0,1010189,C.B. DADARMO DE GÜIMAR,72.0,78.24,81.0,25.0,21.0
+feb3,2026-27,2537063,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008407,CB ARIDANE,94.0,80.08,79.0,31.0,13.0,1008778,EB FELIPE ANTÓN,75.0,76.96,79.0,23.0,9.0
+feb3,2026-27,2537064,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1010497,ZENTRO BASKET MADRID,74.0,86.56,91.0,29.0,18.0,1009119,CESUR DISTRITO OLIMPICO,70.0,89.08,90.0,26.0,19.0
+feb3,2026-27,2537065,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,12.0,1010196,STOP BIOGÁS TOBARRA,68.0,64.24,66.0,22.0,9.0,1009591,EL VENTERO CBV,45.0,62.48,64.0,14.0,6.0
+feb3,2026-27,2537066,90061,"Liga Regular ""B-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009575,QUALIS C.B VILLA DE VALDEMORO,65.0,82.68,84.0,23.0,6.0,1010323,BASKET GLOBALCAJA QUINTANAR,91.0,84.24,85.0,33.0,20.0
 feb3,2026-27,2537067,90061,"Liga Regular ""B-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537068,90061,"Liga Regular ""B-A""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537069,90061,"Liga Regular ""B-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -964,7 +964,7 @@ feb3,2026-27,2537102,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026)
 feb3,2026-27,2537103,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537104,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537105,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537106,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537106,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026),2026-12-20,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537107,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026),2026-12-20,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537108,90061,"Liga Regular ""B-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537109,90061,"Liga Regular ""B-A""",regular,Jornada 13(10/01/2027),2027-01-09,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -1093,20 +1093,20 @@ feb3,2026-27,2537231,90062,"Liga Regular ""B-B""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2537232,90062,"Liga Regular ""B-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1009825,GRAN CANARIA,96.0,86.76,82.0,31.0,17.0,1008707,CB 7 PALMAS,82.0,84.16,80.0,36.0,11.0
 feb3,2026-27,2537233,90062,"Liga Regular ""B-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1009178,GRUPO EGIDO PINTOBASKET,63.0,85.48,82.0,24.0,12.0,1008409,INMOBILIARIA GÁLVEZ SANTA CRUZ,84.0,80.2,80.0,27.0,21.0
 feb3,2026-27,2537234,90062,"Liga Regular ""B-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1009120,FUNDAL ALCOBENDAS,70.0,86.08,87.0,23.0,25.0,1008941,GINELUX TELDE,65.0,90.36,87.0,24.0,12.0
-feb3,2026-27,2537235,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537236,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537235,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009706,NÁUTICO TENERIFE,68.0,77.52,77.0,24.0,12.0,1008941,GINELUX TELDE,79.0,77.84,74.0,23.0,14.0
+feb3,2026-27,2537236,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-12-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537237,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-16,True,True,True,estructurado,True,True,True,True,0.0,1009825,GRAN CANARIA,80.0,86.12,84.0,28.0,15.0,1009178,GRUPO EGIDO PINTOBASKET,82.0,85.72,82.0,36.0,16.0
-feb3,2026-27,2537238,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537239,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537240,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537241,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537242,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537243,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537244,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537245,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537246,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537247,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537248,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537238,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010499,BALONCESTO ALCALA,90.0,90.68,90.0,33.0,26.0,1008707,CB 7 PALMAS,65.0,93.64,90.0,29.0,14.0
+feb3,2026-27,2537239,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008866,UROS DE RIVAS,107.0,75.92,77.0,41.0,28.0,1008946,BASKET CERVANTES CIUDAD REAL,50.0,70.84,72.0,19.0,11.0
+feb3,2026-27,2537240,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,1.0,1008865,IMPLICA REAL CANOE,76.0,72.48,73.0,27.0,17.0,1010580,BALONCESTO TALAVERA,95.0,77.04,72.0,23.0,18.0
+feb3,2026-27,2537241,90062,"Liga Regular ""B-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008935,RECUCYM BAZU,71.0,71.68,71.0,26.0,14.0,1009931,LUJISA GUADALAJARA BASKET,77.0,79.8,78.0,25.0,12.0
+feb3,2026-27,2537242,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,11.0,1009931,LUJISA GUADALAJARA BASKET,69.0,81.04,73.0,24.0,17.0,1009706,NÁUTICO TENERIFE,61.0,75.48,74.0,20.0,13.0
+feb3,2026-27,2537243,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1010580,BALONCESTO TALAVERA,86.0,85.24,83.0,30.0,12.0,1008935,RECUCYM BAZU,79.0,79.68,81.0,29.0,6.0
+feb3,2026-27,2537244,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1008946,BASKET CERVANTES CIUDAD REAL,62.0,63.16,66.0,23.0,6.0,1008865,IMPLICA REAL CANOE,83.0,68.48,71.0,29.0,22.0
+feb3,2026-27,2537245,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537246,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009178,GRUPO EGIDO PINTOBASKET,72.0,84.48,84.0,26.0,17.0,1010499,BALONCESTO ALCALA,59.0,81.6,82.0,22.0,11.0
+feb3,2026-27,2537247,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009120,FUNDAL ALCOBENDAS,92.0,88.56,85.0,36.0,23.0,1009825,GRAN CANARIA,100.0,86.88,87.0,34.0,24.0
+feb3,2026-27,2537248,90062,"Liga Regular ""B-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,12.0,1008941,GINELUX TELDE,86.0,90.56,92.0,29.0,18.0,1008409,INMOBILIARIA GÁLVEZ SANTA CRUZ,88.0,93.52,90.0,29.0,13.0
 feb3,2026-27,2537249,90062,"Liga Regular ""B-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537250,90062,"Liga Regular ""B-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537251,90062,"Liga Regular ""B-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -1271,18 +1271,18 @@ feb3,2026-27,2537413,90066,"Liga Regular ""D-B""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2537414,90066,"Liga Regular ""D-B""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1010329,CLUB BALONCESTO SAN FERNANDO,67.0,81.44,78.0,22.0,11.0,1010341,BAUBLOCK GYMNÁSTICA AVANZA EL PUERTO,81.0,78.0,77.0,32.0,14.0
 feb3,2026-27,2537415,90066,"Liga Regular ""D-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,15.0,1010195,CB CORIA,69.0,84.0,81.0,26.0,10.0,1010330,AD REM ONUBA,81.0,80.76,81.0,26.0,16.0
 feb3,2026-27,2537416,90066,"Liga Regular ""D-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,6.0,1009814,BOSCO MÉRIDA PATRIMONIO DE LA HUMANIDAD,72.0,84.44,85.0,24.0,7.0,1010353,SAN ANTONIO CÁCERES,88.0,84.12,85.0,31.0,15.0
-feb3,2026-27,2537418,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537419,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537420,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537421,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537422,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537423,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537425,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537426,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537427,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537428,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537429,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537430,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537418,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,0.0,1010330,AD REM ONUBA,91.0,96.0,94.0,32.0,21.0,1009814,BOSCO MÉRIDA PATRIMONIO DE LA HUMANIDAD,73.0,92.64,92.0,25.0,11.0
+feb3,2026-27,2537419,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010341,BAUBLOCK GYMNÁSTICA AVANZA EL PUERTO,84.0,79.36,80.0,31.0,20.0,1010195,CB CORIA,64.0,79.12,83.0,21.0,12.0
+feb3,2026-27,2537420,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010573,INSOLAC CB ALCALÁ,76.0,84.04,83.0,27.0,15.0,1010329,CLUB BALONCESTO SAN FERNANDO,70.0,87.32,89.0,24.0,16.0
+feb3,2026-27,2537421,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009724,BALONCESTO BADAJOZ,83.0,81.92,80.0,31.0,21.0,1010342,OH!TELS ULB,82.0,77.32,83.0,34.0,15.0
+feb3,2026-27,2537422,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,0.0,1010322,LITHIUM IBERIA SAGRADO CÁCERES,91.0,90.44,90.0,37.0,16.0,1010501,C.B. FENIX,51.0,87.16,89.0,14.0,6.0
+feb3,2026-27,2537423,90066,"Liga Regular ""D-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010893,CBA SPAIN,93.0,83.76,84.0,28.0,18.0,1010347,EIFFAGE CB CIUDAD DE DOS HERMANAS,84.0,87.0,84.0,31.0,15.0
+feb3,2026-27,2537425,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,36.0,1010501,C.B. FENIX,63.0,86.44,87.0,21.0,6.0,1010893,CBA SPAIN,77.0,90.48,90.0,30.0,6.0
+feb3,2026-27,2537426,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,13.0,1010342,OH!TELS ULB,67.0,78.2,82.0,24.0,5.0,1010322,LITHIUM IBERIA SAGRADO CÁCERES,68.0,76.56,78.0,26.0,12.0
+feb3,2026-27,2537427,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1010329,CLUB BALONCESTO SAN FERNANDO,108.0,86.6,85.0,46.0,31.0,1009724,BALONCESTO BADAJOZ,65.0,81.36,84.0,26.0,16.0
+feb3,2026-27,2537428,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1010195,CB CORIA,97.0,82.64,83.0,32.0,27.0,1010573,INSOLAC CB ALCALÁ,87.0,86.76,86.0,27.0,15.0
+feb3,2026-27,2537429,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009814,BOSCO MÉRIDA PATRIMONIO DE LA HUMANIDAD,69.0,84.92,84.0,26.0,18.0,1010341,BAUBLOCK GYMNÁSTICA AVANZA EL PUERTO,79.0,81.24,83.0,32.0,17.0
+feb3,2026-27,2537430,90066,"Liga Regular ""D-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1010353,SAN ANTONIO CÁCERES,75.0,89.68,87.0,29.0,19.0,1010330,AD REM ONUBA,109.0,94.92,93.0,41.0,24.0
 feb3,2026-27,2537432,90066,"Liga Regular ""D-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537433,90066,"Liga Regular ""D-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537434,90066,"Liga Regular ""D-B""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -1302,7 +1302,7 @@ feb3,2026-27,2537449,90066,"Liga Regular ""D-B""",regular,Jornada 9(29/11/2026),
 feb3,2026-27,2537450,90066,"Liga Regular ""D-B""",regular,Jornada 9(29/11/2026),2026-11-29,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537451,90066,"Liga Regular ""D-B""",regular,Jornada 9(29/11/2026),2026-11-28,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537453,90066,"Liga Regular ""D-B""",regular,Jornada 10(06/12/2026),2026-12-06,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537454,90066,"Liga Regular ""D-B""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537454,90066,"Liga Regular ""D-B""",regular,Jornada 10(06/12/2026),2026-12-02,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537455,90066,"Liga Regular ""D-B""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537456,90066,"Liga Regular ""D-B""",regular,Jornada 10(06/12/2026),2026-12-06,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537457,90066,"Liga Regular ""D-B""",regular,Jornada 10(06/12/2026),2026-12-06,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -1431,20 +1431,20 @@ feb3,2026-27,2537595,90067,"Liga Regular ""E-A""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2537596,90067,"Liga Regular ""E-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008694,HALAL FOOD QUALITY UIXÓ BÀSQUET,76.0,84.96,86.0,22.0,18.0,1008690,C.B. PUERTO SAGUNTO,92.0,86.36,84.0,38.0,27.0
 feb3,2026-27,2537597,90067,"Liga Regular ""E-A""",regular,Jornada 4(25/10/2026),2026-10-25,True,True,True,estructurado,True,True,True,True,0.0,1010319,THE FITZGERALD EL PILAR,77.0,83.72,86.0,23.0,13.0,1010899,AMICS CASTELLÓ B,60.0,89.56,89.0,19.0,10.0
 feb3,2026-27,2537598,90067,"Liga Regular ""E-A""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008692,CB TABERNES BLANQUES - FERNANDO GIL,82.0,80.8,80.0,33.0,23.0,1008790,CB MORVEDRE,83.0,83.96,82.0,33.0,23.0
-feb3,2026-27,2537599,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537600,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537601,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537602,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537603,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537604,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537605,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537606,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537607,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537608,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537609,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537610,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537611,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537612,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537599,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009121,TOPSURFACE NB PATERNA,76.0,81.76,79.0,22.0,14.0,1008790,CB MORVEDRE,80.0,75.48,78.0,29.0,10.0
+feb3,2026-27,2537600,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,6.0,1010899,AMICS CASTELLÓ B,83.0,87.24,85.0,30.0,11.0,1008692,CB TABERNES BLANQUES - FERNANDO GIL,65.0,82.92,83.0,26.0,11.0
+feb3,2026-27,2537601,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008690,C.B. PUERTO SAGUNTO,73.0,88.8,88.0,26.0,17.0,1010319,TRAUMACOKE EL PILAR,72.0,90.96,91.0,20.0,11.0
+feb3,2026-27,2537602,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010204,ECOSIONA JOVENS L’ELIANA,75.0,78.68,80.0,28.0,12.0,1008694,HALAL FOOD QUALITY UIXÓ BÀSQUET,69.0,80.88,83.0,21.0,11.0
+feb3,2026-27,2537603,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1009585,CEMALU ALDAIA,95.0,81.04,83.0,36.0,22.0,1008915,BURJASSOT CB,76.0,82.36,84.0,27.0,12.0
+feb3,2026-27,2537604,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010492,TURBO MANISES C.B.C M-Q,67.0,88.0,90.0,22.0,10.0,1009719,BAUHAUS GODELLA,83.0,88.76,91.0,29.0,21.0
+feb3,2026-27,2537605,90067,"Liga Regular ""E-A""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,0.0,1010203,FUNDACIÓ CAIXA RURAL VILA-REAL,87.0,78.88,83.0,31.0,29.0,1010491,CB JOVENS ALMÀSSERA,58.0,80.96,79.0,23.0,7.0
+feb3,2026-27,2537606,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1010491,CB JOVENS ALMÀSSERA,86.0,80.8,83.0,32.0,14.0,1009121,TOPSURFACE NB PATERNA,89.0,83.08,87.0,30.0,19.0
+feb3,2026-27,2537607,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009719,BAUHAUS GODELLA,66.0,80.6,80.0,26.0,18.0,1010203,FUNDACIÓ CAIXA RURAL VILA-REAL,95.0,82.44,82.0,33.0,27.0
+feb3,2026-27,2537608,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008915,BURJASSOT CB,68.0,85.2,92.0,25.0,8.0,1010492,TURBO MANISES C.B.C M-Q,72.0,87.04,91.0,21.0,12.0
+feb3,2026-27,2537609,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008694,HALAL FOOD QUALITY UIXÓ BÀSQUET,86.0,82.24,82.0,29.0,18.0,1009585,CEMALU ALDAIA,71.0,87.0,89.0,25.0,12.0
+feb3,2026-27,2537610,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1010319,TRAUMACOKE EL PILAR,86.0,84.84,85.0,28.0,16.0,1010204,ECOSIONA JOVENS L’ELIANA,84.0,81.4,84.0,33.0,19.0
+feb3,2026-27,2537611,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008692,CB TABERNES BLANQUES - FERNANDO GIL,76.0,87.24,90.0,32.0,15.0,1008690,C.B. PUERTO SAGUNTO,97.0,84.08,88.0,35.0,19.0
+feb3,2026-27,2537612,90067,"Liga Regular ""E-A""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,10.0,1008790,CB MORVEDRE,89.0,80.4,82.0,36.0,12.0,1010899,AMICS CASTELLÓ B,102.0,83.56,87.0,36.0,17.0
 feb3,2026-27,2537613,90067,"Liga Regular ""E-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537614,90067,"Liga Regular ""E-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537615,90067,"Liga Regular ""E-A""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -1467,7 +1467,7 @@ feb3,2026-27,2537631,90067,"Liga Regular ""E-A""",regular,Jornada 9(29/11/2026),
 feb3,2026-27,2537632,90067,"Liga Regular ""E-A""",regular,Jornada 9(29/11/2026),2026-11-29,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537633,90067,"Liga Regular ""E-A""",regular,Jornada 9(29/11/2026),2026-11-28,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537634,90067,"Liga Regular ""E-A""",regular,Jornada 10(06/12/2026),2026-12-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537635,90067,"Liga Regular ""E-A""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537635,90067,"Liga Regular ""E-A""",regular,Jornada 10(06/12/2026),2026-12-04,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537636,90067,"Liga Regular ""E-A""",regular,Jornada 10(06/12/2026),2026-12-06,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537637,90067,"Liga Regular ""E-A""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537638,90067,"Liga Regular ""E-A""",regular,Jornada 10(06/12/2026),2026-12-05,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -1480,7 +1480,7 @@ feb3,2026-27,2537644,90067,"Liga Regular ""E-A""",regular,Jornada 11(13/12/2026)
 feb3,2026-27,2537645,90067,"Liga Regular ""E-A""",regular,Jornada 11(13/12/2026),2026-12-12,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537646,90067,"Liga Regular ""E-A""",regular,Jornada 11(13/12/2026),2026-12-12,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537647,90067,"Liga Regular ""E-A""",regular,Jornada 11(13/12/2026),2026-12-12,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537648,90067,"Liga Regular ""E-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537648,90067,"Liga Regular ""E-A""",regular,Jornada 12(20/12/2026),2026-12-20,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537649,90067,"Liga Regular ""E-A""",regular,Jornada 12(20/12/2026),2026-12-20,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537650,90067,"Liga Regular ""E-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537651,90067,"Liga Regular ""E-A""",regular,Jornada 12(20/12/2026),2026-12-19,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
@@ -1601,7 +1601,7 @@ feb3,2026-27,2537765,90068,"Liga Regular ""E-B""",regular,Jornada 2(11/10/2026),
 feb3,2026-27,2537766,90068,"Liga Regular ""E-B""",regular,Jornada 2(11/10/2026),2026-10-11,True,True,True,estructurado,True,True,True,True,0.0,1009593,DENIA BASQUET,74.0,90.72,94.0,23.0,12.0,1008688,C.B. JORGE JUAN CASTELLÓ SINCE 1907,65.0,94.76,94.0,23.0,16.0
 feb3,2026-27,2537767,90068,"Liga Regular ""E-B""",regular,Jornada 3(18/10/2026),2026-12-02,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537768,90068,"Liga Regular ""E-B""",regular,Jornada 3(18/10/2026),2026-11-29,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537769,90068,"Liga Regular ""E-B""",regular,Jornada 3(18/10/2026),2026-10-30,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537769,90068,"Liga Regular ""E-B""",regular,Jornada 3(18/10/2026),2026-11-13,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537770,90068,"Liga Regular ""E-B""",regular,Jornada 3(18/10/2026),2026-12-16,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537771,90068,"Liga Regular ""E-B""",regular,Jornada 3(18/10/2026),2026-10-18,True,True,True,estructurado,True,True,True,True,0.0,1010202,SCD CAROLINAS,74.0,91.8,88.0,28.0,16.0,1008808,INVERSUS INFANTE,110.0,91.4,88.0,35.0,22.0
 feb3,2026-27,2537772,90068,"Liga Regular ""E-B""",regular,Jornada 3(18/10/2026),2026-10-17,True,True,True,estructurado,True,True,True,True,14.0,1008689,VELABASKET CB SUECA,101.0,91.56,92.0,38.0,20.0,1009122,INVERSUS - ACEITUNAS FRUYPER A.D. COSTERA SUR,81.0,95.68,93.0,30.0,22.0
@@ -1613,23 +1613,23 @@ feb3,2026-27,2537777,90068,"Liga Regular ""E-B""",regular,Jornada 4(25/10/2026),
 feb3,2026-27,2537778,90068,"Liga Regular ""E-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,32.0,1008833,SERVIGROUP BENIDORM,90.0,86.52,85.0,31.0,20.0,1009732,ESET ONTINET,78.0,86.68,87.0,27.0,18.0
 feb3,2026-27,2537779,90068,"Liga Regular ""E-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,11.0,1009593,DENIA BASQUET,69.0,76.12,77.0,24.0,17.0,1010205,CBI ELCHE,73.0,76.28,77.0,27.0,9.0
 feb3,2026-27,2537780,90068,"Liga Regular ""E-B""",regular,Jornada 4(25/10/2026),2026-10-24,True,True,True,estructurado,True,True,True,True,0.0,1008688,C.B. JORGE JUAN CASTELLÓ SINCE 1907,91.0,92.88,95.0,30.0,19.0,1009586,RIGALLI-ALGINET,112.0,97.8,94.0,36.0,22.0
-feb3,2026-27,2537781,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537782,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537783,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537784,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537785,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537786,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537787,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-10-31,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537788,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537789,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537790,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537791,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537792,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537793,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537794,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-08,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537781,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,8.0,1010579,C.B. ESTUDIANTES CARTAGENA,73.0,89.44,89.0,24.0,16.0,1009586,RIGALLI-ALGINET,120.0,91.64,92.0,41.0,21.0
+feb3,2026-27,2537782,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,0.0,1010205,CBI ELCHE,88.0,84.44,85.0,29.0,13.0,1008688,C.B. JORGE JUAN CASTELLÓ SINCE 1907,70.0,90.24,87.0,26.0,15.0
+feb3,2026-27,2537783,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,15.0,1009732,ESET ONTINET,84.0,84.88,84.0,29.0,21.0,1009593,DENIA BASQUET,62.0,81.6,81.0,24.0,11.0
+feb3,2026-27,2537784,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-11-01,True,True,True,estructurado,True,True,True,True,0.0,1010202,SCD CAROLINAS,60.0,74.52,77.0,24.0,16.0,1008833,SERVIGROUP BENIDORM,94.0,80.24,81.0,35.0,25.0
+feb3,2026-27,2537785,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,11.0,1008689,VELABASKET CB SUECA,95.0,90.32,91.0,35.0,19.0,1009720,CMG HIDRÁULICA NB TORRENT,82.0,83.68,87.0,35.0,13.0
+feb3,2026-27,2537786,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1010201,PERSONALHOME ADESAVI,70.0,81.72,84.0,28.0,10.0,1008808,INVERSUS INFANTE,89.0,81.76,87.0,30.0,12.0
+feb3,2026-27,2537787,90068,"Liga Regular ""E-B""",regular,Jornada 5(01/11/2026),2026-10-31,True,True,True,estructurado,True,True,True,True,0.0,1008691,CB IFACH CALPE,102.0,103.28,103.0,35.0,25.0,1009122,INVERSUS - ACEITUNAS FRUYPER A.D. COSTERA SUR,95.0,96.64,97.0,32.0,26.0
+feb3,2026-27,2537788,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1009122,INVERSUS - ACEITUNAS FRUYPER A.D. COSTERA SUR,103.0,91.12,91.0,39.0,24.0,1010579,C.B. ESTUDIANTES CARTAGENA,88.0,93.08,93.0,30.0,16.0
+feb3,2026-27,2537789,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008808,INVERSUS INFANTE,105.0,89.04,93.0,32.0,10.0,1008691,CB IFACH CALPE,86.0,88.08,90.0,27.0,12.0
+feb3,2026-27,2537790,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,1.0,1009720,CMG HIDRÁULICA NB TORRENT,83.0,75.52,81.0,26.0,14.0,1010201,PERSONALHOME ADESAVI,55.0,71.4,74.0,20.0,10.0
+feb3,2026-27,2537791,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008833,SERVIGROUP BENIDORM,96.0,98.56,101.0,38.0,25.0,1008689,VELABASKET CB SUECA,95.0,94.32,97.0,33.0,24.0
+feb3,2026-27,2537792,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1009593,DENIA BASQUET,74.0,79.32,77.0,27.0,17.0,1010202,SCD CAROLINAS,54.0,86.08,82.0,16.0,10.0
+feb3,2026-27,2537793,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-07,True,True,True,estructurado,True,True,True,True,0.0,1008688,C.B. JORGE JUAN CASTELLÓ SINCE 1907,76.0,83.36,85.0,28.0,21.0,1009732,ESET ONTINET,75.0,80.68,84.0,26.0,14.0
+feb3,2026-27,2537794,90068,"Liga Regular ""E-B""",regular,Jornada 6(08/11/2026),2026-11-08,True,True,True,estructurado,True,True,True,True,0.0,1009586,RIGALLI-ALGINET,95.0,87.68,91.0,32.0,28.0,1010205,CBI ELCHE,77.0,88.28,90.0,29.0,17.0
 feb3,2026-27,2537795,90068,"Liga Regular ""E-B""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537796,90068,"Liga Regular ""E-B""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
-feb3,2026-27,2537797,90068,"Liga Regular ""E-B""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
+feb3,2026-27,2537797,90068,"Liga Regular ""E-B""",regular,Jornada 7(15/11/2026),2026-12-17,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537798,90068,"Liga Regular ""E-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537799,90068,"Liga Regular ""E-B""",regular,Jornada 7(15/11/2026),2026-11-15,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,
 feb3,2026-27,2537800,90068,"Liga Regular ""E-B""",regular,Jornada 7(15/11/2026),2026-11-14,False,False,False,,False,False,False,False,,,,,,,,,,,,,,,

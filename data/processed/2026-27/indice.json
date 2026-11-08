@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-11-03T09:03:53.530887+00:00",
+  "generado": "2026-11-08T23:35:15.396195+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -14,34 +14,34 @@
     "acb": {
       "nombre": "Liga Endesa (ACB)",
       "archivo": "ligas/acb.csv",
-      "fecha_extraccion": "2026-10-29T13:36:36.867936+00:00",
+      "fecha_extraccion": "2026-11-08T23:22:26.444731+00:00",
       "fases": {
-        "regular": 250,
-        "total": 250
+        "regular": 263,
+        "total": 263
       }
     },
     "bbl": {
       "nombre": "easyCredit BBL (Alemania)",
       "archivo": "ligas/bbl.csv",
-      "fecha_extraccion": "2026-10-29T13:36:36.981422+00:00",
+      "fecha_extraccion": "2026-11-08T23:22:26.568995+00:00",
       "fases": {
-        "regular": 247,
-        "total": 247
+        "regular": 257,
+        "total": 257
       }
     },
     "bcl": {
       "nombre": "Basketball Champions League",
       "archivo": "ligas/bcl.csv",
-      "fecha_extraccion": "2026-10-29T13:36:44.602290+00:00",
+      "fecha_extraccion": "2026-11-08T23:23:16.747333+00:00",
       "fases": {
-        "regular": 428,
-        "total": 428
+        "regular": 436,
+        "total": 436
       }
     },
     "bnxt": {
       "nombre": "BNXT League",
       "archivo": "ligas/bnxt.csv",
-      "fecha_extraccion": "2026-10-31T19:33:23.504317+00:00",
+      "fecha_extraccion": "2026-11-08T23:26:24.368486+00:00",
       "fases": {
         "regular": 199,
         "total": 199
@@ -50,16 +50,16 @@
     "bsl": {
       "nombre": "Basketbol Süper Ligi",
       "archivo": "ligas/bsl.csv",
-      "fecha_extraccion": "2026-10-29T13:37:16.039711+00:00",
+      "fecha_extraccion": "2026-11-08T23:24:01.689381+00:00",
       "fases": {
-        "regular": 255,
-        "total": 255
+        "regular": 263,
+        "total": 263
       }
     },
     "cba": {
       "nombre": "Chinese Basketball Association",
       "archivo": "ligas/cba.csv",
-      "fecha_extraccion": "2026-10-31T19:06:35.917800+00:00",
+      "fecha_extraccion": "2026-11-08T23:26:42.162573+00:00",
       "fases": {
         "regular": 278,
         "total": 278
@@ -68,97 +68,105 @@
     "eurocup": {
       "nombre": "BKT EuroCup",
       "archivo": "ligas/eurocup.csv",
-      "fecha_extraccion": "2026-10-29T13:36:36.675985+00:00",
+      "fecha_extraccion": "2026-11-08T23:22:26.570955+00:00",
       "fases": {
-        "regular": 411,
-        "total": 411
+        "regular": 419,
+        "total": 419
       }
     },
     "euroleague": {
       "nombre": "Turkish Airlines EuroLeague",
       "archivo": "ligas/euroleague.csv",
-      "fecha_extraccion": "2026-10-29T13:36:36.864413+00:00",
+      "fecha_extraccion": "2026-11-08T23:22:26.270370+00:00",
       "fases": {
-        "regular": 288,
-        "total": 288
+        "regular": 292,
+        "total": 292
       }
     },
     "feb1": {
       "nombre": "Primera FEB",
       "archivo": "ligas/feb1.csv",
-      "fecha_extraccion": "2026-10-29T13:56:07.408343+00:00",
+      "fecha_extraccion": "2026-11-08T23:24:11.706927+00:00",
       "fases": {
-        "regular": 237,
-        "total": 237
+        "regular": 244,
+        "total": 244
       }
     },
     "feb2": {
       "nombre": "Segunda FEB",
       "archivo": "ligas/feb2.csv",
-      "fecha_extraccion": "2026-10-29T13:56:07.642186+00:00",
+      "fecha_extraccion": "2026-11-08T23:24:17.445652+00:00",
       "fases": {
-        "regular": 347,
-        "total": 347
+        "regular": 353,
+        "total": 353
       }
     },
     "feb3": {
       "nombre": "Tercera FEB",
       "archivo": "ligas/feb3.csv",
-      "fecha_extraccion": "2026-10-29T13:56:08.173573+00:00",
+      "fecha_extraccion": "2026-11-08T23:25:36.907066+00:00",
       "fases": {
-        "regular": 1822,
-        "total": 1822
+        "regular": 1911,
+        "total": 1911
       }
     },
     "fec": {
       "nombre": "FIBA Europe Cup",
       "archivo": "ligas/fec.csv",
-      "fecha_extraccion": "2026-10-29T13:36:48.876418+00:00",
+      "fecha_extraccion": "2026-11-08T23:23:41.378161+00:00",
       "fases": {
-        "regular": 619,
-        "total": 619
+        "regular": 638,
+        "total": 638
       }
     },
     "gbl": {
       "nombre": "Greek Basket League (A1)",
       "archivo": "ligas/gbl.csv",
-      "fecha_extraccion": "2026-10-29T13:38:23.422592+00:00",
+      "fecha_extraccion": "2026-11-08T23:23:56.836533+00:00",
       "fases": {
-        "regular": 202,
-        "total": 202
+        "regular": 209,
+        "total": 209
+      }
+    },
+    "gleague": {
+      "nombre": "NBA G League",
+      "archivo": "ligas/gleague.csv",
+      "fecha_extraccion": "2026-11-08T23:22:26.140296+00:00",
+      "fases": {
+        "total": 246
       }
     },
     "lba": {
       "nombre": "LBA Serie A (Italia)",
       "archivo": "ligas/lba.csv",
-      "fecha_extraccion": "2026-10-29T13:36:36.864653+00:00",
+      "fecha_extraccion": "2026-11-08T23:22:26.270561+00:00",
       "fases": {
-        "regular": 226,
-        "total": 226
+        "regular": 232,
+        "total": 232
       }
     },
     "lnb": {
       "nombre": "LNB Betclic ÉLITE (Francia)",
       "archivo": "ligas/lnb.csv",
-      "fecha_extraccion": "2026-10-29T14:05:36.001774+00:00",
+      "fecha_extraccion": "2026-11-08T23:22:26.338625+00:00",
       "fases": {
-        "regular": 195,
-        "total": 195
+        "regular": 204,
+        "total": 204
       }
     },
     "nba": {
       "nombre": "NBA",
       "archivo": "ligas/nba.csv",
-      "fecha_extraccion": "2026-10-29T13:36:36.637009+00:00",
+      "fecha_extraccion": "2026-11-08T23:22:26.293294+00:00",
       "fases": {
-        "regular": 425,
-        "total": 425
+        "regular": 459,
+        "total": 459
       }
     },
     "nbl": {
       "nombre": "National Basketball League (NBL)",
       "archivo": "ligas/nbl.csv",
-      "fecha_extraccion": "2026-10-31T17:37:50.091141+00:00",
+      "fecha_extraccion": "2026-11-08T23:26:13.921143+00:00",
       "fases": {
         "regular": 154,
         "total": 154
@@ -167,7 +175,7 @@
     "vtb": {
       "nombre": "VTB United League (Liga VTB)",
       "archivo": "ligas/vtb.csv",
-      "fecha_extraccion": "2026-10-31T18:17:09.103302+00:00",
+      "fecha_extraccion": "2026-11-08T23:26:35.097431+00:00",
       "fases": {
         "regular": 158,
         "total": 158
