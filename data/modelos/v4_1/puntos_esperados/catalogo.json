@@ -223,6 +223,30 @@
    "estado": "experimental",
    "def": "Net real en pista, mismos tramos (referencia de xnet_on)"
   },
+  "net_off": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "Net real del equipo SIN él en pista (totales del equipo − en pista), mismos tramos (F2-d)"
+  },
+  "xnet_off": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "xNet del equipo sin él en pista (F2-d)"
+  },
+  "net_onoff": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "net_on − net_off: on/off bruto con los tramos del contrato (F2-d)"
+  },
+  "xnet_onoff": {
+   "grano": "jugador",
+   "unidad": "pts/100",
+   "estado": "experimental",
+   "def": "xnet_on − xnet_off: on/off sin la suerte del tiro (F2-d; diagnóstico del Impacto en pista y objetivo de F2-e)"
+  },
   "xp_creado_asistencias": {
    "grano": "jugador",
    "unidad": "puntos",
@@ -252,12 +276,6 @@
    "unidad": "puntos",
    "estado": "propuesto",
    "def": "valor esperado de la segunda oportunidad tras un fallo (rebote ofensivo esperado)"
-  },
-  "xnet_onoff": {
-   "grano": "jugador",
-   "unidad": "pts/100",
-   "estado": "propuesto",
-   "def": "xnet_on − xnet del equipo sin él: on/off sin la suerte del tiro (contraparte realizada de menor ruido para el Impacto en pista)"
   }
  }
 }

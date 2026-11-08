@@ -511,3 +511,104 @@ def test_ajustar_suma_y_pares_en_pista():
     assert np.array_equal(ajustar_suma(A, 200.0, 40.0), A)             # ya válida: no cambia (paridad)
     P = pares_en_pista(A / 40.0)
     assert np.isclose(np.triu(P, 1).sum(), 10.0)                       # 10 parejas en pista
+
+
+# =============================================================================================== F2 · Impacto en pista
+def test_pi_suma_diez_parejas_y_valor_en_pista():
+    from bbequipo.ecosistema import impacto_pista as IP
+    rng = np.random.default_rng(3)
+    Pm = rng.dirichlet(np.ones(9), 50) * 5
+    PI = IP.pi_matriz(Pm)
+    assert np.allclose(np.einsum("si,sij->s", Pm, PI), 20.0)            # Σ_j p_j Σ_k π_jk = 2 · Σ_{j<k} P_jk = 20
+    assert np.allclose(PI[:, np.arange(9), np.arange(9)], 0.0)
+
+    class Ins:
+        Mr = np.diag([0.5, -0.2]); P4 = np.eye(2)
+        def valor(self, p, l): return (1.0 if p == "a" else 0.0), 0.0, "beta"
+        def z(self, ps): return np.array([[1.0, 0.0] if p in ("a", "b") else [0.0, 0.0] for p in ps])
+        def h(self, ps): return np.zeros(len(ps))
+    pids = ["a", "b"] + [f"x{i}" for i in range(7)]
+    r = IP.valor_en_pista(Ins(), "acb", pids, Pm, rng)
+    # la sinergia de «a» es π_ab·φ_ab con φ_ab = z_aᵀ M z_b = 0,5; la de los demás (z = 0) es 0
+    assert np.allclose(r["syn"][0], 0.5 * PI[:, 0, 1].mean()) and np.allclose(r["syn"][2:], 0.0)
+    assert np.allclose(r["v"].mean(0)[2:], 0.0)
+
+
+def test_familiaridad_pares_y_matriz():
+    from bbequipo.ecosistema import impacto_pista as IP
+    tr = pd.DataFrame({"A": [("a|t", "b|t", "c|t", "d|t", "e|t")], "B": [("f|t", "g|t", "h|t", "i|t", "j|t")], "poss": [100.0]})
+    pares = IP.pares_temporada(pd.concat([tr, tr.assign(poss=50.0)], ignore_index=True))
+    assert pares[("a", "b")] == 150.0 and ("a", "f") not in pares and len(pares) == 20
+    G = IP.familiaridad_matriz(pares, ["b", "a", "z"])
+    assert G[0, 1] == G[1, 0] == pytest.approx(np.log1p(1.5)) and G[0, 2] == 0.0
+
+
+def test_familiaridad_fwl_desplazamiento_exacto():
+    """Sembrar δ·x en el resultado desplaza δ̂ exactamente en δ (estimador lineal): base del EMD analítico."""
+    from bbequipo.ecosistema import familiaridad as FA
+    tr = liga_sintetica(partidos=120, semilla=4)
+    lt = OS.preparar(tr, 1)
+    lt.y_xp = lt.y.copy()
+    rng = np.random.default_rng(2)
+    x = rng.normal(0, 1, lt.n)
+    cfg = _cfg_rapido()
+    r0 = FA.delta_lt(lt, x, cfg)
+    lt2 = lt.con_y(lt.y + 0.7 * x)
+    lt2.y_xp = lt2.y.copy()
+    r1 = FA.delta_lt(lt2, x, cfg)
+    if r1["lambda"] == r0["lambda"]:
+        assert r1["delta"] - r0["delta"] == pytest.approx(0.7, abs=1e-8)
+    ag = FA.agregar(pd.DataFrame({"delta": [1.0, 3.0], "ee": [1.0, 1.0], "liga": ["a", "b"], "temporada": ["s", "s"]}))
+    assert ag["delta"] == pytest.approx(2.0) and ag["ee"] == pytest.approx(1 / np.sqrt(2))
+
+
+def test_pct_esperado_y_calibracion_sin_fuga():
+    from bbequipo.ecosistema import examen_impacto as EX
+    ref = np.arange(100.0)
+    assert EX.pct_esperado(np.array([49.5]), np.array([0.0]), ref)[0] == pytest.approx(50.0, abs=0.6)
+    p = EX.pct_esperado(np.array([0.0, 50.0, 99.0]), np.array([5.0, 5.0, 5.0]), ref)
+    assert np.all(np.diff(p) > 0)
+    rng = np.random.default_rng(0)
+    n = 1500
+    e = pd.DataFrame({"anio": np.repeat([2021, 2022, 2023], n), "c": rng.uniform(0, 100, 3 * n), "onoff_ok": True})
+    e["pct_onoff"] = np.clip(e["c"] + rng.normal(0, 20, 3 * n), 0, 100)
+    a = EX.calibrar(e.copy(), "c", [2021, 2022, 2023], "X")
+    e2 = e.copy()
+    e2.loc[e2["anio"] == 2023, "pct_onoff"] = 0.0                     # el realizado del propio corte no entra en su calibración
+    b = EX.calibrar(e2, "c", [2021, 2022, 2023], "X")
+    s = e["anio"] == 2023
+    assert np.allclose(a.loc[s, "X"], b.loc[s, "X"]) and (a.loc[s, "X_lo80"] <= a.loc[s, "X"]).all()
+
+
+def test_bootstrap_por_equipos_y_spearman():
+    from bbequipo.ecosistema import examen_impacto as EX
+    rng = np.random.default_rng(1)
+    d = pd.DataFrame({"anio": 2022, "liga_d": "acb", "team_d": rng.integers(0, 40, 800).astype(str), "x": rng.normal(size=800)})
+    d["y"] = d["x"] + rng.normal(size=800)
+    assert len(EX.clusters(d)) == d["team_d"].nunique()
+    bs = EX.bootstrap(d, lambda z: np.array([EX.spearman(z["x"], z["y"])]), 200, 0)
+    lo, hi = EX._ic(bs[:, 0])
+    assert lo < EX.spearman(d["x"], d["y"]) < hi and lo > 0.5
+
+
+def test_xp_onoff_identidad():
+    from bbequipo.ecosistema import puntos_esperados as PE
+    tr = pd.DataFrame({"team_a": ["1", "1"], "team_b": ["2", "2"], "quinteto_a": ["a|b|c|d|e", "a|b|c|d|f"],
+                       "quinteto_b": ["g|h|i|j|k"] * 2, "poss": [10.0, 30.0], "xp_a": [12.0, 30.0], "xp_b": [10.0, 33.0],
+                       "a_pts": [14, 27], "b_pts": [9, 36]})
+    O = PE.en_pista(tr)
+    e = O.loc[("1", "e")]
+    # e: en pista sólo el tramo 1 (net +50), fuera el tramo 2 (net −30) → on/off = +80; con xp: +20 − (−10) = +30
+    assert PE.CAMPOS[("jugador", "net_onoff")](e) == pytest.approx(80.0)
+    assert PE.CAMPOS[("jugador", "xnet_onoff")](e) == pytest.approx(30.0)
+    assert np.isnan(PE.CAMPOS[("jugador", "net_off")](O.loc[("1", "a")]))   # siempre en pista: sin «off»
+
+
+def test_escala_producto_monotona():
+    from bbequipo.ecosistema import impacto_pista as IP
+    ref = {"F_grupo": {"domestica_alta": {"n": 100, "cuantiles": {f"{q:.2f}": float(q * 10 - 5) for q in np.linspace(0, 1, 21)}}},
+           "isotonica": {"x": [0.0, 100.0], "y": [10.0, 90.0]},
+           "rango_deciles": {"bordes": list(np.linspace(0, 100, 11)), "q10": [0.0] * 10, "q90": [100.0] * 10}, "sello": "EXPERIMENTAL"}
+    V = np.random.default_rng(0).normal(0, 0.3, (200, 3)) + np.array([-3.0, 0.0, 3.0])
+    out = IP.escala_producto(ref, "acb", CE.cargar_v40(CFG), V)
+    assert np.all(np.diff(out["impacto_pista"]) > 0) and (out["impacto_pista_sello"] == "EXPERIMENTAL").all()

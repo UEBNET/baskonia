@@ -97,6 +97,13 @@ class Ecosistema:
         od = pd.concat(od).sort_values("temporada").drop_duplicates("persona_id", keep="last") if od else pd.DataFrame()
         self.b_of = dict(zip(od.get("persona_id", []), od.get("beta_of", [])))
         self.b_def = dict(zip(od.get("persona_id", []), od.get("beta_def", [])))
+        # F2: referencia del Impacto en pista (impacto_pista/referencia_impacto_pista.json) y referencias NC de la v4.0
+        pr = CE.RAIZ / cfg["salida"] / "impacto_pista" / "referencia_impacto_pista.json"
+        self.ref_ip = json.loads(pr.read_text(encoding="utf-8")) if pr.exists() else None
+        da = CE.RAIZ / self.cfg40["salida"] / "equipo" / "anclas"
+        t1 = f"{int(temporada[:4]) + 1}-{str(int(temporada[:4]) + 2)[-2:]}"
+        cand = [da / f"referencias_nc_{t1}.json", da / f"referencias_nc_{temporada}.json"] + sorted(da.glob("referencias_nc_*.json"), reverse=True)
+        self.ref_nc = next((json.loads(f.read_text(encoding="utf-8")) for f in cand if f.exists()), None)
         pc = CE.RAIZ / cfg["salida"] / "escenarios" / "minutos_calibracion.json"
         self.cal_min = json.loads(pc.read_text(encoding="utf-8"))["producto"] if pc.exists() else None
         # El motor de producción de la capa 4 corre con la configuración de corte de la v3.2, que no trae el bloque
@@ -173,9 +180,49 @@ class Ecosistema:
         return out
 
     # ---------------------------------------------------------------- simular
+    # ---------------------------------------------------------------- F2 · Impacto en pista y NC por escenario
+    def impacto_en_pista(self, liga: str, e: dict, semilla: int = 0) -> pd.DataFrame:
+        """Impacto en pista de cada jugador del escenario (v_j con los compañeros y minutos del escenario → percentil del
+        grupo de liga → calibración isotónica al on/off; rango del 80 % por deciles). Sello según la puerta F2-a."""
+        from . import impacto_pista as IP
+        if self.ref_ip is None:
+            return pd.DataFrame()
+        if not hasattr(self, "_ins_ip"):
+            self._ins_ip = IP.InsumosProduccion(self.eq)
+        r = IP.valor_en_pista(self._ins_ip, liga, e["pids"], e["Pm"], np.random.default_rng(semilla + 99))
+        out = IP.escala_producto(self.ref_ip, liga, self.cfg40, r["v"])
+        out.insert(0, "persona_id", e["pids"])
+        out["ip_sinergia"] = r["syn"]
+        return out.set_index("persona_id")
+
+    def nc_escenario(self, liga: str, team_id: str, e: dict, roles: dict[str, str], n_sim: int = 400) -> pd.DataFrame:
+        """F2-b: NC₁ (con adaptación) y NC₂ (sin ella) de cada jugador CON los compañeros del escenario: el simulador v3.3
+        de la v4.0 (S.simular) con miembros = el resto de la plantilla del escenario y los roles fijados de las altas."""
+        from ..anclas import nivel_cerno
+        S, c = self.eq.S, self.eq.c
+        if self.ref_nc is None:
+            return pd.DataFrame()
+        pres = {p: float(x) for p, x in zip(e["P"]["persona_id"].astype(str), e["P"]["presencia"])} if "presencia" in e["P"] else {}
+        filas = []
+        for p in e["pids"]:
+            mi = [(q, pres.get(q, 1.0)) for q in e["pids"] if q != p]
+            otros = {q: r for q, r in roles.items() if q != p and r}
+            fi = S.jugador_insumos(c, p)
+            p3 = fi.get("pos3") if fi and isinstance(fi.get("pos3"), str) else None
+            fila = {"persona_id": p}
+            for k, sa in (("NC1", False), ("NC2", True)):
+                res = S.simular(c, p, liga, team_id, mi, n_sim=n_sim, detalle=False, sin_adaptacion=sa,
+                                rol=roles.get(p), roles=otros or None)
+                if "error" in res:
+                    continue
+                nc = nivel_cerno(res, liga, p3, self.ref_nc)
+                fila.update({k: nc.get("NC"), f"{k}_lo80": nc.get("NC_lo80"), f"{k}_hi80": nc.get("NC_hi80")})
+            filas.append(fila)
+        return pd.DataFrame(filas).set_index("persona_id")
+
     def simular(self, liga: str, team_id: str, plantilla: list[tuple[str, float]], altas: list[tuple[str, str | None]],
                 bajas: list[str], net_actual: float, n_sim: int | None = None, semilla: int = 0,
-                paridad_capa4: bool = False, aplicar_p5: bool = True) -> dict:
+                paridad_capa4: bool = False, aplicar_p5: bool = True, impacto_pista: bool = True, nc: bool = False) -> dict:
         """API del encargo: ecosistema.simular(R, altas=[(id, rol)], bajas=[id]) → equipo, jugadores, atribución, rangos.
         `paridad_capa4`: la base usa la semilla s y los escenarios s + 1, como `Equipo.delta` (prueba de paridad); por
         defecto todos comparten la semilla (números aleatorios comunes) y la diferencia Monte Carlo de la base es 0.
@@ -292,6 +339,15 @@ class Ecosistema:
         J["rol_fijado"] = [dict(altas).get(p) for p in J.index]
         J["d_min"] = J["min_media_despues"].fillna(0) - J["min_media_antes"].fillna(0)
         J["d_usg"] = J["usg_despues"] - J["usg_antes"]
+        # F2: Impacto en pista (antes / después) y, si se pide, NC₁/NC₂ con los compañeros de cada plantilla
+        if impacto_pista and self.ref_ip is not None:
+            for e, suf in ((base, "_antes"), (final, "_despues")):
+                J = J.join(self.impacto_en_pista(liga, e, semilla).add_suffix(suf), how="left")
+            J["d_impacto_pista"] = J["impacto_pista_despues"] - J["impacto_pista_antes"]
+        if nc:
+            roles_alta = {a: r for a, r in altas if r}
+            J = J.join(self.nc_escenario(liga, team_id, base, {}).add_suffix("_antes"), how="left")
+            J = J.join(self.nc_escenario(liga, team_id, final, roles_alta).add_suffix("_despues"), how="left")
         # impacto cruzado F2-B por movimiento
         cr = [self.cruzado("alta", a, final) for a, _ in altas] + [self.cruzado("baja", b, base) for b in bajas]
         CR = pd.concat([x for x in cr if len(x)], ignore_index=True) if any(len(x) for x in cr) else pd.DataFrame()

@@ -67,6 +67,10 @@ def main(argv=None):
     es.add_argument("--bajas", nargs="*", default=[])
     es.add_argument("--net-actual", type=float, default=None)
     es.add_argument("--salida", default=None)
+    ip = sub.add_parser("impacto-pista", help="F2: Impacto en pista por corte (sin fuga), examen §6.2, contextualidad y referencia")
+    ip.add_argument("--cortes", nargs="*", type=int, default=None)
+    sub.add_parser("familiaridad", help="F2-c: δ de familiaridad por tramo (FWL con el RAPM ridge) y su robustez POST HOC")
+    sub.add_parser("xp-onoff", help="F2-d: añade net_off, xnet_off, net_onoff y xnet_onoff a las tablas de jugadores de la capa XP")
     sub.add_parser("benchmark", help="F0.3: benchmark de decisión sobre la v4.0")
     sub.add_parser("ausencias", help="F0.5: auditoría de ausencias (banco V-AUS)")
     sub.add_parser("inventario", help="F0.6/F0.7: residuos de Fit y ADAPT; referencias fijas a club y temporada")
@@ -131,6 +135,24 @@ def main(argv=None):
         if a.salida:
             open(a.salida, "w", encoding="utf-8").write(txt)
         print(txt[:4000])
+    elif a.orden == "impacto-pista":
+        from . import impacto_pista as IPm
+        r = IPm.ejecutar(cfg, cortes=a.cortes)
+        mon = r["monotonia"]
+        _registro(cfg, "F2_impacto_pista", {"cortes": cfg["comunes"]["cortes"], "bootstrap": cfg["comunes"]["bootstrap"]},
+                  {"spearman_ip": mon["IP"]["spearman"], "spearman_im_v40": mon["IM_onoff"]["spearman"],
+                   "dif_ip_im_ic_inf": mon["IP_menos_IM_v40"]["ic95"][0], "cobertura80": r["cobertura_80"],
+                   "puerta": float(r["puerta"]["pasa"])},
+                  [CE.dir_salida(cfg, "impacto_pista") / "examen_f2.json"])
+        print(json.dumps({k: r[k] for k in ("puerta", "candidatos_entran")}, ensure_ascii=False, indent=1, default=str))
+    elif a.orden == "familiaridad":
+        from . import familiaridad as FA
+        r = FA.ejecutar(cfg)
+        rb = FA.robustez(cfg)
+        print(json.dumps({"global": r["global"], "robustez_l10": rb["delta_l10"], "placebo_cv": rb["placebo_cv"]}, indent=1, default=float))
+    elif a.orden == "xp-onoff":
+        from . import puntos_esperados as PE
+        print(PE.completar_onoff(cfg))
     elif a.orden == "orden-sinergias-resumen":
         _resumen_orden(cfg)
     elif a.orden == "benchmark":

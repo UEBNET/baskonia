@@ -106,6 +106,15 @@ def _f(A): return 100 * _div(A["xp_against_on"], A["poss_on"])                 #
 def _f(A): return 100 * _div(A["xp_for_on"] - A["xp_against_on"], A["poss_on"])    # noqa: E704,F811
 @campo("jugador", "net_on")
 def _f(A): return 100 * _div(A["pts_for_on"] - A["pts_against_on"], A["poss_on"])  # noqa: E704,F811
+# F2-d (08-11-2026): on/off del jugador con los mismos tramos; «off» = el equipo sin él en pista (totales del equipo − en pista)
+@campo("jugador", "net_off")
+def _f(A): return 100 * _div((A["pts_for_eq"] - A["pts_for_on"]) - (A["pts_against_eq"] - A["pts_against_on"]), A["poss_eq"] - A["poss_on"])  # noqa: E704,F811,E501
+@campo("jugador", "xnet_off")
+def _f(A): return 100 * _div((A["xp_for_eq"] - A["xp_for_on"]) - (A["xp_against_eq"] - A["xp_against_on"]), A["poss_eq"] - A["poss_on"])  # noqa: E704,F811,E501
+@campo("jugador", "net_onoff")
+def _f(A): return CAMPOS[("jugador", "net_on")](A) - CAMPOS[("jugador", "net_off")](A)        # noqa: E704,F811
+@campo("jugador", "xnet_onoff")
+def _f(A): return CAMPOS[("jugador", "xnet_on")](A) - CAMPOS[("jugador", "xnet_off")](A)      # noqa: E704,F811
 
 
 # =============================================================================================== modelo de tiro
@@ -203,6 +212,28 @@ def tramos_xp(tr: pd.DataFrame, t: pd.DataFrame) -> pd.DataFrame:
 
 
 # =============================================================================================== jugadores
+_ON = ["poss_on", "xp_for_on", "xp_against_on", "pts_for_on", "pts_against_on"]
+
+
+def en_pista(tr: pd.DataFrame) -> pd.DataFrame:
+    """Por (equipo, jugador): posesiones, xp y puntos a favor y en contra con él en pista y del equipo en todos los tramos
+    (sufijo _eq), con los tramos del contrato. Lo «off» es la diferencia (campos net_off, xnet_off, *_onoff)."""
+    on, eq = [], []
+    for lado, q, f, c in (("a", "quinteto_a", "a", "b"), ("b", "quinteto_b", "b", "a")):
+        d = pd.DataFrame({"team_id": tr[f"team_{lado}"].astype(str).to_numpy(), "q": tr[q].astype(str).to_numpy(),
+                          "poss_on": tr["poss"].to_numpy(float), "xp_for_on": tr[f"xp_{f}"].to_numpy(float),
+                          "xp_against_on": tr[f"xp_{c}"].to_numpy(float),
+                          "pts_for_on": pd.to_numeric(tr[f"{f}_pts"]).to_numpy(float),
+                          "pts_against_on": pd.to_numeric(tr[f"{c}_pts"]).to_numpy(float)})
+        eq.append(d.drop(columns="q"))
+        d["player_id"] = d["q"].str.split("|")
+        on.append(d.explode("player_id").drop(columns="q"))
+    O = pd.concat(on).groupby(["team_id", "player_id"])[_ON].sum()
+    E = pd.concat(eq).groupby("team_id")[_ON].sum()
+    E.columns = [c.replace("_on", "_eq") for c in _ON]
+    return O.join(E, on="team_id")
+
+
 def agregar_jugadores(t: pd.DataFrame, tr: pd.DataFrame, liga: str, temp: str, cfg: dict) -> pd.DataFrame:
     """Tabla por jugador (liga, temporada, equipo, jugador) con todos los campos «jugador» del catálogo."""
     zs = cfg["puntos_esperados"]["zonas"] + [cfg["puntos_esperados"]["sin_coordenadas"]]
@@ -238,18 +269,7 @@ def agregar_jugadores(t: pd.DataFrame, tr: pd.DataFrame, liga: str, temp: str, c
     fiab = np.where(n > 0, tau2 / (tau2 + s2e / np.maximum(n, 1)), 0.0) if tau2 > 0 else np.zeros(len(n))
     A["_fiab"] = fiab
     A["_ase_contraido"] = np.where(n > 0, mu + fiab * (np.nan_to_num(ase) - mu), np.nan)
-    # en pista (tramos del contrato): xp y puntos a favor y en contra
-    on = []
-    for lado, q, f, c in (("a", "quinteto_a", "a", "b"), ("b", "quinteto_b", "b", "a")):
-        d = pd.DataFrame({"team_id": tr[f"team_{lado}"].astype(str).to_numpy(), "q": tr[q].astype(str).to_numpy(),
-                          "poss_on": tr["poss"].to_numpy(float), "xp_for_on": tr[f"xp_{f}"].to_numpy(float),
-                          "xp_against_on": tr[f"xp_{c}"].to_numpy(float),
-                          "pts_for_on": pd.to_numeric(tr[f"{f}_pts"]).to_numpy(float),
-                          "pts_against_on": pd.to_numeric(tr[f"{c}_pts"]).to_numpy(float)})
-        d["player_id"] = d["q"].str.split("|")
-        on.append(d.explode("player_id").drop(columns="q"))
-    O = pd.concat(on).groupby(["team_id", "player_id"])[["poss_on", "xp_for_on", "xp_against_on", "pts_for_on",
-                                                         "pts_against_on"]].sum()
+    O = en_pista(tr)
     A.index = pd.MultiIndex.from_arrays([A.index.get_level_values(0).astype(str), A.index.get_level_values(1).astype(str)],
                                         names=k)
     A = A.join(O, how="outer").fillna({c: 0.0 for c in sumas + list(O.columns)})
@@ -352,3 +372,35 @@ def cargar_tramos(cfg: dict, temp: str, liga: str) -> pd.DataFrame:
         f.parent.mkdir(parents=True, exist_ok=True)
         r["tramos"].to_csv(f, index=False, float_format="%.5g")
     return pd.read_csv(f, low_memory=False)
+
+
+def completar_onoff(cfg: dict, temporadas=None, progreso=print) -> dict:
+    """F2-d (08-11-2026): añade los campos on/off del catálogo (net_off, xnet_off, net_onoff, xnet_onoff) a las tablas de
+    jugadores ya publicadas, desde los tramos anotados de la caché (mismo cálculo que agregar_jugadores, sin re-anotar tiros)."""
+    cp = cfg["puntos_esperados"]
+    dv = CE.dir_salida(cfg, "puntos_esperados")
+    nuevos = [n for n in ("net_off", "xnet_off", "net_onoff", "xnet_onoff") if n in catalogo(cfg)]
+    n = 0
+    for temp in temporadas or cp["temporadas"]:
+        fj = dv / f"jugadores_{temp}.csv.gz"
+        if not fj.exists():
+            continue
+        J = pd.read_csv(fj, low_memory=False, dtype={"team_id": str, "player_id": str})
+        partes = []
+        for liga in J["liga"].unique():
+            tr = cargar_tramos(cfg, temp, liga)
+            O = en_pista(tr)
+            x = pd.DataFrame({"liga": liga, "team_id": O.index.get_level_values(0).astype(str),
+                              "player_id": O.index.get_level_values(1).astype(str)})
+            for c in nuevos:
+                x[c] = np.asarray(CAMPOS[("jugador", c)](O), float)
+            partes.append(x)
+        X = pd.concat(partes, ignore_index=True)
+        J = J.drop(columns=[c for c in nuevos if c in J]).merge(X, on=["liga", "team_id", "player_id"], how="left")
+        J.to_csv(fj, index=False, float_format="%.5g")
+        n += len(J)
+        if progreso:
+            progreso(f"  on/off xp {temp}: {len(J)} filas · xnet_onoff no nulo {J['xnet_onoff'].notna().mean():.3f}", flush=True)
+    (dv / "catalogo.json").write_text(json.dumps({"version_modelo": cp["version_modelo"], "catalogo": cp["catalogo"]},
+                                                 ensure_ascii=False, indent=1), encoding="utf-8")
+    return {"filas": n, "campos": nuevos}

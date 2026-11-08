@@ -1,0 +1,103 @@
+{
+ "generado": "2026-11-08T23:17:54",
+ "definicion": {
+  "definicion": "f_jk = posesiones que j y k compartieron en pista (mismo lado) en la temporada t−1; g(f) = log(1 + f/100)",
+  "examen_tramo": "δ por tramo, conjunto con el RAPM ridge de cada liga-temporada (FWL: δ = x̃ᵀW y / x̃ᵀW x, x = Σ_{parejas A} g − Σ_{parejas B} g), y = 0,75·y_real + 0,25·y_xp (F2-e), IC95 robusto por partido, agregado por inverso de la varianza",
+  "emd": "analitico_estimador_lineal",
+  "entra_si": "δ con IC95 que excluye 0 Y mejora la monotonía del Impacto con IC95 > 0"
+ },
+ "global": {
+  "delta": 0.37912179541044405,
+  "ee": 0.01615825946394698,
+  "ic95": [
+   0.347451606861108,
+   0.4107919839597801
+  ],
+  "excluye_0": true,
+  "emd_80": 0.04526897971419386,
+  "ligas_temporada": 79,
+  "Q_cochran": 243.05919034702472,
+  "gl": 78
+ },
+ "elite_club": {
+  "delta": 0.39517164078079314,
+  "ee": 0.04147705935652057,
+  "ic95": [
+   0.3138766044420128,
+   0.47646667711957347
+  ],
+  "excluye_0": true,
+  "emd_80": 0.11620212949322803,
+  "ligas_temporada": 15,
+  "Q_cochran": 32.583545491635874,
+  "gl": 14
+ },
+ "hasta_temporada": {
+  "2021-22": {
+   "delta": 0.27856672295878815,
+   "ee": 0.03982342156953426,
+   "ic95": [
+    0.200512816682501,
+    0.3566206292350753
+   ],
+   "excluye_0": true,
+   "emd_80": 0.11156929786920718,
+   "ligas_temporada": 13,
+   "Q_cochran": 41.09554518717719,
+   "gl": 12
+  },
+  "2022-23": {
+   "delta": 0.3375756407938821,
+   "ee": 0.02857317618927444,
+   "ic95": [
+    0.2815722154629042,
+    0.39357906612486
+   ],
+   "excluye_0": true,
+   "emd_80": 0.08005061041187127,
+   "ligas_temporada": 28,
+   "Q_cochran": 95.92640089928108,
+   "gl": 27
+  },
+  "2023-24": {
+   "delta": 0.3861172927593405,
+   "ee": 0.02111539791177865,
+   "ic95": [
+    0.34473111285225433,
+    0.42750347266642663
+   ],
+   "excluye_0": true,
+   "emd_80": 0.05915689878963907,
+   "ligas_temporada": 45,
+   "Q_cochran": 190.08784005581228,
+   "gl": 44
+  },
+  "2024-25": {
+   "delta": 0.38332183404361037,
+   "ee": 0.017904637295353437,
+   "ic95": [
+    0.3482287449447176,
+    0.4184149231425031
+   ],
+   "excluye_0": true,
+   "emd_80": 0.05016163184666219,
+   "ligas_temporada": 62,
+   "Q_cochran": 219.67231829431353,
+   "gl": 61
+  },
+  "2025-26": {
+   "delta": 0.37912179541044405,
+   "ee": 0.01615825946394698,
+   "ic95": [
+    0.347451606861108,
+    0.4107919839597801
+   ],
+   "excluye_0": true,
+   "emd_80": 0.04526897971419386,
+   "ligas_temporada": 79,
+   "Q_cochran": 243.05919034702472,
+   "gl": 78
+  }
+ },
+ "segundos": 25
+}
