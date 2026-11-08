@@ -44,7 +44,7 @@ class InsumosCorte:
         from .. import equipo as EQ, rapm as RP, sinergia as SG, conjunto as CJ
         from ..examen_f1 import perfiles_corte
         cfg40 = CE.cargar_v40(cfg)
-        self.cfg, self.cfg40, self.a = cfg, cfg40, a
+        self.cfg41, self.cfg, self.cfg40, self.a = cfg, cfg40, cfg40, a     # cfg = v4.0 (lo que esperan pesos_pl e Insumos.h)
         self.temp = f"{a}-{str(a + 1)[-2:]}"
         self.temp1 = f"{a + 1}-{str(a + 2)[-2:]}"
         dv = CE.RAIZ / cfg40["salida"]
