@@ -579,11 +579,16 @@ def examen(progreso=print) -> dict:
         for m in mets:
             x = g[m]
             margen = MARGEN_V40.get(m, MARGEN_C if m == "C" else MARGEN_OTRAS)
+            # IC95 superior: el mayor de los dos remuestreos (persona, prerregistro; club de destino × corte, el del
+            # examen v3.2/v3.3), para no elegir a posteriori el más favorable
             sup = max(x["persona"]["rel_ic95"][1], x["club_corte"]["rel_ic95"][1])
             cob = x["cob80_cal"]["v42"]
             cob_ok = cob is not None and 0.75 <= cob <= 0.85
             reglas[m] = {"margen_rel": margen, "ic95_sup_rel": sup, "mae_no_peor": bool(sup < margen),
                          "cobertura80_v42": cob, "cobertura_en_rango": bool(cob_ok), "cumple": bool(sup < margen and cob_ok)}
+            if m == "C":            # contribución: no es producción por 100 ni minutos → informativa, no decide
+                reglas[m]["decide"] = False
+                continue
             pasa &= reglas[m]["cumple"]
         return reglas, bool(pasa)
 
