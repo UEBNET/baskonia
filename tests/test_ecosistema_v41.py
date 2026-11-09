@@ -612,3 +612,42 @@ def test_escala_producto_monotona():
     V = np.random.default_rng(0).normal(0, 0.3, (200, 3)) + np.array([-3.0, 0.0, 3.0])
     out = IP.escala_producto(ref, "acb", CE.cargar_v40(CFG), V)
     assert np.all(np.diff(out["impacto_pista"]) > 0) and (out["impacto_pista_sello"] == "EXPERIMENTAL").all()
+
+
+# =============================================================================================== F3 · bancos y sellos
+def test_f3_metricas_y_base_ii():
+    from bbequipo.ecosistema import bancos as BA, examen_f3 as X3
+    A = pd.DataFrame({"min": [60.0, 30.0], "fga": [20.0, 10.0], "fta": [5.0, 0.0], "fgm": [10.0, 4.0], "fgm_asist": [5.0, 4.0],
+                      "pts": [26.0, 9.0], "poss_on": [100.0, 50.0], "team_fga_on": [80.0, 40.0], "team_fta_on": [10.0, 0.0],
+                      "partidos": [3, 3]}, index=["a", "b"])
+    m = BA.metricas(A)
+    assert m.loc["a", "minutos"] == 20.0 and m.loc["a", "cuota_tiro"] == 25.0 and m.loc["b", "pct_asistidas"] == 100.0
+    assert m.loc["a", "uso"] == pytest.approx(100 * 22.2 / 84.4) and m.loc["a", "pts100"] == 26.0
+    C = pd.DataFrame({"evento": ["e", "e"], "persona_id": ["k1", "k2"], "base_minutos": [30.0, 10.0], "base_uso": [20.0, 25.0],
+                      "base_cuota_tiro": [20.0, 25.0], "base_pts100": [20.0, 30.0], "gm": 40.0,
+                      "movers": [[{"tipo": "baja", "m": 20.0, "uso": 30.0, "cuota_tiro": 20.0}]] * 2})
+    D = X3.base_ii(C)
+    assert D["ii_minutos"].tolist() == pytest.approx([15.0, 5.0])          # 20' liberados, 3:1 por los minutos previos
+    assert D.loc[0, "ii_uso"] == pytest.approx(0.5 * 10 * 20 / 70)          # (m/gm)·(s_x − 20)·s_k/(100 − s_x)
+    assert D.loc[0, "ii_cuota_tiro"] == 0.0 and D.loc[1, "ii_pts100"] == pytest.approx(30 * D.loc[1, "ii_uso"] / 25)
+    assert (D["ii_pct_asistidas"] == 0).all()
+
+
+def test_f3_mae_boot_y_conformal():
+    from bbequipo.ecosistema import examen_f3 as X3
+    rng = np.random.default_rng(0)
+    n = 3000
+    d = pd.DataFrame({"anio": rng.choice([2021, 2022, 2023], n), "liga": "acb", "team": rng.integers(0, 60, n).astype(str),
+                      "w": rng.uniform(1, 5, n)})
+    verdad = rng.normal(0, 2, n)
+    d["obs"] = verdad + rng.normal(0, 1, n)
+    d["pred"], d["i"], d["ii"] = verdad, 0.0, 0.5 * verdad
+    r = X3.mae_boot(d, ["pred", "i", "ii"], 300, 1)
+    assert r["mae_pred"] < r["mae_ii"] < r["mae_i"] and r["mejora_i"]["ic95"][0] > 0 and r["mejora_ii"]["ic95"][0] > 0
+    c = X3.conformal(d, [2021, 2022, 2023])
+    s = c["anio"] > 2021
+    cob = ((c.loc[s, "obs"] >= c.loc[s, "lo80"]) & (c.loc[s, "obs"] <= c.loc[s, "hi80"])).mean()
+    assert 0.75 <= cob <= 0.85
+    assert X3.sello({"2022": r, "2023": r}, r, 0.8, [0.75, 0.85]) == "ALTA"
+    assert X3.sello({"2022": r, "2023": {**r, "mejora_i": {"ic95": [-1, 1]}}}, r, 0.8, [0.75, 0.85]) == "MEDIA"
+    assert X3.sello({"2022": r}, r, 0.9, [0.75, 0.85]) == "BAJA"
