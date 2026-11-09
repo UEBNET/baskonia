@@ -237,6 +237,20 @@ def casos_historial(cfg: dict) -> pd.DataFrame:
     return pd.concat(filas, ignore_index=True)
 
 
+def resumen_historial(h: pd.DataFrame) -> pd.DataFrame:
+    filas = []
+    for nombre, mu, sd in (("v4.2 D1 (Kalman)", "v42_mu", "v42_sd"), ("v3.2 publicada (nivel t ⊕ nivel t+1)", "v32_mu", "v32_sd")):
+        for por in ([], ["metrica"], ["pos3"], ["anio"]):
+            grupos = [((), h)] if not por else h.groupby(por)
+            for clave, g in grupos:
+                r = medidas(g["real"], g[mu], g[sd])
+                filas.append({"modelo": nombre, "por": "+".join(por) or "global",
+                              "grupo": "|".join(map(str, clave)) if isinstance(clave, tuple) and clave else
+                              (str(clave) if clave != () else "todo"), **r,
+                              "diagnostico": diagnostico_cobertura(r["cob80"])})
+    return pd.DataFrame(filas)
+
+
 def paso_calibracion(cfg: dict) -> None:
     from bbfit.registro import experimento
     sal = C.dir_fase(cfg) / "calibracion"
@@ -252,16 +266,7 @@ def paso_calibracion(cfg: dict) -> None:
         pit.round(4).to_csv(sal / "movimientos_pit.csv.gz", index=False)
         h = casos_historial(cfg)
         h.round(5).to_csv(sal / "historial_casos.csv.gz", index=False)
-        filas = []
-        for nombre, mu, sd in (("v4.2 D1 (Kalman)", "v42_mu", "v42_sd"), ("v3.2 publicada (nivel t ⊕ nivel t+1)", "v32_mu", "v32_sd")):
-            for por in ([], ["metrica"], ["pos3"]):
-                grupos = [((), h)] if not por else h.groupby(por)
-                for clave, g in grupos:
-                    r = medidas(g["real"], g[mu], g[sd])
-                    filas.append({"modelo": nombre, "por": "+".join(por) or "global",
-                                  "grupo": clave if not isinstance(clave, tuple) else "todo", **r,
-                                  "diagnostico": diagnostico_cobertura(r["cob80"])})
-        hr = pd.DataFrame(filas)
+        hr = resumen_historial(h)
         hr.to_csv(sal / "historial_resumen.csv", index=False)
         g = res[res["por"] == "global"].set_index("modelo")
         run.metricas({"cob80_v32": g.loc["v3.2 publicada (predictiva recalibrada)", "cob80"],
