@@ -202,7 +202,23 @@ def filtrar_corte(th_hist: pd.DataFrame, th_t: pd.DataFrame, anio_corte: int, me
 
 
 # ------------------------------------------------------------------------------------------------ brazos del examen
-BRAZOS = ("v33", "v42")
+BRAZOS = ("v33", "v42_d1", "v42")
+# v42_d1 (PRERREGISTRO, motor_v42.entradas_motor_v42): nivel con historial SÓLO en las métricas que pasaron la D1
+#        (data/modelos/v4_2/normalizacion/examen_d1.json → version «v4.2», modelo literal); decide.
+# v42    (variante pedida en el encargo de la pieza): nivel con historial en TODAS las métricas del motor salvo RAPM.
+BRAZO_DECIDE = "v42_d1"
+D1 = RAIZ / "data" / "modelos" / "v4_2" / "normalizacion" / "examen_d1.json"
+
+
+def metricas_d1() -> list[str]:
+    """Métricas que pasaron la D1 con el modelo literal (sello ALTA o MEDIA → versión v4.2)."""
+    d = json.loads(D1.read_text(encoding="utf-8"))["metricas"]
+    return sorted(m for m, v in d.items() if v.get("version") == "v4.2")
+
+
+def metricas_brazo(b: str, cfg) -> list[str]:
+    todas = _metricas(cfg)
+    return [m for m in todas if m in set(metricas_d1())] if b == "v42_d1" else todas
 COMUNES = ["partidos_jugador.pkl", "roles_temporada.pkl", "theta_V32.pkl", "traduccion_v31.pkl"]
 
 
@@ -225,12 +241,16 @@ def preparar_brazos(progreso=print) -> None:
             _enlazar(d / f, CACHE32 / f)
     for t in CORTES:
         _enlazar(dir_brazo("v33") / f"corte_{t}_V32_corte.pkl", CACHE32 / f"corte_{t}_V32_corte.pkl")
-        f42 = dir_brazo("v42") / f"corte_{t}_V32_corte.pkl"
-        if not f42.exists():
-            corte_filtrado(t, progreso)
+        for b in BRAZOS[1:]:
+            if not (dir_brazo(b) / f"corte_{t}_V32_corte.pkl").exists():
+                corte_filtrado(t, b, progreso)
+    # insumos de la temporada de destino (V32) y casos de los cortes previos: no dependen de θ, se comparten
+    for b in BRAZOS[1:]:
+        for f in list(dir_brazo("v33").glob("corte_20*_V32.pkl")) + list(dir_brazo("v33").glob("casos_20*_V32.pkl")):
+            _enlazar(dir_brazo(b) / f.name, f)
 
 
-def corte_filtrado(t: str, progreso=print) -> dict:
+def corte_filtrado(t: str, brazo: str = "v42", progreso=print) -> dict:
     """Registros de la temporada t del corte V32_corte con θ, sd, <m>_am y varianza propia de las métricas filtradas
     sustituidos por el nivel con historial (persona), y L, L_sd recalculados. Guarda corte_<t>_V32_corte.pkl del brazo
     v42 y los parámetros del filtro."""
@@ -238,7 +258,7 @@ def corte_filtrado(t: str, progreso=print) -> dict:
     from bbmodel.metricas import destransformar
     cfg = _env()
     a = SI.anio(t)
-    mets = _metricas(cfg)
+    mets = metricas_brazo(brazo, cfg)
     reg, eq, trad = pickle.loads((CACHE32 / f"corte_{t}_V32_corte.pkl").read_bytes())
     nv = pickle.loads((CACHE32 / f"norm_v32_hasta_{a}.pkl").read_bytes())
     const2 = pickle.loads((CACHE32 / f"norm_hasta_{a}.pkl").read_bytes())["traduccion"]["constantes"]
@@ -278,13 +298,13 @@ def corte_filtrado(t: str, progreso=print) -> dict:
                       "cociente_sd_mediano": float(np.nanmedian(np.sqrt(PP[ok]) / s0[ok]))}
     r["L"] = SI.indice_L(r, "_am")
     r["L_sd"] = SI.L_intervalo(r, trad["constantes"])
-    d = dir_brazo("v42")
+    d = dir_brazo(brazo)
     d.mkdir(parents=True, exist_ok=True)
     (d / f"corte_{t}_V32_corte.pkl").write_bytes(pickle.dumps((r, eq, trad)))
-    info = {"corte": t, "parametros": par, "cambios": cambios}
+    info = {"corte": t, "brazo": brazo, "metricas": mets, "parametros": par, "cambios": cambios}
     (d / f"filtro_{t}.json").write_text(json.dumps(info, indent=1, default=float), encoding="utf-8")
     if progreso:
-        progreso(f"  corte {t} filtrado: " + ", ".join(f"{m} τ²={p['tau2']:.3f} c={p['c']:.2f}" for m, p in
+        progreso(f"  corte {t} filtrado ({brazo}): " + ", ".join(f"{m} τ²={p['tau2']:.3f} c={p['c']:.2f}" for m, p in
                                                      list(par.items())[:4]) + " …", flush=True)
     return info
 
@@ -511,25 +531,28 @@ def reproduccion() -> dict:
 
 
 def examen(progreso=print) -> dict:
-    """Examen prerregistrado D2 · motor: v4.2 frente a v3.3 en los mismos fichajes y cortes."""
-    from bbfit import v32
+    """Examen prerregistrado D2 · motor: cada brazo v4.2 frente a v3.3 en los mismos fichajes y cortes. Decide el brazo
+    prerregistrado (v42_d1); el de todas las métricas (v42) se informa."""
     t0 = time.time()
     c32 = _env()
     D = decisiones_anidadas()
-    E = {b: _cargar_brazo(b) for b in BRAZOS}
-    k = E["v33"][CLAVE].merge(E["v42"][CLAVE], on=CLAVE).drop_duplicates(CLAVE)       # mismos fichajes
+    brazos = [b for b in BRAZOS if (SALIDA / "validacion" / b / "predicciones.csv.gz").exists()]
+    E = {b: _cargar_brazo(b) for b in brazos}
+    k = E["v33"][CLAVE].drop_duplicates(CLAVE)
+    for b in brazos[1:]:
+        k = k.merge(E[b][CLAVE].drop_duplicates(CLAVE), on=CLAVE)                     # mismos fichajes en todos
     E = {b: e.merge(k, on=CLAVE).drop_duplicates(CLAVE).sort_values(CLAVE).reset_index(drop=True) for b, e in E.items()}
-    P = {b: predicciones_v33(b, E[b], D, c32) for b in BRAZOS}
-    R = {b: recalibrar_con_calibracion(P[b], D, c32) for b in BRAZOS}
-    RN = {b: recalibrar_anidada(P[b], D, c32) for b in BRAZOS}
-    RAW = {b: {t: P[b][t] for t in DECISION} for b in BRAZOS}
+    P = {b: predicciones_v33(b, E[b], D, c32) for b in brazos}
+    R = {b: recalibrar_con_calibracion(P[b], D, c32) for b in brazos}
+    RN = {b: recalibrar_anidada(P[b], D, c32) for b in brazos}
+    RAW = {b: {t: P[b][t] for t in DECISION} for b in brazos}
     mets = list(c32["produccion"]["metricas"]) + ["C", "min"]
     B, sem = int(CFG42["bootstrap"]["B"]), 20261109
 
-    def comparar(cortes: list[str]) -> dict:
-        a, b_ = _filas(R, "v42", cortes), _filas(R, "v33", cortes)
-        an, bn = _filas(RN, "v42", cortes), _filas(RN, "v33", cortes)
-        ar, br_ = _filas(RAW, "v42", cortes), _filas(RAW, "v33", cortes)
+    def comparar(bz: str, cortes: list[str]) -> dict:
+        a, b_ = _filas(R, bz, cortes), _filas(R, "v33", cortes)
+        an, bn = _filas(RN, bz, cortes), _filas(RN, "v33", cortes)
+        ar, br_ = _filas(RAW, bz, cortes), _filas(RAW, "v33", cortes)
         assert (a[CLAVE].astype(str).to_numpy() == b_[CLAVE].astype(str).to_numpy()).all()
         res = {}
         for m in mets:
@@ -551,26 +574,32 @@ def examen(progreso=print) -> dict:
             res[m] = d
         return res
 
-    out = {"prerregistro": "configs/v42.yaml → motor_v42.examen_motor (commit d606f47)",
+    def regla(g: dict) -> tuple[dict, bool]:
+        reglas, pasa = {}, True
+        for m in mets:
+            x = g[m]
+            margen = MARGEN_V40.get(m, MARGEN_C if m == "C" else MARGEN_OTRAS)
+            sup = max(x["persona"]["rel_ic95"][1], x["club_corte"]["rel_ic95"][1])
+            cob = x["cob80_cal"]["v42"]
+            cob_ok = cob is not None and 0.75 <= cob <= 0.85
+            reglas[m] = {"margen_rel": margen, "ic95_sup_rel": sup, "mae_no_peor": bool(sup < margen),
+                         "cobertura80_v42": cob, "cobertura_en_rango": bool(cob_ok), "cumple": bool(sup < margen and cob_ok)}
+            pasa &= reglas[m]["cumple"]
+        return reglas, bool(pasa)
+
+    out = {"prerregistro": "configs/v42.yaml → motor_v42 (examen_motor, entradas_motor_v42, recalibracion; commit d606f47)",
            "banco": "fichajes reales del examen sin fuga V32_corte (escenario inicio, adaptación) que decidió la v3.3",
-           "cortes": {"calibracion": CAL, "decision": DECISION},
-           "decisiones_anidadas": D, "conjunto": comparar(DECISION), "por_corte": {t: comparar([t]) for t in DECISION}}
-    out["filtro_por_corte"] = {t: json.loads((dir_brazo("v42") / f"filtro_{t}.json").read_text(encoding="utf-8"))
-                               for t in CORTES if (dir_brazo("v42") / f"filtro_{t}.json").exists()}
+           "cortes": {"calibracion": CAL, "decision": DECISION}, "fichajes_comunes": int(len(k)),
+           "simulaciones_por_fichaje": int(c32["validacion"]["simulaciones"]),
+           "decisiones_anidadas": D, "brazo_que_decide": BRAZO_DECIDE, "metricas_d1": metricas_d1(), "brazos": {}}
+    for bz in brazos[1:]:
+        g = {"conjunto": comparar(bz, DECISION), "por_corte": {t: comparar(bz, [t]) for t in DECISION}}
+        g["regla"], g["pasa"] = regla(g["conjunto"])
+        g["filtro_por_corte"] = {t: json.loads((dir_brazo(bz) / f"filtro_{t}.json").read_text(encoding="utf-8"))
+                                 for t in CORTES if (dir_brazo(bz) / f"filtro_{t}.json").exists()}
+        out["brazos"][bz] = g
     out["reproduccion_v33"] = reproduccion()
-    # regla de decisión
-    reglas, pasa = {}, True
-    for m in mets:
-        g = out["conjunto"][m]
-        margen = MARGEN_V40.get(m, MARGEN_C if m == "C" else MARGEN_OTRAS)
-        sup = max(g["persona"]["rel_ic95"][1], g["club_corte"]["rel_ic95"][1])
-        cob = g["cob80_cal"]["v42"]
-        cob_ok = cob is not None and 0.75 <= cob <= 0.85
-        mae_ok = sup < margen
-        reglas[m] = {"margen_rel": margen, "ic95_sup_rel": sup, "mae_no_peor": bool(mae_ok), "cobertura80_v42": cob,
-                     "cobertura_en_rango": bool(cob_ok), "cumple": bool(mae_ok and cob_ok)}
-        pasa &= mae_ok and cob_ok
-    out["regla"] = reglas
+    pasa = BRAZO_DECIDE in out["brazos"] and out["brazos"][BRAZO_DECIDE]["pasa"]
     out["pasa"] = bool(pasa)
     out["decision"] = "v4.2 sustituye a v3.3" if pasa else "se mantiene la v3.3"
     out["tiempo_s"] = round(time.time() - t0)
@@ -578,20 +607,24 @@ def examen(progreso=print) -> dict:
     (SALIDA / "examen_d2_motor.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=float),
                                                  encoding="utf-8")
     if progreso:
-        for m in mets:
-            g = out["conjunto"][m]
-            progreso(f"  {m:10s} MAE v3.3 {g['mae_v33']:.3f} v4.2 {g['mae_v42']:.3f} · Δ {g['persona']['dif']:+.3f} "
-                     f"{np.round(g['persona']['dif_ic95'], 3)} · ΔR {g['persona']['rel']:+.3%} · cob80 "
-                     f"{g['cob80_cal']} · {'OK' if reglas[m]['cumple'] else 'NO'}", flush=True)
+        for bz, g in out["brazos"].items():
+            progreso(f"  brazo {bz}: {'PASA' if g['pasa'] else 'NO PASA'}", flush=True)
+            for m in mets:
+                x = g["conjunto"][m]
+                progreso(f"    {m:10s} MAE v3.3 {x['mae_v33']:.3f} v4.2 {x['mae_v42']:.3f} · Δ {x['persona']['dif']:+.3f} "
+                         f"{np.round(x['persona']['dif_ic95'], 3)} · ΔR {x['persona']['rel']:+.2%} "
+                         f"{np.round(np.array(x['persona']['rel_ic95']) * 100, 2)} % · cob80 {x['cob80_cal']} · "
+                         f"anch {x['anchura80_cal']['cociente_mediano_v42_v33']} · {'OK' if g['regla'][m]['cumple'] else 'NO'}",
+                         flush=True)
         progreso(f"  → {out['decision']}", flush=True)
     return out
 
 
 # ------------------------------------------------------------------------------------------------ dataset publicado
-def dataset(progreso=print) -> dict:
+def dataset(progreso=print, solo_d1: bool = True) -> dict:
     """Dataset del simulador v4.2 (normalizacion.dir de configs/simulation_v42.yaml): copia del de la v3.3
     (experimentos/cache_simulador_v3_2/normalizado, `bbfit dataset-simulador`) con <m>_am, <m>_am_lo y <m>_am_hi de
-    cada métrica con rango (salvo RAPM) sustituidos por el nivel filtrado en s (temporadas ≤ s; todas en la misma vara
+    cada métrica que pasó la D1 (prerregistro: entradas_motor_v42; solo_d1=False: todas salvo RAPM) sustituidos por el nivel filtrado en s (temporadas ≤ s; todas en la misma vara
     EuroLeague 2025-26) y su rango del 80 %: T⁻¹(m_s ± z80·√P_s). τ² y c por máxima verosimilitud SÓLO con las
     temporadas ≤ 2021-22 (corte de calibración): el dataset no usa nada de los cortes de decisión para ajustar.
     <m>_am_pctel no se recalcula (el motor no lo lee)."""
@@ -604,7 +637,9 @@ def dataset(progreso=print) -> dict:
     dd = {f.name: pd.read_csv(f, dtype={"player_id": str, "team_id": str, "persona_id": str}, low_memory=False)
           for f in ficheros}
     cab = next(iter(dd.values())).columns
-    mets = [m for m in CATALOGO if m not in SIN_FILTRO and all(f"{m}{s}" in cab for s in ("_am", "_am_lo", "_am_hi"))]
+    d1 = set(metricas_d1()) if solo_d1 else set(CATALOGO)
+    mets = [m for m in CATALOGO if m not in SIN_FILTRO and m in d1
+            and all(f"{m}{s}" in cab for s in ("_am", "_am_lo", "_am_hi"))]
     todo = pd.concat([d.assign(_f=k, _i=np.arange(len(d))) for k, d in dd.items()], ignore_index=True)
     todo["anio"] = todo["temporada"].str[:4].astype(int)
     pid = pd.to_numeric(todo["persona_id"], errors="coerce")
@@ -641,7 +676,8 @@ def dataset(progreso=print) -> dict:
     for k, d in dd.items():
         g = todo[todo["_f"] == k].sort_values("_i")
         g[d.columns].to_csv(dest / k, index=False)
-    info = {"version": "v4.2", "origen": str(origen.relative_to(RAIZ)), "metricas": mets, "ajuste": f"temporadas ≤ {cal}",
+    info = {"version": "v4.2", "origen": str(origen.relative_to(RAIZ)), "metricas": mets, "solo_d1": solo_d1,
+            "ajuste": f"temporadas ≤ {cal}",
             "parametros": par}
     SALIDA.mkdir(parents=True, exist_ok=True)
     (SALIDA / "dataset_simulador_v42.json").write_text(json.dumps(info, ensure_ascii=False, indent=1, default=float),
