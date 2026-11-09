@@ -1,6 +1,6 @@
 # Estado de los modelos · una ficha por salida visible del producto
 
-Revisión F0 de la v4.1 · 06-11-2026 (actualizada con la F1 el 07-11 y la F2 el 09-11) · rama de trabajo `claude/jolly-thompson-qczxl4` (base v4.0 `6fb6abd`).
+Revisión F0 de la v4.1 · 06-11-2026 (actualizada con la F1 el 07-11 y la F2 y la F3 el 09-11) · rama de trabajo `claude/jolly-thompson-qczxl4` (base v4.0 `6fb6abd`).
 Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmark de decisión de la F0
 (`data/modelos/v4_1/benchmark/benchmark.json`, `python -m bbequipo.ecosistema benchmark`). Etiquetas: **[DATO]** medido;
 **[LECTURA]** interpretación; **[HIPÓTESIS]** supuesto; **[POST HOC]**; **[DECISIÓN]**.
@@ -38,8 +38,8 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 14 | Quintetos más probables | v4.0 capa 4 | descriptivo | — | Sólo descripción de la rotación (decisión 8) |
 | 15 | Avisos de la ficha | v3.3 | provisional | — | Recalibrar: el 64,5 % de las fichas lleva alguno |
 | 16 | Impacto en pista | v4.1 F2 | experimental: no alcanza al IMPACTO v4.0 (0,081 frente a 0,149; V41_F2) → regla F2-a | — (EXPERIMENTAL; su cambio por altas/bajas, BAJA) | Puerta F2 (V41_F2 §10) |
-| 17 | Δ por métrica de cada compañero | v4.1 F1 (motor) / F3 (sello) | calculado en F1; sin sello | — | Sello por métrica §6.4 (F3); cuota de tiro sin renormalizar (V41_F1 §5) |
-| 18 | Valor de baja | v4.1 F1 / F3 | calculado en F1; sin examen | — | Examen en V-AUS (ΔNet frente a Δ = 0) |
+| 17 | Δ por métrica de cada compañero | v4.1 F1 (motor) / F3 (sello) | examinado en F3 (V-AUS, V-MID, V-TRANS): ninguna métrica supera a sus dos líneas base en dos bancos | **BAJA** en las diez métricas (V41_F3 §2); rango siempre visible, «sin cambio apreciable» si incluye 0 | Puerta F3 |
+| 18 | Valor de baja | v4.1 F1 / F3 | examinado en V-AUS: mejora a Δ = 0 (+0,060 [0,021; 0,099]), cobertura 0,796; no en cada corte | MEDIA (propuesto, V41_F3 §3) | Puerta F3 |
 | 19 | Atribución por movimiento (Shapley) | v4.1 F1 | validado (composición exacta: Σ = Δ a 10⁻¹⁴ en 472 escenarios) | hereda el de lo atribuido | — |
 | 19b | Net del escenario (altas con rol, bajas) | v4.1 F1 | validado como composición: paridad con la capa 4 exacta en 117/118 (el otro, corrección P5) | hereda la capa 4 (ALTA) | V41_F1 |
 | 19c | Rangos de minutos de la capa E | v4.1 F1 (P5) | validado: cobertura 80 %/90 % en rango en cada corte | ALTA (propuesto) | V41_F1 §3 |
@@ -248,5 +248,6 @@ aplicación: la puerta F3-T, ficha 20.
 python -m bbequipo.ecosistema benchmark        # ≈ 1,5 min: data/modelos/v4_1/benchmark/benchmark.json
 python -m bbequipo.ecosistema inventario       # fit_adapt.csv y club_temporada.csv
 python -m bbequipo.ecosistema impacto-pista    # F2: examen §6.2 del Impacto en pista (V41_F2)
+python -m bbequipo.ecosistema examen-f3        # F3: sellos por métrica × banco y Valor de baja (V41_F3)
 python -m pytest tests/test_ecosistema_v41.py -q
 ```

@@ -1,5 +1,22 @@
 # Registro de cambios
 
+## 2026-11-09 — CERNO v4.1 · F3 Validación del impacto cruzado y de las bajas (puerta pendiente del CEO)
+
+Detalle: `docs/checkpoints/V41_F3.md`. Puerta F2 aprobada el 09-11-2026 (G1–G6; V41_F2 §10.1). Prerregistro
+`configs/ecosistema_v41.yaml → f3`, subido antes de calcular.
+
+* **Bancos** (`bbequipo/ecosistema/bancos.py`), con predicciones ≤ t de los cortes 2021–2024:
+  * V-AUS (5.180 ausencias), V-MID (718 altas a mitad de temporada) y V-TRANS (924 transiciones);
+  * por compañero: Δ de minutos, uso, cuota de tiro, % asistidas y pts/100; además, el Net del equipo.
+* **Examen y sellos** (`examen_f3.py`):
+  * MAE ponderado frente a Δ = 0 y a la redistribución proporcional, con IC95 por equipos-temporada y rangos conformales;
+  * **sello final BAJA en las diez métricas**: minutos ALTA y % asistidas MEDIA sólo en V-AUS, sin segundo banco;
+  * en V-AUS el 100 % de los rangos por compañero incluye 0;
+  * el motor acierta cuántos minutos libera una baja, no quién los absorbe.
+* **Valor de baja:** pasa como la capa 4 (+0,060 [0,021; 0,099] sobre Δ = 0; cobertura 0,796). Propuesta: sello MEDIA.
+* **[POST HOC] V-TRANS-c:** corrige las presencias de las altas de media temporada en el examen. No cambia ningún sello.
+* CLI: `bancos`, `examen-f3`. 2 tests nuevos (35 en `tests/test_ecosistema_v41.py`).
+
 ## 2026-11-09 — CERNO v4.1 · F2 Impacto en pista y candidatos de química (puerta pendiente del CEO)
 
 Detalle: `docs/checkpoints/V41_F2.md`. Puerta F1 aprobada el 08-11-2026 (E1, E2 y E5); F2-a con la opción (a).

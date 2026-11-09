@@ -433,6 +433,13 @@ criterios:
     media: mejora a (i) y (ii) con IC95 que excluye 0 en los cortes agregados, no en cada corte; cobertura en rango
     baja: no cumple lo anterior; se muestra con su rango; si el rango del 80 % incluye 0 → «sin cambio apreciable»
     delta_net_bajas: V-AUS frente a (i), mismos criterios que la capa 4 (§11.4 v4.0)
+    resultado_examen_09-11-2026:                      # V41_F3 (bancos/examen_f3.json); cortes 2022–2024, B = 2000
+      eventos: "V-AUS 5.180 · V-MID 718 · V-TRANS 924 (con 2021, que sólo calibra)"
+      sellos_finales: "BAJA en minutos, uso, cuota de tiro, % asistidas y pts/100 (y en las 5 sin vía, por regla)"
+      por_banco: "minutos ALTA y % asistidas MEDIA sólo en V-AUS; ninguna métrica pasa en V-MID ni V-TRANS"
+      rangos: "en V-AUS el 100 % de los rangos del 80 % por compañero incluye 0 (cobertura 0,79–0,82)"
+      valor_de_baja: "pasa como la capa 4: +0,060 [0,021; 0,099] sobre Δ = 0, cobertura 0,796 (no en 2024 por separado) → propuesta MEDIA"
+      post_hoc_v_trans_c: "presencias corregidas en V-TRANS: no cambia ningún sello final"
   propuestas_ajuste:                                  # V41_F0 §8 · APROBADAS por el CEO el 06-11-2026 (P5 con el workaround) y aplicadas
     P1: {criterio: "§5.4 rotación", propuesta: "≥ 7,5 % de los minutos totales del equipo (≈ 15'/partido) en lugar del 15 %",
          motivo: "con el 15 % literal sólo hay 116 partidos con un único ausente (3 en élite): V-AUS inviable"}

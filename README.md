@@ -721,7 +721,9 @@ capas de la v4.0. Subpaquete `bbequipo/ecosistema/`, configuración `configs/eco
 agregados por tramo y jugador, con un catálogo de campos ampliable en `configs/ecosistema_v41.yaml → puntos_esperados`.
 Desde el 07-11-2026, todo examen de la v4.1 declara su **efecto mínimo detectable** (`configs → potencia`) antes de decidir.
 
-**Estado por fases:** F0 y F1 aprobadas. **F2 (09-11-2026, puerta pendiente)** ([`docs/checkpoints/V41_F2.md`](docs/checkpoints/V41_F2.md)):
+**Estado por fases:** F0, F1 y F2 aprobadas. **F3 (09-11-2026, puerta pendiente)** ([`docs/checkpoints/V41_F3.md`](docs/checkpoints/V41_F3.md)):
+los Δ por métrica de cada compañero quedan en sello BAJA (ninguno supera a sus líneas base en dos bancos) y el «Valor de
+baja» pasa su examen en las ausencias (propuesta: sello MEDIA). **F2** ([`docs/checkpoints/V41_F2.md`](docs/checkpoints/V41_F2.md)):
 el «Impacto en pista» no alcanza al IMPACTO v4.0 frente al on/off realizado (0,081 frente a 0,149), así que por la regla
 F2-a el IMPACTO v4.0 sigue como ancla y aquél queda EXPERIMENTAL. La familiaridad y el contexto de compañeros no aportan
 valor del jugador (diagnósticos POST HOC). Novedades en el motor de escenarios: NC₁/NC₂ por escenario y on/off sin la
@@ -739,6 +741,8 @@ python -m bbequipo.ecosistema minutos-calibrar    # F1 (P5): rangos de minutos r
 python -m bbequipo.ecosistema xp-onoff            # F2-d: on/off con y sin la suerte del tiro en la capa XP (≈ 15 s)
 python -m bbequipo.ecosistema familiaridad        # F2-c: δ de familiaridad por tramo y su robustez (≈ 1 min)
 python -m bbequipo.ecosistema impacto-pista       # F2: Impacto en pista por corte sin fuga y examen §6.2 (≈ 2 min con caché)
+python -m bbequipo.ecosistema bancos              # F3: bancos V-AUS, V-MID y V-TRANS con predicciones ≤ t (≈ 5 min por corte)
+python -m bbequipo.ecosistema examen-f3           # F3: sellos por métrica × banco, Valor de baja y EMD (≈ 40 s)
 python -m bbequipo.ecosistema benchmark           # F0.3: benchmark de decisión sobre la v4.0 (≈ 1,5 min)
 python -m bbequipo.ecosistema ausencias           # F0.5: auditoría de ausencias para el banco V-AUS (≈ 20 s)
 python -m bbequipo.ecosistema inventario          # F0.6/F0.7: Fit, ADAPT y referencias fijas a club y temporada
