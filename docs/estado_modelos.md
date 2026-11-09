@@ -27,7 +27,7 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 3 | Rol previsto | v3.3 | uso interno | — | Deja de ser salida (decisión 1) |
 | 4 | Índice Fit | v2–v3.3 | **retirado de lo visible** (F4, candidata) | — | Baja aprobada (decisión 3); hecha en la F4 (V41_F4 §1) |
 | 5 | ADAPT % | v3.x | **retirado de lo visible** (F4, candidata) | — | Sustituida por «Landing» (decisión 4; V41_F4 §1) |
-| 6 | Landing (nueva) | fase 7 rehecha (v3_2) por grupo, elegida en el examen K3 | examinada (K3): gana a la tabla v3_1 (−0,0089 [−0,0118; −0,0060] de MAE), no a no corregir | **BAJA** (aprobado, V41_F4 §8.2) | 4 de 10 grupos con rango que excluye 0; signo libre |
+| 6 | Landing (nueva) | adaptación v3.1 por grupo (la del motor; DECISIÓN CEO 09-11-2026, V41_F4 §8.6) | sin examen frente a su propia definición (K3 midió otra cosa) | **BAJA** (aprobado) | Lo que pierde en la 1.ª temporada por el coste de adaptación, frente a su nivel adaptado |
 | 7 | NIVEL CERNO (NC₁, NC₂) | v4.0 F5 | validado (referente) | ALTA (NC₁) | Recalcular con los compañeros del escenario |
 | 8 | IMPACTO | v4.0 F5 | provisional (criterio redefinido) | MEDIA | Pasa a «Impacto en pista» (F2) |
 | 9 | Net del equipo proyectado | v4.0 capa 4 | validado | ALTA | Base del motor de escenarios (F1) |
@@ -45,6 +45,11 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 19c | Rangos de minutos de la capa E | v4.1 F1 (P5) | validado: cobertura 80 %/90 % en rango en cada corte | ALTA (propuesto) | V41_F1 §3 |
 | 20 | Sinergia de tríos (φ₃) | v4.1 F3-T | experimental, condicional | — | EMD > 2 pts/100 frente a una puerta de 0,10: examen no informativo; propuesta: cerrar la F3-T (V41_F0 §11.3) |
 | 21 | Capa XP: punto esperado por tiro, tramo y jugador | v4.1 (xp1) | experimental (41 campos desde la F2-d); resultado de tramo 0,75·real + 0,25·esperado adoptado por regla | — (sin sello hasta examinar cada campo) | Catálogo ampliable: `docs/puntos_esperados.md` |
+
+| 22 | Métricas del jugador (normalización) | **v4.2** en 12 de 30 (historial del jugador, Kalman); v3.2 en 18 | examinado (V42_D1): 8 ALTA, 3 MEDIA y 1 por la variante centrada; las 18 restantes predicen peor con historial | ALTA/MEDIA por métrica | Rango del 80 % entre un 45 % y un 70 % más estrecho, cobertura 0,79–0,84 |
+| 23 | β RAPM (RAPM proyectado) | v4.0 en el producto; β v4.2 versionado | examinado (V42_D2_beta): pasa por la regla con poco margen (MAE −0,034 [−0,060; −0,006]) pero ordena peor el on/off (−0,011) y tras recalibrar su rango no es más estrecho | — | No se propaga a IMPACTO ni a la pantalla sin el examen del IMPACTO |
+| 24 | Tríos, parejas y sinergia de pareja | **v4.2** (V42_D3) | examinado: tríos −0,60, parejas −0,45 y sinergia −2,92 pts/100 de MAE, coberturas 0,78–0,80 | — | Quintetos sin potencia: se quedan en la versión anterior. La matriz de parejas se abre en «Net juntos (v4.2)» |
+| 25 | Presentación de rangos | **v4.2 · C** | — | — | Tablas y listas: valor + confianza (terciles de anchura); rango completo en la ficha y al pasar el ratón |
 
 ---
 
