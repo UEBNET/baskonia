@@ -2,7 +2,7 @@
  "version": "v4.2",
  "pieza": "D2 · β v4.2",
  "prerregistro": "configs/v42.yaml → motor_v42.examen_beta",
- "generado": "2026-11-09T11:30:08",
+ "generado": "2026-11-09T11:32:12",
  "beta_v40_agrega_temporadas": "no explícitamente: β por persona-temporada; el prior g lleva el RAPM normalizado v3.2 de la temporada anterior (orapm_th, drapm_th de t−1) como rasgo. β v4.2 = Kalman sobre los β v4.0 por temporada.",
  "diseno": {
   "observaciones": "β v4.0 del ajuste del corte t (examen/beta_corte_<t>.csv.gz), var = c·beta_sd²",
@@ -377,6 +377,36 @@
     "v42": 8.796254384134794,
     "v40": 6.773553657072423
    }
+  },
+  "recalibracion_conformal_2021": {
+   "v42": {
+    "k": 0.8329029185587954,
+    "cobertura80_decision": 0.8148906028647883,
+    "ancho80_mediano_decision": 7.32642594893147,
+    "por_corte": {
+     "2022": 0.7957446808510639,
+     "2023": 0.8193027210884354,
+     "2024": 0.8238539898132428
+    }
+   },
+   "v40_predictivo": {
+    "k": 1.0302849106944723,
+    "cobertura80_decision": 0.8029277506689753,
+    "ancho80_mediano_decision": 6.978690124661076,
+    "por_corte": {
+     "2022": 0.8407294832826747,
+     "2023": 0.7835884353741497,
+     "2024": 0.7958404074702886
+    }
+   }
+  },
+  "estimacion_anclas": {
+   "n": 8243,
+   "spearman_p40_p42": 0.9328005652272207,
+   "delta_percentil_abs_mediana": 3.8759689922480636,
+   "delta_percentil_abs_p90": 17.24137931034483,
+   "fraccion_mueve_mas_de_10_puntos": 0.23826276840955962,
+   "ratio_mediano_sd": 0.9414942753447014
   }
  },
  "criterios": {
@@ -514,5 +544,5 @@
    }
   }
  },
- "tiempo_s": 57.5
+ "tiempo_s": 54.1
 }

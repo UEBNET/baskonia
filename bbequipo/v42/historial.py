@@ -149,6 +149,7 @@ def examen_metrica(d: pd.DataFrame, m: str, rng: np.random.Generator, centrado: 
             par = ajustar(tc, SUELO_TAU_C)
             f = filtrar(tc, par["tau2"], par["c"], par["pp"])
             f["m"] = f["m"] + f["mu_anio"]                 # predicción de t+1: media de t + desviación filtrada
+            f["y"] = f["y"] + f["mu_anio"]                 # la línea base (temporada t sola) en su escala original
         else:
             par = ajustar(tr)
             f = filtrar(tr, par["tau2"], par["c"], par["pp"])
@@ -213,15 +214,28 @@ def exportar(destino: Path | None = None) -> dict:
     """Previas por temporada (estado del filtro ANTES de ver la temporada t, con temporadas ≤ t−1) y parámetros, para que
     el navegador combine la previa con las filas de la temporada cargada (la en curso se actualiza sola)."""
     ex = json.loads((SALIDA / "examen_d1.json").read_text(encoding="utf-8"))
-    pasan = [m for m, v in ex["metricas"].items() if v["version"] == "v4.2"]
+    fc = SALIDA / "examen_d1c_post_hoc.json"
+    exc = json.loads(fc.read_text(encoding="utf-8")) if fc.exists() else {"metricas": {}}
+    modo = {}
+    for m, v in ex["metricas"].items():                 # literal si pasa; si no, la variante POST HOC sólo con ALTA
+        if v["version"] == "v4.2":
+            modo[m] = "literal"
+        elif exc["metricas"].get(m, {}).get("sello") == "ALTA":
+            modo[m] = "centrado"
+    pasan = [m for m in ex["metricas"] if m in modo]
     d = cargar()
     cerradas = [int(t[:4]) for t in CFG["temporadas"]][:-1]           # la en curso no entra en el ajuste
     par, filt = {}, {}
     for m in pasan:
         o = observaciones(d, m)
         oc = o[o["anio"].isin(cerradas)]
-        p = ajustar(oc)
-        par[m] = {"tau2": p["tau2"], "c": p["c"], "transf": CATALOGO[m].transf, "pos": {k: list(v) for k, v in p["pp"].items()}}
+        if modo[m] == "centrado":
+            oc = centrar(oc)
+            p = ajustar(oc, SUELO_TAU_C)
+        else:
+            p = ajustar(oc)
+        par[m] = {"tau2": p["tau2"], "c": p["c"], "transf": CATALOGO[m].transf, "pos": {k: list(v) for k, v in p["pp"].items()},
+                  "centrado": modo[m] == "centrado"}
         filt[m] = filtrar(oc, p["tau2"], p["c"], p["pp"])
     destino = destino or (RAIZ / "artifact" / "kerno" / "atlas" / "v42" / "historial")
     destino.mkdir(parents=True, exist_ok=True)
@@ -241,4 +255,7 @@ def exportar(destino: Path | None = None) -> dict:
         raw = json.dumps(doc, separators=(",", ":")).encode()
         (destino / f"{t}.json.gz.txt").write_text(base64.b64encode(gzip.compress(raw, mtime=0)).decode())
         (SALIDA / f"previa_{t}.json").write_text(json.dumps({"temporada": t, "personas": len(personas), "metricas": pasan}))
-    return {"metricas": pasan, "parametros": par}
+    (SALIDA / "version_por_metrica.json").write_text(json.dumps(
+        {m: ("v4.2" + (" (D1-c, POST HOC)" if modo.get(m) == "centrado" else "")) if m in modo else "v3.2" for m in METRICAS},
+        ensure_ascii=False, indent=1), encoding="utf-8")
+    return {"metricas": pasan, "parametros": par, "modo": modo}

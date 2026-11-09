@@ -626,14 +626,17 @@ async function historialV42(T) {
   T.rows.forEach((r) => { const p = g(r, "persona_id"); if (p == null || !isFinite(+p)) return; const k = String(Math.round(+p)); if (!porP.has(k)) porP.set(k, []); porP.get(k).push(r); });
   H.metricas.forEach((m, k) => {
     const P = H.parametros[m], tf = P.transf; if (I[m] == null || I[m + "_lo"] == null || I[m + "_hi"] == null) return;
+    // D1-c: el filtro trabaja con la desviación frente a la media de la temporada (ponderada por minutos, ≥ 100 min)
+    let mS = 0;
+    if (P.centrado) { let sw = 0, sy = 0; T.rows.forEach((r) => { const v = r[I[m]], mi = +g(r, "min") || 0; if (mi >= 100 && typeof v === "number" && isFinite(v)) { sw += mi; sy += mi * TRv(v, tf); } }); mS = sw ? sy / sw : 0; }
     porP.forEach((rows, pid) => {
       const pre = H.previa[pid] && H.previa[pid][k], rp = rows.find((r) => P.pos[g(r, "pos3")]);
       let [mu, Pv] = pre || P.pos[rp ? g(rp, "pos3") : "A"], n = 0;
       rows.forEach((r) => { const v = r[I[m]], lo = r[I[m + "_lo"]], hi = r[I[m + "_hi"]]; if (![v, lo, hi].every((x) => typeof x === "number" && isFinite(x))) return;
         const s = (TRv(hi, tf) - TRv(lo, tf)) / (2 * Z80H), R = P.c * s * s; if (!(R > 0)) return;
-        const K = Pv / (Pv + R); mu += K * (TRv(v, tf) - mu); Pv *= 1 - K; n++; });
+        const K = Pv / (Pv + R); mu += K * (TRv(v, tf) - mS - mu); Pv *= 1 - K; n++; });
       if (!n) return;
-      const sd = Math.sqrt(Pv), val = TRvInv(mu, tf), lo = TRvInv(mu - Z80H * sd, tf), hi = TRvInv(mu + Z80H * sd, tf);
+      const sd = Math.sqrt(Pv), val = TRvInv(mS + mu, tf), lo = TRvInv(mS + mu - Z80H * sd, tf), hi = TRvInv(mS + mu + Z80H * sd, tf);
       rows.forEach((r) => { if (typeof r[I[m]] !== "number" || !isFinite(r[I[m]])) return; (r.v32 = r.v32 || {})[m] = [r[I[m]], r[I[m + "_lo"]], r[I[m + "_hi"]]];
         r[I[m]] = val; r[I[m + "_lo"]] = lo; r[I[m + "_hi"]] = hi; if (I[m + "_pctel"] != null) r[I[m + "_pctel"]] = null; });
     });

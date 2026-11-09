@@ -5,14 +5,16 @@ contraídos hacia el PPP de la liga con k = 300 posesiones) y, para la pareja, l
 
 v4.2: filtro de Kalman por unidad (misma unidad = misma liga y mismos jugadores) sobre sus temporadas ≤ t:
     observación de la temporada s:   y_s = Net bruto de la unidad,  var = c · 10⁴ / posesiones
-    estado:                          θ_s = μ_s + δ_s,  μ_s = a + b · net_esperado_s  (lo que predicen sus jugadores:
-                                     Σ RAPM propios − Σ RAPM rivales de la temporada s, columna net_esperado)
-                                     δ_s = δ_{s−1} + η,  η ~ N(0, τ²) por año (un hueco de k años suma k·τ²)
-    previa de la primera temporada:  δ ~ N(0, σ0²)
-    sinergia de pareja:              y_s = sinergia WOWY, μ_s = a (b = 0), var = c · 10⁴ · Σ_x p_x / (p_x + 300)²
+    estado:                          θ_s = Net verdadero; paseo aleatorio θ_s = θ_{s−1} + η, η ~ N(0, τ²) por año
+                                     (un hueco de k años suma k·τ²)
+    previa de la primera temporada:  θ ~ N(a + b · net_esperado_s, σ0²)   (lo que predicen sus jugadores: Σ RAPM
+                                     propios − Σ RAPM rivales de esa temporada, columna net_esperado de bbstats)
+    sinergia de pareja:              y_s = sinergia WOWY, previa N(a, σ0²) (b = 0), var = c · 10⁴ · Σ_x p_x / (p_x + 300)²
                                      sobre las cuatro situaciones (juntos, A sin B, B sin A, ninguno; p_x = posesiones)
-a, b, σ0², τ², c por máxima verosimilitud de las innovaciones un paso adelante (todas las filas ≥ 25 posesiones, ≤ t).
-Predicción de t+1: θ̂_t = μ_t + δ̂_t; intervalo predictivo del 80 %: θ̂_t ± κ·z80·√(P_t + τ² + c·R_{t+1}),
+a, b, σ0², τ², c por máxima verosimilitud de las innovaciones un paso adelante de las filas CON historial (predicción
+de la temporada s con lo visto ≤ s−1: fuera de muestra, como en D1), filas ≥ 50 posesiones, temporadas ≤ t.
+Los quintetos repiten demasiado poco para ajustar sus hiperparámetros: usan los de los tríos del mismo corte.
+Predicción de t+1: θ̂_t; intervalo predictivo del 80 %: θ̂_t ± κ·z80·√(P_t + τ² + c·R_{t+1}),
 κ calibrado en el corte 2021 (conformal: cuantil 0,80 de |e|/sd) y aplicado sin tocar a 2022–2024.
 
 Examen prerregistrado (unidades_v42.examen): objetivo = Net bruto de t+1 (unidades con ≥ 100 posesiones en t y en t+1);
@@ -40,13 +42,23 @@ Z80 = float(CFG["z80"])
 DIR_PROC = RAIZ / "data" / "processed"
 SALIDA = RAIZ / "data" / "modelos" / "v4_2" / "unidades"
 K_VIGENTE = 300.0          # contracción vigente (bbstats: contraccion_posesiones)
-MIN_POSS_AJUSTE = 25.0     # filas que entran en el filtro y en la verosimilitud
+MIN_POSS_AJUSTE = 50.0     # filas que entran en el filtro y en la verosimilitud (fijado con el corte de calibración)
 MIN_POSS_EXAMEN = 100.0    # prerregistro
 TIPOS = {"quintetos": "quintetos", "trios": "trios", "parejas": "parejas", "sinergia_pareja": "parejas"}
+# los quintetos repiten muy poco entre temporadas (37 filas con historial ≥ 50 posesiones en el corte 2021): la máxima
+# verosimilitud degenera (σ0² = τ² = 0, c ≈ 27); toman los hiperparámetros de los tríos del mismo corte (SUPUESTO)
+PRESTA = {"quintetos": "trios"}
+_CACHE: dict = {}
 
 
 # ------------------------------------------------------------------------------------------------------------ datos
 def cargar(tipo: str) -> pd.DataFrame:
+    if tipo not in _CACHE:
+        _CACHE[tipo] = _cargar(tipo)
+    return _CACHE[tipo]
+
+
+def _cargar(tipo: str) -> pd.DataFrame:
     """Una fila por unidad-temporada (fase total): clave liga|unidad, año, y (observación), R (varianza unitaria del
     ruido, en (puntos/100)² por unidad de c), ne (Net esperado por los jugadores), vigente (lo que muestra hoy)."""
     fich = TIPOS[tipo]
@@ -141,6 +153,16 @@ def ajustar(o: pd.DataFrame, con_b: bool = True) -> dict:
     return par
 
 
+def hiperparametros(tipo: str, hasta: list[int] | int) -> dict:
+    """Ajuste con las temporadas ≤ hasta (o en la lista); los quintetos los toman de los tríos (PRESTA)."""
+    fuente = PRESTA.get(tipo, tipo)
+    d = cargar(fuente)
+    sel = d["anio"].isin(hasta) if isinstance(hasta, list) else d["anio"] <= hasta
+    par = ajustar(d[sel & (d["poss"] >= MIN_POSS_AJUSTE)].reset_index(drop=True), fuente != "sinergia_pareja")
+    par["fuente"] = fuente
+    return par
+
+
 # ------------------------------------------------------------------------------------------------------------ examen
 def _boot(h: pd.DataFrame, rng: np.random.Generator, B: int) -> dict:
     u, inv = np.unique(h["cluster"].to_numpy(), return_inverse=True)
@@ -160,14 +182,13 @@ def _boot(h: pd.DataFrame, rng: np.random.Generator, B: int) -> dict:
 
 
 def examen_tipo(tipo: str, rng: np.random.Generator) -> dict:
-    con_b = tipo != "sinergia_pareja"
     todo = cargar(tipo)
     base = todo[todo["poss"] >= MIN_POSS_AJUSTE].reset_index(drop=True)
     cal, dec = CFG["cortes"]["calibracion"], CFG["cortes"]["decision"]
     filas, cortes, kappa = [], {}, None
     for t in [cal] + dec:
         tr = base[base["anio"] <= t].reset_index(drop=True)
-        par = ajustar(tr, con_b)
+        par = hiperparametros(tipo, t)
         f = filtrar(tr, par)
         tr = tr.assign(theta=f["theta"], P=f["P"], hist=~_estructura(tr)["nuevo"])
         a = tr[(tr["anio"] == t) & (tr["poss"] >= MIN_POSS_EXAMEN)].set_index("clave")
@@ -244,14 +265,15 @@ def exportar() -> dict:
     for tipo in pasan:
         todo = cargar(tipo)
         base = todo[todo["poss"] >= MIN_POSS_AJUSTE].reset_index(drop=True)
-        par = ajustar(base[base["anio"].isin(cerradas)].reset_index(drop=True), tipo != "sinergia_pareja")
+        par = hiperparametros(tipo, cerradas)
         f = filtrar(base, par)
         est = _estructura(base)
         out = base.assign(v42=f["theta"], v42_lo=f["theta"] - Z80 * np.sqrt(f["P"]), v42_hi=f["theta"] + Z80 * np.sqrt(f["P"]),
                           esperado_jugadores=f["mu"], temporadas_previas=est["paso"],
+                          previa_m=f["m_pred"], previa_sd=np.sqrt(f["P_pred"]),
                           peso_temporada=1 - f["P"] / np.maximum(f["P_pred"], 1e-12))
         cols = ["liga", "temporada", "team_id", "unidad", "poss", "y", "vigente", "esperado_jugadores", "v42", "v42_lo",
-                "v42_hi", "temporadas_previas", "peso_temporada"]
+                "v42_hi", "previa_m", "previa_sd", "temporadas_previas", "peso_temporada"]
         out = out[cols].rename(columns={"y": "observado", "vigente": "vigente_v41"})
         dest = SALIDA / f"{tipo}_v42.csv.gz"
         if dest.exists():
