@@ -1036,7 +1036,7 @@ section.block > div:first-child > h2, .side-r h2 { font: 600 13px var(--f-body) 
           <select id="sClub" aria-label="Club"></select>
           <span class="label">Fichajes</span>
           <input type="search" id="sBus" placeholder="Añadir jugador por nombre" autocomplete="off"><div class="sugs" id="sBusS" hidden></div>
-          <p class="note">Eliges jugador, club y el rol que le darías. El simulador calcula con ese rol sus minutos, rendimiento, adaptación, sinergias e Índice Fit.</p>
+          <p class="note">Eliges jugador, club y el rol que le darías. El simulador calcula con ese rol sus minutos, su rendimiento, el Landing de su grupo de traspaso, las sinergias y lo que cambia en el ecosistema del club.</p>
           <div class="fich" id="sFich"></div>
           <span class="label">Plantilla · marca quién sale</span>
           <div class="roster" id="sRoster"></div>
@@ -2263,10 +2263,8 @@ function notaCero(r) {
   const mm = r.minutos && r.minutos.media, rol = r.rol_asignado;
   if ((rol && ["RESIDUAL", "PROFUNDIDAD"].includes(rol)) || (mm != null && mm < 15))
     f.push(`<b>rol y minutos</b>: ${rol ? esc(ROL_NOM[rol] || rol) + ", " : ""}${fmt(mm, 1)}' por partido, con pocas acciones y una muestra corta`);
-  const ad = r.adaptacion && r.adaptacion.adapt_pct_temporada && r.adaptacion.adapt_pct_temporada.media;
-  if (ad != null && ad < 97) f.push(`<b>adaptación</b>: rinde al ${fmt(ad, 0)} % de su nivel en su primera temporada en la liga`);
-  const ce = r.fit && r.fit.componentes && r.fit.componentes.estilo;
-  if (ce != null && ce < 0) f.push(`<b>estilo</b>: encaja poco con el del club (componente de estilo del Fit ${sg(ce, 2)})`);
+  const lg = window.KernoV41 && KernoV41.listo() ? KernoV41.landing(r.grupo_nacionalidad) : null;
+  if (lg) f.push(`<b>Landing</b>: su grupo de traspaso (${lg.texto}) rinde de media un ${fmt(Math.abs(lg.pct), 1)} % menos su primera temporada`);
   const [g, o] = String(r.recalibrado_v32 || "").split("|");
   if (o === "feb3" || o === "ncaa" || g === "nba_gleague") f.push(`<b>tipo de traspaso</b>: ${o === "feb3" ? "desde la Tercera FEB" : o === "ncaa" ? "desde la NCAA" : "hacia la NBA o la G League"}, el caso con más margen de error en el examen del simulador`);
   const lista = ms.map((m) => RECORTE_NOM[m][0]), y = (a) => a.length > 1 ? a.slice(0, -1).join(", ") + " y " + a[a.length - 1] : a[0];
@@ -2278,13 +2276,11 @@ function tarjetaV2(o, n, s) {
   const r = o.v2, nom = o.j ? o.j.nombre : o.rec ? o.rec.nombre : "?";
   if (!r) return `<div class="v2card"><h3><span class="badge" style="background:${FICH_COL[n % FICH_COL.length]}">${n + 1}</span>${esc(nom)}</h3><p class="note">${o.rec ? "Sin plantilla del simulador para este club y temporada (hay plantillas de 2025-26 y 2026-27)." : "Sin insumos del simulador para esta temporada del jugador: elige otra de sus temporadas (2024-25 a 2026-27)."}</p></div>`;
   if (r.error) return `<div class="v2card"><h3>${esc(nom)}</h3><p class="note">No se pudo simular (${esc(r.error)}).</p></div>`;
-  const F = r.fit, a = r.adaptacion, eq = r.equipo, e = r.estilo, t = r.temporada_destino;
-  const fitTot = F.total != null ? ESC.html("z", F.total, null, { nombre: "Fit (éxito esperado)", raw: `${sg(F.total, 2)} DT del éxito`, extra: "Éxito = 0,5·z(minutos) + 0,5·z(nivel) en la liga de destino; 0 = fichaje medio" }) : "–";
+  const eq = r.equipo, e = r.estilo, t = r.temporada_destino;
   const prod = `<table class="v2t"><thead><tr><th>Por 100 posesiones</th><th>Media</th><th>50 %</th><th>90 %</th></tr></thead><tbody>` +
     MET_V2.map(([m, nm]) => { const d = r.produccion_p100[m], ast = d && d.recorte_cero ? "*" : ""; return d && d.media != null ? `<tr><td>${nm}${ast}</td><td>${fmt(d.media, 1)}</td><td class="iv">${ivTxt(d, 50)}${d.lo50 === 0 ? ast : ""}</td><td class="iv">${ivTxt(d, 90)}${ast}</td></tr>` : ""; }).join("") + `</tbody></table>${notaCero(r)}`;
   const pp = `<table class="v2t"><thead><tr><th>Por partido (ritmo del club)</th><th>Media</th><th>50 %</th><th>90 %</th></tr></thead><tbody>` +
     PP_V2.map(([k, nm]) => { const d = r.por_partido[k]; return d && d.media != null ? `<tr><td>${nm}</td><td>${fmt(d.media, 1)}</td><td class="iv">${ivTxt(d, 50)}</td><td class="iv">${ivTxt(d, 90)}</td></tr>` : ""; }).join("") + `</tbody></table>`;
-  const comps = Object.entries(F.componentes || {}).map(([k, v]) => `<div class="fitrow" data-tip="${esc(COMP_TIP[k])}"><span>${COMP_NOM[k]}</span>${v != null ? ESC.barra(ESC.dS("z", v)) : "<span></span>"}<em>${v != null ? sg(v, 2) : "–"}</em></div>`).join("");
   const peu = euDeVector(e.jugador), teu = euDeVector(e.equipo), hueco = e.hueco_cubierto ? euNom(euIdx(e.hueco_cubierto)) : null;
   const plant = (r.plantilla || []).filter((p) => p.minutos >= 1).slice(0, 10).map((p) => `<tr${p.fichaje ? ' style="font-weight:600"' : ""}><td>${esc(p.nombre || (String(p.persona).startsWith("__") ? "(reemplazo)" : "s/d"))}${p.fichaje ? " (fichaje)" : ""}</td><td>${fmt(p.minutos, 1)}</td><td class="iv">${p.minutos_sin != null ? fmt(p.minutos_sin, 1) : p.fichaje ? "–" : ""}</td></tr>`).join("");
   return `<div class="v2card">
@@ -2292,12 +2288,10 @@ function tarjetaV2(o, n, s) {
     <div class="v2grid">
       <div><span class="label">${r.rol_asignado ? "Rol asignado" : "Rol esperado"}</span>${barraRoles(r.roles)}
         <p style="margin:8px 0 0"><b>${fmt(r.minutos.media, 1)}'</b> por partido · 50 %: ${ivTxt(r.minutos, 50)}' · 90 %: ${ivTxt(r.minutos, 90)}'<br><span class="note">Titular en el ${Math.round(100 * r.p_titular)} % de las temporadas simuladas · nivel ${ESC.html("nivel", r.L_efectivo, "2025-26", { raw: `L ${sg(r.L_efectivo)} ± ${fmt(r.L_sd)}` })}</span></p></div>
-      <div><span class="label">Índice Fit</span><p style="margin:2px 0 6px">${fitTot}</p>${comps}<p class="v2nota">Suma exacta: base ${sg(F.base, 2)} + componentes = ${sg(F.total, 2)} DT (pesos por regresión sobre fichajes reales anteriores).</p></div>
+      <div><span class="label">Landing</span>${window.KernoV41 && KernoV41.listo() ? KernoV41.landingHtml(r.grupo_nacionalidad) : ""}</div>
     </div>
     <div class="v2grid"><div>${prod}</div><div>${pp}</div></div>
     <div class="v2grid">
-      <div><span class="label">Adaptación (ADAPT%)</span><p style="margin:2px 0">Temporada <b>${fmt(a.adapt_pct_temporada.media, 1)}</b> (90 %: ${ivTxt(a.adapt_pct_temporada, 90)}) · primeros ${a.primeros_partidos} partidos <b>${fmt(a.adapt_pct_primeros.media, 1)}</b></p>${svgCurva(a)}
-        <p class="v2nota">100 = rinde lo que dice la normalización. Prior «${esc(r.grupo_nacionalidad)}», nivel ${esc(a.prior.nivel_fallback)} (n = ${a.prior.n ?? 0}), encogido ×${fmt(a.contraccion, 2)}${a.partidos_50 ? ` · el hueco se cierra al 50 % en ${fmt(a.partidos_50, 0)} partidos` : ""}.</p></div>
       <div><span class="label">Impacto en el equipo</span><p style="margin:2px 0">Net con él ${ESC.html("net_equipo", eq.d_net, null, { S: ESC.dS("net_equipo", eq.d_net), nombre: "Cambio del Net del equipo", raw: `${sg(eq.d_net, 2)} pts/100 (90 %: ${sg(eq.d_net_lo90, 1)} a ${sg(eq.d_net_hi90, 1)})` })} <span class="note">(modelo v4.0)</span></p>
         <span class="label" style="margin-top:6px">Quintetos más probables</span>${(eq.quintetos || []).map((q) => `<p class="v2nota" style="margin:2px 0">${Math.round(100 * q.prob)} % · ${q.nombres.map((x) => esc(String(x).split(",")[0])).join(", ")}${q.con_fichaje ? " (con fichaje)" : ""} · suma RAPM ${sg(q.net, 1)}</p>`).join("")}</div>
       <div><span class="label">Estilo</span><p style="margin:2px 0">${peu ? chipEst({ ...peu, jugador: true }, false) : "–"} en un equipo ${teu ? chipEst(teu, false) : "–"}</p>
@@ -2311,7 +2305,7 @@ function pintarV2(s) {
   const box = $("#sV2"); if (!box) return;
   if (!SIMD) { box.innerHTML = `<p class="note">Cargando el simulador…</p>`; return; }
   if (SIMD.error) { box.innerHTML = `<p class="note">No se pudo cargar el simulador (${esc(SIMD.error)}).</p>`; return; }
-  if (!s.todos.length) { box.innerHTML = `<p class="note">Añade un fichaje para ver su rol, minutos, producción, Fit, adaptación e impacto.</p>`; return; }
+  if (!s.todos.length) { box.innerHTML = `<p class="note">Añade un fichaje o marca una baja para ver el rol, los minutos, la producción, el Landing, el NIVEL KERNO y el impacto en el ecosistema del club.</p>`; return; }
   box.innerHTML = s.todos.map((o, n) => tarjetaV2(o, n, s)).join("");
 }
 const simDestino = () => BY.get(`${st.sim.club}:${st.sim.temp}`);
@@ -4441,6 +4435,36 @@ details.mas > summary, details.more > summary { font: 500 10.5px var(--cn-mono) 
 </script>
 <script src="informe_v3.js"></script>
 <script src="informe_equipo.js"></script>
+<script src="v41/ecosistema.js"></script>
+<script>
+/* Kerno Analytics v4.1 · F4 (09-11-2026): capa del ecosistema del club (v41/ecosistema.js). Confianza de las anclas en la
+   tarjeta de cada fichaje y panel del escenario (Δ Net, Coste de su ausencia, cambio en cada compañero, NIVEL KERNO). */
+(function () {
+  if (!window.KernoV41) return;
+  KernoV41.estilos();
+  KernoV41.cargar(cargarJSON).then(() => { try { if (!$("#p-simulador").hidden) pintarSim(); } catch (e) { /* */ } });
+  const _t = tarjetaV2;
+  tarjetaV2 = function (o, n, s) {
+    const h = _t(o, n, s); if (!KernoV41.listo()) return h;
+    return h.replace(/(<div><span>Nivel Kerno<\/span>[\s\S]*?<\/small>)/, "$1" + KernoV41.confianza("nivel_kerno"))
+      .replace(/(<div><span>Impacto<\/span>[\s\S]*?<\/small>)/, "$1" + KernoV41.confianza("impacto"))
+      .replace(/(<div><span>Δ Net del equipo<\/span>[\s\S]*?<\/small>)/, "$1" + KernoV41.confianza("net_equipo"));
+  };
+  const _p = pintarV2;
+  pintarV2 = function (s) {
+    _p(s);
+    const box = $("#sV2"); if (!box || !s || !s.v2 || !s.v2.club || !KernoV41.listo() || !(window.CernoV40 && CernoV40.listo())) return;
+    const bajas = s.v2.bajas || new Set(); if (!s.todos.length && !bajas.size) return;
+    const altas = s.todos.filter((o) => o.rec).map((o) => ({ rec: o.rec, rol: o.rol || rolDe(o.j, o.rec).rol }));
+    const div = document.createElement("div"); div.id = "sEcoV41"; div.innerHTML = '<p class="note">Calculando el ecosistema del club…</p>'; box.appendChild(div);
+    setTimeout(() => {
+      let r = null; try { r = KernoV41.escenario({ SIM: SIM2, SIMD, club: s.v2.club, bajas, altas, nSim: 300 }); } catch (e) { console.error("v4.1:", e); }
+      const el = document.getElementById("sEcoV41");
+      if (el) el.innerHTML = r ? KernoV41.panelHtml(r, (x) => x.nombre || x.persona) : '<p class="note">Sin ecosistema para este club (plantilla del simulador incompleta).</p>';
+    }, 30);
+  };
+})();
+</script>
 <script id="cerno-v2-ctx">
 /* Kerno Analytics v2.x · contexto compartido (club · temporada) aplicado a todas las herramientas del Atlas:
    simulador, parecidos, plantilla, lectura de fichaje (destino), informe de equipo, mapa de estilos y química.

@@ -1,0 +1,157 @@
+{
+ "definicion": "Landing = efecto de temporada de la adaptación al cambio de liga del grupo de traspaso, en % del nivel esperado tras la normalización; rango del 80 %. Explica el escalón entre NC₁ (con adaptación) y NC₂ (sin ella). Se muestra sólo si el rango excluye 0.",
+ "fuente": "data/modelos/adaptacion/v3_1/adaptation_priors.csv",
+ "metrica": "L_rel",
+ "grupos": {
+  "EEUU_a_Europa": {
+   "pct": -4.6,
+   "lo80": -8.1,
+   "hi80": -1.0,
+   "n": 271,
+   "mostrar": true,
+   "es": [
+    "EE. UU.",
+    "Europa"
+   ],
+   "en": [
+    "US",
+    "Europe"
+   ]
+  },
+  "NCAA_a_profesional": {
+   "pct": -11.6,
+   "lo80": -15.0,
+   "hi80": -8.1,
+   "n": 384,
+   "mostrar": true,
+   "es": [
+    "NCAA",
+    "profesional"
+   ],
+   "en": [
+    "NCAA",
+    "pro"
+   ]
+  },
+  "desconocido": {
+   "pct": -1.0,
+   "lo80": -1.7,
+   "hi80": -0.2,
+   "n": 691,
+   "mostrar": true,
+   "es": [
+    "traspaso sin nacionalidad registrada",
+    ""
+   ],
+   "en": [
+    "transfer without recorded nationality",
+    ""
+   ]
+  },
+  "europeo_cambia_liga": {
+   "pct": -2.1,
+   "lo80": -3.8,
+   "hi80": -0.5,
+   "n": 469,
+   "mostrar": true,
+   "es": [
+    "europeo",
+    "otra liga europea"
+   ],
+   "en": [
+    "European",
+    "another European league"
+   ]
+  },
+  "extranjero_cambia_pais": {
+   "pct": -0.8,
+   "lo80": -1.2,
+   "hi80": -0.4,
+   "n": 886,
+   "mostrar": true,
+   "es": [
+    "extranjero",
+    "otro país"
+   ],
+   "en": [
+    "foreign",
+    "another country"
+   ]
+  },
+  "extranjero_mismo_pais": {
+   "pct": 0.0,
+   "lo80": 0.0,
+   "hi80": 0.0,
+   "n": 68,
+   "mostrar": false,
+   "es": [
+    "extranjero",
+    "otra liga del mismo país"
+   ],
+   "en": [
+    "foreign",
+    "same-country league"
+   ]
+  },
+  "hacia_EEUU": {
+   "pct": -5.5,
+   "lo80": -8.3,
+   "hi80": -2.8,
+   "n": 118,
+   "mostrar": true,
+   "es": [
+    "Europa",
+    "EE. UU."
+   ],
+   "en": [
+    "Europe",
+    "US"
+   ]
+  },
+  "intra_EEUU": {
+   "pct": -8.4,
+   "lo80": -12.6,
+   "hi80": -4.1,
+   "n": 100,
+   "mostrar": true,
+   "es": [
+    "EE. UU.",
+    "EE. UU."
+   ],
+   "en": [
+    "US",
+    "US"
+   ]
+  },
+  "nacional_mismo_pais": {
+   "pct": -1.6,
+   "lo80": -2.8,
+   "hi80": -0.3,
+   "n": 248,
+   "mostrar": true,
+   "es": [
+    "liga nacional",
+    "otra liga de su país"
+   ],
+   "en": [
+    "home league",
+    "another home league"
+   ]
+  },
+  "otro_desde_EEUU": {
+   "pct": -2.1,
+   "lo80": -3.7,
+   "hi80": -0.5,
+   "n": 63,
+   "mostrar": true,
+   "es": [
+    "EE. UU. (no estadounidense)",
+    "Europa"
+   ],
+   "en": [
+    "US (non-American)",
+    "Europe"
+   ]
+  }
+ }
+}

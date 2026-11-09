@@ -1,0 +1,101 @@
+{
+ "minutos": {
+  "salida": "Minutos por partido",
+  "sello_examen": "MEDIA",
+  "confianza_es": "moderada",
+  "confianza_en": "moderate",
+  "estado": "propuesto",
+  "fuente": "estado_modelos ficha 1",
+  "segmentos": 2
+ },
+ "minutos_rango": {
+  "salida": "Rango de minutos (capa E, P5)",
+  "sello_examen": "ALTA",
+  "confianza_es": "alta",
+  "confianza_en": "high",
+  "estado": "propuesto",
+  "fuente": "V41_F1 §3; estado_modelos 19c",
+  "segmentos": 3
+ },
+ "produccion": {
+  "salida": "Producción por 100 posesiones",
+  "sello_examen": "MEDIA",
+  "confianza_es": "moderada",
+  "confianza_en": "moderate",
+  "estado": "propuesto",
+  "fuente": "estado_modelos ficha 2",
+  "segmentos": 2
+ },
+ "nivel_kerno": {
+  "salida": "NIVEL KERNO (NC₁, NC₂ y por escenario)",
+  "sello_examen": "ALTA",
+  "confianza_es": "alta",
+  "confianza_en": "high",
+  "estado": "propuesto",
+  "fuente": "V40_F5 §11.5; estado_modelos ficha 7",
+  "segmentos": 3
+ },
+ "impacto": {
+  "salida": "IMPACTO",
+  "sello_examen": "MEDIA",
+  "confianza_es": "moderada",
+  "confianza_en": "moderate",
+  "estado": "propuesto",
+  "fuente": "V40_F5; estado_modelos ficha 8",
+  "segmentos": 2
+ },
+ "net_equipo": {
+  "salida": "Net del equipo proyectado (y del escenario)",
+  "sello_examen": "ALTA",
+  "confianza_es": "alta",
+  "confianza_en": "high",
+  "estado": "propuesto",
+  "fuente": "V40_F4; estado_modelos 9 y 19b",
+  "segmentos": 3
+ },
+ "coste_ausencia": {
+  "salida": "Coste de su ausencia",
+  "sello_examen": "MEDIA",
+  "confianza_es": "moderada",
+  "confianza_en": "moderate",
+  "estado": "aprobado",
+  "fuente": "V41_F3 §3 y §7.1 (H2)",
+  "segmentos": 2
+ },
+ "delta_companeros": {
+  "salida": "Cambio por compañero (minutos, uso, cuota de tiro, % asistidas, pts/100)",
+  "sello_examen": "BAJA",
+  "confianza_es": "baja",
+  "confianza_en": "low",
+  "estado": "aprobado",
+  "fuente": "V41_F3 §2 y §7.1 (H1)",
+  "segmentos": 1
+ },
+ "landing": {
+  "salida": "Landing",
+  "sello_examen": "BAJA",
+  "confianza_es": "baja",
+  "confianza_en": "low",
+  "estado": "propuesto",
+  "fuente": "sin examen propio en la v4.1 (modelo de adaptación v3.x)",
+  "segmentos": 1
+ },
+ "efecto_companeros": {
+  "salida": "Efecto sobre compañeros (F2-B)",
+  "sello_examen": "MEDIA",
+  "confianza_es": "moderada",
+  "confianza_en": "moderate",
+  "estado": "propuesto",
+  "fuente": "estado_modelos ficha 11",
+  "segmentos": 2
+ },
+ "ortg_drtg": {
+  "salida": "ORtg / DRtg del equipo",
+  "sello_examen": "BAJA",
+  "confianza_es": "baja",
+  "confianza_en": "low",
+  "estado": "propuesto",
+  "fuente": "estado_modelos ficha 10",
+  "segmentos": 1
+ }
+}
