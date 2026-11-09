@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## 2026-11-09 — Skill «anadir-liga»
+
+* `.claude/skills/anadir-liga/`: procedimiento para incorporar una liga nueva a todo el sistema (decisiones fijadas de
+  antemano, fuente y adaptador, histórico 2020-21 → temporada en curso, listas de ligas del código, reajuste global de
+  los modelos, congelados del botón, verificación y publicación completa en Kerno). `cadena.sh` encadena el reajuste
+  (crosswalk → `scripts/rehacer_identidades.sh` → v4.0 → congelados del simulador), reanudable por pasos;
+  `decisiones/plantilla.md` es la ficha de cada liga. Basado en la ampliación a 20 ligas (31-10-2026) y en la
+  reconstrucción de identidades (03-11-2026). No se ha ejecutado aún con una liga real.
+
 ## 2026-11-09 — Botón «Actualizar 2026-27» (skill y paquete `bbactualiza`)
 
 Detalle: `docs/actualizacion_2026-27.md` y `.claude/skills/actualizar-temporada/SKILL.md`.
