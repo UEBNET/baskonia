@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## 2026-11-09 — CERNO v4.1 · puerta F3 APROBADA por el CEO
+
+* Decisiones H1–H5 (`docs/checkpoints/V41_F3.md` §7.1):
+  * sello BAJA en las diez métricas por compañero (Δ siempre con su rango; «sin cambio apreciable» si incluye 0);
+  * Valor de baja publicable con sello MEDIA;
+  * V-TRANS-c registrada como corrección de implementación;
+  * la F4 (producto) sólo con orden expresa, tras validar los términos nuevos y aplicar la marca Kerno.
+* La v4.1 queda completa en sus fases de modelo (F0–F3).
+
 ## 2026-11-09 — CERNO v4.1 · F3 Validación del impacto cruzado y de las bajas (puerta pendiente del CEO)
 
 Detalle: `docs/checkpoints/V41_F3.md`. Puerta F2 aprobada el 09-11-2026 (G1–G6; V41_F2 §10.1). Prerregistro

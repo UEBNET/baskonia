@@ -721,9 +721,9 @@ capas de la v4.0. Subpaquete `bbequipo/ecosistema/`, configuración `configs/eco
 agregados por tramo y jugador, con un catálogo de campos ampliable en `configs/ecosistema_v41.yaml → puntos_esperados`.
 Desde el 07-11-2026, todo examen de la v4.1 declara su **efecto mínimo detectable** (`configs → potencia`) antes de decidir.
 
-**Estado por fases:** F0, F1 y F2 aprobadas. **F3 (09-11-2026, puerta pendiente)** ([`docs/checkpoints/V41_F3.md`](docs/checkpoints/V41_F3.md)):
+**Estado por fases:** F0, F1, F2 y F3 aprobadas (la F4, producto, sólo con orden expresa). **F3 (aprobada el 09-11-2026)** ([`docs/checkpoints/V41_F3.md`](docs/checkpoints/V41_F3.md)):
 los Δ por métrica de cada compañero quedan en sello BAJA (ninguno supera a sus líneas base en dos bancos) y el «Valor de
-baja» pasa su examen en las ausencias (propuesta: sello MEDIA). **F2** ([`docs/checkpoints/V41_F2.md`](docs/checkpoints/V41_F2.md)):
+baja» pasa su examen en las ausencias (sello MEDIA). **F2** ([`docs/checkpoints/V41_F2.md`](docs/checkpoints/V41_F2.md)):
 el «Impacto en pista» no alcanza al IMPACTO v4.0 frente al on/off realizado (0,081 frente a 0,149), así que por la regla
 F2-a el IMPACTO v4.0 sigue como ancla y aquél queda EXPERIMENTAL. La familiaridad y el contexto de compañeros no aportan
 valor del jugador (diagnósticos POST HOC). Novedades en el motor de escenarios: NC₁/NC₂ por escenario y on/off sin la
