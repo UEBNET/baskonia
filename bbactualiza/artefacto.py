@@ -8,6 +8,7 @@ rutas del artifact (temporadas anteriores, páginas, PDF) no se tocan: la public
 from __future__ import annotations
 
 import base64
+import gzip
 import importlib.util
 import json
 import os
@@ -35,7 +36,7 @@ def _empaquetar_mod():
 
 def _py(*args: str) -> None:
     env = {**os.environ, "PYTHONPATH": str(RAIZ), "MLFLOW_DISABLE_AGENT_HINT": "1"}
-    subprocess.run([sys.executable, *args], cwd=RAIZ, env=env, check=True)
+    subprocess.run([sys.executable, *args], cwd=RAIZ, env=env, check=True, stdout=sys.stderr)   # stdout: sólo el informe
 
 
 # ============================================================================================ tablas de datos
@@ -58,7 +59,8 @@ def nacionalidades_json(temporada: str = TEMPORADA) -> None:
 
 def evaluacion(temporada: str = TEMPORADA) -> None:
     """Evaluación de ligas (descriptiva): la de la temporada y la de la anterior (sus «puentes» usan la siguiente)."""
-    _py("-m", "bbmodel", "evaluacion-ligas", "--salida", str(DA))
+    from bbmodel import evaluacion_ligas as EL
+    EL.main(str(DA), solo={(temporada, "regular"), (temporada, "total"), (PREVIA, "regular")})
 
 
 def normalizados(temporada: str = TEMPORADA) -> None:
@@ -193,7 +195,8 @@ def empaquetar(salida: Path, temporada: str = TEMPORADA) -> dict:
     for pub, src in mapa(temporada).items():
         if src.suffix == ".json":
             dst = comp / (pub.replace("/", "__") + ".gz.txt")
-            dst.write_bytes(base64.b64encode(E._gzip(src.read_bytes())))
+            b = src.read_bytes()        # gzip estándar: ≈ 10 veces más rápido que zopfli (≈ 4 % más grande)
+            dst.write_bytes(base64.b64encode(E._gzip(b) if os.environ.get("BBACTUALIZA_ZOPFLI") else gzip.compress(b, 9)))
             final[pub + ".gz.txt"] = str(dst)
             if src.stat().st_size <= E.UMBRAL:     # los pequeños también en claro (como artifact/empaquetar.py); los
                 final[pub] = str(src)              # grandes nunca se publicaron en claro: nada que borrar

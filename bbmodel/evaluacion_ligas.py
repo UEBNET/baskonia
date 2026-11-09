@@ -528,13 +528,18 @@ def bridges(reg, cur):
 df_minpart = {}
 
 
-def main(salida="data/artifact"):
+def main(salida="data/artifact", solo=None):
+  """`solo`: pares (temporada, fase) a calcular (por defecto, todos). La actualización rápida de la temporada en curso
+  (bbactualiza) pide sólo los de esa temporada y el «regular» de la anterior, cuyos puentes dependen de ella."""
   OUT = Path(salida)
   temporadas = sorted(p.name for p in DATA.iterdir() if p.is_dir() and (p / "ligas").exists())
   en_curso = temporadas[-1]
   for i, season in enumerate(temporadas):
-   siguiente = load(temporadas[i + 1], "regular") if i + 1 < len(temporadas) else None
-   for phase in ("regular", "playoffs", "total"):
+   fases = [f for f in ("regular", "playoffs", "total") if solo is None or (season, f) in solo]
+   if not fases:
+    continue
+   siguiente = load(temporadas[i + 1], "regular") if i + 1 < len(temporadas) and "regular" in fases else None
+   for phase in fases:
     thr = UMBRAL_EN_CURSO if season == en_curso else UMBRAL[phase]
     df = load(season, phase)
     if df is None:

@@ -1,0 +1,244 @@
+{
+ "temporada": "2026-27",
+ "inicio": "2026-11-08T23:22:25+00:00",
+ "fin": "2026-11-09T01:05:53+00:00",
+ "estado": "ok",
+ "nota": "primera actualización real, por pasos (8-9 nov. 2026); tiempos de cada paso en su ejecución",
+ "pasos": {
+  "descarga": {
+   "estado": "ok",
+   "segundos": 1002,
+   "ligas": {
+    "euroleague": {
+     "estado": "ok",
+     "partidos_nuevos": 20,
+     "incidencias": []
+    },
+    "acb": {
+     "estado": "ok",
+     "partidos_nuevos": 18,
+     "incidencias": []
+    },
+    "nba": {
+     "estado": "ok",
+     "partidos_nuevos": 72,
+     "incidencias": []
+    },
+    "gleague": {
+     "estado": "ok",
+     "partidos_nuevos": 18,
+     "incidencias": []
+    },
+    "lba": {
+     "estado": "ok",
+     "partidos_nuevos": 15,
+     "incidencias": []
+    },
+    "bbl": {
+     "estado": "ok",
+     "partidos_nuevos": 18,
+     "incidencias": []
+    },
+    "lnb": {
+     "estado": "ok",
+     "partidos_nuevos": 17,
+     "incidencias": []
+    },
+    "eurocup": {
+     "estado": "ok",
+     "partidos_nuevos": 16,
+     "incidencias": []
+    },
+    "bcl": {
+     "estado": "ok",
+     "partidos_nuevos": 8,
+     "incidencias": []
+    },
+    "fec": {
+     "estado": "ok",
+     "partidos_nuevos": 29,
+     "incidencias": []
+    },
+    "gbl": {
+     "estado": "ok",
+     "partidos_nuevos": 14,
+     "incidencias": []
+    },
+    "bsl": {
+     "estado": "ok",
+     "partidos_nuevos": 15,
+     "incidencias": []
+    },
+    "feb1": {
+     "estado": "ok",
+     "partidos_nuevos": 18,
+     "incidencias": []
+    },
+    "feb2": {
+     "estado": "ok",
+     "partidos_nuevos": 28,
+     "incidencias": []
+    },
+    "feb3": {
+     "estado": "ok",
+     "partidos_nuevos": 134,
+     "incidencias": []
+    },
+    "nbl": {
+     "estado": "ok",
+     "partidos_nuevos": 0,
+     "incidencias": []
+    },
+    "bnxt": {
+     "estado": "ok",
+     "partidos_nuevos": 0,
+     "incidencias": [
+      "última fecha 2026-10-25: más de 10 días sin partidos nuevos"
+     ]
+    },
+    "ncaa": {
+     "estado": "sin_datos",
+     "partidos_nuevos": 0,
+     "incidencias": [
+      "SIN PARTIDOS: revisar calendario y fuente"
+     ]
+    },
+    "vtb": {
+     "estado": "ok",
+     "partidos_nuevos": 0,
+     "incidencias": [
+      "última fecha 2026-10-27: más de 10 días sin partidos nuevos"
+     ]
+    },
+    "cba": {
+     "estado": "ok",
+     "partidos_nuevos": 0,
+     "incidencias": []
+    }
+   }
+  },
+  "pista": {
+   "estado": "ok",
+   "segundos": 86
+  },
+  "normalizacion": {
+   "estado": "ok",
+   "segundos": 72
+  },
+  "contexto": {
+   "estado": "ok",
+   "segundos": 91
+  },
+  "roles": {
+   "estado": "ok",
+   "segundos": 42
+  },
+  "entropia": {
+   "estado": "ok",
+   "segundos": 127
+  },
+  "estilos": {
+   "estado": "ok",
+   "segundos": 86
+  },
+  "simulador": {
+   "estado": "ok",
+   "segundos": 676
+  },
+  "artifact": {
+   "estado": "ok",
+   "segundos": 557
+  },
+  "publicacion": {
+   "estado": "ok",
+   "segundos": 10,
+   "ficheros": 63,
+   "mb": 44.7,
+   "lote": "/home/user/baskonia/publicacion/lote0.json"
+  }
+ },
+ "segundos": 2749,
+ "huella": "e36f831ab2c60c056a97bb8428fb9963d45ee3eb8832911552e7f7aa9217a577",
+ "ligas_publicas": {
+  "euroleague": {
+   "estado": "ok",
+   "partidos_nuevos": 20
+  },
+  "acb": {
+   "estado": "ok",
+   "partidos_nuevos": 18
+  },
+  "nba": {
+   "estado": "ok",
+   "partidos_nuevos": 72
+  },
+  "gleague": {
+   "estado": "ok",
+   "partidos_nuevos": 18
+  },
+  "lba": {
+   "estado": "ok",
+   "partidos_nuevos": 15
+  },
+  "bbl": {
+   "estado": "ok",
+   "partidos_nuevos": 18
+  },
+  "lnb": {
+   "estado": "ok",
+   "partidos_nuevos": 17
+  },
+  "eurocup": {
+   "estado": "ok",
+   "partidos_nuevos": 16
+  },
+  "bcl": {
+   "estado": "ok",
+   "partidos_nuevos": 8
+  },
+  "fec": {
+   "estado": "ok",
+   "partidos_nuevos": 29
+  },
+  "gbl": {
+   "estado": "ok",
+   "partidos_nuevos": 14
+  },
+  "bsl": {
+   "estado": "ok",
+   "partidos_nuevos": 15
+  },
+  "feb1": {
+   "estado": "ok",
+   "partidos_nuevos": 18
+  },
+  "feb2": {
+   "estado": "ok",
+   "partidos_nuevos": 28
+  },
+  "feb3": {
+   "estado": "ok",
+   "partidos_nuevos": 134
+  },
+  "nbl": {
+   "estado": "ok",
+   "partidos_nuevos": 0
+  },
+  "bnxt": {
+   "estado": "ok",
+   "partidos_nuevos": 0
+  },
+  "ncaa": {
+   "estado": "sin_datos",
+   "partidos_nuevos": 0
+  },
+  "vtb": {
+   "estado": "ok",
+   "partidos_nuevos": 0
+  },
+  "cba": {
+   "estado": "ok",
+   "partidos_nuevos": 0
+  }
+ }
+}

@@ -122,10 +122,27 @@ def roles(temporada: str = TEMPORADA) -> int:
     return n
 
 
-def entropia() -> dict:
-    """Entropía y volatilidad (la contracción agrupa temporadas: se rehace entera, sin parámetros guardados)."""
+def entropia(temporada: str = TEMPORADA) -> dict:
+    """Entropía y volatilidad. La orden se rehace entera (la contracción agrupa temporadas), pero su muestreo Monte Carlo
+    consume la secuencia aleatoria liga a liga: con filas nuevas, el histórico se movería en los decimales. Por eso se
+    guarda una copia antes y se empalman sólo las filas de la temporada en curso."""
+    import shutil
+    import tempfile
     from bbfit import entropia as E
-    return E.main(None)
+    d = MOD / "entropia"
+    ficheros = [d / "jugadores.csv.gz", d / "equipos.csv"]
+    tmp = Path(tempfile.mkdtemp())
+    for f in ficheros:
+        if f.exists():
+            shutil.copy(f, tmp / f.name)
+    res = E.main(None)
+    for f in ficheros:
+        if (tmp / f.name).exists():
+            nuevo = pd.read_csv(f, low_memory=False)
+            shutil.copy(tmp / f.name, f)
+            empalmar(f, nuevo, temporada, float_format="%.4f")
+    shutil.rmtree(tmp, ignore_errors=True)
+    return res
 
 
 def estilos() -> dict:
@@ -142,7 +159,14 @@ def _sim(version: str = "v33"):
 def simulador(salida: Path) -> dict:
     """Dataset del simulador v3.3 (v3.2 + Tercera FEB con la v2) y exportación al navegador (pesos congelados)."""
     _sim("v33")
+    import shutil
     from bbfit import sim_exportar as E
     from bbfit import sim_insumos as SI
     SI.dataset_simulador(progreso=None)
+    # piezas ajustadas con temporadas ≤ t de las temporadas base (2024-25, 2025-26): sólo dependen del histórico,
+    # que no cambia; se guardan congeladas y se ahorran ≈ 4,5 min por actualización. La de la temporada en curso se rehace.
+    SI.DIR_CACHE.mkdir(parents=True, exist_ok=True)
+    for f in sorted((MOD / "simulador" / "v3_3" / "congelado").glob("modelos_hasta_*.pkl")):
+        if TEMPORADA not in f.name and not (SI.DIR_CACHE / f.name).exists():
+            shutil.copy(f, SI.DIR_CACHE / f.name)
     return E.exportar(salida)

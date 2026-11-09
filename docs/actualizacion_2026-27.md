@@ -1,7 +1,7 @@
 # Actualización de la temporada 2026-27 desde el artifact (botón + skill)
 
 Botón **«Actualizar 2026-27»** en la cabecera del artifact Cerno Analytics
-(https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN) → Routine **«Actualizar 2026-27 · Cerno»** → sesión de Claude Code
+(https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN) → Routine **«Actualizar 2026-27 · Cerno»** (`trig_01MKcE4HNk4cKX5unL2t3A6v`, sin programación: sólo la lanza el botón) → sesión de Claude Code
 que sigue la skill `.claude/skills/actualizar-temporada` → `python -m bbactualiza` (paquete `bbactualiza/`) → Git
 (rama `claude/gallant-pascal-49bx9o`) y republicación del artifact con sólo los ficheros que cambian.
 

@@ -4,7 +4,7 @@ Eres el backend del botón «Actualizar 2026-27» del artifact Cerno Analytics (
    git clone --depth 1 --filter=blob:none --sparse --branch claude/gallant-pascal-49bx9o https://github.com/uebnet/baskonia
    cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/2020-21/' '!/data/raw/*/2021-22/' '!/data/raw/*/2022-23/' '!/data/raw/*/2023-24/' '!/data/raw/*/2024-25/' '!/data/raw/*/2025-26/'
    Lee .claude/skills/actualizar-temporada/SKILL.md: es la referencia de todo lo que sigue.
-2. Dependencias: pip install -q -r requirements.txt -r requirements-v3.txt --extra-index-url https://download.pytorch.org/whl/cpu
+2. Dependencias: pip install -q -r requirements.txt -r requirements-v3.txt -r requirements-estilos.txt --extra-index-url https://download.pytorch.org/whl/cpu
 3. Actualización (en segundo plano; espera a que termine, puede tardar 30-90 min):
    PYTHONPATH=. MLFLOW_DISABLE_AGENT_HINT=1 python -m bbactualiza --json > /tmp/actualizacion.json 2> /tmp/actualizacion.log
    Lee /tmp/actualizacion.json: «estado» es ok, sin_cambios, error u ocupado.

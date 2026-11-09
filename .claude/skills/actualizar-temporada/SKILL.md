@@ -22,7 +22,7 @@ y el resto de líneas queda byte a byte igual.
    cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/' '/data/raw/*/2026-27/'
    ```
 2. **Dependencias** (≈ 1 min si el entorno no las trae ya):
-   `pip install -r requirements.txt -r requirements-v3.txt --extra-index-url https://download.pytorch.org/whl/cpu`
+   `pip install -r requirements.txt -r requirements-v3.txt -r requirements-estilos.txt --extra-index-url https://download.pytorch.org/whl/cpu`
 3. **Actualización** (en segundo plano; espera a que termine):
    `PYTHONPATH=. python -m bbactualiza --json > actualizacion.json 2> actualizacion.log`
    * Código 0: `estado` = `ok` (hay ficheros que publicar) o `sin_cambios` (no hay partidos nuevos: no se

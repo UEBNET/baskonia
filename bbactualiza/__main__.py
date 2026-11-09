@@ -21,8 +21,10 @@ def main(argv: list[str] | None = None) -> int:
     a = ap.parse_args(argv)
     if a.temporada != TEMPORADA:
         ap.error(f"sólo se actualiza la temporada en curso ({TEMPORADA}); el histórico es estático")
-    inf = ejecutar(a.temporada, a.pasos, a.sin_descarga, a.forzar, a.ligas, a.publicacion,
-                   log=lambda m: print(m, file=sys.stderr, flush=True))
+    import contextlib
+    with contextlib.redirect_stdout(sys.stderr):          # lo que impriman las capas va al registro; stdout = informe
+        inf = ejecutar(a.temporada, a.pasos, a.sin_descarga, a.forzar, a.ligas, a.publicacion,
+                       log=lambda m: print(m, file=sys.stderr, flush=True))
     print(json.dumps(inf, ensure_ascii=False, indent=1, default=str) if a.json else tabla_md(inf))
     return {"ok": 0, "sin_cambios": 0, "ocupado": 2}.get(inf["estado"], 1)
 

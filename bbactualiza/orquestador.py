@@ -105,15 +105,18 @@ def p_simulador(ctx):
 def p_artifact(ctx):
     from . import artefacto as A
     t = ctx["temporada"]
-    A.tablas(t)
-    A.nacionalidades_json(t)
-    A.evaluacion(t)
-    A.normalizados(t)
-    A.compactar()
-    A.atlas_estilos()
-    A.informe(t)
-    A.quintetos(t)
-    return {}
+    sub = [("tablas", lambda: A.tablas(t)), ("nacionalidades", lambda: A.nacionalidades_json(t)),
+           ("evaluacion", lambda: A.evaluacion(t)), ("normalizados", lambda: A.normalizados(t)),
+           ("atlas_estilos", A.atlas_estilos),
+           ("informe", lambda: A.informe(t)),          # lee datos/<t>/regular.json en filas: antes de compactar
+           ("quintetos", lambda: A.quintetos(t)), ("compactar", A.compactar)]
+    tiempos = {}
+    for n, f in sub:
+        t0 = time.time()
+        f()
+        tiempos[n] = round(time.time() - t0)
+        ctx["log"](f"      {n}: {tiempos[n]} s")
+    return {"subpasos": tiempos}
 
 
 def p_publicacion(ctx):
@@ -124,7 +127,7 @@ def p_publicacion(ctx):
     resumen = {"temporada": ctx["temporada"], "fin": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                "inicio": inf["inicio"], "ligas": {l: {"estado": v.get("estado"), "partidos_nuevos": v.get("partidos_nuevos")}
                                                   for l, v in ligas.items()},
-               "pasos": {n: p.get("segundos") for n, p in inf["pasos"].items()}}
+               "pasos": {n: p.get("segundos") for n, p in _pasos(inf, previa).items()}}
     inf["ligas_publicas"] = resumen["ligas"]
     (artefacto.DA / "actualizacion.json").write_text(json.dumps(resumen, ensure_ascii=False, indent=1), encoding="utf-8")
     return artefacto.empaquetar(ctx["publicacion"], ctx["temporada"])
@@ -188,9 +191,19 @@ def ejecutar(temporada: str = TEMPORADA, pasos: list[str] | None = None, sin_des
             p.pop("traza", None)
         if inf["estado"] == "sin_cambios":
             guardar = {**previa, "ultima_comprobacion": inf["fin"], "pasos_ultima_comprobacion": inf["pasos"]}
+        elif "descarga" not in pasos and previa:     # ejecución parcial: completa el registro de la última actualización
+            guardar = {**previa, "fin": inf["fin"], "huella": inf.get("huella", previa.get("huella")),
+                       "pasos": _pasos(guardar, previa), "ligas_publicas": inf.get("ligas_publicas", previa.get("ligas_publicas"))}
         (ESTADO / "ultima.json").write_text(json.dumps(guardar, ensure_ascii=False, indent=1, default=str),
                                              encoding="utf-8")
     return inf
+
+
+def _pasos(inf: dict, previa: dict) -> dict:
+    """Pasos de esta ejecución; si fue parcial (sin descarga), sobre los de la última actualización completa."""
+    if "descarga" in inf.get("pasos", {}) or not previa:
+        return dict(inf.get("pasos", {}))
+    return {**previa.get("pasos", {}), **inf.get("pasos", {})}
 
 
 def tabla_md(inf: dict) -> str:
