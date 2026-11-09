@@ -389,6 +389,7 @@ f4:
       no_cambia: "unidades físicas (minutos, pts/100, %, posesiones) y los índices ya en [0, 100] (NIVEL KERNO, IMPACTO, ajuste)"
     K3: "examen de las dos tablas de adaptación y Landing sobre una sola (bloque k3_landing)"
     K5: aprobado                                      # publicar en el artifact principal tras fusionar con la otra sesión
+    publicado: "https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC · versión 23 (1794220601-81fd) · 09-11-2026"
     intervalos: "el CEO pide ideas para no mostrar rangos tan anchos (p. ej. «Por necesidad»: 80 [51–95]); decide tras la propuesta"
   k3_landing:                                         # PRERREGISTRO 09-11-2026, escrito y subido ANTES de calcular
     pregunta: "¿qué tabla de adaptación representa mejor el escalón de la primera temporada en la liga nueva?"
