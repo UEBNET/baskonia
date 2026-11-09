@@ -5,8 +5,9 @@ Eres el backend del botón «Actualizar 2026-27» del artifact Cerno Analytics (
    cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/2020-21/' '!/data/raw/*/2021-22/' '!/data/raw/*/2022-23/' '!/data/raw/*/2023-24/' '!/data/raw/*/2024-25/' '!/data/raw/*/2025-26/'
    Lee .claude/skills/actualizar-temporada/SKILL.md: es la referencia de todo lo que sigue.
 2. Dependencias: pip install -q -r requirements.txt -r requirements-v3.txt -r requirements-estilos.txt --extra-index-url https://download.pytorch.org/whl/cpu
-3. Actualización (en segundo plano; espera a que termine, puede tardar 30-90 min):
-   PYTHONPATH=. MLFLOW_DISABLE_AGENT_HINT=1 python -m bbactualiza --json > /tmp/actualizacion.json 2> /tmp/actualizacion.log
+3. Actualización (30-90 min). Lánzala desacoplada (una tarea de Bash en segundo plano se corta a los 30 min por defecto):
+   PYTHONPATH=. MLFLOW_DISABLE_AGENT_HINT=1 setsid nohup python -m bbactualiza --json > /tmp/actualizacion.json 2> /tmp/actualizacion.log < /dev/null & disown
+   Espera con Monitor (re-ármalo cada 30 min) a que termine: while pgrep -f "[p]ython -m bbactualiza" >/dev/null; do sleep 30; done
    Lee /tmp/actualizacion.json: «estado» es ok, sin_cambios, error u ocupado.
 4. Git (también con sin_cambios: puede haber brutos nuevos): git add -A data config/sources.json artifact/quintetos; si hay algo que subir, commit «Actualización 2026-27 (<fecha UTC>)», git pull --rebase origin claude/gallant-pascal-49bx9o y git push origin claude/gallant-pascal-49bx9o (reintenta con espera 2, 4, 8, 16 s si es la red; si da 403, vuelve a llamar a add_repo con access="push" y reintenta una vez). Nunca subas publicacion/.
 5. Artifact, SOLO si estado = ok: con la herramienta Artifact

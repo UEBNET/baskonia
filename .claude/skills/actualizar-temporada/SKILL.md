@@ -19,12 +19,14 @@ y el resto de líneas queda byte a byte igual.
    (sin el historial y sin los brutos de temporadas pasadas, que no se usan):
    ```bash
    git clone --depth 1 --filter=blob:none --sparse --branch claude/gallant-pascal-49bx9o https://github.com/uebnet/baskonia
-   cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/' '/data/raw/*/2026-27/'
+   cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/2020-21/' '!/data/raw/*/2021-22/' '!/data/raw/*/2022-23/' '!/data/raw/*/2023-24/' '!/data/raw/*/2024-25/' '!/data/raw/*/2025-26/'
    ```
 2. **Dependencias** (≈ 1 min si el entorno no las trae ya):
    `pip install -r requirements.txt -r requirements-v3.txt -r requirements-estilos.txt --extra-index-url https://download.pytorch.org/whl/cpu`
-3. **Actualización** (en segundo plano; espera a que termine):
-   `PYTHONPATH=. python -m bbactualiza --json > actualizacion.json 2> actualizacion.log`
+3. **Actualización** (30-90 min), desacoplada para que no la corte el límite de las tareas de Bash en segundo plano
+   (30 min por defecto, 2 h como máximo):
+   `PYTHONPATH=. MLFLOW_DISABLE_AGENT_HINT=1 setsid nohup python -m bbactualiza --json > /tmp/actualizacion.json 2> /tmp/actualizacion.log < /dev/null & disown`
+   y espera con Monitor a que acabe (`while pgrep -f "[p]ython -m bbactualiza" >/dev/null; do sleep 30; done`).
    * Código 0: `estado` = `ok` (hay ficheros que publicar) o `sin_cambios` (no hay partidos nuevos: no se
      recalcula ni se publica nada; termina aquí tras subir los brutos nuevos, si los hay).
    * Código 1: un paso falló. **No publiques**; resume el error (`pasos.<paso>.error`) y termina.
