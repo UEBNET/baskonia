@@ -1,5 +1,29 @@
 # Registro de cambios
 
+## 2026-11-09 — CERNO v4.1 · F2 Impacto en pista y candidatos de química (puerta pendiente del CEO)
+
+Detalle: `docs/checkpoints/V41_F2.md`. Puerta F1 aprobada el 08-11-2026 (E1, E2 y E5); F2-a con la opción (a).
+
+* **Impacto en pista** (`bbequipo/ecosistema/impacto_pista.py`, `examen_impacto.py`).
+  * Definición: v_j = β + h + Σ π φ → percentil esperado del grupo de liga → isotónica con los cortes anteriores.
+  * Los cuatro cortes se calcularon sin fuga.
+  * **Examen §6.2** (las 3.598 filas del IMPACTO v4.0):
+    * monotonía 0,081 frente a 0,149: no cumple la no inferioridad;
+    * frente al aditivo +0,050 [0,024; 0,077];
+    * calibración ±5,0 y cobertura 0,792.
+    * **Regla F2-a aplicada:** el IMPACTO v4.0 sigue como ancla; el Impacto en pista queda EXPERIMENTAL.
+  * Contextualidad −0,003 [−0,039; 0,033]: el cambio por altas y bajas lleva sello BAJA.
+* **Candidatos:**
+  * contexto c_j: entra por la regla literal (+0,080); [POST HOC] es la mecánica del on/off (frente al β RAPM de t+1 cae
+    de 0,58 a 0,13): propuesta de no adoptarlo;
+  * familiaridad (`familiaridad.py`): δ +0,38 [0,35; 0,41], pero no mejora la monotonía. [POST HOC] El placebo de
+    familiaridad futura da +0,47 y sin contracción δ ≈ 0: es selección.
+* **F2-d:** campos `net_off`, `xnet_off`, `net_onoff` y `xnet_onoff` en la capa XP (41 activos).
+* **F2-b:** NC₁/NC₂ por escenario e Impacto en pista antes/después en `Ecosistema.simular`.
+* **Opción (a):** regeneradas en `experimentos/` (no versionado) las cachés ≤ t de los cortes 2021–2024: el A, 80 redes
+  CVAE v3.2, la normalización «V32_corte» y los pesos del motor.
+* CLI: `impacto-pista`, `familiaridad`, `xp-onoff`. 7 tests nuevos (33 en `tests/test_ecosistema_v41.py`).
+
 ## 2026-11-07 — CERNO v4.1 · F1 Motor de escenarios (puerta pendiente del CEO)
 
 Detalle: `docs/checkpoints/V41_F1.md`.

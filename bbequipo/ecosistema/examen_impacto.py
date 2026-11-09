@@ -160,43 +160,48 @@ def delta_por_corte(fam: dict | None, cortes) -> dict:
 
 
 def variantes(cfg: dict, R: pd.DataFrame, e: pd.DataFrame, fam: dict | None) -> tuple[pd.DataFrame, dict]:
-    """fam: familiaridad.json (δ ≤ t en `hasta_temporada`)."""
-    """Crudos y calibrados de IP, beta, IP_fam (δ ≤ t) e IP_ctx (γ con los cortes < t, F2-e)."""
+    """Crudos y calibrados de IP, beta, IP_fam (δ ≤ t) e IP_ctx (γ con los cortes < t, F2-e). fam: familiaridad.json."""
     cortes = [int(c) for c in cfg["comunes"]["cortes"]]
     info = {}
     R["c_IP"] = crudo(R, "v_media", "v_sd")
     R["c_beta"] = crudo(R, "beta", "beta_sd")
     if fam:
-        temp = {a: f"{a}-{str(a + 1)[-2:]}" for a in cortes}
         dlt = delta_por_corte(fam, cortes)
         info["delta_familiaridad_por_corte"] = dlt
         R["v_fam"] = R["v_media"] + R["anio"].map(dlt).fillna(0.0) * R["familiaridad"].fillna(0.0)
         R["c_IP_fam"] = crudo(R, "v_fam", "v_sd")
     # contexto c_j: y_f2e ~ 1 + v̂ + c_j con los fichajes de los cortes < t (MCP por minutos), aplicado a todo el corte t
     comp = ["nivel_companeros"] + [f"perfil_companeros_{k}" for k in range(4)]
-    R["s_ctx"] = np.nan
-    keys = ["anio", "liga", "team", "persona_id"]
-    ee = e[e["onoff_ok"] & e["v_media"].notna() & e["y_f2e"].notna()]
-    gam = {}
-    for k, a in enumerate(cortes):
-        tr = ee[ee["anio"].isin(cortes[:k])] if k else ee[ee["anio"] == a]   # 2021 sólo calibra (in-sample, como el IM)
-        if len(tr) < 300:
-            continue
-        A = np.c_[np.ones(len(tr)), tr["v_media"], tr[comp].fillna(0.0)]
-        w = np.sqrt(tr["min_total"].to_numpy(float))
-        coef = np.linalg.lstsq(A * w[:, None], tr["y_f2e"].to_numpy(float) * w, rcond=None)[0]
-        gam[a] = coef.tolist()
-        s = R["anio"] == a
-        R.loc[s, "s_ctx"] = np.c_[np.ones(s.sum()), R.loc[s, "v_media"], R.loc[s, comp].fillna(0.0)] @ coef
+    R["s_ctx"], gam = puntuacion_contexto(R, e, cortes, comp)
     info["gamma_contexto_por_corte"] = {str(a): dict(zip(["intercepto", "v"] + comp, g)) for a, g in gam.items()}
     R["c_IP_ctx"] = crudo(R, "s_ctx", None)
     cols = [c for c in R.columns if c.startswith("c_")]
+    keys = ["anio", "liga", "team", "persona_id"]
     e = e.drop(columns=[c for c in cols if c in e]).merge(
         R[R["fichaje"]].drop_duplicates(keys)[keys + cols].rename(columns={"liga": "liga_d", "team": "team_d"}),
         on=["anio", "liga_d", "team_d", "persona_id"], how="left")
     for c in cols:
         e = calibrar(e, c, cortes, c[2:])
     return e, info
+
+
+def puntuacion_contexto(R: pd.DataFrame, e: pd.DataFrame, cortes: list[int], comp: list[str],
+                        objetivo: str = "y_f2e") -> tuple[pd.Series, dict]:
+    """s = [1, v̂, c_j]·γ, γ por MCP (pesos = minutos) con los fichajes de los cortes < t (2021: el propio, sólo calibra)."""
+    ee = e[e["onoff_ok"] & e["v_media"].notna() & e[objetivo].notna()]
+    s = pd.Series(np.nan, index=R.index)
+    gam = {}
+    for k, a in enumerate(cortes):
+        tr = ee[ee["anio"].isin(cortes[:k])] if k else ee[ee["anio"] == a]
+        if len(tr) < 300:
+            continue
+        A = np.c_[np.ones(len(tr)), tr["v_media"], tr[comp].fillna(0.0)]
+        w = np.sqrt(tr["min_total"].to_numpy(float))
+        coef = np.linalg.lstsq(A * w[:, None], tr[objetivo].to_numpy(float) * w, rcond=None)[0]
+        gam[a] = coef.tolist()
+        m = R["anio"] == a
+        s[m] = np.c_[np.ones(m.sum()), R.loc[m, "v_media"], R.loc[m, comp].fillna(0.0)] @ coef
+    return s, gam
 
 
 # =============================================================================================== examen
@@ -388,4 +393,68 @@ def contextualidad(cfg: dict, R: pd.DataFrame, B: int, semilla: int, delta_fam: 
                                               ref="d_real")
     out["dt_d_pred"] = float(d["d_pred"].std())
     out["dt_d_real"] = float(d["d_real"].std())
+    return out
+
+
+# =============================================================================================== contexto: diagnóstico POST HOC
+def post_hoc_contexto(cfg: dict, R: pd.DataFrame, e: pd.DataFrame, B: int, semilla: int, min_poss: float = 500.0) -> dict:
+    """[POST HOC, 09-11-2026] ¿De dónde sale la mejora del término de contexto c_j?
+    (i) ablación: sólo el nivel medio de los compañeros / sólo sus perfiles / los dos (el prerregistrado);
+    (ii) contraste con un realizado que NO depende mecánicamente de los compañeros: el β RAPM de la temporada t+1 (F1 v4.0
+    publicado, ajustado por compañeros y rivales; jugadores con ≥ min_poss posesiones). Si c_j mejora frente al on/off pero
+    no frente al β de t+1, lo que añade es la dependencia del on/off respecto a los compañeros, no valor del jugador."""
+    cortes = [int(c) for c in cfg["comunes"]["cortes"]]
+    dec = [int(c) for c in cfg["comunes"]["cortes_decision"]]
+    perf = [f"perfil_companeros_{k}" for k in range(4)]
+    var = {"ctx_solo_nivel": ["nivel_companeros"], "ctx_solo_perfil": perf, "ctx_completo": ["nivel_companeros"] + perf}
+    R = R.copy()
+    keys = ["anio", "liga", "team", "persona_id"]
+    gam = {}
+    for n, comp in var.items():
+        R[f"s_{n}"], g = puntuacion_contexto(R, e, cortes, comp)
+        gam[n] = {str(a): dict(zip(["intercepto", "v"] + comp, x)) for a, x in g.items()}
+        R[f"c_{n}"] = crudo(R, f"s_{n}", None)
+    cols = [f"c_{n}" for n in var]
+    e = e.drop(columns=[c for c in cols if c in e]).merge(
+        R[R["fichaje"]].drop_duplicates(keys)[keys + cols].rename(columns={"liga": "liga_d", "team": "team_d"}),
+        on=["anio", "liga_d", "team_d", "persona_id"], how="left")
+    for c in cols:
+        e = calibrar(e, c, cortes, c[2:])
+    d = e[e["anio"].isin(dec) & e["onoff_ok"] & e["IM_onoff"].notna() & e["IP"].notna()].dropna(subset=list(var))
+    c_all = ["IP", *var, "IM_onoff", "IM_aditivo"]
+    m = monotonia(d, c_all, B, semilla)
+    out = {"etiqueta": "POST HOC", "n": m["n"], "gamma": gam,
+           "on_off": {c: m[c] for c in c_all},
+           "frente_IP": {n: diferencia(m, n, "IP", c_all) for n in var},
+           "ctx_completo_menos_IM_v40": diferencia(m, "ctx_completo", "IM_onoff", c_all),
+           "ctx_completo_menos_aditivo": diferencia(m, "ctx_completo", "IM_aditivo", c_all),
+           "por_corte": {str(a): {c: spearman(d.loc[d["anio"] == a, c], d.loc[d["anio"] == a, "net_rtg_aj_onoff"]) for c in ("IP", "ctx_completo", "IM_onoff")} for a in dec}}
+    elite = set(cfg["comunes"]["segmentos"]["elite_club"])
+    me = monotonia(d[d["liga_d"].isin(elite)], ["IP", "ctx_completo", "IM_onoff"], B, semilla + 1)
+    out["elite_club"] = {c: me[c] for c in ("IP", "ctx_completo", "IM_onoff")} | {"n": me["n"]}
+    # (ii) β RAPM realizado en t+1
+    cfg40 = CE.cargar_v40(cfg)
+    partes = []
+    for a in dec:
+        f = CE.RAIZ / cfg40["f1"]["salidas"]["rapm"] / f"{a + 1}-{str(a + 2)[-2:]}.csv.gz"
+        if f.exists():
+            t = pd.read_csv(f, usecols=["persona_id", "beta", "poss"], dtype={"persona_id": str})
+            partes.append(t.assign(anio=a).rename(columns={"beta": "beta_t1", "poss": "poss_t1"}))
+    if partes:
+        T = pd.concat(partes).sort_values("poss_t1").drop_duplicates(["anio", "persona_id"], keep="last")
+        x = d.merge(T, on=["anio", "persona_id"], how="inner")
+        x = x[x["poss_t1"] >= min_poss]
+        mb = monotonia(x, ["IP", "ctx_completo", "ctx_solo_nivel", "ctx_solo_perfil", "IM_onoff", "beta"], B, semilla + 2, ref="beta_t1")
+        cc = ["IP", "ctx_completo", "ctx_solo_nivel", "ctx_solo_perfil", "IM_onoff", "beta"]
+        out["beta_rapm_t1"] = {"n": mb["n"], "min_poss": min_poss, **{c: mb[c] for c in cc},
+                               "ctx_completo_menos_IP": diferencia(mb, "ctx_completo", "IP", cc),
+                               "ctx_solo_nivel_menos_IP": diferencia(mb, "ctx_solo_nivel", "IP", cc),
+                               "IP_menos_IM_v40": diferencia(mb, "IP", "IM_onoff", cc)}
+    # nivel de los compañeros frente al on/off con el Impacto en pista fijo (correlación parcial de rangos)
+    from scipy.stats import rankdata as rk
+    rr = {c: rk(d[c]) for c in ("net_rtg_aj_onoff", "IP", "nivel_companeros")}
+    X = np.c_[np.ones(len(d)), rr["IP"]]
+    res_y = rr["net_rtg_aj_onoff"] - X @ np.linalg.lstsq(X, rr["net_rtg_aj_onoff"], rcond=None)[0]
+    res_c = rr["nivel_companeros"] - X @ np.linalg.lstsq(X, rr["nivel_companeros"], rcond=None)[0]
+    out["parcial_onoff_nivel_companeros_dado_IP"] = float(np.corrcoef(res_y, res_c)[0, 1])
     return out

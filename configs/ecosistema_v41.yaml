@@ -345,6 +345,17 @@ criterios:
     contextualidad: spearman(Δ predicho Impacto en pista, Δ percentil on/off realizado) > 0 con IC95 que excluye 0
     contextualidad_si_falla: el IMPACTO se publica, pero su CAMBIO por altas/bajas lleva sello BAJA
     termino_contexto_cj: entra solo si mejora la monotonía con IC95 que excluye 0
+    resultado_examen_09-11-2026:                      # V41_F2 (impacto_pista/examen_f2.json); 3.598 fichajes, 1.081 equipos-temporada
+      monotonia: "IP 0,081 [0,048; 0,112] frente a IM v4.0 0,149: diferencia −0,068 [−0,101; −0,035] → NO cumple (margen −0,02)"
+      frente_aditivo: "+0,050 [0,024; 0,077]: cumple"
+      calibracion: "desvío máximo por decil 5,0 (≤ 7): cumple"
+      cobertura_80: "0,792: cumple"
+      elite_club_informado: "IP 0,170 frente a IM 0,159 (diferencia +0,011 [−0,059; 0,078])"
+      contextualidad: "−0,003 [−0,039; 0,033] (EMD 0,05): NO cumple → el CAMBIO por altas/bajas lleva sello BAJA"
+      termino_contexto_cj: "mejora +0,080 [0,047; 0,115]: entra por la regla literal; POST HOC: toda la mejora es el nivel de
+        los compañeros con signo negativo (mecánica del on/off) y frente al β RAPM de t+1 cae de 0,58 a 0,13 → pendiente del CEO"
+      familiaridad: "δ +0,38 [0,35; 0,41] pero no mejora la monotonía (+0,002 [−0,005; 0,009]): no entra; POST HOC: selección"
+      regla_f2a: "aplicada: el IMPACTO v4.0 sigue como ancla; el Impacto en pista se muestra EXPERIMENTAL"
   f3_trios:
     estado: cerrada_sin_ejecutar_07-11-2026           # DECISIÓN CEO (D4): examen no informativo (EMD > 2 pts/100 frente a 0,10;
                                                       # V41_F0 §11.3); motor en orden 2; ablación negativa en potencia/trios_elite_club.json

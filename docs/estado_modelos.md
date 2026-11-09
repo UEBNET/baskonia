@@ -1,6 +1,6 @@
 # Estado de los modelos · una ficha por salida visible del producto
 
-Revisión F0 de la v4.1 · 06-11-2026 · rama de trabajo `claude/jolly-thompson-qczxl4` (base v4.0 `6fb6abd`).
+Revisión F0 de la v4.1 · 06-11-2026 (actualizada con la F1 el 07-11 y la F2 el 09-11) · rama de trabajo `claude/jolly-thompson-qczxl4` (base v4.0 `6fb6abd`).
 Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmark de decisión de la F0
 (`data/modelos/v4_1/benchmark/benchmark.json`, `python -m bbequipo.ecosistema benchmark`). Etiquetas: **[DATO]** medido;
 **[LECTURA]** interpretación; **[HIPÓTESIS]** supuesto; **[POST HOC]**; **[DECISIÓN]**.
@@ -37,14 +37,14 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 13 | Estilo | v3.x | descriptivo | — | Nunca se suma (decisión 9) |
 | 14 | Quintetos más probables | v4.0 capa 4 | descriptivo | — | Sólo descripción de la rotación (decisión 8) |
 | 15 | Avisos de la ficha | v3.3 | provisional | — | Recalibrar: el 64,5 % de las fichas lleva alguno |
-| 16 | Impacto en pista | v4.1 F2 | experimental | — | Examen §6.2 |
+| 16 | Impacto en pista | v4.1 F2 | experimental: no alcanza al IMPACTO v4.0 (0,081 frente a 0,149; V41_F2) → regla F2-a | — (EXPERIMENTAL; su cambio por altas/bajas, BAJA) | Puerta F2 (V41_F2 §10) |
 | 17 | Δ por métrica de cada compañero | v4.1 F1 (motor) / F3 (sello) | calculado en F1; sin sello | — | Sello por métrica §6.4 (F3); cuota de tiro sin renormalizar (V41_F1 §5) |
 | 18 | Valor de baja | v4.1 F1 / F3 | calculado en F1; sin examen | — | Examen en V-AUS (ΔNet frente a Δ = 0) |
 | 19 | Atribución por movimiento (Shapley) | v4.1 F1 | validado (composición exacta: Σ = Δ a 10⁻¹⁴ en 472 escenarios) | hereda el de lo atribuido | — |
 | 19b | Net del escenario (altas con rol, bajas) | v4.1 F1 | validado como composición: paridad con la capa 4 exacta en 117/118 (el otro, corrección P5) | hereda la capa 4 (ALTA) | V41_F1 |
 | 19c | Rangos de minutos de la capa E | v4.1 F1 (P5) | validado: cobertura 80 %/90 % en rango en cada corte | ALTA (propuesto) | V41_F1 §3 |
 | 20 | Sinergia de tríos (φ₃) | v4.1 F3-T | experimental, condicional | — | EMD > 2 pts/100 frente a una puerta de 0,10: examen no informativo; propuesta: cerrar la F3-T (V41_F0 §11.3) |
-| 21 | Capa XP: punto esperado por tiro, tramo y jugador | v4.1 (xp1) | experimental (37 campos); resultado de tramo 0,75·real + 0,25·esperado adoptado por regla | — (sin sello hasta examinar cada campo) | Catálogo ampliable: `docs/puntos_esperados.md` |
+| 21 | Capa XP: punto esperado por tiro, tramo y jugador | v4.1 (xp1) | experimental (41 campos desde la F2-d); resultado de tramo 0,75·real + 0,25·esperado adoptado por regla | — (sin sello hasta examinar cada campo) | Catálogo ampliable: `docs/puntos_esperados.md` |
 
 ---
 
@@ -124,6 +124,8 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 - **Fugas**: la calibración del corte 2021 usa su propio corte (declarado; no decide).
 - **Estado**: validado. **Sello propuesto**: ALTA para NC₁ (pasa en cada corte); NC₂ hereda, con la nota de la ficha 6.
 - **Límite declarado**: C son puntos; defensa y juego sin balón no entran en NC.
+- **v4.1 F2-b (09-11-2026)**: NC₁/NC₂ **por escenario**: el mismo cálculo con los compañeros y roles del escenario
+  (`Ecosistema.simular(..., nc=True)`); hereda el examen y el sello del NC (V41_F2 §8).
 
 ## 8 · IMPACTO (v4.0)
 
@@ -135,7 +137,9 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
   El 90 % de los IM publicados está en [42,5, 60,7]: **la escala está muy comprimida alrededor de 50**.
 - **Fugas**: [POST HOC] criterio redefinido tras ver el literal (declarado en V40_F5 §6.0).
 - **Estado**: provisional. **Sello propuesto**: MEDIA (pasa en global; en élite, en el límite).
-- **v4.1**: se sustituye por «Impacto en pista» (ficha 16), que no puede empeorar esta línea base (§6.2).
+- **v4.1**: iba a sustituirse por «Impacto en pista» (ficha 16) si no empeoraba esta línea base (§6.2). **No la alcanza**
+  (V41_F2: 0,081 frente a 0,149; diferencia −0,068 [−0,101, −0,035]) → por la regla F2-a el IMPACTO v4.0 sigue siendo el
+  ancla publicada.
 
 ## 9 · Net del equipo proyectado (capa 4)
 
@@ -199,6 +203,21 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 19 | Atribución (Shapley) | φ_k exacto si \|M\| ≤ 4; permutaciones con error MC declarado si no | Tests: Σ φ_k = Δ total; determinismo | — |
 | 20 | Sinergia de tríos | φ_jkl por perfiles (CP de rango bajo) sobre el residuo F1 + F2 + h | §6.3: reducción de error con IC95 < 0 en los tres cortes y DT ≥ 0,10 | Motor de orden 2 |
 
+### Ficha 16 tras la F2 (09-11-2026, V41_F2)
+
+- **Examen §6.2 [DATO]** (las 3.598 filas del IMPACTO v4.0, cortes 2022–2024, bootstrap de equipos-temporada):
+  - monotonía 0,081 frente a 0,149: **no cumple** la no inferioridad;
+  - frente al aditivo +0,050 [0,024, 0,077];
+  - calibración ±5,0 y cobertura 0,792;
+  - élite 0,170 frente a 0,159 (informado).
+- **Contextualidad [DATO]**: −0,003 [−0,039, 0,033], EMD 0,05: no cumple → el cambio por altas/bajas lleva sello BAJA.
+- **Candidatos**:
+  - contexto c_j: entra por la regla literal, pero [POST HOC] es un artefacto del on/off (frente al β RAPM de t+1 cae de
+    0,58 a 0,13): propuesta de no adoptarlo;
+  - familiaridad: no entra; [POST HOC] es selección.
+- **Estado**: experimental; se muestra en el motor de escenarios con sello EXPERIMENTAL
+  (`impacto_pista/referencia_impacto_pista.json`).
+
 ## 21 · Capa XP · punto esperado por tiro (nueva, 07-11-2026)
 
 - **Versión**: xp1, con acierto por zona × liga-temporada contraído hacia su tipo y TL del tirador contraído
@@ -214,6 +233,8 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 - **Fugas**: ninguna (las tasas de la temporada son su instrumento de medida, no una predicción).
 - **Estado**: experimental campo a campo. Cada métrica de jugador necesita su examen, con su efecto mínimo detectable,
   antes de mostrarse con sello.
+- **F2-d (09-11-2026)**: on/off con los mismos tramos y sin la suerte del tiro (`net_off`, `xnet_off`, `net_onoff`,
+  `xnet_onoff`; 41 campos activos). DT de xnet_onoff 5,4 frente a 8,9 del on/off real [DATO].
 
 ## Regla común desde el 07-11-2026: efecto mínimo detectable
 
@@ -226,5 +247,6 @@ aplicación: la puerta F3-T, ficha 20.
 ```bash
 python -m bbequipo.ecosistema benchmark        # ≈ 1,5 min: data/modelos/v4_1/benchmark/benchmark.json
 python -m bbequipo.ecosistema inventario       # fit_adapt.csv y club_temporada.csv
+python -m bbequipo.ecosistema impacto-pista    # F2: examen §6.2 del Impacto en pista (V41_F2)
 python -m pytest tests/test_ecosistema_v41.py -q
 ```

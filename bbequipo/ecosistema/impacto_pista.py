@@ -333,6 +333,12 @@ def ejecutar(cfg: dict, cortes=None, progreso=print) -> dict:
                                    "dif_abs_media": float((m["IP"] - m["IM_onoff"]).abs().mean()),
                                    "frac_cambio_quintil": float((np.ceil(m["IP"] / 20).clip(1, 5) != np.ceil(m["IM_onoff"] / 20).clip(1, 5)).mean())}
     ref = referencia(cfg, _con_grupo(R, cfg40), e, res)
+    # [POST HOC] de dónde sale la mejora del término de contexto (ablación y β RAPM de t+1)
+    ph = EX.post_hoc_contexto(cfg, _con_grupo(R, cfg40), e, int(cfg["comunes"]["bootstrap"]), int(cfg["comunes"]["semilla_bootstrap"]) + 11)
+    (d / "contexto_post_hoc.json").write_text(json.dumps(ph, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+    res["contexto_post_hoc"] = {"archivo": "contexto_post_hoc.json", "IP_vs_beta_t1": ph.get("beta_rapm_t1", {}).get("IP", {}),
+                                "ctx_vs_beta_t1": ph.get("beta_rapm_t1", {}).get("ctx_completo", {}),
+                                "ctx_solo_nivel_onoff": ph["on_off"]["ctx_solo_nivel"]}
     (d / "referencia_impacto_pista.json").write_text(json.dumps(ref, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
     (d / "examen_f2.json").write_text(json.dumps(res, ensure_ascii=False, indent=1, default=_json), encoding="utf-8")
     cols = ["anio", "liga_d", "team_d", "grupo_im", "persona_id", "net_rtg_aj_onoff", "pct_onoff", "onoff_ok", "IM_onoff",

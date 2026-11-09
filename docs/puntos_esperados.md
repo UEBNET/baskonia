@@ -95,7 +95,8 @@ nombre_del_campo: {grano: jugador, unidad: pts/100, estado: experimental, def: "
    @campo("jugador", "nombre_del_campo")
    def _f(A): return ...          # A = tabla agregada por jugador (sumas de tiros, xp, zonas y presencia en pista)
    ```
-   Si necesita una suma nueva por jugador, se añade en `agregar_jugadores`.
+   Si necesita una suma nueva por jugador, se añade en `agregar_jugadores` (o en `en_pista` si sale de los tramos; para
+   rellenar tablas ya publicadas sin re-anotar tiros: `completar_onoff` como modelo, `python -m bbequipo.ecosistema xp-onoff`).
 3. Ejecutar los tests: `test_catalogo_xp_y_codigo_coinciden` falla si un campo no propuesto no tiene función o si hay una
    función sin entrada en el catálogo. El fichero `jugadores_<t>.csv.gz` incluye automáticamente todo campo activo.
 
@@ -113,12 +114,12 @@ checkpoint.
 | jugador · fiabilidad | `acierto_sobre_esperado_contraido`, `fiabilidad_acierto` (bayes empírico por liga-temporada), `tl_pct_contraido` | experimental |
 | jugador · zonas | `pct_tc_aro`, `pct_tc_corta`, `pct_tc_media`, `pct_tc_t3_esquina`, `pct_tc_t3_frontal`, `pct_tc_sin_zona` | experimental |
 | jugador · en pista | `poss_on`, `xortg_on`, `xdrtg_on`, `xnet_on` (sin la suerte del tiro), `net_on` (real, referencia) | experimental |
+| jugador · on/off (F2-d, 09-11-2026) | `net_off`, `xnet_off` (el equipo sin él = totales del equipo − en pista), `net_onoff`, `xnet_onoff` (on/off sin la suerte del tiro: DT 5,4 frente a 8,9 del real) | experimental |
 
 ### Hoja de ruta (propuestos)
 
 | Campo | Grano | Para qué | Qué falta |
 |---|---|---|---|
-| `xnet_onoff` | jugador | on/off sin suerte de tiro: contraparte realizada de menos ruido para el Impacto en pista (F2) | el Net del equipo sin él con xp (sumar tramos sin el jugador) |
 | `xp_permitido_defensor` | jugador | defensa por zonas (protección del aro, defensa del triple) | xp del rival con él en pista, por zona |
 | `xp_creado_asistencias` | jugador | creación de tiros para los demás | asistencias de tiros fallados o un modelo de pase (la fuente sólo registra las de los anotados) |
 | `xp_distancia_continua` | tiro | xp2: acierto como función continua de distancia y ángulo | spline por liga-temporada y examen frente a xp1 |

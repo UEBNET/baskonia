@@ -1,0 +1,825 @@
+{
+ "version": "v4.1",
+ "generado": "2026-11-09T02:00:26",
+ "criterios": {
+  "monotonia_no_peor_que_im_v40": {
+   "spearman_ref": 0.149,
+   "ic95_inferior_diferencia": -0.02
+  },
+  "realizado": "net_rtg_aj_onoff",
+  "realizado_min_minutos": 300,
+  "elite_club_informado": true,
+  "monotonia_frente_aditivo": "ic95_diferencia_excluye_0",
+  "calibracion_deciles_tolerancia": 7,
+  "cobertura_80": [
+   0.75,
+   0.85
+  ],
+  "contextualidad": "spearman(Δ predicho Impacto en pista, Δ percentil on/off realizado) > 0 con IC95 que excluye 0",
+  "contextualidad_si_falla": "el IMPACTO se publica, pero su CAMBIO por altas/bajas lleva sello BAJA",
+  "termino_contexto_cj": "entra solo si mejora la monotonía con IC95 que excluye 0"
+ },
+ "delta_familiaridad_por_corte": {
+  "2021": 0.27856672295878815,
+  "2022": 0.3375756407938821,
+  "2023": 0.3861172927593405,
+  "2024": 0.38332183404361037
+ },
+ "gamma_contexto_por_corte": {
+  "2021": {
+   "intercepto": -0.08503949680435385,
+   "v": 0.1615593648243844,
+   "nivel_companeros": -0.1600965006438403,
+   "perfil_companeros_0": -0.4661496922786472,
+   "perfil_companeros_1": 0.15076679384506683,
+   "perfil_companeros_2": 1.1952984674951945,
+   "perfil_companeros_3": 0.7493525073498595
+  },
+  "2022": {
+   "intercepto": -0.08503949680435385,
+   "v": 0.1615593648243844,
+   "nivel_companeros": -0.1600965006438403,
+   "perfil_companeros_0": -0.4661496922786472,
+   "perfil_companeros_1": 0.15076679384506683,
+   "perfil_companeros_2": 1.1952984674951945,
+   "perfil_companeros_3": 0.7493525073498595
+  },
+  "2023": {
+   "intercepto": 0.29018523030204024,
+   "v": 0.19160922581555956,
+   "nivel_companeros": -0.2599467657996548,
+   "perfil_companeros_0": -0.16545832780792347,
+   "perfil_companeros_1": 0.1705275320452129,
+   "perfil_companeros_2": 0.29646934019160187,
+   "perfil_companeros_3": 0.14685621224914458
+  },
+  "2024": {
+   "intercepto": 0.27102053947537896,
+   "v": 0.24250774930267707,
+   "nivel_companeros": -0.3262912829266187,
+   "perfil_companeros_0": 0.03791975213203843,
+   "perfil_companeros_1": 0.31079276675852413,
+   "perfil_companeros_2": -0.06866415726846087,
+   "perfil_companeros_3": -0.11998829582294591
+  }
+ },
+ "cobertura_filas_im": {
+  "filas_im_decision": 3598,
+  "con_impacto_en_pista": 3598
+ },
+ "monotonia": {
+  "IP": {
+   "spearman": 0.08087473652432356,
+   "ic95": [
+    0.047942095585035524,
+    0.11182348031072255
+   ],
+   "ee": 0.01623562454697234
+  },
+  "IM_onoff": {
+   "spearman": 0.14914981725001705,
+   "ic95": [
+    0.11678102209278705,
+    0.18229147049311056
+   ],
+   "ee": 0.016947462199448544
+  },
+  "IM_aditivo": {
+   "spearman": 0.030777587217978245,
+   "ic95": [
+    -0.00022344464659416674,
+    0.06070531978919175
+   ],
+   "ee": 0.015798136567976375
+  },
+  "beta": {
+   "spearman": 0.07190683143499409,
+   "ic95": [
+    0.040559153088794,
+    0.10304942120448543
+   ],
+   "ee": 0.016132919013360256
+  },
+  "c_IP": {
+   "spearman": 0.08689913899432426,
+   "ic95": [
+    0.05399548156981348,
+    0.11975899337463132
+   ],
+   "ee": 0.016268115798522415
+  },
+  "n": 3598,
+  "equipos_temporada": 1081,
+  "IP_menos_IM_v40": {
+   "diferencia": -0.0682750807256935,
+   "ic95": [
+    -0.10138404530183512,
+    -0.03457094752562374
+   ],
+   "ee": 0.01705967941387421
+  },
+  "IP_menos_aditivo": {
+   "diferencia": 0.05009714930634532,
+   "ic95": [
+    0.024344439988958997,
+    0.07698590004202123
+   ],
+   "ee": 0.013344719590014358
+  },
+  "IP_menos_beta": {
+   "diferencia": 0.008967905089329473,
+   "ic95": [
+    -0.006273330845997056,
+    0.024423508571087275
+   ],
+   "ee": 0.007747682008464445
+  }
+ },
+ "monotonia_elite_club": {
+  "IP": {
+   "spearman": 0.17025122583541352,
+   "ic95": [
+    0.0823644795466828,
+    0.2556097467108076
+   ],
+   "ee": 0.04338994110124268
+  },
+  "IM_onoff": {
+   "spearman": 0.15908750099372362,
+   "ic95": [
+    0.06787788668814858,
+    0.24916306027342716
+   ],
+   "ee": 0.04617186786095749
+  },
+  "n": 484,
+  "IP_menos_IM_v40": {
+   "diferencia": 0.011163724841689898,
+   "ic95": [
+    -0.058589815816808236,
+    0.07760778911834026
+   ],
+   "ee": 0.03568343453199359
+  }
+ },
+ "monotonia_grupo_elite": {
+  "IP": {
+   "spearman": 0.1316099176764654,
+   "ic95": [
+    0.04935548690702433,
+    0.21278101688889947
+   ],
+   "ee": 0.042076580989512204
+  },
+  "IM_onoff": {
+   "spearman": 0.17854635525911963,
+   "ic95": [
+    0.09187305814006806,
+    0.2595405055863349
+   ],
+   "ee": 0.04361709425505832
+  },
+  "n": 511,
+  "IP_menos_IM_v40": {
+   "diferencia": -0.04693643758265423,
+   "ic95": [
+    -0.11902929183646838,
+    0.03189386637544475
+   ],
+   "ee": 0.038573063967884506
+  }
+ },
+ "monotonia_por_corte": {
+  "2022": {
+   "n": 897,
+   "IP": 0.0959970063993058,
+   "IM_onoff": 0.10503983426402277
+  },
+  "2023": {
+   "n": 1244,
+   "IP": 0.10434148846519435,
+   "IM_onoff": 0.17987550744299682
+  },
+  "2024": {
+   "n": 1457,
+   "IP": 0.06709499940523023,
+   "IM_onoff": 0.16657767109726992
+  }
+ },
+ "calibracion": {
+  "deciles": {
+   "0": {
+    "n": 360,
+    "previsto": 45.07,
+    "realizado": 46.91,
+    "desvio": 1.84
+   },
+   "1": {
+    "n": 360,
+    "previsto": 47.75,
+    "realizado": 48.24,
+    "desvio": 0.49
+   },
+   "2": {
+    "n": 360,
+    "previsto": 47.84,
+    "realizado": 47.74,
+    "desvio": -0.1
+   },
+   "3": {
+    "n": 359,
+    "previsto": 48.18,
+    "realizado": 50.11,
+    "desvio": 1.93
+   },
+   "4": {
+    "n": 360,
+    "previsto": 48.48,
+    "realizado": 47.72,
+    "desvio": -0.77
+   },
+   "5": {
+    "n": 360,
+    "previsto": 49.2,
+    "realizado": 52.33,
+    "desvio": 3.14
+   },
+   "6": {
+    "n": 359,
+    "previsto": 50.5,
+    "realizado": 49.11,
+    "desvio": -1.39
+   },
+   "7": {
+    "n": 360,
+    "previsto": 52.26,
+    "realizado": 51.38,
+    "desvio": -0.89
+   },
+   "8": {
+    "n": 360,
+    "previsto": 54.46,
+    "realizado": 54.33,
+    "desvio": -0.14
+   },
+   "9": {
+    "n": 360,
+    "previsto": 58.37,
+    "realizado": 53.37,
+    "desvio": -5.0
+   }
+  },
+  "max_desvio_abs": 5.000986959761896,
+  "tolerancia": 7.0,
+  "pasa": true
+ },
+ "cobertura_80": 0.7915508615897721,
+ "anchura_80_media": 78.57028602001112,
+ "monotonia_objetivo_f2e": {
+  "IP": {
+   "spearman": 0.08985695138243845,
+   "ic95": [
+    0.05689103323281677,
+    0.12100410663322334
+   ],
+   "ee": 0.016218474071143685
+  },
+  "IM_onoff": {
+   "spearman": 0.15689404894116055,
+   "ic95": [
+    0.1223578765955952,
+    0.18960765792754544
+   ],
+   "ee": 0.017507360355228315
+  },
+  "n": 3598,
+  "IP_menos_IM_v40": {
+   "diferencia": -0.0670370975587221,
+   "ic95": [
+    -0.09898427982903144,
+    -0.032872339983424204
+   ],
+   "ee": 0.016813339539268484
+  }
+ },
+ "diagnostico_xnet_onoff": {
+  "n": 3598,
+  "spearman_net_rtg_aj_vs_net_onoff_tramos": 0.9131343694529394,
+  "spearman_IP_vs_xnet_onoff": 0.09085079421122684,
+  "spearman_IM_vs_xnet_onoff": 0.14230595098973461,
+  "dt_net_onoff": 8.895737147527983,
+  "dt_xnet_onoff": 5.421995134852598
+ },
+ "candidatos": {
+  "IP_ctx": {
+   "IP_ctx": {
+    "spearman": 0.16071465741493468,
+    "ic95": [
+     0.12986672955121586,
+     0.19060475256912654
+    ],
+    "ee": 0.015956404751737756
+   },
+   "IP": {
+    "spearman": 0.08087473652432356,
+    "ic95": [
+     0.04772175180975002,
+     0.11145543857419658
+    ],
+    "ee": 0.016280506041167715
+   },
+   "n": 3598,
+   "mejora_sobre_IP": {
+    "diferencia": 0.07983992089061112,
+    "ic95": [
+     0.04687934061944895,
+     0.11473234029106338
+    ],
+    "ee": 0.017513738172757577
+   },
+   "frente_IM_v40": {
+    "diferencia": 0.011564840164917628,
+    "ic95": [
+     -0.017607226720746612,
+     0.039581994464720494
+    ],
+    "ee": 0.014893508015632776
+   },
+   "calibracion": {
+    "deciles": {
+     "0": {
+      "n": 360,
+      "previsto": 40.07,
+      "realizado": 42.81,
+      "desvio": 2.75
+     },
+     "1": {
+      "n": 360,
+      "previsto": 45.44,
+      "realizado": 44.83,
+      "desvio": -0.61
+     },
+     "2": {
+      "n": 360,
+      "previsto": 45.79,
+      "realizado": 45.02,
+      "desvio": -0.77
+     },
+     "3": {
+      "n": 359,
+      "previsto": 48.58,
+      "realizado": 49.04,
+      "desvio": 0.46
+     },
+     "4": {
+      "n": 360,
+      "previsto": 50.27,
+      "realizado": 51.6,
+      "desvio": 1.33
+     },
+     "5": {
+      "n": 360,
+      "previsto": 51.25,
+      "realizado": 50.67,
+      "desvio": -0.59
+     },
+     "6": {
+      "n": 359,
+      "previsto": 52.43,
+      "realizado": 50.57,
+      "desvio": -1.86
+     },
+     "7": {
+      "n": 360,
+      "previsto": 54.41,
+      "realizado": 54.96,
+      "desvio": 0.55
+     },
+     "8": {
+      "n": 360,
+      "previsto": 56.08,
+      "realizado": 54.2,
+      "desvio": -1.88
+     },
+     "9": {
+      "n": 360,
+      "previsto": 59.09,
+      "realizado": 57.56,
+      "desvio": -1.53
+     }
+    },
+    "max_desvio_abs": 2.7458096960428193,
+    "tolerancia": 7.0,
+    "pasa": true
+   },
+   "cobertura_80": 0.782934963868816
+  },
+  "IP_fam": {
+   "IP_fam": {
+    "spearman": 0.08322866056327072,
+    "ic95": [
+     0.05093854017916307,
+     0.1135400494887175
+    ],
+    "ee": 0.016441582917894076
+   },
+   "IP": {
+    "spearman": 0.08087473652432356,
+    "ic95": [
+     0.04772175180975002,
+     0.11145543857419658
+    ],
+    "ee": 0.016280506041167715
+   },
+   "n": 3598,
+   "mejora_sobre_IP": {
+    "diferencia": 0.0023539240389471583,
+    "ic95": [
+     -0.004634887866688191,
+     0.009270755262492868
+    ],
+    "ee": 0.0035570275564697617
+   },
+   "frente_IM_v40": {
+    "diferencia": -0.06592115668674633,
+    "ic95": [
+     -0.09852275045743406,
+     -0.032751015527104604
+    ],
+    "ee": 0.016748018678271644
+   },
+   "calibracion": {
+    "deciles": {
+     "0": {
+      "n": 360,
+      "previsto": 44.88,
+      "realizado": 46.97,
+      "desvio": 2.09
+     },
+     "1": {
+      "n": 360,
+      "previsto": 47.47,
+      "realizado": 48.46,
+      "desvio": 0.99
+     },
+     "2": {
+      "n": 360,
+      "previsto": 47.81,
+      "realizado": 48.09,
+      "desvio": 0.29
+     },
+     "3": {
+      "n": 359,
+      "previsto": 48.3,
+      "realizado": 47.79,
+      "desvio": -0.52
+     },
+     "4": {
+      "n": 360,
+      "previsto": 48.75,
+      "realizado": 50.46,
+      "desvio": 1.71
+     },
+     "5": {
+      "n": 360,
+      "previsto": 49.96,
+      "realizado": 52.01,
+      "desvio": 2.06
+     },
+     "6": {
+      "n": 359,
+      "previsto": 50.62,
+      "realizado": 48.78,
+      "desvio": -1.85
+     },
+     "7": {
+      "n": 360,
+      "previsto": 51.45,
+      "realizado": 51.08,
+      "desvio": -0.38
+     },
+     "8": {
+      "n": 360,
+      "previsto": 54.04,
+      "realizado": 52.67,
+      "desvio": -1.36
+     },
+     "9": {
+      "n": 360,
+      "previsto": 58.67,
+      "realizado": 54.94,
+      "desvio": -3.73
+     }
+    },
+    "max_desvio_abs": 3.7309343510697346,
+    "tolerancia": 7.0,
+    "pasa": true
+   },
+   "cobertura_80": 0.7887715397443024
+  }
+ },
+ "potencia": {
+  "monotonia_sembrada": [
+   {
+    "rho_sembrado": 0.02,
+    "rho_medido": 0.018066664896785895,
+    "deteccion": 0.25,
+    "replicas": 20
+   },
+   {
+    "rho_sembrado": 0.04,
+    "rho_medido": 0.046844057346097735,
+    "deteccion": 0.85,
+    "replicas": 20
+   },
+   {
+    "rho_sembrado": 0.06,
+    "rho_medido": 0.05205331029679291,
+    "deteccion": 0.8,
+    "replicas": 20
+   },
+   {
+    "rho_sembrado": 0.08,
+    "rho_medido": 0.08134611472107459,
+    "deteccion": 1.0,
+    "replicas": 20
+   }
+  ],
+  "emd_diferencia_pareada_vs_IM": 0.047794145671656095,
+  "emd_diferencia_vs_aditivo": 0.03738636914324678,
+  "potencia_no_inferioridad_si_igual_al_IM": 0.2154627209904738,
+  "nota": "diferencias pareadas: EMD = (1,96 + 0,84)·EE bootstrap; la no inferioridad usa el margen prerregistrado"
+ },
+ "puerta": {
+  "monotonia_no_peor_que_im_v40": false,
+  "monotonia_frente_aditivo": true,
+  "calibracion": true,
+  "cobertura_80": true,
+  "pasa": false,
+  "regla_si_no": "Si el Impacto en pista no cumple la monotonía frente al IMPACTO v4.0 (o la calibración o la cobertura), el IMPACTO v4.0 sigue siendo el ancla publicada y el Impacto en pista se muestra como EXPERIMENTAL (sin sello) hasta que pase."
+ },
+ "candidatos_entran": {
+  "IP_ctx": true,
+  "IP_fam": false
+ },
+ "poblacion_secundaria": {
+  "n": 10812,
+  "IP_crudo": {
+   "spearman": 0.10082024498829444,
+   "ic95": [
+    0.08330178090293844,
+    0.1187825109729337
+   ],
+   "ee": 0.008929847733947484
+  },
+  "beta_crudo": {
+   "spearman": 0.0995392257957707,
+   "ic95": [
+    0.08206809278114556,
+    0.11764644723839655
+   ],
+   "ee": 0.00893912780344806
+  },
+  "IP_menos_beta": {
+   "diferencia": 0.0012810191925237413,
+   "ic95": [
+    -0.0036836515540305268,
+    0.005819587894868215
+   ],
+   "ee": 0.0024839011906874313
+  }
+ },
+ "segundos": 64,
+ "contextualidad": {
+  "n": 2812,
+  "por_corte": {
+   "2022": 727,
+   "2023": 1083,
+   "2024": 1002
+  },
+  "spearman": {
+   "spearman": -0.002520143048423033,
+   "ic95": [
+    -0.03924979763931752,
+    0.03306615658583404
+   ],
+   "ee": 0.01848245572152864
+  },
+  "pasa": false,
+  "emd_rho": 0.051780174743862095,
+  "potencia_sembrada": [
+   {
+    "rho_sembrado": 0.05,
+    "rho_medido": 0.051884709297655894,
+    "deteccion": 0.75,
+    "replicas": 20
+   },
+   {
+    "rho_sembrado": 0.1,
+    "rho_medido": 0.09747372745518676,
+    "deteccion": 1.0,
+    "replicas": 20
+   },
+   {
+    "rho_sembrado": 0.15,
+    "rho_medido": 0.1449982268590185,
+    "deteccion": 1.0,
+    "replicas": 20
+   }
+  ],
+  "dt_d_pred": 0.2565159536403555,
+  "dt_d_real": 36.62913272038493
+ },
+ "familiaridad": {
+  "global": {
+   "delta": 0.37912179541044405,
+   "ee": 0.01615825946394698,
+   "ic95": [
+    0.347451606861108,
+    0.4107919839597801
+   ],
+   "excluye_0": true,
+   "emd_80": 0.04526897971419386,
+   "ligas_temporada": 79,
+   "Q_cochran": 243.05919034702472,
+   "gl": 78
+  },
+  "elite_club": {
+   "delta": 0.39517164078079314,
+   "ee": 0.04147705935652057,
+   "ic95": [
+    0.3138766044420128,
+    0.47646667711957347
+   ],
+   "excluye_0": true,
+   "emd_80": 0.11620212949322803,
+   "ligas_temporada": 15,
+   "Q_cochran": 32.583545491635874,
+   "gl": 14
+  }
+ },
+ "familiaridad_robustez_post_hoc": {
+  "etiqueta": "POST HOC",
+  "generado": "2026-11-08T23:20:20",
+  "delta_cv": {
+   "delta": 0.38332183404361037,
+   "ee": 0.017904637295353437,
+   "ic95": [
+    0.3482287449447176,
+    0.4184149231425031
+   ],
+   "excluye_0": true,
+   "emd_80": 0.05016163184666219,
+   "ligas_temporada": 62,
+   "Q_cochran": 219.67231829431353,
+   "gl": 61
+  },
+  "placebo_cv": {
+   "delta": 0.46892223099557584,
+   "ee": 0.02422220840897996,
+   "ic95": [
+    0.4214467025139751,
+    0.5163977594771766
+   ],
+   "excluye_0": true,
+   "emd_80": 0.06786093907859826,
+   "ligas_temporada": 62,
+   "Q_cochran": 293.36134549431387,
+   "gl": 61
+  },
+  "conjunto_cv": {
+   "delta": 0.49773171273677985,
+   "ee": 0.018719925272212102,
+   "ic95": [
+    0.4610406592032441,
+    0.5344227662703156
+   ],
+   "excluye_0": true,
+   "emd_80": 0.052445742642629425,
+   "ligas_temporada": 62,
+   "Q_cochran": 199.96770366890044,
+   "gl": 61
+  },
+  "delta_l10": {
+   "delta": 0.07189856494412109,
+   "ee": 0.05823680582057845,
+   "ic95": [
+    -0.042245574464212676,
+    0.18604270435245485
+   ],
+   "excluye_0": false,
+   "emd_80": 0.1631562351869326,
+   "ligas_temporada": 62,
+   "Q_cochran": 90.27425305355013,
+   "gl": 61
+  },
+  "placebo_l10": {
+   "delta": 0.2147760512528201,
+   "ee": 0.06873484825600698,
+   "ic95": [
+    0.08005574867104642,
+    0.34949635383459376
+   ],
+   "excluye_0": true,
+   "emd_80": 0.19256755087402916,
+   "ligas_temporada": 62,
+   "Q_cochran": 59.759527124169765,
+   "gl": 61
+  },
+  "conjunto_l10": {
+   "delta": 0.15403430226123305,
+   "ee": 0.06373993098544334,
+   "ic95": [
+    0.029104037529764107,
+    0.278964566992702
+   ],
+   "excluye_0": true,
+   "emd_80": 0.17857379064881806,
+   "ligas_temporada": 62,
+   "Q_cochran": 90.01504990994182,
+   "gl": 61
+  },
+  "delta_l100": {
+   "delta": 0.2738114967174715,
+   "ee": 0.036367983412975285,
+   "ic95": [
+    0.20253024922803997,
+    0.34509274420690306
+   ],
+   "excluye_0": true,
+   "emd_80": 0.10188854232979157,
+   "ligas_temporada": 62,
+   "Q_cochran": 136.8332339436815,
+   "gl": 61
+  },
+  "placebo_l100": {
+   "delta": 0.4670937265251013,
+   "ee": 0.04573032275255853,
+   "ic95": [
+    0.37746229393008657,
+    0.556725159120116
+   ],
+   "excluye_0": true,
+   "emd_80": 0.128118072223568,
+   "ligas_temporada": 62,
+   "Q_cochran": 114.15018904037136,
+   "gl": 61
+  },
+  "conjunto_l100": {
+   "delta": 0.38936494050030485,
+   "ee": 0.037864592013062574,
+   "ic95": [
+    0.3151503401547022,
+    0.46357954084590747
+   ],
+   "excluye_0": true,
+   "emd_80": 0.10608144098379611,
+   "ligas_temporada": 62,
+   "Q_cochran": 137.9364225425501,
+   "gl": 61
+  },
+  "aleatorios_DL_cv": {
+   "delta": 0.5357256702934203,
+   "ee": 0.045865937047880175,
+   "ic95": [
+    0.4458284336795752,
+    0.6256229069072655
+   ],
+   "tau": 0.2394178436376977,
+   "k": 62
+  }
+ },
+ "movimiento_frente_IM": {
+  "n": 4892,
+  "spearman_IP_IM": 0.4719611224051982,
+  "dif_abs_media": 3.460824364930663,
+  "frac_cambio_quintil": 0.06214227309893704
+ },
+ "contexto_post_hoc": {
+  "archivo": "contexto_post_hoc.json",
+  "IP_vs_beta_t1": {
+   "spearman": 0.5771624344299664,
+   "ic95": [
+    0.5461182163410325,
+    0.6084884620751784
+   ],
+   "ee": 0.015721894455728976
+  },
+  "ctx_vs_beta_t1": {
+   "spearman": 0.12668229461516792,
+   "ic95": [
+    0.08733720634797469,
+    0.1670377077457599
+   ],
+   "ee": 0.02032535523459712
+  },
+  "ctx_solo_nivel_onoff": {
+   "spearman": 0.1630745327701689,
+   "ic95": [
+    0.12936048042793002,
+    0.19601665153143472
+   ],
+   "ee": 0.016748068969178465
+  }
+ }
+}
