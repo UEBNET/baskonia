@@ -48,7 +48,25 @@ diferencias en la posición vienen de que `posicion.consolidar_por_persona` usa 
 
 Ejecución real del 8-11-2026 (dos semanas de partidos, 4 núcleos):
 
-TIEMPOS_PLACEHOLDER
+| Paso | Primera ejecución | Tras las mejoras | Qué lo domina |
+|---|---|---|---|
+| descarga (con entrenadores) | 1.002 s | — | webs de las ligas (Basketball-Reference a 3,5 s por petición, G League lenta) |
+| pista | 86 s | | calibración de zonas por liga |
+| normalizacion | 72 s | | carga de la tabla de todas las temporadas |
+| contexto | 91 s | | |
+| roles | 42 s | | |
+| entropia | 127 s | | Monte Carlo de todas las temporadas |
+| estilos | 86 s | | |
+| simulador | 676 s | ≈ 400 s | `modelos_hasta` de 2024-25 y 2025-26 congelados (`data/modelos/simulador/v3_3/congelado/`) |
+| artifact | 590 s | ≈ 430 s | evaluación de ligas sólo de 2026-27 y del «regular» de 2025-26, en paralelo (311 → 152 s); Atlas 98 s; quintetos 137 s |
+| publicacion | 141 s | 10 s | gzip estándar en vez de zopfli (≈ 4 % más grande) |
+| **total del programa** | **≈ 46 min** | **≈ 40 min** | |
+
+Fuera del programa, en la sesión de la Routine: clon ligero ≈ 3 min (4 GB), dependencias ≈ 1,5 min, lectura y
+publicación de la página ≈ 3-5 min. **Una pulsación con partidos nuevos: ≈ 50 min de principio a fin.** Sin partidos
+nuevos: la descarga y la huella (≈ 15 min) y nada más.
+
+Lote publicado en esta primera ejecución: 63 ficheros, 45,9 MB (versión 106 del artifact).
 
 ## 4. Recalibración mensual
 

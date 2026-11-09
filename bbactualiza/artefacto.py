@@ -59,8 +59,15 @@ def nacionalidades_json(temporada: str = TEMPORADA) -> None:
 
 def evaluacion(temporada: str = TEMPORADA) -> None:
     """Evaluación de ligas (descriptiva): la de la temporada y la de la anterior (sus «puentes» usan la siguiente)."""
+    from concurrent.futures import ProcessPoolExecutor
+    pares = [(temporada, "regular"), (temporada, "total"), (PREVIA, "regular")]
+    with ProcessPoolExecutor(max_workers=min(len(pares), os.cpu_count() or 1)) as ex:   # cada par, en su proceso
+        list(ex.map(_evaluar_par, pares))
+
+
+def _evaluar_par(par: tuple[str, str]) -> None:
     from bbmodel import evaluacion_ligas as EL
-    EL.main(str(DA), solo={(temporada, "regular"), (temporada, "total"), (PREVIA, "regular")})
+    EL.main(str(DA), solo={par})
 
 
 def normalizados(temporada: str = TEMPORADA) -> None:

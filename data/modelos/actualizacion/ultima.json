@@ -1,7 +1,7 @@
 {
  "temporada": "2026-27",
  "inicio": "2026-11-08T23:22:25+00:00",
- "fin": "2026-11-09T01:05:53+00:00",
+ "fin": "2026-11-09T01:29:33+00:00",
  "estado": "ok",
  "nota": "primera actualización real, por pasos (8-9 nov. 2026); tiempos de cada paso en su ejecución",
  "pasos": {
@@ -143,17 +143,28 @@
   },
   "simulador": {
    "estado": "ok",
-   "segundos": 676
+   "segundos": 242,
+   "clubes": null
   },
   "artifact": {
    "estado": "ok",
-   "segundos": 557
+   "segundos": 590,
+   "subpasos": {
+    "tablas": 10,
+    "nacionalidades": 0,
+    "evaluacion": 311,
+    "normalizados": 8,
+    "atlas_estilos": 98,
+    "informe": 10,
+    "quintetos": 137,
+    "compactar": 15
+   }
   },
   "publicacion": {
    "estado": "ok",
-   "segundos": 10,
+   "segundos": 11,
    "ficheros": 63,
-   "mb": 44.7,
+   "mb": 45.9,
    "lote": "/home/user/baskonia/publicacion/lote0.json"
   }
  },
