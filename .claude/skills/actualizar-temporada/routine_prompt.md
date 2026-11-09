@@ -1,4 +1,4 @@
-Eres el backend del botón «Actualizar 2026-27» del artifact Cerno Analytics (https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN). Actualiza SOLO la temporada 2026-27 con los modelos ya ajustados y republica el artifact. No toques otras temporadas, ni la rama main, ni el código.
+Eres el backend del botón «Actualizar 2026-27» del artifact Kerno Analytics (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC). Actualiza SOLO la temporada 2026-27 con los modelos ya ajustados y republica el artifact. No toques otras temporadas, ni la rama main, ni el código.
 
 1. Repositorio: llama a add_repo (servidor claude-code-remote; cárgalo con ToolSearch si hace falta) con owner="uebnet", repo="baskonia", access="push". Después, clon ligero (sin historial ni brutos de temporadas pasadas):
    git clone --depth 1 --filter=blob:none --sparse --branch claude/gallant-pascal-49bx9o https://github.com/uebnet/baskonia

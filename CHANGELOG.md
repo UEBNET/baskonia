@@ -3,12 +3,17 @@
 ## 2026-11-09 — Botón «Actualizar 2026-27» (skill y paquete `bbactualiza`)
 
 Detalle: `docs/actualizacion_2026-27.md` y `.claude/skills/actualizar-temporada/SKILL.md`.
-* Botón en la cabecera del artifact → Routine «Actualizar 2026-27 · Cerno» → sesión de Claude Code que sigue la skill:
+* Botón en la cabecera (bloque «Datos 2026-27») del artifact Kerno Analytics
+  (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, versión 22; página fuente `artifact/kerno.html`, capacidad `mcp`
+  con el conector «Claude Code Remote») → Routine «Actualizar 2026-27 · Kerno» → sesión de Claude Code que sigue la skill:
   descarga delta de las 20 ligas, modelos congelados aplicados sólo a 2026-27 (normalización A + amortiguada + v3.2
   incremental con la CVAE de la última recalibración, contexto, roles, entropía, estilos, simulador v3.3), datos a Git y
   publicación incremental (un lote con sólo las rutas de la temporada en curso). Sin partidos nuevos no se recalcula nada.
 * El histórico no cambia: los ficheros con todas las temporadas se empalman (sólo las filas de 2026-27).
 * Recalibración mensual aparte (`python -m bbactualiza.recalibrar`): redes CVAE, modelo de equipo v4.0 y publicación.
+  Primera recalibración CVAE (9-11-2026, ≈ 2 h 33 min): los 227 jugadores nuevos de 2026-27 ya tienen valor CVAE.
+* Proceso desacoplado (`setsid nohup`) en la Routine y en la tarea mensual: una tarea de Bash en segundo plano se corta
+  a los 30 min por defecto (2 h como máximo).
 * Cambios en capas existentes: `bbfit/roles.py` (respaldo de caja vacío si no hay filas de las fases del partido),
   `bbmodel/evaluacion_ligas.py` (parámetro `solo`, sin cambio por defecto).
 * Integrada la rama `claude/focused-dijkstra-mpqa3u` (artifact v3.3 publicado: vara «liga = 0», simulador con `az` y

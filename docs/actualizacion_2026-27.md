@@ -1,7 +1,7 @@
 # Actualización de la temporada 2026-27 desde el artifact (botón + skill)
 
-Botón **«Actualizar 2026-27»** en la cabecera del artifact Cerno Analytics
-(https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN) → Routine **«Actualizar 2026-27 · Cerno»** (`trig_01MKcE4HNk4cKX5unL2t3A6v`, sin programación: sólo la lanza el botón) → sesión de Claude Code
+Botón **«Actualizar 2026-27»** en la cabecera (bloque «Datos 2026-27») del artifact Kerno Analytics
+(https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC; página fuente `artifact/kerno.html`) → Routine **«Actualizar 2026-27 · Kerno»** (`trig_01MKcE4HNk4cKX5unL2t3A6v`, sin programación: sólo la lanza el botón) → sesión de Claude Code
 que sigue la skill `.claude/skills/actualizar-temporada` → `python -m bbactualiza` (paquete `bbactualiza/`) → Git
 (rama `claude/gallant-pascal-49bx9o`) y republicación del artifact con sólo los ficheros que cambian.
 
@@ -70,7 +70,7 @@ Lote publicado en esta primera ejecución: 63 ficheros, 45,9 MB (versión 106 de
 
 ## 4. Recalibración mensual
 
-`python -m bbactualiza.recalibrar` (tarea programada «Recalibración mensual 2026-27 · Cerno», `trig_01C8jRqVWneTuJpCmJUWK8Lo`,
+`python -m bbactualiza.recalibrar` (tarea programada «Recalibración mensual 2026-27 · Kerno», `trig_01C8jRqVWneTuJpCmJUWK8Lo`,
 el día 1 de cada mes a las 03:17, hora de Madrid; instrucciones en `.claude/skills/actualizar-temporada/recalibracion_prompt.md`):
 
 1. `cvae` — reentrena las 20 redes CVAE de la v3.2 (4 procesos: 37 min medidos el 9-11-2026) y recalcula la combinación
@@ -96,8 +96,13 @@ cambiado y no sea de la temporada en curso (ni propio del paso), así que el his
 * **Fuentes**: la descarga depende de las webs de cada liga. Una liga que falla se reprocesa con su último bruto
   (`ok_bruto_anterior`) y queda anotada. NCAA 2026-27 está marcada `sin_datos` en `config/sources.json` hasta que se
   quite la marca.
-* **Lectura de la página**: la Routine debe leer entera la página publicada antes de republicarla (≈ 440 KB). Separar
-  estilos y scripts en ficheros aparte la reduciría a ≈ 70 KB por pulsación (pendiente de decidir, afecta a cómo
-  editan la página otras sesiones).
+* **Lectura de la página**: la Routine debe leer entera la página publicada antes de republicarla (≈ 175 KB la de Kerno;
+  las herramientas de detalle van aparte en `clasico.html`, que el botón no toca).
+* **Capa v4.0 propia de Kerno**: `atlas/v40/clubes_v40.json` (Net v4.0 de cada plantilla con sus minutos reales) y
+  `atlas/v40/mapa_personas.json` los generó la sesión que montó Kerno y no están en este repositorio: ni el botón ni la
+  recalibración los rehacen. Las filas de 2026-27 de `clubes_v40` (bloque «El banquillo») se quedan con los minutos del
+  6-11-2026; la página calcula el Net v4.0 en vivo para los clubes que no estén en ese fichero.
+* **Artifact anterior** (https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN, versión 106): conserva un botón que lanza la
+  misma Routine, pero la Routine ya publica en Kerno.
 * `quintetos/datos/indice.json` y los estilos unificados de Equipos y quintetos se regeneran enteros (contienen todas
   las temporadas); su contenido histórico es el mismo.

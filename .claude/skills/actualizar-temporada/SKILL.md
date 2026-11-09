@@ -1,11 +1,11 @@
 ---
 name: actualizar-temporada
-description: Backend del botón «Actualizar 2026-27» del artifact Cerno Analytics (https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN). Descarga sólo los partidos nuevos de la temporada en curso en las 20 ligas, aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3) sin reajustar ni tocar el histórico, sube los datos a Git y republica en el artifact sólo los ficheros que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Cerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
+description: Backend del botón «Actualizar 2026-27» del artifact Kerno Analytics (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC). Descarga sólo los partidos nuevos de la temporada en curso en las 20 ligas, aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3) sin reajustar ni tocar el histórico, sube los datos a Git y republica en el artifact sólo los ficheros que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
 ---
 
 # Actualizar la temporada en curso (botón del artifact)
 
-El botón del artifact lanza la Routine **«Actualizar 2026-27 · Cerno»**, y la Routine abre una sesión de Claude Code que
+El botón del artifact lanza la Routine **«Actualizar 2026-27 · Kerno»**, y la Routine abre una sesión de Claude Code que
 sigue esta skill. Todo el cálculo lo hace un único programa, `python -m bbactualiza` (paquete `bbactualiza/`), así
 que la sesión sólo prepara el entorno, lanza el programa, sube los datos y publica.
 

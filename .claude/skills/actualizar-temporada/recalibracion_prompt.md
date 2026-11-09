@@ -1,4 +1,4 @@
-Recalibración mensual de la temporada 2026-27 del artifact Cerno Analytics (https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN): reentrena lo que el botón «Actualizar 2026-27» aplica congelado (redes CVAE de la normalización v3.2 y modelo de equipo v4.0) y republica. Sólo cambia la temporada 2026-27; el histórico se restaura desde Git automáticamente. No toques la rama main ni el código.
+Recalibración mensual de la temporada 2026-27 del artifact Kerno Analytics (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC): reentrena lo que el botón «Actualizar 2026-27» aplica congelado (redes CVAE de la normalización v3.2 y modelo de equipo v4.0) y republica. Sólo cambia la temporada 2026-27; el histórico se restaura desde Git automáticamente. No toques la rama main ni el código.
 
 1. Repositorio: add_repo (servidor claude-code-remote; cárgalo con ToolSearch si hace falta) con owner="uebnet", repo="baskonia", access="push". Clon ligero:
    git clone --depth 1 --filter=blob:none --sparse --branch claude/gallant-pascal-49bx9o https://github.com/uebnet/baskonia
