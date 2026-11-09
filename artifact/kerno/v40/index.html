@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Modelo de equipo v4.0 · Kerno</title>
+<link rel="icon" type="image/svg+xml" href="../kerno/favicon.svg">
+<style>
+/* Kerno Analytics · Modelo de equipo v4.0 · tokens y componentes de kerno-base.css (Anexo B) */
+@font-face { font-family: "Bombardier"; src: url("../kerno/fonts/Bombardier.woff") format("woff"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Mona Sans"; src: url("../kerno/fonts/MonaSans-Variable.woff2") format("woff2"); font-weight: 200 900; font-stretch: 75% 125%; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url("../kerno/fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: block; }
+
+:root {
+  --k-racing: #0F2E25; --k-ink: #0C1210; --k-chalk: #F3F4F0; --k-white: #FFFFFF;
+  --k-brass: #B8975C; --k-brass-deep: #8A6B35;
+  --k-r800: #163B30; --k-r700: #1F4A3D; --k-r600: #2C5C4C; --k-r300: #7FA597; --k-r100: #DCE7E2;
+  --k-s900: #1D2723; --k-s700: #3F4B45; --k-s600: #56625C; --k-s500: #707B75; --k-s400: #8F9993; --k-s300: #B2BAB5; --k-s200: #CFD5D0; --k-s100: #E3E7E2;
+  --k-good: #2F7D3A; --k-warning: #A86A12; --k-critical: #B3392E;
+  /* alias semánticos · claro (Chalk) */
+  --surface: var(--k-chalk); --surface-2: var(--k-white); --text: var(--k-ink); --text-2: var(--k-s600); --lead: var(--k-s700); --muted: var(--k-s500);
+  --rule: var(--k-s200); --rule-mid: var(--k-s300); --rule-strong: var(--k-racing); --brand: var(--k-racing); --read: var(--k-brass-deep); --link: var(--k-racing);
+  --grid: var(--k-s200); --axis: var(--k-s600); --context: var(--k-s400); --ctx-band: var(--k-s100);
+  --s1: #2B6FBF; --s2: #D35C2A; --s3: #12997A;
+  --band: rgba(15,46,37,0.14); --hl-row: var(--k-r100);
+  --callout-bg: var(--k-racing); --callout-text: var(--k-chalk); --callout-read: var(--k-brass);
+  --hero-bg: var(--k-racing); --on-brand: var(--k-chalk);
+  --font-display: "Bombardier", "Mona Sans", sans-serif; --font-sans: "Mona Sans", sans-serif; --font-mono: "Geist Mono", monospace;
+  --ease: cubic-bezier(.2,0,0,1); --u: 8px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --surface: var(--k-racing); --surface-2: var(--k-r800); --text: var(--k-chalk); --text-2: var(--k-s300); --lead: var(--k-s300); --muted: var(--k-s400);
+  --rule: var(--k-r700); --rule-mid: var(--k-r600); --rule-strong: var(--k-chalk); --brand: var(--k-chalk); --read: var(--k-brass); --link: var(--k-chalk);
+  --grid: var(--k-r700); --axis: var(--k-s300); --context: var(--k-s500); --ctx-band: var(--k-r700);
+  --s1: #3A82D6; --s2: #D9662F; --s3: #17A07D;
+  --band: rgba(243,244,240,0.16); --hl-row: var(--k-r700);
+  --callout-bg: var(--k-ink); --callout-text: var(--k-chalk); --callout-read: var(--k-brass);
+  --hero-bg: var(--k-ink); --on-brand: var(--k-racing);
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --surface: var(--k-racing); --surface-2: var(--k-r800); --text: var(--k-chalk); --text-2: var(--k-s300); --lead: var(--k-s300); --muted: var(--k-s400);
+  --rule: var(--k-r700); --rule-mid: var(--k-r600); --rule-strong: var(--k-chalk); --brand: var(--k-chalk); --read: var(--k-brass); --link: var(--k-chalk);
+  --grid: var(--k-r700); --axis: var(--k-s300); --context: var(--k-s500); --ctx-band: var(--k-r700);
+  --s1: #3A82D6; --s2: #D9662F; --s3: #17A07D;
+  --band: rgba(243,244,240,0.16); --hl-row: var(--k-r700);
+  --callout-bg: var(--k-ink); --callout-text: var(--k-chalk); --callout-read: var(--k-brass);
+  --hero-bg: var(--k-ink); --on-brand: var(--k-racing);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+:root[data-embed] header.top { display: none; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--surface); color: var(--text); font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 420; font-stretch: 98%;
+  -webkit-font-smoothing: antialiased; padding-block: 8px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+:root[data-embed] body, body.embed { padding-top: 0; }
+.wrap { max-width: 1280px; margin: 0 auto; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1 { font-weight: 640; font-stretch: 92%; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.08; letter-spacing: -.015em; }
+h2 { font-weight: 640; font-stretch: 92%; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -.015em; }
+h3 { font-weight: 620; font-stretch: 95%; font-size: 19px; line-height: 25px; }
+p { margin: 0; }
+a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid var(--read); outline-offset: 2px; }
+::selection { background: var(--hl-row); }
+.label { font: 500 12px/14px var(--font-mono); letter-spacing: .10em; text-transform: uppercase; color: var(--text-2); }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.lead { font-size: 19px; line-height: 28px; color: var(--lead); max-width: 66ch; font-weight: 420; }
+/* la lectura: filete de latón bajo la frase decisiva (una por pantalla) */
+.k-read { background-image: linear-gradient(var(--read), var(--read)); background-repeat: no-repeat; background-size: 100% 3px; background-position: 0 100%; padding-bottom: 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.k-arrow { display: inline-block; width: .85em; height: .85em; margin: 0 .3em; vertical-align: -.08em; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat; }
+
+/* ---- portada (solo fuera del marco): Racing con la Estela a sangre, logotipo negativo */
+header.top { display: grid; gap: 0; }
+.hero { position: relative; overflow: hidden; background: var(--hero-bg); color: var(--k-chalk); padding: 32px 40px 40px; min-height: 360px; display: grid; align-content: space-between; gap: 40px; }
+.hero .estela { position: absolute; top: -12%; right: -16%; height: 124%; width: auto; aspect-ratio: 1; pointer-events: none; }
+:root[data-theme="dark"] .hero .estela { content: url("../kerno/patterns/kerno-estela-bleed-ink.svg"); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero .estela { content: url("../kerno/patterns/kerno-estela-bleed-ink.svg"); } }
+.hero > * { position: relative; }
+.hero-in { display: grid; gap: 16px; max-width: min(780px, 58%); }
+.k-logo { display: block; width: 168px; line-height: 0; }
+.k-logo img { width: 100%; height: auto; display: block; }
+.eyebrow { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; }
+.hero .label { color: var(--k-s300); }
+.hero .label b { color: var(--k-chalk); font-weight: 500; }
+.hero .label.read { color: var(--k-brass); }
+.hero h1 { color: var(--k-chalk); }
+.hero .lead { color: var(--k-s300); }
+.tabs { display: flex; gap: 4px 28px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--rule); }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { position: relative; appearance: none; border: 0; background: transparent; color: var(--text-2); font: 560 15px/20px var(--font-sans); padding: 16px 0 14px; cursor: pointer; white-space: nowrap; }
+.tab::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: transparent; transition: background .2s var(--ease); }
+.tab[aria-selected="true"] { color: var(--text); }
+.tab[aria-selected="true"]::after { background: var(--brand); }
+.tab:hover { color: var(--text); }
+.tab:focus-visible { outline: 2px solid var(--read); outline-offset: -2px; }
+
+/* ---- secciones */
+section.view { padding-block: 32px 8px; display: grid; gap: 40px; }
+.sec-head { display: grid; gap: 12px; max-width: 76ch; }
+.sec-head .note { color: var(--lead); font-size: 16px; line-height: 24px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 40px 24px; }
+/* tarjeta con regla superior: filete Racing, etiqueta mono, título Mona 620, texto S700 */
+.card { border-top: 2px solid var(--rule-strong); padding-top: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.card h3 { font-size: 18px; line-height: 24px; }
+.card p { color: var(--lead); font-size: 15px; line-height: 22px; }
+/* el marcador: cifra héroe en Bombardier con su rango en Geist Mono */
+.card .big { font: 400 48px/44px var(--font-display); letter-spacing: .02em; color: var(--brand); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; padding-top: 4px; }
+.card .big small { font: 450 15px/20px var(--font-mono); color: var(--text-2); letter-spacing: 0; margin-left: 8px; vertical-align: 6px; }
+.k-tag { justify-self: start; display: inline-block; font: 500 10px/12px var(--font-mono); letter-spacing: .10em; text-transform: uppercase; padding: 3px 6px; border: 1px solid currentColor; color: var(--text); vertical-align: middle; }
+.k-tag.dato { color: var(--brand); }
+.k-tag.lectura { color: var(--text-2); }
+.k-tag.supuesto { color: var(--text-2); border-style: dashed; }
+.tags { display: flex; gap: 8px; flex-wrap: wrap; }
+/* llamada: fondo Racing (Ink en oscuro), etiqueta mono en latón, texto Chalk */
+.callout { background: var(--callout-bg); color: var(--callout-text); padding: 24px 28px; display: grid; gap: 12px; }
+.callout .label { color: var(--callout-read); }
+.callout ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.callout li { color: var(--callout-text); }
+.callout li::marker { color: var(--k-s400); }
+.callout p { color: var(--k-s300); }
+
+/* ---- controles */
+.controls { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; }
+.ctl { display: grid; gap: 6px; min-width: 0; }
+select, input[type="search"] { font: 450 15px/20px var(--font-sans); color: var(--text); background: var(--surface-2); border: 1px solid var(--rule-mid); border-radius: 0; padding: 8px 10px; min-width: 0; max-width: 100%; }
+select:focus-visible, input:focus-visible { outline: 2px solid var(--read); outline-offset: 1px; }
+input[type="search"] { width: 240px; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule-mid); max-width: 100%; }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--text-2); font: 560 14px/18px var(--font-sans); padding: 9px 14px; cursor: pointer; transition: background-color .2s var(--ease), color .2s var(--ease); }
+.seg button + button { box-shadow: inset 1px 0 0 var(--rule); }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
+.btn { appearance: none; border: 1.5px solid var(--brand); background: transparent; color: var(--brand); font: 600 14px/18px var(--font-sans); padding: 10px 18px; border-radius: 0; cursor: pointer; transition: background-color .2s var(--ease), color .2s var(--ease); }
+.btn:hover { background: var(--brand); color: var(--on-brand); }
+
+/* ---- tablas: cabecera de etiqueta, filete Racing, cifras mono a la derecha, fila protagonista R100 */
+.tblwrap { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 15px; line-height: 20px; }
+th { text-align: left; font: 500 11px/14px var(--font-mono); letter-spacing: .10em; text-transform: uppercase; color: var(--text-2); padding: 10px 12px 8px; border-bottom: 1.5px solid var(--rule-strong); white-space: nowrap; vertical-align: bottom; }
+th .unit { text-transform: none; letter-spacing: .02em; font-weight: 450; }
+th.r, td.r { text-align: right; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+td b { font-weight: 620; }
+td.num { font-family: var(--font-mono); font-weight: 450; font-size: 14px; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+td.txtmono { font-family: var(--font-mono); font-size: 13px; line-height: 18px; color: var(--lead); white-space: normal; min-width: 280px; }
+td .sub { display: block; color: var(--text-2); font-size: 13px; line-height: 17px; }
+tr.hl td { background: var(--hl-row); font-weight: 620; }
+tbody tr:hover td { background: color-mix(in srgb, var(--text) 4%, transparent); }
+tr.hl:hover td { background: var(--hl-row); }
+/* banda de tolerancia: punto + rango del 80 % */
+.rg { position: relative; display: inline-block; width: 140px; height: 18px; vertical-align: middle; margin-right: 10px; }
+.rg::before { content: ""; position: absolute; left: 0; right: 0; top: 8.5px; height: 1px; background: var(--rule); }
+.rg i { position: absolute; top: 4px; height: 10px; background: var(--band); }
+.rg b { position: absolute; top: 0; height: 18px; width: 3px; margin-left: -1.5px; background: var(--brand); }
+.rg.yo b { background: var(--read); }
+.rg .z { position: absolute; top: 1px; bottom: 1px; width: 0; border-left: 1px dashed var(--context); }
+.rgtxt { font: 450 14px/18px var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.card .rgtxt, .card p.rgtxt { white-space: normal; font-size: 13px; line-height: 18px; }
+.rgtxt small { color: var(--text-2); font-weight: 450; font-size: 12.5px; }
+.note { color: var(--text-2); font-size: 14px; line-height: 20px; max-width: 80ch; }
+.src { font: 450 12px/17px var(--font-mono); color: var(--text-2); letter-spacing: .02em; }
+
+/* ---- gráficos de marca (5.5): título que concluye, subtítulo mono con unidad e intervalo, rejilla S200, ejes Geist Mono S600 */
+.chart { display: grid; gap: 6px; min-width: 0; align-content: start; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart .ttl { font: 620 19px/25px var(--font-sans); font-stretch: 95%; text-wrap: balance; }
+.chart .label { margin-bottom: 6px; line-height: 16px; }
+.chart .note { margin-top: 4px; }
+.chart .src { margin-top: 2px; }
+.k-chart-narrow { display: none; }
+@media (max-width: 720px) { .k-chart-wide { display: none; } .k-chart-narrow { display: block; } }
+
+/* ---- pie: marcador de calles (8 marcas, la actual en latón) */
+footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: flex-end; justify-content: space-between; }
+.scale { display: inline-flex; gap: 5px; align-items: flex-end; height: 14px; flex: none; }
+.scale i { width: 2px; height: 9px; background: var(--context); }
+.scale i.cur { height: 14px; width: 3px; background: var(--read); }
+/* cargador: la Estela se traza hasta que llegan los datos */
+.loading { padding: 56px 0; color: var(--text-2); font: 500 12px/14px var(--font-mono); letter-spacing: .10em; text-transform: uppercase; display: grid; justify-items: start; gap: 14px; }
+.loading img { width: 56px; height: 56px; display: block; }
+.loading .ld-d { display: none; }
+:root[data-theme="dark"] .loading .ld-l { display: none; } :root[data-theme="dark"] .loading .ld-d { display: block; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .loading .ld-l { display: none; } :root:not([data-theme="light"]) .loading .ld-d { display: block; } }
+.pager { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding-top: 4px; }
+dl.kv { display: grid; grid-template-columns: fit-content(260px) minmax(0, 1fr); min-width: 0; gap: 8px 16px; margin: 0; }
+dl.kv dt { color: var(--text-2); font: 500 11.5px/18px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+dl.kv dd { margin: 0; color: var(--lead); font-size: 15px; line-height: 22px; }
+.controls dl.kv dd { color: var(--text); }
+@media (max-width: 860px) { .hero-in { max-width: none; } .hero .estela { right: -42%; top: -8%; height: 70%; opacity: .55; } }
+@media (max-width: 640px) {
+  .hero { padding: 24px 20px 28px; min-height: 0; gap: 28px; }
+  .hero .estela { right: -38%; top: -6%; height: 210px; opacity: 1; }
+  .rg { width: 90px; } .lead { font-size: 17px; line-height: 25px; }
+  dl.kv { grid-template-columns: 1fr; gap: 2px 0; } dl.kv dd { margin-bottom: 8px; }
+  .card .big { font-size: 40px; line-height: 38px; }
+  .tabs { gap: 4px 20px; } .tab { font-size: 14px; }
+  .callout { padding: 20px; }
+  input[type="search"] { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="hero">
+    <img class="estela" src="../kerno/patterns/kerno-estela-bleed-racing.svg" alt="" aria-hidden="true">
+    <span class="k-logo"><img src="../kerno/logo/kerno-horizontal-negative.svg" alt="Kerno Analytics" width="168" height="64"></span>
+    <div class="hero-in">
+      <div class="eyebrow">
+        <span class="label read">Kerno Analytics · Confidencial</span>
+        <span class="label">Modelo de equipo · <b>v4.0</b></span>
+        <span class="label">Encargo cerrado · <b id="fechaCierre">5 nov 2026</b></span>
+      </div>
+      <h1>Dos notas de 0 a 100 con significado comprobable, y una proyección de equipo que gana a repetir el curso anterior</h1>
+      <p class="lead">Nivel Kerno dice qué percentil de producción esperar de un fichaje en su liga y posición. Impacto dice cuánto cambiará el equipo con él en pista frente a sin él. Las dos llevan su rango del 80 % y se han examinado sobre 4 560 fichajes reales de 2022 a 2026.</p>
+      <span class="label">Estado · <b>Nivel Kerno referente · Impacto referente (criterio on/off)</b></span>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Secciones del modelo v4.0">
+    <button class="tab" role="tab" data-v="resumen" aria-selected="true" type="button">Resumen y puertas</button>
+    <button class="tab" role="tab" data-v="anclas" aria-selected="false" type="button">Nivel Kerno e Impacto</button>
+    <button class="tab" role="tab" data-v="equipos" aria-selected="false" type="button">Equipos 2026-27</button>
+    <button class="tab" role="tab" data-v="metodo" aria-selected="false" type="button">Método y límites</button>
+  </nav>
+</header>
+<section class="view" id="view"><div class="loading" role="status"><img class="ld-l" src="../kerno/motion/kerno-loader-chalk.svg" alt=""><img class="ld-d" src="../kerno/motion/kerno-loader-racing.svg" alt="">Cargando el modelo v4.0</div></section>
+<footer>
+  <div class="scale" aria-hidden="true" id="escala"></div>
+  <p class="src">Datos públicos · ligas oficiales · exámenes 2021-22 a 2025-26 sin fuga (perfiles hasta t) · intervalo del 80 % · Kerno Analytics · Confidencial</p>
+</footer>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const LS = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, json(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } } };
+const N = (x, d = 1) => (x == null || !isFinite(x)) ? "–" : Number(x).toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
+const Nz = (x, d = 1) => (x == null || !isFinite(x)) ? "–" : (x > 0 ? "+" : "") + N(x, d);
+const Ni = (x) => (x == null) ? "–" : Number(x).toLocaleString("es-ES");
+const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB" };
+const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3"];
+const ligaN = (l) => LIGA_N[l] || String(l || "").toUpperCase();
+const ligaOrd = (a, b) => (LIGA_ORD.indexOf(a) + 1 || 99) - (LIGA_ORD.indexOf(b) + 1 || 99);
+const GRUPO_N = { europa_top: "Europa top (EuroLeague, EuroCup, Liga Endesa)", europa_media: "Europa media (LBA, LNB, BSL, VTB, BCL)", europa_menor: "Europa menor (BBL, BNXT, GBL, FIBA Europe Cup)", feb: "FEB (Primera, Segunda y Tercera)", nba: "NBA", eeuu_menor: "EE. UU. menor (G League, NCAA)", otras: "Otras (CBA, NBL)" };
+const GRUPO_C = { europa_top: "Europa top", europa_media: "Europa media", europa_menor: "Europa menor", feb: "FEB", nba: "NBA", eeuu_menor: "EE. UU. menor", otras: "Otras (CBA, NBL)" };
+const POS = { E: "Exterior", A: "Alero", I: "Interior" };
+// texto de los datos: escapado + literales de marca (Kerno) + glifos que las fuentes de marca no tienen
+const ARW = `<span class="k-arrow" role="img" aria-label="a"></span>`;
+const et = (s) => esc(s).replace(/NIVEL CERNO/g, "Nivel Kerno").replace(/\bCERNO\b/g, "Kerno").replace(/\bIMPACTO\b/g, "Impacto")
+  .replace(/\s*→\s*/g, ARW).replace(/≈\s*/g, "aprox. ").replace(/≤\s*/g, "hasta ").replace(/≥\s*/g, "desde ").replace(/Δ\s*/g, "cambio ").replace(/β/g, "beta").replace(/ρ/g, "rho");
+
+// ---- tema y contexto: los comparte la página principal por almacenamiento local (mismo origen)
+function aplicarTema() {
+  const t = LS.get("mm.theme");
+  if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+}
+aplicarTema();
+const EMBED = new URLSearchParams(location.search).get("embed") === "1";
+if (EMBED) { document.querySelector("header.top").hidden = true; document.documentElement.dataset.embed = "1"; }
+window.addEventListener("storage", (e) => { if (e.key === "mm.theme") aplicarTema(); });
+window.addEventListener("message", (e) => {
+  const d = e.data || {};
+  if (d.tema === "dark" || d.tema === "light") document.documentElement.dataset.theme = d.tema;
+  if (d.cernoCtx && d.cernoCtx.tema) document.documentElement.dataset.theme = d.cernoCtx.tema;
+  if (d.irV40) { location.hash = d.irV40; }
+});
+const CTX = LS.json("cerno.ctx", {});
+const CLUB = (CTX && CTX.club) || LS.json("cerno.v2.ctx", null) && { liga: LS.json("cerno.v2.ctx", {}).liga, id: LS.json("cerno.v2.ctx", {}).id } || { liga: "euroleague", id: "BAS" };
+
+// ---- altura para el marco de la página principal
+function publicarAlto() { if (window.parent !== window) { try { window.parent.postMessage({ atlasAlto: document.documentElement.scrollHeight }, "*"); } catch (e) { /* */ } } }
+new ResizeObserver(publicarAlto).observe(document.body);
+
+// ---- datos
+async function jsonDe(r, gz) {
+  if (!gz) return r.json();
+  const b64 = (await r.text()).trim(); const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  const ds = new DecompressionStream("gzip"); const txt = await new Response(new Blob([bin]).stream().pipeThrough(ds)).text();
+  return JSON.parse(txt);
+}
+async function cargar(path) { const r = await fetch(path); if (!r.ok) throw new Error(`${path} (${r.status})`); return jsonDe(r, path.endsWith(".gz.txt")); }
+function tabla(d) { const I = {}; d.columnas.forEach((c, i) => { I[c] = i; }); let filas = d.filas; if (!filas && d.por_columna) { const C = d.por_columna, n = C.length ? C[0].length : 0; filas = new Array(n); for (let i = 0; i < n; i++) { const r = new Array(C.length); for (let j = 0; j < C.length; j++) r[j] = C[j][i]; filas[i] = r; } } return { I, filas, g: (r, c) => r[I[c]] }; }
+const D = { resumen: null, fich: null, eq: null, cal: null };
+let P = null;
+function datos() { if (!P) P = Promise.all([cargar("resumen.json"), cargar("fichajes.json.gz.txt"), cargar("equipos_2026-27.json"), cargar("calibracion.json")]).then(([r, f, e, c]) => { D.resumen = r; D.fich = tabla(f); D.eq = tabla(e); D.cal = c; }); return P; }
+
+// ---- componentes
+function rango(lo, pt, hi, min, max, cero, hero) {
+  const w = max - min, x = (v) => Math.max(0, Math.min(100, (v - min) / w * 100));
+  return `<span class="rg${hero ? " yo" : ""}" aria-hidden="true">${cero != null ? `<span class="z" style="left:${x(cero)}%"></span>` : ""}<i style="left:${x(lo)}%;width:${Math.max(0.5, x(hi) - x(lo))}%"></i><b style="left:${x(pt)}%"></b></span>`;
+}
+const rtxt = (pt, lo, hi, d = 0, signo = false) => `<span class="rgtxt">${signo ? Nz(pt, d) : N(pt, d)} <small>[${signo ? Nz(lo, d) : N(lo, d)}–${signo ? Nz(hi, d) : N(hi, d)}]</small></span>`;
+const tag = (k) => ({ DATO: `<span class="k-tag dato">Dato</span>`, LECTURA: `<span class="k-tag lectura">Lectura</span>`, HIPOTESIS: `<span class="k-tag supuesto">Supuesto</span>` }[k] || "");
+// marcador de calles del pie: 8 marcas finas, la de la vista actual más alta y en latón
+function pintarEscala(pos) { $("escala").innerHTML = Array.from({ length: 8 }, (_, i) => `<i${i === pos ? ' class="cur"' : ""}></i>`).join(""); }
+
+// ---- vistas
+const V = {};
+const VISTAS = ["resumen", "anclas", "equipos", "metodo"];
+V.resumen = () => {
+  const R = D.resumen, f4 = R.f4, nc = R.nc, im = R.im;
+  return `
+  <div class="sec-head"><span class="label">Resumen · cinco capas, cinco puertas</span><h2>Las cinco capas <span class="k-read">pasaron su examen prerregistrado</span>; la química de quinteto resultó despreciable y se publica como corrección por jugador</h2>
+  <p class="note">Cada fase tuvo un criterio fijado antes de ejecutar y una puerta aprobada por la dirección. Lo que se muestra aquí es lo que salió, no lo que se esperaba.</p></div>
+  <div class="grid3">
+    <div class="card"><span class="label">Nivel Kerno · pares bien ordenados</span><div class="big">${N(nc.separacion.fraccion * 100, 1)} %</div><p class="rgtxt"><small>IC95 [${N(nc.separacion.ic95[0] * 100, 1)}–${N(nc.separacion.ic95[1] * 100, 1)}] · n = ${Ni(nc.n)} fichajes</small></p><p>De cada dos fichajes, el que Nivel Kerno puso más alto rindió más en 7 de cada 10 pares. El azar daría 5.</p>${tag("DATO")}</div>
+    <div class="card"><span class="label">Impacto · Spearman con el on/off realizado</span><div class="big">${N(im.monotonia.spearman, 3)}</div><p class="rgtxt"><small>IC95 [${N(im.monotonia.ic95[0], 3)}–${N(im.monotonia.ic95[1], 3)}] · aditivo ${N(im.monotonia.spearman_aditivo, 3)} · n = ${Ni(im.n)}</small></p><p>Impacto sigue al on/off del fichaje en su nueva casa; la suma simple de valores individuales casi no lo hace.</p>${tag("DATO")}</div>
+    <div class="card"><span class="label">Equipo · error medio del Net proyectado</span><div class="big">${N(f4.mae_f4, 2)}<small>frente a ${N(f4.mae_persistencia, 2)}</small></div><p class="rgtxt"><small>IC95 de la diferencia [${N(-1.02, 2)}, ${N(-0.65, 2)}] · ${Ni(f4.n_decision)} transiciones de decisión</small></p><p>Proyectar la plantilla nueva se equivoca menos que suponer que el equipo repite su Net del curso anterior.</p>${tag("DATO")}</div>
+  </div>
+  <div class="tblwrap"><table><thead><tr><th>Fase</th><th>Qué aporta</th><th>Puerta</th><th>Dato del examen</th><th>Lectura</th></tr></thead><tbody>
+  ${R.fases.map((f) => `<tr><td class="mono">${esc(f.id)}</td><td>${et(f.nombre)}</td><td>${et(f.puerta)}</td><td class="txtmono">${et(f.dato)}</td><td style="min-width:260px">${et(f.lectura)}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="callout"><span class="label">Dónde termina lo que sabemos</span><ul>${R.limites.map((l) => `<li>${et(l)}</li>`).join("")}</ul></div>`;
+};
+
+const AN = { t: "2025-26", liga: "", q: "", orden: "NC", n: 60 };
+V.anclas = () => {
+  const F = D.fich, g = F.g;
+  const temps = [...new Set(F.filas.map((r) => g(r, "temporada")))].sort();
+  if (!temps.includes(AN.t)) AN.t = temps[temps.length - 1];
+  const ligas = [...new Set(F.filas.filter((r) => g(r, "temporada") === AN.t).map((r) => g(r, "liga")))].sort(ligaOrd);
+  const q = AN.q.trim().toLowerCase();
+  let rows = F.filas.filter((r) => g(r, "temporada") === AN.t && (!AN.liga || g(r, "liga") === AN.liga) && (!q || String(g(r, "nombre") || "").toLowerCase().includes(q) || String(g(r, "equipo") || "").toLowerCase().includes(q)));
+  const key = { NC: "NC", IM: "IM", real: "pct_realizado", onoff: "pct_onoff", comp: "comp_pts100" }[AN.orden] || "NC";
+  rows.sort((a, b) => ((g(b, key) ?? -1e9) - (g(a, key) ?? -1e9)));
+  const total = rows.length; rows = rows.slice(0, AN.n);
+  const nc = D.resumen.nc, im = D.resumen.im;
+  return `
+  <div class="sec-head"><span class="label">Nivel Kerno e Impacto · ${esc(AN.t)}</span><h2>Lo que se dijo de cada fichaje antes de verlo jugar, junto a lo que después hizo</h2>
+  <p class="note">Nivel Kerno es el percentil esperado de producción (minutos × puntos por 100 posesiones) entre jugadores de su liga y posición de las tres temporadas anteriores. Impacto es el percentil del cambio esperado en el Net del equipo con él frente a sin él, en la escala de todos los movimientos examinados. Los dos se calcularon con perfiles anteriores a la temporada; el realizado es lo que ocurrió esa temporada.</p></div>
+  <div class="grid2">
+    ${calibChart("Nivel Kerno acierta su propio nivel: ningún decil se desvía más de 3,6 puntos", nc.calibracion, nc.cobertura_80, nc.anchura_80, "Nivel Kerno previsto frente a percentil de producción realizado", nc.n)}
+    ${calibChart("Impacto también: desvío máximo 2,5 puntos entre lo previsto y el on/off realizado", im.calibracion, im.cobertura_80, im.anchura_80, "Impacto previsto frente a percentil de on/off realizado", im.n)}
+  </div>
+  <div class="grid2">
+    <div class="card"><span class="label">Cómo leer Nivel Kerno</span><h3>50 es un fichaje mediano de su liga y posición; 70, uno que suele acabar entre el 30 % que más produce</h3><p>El rango del 80 % es ancho a propósito: con minutos aún sin repartir, una horquilla de 60 puntos es lo honesto. La nota cruda subestimaba unos 10 puntos por la selección del examen; se corrigió con una calibración isotónica sobre los cortes anteriores.</p></div>
+    <div class="card"><span class="label">Cómo leer Impacto</span><h3>50 es un movimiento que no cambia el equipo; por encima, lo mejora; por debajo, lo empeora en Net</h3><p>El criterio literal del encargo (acertar el cambio de Net de todo el equipo con un solo fichaje) no se cumple por construcción. El criterio redefinido y prerregistrado compara con el on/off realizado del jugador y sí se cumple. El efecto sobre compañeros (quién tira y quién recibe asistencias) se publica aparte y no entra en la nota.</p></div>
+  </div>
+  <div class="controls">
+    <div class="ctl"><label class="label" for="anT">Temporada del fichaje</label><select id="anT">${temps.map((t) => `<option value="${t}"${t === AN.t ? " selected" : ""}>${t}</option>`).join("")}</select></div>
+    <div class="ctl"><label class="label" for="anL">Liga de destino</label><select id="anL"><option value="">Todas (${ligas.length})</option>${ligas.map((l) => `<option value="${l}"${l === AN.liga ? " selected" : ""}>${esc(ligaN(l))}</option>`).join("")}</select></div>
+    <div class="ctl"><label class="label" for="anQ">Jugador o equipo</label><input type="search" id="anQ" value="${esc(AN.q)}" placeholder="Buscar"></div>
+    <div class="ctl"><span class="label">Ordenar por</span><div class="seg" id="anO">${[["NC", "Nivel Kerno"], ["IM", "Impacto"], ["real", "Producción real"], ["onoff", "On/off real"], ["comp", "Compañeros"]].map(([k, n]) => `<button type="button" data-o="${k}" aria-pressed="${AN.orden === k}">${n}</button>`).join("")}</div></div>
+  </div>
+  <div class="tblwrap"><table><thead><tr><th>Jugador</th><th>Destino</th><th>Nivel Kerno <span class="unit">· punto [80 %]</span></th><th class="r">Producción real<br><span class="unit">percentil esa temporada</span></th><th>Impacto <span class="unit">· punto [80 %]</span></th><th class="r">On/off real<br><span class="unit">percentil esa temporada</span></th><th class="r">Compañeros<br><span class="unit">pts/100</span></th><th class="r">Min./partido prev.</th></tr></thead><tbody>
+  ${rows.map((r) => { const im = g(r, "IM"); const cp = g(r, "comp_pts100"); return `<tr><td><b>${esc(g(r, "nombre") || g(r, "persona_id"))}</b><span class="sub">${esc(POS[g(r, "pos3")] || "")}</span></td><td>${esc(g(r, "equipo"))}<span class="sub">${esc(ligaN(g(r, "liga")))}</span></td>
+    <td>${rango(g(r, "NC_lo80"), g(r, "NC"), g(r, "NC_hi80"), 0, 100)}${rtxt(g(r, "NC"), g(r, "NC_lo80"), g(r, "NC_hi80"))}</td><td class="num">${N(g(r, "pct_realizado"), 0)}</td>
+    <td>${im == null ? `<span class="note">sin proyección</span>` : rango(g(r, "IM_lo80"), im, g(r, "IM_hi80"), 0, 100, 50) + rtxt(im, g(r, "IM_lo80"), g(r, "IM_hi80"))}</td><td class="num">${N(g(r, "pct_onoff"), 0)}</td>
+    <td class="num" title="Efecto previsto sobre los pts/100 de los compañeros (F2-B); subíndice aparte, no entra en Impacto">${cp == null ? "–" : Nz(cp, 1)}</td><td class="num">${N(g(r, "minutos_proyectados"), 1)}</td></tr>`; }).join("")}
+  </tbody></table></div>
+  <div class="pager"><span class="note">${Ni(Math.min(AN.n, total))} de ${Ni(total)} fichajes de ${esc(AN.t)}${AN.liga ? " en " + esc(ligaN(AN.liga)) : ""}. «Producción real» es el percentil que ocupó de verdad su producción (minutos × puntos por 100) entre los de su puesto en esa liga y temporada, lo que Nivel Kerno intentaba anticipar; «On/off real» es el percentil del Net del equipo con él en pista frente a sin él en esa temporada, lo que Impacto intentaba anticipar; «sin proyección» cuando el equipo de destino no tenía plantilla suficiente para simular.</span>${total > AN.n ? `<button class="btn" id="anMas" type="button">Mostrar 60 más</button>` : ""}</div>`;
+};
+// ---- gráfico de calibración por deciles (5.5): previsto frente a realizado, banda de tolerancia, identidad en Sage;
+//      los deciles en Racing (Chalk en oscuro); el decil con mayor desvío, que es la lectura del título, con su punto en latón.
+function calibSvg(ttl, cal, W, H, fs) {
+  const L = 40, R = 14, T = 26, B = 46;
+  const x = (v) => L + (v / 100) * (W - L - R), y = (v) => (H - B) - (v / 100) * (H - B - T);
+  const dec = Object.values(cal.deciles), tol = cal.tolerancia;
+  const dv = (d) => (d.desvio != null ? d.desvio : d.realizado - d.previsto);
+  const peor = dec.reduce((a, d) => (Math.abs(dv(d)) > Math.abs(dv(a)) ? d : a), dec[0]);
+  const M = `font-family="var(--font-mono)"`, ax = `${M} font-size="${fs}" fill="var(--axis)"`;
+  let s = `<svg viewBox="0 0 ${W} ${H}" style="max-width:${W}px" role="img" aria-label="${esc(ttl)}">`;
+  s += `<polygon points="${x(0)},${y(tol)} ${x(100 - tol)},${y(100)} ${x(100)},${y(100)} ${x(100)},${y(100 - tol)} ${x(tol)},${y(0)} ${x(0)},${y(0)}" fill="var(--band)"/>`;
+  [0, 25, 50, 75, 100].forEach((v) => {
+    s += `<line x1="${x(0)}" x2="${x(100)}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/>`;
+    s += `<text x="${x(0) - 8}" y="${y(v) + 4}" text-anchor="end" ${ax}>${v}</text>`;
+    s += `<line x1="${x(v)}" x2="${x(v)}" y1="${y(0)}" y2="${y(0) + 4}" stroke="var(--axis)" stroke-width="1"/><text x="${x(v)}" y="${y(0) + 18}" text-anchor="middle" ${ax}>${v}</text>`;
+  });
+  s += `<line x1="${x(0)}" y1="${y(0)}" x2="${x(100)}" y2="${y(100)}" stroke="var(--context)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  s += `<text x="${x(100) - 4}" y="${y(100 - tol) + 18}" text-anchor="end" ${M} font-size="${fs - 1}" letter-spacing=".6" fill="var(--axis)">TOLERANCIA ±${N(tol, 0)}</text>`;
+  dec.forEach((d) => { if (d === peor) return; s += `<circle cx="${x(d.previsto)}" cy="${y(d.realizado)}" r="4.5" fill="var(--brand)"><title>previsto ${N(d.previsto, 1)} · realizado ${N(d.realizado, 1)} · n = ${Ni(d.n)}</title></circle>`; });
+  // la lectura: el decil más alejado de la diagonal, con su desvío dibujado en latón
+  const px = x(peor.previsto), py = y(peor.realizado), dy = y(peor.previsto), enc = dv(peor) > 0;
+  s += `<line x1="${px}" x2="${px}" y1="${py}" y2="${dy}" stroke="var(--read)" stroke-width="2"/>`;
+  s += `<circle cx="${px}" cy="${py}" r="6.5" fill="var(--brand)"/><circle cx="${px}" cy="${py}" r="3" fill="var(--read)"><title>previsto ${N(peor.previsto, 1)} · realizado ${N(peor.realizado, 1)} · n = ${Ni(peor.n)}</title></circle>`;
+  // por encima de la diagonal, rótulo arriba a la izquierda; por debajo, abajo a la derecha (lejos de la nube)
+  s += `<text x="${enc ? px - 12 : px + 12}" y="${enc ? py - 12 : py + 20}" text-anchor="${enc ? "end" : "start"}" ${M} font-size="${fs}" font-weight="600" fill="var(--text)">DESVÍO MÁX. ${Nz(dv(peor), 1)}</text>`;
+  s += `<text x="${x(0)}" y="${T - 12}" ${M} font-size="${fs - 1}" letter-spacing=".8" fill="var(--axis)">REALIZADO · PERCENTIL</text>`;
+  s += `<text x="${x(100)}" y="${H - 4}" text-anchor="end" ${M} font-size="${fs - 1}" letter-spacing=".8" fill="var(--axis)">PREVISTO · MEDIA DEL DECIL</text></svg>`;
+  return s;
+}
+function calibChart(ttl, cal, cob, anch, sub, n) {
+  const tol = cal.tolerancia;
+  return `<figure class="chart" style="margin:0"><div class="ttl">${esc(ttl)}</div><span class="label">${esc(sub)} · percentil 0–100 · 10 deciles · n = ${Ni(n)} · banda = tolerancia ±${N(tol, 0)}</span>
+    <div class="k-chart-wide">${calibSvg(ttl, cal, 600, 440, 11.5)}</div><div class="k-chart-narrow">${calibSvg(ttl, cal, 360, 320, 10.5)}</div>
+    <p class="note">Cobertura del intervalo del 80 %: ${N(cob * 100, 1)} % · anchura media ${N(anch, 0)} puntos de percentil · desvío máximo ${N(cal.max_desvio_abs, 1)} · ${cal.pasa ? "pasa" : "no pasa"} el criterio prerregistrado.</p><p class="src">Datos públicos · ligas oficiales · exámenes 2021-22 a 2025-26 sin fuga</p></figure>`;
+}
+// ---- ranking con rangos (5.5, como ranking_svg de charts.py): punto + intervalo; protagonista con banda Racing y punto latón,
+//      contexto en Sage; línea de cero discontinua; cifras en Geist Mono. Se generan versión ancha y estrecha.
+function rankChart(rows, o) {
+  const W = o.width, LW = o.labelW, RW = o.rightW, RH = o.rowH || 32, T = 8, top = T;
+  const pw = W - LW - RW, H = top + RH * rows.length + 30;
+  const sx = (v) => LW + (v - o.min) / (o.max - o.min) * pw;
+  const M = `font-family="var(--font-mono)"`;
+  let s = `<svg viewBox="0 0 ${W} ${H}" style="max-width:${W}px" role="img" aria-label="${esc(o.aria)}">`;
+  o.ticks.forEach((t) => { const X = sx(t); s += `<line x1="${X}" x2="${X}" y1="${top - 2}" y2="${top + RH * rows.length}" stroke="var(--grid)" stroke-width="1"/><text x="${X}" y="${top + RH * rows.length + 17}" text-anchor="middle" ${M} font-size="11" fill="var(--axis)">${Nz(t, o.dt || 0)}</text>`; });
+  if (o.zero != null) s += `<line x1="${sx(o.zero)}" x2="${sx(o.zero)}" y1="${top - 4}" y2="${top + RH * rows.length + 4}" stroke="var(--axis)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  rows.forEach((r, i) => {
+    const yc = top + i * RH + RH / 2, h = r.hero;
+    if (h) s += `<rect x="0" y="${yc - RH / 2}" width="${W}" height="${RH}" fill="var(--hl-row)"/>`;
+    s += `<text x="${h ? 8 : 0}" y="${yc + 4.5}" font-family="var(--font-sans)" font-size="13.5" font-weight="${h ? 620 : 420}" fill="var(--text)">${esc(r.name)}</text>`;
+    const x0 = sx(r.lo), x1 = sx(r.hi), xp = sx(r.point);
+    s += `<rect x="${x0}" y="${yc - 6}" width="${Math.max(1, x1 - x0)}" height="12" fill="${h ? "var(--band)" : "var(--ctx-band)"}"/>`;
+    s += `<rect x="${xp - 1.5}" y="${yc - 10}" width="3" height="20" fill="${h ? "var(--read)" : "var(--context)"}"><title>${esc(r.name)} · ${Nz(r.point, 2)} [${Nz(r.lo, 2)}, ${Nz(r.hi, 2)}]</title></rect>`;
+    s += `<text x="${W - RW + 12}" y="${yc + 4.5}" ${M} font-size="12.5" font-weight="${h ? 600 : 450}" fill="var(--text)">${Nz(r.point, 2)}</text>`;
+    s += `<text x="${W - 4}" y="${yc + 4.5}" text-anchor="end" ${M} font-size="11" fill="var(--axis)">${o.n ? "n " + Ni(r.n) : ""}</text>`;
+  });
+  return s + `</svg>`;
+}
+function grupoChart(f4) {
+  const rows = [{ name: "Conjunto", point: f4.mae_f4 - f4.mae_persistencia, lo: -1.02, hi: -0.65, n: f4.n_decision, hero: true }]
+    .concat(Object.entries(f4.por_grupo).sort((a, b) => b[1].n - a[1].n).map(([k, v]) => ({ name: GRUPO_C[k] || k, point: v.mae_f4 - v.mae_persistencia, lo: v.ic95[0], hi: v.ic95[1], n: v.n })));
+  const base = { min: -2.5, max: 0.5, zero: 0, ticks: [-2, -1.5, -1, -0.5, 0, 0.5], dt: 1, n: true, aria: "Diferencia de error entre proyectar y repetir, por grupo de liga, con su IC95" };
+  const ttl = `Proyectar gana a repetir en los siete grupos de liga: ${Nz(f4.mae_f4 - f4.mae_persistencia, 2)} puntos de error en el conjunto`;
+  return `<figure class="chart" style="margin:0"><div class="ttl">${esc(ttl)}</div><span class="label">Error v4.0 menos error de repetir · pts/100 de Net · punto + IC95 · ${Ni(f4.n_decision)} transiciones de decisión</span>
+    <div class="k-chart-wide">${rankChart(rows, { ...base, width: 760, labelW: 150, rightW: 120 })}</div>
+    <div class="k-chart-narrow">${rankChart(rows, { ...base, width: 360, labelW: 104, rightW: 96, ticks: [-2, -1, 0], rowH: 30 })}</div>
+    <p class="note">Por debajo de cero, proyectar la plantilla nueva se equivoca menos que suponer que el equipo repite su Net. Ningún intervalo cruza el cero.</p><p class="src">Datos públicos · ligas oficiales · cortes temporales 2021-22 a 2024-25</p></figure>`;
+}
+
+const EQ = { liga: null };
+V.equipos = () => {
+  const E = D.eq, g = E.g;
+  const ligas = [...new Set(E.filas.map((r) => g(r, "liga")))].sort(ligaOrd);
+  if (!EQ.liga) EQ.liga = ligas.includes(CLUB.liga) ? CLUB.liga : ligas[0];
+  const rows = E.filas.filter((r) => g(r, "liga") === EQ.liga).sort((a, b) => g(a, "puesto") - g(b, "puesto"));
+  const ext = Math.max(6, ...rows.map((r) => Math.max(Math.abs(g(r, "lo80")), Math.abs(g(r, "hi80")))));
+  const grupo = rows.length ? g(rows[0], "grupo") : null, cal = grupo && D.cal.por_grupo[grupo];
+  const propio = rows.find((r) => String(g(r, "team_id")) === String(CLUB.id));
+  const cab = propio ? `${esc(g(propio, "equipo"))} se proyecta ${g(propio, "puesto")}.º de ${rows.length} en ${esc(ligaN(EQ.liga))}: Net ${Nz(g(propio, "net_proyectado_relativo"), 1)} [${Nz(g(propio, "lo80"), 1)}, ${Nz(g(propio, "hi80"), 1)}] frente a la media de la liga` : `${esc(ligaN(EQ.liga))}: ${rows.length} plantillas proyectadas a Net relativo a la liga, con su rango del 80 %`;
+  return `
+  <div class="sec-head"><span class="label">Equipos 2026-27 · proyección de plantillas</span><h2>${cab}</h2>
+  <p class="note">La capa 4 reparte los minutos de la plantilla con el motor v3.3, suma el valor de cada jugador (beta de la capa 1, efectos dirigidos de la 2 y corrección aditiva de la 3) y encoge la proyección con la calibración aprendida en 1 149 transiciones reales de equipo. Net relativo: puntos por 100 posesiones por encima o por debajo de la media de la liga en la temporada regular. Plantillas a 5 de noviembre de 2026.</p></div>
+  <div class="controls"><div class="ctl"><label class="label" for="eqL">Liga</label><select id="eqL">${ligas.map((l) => `<option value="${l}"${l === EQ.liga ? " selected" : ""}>${esc(ligaN(l))} (${E.filas.filter((r) => g(r, "liga") === l).length})</option>`).join("")}</select></div>
+  ${cal ? `<dl class="kv"><dt>Grupo</dt><dd>${esc(GRUPO_N[grupo] || grupo)}</dd><dt>Encogimiento c</dt><dd class="mono">${N(cal.prediccion.c, 2)} · n = ${Ni(cal.prediccion.n)}</dd><dt>Error irreducible s0</dt><dd class="mono">${N(cal.intervalo.s0, 1)} pts/100</dd></dl>` : ""}</div>
+  <div class="tblwrap"><table><thead><tr><th class="r">#</th><th>Equipo</th><th>Net proyectado frente a la liga <span class="unit">· pts/100 · punto [80 %]</span></th><th class="r">Fuerza T</th><th class="r">Plantilla</th><th class="r">Sin beta</th></tr></thead><tbody>
+  ${rows.map((r) => { const yo = String(g(r, "team_id")) === String(CLUB.id); return `<tr${yo ? ' class="hl"' : ""}><td class="num">${g(r, "puesto")}</td><td><b>${esc(g(r, "equipo"))}</b></td><td>${rango(g(r, "lo80"), g(r, "net_proyectado_relativo"), g(r, "hi80"), -ext, ext, 0, yo)}${rtxt(g(r, "net_proyectado_relativo"), g(r, "lo80"), g(r, "hi80"), 1, true)}</td><td class="num">${N(g(r, "T"), 1)} <small class="note">± ${N(g(r, "T_sd"), 1)}</small></td><td class="num">${g(r, "n_plantilla")}</td><td class="num">${g(r, "n_sin_beta")}</td></tr>`; }).join("")}
+  </tbody></table></div>
+  <p class="note">Fuerza T es la suma de valor proyectada antes de calibrar (± desviación del Monte Carlo de minutos). «Sin beta» cuenta jugadores sin valor medido en ninguna liga, a los que se asigna el nivel medio de los recién llegados a esa liga. Un orden parecido entre dos equipos con rangos solapados no es una diferencia que el modelo pueda afirmar.</p>
+  <p class="src">Datos públicos · ligas oficiales · plantillas a 5 de noviembre de 2026 · intervalo del 80 %</p>`;
+};
+
+V.metodo = () => {
+  const R = D.resumen, f4 = R.f4, a5 = R.a5, im = R.im;
+  const A5N = { pts_p100: "Puntos / 100", ts_pct: "TS %", usg_pct: "Uso %", ast_pct: "Asistencias %", oreb_p100: "Reb. of. / 100", dreb_p100: "Reb. def. / 100", stl_p100: "Robos / 100", blk_p100: "Tapones / 100", tov_pct: "Pérdidas %" };
+  return `
+  <div class="sec-head"><span class="label">Método y límites</span><h2>Cada número de esta sección sale de un examen con el criterio fijado antes de mirar los datos</h2>
+  <p class="note">Los exámenes usan cortes temporales anidados: para predecir la temporada t solo se emplean perfiles, valores y redes estimados con datos hasta t − 1. Las etiquetas distinguen hechos con fuente (Dato), criterio de Kerno (Lectura) y supuestos pendientes de validar (Supuesto).</p></div>
+  ${grupoChart(f4)}
+  <div class="grid2">
+    <div class="card"><span class="label">Capa 4 · por grupo de liga</span><div class="tblwrap"><table style="min-width:520px"><thead><tr><th>Grupo</th><th class="r">n</th><th class="r">Error v4.0</th><th class="r">Error repetir</th><th class="r">IC95 diferencia</th></tr></thead><tbody>
+    ${Object.entries(f4.por_grupo).sort((a, b) => b[1].n - a[1].n).map(([k, v]) => `<tr><td>${esc(GRUPO_N[k] || k)}</td><td class="num">${v.n}</td><td class="num">${N(v.mae_f4, 2)}</td><td class="num">${N(v.mae_persistencia, 2)}</td><td class="num">[${N(v.ic95[0], 2)}, ${N(v.ic95[1], 2)}]</td></tr>`).join("")}
+    </tbody></table></div><p class="note">En los siete grupos el intervalo queda por debajo de cero: proyectar gana a repetir en todos. Spearman entre Net previsto y realizado ${N(f4.spearman, 2)}; minutos reales en vez de proyectados bajarían el error solo hasta ${N(f4.mae_oraculo, 2)}.</p><div class="tags">${tag("DATO")}</div></div>
+    <div class="card"><span class="label">Capa 4 · por corte temporal</span><div class="tblwrap"><table style="min-width:420px"><thead><tr><th>Predice</th><th class="r">n</th><th class="r">Error v4.0</th><th class="r">Error repetir</th><th class="r">Cobertura 80 %</th></tr></thead><tbody>
+    ${Object.entries(f4.por_corte).map(([k, v]) => `<tr><td class="mono" style="white-space:nowrap">${k}-${String(Number(k) + 1).slice(2)}${ARW}${Number(k) + 1}-${String(Number(k) + 2).slice(2)}</td><td class="num">${v.n}</td><td class="num">${N(v.mae_f4, 2)}</td><td class="num">${N(v.mae_persistencia, 2)}</td><td class="num">${N(v.cobertura_80 * 100, 0)} %</td></tr>`).join("")}
+    </tbody></table></div><p class="note">Un modelo de gradiente directo sobre las mismas variables da ${N(f4.mae_gbm, 2)}; la versión aditiva sin red de conjunto, ${N(f4.mae_aditivo, 2)}. La estructura explícita (valor + minutos + calibración) no pierde frente a la caja negra.</p><div class="tags">${tag("DATO")}</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><span class="label">A5 · producción no lineal en minutos y rol</span><div class="tblwrap"><table style="min-width:480px"><thead><tr><th>Métrica</th><th class="r">Error lineal</th><th class="r">Error A5</th><th class="r">Cambio</th><th class="r">IC90</th><th>Decisión</th></tr></thead><tbody>
+    ${Object.entries(a5).map(([k, v]) => { const gana = v.ic90[1] < 0; return `<tr><td>${esc(A5N[k] || k)}</td><td class="num">${N(v.mae_b9, 2)}</td><td class="num">${N(v.mae_a5, 2)}</td><td class="num">${Nz(v.cociente_menos_1 * 100, 1)} %</td><td class="num">[${Nz(v.ic90[0] * 100, 1)}, ${Nz(v.ic90[1] * 100, 1)}]</td><td>${gana ? "A5 con carga" : (k === "oreb_p100" ? "Se mantiene el lineal" : "A5 con carga (sin ganancia clara)")}</td></tr>`; }).join("")}
+    </tbody></table></div><p class="note">Spline de 3 nudos en el cambio de minutos, salto por cambio de rol encogido por parejas de roles y covariable de carga por encima de 30 minutos. La pendiente positiva de la carga sobre el TS % es selección (juegan más los que tiran mejor), no fatiga: se declara y no se interpreta como efecto causal.</p><div class="tags">${tag("DATO")} ${tag("LECTURA")}</div></div>
+    <div class="card"><span class="label">Impacto · criterio literal frente a criterio redefinido</span>
+      <dl class="kv"><dt>Literal §11.5</dt><dd>Correlación del cambio de Net previsto por fichaje con el cambio de Net realizado de todo el equipo: Spearman ${N(im.literal.spearman_equipo, 3)}, calibración ${im.literal.calibracion_pasa ? "pasa" : "no pasa"}. Un equipo cambia por diez movimientos a la vez; atribuir su cambio a uno solo no es un examen de ese uno.</dd>
+      <dt>Redefinido (prerregistrado antes de calcular)</dt><dd>Monotonía y calibración frente al percentil de on/off realizado del propio fichaje en su destino: Spearman ${N(im.monotonia.spearman, 3)} [${N(im.monotonia.ic95[0], 3)}–${N(im.monotonia.ic95[1], 3)}], frente a ${N(im.monotonia.spearman_aditivo, 3)} del valor aditivo; diferencia IC95 [${N(im.monotonia.ic95_diferencia_vs_aditivo[0], 3)}, ${N(im.monotonia.ic95_diferencia_vs_aditivo[1], 3)}]. Desvío máximo por decil ${N(im.calibracion.max_desvio_abs, 1)} (tolerancia ${N(im.calibracion.tolerancia, 0)}).</dd>
+      <dt>Complemento compañeros (F2-B)</dt><dd>Sumar el efecto previsto sobre los compañeros a Impacto cambia Spearman en ${Nz(im.complemento.dif_spearman, 3)} [${Nz(im.complemento.ic95[0], 3)}, ${Nz(im.complemento.ic95[1], 3)}]: no se adopta. Se publica como subíndice aparte (media ${Nz(im.subindice_companeros.media_comp_pts100, 2)}, desviación ${N(im.subindice_companeros.sd_comp_pts100, 2)} pts/100), sin solapar con Nivel Kerno.</dd></dl>
+      <div class="tags">${tag("DATO")} ${tag("LECTURA")}</div></div>
+  </div>
+  <div class="callout"><span class="label">Límites declarados</span><ul>${R.limites.map((l) => `<li>${et(l)}</li>`).join("")}<li>Nivel Kerno e Impacto son percentiles esperados, no promesas: un 70 con rango [30–95] se lee como «probablemente alto, con una de cada cinco veces fuera de ese rango».</li></ul></div>`;
+};
+
+// ---- navegación
+let vista = "resumen";
+function leerHash() {
+  const h = location.hash.replace(/^#/, ""); const [v, ...rest] = h.split("&"); const p = new URLSearchParams(rest.join("&"));
+  if (p.get("liga")) { EQ.liga = p.get("liga"); AN.liga = AN.liga || ""; }
+  if (p.get("t")) AN.t = p.get("t");
+  return VISTAS.includes(v) ? v : "resumen";
+}
+async function pintar() {
+  vista = leerHash();
+  document.querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-selected", b.dataset.v === vista));
+  pintarEscala([1, 3, 5, 7][VISTAS.indexOf(vista)]);
+  try { await datos(); } catch (e) { $("view").innerHTML = `<div class="callout"><span class="label">No se pudieron cargar los datos</span><p>${esc(e.message || e)}. Recarga la página; si persiste, el archivo no está publicado junto a la herramienta.</p></div>`; return; }
+  $("view").innerHTML = V[vista]();
+  bind(); publicarAlto();
+}
+function bind() {
+  const on = (id, ev, fn) => { const el = $(id); if (el) el.addEventListener(ev, fn); };
+  on("anT", "change", (e) => { AN.t = e.target.value; AN.n = 60; repintar(); });
+  on("anL", "change", (e) => { AN.liga = e.target.value; AN.n = 60; repintar(); });
+  on("anQ", "input", (e) => { AN.q = e.target.value; AN.n = 60; clearTimeout(bind.t); bind.t = setTimeout(repintar, 180); });
+  on("anO", "click", (e) => { const b = e.target.closest("[data-o]"); if (!b) return; AN.orden = b.dataset.o; repintar(); });
+  on("anMas", "click", () => { AN.n += 60; repintar(); });
+  on("eqL", "change", (e) => { EQ.liga = e.target.value; repintar(); });
+}
+function repintar() { const foco = document.activeElement && document.activeElement.id; const pos = foco === "anQ" ? document.activeElement.selectionStart : null; $("view").innerHTML = V[vista](); bind(); if (foco && $(foco)) { $(foco).focus(); if (pos != null) try { $(foco).setSelectionRange(pos, pos); } catch (e) { /* */ } } publicarAlto(); }
+document.querySelector(".tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-v]"); if (!b) return; if (location.hash.replace(/^#/, "").split("&")[0] === b.dataset.v) pintar(); else location.hash = b.dataset.v; });
+window.addEventListener("hashchange", pintar);
+pintar();
+</script>
+<style id="cerno-tablas">
+/* Kerno · cabeceras de tabla: alineadas con sus valores y en varias líneas cuando hace falta (no ensanchan la columna) */
+table th { white-space: normal !important; vertical-align: bottom !important; overflow-wrap: normal; }
+</style>
+<script id="cerno-tablas-js">
+(function () {
+  // cada cabecera toma la alineación mayoritaria de los valores de su columna (números a la derecha, mapas de calor centrados, texto a la izquierda)
+  const al = (el) => { const a = getComputedStyle(el).textAlign; return a === "start" || a === "-webkit-left" ? "left" : a === "end" || a === "-webkit-right" ? "right" : a === "-webkit-center" ? "center" : a; };
+  function fix(t) {
+    const h = t.tHead; if (!h || !h.rows.length) return;
+    const ths = [...h.rows[h.rows.length - 1].cells]; let n = 0; const pos = ths.map((c) => { const p = n; n += c.colSpan || 1; return p; });
+    const rows = []; for (const b of t.tBodies) { for (const r of b.rows) { if (r.cells.length === n) rows.push(r); if (rows.length >= 30) break; } if (rows.length >= 30) break; }
+    if (!rows.length) return;
+    ths.forEach((th, i) => { if ((th.colSpan || 1) > 1) return; const cnt = {};
+      rows.forEach((r) => { const c = r.cells[pos[i]]; if (!c || !c.textContent.trim()) return; const a = al(c); cnt[a] = (cnt[a] || 0) + 1; });
+      const best = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0]; if (best && al(th) !== best[0]) th.style.setProperty("text-align", best[0], "important"); });
+  }
+  let T = 0; const run = () => { T = 0; document.querySelectorAll("table").forEach((t) => { try { fix(t); } catch (e) { /* */ } }); };
+  const plan = () => { if (!T) T = setTimeout(run, 80); };
+  new MutationObserver(plan).observe(document.documentElement, { childList: true, subtree: true });
+  if (document.readyState !== "loading") plan(); else document.addEventListener("DOMContentLoaded", plan);
+})();
+</script>
+</body>
+</html>
