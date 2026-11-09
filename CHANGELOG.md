@@ -1,5 +1,19 @@
 # Registro de cambios
 
+## 2026-11-09 — CERNO v4.2 · historial del jugador, intervalos y tres artifacts
+
+Resumen ejecutivo: `docs/RESUMEN_EJECUTIVO_v42.md`.
+
+* **Normalización v4.2:** 12 de 30 métricas con historial (V42_D1).
+* **Motor v4.2:** no pasa; sigue el v3.3 (V42_D2_motor).
+* **β v4.2:** versionado, no propagado (V42_D2_beta).
+* **Tríos, parejas y sinergia v4.2:** pasan; los quintetos no (V42_D3).
+* **Presentación C:** valor + confianza; rango en la ficha y al pasar el ratón.
+* **Producto en tres artifacts:**
+  * Jugadores: https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC
+  * Equipos: https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj
+  * Metodología: https://claude.ai/artifact/T83MBGZk5untACmegadfNn
+
 ## 2026-11-09 — CERNO v4.1 · la Landing vuelve a la adaptación v3.1 (decisión del CEO)
 
 * La Landing mide lo que pierde el jugador en la primera temporada por el coste de adaptación, frente a su nivel adaptado:

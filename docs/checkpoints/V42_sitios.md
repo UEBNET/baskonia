@@ -93,3 +93,16 @@ formados, portada de cada sitio, título, sin errores JS (salvo 404 de datos que
 las vistas de cada uno. Controles dentro de las vistas (botones, selects, inputs) idénticos a la versión anterior en
 Equipos, Metodología y Jugadores. Un enlace de Jugadores a «Impacto en pista» llega a Equipos con club, temporada y jugador
 en la página de quintetos. Scripts en línea de `index.html` y `clasico.html`: todos compilan.
+
+
+## Publicación (09-11-2026)
+
+| Sitio | Dirección | Versión |
+|---|---|---|
+| Jugadores | https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC | 27 (214 ficheros retirados) |
+| Equipos | https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj | 4 (3 tandas con copia en el servidor + sitio.json) |
+| Metodología | https://claude.ai/artifact/T83MBGZk5untACmegadfNn | 4 (3 tandas + sitio.json) |
+
+- **Página de cada sitio nuevo:** una copia de `artifact/kerno/index.html` con el `<title>` del sitio. Se publica desde otra ruta
+  porque la misma ruta de página redespliega en el artifact principal.
+- **Capacidades:** `downloads` y `sample`. El botón de actualizar (que usa `mcp`) sólo funciona en Jugadores.

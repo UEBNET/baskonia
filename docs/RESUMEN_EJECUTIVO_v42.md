@@ -142,6 +142,17 @@ Etiquetas: **[DATO]** medido; **[LECTURA]** interpretación; **[DECISIÓN]** tom
 
   Mismo código con un interruptor de sitio. Las secciones de otro sitio son enlaces. Doc: `docs/checkpoints/V42_sitios.md`.
 
+| Sitio | Dirección | Versión | Contenido | Tamaño |
+|---|---|---|---|---|
+| Jugadores | https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC | v27 | Tu equipo hoy, 02 Mercado, 03 Evaluación, 04 Decisión, 05 Modelo de equipo | ~156 MiB |
+| Equipos | https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj | v4 | Tu equipo hoy y todo el 01 Diagnóstico (con tríos y parejas v4.2 de todas las temporadas) | ~165 MiB |
+| Metodología | https://claude.ai/artifact/T83MBGZk5untACmegadfNn | v4 | Todo el Método (con la Guía de conceptos, que duplica los datos de quintetos) | ~160 MiB |
+
+- Los tres son privados; para compartirlos, menú Compartir de cada uno.
+- El botón de actualizar datos está en Jugadores. **La rutina mensual de datos (skill `actualizar-temporada`) hoy publica sólo en
+  Jugadores**: hay que repartir los ficheros de 2026-27 entre los tres sitios según `artifact/kerno/sitios/*.json` (doc §4).
+  Hasta entonces, Equipos y Metodología no recibirán las actualizaciones de 2026-27.
+
 ## 8. Decisiones y riesgos abiertos
 
 1. **Ajuste de «Por necesidad»:** aplicar la opción A (correlación real entre métricas) para estrecharlo más.
@@ -150,8 +161,8 @@ Etiquetas: **[DATO]** medido; **[LECTURA]** interpretación; **[DECISIÓN]** tom
 3. **IMPACTO con β v4.2:** no lo propongo; el estimado apunta a empeorar.
 4. **Tríos y parejas de 2026-27:** su fichero v4.2 es una foto. Hay que reexportarlo tras cada actualización mensual (o
    pasar la combinación al navegador, como en las métricas).
-5. **Rutina mensual y los tres artifacts:** la actualización de datos debe publicar en el artifact que corresponda a cada
-   fichero.
+5. **Rutina mensual y los tres artifacts (urgente para la próxima actualización):** adaptar la skill `actualizar-temporada`
+   para publicar cada fichero en su sitio (manifiestos en `artifact/kerno/sitios/`).
 6. **Pendientes de marca** (de antes): estado legal del nombre, licencia de Bombardier y dominio.
 
 ## 9. Dónde está todo en Git
