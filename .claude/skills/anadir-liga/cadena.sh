@@ -5,6 +5,9 @@
 #      simulador v3.2 + v3.3, datos del artifact y lotes en experimentos/v33_artifact/_publicacion
 #   3. modelo de equipo v4.0 (productos, con las decisiones prerregistradas vigentes) y su exportación
 #   4. congelados del botón (modelos_hasta_* del simulador v3.3)
+#   5. capas v4.1 y v4.2 (09-11-2026): producto v4.1 (Landing v3.1, sellos, i18n), historial del jugador v4.2 (D1) y
+#      tríos, parejas y sinergia v4.2 (D3) de todas las temporadas, con las decisiones prerregistradas vigentes (qué
+#      métricas y qué tipos pasaron) y los parámetros reajustados con las temporadas cerradas
 # Reanudable: cada paso deja una marca en experimentos/.pasos_liga/ (y la cadena del punto 2, las suyas en
 # experimentos/.pasos_id/). Si un paso falla, se corrige y se relanza el mismo comando.
 #
@@ -37,4 +40,11 @@ paso python3 -c "from bbactualiza.recalibrar import equipos_v40; print(equipos_v
 paso bash -c "mkdir -p data/modelos/simulador/v3_3/congelado && \
   cp experimentos/cache_simulador_v3_3/modelos_hasta_2024-25.pkl experimentos/cache_simulador_v3_3/modelos_hasta_2025-26.pkl \
      data/modelos/simulador/v3_3/congelado/"
+# 5. capas v4.1 y v4.2. `unidades exportar` no sobrescribe: las estimaciones anteriores se apartan a experimentos/
+paso python3 -m bbequipo.ecosistema producto
+paso python3 -m bbequipo.v42 historial-exportar
+paso bash -c 'mkdir -p experimentos/v42_unidades_antes_liga && for t in trios parejas sinergia_pareja; do \
+  f=data/modelos/v4_2/unidades/${t}_v42.csv.gz; if [ -f "$f" ]; then mv "$f" experimentos/v42_unidades_antes_liga/; fi; done'
+paso python3 -m bbequipo.v42.unidades exportar
+paso python3 -m bbequipo.v42.unidades_artifact
 echo "=== $(date +%H:%M:%S) FIN cadena de la liga nueva"

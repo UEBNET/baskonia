@@ -1,6 +1,6 @@
 ---
 name: anadir-liga
-description: Incorpora una liga nueva a todo el sistema Kerno (extracción, histórico 2020-21 en adelante, normalización v3.2, simulador v3.3, modelo de equipo v4.0, Atlas, Equipos y quintetos) y la publica en el artifact Kerno Analytics (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC), de modo que a partir de entonces el botón «Actualizar 2026-27» y la recalibración mensual la traten como una más. Úsala cuando pidan «añadir la liga X», «incorporar una competición», «ampliar a N ligas» o «meter la liga X en Kerno».
+description: Incorpora una liga nueva a todo el sistema Kerno (extracción, histórico 2020-21 en adelante, normalización v3.2, simulador v3.3, modelo de equipo v4.0, capas v4.1 y v4.2, Atlas, Equipos y quintetos) y la publica en los tres artifacts de Kerno Analytics (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn), de modo que a partir de entonces el botón «Actualizar 2026-27» y la recalibración mensual la traten como una más. Úsala cuando pidan «añadir la liga X», «incorporar una competición», «ampliar a N ligas» o «meter la liga X en Kerno».
 ---
 
 # Añadir una liga
@@ -12,7 +12,22 @@ un trabajo **de una sola vez y en dos mitades**:
 
 1. **Datos**: fuente, histórico 2020-21 → temporada en curso, listas de ligas del código.
 2. **Reajuste global**: toda la cadena de modelos con la liga dentro (la misma que la ampliación a 20 ligas del
-   31-10-2026 y la reconstrucción de identidades del 03-11-2026), congelados nuevos para el botón y publicación completa.
+   31-10-2026 y la reconstrucción de identidades del 03-11-2026, más las capas v4.1 y v4.2), congelados nuevos para el
+   botón y publicación completa de los tres artifacts.
+
+**Tres artifacts (v4.2, 09-11-2026).** Kerno Analytics está dividido por secciones (docs/checkpoints/V42_sitios.md):
+
+| Sitio | URL | Qué publica |
+|---|---|---|
+| Jugadores | https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC (lleva el botón) | Tu equipo hoy, Mercado, Evaluación, Decisión, Modelo de equipo |
+| Equipos | https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj | Tu equipo hoy y 01 Diagnóstico (quintetos, parejas y tríos, Impacto en pista, Informe de equipo…) |
+| Metodología | https://claude.ai/artifact/T83MBGZk5untACmegadfNn | Método (evaluación y normalización de ligas, claves del estilo, guía) |
+
+Los tres salen de la misma fuente, `artifact/kerno/` (página `index.html`, `clasico.html`, `atlas/`, `quintetos/`,
+`v40/`), y cada uno publica sólo las rutas de su manifiesto `artifact/kerno/sitios/<sitio>.json`. La página de cada
+sitio es `artifact/kerno/index.html` con su `<title>`; el interruptor `sitio.json` (de `sitios/sitio_<sitio>.json`) no
+cambia al añadir una liga. `artifact/kerno.html`, `artifact/atlas/` y `artifact/quintetos/` son copias anteriores: no
+se publican.
 
 Después no hay que tocar el botón: `actualizar_delta.py` descarga todas las ligas `activa: true` de
 `config/sources.json`, y la recalibración mensual reentrena con todas las ligas que haya en los datos.
@@ -22,7 +37,8 @@ alcance, identidad, cambios de modelo y resultados) y `docs/actualizacion_2026-2
 
 ## Reglas
 
-* **Rama**: todo en la rama de desarrollo de la sesión (la del botón es `claude/gallant-pascal-49bx9o`). Nunca `main`.
+* **Rama**: todo en la rama de desarrollo de la sesión; lo que tiene que llegar al botón, en la suya,
+  `claude/jolly-thompson-qczxl4` (la que clonan la Routine y la recalibración mensual). Nunca `main`.
 * **Decisiones antes de mirar resultados.** El escalón de contracción, el grupo de la v4.0, qué es regular y qué
   playoffs, y el alcance (temporadas, equipos) se fijan **antes** de ajustar y se anotan en
   `decisiones/<codigo>.md` (plantilla en `decisiones/plantilla.md`). No se cambian tras ver el nivel resultante.
@@ -103,7 +119,9 @@ Las conocidas (11-2026): nombres en `bbmodel/dataset_normalizado.py`; orden en `
 por defecto en `configs/simulation_v33.yaml`; grupos de la v4.0 en `bbequipo/equipo.py` y `configs/equipo_v40.yaml`;
 coordenadas de tiro en `bbmodel/zonas.py`; ids de equipo inestables en `bbestilo/datos.py` y
 `bbfit/estilos_unificados.py` (si la fuente renumera equipos cada temporada). Las páginas del artifact (Fase 7) tienen
-sus propias listas (`LIGA_ORD`/`LIGA_N` en Kerno, `LIGAS_INFO` en el Atlas y en Quintetos).
+sus propias listas (`LIGA_ORD`/`LIGA_N` en `artifact/kerno/index.html` y `clasico.html`, `LIGAS_INFO` en
+`artifact/kerno/atlas/index.html` y `artifact/kerno/quintetos/index.html`; búscalas con
+`git grep -n -w bnxt -- artifact/kerno`).
 
 Ejecuta los tests: `PYTHONPATH=. python -m pytest -q tests` (≈ 1,5 min).
 
@@ -121,6 +139,15 @@ Ejecuta los tests: `PYTHONPATH=. python -m pytest -q tests` (≈ 1,5 min).
    conjunto, A5, equipo, anclas, exportación del Atlas v4.0 y `v40/equipos_<temporada>.json`.
 4. **Congelados del botón**: `modelos_hasta_2024-25.pkl` y `modelos_hasta_2025-26.pkl` del simulador v3.3
    (`data/modelos/simulador/v3_3/congelado/`), que el botón reutiliza en vez de reajustarlos.
+5. **Capas v4.1 y v4.2**: producto v4.1 (`bbequipo.ecosistema producto`: Landing v3.1, sellos, i18n →
+   `artifact/kerno/atlas/v41/producto.json`), historial del jugador v4.2 (`bbequipo.v42 historial-exportar` →
+   `artifact/kerno/atlas/v42/historial/`) y tríos, parejas y sinergia v4.2 de todas las temporadas
+   (`bbequipo.v42.unidades exportar` + `bbequipo.v42.unidades_artifact` → `data/modelos/v4_2/unidades/`,
+   `artifact/kerno/quintetos/datos_v42/`). Se conservan las decisiones prerregistradas (qué métricas pasaron D1 y qué
+   tipos D3; `configs/v42.yaml`) y los parámetros se reajustan con las temporadas cerradas. Las estimaciones D3
+   anteriores se apartan a `experimentos/v42_unidades_antes_liga/` (`exportar` no sobrescribe). Los exámenes v4.2
+   (`historial-examen`, `unidades examen`) no van en la cadena: ejecútalos si el usuario quiere saber si las decisiones
+   siguen en pie con la liga nueva.
 
 ```
 setsid nohup .claude/skills/anadir-liga/cadena.sh > experimentos/cadena_liga.log 2>&1 < /dev/null & disown
@@ -143,7 +170,10 @@ PYTHONPATH=. python -m pytest -q tests/test_bbactualiza.py
 PYTHONPATH=. MLFLOW_DISABLE_AGENT_HINT=1 setsid nohup python -m bbactualiza --sin-descarga --forzar --json > /tmp/act.json 2> /tmp/act.log < /dev/null & disown
 ```
 
-Tiene que acabar en `ok` y la liga tiene que aparecer en `data/artifact/2026-27/indice.json`. Si la temporada en curso
+Tiene que acabar en `ok` y la liga tiene que aparecer en `data/artifact/2026-27/indice.json`. El botón deja además
+`publicacion/sitios.json` y `publicacion/lote_<sitio>_<n>.json` (el parche de 2026-27 repartido entre los tres
+artifacts); en la Fase 7 no se publican sueltos: `publicacion/lote0.json` entra como `--parche` de la publicación
+completa. Si la temporada en curso
 de la liga aún no ha empezado, márcala como la NCAA (`sin_datos: true` en esa temporada) hasta que empiece.
 
 ## Fase 6 · Verificación (antes de publicar)
@@ -155,35 +185,55 @@ de la liga aún no ha empezado, márcala como la NCAA (`sin_datos: true` en esa 
   y examen por segmentos (con origen o destino en la liga nueva frente al resto), como en `docs/fuentes_ligas_nuevas.md` §7.
 * **Cambio en las demás ligas**: compara niveles (`data/modelos/algoritmo_A/`) y el normalizado v3.2 de 2025-26
   antes/después (`git diff --stat data/modelos`, y medias por liga). Explícaselo al usuario.
+* **Capas v4.2**: parámetros D1 (`data/modelos/v4_2/historial/`, τ² y c por métrica) y D3
+  (`data/modelos/v4_2/unidades/parametros_v42.json`) antes/después, y Net v4.2 de tríos y parejas de 2025-26 de las
+  demás ligas frente a `experimentos/v42_unidades_antes_liga/` (diferencia media y máxima).
 * Escribe los resultados en `decisiones/<codigo>.md` y una sección nueva en `docs/fuentes_ligas_nuevas.md`.
 
-## Fase 7 · Publicación en Kerno
+## Fase 7 · Publicación en los tres artifacts
 
-Cambian todas las temporadas, así que se publica **completo** (no el parche del botón):
+Cambian todas las temporadas, así que se publica **completo** (no el parche del botón), sitio por sitio.
 
-1. `python3 artifact/empaquetar.py experimentos/v33_artifact/_publicacion experimentos/v33_artifact` (la cadena ya
-   lo hace) deja `lote0.json … loteN.json` (≤ 58 MB y ≤ 250 ficheros cada uno; la versión no puede pasar de 256 MB:
-   si no cabe, `artifact/herramientas/compactar.py` y el documento §8 del precedente).
-2. **Quita de los lotes las páginas** (`atlas/index.html`, `quintetos/index.html` y cualquier `.html`): las publicadas
-   en Kerno son más nuevas que las del repositorio. Las páginas se tocan aparte (punto 4).
-3. Con la herramienta Artifact: `read` de https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC (lee la página entera),
-   `list` con `scope: "files"`, y un `publish` por lote con `url` = la de Kerno, `file_path` = la página guardada sin
-   cambios y `files` = el lote. Sin `capabilities` (se conservan las de la página, `mcp` del botón incluido).
-   **El último lote es `publicacion/lote0.json` de la Fase 5** (el parche del botón): lleva `datos/actualizacion.json`
-   y los ficheros de la v4.0 (`atlas/v40/jugadores_v40`, `referencias_v40`, `v40/equipos_<t>.json`,
-   `v40/calibracion.json`), que `artifact/empaquetar.py` no incluye.
-4. Páginas: para cada una (`index.html` = la app Kerno, `clasico.html`, `atlas/index.html`, `quintetos/index.html`,
-   `v40/index.html`) lee la versión publicada (`read` con `path`), añade la liga a sus listas (`LIGA_ORD`/`LIGA_N`,
-   `LIGAS_INFO`) y publícala; guarda la copia en el repositorio (`artifact/kerno.html` para `index.html`).
-   Comprueba en Playwright (1440 y 390 px, claro y oscuro) que no hay errores de JavaScript.
-5. Límite conocido: `atlas/v40/clubes_v40.json` y `atlas/v40/mapa_personas.json` no se generan en este repositorio
+1. **Páginas primero, en el repositorio.** Para cada página y código compartido (`index.html`, `clasico.html`,
+   `atlas/index.html`, `atlas/*.js`, `quintetos/index.html`, `v40/index.html`): `read` con `path` de la versión
+   publicada en Jugadores (Equipos y Metodología si sólo la publican ellos: `quintetos/index.html`) y compárala con
+   `artifact/kerno/<ruta>` (en `index.html`, todo salvo el `<title>`). Si la publicada tiene cambios que el repositorio
+   no tiene, llévalos antes al repositorio. Después añade la liga a sus listas (`LIGA_ORD`/`LIGA_N`, `LIGAS_INFO`) **en
+   `artifact/kerno/`** y comprueba en Playwright (1440 y 390 px, claro y oscuro) que no hay errores de JavaScript.
+2. **Datos**: `python3 artifact/empaquetar.py experimentos/v33_artifact/_publicacion experimentos/v33_artifact` (la
+   cadena ya lo hace) deja `lote0.json … loteN.json` con los datos de todas las temporadas.
+3. **Reparto entre los tres sitios**:
+   ```
+   PYTHONPATH=. python -m bbactualiza.sitios --publicacion publicacion_completa \
+       --completo experimentos/v33_artifact/_publicacion/lote*.json --parche publicacion/lote0.json
+   ```
+   Toma los datos de esos lotes (sin borrados ni páginas ni `.js`: los de `artifact/atlas` y `artifact/quintetos` son
+   anteriores), las páginas, el código y los datos v4.1/v4.2 de `artifact/kerno/` (comprime los `.json` que se publican
+   como `.gz.txt`), y el parche del botón al final (lleva `datos/actualizacion.json` y los ficheros de la v4.0 que
+   `empaquetar.py` no incluye). Escribe `publicacion_completa/sitios.json`, `lote_<sitio>_<n>.json` (≤ 58 MB y ≤ 250
+   ficheros cada uno) y la página de cada sitio en `publicacion_completa/paginas/<sitio>/index.html`. Las rutas de la
+   liga nueva van a los sitios que publican sus hermanas (alineaciones y v4.2 en Equipos y Metodología, `.extras` sólo
+   en Equipos…) y quedan anotadas en los manifiestos. Revisa `sin_sitio` (no se publica: decide con el usuario a qué
+   sitio va) y que Jugadores no reciba nada de `quintetos/`.
+4. **Cabe**: cada versión admite 256 MiB y 511 ficheros. Con el `list` de cada sitio (paso 5) suma los tamaños de lo
+   que no se sustituye y los de sus lotes; si un sitio no cabe, compacta (`artifact/herramientas/compactar.py`) o
+   pregunta al usuario qué sale de ese sitio (precedente: docs/checkpoints/V42_sitios.md §3). Nunca muevas datos de un
+   sitio a otro sin decírselo.
+5. Con la herramienta Artifact, **para cada sitio** (Jugadores, Equipos, Metodología): `read` de su URL (lee la
+   página entera), `list` con `scope: "files"`, y un `publish` por cada lote suyo con `url` = la de ese sitio,
+   `file_path` = `publicacion_completa/paginas/<sitio>/index.html` y `files` = el lote. Sin `capabilities` (Jugadores
+   conserva `mcp` del botón; Equipos y Metodología, `downloads` y `sample`). Nunca publiques el lote de un sitio en la
+   URL de otro.
+6. Límite conocido: `atlas/v40/clubes_v40.json` y `atlas/v40/mapa_personas.json` no se generan en este repositorio
    (`docs/actualizacion_2026-27.md` §5): la liga nueva no estará en ellos y la página calcula su Net v4.0 en vivo.
 
 ## Fase 8 · Cierre
 
 * `CHANGELOG.md` (entrada con la liga, decisiones, niveles y resultados del examen), `docs/fuentes_ligas_nuevas.md`,
   `docs/actualizacion_2026-27.md` (número de ligas), `decisiones/<codigo>.md`.
-* Commit y push a la rama (los datos de modelos y del artifact versionados; nunca `publicacion/` ni cachés de
-  `experimentos/`).
+* `docs/checkpoints/V42_sitios.md` (ficheros y MB por sitio tras la liga) y los manifiestos `artifact/kerno/sitios/`.
+* Commit y push a la rama (los datos de modelos, `artifact/kerno/` y los manifiestos versionados; nunca
+  `publicacion/`, `publicacion_completa/` ni cachés de `experimentos/`).
 * Resumen al usuario: cobertura de la fuente, nivel y si es provisional, cuánto cambiaron las demás ligas, examen
-  del simulador por segmentos, versión publicada y que el botón ya la incluye desde la siguiente pulsación.
+  del simulador por segmentos, cambios en las capas v4.2, versión publicada de cada uno de los tres artifacts y que
+  el botón ya la incluye desde la siguiente pulsación.

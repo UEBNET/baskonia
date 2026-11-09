@@ -91,6 +91,12 @@ sinergia v4.2 de la temporada con los parámetros congelados (las temporadas cer
 0,0 en la prueba). La previa del historial de jugador v4.2 no cambia con la temporada en curso. Rama de la Routine y de la
 recalibración mensual: `claude/jolly-thompson-qczxl4` (contiene `claude/gallant-pascal-49bx9o`, fusionada).
 
+**Republicación completa (skill `anadir-liga`, Fase 7).** `python -m bbactualiza.sitios --completo <lotes> --parche
+publicacion/lote0.json` junta los datos de `artifact/empaquetar.py`, las páginas, el código y los datos v4.1/v4.2 de
+`artifact/kerno/` y el parche del botón, los reparte con las mismas reglas y escribe la página de cada sitio
+(`artifact/kerno/index.html` con su `<title>`). Sólo quedan sin volver a subir los recursos de marca (`kerno/*`) y
+`sitio.json`, que no cambian.
+
 ## 5. Pruebas locales
 
 Playwright sobre la copia de `kerno_cand` (http://localhost:8766/) con cinco variantes de `sitio.json` (sin fichero,

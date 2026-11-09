@@ -1,5 +1,16 @@
 # Registro de cambios
 
+## 2026-11-09 — Skill «anadir-liga» para los tres artifacts (v4.2)
+
+* Fase 7 reescrita: páginas y código en `artifact/kerno/` (comparados antes con lo publicado), reparto completo con
+  `python -m bbactualiza.sitios --completo <lotes de empaquetar> --parche publicacion/lote0.json` (datos de todas las
+  temporadas + páginas, código y datos v4.1/v4.2 de `artifact/kerno/` + parche del botón), página de cada sitio con su
+  `<title>` y publicación sitio por sitio (read → list → publish por lote), con comprobación de 256 MiB y 511 ficheros.
+* `cadena.sh`: paso 5 con las capas v4.1 (producto) y v4.2 (historial D1; tríos, parejas y sinergia D3 de todas las
+  temporadas, apartando las estimaciones anteriores), decisiones prerregistradas vigentes.
+* Rama del botón `claude/jolly-thompson-qczxl4`; Fase 3 con las listas de ligas de `artifact/kerno/`; Fases 6 y 8 con
+  la comprobación de las capas v4.2 y los manifiestos.
+
 ## 2026-11-09 — Skill «actualizar-temporada» para los tres artifacts (v4.2)
 
 * Fusiona `claude/gallant-pascal-49bx9o` (botón, `bbactualiza`, skills `actualizar-temporada` y `anadir-liga`).

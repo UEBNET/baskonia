@@ -17,3 +17,4 @@ data/modelos/v3_2/validacion/ablacion/escala_*.pkl
 
 # lote de publicación incremental del artifact (python -m bbactualiza)
 publicacion/
+publicacion_completa/

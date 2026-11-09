@@ -121,14 +121,84 @@ def repartir(lote: dict[str, str], salida: Path, carpeta: Path = MANIFIESTOS, an
     return resumen
 
 
+# ============================================================================================ publicación completa
+FUENTE = RAIZ / "artifact" / "kerno"           # fuente de las páginas, el código y los datos v4.1/v4.2 de los tres sitios
+NOMBRES = {"jugadores": "Jugadores", "equipos": "Equipos", "metodologia": "Metodología"}
+NO_FUENTE = ("index.html", "README.md", "sitio.json")       # página propia de cada sitio, documentación, interruptor
+
+
+def pagina(sitio: str, salida: Path) -> Path:
+    """Página de un sitio: artifact/kerno/index.html con su <title> («Kerno Analytics · Equipos»; Jugadores, sin sufijo)."""
+    import re
+    html = (FUENTE / "index.html").read_text(encoding="utf-8")
+    titulo = "Kerno Analytics" if sitio == "jugadores" else f"Kerno Analytics · {NOMBRES[sitio]}"
+    html, n = re.subn(r"<title>[^<]*</title>", f"<title>{titulo}</title>", html, count=1)
+    if n != 1:
+        raise ValueError("artifact/kerno/index.html sin <title>")
+    dest = Path(salida) / "paginas" / sitio / "index.html"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(html, encoding="utf-8")
+    return dest
+
+
+def completo(lotes: list[Path], salida: Path, parche: Path | None = None, carpeta: Path = MANIFIESTOS) -> dict:
+    """Republicación completa de los tres sitios (p. ej. tras añadir una liga: cambian todas las temporadas).
+
+    * Datos: la unión de los lotes de `artifact/empaquetar.py` (sin borrados `null`, sin páginas `.html` ni código
+      `.js`: las copias de artifact/atlas y artifact/quintetos son anteriores a las de artifact/kerno).
+    * Páginas, código y datos v4.1/v4.2: todo `artifact/kerno/` salvo la página propia de cada sitio, `sitio.json`,
+      `sitios/`, `kerno/` (marca, no cambia) y README. Un `.json` cuyo `.json.gz.txt` está en algún manifiesto se
+      comprime aquí (gzip en base64).
+    * `parche` (publicacion/lote0.json del botón, opcional) va el último y manda.
+    Reparte con `repartir` (lotes por sitio y sitios.json) y escribe la página de cada sitio en `paginas/<sitio>/`."""
+    import base64
+    import gzip
+    salida = Path(salida)
+    salida.mkdir(parents=True, exist_ok=True)
+    man = manifiestos(carpeta)
+    en_alguno = set().union(*(m["ficheros"] for m in man.values()))
+    total: dict[str, str] = {}
+    for f in lotes:
+        for k, v in json.loads(Path(f).read_text(encoding="utf-8")).items():
+            if v is None or k.endswith((".html", ".js")):
+                continue
+            total[k] = v
+    comp = salida / "comprimidos"
+    comp.mkdir(exist_ok=True)
+    for f in sorted(FUENTE.rglob("*")):
+        rel = f.relative_to(FUENTE).as_posix()
+        if not f.is_file() or rel in NO_FUENTE or rel.startswith(("sitios/", "kerno/")):
+            continue
+        total[rel] = str(f)
+        if rel.endswith(".json") and rel + ".gz.txt" in en_alguno:
+            g = comp / (rel.replace("/", "__") + ".gz.txt")
+            g.write_bytes(base64.b64encode(gzip.compress(f.read_bytes(), 9, mtime=0)))
+            total[rel + ".gz.txt"] = str(g)
+    if parche and Path(parche).exists():
+        total.update({k: v for k, v in json.loads(Path(parche).read_text(encoding="utf-8")).items() if v is not None})
+    (salida / "lote_completo.json").write_text(json.dumps(total, ensure_ascii=False, indent=0), encoding="utf-8")
+    r = repartir(total, salida, carpeta)
+    for s in SITIOS:
+        r["sitios"][s]["pagina"] = str(pagina(s, salida))
+    (salida / "sitios.json").write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
+    return r
+
+
 def main(argv: list[str] | None = None) -> int:
     import argparse
     ap = argparse.ArgumentParser(prog="python -m bbactualiza.sitios",
-                                 description="reparte publicacion/lote0.json entre los tres artifacts")
-    ap.add_argument("--publicacion", default=str(RAIZ / "publicacion"))
+                                 description="reparte una publicación entre los tres artifacts de Kerno")
+    ap.add_argument("--publicacion", default=str(RAIZ / "publicacion"),
+                    help="carpeta del botón (lee lote0.json) o, con --completo, carpeta de salida")
+    ap.add_argument("--completo", nargs="*", default=None, metavar="LOTE",
+                    help="republicación completa: lotes de artifact/empaquetar.py (lote*.json)")
+    ap.add_argument("--parche", default=None, help="con --completo: lote0.json del botón, que va el último")
     a = ap.parse_args(argv)
     pub = Path(a.publicacion)
-    r = repartir(json.loads((pub / "lote0.json").read_text(encoding="utf-8")), pub)
+    if a.completo is not None:
+        r = completo([Path(x) for x in a.completo], pub, Path(a.parche) if a.parche else None)
+    else:
+        r = repartir(json.loads((pub / "lote0.json").read_text(encoding="utf-8")), pub)
     print(json.dumps(r, ensure_ascii=False, indent=1))
     return 0
 

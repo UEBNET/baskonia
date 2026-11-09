@@ -137,3 +137,32 @@ def test_manifiestos_reales_y_urls():
     assert m["jugadores"]["url"].endswith("A7rufkL84rvRFcUBFBxFbC")
     assert all(m[s]["url"].startswith("https://claude.ai/artifact/") for s in S.SITIOS)
     assert not any(r.startswith("quintetos/datos/2026-27/") for r in m["jugadores"]["ficheros"])
+
+
+def test_pagina_por_sitio(tmp_path):
+    from bbactualiza import sitios as S
+    t = {s: S.pagina(s, tmp_path).read_text(encoding="utf-8") for s in S.SITIOS}
+    assert "<title>Kerno Analytics</title>" in t["jugadores"]
+    assert "<title>Kerno Analytics · Equipos</title>" in t["equipos"]
+    assert "<title>Kerno Analytics · Metodología</title>" in t["metodologia"]
+    assert len({len(x) - len(x.split("</title>")[0]) for x in t.values()}) == 1     # el resto, idéntico
+
+
+def test_completo_sin_paginas_viejas_ni_borrados(tmp_path):
+    import json
+    from bbactualiza import sitios as S
+    (tmp_path / "m").mkdir()
+    car = _sitios(tmp_path / "m")
+    f = tmp_path / "x.txt"
+    f.write_text("x")
+    lote = tmp_path / "lote0.json"
+    lote.write_text(json.dumps({"datos/temporadas.json.gz.txt": str(f), "atlas/index.html": str(f),
+                                "atlas/simulador.js": str(f), "datos/viejo.json": None}))
+    r = S.completo([lote], tmp_path / "pub", None, car)
+    todo = json.loads((tmp_path / "pub" / "lote_completo.json").read_text())
+    assert todo["datos/temporadas.json.gz.txt"] == str(f)
+    assert todo["atlas/index.html"].endswith("artifact/kerno/atlas/index.html")     # la página, de artifact/kerno
+    assert todo["atlas/simulador.js"].endswith("artifact/kerno/atlas/simulador.js")
+    assert "datos/viejo.json" not in todo and "index.html" not in todo and "sitio.json" not in todo
+    assert not any(k.startswith(("kerno/", "sitios/")) for k in todo)
+    assert all(r["sitios"][s]["pagina"].endswith(f"paginas/{s}/index.html") for s in S.SITIOS)
