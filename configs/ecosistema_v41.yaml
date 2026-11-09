@@ -377,6 +377,39 @@ f4:
     impacto_en_pista: no_se_muestra_en_la_ficha       # sólo en el motor de escenarios y documentos técnicos hasta que pase su examen
   marca: Kerno                                        # skill cerno-brand v2.0 (Racing · Chalk · Ink · Brass; Bombardier, Mona Sans, Geist Mono)
   capturas: {anchos: [1440, 390], temas: [claro, oscuro]}
+  candidata: https://claude.ai/artifact/HKJYKNWXoxgQDsYnFw3HR1   # versión 6 (1794216997-5f60); V41_F4
+  decision_ceo_09-11-2026:                            # puerta F4 (V41_F4 §8): «Apruebo la puerta F4 con K1, K2, K5 y K4 con "RAPM proyectado"»
+    K1: aprobado                                      # producto de la candidata (sin Fit ni ADAPT, Landing, confianza, panel del ecosistema)
+    K2: aprobado                                      # sellos «propuesto» del §3 tal como están; reexamen en la v4.2 de los que no tienen examen propio
+    K4:
+      etiqueta: "RAPM proyectado"                     # sustituye a «Impacto en pista» y a «Valor v4.0» (el β RAPM v4.0 del jugador)
+      escala: "[0, 100] en todas las etiquetas de índice del artifact"   # orden expresa del CEO: homogeneizar con escalado sencillo
+      transformacion: "S₀₁ = 50 + S/2 = 100·logística(z) (S = 100·tanh(z/2), la escala ±100 vigente); 50 = referencia"
+      diferencias: "ΔS₀₁ = ΔS/2 (diferencias entre dos valores de la escala; conservan el signo)"
+      no_cambia: "unidades físicas (minutos, pts/100, %, posesiones) y los índices ya en [0, 100] (NIVEL KERNO, IMPACTO, ajuste)"
+    K3: "examen de las dos tablas de adaptación y Landing sobre una sola (bloque k3_landing)"
+    K5: aprobado                                      # publicar en el artifact principal tras fusionar con la otra sesión
+    intervalos: "el CEO pide ideas para no mostrar rangos tan anchos (p. ej. «Por necesidad»: 80 [51–95]); decide tras la propuesta"
+  k3_landing:                                         # PRERREGISTRO 09-11-2026, escrito y subido ANTES de calcular
+    pregunta: "¿qué tabla de adaptación representa mejor el escalón de la primera temporada en la liga nueva?"
+    objetivo: "o = log(L_rel observado / 100): rendimiento compuesto de la temporada frente a lo esperado tras la normalización (ŷ)"
+    poblacion: "traspasos observados de destino t+1 con t en {2022, 2023, 2024} (validacion_casos de la fase 7, métrica L_rel)"
+    pesos: w_ipcw_test                                # censura (quien deja de jugar en la liga nueva)
+    candidatos:
+      A_fase7_v3_2: "Δ de temporada de la fase 7 rehecha (v3_2): media del grupo de log(previsto/100), modelo ajustado ≤ t (sin fuga)"
+      B_v3_1: "log(1 + D_g·w̄_g) de la adaptación v3 (la del motor y la Landing de la candidata); tabla publicada, con fuga a su favor"
+      base: "0 (sólo la normalización)"
+    grupo: grupo_nacionalidad                         # el de la Landing
+    medidas:
+      mae: "MAE ponderado de o − p por corte y conjunto; diferencias A − B, A − base, B − base con IC95 bootstrap por persona (B = 2000)"
+      representatividad: "grupos con n ≥ 30 en los cortes de decisión: proporción en que la predicción cae en el IC80 de la media observada del grupo; acuerdo de signo"
+      cobertura_80: "sólo A, que trae intervalo de predicción por traspaso"
+    regla:
+      eleccion: "gana el de menor MAE conjunto si el IC95 de A − B excluye 0; si no, el de mayor representatividad; si empatan, el de menor MAE puntual"
+      fuga: "si B gana o empata, se reajusta B por corte sin fuga antes de decidir (B lleva la fuga a su favor)"
+      sello: "ALTA si mejora a la base con IC95 que excluye 0 en los tres cortes; MEDIA si sólo en el conjunto; BAJA si no"
+      producto: "la Landing sale sólo de la tabla elegida; se muestra el grupo si su rango del 80 % excluye 0 (si no, «sin cambio apreciable»)"
+      motor: "no se toca el motor v3.3 (regla del encargo); si gana A, se informa la consecuencia en el motor como decisión del CEO"
 
 # ---------------------------------------------------------------------------------------- §6 · criterios PRERREGISTRADOS
 # Transcripción literal del §6 del encargo. Estado: «propuesto en F0» → se congela al aprobar el CEO la puerta F0 (con o sin
