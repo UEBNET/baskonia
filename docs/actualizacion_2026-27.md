@@ -75,6 +75,11 @@ el día 1 de cada mes a las 03:17, hora de Madrid; instrucciones en `.claude/ski
 
 1. `cvae` — reentrena las 20 redes CVAE de la v3.2 (4 procesos: 37 min medidos el 9-11-2026) y recalcula la combinación
    (posterior y traducción red a red, ≈ 5 min por red): los jugadores nuevos reciben valor CVAE y los demás lo ponen al día.
+   Medido el 9-11-2026: ≈ 9.200 s en total (2 h 33 min; redes 37 min, traducciones ≈ 100 min, combinación ≈ 11 min);
+   los 227 jugadores que sólo tenían `v2_incremental` pasaron a tener valor CVAE y sólo cambió
+   `v3_2/normalizado/2026-27.csv.gz` (7 ficheros históricos restaurados). Con `v40` y `boton`, la tarea mensual dura
+   ≈ 3,5 h: por eso se lanza desacoplada (`setsid nohup`), no como tarea de Bash en segundo plano (límite de 2 h).
+   Si se corta, al relanzarla retoma redes y traducciones desde la caché (`experimentos/v3`).
 2. `v40` — perfiles 2026-27, RAPM de producto, capa 4, anclas y tablas del Atlas v4.0, y `v40/equipos_2026-27.json`.
 3. `boton` — `python -m bbactualiza --sin-descarga --forzar` desde el contexto hasta la publicación.
 
