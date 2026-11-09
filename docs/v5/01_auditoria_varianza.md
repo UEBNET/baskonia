@@ -63,7 +63,7 @@ python -m bbnorm5.diagnostico.lolo --config configs/v5/f1.yaml v2    # dejar fue
 | 5.1 | **División de muestra** (partidos alternos por fecha): r clásico + Spearman-Brown, y un estimador de momentos con exposición heterogénea (el comparable con el REML), con IC por bootstrap | Tabla jugador-partido `data/modelos/roles/partidos_jugador`, 10 métricas reconstruibles, entre 14.997 y 16.216 jugador-liga-temporadas con ≥ 10 partidos por mitad |
 | 5.2 | **Descomposición de la varianza** de la traducción de la v3.2 en nivel del jugador (v_j), traducción (Var(δ_o − δ_d), covarianza conjunta) y residual de temporada (ψ + σ²/n + η²), por métrica y por par de ligas | `v3_2/destino` (capacidad, constantes, covarianza) 2025-26, jugadores con ≥ 300 min, 20 × 20 pares |
 | 5.3 | **Cobertura 50/80/95, PIT, CRPS, RMSE, MAE y sesgo** por métrica, liga de origen, liga de destino, puesto, tramo de minutos y corte | (a) Examen fuera de tiempo de cambios de liga (cortes 2022-2024, 44.128 predicciones, ya calculado en `casos_combinada_v32.csv.gz`). (b) **Examen de la v4.2 D1 reconstruido caso a caso** con sus propias funciones (227.758 predicciones) |
-| 5.3 | **Dejar fuera una liga (LOLO)** | v2 de 15 ligas (DATO del repositorio). v3.2 y v2 con 20 ligas: **en ejecución** (§3.4) |
+| 5.3 | **Dejar fuera una liga (LOLO)** | v2 con 20 ligas (hecho) y v2 de 15 ligas (DATO del repositorio). v3.2: **en ejecución** (§3.4) |
 | 5.4 | **Nivel frente a lo publicado.** DT de credibilidad del nivel con una temporada y con el historial hasta t (modelo anidado), frente a la DT propia publicada | 2025-26, ≥ 300 min |
 | 5.4 | **Simulación con intervalos exactos** de las dos pruebas que sugerían «rangos demasiado anchos» (la de la D1 y la de t ⊕ t+1) | Estructura real de personas, temporadas y exposiciones; 6 métricas × 2 réplicas |
 
@@ -306,22 +306,30 @@ Columnas:
 
 ### 3.4 Dejar fuera una liga (LOLO)
 
-**v2 (A+B amortiguado), 15 ligas.** DATO del repositorio:
-`data/modelos/normalizacion_amortiguada/validacion_lolo.csv`. Es anterior a la corrección de identidades del 03-11.
-Se quitan todos los puentes de la liga y su nivel sale sólo del escalón. Se compara con el nivel completo, en DT de la
-vara EuroLeague, con intervalo del 90 %.
+Procedimiento del repositorio (`bbmodel.amortiguacion.dejar_fuera_liga`): se quitan todos los puentes de la liga y su
+nivel sale sólo del escalón. Se compara con el nivel completo, en DT de la vara EuroLeague, con intervalo del 90 %.
 
-| Grupo | Error absoluto medio del nivel | Cobertura del 90 % |
-|---|---|---|
-| Ligas europeas con escalón compartido (BCL, BSL, GBL, LBA, LNB) | 0,06–0,08 | 0,91–0,99 |
-| ACB, BBL, EuroCup, FEC | 0,13–0,18 | **0,74–0,80** (sobreconfiada) |
-| Solas en su escalón: Primera, Segunda y Tercera FEB, NBA, G League | **0,26–2,05** | 0,74–1,00, con DT a priori 2,0 (intervalo inútil) |
-| Global | 0,287 | 0,893 |
+**v2 (A+B amortiguado) con las 20 ligas**, corte 2024, identidades corregidas.
+DATO: `data/v5/f1/lolo_v2/validacion_lolo.csv`, 33 métricas × 19 ligas.
 
-**LOLO de la v3.2 (CVAE, 1 semilla, corte 2024) y de la v2 con 20 ligas: en ejecución.** Las salidas van a
-`data/v5/f1/lolo_v32/` y `data/v5/f1/lolo_v2/`. Con 4 núcleos, cada red de la CVAE tarda unos 25 minutos: 19 ligas son
-varias horas. Se añadirán a este documento y al PR cuando terminen. **No cambian la recomendación de §6**, que no
-depende de ellos. Lo que pueden cambiar es la magnitud del sesgo por liga mal conectada que tendrá que medir la F6.
+| Grupo | Ligas | Error absoluto medio del nivel | Cobertura del 90 % |
+|---|---|---|---|
+| Domésticas con escalón compartido | NBL, GBL, LBA, BSL, VTB, LNB, BCL | 0,04–0,08 | 0,92–1,00 |
+| Bien conectadas, pero sobreconfiadas sin sus puentes | BBL, ACB, EuroCup, FEC | 0,11–0,19 | **0,72–0,89** |
+| Escalón medio | CBA | 0,18 | 0,94 |
+| | BNXT | **0,37** | **0,70** |
+| Solas en su escalón | G League, NCAA, NBA, Primera, Segunda y Tercera FEB | **0,27–2,05** | DT a priori 2,0: intervalo sin información |
+| Global | | 0,259 | 0,908 |
+
+La versión anterior, de 15 ligas (`data/modelos/normalizacion_amortiguada/validacion_lolo.csv`), da lo mismo en las
+ligas comunes: error global 0,287 y cobertura 0,893.
+
+**LOLO de la v3.2 (CVAE, 1 semilla, corte 2024): en ejecución.**
+- Salida en `data/v5/f1/lolo_v32/`.
+- Con 4 núcleos compartidos, cada red tarda entre 25 y 55 minutos: la primera liga (ACB) ya está; quedan 18.
+- Se añadirá a este documento y al PR cuando termine.
+- **No cambia la recomendación de §6**, que no depende de él. Lo que puede cambiar es la magnitud del sesgo por liga
+  mal conectada que tendrá que medir la F6.
 
 **LECTURA.**
 - La traducción pesa poco en la **anchura**, pero mucho en el **centro** de las ligas sin puentes propios.
@@ -429,7 +437,7 @@ REML. La posterior de cada temporada es **exacta por construcción**: cubre el n
 | (a) Varianza aleatoria irreducible | **Confirmada y dominante** | 77 % de la varianza predictiva es residual de temporada; ruido > 25 % en 21/33 métricas; RAPM con σ²_u > σ²_a |
 | (b) Demasiados parámetros por ~30 partidos | Confirmada en tiro | n*_temp de 180–190 tiros en TS% y eFG% y de 100–180 triples en T3%; a la exposición media, ρ_temp ≤ 0,61 |
 | (c) Métricas tratadas como independientes | Cierta en la v1; parcialmente resuelta en la v3.2 | La DT publicada (con latente) es 1,5–1,7 veces más estrecha que la univariante en tiro |
-| (d) Factores de liga con traspasos confundidos | **No es lo que hace los rangos anchos**; sí sesga los niveles mal conectados | Traducción = 1,1 % de la varianza predictiva y 5 % de la de nivel; LOLO: errores de 0,26–2,05 DT en ligas sin puentes propios |
+| (d) Factores de liga con traspasos confundidos | **No es lo que hace los rangos anchos**; sí sesga los niveles mal conectados | Traducción = 1,1 % de la varianza predictiva y 5 % de la de nivel; LOLO (20 ligas): errores de 0,27–2,05 DT en ligas sin escalón compartido, y BNXT 0,37 |
 | (e) Se publica el predictivo | **No**: se publica el de nivel, mal etiquetado | §4.1 |
 | (f) Infraconfianza por mala calibración | **No en lo publicado**; leve en la v3.2 sin recalibrar (0,852) y en el RAPM de la v2 (0,88) | §3.2, §4.3 |
 
@@ -439,7 +447,7 @@ REML. La posterior de cada temporada es **exacta por construcción**: cubre el n
 
 | Fase | Inversión | Por qué, con números |
 |---|---|---|
-| F2 · Datos y puentes | **Alta** (sesgo e identidad, no anchura) | LOLO: ligas sin puentes con error de nivel de 0,26–2,05 DT. Errores de identidad en puentes europeos (F0 §3.2). Entre 160 (2020-21) y 429 (2025-26) personas por temporada son puentes europea–doméstica de la misma temporada con ≥ 150 min en ambas, y aún no se usan como tales |
+| F2 · Datos y puentes | **Alta** (sesgo e identidad, no anchura) | LOLO (20 ligas): ligas sin escalón compartido con error de nivel de 0,27–2,05 DT; BNXT 0,37 con cobertura 0,70. Errores de identidad en puentes europeos (F0 §3.2). Entre 160 (2020-21) y 429 (2025-26) personas por temporada son puentes europea–doméstica de la misma temporada con ≥ 150 min en ambas, y aún no se usan como tales |
 | F3 · Capa de medida | **Máxima** | El ruido de muestra es > 25 % de la varianza en 21/33 métricas y > 50 % en 6. Las exposiciones actuales son burdas: USG%, AST% y rebote en minutos; tiros en el aro con tiros del jugada a jugada. Una verosimilitud binomial o de Poisson con su exposición real da la contracción correcta |
 | F4 · Carrera | **Alta**, con el listón de la D1 | El historial estrecha la credibilidad un 18 % (mediana). Techo de ρ_carr ≥ 0,85 en 27/33 métricas: la capacidad es estable. La D1 vigente ya cubre 12 métricas, pero con τ² = 0 en 6 y posible doble conteo. F4 debe ganarle con un modelo que use datos brutos, no medias a posteriori. **Baja para el RAPM** (techo 0,28–0,34) |
 | F5 · Latente | **Alta en tiro, media en el resto** | En tiro la información compartida ya rinde (razón 1,5–1,7 frente al univariante); es donde la fiabilidad es más baja (0,30–0,61) |
@@ -493,7 +501,7 @@ REML. La posterior de cada temporada es **exacta por construcción**: cubre el n
    examen limpio es 2025-26 → 2026-27 (decisión 10 de la F0).
 5. **VERIFICAR.** La referencia externa de estabilización (Blackport, 750 triples a fiabilidad 0,7) se ha citado de
    fuentes secundarias.
-6. **VERIFICAR.** LOLO de la v3.2 y de la v2 con 20 ligas: en ejecución.
+6. **VERIFICAR.** LOLO de la v3.2: en ejecución. El de la v2 con 20 ligas ya está (§3.4).
 
 ## 9. Diagnósticos de inferencia
 
