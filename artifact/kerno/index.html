@@ -275,6 +275,7 @@ td.n b { font-weight: 600; }
 .conf i::before, .conf i::after, .conf i span { content: ""; background: var(--ctx-band); }
 .conf.alta i::before, .conf.alta i span, .conf.alta i::after, .conf.moderada i::before, .conf.moderada i span, .conf.baja i::before { background: var(--brand); }
 .conf.alta { color: var(--text); }
+.conf.mini { gap: 0; vertical-align: 1px; margin-left: 4px; } .conf.mini i { grid-template-columns: repeat(3, 5px); height: 7px; }
 
 /* perfil por percentiles: banda = intervalo del 80 %, punto = estimación; marcas en 25 / 50 / 75 */
 .pbar { position: relative; height: 18px; min-width: 120px; background: linear-gradient(90deg, transparent calc(25% - .5px), var(--grid) calc(25% - .5px) calc(25% + .5px), transparent calc(25% + .5px) calc(50% - .5px), var(--context) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px) calc(75% - .5px), var(--grid) calc(75% - .5px) calc(75% + .5px), transparent calc(75% + .5px)), var(--track); }
@@ -818,12 +819,34 @@ const v4ClubT = (liga, id, t) => { const o = V4CLUBES && V4CLUBES.clubes[`${liga
 const ancE = (a, k) => (a && isFinite(a[k]) ? { m: k, v: a[k], lo: a[k + "_lo80"], hi: a[k + "_hi80"], p: a[k], pl: Math.min(a[k + "_lo80"], a[k]), ph: Math.max(a[k + "_hi80"], a[k]), s: 1, w: a[k + "_hi80"] - a[k + "_lo80"] } : null);
 const dnetE = (a) => (a && isFinite(a.delta_net) ? { m: "dnet", v: a.delta_net, lo: a.delta_lo80, hi: a.delta_hi80, p: 50, pl: 50, ph: 50, s: 0, w: 0 } : null);
 const nivelTxt = (x) => (x >= 75 ? "muy alto" : x >= 60 ? "alto" : x >= 40 ? "medio" : x >= 25 ? "bajo" : "muy bajo");
-const confDe = (w) => (w <= 30 ? "alta" : w <= 55 ? "moderada" : "baja");
-const confHTML = (w) => { const c = confDe(w); return `<span class="conf ${c}" title="Ancho del intervalo: ${Math.round(w)} puntos de percentil"><i><span></span></i>${c}</span>`; };
+// v4.2 · C (configs/v42.yaml → presentacion_v42): confianza alta · moderada · baja desde la anchura del rango del 80 %, con
+// los terciles de esa anchura en su familia (métricas o ajuste) sobre la temporada cerrada de referencia (REF_T, 400+ min).
+// Sin esa temporada cargada todavía, los cortes anteriores (30 y 55 puntos de percentil). Las anclas llevan su sello (K2).
+const CORTES_C = {};
+function cortesC(fam) {
+  if (CORTES_C[fam]) return CORTES_C[fam];
+  const T = SEAS[REF_T]; if (!T || !REF) return [30, 55];
+  const ws = [], ok = (r) => (g(r, "min") || 0) >= 400;
+  if (fam === "ajuste") T.rows.forEach((r) => { if (!ok(r)) return; Object.values(PERFILES).forEach((P) => { const a = ajuste(r, P); if (a && isFinite(a.w)) ws.push(a.w); }); });
+  else T.rows.forEach((r) => { if (!ok(r)) return; Object.keys(M).forEach((m) => { if (["NC", "IM", "dnet"].includes(m)) return; const e = est(r, m); if (e && isFinite(e.w)) ws.push(e.w); }); });
+  if (ws.length < 30) return [30, 55];
+  ws.sort((x, y) => x - y);
+  return (CORTES_C[fam] = [ws[Math.floor(ws.length / 3)], ws[Math.floor((2 * ws.length) / 3)]]);
+}
+const SELLO_ANCLA = { NC: "alta", IM: "moderada", dnet: "alta" };
+const confDe = (w, fam = "metricas") => { const [a, b] = cortesC(fam); return w <= a ? "alta" : w <= b ? "moderada" : "baja"; };
+const confHTML = (w, fam = "ajuste", tip = "") => { const c = confDe(w, fam); return `<span class="conf ${c}" title="${tip || `Rango del 80 %: ${Math.round(w)} puntos de percentil de ancho`}"><i><span></span></i>${c}</span>`; };
 const fmtM = (m, v) => { const k = M[m] || { d: 1 }; return k.sg ? sgn(v, k.d) : fmt(v, k.d); };
-const valHTML = (e) => (e ? `<b>${fmtM(e.m, e.v)}${M[e.m] && M[e.m].pc ? " %" : ""}</b> <span class="rng">[${rngTxt(fmtM(e.m, e.lo), fmtM(e.m, e.hi))}]</span>` : "—");
+// completo = ficha (punto y rango); si no, tablas y listas: punto y confianza, con el rango al pasar el ratón (v4.2 · C)
+const valHTML = (e, completo = false) => {
+  if (!e) return "—";
+  const v = `${fmtM(e.m, e.v)}${M[e.m] && M[e.m].pc ? " %" : ""}`, r = rngTxt(fmtM(e.m, e.lo), fmtM(e.m, e.hi));
+  if (completo) return `<b>${v}</b> <span class="rng">[${r}]</span>`;
+  const c = SELLO_ANCLA[e.m] || confDe(e.w), t = `Rango del 80 %: ${r}`;
+  return `<b title="${t}">${v}</b> <span class="conf mini ${c}" title="${t} · confianza ${c}"><i><span></span></i></span>`;
+};
 const tier = (e) => (!e ? "" : e.s === 0 ? "t-neu" : e.s == null ? "t-aj" : e.p >= 60 ? "t-hi" : e.p <= 40 ? "t-lo" : "t-mid");
-const pbar = (e, s = "") => (e ? `<div class="pbar ${s ? "" : tier(e)}" role="img" aria-label="Percentil ${Math.round(e.p)}, rango ${Math.round(e.pl)}–${Math.round(e.ph)}"><span class="b ${s}" style="left:${e.pl.toFixed(1)}%;width:${Math.max(0.6, e.ph - e.pl).toFixed(1)}%"></span><span class="p ${s}" style="left:${e.p.toFixed(1)}%"></span></div>` : `<div class="pbar"></div>`);
+const pbar = (e, s = "", completo = false) => (e ? `<div class="pbar ${s ? "" : tier(e)}" role="img" aria-label="Percentil ${Math.round(e.p)}, rango ${Math.round(e.pl)}–${Math.round(e.ph)}">${completo ? `<span class="b ${s}" style="left:${e.pl.toFixed(1)}%;width:${Math.max(0.6, e.ph - e.pl).toFixed(1)}%"></span>` : ""}<span class="p ${s}" style="left:${e.p.toFixed(1)}%"></span></div>` : `<div class="pbar"></div>`);
 
 let EQ = null, EQP = null, ESCL = null, EUC = null, BQP = null;
 // banquillo: etapas de entrenador por club-temporada (equipos), escala de nivel (índice de Equipos) y estilo por etapa
@@ -1249,7 +1272,7 @@ VISTAS.ficha = async (tk) => {
     </div>
     ${anc4}
     <div class="block"><div class="block-h"><div><h3 class="h2">Perfil por percentiles</h3><p class="sub">Frente a ${POSP[pos] || "jugadores"} de ${esc(VN())} · equivalente ${REF_T} · marcas en 25 / 50 / 75 · banda = intervalo del 80 %</p></div><span class="tag">Lectura</span></div>
-      <div class="prof">${GRUPOS.map(([n, d, ms]) => `<div class="g"><span>${n}</span><small>${esc(d)}</small></div>` + ms.map((m) => { const e = est(r, m); return `<div class="m">${M[m].n}${e && e.s === -1 ? "<small>menos es mejor; la barra ya está invertida</small>" : ""}</div>${pbar(e)}<div class="val">${valHTML(e)}</div>`; }).join("")).join("")}
+      <div class="prof">${GRUPOS.map(([n, d, ms]) => `<div class="g"><span>${n}</span><small>${esc(d)}</small></div>` + ms.map((m) => { const e = est(r, m); return `<div class="m">${M[m].n}${e && e.s === -1 ? "<small>menos es mejor; la barra ya está invertida</small>" : ""}</div>${pbar(e, "", true)}<div class="val">${valHTML(e, true)}</div>`; }).join("")).join("")}
         <div></div><div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div></div>
     <div class="block" id="trayBlock">${tray ? trayHTML(tray) : ""}</div>
     <div class="callout"><span class="label">Qué cambiaría la lectura</span><p>${esc(cambio)}</p></div>
@@ -1289,7 +1312,7 @@ function trayHTML(tr) {
   return `<div class="block-h"><div><h3 class="h2">Trayectoria del RAPM proyectado</h3><p class="sub">RAPM multiliga v4.0 · 0–100, 50 = jugador medio de ${esc(VN())} ${esc(CTX.temp)} · punto y rango del 80 % por temporada</p></div><span class="tag">Lectura</span></div>
     <div class="chart">${svg}</div>
     <div class="tw"><table><thead><tr><th>Temporada</th><th>Equipo</th><th class="n">Min</th><th class="n">RAPM proyectado</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
-    ${tr.filas.map((x) => { const u = est(x, "usg_pct", 0); return `<tr class="go" data-k="${esc(rk(x))}" tabindex="0"><td class="num">${x.T.temp}${enCurso(x.T.temp) ? " · en curso" : ""}</td><td>${esc(g(x, "equipo"))} <span class="rng">${esc(ligaN(g(x, "liga")))}</span></td><td class="n">${Math.round(g(x, "min"))}</td><td class="n">${valHTML(est(x, "rapm"))}</td><td class="n">${valHTML(est(x, "ts_pct"))}</td><td class="n">${u ? fmt(u.v) + " %" : "—"}</td></tr>`; }).join("")}
+    ${tr.filas.map((x) => { const u = est(x, "usg_pct", 0); return `<tr class="go" data-k="${esc(rk(x))}" tabindex="0"><td class="num">${x.T.temp}${enCurso(x.T.temp) ? " · en curso" : ""}</td><td>${esc(g(x, "equipo"))} <span class="rng">${esc(ligaN(g(x, "liga")))}</span></td><td class="n">${Math.round(g(x, "min"))}</td><td class="n">${valHTML(est(x, "rapm"), true)}</td><td class="n">${valHTML(est(x, "ts_pct"))}</td><td class="n">${u ? fmt(u.v) + " %" : "—"}</td></tr>`; }).join("")}
     </tbody></table></div><p class="note">Una fila por temporada: la competición con más minutos.</p>`;
 }
 
@@ -1340,16 +1363,16 @@ VISTAS.necesidad = async (tk) => {
       <div class="ctrl"><span class="label">Orden</span><div class="seg" id="nOrden" role="group" aria-label="Orden"><button type="button" data-v="punto" aria-pressed="${NEC.orden === "punto"}">Por el punto</button><button type="button" data-v="prudente" aria-pressed="${NEC.orden === "prudente"}">Prudente (extremo bajo)</button>${c4 ? `<button type="button" data-v="nc" aria-pressed="${NEC.orden === "nc"}" title="Nivel Kerno v4.0 como fichaje de ${esc(nomC4)}, entre los 150 de mejor ajuste">Por Nivel Kerno</button>` : ""}</div></div>
       <label class="check"><input type="checkbox" id="nExc" ${NEC.excluir ? "checked" : ""}>Excluir a ${esc(clubActual() ? clubActual().nombre : "mi club")}</label>
     </div>
-    <div class="block"><div class="block-h"><div><h3 class="h2">${xs.length ? `${esc(g(xs[0].r, "nombre"))} es el candidato con mejor ajuste: ${Math.round(xs[0].a.p)} [${Math.round(xs[0].a.pl)}–${Math.round(xs[0].a.ph)}]` : "Ningún jugador cumple los filtros"}</h3>
+    <div class="block"><div class="block-h"><div><h3 class="h2">${xs.length ? `${esc(g(xs[0].r, "nombre"))} es el candidato con mejor ajuste: ${Math.round(xs[0].a.p)} (confianza ${confDe(xs[0].a.w, "ajuste")})` : "Ningún jugador cumple los filtros"}</h3>
       <p class="sub">Ajuste al perfil «${esc(P.n)}» · 0–100 · ${xs.length.toLocaleString("es-ES")} candidatos · ${esc(CTX.temp)}${c4 ? ` · Nivel Kerno e Impacto v4.0 como fichajes de ${esc(nomC4)}` : ""}${NEC.orden === "nc" ? " · ordenados por Nivel Kerno" : ""}</p></div><span class="tag">Lectura</span></div>
-      ${top.length ? `<div class="rank">${top.map((o) => `<div class="who"><b>${esc(g(o.r, "nombre"))}</b><span>${filaJug(o.r)}</span></div>${pbar({ p: o.a.p, pl: o.a.pl, ph: o.a.ph, s: null })}<div class="val"><b>${Math.round(o.a.p)}</b> <span class="rng">[${Math.round(o.a.pl)}–${Math.round(o.a.ph)}]</span></div>`).join("")}
+      ${top.length ? `<div class="rank">${top.map((o) => `<div class="who"><b>${esc(g(o.r, "nombre"))}</b><span>${filaJug(o.r)}</span></div>${pbar({ p: o.a.p, pl: o.a.pl, ph: o.a.ph, s: null })}<div class="val"><b title="Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}">${Math.round(o.a.p)}</b> ${confHTML(o.a.w, "ajuste", `Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}`)}</div>`).join("")}
         <div></div><div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div>` : ""}</div>
     ${filas.length ? `<div class="block"><div class="tw"><table><thead><tr><th class="n">#</th><th>Jugador</th><th class="n">Edad</th><th class="n">Min</th><th class="n">Ajuste</th><th>Confianza</th>${c4 ? `<th class="n" title="Nivel Kerno v4.0 como fichaje de ${esc(nomC4)} (0–100, rango del 80 %)">Nivel Kerno</th><th class="n" title="Impacto v4.0 como fichaje de ${esc(nomC4)}">Impacto</th>` : ""}${P.w.map(([m]) => `<th class="n" title="${esc(M[m].n)}">${esc(CORTO[m] || M[m].n)}</th>`).join("")}<th></th></tr></thead><tbody>
       ${filas.map((o, i) => `<tr class="go${i === 0 ? " top" : ""}" data-k="${esc(rk(o.r))}" tabindex="0"><td class="n">${i + 1}</td><td><div class="who"><b>${esc(g(o.r, "nombre"))}</b><span>${filaJug(o.r)}</span></div></td><td class="n">${g(o.r, "edad") ? Math.round(g(o.r, "edad")) : "—"}</td><td class="n">${Math.round(g(o.r, "min"))}</td>
-        <td class="n"><b>${Math.round(o.a.p)}</b> <span class="rng">[${Math.round(o.a.pl)}–${Math.round(o.a.ph)}]</span></td><td>${confHTML(o.a.w)}</td>${c4 ? `<td class="n">${valHTML(ancE(o.an, "NC"))}</td><td class="n">${valHTML(ancE(o.an, "IM"))}</td>` : ""}${P.w.map(([m]) => { const e = est(o.r, m); return `<td class="n">${e ? fmtM(m, e.v) : "—"}</td>`; }).join("")}
+        <td class="n"><b title="Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}">${Math.round(o.a.p)}</b></td><td>${confHTML(o.a.w, "ajuste", `Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}`)}</td>${c4 ? `<td class="n">${valHTML(ancE(o.an, "NC"))}</td><td class="n">${valHTML(ancE(o.an, "IM"))}</td>` : ""}${P.w.map(([m]) => { const e = est(o.r, m); return `<td class="n">${e ? fmtM(m, e.v) : "—"}</td>`; }).join("")}
         <td><button class="btn quiet" type="button" style="min-height:28px;padding:3px 9px" data-lista="${esc(rk(o.r))}">${enLista(rk(o.r)) ? "En la lista" : "+ Lista"}</button></td></tr>`).join("")}
       </tbody></table></div>${xs.length > filas.length ? `<div><button class="btn quiet" type="button" data-act="mas">Ver 40 más (${filas.length} de ${xs.length})</button></div>` : ""}</div>` : ""}
-    <div class="callout"><span class="label">Cómo se calcula</span><p>Ajuste = media ponderada de los percentiles del jugador frente a los de su posición en ${esc(VN())}, la liga de tu club. El rango usa los extremos de cada intervalo del 80 % con los mismos pesos: es prudente, porque supone que todas las métricas fallan a la vez en la misma dirección. «Prudente» ordena por el extremo bajo: premia a quien tiene el ajuste más seguro, no el más alto. Es un perfil estadístico, no el encaje en tu sistema: eso se lee en la lectura de fichaje.</p></div>
+    <div class="callout"><span class="label">Cómo se calcula</span><p>Ajuste = media ponderada de los percentiles del jugador frente a los de su posición en ${esc(VN())}, la liga de tu club. Las métricas con historial (normalización v4.2: uso, pérdidas, robos, tapones, rebote, proporción de triples, puntos/100, canastas asistidas) combinan todas sus temporadas; el resto, la temporada sola. La confianza (alta, moderada o baja) sale de la anchura del rango del 80 % frente a la del resto de jugadores; el rango completo aparece al pasar el ratón y en la ficha. Ese rango usa los extremos de cada intervalo del 80 % con los mismos pesos: es prudente, porque supone que todas las métricas fallan a la vez en la misma dirección. «Prudente» ordena por el extremo bajo: premia a quien tiene el ajuste más seguro, no el más alto. Es un perfil estadístico, no el encaje en tu sistema: eso se lee en la lectura de fichaje.</p></div>
     ${pie(CTX.temp)}`;
   $("nLiga").value = NEC.liga;
 };
