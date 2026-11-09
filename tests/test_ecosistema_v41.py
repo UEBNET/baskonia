@@ -744,7 +744,7 @@ def test_k3_landing_una_sola_tabla():
     assert np.isfinite(d[["o", "pA", "pB", "w"]].to_numpy()).all()
     r = json.loads((CE.RAIZ / "data/modelos/v4_1/producto/examen_landing.json").read_text(encoding="utf-8"))
     assert r["decision"]["gana"] == "A" and r["decision"]["sello"] == "BAJA"
-    L = PR.landing(CE.cargar())
-    assert "v3_2/fase7" in L["fuente"]
-    for g in L["grupos"].values():                      # se muestra sólo si el rango del 80 % excluye 0 (signo libre)
-        assert g["mostrar"] == (g["lo80"] > 0 or g["hi80"] < 0) or abs(g["lo80"]) < 0.05 or abs(g["hi80"]) < 0.05
+    L = PR.landing(CE.cargar())                         # DECISIÓN CEO (V41_F4 §8.6): la Landing es la adaptación v3.1
+    assert "v3_1" in L["fuente"]
+    for g in L["grupos"].values():                      # coste ≤ 0; se muestra sólo si el rango del 80 % excluye 0
+        assert g["pct"] <= 0 and g["hi80"] <= 0 and g["mostrar"] == (g["hi80"] < 0)

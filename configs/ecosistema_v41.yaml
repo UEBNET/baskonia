@@ -411,6 +411,10 @@ f4:
       sello: "ALTA si mejora a la base con IC95 que excluye 0 en los tres cortes; MEDIA si sólo en el conjunto; BAJA si no"
       producto: "la Landing sale sólo de la tabla elegida; se muestra el grupo si su rango del 80 % excluye 0 (si no, «sin cambio apreciable»)"
       motor: "no se toca el motor v3.3 (regla del encargo); si gana A, se informa la consecuencia en el motor como decisión del CEO"
+    resultado_examen_09-11-2026: "A (fase 7 rehecha) gana a B (v3_1) −0,0089 [−0,0118; −0,0060]; A empata con no corregir → sello BAJA"
+    decision_ceo_09-11-2026: "la Landing mide lo que pierde el jugador en la 1.ª temporada por el coste de adaptación, frente a su
+      nivel adaptado: el concepto de la v3.1. Se vuelve a la tabla v3.1 (la del motor). El examen K3 queda como DATO: mide otra
+      cosa (frente a lo que traduce la normalización)"
 
 # ---------------------------------------------------------------------------------------- §6 · criterios PRERREGISTRADOS
 # Transcripción literal del §6 del encargo. Estado: «propuesto en F0» → se congela al aprobar el CEO la puerta F0 (con o sin

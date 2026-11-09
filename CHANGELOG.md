@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## 2026-11-09 — CERNO v4.1 · la Landing vuelve a la adaptación v3.1 (decisión del CEO)
+
+* La Landing mide lo que pierde el jugador en la primera temporada por el coste de adaptación, frente a su nivel adaptado:
+  es la tabla v3.1 del motor (V41_F4 §8.6).
+* El examen K3 queda como dato.
+* Intervalos: el CEO elige la opción D (historial del jugador) y después la C (presentación). En curso (§8.7).
+
 ## 2026-11-09 — CERNO v4.1 · puerta F4 APROBADA (K1, K2, K5; K4 «RAPM proyectado»), K3 y escala 0–100
 
 Detalle: `docs/checkpoints/V41_F4.md` §8.1–8.5.
