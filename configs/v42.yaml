@@ -77,3 +77,6 @@ presentacion_v42:
     calibración), no los cortes fijos de hoy (30 y 55 puntos de percentil)"
   regla_de_oro: "mismos controles antes y después; sólo cambia cómo se muestran los rangos"
   cambia_la_regla_del_encargo: "«punto + rango + sello» siempre visible pasa a «punto + sello» visible y rango al detalle (orden del CEO)"
+
+decisiones_ceo:
+  matriz_parejas_09-11-2026: "la matriz de parejas se abre en «Net juntos (v4.2)»; la sinergia v4.2 (casi plana) queda a un clic"

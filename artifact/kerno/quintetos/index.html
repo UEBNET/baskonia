@@ -1492,7 +1492,9 @@ R.parejas = (el) => {
   if (!D.hasQ) { el.innerHTML = vacioSinQuintetos(); return; }
   const T = TV(); if (!T.row) { el.innerHTML = vacioFase(T); return; }
   if (!T.P.length) { el.innerHTML = vacio("Sin parejas", "Ninguna pareja de este equipo llega a 40 minutos juntos en esta fase."); return; }
-  const met = PMET[ui("pMet", "sinergia")] ? ui("pMet", "sinergia") : "sinergia";
+  // v4.2 (decisión del CEO, 09-11-2026): la matriz se abre en «Net juntos (v4.2)»; la sinergia v4.2 es casi plana (no se repite
+  // entre temporadas) y sigue a un clic en el mismo selector. Se respeta la elección guardada de cada usuario.
+  const pDef = D && D.v42 ? "net" : "sinergia", met = PMET[ui("pMet", pDef)] ? ui("pMet", pDef) : pDef;
   el.innerHTML = `
   ${T.pf !== S.f ? `<div class="warnbox">Las parejas no se calculan por separado en playoffs: se muestra <b>toda la temporada</b>. Los tríos sí son de playoffs.</div>` : ""}
   ${notaV42()}
@@ -2379,7 +2381,7 @@ document.addEventListener("click", (e) => {
   else if (act === "fase") { S.f = v; pintarMando(); pintar(); }
   else if (act === "recargar") aplicar();
   else if (act === "q") { S.q = v; if (S.tab !== "quintetos") { irTab("quintetos"); requestAnimationFrame(() => verFicha("#qFicha")); } else { const T = TV(); qFicha(T); qScatter(T); marcarSel("#qTabla", v); guardar(); verFicha("#qFicha"); } }
-  else if (act === "p") { S.p = v; if (S.tab !== "parejas") { irTab("parejas"); requestAnimationFrame(() => verFicha("#pFicha")); } else { const T = TV(); pFicha(T); pMatriz(T, PMET[ui("pMet", "sinergia")] ? ui("pMet", "sinergia") : "sinergia"); marcarSel("#pTabla", v); guardar(); verFicha("#pFicha"); } }
+  else if (act === "p") { S.p = v; if (S.tab !== "parejas") { irTab("parejas"); requestAnimationFrame(() => verFicha("#pFicha")); } else { const T = TV(); pFicha(T); pMatriz(T, PMET[ui("pMet", D && D.v42 ? "net" : "sinergia")] ? ui("pMet", "sinergia") : "sinergia"); marcarSel("#pTabla", v); guardar(); verFicha("#pFicha"); } }
   else if (act === "j") { S.j = v; if (S.tab !== "jugadores") { irTab("jugadores"); requestAnimationFrame(() => verFicha("#jFicha")); } else { jFicha(TV()); marcarSel("#jTabla", v); guardar(); verFicha("#jFicha"); } }
   else if (act === "nx") { S.x = v; if (a.dataset.ir || S.tab !== "conexiones") { irTab("conexiones"); const anc = a.dataset.ancla; requestAnimationFrame(() => { const c = $(anc ? `#${anc}` : "#nRed"); if (c) c.scrollIntoView({ block: "start", behavior: "smooth" }); }); } else { pintar(); } }
   else if (act === "ap") { S.ap = v; if (S.tab !== "aprende") irTab("aprende"); else { $$(".ap nav button").forEach((b) => b.classList.toggle("on", b.dataset.v === v)); const c = $(`#c-${v}`); if (c) c.scrollIntoView({ block: "start", behavior: "smooth" }); guardar(); } }
