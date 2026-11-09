@@ -118,7 +118,13 @@ def exportar(salida: Path = SALIDA, ligas: list[str] | None = None, temporadas: 
               ("temporadas_previas", 0)]
         cp = ct + [("sv", 2), ("slo", 2), ("shi", 2), ("sw", 3)]
         nom = {"v42": "v", "v42_lo": "lo", "v42_hi": "hi", "peso_temporada": "w", "temporadas_previas": "np"}
+        # formato compacto (límite de 256 MiB por versión del artifact): un decimal y semiancho e = (hi − lo)/2
+        t = t.assign(e=(t["v42_hi"] - t["v42_lo"]) / 2)
+        p = p.assign(e=(p["v42_hi"] - p["v42_lo"]) / 2, se=(p["shi"] - p["slo"]) / 2)
+        ct = [("team_id", -1), ("u", -1), ("poss", 0), ("v42", 1), ("e", 1), ("peso_temporada", 2), ("temporadas_previas", 0)]
+        cp = ct + [("sv", 1), ("se", 1), ("sw", 2)]
         d = {"version": "4.2", "liga": liga, "temporada": temp,
+             "formato": "v4.2 compacto: e = semiancho del 80 % (lo = v − e, hi = v + e); un decimal",
              "t": {"c": [nom.get(c, c) for c, _ in ct], "f": _filas(t, ct)},
              "p": {"c": [nom.get(c, c) for c, _ in cp], "f": _filas(p, cp)}}
         dest = salida / temp / f"{liga}.gz.txt"

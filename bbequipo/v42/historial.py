@@ -241,6 +241,8 @@ def exportar(destino: Path | None = None) -> dict:
     destino.mkdir(parents=True, exist_ok=True)
     import base64
     import gzip
+    presentes = {int(t[:4]): set(d.loc[d["anio"] == int(t[:4]), "persona_id"].astype(int).astype(str)) for t in CFG["temporadas"]}
+    en_curso = int(CFG["temporadas"][-1][:4])
     for t in CFG["temporadas"]:
         a = int(t[:4])
         prev = {}
@@ -248,7 +250,10 @@ def exportar(destino: Path | None = None) -> dict:
             f = filt[m][filt[m]["anio"] < a]
             u = f.groupby("persona_id").tail(1)
             Pp = u["P"] + par[m]["tau2"] * (a - u["anio"])
-            prev[m] = dict(zip(u["persona_id"].astype(int).astype(str), zip(np.round(u["m"], 5).tolist(), np.round(Pp, 6).tolist())))
+            ids = u["persona_id"].astype(int).astype(str)
+            # tamaño: en una temporada cerrada sólo hacen falta los jugadores que la juegan; en la en curso, todos (llegan nuevos)
+            keep = ids.isin(presentes[a]).to_numpy() if a != en_curso else np.ones(len(u), bool)
+            prev[m] = dict(zip(ids[keep], zip(np.round(u["m"].to_numpy()[keep], 4).tolist(), [float(f"{x:.4g}") for x in Pp.to_numpy()[keep]])))
         personas = sorted(set().union(*[set(v) for v in prev.values()])) if prev else []
         doc = {"version": "v4.2", "temporada": t, "metricas": pasan, "parametros": par,
                "previa": {p: [prev[m].get(p) for m in pasan] for p in personas}}

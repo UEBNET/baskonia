@@ -762,7 +762,11 @@ function cargarV42(t, l) {
 }
 function aplicarV42(D, x) {
   const id = (i) => String((D.J[i] || {}).player_id), clave = (eq, js) => `${eq}#${js.map(id).sort().join("|")}`;
-  const mapa = (tab) => { const m = new Map(); if (tab && Array.isArray(tab.c)) objs(tab).forEach((o) => m.set(`${o.team_id}#${o.u}`, o)); return m; };
+  // formato compacto (v4.2): e/se = semiancho del rango del 80 %; se reconstruyen lo/hi y slo/shi
+  const mapa = (tab) => { const m = new Map(); if (tab && Array.isArray(tab.c)) objs(tab).forEach((o) => {
+    if (o.lo == null && ok(o.v) && ok(o.e)) { o.lo = o.v - o.e; o.hi = o.v + o.e; }
+    if (o.slo == null && ok(o.sv) && ok(o.se)) { o.slo = o.sv - o.se; o.shi = o.sv + o.se; }
+    m.set(`${o.team_id}#${o.u}`, o); }); return m; };
   const MT = mapa(x && x.t), MP = mapa(x && x.p);
   D.v42 = MT.size + MP.size > 0;
   for (const r of D.T3) { const e = MT.get(clave(r.team_id, r.u)) || null; r.e42 = e; r.net42 = e && ok(e.v) ? e.v : r.net_rtg_aj; }
