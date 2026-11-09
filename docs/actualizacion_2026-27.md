@@ -70,10 +70,11 @@ Lote publicado en esta primera ejecución: 63 ficheros, 45,9 MB (versión 106 de
 
 ## 4. Recalibración mensual
 
-`python -m bbactualiza.recalibrar` (tarea programada mensual «Recalibración mensual 2026-27 · Cerno»):
+`python -m bbactualiza.recalibrar` (tarea programada «Recalibración mensual 2026-27 · Cerno», `trig_01C8jRqVWneTuJpCmJUWK8Lo`,
+el día 1 de cada mes a las 03:17, hora de Madrid; instrucciones en `.claude/skills/actualizar-temporada/recalibracion_prompt.md`):
 
-1. `cvae` — reentrena las 20 redes CVAE de la v3.2 (4 procesos, ≈ 40 min) y recalcula la combinación: los jugadores
-   nuevos reciben valor CVAE y los demás lo ponen al día.
+1. `cvae` — reentrena las 20 redes CVAE de la v3.2 (4 procesos: 37 min medidos el 9-11-2026) y recalcula la combinación
+   (posterior y traducción red a red, ≈ 5 min por red): los jugadores nuevos reciben valor CVAE y los demás lo ponen al día.
 2. `v40` — perfiles 2026-27, RAPM de producto, capa 4, anclas y tablas del Atlas v4.0, y `v40/equipos_2026-27.json`.
 3. `boton` — `python -m bbactualiza --sin-descarga --forzar` desde el contexto hasta la publicación.
 

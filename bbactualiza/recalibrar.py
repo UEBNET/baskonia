@@ -1,6 +1,6 @@
 """Recalibración mensual de la temporada en curso: lo que el botón no puede hacer con parámetros congelados.
 
-    python -m bbactualiza.recalibrar                     # todo (≈ 1,5-3 h con 4 núcleos)
+    python -m bbactualiza.recalibrar                     # todo (≈ 2,5-4 h con 4 núcleos)
     python -m bbactualiza.recalibrar --pasos cvae boton  # sólo la normalización CVAE y la publicación
 
 Pasos (cada uno se puede lanzar suelto con --pasos):
