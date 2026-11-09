@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-03",
+ "generado": "2026-11-08",
  "descripcion": "Taxonomía unificada jugador ↔ equipo: mezcla gaussiana sobre 12 rasgos en z por rangos dentro de cada liga-temporada, ajustada sobre jugadores; la otra población se proyecta con la misma mezcla (probabilidad a posteriori).",
  "rasgos": [
   {
@@ -1204,34 +1204,34 @@
   "covarianza": "full",
   "poblacion_ajuste": "jugadores",
   "n_ajuste": 18412,
-  "seguridad_media_equipos": 0.7157346141970012,
-  "seguridad_media_jugadores": 0.7492819504101245,
+  "seguridad_media_equipos": 0.71646782242328,
+  "seguridad_media_jugadores": 0.7493070344824634,
   "equipos_asignados": 3205,
-  "jugadores_asignados": 41602,
-  "tramos_equipo": 766,
-  "tramos_jugador": 7497,
+  "jugadores_asignados": 42110,
+  "tramos_equipo": 772,
+  "tramos_jugador": 7544,
   "coherencia": {
    "equipos": 3205,
-   "acuerdo_estilo_principal": 0.2882995319812793,
+   "acuerdo_estilo_principal": 0.2792511700468019,
    "correlacion_por_estilo": {
-    "circulacion": 0.21186607694942536,
-    "pintura": 0.1421755932808528,
-    "spacing": 0.21875061168453744,
-    "old_school": 0.18546606252321182,
-    "pistons": 0.21451793410864645,
-    "isolation": 0.23841271061178493
+    "circulacion": 0.2035828751821038,
+    "pintura": 0.14001698817531139,
+    "spacing": 0.21419756075506036,
+    "old_school": 0.1754114613120602,
+    "pistons": 0.22277928901169017,
+    "isolation": 0.24515506654861316
    },
-   "clubes_con_relevo": 346,
-   "cambia_estilo_con_relevo": 0.5635838150289018,
+   "clubes_con_relevo": 349,
+   "cambia_estilo_con_relevo": 0.5730659025787965,
    "clubes_con_relevo_10_partidos": 96,
    "cambia_estilo_con_relevo_10_partidos": 0.5833333333333334
   },
   "vade": {
    "equipos_emparejados": 1667,
-   "ari": 0.01859492780348458,
-   "nmi": 0.03626711403703642
+   "ari": 0.019803663345715667,
+   "nmi": 0.037309139875797856
   },
-  "segundos": 102
+  "segundos": 86
  },
  "estilos": [
   {
@@ -1288,19 +1288,19 @@
      "z": 0.55
     }
    ],
-   "equipos": 748,
-   "cuota_equipos": 0.2334,
-   "jugadores": 8011,
+   "equipos": 762,
+   "cuota_equipos": 0.2378,
+   "jugadores": 8068,
    "cuota_minutos_jugadores": 0.227,
    "ligas": {
-    "feb3": 0.155,
-    "ncaa": 0.104,
-    "bcl": 0.074,
-    "nba": 0.074,
-    "eurocup": 0.063,
-    "fec": 0.059,
+    "feb3": 0.161,
+    "ncaa": 0.102,
+    "nba": 0.071,
+    "bcl": 0.068,
+    "fec": 0.066,
+    "eurocup": 0.062,
     "gleague": 0.049,
-    "euroleague": 0.048
+    "euroleague": 0.045
    },
    "ejemplos_equipos": [
     {
@@ -1465,19 +1465,19 @@
      "z": -0.42
     }
    ],
-   "equipos": 101,
-   "cuota_equipos": 0.0315,
-   "jugadores": 5058,
+   "equipos": 105,
+   "cuota_equipos": 0.0328,
+   "jugadores": 5167,
    "cuota_minutos_jugadores": 0.1232,
    "ligas": {
-    "feb3": 0.149,
-    "ncaa": 0.119,
-    "nba": 0.109,
-    "cba": 0.099,
-    "gleague": 0.099,
-    "fec": 0.079,
-    "bcl": 0.059,
-    "vtb": 0.05
+    "feb3": 0.171,
+    "ncaa": 0.114,
+    "nba": 0.105,
+    "cba": 0.095,
+    "gleague": 0.095,
+    "bcl": 0.067,
+    "fec": 0.057,
+    "vtb": 0.048
    },
    "ejemplos_equipos": [
     {
@@ -1627,19 +1627,19 @@
      "z": -0.69
     }
    ],
-   "equipos": 979,
-   "cuota_equipos": 0.3055,
-   "jugadores": 4764,
-   "cuota_minutos_jugadores": 0.1259,
+   "equipos": 980,
+   "cuota_equipos": 0.3058,
+   "jugadores": 4799,
+   "cuota_minutos_jugadores": 0.126,
    "ligas": {
-    "feb3": 0.175,
-    "fec": 0.093,
+    "feb3": 0.171,
+    "fec": 0.09,
     "ncaa": 0.085,
-    "nba": 0.065,
-    "bcl": 0.064,
+    "nba": 0.072,
+    "bcl": 0.066,
     "gleague": 0.055,
-    "eurocup": 0.05,
-    "feb2": 0.044
+    "eurocup": 0.049,
+    "bbl": 0.042
    },
    "ejemplos_equipos": [
     {
@@ -1779,19 +1779,19 @@
      "z": -0.45
     }
    ],
-   "equipos": 828,
-   "cuota_equipos": 0.2583,
-   "jugadores": 7575,
-   "cuota_minutos_jugadores": 0.1677,
+   "equipos": 826,
+   "cuota_equipos": 0.2577,
+   "jugadores": 7628,
+   "cuota_minutos_jugadores": 0.1679,
    "ligas": {
-    "feb3": 0.175,
+    "feb3": 0.177,
     "ncaa": 0.1,
-    "bcl": 0.08,
-    "fec": 0.076,
-    "nba": 0.05,
-    "eurocup": 0.045,
+    "bcl": 0.081,
+    "fec": 0.075,
+    "eurocup": 0.047,
+    "nba": 0.046,
     "gleague": 0.045,
-    "bbl": 0.042
+    "cba": 0.042
    },
    "ejemplos_equipos": [
     {
@@ -1921,19 +1921,19 @@
      "z": -0.48
     }
    ],
-   "equipos": 310,
-   "cuota_equipos": 0.0967,
-   "jugadores": 8562,
-   "cuota_minutos_jugadores": 0.1625,
+   "equipos": 298,
+   "cuota_equipos": 0.093,
+   "jugadores": 8676,
+   "cuota_minutos_jugadores": 0.1624,
    "ligas": {
-    "feb3": 0.197,
-    "fec": 0.087,
-    "ncaa": 0.081,
-    "bcl": 0.065,
-    "nba": 0.065,
-    "gleague": 0.061,
-    "cba": 0.058,
-    "lba": 0.048
+    "feb3": 0.181,
+    "fec": 0.091,
+    "ncaa": 0.084,
+    "gleague": 0.064,
+    "nba": 0.064,
+    "bcl": 0.06,
+    "cba": 0.06,
+    "lnb": 0.05
    },
    "ejemplos_equipos": [
     {
@@ -2068,19 +2068,19 @@
      "z": 0.44
     }
    ],
-   "equipos": 239,
-   "cuota_equipos": 0.0746,
-   "jugadores": 7632,
-   "cuota_minutos_jugadores": 0.1937,
+   "equipos": 234,
+   "cuota_equipos": 0.073,
+   "jugadores": 7772,
+   "cuota_minutos_jugadores": 0.1936,
    "ligas": {
-    "feb3": 0.18,
-    "cba": 0.079,
-    "nba": 0.079,
-    "ncaa": 0.079,
-    "fec": 0.063,
-    "feb2": 0.063,
-    "eurocup": 0.05,
-    "gleague": 0.05
+    "feb3": 0.179,
+    "cba": 0.081,
+    "ncaa": 0.081,
+    "nba": 0.073,
+    "fec": 0.064,
+    "gleague": 0.051,
+    "bbl": 0.047,
+    "eurocup": 0.047
    },
    "ejemplos_equipos": [
     {

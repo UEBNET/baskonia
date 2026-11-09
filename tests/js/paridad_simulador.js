@@ -1,25 +1,33 @@
-// Paridad del motor del navegador (artifact/atlas/simulador_v2.js) con la referencia Python (bbfit.simulador.simular).
-//   python -c "from bbfit import sim_exportar as E; E.paridad()"     # casos de referencia → data/artifact/simulador/paridad.json
-//   node tests/js/paridad_simulador.js [carpeta]                     # compara medias (tolerancias de error Monte Carlo)
+// Paridad del motor del navegador v3.3 (artifact/atlas/simulador.js) con Python (bbfit.simulador, CERNO_SIMULADOR=v33).
+//   CERNO_SIMULADOR=v33 python -c "from bbfit import sim_exportar as E; E.paridad('<carpeta>')"   # casos → <carpeta>/paridad.json
+//   node tests/js/paridad_simulador.js [<carpeta de exportar-simulador>] [<simulador.js>]
+// (por defecto experimentos/v33_artifact/simulador y artifact/atlas/simulador.js)
+// Los números aleatorios no son los de numpy: se compara en distribución (tolerancias del error Monte Carlo).
 const fs = require("fs"), path = require("path");
-const dir = process.argv[2] || path.join(__dirname, "..", "..", "data", "artifact", "simulador");
-const SIM2 = require(path.join(__dirname, "..", "..", "artifact", "atlas", "simulador_v2.js"));
-const leer = (f) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
-const D = SIM2.cargar(leer("meta.json"), leer("jugadores.json"), leer("clubes.json"));
-const casos = leer("paridad.json");
-const TOL = { minutos: 1.2, rol: 0.07, pts_p100: 1.0, ts_pct: 1.2, usg_pct: 1.0, adapt: 0.6, d_net: 0.5 };
-let fallos = 0;
-casos.forEach((c) => {
-  const rec = D.jug.get(c.rec), club = D.porClub.get(c.club);
-  const t0 = Date.now(), r = SIM2.simular({ rec, club, nSim: 4000 }), ms = Date.now() - t0;
-  const dif = { minutos: r.minutos.media - c.minutos, pts_p100: r.produccion_p100.pts_p100.media - c.pts_p100,
-    ts_pct: r.produccion_p100.ts_pct.media - c.ts_pct, usg_pct: r.produccion_p100.usg_pct.media - c.usg_pct,
-    adapt: r.adaptacion.adapt_pct_temporada.media - c.adapt, d_net: r.equipo.d_net - c.d_net,
-    rol: Math.max(...SIM2.ROLES.map((k) => Math.abs(r.roles[k] - c.roles[k]))) };
-  const mal = Object.entries(dif).filter(([k, v]) => !(Math.abs(v) <= TOL[k]));
-  if (mal.length) fallos++;
-  console.log(`${mal.length ? "FALLO" : "ok   "} ${c.nombre} → ${c.club_nombre} (${ms} ms): ` + Object.entries(dif).map(([k, v]) => `${k} ${v >= 0 ? "+" : ""}${v.toFixed(2)}`).join(" · ")
-    + (mal.length ? `  [fuera de tolerancia: ${mal.map((x) => x[0]).join(", ")}]` : ""));
-});
-console.log(fallos ? `${fallos} de ${casos.length} casos fuera de tolerancia` : `paridad: ${casos.length} de ${casos.length} casos dentro de tolerancia`);
-process.exit(fallos ? 1 : 0);
+const R = path.join(__dirname, "..", "..");
+const dir = process.argv[2] || path.join(R, "experimentos", "v33_artifact", "simulador");
+const S = require(path.resolve(process.argv[3] || path.join(R, "artifact", "atlas", "simulador.js")));
+const L = (f) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
+const D = S.cargar(L("meta.json"), L("jugadores.json"), L("clubes.json"));
+const ref = L("paridad.json");
+let mal = 0;
+const tol = { minutos: 1.5, pts: 1.2, ts: 1.2, usg: 1.0 };
+for (const c of ref) {
+  const [liga, team, temp] = c.club.split("|");
+  const club = [...D.porClub.values()].find((x) => x.liga === liga && String(x.team) === team && x.temporada === temp);
+  const rec = D.jug.get(c.rec);
+  if (!club || !rec) { console.log("sin club/registro", c.club, c.rec); mal++; continue; }
+  const r = S.simular({ rec, club, rol: c.rol || undefined, nSim: 4000 });
+  const pp = r.produccion_p100;
+  const d = { minutos: r.minutos.mediana - c.minutos_mediana, pts: pp.pts_p100.media - c.pts_p100, ts: pp.ts_pct.media - c.ts_pct, usg: pp.usg_pct.media - c.usg_pct };
+  const ok = Object.entries(d).every(([k, v]) => Math.abs(v) <= tol[k]);
+  if (!ok) mal++;
+  console.log(`${ok ? "OK " : "MAL"} ${String(c.nombre).padEnd(26)} ${c.club.padEnd(30)} rol=${String(c.rol).padEnd(9)} v=${r.version_motor}`,
+    `min ${r.minutos.mediana.toFixed(1)}/${c.minutos_mediana.toFixed(1)} pts ${pp.pts_p100.media.toFixed(2)}/${c.pts_p100.toFixed(2)}`,
+    `ts ${pp.ts_pct.media.toFixed(2)}/${c.ts_pct.toFixed(2)} usg ${pp.usg_pct.media.toFixed(2)}/${c.usg_pct.toFixed(2)}`,
+    `pts80 [${fmt(pp.pts_p100.lo80)}, ${fmt(pp.pts_p100.hi80)}]/[${fmt(c.pts_lo80)}, ${fmt(c.pts_hi80)}]`,
+    c.b9 ? `b9 Δmin ${r.b9 ? r.b9.d_min.toFixed(1) : "–"}/${c.b9.d_min.toFixed(1)} Δrol ${r.b9 ? r.b9.d_rol.toFixed(2) : "–"}/${c.b9.d_rol.toFixed(2)}` : "");
+}
+function fmt(x) { return x == null ? "–" : x.toFixed(1); }
+console.log(mal ? `${mal} casos fuera de tolerancia` : "paridad v3.3: todos los casos dentro de tolerancia");
+process.exit(mal ? 1 : 0);

@@ -45,9 +45,10 @@ que solo trataba los estilos de juego en ocho ligas, y recoge todas las versione
 la normalización amortiguada (v2), la red jerárquica (v3.0), la mezcla de ambas (v3.1) y los cambios de la v3.2.</p>
 <p>Tres ideas atraviesan el documento. Primera: <b>ningún modelo se publica sin un examen fuera de muestra</b>, con
 cambios de liga reales y con las reglas de decisión fijadas antes de ver los resultados. Segunda: <b>cada cifra lleva su
-rango</b> y las reglas de recalibración buscan que el intervalo del 80 % cubra de verdad un 80 %. Tercera: <b>la vara
-puede ser cualquier liga</b>: la EuroLeague es solo una forma de expresar la salida, y la v3.2 deja preparados los
-datos para poner a 0 la liga de destino de cada comparación.</p>
+rango</b> y las reglas de recalibración buscan que el intervalo del 80 % cubra de verdad un 80 %. Tercera: <b>cada
+cifra se lee frente a su liga</b>: el equivalente EuroLeague es solo la escala común de trabajo; en la herramienta el 0
+es la liga del club elegido (fichajes, equipo completo e informe), la propia liga de cada equipo y jugador (estilos,
+equipos y quintetos) o la que se elija en la tabla de jugadores (sección «Lectura en la herramienta»).</p>
 <div class="indice-linea"><div class="etq">Lectura</div><p>{_lectura_resumen(R)}</p></div>"""
     return ("Resumen", "La v3.2 decide cada pieza con un examen anidado y declara cuánto sabe", cuerpo)
 
@@ -284,7 +285,7 @@ def vara_destino(R: dict) -> tuple[str, str, str]:
               "lo": r.lo80_gauge_media - r0, "hi": r.hi80_gauge_media - r0,
               "protagonista": r.competicion in ("acb",), "texto": n(r.nivel_gauge_media - r0, 2, signo=True)}
              for r in niv.itertuples()]
-    graf = grafico_rangos(filas, "Nivel de cada liga en PER con la EuroLeague a 0 (2025-26)",
+    graf = grafico_rangos(filas, "Nivel de cada liga en PER: comparación entre ligas, EuroLeague = 0 (2025-26)",
                           f"DT de capacidad · intervalo del 80 % · normalización {R['niveles_fuente'].replace('_', '.')}",
                           FUENTE, cero=0.0, fmt=lambda v: n(v, 1))
     pares = ""
@@ -296,8 +297,9 @@ def vara_destino(R: dict) -> tuple[str, str, str]:
                         n(r.sd_par_v2, 3), n(r.sd_par_mezcla, 3)] for r in sel.itertuples()], {2, 3, 4})
     ci = DT.ciclo_resumen(R)
     cuerpo = f"""<p>La normalización no fija ninguna liga: el gauge es la media ponderada de todas las competiciones.
-«EuroLeague = 0» es solo una forma de expresar la salida. La v3.2 exporta lo necesario para que el artifact exprese
-cualquier comparación en la vara de la liga de destino: la capacidad de cada jugador sin la incertidumbre del nivel
+El equivalente EuroLeague es solo la escala común de trabajo, no la vara de lectura: en la herramienta cada cifra se
+lee frente a su liga («su liga = 0»). La v3.2 exporta lo necesario para expresar cualquier comparación en la vara de
+la liga de destino: la capacidad de cada jugador sin la incertidumbre del nivel
 de su liga, las constantes de traducción y la covarianza conjunta de los niveles.</p>
 <div class="eq">z_d = (θ + deriva(edad) − δ_d) / s_d          valor en d = T⁻¹(μ_d,t,pos + τ_d,pos · z_d)
 Var(z_d) = (v_j + sd_par(o, d)²) / s_d² + (z_d − clip(z_d, soporte_d))²
@@ -323,8 +325,9 @@ ablación.</p>
 <span class="mono">destino/covarianza/</span>, por métrica.</li>
 <li><b>Capacidad de cada jugador</b> (θ, v_j) sin la incertidumbre del nivel de su liga, en
 <span class="mono">destino/capacidad/</span>.</li>
-<li>Con ellas, el artifact pone a 0 la liga que se elija como destino (ACB = 0, BBL = 0…) y calcula valor, rango y
-marca de extrapolación sin volver a ajustar nada.</li></ul>"""
+<li>Con ellas (resumidas en <span class="mono">datos/normalizados/vara.json</span>), la herramienta pone a 0 la liga
+de referencia de cada vista (ACB = 0, BBL = 0…) y calcula valor, rango y marca de extrapolación sin volver a ajustar
+nada. El gráfico de arriba es la única excepción que se mantiene con la EuroLeague a 0: compara ligas entre sí.</li></ul>"""
     return ("Vara de destino", "Cualquier liga puede ser la vara sin mover el centro de ningún jugador", cuerpo)
 
 
@@ -555,6 +558,10 @@ banda de 50-300 minutos el simulador sobrestima la producción de quien acaba ju
 los pesos de utilidad y calibración se aprenden con la fuente completa.</li>
 <li>{ev("lectura")}<b>B9 sin rol asignado.</b> El acoplamiento de la v3.3 sólo mueve la producción cuando el club fija
 el rol; en la simulación libre la producción publicada es la de la v3.2.</li>
+<li>{ev("lectura")}<b>Percentiles por liga.</b> Los percentiles del informe de fichaje se calculan frente a los
+jugadores de su posición en la liga de referencia (300+ minutos). En ligas con menos de 15 jugadores de esa posición se
+usan todas las posiciones, y las métricas que no se normalizan (PIE, STOP%, AST/TO, on/off) se comparan siempre con su
+propia liga, porque no se pueden traducir.</li>
 <li>{ev("lectura")}<b>Trabajo futuro.</b> El rol como variable ordinal (C1) y el modelo secuencial de trayectorias
 (B8).</li></ul>"""
     return ("Límites", "Dónde termina lo que sabemos", cuerpo)
@@ -570,6 +577,48 @@ def _auditoria_texto(R: dict) -> str:
             f"distintos fusionados de {n(a['personas'], 0)} ({n(a['tasa'], 2, pct=True)})" +
             (f", por ejemplo {esc(nom)}" if nom else "") + ", que en los dos casos es la misma persona "
             "(transliteración; mismo id de la FEB).")
+
+
+# ================================================================================================== lectura en la herramienta
+def lectura_herramienta(R: dict) -> tuple[str, str, str]:
+    filas = [["Jugadores (Datos normalizados, Buscar parecidos)", "La que se elija en Ajustes («Liga = 0»); por defecto, la EuroLeague"],
+             ["Planificación: simular fichajes y equipo completo", "La liga del club elegido"],
+             ["Informe de fichaje (PDF)", "La liga del club de destino; sin destino, la del jugador"],
+             ["Estilos (mapa, comparador, química)", "La propia liga de cada equipo y de cada jugador"],
+             ["Equipos y quintetos", "La propia liga (jugadores y unidades: jugador medio; equipos y plantillas: club medio)"],
+             ["Metodología y comparaciones entre ligas", "La EuroLeague, rotulada («comparación entre ligas»)"]]
+    cuerpo = f"""<p>Los modelos trabajan en una escala común, el equivalente EuroLeague, pero nadie lee las cifras así. En la
+herramienta, cada cifra de nivel e impacto individual se expresa en la escala ±100 frente a <b>su liga</b> («su liga = 0»).
+Cuál es esa liga depende de la pregunta: para un fichaje, la del club de destino; para un equipo o un jugador, la suya.
+Cambiar la referencia no mueve el valor de nadie: solo cambia el 0, los percentiles y, al mostrarlas, las métricas
+normalizadas, que se traducen a esa liga con <span class="mono">vara.json</span> (sección «Vara de destino»).</p>
+{tabla(["Vista", "Liga = 0"], filas)}
+<div class="eq">S = 100 · tanh(z / 2),   z = (valor − referencia) / DT
+referencia de un jugador = L medio (por minutos) de los jugadores de la liga de referencia en esa temporada
+referencia de un club o plantilla = media del nivel de los clubes de esa liga en esa temporada (club medio = 0)</div>
+<p>{ev("dato")}Antes, el 0 de los clubes era el jugador medio, que queda unos 10 puntos por debajo del club medio. La media
+de los clubes de la EuroLeague 2025-26 marcaba +10 y ahora marca 0, y Baskonia pasa de +6 a −5. Los percentiles de los
+clubes se calculan entre los clubes de esa liga, y los de los jugadores, entre sus jugadores.</p>
+<p>{ev("dato")}<b>Química e impacto.</b> La sinergia de cada pareja se mide frente a la pareja media de la liga de
+referencia (antes, siempre la de la EuroLeague), y el quinteto previsto, frente a su quinteto medio. El impacto
+individual (RAPM traducido a la EuroLeague) se resta del RAPM medio por minutos de los jugadores de esa liga. Con la ACB
+como referencia, la pareja media vale 0,27 pts/100 (EuroLeague 0,34; Tercera FEB −1,57) y el jugador medio, −0,73 de
+RAPM (EuroLeague +0,28). El percentil del quinteto entre quintetos reales solo se da con la EuroLeague, la única liga
+con esa distribución en la herramienta.</p>
+<h3>Informe de fichaje</h3>
+<p>Cada métrica se traduce a la liga de referencia y se compara con los jugadores de su posición en esa liga (300+
+minutos), con 21 cuantiles por liga y posición exportados en <span class="mono">atlas/informe/&lt;temporada&gt;.json</span>.
+Si es su propia liga, se usa su valor real. Los textos dicen siempre frente a qué liga se compara
+(«frente a los aleros de la Liga Endesa»).</p>
+<h3>Rangos y minutos</h3>
+<ul><li>{ev("dato")}<b>Rangos sin valores imposibles.</b> Los extremos inferiores de puntos/100, tapones/100, rebotes
+ofensivos/100 y AST% se recortan a 0. El centro no cambia, así que el error y la cobertura del examen tampoco. Una nota
+al pie explica, para ese fichaje, por qué el rango llegaba a 0: producción esperada baja con un margen amplio por nivel,
+rol y minutos, adaptación, estilo o tipo de traspaso.</li>
+<li>{ev("dato")}<b>Equipo completo a 200 minutos.</b> Cada jugador se mueve solo dentro de la franja de su rol
+(Residual 1–5', Profundidad 5–15', Rotación 15–22', Titular 22–33', Go-to-guy 25–36' en 40'). Si no cabe, el reparto
+no se fuerza: el cuadro se pone en rojo y pide cambiar a mano el rol de algún jugador.</li></ul>"""
+    return ("Lectura en la herramienta", "Cada cifra se lee frente a su liga", cuerpo)
 
 
 # ================================================================================================== 12 reproducibilidad
@@ -590,5 +639,5 @@ data/modelos/simulador/v3_1) no cambia: la v3.2 y la v3.3 viven en sus propias c
 
 def todas(R: dict) -> list[tuple[str, str, str]]:
     return [resumen(R), datos_seccion(R), normalizacion_previa(R), metodo_v32(R), resultados_v32(R), vara_destino(R),
-            estilos(R), simulador(R), simulador_v32(R), simulador_v33(R), evaluaciones(R), limites(R),
+            estilos(R), simulador(R), simulador_v32(R), simulador_v33(R), lectura_herramienta(R), evaluaciones(R), limites(R),
             reproducibilidad(R)]

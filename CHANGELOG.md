@@ -213,6 +213,33 @@ v3.2, la v3.3, la v4.0 ni el pipeline de extracción; Fit y ADAPT sólo se inven
   temporada, con su propuesta.
 * **`docs/estado_modelos.md`**: una ficha por salida visible (v3.3, v4.0 y v4.1) con examen, fugas, estado y sello propuesto.
 * README §18, §19 y §21 actualizados.
+## 2026-11-09 — Skill «anadir-liga»
+
+* `.claude/skills/anadir-liga/`: procedimiento para incorporar una liga nueva a todo el sistema (decisiones fijadas de
+  antemano, fuente y adaptador, histórico 2020-21 → temporada en curso, listas de ligas del código, reajuste global de
+  los modelos, congelados del botón, verificación y publicación completa en Kerno). `cadena.sh` encadena el reajuste
+  (crosswalk → `scripts/rehacer_identidades.sh` → v4.0 → congelados del simulador), reanudable por pasos;
+  `decisiones/plantilla.md` es la ficha de cada liga. Basado en la ampliación a 20 ligas (31-10-2026) y en la
+  reconstrucción de identidades (03-11-2026). No se ha ejecutado aún con una liga real.
+
+## 2026-11-09 — Botón «Actualizar 2026-27» (skill y paquete `bbactualiza`)
+
+Detalle: `docs/actualizacion_2026-27.md` y `.claude/skills/actualizar-temporada/SKILL.md`.
+* Botón en la cabecera (bloque «Datos 2026-27») del artifact Kerno Analytics
+  (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, versión 22; página fuente `artifact/kerno.html`, capacidad `mcp`
+  con el conector «Claude Code Remote») → Routine «Actualizar 2026-27 · Kerno» → sesión de Claude Code que sigue la skill:
+  descarga delta de las 20 ligas, modelos congelados aplicados sólo a 2026-27 (normalización A + amortiguada + v3.2
+  incremental con la CVAE de la última recalibración, contexto, roles, entropía, estilos, simulador v3.3), datos a Git y
+  publicación incremental (un lote con sólo las rutas de la temporada en curso). Sin partidos nuevos no se recalcula nada.
+* El histórico no cambia: los ficheros con todas las temporadas se empalman (sólo las filas de 2026-27).
+* Recalibración mensual aparte (`python -m bbactualiza.recalibrar`): redes CVAE, modelo de equipo v4.0 y publicación.
+  Primera recalibración CVAE (9-11-2026, ≈ 2 h 33 min): los 227 jugadores nuevos de 2026-27 ya tienen valor CVAE.
+* Proceso desacoplado (`setsid nohup`) en la Routine y en la tarea mensual: una tarea de Bash en segundo plano se corta
+  a los 30 min por defecto (2 h como máximo).
+* Cambios en capas existentes: `bbfit/roles.py` (respaldo de caja vacío si no hay filas de las fases del partido),
+  `bbmodel/evaluacion_ligas.py` (parámetro `solo`, sin cambio por defecto).
+* Integrada la rama `claude/focused-dijkstra-mpqa3u` (artifact v3.3 publicado: vara «liga = 0», simulador con `az` y
+  `factor_ajustes_ts`), que no estaba en la rama de la v4.0.
 
 ## 2026-11-05 — CERNO v4.0 · ENCARGO CERRADO (puerta F5 aprobada por el CEO)
 
@@ -379,6 +406,121 @@ Encargo v4.0 (rev. 1.2); detalle en `docs/checkpoints/V40_F0.md` y `docs/modelo_
   con aviso, 4 excluidas (< 50 % de partidos con quintetos); 1.152.179 tramos válidos, ≈ 2,99 M de posesiones;
   mediana de 3-5 posesiones por quinteto.
 * `tests/test_equipo_v40.py` (9, sintéticos); diccionario de datos (tablas `v4_0/`); MLflow `equipo_v40`.
+
+## 2026-11-04 — Química e impacto frente a la liga de referencia
+
+Decisión del usuario (04-11-2026): «aplica también la liga de destino en la química y todo lo que reste».
+
+* Pareja media (`synRefP`) de la liga de referencia de cada vista (destino en Planificación e informe; liga del primer
+  jugador en la calculadora de Química de perfiles; la de Ajustes en Jugadores y Claves), con caché por liga.
+* Quinteto previsto e impacto de la rotación: RAPM-EL menos el RAPM medio por minutos de esa liga (`rapmMedio`), así
+  que 0 = quinteto/rotación media de esa liga; percentil frente a quintetos reales solo con la Euroliga.
+* Informe de fichaje: simulaciones y contexto de química calculados con la liga del destino; todos los textos de química
+  nombran esa liga. Claves: «Química de las plantillas de» la liga de Ajustes.
+* Artículo: párrafo «Química e impacto» en «Lectura en la herramienta»; PDF regenerado.
+
+## 2026-11-04 — PDF con «su liga = 0»: informe de fichaje y artículo científico
+
+Decisiones del usuario (04-11-2026): actualizar los dos PDF; percentiles del informe frente a la liga de destino.
+
+* **Informe de fichaje (PDF)**: percentiles y textos frente a los jugadores de su posición en la **liga del club de
+  destino** (sin destino, la suya), con sus cifras traducidas a esa liga (`enVara`) o, en su propia liga, su valor real.
+  `bbestilo/informe.py` exporta en `atlas/informe/<t>.json → ligas` 21 cuantiles por liga y posición (300+ minutos) y
+  el ritmo de cada liga, y los extremos del intervalo (3 cifras); ya no exporta percentiles frente a la Euroliga (los
+  calcula la página: `enLigaR` en `informe_v3.js`). Textos: «frente a los aleros de la Liga Endesa», «Qué produce por
+  cada 25 minutos en la Tercera FEB»… Siguen con la Euroliga, rotulados, la química (pareja/quinteto medio) y la tabla
+  que compara ligas. Grupos de menos de 15 jugadores de su posición: todas las posiciones; métricas sin normalizar
+  (PIE, STOP%…): frente a su propia liga.
+* **Artículo científico** (`docs/articulo/cerno_lectura_entre_ligas_v3_2.pdf`, 21 páginas): sección nueva «Lectura en
+  la herramienta» (su liga = 0 por vista, club medio, informe, recortes a 0, equipo a 200'); el resumen y la vara de
+  destino dejan de hablar de «EuroLeague = 0» salvo en el gráfico que compara ligas, rotulado así; límite nuevo sobre
+  los percentiles por liga.
+* `bbestilo/informe.py` lee también las tablas compactadas (formato por columnas). Prueba: `tests/js/informe_liga.js`.
+
+## 2026-11-04 — Equipos y quintetos con su propia liga = 0 y clubes frente al club medio
+
+Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.
+
+* **Clubes y plantillas: 0 = club medio de la liga de referencia** (antes, el jugador medio por minutos, que dejaba el
+  club medio en torno a +10). Atlas: `enClub`/`sNivCL` y `ESC` con `HV.refClub` (media del nivel de los clubes de esa
+  liga y temporada; percentil entre sus clubes) en tarjetas, mapa, comparador, simulador, equipo completo (nivel,
+  ranking, aporte, plantilla) e informe de fichaje. «EuroLeague (media)» marca ahora ±0 y Baskonia 2025-26 −5.
+* **Equipos y quintetos** (`artifact/quintetos/index.html`): su propia liga = 0. Jugadores, quintetos, tríos y parejas
+  frente al jugador medio de su liga; equipo y plantillas (Evaluación, historial, todos los equipos, entrenadores)
+  frente al club medio de su liga, con percentiles dentro de ella. Las cifras que comparan ligas entre sí («Nivel de su
+  liga», franja «Ligas», columna «Nivel liga», guía de escalas) siguen con la Euroliga = 0 y lo dicen.
+* Mesa: ayuda de «Liga = 0» con el alcance de cada pestaña.
+
+## 2026-11-04 — Referencia de nivel por contexto (liga del club elegido / liga propia) y recorte a 0 ampliado
+
+Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.
+
+* **Referencia de la escala ±100 por contexto** (`conVara`, `enPropia`, `refEnt` en `atlas/index.html`):
+  * **Planificación** (Simular fichajes, Simular equipo completo): 0 = la liga del club elegido. Pablo Gimeno a Surne
+    Bilbao: nivel −83 con ACB = 0 (antes −86 frente a la Euroliga); al Baskonia de Tercera FEB: +5 con Tercera FEB = 0.
+    El ranking y el desglose del equipo completo son frente a los clubes de esa liga.
+  * **Informe de fichaje (PDF)**: 0 = la liga del club de destino (sin destino, la del jugador).
+  * **Estilos** (Mapa y comparador, Química de perfiles): cada equipo y cada jugador frente a su propia liga
+    (tarjetas, tooltips del mapa, perfil de rasgos, química).
+  * **Jugadores** (Datos normalizados, Buscar parecidos) y Metodología: la «Liga = 0» de Ajustes, como antes.
+* **Recorte a 0** ampliado a tapones/100, rebotes ofensivos/100 y AST% (`RECORTE_CERO`), con la misma nota al pie, que
+  ahora nombra cada métrica recortada y mide el nivel frente a la liga de destino.
+
+## 2026-11-04 — Puntos/100 sin rangos negativos y «Simular equipo completo» siempre a 200'
+
+Decisiones del usuario (04-11-2026). Publicado en https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN.
+
+* **Puntos/100**: los extremos inferiores de sus intervalos (50/80/90 %) se recortan a 0 (`bbfit.simulador.recorte_cero`
+  y `recorteCero` en `atlas/simulador.js`, marca `recorte_cero`); el centro no cambia, así que error y cobertura del
+  examen tampoco. Asterisco y **nota al pie** en la tarjeta del simulador y en el informe de fichaje (`notaCero`): explica
+  que el rango llegaba a 0 por una producción esperada baja con un margen de error amplio, y nombra los factores de ese
+  fichaje: nivel frente a la media de la liga de destino, rol y minutos, adaptación de primera temporada, estilo (Fit) y
+  tipo de traspaso (Tercera FEB, NCAA, NBA/G League, los de más error en el examen). Sólo puntos/100, como se pidió.
+* **«Simular equipo completo» reparte siempre 200'** (`cuadrarRoles` en `atlas/simulador.js`; la simulación de un
+  fichaje no cambia): cada jugador se mueve sólo dentro de la franja de su rol, en la misma proporción para todos,
+  hasta sumar exactamente 200'. Si ni con el mínimo de cada franja se baja de 200' (sobran) o ni con el máximo se llega
+  (faltan), el cuadro se pone **en rojo** y pide **cambiar a mano el rol de algún jugador** (o añadir jugadores). Antes,
+  los minutos de los roles se recortaban en silencio al 90 % del partido.
+* Prueba nueva: `tests/js/equipo_200.js`.
+
+## 2026-11-04 — Atlas con liga = 0 elegible y zona de los estilos corregida · v3.3 publicada
+
+Detalle: `docs/checkpoints/ARTIFACT-v3.3.md` (§ Atlas con liga = 0). **Publicada en la URL de siempre**
+(https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN, versión 91, 265 ficheros), con todo lo de la entrada siguiente.
+
+* **Liga = 0 en toda la herramienta**: selector en Ajustes de la Mesa (`#ebVara`), sincronizado con los de «Datos
+  normalizados» y «Normalización de ligas» y enviado al Atlas (mensaje `{vara}` y `localStorage mm.vara`).
+* **Atlas** (decisión del usuario: nivel + rasgos + normalizados; selector compartido):
+  * escala ±100 de **nivel** (jugadores, clubes, plantillas, ligas) con 0 = media de L de la liga elegida en esa
+    temporada (`escalas.familias.nivel.ligas`), percentiles y ranking frente a sus jugadores y clubes;
+  * **RAPM-EL**: 0 = media por minutos de los jugadores de esa liga; el valor original sigue en la vara Euroliga;
+  * **rasgos** y desglose por métricas frente al club medio de esa liga;
+  * **métricas normalizadas** mostradas (contexto, informe de fichaje) convertidas con `vara.json` (misma fórmula que
+    la Mesa); los cálculos internos (mapa, estilo, química, proyección) no cambian;
+  * Net, on/off, sinergias y quintetos siguen como estaban (su 0 ya es la media de cada liga).
+  Con la Euroliga elegida, las cifras son exactamente las publicadas.
+* **Mapa 3D · «Zona que ocupa cada estilo»**: la descomposición de Cholesky partía de una matriz con valores de prueba
+  en el triángulo superior (`[[18, 22, 27], …]`), así que cada elipsoide se estiraba decenas de unidades y aplastaba el
+  mapa. Ahora parte de ceros: elipsoides de 1 desviación típica alrededor del centro de cada estilo.
+* Mesa: la carga de la vara ya no cambia `st.vara` mientras lee los equivalentes EL (la pestaña «Normalización de
+  ligas» podía pintarse con la Euroliga durante la carga).
+* Pruebas: `tests/js/atlas_vara.js` (nueva) y `tests/js/mesa_vara.js`, `atlas_simulador.js`, `paridad_simulador.js`.
+
+## 2026-11-04 — Artifact v3.3 (copia de revisión): datos nuevos, vara «liga = 0» y simulador v3.3 en el navegador
+
+Detalle: `docs/checkpoints/ARTIFACT-v3.3.md`. Revisada primero en una copia (https://claude.ai/artifact/Kp7nAKMxXcy2oUSnPhhT6a)
+y publicada después en la URL de siempre (entrada anterior).
+
+* Datos de todas las pestañas con identidades corregidas, nombres «Nombre Apellido(s)» y normalización v3.2.
+* Mesa: selector de vara (cualquier liga = 0) en «Datos normalizados» y en «Normalización de ligas»
+  (`datos/normalizados/vara.json`, `bbnorm3.destino.vara_artifact`; conversión JS = referencia Python `desde_el`).
+* Atlas: motor `atlas/simulador.js` v3.3 (minutos mezcla motor + GBM, B9 con rol asignado), con paridad 12/12 con
+  Python. Sustituye a `atlas/simulador_v2.js`, que se retira del repositorio y de la publicación junto a su prueba
+  (`artifact/herramientas/test_paridad_simulador.js`).
+* `artifact/empaquetar.py` con origen de datos configurable; paso 8 de `scripts/rehacer_identidades.sh` (quintetos,
+  escalas, equipos, estilos, compactación, paridad y lotes).
+* Pruebas: `tests/js/paridad_simulador.js` (v3.3), `tests/js/atlas_simulador.js` (al día con la interfaz actual) y
+  `tests/js/mesa_vara.js` (nueva).
 
 ## 2026-11-04 — Identidades corregidas, nombres canónicos y simulador v3.3
 

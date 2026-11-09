@@ -13,7 +13,7 @@ meta=json.load(open(f'{ORIG}/atlas/estilos/meta.json'))
 byc={}
 for f in d['filas']: byc.setdefault(f[I['clave']],[]).append(f)
 mapa={}; n=0
-for p in sorted(glob.glob(f'{ORIG}/quintetos/datos/20*/*.gz.txt')):
+for p in sorted(x for x in glob.glob(f'{ORIG}/quintetos/datos/20*/*.gz.txt') if '.extras.' not in x):  # extras: informe de equipo
     t,l=p.split('/')[-2],os.path.basename(p).split('.')[0]
     q=dec(p); J={x:i for i,x in enumerate(q['jugadores']['c'])}
     for r in q['jugadores']['f']:

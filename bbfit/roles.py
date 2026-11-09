@@ -578,6 +578,8 @@ def respaldo_caja(liga: str, temp: str, cfg: dict, pos3: pd.DataFrame, cobertura
     if lg.empty:
         return pd.DataFrame()
     lg = lg[lg["fase"].isin(cfg["partido"]["fases"])].copy()
+    if lg.empty:        # sin filas de esas fases (p. ej. G League en noviembre: sólo «total», torneo de inicio)
+        return pd.DataFrame()
     for c in ("min", "gp", "gs", "pie", "per", "usg_pct", "ast_pct", "pfd", "pts", "fga", "fta"):
         lg[c] = pd.to_numeric(lg.get(c), errors="coerce")
     g = lg.groupby(["team_id", "player_id"])

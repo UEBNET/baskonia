@@ -297,3 +297,81 @@ def pares_cvae(tabla: pd.DataFrame, cfg: dict, mets: list[str], progreso=print) 
     if progreso:
         progreso(f"  DT por par de niveles de la CVAE: {len(out)} métricas × {nC} competiciones", flush=True)
     return out
+
+
+# ================================================================================================== artifact · vara
+Z80 = 1.2815515655446004
+
+
+def vara_artifact(dir_dest: Path | None = None, temp: str = "2025-26") -> dict:
+    """Constantes para que el artifact exprese los equivalentes EuroLeague de «Datos Normalizados» en la vara de
+    cualquier liga (liga elegida = 0). Por métrica: transformación, s y δ de cada liga en `temp` (EuroLeague: s = 1,
+    δ = 0), μ por liga|posición en `temp`, τ por liga|posición, soporte y la DT del nivel de cada par
+    (nodo de origen liga:temporada → liga de destino en `temp`, mezcla con la cota de Cauchy-Schwarz). Ver desde_el()."""
+    from bbfit.sim_insumos import entorno
+    dd = dir_dest or (C.RAIZ / "data" / "modelos" / "v3_2" / "destino")
+    const = json.loads((dd / "constantes.json").read_text(encoding="utf-8"))
+    ligas = sorted({lg for k in const["metricas"].values() for lg in k["s"]})
+    out = {"temporada": temp, "z80": Z80, "ligas": ligas, "metricas": {}}
+    for m, k in const["metricas"].items():
+        f = dd / "covarianza" / f"{m}.json"
+        sp = {}
+        if f.exists():
+            cv = json.loads(f.read_text(encoding="utf-8"))
+            nod = cv["nodos"]
+            n = len(nod)
+            T = np.zeros((n, n))
+            T[np.triu_indices(n)] = cv.get("sd_par_triangular") or cv["cov_triangular"]
+            T = T + T.T - np.diag(np.diag(T))
+            ix = {x: i for i, x in enumerate(nod)}
+            for o in nod:
+                sp[o] = [_sig(T[ix[o], ix[f"{d}:{temp}"]], 4) if f"{d}:{temp}" in ix else None for d in ligas]
+        mu, tau = {}, {}
+        for lg in ligas:
+            for p in "EAI":
+                a, b = entorno({"mu": k["mu"], "tau2": k["tau2"]}, lg, temp, p)
+                mu[f"{lg}|{p}"], tau[f"{lg}|{p}"] = _sig(a, 6), _sig(b, 6)
+        out["metricas"][m] = {
+            "transf": k["transf"], "sentido": k.get("sentido"),
+            "s": {lg: _sig(1.0 if lg == "euroleague" else k["s"].get(lg, np.nan), 6) for lg in ligas},
+            "delta": {lg: (0.0 if lg == "euroleague" else _sig((k["nodos"].get(f"{lg}:{temp}") or [np.nan])[0], 6))
+                      for lg in ligas},
+            "mu": mu, "tau": tau, "soporte": k.get("soporte", {}), "sp": sp}
+    return out
+
+
+def desde_el(v, lo, hi, m: str, liga_o: str, temp_o: str, pos: str, liga_d: str, vd: dict) -> dict:
+    """Referencia (Python) de la conversión que hace el artifact: equivalente EuroLeague (con su intervalo del 80 %)
+    → misma capacidad en la vara de `liga_d`. z_EL = (T(v) − μ_EL)/τ_EL = θ + deriva; z_d = (z_EL − δ_d)/s_d.
+    Cada cola del intervalo: v_j = sd_EL² − sd_par(o, EL)² (como mínimo el 10 % de sd_EL²), sd_d² = (v_j + sd_par(o, d)²)/s_d²
+    (+ la distancia fuera del soporte de la liga de destino al cuadrado). Con liga_d = euroleague devuelve v, lo, hi."""
+    from bbmodel.metricas import destransformar, transformar
+    k = vd["metricas"][m]
+    p = pos if pos in ("E", "A", "I") else "A"
+    tf = k["transf"]
+    mu_e, tau_e = k["mu"][f"euroleague|{p}"], k["tau"][f"euroleague|{p}"]
+    mu_d, tau_d = k["mu"][f"{liga_d}|{p}"], k["tau"][f"{liga_d}|{p}"]
+    s_d, d_d = k["s"][liga_d], k["delta"][liga_d]
+    z = lambda x: (float(transformar(x, tf)) - mu_e) / tau_e  # noqa: E731
+    ze = z(v)
+    zd = (ze - d_d) / s_d
+    nodo = f"{liga_o}:{temp_o}"
+    if nodo not in k["sp"]:                                   # temporada sin nodo (2026-27): la última de su liga
+        cand = sorted(x for x in k["sp"] if x.startswith(f"{liga_o}:"))
+        nodo = cand[-1] if cand else None
+    ligas = vd["ligas"]
+    sp = k["sp"].get(nodo) if nodo else None
+    sp_e = (sp[ligas.index("euroleague")] if sp else None) or 0.0
+    sp_d = (sp[ligas.index(liga_d)] if sp else None) or 0.0
+    lo_s, hi_s = k["soporte"].get(liga_d, [-np.inf, np.inf])
+    ext = zd - float(np.clip(zd, lo_s, hi_s))
+    out = {"valor": float(destransformar(mu_d + tau_d * zd, tf)), "z": zd, "extrapolacion": bool(ext != 0)}
+    for lado, x, sg in (("lo", lo, -1), ("hi", hi, 1)):
+        if x is None or not np.isfinite(x):
+            out[lado] = None
+            continue
+        sd_e = abs(ze - z(x)) / vd["z80"]
+        vj = max(sd_e ** 2 - sp_e ** 2, 0.1 * sd_e ** 2)
+        sd_d = np.sqrt((vj + sp_d ** 2) / s_d ** 2 + ext ** 2)
+        out[lado] = float(destransformar(mu_d + tau_d * (zd + sg * vd["z80"] * sd_d), tf))
+    return out

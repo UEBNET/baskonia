@@ -785,7 +785,8 @@ body { background: var(--bg); }
       <div class="eb-ctrls cx-set">
         <button type="button" class="cx-set-btn" id="cxSetBtn" aria-expanded="false" aria-controls="cxSetPop"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.5h7M12 4.5h2M2 11.5h2M7 11.5h7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="10.5" cy="4.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="5.5" cy="11.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg><span>Ajustes</span></button>
         <div class="cx-set-pop" id="cxSetPop" role="dialog" aria-label="Ajustes">
-          <div class="cx-set-row"><div class="eb-ctl" data-tip="Escala ±100: 0 = media de la Euroliga; ±46 = una desviación típica. «Originales» muestra cada cifra en su unidad (pts/100, índice L…). Afecta a Equipos, Estilos y Planificación."><span class="label">Cifras</span><div class="eb-seg" id="ebEsc" role="group" aria-label="Cifras"><button type="button" data-v="escala">Escala ±100</button><button type="button" data-v="original">Originales</button></div></div></div>
+          <div class="cx-set-row"><div class="eb-ctl" data-tip="Escala ±100: 0 = media de la liga de referencia (nivel e impacto individual): la del club elegido en Planificación e informes, la propia en Estilos y la de «Liga = 0» en Jugadores; ±46 = una desviación típica. «Originales» muestra cada cifra en su unidad (pts/100, índice L…). Afecta a Equipos, Estilos y Planificación."><span class="label">Cifras</span><div class="eb-seg" id="ebEsc" role="group" aria-label="Cifras"><button type="button" data-v="escala">Escala ±100</button><button type="button" data-v="original">Originales</button></div></div></div>
+          <div class="cx-set-row"><div class="eb-ctl" data-tip="Liga de referencia (= 0) de «Jugadores» (Datos normalizados, Buscar parecidos) y de Metodología. Por defecto, la Euroliga. En Planificación y en el informe de fichaje el 0 es siempre la liga del club elegido; en Estilos y en Equipos y quintetos, cada equipo y cada jugador se mide frente a su propia liga (jugadores: jugador medio; clubes y plantillas: club medio)."><span class="label">Liga = 0</span><select id="ebVara" aria-label="Liga de referencia (= 0)"><option value="euroleague">EuroLeague</option></select></div></div>
           <div class="cx-set-row"><span class="label">Ayudas</span><button class="eb-switch" type="button" id="ebAyuda" aria-pressed="true" data-tip="Abre o pliega las ayudas «¿Cómo se lee?» junto a los gráficos y tablas."><i></i>Ayudas de lectura</button></div>
           <div class="cx-set-row"><span class="label">Modo de color</span><div class="theme-sw" role="group" aria-label="Modo de color">
       <button type="button" data-theme-set="light" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Día</button>
@@ -799,6 +800,7 @@ body { background: var(--bg); }
       <button class="pagetab" role="tab" type="button" id="tab-normalizados" data-page="normalizados" aria-selected="false">Datos Normalizados</button>
       <button class="pagetab" role="tab" type="button" id="tab-quintetos" data-page="quintetos" aria-selected="false">Equipos y quintetos</button>
       <button class="pagetab" role="tab" type="button" id="tab-atlas" data-page="atlas" aria-selected="false">Atlas de Estilos</button>
+      <button class="pagetab" role="tab" type="button" id="tab-v40" data-page="v40" aria-selected="false">Modelo de equipo v4.0</button>
       <span class="ro-sep" aria-hidden="true"></span><span class="ro-tag">Solo lectura</span>
       <button class="pagetab ro" role="tab" type="button" id="tab-evaluacion" data-page="evaluacion" aria-selected="false">Evaluación de ligas</button>
       <button class="pagetab ro" role="tab" type="button" id="tab-normalizacion" data-page="normalizacion" aria-selected="false">Normalización de ligas</button>
@@ -823,7 +825,8 @@ body { background: var(--bg); }
   <div id="pageTabla" class="page eb-split">
     <aside class="eb-rail" id="datosRail" aria-label="Filtros de datos">
       <div class="eb-ctxslot" id="datosCtx"></div>
-      <div class="cmd-group"><span class="label">Valores</span><div class="eb-seg wide" id="srcSeg" role="group" aria-label="Valores"><button type="button" data-src="tabla">Brutos</button><button type="button" data-src="normalizados">Normalizados EL</button></div></div>
+      <div class="cmd-group"><span class="label">Valores</span><div class="eb-seg wide" id="srcSeg" role="group" aria-label="Valores"><button type="button" data-src="tabla">Brutos</button><button type="button" data-src="normalizados">Normalizados</button></div></div>
+      <div class="cmd-group" id="varaGrp" hidden><span class="label">Vara (esta liga = 0)</span><select id="varaSel" aria-label="Liga de la vara: los normalizados se expresan en esta liga"><option value="euroleague">EuroLeague</option></select></div>
       <section class="fpanel" aria-label="Filtros">
       <div class="f-row filters">
         <div class="cmd-group" style="min-width:0">
@@ -1008,6 +1011,18 @@ body { background: var(--bg); }
     <iframe id="atlasFrame" title="Atlas de Estilos" class="atlas-frame" loading="lazy"></iframe>
   </div>
 
+  <!-- Modelo de equipo v4.0 (encargo v4.0, cerrado el 5 de noviembre de 2026): página propia publicada en v40/ -->
+  <div id="pageV40" class="page" hidden>
+    <div class="sec-head">
+      <div>
+        <span class="kicker">Modelo de equipo v4.0</span>
+        <h2 class="sec-title">Nivel Cerno, Impacto y proyección de equipos</h2>
+        <p class="sec-lead">Dos notas de 0 a 100 por fichaje con su rango del 80 % y la proyección del Net de cada plantilla 2026-27, con los exámenes prerregistrados de las cinco capas del modelo (encargo v4.0, cerrado el 5 de noviembre de 2026).</p>
+      </div>
+    </div>
+    <iframe id="v40Frame" title="Modelo de equipo v4.0" class="atlas-frame" loading="lazy"></iframe>
+  </div>
+
   <div id="pageClaves" class="page" hidden>
     <div class="sec-head">
       <div>
@@ -1037,8 +1052,9 @@ body { background: var(--bg); }
 
     <section class="subpage" data-subpage="nl:resumen" aria-label="Resumen">
       <section class="dcard" aria-labelledby="nlRankT">
-        <div class="nl-head"><h2 id="nlRankT">Parecido con la EuroLeague</h2><span class="nl-hint2">Barra más corta = más parecida · pulsa una liga para abrir su ficha</span></div>
-        <p class="take">El parecido mide las <span id="nlNMet">33</span> métricas a la vez: la distancia media (en desviaciones típicas de la EuroLeague) entre el jugador medio de cada liga y el de la EuroLeague, con la estimación combinada de A y B.</p>
+        <div class="nl-head"><h2 id="nlRankT">Parecido con la EuroLeague</h2><span class="nl-hint2">Barra más corta = más parecida · pulsa una liga para abrir su ficha</span>
+          <label class="nl-hint2">Vara (esta liga = 0) <select id="nlVara" aria-label="Liga de referencia: su nivel es 0"></select></label></div>
+        <p class="take">El parecido mide las <span id="nlNMet">33</span> métricas a la vez: la distancia media (en desviaciones típicas de la EuroLeague) entre el jugador medio de cada liga y el de la <span id="nlRefNom">EuroLeague</span> (la vara), con la estimación combinada de A y B.</p>
         <div class="nl-rank" id="nlRank" role="list"><div class="empty">Cargando…</div></div>
         <details class="more"><summary>Cómo leer el ranking</summary><p class="note" id="nlRankNote"></p></details>
       </section>
@@ -1183,10 +1199,56 @@ function colDesc(c) {
   const m = c.replace(/_(pctel|obs|ctx)$/, "");
   if (!NORM_M.includes(m)) return st.dict[c] || (c === "fuente_norm" ? "Algoritmos usados: A+B, o sólo A cuando B no traduce al jugador" : c);
   const d = descOf(m) ? ` — ${descOf(m)}` : "";
-  if (c.endsWith("_pctel")) return `Percentil entre los jugadores de la EuroLeague de su posición (A+B)${d}`;
+  if (c.endsWith("_pctel")) return st.vara !== "euroleague" ? `Percentil aproximado en la vara de ${varaNombre()} (Φ(z) frente al jugador medio de su posición en esa liga, 2025-26)${d}` : `Percentil entre los jugadores de la EuroLeague de su posición (A+B)${d}`;
   if (c.endsWith("_obs")) return `Valor observado en su liga${d}`;
   if (c.endsWith("_ctx")) return `Valor neutro de contexto: lo que marcaría con compañeros de nivel medio (equivalente EuroLeague sin el efecto de su plantilla)${d}`;
-  return `Equivalente EuroLeague 2025-26 (A+B; sólo A donde B no traduce)${d}`;
+  return `Equivalente ${varaNombre()} 2025-26 (A+B; sólo A donde B no traduce)${d}`;
+}
+// ---------------------------------------------------------------- vara de destino (v3.2): cualquier liga = 0
+// datos/normalizados/vara.json (bbnorm3.destino.vara_artifact): los equivalentes EuroLeague se expresan con la misma
+// capacidad en la vara de la liga elegida. z_EL = (T(v) − μ_EL)/τ_EL; z_d = (z_EL − δ_d)/s_d; valor = T⁻¹(μ_d + τ_d·z_d).
+// Intervalo del 80 %, cada cola: v_j = sd_EL² − sd_par(o,EL)² (≥ 10 % de sd_EL²), sd_d² = (v_j + sd_par(o,d)²)/s_d²
+// + extrapolación² fuera del soporte de la liga. Con la EuroLeague, los valores publicados tal cual.
+const VARA_NOMBRES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa (ACB)", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "BCL", fec: "FIBA Europe Cup", bsl: "BSL", gbl: "GBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", cba: "CBA", bnxt: "BNXT", ncaa: "NCAA (top-50)", nbl: "NBL", vtb: "VTB" };
+const varaNombre = () => VARA_NOMBRES[st.vara] || st.vara || "EuroLeague";
+let VARA = null;
+async function cargarVara() { if (!VARA) VARA = await getJSON("datos/normalizados/vara.json").catch(() => null); return VARA; }
+const TRv = (x, t) => { if (typeof x !== "number" || !isFinite(x)) return NaN; if (t === "raiz") return Math.sqrt(Math.max(0, x)); if (t === "log1") return Math.log1p(Math.max(0, x)); if (t === "proporcion") return Math.asin(Math.sqrt(Math.min(100, Math.max(0, x)) / 100)); return x; };
+const TRvInv = (y, t) => { if (!isFinite(y)) return NaN; if (t === "raiz") return Math.max(0, y) ** 2; if (t === "log1") return Math.expm1(Math.max(0, y)); if (t === "proporcion") return 100 * Math.sin(Math.min(Math.PI / 2, Math.max(0, y))) ** 2; return y; };
+function Phi(z) { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989422804014327 * Math.exp(-z * z / 2), p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429)))); return z > 0 ? 1 - p : p; }
+function convertirVara(idx, rows, vd, ld) {
+  const ligas = vd.ligas, iE = ligas.indexOf("euroleague"), iD = ligas.indexOf(ld), Z = vd.z80;
+  const out = rows.map((r) => r.slice());
+  NORM_M.forEach((m) => {
+    const k = vd.metricas[m], ic = idx[m];
+    if (ic == null) return;
+    const cols = ["_lo", "_hi", "_pctel", "_A", "_B", "_ctx"].map((s) => idx[m + s]);
+    if (!k) { out.forEach((r) => { r[ic] = null; cols.forEach((c) => { if (c != null) r[c] = null; }); }); return; }
+    const tf = k.transf, sd_ = k.s[ld], dd = k.delta[ld], [sl, sh] = k.soporte[ld] || [-Infinity, Infinity];
+    out.forEach((r) => {
+      const p = ["E", "A", "I"].includes(r[idx.pos3]) ? r[idx.pos3] : "A";
+      const muE = k.mu["euroleague|" + p], tauE = k.tau["euroleague|" + p], muD = k.mu[ld + "|" + p], tauD = k.tau[ld + "|" + p];
+      const zEL = (x) => (TRv(x, tf) - muE) / tauE, aD = (z) => TRvInv(muD + tauD * z, tf);
+      const conv = (x) => (typeof x === "number" && isFinite(x) ? aD((zEL(x) - dd) / sd_) : null);
+      const v = r[ic];
+      if (typeof v !== "number" || !isFinite(v)) { cols.forEach((c) => { if (c != null && c !== idx[m + "_obs"]) r[c] = null; }); return; }
+      const ze = zEL(v), zd = (ze - dd) / sd_, ext = zd - Math.min(sh, Math.max(sl, zd));
+      let nodo = r[idx.liga] + ":" + r[idx.temporada];
+      if (!k.sp[nodo]) { const c = Object.keys(k.sp).filter((x) => x.startsWith(r[idx.liga] + ":")).sort(); nodo = c.length ? c[c.length - 1] : null; }
+      const sp = nodo ? k.sp[nodo] : null, spE = (sp && sp[iE]) || 0, spD = (sp && sp[iD]) || 0;
+      r[ic] = aD(zd);
+      [["_lo", -1], ["_hi", 1]].forEach(([s, sg]) => {
+        const c = idx[m + s]; if (c == null) return; const x = r[c];
+        if (typeof x !== "number" || !isFinite(x)) { r[c] = null; return; }
+        const sdE = Math.abs(ze - zEL(x)) / Z, vj = Math.max(sdE * sdE - spE * spE, 0.1 * sdE * sdE);
+        r[c] = aD(zd + sg * Z * Math.sqrt((vj + spD * spD) / (sd_ * sd_) + ext * ext));
+      });
+      if (idx[m + "_pctel"] != null) r[idx[m + "_pctel"]] = 100 * Phi(k.sentido === "-1" || k.sentido === -1 ? -zd : zd);
+      ["_A", "_B", "_ctx"].forEach((s) => { const c = idx[m + s]; if (c != null) r[c] = conv(r[c]); });
+      if (ext) { if (idx.vara_extrapolacion == null) idx.vara_extrapolacion = Object.keys(idx).length; r[idx.vara_extrapolacion] = 1; }
+    });
+  });
+  return out;
 }
 const PAGE = 50;
 const POS = ["Base", "Escolta", "Alero", "Alapívot", "Pívot"];
@@ -1221,6 +1283,34 @@ const st = { src: "raw", indexN: {}, nac: "", ready: false, season: SEASONS[0], 
              sort: { col: "pts_pg", dir: -1 }, page: 0, sel: null, index: {}, dict: {}, cache: {}, mf: [], leaguesTouched: false,
              pos: new Set([1, 2, 3, 4, 5]), posEst: true, age: { lo: null, hi: null } };
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+st.vara = store.get("mm.vara") || "euroleague";          // vara de «Datos Normalizados» (liga = 0)
+function etiquetasVara() {
+  const ab = st.vara === "euroleague" ? "EL" : st.vara.toUpperCase();
+  NORM_M.forEach((m) => { LABELS[m + "_pctel"] = (LABELS[m] || m) + " p." + ab; });
+  const b = document.querySelector('#srcSeg [data-src="normalizados"]'); if (b) b.textContent = "Normalizados " + ab;
+  const n = document.getElementById("normNote");
+  if (n && !n.dataset.base) n.dataset.base = n.innerHTML;
+  if (n) n.innerHTML = st.vara === "euroleague" ? n.dataset.base : `<b>Datos normalizados en la vara de ${varaNombre()} (= 0).</b> Cada valor es la misma capacidad del jugador expresada como equivalente ${varaNombre()} 2025-26: se parte del equivalente EuroLeague (A+B) y se traduce con el nivel y la escala de esa liga; el intervalo del 80 % suma la incertidumbre del nivel del par de ligas (su liga → ${varaNombre()}). «p.» = percentil aproximado frente al jugador medio de su posición en esa liga; «liga» = valor original en su competición. Elige «EuroLeague» para volver a los valores publicados.`;
+}
+// vara única de toda la herramienta: Ajustes (#ebVara), «Datos normalizados» (#varaSel) y «Normalización de ligas»
+// (#nlVara) muestran la misma; se guarda en «mm.vara» y se envía a los marcos (Atlas, Claves, Quintetos)
+function setVaraGlobal(v) {
+  if (!VARA_NOMBRES[v]) v = "euroleague";
+  const cambia = v !== st.vara; st.vara = v; store.set("mm.vara", v); etiquetasVara();
+  ["ebVara", "varaSel", "nlVara"].forEach((id) => { const e = document.getElementById(id); if (e && e.value !== v && [...e.options].some((o) => o.value === v)) e.value = v; });
+  ["atlasFrame", "clavesFrame", "quintetosFrame"].forEach((id) => { const f = document.getElementById(id); if (f && f.src) try { f.contentWindow.postMessage({ vara: v }, "*"); } catch (e) { /* */ } });
+  if (!cambia) return;
+  current = null; st.page = 0; if (st.ready && st.src === "norm") refresh();
+  if (typeof nlSt !== "undefined" && nlSt.R) { nlPrepare(); renderNorm(); }
+}
+function iniciarVara() {
+  const s = document.getElementById("varaSel"); if (!s || s.dataset.ok) return; s.dataset.ok = "1";
+  const ops = Object.entries(VARA_NOMBRES).map(([k, n]) => `<option value="${k}">${n}</option>`).join("");
+  s.innerHTML = ops; const g = document.getElementById("ebVara"); if (g) g.innerHTML = ops;
+  s.value = VARA_NOMBRES[st.vara] ? st.vara : "euroleague"; st.vara = s.value; if (g) g.value = st.vara; etiquetasVara();
+  s.addEventListener("change", () => setVaraGlobal(s.value));
+  if (g) g.addEventListener("change", () => setVaraGlobal(g.value));
+}
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -1267,6 +1357,7 @@ function setSource(src) {
   Object.assign(st, { view: s.view, sort: s.sort, phase: s.phase, mf: s.mf, page: 0, sel: null });
   current = null; renderPanel(null);
   $("normNote").hidden = src !== "norm";
+  $("varaGrp").hidden = src !== "norm"; iniciarVara();
   if (st.ready) refresh();
 }
 // Nacionalidad de la «Tabla de datos»: datos/<temporada>/nacionalidades.json (python -m bbmodel dataset-normalizado),
@@ -1281,8 +1372,15 @@ function addNationality(idx, rows, nac) {
     else if (r[idx.nacionalidad] != null && r[idx.nacionalidad] !== "" && r[idx.nacionalidad_fuente] == null) r[idx.nacionalidad_fuente] = "propia";
   }
 }
-async function loadPhase(season, phase) {
-  const src = st.src, key = src + "/" + season + "/" + phase;
+// vara: la de la llamada (por defecto la elegida); la de otra liga se calcula sobre los equivalentes EL (vara = euroleague),
+// sin tocar st.vara mientras carga (otras vistas, como Normalización de ligas, la leen a la vez)
+async function loadPhase(season, phase, vara = st.vara) {
+  const src = st.src, key = src + "/" + season + "/" + phase + (src === "norm" && vara !== "euroleague" ? "/" + vara : "");
+  if (src === "norm" && vara !== "euroleague" && !st.cache[key]) {          // vara de otra liga: sobre los equivalentes EL
+    const ld = vara;
+    st.cache[key] = Promise.all([loadPhase(season, phase, "euroleague"), cargarVara()])
+      .then(([base, vd]) => { if (!(vd && vd.ligas.includes(ld))) return base; const idx2 = { ...base.idx }; return { idx: idx2, rows: convertirVara(idx2, base.rows, vd, ld) }; });
+  }
   if (!st.cache[key]) {
     const url = src === "norm" ? `datos/normalizados/${season}/regular.json` : `datos/${season}/${phase}.json`;
     st.cache[key] = Promise.all([getJSON(url), src === "norm" ? null : getJSON(`datos/${season}/nacionalidades.json`).catch(() => null)]).then(([doc, nac]) => {
@@ -1803,7 +1901,7 @@ function panelNorm(g, R) {
     return `<tr><td title="${esc(descOf(m) || m)}">${esc(LABELS[m] || m)}</td><td>${fmt(m, g(m + "_obs"))}</td><td class="el">${fmt(m, g(m))}</td><td>${g(m + "_lo") == null ? "–" : fmt(m, g(m + "_lo")) + sep + fmt(m, g(m + "_hi"))}</td><td>${p == null ? "–" : Math.round(p)}</td><td>${fmt(m, g(m + "_A"))}</td><td>${fmt(m, g(m + "_B"))}</td></tr>`;
   }).join(""); }).join("");
   const pista = NORM_PISTA.some((m) => g(m) != null) ? "" : `<div class="note">Sin datos jugada a jugada para esta liga y temporada (BBL 2020-23 y LNB 2020-21 no tienen quintetos): la fila «Pista» no se traduce.</div>`;
-  return head + kv + ctxBlock(g, R) + `<div class="nrm-table"><table><thead><tr><th>Métrica</th><th title="Valor observado en su liga">Su liga</th><th title="Equivalente EuroLeague A+B">EL</th><th title="Intervalo del 80 %">Interv. 80 %</th><th title="Percentil entre los jugadores de EuroLeague de su posición">p.EL</th><th>A</th><th>B</th></tr></thead><tbody>${filas}</tbody></table></div>
+  return head + kv + ctxBlock(g, R) + `<div class="nrm-table"><table><thead><tr><th>Métrica</th><th title="Valor observado en su liga">Su liga</th><th title="Equivalente ${varaNombre()} A+B">${st.vara === "euroleague" ? "EL" : st.vara.toUpperCase()}</th><th title="Intervalo del 80 %">Interv. 80 %</th><th title="${st.vara === "euroleague" ? "Percentil entre los jugadores de EuroLeague de su posición" : "Percentil aproximado en la vara de " + varaNombre()}">p.${st.vara === "euroleague" ? "EL" : st.vara.toUpperCase()}</th><th>A</th><th>B</th></tr></thead><tbody>${filas}</tbody></table></div>
     <div class="note">Algoritmos: ${esc(g("fuente_norm") || "–")}${g("fuente_norm") === "A" ? " (B no traduce a este jugador: menos de 150 minutos o temporada en curso)" : ""}. EL = equivalente EuroLeague 2025-26; A y B son los dos algoritmos del estudio de normalización.</div>${pista}
     ${qButton({ tab: "jugadores", t: g("temporada"), l: g("liga"), f: "regular", e: g("team_id"), j: g("player_id") })}
     <button class="btn ghost" type="button" id="closePanel">Cerrar ficha</button>`;
@@ -2100,11 +2198,13 @@ function cmpSuggest() {
 }
 function showPage(pg) {
   // la pestaña Comparador se retiró de la navegación; su vista queda oculta
-  st.pageTab = ["evaluacion", "normalizacion", "atlas", "normalizados", "claves", "quintetos"].includes(pg) ? pg : "tabla";
+  st.pageTab = ["evaluacion", "normalizacion", "atlas", "normalizados", "claves", "quintetos", "v40"].includes(pg) ? pg : "tabla";
   $("pageTabla").hidden = st.pageTab !== "tabla" && st.pageTab !== "normalizados";
   $("tab-normalizados").setAttribute("aria-selected", st.pageTab === "normalizados");
   if (st.pageTab === "tabla" || st.pageTab === "normalizados") setSource(st.pageTab === "normalizados" ? "norm" : "raw"); $("pageCmp").hidden = true; $("pageAtlas").hidden = st.pageTab !== "atlas"; $("tab-atlas").setAttribute("aria-selected", st.pageTab === "atlas");
   if (st.pageTab === "atlas" && !$("atlasFrame").src) $("atlasFrame").src = "atlas/index.html";
+  $("pageV40").hidden = st.pageTab !== "v40"; $("tab-v40").setAttribute("aria-selected", st.pageTab === "v40");
+  if (st.pageTab === "v40" && !$("v40Frame").src) $("v40Frame").src = "v40/index.html?embed=1#" + (st.v40Sub || "resumen");
   $("pageQuintetos").hidden = st.pageTab !== "quintetos"; $("tab-quintetos").setAttribute("aria-selected", st.pageTab === "quintetos");
   if (st.pageTab === "quintetos" && !$("quintetosFrame").src) $("quintetosFrame").src = "quintetos/index.html" + (st.quintetosHash ? "#" + st.quintetosHash : "");
   $("pageClaves").hidden = st.pageTab !== "claves"; $("tab-claves").setAttribute("aria-selected", st.pageTab === "claves");
@@ -2702,11 +2802,19 @@ function nlTone(v, sentido) { // color de una desviación frente a la EuroLeague
   return nlMix(sentido === 0 ? NL_NEU : v * sentido > 0 ? NL_GOOD : NL_BAD, k);
 }
 const nlToneVar = (v, s) => (v == null || Math.abs(v) < 0.005 ? "var(--muted)" : s === 0 ? "var(--neutral)" : v * s > 0 ? "var(--good)" : "var(--bad)");
-function nlLevel(c, l) {
+function nlLevelEL(c, l) {
   const R = nlSt.R, a = (R.A.nivel[c] || {})[l], b = (R.B.nivel[c] || {})[l];
-  const A = a && a[0] != null ? a[0] : null, B = b && b[0] != null ? b[0] : null;
+  const A = l === "euroleague" ? 0 : a && a[0] != null ? a[0] : null, B = l === "euroleague" ? 0 : b && b[0] != null ? b[0] : null;
   const AB = A != null && B != null ? (A + B) / 2 : A ?? B;
   return { A, ase: a ? a[1] || 0 : 0, B, bse: b ? b[1] || 0 : 0, AB };
+}
+// vara (v3.2): niveles respecto a la liga elegida (= 0); con la EuroLeague, los publicados
+const nlVaraOk = () => st.vara && st.vara !== "euroleague" && nlSt.R && nlSt.R.ligas.includes(st.vara);
+function nlLevel(c, l) {
+  const v = nlLevelEL(c, l);
+  if (!nlVaraOk()) return v;
+  const r = nlLevelEL(c, st.vara), dif = (x, y) => (x != null && y != null ? x - y : null);
+  return { A: dif(v.A, r.A), ase: v.ase, B: dif(v.B, r.B), bse: v.bse, AB: dif(v.AB, r.AB) };
 }
 
 // ---------------------------------------------------------------- índices por competición
@@ -2729,7 +2837,8 @@ function nlPrepare() {
     info[l].provTxt = info[l].prov ? `Nivel provisional: ${(nPu || 0) < 50 ? `sólo ${nPu || 0} jugadores puente` : `error típico del nivel ±${evN(se, 2)} σ`}. La estimación puede moverse al llegar más datos.` : "";
   });
   nlSt.info = info;
-  nlSt.rank = R.ligas.filter((l) => l !== "euroleague" && info[l].d != null).sort((a, b) => info[a].d - info[b].d);
+  const ref = nlVaraOk() ? st.vara : "euroleague";
+  nlSt.rank = R.ligas.filter((l) => l !== ref && info[l].d != null).sort((a, b) => info[a].d - info[b].d);
   if (!nlSt.sel || !info[nlSt.sel]) nlSt.sel = nlSt.rank[0];
   if (nlSt.liga == null) nlSt.liga = nlSt.sel;
 }
@@ -2740,11 +2849,18 @@ async function renderNorm() {
     try { nlSt.R = await getResumen(); }
     catch { $("nlRank").innerHTML = `<div class="empty">No se encontraron los datos de normalización (datos/normalizacion/resumen.json).</div>`; return; }
     nlPrepare();
+    const sv = $("nlVara");
+    sv.innerHTML = nlSt.R.ligas.slice().sort((a, b) => (a === "euroleague" ? -1 : b === "euroleague" ? 1 : nlLg(a).localeCompare(nlLg(b)))).map((l) => `<option value="${l}">${esc(nlLg(l))}</option>`).join("");
+    sv.value = nlSt.R.ligas.includes(st.vara) ? st.vara : "euroleague";
+    sv.addEventListener("change", () => setVaraGlobal(sv.value));
     const temps = [...SEASONS].sort();
     $("nlTemp").innerHTML = temps.map((t) => `<option value="${t}">${t}${t === "2026-27" ? " (en curso)" : ""}</option>`).join("");
     nlSt.temp = nlSt.temp || "2025-26"; $("nlTemp").value = nlSt.temp;
     $("nlPos").value = nlSt.pos;
   }
+  $("nlRankT").textContent = nlVaraOk() ? `Parecido con ${VARA_NOMBRES[st.vara] || nlLg(st.vara)} (= 0)` : "Parecido con la EuroLeague";
+  $("nlRefNom").textContent = nlVaraOk() ? VARA_NOMBRES[st.vara] || nlLg(st.vara) : "EuroLeague";
+  $("nlInsights").hidden = nlVaraOk();          // las conclusiones están escritas frente a la EuroLeague
   nlRank(); nlMap(); nlFicha(); nlLigaSelect(); nlExplo();
   try { nlInsights(); } catch (e) { console.warn("conclusiones", e); }
   nlValid(); nlContexto();
@@ -2762,8 +2878,9 @@ function nlRank() {
   const mx = Math.max(...order.map((l) => Math.max(I[l].d, I[l].dA || 0, I[l].dB || 0))) * 1.08 || 1;
   const pct = (v) => (v == null ? 0 : (v / mx) * 100);
   const lvl = (v, s = 1) => `<span class="nl-chip" style="color:${nlToneVar(v, s)}">${evSig(v, 2)}</span>`;
+  const refL = nlVaraOk() ? st.vara : "euroleague";      // vara (v3.2): la liga elegida es la referencia (= 0)
   const row = (l, k) => {
-    const f = I[l], ref = l === "euroleague";
+    const f = I[l], ref = l === refL;
     return `<button type="button" role="listitem" class="nl-rrow${l === nlSt.sel ? " on" : ""}${ref ? " ref" : ""}" data-nlsel="${l}" aria-pressed="${l === nlSt.sel}">
       <span class="nl-pos">${ref ? "ref." : k + 1}</span>
       <span class="nl-lname"><i class="evsw" style="background:${EV_COL[l]}"></i>${esc(nlLg(l))}${f.prov ? ` <span class="nl-prov" data-tip="${esc(f.provTxt)}" title="${esc(f.provTxt)}">Provisional</span>` : ""}</span>
@@ -2771,11 +2888,11 @@ function nlRank() {
       <span class="nl-dval">${ref ? "0" : evN(f.d, 2)}<small> σ</small></span>
       <span class="nl-cell"><small>Nivel PER</small>${ref ? "0" : lvl(f.per.AB)}</span>
       <span class="nl-cell"><small>20 % alto → EL</small>${f.top != null ? "p" + evN(f.top, 0) : "–"}</span>
-      <span class="nl-cell"><small>${ref ? "Puentes con otras" : "Puentes con EL"}</small>${f.puentes.toLocaleString("es-ES")}</span>
+      <span class="nl-cell"><small>${l === "euroleague" ? "Puentes con otras" : "Puentes con EL"}</small>${f.puentes.toLocaleString("es-ES")}</span>
     </button>`;
   };
-  $("nlRank").innerHTML = [row("euroleague", -1), ...order.map(row)].join("");
-  $("nlRankNote").innerHTML = `Distancia = raíz de la media de los cuadrados del nivel A+B en ${I[order[0]].n} métricas (0 = idéntica a la EuroLeague). Las marcas finas sobre cada barra son la misma distancia según A (<b style="color:var(--nl-a)">azul</b>) y según B (<b style="color:var(--nl-b)">ámbar</b>): si están juntas, los dos métodos coinciden. «Nivel PER»: dónde rinde el jugador medio de esa liga en la EuroLeague, en σ (positivo = por encima). «20 % alto → EL»: percentil EuroLeague esperado en PER de sus mejores jugadores; la propia EuroLeague da p${evN(I.euroleague.top, 0)} porque la suerte de una gran temporada no se repite.`;
+  $("nlRank").innerHTML = [row(refL, -1), ...order.map(row)].join("");
+  $("nlRankNote").innerHTML = `Distancia = raíz de la media de los cuadrados del nivel A+B en ${I[order[0]].n} métricas (0 = idéntica a ${esc(nlVaraOk() ? VARA_NOMBRES[st.vara] || nlLg(st.vara) : "la EuroLeague")}). Las marcas finas sobre cada barra son la misma distancia según A (<b style="color:var(--nl-a)">azul</b>) y según B (<b style="color:var(--nl-b)">ámbar</b>): si están juntas, los dos métodos coinciden. «Nivel PER»: dónde rinde el jugador medio de esa liga en la EuroLeague, en σ (positivo = por encima). «20 % alto → EL»: percentil EuroLeague esperado en PER de sus mejores jugadores; la propia EuroLeague da p${evN(I.euroleague.top, 0)} porque la suerte de una gran temporada no se repite.`;
 }
 
 // ---------------------------------------------------------------- mapa competición × métrica
@@ -3114,7 +3231,7 @@ async function start() {
   // #quintetos admite un enlace profundo: #quintetos&tab=jugadores&t=2025-26&l=euroleague&f=regular&e=BAS&j=012080
   const hp = location.hash.replace(/^#/, "").split("&")[0];
   if (hp === "quintetos" && location.hash.includes("&")) st.quintetosHash = location.hash.slice(location.hash.indexOf("&") + 1);
-  if (!ebRestaurar(hp)) showPage(["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos"].includes(hp) ? hp : (store.get("mm.page") || "tabla"));
+  if (!ebRestaurar(hp)) showPage(["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos", "v40"].includes(hp) ? hp : (store.get("mm.page") || "tabla"));
   const [dict, idxN, ...idxs] = await Promise.all([getJSON("datos/diccionario_columnas.json").catch(() => []),
     getJSON("datos/normalizados/indice.json").catch(() => null),
     ...SEASONS.map((s) => getJSON(`datos/${s}/indice.json`).catch(() => null))]);
@@ -3126,7 +3243,7 @@ async function start() {
 }
 window.addEventListener("message", (e) => {
   const d = e.data || {};
-  ["atlasFrame", "clavesFrame", "quintetosFrame"].forEach((id) => { if (e.source === $(id).contentWindow && d.atlasAlto) $(id).style.height = Math.max(600, Math.ceil(d.atlasAlto) + 4) + "px"; });
+  ["atlasFrame", "clavesFrame", "quintetosFrame", "v40Frame"].forEach((id) => { if (e.source === $(id).contentWindow && d.atlasAlto) $(id).style.height = Math.max(600, Math.ceil(d.atlasAlto) + 4) + "px"; });
   // «¿Cómo se lee?» desde el Atlas: abre Claves del estilo en el apartado pedido
   if (d.irClaves) { st.clavesSub = d.irClaves; const f = $("clavesFrame"); if (f.src) f.contentWindow.postMessage({ irA: d.irClaves }, "*"); showPage("claves"); scrollTo({ top: 0, behavior: "smooth" }); }
 });
@@ -3162,7 +3279,7 @@ window.addEventListener("message", async (e) => {
 });
 const EB_AREAS = [
   { k: "jugadores", n: "Jugadores", tools: [
-    ["datos", "Datos", "Todas las métricas de cada jugador, en bruto o normalizadas a la Euroliga. Acota con «Filtros» y pulsa una fila para abrir su ficha."],
+    ["datos", "Datos", "Todas las métricas de cada jugador, en bruto o normalizadas a la liga que elijas como vara (esa liga = 0; por defecto, la Euroliga). Acota con «Filtros» y pulsa una fila para abrir su ficha."],
     ["parecidos", "Buscar parecidos", "Clubes que juegan como el tuyo y jugadores parecidos a uno concreto o que encajan con tu estilo. El nivel se filtra aparte y no influye en el parecido."]] },
   { k: "equipos", n: "Equipos", tools: [
     ["evaluacion", "Evaluación", "El equipo al completo: nivel de su liga y de su plantilla (Euroliga = 0), balance, rendimiento frente a su liga, entrenadores y estilo."],
@@ -3181,6 +3298,11 @@ const EB_AREAS = [
   { k: "informe", n: "Informe", tools: [
     ["informeq", "Informe equipo", "El documento para la dirección deportiva sobre el estado de un equipo frente a su liga: identidad, conclusiones, ataque, defensa, rotación, quintetos, conexiones y jugadores. Descárgalo en PDF."],
     ["informe", "Lectura de fichaje", "El documento para la dirección deportiva: jugador, conclusiones, ataque, defensa, contexto y conexiones en el club de destino con el rol que elijas. Descárgalo en PDF."]] },
+  { k: "modelo", n: "Modelo v4.0", tools: [
+    ["resumen", "Resumen y puertas", "Qué aporta cada capa del modelo de equipo v4.0, el criterio prerregistrado de su examen y lo que salió."],
+    ["anclas", "Nivel Cerno e Impacto", "Para cada fichaje de 2022 a 2026: el percentil esperado de producción y el del cambio del equipo con él, con rango del 80 %, junto a lo que después hizo."],
+    ["equipos", "Equipos 2026-27", "Net proyectado de cada plantilla frente a la media de su liga, con su rango del 80 % y la calibración aprendida en 1 149 transiciones reales."],
+    ["metodo", "Método y límites", "Resultados por grupo de liga y por corte, producción no lineal en minutos, criterio redefinido del Impacto y límites declarados."]] },
   { k: "metodologia", n: "Metodología", ro: true, tools: [
     ["evaluacion", "Evaluación de ligas", ""],
     ["normalizacion", "Normalización de ligas", ""],
@@ -3206,6 +3328,12 @@ function ebAtlas(t) {
   else { f.src = "atlas/index.html#" + t; }
   showPage("atlas");
 }
+function ebV40(t) {
+  const f = $("v40Frame"); st.v40Sub = t;
+  if (f.src) { try { f.contentWindow.postMessage({ irV40: t }, "*"); } catch {} }
+  else f.src = "v40/index.html?embed=1#" + t;
+  showPage("v40");
+}
 function ebQuint(t) {
   const f = $("quintetosFrame");
   if (f.src && f.dataset.loaded === "1") { try { f.contentWindow.postMessage({ irQuintetos: { tab: t } }, "*"); } catch {} }
@@ -3218,6 +3346,7 @@ function ebIr(area, tool) {
   EB.area = area; EB.tool = tool;
   if (area === "jugadores" && tool === "datos") showPage(store.get("mm.datosModo") === "norm" ? "normalizados" : "tabla");
   else if (area === "equipos") ebQuint(tool);
+  else if (area === "modelo") ebV40(tool);
   else if (area === "metodologia") { if (tool === "guia") ebQuint("aprende"); else showPage(tool); }
   else ebAtlas(tool);
   ebMarcar(area, tool);
@@ -3238,10 +3367,11 @@ showPage = function (pg) {
   else if (p === "evaluacion" || p === "normalizacion" || p === "claves") ebMarcar("metodologia", p);
   else if (p === "atlas" && EB.atlas && ebDeAtlas[EB.atlas]) ebMarcar(...ebDeAtlas[EB.atlas]);
   else if (p === "quintetos" && EB.quint) ebMarcar(...ebDeQuint(EB.quint));
+  else if (p === "v40") ebMarcar("modelo", st.v40Sub || "resumen");
   ebMoverCtx();
 };
 function ebRestaurar(hp) {
-  if (["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos"].includes(hp)) return false;
+  if (["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos", "v40"].includes(hp)) return false;
   const [a, t] = String(store.get("mm.ebate") || "").split("/");
   if (ebArea(a)) { ebIr(a, t); return true; }
   return false;
@@ -3258,6 +3388,7 @@ function ebIniciar() {
   $("ebHome").addEventListener("click", (e) => { e.preventDefault(); ebIr("jugadores", "datos"); });
   $("srcSeg").addEventListener("click", (e) => { const b = e.target.closest("[data-src]"); if (!b) return; store.set("mm.datosModo", b.dataset.src === "normalizados" ? "norm" : "raw"); showPage(b.dataset.src); });
   // controles globales: cifras (escala ±100 / originales) y ayudas de lectura → se envían a los marcos
+  iniciarVara();          // vara (liga = 0) de Ajustes, sincronizada con las de Datos normalizados y Normalización de ligas
   const esc = store.get("mm.escala") === "original" ? "original" : "escala";
   const pintarEsc = (v) => document.querySelectorAll("#ebEsc button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === v));
   pintarEsc(esc);

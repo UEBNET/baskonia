@@ -14,3 +14,6 @@ data/modelos/roles/_cache/
 # decisiones y las salvaguardas
 data/modelos/v3_2/validacion/ablacion/pred_*.csv.gz
 data/modelos/v3_2/validacion/ablacion/escala_*.pkl
+
+# lote de publicación incremental del artifact (python -m bbactualiza)
+publicacion/

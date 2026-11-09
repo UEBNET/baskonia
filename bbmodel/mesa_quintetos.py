@@ -123,7 +123,9 @@ def exportar_liga(liga: str, temporada: str, extras: dict) -> dict | None:
     base = jug.sort_values("min_on", ascending=False).drop_duplicates(["team_id", "player_id"])
     pids = list(dict.fromkeys(base["player_id"]))
     pix = {p: i for i, p in enumerate(pids)}
-    nombres = jug.drop_duplicates("player_id").set_index("player_id")["nombre"]
+    from .nombres import aplicar                     # nombres canónicos «Nombre Apellido(s)» (bbmodel/nombres.py)
+    jug_n = aplicar(jug.assign(liga=liga), fuente=False) if "nombre" in jug else jug
+    nombres = jug_n.drop_duplicates("player_id").set_index("player_id")["nombre"]
     equipos_nombre = jug.drop_duplicates("team_id").set_index("team_id")["equipo"].to_dict()
     cat = pd.DataFrame({"player_id": pids, "nombre": [nombres.get(p, p) for p in pids]})
     # equipo principal (más minutos en la temporada regular, o en total)
