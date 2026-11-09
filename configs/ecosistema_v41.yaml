@@ -369,6 +369,13 @@ f3:
 f4:
   retirar: [indice_fit, adapt_pct]                    # bajas aprobadas en la regla de oro
   terminos_nuevos_pendientes_ceo: [Landing, "FIABILIDAD ALTA · MEDIA · BAJA", "Valor de baja", "Impacto en pista"]
+  orden_ceo: "09-11-2026 · «Arranca la F4 con marca Kerno.»"
+  terminos_decididos_09-11-2026:                      # DECISIÓN CEO (respuestas del 09-11-2026)
+    sellos: "Confianza alta · moderada · baja"        # vocabulario y medidor de tres segmentos de la marca Kerno; regla del examen igual
+    adaptacion: Landing                               # mismo término en ES y EN (glosario i18n); sustituye a ADAPT %
+    valor_de_baja: "Coste de su ausencia"             # ΔNet del equipo sin el jugador (sello MEDIA, V41_F3); EN: «Cost of his absence»
+    impacto_en_pista: no_se_muestra_en_la_ficha       # sólo en el motor de escenarios y documentos técnicos hasta que pase su examen
+  marca: Kerno                                        # skill cerno-brand v2.0 (Racing · Chalk · Ink · Brass; Bombardier, Mona Sans, Geist Mono)
   capturas: {anchos: [1440, 390], temas: [claro, oscuro]}
 
 # ---------------------------------------------------------------------------------------- §6 · criterios PRERREGISTRADOS
