@@ -56,7 +56,8 @@ tomadas con reglas fijadas de antemano.</div>
 <section><div class="sec-cab"><div><div class="ceja">Índice</div><h2>Contenido</h2></div></div>
 <table class="indice">{indice}</table>
 <p class="entradilla">Versión 3.2 del artículo científico de Cerno Analytics. Sustituye al artículo de estilos de juego
-en ocho ligas y documenta todas las versiones de la normalización hasta la v3.2 y del simulador hasta la v3.3.</p></section>
+en ocho ligas y documenta todas las versiones de la normalización hasta la v3.2 y del simulador hasta la v3.3, y cómo se lee cada cifra
+en la herramienta: frente a su liga.</p></section>
 {cuerpo}
 <section class="sec"><div class="sec-cab"><div><div class="ceja">Referencias</div><h2>Referencias</h2></div></div>
 <ol class="refs">{refs}</ol></section>
@@ -75,6 +76,7 @@ ENTRADILLAS = {
     "Simulador": "Minutos, rol y producción de un fichaje en su club de destino.",
     "Simulador v3.2": "Examen sin fuga, reglas de no inferioridad y rangos recalibrados.",
     "Simulador v3.3": "Minutos con un segundo modelo y producción acoplada al rol.",
+    "Lectura en la herramienta": "Su liga = 0: cada cifra frente a la liga que toca.",
     "Evaluaciones": "Ideas que no se aplican, medidas con el mismo rigor.",
     "Límites": "Lo que podría cambiar nuestra lectura.",
     "Reproducibilidad": "Órdenes, configuraciones y semillas.",

@@ -111,6 +111,15 @@ v3.3 lo incluye con los mismos valores que `simulation.yaml`.
 **`jugadores.json`:** una columna `min_gbm` con los minutos del GBM de cada registro en cada liga de destino
 (`meta.v33.ligas_min_gbm`). El navegador no necesita evaluar los árboles.
 
+**Motor del navegador** (`artifact/atlas/simulador.js`, sustituye a `simulador_v2.js`): mismos pasos que
+`bbfit.simulador` con `CERNO_SIMULADOR=v33` (mezcla de minutos, recalibración, B9 con rol asignado, producción del
+Atlas con A4). Paridad en 12 casos con rol libre, ROTACION y TITULAR: todos dentro de tolerancia
+(`tests/js/paridad_simulador.js`). Estado de la publicación: `docs/checkpoints/ARTIFACT-v3.3.md`.
+
+**Puntos/100 sin valores negativos** (04-11-2026): tras la recalibración, los extremos inferiores de sus intervalos se
+recortan a 0 (`recorte_cero`); el centro no cambia. **«Simular equipo completo»** reparte siempre 200' dentro de las
+franjas de rol (`cuadrarRoles`, sólo en el navegador); si no cabe, pide cambiar un rol a mano.
+
 ## 5. Resultados
 
 Examen sin fuga de la v3.2 rehecho con las identidades corregidas (`scripts/rehacer_identidades.sh`, 04-11-2026).

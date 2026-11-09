@@ -94,6 +94,7 @@ def _registros(c: S.Corte, filas: pd.DataFrame, nombres: dict | None = None) -> 
     can = f["persona_id"].astype(str).map(canonico_persona())          # nombre canónico «Nombre Apellido»
     f["nombre"] = can.where(can.notna(), f["nombre"])
     out = []
+    atlas = (c.cfg.get("v32") or {}).get("produccion_publicada") == "atlas"
     for r in f.to_dict("records"):
         r["persona_id"] = r["persona_id"]
         ctx = S._ctx_origen(c, r)
@@ -107,6 +108,8 @@ def _registros(c: S.Corte, filas: pd.DataFrame, nombres: dict | None = None) -> 
                     _r(r.get("usg_pct_obs"), 2), _r(r.get("ast_pct_obs"), 2), _r(r.get("gti"), 2), _r(r.get("sigma"), 2),
                     _r(hr, 3), [_r(r.get(f"eu_{i}"), 3) for i in ids],
                     [_r(r.get(f"{m}_th"), 3) for m in METS], [_r(r.get(f"{m}_thsd"), 3) for m in METS]])
+        if atlas:                          # v3.2/v3.3 · producción del Atlas: punto de partida en la escala EuroLeague
+            out[-1].append([_r(S.atlas_z(c, r, m), 4) for m in METS])
     return out
 
 
@@ -153,6 +156,7 @@ def _constantes_base(c: S.Corte, ligas: list[str]) -> dict:
             mu = {p: _r(SI.entorno(k, liga, c.temp, p)[0], 5) for p in "EAI"}
             tau = {p: _r(SI.entorno(k, liga, c.temp, p)[1], 5) for p in "EAI"}
             d["metricas"][m] = {"s": _r(k["s"][liga], 5), "psi": _r(k["psi"].get(liga, 0.0), 5),
+                                "m": _r(k["m"].get(liga), 5),          # constante de nivel (producción del Atlas)
                                 "sigma2": _r(k["sigma2"].get(liga, k["sigma2"].get("todas")), 6), "nodo": [_r(dl, 5), _r(vd, 6)],
                                 "mu": mu, "tau": tau}
         out[liga] = d
@@ -266,9 +270,11 @@ def _stub(sid: str, persona: str, liga: str, team, temp: str, r1: pd.DataFrame, 
     """Fila de jugadores.json para un miembro de la plantilla sin registro en la temporada base: sólo identidad."""
     x = r1[(r1["persona_id"] == persona) & (r1["liga"] == liga) & (r1["team_id"].astype(str) == str(team))]
     x = (x if len(x) else r1[r1["persona_id"] == persona]).dropna(subset=["nombre"])
-    from bbmodel.nombres import canonico_persona
+    from bbmodel.nombres import canonico, canonico_persona
     nombre = canonico_persona().get(str(persona)) or (x.sort_values("min_total").iloc[-1]["nombre"] if len(x)
                                                         else nombres.get(persona))
+    if isinstance(nombre, str) and str(persona) not in canonico_persona():   # sin canónico: formato «Nombre Apellido»
+        nombre = canonico([(nombre, 1.0)]) or nombre
     fila = {k: None for k in COLS_JUG}
     fila.update({"id": sid, "persona": str(persona), "nombre": nombre if isinstance(nombre, str) else None, "liga": liga,
                  "temporada": temp, "team": str(team), "min_pct": 0.5})
@@ -353,6 +359,21 @@ def exportar(salida: str | Path = SALIDA) -> dict:
             "avisos": cfg["avisos"], "estilos": estilos, "bases": meta_bases,
             "validacion": P.get("validacion_resumen"),
             "nota": "Motor en el navegador: port de bbfit.simulador.simular (docs/checkpoints/F8.md)."}
+    v32c = cfg.get("v32") or {}
+    atlas = v32c.get("produccion_publicada") == "atlas"
+    if atlas:                              # filas sin registro (plantilla): sin punto de partida del Atlas
+        for f in jug:
+            if len(f) == len(COLS_JUG):
+                f.append(None)
+    if v32c:                               # v3.2 · pasos del motor, producción publicada y recalibración A4 (bbfit.v32)
+        meta["pasos"] = {**S.PASOS_DEFECTO, **(cfg.get("pasos") or {})}
+        meta["factor_ajustes_ts"] = cfg["produccion"].get("factor_ajustes_ts", [1.0, 1.0])
+        meta["v32"] = {"produccion_publicada": v32c.get("produccion_publicada", "motor"),
+                       "aplicar_recalibracion": bool(v32c.get("aplicar_recalibracion")),
+                       "recalibracion": S._factores_v32(cfg) if v32c.get("aplicar_recalibracion") else None,
+                       "sens_atlas": S.sens_atlas() if atlas else None,
+                       "grupos": "destino euroleague → a_euroleague; origen o destino FEB → feb; origen o destino "
+                                 "NBA/G League → nba_gleague; resto → europa. Origen: feb3 | ncaa | resto."}
     v33 = S._v33(cfg)
     if v33:                                # v3.3 · minutos (GBM por liga de destino) y B9 para el motor del navegador
         ligas_gbm = sorted(ligas_todas)
@@ -367,7 +388,7 @@ def exportar(salida: str | Path = SALIDA) -> dict:
                               "calibrado y el GBM, recalibrados con recalibracion_minutos. Con rol asignado (B9): "
                               "producción + b_min·(minutos del rol − minutos publicados sin rol) + c_rol·(índice del rol "
                               "− índice esperado sin rol). bbfit/simulador.py: _minutos_v33 y _b9_rol_asignado."}
-    cols_j = COLS_JUG + (["min_gbm"] if v33 else [])
+    cols_j = COLS_JUG + (["az"] if atlas else []) + (["min_gbm"] if v33 else [])
     jcols = {"columnas": cols_j, "filas": jug}
     cl = {"columnas": list(clubes[0].keys()) if clubes else [], "filas": [list(x.values()) for x in clubes]}
     tam = {}
@@ -403,10 +424,15 @@ def paridad(carpeta: str | Path = SALIDA, n: int = 6, n_sim: int = 3000, semilla
     for k in range(n):
         club = cand_cl[int(rng.integers(len(cand_cl)))]
         rec = cand_j[int(rng.integers(len(cand_j)))]
+        rol = [None, "ROTACION", "TITULAR"][k % 3]          # v3.3: también con rol asignado (B9)
         r = S.simular(c, rec["persona"], club["liga"], club["team"], [(p[3], p[1]) for p in club["plantilla"]],
                       entrenador=club["entrenador"], ritmo=club["ritmo"], team_eu=club["eu"], team_eu_probs=club["eu_probs"],
-                      n_sim=n_sim, detalle=False, club_t=club["club_t"])
-        out.append({"rec": rec["id"], "club": f"{club['liga']}|{club['team']}|{club['temporada']}",
+                      n_sim=n_sim, detalle=False, club_t=club["club_t"], rol=rol)
+        out.append({"rec": rec["id"], "club": f"{club['liga']}|{club['team']}|{club['temporada']}", "rol": rol,
+                    "version": r.get("version"), "minutos_mediana": r["minutos"]["mediana"],
+                    "minutos_lo80": r["minutos"].get("lo80"), "minutos_hi80": r["minutos"].get("hi80"),
+                    "pts_lo80": r["produccion_p100"]["pts_p100"].get("lo80"),
+                    "pts_hi80": r["produccion_p100"]["pts_p100"].get("hi80"), "b9": r.get("b9"),
                     "minutos": r["minutos"]["media"], "roles": r["roles"], "pts_p100": r["produccion_p100"]["pts_p100"]["media"],
                     "ts_pct": r["produccion_p100"]["ts_pct"]["media"], "usg_pct": r["produccion_p100"]["usg_pct"]["media"],
                     "adapt": r["adaptacion"]["adapt_pct_temporada"]["media"], "d_net": r["equipo"]["d_net"],

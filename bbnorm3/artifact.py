@@ -52,6 +52,8 @@ def main(salida: str = "data/artifact", origen: Path = DIR_V31, etiqueta: str = 
                                       "ligas": ligas}
         print(f"  {temp}: {len(df)} jugadores", flush=True)
     _dump(indice, sal / "normalizados" / "indice.json")
+    from .destino import vara_artifact               # vara de destino: cualquier liga = 0 (Datos Normalizados)
+    _dump(vara_artifact(), sal / "normalizados" / "vara.json")
 
 
 if __name__ == "__main__":

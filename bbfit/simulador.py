@@ -819,6 +819,22 @@ def _factores_v32(cfg: dict) -> dict | None:
     return _RECAL[f]
 
 
+RECORTE_CERO = ("pts_p100", "blk_p100", "oreb_p100", "ast_pct")     # métricas que no pueden ser negativas (04-11-2026)
+
+
+def recorte_cero(d: dict | None) -> None:
+    """v3.3 · puntos/100, tapones/100, rebotes ofensivos/100 y AST% no pueden ser negativos: los extremos inferiores de los intervalos (semiamplitud A4 fija alrededor de
+    una producción esperada baja) se recortan a 0 y se marca `recorte_cero` para que la interfaz lo explique. El centro
+    no cambia, así que el error y la cobertura del examen no se ven afectados (un valor real nunca es negativo)."""
+    if not d:
+        return
+    for a in ("50", "80", "90"):
+        x = d.get(f"lo{a}")
+        if x is not None and float(x) < 0:
+            d[f"lo{a}"] = 0.0
+            d["recorte_cero"] = True
+
+
 def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str, fac_min: dict | None = None) -> None:
     """A4 · recalibración conforme de dos colas (factores por métrica × grupo de destino × origen, con contracción,
     ajustados con todo el examen sin fuga: bbfit.v32)."""
@@ -860,6 +876,8 @@ def _recalibrar_v32(c: "Corte", res: dict, liga_o: str, liga_d: str, fac_min: di
     if c.cfg.get("v33"):
         for d in list(res["produccion_p100"].values()) + [res["minutos"]] + ([res["contribucion"]] if "contribucion" in res else []):
             orden(d)
+        for m in RECORTE_CERO:
+            recorte_cero(res["produccion_p100"].get(m))
     if "contribucion" in res:
         esc(res["contribucion"], fac.get("C"), "media")
     res["min_pct"] = {k: (v / minutos_partido(liga_d) if isinstance(v, (int, float)) else v)
@@ -965,6 +983,27 @@ def _b9_rol_asignado(c, res, fila, liga_d, tr0, gm, v33, M_libre, i_f, es_gtg, r
             if isinstance(v, (int, float)) and (kk in ("media", "mediana") or kk[:2] in ("lo", "hi")):
                 d[kk] = float(v) + dy
     res["b9"] = {"d_min": dmin, "d_rol": drol, "minutos_libre": libre, "indice_rol_libre": tmp["indice_rol"]}
+
+
+def atlas_z(c: "Corte", fila: dict, m: str) -> float:
+    """Valor del registro en la escala de trabajo de la EuroLeague 2025-26 (z), el punto de partida de la producción del
+    Atlas (_produccion_atlas). Lo exporta sim_exportar para el motor del navegador (columna «az»)."""
+    from bbmodel.metricas import transformar
+    v = _f(fila.get(m)) if c.fuente not in ("A_corte", "V32_corte") else _f(fila.get(f"{m}_am"))
+    v = v if np.isfinite(v) else _f(fila.get(f"{m}_am"))
+    k = c.trad["constantes"].get(m)
+    if k is None or not np.isfinite(v):
+        return float("nan")
+    pos = fila.get("pos3") if isinstance(fila.get("pos3"), str) else "A"
+    mu_el, tau_el = SI.entorno(k, "euroleague", "2025-26", pos)
+    return float((transformar(v, k["transf"]) - mu_el) / tau_el)
+
+
+def sens_atlas() -> dict:
+    """β de contexto de cada métrica que usa la producción del Atlas (0 si no es claro: |β| ≤ 2·se)."""
+    sens = SI.sensibilidad_contexto()
+    return {m: float(sens.loc[m, "beta_comp"]) if abs(sens.loc[m, "beta_comp"]) > 2 * sens.loc[m, "beta_comp_se"] else 0.0
+            for m in sens.index}
 
 
 def _produccion_atlas(c: "Corte", res: dict, fila: dict, liga_d: str, Lbar_dest: float) -> None:
@@ -1112,7 +1151,7 @@ def forzar_roles(M: np.ndarray, fuerza: dict, total: float, gm: float, liga_d: s
     """v2.1 · impone los roles asignados {índice: rol} sobre cada simulación de minutos M (n_sim × jugadores, se modifica
     en sitio) y devuelve los titulares T5. Minutos del rol: centro = min_rol de la liga de destino, dispersión
     `rol_asignado.dispersion`, recortado a la franja; titular si TITULAR o GO_TO_GUY; el resto de la plantilla reparte
-    los minutos que quedan (con el tope por jugador). Misma lógica que forzarRoles en artifact/atlas/simulador_v2.js."""
+    los minutos que quedan (con el tope por jugador). Misma lógica que forzarRoles en artifact/atlas/simulador.js."""
     from .roles import umbrales_pct
     cr = c.cfg["rol_asignado"]
     u = umbrales_pct(cargar("roles"))

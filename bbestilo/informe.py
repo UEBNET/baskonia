@@ -4,7 +4,8 @@
                                --salida <carpeta atlas/informe>
 
 Una entrada por jugador-club del Atlas (clave «persona_id|clave», la que busca la página: ifKey):
-    m[métrica] = [valor en la vara Euroliga, valor en su liga, percentil, percentil del extremo bajo, del alto]
+    m[métrica] = [valor en la vara Euroliga, valor en su liga, None, None, None (percentiles: los calcula la página),
+                  extremo bajo y alto en la vara Euroliga (3 cifras; la página los traduce a la liga de referencia)]
         * métricas normalizadas: <m> y <m>_obs del dataset normalizado; el percentil compara el valor Euroliga con el de
           los jugadores de su posición de la Euroliga de referencia (pool) y los extremos son los de <m>_lo/<m>_hi;
         * sin normalizar (PIE, STOP%, AST/TO, MIN%, on/off, triple frontal): [None, valor en su liga, percentil frente a
@@ -14,6 +15,10 @@ Una entrada por jugador-club del Atlas (clave «persona_id|clave», la que busca
     fn = fuente de la normalización (fuente_norm del dataset).
 Pool de referencia: jugadores de la Euroliga de esa temporada (de la última completa si la temporada es provisional)
 con ≥ 300 min, por posición (E, A, I; «*» todos). ref[pos][m] = [p10, p50, p90, n]. ritmo_el = ritmo de la Euroliga.
+Grupos por liga (04-11-2026, el informe compara con la liga de destino o con la suya): ligas[liga] = {"n": {pos: n},
+"ritmo": ritmo mediano, "q": {pos: {m: 21 cuantiles (0, 5, …, 100) de los valores EN SU LIGA}}} con los jugadores de esa
+liga con ≥ 300 min (normalizadas: <m>_obs; L: nivel; brutas: su valor). La página traduce el valor del jugador a esa liga
+(vara.json) y calcula ahí el percentil.
 """
 from __future__ import annotations
 
@@ -51,6 +56,13 @@ def _num(v):
     return f if math.isfinite(f) else None
 
 
+def _r3(v):
+    """3 cifras significativas."""
+    if v is None or not math.isfinite(v) or v == 0:
+        return None if v is None or not math.isfinite(v) else 0.0
+    return round(float(v), max(0, 2 - int(math.floor(math.log10(abs(v))))))
+
+
 def _r(v, d=2):
     f = _num(v)
     return None if f is None else round(f, d)
@@ -67,6 +79,8 @@ def _leer_json(p: Path):
 
 
 def _tabla(obj) -> pd.DataFrame:
+    if "por_columna" in obj:                  # tablas compactadas (artifact/herramientas/compactar.py)
+        return pd.DataFrame(dict(zip(obj["columnas"], obj["por_columna"])))
     return pd.DataFrame(obj["filas"], columns=obj["columnas"])
 
 
@@ -171,7 +185,9 @@ def construir(temp: str, atlas: pd.DataFrame, datos: Path, norm: Path, pool_de: 
             v, o, lo, hi = (_num(r.get(f"N_{k}{s}")) for s in ("", "_obs", "_lo", "_hi"))
             if v is None and o is None:
                 continue
-            m[k] = [_r(v), _r(o), _pct(v, pp[k]), _pct(lo, pp[k]), _pct(hi, pp[k])]
+            # extremos: sus valores (3 cifras significativas) para traducirlos a la liga de referencia en la página, que
+            # calcula ahí todos los percentiles (los de la Euroliga ya no se exportan: límite de tamaño de la publicación)
+            m[k] = [_r(v), _r(o), None, None, None, _r3(lo), _r3(hi)]
         v, o = _num(r.get("N_ast_usg")), _num(r.get("N_ast_usg_obs"))
         if v is not None or o is not None:
             m["ast_usg"] = [_r(v), _r(o), _pct(v, pp["ast_usg"]), None, None]
@@ -187,7 +203,30 @@ def construir(temp: str, atlas: pd.DataFrame, datos: Path, norm: Path, pool_de: 
             b[c] = _r(v) if isinstance(v, (int, float, np.floating, np.integer)) and not isinstance(v, bool) else v
         j[f"{r['persona_id']}|{r['clave']}"] = {"m": m, "b": b, "fn": r.get("N_fuente_norm") if isinstance(r.get("N_fuente_norm"), str) else None}
     return {"temporada": temp, "ritmo_el": _r(ritmo.median()) if len(ritmo) else None, "min_pool": MIN_POOL,
-            "pool_de": pool_de, "pool_n": {pos: int(len(P[pos]["L"])) for pos in ("E", "A", "I")}, "ref": ref, "j": j}
+            "pool_de": pool_de, "pool_n": {pos: int(len(P[pos]["L"])) for pos in ("E", "A", "I")}, "ref": ref,
+            "ligas": _ligas(xp), "j": j}
+
+
+def _ligas(x: pd.DataFrame) -> dict:
+    """Grupos de referencia de cada liga (≥ 300 min) por posición: 21 cuantiles de los valores en su liga."""
+    out = {}
+    mins = pd.to_numeric(x["min_reg"], errors="coerce")
+    qs = np.linspace(0, 1, 21)
+    for liga, g0 in x[mins >= MIN_POOL].groupby("liga"):
+        d = {"n": {}, "q": {}}
+        rit = pd.to_numeric(g0["lg_pace"], errors="coerce").dropna() if "lg_pace" in g0 else pd.Series(dtype=float)
+        d["ritmo"] = _r(rit.median()) if len(rit) else None
+        for pos in ("E", "A", "I", "*"):
+            g = g0 if pos == "*" else g0[g0["pos3"] == pos]
+            d["n"][pos] = int(len(g))
+            v = {"L": pd.to_numeric(g["nivel"], errors="coerce")}
+            for m in NORMALIZADAS + ["ast_usg"]:
+                v[m] = pd.to_numeric(g[f"N_{m}_obs"], errors="coerce")
+            for k, c in BRUTAS.items():
+                v[k] = pd.to_numeric(g[c], errors="coerce") if c in g else pd.Series(dtype=float)
+            d["q"][pos] = {k: [_r(q) for q in np.quantile(s.dropna().to_numpy(float), qs)] for k, s in v.items() if s.notna().sum() >= 5}
+        out[str(liga)] = d
+    return out
 
 
 def main(atlas: str, datos: str, normalizado: str, salida: str) -> dict:
