@@ -39,3 +39,12 @@ def test_examen_d1_y_versiones():
             assert ver[m].startswith("v4.2")                # la literal que pasa se usa
             assert 0.75 <= v["conjunto"]["cobertura_80"] <= 0.85
     assert sum(x.startswith("v4.2") for x in ver.values()) == 12
+
+
+def test_d3_empalme_solo_temporada_en_curso():
+    from bbequipo.v42 import actualizar as A
+    previo = pd.DataFrame({"temporada": ["2025-26", "2025-26", "2026-27"], "unidad": ["a", "b", "a"], "v42": [1.0, 2.0, 3.0]})
+    nuevo = pd.DataFrame({"temporada": ["2025-26", "2026-27", "2026-27"], "unidad": ["a", "a", "c"], "v42": [9.0, 4.0, 5.0]})
+    d = A.empalmar(previo, nuevo, "2026-27")
+    assert d[d["temporada"] == "2025-26"]["v42"].tolist() == [1.0, 2.0]       # cerradas: las de antes, intactas
+    assert d[d["temporada"] == "2026-27"]["v42"].tolist() == [4.0, 5.0]

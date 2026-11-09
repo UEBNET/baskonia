@@ -64,3 +64,76 @@ def test_recombinar_v32_sin_valor_cvae_es_la_v2():
     assert 0.0 <= w <= 1.0 and out.loc[1, "pts_p100_v31"] == pytest.approx(18.0 + w * 4.0, rel=0.05)
     # liga con menos temporadas que el mínimo: sólo v2
     assert N.recombinar_v32(base, v3, {"acb": 1}, cfg).loc[1, "pts_p100_v31_peso_cvae"] == 0.0
+
+
+# ------------------------------------------------------------------------------------- v4.2: tres artifacts
+def _sitios(tmp_path):
+    import json
+    man = {"jugadores": {"ficheros": ["index.html", "datos/temporadas.json.gz.txt", "datos/2026-27/regular.json.gz.txt",
+                                      "datos/actualizacion.json"],
+                         "borrar_al_republicar": ["quintetos/datos/2026-27/acb.gz.txt"]},
+           "equipos": {"ficheros": ["index.html", "datos/temporadas.json.gz.txt", "datos/actualizacion.json",
+                                    "quintetos/datos/2026-27/acb.gz.txt", "quintetos/datos/2026-27/acb.extras.gz.txt",
+                                    "quintetos/datos_v42/2026-27/acb.gz.txt"]},
+           "metodologia": {"ficheros": ["index.html", "datos/temporadas.json.gz.txt", "datos/actualizacion.json",
+                                        "quintetos/datos/2026-27/acb.gz.txt", "quintetos/datos_v42/2026-27/acb.gz.txt"]}}
+    for s, m in man.items():
+        (tmp_path / f"{s}.json").write_text(json.dumps({"sitio": s, **m}))
+        (tmp_path / f"sitio_{s}.json").write_text(json.dumps({"sitio": s, "urls": {s: f"https://x/{s}"}}))
+    return tmp_path
+
+
+def test_repartir_por_sitio(tmp_path):
+    import json
+    from bbactualiza import sitios as S
+    (tmp_path / "m").mkdir()
+    car = _sitios(tmp_path / "m")
+    loc = tmp_path / "f"
+    loc.mkdir()
+    rutas = ["datos/temporadas.json", "datos/temporadas.json.gz.txt", "datos/actualizacion.json",
+             "datos/2026-27/regular.json.gz.txt", "quintetos/datos/2026-27/acb.gz.txt",
+             "quintetos/datos/2026-27/gleague.gz.txt", "quintetos/datos/2026-27/gleague.extras.gz.txt",
+             "quintetos/datos_v42/2026-27/gleague.gz.txt", "atlas/algo_nuevo/x.bin"]
+    lote = {}
+    for i, r in enumerate(rutas):
+        f = loc / f"{i}.txt"
+        f.write_text("x" * 10)
+        lote[r] = str(f)
+    pub = tmp_path / "pub"
+    pub.mkdir()
+    res = S.repartir(lote, pub, car)
+    lotes = {s: json.loads((pub / f"lote_{s}_0.json").read_text()) for s in S.SITIOS}
+    assert set(lotes["jugadores"]) == {"datos/temporadas.json.gz.txt", "datos/actualizacion.json",
+                                       "datos/2026-27/regular.json.gz.txt"}       # nunca los quintetos borrados
+    assert set(lotes["equipos"]) == {"datos/temporadas.json.gz.txt", "datos/actualizacion.json",
+                                     "quintetos/datos/2026-27/acb.gz.txt", "quintetos/datos/2026-27/gleague.gz.txt",
+                                     "quintetos/datos/2026-27/gleague.extras.gz.txt",
+                                     "quintetos/datos_v42/2026-27/gleague.gz.txt"}
+    assert "quintetos/datos/2026-27/gleague.extras.gz.txt" not in lotes["metodologia"]   # extras: sólo Equipos
+    assert res["rutas_nuevas"]["quintetos/datos_v42/2026-27/gleague.gz.txt"] == ["equipos", "metodologia"]
+    assert res["sin_sitio"] == ["atlas/algo_nuevo/x.bin"]
+    assert res["duplicados_en_claro_omitidos"] == 1                                  # datos/temporadas.json
+    assert res["sitios"]["equipos"]["url"] == "https://x/equipos"
+    m = json.loads((car / "equipos.json").read_text())                          # la ruta nueva queda anotada
+    assert "quintetos/datos_v42/2026-27/gleague.gz.txt" in m["ficheros"] and m["n_ficheros"] == len(m["ficheros"])
+    assert S.repartir(lote, pub, car)["rutas_nuevas"] == {}                       # y la próxima vez ya es «manifiesto»
+
+
+def test_trocear_respeta_limites(tmp_path):
+    from bbactualiza import sitios as S
+    rutas = {}
+    for i in range(7):
+        f = tmp_path / f"{i}"
+        f.write_bytes(b"x" * 100)
+        rutas[f"r{i}"] = str(f)
+    t = S.trocear(rutas, max_mb=250, max_n=3)
+    assert [len(x) for x in t] == [2, 2, 2, 1] and sum(len(x) for x in t) == 7
+    assert [len(x) for x in S.trocear(rutas, max_mb=1e9, max_n=3)] == [3, 3, 1]
+
+
+def test_manifiestos_reales_y_urls():
+    from bbactualiza import sitios as S
+    m = S.manifiestos()
+    assert m["jugadores"]["url"].endswith("A7rufkL84rvRFcUBFBxFbC")
+    assert all(m[s]["url"].startswith("https://claude.ai/artifact/") for s in S.SITIOS)
+    assert not any(r.startswith("quintetos/datos/2026-27/") for r in m["jugadores"]["ficheros"])

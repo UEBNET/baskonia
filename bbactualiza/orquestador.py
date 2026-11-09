@@ -119,6 +119,13 @@ def p_artifact(ctx):
     return {"subpasos": tiempos}
 
 
+def p_v42(ctx):
+    """Tríos y parejas v4.2 de la temporada en curso con los parámetros congelados (bbequipo.v42.actualizar)."""
+    from bbequipo.v42 import actualizar
+    r = actualizar.temporada_en_curso(ctx["temporada"])
+    return {k: v for k, v in r.items() if k != "artifact"} | {"ficheros": r["artifact"]["ficheros"]}
+
+
 def p_publicacion(ctx):
     """Resumen público de la actualización (datos/actualizacion.json, lo lee el botón) y lote de publicación."""
     from . import artefacto
@@ -135,7 +142,7 @@ def p_publicacion(ctx):
 
 PASOS = [("descarga", p_descarga), ("pista", p_pista), ("normalizacion", p_normalizacion), ("contexto", p_contexto),
          ("roles", p_roles), ("entropia", p_entropia), ("estilos", p_estilos), ("simulador", p_simulador),
-         ("artifact", p_artifact), ("publicacion", p_publicacion)]
+         ("artifact", p_artifact), ("v42", p_v42), ("publicacion", p_publicacion)]
 NOMBRES = [n for n, _ in PASOS]
 
 

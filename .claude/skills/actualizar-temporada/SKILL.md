@@ -1,6 +1,6 @@
 ---
 name: actualizar-temporada
-description: Backend del botón «Actualizar 2026-27» del artifact Kerno Analytics (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC). Descarga sólo los partidos nuevos de la temporada en curso en las 20 ligas, aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3) sin reajustar ni tocar el histórico, sube los datos a Git y republica en el artifact sólo los ficheros que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
+description: Backend del botón «Actualizar 2026-27» de Kerno Analytics, que desde la v4.2 son tres artifacts (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn). Descarga sólo los partidos nuevos de la temporada en curso en las 20 ligas, aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3, tríos y parejas v4.2) sin reajustar ni tocar el histórico, sube los datos a Git y republica en cada artifact sólo los ficheros suyos que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
 ---
 
 # Actualizar la temporada en curso (botón del artifact)
@@ -8,6 +8,17 @@ description: Backend del botón «Actualizar 2026-27» del artifact Kerno Analyt
 El botón del artifact lanza la Routine **«Actualizar 2026-27 · Kerno»**, y la Routine abre una sesión de Claude Code que
 sigue esta skill. Todo el cálculo lo hace un único programa, `python -m bbactualiza` (paquete `bbactualiza/`), así
 que la sesión sólo prepara el entorno, lanza el programa, sube los datos y publica.
+
+**Tres artifacts (v4.2, 09-11-2026).** El producto se dividió por secciones en tres artifacts con los mismos ficheros
+fuente (docs/checkpoints/V42_sitios.md):
+   * Jugadores · https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC (lleva el botón)
+   * Equipos · https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj
+   * Metodología · https://claude.ai/artifact/T83MBGZk5untACmegadfNn
+
+Cada uno publica sólo las rutas de su manifiesto (`artifact/kerno/sitios/<sitio>.json`). El programa reparte el lote de
+la actualización entre los tres (`bbactualiza.sitios`): `publicacion/sitios.json` dice, para cada sitio, su URL y sus
+lotes `publicacion/lote_<sitio>_<n>.json` (cada uno cabe en una publicación: ≤ 58 MB y ≤ 250 ficheros). Jugadores ya no
+publica los quintetos: el reparto nunca le devuelve una ruta de `borrar_al_republicar`.
 
 **Regla de oro: sólo cambia la temporada en curso (2026-27).** El histórico 2020-21 … 2025-26 es estático: los
 ficheros que guardan todas las temporadas se reescriben sustituyendo sólo las filas de 2026-27 (`bbactualiza.capas.empalmar`),
@@ -18,7 +29,7 @@ y el resto de líneas queda byte a byte igual.
 1. **Repositorio**: `add_repo` (owner `uebnet`, repo `baskonia`, access `push`) y clon ligero de la rama de trabajo
    (sin el historial y sin los brutos de temporadas pasadas, que no se usan):
    ```bash
-   git clone --depth 1 --filter=blob:none --sparse --branch claude/gallant-pascal-49bx9o https://github.com/uebnet/baskonia
+   git clone --depth 1 --filter=blob:none --sparse --branch claude/jolly-thompson-qczxl4 https://github.com/uebnet/baskonia
    cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/2020-21/' '!/data/raw/*/2021-22/' '!/data/raw/*/2022-23/' '!/data/raw/*/2023-24/' '!/data/raw/*/2024-25/' '!/data/raw/*/2025-26/'
    ```
 2. **Dependencias** (≈ 1 min si el entorno no las trae ya):
@@ -31,15 +42,24 @@ y el resto de líneas queda byte a byte igual.
      recalcula ni se publica nada; termina aquí tras subir los brutos nuevos, si los hay).
    * Código 1: un paso falló. **No publiques**; resume el error (`pasos.<paso>.error`) y termina.
    * Código 2: ya había otra actualización en curso.
-4. **Git**: `git add -A data/ config/sources.json artifact/quintetos/*.gz.txt` (nunca `publicacion/`), commit
-   «Actualización 2026-27 (<fecha>)», `git pull --rebase` y `git push origin claude/gallant-pascal-49bx9o`
+4. **Git**: `git add -A data/ config/sources.json artifact/quintetos/*.gz.txt artifact/kerno/quintetos/datos_v42 artifact/kerno/sitios`
+   (nunca `publicacion/`), commit «Actualización 2026-27 (<fecha>)», `git pull --rebase` y `git push origin claude/jolly-thompson-qczxl4`
    (reintentos con espera si es la red; si da 403, vuelve a llamar a `add_repo` con `push`).
-5. **Artifact** (sólo si `estado` = `ok`): con la herramienta Artifact,
-   * `action: "read"` de la URL (guarda la página publicada; léela entera, es obligatorio antes de publicar);
-   * `action: "list"`, `scope: "files"` de la URL (rutas que se van a sustituir);
-   * `action: "publish"` con `url` = la del artifact, `file_path` = la página guardada **sin cambios** y `files` =
-     el contenido de `publicacion/lote0.json` (ruta publicada → fichero local). No pases `capabilities` (se conservan).
-6. **Resumen** para el usuario: estado por liga (partidos nuevos), segundos por paso, ficheros publicados, commit.
+5. **Artifacts** (sólo si `estado` = `ok`): lee `publicacion/sitios.json` y, **para cada sitio en este orden — Jugadores,
+   Equipos, Metodología —** con la herramienta Artifact:
+   * `action: "read"` de su URL (guarda la página publicada; léela entera, es obligatorio antes de publicar, y no la
+     modifiques: cada artifact tiene su propia página, con su título y su `sitio.json`);
+   * `action: "list"`, `scope: "files"` de esa URL (rutas que se van a sustituir);
+   * por cada lote de `lotes` (normalmente uno): `action: "publish"` con `url` = la de ese sitio, `file_path` = su página
+     guardada **sin cambios** y `files` = el contenido del lote (ruta publicada → fichero local). No pases
+     `capabilities` ni `contract` (se conservan: Jugadores tiene `mcp` para el botón; Equipos y Metodología, `downloads`
+     y `sample`).
+   Nunca publiques el lote de un sitio en la URL de otro. Si la publicación de un sitio falla, sigue con los demás y
+   dilo en el resumen. Si `sin_sitio` no está vacío, esas rutas no se publican: nómbralas en el resumen. Las
+   `rutas_nuevas` (p. ej. la primera vez que una liga tiene alineaciones en la temporada) ya van en los lotes de los
+   sitios que publican sus hermanas y quedan anotadas en los manifiestos (se suben en el paso 4).
+6. **Resumen** para el usuario: estado por liga (partidos nuevos), segundos por paso, ficheros publicados **por
+   artifact** (y versión resultante), rutas nuevas o sin sitio, commit.
 
 ## Qué calcula `python -m bbactualiza`
 
@@ -54,7 +74,8 @@ y el resto de líneas queda byte a byte igual.
 | `entropia`, `estilos` | entropía y volatilidad; estilos unificados con la mezcla ajustada en 2020-26 (semilla fija) | `entropia/`, `estilos_unificados/` |
 | `simulador` | dataset del simulador v3.3 y exportación al navegador con los pesos congelados | `data/artifact/simulador/` |
 | `artifact` | tablas de datos, nacionalidades, evaluación de ligas, normalizados v3.2, Atlas (estilos e informe), quintetos | `data/artifact/` (no versionado) |
-| `publicacion` | lote único con sólo las rutas que dependen de 2026-27 (`.gz.txt` = gzip en base64) | `publicacion/lote0.json` |
+| `v42` | tríos, parejas y sinergia v4.2 de la temporada con los parámetros congelados (`bbequipo.v42.actualizar`; el filtro es causal, las temporadas cerradas no cambian). La previa del historial de jugador v4.2 sólo depende de temporadas cerradas: no se toca | filas 2026-27 de `data/modelos/v4_2/unidades/*_v42.csv.gz`, `artifact/kerno/quintetos/datos_v42/2026-27/`, su `indice.json` |
+| `publicacion` | lote con sólo las rutas que dependen de 2026-27 (`.gz.txt` = gzip en base64), repartido entre los tres artifacts | `publicacion/lote0.json`, `lote_<sitio>_<n>.json`, `sitios.json` |
 
 Opciones: `--sin-descarga` (reprocesa sin red), `--pasos …` (sólo algunos), `--forzar` (recalcula aunque no haya
 partidos nuevos), `--ligas …` (descarga sólo esas ligas). El último informe queda versionado en
@@ -70,5 +91,6 @@ de equipo v4.0 (`atlas/v40/`, `v40/`) y los pesos del simulador.
 ## Reglas
 
 * Sólo la temporada en curso; nunca `main`; nunca se publica si un paso falla.
+* Cada artifact recibe sólo sus lotes y se republica con **su** página leída en ese momento, sin cambios.
 * No se toca el código de las capas (`bbmodel/`, `bbnorm3/`, `bbfit/`…): `bbactualiza` sólo las llama.
 * Si una liga falla en la descarga, se sigue con las demás (queda `ok_bruto_anterior` en el informe).

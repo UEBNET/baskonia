@@ -133,7 +133,7 @@ def equipos_v40(temporada: str = TEMPORADA) -> Path:
 
 def p_boton() -> None:
     _sh(sys.executable, "-m", "bbactualiza", "--sin-descarga", "--forzar", "--pasos", "contexto", "roles", "entropia",
-        "estilos", "simulador", "artifact", "publicacion")
+        "estilos", "simulador", "artifact", "v42", "publicacion")
 
 
 PASOS = {"cvae": p_cvae, "v40": p_v40, "boton": p_boton}

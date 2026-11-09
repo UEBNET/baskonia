@@ -80,9 +80,16 @@ ficheros y 256 MiB). Equipos y Metodología necesitan al menos tres lotes cada u
    Claves del estilo) y `mcp` (botón de actualización).
 4. Con las tres URL conocidas, rellenar `urls` en los tres `sitio_<sitio>.json` y republicar solo `sitio.json` en cada uno.
 
-La skill `actualizar-temporada` republica hoy un único artifact: hay que repartir sus ficheros de 2026-27 según estos
-manifiestos (normalizados y historial en los tres; `datos/2026-27/*` en Jugadores, salvo `evaluacion_*` en Metodología;
-`quintetos/datos/2026-27/*` y `datos_v42/2026-27/*` en Equipos y Metodología; `atlas/informe/2026-27` en Jugadores y Equipos).
+**Actualización de la temporada (skill `actualizar-temporada`, adaptada el 09-11-2026).** `python -m bbactualiza` reparte
+su lote de 2026-27 entre los tres sitios según estos manifiestos (`bbactualiza.sitios`; normalizados en los tres;
+`datos/2026-27/*` en Jugadores, salvo `evaluacion_*` en Metodología; `quintetos/datos/2026-27/*` y `datos_v42/2026-27/*`
+en Equipos y Metodología; `atlas/informe/2026-27` en Jugadores y Equipos) y la Routine publica cada lote en su URL con la
+página de ese sitio. Reglas: una ruta del manifiesto va a su sitio; una ruta nueva va a los sitios que publican sus
+hermanas (misma carpeta y tipo) y se anota en sus manifiestos; el duplicado en claro de un JSON comprimido no se publica;
+nada vuelve a Jugadores desde `borrar_al_republicar`. Paso nuevo `v42` (`bbequipo.v42.actualizar`): tríos, parejas y
+sinergia v4.2 de la temporada con los parámetros congelados (las temporadas cerradas salen idénticas: diferencia máxima
+0,0 en la prueba). La previa del historial de jugador v4.2 no cambia con la temporada en curso. Rama de la Routine y de la
+recalibración mensual: `claude/jolly-thompson-qczxl4` (contiene `claude/gallant-pascal-49bx9o`, fusionada).
 
 ## 5. Pruebas locales
 
@@ -106,3 +113,7 @@ en la página de quintetos. Scripts en línea de `index.html` y `clasico.html`: 
 - **Página de cada sitio nuevo:** una copia de `artifact/kerno/index.html` con el `<title>` del sitio. Se publica desde otra ruta
   porque la misma ruta de página redespliega en el artifact principal.
 - **Capacidades:** `downloads` y `sample`. El botón de actualizar (que usa `mcp`) sólo funciona en Jugadores.
+
+**Primera publicación con el reparto (09-11-2026):** los tríos y parejas v4.2 de 2026-27 rehechos con los datos al día
+(13 480 tríos y 18 039 parejas frente a 7 907 y 13 761; G League aparece por primera vez, ruta nueva anotada en los
+manifiestos) en Equipos (versión 5) y Metodología (versión 5): 20 ficheros, 0,3 MB, página de cada sitio sin cambios.

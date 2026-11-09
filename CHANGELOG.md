@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## 2026-11-09 — Skill «actualizar-temporada» para los tres artifacts (v4.2)
+
+* Fusiona `claude/gallant-pascal-49bx9o` (botón, `bbactualiza`, skills `actualizar-temporada` y `anadir-liga`).
+* `bbactualiza/sitios.py`: reparte el lote de la actualización entre Jugadores, Equipos y Metodología según
+  `artifact/kerno/sitios/<sitio>.json` (`publicacion/sitios.json`, `lote_<sitio>_<n>.json` de ≤ 58 MB y ≤ 250 ficheros);
+  rutas nuevas por sus hermanas y anotadas en los manifiestos.
+* Paso `v42` (`bbequipo/v42/actualizar.py`): tríos, parejas y sinergia v4.2 de la temporada en curso con los parámetros
+  congelados; el lote incluye `quintetos/datos_v42/2026-27/*` e `indice.json`.
+* SKILL.md, `routine_prompt.md` y `recalibracion_prompt.md`: publicación por sitio (read → list → publish por lote, con la
+  página de cada sitio) y rama `claude/jolly-thompson-qczxl4`. Tareas programadas del botón y de la recalibración
+  apuntadas a esa rama.
+* Tríos y parejas v4.2 de 2026-27 al día publicados en Equipos y Metodología (versión 5 de cada uno).
+
 ## 2026-11-09 — CERNO v4.2 · historial del jugador, intervalos y tres artifacts
 
 Resumen ejecutivo: `docs/RESUMEN_EJECUTIVO_v42.md`.

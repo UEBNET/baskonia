@@ -2,7 +2,7 @@
  "sitio": "equipos",
  "pagina": "index.html",
  "sitio_json": "sitios/sitio_equipos.json",
- "n_ficheros": 363,
+ "n_ficheros": 364,
  "mb_estimados": 172.6,
  "mib_estimados": 164.6,
  "ficheros": [
@@ -359,6 +359,7 @@
   "quintetos/datos_v42/2026-27/feb3.gz.txt",
   "quintetos/datos_v42/2026-27/fec.gz.txt",
   "quintetos/datos_v42/2026-27/gbl.gz.txt",
+  "quintetos/datos_v42/2026-27/gleague.gz.txt",
   "quintetos/datos_v42/2026-27/lba.gz.txt",
   "quintetos/datos_v42/2026-27/lnb.gz.txt",
   "quintetos/datos_v42/2026-27/nba.gz.txt",

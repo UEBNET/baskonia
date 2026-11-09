@@ -3,13 +3,22 @@
 Botón **«Actualizar 2026-27»** en la cabecera (bloque «Datos 2026-27») del artifact Kerno Analytics
 (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC; página fuente `artifact/kerno.html`) → Routine **«Actualizar 2026-27 · Kerno»** (`trig_01MKcE4HNk4cKX5unL2t3A6v`, sin programación: sólo la lanza el botón) → sesión de Claude Code
 que sigue la skill `.claude/skills/actualizar-temporada` → `python -m bbactualiza` (paquete `bbactualiza/`) → Git
-(rama `claude/gallant-pascal-49bx9o`) y republicación del artifact con sólo los ficheros que cambian.
+(rama `claude/jolly-thompson-qczxl4` desde el 09-11-2026; antes `claude/gallant-pascal-49bx9o`) y republicación de
+**los tres artifacts** de Kerno con sólo los ficheros de cada uno que cambian.
+
+**v4.2 · tres artifacts (09-11-2026).** Kerno Analytics se dividió por secciones (docs/checkpoints/V42_sitios.md):
+Jugadores (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, la URL de siempre, con el botón), Equipos
+(https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj) y Metodología (https://claude.ai/artifact/T83MBGZk5untACmegadfNn).
+`bbactualiza.sitios` reparte el lote entre ellos según sus manifiestos (`artifact/kerno/sitios/<sitio>.json`):
+`publicacion/sitios.json` + `publicacion/lote_<sitio>_<n>.json`. La Routine republica cada sitio con su propia página
+(read → list → publish por lote). Un paso nuevo, `v42`, pone al día los tríos y parejas v4.2 de la temporada.
 
 ```
 artifact (navegador)            Routine (sesión nueva)                         repositorio / artifact
 ───────────────────            ────────────────────────                       ─────────────────────
 [Actualizar 2026-27] ─mcp──▶  fire_trigger ─▶ clon ligero + pip ─▶ python -m bbactualiza ─▶ git push (datos 2026-27)
-   estado ◀──── get_trigger                                        └─▶ publicacion/lote0.json ─▶ Artifact publish (parche)
+   estado ◀──── get_trigger                                        └─▶ publicacion/sitios.json ─▶ Artifact publish (parche)
+                                                                       lote_jugadores_0 · lote_equipos_0 · lote_metodologia_0
 ```
 
 ## 1. Principios
@@ -38,7 +47,8 @@ artifact (navegador)            Routine (sesión nueva)                         
 | estilos | `bbfit.estilos_unificados --reusar-k` | mezcla ajustada sólo con 2020-26 y semilla fija (= la guardada); 2026-27 se asigna | `estilos_unificados/` |
 | simulador | `bbfit.sim_insumos.dataset_simulador` + `bbfit.sim_exportar.exportar` (v3.3) | pesos, GBM de minutos, B9 y adaptación guardados | `data/artifact/simulador/` |
 | artifact | `artefacto.py` | — | tablas de datos, nacionalidades, evaluación de ligas, normalizados v3.2, Atlas (estilos, lectura de fichaje 2026-27), quintetos y estilos unificados |
-| publicacion | `artefacto.empaquetar` | — | `publicacion/lote0.json` (parche: sólo rutas que dependen de 2026-27) y `datos/actualizacion.json` |
+| v42 | `bbequipo.v42.actualizar` | parámetros D3 de `data/modelos/v4_2/unidades/parametros_v42.json` (ajustados con temporadas cerradas) | filas 2026-27 de `*_v42.csv.gz`, `artifact/kerno/quintetos/datos_v42/2026-27/` (≈ 70 s) |
+| publicacion | `artefacto.empaquetar` + `sitios.repartir` | manifiestos de los tres sitios | `publicacion/lote0.json` (parche: sólo rutas que dependen de 2026-27), su reparto por sitio y `datos/actualizacion.json` |
 
 **Validación del atajo del A.** Con el μ guardado, aplicado a 2025-26, reproduce las traducciones del A versionadas:
 error medio 0,0001 en pts/100 (máximo 0,08, en filas de pocos minutos) cuando la posición asignada coincide. Las

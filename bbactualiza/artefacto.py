@@ -3,7 +3,9 @@
 Se generan en data/artifact/ (no versionado; mismas rutas que usan las herramientas existentes) y `empaquetar()` deja
 en la carpeta de publicación un único lote `lote0.json` {ruta publicada: fichero local} con SÓLO esas rutas
 (.gz.txt = gzip en base64, como artifact/empaquetar.py; los JSON de menos de 256 KB, también en claro). Las demás
-rutas del artifact (temporadas anteriores, páginas, PDF) no se tocan: la publicación es un parche.
+rutas del artifact (temporadas anteriores, páginas, PDF) no se tocan: la publicación es un parche. Desde la v4.2 el lote
+se reparte entre los tres artifacts (Jugadores, Equipos, Metodología) con `bbactualiza.sitios`: `lote_<sitio>_<n>.json`
+y el resumen `sitios.json`.
 """
 from __future__ import annotations
 
@@ -179,7 +181,19 @@ def mapa(temporada: str = TEMPORADA) -> dict[str, Path]:
         m[f"quintetos/{n}"] = RAIZ / "artifact" / "quintetos" / n
     for rel, src in _v40().items():
         m[rel] = src
+    for rel, src in _v42(temporada).items():
+        m[rel] = src
     return {k: v for k, v in m.items() if v.exists()}
+
+
+def _v42(temporada: str = TEMPORADA) -> dict[str, Path]:
+    """Tríos y parejas v4.2 de la temporada en curso (bbequipo.v42.actualizar; los publican Equipos y Metodología).
+    La previa del historial v4.2 (atlas/v42/historial/<t>) sólo depende de temporadas cerradas: no cambia."""
+    d = RAIZ / "artifact" / "kerno" / "quintetos" / "datos_v42"
+    out = {f"quintetos/datos_v42/{temporada}/{p.name}": p for p in sorted((d / temporada).glob("*.gz.txt"))}
+    if (d / "indice.json").exists():
+        out["quintetos/datos_v42/indice.json"] = d / "indice.json"
+    return out
 
 
 def _v40() -> dict[str, Path]:
@@ -214,6 +228,11 @@ def empaquetar(salida: Path, temporada: str = TEMPORADA) -> dict:
     (salida / "lote0.json").write_text(json.dumps(lote, ensure_ascii=False, indent=0), encoding="utf-8")
     tam = sum(Path(v).stat().st_size for v in lote.values() if v)
     info = {"ficheros": len(lote), "mb": round(tam / 1e6, 1), "lote": str(salida / "lote0.json")}
-    if tam > E.MAX_LOTE or info["ficheros"] > E.MAX_FICHEROS:
-        raise RuntimeError(f"la publicación incremental no cabe en un lote: {info}")
+    # v4.2: tres artifacts (Jugadores, Equipos, Metodología); cada uno recibe sólo las rutas de su manifiesto, en lotes
+    # que caben en una publicación (bbactualiza.sitios)
+    from . import sitios
+    r = sitios.repartir(lote, salida)
+    info["sitios"] = {s: {k: v[k] for k in ("url", "ficheros", "mb")} | {"lotes": len(v["lotes"])}
+                      for s, v in r["sitios"].items()}
+    info["rutas_nuevas"], info["sin_sitio"] = r["rutas_nuevas"], r["sin_sitio"]
     return info
