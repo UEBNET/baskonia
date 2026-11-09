@@ -150,6 +150,7 @@ def ejecutar(cfg: dict, progreso=print) -> dict:
     B = int(cfg["comunes"]["bootstrap"])
     sem = int(cfg["comunes"]["semilla_bootstrap"])
     R = [pickle.loads((DIR / f"corte_{a}.pkl").read_bytes()) for a in cortes if (DIR / f"corte_{a}.pkl").exists()]
+    R += [pickle.loads((DIR / f"corte_{a}_trans_c.pkl").read_bytes()) for a in cortes if (DIR / f"corte_{a}_trans_c.pkl").exists()]
     C = base_ii(pd.concat([r["companeros"] for r in R], ignore_index=True))
     E = pd.concat([r["equipos"] for r in R], ignore_index=True)
     minimos = cf["minimo_exposicion"]
@@ -159,7 +160,7 @@ def ejecutar(cfg: dict, progreso=print) -> dict:
     filas_out = []
     for m in METRICAS:
         res["metricas"][m] = {}
-        for banco in ("V-AUS", "V-MID", "V-TRANS"):
+        for banco in ("V-AUS", "V-MID", "V-TRANS", "V-TRANS-c"):
             d = tabla_metrica(C[C["banco"] == banco], m, minimos)
             if d["anio"].isin(dec).sum() < 50:
                 res["metricas"][m][banco] = {"n": int(len(d)), "sello": "BAJA", "motivo": "muestra insuficiente"}
@@ -187,11 +188,13 @@ def ejecutar(cfg: dict, progreso=print) -> dict:
         s_aus = sv.get("V-AUS", {}).get("sello", "BAJA")
         s_otro = max((sv.get(b, {}).get("sello", "BAJA") for b in ("V-MID", "V-TRANS")), key=ORDEN.get)
         res["sello_final"][m] = min(s_aus, s_otro, key=ORDEN.get)
+        s_otro_c = max((sv.get(b, {}).get("sello", "BAJA") for b in ("V-MID", "V-TRANS-c")), key=ORDEN.get)
+        res.setdefault("sello_final_post_hoc_trans_c", {})[m] = min(s_aus, s_otro_c, key=ORDEN.get)
     for m in cf["candidatos_sin_via"]:
         res["sello_final"][m] = "BAJA (sin vía de predicción examinada, §3.4)"
     # Valor de baja: ΔNet del equipo en V-AUS (y, informados, V-MID y V-TRANS)
     res["delta_net"] = {}
-    for banco in ("V-AUS", "V-MID", "V-TRANS"):
+    for banco in ("V-AUS", "V-MID", "V-TRANS", "V-TRANS-c"):
         e = E[(E["banco"] == banco) & E["net_obs"].notna() & (E["poss_min"] >= float(minimos["posesiones"]))]
         d = pd.DataFrame({"anio": e["anio"], "liga": e["liga"], "team": e["team"], "obs": e["net_obs"], "pred": e["pred_net"],
                           "i": 0.0, "w": e["w_net"]})

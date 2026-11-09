@@ -71,6 +71,10 @@ def main(argv=None):
     ip.add_argument("--cortes", nargs="*", type=int, default=None)
     sub.add_parser("familiaridad", help="F2-c: δ de familiaridad por tramo (FWL con el RAPM ridge) y su robustez POST HOC")
     sub.add_parser("xp-onoff", help="F2-d: añade net_off, xnet_off, net_onoff y xnet_onoff a las tablas de jugadores de la capa XP")
+    bq = sub.add_parser("bancos", help="F3: bancos V-AUS, V-MID y V-TRANS de un corte con predicciones ≤ t (caché)")
+    bq.add_argument("--cortes", nargs="*", type=int, default=None)
+    bq.add_argument("--trans-corregida", action="store_true", help="[POST HOC] V-TRANS con presencias corregidas (V-TRANS-c)")
+    sub.add_parser("examen-f3", help="F3: sellos por métrica × banco, Valor de baja y EMD (desde la caché de bancos)")
     sub.add_parser("benchmark", help="F0.3: benchmark de decisión sobre la v4.0")
     sub.add_parser("ausencias", help="F0.5: auditoría de ausencias (banco V-AUS)")
     sub.add_parser("inventario", help="F0.6/F0.7: residuos de Fit y ADAPT; referencias fijas a club y temporada")
@@ -153,6 +157,17 @@ def main(argv=None):
     elif a.orden == "xp-onoff":
         from . import puntos_esperados as PE
         print(PE.completar_onoff(cfg))
+    elif a.orden == "bancos":
+        from . import bancos as BA
+        for c in (a.cortes or cfg["comunes"]["cortes"]):
+            (BA.corte_trans_corregida if a.trans_corregida else BA.corte)(cfg, int(c))
+    elif a.orden == "examen-f3":
+        from . import examen_f3 as X3
+        r = X3.ejecutar(cfg)
+        _registro(cfg, "F3_sellos", {"cortes": cfg["comunes"]["cortes"], "bootstrap": cfg["comunes"]["bootstrap"]},
+                  {f"sello_{m}": {"BAJA": 0, "MEDIA": 1, "ALTA": 2}.get(v, 0) for m, v in r["sello_final"].items()},
+                  [CE.dir_salida(cfg, "bancos") / "examen_f3.json"])
+        print(json.dumps({k: r[k] for k in ("sello_final", "valor_de_baja")}, ensure_ascii=False, indent=1, default=str))
     elif a.orden == "orden-sinergias-resumen":
         _resumen_orden(cfg)
     elif a.orden == "benchmark":

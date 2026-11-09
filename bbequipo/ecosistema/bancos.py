@@ -273,15 +273,26 @@ class Predictor:
         return float(self.c_grupo.get(EQ.GRUPOS_LIGA.get(liga, "otras"), self.c_def))
 
 
-def predecir_evento(pr: Predictor, ev: dict, base: dict, n_sim: int, semilla: int) -> pd.DataFrame | None:
-    """Añade al evento las predicciones del modelo para cada compañero (Δmin, Δuso, F2-B) y el ΔNet del equipo."""
+def predecir_evento(pr: Predictor, ev: dict, base: dict, n_sim: int, semilla: int, corregida: bool = False) -> pd.DataFrame | None:
+    """Añade al evento las predicciones del modelo para cada compañero (Δmin, Δuso, F2-B) y el ΔNet del equipo.
+    `corregida` (V-TRANS, POST HOC 09-11-2026): plantilla de t con su presencia real (como la de t+1) y rol oráculo sólo para
+    las altas con presencia ≥ 0,5 (las de media temporada entran por el motor con su presencia: forzar_roles no la usa)."""
     liga, team, movs = ev["liga"], ev["team"], ev["movs"]
     S = pr.ins.S
     if ev["banco"] == "V-TRANS":
-        e0 = pr.escenario(ev["liga0"], ev["team0"], ev["club_t"], ev["miembros0"], {}, n_sim, semilla)
+        minp = float(S.cfg_sim()["plantilla"]["minimo_presencia"])
         r1 = pr.ins.roles[pr.ins.roles["temporada"] == pr.ins.temp1]
-        mi = S.miembros_reales(r1, liga, team, float(S.cfg_sim()["plantilla"]["minimo_presencia"]))
-        e1 = pr.escenario(liga, team, ev["club_t"], mi, {a: r for t, a, r in movs if t == "alta" and r}, n_sim, semilla)
+        mi = S.miembros_reales(r1, liga, team, minp)
+        roles_a = {a: r for t, a, r in movs if t == "alta" and r}
+        if corregida:
+            r0 = pr.ins.roles[pr.ins.roles["temporada"] == pr.ins.temp]
+            mi0 = S.miembros_reales(r0, ev["liga0"], ev["team0"], minp)
+            pres = dict(mi)
+            roles_a = {a: r for a, r in roles_a.items() if pres.get(a, 0.0) >= 0.5}
+        else:
+            mi0 = ev["miembros0"]
+        e0 = pr.escenario(ev["liga0"], ev["team0"], ev["club_t"], mi0, {}, n_sim, semilla)
+        e1 = pr.escenario(liga, team, ev["club_t"], mi, roles_a, n_sim, semilla)
     else:
         e0 = base["e"]
         mi = base["miembros"]
@@ -402,4 +413,46 @@ def corte(cfg: dict, a: int, n_sim: int = 200, progreso=print) -> pd.DataFrame:
     cp.write_bytes(pickle.dumps(res))
     if progreso:
         progreso(f"  F3 corte {a}: {len(C)} filas de compañeros, {len(E)} eventos · {time.time() - t0:.0f} s", flush=True)
+    return res
+
+
+def corte_trans_corregida(cfg: dict, a: int, n_sim: int = 200, progreso=print) -> pd.DataFrame:
+    """[POST HOC, 09-11-2026] V-TRANS con la corrección de presencias (ver predecir_evento). Banco «V-TRANS-c», informado
+    junto al literal prerregistrado. Caché experimentos/v4_1/bancos/corte_<a>_trans_c.pkl."""
+    cp = DIR / f"corte_{a}_trans_c.pkl"
+    if cp.exists():
+        return pickle.loads(cp.read_bytes())
+    t0 = time.time()
+    os.environ.setdefault("CERNO_SIMULADOR", "v32")
+    pr = Predictor(cfg, a, progreso)
+    ins = pr.ins
+    d0, d1 = partidos(ins.temp), partidos(ins.temp1)
+    roles1 = pd.read_csv(CE.RAIZ / ins.cfg40["insumos"]["roles"], usecols=["liga", "temporada", "team_id", "persona_id", "rol"],
+                         dtype={"team_id": str, "persona_id": str}, low_memory=False)
+    roles1 = roles1[roles1["temporada"] == ins.temp1]
+    previa = previa_jugadores(d0)
+    filas, equipos = [], []
+    for i, ev in enumerate(v_trans(cfg, ins, d0, d1, roles1)):
+        sem = int(CE.semilla(cfg, f"bancos|{a}|{(ev['liga'], ev['team'])}"))
+        try:
+            D = predecir_evento(pr, ev, {"previa": previa}, n_sim, sem, corregida=True)
+        except Exception as exc:
+            if progreso:
+                progreso(f"    evento V-TRANS-c {ev['team']} omitido: {exc}", flush=True)
+            continue
+        if D is None:
+            continue
+        mov_id = f"V-TRANS-c|{ev['liga']}|{ev['team']}|{i}"
+        D = D.reset_index().rename(columns={"index": "persona_id"})
+        mvs, eqd = D.attrs["movers"], D.attrs["equipo"]
+        D["evento"], D["banco"], D["anio"], D["liga"], D["team"] = mov_id, "V-TRANS-c", a, ev["liga"], ev["team"]
+        D["movers"] = [mvs] * len(D)
+        filas.append(D)
+        equipos.append({"evento": mov_id, "banco": "V-TRANS-c", "anio": a, "liga": ev["liga"], "team": ev["team"],
+                        "n_movs": len(ev["movs"]), "tipo": "varios", **eqd})
+    res = {"companeros": pd.concat(filas, ignore_index=True) if filas else pd.DataFrame(), "equipos": pd.DataFrame(equipos),
+           "segundos": round(time.time() - t0)}
+    cp.write_bytes(pickle.dumps(res))
+    if progreso:
+        progreso(f"  V-TRANS-c corte {a}: {len(equipos)} eventos · {time.time() - t0:.0f} s", flush=True)
     return res
