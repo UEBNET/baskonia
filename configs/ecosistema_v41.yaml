@@ -298,9 +298,67 @@ f2:
 
 # ---------------------------------------------------------------------------------------- F3 · validación del impacto cruzado y bajas
 f3:
+  # PRERREGISTRO de la F3 (09-11-2026), escrito ANTES de calcular. Orden del CEO: «Apruebo la puerta F2 con G1 a G6 y
+  # arranca la F3». Código: bbequipo/ecosistema/bancos.py (bancos y predicciones) y examen_f3.py (sellos).
   bancos: [V-AUS, V-MID, V-TRANS]
   metricas_cruzadas: [minutos, usg_pct, cuota_tiro, pct_asistidas, pts_p100, ts_pct, efg_pct, ortg, ast_pct, reb_pct]
+  metricas_examinadas: [minutos, uso, cuota_tiro, pct_asistidas, pts100]     # las que tienen vía de predicción (motor y F2-B)
+  candidatos_sin_via: [ts_pct, efg_pct, ortg, ast_pct, reb_pct]              # §3.4: sin modelo con examen → sello BAJA por regla
   lineas_base: [delta_0, redistribucion_proporcional]
+  fuente_partidos: data/modelos/roles/partidos_jugador/<temporada>.csv.gz    # fase regular; métricas por partido y jugador
+  definiciones_observadas:                            # agregadas sobre un CONJUNTO de partidos (sumas, no medias de cocientes)
+    minutos: media de minutos por partido (0 si en el acta del equipo sin jugar)
+    uso: 100·Σ(fga + 0,44·fta) / Σ(team_fga_on + 0,44·team_fta_on)   # uso de tiro en pista (escala del USG del motor, media 20)
+    cuota_tiro: 100·Σ fga / Σ team_fga_on             # igual que bbmodel.interacciones (F2-B)
+    pct_asistidas: 100·Σ fgm_asist / Σ fgm
+    pts100: 100·Σ pts / Σ poss_on
+    net_equipo: 100·(Σ pts a favor − Σ pts en contra) / (Σ poss_on del equipo / 5)
+  pesos_mae:                                          # media armónica de la exposición en los dos conjuntos de partidos
+    minutos: partidos
+    uso: team_tsa_on
+    cuota_tiro: team_fga_on
+    pct_asistidas: fgm
+    pts100: poss_on
+    net_equipo: posesiones
+  minimo_exposicion: {partidos: 1, team_fga_on: 20, fgm: 5, poss_on: 30, posesiones: 50}   # por conjunto, para entrar en una métrica
+  prediccion:                                         # TODO con información ≤ t (corte t) para la temporada t+1
+    minutos: motor v3.3 de los pesos ≤ t (InsumosCorte.minutos) con y sin el movimiento, mismos números aleatorios; P5
+    uso: uso natural traducido a la liga (≤ t) + suma fija (redistribuir_uso, amortiguar 1) con los minutos de cada escenario
+    f2b: −π_kj·d̂(j→k) (baja) o +π_ka·d̂(a→k) (alta) con los GBM de F2-B ≤ t (dirigidos/examen/modelos_corte_<t>) y π del motor
+    net_equipo: c_cal(corte, grupo)·ΔT de la capa 4 (T con β, φ, h ≤ t; c del examen v4.0 de la capa 4, cortes anteriores)
+    rol_altas: oraculo                                # V-MID y V-TRANS: rol realizado del alta (player_role_season.rol)
+  redistribucion_proporcional:                        # línea base (ii); sin modelo, con datos ≤ el momento del movimiento
+    minutos: Δm_k = ±m_x · m_k / Σ_{l ∉ movs} m_l (los minutos liberados o absorbidos por x, en proporción a los minutos previos)
+    cuotas: "Δs_k = ±(m_x/gm)·(s_x − 20)·s_k/(100 − s_x), s ∈ {uso, cuota_tiro}: x se sustituye por un jugador de cuota media (20)
+      y el exceso se reparte en proporción a la cuota previa; m_x/gm = prob. de coincidir (independencia)"
+    pts100: Δp_k = p_k · Δuso_k(ii) / uso_k           # los puntos acompañan al uso
+    pct_asistidas: 0                                  # sin noción de reparto: (ii) = (i) [declarado]
+  intervalos: conformal_cortes_anteriores             # q10/q90 del residuo (obs − pred) de los cortes < t por tercil de peso
+                                                      # (2021: en muestra, sólo calibra); incluye el ruido de la observación
+  bootstrap: equipo_temporada                         # B de comunes; IC95 de la diferencia de MAE ponderado (base − modelo)
+  v_aus:
+    evento: (equipo, temporada, j) con ≥ 1 partido sin j (único ausente de rotación, P1/P3) y ≥ 3 con j sin ausentes de rotación
+    compañeros: jugadores con fila en los dos conjuntos y minutos > 0 en ambos
+    observado: métrica(partidos sin j) − métrica(partidos con j)
+  v_mid:
+    evento: alta a de un equipo en la fase regular con su primer partido entre el 15 % y el 85 % del calendario del equipo,
+      ≥ 3 partidos del equipo antes y ≥ 5 jugados por a después, y a de rotación después (≥ 7,5 % de los minutos)
+    resto_constante: ningún OTRO jugador de rotación (≥ 7,5 % en alguna ventana) aparece sólo en una de las dos ventanas
+    observado: métrica(después) − métrica(antes)
+  v_trans:
+    evento: (club, t → t+1) con jugadores que siguen (≥ 300 min en las dos), plantillas reales (mapa de clubes de la v3.2)
+    prediccion: motor(R_t+1, altas con rol oráculo) − motor(R_t), F2-B de las altas (+) y de las bajas (−)
+    observado: métrica de la temporada t+1 − métrica de la temporada t (mismas definiciones, temporada completa)
+  sello_por_metrica: >-
+    Por banco, la regla congelada criterios.f3_sellos (ALTA / MEDIA / BAJA) con la cobertura del 80 % agregada en los cortes de
+    decisión. Sello final de la métrica = el menor entre el de V-AUS y el MEJOR de los otros dos bancos (§6.4: «banco V-AUS y al
+    menos un banco más»).
+  valor_de_baja: ΔNet del equipo en V-AUS frente a (i), como la capa 4 (mejora a Δ = 0 con IC95 que excluye 0; cobertura en rango)
+  potencia: >-
+    EMD sembrado sobre los datos reales (regla de la F0): y* = b + κ·(p − b) + e*, con e* los residuos reales de la línea base
+    permutados dentro de corte; se busca el κ con detección ≥ 0,80 (IC95 de MAE_base − MAE_modelo > 0); 20 réplicas.
+  endogeneidad_declarada: descansos en partidos sin nada en juego y lesiones tras sobrecarga (V-AUS); fichajes a mitad de
+    temporada por lesión o mal rendimiento (V-MID); envejecimiento y desarrollo (V-TRANS)
   trios:
     modelo: descomposicion_cp_sobre_z                 # φ_jkl de rango bajo sobre los perfiles z
     rango_candidatos: [1, 2, 3]
@@ -356,6 +414,8 @@ criterios:
         los compañeros con signo negativo (mecánica del on/off) y frente al β RAPM de t+1 cae de 0,58 a 0,13 → pendiente del CEO"
       familiaridad: "δ +0,38 [0,35; 0,41] pero no mejora la monotonía (+0,002 [−0,005; 0,009]): no entra; POST HOC: selección"
       regla_f2a: "aplicada: el IMPACTO v4.0 sigue como ancla; el Impacto en pista se muestra EXPERIMENTAL"
+    decision_ceo_09-11-2026: "puerta F2 APROBADA con G1–G6 (V41_F2 §10.1): IMPACTO v4.0 ancla; Impacto en pista EXPERIMENTAL;
+      c_j NO se adopta; familiaridad cerrada; cambio por altas/bajas con sello BAJA; arranca la F3"
   f3_trios:
     estado: cerrada_sin_ejecutar_07-11-2026           # DECISIÓN CEO (D4): examen no informativo (EMD > 2 pts/100 frente a 0,10;
                                                       # V41_F0 §11.3); motor en orden 2; ablación negativa en potencia/trios_elite_club.json
