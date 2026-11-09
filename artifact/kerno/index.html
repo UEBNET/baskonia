@@ -183,6 +183,20 @@ select:hover, input:hover { border-color: var(--text-2); }
 .rail-foot { display: grid; gap: 6px; border-top: 1px solid var(--rule); margin: 0 16px 0 20px; padding-top: 14px; }
 .rail-foot p { margin: 0; font-size: 12.5px; color: var(--muted); }
 .rail-foot .label { color: var(--text); }
+/* sitios (v4.2): el producto en tres artifacts. Nombre del sitio arriba del raíl; lo de otro sitio, enlace a ese artifact */
+.rail-site { display: grid; gap: 4px; margin: 0 16px 22px 20px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.rail-site b { font: 620 16px/1.15 var(--f-sans); letter-spacing: .005em; color: var(--text); }
+.rail-otros { margin: 0 16px 12px 20px; padding-top: 14px; border-top: 1px solid var(--rule-strong); }
+.rail .sec.fuera .sec-h { border-top-color: var(--rule); }
+a.nav { text-decoration: none; }
+.nav.fuera { color: var(--muted); }
+.nav.fuera:hover { color: var(--text); }
+.nav .fuera-t { display: inline-flex; align-items: center; flex: none; font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.nav.off { cursor: default; opacity: .6; }
+.nav.off:hover { background: transparent; color: var(--muted); }
+.k-arrow { display: inline-block; width: .95em; height: .95em; margin: 0 0 0 .3em; vertical-align: -.1em; background: currentColor; flex: none;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat; }
 
 .main { position: relative; min-width: 0; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }
 /* cabecera de vista: ceja mono, título corto en Bombardier (H1), entradilla Mona en S700 */
@@ -474,9 +488,9 @@ td.n b { font-weight: 600; }
 <div class="app">
   <header class="head" id="head">
     <button class="ibtn menu-btn" type="button" id="menuBtn" aria-label="Abrir navegación" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/></svg></button>
-    <a class="brand" href="#inicio" aria-label="Kerno Analytics · inicio">
+    <a class="brand" id="brandLink" href="#inicio" aria-label="Kerno Analytics · inicio">
       <span class="logo"><span class="pos"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-80.00 -80.00 835.90 319.00" width="835.9" height="319.0" role="img" aria-label="KERNO Analytics"><title>KERNO Analytics — horizontal (positive)</title><g transform="translate(-22.942 0.000) scale(1.59000)"><path fill="#0F2E25" d="M14.429 0.000 L18.629 0.000 L18.629 100.000 L14.429 100.000ZM21.029 0.000 L21.044 36.587 L21.153 38.604 L21.368 40.612 L21.687 42.606 L22.145 44.727 L26.226 43.734 L25.790 41.698 L25.479 39.645 L25.291 37.576 L25.229 0.000ZM41.305 71.508 L70.810 100.000 L76.852 99.996 L44.222 68.486ZM27.629 0.000 L27.645 36.531 L27.703 37.685 L31.894 37.407 L31.829 0.000ZM42.609 63.592 L80.311 100.000 L86.357 100.000 L45.527 60.571ZM34.229 0.000 L34.229 31.294 L38.429 31.294 L38.429 0.000ZM46.331 58.011 L89.812 100.000 L95.858 100.000 L49.249 54.990ZM25.229 100.000 L25.242 67.531 L25.363 65.457 L25.609 63.395 L25.978 61.351 L26.469 59.333 L27.081 57.348 L27.811 55.403 L28.657 53.506 L29.616 51.664 L30.684 49.882 L31.857 48.168 L33.131 46.527 L34.501 44.967 L80.998 0.000 L74.952 0.000 L32.183 41.317 L30.802 42.791 L29.501 44.335 L28.281 45.944 L27.148 47.615 L26.103 49.343 L25.149 51.123 L24.290 52.951 L23.527 54.821 L22.863 56.727 L22.299 58.666 L21.837 60.632 L21.478 62.619 L21.223 64.623 L21.074 66.636 L21.029 100.000ZM38.429 100.000 L38.453 67.474 L38.651 65.433 L39.044 63.419 L39.628 61.453 L40.399 59.552 L41.350 57.734 L42.470 56.016 L43.751 54.414 L44.934 53.177 L100.000 0.000 L93.954 0.000 L41.293 50.882 L39.940 52.418 L38.714 54.057 L37.623 55.789 L36.675 57.602 L35.875 59.486 L35.229 61.428 L34.741 63.416 L34.413 65.437 L34.249 67.477 L34.229 100.000Z"/><path fill="#8A6B35" d="M31.829 100.000 L31.847 67.492 L31.992 65.482 L32.283 63.487 L32.716 61.519 L33.291 59.587 L34.003 57.702 L34.850 55.873 L35.826 54.110 L36.928 52.422 L38.148 50.817 L39.481 49.305 L90.499 0.000 L84.453 0.000 L36.700 46.137 L35.312 47.661 L34.025 49.271 L32.844 50.961 L31.774 52.722 L30.819 54.549 L29.983 56.434 L29.270 58.368 L28.682 60.344 L28.223 62.353 L27.893 64.388 L27.695 66.440 L27.629 100.000Z"/></g><path fill="#0F2E25" transform="translate(191.058 100.000)" d="M86.71875 0.0 60.15625 -69.6875 82.96875 -100.0H61.71875L25.9375 -52.96875V-100.0H7.8125V0.0H25.9375V-26.09375L46.875 -53.4375L67.96875 0.0Z M181.875 0.0V-17.34375H137.8125V-40.9375H167.65625V-59.0625H137.8125V-82.65625H181.875V-100.0H119.53125V0.0Z M284.6875 0.0 269.0625 -38.59375 281.5625 -51.09375V-87.5L269.0625 -100.0H219.375V0.0H237.5V-38.59375H249.53125L264.53125 0.0ZM263.4375 -56.71875H237.5V-82.65625H263.4375Z M382.03125 0.0V-100.0H364.21875V-43.28125L335.625 -100.0H319.84375V0.0H337.8125L337.65625 -56.71875L366.25 0.0Z M484.84375 -12.5V-87.5L472.34375 -100.0H435.15625L422.65625 -87.5V-12.5L435.15625 0.0H472.34375ZM466.71875 -17.34375H440.78125V-82.65625H466.71875Z"/><path fill="#0F2E25" transform="translate(191.058 159.000)" d="M0.7645022969850351 0.0 7.528431723151408 -23.0H11.90818799515845L18.672117421324824 0.0H15.134618624834946L9.71830985915493 -19.462473522777287L4.302001093474912 0.0ZM4.535221153581646 -5.992924134160431 5.57184482628191 -9.148161896181778H13.864774892027949L14.901398564728213 -5.992924134160431Z M60.553633611974576 0.0V-23.0H64.68716581102828L72.82459936007646 -3.4598088653994274L72.25445337429852 -3.343187960772447V-23.0H75.58462743624834V0.0H71.45109523719465L63.31366168814645 -19.540191134600573L63.8838076739244 -19.68272713674626V0.0Z M117.46614362689809 0.0 124.23007305306447 -23.0H128.6098293250715L135.3737587512379 0.0H131.83625995474802L126.41995118906799 -19.462473522777287L121.00364242338797 0.0ZM121.2368624834947 -5.992924134160431 122.27348615619496 -9.148161896181778H130.566416221941L131.60303989464128 -5.992924134160431Z M178.22710592780314 0.0V-23.0H181.62207267653773V-1.302253916565801L179.5617502561757 -3.2005926427706863H192.61021242813322V0.0Z M241.45002424213246 0.0V-9.45915888396787L234.5953890088578 -23.0H238.36612961460165L243.12159251898106 -12.94483143981074L247.87705542336045 -23.0H251.64779602910428L244.84499099086705 -9.45915888396787V0.0Z M299.77492980957027 0.0V-19.799407357229313H293.04987797266995V-23.0H309.8949483952052V-19.799407357229313H303.16989655830486V0.0Z M352.6316805987291 0.0V-3.2005926427706863H358.1257504745268V-19.799407357229313H352.6316805987291V-23.0H367.01478709905916V-19.799407357229313H361.5207172232614V-3.2005926427706863H367.01478709905916V0.0Z M418.2647603209589 0.5183098591549296Q415.4918013881629 0.5183098591549296 413.5610959764937 -0.9361969853790714Q411.63039056482444 -2.3907038299130723 410.6261642241142 -5.079436224279269Q409.6219378834039 -7.768168618645467 409.6219378834039 -11.467605633802817Q409.6219378834039 -15.192957746478873 410.6261642241142 -17.884929775184307Q411.63039056482444 -20.576901803889744 413.5610959764937 -22.047605831522336Q415.4918013881629 -23.51830985915493 418.2647603209589 -23.51830985915493Q421.41349904234977 -23.51830985915493 423.5644857487208 -21.45154474822568Q425.71547245509186 -19.384779637296432 426.389272899359 -15.64645910128741L422.8323362968337 -15.445613635425836Q422.3464247582663 -17.86222860846721 421.134883568992 -19.10293144978268Q419.9233423797177 -20.34363429109815 418.2647603209589 -20.34363429109815Q416.59322170203836 -20.34363429109815 415.45942580532017 -19.310257172920334Q414.32562990860197 -18.276880054742517 413.7360560027646 -16.29111173387984Q413.14648209692723 -14.305343413017164 413.14648209692723 -11.467605633802817Q413.14648209692723 -8.662262220785651 413.7360560027646 -6.689451448682329Q414.32562990860197 -4.716640676579005 415.45942580532017 -3.686503192740427Q416.59322170203836 -2.6563657089018484 418.2647603209589 -2.6563657089018484Q420.05939515879453 -2.6563657089018484 421.31952789736465 -4.0104478433098585Q422.5796606359347 -5.364529977717869 423.0137419794646 -8.007903536944323L426.5447634844712 -7.832973168601452Q425.9487083327602 -3.9002884126045334 423.77180652887046 -1.6909892767248018Q421.5949047249807 0.5183098591549296 418.2647603209589 0.5183098591549296Z M476.8228997888699 0.5183098591549296Q474.33500890597486 0.5183098591549296 472.465854569556 -0.4859154929577465Q470.596700233137 -1.4901408450704225 469.49853339396725 -3.2847905118700482Q468.4003665547975 -5.079440178669674 468.20600035761436 -7.4960650376870595L471.6916689590669 -7.703389772227112Q471.9119502537687 -6.0642395879181334 472.6019459039392 -4.9336803597463685Q473.29194155410977 -3.8031211315746036 474.3868638159523 -3.229743420238226Q475.4817860777948 -2.6563657089018484 476.94600193937055 -2.6563657089018484Q478.37134218887536 -2.6563657089018484 479.34964453468854 -3.0224196742957745Q480.3279468805017 -3.3884736396897006 480.8365348708461 -4.1076240217182Q481.34512286119053 -4.826774403746699 481.34512286119053 -5.856908921792473Q481.34512286119053 -6.88704541703345 480.8689272598481 -7.632112873775858Q480.3927316585057 -8.377180330518266 479.12287902832026 -9.018585419990647Q477.85302639813483 -9.659990509463027 475.4234647509077 -10.327309707856514Q473.0586779957086 -10.988153591961927 471.5750154307191 -11.810970295650858Q470.0913528657295 -12.633786999339788 469.40783055265183 -13.84209844025088Q468.7243082395741 -15.050409881161972 468.7243082395741 -16.832103976397445Q468.7243082395741 -18.834079366334727 469.6475476761938 -20.340419371698943Q470.57078711281355 -21.846759377063158 472.30712632729967 -22.682534618109045Q474.0434655417858 -23.51830985915493 476.460088423608 -23.51830985915493Q478.85727349939475 -23.51830985915493 480.56121834768373 -22.57887422803422Q482.26516319597266 -21.63943859691351 483.2531913649867 -19.964648480482502Q484.24121953400083 -18.289858364051497 484.4744573888644 -16.067597725022008L480.97583025005497 -15.86675225916043Q480.7944225902288 -17.194917318854532 480.2307637819101 -18.20561699665768Q479.6671049735915 -19.216316674460828 478.70175918794007 -19.77997548277949Q477.7364134022887 -20.34363429109815 476.3499448104643 -20.34363429109815Q474.45812885123235 -20.34363429109815 473.34053211480796 -19.430119689081756Q472.2229353783835 -18.51660508706536 472.2229353783835 -17.013515590613995Q472.2229353783835 -16.022252730248677 472.6732158822073 -15.364649469080105Q473.123496386031 -14.707046207911532 474.2605348828812 -14.198456240371918Q475.39757337973145 -13.689866272832306 477.4448898100517 -13.11324892715669Q480.1919277137433 -12.361701213138204 481.81164305780965 -11.386630592883472Q483.431358401876 -10.41155997262874 484.137554200938 -9.080151324204994Q484.84374999999994 -7.74874267578125 484.84374999999994 -5.869871413539832Q484.84374999999994 -3.9715564136773764 483.84600391656573 -2.523525872029049Q482.8482578331315 -1.0754953303807218 481.05036952059027 -0.2785927356128961Q479.252481208049 0.5183098591549296 476.8228997888699 0.5183098591549296Z"/></svg></span><span class="neg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-80.00 -80.00 835.90 319.00" width="835.9" height="319.0" role="img" aria-label="KERNO Analytics"><title>KERNO Analytics — horizontal (negative)</title><g transform="translate(-22.942 0.000) scale(1.59000)"><path fill="#F3F4F0" d="M14.429 0.000 L18.629 0.000 L18.629 100.000 L14.429 100.000ZM21.029 0.000 L21.044 36.587 L21.153 38.604 L21.368 40.612 L21.687 42.606 L22.145 44.727 L26.226 43.734 L25.790 41.698 L25.479 39.645 L25.291 37.576 L25.229 0.000ZM41.305 71.508 L70.810 100.000 L76.852 99.996 L44.222 68.486ZM27.629 0.000 L27.645 36.531 L27.703 37.685 L31.894 37.407 L31.829 0.000ZM42.609 63.592 L80.311 100.000 L86.357 100.000 L45.527 60.571ZM34.229 0.000 L34.229 31.294 L38.429 31.294 L38.429 0.000ZM46.331 58.011 L89.812 100.000 L95.858 100.000 L49.249 54.990ZM25.229 100.000 L25.242 67.531 L25.363 65.457 L25.609 63.395 L25.978 61.351 L26.469 59.333 L27.081 57.348 L27.811 55.403 L28.657 53.506 L29.616 51.664 L30.684 49.882 L31.857 48.168 L33.131 46.527 L34.501 44.967 L80.998 0.000 L74.952 0.000 L32.183 41.317 L30.802 42.791 L29.501 44.335 L28.281 45.944 L27.148 47.615 L26.103 49.343 L25.149 51.123 L24.290 52.951 L23.527 54.821 L22.863 56.727 L22.299 58.666 L21.837 60.632 L21.478 62.619 L21.223 64.623 L21.074 66.636 L21.029 100.000ZM38.429 100.000 L38.453 67.474 L38.651 65.433 L39.044 63.419 L39.628 61.453 L40.399 59.552 L41.350 57.734 L42.470 56.016 L43.751 54.414 L44.934 53.177 L100.000 0.000 L93.954 0.000 L41.293 50.882 L39.940 52.418 L38.714 54.057 L37.623 55.789 L36.675 57.602 L35.875 59.486 L35.229 61.428 L34.741 63.416 L34.413 65.437 L34.249 67.477 L34.229 100.000Z"/><path fill="#B8975C" d="M31.829 100.000 L31.847 67.492 L31.992 65.482 L32.283 63.487 L32.716 61.519 L33.291 59.587 L34.003 57.702 L34.850 55.873 L35.826 54.110 L36.928 52.422 L38.148 50.817 L39.481 49.305 L90.499 0.000 L84.453 0.000 L36.700 46.137 L35.312 47.661 L34.025 49.271 L32.844 50.961 L31.774 52.722 L30.819 54.549 L29.983 56.434 L29.270 58.368 L28.682 60.344 L28.223 62.353 L27.893 64.388 L27.695 66.440 L27.629 100.000Z"/></g><path fill="#F3F4F0" transform="translate(191.058 100.000)" d="M86.71875 0.0 60.15625 -69.6875 82.96875 -100.0H61.71875L25.9375 -52.96875V-100.0H7.8125V0.0H25.9375V-26.09375L46.875 -53.4375L67.96875 0.0Z M181.875 0.0V-17.34375H137.8125V-40.9375H167.65625V-59.0625H137.8125V-82.65625H181.875V-100.0H119.53125V0.0Z M284.6875 0.0 269.0625 -38.59375 281.5625 -51.09375V-87.5L269.0625 -100.0H219.375V0.0H237.5V-38.59375H249.53125L264.53125 0.0ZM263.4375 -56.71875H237.5V-82.65625H263.4375Z M382.03125 0.0V-100.0H364.21875V-43.28125L335.625 -100.0H319.84375V0.0H337.8125L337.65625 -56.71875L366.25 0.0Z M484.84375 -12.5V-87.5L472.34375 -100.0H435.15625L422.65625 -87.5V-12.5L435.15625 0.0H472.34375ZM466.71875 -17.34375H440.78125V-82.65625H466.71875Z"/><path fill="#F3F4F0" transform="translate(191.058 159.000)" d="M0.7645022969850351 0.0 7.528431723151408 -23.0H11.90818799515845L18.672117421324824 0.0H15.134618624834946L9.71830985915493 -19.462473522777287L4.302001093474912 0.0ZM4.535221153581646 -5.992924134160431 5.57184482628191 -9.148161896181778H13.864774892027949L14.901398564728213 -5.992924134160431Z M60.553633611974576 0.0V-23.0H64.68716581102828L72.82459936007646 -3.4598088653994274L72.25445337429852 -3.343187960772447V-23.0H75.58462743624834V0.0H71.45109523719465L63.31366168814645 -19.540191134600573L63.8838076739244 -19.68272713674626V0.0Z M117.46614362689809 0.0 124.23007305306447 -23.0H128.6098293250715L135.3737587512379 0.0H131.83625995474802L126.41995118906799 -19.462473522777287L121.00364242338797 0.0ZM121.2368624834947 -5.992924134160431 122.27348615619496 -9.148161896181778H130.566416221941L131.60303989464128 -5.992924134160431Z M178.22710592780314 0.0V-23.0H181.62207267653773V-1.302253916565801L179.5617502561757 -3.2005926427706863H192.61021242813322V0.0Z M241.45002424213246 0.0V-9.45915888396787L234.5953890088578 -23.0H238.36612961460165L243.12159251898106 -12.94483143981074L247.87705542336045 -23.0H251.64779602910428L244.84499099086705 -9.45915888396787V0.0Z M299.77492980957027 0.0V-19.799407357229313H293.04987797266995V-23.0H309.8949483952052V-19.799407357229313H303.16989655830486V0.0Z M352.6316805987291 0.0V-3.2005926427706863H358.1257504745268V-19.799407357229313H352.6316805987291V-23.0H367.01478709905916V-19.799407357229313H361.5207172232614V-3.2005926427706863H367.01478709905916V0.0Z M418.2647603209589 0.5183098591549296Q415.4918013881629 0.5183098591549296 413.5610959764937 -0.9361969853790714Q411.63039056482444 -2.3907038299130723 410.6261642241142 -5.079436224279269Q409.6219378834039 -7.768168618645467 409.6219378834039 -11.467605633802817Q409.6219378834039 -15.192957746478873 410.6261642241142 -17.884929775184307Q411.63039056482444 -20.576901803889744 413.5610959764937 -22.047605831522336Q415.4918013881629 -23.51830985915493 418.2647603209589 -23.51830985915493Q421.41349904234977 -23.51830985915493 423.5644857487208 -21.45154474822568Q425.71547245509186 -19.384779637296432 426.389272899359 -15.64645910128741L422.8323362968337 -15.445613635425836Q422.3464247582663 -17.86222860846721 421.134883568992 -19.10293144978268Q419.9233423797177 -20.34363429109815 418.2647603209589 -20.34363429109815Q416.59322170203836 -20.34363429109815 415.45942580532017 -19.310257172920334Q414.32562990860197 -18.276880054742517 413.7360560027646 -16.29111173387984Q413.14648209692723 -14.305343413017164 413.14648209692723 -11.467605633802817Q413.14648209692723 -8.662262220785651 413.7360560027646 -6.689451448682329Q414.32562990860197 -4.716640676579005 415.45942580532017 -3.686503192740427Q416.59322170203836 -2.6563657089018484 418.2647603209589 -2.6563657089018484Q420.05939515879453 -2.6563657089018484 421.31952789736465 -4.0104478433098585Q422.5796606359347 -5.364529977717869 423.0137419794646 -8.007903536944323L426.5447634844712 -7.832973168601452Q425.9487083327602 -3.9002884126045334 423.77180652887046 -1.6909892767248018Q421.5949047249807 0.5183098591549296 418.2647603209589 0.5183098591549296Z M476.8228997888699 0.5183098591549296Q474.33500890597486 0.5183098591549296 472.465854569556 -0.4859154929577465Q470.596700233137 -1.4901408450704225 469.49853339396725 -3.2847905118700482Q468.4003665547975 -5.079440178669674 468.20600035761436 -7.4960650376870595L471.6916689590669 -7.703389772227112Q471.9119502537687 -6.0642395879181334 472.6019459039392 -4.9336803597463685Q473.29194155410977 -3.8031211315746036 474.3868638159523 -3.229743420238226Q475.4817860777948 -2.6563657089018484 476.94600193937055 -2.6563657089018484Q478.37134218887536 -2.6563657089018484 479.34964453468854 -3.0224196742957745Q480.3279468805017 -3.3884736396897006 480.8365348708461 -4.1076240217182Q481.34512286119053 -4.826774403746699 481.34512286119053 -5.856908921792473Q481.34512286119053 -6.88704541703345 480.8689272598481 -7.632112873775858Q480.3927316585057 -8.377180330518266 479.12287902832026 -9.018585419990647Q477.85302639813483 -9.659990509463027 475.4234647509077 -10.327309707856514Q473.0586779957086 -10.988153591961927 471.5750154307191 -11.810970295650858Q470.0913528657295 -12.633786999339788 469.40783055265183 -13.84209844025088Q468.7243082395741 -15.050409881161972 468.7243082395741 -16.832103976397445Q468.7243082395741 -18.834079366334727 469.6475476761938 -20.340419371698943Q470.57078711281355 -21.846759377063158 472.30712632729967 -22.682534618109045Q474.0434655417858 -23.51830985915493 476.460088423608 -23.51830985915493Q478.85727349939475 -23.51830985915493 480.56121834768373 -22.57887422803422Q482.26516319597266 -21.63943859691351 483.2531913649867 -19.964648480482502Q484.24121953400083 -18.289858364051497 484.4744573888644 -16.067597725022008L480.97583025005497 -15.86675225916043Q480.7944225902288 -17.194917318854532 480.2307637819101 -18.20561699665768Q479.6671049735915 -19.216316674460828 478.70175918794007 -19.77997548277949Q477.7364134022887 -20.34363429109815 476.3499448104643 -20.34363429109815Q474.45812885123235 -20.34363429109815 473.34053211480796 -19.430119689081756Q472.2229353783835 -18.51660508706536 472.2229353783835 -17.013515590613995Q472.2229353783835 -16.022252730248677 472.6732158822073 -15.364649469080105Q473.123496386031 -14.707046207911532 474.2605348828812 -14.198456240371918Q475.39757337973145 -13.689866272832306 477.4448898100517 -13.11324892715669Q480.1919277137433 -12.361701213138204 481.81164305780965 -11.386630592883472Q483.431358401876 -10.41155997262874 484.137554200938 -9.080151324204994Q484.84374999999994 -7.74874267578125 484.84374999999994 -5.869871413539832Q484.84374999999994 -3.9715564136773764 483.84600391656573 -2.523525872029049Q482.8482578331315 -1.0754953303807218 481.05036952059027 -0.2785927356128961Q479.252481208049 0.5183098591549296 476.8228997888699 0.5183098591549296Z"/></svg></span></span>
-      <span class="prod"><b>KERNO BASKETBALL</b><span>ELITE SPORTS ANALYTICS · v2.0</span></span>
+      <span class="prod"><b>KERNO BASKETBALL</b><span id="prodSitio">ELITE SPORTS ANALYTICS · v2.0</span></span>
     </a>
     <div class="hnav" role="group" aria-label="Navegación">
       <button class="ibtn" type="button" id="backBtn" aria-label="Atrás: volver a la pantalla anterior" title="Volver a la pantalla anterior" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l-6 6 6 6M4.5 12H20" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/></svg><span>Atrás</span></button>
@@ -932,20 +946,20 @@ function publicarCtx(extra) {
 
 // ---------------------------------------------------------------------------------------------- flujo y navegación
 const NAV = [
-  { t: "Lectura", items: [["inicio", "Tu equipo hoy", null, 1]] },
-  { n: "01", t: "Diagnóstico", q: "¿Cómo está mi equipo?", items: [
+  { t: "Lectura", en: ["jugadores", "equipos"], items: [["inicio", "Tu equipo hoy", null, 1]] },
+  { n: "01", t: "Diagnóstico", en: ["equipos"], q: "¿Cómo está mi equipo?", items: [
     ["eq-evaluacion", "Evaluación", ["equipos", "evaluacion"]], ["eq-rotacion", "Rotación", ["equipos", "equipo"]], ["eq-quintetos", "Quintetos", ["equipos", "quintetos"]],
     ["eq-parejas", "Parejas y tríos", ["equipos", "parejas"]], ["eq-conexiones", "Conexiones", ["equipos", "conexiones"]], ["eq-impacto", "Impacto en pista", ["equipos", "jugadores"]],
     ["eq-liga", "La liga", ["equipos", "liga"]], ["eq-informe", "Informe de equipo", ["informe", "informeq"]]] },
-  { n: "02", t: "Mercado", q: "¿Quién cubre lo que falta?", items: [
+  { n: "02", t: "Mercado", en: ["jugadores"], q: "¿Quién cubre lo que falta?", items: [
     ["necesidad", "Por necesidad", null, 1], ["mk-datos", "Datos de jugadores", ["jugadores", "datos"]], ["mk-parecidos", "Buscar parecidos", ["jugadores", "parecidos"]], ["mk-estilos", "Mapa de estilos", ["estilos", "comparar"]]] },
-  { n: "03", t: "Evaluación", q: "¿Este jugador, sí o no?", items: [
+  { n: "03", t: "Evaluación", en: ["jugadores"], q: "¿Este jugador, sí o no?", items: [
     ["ficha", "Ficha de jugador", null, 1], ["lista", "Lista corta", null, 1], ["ev-informe", "Lectura de fichaje", ["informe", "informe"]], ["ev-quimica", "Química de perfiles", ["estilos", "quimica"]]] },
-  { n: "04", t: "Decisión", q: "¿Qué pasa si lo fichamos?", items: [
+  { n: "04", t: "Decisión", en: ["jugadores"], q: "¿Qué pasa si lo fichamos?", items: [
     ["de-fichajes", "Simular fichajes", ["planificacion", "simulador"]], ["de-plantilla", "Simular plantilla", ["planificacion", "equipo"]]] },
-  { n: "05", t: "Modelo de equipo", q: "¿Cuánto vale el fichaje para el equipo?", items: [
+  { n: "05", t: "Modelo de equipo", en: ["jugadores"], q: "¿Cuánto vale el fichaje para el equipo?", items: [
     ["v40-resumen", "Resumen v4.0", null, 1], ["v40-anclas", "Nivel Kerno e Impacto", null, 1], ["v40-equipos", "Equipos 2026-27", null, 1], ["v40-metodo", "Método y límites", null, 1]] },
-  { t: "Método", q: "Cómo se calcula y dónde termina lo que sabemos", items: [
+  { t: "Método", en: ["metodologia"], q: "Cómo se calcula y dónde termina lo que sabemos", items: [
     ["como-leer", "Cómo leer los datos", null, 1], ["me-ligas", "Evaluación de ligas", ["metodologia", "evaluacion"]], ["me-normalizacion", "Normalización de ligas", ["metodologia", "normalizacion"]],
     ["me-claves", "Claves del estilo", ["metodologia", "claves"]], ["me-guia", "Guía de conceptos", ["metodologia", "guia"]]] },
 ];
@@ -992,10 +1006,64 @@ function marcarAplica() {
 }
 const ITEM = {}, LEG2ID = {};
 NAV.forEach((s) => s.items.forEach(([id, n, leg, nuevo]) => { ITEM[id] = { id, n, leg, nuevo, sec: s }; if (leg) LEG2ID[leg.join("/")] = id; }));
+// ---------------------------------------------------------------------------------------------- sitios (v4.2)
+// El producto se publica en tres artifacts con los mismos ficheros fuente (límite de 256 MiB por versión): Jugadores (el
+// original), Equipos (01 Diagnóstico) y Metodología (Método). Cada artifact publica un sitio.json {sitio, urls}; sin él,
+// «jugadores». Las herramientas de otro sitio siguen en el raíl como enlaces a ese artifact (pestaña nueva), con el club,
+// la temporada (y la ficha o el jugador pedidos) en el enlace: #<vista>&club=<liga>|<id>&temp=<t>[&f=<ficha>][&q.<k>=<v>].
+const SITIOS = { jugadores: { n: "Jugadores", inicio: "inicio" }, equipos: { n: "Equipos", inicio: "inicio" }, metodologia: { n: "Metodología", inicio: "como-leer" } };
+let SITIO = { sitio: "jugadores", urls: {} };
+const SN = () => SITIOS[SITIO.sitio].n;
+const INICIO = () => SITIOS[SITIO.sitio].inicio;
+async function cargarSitio() {
+  try {
+    const r = await fetch("sitio.json", { cache: "no-cache" });
+    if (r.ok) { const d = await r.json(); if (d && SITIOS[d.sitio]) SITIO = { sitio: d.sitio, urls: d.urls && typeof d.urls === "object" ? d.urls : {} }; }
+  } catch (e) { /* sin sitio.json: Jugadores, como antes de la separación */ }
+  const ini = ITEM[INICIO()], pr = $("prodSitio"), br = $("brandLink"), hb = $("homeBtn");
+  if (pr) pr.textContent = `KERNO ANALYTICS · ${SN().toUpperCase()}`;
+  if (br) { br.href = "#" + ini.id; br.setAttribute("aria-label", `Kerno Analytics · ${SN()} · inicio`); }
+  if (hb) { hb.setAttribute("aria-label", `Inicio: ${ini.n}`); hb.title = ini.n; }
+  document.title = `Kerno Analytics · ${SN()}`;
+}
+const propio = (id) => !!ITEM[id] && ITEM[id].sec.en.includes(SITIO.sitio);
+const sitioDe = (id) => (propio(id) ? SITIO.sitio : ITEM[id].sec.en[0]);
+function urlFuera(id, q) {
+  const base = String((SITIO.urls || {})[sitioDe(id)] || "").trim();
+  if (!/^https?:\/\//.test(base)) return "";
+  const p = new URLSearchParams();
+  if (CTX.liga && CTX.id) p.set("club", `${CTX.liga}|${CTX.id}`);
+  if (CTX.temp) p.set("temp", CTX.temp);
+  if (id === "ficha" && LS.get("cerno.v2.ficha")) p.set("f", LS.get("cerno.v2.ficha"));
+  if (q) Object.entries(q).forEach(([k, v]) => { if (v != null && v !== "") p.set("q." + k, String(v)); });
+  return `${base.split("#")[0]}#${id}&${p.toString()}`;
+}
+function abrirFuera(id, q) {
+  const n = SITIOS[sitioDe(id)].n, u = urlFuera(id, q);
+  if (!u) { toast(`«${ITEM[id].n}» está en Kerno Analytics · ${n}, todavía sin enlace`); return; }
+  let w = null; try { w = window.open(u, "_blank"); if (w) w.opener = null; } catch (e) { w = null; }
+  toast(w ? `«${ITEM[id].n}» se abre en Kerno Analytics · ${n}` : `«${ITEM[id].n}» está en Kerno Analytics · ${n}: ábrelo desde el menú`);
+}
+// lo que llega en el enlace de otro sitio: vista, club, temporada, ficha y parámetros de la herramienta de detalle
+function leerHash() {
+  const [id, ...resto] = location.hash.replace(/^#/, "").split("&"), p = new URLSearchParams(resto.join("&")), q = {};
+  p.forEach((v, k) => { if (k.startsWith("q.")) q[k.slice(2)] = v; });
+  return { id: id || "", p, q: Object.keys(q).length ? q : null };
+}
+function navFuera(id, n) {
+  const sn = SITIOS[sitioDe(id)].n, u = urlFuera(id);
+  return u ? `<a class="nav fuera" href="${esc(u)}" target="_blank" rel="noopener" data-fuera="${id}" title="Se abre en Kerno Analytics · ${esc(sn)}, en una pestaña nueva">${esc(n)}<span class="fuera-t">en ${esc(sn)}<i class="k-arrow" aria-hidden="true"></i></span></a>`
+    : `<span class="nav fuera off" aria-disabled="true" title="Está en Kerno Analytics · ${esc(sn)}, que todavía no tiene enlace">${esc(n)}<span class="fuera-t">en ${esc(sn)}</span></span>`;
+}
 function pintarRail() {
-  $("rail").innerHTML = NAV.map((s) => `<div class="sec"><div class="sec-h"><span class="n">${s.n || "··"}</span><span class="t">${esc(s.t)}</span>${s.q ? `<span class="q">${esc(s.q)}</span>` : ""}</div>
-    ${s.items.map(([id, n, , nuevo]) => `<button class="nav" type="button" data-go="${id}">${esc(n)}${nuevo ? `<span class="new">v2</span>` : ""}</button>`).join("")}</div>`).join("")
-    + `<div class="rail-foot"><p class="label">Discreción por diseño</p><p>La lista corta y los ajustes se guardan solo en este navegador.</p></div>`;
+  const sec = (s, fuera) => `<div class="sec${fuera ? " fuera" : ""}"><div class="sec-h"><span class="n">${s.n || "··"}</span><span class="t">${esc(s.t)}</span>${s.q ? `<span class="q">${esc(s.q)}</span>` : ""}</div>
+    ${s.items.map(([id, n, , nuevo]) => (fuera ? navFuera(id, n) : `<button class="nav" type="button" data-go="${id}">${esc(n)}${nuevo ? `<span class="new">v2</span>` : ""}</button>`)).join("")}</div>`;
+  const mios = NAV.filter((s) => s.en.includes(SITIO.sitio)), otros = NAV.filter((s) => !s.en.includes(SITIO.sitio));
+  const sinUrl = otros.some((s) => s.items.some(([id]) => !urlFuera(id)));
+  $("rail").innerHTML = `<div class="rail-site"><span class="label">Kerno Analytics</span><b>${esc(SN())}</b></div>`
+    + mios.map((s) => sec(s, false)).join("")
+    + (otros.length ? `<p class="label rail-otros">En otros sitios de Kerno Analytics</p>` + otros.map((s) => sec(s, true)).join("") : "")
+    + `<div class="rail-foot"><p class="label">Discreción por diseño</p><p>La lista corta y los ajustes se guardan solo en este navegador.</p>${sinUrl ? `<p>Las herramientas atenuadas están en otro sitio de Kerno Analytics que todavía no tiene enlace.</p>` : ""}</div>`;
 }
 function marcarNav() { document.querySelectorAll("#rail .nav").forEach((b) => { if (b.dataset.go === S.route) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); }); }
 
@@ -1014,12 +1082,15 @@ function atras() {
   if (HIST.length < 2) return; HIST.pop(); const p = HIST[HIST.length - 1];
   if (p.f) LS.set("cerno.v2.ficha", p.f); atrasando = true; navegar(p.id);
 }
-function navegar(id) { if (!ITEM[id]) id = "inicio"; if (location.hash.slice(1) === id) ir(id); else location.hash = id; }
+function navegar(id) {
+  if (ITEM[id] && !propio(id)) { const q = S.q; S.q = null; abrirFuera(id, q); return; }  // herramienta de otro sitio: su artifact, en pestaña nueva
+  if (!ITEM[id]) id = INICIO(); if (location.hash.slice(1) === id) ir(id); else location.hash = id;
+}
 function ir(id) {
-  const it = ITEM[id] || ITEM.inicio; S.route = it.id; S.tk++; apuntar(it.id);
+  const it = ITEM[id] && propio(id) ? ITEM[id] : ITEM[INICIO()]; S.route = it.id; S.tk++; apuntar(it.id);
   marcarNav(); marcarAplica(); cerrarRail();
   const sec = it.sec, vh = $("vhead");
-  document.title = it.id === "inicio" ? "Kerno Analytics" : `${it.n} · Kerno`;
+  document.title = it.id === INICIO() ? `Kerno Analytics · ${SN()}` : `${it.n} · Kerno Analytics · ${SN()}`;
   vh.hidden = it.id === "inicio";
   vh.innerHTML = `<div><div class="eyebrow">${sec.n ? `<span>${sec.n} · ${esc(sec.t.toUpperCase())}</span>` : `<span>${esc(sec.t.toUpperCase())}</span>`}${it.leg ? `<span class="tag">Herramienta de detalle</span>` : ""}</div><h1>${esc(it.n)}</h1>${LEAD[it.id] ? `<p>${esc(LEAD[it.id])}</p>` : ""}</div>
     ${(() => { const a = APLICA[it.id] ?? "ct", p = []; if (a.includes("c")) p.push(esc(clubActual() ? clubActual().nombre : "")); if (a.includes("t")) p.push(esc(CTX.temp || "")); if (a.includes("c")) p.push("vara " + esc(VN()));
@@ -1035,7 +1106,7 @@ function abrirLegado(area, tool, q) {
   legEspera = `${area}/${tool}`; clearTimeout(legEsperaT); legEsperaT = setTimeout(() => { legEspera = null; }, 6000);
   if (!LEG) {
     LEG = document.createElement("iframe"); LEG.className = "legacy"; LEG.title = "Herramienta de detalle";
-    LEG.src = `clasico.html?embed=1&ir=${encodeURIComponent(area)}/${encodeURIComponent(tool)}`;
+    LEG.src = `clasico.html?embed=1&sitio=${SITIO.sitio}&ir=${encodeURIComponent(area)}/${encodeURIComponent(tool)}`;
     $("paneLegacy").appendChild(LEG); legPend = q ? { area, tool, q } : null; return;
   }
   if (legListo) LEG.contentWindow.postMessage({ cernoIr: { area, tool, q } }, "*"); else legPend = { area, tool, q };
@@ -1045,8 +1116,9 @@ window.addEventListener("message", async (e) => {
   if (!LEG || e.source !== LEG.contentWindow) return;
   const d = e.data || {};
   if (d.cernoListo) { legListo = true; if (legPend) { LEG.contentWindow.postMessage({ cernoIr: legPend }, "*"); legPend = null; } }
+  if (d.cernoFuera) { const id = LEG2ID[`${d.cernoFuera.area}/${d.cernoFuera.tool}`]; if (id) abrirFuera(id, d.cernoFuera.q || null); }  // clasico: herramienta de otro sitio
   if (d.cernoNav && legEspera) { const k = `${d.cernoNav.area}/${d.cernoNav.tool}`; if (k === legEspera || LEG2ID[k] === S.route) { legEspera = null; clearTimeout(legEsperaT); } }
-  else if (d.cernoNav) { const id = LEG2ID[`${d.cernoNav.area}/${d.cernoNav.tool}`]; if (id && id !== S.route && ITEM[S.route] && ITEM[S.route].leg) { S.route = id; apuntar(id); marcarNav(); marcarAplica(); try { history.replaceState(null, "", "#" + id); } catch (er) { /* */ } const it = ITEM[id]; $("vhead").querySelector("h1").textContent = it.n; document.title = `${it.n} · Kerno`; } }
+  else if (d.cernoNav) { const id = LEG2ID[`${d.cernoNav.area}/${d.cernoNav.tool}`]; if (id && propio(id) && id !== S.route && ITEM[S.route] && ITEM[S.route].leg) { S.route = id; apuntar(id); marcarNav(); marcarAplica(); try { history.replaceState(null, "", "#" + id); } catch (er) { /* */ } const it = ITEM[id]; $("vhead").querySelector("h1").textContent = it.n; document.title = `${it.n} · Kerno`; } }
   if (d.cernoRelay) {
     const { id, op, args } = d.cernoRelay, res = (o) => { try { LEG.contentWindow.postMessage({ cernoRelayRes: Object.assign({ id }, o) }, "*"); } catch (er) { /* */ } };
     try {
@@ -1457,6 +1529,7 @@ function cerrarRail() { $("rail").classList.remove("open"); $("railScrim").class
 document.addEventListener("click", (e) => {
   const t = e.target;
   const go = t.closest("[data-go]"); if (go) { navegar(go.dataset.go); return; }
+  const fa = t.closest("a[data-fuera]"); if (fa) { const u = urlFuera(fa.dataset.fuera); if (u) fa.href = u; cerrarRail(); return; }  // enlace a otro sitio con el contexto de ahora
   if (t.closest("[data-lista]")) { const r = porClave(t.closest("[data-lista]").dataset.lista); if (r) { alternarLista(r); t.closest("[data-lista]").textContent = enLista(rk(r)) ? "En la lista" : "+ Lista"; } e.stopPropagation(); return; }
   if (t.closest("[data-quitar]")) { LISTA.set(LISTA.get().filter((x) => x.k !== t.closest("[data-quitar]").dataset.quitar)); ir("lista"); return; }
   if (t.closest("#searchRes [data-k]")) { const r = porClave(t.closest("[data-k]").dataset.k); cerrarBusqueda(); if (r) abrirFicha(r); return; }
@@ -1512,15 +1585,23 @@ $("searchIn").addEventListener("input", buscar);
 $("searchClose").addEventListener("click", cerrarBusqueda);
 $("searchBtn").addEventListener("click", abrirBusqueda);
 $("backBtn").addEventListener("click", atras);
-$("homeBtn").addEventListener("click", () => navegar("inicio"));
+$("homeBtn").addEventListener("click", () => navegar(INICIO()));
 $("setBtn").addEventListener("click", () => { const p = $("setPop"); p.hidden = !p.hidden; $("setBtn").setAttribute("aria-expanded", String(!p.hidden)); });
 $("menuBtn").addEventListener("click", () => { const o = !$("rail").classList.contains("open"); $("rail").classList.toggle("open", o); $("railScrim").classList.toggle("on", o); $("menuBtn").setAttribute("aria-expanded", String(o)); });
 $("railScrim").addEventListener("click", cerrarRail);
-window.addEventListener("hashchange", () => { if (S.silencio) { S.silencio = false; return; } ir(location.hash.slice(1) || "inicio"); });
+window.addEventListener("hashchange", () => { if (S.silencio) { S.silencio = false; return; } const H = leerHash(); if (H.q) S.q = H.q; ir(H.id || INICIO()); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (CTX.tema === "sistema") { aplicarTema(); publicarCtx(); } });
 
 // ---------------------------------------------------------------------------------------------- arranque
 (async function arrancar() {
+  await cargarSitio();
+  // enlace desde otro sitio de Kerno Analytics: club, temporada, ficha y parámetros de la herramienta pedida
+  const H = leerHash(), club = String(H.p.get("club") || "").split("|");
+  if (club.length === 2 && club[0] && club[1]) { if (club[0] !== CTX.liga || club[1] !== CTX.id) CTX.ent = ""; CTX.liga = club[0]; CTX.id = club[1]; }
+  if (/^\d{4}-\d{2}$/.test(H.p.get("temp") || "")) CTX.temp = H.p.get("temp");
+  if (H.p.get("f")) LS.set("cerno.v2.ficha", H.p.get("f"));
+  if (H.q) S.q = H.q;
+  if (location.hash.includes("&")) { try { history.replaceState(null, "", "#" + (H.id || INICIO())); } catch (e) { /* */ } }
   aplicarTema(); pintarRail();
   V().innerHTML = cargando("Preparando Kerno Analytics");
   try {
@@ -1534,7 +1615,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if
   pintarCtx(); pintarAjustes(); guardarCtx();
   const prev = LS.json("cerno.ctx", {}), igual = prev && prev.stamp && prev.club && prev.club.liga === CTX.liga && prev.club.id === CTX.id && prev.club.temp === CTX.temp && prev.vara === VARA();
   if (igual) LS.set("cerno.ctx", JSON.stringify(Object.assign(prev, { tema: temaResuelto(), escala: CTX.escala, ayudas: CTX.ayudas }))); else publicarCtx();
-  pintarEnt(); ir(location.hash.slice(1) || "inicio");
+  pintarEnt(); ir(H.id || INICIO());
   banquillo().then(() => pintarEnt()).catch(() => { const el = $("ctxEnt"); if (el) { el.innerHTML = `<option value="">Sin datos</option>`; el.disabled = true; } });
 })();
 (function () {

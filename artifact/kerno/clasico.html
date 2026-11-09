@@ -1132,6 +1132,16 @@ body { background: var(--bg); }
 // (UX v2) El botón EJECUTAR y su conexión MCP se retiraron de la interfaz por decisión del CEO.
 // Lista de respaldo; la real se lee de datos/temporadas.json (la genera "python -m bbstats artifact").
 let SEASONS = ["2026-27", "2025-26", "2024-25", "2023-24", "2022-23", "2021-22", "2020-21"];
+// v4.2 · sitios: Kerno Analytics se publica en tres artifacts con los mismos ficheros (Jugadores, Equipos, Metodología) y el
+// portal abre esta página con ?sitio=<sitio>. Cada sitio publica solo los datos de sus herramientas: aquí no se cargan los
+// de otro sitio y sus herramientas se piden al portal (que abre su artifact). Sin ?sitio=, todo como antes.
+const CL_SITIO = (new URLSearchParams(location.search).get("sitio") || "").toLowerCase();
+const CL_PROPIO = { jugadores: ["jugadores/*", "estilos/*", "planificacion/*", "informe/informe"], equipos: ["equipos/*", "informe/informeq"], metodologia: ["metodologia/*"] };
+const clPropio = (area, tool) => { const L = CL_PROPIO[CL_SITIO]; return !L || L.includes(`${area}/*`) || L.includes(`${area}/${tool}`); };
+const clConDatos = () => !CL_PROPIO[CL_SITIO] || CL_SITIO === "jugadores";   // datos/<temporada>/<fase> (Datos de jugadores): solo en Jugadores
+// página → sitio que publica sus datos (atlas y claves usan los del Atlas, que van en los tres)
+const CL_PAG = { tabla: ["jugadores"], normalizados: ["jugadores"], quintetos: ["equipos", "metodologia"], evaluacion: ["metodologia"], normalizacion: ["metodologia"] };
+const clPag = (pg) => (!CL_PROPIO[CL_SITIO] || !CL_PAG[pg] || CL_PAG[pg].includes(CL_SITIO) ? pg : "tabla");
 const PHASES = [["regular", "Temporada regular"], ["playoffs", "Playoffs"], ["total", "Total"]];
 // ligas conocidas (nombre); las que traiga el índice de datos y no estén aquí se añaden solas en renderLeagues
 const LEAGUES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "Basketball Champions League", fec: "FIBA Europe Cup", bsl: "Basketbol Süper Ligi", gbl: "Greek Basket League", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", bnxt: "BNXT League", vtb: "VTB United League", cba: "Chinese Basketball Association", nbl: "NBL (Australia)", ncaa: "NCAA D-I (top-50)" };
@@ -1588,6 +1598,7 @@ function rolNota(g) {
 // al mostrar Datos: carga perezosa y anotación de los lotes ya cargados
 function rolAsegurar() {
   if (st.pageTab !== "tabla" && st.pageTab !== "normalizados") return;
+  if (!clConDatos()) return;
   if (rolSt.map) { if (current && !current.rolHecho) { rolAnotar(current); renderTable(); if (st.sel) renderPanel(st.sel); } return; }
   rolCargar().then(() => { if (current && !current.rolHecho) { rolAnotar(current); renderTable(); if (st.sel) renderPanel(st.sel); } });
 }
@@ -1597,6 +1608,7 @@ let current = null;
 async function refresh() {
   renderPhases(); renderViews(); renderMeta();
   if (VIEWS[st.view].phase && VIEWS[st.view].phase !== st.phase) st.view = "basico";
+  if (!clConDatos()) { if (st.pageTab === "evaluacion") renderEval(); return; }   // sitio sin «Datos de jugadores»
   let data;
   try { data = await loadPhase(st.season, st.phase); }
   catch (e) { $("tablebox").innerHTML = `<div class="empty">No se pudieron cargar los datos de ${st.season} (${st.phase}).</div>`; return; }
@@ -3261,7 +3273,7 @@ async function start() {
   // #quintetos admite un enlace profundo: #quintetos&tab=jugadores&t=2025-26&l=euroleague&f=regular&e=BAS&j=012080
   const hp = location.hash.replace(/^#/, "").split("&")[0];
   if (hp === "quintetos" && location.hash.includes("&")) st.quintetosHash = location.hash.slice(location.hash.indexOf("&") + 1);
-  if (!ebRestaurar(hp)) showPage(["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos"].includes(hp) ? hp : (store.get("mm.page") || "tabla"));
+  if (!ebRestaurar(hp)) showPage(clPag(["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos"].includes(hp) ? hp : (store.get("mm.page") || "tabla")));
   const [dict, idxN, ...idxs] = await Promise.all([getJSON("datos/diccionario_columnas.json").catch(() => []),
     getJSON("datos/normalizados/indice.json").catch(() => null),
     ...SEASONS.map((s) => getJSON(`datos/${s}/indice.json`).catch(() => null))]);
@@ -3390,7 +3402,7 @@ showPage = function (pg) {
 function ebRestaurar(hp) {
   if (["normalizados", "atlas", "claves", "evaluacion", "normalizacion", "quintetos"].includes(hp)) return false;
   const [a, t] = String(store.get("mm.ebate") || "").split("/");
-  if (ebArea(a)) { ebIr(a, t); return true; }
+  if (ebArea(a) && clPropio(a, t)) { ebIr(a, t); return true; }
   return false;
 }
 function ebIniciar() {
@@ -3422,6 +3434,24 @@ window.addEventListener("message", (e) => {
   if (app === "atlas") { EB.atlas = tab; if (st.pageTab === "atlas" && ebDeAtlas[tab]) ebMarcar(...ebDeAtlas[tab]); }
   if (app === "quintetos") { EB.quint = tab; if (st.pageTab === "quintetos") ebMarcar(...ebDeQuint(tab)); }
 });
+// v4.2 · sitios: en la barra propia (solo fuera del portal) se ocultan las herramientas de otro sitio; desde Jugadores,
+// «Ver quintetos y conexiones» abre Equipos (su artifact) en el jugador, a través del portal
+if (CL_PROPIO[CL_SITIO]) {
+  const pintarNav0 = ebPintarNav;
+  ebPintarNav = function () {
+    pintarNav0();
+    document.querySelectorAll("#ebAreas [data-area]").forEach((b) => { const A = ebArea(b.dataset.area); b.hidden = !A.tools.some(([k]) => clPropio(A.k, k)); });
+    document.querySelectorAll("#ebTools [data-tool]").forEach((b) => { b.hidden = !clPropio(EB.area, b.dataset.tool); });
+  };
+  if (!clPropio("equipos", "jugadores")) {
+    const irQuintetos0 = irQuintetos;
+    irQuintetos = function (p) {
+      if (window.parent === window) return irQuintetos0(p);
+      const q = Object.assign({}, p), tool = q.tab || "jugadores"; delete q.tab;
+      try { window.parent.postMessage({ cernoFuera: { area: "equipos", tool, q } }, "*"); } catch (e) { /* */ }
+    };
+  }
+}
 ebIniciar();
 
 start();
