@@ -33,7 +33,13 @@ Después no hay que tocar el botón: `actualizar_delta.py` descarga todas las li
 `config/sources.json`, y la recalibración mensual reentrena con todas las ligas que haya en los datos.
 
 Precedente que hay que leer antes de empezar: `docs/fuentes_ligas_nuevas.md` (CBA, BNXT, NCAA, NBL y VTB: fuentes,
-alcance, identidad, cambios de modelo y resultados) y `docs/actualizacion_2026-27.md` (cómo trabaja el botón).
+alcance, identidad, cambios de modelo y resultados; §9 Liga U, la última, añadida el 09-11-2026 con la plataforma FEB),
+`decisiones/ligau.md` (ejemplo completo de las decisiones de la Fase 0 y de la cobertura) y
+`docs/actualizacion_2026-27.md` (cómo trabaja el botón).
+
+**Ligas en el sistema (09-11-2026): 21.** euroleague, eurocup, acb, nba, gleague, lba, bbl, lnb, bcl, fec, bsl, gbl,
+feb1, feb2, feb3, nbl, bnxt, ncaa, vtb, cba y **ligau** (Liga U de la ACB, sub-22, temporadas 2025-26 y 2026-27; la
+2026-27 se actualiza con el botón como las demás).
 
 ## Reglas
 
@@ -75,11 +81,24 @@ Pregunta (AskUserQuestion) lo que no esté claro y anótalo en `decisiones/<codi
    | FIBA LiveStats (`/data/<id>/data.json`) | `fiba_livestats` | BSL, GBL, BNXT |
    | Web de FIBA (competiciones FIBA) | `fiba_web` | BCL, FIBA Europe Cup |
    | Feed de la EuroLeague | `euroleague` | EuroLeague, EuroCup |
-   | FEB | `feb` | Primera, Segunda y Tercera FEB |
+   | FEB (`baloncestoenvivo.feb.es` + `intrafeb.feb.es`; competición `g` del menú de la web) | `feb` | Primera (`g=1`), Segunda (`g=2`) y Tercera FEB (`g=3`), Liga U de la ACB (`g=74`, `slug: ligau`) |
    | Basketball-Reference | `bref_nba` | NBA (G League con su propio adaptador) |
 
    Copia la entrada de una liga del mismo adaptador y cambia identificadores, temporadas, `minutos_partido` y
    `estado_verificacion` («pendiente» hasta la Fase 2).
+
+   Antes de escribir un adaptador, mira si la web oficial de la liga enlaza ids de partido de una plataforma conocida:
+   la Liga U (ligau.com, web propia sobre Supabase) enlaza ids de partido FEB (2.5 millones, los mismos que
+   `baloncestoenvivo.feb.es/partido/<id>`), y el menú de esa página da su `g` y su `slug`. Así se evitó leer el backend
+   de ligau.com, que exige una clave del código de su web. Si la liga usa la plataforma FEB, añádela además a las listas
+   del sistema FEB: `FEB` en `bbstats/feb_informe.py` y `bbmodel/crosswalk.py` (el id de persona FEB es común a todas
+   sus competiciones: mismo id = misma persona), `bbmodel/nombres.py`, `scripts/feb_nombres_web.py`, `bbfit/adaptacion.py`
+   (nacionalidad de la plantilla) y `actualizar_delta.py` (informes FEB del botón).
+
+   **Red del entorno**: el entorno de la sesión tiene una lista de hosts permitidos. Si la descarga falla con
+   `CONNECT tunnel failed, response 403`, propón añadir los hosts de la fuente con `update_environment` (FEB:
+   `baloncestoenvivo.feb.es` e `intrafeb.feb.es`). El proxy sólo cursa HTTPS: una redirección a `http://` falla
+   (`Equipo.aspx?i=` de la FEB redirigía a `http://…/equipo/<id>`; el adaptador pide ya `/equipo/<id>` por HTTPS).
 2. Si no, escribe `bbstats/adapters/<codigo>.py` con el patrón de las cinco últimas ligas: **traducir cada partido al
    formato del data.json de FIBA LiveStats (`to_fls`)** y reutilizar `bbstats/adapters/fiba_livestats.py` y
    `bbstats/lineups/sources/fiba_livestats.py` (boxscore, fases, quintetos, tramos, RAPM, tiros y entrenadores salen del
@@ -114,12 +133,18 @@ Hay listas explícitas de ligas en el código y en las páginas. Encuéntralas c
 git grep -n -w bnxt -- ':!data' ':!experimentos' ':!docs' ':!tests'
 ```
 
-Las conocidas (11-2026): nombres en `bbmodel/dataset_normalizado.py`; orden en `bbmodel/evaluacion_ligas.py` y
+Las conocidas (11-2026; con `ligau` como plantilla si la liga nueva es de la FEB: `git grep -n -w ligau`): nombres en
+`bbmodel/dataset_normalizado.py`, `bbmodel/mesa_quintetos.py`, `bbestilo/figuras.py`, `bbestilo/articulo.py` y
+`cerno_articulo/datos.py`; identidad en `bbmodel/crosswalk.py` e `bbmodel/identidad.py` (`NACIONALES`: concurrencia con
+las copas europeas); pares de validación en `bbmodel/amortiguacion.py`; `LIGAS_POCOS_PUENTES` en
+`bbmodel/auditoria_puentes.py`; `club_clave` en `configs/reemplazo.yaml`; partidos por temporada en
+`configs/simulation_v3*.yaml`, `simulation_v40.yaml` y `simulation_v42.yaml` (`partidos_temporada`); orden en `bbmodel/evaluacion_ligas.py` y
 `bbmodel/mesa_normalizacion.py`; escalones en `configs/normalization*.yaml`; país en `configs/adaptacion.yaml`; minutos
 por defecto en `configs/simulation_v33.yaml`; grupos de la v4.0 en `bbequipo/equipo.py` y `configs/equipo_v40.yaml`;
 coordenadas de tiro en `bbmodel/zonas.py`; ids de equipo inestables en `bbestilo/datos.py` y
 `bbfit/estilos_unificados.py` (si la fuente renumera equipos cada temporada). Las páginas del artifact (Fase 7) tienen
-sus propias listas (`LIGA_ORD`/`LIGA_N` en `artifact/kerno/index.html` y `clasico.html`, `LIGAS_INFO` en
+sus propias listas (`LIGA_ORD`/`LIGA_N` en `artifact/kerno/index.html` y `v40/index.html`; `LEAGUES`, `VARA_NOMBRES` y
+`LEAGUE_ABBR` en `clasico.html`; `LIGAS_INFO` en
 `artifact/kerno/atlas/index.html` y `artifact/kerno/quintetos/index.html`; búscalas con
 `git grep -n -w bnxt -- artifact/kerno`).
 

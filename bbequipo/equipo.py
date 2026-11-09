@@ -38,7 +38,7 @@ from . import conjunto as CJ
 GRUPOS_LIGA = {"nba": "nba", "gleague": "eeuu_menor", "ncaa": "eeuu_menor", "euroleague": "europa_top", "eurocup": "europa_top",
                "acb": "europa_top", "lba": "europa_media", "lnb": "europa_media", "bsl": "europa_media", "vtb": "europa_media",
                "bcl": "europa_media", "bbl": "europa_menor", "bnxt": "europa_menor", "gbl": "europa_menor", "fec": "europa_menor",
-               "feb1": "feb", "feb2": "feb", "feb3": "feb", "cba": "otras", "nbl": "otras"}
+               "feb1": "feb", "feb2": "feb", "feb3": "feb", "ligau": "feb", "cba": "otras", "nbl": "otras"}
 
 
 def dir_salida(cfg: dict) -> Path:

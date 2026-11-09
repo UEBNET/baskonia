@@ -582,8 +582,8 @@ async function cargarJSON(path) {
   const r = await fetch(path); if (!r.ok) throw new Error(`${path} (${r.status})`); return jsonDe(r);
 }
 
-const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3"];
-const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB" };
+const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3", "ligau"];
+const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", ligau: "Liga U" };
 const ligaN = (l) => LIGA_N[l] || String(l || "").toUpperCase();
 const ligaOrd = (a, b) => (LIGA_ORD.indexOf(a) + 1 || 99) - (LIGA_ORD.indexOf(b) + 1 || 99);
 const POS = { E: "Exterior", A: "Alero", I: "Interior" }, POSP = { E: "exteriores", A: "aleros", I: "interiores" };

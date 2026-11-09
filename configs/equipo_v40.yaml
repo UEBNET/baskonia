@@ -244,7 +244,7 @@ f5:
       grupos:
         elite: [euroleague, nba]
         domestica_alta: [acb, lba, bbl, lnb, bsl, gbl, vtb, nbl]
-        resto: [eurocup, bcl, fec, gleague, bnxt, cba, ncaa, feb1, feb2, feb3]
+        resto: [eurocup, bcl, fec, gleague, bnxt, cba, ncaa, feb1, feb2, feb3, ligau]
       temporadas: todas_las_del_examen
     rango: [0.10, 0.90]
     simulaciones: 200                                 # Monte Carlo por fichaje (con y sin) en el examen y el producto

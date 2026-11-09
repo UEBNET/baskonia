@@ -1,0 +1,43 @@
+game_id,fase,tramos,jugadores_box,dif_min_max_s,dif_min_media_s,dif_pm_max,jugadores_dif_pm,anomalias,detalle_anomalias,valido,con_quintetos,con_asistencias,con_coordenadas,pm_oficial_coherente,notas,usado_en_quintetos
+2538911,regular,44,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538912,regular,40,23,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538913,regular,51,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538915,regular,45,24,11.0,1.8,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538916,regular,49,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538917,regular,29,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,formato estructurado,True
+2538919,regular,54,24,7.0,1.2,0.0,0,2,actua_fuera_de_pista=2,True,True,True,True,True,formato estructurado,True
+2538920,regular,35,24,18.0,1.6,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538921,regular,51,23,31.0,4.3,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538923,regular,56,23,0.0,0.0,0.0,0,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2538924,regular,36,24,0.0,0.0,0.0,0,0,,True,True,True,True,True,formato estructurado,True
+2538925,regular,41,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538927,regular,46,23,0.0,0.0,3.0,2,5,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2538928,regular,45,24,14.0,1.4,1.0,2,1,quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2538929,regular,40,24,279.0,12.1,2.0,1,7,añadido_por_actuar=1;no_cinco_4=1;no_cinco_6=4;quinteto_inicial_de_titulares=1,False,True,True,True,True,formato estructurado,False
+2538931,regular,40,22,14.0,1.3,0.0,0,0,,True,True,True,True,True,formato estructurado,True
+2538932,regular,41,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,1/35 asistencias sin enlazar | formato estructurado,True
+2538933,regular,45,24,9.0,2.7,2.0,6,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/42 asistencias sin enlazar | formato estructurado,True
+2538935,regular,29,24,12.0,1.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538936,regular,51,24,8.0,0.8,0.0,0,6,actua_fuera_de_pista=4;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538937,regular,40,23,0.0,0.0,0.0,0,0,,True,True,True,True,True,1/35 asistencias sin enlazar | formato estructurado,True
+2538967,regular,42,24,0.0,0.0,0.0,0,1,actua_fuera_de_pista=1,True,True,True,True,True,formato estructurado,True
+2538968,regular,43,24,92.0,5.4,3.0,1,7,añadido_por_actuar=1;no_cinco_4=2;no_cinco_6=2;quinteto_inicial_de_titulares=2,False,True,True,True,True,formato estructurado,True
+2538969,regular,48,24,0.0,0.0,0.0,0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538971,regular,36,24,25.0,2.1,1.0,4,0,,True,True,True,True,True,formato estructurado,True
+2538972,regular,42,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538973,regular,39,24,8.0,0.7,0.0,0,0,,True,True,True,True,True,formato estructurado,True
+2538975,regular,36,23,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2538976,regular,37,24,11.0,1.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538977,regular,48,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538979,regular,40,24,0.0,0.0,2.0,2,4,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2;quinteto_periodo_arrastrado=1,True,True,True,True,True,formato estructurado,True
+2538980,regular,37,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538981,regular,40,24,1.0,0.1,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538983,regular,39,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538984,regular,42,24,26.0,5.5,0.0,0,3,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538985,regular,37,24,16.0,1.3,0.0,0,2,actua_fuera_de_pista=1;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2538987,regular,44,24,3.0,0.2,0.0,0,10,actua_fuera_de_pista=8;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,2/33 asistencias sin enlazar | formato estructurado,True
+2538988,regular,39,23,7.0,0.6,0.0,0,5,actua_fuera_de_pista=3;quinteto_inicial_de_titulares=1;quinteto_periodo_arrastrado=1,True,True,True,True,True,4/27 asistencias sin enlazar | formato estructurado,True
+2538989,regular,40,24,0.0,0.0,0.0,0,3,actua_fuera_de_pista=2;quinteto_inicial_de_titulares=1,True,True,True,True,True,formato estructurado,True
+2538991,regular,37,23,17.0,1.5,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,3/24 asistencias sin enlazar | formato estructurado,True
+2538992,regular,39,24,14.0,1.2,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,formato estructurado,True
+2538993,regular,34,24,0.0,0.0,0.0,0,2,quinteto_inicial_de_titulares=2,True,True,True,True,True,2/32 asistencias sin enlazar | formato estructurado,True

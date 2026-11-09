@@ -545,7 +545,7 @@ def nacionalidad_persona(tem: pd.DataFrame) -> pd.DataFrame:
                                                                             on=["liga", "player_id"])
         regs.append(pd.DataFrame({"persona_id": x["persona_id"], "iso": x["nacionalidad_iso"], "fuente": "crosswalk"}))
     for temp in sorted(k["temporada"].unique()):
-        for liga in ("feb1", "feb2", "feb3", "lnb", "gleague"):
+        for liga in ("feb1", "feb2", "feb3", "ligau", "lnb", "gleague"):
             p = DIR_PROC / temp / "ligas" / f"{liga}.csv"
             if not p.exists():
                 continue

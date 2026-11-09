@@ -216,7 +216,7 @@ class _Http:
         if "/resultados/" in url:
             grupo = (data or {}).get("_ctl0:Main:gruposDropDownList", "1")
             return _Resp(200, RES_HTML if grupo == "1" else RES_HTML.split("<table>")[0])   # otros grupos vacíos
-        if "Equipo.aspx" in url:
+        if "/equipo/" in url:
             return _Resp(200, TEAM_HTML)
         return _Resp(404, "")
 

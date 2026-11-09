@@ -202,7 +202,7 @@ def variantes_web(proc: Path, v: pd.DataFrame) -> pd.DataFrame:
     if not f.exists():
         return v.iloc[0:0]
     w = pd.read_csv(f, dtype=str).dropna(subset=["player_id", "nombre"]).drop_duplicates(["player_id", "nombre"])
-    feb = v[v["fuente_liga"].isin(["feb1", "feb2", "feb3"])][["fuente_liga", "fuente_id", "nombre"]]
+    feb = v[v["fuente_liga"].isin(["feb1", "feb2", "feb3", "ligau"])][["fuente_liga", "fuente_id", "nombre"]]
     x = feb.merge(w.rename(columns={"player_id": "fuente_id", "nombre": "web"}), on="fuente_id")
     x = x[[_apellidos_compatibles(a, b) for a, b in zip(x["nombre"], x["web"])]]
     return x.drop_duplicates(["fuente_liga", "fuente_id", "web"]).assign(nombre=lambda d: d["web"], min=0.0)[

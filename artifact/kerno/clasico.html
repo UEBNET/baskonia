@@ -1144,7 +1144,7 @@ const CL_PAG = { tabla: ["jugadores"], normalizados: ["jugadores"], quintetos: [
 const clPag = (pg) => (!CL_PROPIO[CL_SITIO] || !CL_PAG[pg] || CL_PAG[pg].includes(CL_SITIO) ? pg : "tabla");
 const PHASES = [["regular", "Temporada regular"], ["playoffs", "Playoffs"], ["total", "Total"]];
 // ligas conocidas (nombre); las que traiga el índice de datos y no estén aquí se añaden solas en renderLeagues
-const LEAGUES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "Basketball Champions League", fec: "FIBA Europe Cup", bsl: "Basketbol Süper Ligi", gbl: "Greek Basket League", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", bnxt: "BNXT League", vtb: "VTB United League", cba: "Chinese Basketball Association", nbl: "NBL (Australia)", ncaa: "NCAA D-I (top-50)" };
+const LEAGUES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "Basketball Champions League", fec: "FIBA Europe Cup", bsl: "Basketbol Süper Ligi", gbl: "Greek Basket League", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", bnxt: "BNXT League", vtb: "VTB United League", cba: "Chinese Basketball Association", nbl: "NBL (Australia)", ncaa: "NCAA D-I (top-50)", ligau: "Liga U (ACB, sub-22)" };
 const VIEWS_RAW = {
   basico:   { name: "Básico", cols: ["gp","gs","min_pg","pts_pg","reb_pg","ast_pg","stl_pg","blk_pg","tov_pg","pf_pg","pir_pg","plus_minus_pg"] },
   tiro:     { name: "Tiro", cols: ["fga_pg","fg_pct","fg2a_pg","fg2_pct","fg3a_pg","fg3_pct","fta_pg","ft_pct","fg3a_rate","fta_rate","efg_pct","ts_pct","pts_per_tsa"] },
@@ -1231,7 +1231,7 @@ function colDesc(c) {
 // capacidad en la vara de la liga elegida. z_EL = (T(v) − μ_EL)/τ_EL; z_d = (z_EL − δ_d)/s_d; valor = T⁻¹(μ_d + τ_d·z_d).
 // Intervalo del 80 %, cada cola: v_j = sd_EL² − sd_par(o,EL)² (≥ 10 % de sd_EL²), sd_d² = (v_j + sd_par(o,d)²)/s_d²
 // + extrapolación² fuera del soporte de la liga. Con la EuroLeague, los valores publicados tal cual.
-const VARA_NOMBRES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa (ACB)", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "BCL", fec: "FIBA Europe Cup", bsl: "BSL", gbl: "GBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", cba: "CBA", bnxt: "BNXT", ncaa: "NCAA (top-50)", nbl: "NBL", vtb: "VTB" };
+const VARA_NOMBRES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa (ACB)", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "BCL", fec: "FIBA Europe Cup", bsl: "BSL", gbl: "GBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", cba: "CBA", bnxt: "BNXT", ncaa: "NCAA (top-50)", nbl: "NBL", vtb: "VTB", ligau: "Liga U" };
 const varaNombre = () => VARA_NOMBRES[st.vara] || st.vara || "EuroLeague";
 let VARA = null;
 async function cargarVara() { if (!VARA) VARA = await getJSON("datos/normalizados/vara.json").catch(() => null); return VARA; }
@@ -1278,7 +1278,7 @@ const POS_MAP = { "Base": 1, "Escolta": 2, "Alero": 3, "Ala-pívot": 4, "Pívot"
   PG: 1, SG: 2, SF: 3, PF: 4, C: 5, "C-F": 5 };
 const POS_CANDS = { G: [1, 2], "G-F": [1, 2], F: [3, 4], "F-G": [3, 4], "F-C": [3, 4] };
 const POS_FEATS = ["ast_pct", "oreb_pct", "dreb_pct", "blk_pct", "fg3a_rate", "stl_pct", "fta_rate", "tov_pct"];
-const LEAGUE_ABBR = { euroleague: "EL", eurocup: "EC", acb: "ACB", nba: "NBA", gleague: "GL", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "BCL", fec: "FEC", bsl: "BSL", gbl: "GBL", feb1: "FEB1", feb2: "FEB2", feb3: "FEB3", bnxt: "BNXT", vtb: "VTB", cba: "CBA", nbl: "NBL", ncaa: "NCAA" };
+const LEAGUE_ABBR = { euroleague: "EL", eurocup: "EC", acb: "ACB", nba: "NBA", gleague: "GL", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "BCL", fec: "FEC", bsl: "BSL", gbl: "GBL", feb1: "FEB1", feb2: "FEB2", feb3: "FEB3", bnxt: "BNXT", vtb: "VTB", cba: "CBA", nbl: "NBL", ncaa: "NCAA", ligau: "LU" };
 // Dirección de cada métrica para el mapa de calor: -1 = menos es mejor, 0 = sin juicio (rol o contexto), resto = más es mejor
 const HEAT_DIR = { tov_pg: -1, pf_pg: -1, tov_p40: -1, tov_pct: -1, drtg: -1, team_drtg: -1, src_drtg: -1, bn_drtg_ind: -1, bn_drtg_onoff: -1, delta_drtg: -1, team_l: -1,
   usg_pct: 0, bn_usg_pct: 0, src_usg_pct: 0, delta_usg_pct: 0, fg3a_rate: 0, src_avg_shot_dist: 0, team_pace: 0, lg_pace: 0, lg_ortg: 0, calidad_contexto: 0 };

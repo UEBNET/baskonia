@@ -27,7 +27,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
-LIGAS_POCOS_PUENTES = ["feb3", "feb2", "cba", "nbl", "bnxt", "ncaa"]
+LIGAS_POCOS_PUENTES = ["ligau", "feb3", "feb2", "cba", "nbl", "bnxt", "ncaa"]
 SUFIJOS = {"jr", "sr", "ii", "iii", "iv"}
 COPAS = {"euroleague", "eurocup", "bcl", "fec"}       # compatibles con una liga nacional en la misma temporada
 SALIDA = RAIZ / "data" / "modelos" / "v3_2" / "auditoria_puentes"

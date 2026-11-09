@@ -1,6 +1,6 @@
 ---
 name: actualizar-temporada
-description: Backend del botón «Actualizar 2026-27» de Kerno Analytics, que desde la v4.2 son tres artifacts (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn). Descarga sólo los partidos nuevos de la temporada en curso en las 20 ligas, aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3, tríos y parejas v4.2) sin reajustar ni tocar el histórico, sube los datos a Git y republica en cada artifact sólo los ficheros suyos que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
+description: Backend del botón «Actualizar 2026-27» de Kerno Analytics, que desde la v4.2 son tres artifacts (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn). Descarga sólo los partidos nuevos de la temporada en curso en las 21 ligas (con la Liga U de la ACB desde el 09-11-2026), aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3, tríos y parejas v4.2) sin reajustar ni tocar el histórico, sube los datos a Git y republica en cada artifact sólo los ficheros suyos que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
 ---
 
 # Actualizar la temporada en curso (botón del artifact)
@@ -32,6 +32,10 @@ y el resto de líneas queda byte a byte igual.
    git clone --depth 1 --filter=blob:none --sparse --branch claude/jolly-thompson-qczxl4 https://github.com/uebnet/baskonia
    cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/2020-21/' '!/data/raw/*/2021-22/' '!/data/raw/*/2022-23/' '!/data/raw/*/2023-24/' '!/data/raw/*/2024-25/' '!/data/raw/*/2025-26/'
    ```
+   **Ligas (09-11-2026): 21**, todas las `activa: true` de `config/sources.json`. La Liga U de la ACB (`ligau`, sub-22,
+   desde 2025-26) se descarga con el adaptador FEB (competición `g=74`): necesita en la red del entorno los mismos hosts
+   que las FEB (`baloncestoenvivo.feb.es`, `intrafeb.feb.es`). Si una liga falla con `CONNECT tunnel failed, response
+   403`, el host no está permitido en ese entorno: el programa sigue con el bruto anterior y lo anota en el informe.
 2. **Dependencias** (≈ 1 min si el entorno no las trae ya):
    `python -m pip install -r requirements.txt -r requirements-v3.txt -r requirements-estilos.txt --extra-index-url https://download.pytorch.org/whl/cpu`
 3. **Actualización** (30-90 min), desacoplada para que no la corte el límite de las tareas de Bash en segundo plano

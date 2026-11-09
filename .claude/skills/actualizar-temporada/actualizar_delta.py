@@ -230,7 +230,7 @@ def actualizar(temporada: str | None = None, ligas: list[str] | None = None, des
                                                         "estados": {k: v.get("estado") for k, v in out.items()}}
                 except Exception as exc:  # noqa: BLE001 - se informa; no invalida la extracción
                     informe["pasos"]["entrenadores"] = {"error": f"{type(exc).__name__}: {exc}"}
-            feb = [l for l in ligas if l in ("feb1", "feb2", "feb3")]
+            feb = [l for l in ligas if l in ("feb1", "feb2", "feb3", "ligau")]
             if feb:
                 from bbstats import feb_informe
                 try:

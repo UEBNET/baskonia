@@ -244,8 +244,8 @@ const LS = { get(k) { try { return localStorage.getItem(k); } catch (e) { return
 const N = (x, d = 1) => (x == null || !isFinite(x)) ? "–" : Number(x).toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
 const Nz = (x, d = 1) => (x == null || !isFinite(x)) ? "–" : (x > 0 ? "+" : "") + N(x, d);
 const Ni = (x) => (x == null) ? "–" : Number(x).toLocaleString("es-ES");
-const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB" };
-const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3"];
+const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", ligau: "Liga U" };
+const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3", "ligau"];
 const ligaN = (l) => LIGA_N[l] || String(l || "").toUpperCase();
 const ligaOrd = (a, b) => (LIGA_ORD.indexOf(a) + 1 || 99) - (LIGA_ORD.indexOf(b) + 1 || 99);
 const GRUPO_N = { europa_top: "Europa top (EuroLeague, EuroCup, Liga Endesa)", europa_media: "Europa media (LBA, LNB, BSL, VTB, BCL)", europa_menor: "Europa menor (BBL, BNXT, GBL, FIBA Europe Cup)", feb: "FEB (Primera, Segunda y Tercera)", nba: "NBA", eeuu_menor: "EE. UU. menor (G League, NCAA)", otras: "Otras (CBA, NBL)" };

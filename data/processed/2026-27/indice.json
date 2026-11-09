@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-11-08T23:35:15.396195+00:00",
+  "generado": "2026-11-09T16:27:29.381041+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -143,6 +143,15 @@
       "fases": {
         "regular": 232,
         "total": 232
+      }
+    },
+    "ligau": {
+      "nombre": "Liga U (ACB)",
+      "archivo": "ligas/ligau.csv",
+      "fecha_extraccion": "2026-11-09T16:26:08.710496+00:00",
+      "fases": {
+        "regular": 207,
+        "total": 207
       }
     },
     "lnb": {

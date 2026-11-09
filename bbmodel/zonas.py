@@ -96,6 +96,7 @@ INICIAL = {
     "feb1": (Sistema("feb1", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
     "feb2": (Sistema("feb2", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
     "feb3": (Sistema("feb3", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),
+    "ligau": (Sistema("ligau", "fiba", "x", (11.7, 49.7), (0.38, 0.174), pista_completa=100.0), True),  # Liga U: sistema FEB
     # Ligas añadidas el 31-10-2026: todas llegan traducidas al data.json de FIBA LiveStats (% de la pista completa,
     # x a lo largo, y lateral). BNXT y NBL: FIBA LiveStats / Genius (como BSL/GBL). VTB (Infobasket) y NCAA (ESPN):
     # tiros llevados al aro izquierdo por el adaptador. NCAA: línea de 3 a 6,75 m desde 2019-20 (regla fiba).

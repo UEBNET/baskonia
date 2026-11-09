@@ -33,7 +33,8 @@ DIR_PROC = RAIZ / "data" / "processed"
 DIR_MOD = RAIZ / "data" / "modelos"
 NOMBRES_LIGA = {"euroleague": "EuroLeague", "eurocup": "EuroCup", "acb": "Liga Endesa", "nba": "NBA",
                 "gleague": "G League", "lba": "LBA", "bbl": "BBL", "lnb": "LNB", "bcl": "BCL", "fec": "FIBA Europe Cup",
-                "bsl": "BSL", "gbl": "GBL", "bnxt": "BNXT", "vtb": "VTB", "cba": "CBA", "nbl": "NBL", "ncaa": "NCAA"}
+                "bsl": "BSL", "gbl": "GBL", "bnxt": "BNXT", "vtb": "VTB", "cba": "CBA", "nbl": "NBL", "ncaa": "NCAA",
+                "feb1": "Primera FEB", "feb2": "Segunda FEB", "feb3": "Tercera FEB", "ligau": "Liga U"}
 FASES = ["regular", "playoffs", "total"]
 
 UNIDAD = ["fase", "gp", "min", "poss", "pts_for", "pts_against", "plus_minus", "ortg", "drtg", "net_rtg",

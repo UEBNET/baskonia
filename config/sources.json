@@ -4486,6 +4486,46 @@
       "_nombres_latinos": "Entrenadores extranjeros que Sina sólo da transliterados (sin override salen como una palabra en pinyin, tipo 'transliterado'): 乌戈 (Wuge) y 雅尼斯 (Yanisi), vistos en 2023-24/2026-27. Añadir aquí su nombre real cuando se verifique. 阿的江 (Adijiang) y 西热力江 (Xirelijiang) son uigures: la transliteración es correcta.",
       "_entrenadores": "Registrar en bbstats/entrenadores.py: registrar('cba', Extractor(lector_fiba_livestats, 'Sina schedule/show (主教练)', docs_principal=lambda m, g: cba_src.docs_principal(m, g))) con `from .lineups.sources import cba as cba_src`; 'entrenadores': 'cba' en esta config.",
       "_temporadas": "sina_liga = qleagueid del calendario de Sina; minutos_partido por temporada (48 hasta 2024-25). Opcional para pruebas: meses = ['AAAA-MM', ...] limita la descarga a esos meses."
+    },
+    "ligau": {
+      "adaptador": "feb",
+      "activa": true,
+      "pais": "España",
+      "minutos_partido": 40,
+      "fase": "todas",
+      "partidos_por_paquete": 400,
+      "pbp": "feb",
+      "_fases": "Mismas reglas que las FEB (grupos de baloncestoenvivo.feb.es, g=74): LIGA REGULAR GRUPO A/B y 2ª FASE = regular; PLAY-OUT (cruces de acceso), PLAY-OFFS 1/8 a Final y 3º-4º = playoffs; copas y permanencia fuera.",
+      "fases_grupo": [
+        [
+          "copa",
+          null
+        ],
+        [
+          "liga regular",
+          "regular"
+        ],
+        [
+          "perman|descen",
+          null
+        ],
+        [
+          "2\\S* fase|clasif",
+          "regular"
+        ],
+        [
+          ".",
+          "playoffs"
+        ]
+      ],
+      "estado_verificacion": "verificado con datos reales (2025-26 completa: 206/206 partidos del calendario FEB; 2026-27 en curso, 42/42 jugados al 09-11-2026)",
+      "nombre": "Liga U (ACB)",
+      "nombre_historico": "Liga U22",
+      "competicion_feb": 74,
+      "slug": "ligau",
+      "fuente": "https://baloncestoenvivo.feb.es (resultados g=74 ligau) + intrafeb.feb.es/LiveStats.API (KeyFacts/BoxScore por partido); la web oficial ligau.com enlaza los mismos ids de partido",
+      "temporada_inicial": "2025-26",
+      "_temporada_inicial": "Liga creada en 2025-26 (competición sub-22 de la ACB para jugadores españoles U22 de sus clubes); decisión del usuario 09-11-2026: 2025-26 y 2026-27."
     }
   },
   "identidad": {
