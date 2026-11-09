@@ -102,7 +102,7 @@ cambiado y no sea de la temporada en curso (ni propio del paso), así que el his
   `atlas/v40/mapa_personas.json` los generó la sesión que montó Kerno y no están en este repositorio: ni el botón ni la
   recalibración los rehacen. Las filas de 2026-27 de `clubes_v40` (bloque «El banquillo») se quedan con los minutos del
   6-11-2026; la página calcula el Net v4.0 en vivo para los clubes que no estén en ese fichero.
-* **Artifact anterior** (https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN, versión 106): conserva un botón que lanza la
-  misma Routine, pero la Routine ya publica en Kerno.
+* **Artifact anterior** (https://claude.ai/artifact/F4AxayFrM2d1D5JEoNiDoN): sin botón desde la versión 107; el botón
+  vive sólo en Kerno.
 * `quintetos/datos/indice.json` y los estilos unificados de Equipos y quintetos se regeneran enteros (contienen todas
   las temporadas); su contenido histórico es el mismo.
