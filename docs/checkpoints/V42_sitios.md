@@ -47,7 +47,7 @@ publicadas exactas. Tamaños: los de la versión publicada 1794228781-5e60 y, pa
 | Sitio | Ficheros | MB | MiB | Lo grande |
 |---|---|---|---|---|
 | Jugadores | 127 | 163,9 | 156,3 | datos/<t>/ 70,2 · normalizados 34,7 · atlas/informe 29,3 · atlas/estilos 13,3 · simulador 5,9 |
-| Equipos | 362 | 169,7 | 161,9 | quintetos/datos/<t> 75,6 · normalizados 34,7 · atlas/informe 29,3 · atlas/estilos 10,5 · simulador 5,9 · datos_v42 3,4 |
+| Equipos | 363 | 172,6 | 164,6 | quintetos/datos/<t> 75,6 · normalizados 34,7 · atlas/informe 29,3 · atlas/estilos 13,3 · simulador 5,9 · datos_v42 3,4 |
 | Metodología | 350 | 167,3 | 159,6 | quintetos/datos/<t> 75,2 · normalizados 34,7 · evaluaciones 14,2 · normalizacion 10,5 · atlas/estilos 10,5 · simulador 5,9 |
 
 Los tres por debajo de 230 MB. Comunes a los tres: `index.html`, `sitio.json`, `kerno/*`, `clasico.html`,
@@ -63,7 +63,8 @@ Los tres por debajo de 230 MB. Comunes a los tres: `index.html`, `sitio.json`, `
   con el equipo elegido, así que necesita los ficheros de quintetos (~80 MB duplicados con Equipos). Alternativa más ligera
   (no aplicada): publicar en Metodología solo las alineaciones de una temporada cerrada y la en curso (~27 MB) y fijar allí
   la liga y la temporada de la guía; o dejar la Guía como enlace a Equipos.
-- `atlas/estilos/brutos` solo va en Jugadores (Simular plantilla); el Atlas lo precarga en segundo plano y tolera que falte.
+- `atlas/estilos/brutos` (2,9 MB) solo lo usa Simular plantilla, pero el Atlas lo precarga en segundo plano al abrir el
+  Informe de equipo: va también en Equipos (quitarlo ahorra 2,9 MB a cambio de una petición 404 que el Atlas tolera).
 
 ## 4. Cómo republicar cada sitio
 
@@ -89,4 +90,6 @@ Playwright sobre la copia de `kerno_cand` (http://localhost:8766/) con cinco var
 Jugadores, Equipos y Metodología con URL, Equipos sin URL), a 1280 y 390 px: raíl filtrado, enlaces a otros sitios bien
 formados, portada de cada sitio, título, sin errores JS (salvo 404 de datos que la copia no tiene), sin scroll horizontal
 (también con el raíl abierto en móvil), sin flechas de texto en el raíl y sin peticiones a ficheros de otro sitio al recorrer
-las vistas de cada uno. Scripts en línea de `index.html` y `clasico.html`: todos compilan.
+las vistas de cada uno. Controles dentro de las vistas (botones, selects, inputs) idénticos a la versión anterior en
+Equipos, Metodología y Jugadores. Un enlace de Jugadores a «Impacto en pista» llega a Equipos con club, temporada y jugador
+en la página de quintetos. Scripts en línea de `index.html` y `clasico.html`: todos compilan.
