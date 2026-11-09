@@ -5,6 +5,7 @@
     python -m bbnorm5.f1 --config configs/v5/f1.yaml incertidumbre   # §5.2 descomposición del ancho publicado v3.2
     python -m bbnorm5.f1 --config configs/v5/f1.yaml calibracion     # §5.3 cobertura, PIT, CRPS (v1, v3.2, v4.2)
     python -m bbnorm5.f1 --config configs/v5/f1.yaml nivel           # §5.4 nivel frente a predictivo
+    python -m bbnorm5.f1 --config configs/v5/f1.yaml simulacion      # §5.4 prueba de la D1 con intervalos exactos
     python -m bbnorm5.f1 --config configs/v5/f1.yaml figuras         # figuras del informe (marca Kerno)
 
 Salidas en data/v5/f1/ con metadatos (versión, hash de configuración y de datos de entrada). Registro en MLflow
@@ -58,7 +59,7 @@ def paso_varianza(cfg: dict) -> pd.DataFrame:
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="bbnorm5.f1")
     ap.add_argument("--config", default="configs/v5/f1.yaml")
-    ap.add_argument("paso", choices=["varianza", "division", "incertidumbre", "calibracion", "nivel", "figuras"])
+    ap.add_argument("paso", choices=["varianza", "division", "incertidumbre", "calibracion", "nivel", "simulacion", "figuras"])
     a = ap.parse_args(argv)
     cfg = C.cargar(a.config)
     np.random.seed(int(cfg["semilla"]))

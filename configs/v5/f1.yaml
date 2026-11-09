@@ -35,3 +35,7 @@ v42:
 
 lolo:
   anio: 2024                     # corte del LOLO (como bbnorm3.flujo.lolo y bbmodel.amortiguacion)
+
+simulacion:                      # §5.4: prueba de la D1 y de la sobrecobertura con intervalos exactos por construcción
+  metricas: [pts_p100, fg3_pct, stl_pct, ast_pct, ts_pct, oreb_pct]
+  repeticiones: 2

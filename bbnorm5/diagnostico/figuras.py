@@ -91,7 +91,7 @@ def fig_varianza(cfg):
     comp = pd.read_csv(C.dir_fase(cfg) / "varianza" / "componentes.csv")
     comp = comp.sort_values("prop_ruido_muestra")
     partes = [("prop_jugador", "Jugador (estable)", RACING), ("prop_temporada_jugador", "Jugador × temporada", R300),
-              ("prop_liga_temporada", "Liga × temporada", S300), ("prop_ruido_muestra", "Ruido de muestra (σ²/n̄)", CLAY)]
+              ("prop_liga_temporada", "Liga × temporada", S300), ("prop_ruido_muestra", "Ruido de muestra", CLAY)]
     fig, ax = plt.subplots(figsize=(9.2, 9.6))
     fig.subplots_adjust(left=0.16, right=0.97, top=0.86, bottom=0.08)
     y = np.arange(len(comp))
@@ -117,13 +117,16 @@ def fig_estabilizacion(cfg):
     m = [x for x in div.index if x in comp.index]
     m = sorted(m, key=lambda x: comp.loc[x, "n_estab_temp"])
     fig, ax = plt.subplots(figsize=(9.2, 5.4))
-    fig.subplots_adjust(left=0.15, right=0.97, top=0.83, bottom=0.14)
+    fig.subplots_adjust(left=0.21, right=0.97, top=0.83, bottom=0.14)
     y = np.arange(len(m))
     lo, hi = div.loc[m, "n_estab_momentos_lo80"], div.loc[m, "n_estab_momentos_hi80"]
     ax.hlines(y - 0.15, lo, hi, color=BANDA, linewidth=7)
     ax.plot(div.loc[m, "n_estab_momentos"], y - 0.15, "o", color=S500, ms=5, label="División de muestra (momentos) · rango 80 %")
     ax.plot(comp.loc[m, "n_estab_temp"], y + 0.15, "o", color=RACING, ms=6, label="Componentes de varianza (REML)")
     ax.set_xscale("log")
+    ax.set_xticks([5, 10, 20, 50, 100, 200, 500])
+    ax.xaxis.set_major_formatter(lambda v, p: f"{v:.0f}")
+    ax.xaxis.set_minor_formatter(lambda v, p: "")
     ax.set_yticks(y, [f"{NOMBRES.get(x, x)} · {div.loc[x, 'unidad_exposicion']}" for x in m])
     ax.legend(loc="lower right", fontsize=8)
     ax.set_xlabel("Exposición con fiabilidad 0,5 (n*), escala logarítmica")
@@ -142,7 +145,7 @@ def fig_incertidumbre(cfg):
     y = np.arange(len(r))
     izq = np.zeros(len(r))
     for col, et, colr in (("frac_jugador", "Nivel del jugador", RACING), ("frac_traduccion", "Factor de traducción", LAKE),
-                          ("frac_temporada", "Residual de temporada (ψ + σ²/n + η²)", CLAY)):
+                          ("frac_temporada", "Residual de temporada (contexto, muestra y cambio)", CLAY)):
         ax.barh(y, r[col], left=izq, color=colr, height=0.72, label=et)
         izq += r[col].to_numpy()
     ax.set_yticks(y, [NOMBRES.get(m, m) for m in r.index])
@@ -165,7 +168,7 @@ def fig_fiabilidad(cfg):
               ("v3.2 sin recalibrar", "v3.2 · sin recalibrar", R300, "o"),
               ("v2 = A+B amortiguado (intervalo F0, de nivel)", "v1/v2 · A+B amortiguado (F0)", S500, "s"),
               ("v4.2 D1 (Kalman)", "v4.2 D1 · historial (Kalman)", LAKE, "D"),
-              ("v3.2 publicada (nivel t ⊕ nivel t+1)", "v3.2 · intervalo publicado (nivel t ⊕ t+1)", CLAY, "^")]
+              ("v3.2 publicada (nivel t ⊕ nivel t+1)", "v3.2 · intervalo publicado (nivel t y t+1)", CLAY, "^")]
     nom = np.array([0.5, 0.8, 0.95])
     fig, ax = plt.subplots(figsize=(7.6, 6.4))
     fig.subplots_adjust(left=0.12, right=0.97, top=0.84, bottom=0.12)
@@ -181,8 +184,8 @@ def fig_fiabilidad(cfg):
     ax.set_ylabel("Cobertura empírica")
     ax.legend(loc="lower right", fontsize=7.8)
     c = g.loc["v3.2 publicada (nivel t ⊕ nivel t+1)", "cob80"] if "v3.2 publicada (nivel t ⊕ nivel t+1)" in g.index else np.nan
-    _cabecera(fig, ax, F, f"El intervalo publicado cubre el {c * 100:.0f} % cuando promete el 80 %",
-              "Gráfico de fiabilidad · fuera de tiempo, cortes 2022–2024 · aproximación normal en la escala de trabajo", PIE)
+    _cabecera(fig, ax, F, f"Los predictivos están calibrados; el {c * 100:.0f} % del intervalo publicado no prueba que sea ancho",
+              "Fiabilidad · fuera de tiempo, cortes 2022–2024 · recuadro: objetivo 76–84 % · ver la simulación del §4.3", PIE)
     return _guardar(fig, "f1_fiabilidad", cfg)
 
 
@@ -195,19 +198,19 @@ def fig_cob80_metrica(cfg):
     c4 = hi[(hi["por"] == "metrica") & (hi["modelo"] == "v4.2 D1 (Kalman)")].set_index("grupo")["cob80"]
     m = sorted(set(a.index) | set(b.index), key=lambda x: b.get(x, a.get(x, 0)))
     fig, ax = plt.subplots(figsize=(9.2, 9.0))
-    fig.subplots_adjust(left=0.16, right=0.97, top=0.86, bottom=0.08)
+    fig.subplots_adjust(left=0.16, right=0.97, top=0.88, bottom=0.08)
     y = np.arange(len(m))
     ax.axvspan(0.72, 0.88, color=BANDA)
     ax.axvline(0.8, color=S400, lw=1, ls="--")
     ax.plot([a.get(x, np.nan) for x in m], y, "o", color=RACING, ms=5.5, label="v3.2 · examen de cambios de liga (predictiva recalibrada)")
     ax.plot([c4.get(x, np.nan) for x in m], y, "D", color=LAKE, ms=4.5, label="v4.2 D1 · historial")
-    ax.plot([b.get(x, np.nan) for x in m], y, "^", color=CLAY, ms=5.5, label="v3.2 · intervalo publicado (nivel t ⊕ t+1)")
+    ax.plot([b.get(x, np.nan) for x in m], y, "^", color=CLAY, ms=5.5, label="v3.2 · intervalo publicado (nivel t y t+1)")
     ax.set_yticks(y, [NOMBRES.get(x, x) for x in m])
     ax.set_xlim(0.55, 1.0)
     ax.xaxis.set_major_formatter(lambda v, p: f"{v * 100:.0f} %")
-    ax.legend(loc="lower center", bbox_to_anchor=(0.45, 1.0), ncol=1, fontsize=8)
+    ax.legend(loc="lower left", fontsize=8)
     n_inf = int((b > 0.88).sum())
-    _cabecera(fig, ax, F, f"Por la regla del encargo, el intervalo publicado está infraconfiado en {n_inf} de {len(b)} métricas",
+    _cabecera(fig, ax, F, f"El intervalo publicado sobrecubre en {n_inf} de {len(b)} métricas; en parte es mecánico (§4.3)",
               "Cobertura empírica del intervalo nominal del 80 % · banda: 72–88 % (regla de interpretación §5.3)", PIE)
     return _guardar(fig, "f1_cobertura80_metrica", cfg)
 
@@ -216,7 +219,7 @@ def fig_pit(cfg):
     plt, F = estilo()
     p = pd.read_csv(C.dir_fase(cfg) / "calibracion" / "movimientos_pit.csv.gz")
     fig, axs = plt.subplots(1, 3, figsize=(10.2, 3.9), sharey=True)
-    fig.subplots_adjust(left=0.07, right=0.98, top=0.74, bottom=0.17, wspace=0.08)
+    fig.subplots_adjust(left=0.07, right=0.98, top=0.70, bottom=0.17, wspace=0.08)
     for ax, col, et in zip(axs, ("pit_v32", "pit_v32_sin_recal", "pit_v2"),
                            ("v3.2 recalibrada", "v3.2 sin recalibrar", "v1/v2 · A+B amortiguado (F0)")):
         x = p[col].dropna()
@@ -225,7 +228,7 @@ def fig_pit(cfg):
         ax.set_title(et, fontsize=9.5, color=INK, loc="left", fontfamily=F["titulo"])
         ax.set_xlabel("PIT")
     axs[0].set_ylabel("Densidad (uniforme = 1)")
-    _cabecera(fig, axs[0], F, "PIT en U invertida: los intervalos de la v1/v2 son demasiado anchos para el error real",
+    _cabecera(fig, axs[0], F, "Sin recalibrar, la v3.2 es algo ancha; la v1/v2 además se queda corta (sesgo)",
               "Histograma PIT · examen fuera de tiempo, cambios de liga, cortes 2022–2024 · 33 métricas", PIE)
     return _guardar(fig, "f1_pit", cfg)
 
@@ -241,13 +244,13 @@ def fig_nivel(cfg):
     ax.axvline(1.0, color=S400, lw=1, ls="--")
     ax.hlines(y, r["razon_historial"], r["razon_1temp"], color=BANDA, lw=6)
     ax.plot(r["razon_1temp"], y, "o", color=RACING, ms=6, label="Credibilidad con una temporada")
-    ax.plot(r["razon_historial"], y, "D", color=LAKE, ms=5, label="Credibilidad con su historial ≤ t")
+    ax.plot(r["razon_historial"], y, "D", color=LAKE, ms=5, label="Credibilidad con su historial hasta t")
     ax.set_yticks(y, [NOMBRES.get(m, m) for m in r.index])
     ax.set_xlabel("DT de credibilidad del nivel / DT propia publicada (v3.2)")
     ax.legend(loc="lower center", bbox_to_anchor=(0.45, 1.0), ncol=2, fontsize=8.2)
-    med = r["razon_1temp"].median()
-    _cabecera(fig, ax, F, f"Un intervalo de nivel bien calibrado sería un {100 * (1 - med):.0f} % más estrecho (mediana)",
-              "Razón de desviaciones típicas · 2025-26 · jugadores con 300+ minutos · modelo de componentes de varianza", PIE)
+    n_mas = int((r["razon_1temp"] > 1).sum())
+    _cabecera(fig, ax, F, f"En {n_mas} de {len(r)} métricas la DT publicada ya es más estrecha que la de una métrica aislada",
+              "DT de credibilidad del nivel (componentes de varianza) / DT propia publicada (v3.2) · 2025-26 · 300+ minutos", PIE)
     return _guardar(fig, "f1_nivel_frente_publicado", cfg)
 
 

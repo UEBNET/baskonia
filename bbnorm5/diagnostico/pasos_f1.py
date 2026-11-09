@@ -349,3 +349,16 @@ def paso_nivel(cfg: dict) -> pd.DataFrame:
 def paso_figuras(cfg: dict) -> None:
     from bbnorm5.diagnostico import figuras
     figuras.todas(cfg)
+
+
+def paso_simulacion(cfg: dict) -> pd.DataFrame:
+    """§5.4 · Prueba por simulación de la v4.2 D1 y de la sobrecobertura con intervalos exactos
+    (bbnorm5/diagnostico/simulacion_d1.py)."""
+    from bbnorm5.diagnostico import simulacion_d1 as S
+    r = S.ejecutar(cfg, list(cfg["simulacion"]["metricas"]), int(cfg["simulacion"]["repeticiones"]))
+    sal = C.dir_fase(cfg) / "nivel"
+    sal.mkdir(parents=True, exist_ok=True)
+    r.to_csv(sal / "simulacion_d1.csv", index=False)
+    C.escribir_json(C.metadatos(cfg, extra={"paso": "simulacion"}), sal / "simulacion_meta.json")
+    print(r.groupby("metrica").mean(numeric_only=True).round(3).to_string())
+    return r
