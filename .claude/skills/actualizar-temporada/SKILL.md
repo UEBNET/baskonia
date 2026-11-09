@@ -22,7 +22,7 @@ y el resto de líneas queda byte a byte igual.
    cd baskonia && git sparse-checkout set --no-cone '/*' '!/data/raw/*/2020-21/' '!/data/raw/*/2021-22/' '!/data/raw/*/2022-23/' '!/data/raw/*/2023-24/' '!/data/raw/*/2024-25/' '!/data/raw/*/2025-26/'
    ```
 2. **Dependencias** (≈ 1 min si el entorno no las trae ya):
-   `pip install -r requirements.txt -r requirements-v3.txt -r requirements-estilos.txt --extra-index-url https://download.pytorch.org/whl/cpu`
+   `python -m pip install -r requirements.txt -r requirements-v3.txt -r requirements-estilos.txt --extra-index-url https://download.pytorch.org/whl/cpu`
 3. **Actualización** (30-90 min), desacoplada para que no la corte el límite de las tareas de Bash en segundo plano
    (30 min por defecto, 2 h como máximo):
    `PYTHONPATH=. MLFLOW_DISABLE_AGENT_HINT=1 setsid nohup python -m bbactualiza --json > /tmp/actualizacion.json 2> /tmp/actualizacion.log < /dev/null & disown`
