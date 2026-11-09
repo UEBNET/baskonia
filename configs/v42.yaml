@@ -1,0 +1,79 @@
+# CERNO v4.2 · Kerno — historial del jugador en todo el modelo e intervalos más estrechos y honestos
+# Orden del CEO (09-11-2026): «Autorizo D2 y D3 también; sigue adelante con todo, incluyendo tocar el motor v3.3, capas de
+# normalización y v4.0. Debes versionar absolutamente TODO en Git y llamar a esta nueva fase transversalmente v4.2 […]
+# si no mejoran lo actual, debes mantener las versiones anteriores y hacérmelo saber.»
+#
+# PRERREGISTRO: este fichero se escribe y se sube ANTES de calcular nada de la v4.2. Etiquetas: DATO / LECTURA / SUPUESTO /
+# POST HOC / DECISIÓN. Sin fuga: todo ajuste usa temporadas ≤ t y predice t+1. 2021 calibra; 2022–2024 deciden.
+# Regla de versión: cada pieza v4.2 sustituye a su predecesora SÓLO si pasa su examen; si no, se mantiene la anterior
+# (v3.2 / v3.3 / v4.0 / v4.1) y se informa al CEO.
+
+version: v4.2
+salidas: data/modelos/v4_2
+codigo: bbequipo/v42
+checkpoints: docs/checkpoints/V42_<pieza>.md
+temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26", "2026-27"]
+cortes: {calibracion: 2021, decision: [2022, 2023, 2024]}   # t = año inicial de la temporada; se predice t+1
+bootstrap: {B: 2000, unidad: persona}
+z80: 1.2815515655446004
+
+# ---------------------------------------------------------------------------------------------------- D1 · normalización v4.2
+normalizacion_v42:
+  que: "historial del jugador: nivel de cada métrica combinando sus temporadas ≤ t (filtro de Kalman por persona)"
+  base: "normalización v3.2 (data/modelos/v3_2/normalizado; equivalente EuroLeague, valor y rango del 80 % por temporada)"
+  metricas: "las 30 normalizadas con rango (todas las de bbmodel.metricas.CATALOGO salvo rapm/orapm/drapm, que van en D2-β)"
+  escala: "la escala de trabajo de cada métrica (bbmodel.metricas.transformar)"
+  modelo:
+    observacion: "y = T(valor), varianza c·v con v = ((T(hi) − T(lo)) / (2·z80))²; varias ligas en una temporada = varias observaciones"
+    estado: "paseo aleatorio entre temporadas: θ_s = θ_{s−1} + η, η ~ N(0, τ²)"
+    previa: "primera temporada: N(μ_pos, σ²_pos) por posición (pos3), estimadas con ≤ t"
+    parametros: "τ² y c por métrica, por máxima verosimilitud de las innovaciones un paso adelante con temporadas ≤ t"
+  examen:
+    poblacion: "personas con observación en t y en t+1, ≥ 300 minutos en cada temporada"
+    objetivo: "ȳ_{t+1}: observación de t+1 (media ponderada por precisión de sus filas)"
+    linea_base: "ȳ_t: lo que muestra hoy el producto (sólo la temporada t)"
+    medidas:
+      mae: "MAE de ȳ_{t+1} − predicción, en desviaciones típicas de la métrica; diferencia v4.2 − v3.2 con IC95 bootstrap por persona"
+      cobertura_80: "cobertura del intervalo predictivo del 80 % de ȳ_{t+1}: m_t ± z80·√(P_t + τ² + c·v_{t+1})"
+      anchura: "anchura del 80 % del nivel en t: v4.2 (√P_t) frente a la de la v3.2 (√v_t), en la escala de la métrica y en percentil"
+    sello_por_metrica:
+      ALTA: "mejora el MAE con IC95 que excluye 0 en los tres cortes de decisión y cobertura conjunta en [0,75; 0,85]"
+      MEDIA: "mejora con IC95 que excluye 0 en el conjunto, no en cada corte; cobertura en rango"
+      BAJA: "no cumple: esa métrica se queda en la v3.2 (una temporada)"
+  producto: "el artifact combina en el navegador la previa precalculada (temporadas cerradas) con la temporada cargada: la
+    temporada en curso se actualiza sola con la rutina mensual, sin tocarla"
+
+# ---------------------------------------------------------------------------------------------------- D2 · motor v4.2 y v4.0 → v4.2
+motor_v42:
+  que: "el motor de minutos y producción (v3.3) y las capas v4.0 (β RAPM, NC, IMPACTO, Net) reciben el nivel con historial"
+  piezas:
+    beta_v42: "β RAPM con historial (Kalman sobre las temporadas del jugador, misma forma que D1); sustituye al β v4.0 si pasa"
+    entradas_motor_v42: "niveles de producción del motor con la normalización v4.2 donde la métrica pasó D1"
+  examen_beta:
+    objetivo: "on/off ajustado de t+1 (el realizado del criterio F2 de la v4.1, ≥ 300 minutos) y β de t+1"
+    criterio: "Spearman con el realizado no peor que el β v4.0 (margen −0,02 en el IC95 inferior de la diferencia) y MAE frente
+      al β de t+1 mejor con IC95 que excluye 0"
+  examen_motor:
+    banco: "fichajes reales de los cortes de decisión (el examen v3.2/v3.3 del motor y el de la capa 4 v4.0)"
+    criterio: "MAE de producción por 100 y Net del equipo no peor que la versión vigente (IC95 superior de la diferencia < margen
+      de la v4.0) y cobertura del 80 % en [0,75; 0,85] tras recalibrar"
+  recalibracion: "rangos del 80 % recalibrados con el corte de calibración (conformal), nunca con los de decisión"
+  si_no_pasa: "se mantiene la v3.3 / v4.0 y se informa"
+
+# ---------------------------------------------------------------------------------------------------- D3 · quintetos, parejas, sinergias
+unidades_v42:
+  que: "Net de quintetos, tríos y parejas y sinergia de pareja con historial: contracción de la temporada t hacia la misma
+    unidad en temporadas ≤ t−1 (y hacia lo esperado por sus jugadores), con pesos por posesiones"
+  examen:
+    objetivo: "Net de la unidad en t+1 (unidades con ≥ 100 posesiones en t y en t+1)"
+    criterio: "MAE frente a la versión vigente (sólo la temporada t, corregida por muestra) mejor con IC95 que excluye 0 en el
+      conjunto; cobertura del 80 % en [0,75; 0,85]"
+  si_no_pasa: "se mantiene la versión vigente y se informa"
+
+# ---------------------------------------------------------------------------------------------------- C · presentación v4.2
+presentacion_v42:
+  que: "en tablas y listas: punto + medidor de confianza (alta · moderada · baja); el rango completo en la ficha y al pasar el ratón"
+  cortes_confianza: "desde la anchura calibrada de cada cifra: terciles de la anchura del 80 % en su familia (corte de
+    calibración), no los cortes fijos de hoy (30 y 55 puntos de percentil)"
+  regla_de_oro: "mismos controles antes y después; sólo cambia cómo se muestran los rangos"
+  cambia_la_regla_del_encargo: "«punto + rango + sello» siempre visible pasa a «punto + sello» visible y rango al detalle (orden del CEO)"
