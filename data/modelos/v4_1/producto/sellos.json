@@ -4,7 +4,7 @@
   "sello_examen": "MEDIA",
   "confianza_es": "moderada",
   "confianza_en": "moderate",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "estado_modelos ficha 1",
   "segmentos": 2
  },
@@ -13,7 +13,7 @@
   "sello_examen": "ALTA",
   "confianza_es": "alta",
   "confianza_en": "high",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "V41_F1 §3; estado_modelos 19c",
   "segmentos": 3
  },
@@ -22,7 +22,7 @@
   "sello_examen": "MEDIA",
   "confianza_es": "moderada",
   "confianza_en": "moderate",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "estado_modelos ficha 2",
   "segmentos": 2
  },
@@ -31,7 +31,7 @@
   "sello_examen": "ALTA",
   "confianza_es": "alta",
   "confianza_en": "high",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "V40_F5 §11.5; estado_modelos ficha 7",
   "segmentos": 3
  },
@@ -40,7 +40,7 @@
   "sello_examen": "MEDIA",
   "confianza_es": "moderada",
   "confianza_en": "moderate",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "V40_F5; estado_modelos ficha 8",
   "segmentos": 2
  },
@@ -49,7 +49,7 @@
   "sello_examen": "ALTA",
   "confianza_es": "alta",
   "confianza_en": "high",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "V40_F4; estado_modelos 9 y 19b",
   "segmentos": 3
  },
@@ -76,8 +76,8 @@
   "sello_examen": "BAJA",
   "confianza_es": "baja",
   "confianza_en": "low",
-  "estado": "propuesto",
-  "fuente": "sin examen propio en la v4.1 (modelo de adaptación v3.x)",
+  "estado": "aprobado",
+  "fuente": "examen K3 (V41_F4 §8.2): gana a la tabla v3_1, no a no corregir",
   "segmentos": 1
  },
  "efecto_companeros": {
@@ -85,7 +85,7 @@
   "sello_examen": "MEDIA",
   "confianza_es": "moderada",
   "confianza_en": "moderate",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "estado_modelos ficha 11",
   "segmentos": 2
  },
@@ -94,7 +94,7 @@
   "sello_examen": "BAJA",
   "confianza_es": "baja",
   "confianza_en": "low",
-  "estado": "propuesto",
+  "estado": "aprobado",
   "fuente": "estado_modelos ficha 10",
   "segmentos": 1
  }

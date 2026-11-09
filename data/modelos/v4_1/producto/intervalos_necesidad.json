@@ -1,0 +1,138 @@
+{
+ "temp": "2026-27",
+ "liga": "euroleague",
+ "perfiles": {
+  "tirador": {
+   "n": 2999,
+   "ancho_actual_mediana": 51.509872241579544,
+   "ancho_indep_mediana": 31.050534065565955,
+   "top40_actual": 44.53781512605041,
+   "top40_indep": 24.736779069602676,
+   "morgan": [
+    {
+     "n": "Juwan Morgan",
+     "liga": "eurocup",
+     "p": 71,
+     "cl": 46,
+     "ch": 95,
+     "il": 58,
+     "ih": 85
+    }
+   ]
+  },
+  "creador": {
+   "n": 2999,
+   "ancho_actual_mediana": 49.08163265306122,
+   "ancho_indep_mediana": 29.8296512827162,
+   "top40_actual": 36.106442577030805,
+   "top40_indep": 23.1288767758395,
+   "morgan": [
+    {
+     "n": "Juwan Morgan",
+     "liga": "eurocup",
+     "p": 80,
+     "cl": 51,
+     "ch": 95,
+     "il": 65,
+     "ih": 89
+    }
+   ]
+  },
+  "anotador": {
+   "n": 2999,
+   "ancho_actual_mediana": 47.628726287262865,
+   "ancho_indep_mediana": 26.869251174931463,
+   "top40_actual": 24.385964912280713,
+   "top40_indep": 16.249558617886834,
+   "morgan": [
+    {
+     "n": "Juwan Morgan",
+     "liga": "eurocup",
+     "p": 66,
+     "cl": 22,
+     "ch": 95,
+     "il": 43,
+     "ih": 82
+    }
+   ]
+  },
+  "aro": {
+   "n": 2999,
+   "ancho_actual_mediana": 50.112044817927185,
+   "ancho_indep_mediana": 31.86368204931734,
+   "top40_actual": 33.361344537815114,
+   "top40_indep": 19.822335457417992,
+   "morgan": [
+    {
+     "n": "Juwan Morgan",
+     "liga": "eurocup",
+     "p": 57,
+     "cl": 23,
+     "ch": 83,
+     "il": 39,
+     "ih": 71
+    }
+   ]
+  },
+  "rebote": {
+   "n": 2999,
+   "ancho_actual_mediana": 52.764227642276424,
+   "ancho_indep_mediana": 33.17750750735138,
+   "top40_actual": 32.195121951219505,
+   "top40_indep": 20.784188692709705,
+   "morgan": [
+    {
+     "n": "Juwan Morgan",
+     "liga": "eurocup",
+     "p": 39,
+     "cl": 15,
+     "ch": 68,
+     "il": 22,
+     "ih": 57
+    }
+   ]
+  },
+  "perimetro": {
+   "n": 2999,
+   "ancho_actual_mediana": 53.90243902439025,
+   "ancho_indep_mediana": 33.703047976555666,
+   "top40_actual": 44.531328320802,
+   "top40_indep": 26.020405695514285,
+   "morgan": [
+    {
+     "n": "Juwan Morgan",
+     "liga": "eurocup",
+     "p": 67,
+     "cl": 20,
+     "ch": 94,
+     "il": 40,
+     "ih": 82
+    }
+   ]
+  },
+  "impacto": {
+   "n": 2999,
+   "ancho_actual_mediana": 27.92156862745098,
+   "ancho_indep_mediana": 17.838917964824798,
+   "top40_actual": 20.72932330827068,
+   "top40_indep": 13.789621968556446,
+   "morgan": [
+    {
+     "n": "Juwan Morgan",
+     "liga": "eurocup",
+     "p": 82,
+     "cl": 41,
+     "ch": 98,
+     "il": 57,
+     "ih": 91
+    }
+   ]
+  }
+ },
+ "definicion": {
+  "actual": "rango del ajuste = media ponderada de los extremos del 80 % de cada métrica (todas fallan a la vez en la misma dirección)",
+  "independiente": "p ± √Σ(w·semiancho)² / Σw (errores de las métricas independientes): cota inferior de la anchura honesta",
+  "poblacion": "2026-27, vara Euroliga, 100+ minutos; datos del artifact principal (versión 1794209818-6873)",
+  "herramienta": "medición en el navegador con las funciones est() y PERFILES de la página (V41_F4 §8.4)"
+ }
+}

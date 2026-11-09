@@ -1,0 +1,334 @@
+{
+ "prerregistro": "configs/ecosistema_v41.yaml → f4.k3_landing (commit 63cd324)",
+ "objetivo": "log(L_rel observado/100) frente a ŷ de la normalización; cortes 2022–2024; IPCW; bootstrap por persona B = 2000",
+ "sesgo_observado_pct": 0.7365743610261648,
+ "por_corte": {
+  "2022": {
+   "n": 587,
+   "mae": {
+    "pA": 0.14003067965622412,
+    "pB": 0.14747534734219814,
+    "p0": 0.13828031325430068,
+    "pA_ind": 0.1402846476620064
+   },
+   "A_menos_B": {
+    "punto": -0.007444667685974016,
+    "ic95": [
+     -0.01334729882477645,
+     -0.001769774442409476
+    ]
+   },
+   "A_menos_base": {
+    "punto": 0.0017503664019234422,
+    "ic95": [
+     -0.0012501889791204659,
+     0.004823663821331566
+    ]
+   },
+   "B_menos_base": {
+    "punto": 0.009195034087897458,
+    "ic95": [
+     0.005126359547505921,
+     0.013563273982691934
+    ]
+   },
+   "Aind_menos_base": {
+    "punto": 0.002004334407705727,
+    "ic95": [
+     -0.0027995733826220804,
+     0.006623364880542672
+    ]
+   }
+  },
+  "2023": {
+   "n": 732,
+   "mae": {
+    "pA": 0.13822777341177217,
+    "pB": 0.1485923470201878,
+    "p0": 0.139497479050689,
+    "pA_ind": 0.13579719789674807
+   },
+   "A_menos_B": {
+    "punto": -0.01036457360841564,
+    "ic95": [
+     -0.015458772814997166,
+     -0.005129431179224092
+    ]
+   },
+   "A_menos_base": {
+    "punto": -0.0012697056389168182,
+    "ic95": [
+     -0.00393508538855385,
+     0.0013316425964057766
+    ]
+   },
+   "B_menos_base": {
+    "punto": 0.009094867969498821,
+    "ic95": [
+     0.0048789118319739685,
+     0.013285313360591551
+    ]
+   },
+   "Aind_menos_base": {
+    "punto": -0.0037002811539409153,
+    "ic95": [
+     -0.007813139885859096,
+     0.00042215270699734453
+    ]
+   }
+  },
+  "2024": {
+   "n": 845,
+   "mae": {
+    "pA": 0.14117158398778604,
+    "pB": 0.14984483235960255,
+    "p0": 0.141538335879746,
+    "pA_ind": 0.13745364939074756
+   },
+   "A_menos_B": {
+    "punto": -0.008673248371816517,
+    "ic95": [
+     -0.01297446431329931,
+     -0.004218321978300705
+    ]
+   },
+   "A_menos_base": {
+    "punto": -0.0003667518919599766,
+    "ic95": [
+     -0.001987399061104007,
+     0.0012773709631969377
+    ]
+   },
+   "B_menos_base": {
+    "punto": 0.00830649647985654,
+    "ic95": [
+     0.004196770769256973,
+     0.012271990567181479
+    ]
+   },
+   "Aind_menos_base": {
+    "punto": -0.004084686488998457,
+    "ic95": [
+     -0.0075321631622384064,
+     -0.0007714130292956005
+    ]
+   }
+  }
+ },
+ "conjunto": {
+  "n": 2164,
+  "mae": {
+   "pA": 0.13989914191407726,
+   "pB": 0.14880778425186522,
+   "p0": 0.14000714237355044,
+   "pA_ind": 0.1376513447293127
+  },
+  "A_menos_B": {
+   "punto": -0.008908642337787959,
+   "ic95": [
+    -0.011821843610540034,
+    -0.005982793254915053
+   ]
+  },
+  "A_menos_base": {
+   "punto": -0.00010800045947317871,
+   "ic95": [
+    -0.001418090506284366,
+    0.0012369690716715872
+   ]
+  },
+  "B_menos_base": {
+   "punto": 0.00880064187831478,
+   "ic95": [
+    0.006318353400090089,
+    0.011212357862253124
+   ]
+  },
+  "Aind_menos_base": {
+   "punto": -0.0023557976442377393,
+   "ic95": [
+    -0.0046400571831985895,
+    -2.0664567031757005e-05
+   ]
+  }
+ },
+ "representatividad": {
+  "grupos": [
+   {
+    "grupo": "EEUU_a_Europa",
+    "n": 179,
+    "observado_pct": 0.522948407067455,
+    "ic80_pct": [
+     -1.265635125598129,
+     2.3439323208707705
+    ],
+    "A_pct": -0.17186592251214883,
+    "B_pct": -4.564,
+    "A_dentro": true,
+    "B_dentro": false,
+    "A_signo": false,
+    "B_signo": false
+   },
+   {
+    "grupo": "NCAA_a_profesional",
+    "n": 249,
+    "observado_pct": -0.2873960216982249,
+    "ic80_pct": [
+     -1.7832047217865368,
+     1.2311933409124383
+    ],
+    "A_pct": 0.3030179829246349,
+    "B_pct": -11.557,
+    "A_dentro": true,
+    "B_dentro": false,
+    "A_signo": false,
+    "B_signo": true
+   },
+   {
+    "grupo": "desconocido",
+    "n": 414,
+    "observado_pct": -0.026300176761384908,
+    "ic80_pct": [
+     -1.3678625756396394,
+     1.333509719505479
+    ],
+    "A_pct": 1.7263431935955875,
+    "B_pct": -0.9730000000000001,
+    "A_dentro": false,
+    "B_dentro": true,
+    "A_signo": false,
+    "B_signo": true
+   },
+   {
+    "grupo": "europeo_cambia_liga",
+    "n": 272,
+    "observado_pct": 3.9266404255598775,
+    "ic80_pct": [
+     2.326294415125176,
+     5.55201526526816
+    ],
+    "A_pct": 2.7607906090837577,
+    "B_pct": -2.146,
+    "A_dentro": true,
+    "B_dentro": false,
+    "A_signo": true,
+    "B_signo": false
+   },
+   {
+    "grupo": "extranjero_cambia_pais",
+    "n": 567,
+    "observado_pct": 2.389895518041216,
+    "ic80_pct": [
+     1.4906675529329403,
+     3.2970908258887732
+    ],
+    "A_pct": 3.738170408609117,
+    "B_pct": -0.799,
+    "A_dentro": false,
+    "B_dentro": false,
+    "A_signo": true,
+    "B_signo": false
+   },
+   {
+    "grupo": "extranjero_mismo_pais",
+    "n": 66,
+    "observado_pct": 0.2129482353508725,
+    "ic80_pct": [
+     -2.553573923829534,
+     3.058012473142285
+    ],
+    "A_pct": 0.9348620459269972,
+    "B_pct": 0.0,
+    "A_dentro": true,
+    "B_dentro": true,
+    "A_signo": true,
+    "B_signo": false
+   },
+   {
+    "grupo": "hacia_EEUU",
+    "n": 65,
+    "observado_pct": -1.4818914160675054,
+    "ic80_pct": [
+     -4.52031896966278,
+     1.6532273067778385
+    ],
+    "A_pct": 0.4323893202901902,
+    "B_pct": -5.52,
+    "A_dentro": true,
+    "B_dentro": false,
+    "A_signo": false,
+    "B_signo": true
+   },
+   {
+    "grupo": "intra_EEUU",
+    "n": 58,
+    "observado_pct": -1.0263460396459474,
+    "ic80_pct": [
+     -4.223673313061152,
+     2.2777184834315873
+    ],
+    "A_pct": 0.8196457435127644,
+    "B_pct": -8.389000000000001,
+    "A_dentro": true,
+    "B_dentro": false,
+    "A_signo": false,
+    "B_signo": true
+   },
+   {
+    "grupo": "nacional_mismo_pais",
+    "n": 248,
+    "observado_pct": -3.612270584956963,
+    "ic80_pct": [
+     -5.190546897053909,
+     -2.007720984323887
+    ],
+    "A_pct": -5.022774441352584,
+    "B_pct": -1.5650000000000002,
+    "A_dentro": true,
+    "B_dentro": false,
+    "A_signo": true,
+    "B_signo": true
+   },
+   {
+    "grupo": "otro_desde_EEUU",
+    "n": 46,
+    "observado_pct": 4.393218791158879,
+    "ic80_pct": [
+     1.829230328941974,
+     7.021766681087699
+    ],
+    "A_pct": 2.1962820039752446,
+    "B_pct": -2.093,
+    "A_dentro": true,
+    "B_dentro": false,
+    "A_signo": true,
+    "B_signo": false
+   }
+  ],
+  "n_grupos": 10,
+  "A_dentro": 0.8,
+  "B_dentro": 0.2,
+  "A_signo": 0.5,
+  "B_signo": 0.5
+ },
+ "cobertura_80_A": 0.8025249813612816,
+ "tabla_B": {
+  "EEUU_a_Europa": -0.04564,
+  "NCAA_a_profesional": -0.11557,
+  "desconocido": -0.00973,
+  "europeo_cambia_liga": -0.02146,
+  "extranjero_cambia_pais": -0.00799,
+  "extranjero_mismo_pais": 0.0,
+  "hacia_EEUU": -0.0552,
+  "intra_EEUU": -0.08389,
+  "nacional_mismo_pais": -0.01565,
+  "otro_desde_EEUU": -0.02093,
+  "global": -0.06244
+ },
+ "decision": {
+  "gana": "A",
+  "motivo": "MAE conjunto menor con IC95 de A − B que excluye 0",
+  "sello": "BAJA",
+  "reajuste_B_sin_fuga_necesario": false
+ }
+}

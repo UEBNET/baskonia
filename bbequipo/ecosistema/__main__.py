@@ -76,6 +76,7 @@ def main(argv=None):
     bq.add_argument("--trans-corregida", action="store_true", help="[POST HOC] V-TRANS con presencias corregidas (V-TRANS-c)")
     sub.add_parser("examen-f3", help="F3: sellos por métrica × banco, Valor de baja y EMD (desde la caché de bancos)")
     sub.add_parser("producto", help="F4: tablas de producto del artifact Kerno (Landing, confianza, glosario i18n)")
+    sub.add_parser("examen-landing", help="F4 · K3: examen prerregistrado de las dos tablas de adaptación para la Landing")
     sub.add_parser("benchmark", help="F0.3: benchmark de decisión sobre la v4.0")
     sub.add_parser("ausencias", help="F0.5: auditoría de ausencias (banco V-AUS)")
     sub.add_parser("inventario", help="F0.6/F0.7: residuos de Fit y ADAPT; referencias fijas a club y temporada")
@@ -173,6 +174,11 @@ def main(argv=None):
         from . import producto as PR
         r = PR.exportar(cfg)
         print(json.dumps({g: v for g, v in r["landing"]["grupos"].items()}, ensure_ascii=False, indent=1))
+    elif a.orden == "examen-landing":
+        from . import examen_landing as EL
+        r = EL.ejecutar()
+        print(json.dumps({"decision": r["decision"], "conjunto": r["conjunto"], "representatividad": {k: v for k, v in r["representatividad"].items() if k != "grupos"},
+                          "cobertura_80_A": r["cobertura_80_A"], "sesgo_observado_pct": r["sesgo_observado_pct"]}, ensure_ascii=False, indent=1, default=float))
     elif a.orden == "orden-sinergias-resumen":
         _resumen_orden(cfg)
     elif a.orden == "benchmark":

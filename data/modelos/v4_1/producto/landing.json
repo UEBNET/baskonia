@@ -1,14 +1,15 @@
 {
- "definicion": "Landing = efecto de temporada de la adaptación al cambio de liga del grupo de traspaso, en % del nivel esperado tras la normalización; rango del 80 %. Explica el escalón entre NC₁ (con adaptación) y NC₂ (sin ella). Se muestra sólo si el rango excluye 0.",
- "fuente": "data/modelos/adaptacion/v3_1/adaptation_priors.csv",
+ "definicion": "Landing = rendimiento de la primera temporada del grupo de traspaso frente a lo que traduce la normalización, en % (+ por encima, − por debajo); rango del 80 %. Fase 7 rehecha (v3_2), elegida en el examen K3. Se muestra sólo si el rango excluye 0.",
+ "fuente": "data/modelos/adaptacion/v3_2/fase7/adaptation_priors.csv",
  "metrica": "L_rel",
+ "examen": "data/modelos/v4_1/producto/examen_landing.json",
  "grupos": {
   "EEUU_a_Europa": {
-   "pct": -4.6,
-   "lo80": -8.1,
-   "hi80": -1.0,
-   "n": 271,
-   "mostrar": true,
+   "pct": 0.2,
+   "lo80": -1.1,
+   "hi80": 1.5,
+   "n": 269,
+   "mostrar": false,
    "es": [
     "EE. UU.",
     "Europa"
@@ -19,11 +20,11 @@
    ]
   },
   "NCAA_a_profesional": {
-   "pct": -11.6,
-   "lo80": -15.0,
-   "hi80": -8.1,
+   "pct": 0.5,
+   "lo80": -0.4,
+   "hi80": 1.4,
    "n": 384,
-   "mostrar": true,
+   "mostrar": false,
    "es": [
     "NCAA",
     "profesional"
@@ -34,11 +35,11 @@
    ]
   },
   "desconocido": {
-   "pct": -1.0,
-   "lo80": -1.7,
-   "hi80": -0.2,
+   "pct": 0.8,
+   "lo80": -0.0,
+   "hi80": 1.7,
    "n": 691,
-   "mostrar": true,
+   "mostrar": false,
    "es": [
     "traspaso sin nacionalidad registrada",
     ""
@@ -49,10 +50,10 @@
    ]
   },
   "europeo_cambia_liga": {
-   "pct": -2.1,
-   "lo80": -3.8,
-   "hi80": -0.5,
-   "n": 469,
+   "pct": 3.5,
+   "lo80": 2.5,
+   "hi80": 4.5,
+   "n": 466,
    "mostrar": true,
    "es": [
     "europeo",
@@ -64,10 +65,10 @@
    ]
   },
   "extranjero_cambia_pais": {
-   "pct": -0.8,
-   "lo80": -1.2,
-   "hi80": -0.4,
-   "n": 886,
+   "pct": 3.6,
+   "lo80": 2.8,
+   "hi80": 4.3,
+   "n": 889,
    "mostrar": true,
    "es": [
     "extranjero",
@@ -79,9 +80,9 @@
    ]
   },
   "extranjero_mismo_pais": {
-   "pct": 0.0,
-   "lo80": 0.0,
-   "hi80": 0.0,
+   "pct": 1.5,
+   "lo80": -1.4,
+   "hi80": 4.3,
    "n": 68,
    "mostrar": false,
    "es": [
@@ -94,11 +95,11 @@
    ]
   },
   "hacia_EEUU": {
-   "pct": -5.5,
-   "lo80": -8.3,
-   "hi80": -2.8,
-   "n": 118,
-   "mostrar": true,
+   "pct": -0.5,
+   "lo80": -2.1,
+   "hi80": 1.2,
+   "n": 119,
+   "mostrar": false,
    "es": [
     "Europa",
     "EE. UU."
@@ -109,11 +110,11 @@
    ]
   },
   "intra_EEUU": {
-   "pct": -8.4,
-   "lo80": -12.6,
-   "hi80": -4.1,
-   "n": 100,
-   "mostrar": true,
+   "pct": 1.0,
+   "lo80": -0.9,
+   "hi80": 2.9,
+   "n": 101,
+   "mostrar": false,
    "es": [
     "EE. UU.",
     "EE. UU."
@@ -124,9 +125,9 @@
    ]
   },
   "nacional_mismo_pais": {
-   "pct": -1.6,
-   "lo80": -2.8,
-   "hi80": -0.3,
+   "pct": -3.2,
+   "lo80": -4.7,
+   "hi80": -1.8,
    "n": 248,
    "mostrar": true,
    "es": [
@@ -139,10 +140,10 @@
    ]
   },
   "otro_desde_EEUU": {
-   "pct": -2.1,
-   "lo80": -3.7,
-   "hi80": -0.5,
-   "n": 63,
+   "pct": 3.2,
+   "lo80": 0.5,
+   "hi80": 5.8,
+   "n": 64,
    "mostrar": true,
    "es": [
     "EE. UU. (no estadounidense)",

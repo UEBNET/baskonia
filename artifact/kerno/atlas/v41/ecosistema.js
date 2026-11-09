@@ -47,9 +47,9 @@
   }
   function landingHtml(grupo) {
     const g = landing(grupo);
-    if (!g) return `<p class="v2nota">${lang() === "es" ? "Sin escalón de Landing apreciable para su grupo de traspaso (el rango del 80 % incluye 0)." : "No measurable Landing step for his transfer group (the 80% range includes 0)."}</p>`;
+    if (!g) return `<p class="v2nota">${lang() === "es" ? "Landing: sin cambio apreciable para su grupo de traspaso (el rango del 80 % incluye 0)." : "Landing: no measurable change for his transfer group (the 80% range includes 0)."}</p>`;
     return `<p style="margin:2px 0"><b>${esc(t("landing"))}</b> · ${g.texto}: <b>${sg(g.pct, 1)} %</b> <span class="muted">[${sg(g.lo80, 1)} a ${sg(g.hi80, 1)}]</span></p>${confianza("landing")}
-      <p class="v2nota">${esc(t("landing_def"))} (${g.n} ${lang() === "es" ? "traspasos" : "transfers"}). ${lang() === "es" ? "Es el escalón entre NIVEL KERNO con y sin adaptación; no es una cifra individual." : "It is the step between KERNO LEVEL with and without adaptation; not an individual figure."}</p>`;
+      <p class="v2nota">${esc(t("landing_def"))} (${g.n} ${lang() === "es" ? "traspasos" : "transfers"}). ${lang() === "es" ? "Es una cifra del grupo, no del jugador." : "It is a group figure, not an individual one."}</p>`;
   }
 
   // ------------------------------------------------------------------ escenario

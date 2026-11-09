@@ -721,7 +721,7 @@ capas de la v4.0. Subpaquete `bbequipo/ecosistema/`, configuración `configs/eco
 agregados por tramo y jugador, con un catálogo de campos ampliable en `configs/ecosistema_v41.yaml → puntos_esperados`.
 Desde el 07-11-2026, todo examen de la v4.1 declara su **efecto mínimo detectable** (`configs → potencia`) antes de decidir.
 
-**Estado por fases:** F0, F1, F2 y F3 aprobadas. **F4 (producto con marca Kerno) hecha y pendiente de la puerta del CEO** ([`docs/checkpoints/V41_F4.md`](docs/checkpoints/V41_F4.md)): Fit y ADAPT retirados de lo visible, Landing del grupo de traspaso, confianza alta · moderada · baja en cada valor del modelo y panel «Ecosistema del club en este escenario» en el Simulador de fichajes (candidata privada; el artifact principal no cambia hasta la puerta). **F3 (aprobada el 09-11-2026)** ([`docs/checkpoints/V41_F3.md`](docs/checkpoints/V41_F3.md)):
+**Estado por fases:** F0, F1, F2 y F3 aprobadas. **F4 (producto con marca Kerno) aprobada el 09-11-2026 (K1, K2, K5; K4 «RAPM proyectado» con escala 0–100 en todo el artifact; K3: la Landing sale de la fase 7 rehecha)** ([`docs/checkpoints/V41_F4.md`](docs/checkpoints/V41_F4.md)): Fit y ADAPT retirados de lo visible, Landing del grupo de traspaso, confianza alta · moderada · baja en cada valor del modelo y panel «Ecosistema del club en este escenario» en el Simulador de fichajes (publicado en el artifact principal). **F3 (aprobada el 09-11-2026)** ([`docs/checkpoints/V41_F3.md`](docs/checkpoints/V41_F3.md)):
 los Δ por métrica de cada compañero quedan en sello BAJA (ninguno supera a sus líneas base en dos bancos) y el «Valor de
 baja» pasa su examen en las ausencias (sello MEDIA). **F2** ([`docs/checkpoints/V41_F2.md`](docs/checkpoints/V41_F2.md)):
 el «Impacto en pista» no alcanza al IMPACTO v4.0 frente al on/off realizado (0,081 frente a 0,149), así que por la regla
@@ -742,6 +742,7 @@ python -m bbequipo.ecosistema xp-onoff            # F2-d: on/off con y sin la su
 python -m bbequipo.ecosistema familiaridad        # F2-c: δ de familiaridad por tramo y su robustez (≈ 1 min)
 python -m bbequipo.ecosistema impacto-pista       # F2: Impacto en pista por corte sin fuga y examen §6.2 (≈ 2 min con caché)
 python -m bbequipo.ecosistema producto            # F4: Landing, sellos e i18n del producto (≈ 1 s)
+python -m bbequipo.ecosistema examen-landing      # F4 · K3: examen de las dos tablas de adaptación para la Landing (≈ 2 s)
 python -m bbequipo.ecosistema bancos              # F3: bancos V-AUS, V-MID y V-TRANS con predicciones ≤ t (≈ 5 min por corte)
 python -m bbequipo.ecosistema examen-f3           # F3: sellos por métrica × banco, Valor de baja y EMD (≈ 40 s)
 python -m bbequipo.ecosistema benchmark           # F0.3: benchmark de decisión sobre la v4.0 (≈ 1,5 min)

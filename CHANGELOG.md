@@ -1,5 +1,24 @@
 # Registro de cambios
 
+## 2026-11-09 — CERNO v4.1 · puerta F4 APROBADA (K1, K2, K5; K4 «RAPM proyectado»), K3 y escala 0–100
+
+Detalle: `docs/checkpoints/V41_F4.md` §8.1–8.5.
+
+* **K3 · Landing sobre una sola tabla** (examen prerregistrado, `python -m bbequipo.ecosistema examen-landing`):
+  * la v3_1 predice peor que no corregir en los tres cortes;
+  * la fase 7 rehecha (v3_2) le gana (−0,0089 [−0,0118; −0,0060]) y representa 8 de 10 grupos;
+  * la Landing pasa a la fase 7, con signo libre y sello BAJA; textos reescritos.
+* **K4 · «RAPM proyectado» y escala 0–100 en todo el artifact:**
+  * los niveles se leen U = 50 + S/2 (50 = referencia);
+  * los cambios, en puntos con signo;
+  * etiquetas «Valor v4.0», «Impacto en pista» y «Su valor propio» renombradas;
+  * filtros de nivel en 0–100;
+  * regla de oro cumplida.
+* **K2:** todos los sellos del producto pasan a «aprobado».
+* **Intervalos («Por necesidad»):** diagnóstico y cinco propuestas, pendientes de decisión (§8.4). El rango 80 [51–95] de
+  Juwan Morgan sale de sumar los extremos de cada métrica; con errores independientes sería 80 [65–89].
+* Publicación en el artifact principal (K5).
+
 ## 2026-11-09 — CERNO v4.1 · F4 Producto con marca Kerno (puerta pendiente del CEO)
 
 Detalle: `docs/checkpoints/V41_F4.md`. Orden del CEO: «Arranca la F4 con marca Kerno». Términos aprobados antes de publicar:

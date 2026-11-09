@@ -1,11 +1,12 @@
 """F4 · tablas de producto de la v4.1 para el artifact Kerno (orden del CEO del 09-11-2026, marca Kerno).
 
-  landing   Landing por grupo de traspaso (encargo §1.4): efecto de TEMPORADA de la adaptación del modelo vigente del motor
-            v3.3 (`configs/simulation_v33.yaml → adaptacion.priors`, métrica L_rel = la del antiguo ADAPT %), recalculado al
-            80 %: [μ − z₈₀·σ, mín(μ + z₈₀·σ, 0)] (el modelo acota δ ≤ 0). Se muestra sólo si el rango excluye 0; nunca un
-            valor individual: la causa es el grupo de traspaso.
+  landing   Landing por grupo de traspaso (encargo §1.4): cómo rinde la PRIMERA TEMPORADA el grupo de traspaso frente a lo
+            que traduce la normalización (métrica L_rel, compuesta de las 8 del índice L), con la tabla de la fase 7 rehecha
+            (v3_2, `configs/simulation_v33.yaml → adaptacion.priors_fase7`), la que eligió el examen K3 (V41_F4 §8.2;
+            `python -m bbequipo.ecosistema examen-landing`). Rango del 80 %: μ ± z₈₀·σ. Signo libre (+ = por encima de lo
+            traducido). Se muestra sólo si el rango excluye 0; nunca un valor individual: la causa es el grupo de traspaso.
   sellos    Confianza (alta · moderada · baja; decisión del CEO del 09-11-2026) de cada salida visible, con su estado:
-            «aprobado» (puertas F3) o «propuesto» (fichas de docs/estado_modelos.md pendientes de confirmar en la puerta F4).
+            todos «aprobado» (H1–H2 en la puerta F3; el resto por K2 en la puerta F4 del 09-11-2026).
   i18n      Glosario ES/EN de los términos nuevos (encargo F4: textos desde el diccionario i18n).
 
 Salidas: data/modelos/v4_1/producto/{landing,sellos,i18n}.json y artifact/kerno/atlas/v41/producto.json (los tres juntos).
@@ -39,34 +40,34 @@ GRUPOS = {   # grupo de traspaso (bbfit.adaptacion.grupo_nacionalidad) → nombr
 def landing(cfg: dict) -> dict:
     import yaml
     sim = yaml.safe_load((CE.RAIZ / "configs" / "simulation_v33.yaml").read_text(encoding="utf-8"))
-    ruta = sim["adaptacion"]["priors"]
+    ruta = sim["adaptacion"]["priors_fase7"]                  # K3: la tabla elegida por el examen (fase 7 rehecha, v3_2)
     t = pd.read_csv(CE.RAIZ / ruta)
     g = t[(t["nivel"] == "global_grupo") & (t["metrica"] == "L_rel")]
     out = {}
     for r in g.itertuples():
         mu, sd = float(r.delta_temporada_media), float(r.delta_temporada_sd)
-        lo, hi = mu - Z80 * sd, min(mu + Z80 * sd, 0.0)
+        lo, hi = mu - Z80 * sd, mu + Z80 * sd
         es, en = GRUPOS.get(r.grupo_nacionalidad, ([r.grupo_nacionalidad, ""], [r.grupo_nacionalidad, ""]))
         out[r.grupo_nacionalidad] = {"pct": round(100 * mu, 1), "lo80": round(100 * lo, 1), "hi80": round(100 * hi, 1),
-                                     "n": int(r.n), "mostrar": bool(hi < 0 and sd > 0), "es": es, "en": en}
-    return {"definicion": "Landing = efecto de temporada de la adaptación al cambio de liga del grupo de traspaso, en % del "
-                          "nivel esperado tras la normalización; rango del 80 %. Explica el escalón entre NC₁ (con adaptación) "
-                          "y NC₂ (sin ella). Se muestra sólo si el rango excluye 0.",
-            "fuente": ruta, "metrica": "L_rel", "grupos": out}
+                                     "n": int(r.n), "mostrar": bool(sd > 0 and (hi < 0 or lo > 0)), "es": es, "en": en}
+    return {"definicion": "Landing = rendimiento de la primera temporada del grupo de traspaso frente a lo que traduce la "
+                          "normalización, en % (+ por encima, − por debajo); rango del 80 %. Fase 7 rehecha (v3_2), elegida en "
+                          "el examen K3. Se muestra sólo si el rango excluye 0.",
+            "fuente": ruta, "metrica": "L_rel", "examen": "data/modelos/v4_1/producto/examen_landing.json", "grupos": out}
 
 
 SELLOS = [   # (clave, salida visible, sello del examen, estado, fuente)
-    ("minutos", "Minutos por partido", "MEDIA", "propuesto", "estado_modelos ficha 1"),
-    ("minutos_rango", "Rango de minutos (capa E, P5)", "ALTA", "propuesto", "V41_F1 §3; estado_modelos 19c"),
-    ("produccion", "Producción por 100 posesiones", "MEDIA", "propuesto", "estado_modelos ficha 2"),
-    ("nivel_kerno", "NIVEL KERNO (NC₁, NC₂ y por escenario)", "ALTA", "propuesto", "V40_F5 §11.5; estado_modelos ficha 7"),
-    ("impacto", "IMPACTO", "MEDIA", "propuesto", "V40_F5; estado_modelos ficha 8"),
-    ("net_equipo", "Net del equipo proyectado (y del escenario)", "ALTA", "propuesto", "V40_F4; estado_modelos 9 y 19b"),
+    ("minutos", "Minutos por partido", "MEDIA", "aprobado", "estado_modelos ficha 1"),
+    ("minutos_rango", "Rango de minutos (capa E, P5)", "ALTA", "aprobado", "V41_F1 §3; estado_modelos 19c"),
+    ("produccion", "Producción por 100 posesiones", "MEDIA", "aprobado", "estado_modelos ficha 2"),
+    ("nivel_kerno", "NIVEL KERNO (NC₁, NC₂ y por escenario)", "ALTA", "aprobado", "V40_F5 §11.5; estado_modelos ficha 7"),
+    ("impacto", "IMPACTO", "MEDIA", "aprobado", "V40_F5; estado_modelos ficha 8"),
+    ("net_equipo", "Net del equipo proyectado (y del escenario)", "ALTA", "aprobado", "V40_F4; estado_modelos 9 y 19b"),
     ("coste_ausencia", "Coste de su ausencia", "MEDIA", "aprobado", "V41_F3 §3 y §7.1 (H2)"),
     ("delta_companeros", "Cambio por compañero (minutos, uso, cuota de tiro, % asistidas, pts/100)", "BAJA", "aprobado", "V41_F3 §2 y §7.1 (H1)"),
-    ("landing", "Landing", "BAJA", "propuesto", "sin examen propio en la v4.1 (modelo de adaptación v3.x)"),
-    ("efecto_companeros", "Efecto sobre compañeros (F2-B)", "MEDIA", "propuesto", "estado_modelos ficha 11"),
-    ("ortg_drtg", "ORtg / DRtg del equipo", "BAJA", "propuesto", "estado_modelos ficha 10"),
+    ("landing", "Landing", "BAJA", "aprobado", "examen K3 (V41_F4 §8.2): gana a la tabla v3_1, no a no corregir"),
+    ("efecto_companeros", "Efecto sobre compañeros (F2-B)", "MEDIA", "aprobado", "estado_modelos ficha 11"),
+    ("ortg_drtg", "ORtg / DRtg del equipo", "BAJA", "aprobado", "estado_modelos ficha 10"),
 ]
 NIVEL = {"ALTA": ("alta", "high"), "MEDIA": ("moderada", "moderate"), "BAJA": ("baja", "low")}
 
@@ -78,7 +79,7 @@ def sellos(cfg: dict) -> dict:
 
 def i18n(cfg: dict) -> dict:
     return {
-        "es": {"landing": "Landing", "landing_def": "Lo que suele costar el cambio de liga a su grupo de traspaso durante la temporada",
+        "es": {"landing": "Landing", "landing_def": "Cómo rinde su grupo de traspaso la primera temporada frente a lo que traduce la normalización (+ por encima, − por debajo)",
                "confianza": "confianza", "confianza_alta": "confianza alta", "confianza_moderada": "confianza moderada",
                "confianza_baja": "confianza baja", "sin_cambio": "sin cambio apreciable",
                "coste_ausencia": "Coste de su ausencia",
@@ -88,7 +89,7 @@ def i18n(cfg: dict) -> dict:
                "rango80": "rango 80 %", "escenario": "Escenario", "alta": "alta", "baja_mov": "baja",
                "net_escenario": "Net del equipo en el escenario", "antes": "antes", "despues": "después",
                "reparto_total": "El motor acierta cuántos minutos se liberan, no quién los absorbe"},
-        "en": {"landing": "Landing", "landing_def": "What the league move usually costs his transfer group over the season",
+        "en": {"landing": "Landing", "landing_def": "How his transfer group performs in its first season against what the normalization translates (+ above, − below)",
                "confianza": "confidence", "confianza_alta": "high confidence", "confianza_moderada": "moderate confidence",
                "confianza_baja": "low confidence", "sin_cambio": "no measurable change",
                "coste_ausencia": "Cost of his absence",

@@ -498,7 +498,7 @@ td.n b { font-weight: 600; }
     </div>
     <div class="pop" id="setPop" role="dialog" aria-label="Ajustes de lectura" hidden>
       <div class="row"><span class="label">Vara</span><p>La vara es la liga de tu club en la temporada elegida. Cambia sola al cambiar de club.</p></div>
-      <div class="row"><span class="label">Escala de nivel</span><div class="seg" id="setEsc" role="group" aria-label="Escala"><button type="button" data-v="escala">±100</button><button type="button" data-v="original">Originales</button></div></div>
+      <div class="row"><span class="label">Escala de nivel</span><div class="seg" id="setEsc" role="group" aria-label="Escala"><button type="button" data-v="escala">0–100</button><button type="button" data-v="original">Originales</button></div></div>
       <div class="row"><span class="label">Ayudas de lectura</span><div class="seg" id="setAyu" role="group" aria-label="Ayudas"><button type="button" data-v="1">Visibles</button><button type="button" data-v="0">Plegadas</button></div></div>
       <div class="row"><span class="label">Modo de color</span><div class="seg" id="setTema" role="group" aria-label="Modo de color"><button type="button" data-v="sistema">Sistema</button><button type="button" data-v="light">Día</button><button type="button" data-v="dark">Noche</button></div></div>
     </div>
@@ -575,7 +575,7 @@ const POS = { E: "Exterior", A: "Alero", I: "Interior" }, POSP = { E: "exteriore
 
 // métricas que la normalización traduce a equivalente EuroLeague (con intervalo del 80 % y percentil EL por posición)
 const M = {
-  rapm: { n: "Valor v4.0", c: "valor v4.0", d: 1, sg: 1 }, NC: { n: "Nivel Kerno", d: 0 }, IM: { n: "Impacto", d: 0 }, dnet: { n: "Δ Net del equipo", d: 1, sg: 1 },
+  rapm: { n: "RAPM proyectado", c: "RAPM proyectado", d: 0 }, NC: { n: "Nivel Kerno", d: 0 }, IM: { n: "Impacto", d: 0 }, dnet: { n: "Δ Net del equipo", d: 1, sg: 1 },
   per: { n: "PER", c: "PER", d: 1 }, ws_per_40: { n: "Win shares por 40′", c: "win shares", d: 3 }, game_score_p40: { n: "Game score por 40′", d: 1 },
   ortg: { n: "Rating ofensivo", d: 1 }, drtg: { n: "Rating defensivo", c: "rating defensivo", d: 1 },
   pts_p100: { n: "Puntos por 100 posesiones", c: "volumen de puntos", d: 1 }, ts_pct: { n: "Tiro verdadero (TS%)", c: "eficiencia de tiro (TS%)", d: 1, pc: 1 }, efg_pct: { n: "eFG%", d: 1, pc: 1 },
@@ -588,7 +588,7 @@ const M = {
   pct_t3_esquina: { n: "Triples de esquina", d: 1, pc: 1 }, pct_asistidas: { n: "Canastas asistidas", d: 1, pc: 1 },
 };
 const GRUPOS = [
-  ["Valor", "Valor v4.0 (RAPM multiliga con prior del perfil) y medidas de producción", ["rapm", "per", "ws_per_40"]],
+  ["Valor", "RAPM proyectado (RAPM multiliga v4.0 con prior del perfil, 0–100) y medidas de producción", ["rapm", "per", "ws_per_40"]],
   ["Anotación", "Volumen y eficiencia", ["pts_p100", "ts_pct", "fg2_pct", "fg3_pct", "ft_pct", "fta_rate"]],
   ["Creación y cuidado del balón", "", ["ast_pct", "tov_pct"]],
   ["Rebote", "", ["oreb_pct", "dreb_pct"]],
@@ -663,7 +663,12 @@ function convVara(r, m) {
   o.pl = 100 * Phi(o.zlo); o.ph = 100 * Phi(o.zhi);
   return o;
 }
-function est(r, m, dir) {
+// v4.1 K4: el RAPM proyectado se lee en 0–100 (50 = jugador medio de la vara), con la curva de las escalas del Atlas:
+// U = 50 + 50·tanh(x / (2·DT)), x = pts/100 sobre el jugador medio, DT = 1,2426 (familia «rapm» del bloque de escalas)
+const DT_RAPM = 1.2426, U_RAPM = (x) => (x == null || !isFinite(x) ? x : 50 + 50 * Math.tanh(x / (2 * DT_RAPM)));
+const rapm01 = (e) => (e ? { ...e, v: U_RAPM(e.v), lo: U_RAPM(e.lo), hi: U_RAPM(e.hi) } : e);
+function est(r, m, dir) { const e = est0(r, m, dir); return m === "rapm" ? rapm01(e) : e; }
+function est0(r, m, dir) {
   if (m === "rapm") { const e4 = estV4(r); if (e4 || !V4D) return e4; }  // sin persona v4.0: el valor anterior (misma escala)
   if (VARA() !== "euroleague") {
     const c = convVara(r, m); if (!c || !isFinite(c.v)) return null;
@@ -732,7 +737,7 @@ function v4Base(liga, t) {
   }
   V4BASE.set(k, o); return o;
 }
-// valor v4.0 de una fila con la forma de est(): punto y rango en pts/100 sobre el jugador medio de la vara, percentil por posición
+// RAPM proyectado de una fila con la forma de est(): punto y rango en pts/100 sobre el jugador medio de la vara (est() lo pasa a 0–100), percentil por posición
 function estV4(r) {
   if (!V4D || !window.CernoV40 || !CernoV40.listo()) return null;
   const per = v4Persona(r); if (!per && g(r, "rapm") != null) return null;
@@ -742,7 +747,7 @@ function estV4(r) {
   return { m: "rapm", v, lo, hi, p, pl, ph, s: 1, w: ph - pl, fuente: B.f };
 }
 const v4Club = () => (V4D && V4D.porClub ? V4D.porClub.get(`${CTX.liga}|${CTX.id}|${CTX.temp}`) || null : null);
-const v4SinClub = () => `Nivel Kerno, Impacto y Net proyectado de la v4.0 se calculan sobre la plantilla del club en el motor del Atlas, que tiene ${["2025-26", "2026-27"].join(" y ")}. Con ${CTX.temp} se muestra el valor v4.0 de cada jugador.`;
+const v4SinClub = () => `Nivel Kerno, Impacto y Net proyectado de la v4.0 se calculan sobre la plantilla del club en el motor del Atlas, que tiene ${["2025-26", "2026-27"].join(" y ")}. Con ${CTX.temp} se muestra el RAPM proyectado de cada jugador.`;
 function v4Plantilla() {
   const club = v4Club(); if (!club) return null;
   const k = `P|${club.liga}|${club.team}|${club.temporada}`; if (V4C.has(k)) return V4C.get(k);
@@ -1094,9 +1099,9 @@ VISTAS.inicio = async (tk) => {
       const arriba = con.filter((x) => x.a.NC_lo80 > 50).length, abajo = con.filter((x) => x.a.NC_hi80 < 50).length, mejor = con.slice().sort((x, y) => y.a.NC - x.a.NC)[0];
       const clave = ev.filter((x) => x.a && isFinite(x.a.delta_net)).sort((x, y) => y.a.delta_net - x.a.delta_net)[0];
       const lect = `${arriba ? `${arriba} ${arriba === 1 ? "jugador produce" : "jugadores producen"} con claridad por encima de lo esperable para su puesto (todo su rango de Nivel Kerno por encima de 50)` : "Nadie produce todavía con claridad por encima de lo esperable para su puesto"}, ${abajo ? `${abajo} por debajo` : "nadie claramente por debajo"} y ${con.length - arriba - abajo} en la zona media.${mejor ? ` El Nivel Kerno más alto es el de ${g(mejor.r, "nombre")} (${Math.round(mejor.a.NC)}).` : ""}${clave && clave.a.delta_net > 0 ? ` Sin ${g(clave.r, "nombre")}, el Net proyectado del equipo bajaría ${fmt(clave.a.delta_net, 1)} puntos por 100 posesiones: es la pieza que más pesa.` : ""}`;
-      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">Modelo v4.0 · Nivel Kerno e Impacto (0–100, rango del 80 %) en ${esc(nomC)} ${esc(CTX.temp)} · Δ Net: lo que pierde el equipo sin él · valor v4.0 frente al jugador medio de ${esc(VN())}</p></div><span class="tag">Lectura</span></div>
+      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">Modelo v4.0 · Nivel Kerno e Impacto (0–100, rango del 80 %) en ${esc(nomC)} ${esc(CTX.temp)} · Δ Net: lo que pierde el equipo sin él · RAPM proyectado en 0–100 (50 = jugador medio de ${esc(VN())})</p></div><span class="tag">Lectura</span></div>
       <p class="note" style="color:var(--text-2);font-size:15px">${esc(lect)}</p>
-      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n" title="Minutos por partido proyectados por el motor">Min/p</th><th class="n" title="Percentil esperado de producción entre los de su puesto en la liga del club">Nivel Kerno</th><th class="bar">0–100</th><th class="n" title="Percentil del cambio del equipo con él en pista frente a sin él">Impacto</th><th class="n" title="Puntos por 100 posesiones que perdería el equipo sin él">Δ Net</th><th class="n" title="RAPM multiliga v4.0, pts/100 sobre el jugador medio de la vara">Valor v4.0</th></tr></thead><tbody>
+      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n" title="Minutos por partido proyectados por el motor">Min/p</th><th class="n" title="Percentil esperado de producción entre los de su puesto en la liga del club">Nivel Kerno</th><th class="bar">0–100</th><th class="n" title="Percentil del cambio del equipo con él en pista frente a sin él">Impacto</th><th class="n" title="Puntos por 100 posesiones que perdería el equipo sin él">Δ Net</th><th class="n" title="RAPM multiliga v4.0 en 0–100 (50 = jugador medio de la vara)">RAPM proyectado</th></tr></thead><tbody>
       ${ev.map(({ r, a, e }) => { const nc = ancE(a, "NC"), im = ancE(a, "IM");
         return `<tr class="go" data-k="${esc(rk(r))}" tabindex="0"><td><div class="who"><b>${esc(g(r, "nombre"))}</b><span>${POS[g(r, "pos3")] || "s/d"}${g(r, "edad") ? " · " + Math.round(g(r, "edad")) + " años" : ""}</span></div></td>
           <td class="n">${Math.round(g(r, "min"))}</td><td class="n">${a && isFinite(a.minutos) ? fmt(a.minutos, 1) : "—"}</td><td class="n">${valHTML(nc)}</td><td>${pbar(nc)}</td><td class="n">${valHTML(im)}</td><td class="n">${valHTML(dnetE(a))}</td><td class="n">${valHTML(e)}</td></tr>`; }).join("")}
@@ -1104,9 +1109,9 @@ VISTAS.inicio = async (tk) => {
     } else {
       const ev = ro.map((r) => ({ r, e: est(r, "rapm") })).filter((x) => x.e);
       const suma = ev.filter((x) => x.e.pl > 50).length, resta = ev.filter((x) => x.e.ph < 50).length;
-      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">Valor v4.0 (RAPM multiliga) · pts/100 sobre el jugador medio de ${esc(VN())} · percentil frente a su posición</p></div><span class="tag">Lectura</span></div>
+      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">RAPM proyectado (RAPM multiliga v4.0) · 0–100, 50 = jugador medio de ${esc(VN())} · percentil frente a su posición</p></div><span class="tag">Lectura</span></div>
       <p class="note" style="color:var(--text-2);font-size:15px">${esc(`${suma} ${suma === 1 ? "jugador está" : "jugadores están"} con claridad por encima del jugador medio de su posición y ${resta} por debajo. ${V4D ? v4SinClub() : "No se pudo cargar el modelo v4.0."}`)}</p>
-      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n">Valor v4.0</th><th class="bar">Percentil</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
+      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n">RAPM proyectado</th><th class="bar">Percentil</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
       ${ro.map((r) => { const e = est(r, "rapm"), ts = est(r, "ts_pct"), us = est(r, "usg_pct", 0);
         return `<tr class="go" data-k="${esc(rk(r))}" tabindex="0"><td><div class="who"><b>${esc(g(r, "nombre"))}</b><span>${POS[g(r, "pos3")] || "s/d"}${g(r, "edad") ? " · " + Math.round(g(r, "edad")) + " años" : ""}</span></div></td>
           <td class="n">${Math.round(g(r, "min"))}</td><td class="n">${valHTML(e)}</td><td>${pbar(e)}</td><td class="n">${valHTML(ts)}</td><td class="n">${us ? fmt(us.v) + " %" : "—"}</td></tr>`; }).join("")}
@@ -1131,7 +1136,7 @@ function banquilloHTML() {
       <td class="n">${e.pj ?? "—"}</td><td class="n">${n ? `${e.w}–${e.l}` : "—"}</td>
       <td><div class="wl" role="img" aria-label="${pct == null ? "Sin balance" : Math.round(pct) + " % de victorias"}"><i style="width:${pct == null ? 0 : pct.toFixed(1)}%"></i></div></td><td class="n">${pct == null ? "—" : Math.round(pct) + " %"}</td>
       <td class="n">${S == null ? "—" : `${sgn(S.net)} <span class="rng">${ord(S.puesto)}</span>`}</td><td>${estiloEt(e)}</td></tr>`; };
-  const cab = (conT) => `<thead><tr>${conT ? "<th>Temporada</th>" : ""}<th>Entrenador · etapa</th><th class="n">PJ</th><th class="n">Balance</th><th colspan="2">% victorias</th><th class="n" title="Net v4.0 de la plantilla de la temporada con sus minutos reales (Σ minutos × valor v4.0), pts/100 frente a la media de su liga, y su puesto">Net v4.0</th><th>Estilo de su etapa</th></tr></thead>`;
+  const cab = (conT) => `<thead><tr>${conT ? "<th>Temporada</th>" : ""}<th>Entrenador · etapa</th><th class="n">PJ</th><th class="n">Balance</th><th colspan="2">% victorias</th><th class="n" title="Net v4.0 de la plantilla de la temporada con sus minutos reales (Σ minutos × RAPM multiliga v4.0), pts/100 frente a la media de su liga, y su puesto">Net v4.0</th><th>Estilo de su etapa</th></tr></thead>`;
   let lect;
   if (hoyT.length > 1) lect = `${hoyT.length} entrenadores en ${CTX.temp}: ${hoyT.map((e) => `${e.n} (${e.w}–${e.l})`).join(", ")}. Las cifras de equipo de arriba y el Net v4.0 son de la temporada entera; el estilo de cada etapa se calcula solo con sus partidos.`;
   else if (hoyT.length === 1) lect = `${hoyT[0].n} dirige ${enCurso(CTX.temp) ? "la temporada hasta ahora" : "toda la temporada"}: ${hoyT[0].w}–${hoyT[0].l} en ${hoyT[0].pj} partidos.`;
@@ -1173,9 +1178,9 @@ VISTAS.ficha = async (tk) => {
   const flojos = favs.filter((e) => e.p <= 30 && e.ph <= 50).sort((a, b) => a.p - b.p).slice(0, 2);
   const lista = (a) => a.map((e) => `${(M[e.m].c || M[e.m].n.toLowerCase())} (percentil ${Math.round(e.p)})`).join(", ");
   const an4 = v4Anclas(r), clubN4 = (clubActual() || {}).nombre || "tu club";
-  const vTxt = imp ? `valor v4.0 ${sgn(imp.v)} [${rngTxt(sgn(imp.lo), sgn(imp.hi))}] por 100 posesiones frente al jugador medio de ${VN()} (percentil ${Math.round(imp.p)} entre ${POSP[pos] || "jugadores"})` : "";
+  const vTxt = imp ? `RAPM proyectado ${fmt(imp.v, 0)} [${rngTxt(fmt(imp.lo, 0), fmt(imp.hi, 0))}] en la escala 0–100 (50 = jugador medio de ${VN()}; percentil ${Math.round(imp.p)} entre ${POSP[pos] || "jugadores"})` : "";
   const readH = an4 && isFinite(an4.NC) ? `${an4.propio ? "En" : "Como fichaje de"} ${clubN4}: Nivel Kerno ${Math.round(an4.NC)} [${Math.round(an4.NC_lo80)}–${Math.round(an4.NC_hi80)}], ${nivelTxt(an4.NC)} para su puesto${isFinite(an4.IM) ? `, e Impacto ${Math.round(an4.IM)} [${Math.round(an4.IM_lo80)}–${Math.round(an4.IM_hi80)}]` : ""}.${vTxt ? ` Su ${vTxt}.` : ""}`
-    : imp ? `${vTxt.charAt(0).toUpperCase()}${vTxt.slice(1)}.` : "Sin valor v4.0 para este jugador.";
+    : imp ? `${vTxt.charAt(0).toUpperCase()}${vTxt.slice(1)}.` : "Sin RAPM proyectado para este jugador.";
   const anc4 = an4 && isFinite(an4.NC) ? `<div class="block"><div class="block-h"><div><h3 class="h2">Nivel Kerno e Impacto en ${esc(clubN4)}</h3><p class="sub">Modelo v4.0 · ${esc(CTX.temp)} · ${an4.propio ? "con la plantilla actual: qué pierde el equipo sin él" : "simulado como fichaje con el rol que le da el motor"} · rangos del 80 %</p></div><span class="tag">Lectura</span></div>
       <div class="kpis">
         <div class="kpi key"><span class="label" title="Percentil esperado de su producción (minutos × puntos por 100) entre los de su puesto en ${esc(ligaN(CTX.liga))}">Nivel Kerno</span><span class="v">${Math.round(an4.NC)}</span><span class="r">[${Math.round(an4.NC_lo80)}–${Math.round(an4.NC_hi80)}] · ${nivelTxt(an4.NC)}</span></div>
@@ -1236,23 +1241,23 @@ function trayResumen(tr) {
   if (xs.length < 2) return `<span class="v">${tr.filas.length} temporada${tr.filas.length === 1 ? "" : "s"}</span><p>Sin dos temporadas completas para leer una tendencia.</p>`;
   const a = xs[xs.length - 2], b = xs[xs.length - 1], solapa = !(a.e.hi < b.e.lo || b.e.hi < a.e.lo);
   const dir = b.e.v > a.e.v ? "sube" : b.e.v < a.e.v ? "baja" : "se mantiene";
-  return `<span class="v">${solapa ? "Sin cambio claro" : dir === "sube" ? "Al alza" : "A la baja"}</span><p>Valor v4.0 ${sgn(a.e.v)} en ${a.x.T.temp} y ${sgn(b.e.v)} en ${b.x.T.temp}${solapa ? ": los rangos se solapan." : "."}</p>`;
+  return `<span class="v">${solapa ? "Sin cambio claro" : dir === "sube" ? "Al alza" : "A la baja"}</span><p>RAPM proyectado ${fmt(a.e.v, 0)} en ${a.x.T.temp} y ${fmt(b.e.v, 0)} en ${b.x.T.temp}${solapa ? ": los rangos se solapan." : "."}</p>`;
 }
 function trayHTML(tr) {
   const pts = tr.filas.map((x) => ({ x, e: est(x, "rapm") })).filter((o) => o.e);
   if (!pts.length) return "";
   const W = 720, H = 240, L = 46, R = 40, Tp = 18, B = 34, n = pts.length;
-  let lo = Math.min(-1, ...pts.map((p) => p.e.lo)), hi = Math.max(1, ...pts.map((p) => p.e.hi)); lo = Math.floor(lo); hi = Math.ceil(hi);
+  let lo = Math.min(40, ...pts.map((p) => p.e.lo)), hi = Math.max(60, ...pts.map((p) => p.e.hi)); lo = Math.max(0, Math.floor(lo / 10) * 10); hi = Math.min(100, Math.ceil(hi / 10) * 10);
   const xs = (i) => L + (n === 1 ? (W - L - R) / 2 : (i * (W - L - R)) / (n - 1)), ys = (v) => Tp + ((hi - v) * (H - Tp - B)) / (hi - lo);
-  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valor v4.0 por temporada con intervalo del 80 %">`;
-  for (let v = lo; v <= hi; v++) svg += `<line class="${v === 0 ? "zl" : "gl"}" x1="${L}" x2="${W - R}" y1="${ys(v)}" y2="${ys(v)}"/><text class="ax" x="${L - 8}" y="${ys(v) + 4}" text-anchor="end">${sgn(v, 0).replace("+0", "0")}</text>`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="RAPM proyectado por temporada con intervalo del 80 %">`;
+  for (let v = lo; v <= hi; v += 10) svg += `<line class="${v === 50 ? "zl" : "gl"}" x1="${L}" x2="${W - R}" y1="${ys(v)}" y2="${ys(v)}"/><text class="ax" x="${L - 8}" y="${ys(v) + 4}" text-anchor="end">${v}</text>`;
   pts.forEach((p, i) => { svg += `<rect class="bd" x="${xs(i) - 9}" y="${ys(p.e.hi)}" width="18" height="${Math.max(1, ys(p.e.lo) - ys(p.e.hi))}"/><text class="ax" x="${xs(i)}" y="${H - 12}" text-anchor="middle">${p.x.T.temp}</text>`; });
   svg += `<polyline class="ln" points="${pts.map((p, i) => `${xs(i)},${ys(p.e.v)}`).join(" ")}" stroke-dasharray="${0}"/>`;
-  pts.forEach((p, i) => { const last = i === n - 1 && n > 1; svg += `<circle class="pt${i === n - 1 ? " rd" : ""}" cx="${xs(i)}" cy="${ys(p.e.v)}" r="4"/><text class="lb" x="${xs(i) + (last ? -14 : 14)}" y="${ys(p.e.v) - 8}" text-anchor="${last ? "end" : "start"}">${sgn(p.e.v)}</text>`; });
+  pts.forEach((p, i) => { const last = i === n - 1 && n > 1; svg += `<circle class="pt${i === n - 1 ? " rd" : ""}" cx="${xs(i)}" cy="${ys(p.e.v)}" r="4"/><text class="lb" x="${xs(i) + (last ? -14 : 14)}" y="${ys(p.e.v) - 8}" text-anchor="${last ? "end" : "start"}">${fmt(p.e.v, 0)}</text>`; });
   svg += `</svg>`;
-  return `<div class="block-h"><div><h3 class="h2">Trayectoria del valor v4.0</h3><p class="sub">RAPM multiliga v4.0 · pts/100 frente al jugador medio de ${esc(VN())} ${esc(CTX.temp)} · punto y rango del 80 % por temporada</p></div><span class="tag">Lectura</span></div>
+  return `<div class="block-h"><div><h3 class="h2">Trayectoria del RAPM proyectado</h3><p class="sub">RAPM multiliga v4.0 · 0–100, 50 = jugador medio de ${esc(VN())} ${esc(CTX.temp)} · punto y rango del 80 % por temporada</p></div><span class="tag">Lectura</span></div>
     <div class="chart">${svg}</div>
-    <div class="tw"><table><thead><tr><th>Temporada</th><th>Equipo</th><th class="n">Min</th><th class="n">Valor v4.0</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
+    <div class="tw"><table><thead><tr><th>Temporada</th><th>Equipo</th><th class="n">Min</th><th class="n">RAPM proyectado</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
     ${tr.filas.map((x) => { const u = est(x, "usg_pct", 0); return `<tr class="go" data-k="${esc(rk(x))}" tabindex="0"><td class="num">${x.T.temp}${enCurso(x.T.temp) ? " · en curso" : ""}</td><td>${esc(g(x, "equipo"))} <span class="rng">${esc(ligaN(g(x, "liga")))}</span></td><td class="n">${Math.round(g(x, "min"))}</td><td class="n">${valHTML(est(x, "rapm"))}</td><td class="n">${valHTML(est(x, "ts_pct"))}</td><td class="n">${u ? fmt(u.v) + " %" : "—"}</td></tr>`; }).join("")}
     </tbody></table></div><p class="note">Una fila por temporada: la competición con más minutos.</p>`;
 }
@@ -1265,9 +1270,9 @@ const PERFILES = {
   aro: { n: "Protector del aro", d: "Tapones, rebote defensivo e impacto atrás", w: [["blk_pct", 3, 1], ["dreb_pct", 2, 1], ["drtg", 1, -1], ["rapm", 1, 1]] },
   rebote: { n: "Reboteador", d: "Segundas opciones y cierre del rebote", w: [["oreb_pct", 2, 1], ["dreb_pct", 2, 1], ["pct_aro", 1, 1]] },
   perimetro: { n: "Defensor exterior", d: "Robos e impacto defensivo sin cargarse de faltas", w: [["stl_pct", 2, 1], ["drtg", 1, -1], ["pf_p100", 1, -1], ["rapm", 1, 1]] },
-  impacto: { n: "Valor global", d: "El de más valor v4.0 (RAPM multiliga), sin atender al rol", w: [["rapm", 3, 1], ["per", 1, 1], ["ws_per_40", 1, 1]] },
+  impacto: { n: "Valor global", d: "El de más RAPM proyectado (RAPM multiliga v4.0), sin atender al rol", w: [["rapm", 3, 1], ["per", 1, 1], ["ws_per_40", 1, 1]] },
 };
-const CORTO = {"fg3_pct": "T3%", "fg3a_rate": "% T3", "ts_pct": "TS%", "pct_t3_esquina": "T3 esq.", "ast_pct": "AST%", "tov_pct": "TOV%", "usg_pct": "USG%", "pts_p100": "Pts/100", "fta_rate": "FTr", "blk_pct": "BLK%", "dreb_pct": "DREB%", "oreb_pct": "OREB%", "drtg": "DRtg", "stl_pct": "STL%", "pf_p100": "Faltas/100", "pct_aro": "% aro", "rapm": "Valor v4.0", "per": "PER", "ws_per_40": "WS/40"};  // cabeceras cortas de tabla
+const CORTO = {"fg3_pct": "T3%", "fg3a_rate": "% T3", "ts_pct": "TS%", "pct_t3_esquina": "T3 esq.", "ast_pct": "AST%", "tov_pct": "TOV%", "usg_pct": "USG%", "pts_p100": "Pts/100", "fta_rate": "FTr", "blk_pct": "BLK%", "dreb_pct": "DREB%", "oreb_pct": "OREB%", "drtg": "DRtg", "stl_pct": "STL%", "pf_p100": "Faltas/100", "pct_aro": "% aro", "rapm": "RAPM proy.", "per": "PER", "ws_per_40": "WS/40"};  // cabeceras cortas de tabla
 const NEC = Object.assign({ perfil: "tirador", liga: "todas", pos: "todas", edad: "", min: "", excluir: true, orden: "punto", ver: 40 }, LS.json("cerno.v2.nec", {}));
 const guardarNec = () => LS.set("cerno.v2.nec", JSON.stringify(Object.assign({}, NEC, { ver: 40 })));
 function ajuste(r, P) {
@@ -1337,7 +1342,7 @@ VISTAS.lista = async (tk) => {
         return `<div class="m">${M[m].n}</div>${bar}<div class="val">${es.map((e, i) => `<span style="display:inline-flex;align-items:center;gap:4px;margin-left:8px"><i style="width:8px;height:3px;background:var(--${cls[i]});display:inline-block"></i>${e ? fmtM(m, e.v) : "—"}</span>`).join("")}</div>`; }).join("")).join("")}
         <div></div><div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div></div>` : `<p class="note">Marca hasta tres jugadores para compararlos.</p>`;
   V().innerHTML = `<div class="block"><div class="block-h"><div><h3 class="h2">${a.length} ${a.length === 1 ? "candidato" : "candidatos"} en la lista corta</h3><p class="sub">Marca hasta tres para compararlos</p></div></div>
-    <div class="tw"><table><thead><tr><th>Comparar</th><th>Jugador</th><th class="n">Temporada</th>${v4Club() ? `<th class="n" title="Como fichaje de ${esc((clubActual() || {}).nombre || "tu club")}, ${esc(CTX.temp)}">Nivel Kerno</th><th class="n">Impacto</th><th class="n" title="Δ Net del equipo con él">Δ Net</th>` : ""}<th class="n">Valor v4.0</th><th>Confianza</th><th></th></tr></thead><tbody>
+    <div class="tw"><table><thead><tr><th>Comparar</th><th>Jugador</th><th class="n">Temporada</th>${v4Club() ? `<th class="n" title="Como fichaje de ${esc((clubActual() || {}).nombre || "tu club")}, ${esc(CTX.temp)}">Nivel Kerno</th><th class="n">Impacto</th><th class="n" title="Δ Net del equipo con él">Δ Net</th>` : ""}<th class="n">RAPM proyectado</th><th>Confianza</th><th></th></tr></thead><tbody>
     ${a.map((x) => { const r = porClave(x.k), e = r ? est(r, "rapm") : null;
       return `<tr><td><label class="check"><input type="checkbox" data-cmp="${esc(x.k)}" ${x.cmp ? "checked" : ""} ${!x.cmp && sel.length >= 3 ? "disabled" : ""}><span class="sr">Comparar ${esc(x.nombre)}</span></label></td>
         <td><div class="who"><b>${esc(x.nombre)}</b><span>${esc(x.equipo)} · ${esc(ligaN(x.liga))}</span></div></td><td class="n">${esc(x.temp)}</td>${v4Club() ? (() => { const a = r ? v4Anclas(r) : null; return `<td class="n">${valHTML(ancE(a, "NC"))}</td><td class="n">${valHTML(ancE(a, "IM"))}</td><td class="n">${valHTML(dnetE(a))}</td>`; })() : ""}<td class="n">${valHTML(e)}</td><td>${e ? confHTML(e.w) : "—"}</td>
@@ -1356,7 +1361,7 @@ VISTAS["como-leer"] = () => {
         <tr><td>Nivel Kerno (v4.0)</td><td>De 0 a 100: percentil esperado de la producción del jugador (minutos por partido × puntos por 100 posesiones) entre los de su puesto en la liga del club elegido, con los minutos que le da el motor en esa plantilla. 50 = fichaje mediano. Calibrado con 4.560 fichajes reales de 2022 a 2026; rango del 80 %.</td></tr>
         <tr><td>Impacto (v4.0)</td><td>De 0 a 100: percentil del cambio esperado del Net del equipo con él en pista frente a sin él (capa 4), calibrado con el on/off real. Para los jugadores del club, lo que perdería el equipo sin él; para el resto, lo que ganaría como fichaje.</td></tr>
         <tr><td>Δ Net del equipo</td><td>El mismo cambio en puntos por 100 posesiones, con su rango del 80 %.</td></tr>
-        <tr><td>Valor v4.0</td><td>RAPM multiliga con prior del perfil (capa 1 de la v4.0): un valor por jugador y temporada en una escala común a las 20 ligas. Se expresa en puntos por 100 posesiones sobre el jugador medio de la vara (la liga del club en la temporada elegida), con su rango del 80 % y su percentil por posición. Sustituye al antiguo impacto neto (RAPM por liga).</td></tr>
+        <tr><td>RAPM proyectado</td><td>RAPM multiliga con prior del perfil (capa 1 de la v4.0): un valor por jugador y temporada en una escala común a las 20 ligas. Se expresa de 0 a 100, con 50 = el jugador medio de la vara (la liga del club en la temporada elegida): 50 + 50·tanh(x / 2·DT), con x en puntos por 100 posesiones y DT = 1,24, la curva de las escalas del Atlas. Lleva su rango del 80 % y su percentil por posición. Sustituye al antiguo impacto neto (RAPM por liga).</td></tr>
         <tr><td>Net proyectado v4.0</td><td>Net de la plantilla frente a la media de su liga (capa 4), con rango del 80 % y puesto. En temporadas pasadas y en el banquillo se usa el Net v4.0 con los minutos reales de cada jugador.</td></tr>
         <tr><td>Percentil</td><td>Posición frente a los jugadores de la vara de su misma posición (exterior, alero, interior). 50 = jugador medio de esa liga en ese rol. Con la EuroLeague, percentil real entre sus jugadores de 2025-26; con otra liga, percentil aproximado frente al jugador medio de su posición en esa liga, como en «Datos normalizados». En métricas donde menos es mejor (pérdidas, rating defensivo, faltas) la barra ya está invertida: a la derecha siempre es mejor.</td></tr>
         <tr><td>Banda del percentil</td><td>Los extremos del intervalo del 80 %, llevados a percentil con la misma referencia.</td></tr>

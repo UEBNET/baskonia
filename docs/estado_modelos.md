@@ -27,7 +27,7 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 3 | Rol previsto | v3.3 | uso interno | — | Deja de ser salida (decisión 1) |
 | 4 | Índice Fit | v2–v3.3 | **retirado de lo visible** (F4, candidata) | — | Baja aprobada (decisión 3); hecha en la F4 (V41_F4 §1) |
 | 5 | ADAPT % | v3.x | **retirado de lo visible** (F4, candidata) | — | Sustituida por «Landing» (decisión 4; V41_F4 §1) |
-| 6 | Landing (nueva) | adaptación v3_1 por grupo (la del motor) | experimental; en el producto F4 al 80 % | BAJA (propuesto, V41_F4 §3) | 9 de 10 grupos con rango que excluye 0 (V41_F4 §4); riesgo: no coincide con la tabla v3_2 fase 7 (§6.1) |
+| 6 | Landing (nueva) | fase 7 rehecha (v3_2) por grupo, elegida en el examen K3 | examinada (K3): gana a la tabla v3_1 (−0,0089 [−0,0118; −0,0060] de MAE), no a no corregir | **BAJA** (aprobado, V41_F4 §8.2) | 4 de 10 grupos con rango que excluye 0; signo libre |
 | 7 | NIVEL CERNO (NC₁, NC₂) | v4.0 F5 | validado (referente) | ALTA (NC₁) | Recalcular con los compañeros del escenario |
 | 8 | IMPACTO | v4.0 F5 | provisional (criterio redefinido) | MEDIA | Pasa a «Impacto en pista» (F2) |
 | 9 | Net del equipo proyectado | v4.0 capa 4 | validado | ALTA | Base del motor de escenarios (F1) |
@@ -111,9 +111,9 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
   Landing. Conviene que el CEO lo sepa antes de diseñar la vista.
 - **Estado**: experimental. Pendiente: recalcular los rangos del grupo al 80 % (hoy están a otro nivel) y examinar su
   cobertura con los cortes (F1–F2).
-- **F4 (09-11-2026)** [DATO]: tabla al 80 % por grupo de traspaso con la v3_1 (la del motor), en
-  `data/modelos/v4_1/producto/landing.json`; se muestra en 9 de 10 grupos (V41_F4 §4). [RIESGO] La tabla reconstruida
-  v3_2 fase 7 da a menudo signos positivos para los mismos grupos (V41_F4 §6.1); propuesta: confianza baja y examen en la v4.2.
+- **F4 · K3 (09-11-2026)** [DATO]: examen prerregistrado de las dos tablas (V41_F4 §8.2). La v3_1 (curva dentro de la
+  temporada, siempre ≤ 0) predice PEOR que no corregir en los tres cortes; la fase 7 rehecha (v3_2) le gana con IC que excluye 0
+  y representa 8 de 10 grupos (la v3_1, 2). La Landing sale sólo de la fase 7 rehecha, con signo libre y sello BAJA.
 
 ## 7 · NIVEL CERNO (NC₁ titular, NC₂ al lado)
 

@@ -2,6 +2,7 @@
 configuración. Ninguno lee datos reales: cada test construye su liga sintética con una verdad conocida."""
 from __future__ import annotations
 
+import json
 import numpy as np
 import pandas as pd
 import pytest
@@ -732,3 +733,18 @@ def test_paridad_python_js_ecosistema_v41():
         mi = lambda S: E[S]["M"][:, E[S]["idx"][cj["persona"]]].mean()  # noqa: E731
         ph = [0.5 * ((mi((0,)) - mi(())) + (mi((0, 1)) - mi((1,)))), 0.5 * ((mi((1,)) - mi(())) + (mi((0, 1)) - mi((0,))))]
         assert cj["phi"] == pytest.approx(ph, abs=1e-9)
+
+
+# ------------------------------------------------------------------ F4 · K3: la Landing sale de una sola tabla (la elegida)
+def test_k3_landing_una_sola_tabla():
+    from bbequipo.ecosistema import examen_landing as EL, producto as PR
+    from bbequipo.ecosistema import config as CE
+    d = EL.casos()
+    assert set(d["corte"].unique()) <= {2022, 2023, 2024} and len(d) > 1000
+    assert np.isfinite(d[["o", "pA", "pB", "w"]].to_numpy()).all()
+    r = json.loads((CE.RAIZ / "data/modelos/v4_1/producto/examen_landing.json").read_text(encoding="utf-8"))
+    assert r["decision"]["gana"] == "A" and r["decision"]["sello"] == "BAJA"
+    L = PR.landing(CE.cargar())
+    assert "v3_2/fase7" in L["fuente"]
+    for g in L["grupos"].values():                      # se muestra sólo si el rango del 80 % excluye 0 (signo libre)
+        assert g["mostrar"] == (g["lo80"] > 0 or g["hi80"] < 0) or abs(g["lo80"]) < 0.05 or abs(g["hi80"]) < 0.05
