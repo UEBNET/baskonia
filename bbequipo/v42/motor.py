@@ -498,6 +498,18 @@ def _filas(R: dict, b: str, cortes: list[str]) -> pd.DataFrame:
     return pd.concat(fr, ignore_index=True)
 
 
+def reproduccion() -> dict:
+    """Control: el brazo v3.3 rehecho frente a las predicciones guardadas del examen V32_corte original."""
+    a = pd.read_csv(SALIDA / "validacion" / "v33" / "predicciones.csv.gz", low_memory=False)
+    b = pd.read_csv(DIR_VAL32 / "V32_corte_inicio_adapt" / "predicciones.csv.gz", low_memory=False)
+    m = a.merge(b, on=CLAVE, suffixes=("_n", "_o"))
+    out = {"fichajes": [int(len(a)), int(len(b)), int(len(m))]}
+    for c in ("v_min_pred", "v_pts_p100_pred", "v_ts_pct_pred", "a_pts_p100_pred"):
+        d = (m[f"{c}_n"].astype(float) - m[f"{c}_o"].astype(float)).abs().dropna()
+        out[c] = {"dif_abs_media": float(d.mean()), "dif_abs_max": float(d.max()), "fraccion_identica": float((d < 1e-3).mean())}
+    return out
+
+
 def examen(progreso=print) -> dict:
     """Examen prerregistrado D2 · motor: v4.2 frente a v3.3 en los mismos fichajes y cortes."""
     from bbfit import v32
@@ -543,6 +555,9 @@ def examen(progreso=print) -> dict:
            "banco": "fichajes reales del examen sin fuga V32_corte (escenario inicio, adaptación) que decidió la v3.3",
            "cortes": {"calibracion": CAL, "decision": DECISION},
            "decisiones_anidadas": D, "conjunto": comparar(DECISION), "por_corte": {t: comparar([t]) for t in DECISION}}
+    out["filtro_por_corte"] = {t: json.loads((dir_brazo("v42") / f"filtro_{t}.json").read_text(encoding="utf-8"))
+                               for t in CORTES if (dir_brazo("v42") / f"filtro_{t}.json").exists()}
+    out["reproduccion_v33"] = reproduccion()
     # regla de decisión
     reglas, pasa = {}, True
     for m in mets:
