@@ -602,16 +602,44 @@ const SEAS = {}, PEND = {};
 function temporada(t) {
   if (SEAS[t]) return Promise.resolve(SEAS[t]);
   if (PEND[t]) return PEND[t];
-  PEND[t] = cargarJSON(`datos/normalizados/${t}/regular.json`).then((d) => {
+  PEND[t] = cargarJSON(`datos/normalizados/${t}/regular.json`).then(async (d) => {
     const I = {}; d.columnas.forEach((c, i) => { I[c] = i; });
     const T = { temp: t, I, rows: d.filas };
     T.rows.forEach((r) => { r.T = T; });
     T.byKey = new Map(T.rows.map((r) => [rk(r), r]));
+    await historialV42(T);
     SEAS[t] = T; v4Mapear(T); return T;
   }).catch((e) => { delete PEND[t]; throw e; });
   return PEND[t];
 }
 const g = (r, c) => { const i = r.T.I[c]; return i == null ? null : r[i]; };
+// ---------------------------------------------------------------------------------------------- normalización v4.2
+// Historial del jugador (configs/v42.yaml → normalizacion_v42; bbequipo/v42/historial.py): la previa de sus temporadas
+// cerradas (atlas/v42/historial/<t>, estado del filtro de Kalman antes de la temporada t) se combina aquí con sus filas de
+// la temporada cargada; la temporada en curso se actualiza sola con la rutina mensual. Sólo las métricas que pasaron su
+// examen. El valor de una temporada (v3.2) queda en r.v32[m] = [valor, lo, hi].
+const Z80H = 1.2815515655446004;
+async function historialV42(T) {
+  let H; try { H = await cargarJSON(`atlas/v42/historial/${T.temp}.json`); } catch (e) { return; }
+  if (!H || !Array.isArray(H.metricas)) return;
+  const I = T.I, porP = new Map();
+  T.rows.forEach((r) => { const p = g(r, "persona_id"); if (p == null || !isFinite(+p)) return; const k = String(Math.round(+p)); if (!porP.has(k)) porP.set(k, []); porP.get(k).push(r); });
+  H.metricas.forEach((m, k) => {
+    const P = H.parametros[m], tf = P.transf; if (I[m] == null || I[m + "_lo"] == null || I[m + "_hi"] == null) return;
+    porP.forEach((rows, pid) => {
+      const pre = H.previa[pid] && H.previa[pid][k], rp = rows.find((r) => P.pos[g(r, "pos3")]);
+      let [mu, Pv] = pre || P.pos[rp ? g(rp, "pos3") : "A"], n = 0;
+      rows.forEach((r) => { const v = r[I[m]], lo = r[I[m + "_lo"]], hi = r[I[m + "_hi"]]; if (![v, lo, hi].every((x) => typeof x === "number" && isFinite(x))) return;
+        const s = (TRv(hi, tf) - TRv(lo, tf)) / (2 * Z80H), R = P.c * s * s; if (!(R > 0)) return;
+        const K = Pv / (Pv + R); mu += K * (TRv(v, tf) - mu); Pv *= 1 - K; n++; });
+      if (!n) return;
+      const sd = Math.sqrt(Pv), val = TRvInv(mu, tf), lo = TRvInv(mu - Z80H * sd, tf), hi = TRvInv(mu + Z80H * sd, tf);
+      rows.forEach((r) => { if (typeof r[I[m]] !== "number" || !isFinite(r[I[m]])) return; (r.v32 = r.v32 || {})[m] = [r[I[m]], r[I[m + "_lo"]], r[I[m + "_hi"]]];
+        r[I[m]] = val; r[I[m + "_lo"]] = lo; r[I[m + "_hi"]] = hi; if (I[m + "_pctel"] != null) r[I[m + "_pctel"]] = null; });
+    });
+  });
+  T.v42 = H.metricas.slice();
+}
 const rk = (r) => `${r.T.temp}|${g(r, "player_uid")}|${g(r, "team_id")}`;
 function porClave(k) { const t = String(k || "").split("|")[0]; return SEAS[t] ? SEAS[t].byKey.get(k) || null : null; }
 

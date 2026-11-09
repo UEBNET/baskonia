@@ -1,0 +1,518 @@
+{
+ "version": "v4.2",
+ "pieza": "D2 · β v4.2",
+ "prerregistro": "configs/v42.yaml → motor_v42.examen_beta",
+ "generado": "2026-11-09T11:30:08",
+ "beta_v40_agrega_temporadas": "no explícitamente: β por persona-temporada; el prior g lleva el RAPM normalizado v3.2 de la temporada anterior (orapm_th, drapm_th de t−1) como rasgo. β v4.2 = Kalman sobre los β v4.0 por temporada.",
+ "diseno": {
+  "observaciones": "β v4.0 del ajuste del corte t (examen/beta_corte_<t>.csv.gz), var = c·beta_sd²",
+  "objetivo_mae": "β v4.0 publicado de t+1 (rapm_multiliga/<t+1>.csv.gz), predictor alineado a su escala con a + b·β (temporada t)",
+  "poblacion_mae": "personas con β en t y t+1 y ≥ 300 min (perfil v4.0, todas sus ligas) en t y en t+1",
+  "spearman": "filas jugador-equipo de t+1 con ≥ 300 min y net_rtg_aj_onoff; predictor en percentil dentro de (liga, temporada t+1)",
+  "bootstrap": {
+   "B": 2000,
+   "spearman": "equipo-temporada",
+   "mae": "persona"
+  },
+  "cortes": {
+   "calibracion": 2021,
+   "decision": [
+    2022,
+    2023,
+    2024
+   ]
+  }
+ },
+ "cortes": {
+  "2021": {
+   "tau2": 1.8502008941673547,
+   "c": 1.6542886985372143,
+   "nll": 3018.297841628155,
+   "n_obs": 6177,
+   "previa_pos": {
+    "E": [
+     -0.26715714801444046,
+     26.41348915623784
+    ],
+    "A": [
+     0.29402334983498357,
+     25.364692939255484
+    ],
+    "I": [
+     0.6140461958997723,
+     35.77894266205932
+    ]
+   },
+   "personas_t": 3721,
+   "temporadas_previas_media": 1.4533727492609514,
+   "alineacion_producto": {
+    "a": 4.117628508247813,
+    "b": 0.8557206806104589,
+    "n": 3721
+   },
+   "alineacion_corte_t1": {
+    "a": 0.2663116982831932,
+    "b": 0.9011885405138842,
+    "n": 3721
+   },
+   "spearman": {
+    "n": 1883,
+    "conglomerados": 255,
+    "unidad": "equipo",
+    "rho_v40": 0.1941467236334385,
+    "rho_v42": 0.19715226193992744,
+    "rho_v40_ic95": [
+     0.14769412603283555,
+     0.23893508539103495
+    ],
+    "rho_v42_ic95": [
+     0.15083661684848026,
+     0.24071334988017118
+    ],
+    "diferencia": 0.0030055383064889474,
+    "diferencia_ic95": [
+     -0.006651703104093748,
+     0.01263293042116873
+    ]
+   },
+   "mae": {
+    "n": 1440,
+    "personas": 1440,
+    "mae_v40": 2.009047074506707,
+    "mae_v42": 2.085744476330299,
+    "diferencia": 0.07669740182359241,
+    "diferencia_ic95": [
+     0.032730415970194854,
+     0.121863638472194
+    ]
+   },
+   "intervalos": {
+    "cobertura80_v42_predictivo": 0.8819444444444444,
+    "cobertura80_v40_mostrado": 0.6034722222222222,
+    "cobertura80_v40_predictivo": 0.7881944444444444,
+    "ratio_mediano_ancho_nivel_v42_v40": 0.9554046882675082,
+    "ancho80_nivel_mediano": {
+     "v42": 4.624106351506275,
+     "v40": 4.850544520429758
+    },
+    "ancho80_predictivo_mediano": {
+     "v42": 8.0038828987794,
+     "v40": 6.3554598765257655
+    }
+   },
+   "papel": "calibracion"
+  },
+  "2022": {
+   "tau2": 0.5682832322266491,
+   "c": 1.6785788183389645,
+   "nll": 7331.306516524668,
+   "n_obs": 10377,
+   "previa_pos": {
+    "E": [
+     -0.09937139484978545,
+     24.493474255104008
+    ],
+    "A": [
+     0.40628552188552186,
+     20.876549192682884
+    ],
+    "I": [
+     0.4537260582737768,
+     31.27164091369108
+    ]
+   },
+   "personas_t": 4200,
+   "temporadas_previas_media": 1.9533333333333334,
+   "alineacion_producto": {
+    "a": 3.8768312842927375,
+    "b": 0.9525605965117117,
+    "n": 4200
+   },
+   "alineacion_corte_t1": {
+    "a": 1.757454685901873,
+    "b": 1.014474209112636,
+    "n": 4200
+   },
+   "spearman": {
+    "n": 2140,
+    "conglomerados": 317,
+    "unidad": "equipo",
+    "rho_v40": 0.19431756116302823,
+    "rho_v42": 0.17755615609869063,
+    "rho_v40_ic95": [
+     0.1514613825940598,
+     0.2372375217188619
+    ],
+    "rho_v42_ic95": [
+     0.1328165680649154,
+     0.22284685145156521
+    ],
+    "diferencia": -0.016761405064337598,
+    "diferencia_ic95": [
+     -0.034408566581119016,
+     0.0008397638121820233
+    ]
+   },
+   "mae": {
+    "n": 1645,
+    "personas": 1645,
+    "mae_v40": 1.9642581178463003,
+    "mae_v42": 2.0401774151392154,
+    "diferencia": 0.07591929729291531,
+    "diferencia_ic95": [
+     0.02000296915902133,
+     0.13035682962290668
+    ]
+   },
+   "intervalos": {
+    "cobertura80_v42_predictivo": 0.8723404255319149,
+    "cobertura80_v40_mostrado": 0.6462006079027356,
+    "cobertura80_v40_predictivo": 0.8303951367781155,
+    "ratio_mediano_ancho_nivel_v42_v40": 0.8805705058265717,
+    "ancho80_nivel_mediano": {
+     "v42": 4.219249673673065,
+     "v40": 4.842214435253718
+    },
+    "ancho80_predictivo_mediano": {
+     "v42": 7.599006406912045,
+     "v40": 6.670543781365476
+    }
+   },
+   "papel": "decision"
+  },
+  "2023": {
+   "tau2": 2.1073858119773505,
+   "c": 1.6707963341497283,
+   "nll": 13030.294299238165,
+   "n_obs": 17372,
+   "previa_pos": {
+    "E": [
+     -0.40446970421648826,
+     46.19415216412042
+    ],
+    "A": [
+     0.4483786835748794,
+     40.70457186890009
+    ],
+    "I": [
+     0.678338544562551,
+     49.73137314633725
+    ]
+   },
+   "personas_t": 6995,
+   "temporadas_previas_media": 1.9037884203002144,
+   "alineacion_producto": {
+    "a": 1.26271556360674,
+    "b": 1.1068212624582823,
+    "n": 6995
+   },
+   "alineacion_corte_t1": {
+    "a": 0.9795501595282342,
+    "b": 1.0958047458884537,
+    "n": 6995
+   },
+   "spearman": {
+    "n": 3027,
+    "conglomerados": 418,
+    "unidad": "equipo",
+    "rho_v40": 0.1836973534404235,
+    "rho_v42": 0.1705566563579054,
+    "rho_v40_ic95": [
+     0.14437209038031334,
+     0.22010588649291923
+    ],
+    "rho_v42_ic95": [
+     0.13303125745821967,
+     0.20749721610482239
+    ],
+    "diferencia": -0.01314069708251811,
+    "diferencia_ic95": [
+     -0.024601862160883198,
+     -0.0011450537085860909
+    ]
+   },
+   "mae": {
+    "n": 2352,
+    "personas": 2352,
+    "mae_v40": 2.4306216649354013,
+    "mae_v42": 2.3059004777037195,
+    "diferencia": -0.12472118723168144,
+    "diferencia_ic95": [
+     -0.16971625895232403,
+     -0.0800951524103737
+    ]
+   },
+   "intervalos": {
+    "cobertura80_v42_predictivo": 0.8873299319727891,
+    "cobertura80_v40_mostrado": 0.6356292517006803,
+    "cobertura80_v40_predictivo": 0.7678571428571429,
+    "ratio_mediano_ancho_nivel_v42_v40": 0.9692163998890002,
+    "ancho80_nivel_mediano": {
+     "v42": 4.704812269183435,
+     "v40": 4.865282363433521
+    },
+    "ancho80_predictivo_mediano": {
+     "v42": 9.148898074283732,
+     "v40": 7.253761035669471
+    }
+   },
+   "papel": "decision"
+  },
+  "2024": {
+   "tau2": 2.909183204545213,
+   "c": 1.7155348273580113,
+   "nll": 21215.9816857047,
+   "n_obs": 24019,
+   "previa_pos": {
+    "E": [
+     -0.3297255098357695,
+     65.05909449188358
+    ],
+    "A": [
+     0.7681013689407545,
+     56.571078684484945
+    ],
+    "I": [
+     0.8373968989505953,
+     65.73060436907363
+    ]
+   },
+   "personas_t": 6647,
+   "temporadas_previas_media": 2.344967654581014,
+   "alineacion_producto": {
+    "a": 0.5813962200258461,
+    "b": 0.9516812042717739,
+    "n": 6647
+   },
+   "spearman": {
+    "n": 3076,
+    "conglomerados": 461,
+    "unidad": "equipo",
+    "rho_v40": 0.17251459674071734,
+    "rho_v42": 0.16877537237260576,
+    "rho_v40_ic95": [
+     0.13834177832835715,
+     0.2086415358082189
+    ],
+    "rho_v42_ic95": [
+     0.13471196434464666,
+     0.20391402387439583
+    ],
+    "diferencia": -0.003739224368111582,
+    "diferencia_ic95": [
+     -0.01656135273517931,
+     0.008996698198168854
+    ]
+   },
+   "mae": {
+    "n": 2356,
+    "personas": 2356,
+    "mae_v40": 2.206103907308245,
+    "mae_v42": 2.1872270706250005,
+    "diferencia": -0.01887683668324446,
+    "diferencia_ic95": [
+     -0.058136040314192665,
+     0.024436440754564002
+    ]
+   },
+   "intervalos": {
+    "cobertura80_v42_predictivo": 0.8977079796264855,
+    "cobertura80_v40_mostrado": 0.5938030560271647,
+    "cobertura80_v40_predictivo": 0.7801358234295416,
+    "ratio_mediano_ancho_nivel_v42_v40": 0.9876930531363974,
+    "ancho80_nivel_mediano": {
+     "v42": 4.76350652374638,
+     "v40": 4.861309553580333
+    },
+    "ancho80_predictivo_mediano": {
+     "v42": 8.838332998747006,
+     "v40": 6.703088853037762
+    }
+   },
+   "papel": "decision"
+  }
+ },
+ "conjunto_decision": {
+  "spearman": {
+   "n": 8243,
+   "conglomerados": 1196,
+   "unidad": "equipo",
+   "rho_v40": 0.18233322864983814,
+   "rho_v42": 0.17169901901055798,
+   "rho_v40_ic95": [
+    0.15997027380030487,
+    0.20362604010286833
+   ],
+   "rho_v42_ic95": [
+    0.14977308580829402,
+    0.19301228311307653
+   ],
+   "diferencia": -0.010634209639280162,
+   "diferencia_ic95": [
+    -0.018703311430431687,
+    -0.003172739772199873
+   ]
+  },
+  "mae": {
+   "n": 6353,
+   "personas": 3589,
+   "mae_v40": 2.226602796380207,
+   "mae_v42": 2.1930862190863625,
+   "diferencia": -0.03351657729384433,
+   "diferencia_ic95": [
+    -0.06017795589643691,
+    -0.006302803490393668
+   ]
+  },
+  "intervalos": {
+   "cobertura80_v42_predictivo": 0.8872973398394459,
+   "cobertura80_v40_mostrado": 0.6228553439320006,
+   "cobertura80_v40_predictivo": 0.7886038092239886,
+   "ratio_mediano_ancho_nivel_v42_v40": 0.9435123838651353,
+   "ancho80_nivel_mediano": {
+    "v42": 4.530277528866761,
+    "v40": 4.8578493643533625
+   },
+   "ancho80_predictivo_mediano": {
+    "v42": 8.796254384134794,
+    "v40": 6.773553657072423
+   }
+  }
+ },
+ "criterios": {
+  "a_spearman_no_peor": {
+   "regla": "IC95 inferior de ρ_v42 − ρ_v40 ≥ −0,02",
+   "pasa": true
+  },
+  "b_mae_mejor": {
+   "regla": "IC95 superior de MAE_v42 − MAE_v40 < 0",
+   "pasa": true
+  }
+ },
+ "pasa": true,
+ "decision": "β v4.2 sustituye al β v4.0",
+ "sensibilidades": {
+  "spearman_bootstrap_por_persona": {
+   "n": 8243,
+   "conglomerados": 4313,
+   "unidad": "persona",
+   "rho_v40": 0.18233322864983814,
+   "rho_v42": 0.17169901901055798,
+   "rho_v40_ic95": [
+    0.1607099238723965,
+    0.2045782480483268
+   ],
+   "rho_v42_ic95": [
+    0.15010842590047088,
+    0.19399440185659325
+   ],
+   "diferencia": -0.010634209639280162,
+   "diferencia_ic95": [
+    -0.01804287278644745,
+    -0.0027667315375090734
+   ]
+  },
+  "spearman_beta_crudo_sin_percentil_liga": {
+   "rho_v40": 0.07092998465366414,
+   "rho_v42": 0.06231804203433187
+  },
+  "mae_sin_alinear_objetivo_producto": {
+   "n": 6353,
+   "personas": 3589,
+   "mae_v40": 3.03672845899575,
+   "mae_v42": 3.1601841282854535,
+   "diferencia": 0.12345566928970342,
+   "diferencia_ic95": [
+    0.09283931794463086,
+    0.15297050347593769
+   ]
+  },
+  "mae_objetivo_corte_t1_2022_2023": {
+   "n": 3997,
+   "personas": 2905,
+   "mae_v40": 2.1959743185441534,
+   "mae_v42": 2.1866414131729006,
+   "diferencia": -0.009332905371252403,
+   "diferencia_ic95": [
+    -0.0433679872975447,
+    0.024767924067955454
+   ],
+   "intervalos": {
+    "cobertura80_v42_predictivo": 0.8846634976232174,
+    "cobertura80_v40_mostrado": 0.6614961220915687,
+    "cobertura80_v40_predictivo": 0.7995996997748311,
+    "ratio_mediano_ancho_nivel_v42_v40": 0.902692433742855,
+    "ancho80_nivel_mediano": {
+     "v42": 4.37531800779197,
+     "v40": 4.8560551921616
+    },
+    "ancho80_predictivo_mediano": {
+     "v42": 8.75744764433054,
+     "v40": 7.058814847997307
+    }
+   }
+  },
+  "esquema_producto": {
+   "parametros": {
+    "2022": {
+     "tau2": 0.3420129680151484,
+     "c": 1.6810360269110558
+    },
+    "2023": {
+     "tau2": 1.8083275727321888,
+     "c": 1.5356714590115532
+    },
+    "2024": {
+     "tau2": 1.4931480482795696,
+     "c": 1.7621471752736617
+    }
+   },
+   "spearman": {
+    "n": 8243,
+    "conglomerados": 1196,
+    "unidad": "equipo",
+    "rho_v40": 0.21393444576560275,
+    "rho_v42": 0.19996021788435445,
+    "rho_v40_ic95": [
+     0.19092494362385348,
+     0.23554393631138176
+    ],
+    "rho_v42_ic95": [
+     0.1779371546122559,
+     0.22108803718753586
+    ],
+    "diferencia": -0.013974227881248302,
+    "diferencia_ic95": [
+     -0.022190972298685673,
+     -0.005437292064187915
+    ]
+   },
+   "mae": {
+    "n": 6353,
+    "personas": 3589,
+    "mae_v40": 1.9263240358885565,
+    "mae_v42": 1.938092899297606,
+    "diferencia": 0.011768863409049648,
+    "diferencia_ic95": [
+     -0.01639010710212832,
+     0.042123229721193374
+    ]
+   },
+   "intervalos": {
+    "cobertura80_v42_predictivo": 0.9057138359830001,
+    "cobertura80_v40_mostrado": 0.6856603179600189,
+    "cobertura80_v40_predictivo": 0.8452699512041555,
+    "ratio_mediano_ancho_nivel_v42_v40": 0.8971654051073666,
+    "ancho80_nivel_mediano": {
+     "v42": 4.326523843663639,
+     "v40": 4.846059089950352
+    },
+    "ancho80_predictivo_mediano": {
+     "v42": 8.245449448886227,
+     "v40": 6.853372304923537
+    }
+   }
+  }
+ },
+ "tiempo_s": 57.5
+}
