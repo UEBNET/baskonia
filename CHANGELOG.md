@@ -24,6 +24,23 @@
 * Publicado en Jugadores (v31, con el ajuste final de los textos «De dónde sale…» hecho por otra sesión sobre la v30), Equipos (v8) y Metodología (v8): el mismo fichero en los tres. Comprobado en navegador: ningún texto de rango ni de
   confianza en el informe completo, con y sin destino, sin errores de JavaScript.
 
+## 2026-11-09 — Corrección: DT de nivel por par en `vara.json` (rangos con vara ≠ EuroLeague)
+
+* **Fallo.** `bbnorm3/destino.py::vara_artifact` leía `sd_par_triangular` con `np.triu_indices`, pero
+  `bbnorm3.destino` lo escribe en el orden de `np.tril_indices`. Las DT del nivel de cada par (origen → liga de la vara)
+  quedaban desordenadas y la diagonal salía ≠ 0. Ejemplo en pts/100: ACB 2025-26 → EuroLeague 0,1343 en lugar de 0,0504;
+  ACB → ACB 0,1427 en lugar de 0. Sin `sd_par_triangular`, además, tomaba covarianzas por DT.
+* **Efecto.** Afectaba sólo a la **anchura del rango** que el artifact muestra cuando la vara no es la EuroLeague (por
+  defecto, la liga del club). El centro no cambia. El simulador en Python leía bien (`bbfit/sim_insumos.py`).
+* **Corrección.**
+  * Nueva función `bbnorm3.destino.sd_par_matriz`: lectura en el orden `tril` y, donde falta la DT de la mezcla,
+    √(Σ_aa + Σ_bb − 2Σ_ab), igual que `bbfit.sim_insumos.var_par`.
+  * Test nuevo: `tests/test_v32.py::test_vara_sd_par_lee_triangular_inferior`.
+* **Republicación.** `datos/normalizados/vara.json.gz.txt` en los tres artifacts de Kerno (Jugadores v29, Equipos v6,
+  Metodología v6). Sólo cambia el campo `sp`; el resto del fichero es idéntico al publicado (comprobado campo a campo) y el
+  publicado coincide byte a byte con el generado (sha256 `327eed4a…`).
+* Tarea aparte del encargo v5.0 (F0 §6.1), aprobada por el usuario el 09-11-2026.
+
 ## 2026-11-09 — Skill «anadir-liga» para los tres artifacts (v4.2)
 
 * Fase 7 reescrita: páginas y código en `artifact/kerno/` (comparados antes con lo publicado), reparto completo con
