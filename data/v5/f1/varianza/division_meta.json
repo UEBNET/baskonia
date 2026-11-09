@@ -1,0 +1,10 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F1",
+ "config": "configs/v5/f1.yaml",
+ "hash_config": "f505a1d5830d",
+ "hash_datos_entrada": "1667ca79676f6160",
+ "fecha": "2026-11-09T20:37:47+00:00",
+ "python": "3.13.18",
+ "paso": "division"
+}
