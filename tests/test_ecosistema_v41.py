@@ -651,3 +651,84 @@ def test_f3_mae_boot_y_conformal():
     assert X3.sello({"2022": r, "2023": r}, r, 0.8, [0.75, 0.85]) == "ALTA"
     assert X3.sello({"2022": r, "2023": {**r, "mejora_i": {"ic95": [-1, 1]}}}, r, 0.8, [0.75, 0.85]) == "MEDIA"
     assert X3.sello({"2022": r}, r, 0.9, [0.75, 0.85]) == "BAJA"
+
+
+# =============================================================================================== F4 · paridad Python–JS
+def _i32(x):
+    x &= 0xFFFFFFFF
+    return x - (1 << 32) if x & 0x80000000 else x
+
+
+def _imul(a, b):
+    return _i32((a & 0xFFFFFFFF) * (b & 0xFFFFFFFF))
+
+
+def _rng_js(s):
+    """Port exacto de rngDe (mulberry32) de los motores del Atlas."""
+    st = {"a": s & 0xFFFFFFFF}
+
+    def u():
+        st["a"] = (st["a"] + 0x6D2B79F5) & 0xFFFFFFFF
+        t = st["a"]
+        t = _imul(t ^ (t >> 15), t | 1)
+        t2 = _imul(t ^ ((t & 0xFFFFFFFF) >> 7), t | 61)
+        t = _i32(t) ^ _i32(t + t2)
+        return ((t ^ ((t & 0xFFFFFFFF) >> 14)) & 0xFFFFFFFF) / 4294967296
+    return u
+
+
+def test_paridad_python_js_ecosistema_v41():
+    """Las cifras nuevas del artifact (atlas/v41/ecosistema.js) coinciden con su definición recalculada en numpy sobre un
+    motor sintético idéntico: ΔNet y su rango, Coste de su ausencia, Shapley, Δ minutos (y rango), Δ uso y NIVEL KERNO."""
+    import json
+    import shutil
+    import subprocess
+    import tempfile
+    if not shutil.which("node"):
+        pytest.skip("sin node")
+    out = tempfile.mktemp(suffix=".json")
+    subprocess.run(["node", str(CE.RAIZ / "artifact/herramientas/paridad_v41.js"), out], check=True, capture_output=True)
+    js = json.loads(open(out, encoding="utf-8").read())["res"]
+    N, GM, c, q, s0 = 40, 40.0, 0.43, 1.24, 4.79
+    base = [{"p": f"P{i}", "q": 1 + i % 5, "usg": 14 + i, "pts": 12 + i, "pos": "EAI"[i % 3]} for i in range(12)]
+    alta = {"p": "A1", "q": 4, "usg": 24, "pts": 21, "pos": "A"}
+    beta = lambda p: 3.0 if p == "A1" else (int(p[1:]) - 5) * 0.8  # noqa: E731
+
+    def ev(S):                                   # S ⊆ {0: alta (TITULAR), 1: baja de P11}
+        recs = [r for r in base if not (1 in S and r["p"] == "P11")] + ([alta] if 0 in S else [])
+        u = _rng_js(7)
+        M = []
+        for _ in range(N):
+            us = [u() for _ in recs]
+            w = np.array([r["q"] * (1 + 0.3 * x) * (1.5 if (0 in S and r["p"] == "A1") else 1.0) for r, x in zip(recs, us)])
+            M.append(5 * GM * w / w.sum())
+        M = np.array(M)
+        T = (M / GM) @ np.array([beta(r["p"]) for r in recs])
+        U = np.array([r["usg"] for r in recs])
+        f = 20 * M.sum(1) / (M * U).sum(1)
+        return {"recs": recs, "M": M, "T": T, "U": U, "f": f, "idx": {r["p"]: i for i, r in enumerate(recs)}}
+    E = {S: ev(set(S)) for S in [(), (0,), (1,), (0, 1)]}
+    e0, e1 = E[()], E[(0, 1)]
+    dT = e1["T"] - e0["T"]
+    assert js["delta_net"] == pytest.approx(c * dT.mean(), abs=1e-9)
+    assert js["delta_semi"] == pytest.approx(q * np.sqrt((c * dT.std(ddof=1)) ** 2 + s0 ** 2), abs=1e-9)
+    d = e0["T"] - E[(1,)]["T"]
+    assert js["bajas"][0]["coste"] == pytest.approx(c * d.mean(), abs=1e-9)
+    v = lambda S: c * E[S]["T"].mean()  # noqa: E731
+    phi = [0.5 * ((v((0,)) - v(())) + (v((0, 1)) - v((1,)))), 0.5 * ((v((1,)) - v(())) + (v((0, 1)) - v((0,))))]
+    assert js["phi_net"] == pytest.approx(phi, abs=1e-9)
+    assert sum(js["phi_net"]) == pytest.approx(js["delta_net"], abs=1e-9)          # Shapley suma el Δ
+    xs, ps = np.arange(0, 41, 2.0), np.linspace(0, 1, 21)
+    for cj in js["companeros"]:
+        i0, i1 = e0["idx"][cj["persona"]], e1["idx"][cj["persona"]]
+        dm = e1["M"][:, i1] - e0["M"][:, i0]
+        assert cj["dmin"] == pytest.approx(dm.mean(), abs=1e-9)
+        assert [cj["dmin_lo"], cj["dmin_hi"]] == pytest.approx(list(np.quantile(dm, [0.1, 0.9])), abs=1e-9)
+        du = e1["U"][i1] * e1["f"] - e0["U"][i0] * e0["f"]
+        assert cj["duso"] == pytest.approx(du.mean(), abs=1e-9)
+        r = next(x for x in base if x["p"] == cj["persona"])
+        nc0 = np.mean(100 * np.interp(e0["M"][:, i0] / GM * r["pts"], xs, ps))
+        assert cj["nc0"] == pytest.approx(nc0, abs=1e-9)
+        mi = lambda S: E[S]["M"][:, E[S]["idx"][cj["persona"]]].mean()  # noqa: E731
+        ph = [0.5 * ((mi((0,)) - mi(())) + (mi((0, 1)) - mi((1,)))), 0.5 * ((mi((1,)) - mi(())) + (mi((0, 1)) - mi((0,))))]
+        assert cj["phi"] == pytest.approx(ph, abs=1e-9)

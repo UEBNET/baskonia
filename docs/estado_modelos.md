@@ -25,9 +25,9 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 1 | Minutos por partido (y uso) | v3.3 (mezcla motor + GBM) | validado | MEDIA | Recorte a [0, duración] y rangos recalibrados en la capa E (P5) |
 | 2 | Producción por 100 posesiones (pts/100, TS %, USG %, AST %, rebote…) | v3.3 + A5 (v4.0) | validado | MEDIA | Sin cambios |
 | 3 | Rol previsto | v3.3 | uso interno | — | Deja de ser salida (decisión 1) |
-| 4 | Índice Fit | v2–v3.3 | **retirar** | — | Baja aprobada (decisión 3) |
-| 5 | ADAPT % | v3.x | **retirar** | — | Baja aprobada; sustituida por «Landing» (decisión 4) |
-| 6 | Landing (nueva) | adaptación v3.x por grupo | experimental | pendiente | Recalcular al 80 %; mostrar sólo si el rango excluye 0 |
+| 4 | Índice Fit | v2–v3.3 | **retirado de lo visible** (F4, candidata) | — | Baja aprobada (decisión 3); hecha en la F4 (V41_F4 §1) |
+| 5 | ADAPT % | v3.x | **retirado de lo visible** (F4, candidata) | — | Sustituida por «Landing» (decisión 4; V41_F4 §1) |
+| 6 | Landing (nueva) | adaptación v3_1 por grupo (la del motor) | experimental; en el producto F4 al 80 % | BAJA (propuesto, V41_F4 §3) | 9 de 10 grupos con rango que excluye 0 (V41_F4 §4); riesgo: no coincide con la tabla v3_2 fase 7 (§6.1) |
 | 7 | NIVEL CERNO (NC₁, NC₂) | v4.0 F5 | validado (referente) | ALTA (NC₁) | Recalcular con los compañeros del escenario |
 | 8 | IMPACTO | v4.0 F5 | provisional (criterio redefinido) | MEDIA | Pasa a «Impacto en pista» (F2) |
 | 9 | Net del equipo proyectado | v4.0 capa 4 | validado | ALTA | Base del motor de escenarios (F1) |
@@ -38,8 +38,8 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
 | 14 | Quintetos más probables | v4.0 capa 4 | descriptivo | — | Sólo descripción de la rotación (decisión 8) |
 | 15 | Avisos de la ficha | v3.3 | provisional | — | Recalibrar: el 64,5 % de las fichas lleva alguno |
 | 16 | Impacto en pista | v4.1 F2 | experimental: no alcanza al IMPACTO v4.0 (0,081 frente a 0,149; V41_F2) → regla F2-a | — (EXPERIMENTAL; su cambio por altas/bajas, BAJA) | Puerta F2 (V41_F2 §10) |
-| 17 | Δ por métrica de cada compañero | v4.1 F1 (motor) / F3 (sello) | examinado en F3 (V-AUS, V-MID, V-TRANS): ninguna métrica supera a sus dos líneas base en dos bancos | **BAJA** en las diez métricas (V41_F3 §2); rango siempre visible, «sin cambio apreciable» si incluye 0 (aprobado por el CEO, 09-11-2026) | F4 (sólo con orden expresa) |
-| 18 | Valor de baja | v4.1 F1 / F3 | examinado en V-AUS: mejora a Δ = 0 (+0,060 [0,021; 0,099]), cobertura 0,796; no en cada corte | **MEDIA** (aprobado por el CEO el 09-11-2026, V41_F3 §7.1) | F4 (sólo con orden expresa) |
+| 17 | Δ por métrica de cada compañero | v4.1 F1 (motor) / F3 (sello) | examinado en F3 (V-AUS, V-MID, V-TRANS): ninguna métrica supera a sus dos líneas base en dos bancos | **BAJA** en las diez métricas (V41_F3 §2); rango siempre visible, «sin cambio apreciable» si incluye 0 (aprobado por el CEO, 09-11-2026) | En el panel del ecosistema de la F4 (minutos y uso; V41_F4 §2) |
+| 18 | Valor de baja | v4.1 F1 / F3 | examinado en V-AUS: mejora a Δ = 0 (+0,060 [0,021; 0,099]), cobertura 0,796; no en cada corte | **MEDIA** (aprobado por el CEO el 09-11-2026, V41_F3 §7.1) | En el producto como «Coste de su ausencia» (V41_F4 §2) |
 | 19 | Atribución por movimiento (Shapley) | v4.1 F1 | validado (composición exacta: Σ = Δ a 10⁻¹⁴ en 472 escenarios) | hereda el de lo atribuido | — |
 | 19b | Net del escenario (altas con rol, bajas) | v4.1 F1 | validado como composición: paridad con la capa 4 exacta en 117/118 (el otro, corrección P5) | hereda la capa 4 (ALTA) | V41_F1 |
 | 19c | Rangos de minutos de la capa E | v4.1 F1 (P5) | validado: cobertura 80 %/90 % en rango en cada corte | ALTA (propuesto) | V41_F1 §3 |
@@ -111,6 +111,9 @@ Fuente única de las cifras: los checkpoints citados en cada ficha y el benchmar
   Landing. Conviene que el CEO lo sepa antes de diseñar la vista.
 - **Estado**: experimental. Pendiente: recalcular los rangos del grupo al 80 % (hoy están a otro nivel) y examinar su
   cobertura con los cortes (F1–F2).
+- **F4 (09-11-2026)** [DATO]: tabla al 80 % por grupo de traspaso con la v3_1 (la del motor), en
+  `data/modelos/v4_1/producto/landing.json`; se muestra en 9 de 10 grupos (V41_F4 §4). [RIESGO] La tabla reconstruida
+  v3_2 fase 7 da a menudo signos positivos para los mismos grupos (V41_F4 §6.1); propuesta: confianza baja y examen en la v4.2.
 
 ## 7 · NIVEL CERNO (NC₁ titular, NC₂ al lado)
 

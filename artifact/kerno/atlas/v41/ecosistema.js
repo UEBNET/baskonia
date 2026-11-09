@@ -76,7 +76,7 @@
   }
   const minDe = (e, p) => { const i = e && e.pid.get(p); return i == null ? e.M.map(() => 0) : e.M.map((f) => f[i]); };
   const usoDe = (e, p) => { const i = e && e.pid.get(p); return i == null ? e.M.map(() => NaN) : e.f.map((x) => e.U[i] * x); };
-  function shapley(ctx, valor) {        // valor(evaluación) → número; exacto con |M| ≤ 4
+  function shapley(ctx, valor) {        // valor: de una evaluación a un número; exacto con hasta 4 movimientos
     const m = ctx.movs.length, phi = new Array(m).fill(0), fact = (n) => (n <= 1 ? 1 : n * fact(n - 1));
     for (let k = 0; k < m; k++) {
       const resto = [...Array(m).keys()].filter((i) => i !== k);
@@ -119,10 +119,10 @@
       const u0 = usoDe(e0, r.persona), u1 = usoDe(e1, r.persona), du = u1.map((x, s) => x - u0[s % u0.length]);
       let atrib = null;
       if (res.exacto && movs.length) { const phi = shapley(ctx, (e) => media(minDe(e, r.persona))); let kb = 0; phi.forEach((x, k) => { if (Math.abs(x) > Math.abs(phi[kb])) kb = k; }); atrib = { k: kb, phi: phi[kb], todos: phi }; }
-      res.companeros.push({ persona: r.persona, nombre: r.nombre, min0: media(m0), min1: media(m1), dmin: media(dm), dmin_lo: cuantil(dm, 0.1), dmin_hi: cuantil(dm, 0.9),
+      res.companeros.push({ persona: r.persona, nombre: r.nombre, min0: media(m0), min1: media(m1), min1_lo: cuantil(m1, 0.1), min1_hi: cuantil(m1, 0.9), dmin: media(dm), dmin_lo: cuantil(dm, 0.1), dmin_hi: cuantil(dm, 0.9),
         duso: media(du), duso_lo: cuantil(du, 0.1), duso_hi: cuantil(du, 0.9), nc0: nc(e0, r), nc1: nc(e1, r), atrib });
     });
-    movs.forEach((m) => { if (m.t !== "alta") return; res.altas.push({ persona: m.persona, nombre: m.nombre, rol: m.rol, min1: media(minDe(e1, m.persona)), nc1: nc(e1, m.rec) }); });
+    movs.forEach((m) => { if (m.t !== "alta") return; const ma = minDe(e1, m.persona); res.altas.push({ persona: m.persona, nombre: m.nombre, rol: m.rol, min1: media(ma), min1_lo: cuantil(ma, 0.1), min1_hi: cuantil(ma, 0.9), nc1: nc(e1, m.rec) }); });
     res.companeros.sort((a, b) => b.min1 - a.min1);
     V.cache.set(key, res); if (V.cache.size > 30) V.cache.delete(V.cache.keys().next().value);
     return res;
@@ -136,10 +136,10 @@
     const net = `<div class="v41net"><span class="label">${esc(t("net_escenario"))}</span><p style="margin:2px 0">Δ Net ${cambio(res.delta_net, res.delta_net - res.delta_semi, res.delta_net + res.delta_semi, 1, " pts/100")}</p>${confianza("net_equipo")}
       ${res.phi_net ? `<p class="v2nota">${es ? "Atribución (Shapley exacto):" : "Attribution (exact Shapley):"} ${res.phi_net.map((x, k) => `${movNom(k)} ${sg(x, 1)}`).join(" · ")}</p>` : res.movs.length > 4 ? `<p class="v2nota">${es ? "Con más de 4 movimientos no se muestra la atribución exacta." : "With more than 4 moves, exact attribution is not shown."}</p>` : ""}</div>`;
     const bajas = res.bajas.length ? `<div class="v41bajas"><span class="label">${esc(t("coste_ausencia"))}</span>${res.bajas.map((b) => `<p style="margin:2px 0">${esc(nombreMov(b))}: ${cambio(b.coste, b.lo, b.hi, 1, " pts/100")}</p>`).join("")}${confianza("coste_ausencia")}<p class="v2nota">${esc(t("coste_ausencia_def"))}.</p></div>` : "";
-    const filas = res.companeros.map((c) => `<tr><td>${esc(nombreMov(c))}</td><td class="num">${num(c.min0, 1)} ${FL} ${num(c.min1, 1)}</td><td>${cambio(c.dmin, c.dmin_lo, c.dmin_hi, 1, "'")}</td><td>${cambio(c.duso, c.duso_lo, c.duso_hi, 1, "")}</td><td>${ncTxt(c.nc0)} ${FL} ${ncTxt(c.nc1)}</td><td class="v2nota">${c.atrib && Math.abs(c.atrib.phi) >= 0.5 ? `${movNom(c.atrib.k)} (${sg(c.atrib.phi, 1)}')` : ""}</td></tr>`).join("");
-    const altas = res.altas.map((a) => `<tr class="v41alta"><td>${esc(nombreMov(a))} <span class="muted">(${es ? "alta" : "signing"})</span></td><td class="num">${num(a.min1, 1)}</td><td></td><td></td><td>${ncTxt(a.nc1)}</td><td></td></tr>`).join("");
+    const filas = res.companeros.map((c) => `<tr><td>${esc(nombreMov(c))}</td><td class="num">${num(c.min0, 1)} ${FL} <b>${num(c.min1, 1)}</b> <span class="muted">[${num(c.min1_lo, 0)}–${num(c.min1_hi, 0)}]</span></td><td>${cambio(c.dmin, c.dmin_lo, c.dmin_hi, 1, "'")}</td><td>${cambio(c.duso, c.duso_lo, c.duso_hi, 1, "")}</td><td>${ncTxt(c.nc0)} ${FL} ${ncTxt(c.nc1)}</td><td class="v2nota">${c.atrib && Math.abs(c.atrib.phi) >= 0.5 ? `${movNom(c.atrib.k)} (${sg(c.atrib.phi, 1)}')` : ""}</td></tr>`).join("");
+    const altas = res.altas.map((a) => `<tr class="v41alta"><td>${esc(nombreMov(a))} <span class="muted">(${es ? "alta" : "signing"})</span></td><td class="num"><b>${num(a.min1, 1)}</b> <span class="muted">[${num(a.min1_lo, 0)}–${num(a.min1_hi, 0)}]</span></td><td></td><td></td><td>${ncTxt(a.nc1)}</td><td></td></tr>`).join("");
     const tabla = `<div class="v41comp"><span class="label">${esc(t("cambio_companeros"))}</span>
-      <table class="v2t v41t"><thead><tr><th>${es ? "Jugador" : "Player"}</th><th>${es ? "Minutos" : "Minutes"}</th><th>${es ? "Δ minutos" : "Δ minutes"}</th><th>${es ? "Δ uso" : "Δ usage"}</th><th>${esc(t("nc_escenario"))}</th><th>${es ? "Sobre todo por" : "Mostly due to"}</th></tr></thead><tbody>${filas}${altas}</tbody></table>
+      <div class="v41scroll"><table class="v2t v41t"><thead><tr><th>${es ? "Jugador" : "Player"}</th><th>${es ? "Minutos (antes, después [80 %])" : "Minutes (before, after [80%])"}</th><th>${es ? "Δ minutos" : "Δ minutes"}</th><th>${es ? "Δ uso" : "Δ usage"}</th><th>${esc(t("nc_escenario"))}</th><th>${es ? "Sobre todo por" : "Mostly due to"}</th></tr></thead><tbody>${filas}${altas}</tbody></table></div>
       <div class="v41pie"><span>${es ? "Cambios" : "Changes"} ${confianza("delta_companeros")}</span><span>NIVEL KERNO ${confianza("nivel_kerno")}</span></div>
       <p class="v2nota">${esc(t("cambio_companeros_def"))}. ${esc(t("reparto_total"))}.</p></div>`;
     return `<div class="v41eco"><h4>${es ? "Ecosistema del club en este escenario" : "Club ecosystem in this scenario"} <small class="muted">· v4.1</small></h4>${net}${bajas}${tabla}
@@ -151,7 +151,7 @@
 .v41eco{border-top:1.2px solid var(--rule-strong);margin-top:24px;padding-top:12px}.v41eco h4{margin:0 0 8px}
 .v41eco .v41net,.v41eco .v41bajas{margin-bottom:12px}.v41t td.num{font-family:var(--font-mono);white-space:nowrap}.v41t tr.v41alta td{border-top:1px solid var(--rule)}
 .v41pie{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;font-size:12px;color:var(--text-2);margin-top:6px}
-@media (max-width:600px){.v41t{display:block;overflow-x:auto}}`;
+#sEcoV41,.v41eco{min-width:0;max-width:100%}.v41scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.v41t{min-width:640px}`;
   function estilos() { if (document.getElementById("k-v41-css")) return; const s = document.createElement("style"); s.id = "k-v41-css"; s.textContent = CSS; document.head.appendChild(s); }
 
   const api = { cargar, listo, t, confianza, landing, landingHtml, escenario, panelHtml, estilos, VERSION: "v4.1", get datos() { return V; } };

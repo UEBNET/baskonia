@@ -1,5 +1,30 @@
 # Registro de cambios
 
+## 2026-11-09 — CERNO v4.1 · F4 Producto con marca Kerno (puerta pendiente del CEO)
+
+Detalle: `docs/checkpoints/V41_F4.md`. Orden del CEO: «Arranca la F4 con marca Kerno». Términos aprobados antes de publicar:
+«Confianza alta · moderada · baja», «Landing», «Coste de su ausencia»; el «Impacto en pista» v4.1 no se muestra.
+
+* **Fit y ADAPT retirados de todo lo visible** del artifact (Atlas, lectura de fichaje, informe de equipo, glosario). En su
+  lugar, la **Landing** del grupo de traspaso, al 80 % y sólo si el rango excluye 0.
+* **Confianza visible** (medidor de tres segmentos) en NIVEL KERNO, IMPACTO, Net del equipo y las salidas nuevas. H1 y H2
+  aprobados; el resto, propuestos (V41_F4 §3).
+* **Panel «Ecosistema del club en este escenario»** en el Simulador de fichajes (`artifact/kerno/atlas/v41/ecosistema.js`):
+  * Δ Net del equipo con atribución Shapley exacta;
+  * Coste de su ausencia de cada baja;
+  * por compañero: minutos antes y después con rango, Δ minutos, Δ uso, Nivel Kerno y el movimiento que más le afecta;
+  * el rol se fija sólo para las altas.
+* **Tablas de producto** (`python -m bbequipo.ecosistema producto`, en `data/modelos/v4_1/producto/`): Landing, sellos e i18n
+  ES/EN.
+* **Controles:**
+  * regla de oro (mismos controles antes y después en las 5 páginas);
+  * paridad Python–JS exacta (test nuevo);
+  * lint de marca sin bloqueantes;
+  * capturas claro y oscuro a 1440 y 390 px.
+  * Herramientas en `artifact/herramientas/`.
+* Candidata privada publicada: https://claude.ai/artifact/HKJYKNWXoxgQDsYnFw3HR1. El artifact principal no se ha tocado.
+* Suite completa: 315 tests en verde.
+
 ## 2026-11-09 — CERNO v4.1 · puerta F3 APROBADA por el CEO
 
 * Decisiones H1–H5 (`docs/checkpoints/V41_F3.md` §7.1):
