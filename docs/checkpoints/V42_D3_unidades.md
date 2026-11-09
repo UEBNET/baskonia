@@ -110,3 +110,49 @@ Semilla del bootstrap 20261109. `bbequipo/v42/__main__.py` no se ha tocado: es d
   reajustarlos con cada temporada cerrada.
 - Si el CEO quiere quintetos con historial, harían falta más temporadas o un modelo jerárquico que los ligue a sus
   tríos y parejas. Esto no estaba prerregistrado.
+
+## 8. Integración en el artifact
+
+(Se numera 8 porque §6 y §7 ya existían; es la «§6 Integración en el artifact» del encargo.)
+
+**Exportador** `bbequipo/v42/unidades_artifact.py` (`PYTHONPATH=. python -m bbequipo.v42.unidades_artifact`, ≈ 30 s;
+`--ligas`/`--temporadas` para exportar sólo una parte; el índice conserva el resto).
+- Salida: `artifact/kerno/quintetos/datos_v42/<temporada>/<liga>.gz.txt` (JSON comprimido con gzip y en base64, la misma
+  codificación que `datos/`) e `indice.json` (qué liga-temporada tiene fichero, con bytes y filas).
+- Contenido: `t` (tríos) y `p` (parejas) en tablas columnares. Clave `team_id` + `u` (ids de jugador ordenados y unidos
+  por «|»: la columna `unidad` de bbstats; la página la rehace con el `player_id` de sus índices). Columnas `poss` (fase
+  total), `v`, `lo`, `hi` (Net v4.2 y rango del 80 % del nivel), `w` (peso de la temporada), `np` (temporadas previas) y,
+  en parejas, `sv`, `slo`, `shi`, `sw` (sinergia WOWY v4.2).
+- Sólo las unidades que la página trae (mismos filtros que `bbmodel/mesa_quintetos.py`: los 20 tríos con más minutos por
+  equipo y fase; parejas con 40+ minutos en regular o total; NCAA, sólo el top-50) y con estimación v4.2 (≥ 50 posesiones
+  en la fase total). [DATO] 115 ficheros, 66.842 tríos y 161.608 parejas, 5,95 MB en total; 2025-26: ACB 48 KB
+  (470 tríos, 1.415 parejas), EuroLeague 52 KB (504, 1.540). En 2025-26 casan con la página el 100 % de las parejas y
+  el 99,4 % (ACB) / 99,7 % (EuroLeague) de las filas de tríos (fallan 5 y 3 tríos de playoffs con menos de 50 posesiones
+  en toda la temporada); en la fase total, `vigente_v41` = `net_rtg_aj` de la página (diferencia ≤ 0,005).
+
+**Página** `artifact/kerno/quintetos/index.html`.
+- Al cargar una liga-temporada pide `datos_v42/indice.json` (una vez) y, si lo lista, `datos_v42/<t>/<l>.gz.txt`.
+  Cualquier fallo deja la página como estaba: `net42 = net_rtg_aj`, `sin42 = sinergia` y las etiquetas antiguas.
+- Cada fila de trío y pareja recibe `net42`, `sin42` y `e42` (la fila v4.2). Se muestran en la escala de siempre
+  (`ESC`, 0–100); el tooltip añade «Estimación v4.2 …», el **rango del 80 %** (escala y pts/100) y
+  «Temporada sola: …» con el valor vigente de la fase mostrada.
+- Sitios: tabla de tríos (columna «Net v4.2»), tabla de parejas («Net v4.2» y «Sinergia»), matriz de parejas (métricas
+  «Net juntos (v4.2)» y «Sinergia WOWY (v4.2)», con su tooltip), ficha de la pareja (bloque «Estimación v4.2» con los
+  rangos; las barras WOWY y la fórmula siguen siendo de la temporada sola, porque son una suma de valores de la fase),
+  «Parejas que más suman» y la lectura rápida del equipo, «Mejor y peor encaje» de la ficha del jugador y «Parejas con
+  más sinergia» de la liga. Nota en la pestaña de parejas y tríos y en la tabla de parejas de la liga: «Tríos y parejas:
+  estimación v4.2 (…). Los quintetos se quedan en la versión anterior: su examen no tuvo potencia.»
+- Sin controles nuevos: los mismos botones, selects, inputs y pestañas (contados en Playwright frente a la versión
+  anterior, en cinco pestañas y dos ligas). Los scripts en línea compilan con `new Function`.
+- Prueba (Playwright, Chromium, 2025-26 ACB y EuroLeague, fases regular, playoffs y total): sin errores de consola; las
+  tablas de tríos y parejas pintan los valores v4.2 (20/20 tríos y 93/93 parejas de Baskonia en la ACB tienen
+  estimación). Sin `datos_v42` la página vuelve a «Net aj.» y no da más error que el 404 del índice.
+
+**Decisiones y dudas** [SUPUESTO]
+- La v4.2 es una estimación de la temporada completa (fase total más historial). Se muestra también en las vistas de
+  temporada regular y playoffs; «Temporada sola» del tooltip es entonces la de esa fase.
+- Sinergia de pareja: la v4.2 contrae casi todo hacia −0,4 (§4), así que la matriz en modo sinergia (la vista por
+  defecto de la pestaña) y las clasificaciones por sinergia quedan casi planas (47–51 en la escala). Es lo que dice el
+  examen; si molesta, se podría abrir la matriz en «Net juntos (v4.2)», pero eso es un cambio de producto.
+- 2026-27 (en curso): el fichero refleja los datos del momento de exportar. Hay que volver a ejecutar el exportador tras
+  cada actualización (o actualizar en el navegador con `previa_m`/`previa_sd`, §5, que no se exportan todavía).

@@ -549,6 +549,31 @@ const nvC = (fam, v, o = {}) => nv(fam, v, { cambio: true, ...o }); // cambio (e
 const nbar = (fam, v) => (ok(v) ? dbar(nS(fam, v), 100) : "");
 const nTxt = (fam, v) => (ESC.modo === "original" ? fs(v) : ESC.txt(nS(fam, v)));
 const nTxtD = (fam, v) => (ESC.modo === "original" ? fs(v) : ESC.txtD(nS(fam, v)));
+// v4.2 D3 (tríos y parejas): la cifra es la estimación v4.2 (net42, sin42; sin ella, la de la temporada sola) y el tooltip
+// lleva su rango del 80 % y el valor de la temporada sola. cual: "n" = Net, "s" = sinergia WOWY de la pareja
+const NOTA_V42 = "Tríos y parejas: estimación v4.2 (temporada contraída hacia lo que esperan sus jugadores y hacia su historial). Los quintetos se quedan en la versión anterior: su examen no tuvo potencia.";
+const notaV42 = () => (D && D.v42 ? `<p class="note">${NOTA_V42}</p>` : "");
+function v42Info(r, cual) {
+  const s = cual === "s", e = (r && r.e42) || null;
+  return { v: r ? (s ? r.sin42 : r.net42) : null, orig: r ? (s ? r.sinergia : r.net_rtg_aj) : null, e, hay: !!e && ok(s ? e.sv : e.v),
+    lo: e ? (s ? e.slo : e.lo) : null, hi: e ? (s ? e.shi : e.hi) : null, w: e ? (s ? e.sw : e.w) : null };
+}
+const rango42 = (fam, x) => (ok(x.lo) && ok(x.hi) ? `de ${ESC.txt(nS(fam, x.lo))} a ${ESC.txt(nS(fam, x.hi))} en la escala (de ${fs(x.lo)} a ${fs(x.hi)} pts/100)` : "–");
+function v42Extra(fam, r, cual) {
+  if (!D || !D.v42 || !r) return "";
+  const x = v42Info(r, cual), fz = r.fase && r.fase !== "total" ? ` (${FNOM[r.fase] || r.fase})` : "";
+  const sola = `Temporada sola${fz}: ${cual === "s" ? "sinergia WOWY" : "Net ajustado"} ${ESC.txt(nS(fam, x.orig))} (${fs(x.orig)} pts/100)`;
+  if (!x.hay) return `Sin estimación v4.2 (menos de 50 posesiones en toda la temporada): se muestra la temporada sola.<br>${sola}`;
+  const e = x.e, prev = e.np ? `${fi(e.np)} temporada${e.np > 1 ? "s" : ""} previa${e.np > 1 ? "s" : ""}` : "sin temporadas previas";
+  return `Estimación v4.2: toda la temporada (${fi(e.poss)} posesiones; pesa un ${fp(100 * x.w, 0)}) más lo que esperan sus jugadores y su historial (${prev})<br>Rango del 80 %: ${rango42(fam, x)}<br>${sola}`;
+}
+const nv42 = (fam, r, cual, o = {}) => { const x = v42Info(r, cual); return nv(fam, x.v, { extra: v42Extra(fam, r, cual), ...(x.hay ? { nombre: `${ESC.fam(fam).nombre} · v4.2` } : {}), ...o }); };
+// línea de texto para tooltips de fila: valor v4.2 con su rango, o el de la temporada sola
+function v42Txt(fam, r, cual) {
+  const x = v42Info(r, cual), lab = cual === "s" ? "Sinergia" : "Net";
+  if (!x.hay) return `${lab} ${cual === "s" ? "WOWY" : "aj."} ${fs(x.orig)} pts/100`;
+  return `${lab} v4.2 ${fs(x.v)} pts/100 (rango del 80 %: de ${fs(x.lo)} a ${fs(x.hi)}) · temporada sola ${fs(x.orig)}`;
+}
 // barras horizontales en la escala: cada item con su familia (it.fam) o la común
 const escItems = (items, fam) => items.map((it) => { const fm_ = it.fam || fam; return ok(it.v) ? { ...it, v: nS(fm_, it.v), txt: nTxt(fm_, it.v), tip: (it.tip ? it.tip + "<hr>" : "") + ESC.tip(fm_, it.v, D.temp) } : it; });
 // nivel conjunto de una unidad (quinteto, trío, pareja): media simple de L de sus jugadores, en la escala de Nivel
@@ -722,8 +747,26 @@ function v4Quintetos(raw, t, l) {
 }
 function cargarLiga(t, l) {
   const k = `${t}/${l}`;
-  if (!CACHE.has(k)) { const p = Promise.all([bajarJSON(`datos/${t}/${l}.gz.txt`), cargarEU()]).then(async ([raw]) => { await v4Quintetos(raw, t, l); return prep(raw); }); p.catch(() => CACHE.delete(k)); CACHE.set(k, p); p.then((d) => { p.listo = d; }); }
+  if (!CACHE.has(k)) { const p = Promise.all([bajarJSON(`datos/${t}/${l}.gz.txt`), cargarEU(), cargarV42(t, l)]).then(async ([raw, , x42]) => { await v4Quintetos(raw, t, l); const d = prep(raw); aplicarV42(d, x42); return d; }); p.catch(() => CACHE.delete(k)); CACHE.set(k, p); p.then((d) => { p.listo = d; }); }
   return CACHE.get(k);
+}
+// v4.2 D3 (09-11-2026): tríos, parejas y sinergia de pareja pasan su examen (docs/checkpoints/V42_D3_unidades.md); los
+// quintetos, no (se quedan en el Net ajustado vigente). datos_v42/<t>/<l>.gz.txt (bbequipo/v42/unidades_artifact.py)
+// trae, por unidad (team_id + ids de jugador ordenados y unidos por «|»), el Net v4.2 de la temporada completa con su
+// rango del 80 % y, para la pareja, la sinergia v4.2. Sólo se pide si indice.json lo lista; si falta, la página sigue
+// con los valores de la temporada sola (net42 = net_rtg_aj, sin42 = sinergia).
+let V42IP = null;
+function cargarV42(t, l) {
+  if (!V42IP) V42IP = bajarJSON("datos_v42/indice.json").catch(() => null);
+  return V42IP.then((ix) => (ix && ix.temporadas && ix.temporadas[t] && ix.temporadas[t][l] ? bajarJSON(`datos_v42/${t}/${l}.gz.txt`) : null)).catch(() => null);
+}
+function aplicarV42(D, x) {
+  const id = (i) => String((D.J[i] || {}).player_id), clave = (eq, js) => `${eq}#${js.map(id).sort().join("|")}`;
+  const mapa = (tab) => { const m = new Map(); if (tab && Array.isArray(tab.c)) objs(tab).forEach((o) => m.set(`${o.team_id}#${o.u}`, o)); return m; };
+  const MT = mapa(x && x.t), MP = mapa(x && x.p);
+  D.v42 = MT.size + MP.size > 0;
+  for (const r of D.T3) { const e = MT.get(clave(r.team_id, r.u)) || null; r.e42 = e; r.net42 = e && ok(e.v) ? e.v : r.net_rtg_aj; }
+  for (const r of D.P) { const e = MP.get(clave(r.team_id, [r.a, r.b])) || null; r.e42 = e; r.net42 = e && ok(e.v) ? e.v : r.net_rtg_aj; r.sin42 = e && ok(e.sv) ? e.sv : r.sinergia; }
 }
 function objs(tab) {
   if (!tab || !Array.isArray(tab.c)) return [];
@@ -1160,9 +1203,9 @@ function filaQ(q, T, k = "net_rtg_aj", sc = 20) {
     `<span class="who">${nombresQ(ordenarPos(q.u, T), T)}<small>${fm(q.min)} · ${fi(q.poss)} pos. · Net bruto ${fs(q.net_rtg)}</small></span>${nbar("net_quinteto", v)}<span class="v">${nv("net_quinteto", v)}</span></button>`;
 }
 function filaP(p, T, k = "sinergia", sc = 15) {
-  const v = p[k];
-  return `<button class="lrow" type="button" data-a="p" data-v="${esc(pid(p.a) + "," + pid(p.b))}" ${tipA(`<b>${esc(J(p.a).nm)} + ${esc(J(p.b).nm)}</b><br>${fm(p.min)} juntos · Net aj. ${fs(p.net_rtg_aj)}<br>Sinergia WOWY ${fs(p.sinergia)} · frente al RAPM ${fs(p.sinergia_rapm)}<br><i>Clic: análisis de la pareja</i>`)}>` +
-    `<span class="who">${esc(sn(p.a, T))} + ${esc(sn(p.b, T))}<small>${fm(p.min)} juntos · Net aj. ${fs(p.net_rtg_aj)}</small></span>${nbar(k === "sinergia_rapm" ? "sinergia_rapm" : "sinergia_pareja", v)}<span class="v">${nv(k === "sinergia_rapm" ? "sinergia_rapm" : "sinergia_pareja", v)}</span></button>`;
+  const v = k === "sinergia" ? p.sin42 : p[k], hay = D.v42 && p.e42;
+  return `<button class="lrow" type="button" data-a="p" data-v="${esc(pid(p.a) + "," + pid(p.b))}" ${tipA(`<b>${esc(J(p.a).nm)} + ${esc(J(p.b).nm)}</b><br>${fm(p.min)} juntos · ${v42Txt("net_pareja", p, "n")}<br>${v42Txt("sinergia_pareja", p, "s")}<br>Sinergia frente al RAPM ${fs(p.sinergia_rapm)}<br><i>Clic: análisis de la pareja</i>`)}>` +
+    `<span class="who">${esc(sn(p.a, T))} + ${esc(sn(p.b, T))}<small>${fm(p.min)} juntos · Net${hay ? "" : " aj."} ${fs(p.net42)}</small></span>${nbar(k === "sinergia_rapm" ? "sinergia_rapm" : "sinergia_pareja", v)}<span class="v">${k === "sinergia" ? nv42("sinergia_pareja", p, "s") : nv("sinergia_rapm", v)}</span></button>`;
 }
 R.equipo = (el) => {
   if (!D.hasQ) { el.innerHTML = vacioSinQuintetos(); return; }
@@ -1188,8 +1231,9 @@ R.equipo = (el) => {
   const qs = T.Q.filter((q) => q.poss >= thrQ).sort((a, b) => b.net_rtg_aj - a.net_rtg_aj);
   if (qs.length) ins.push(`Su mejor quinteto con ${fi(thrQ)}+ posesiones es <b>${nombresQ(ordenarPos(qs[0].u, T), T)}</b>: Net ajustado <b>${nv("net_quinteto", qs[0].net_rtg_aj)}</b> en la escala (${fs(qs[0].net_rtg_aj)} por 100 posesiones) en ${fm(qs[0].min)}.`);
   const thrP = umbral(T.P.map((p) => p.min), 12, 250, 10, 60);
-  const ps = T.P.filter((p) => p.min >= thrP && ok(p.sinergia)).sort((a, b) => b.sinergia - a.sinergia);
-  if (ps.length) ins.push(`La pareja que más se potencia es <b>${esc(sn(ps[0].a, T))} + ${esc(sn(ps[0].b, T))}</b>: juntos rinden <b>${fs(ps[0].sinergia)}</b> por 100 posesiones por encima de lo que suman por separado (${nv("sinergia_pareja", ps[0].sinergia)} en la escala; ${fm(ps[0].min)} juntos).`);
+  const ps = T.P.filter((p) => p.min >= thrP && ok(p.sin42)).sort((a, b) => b.sin42 - a.sin42);
+  if (ps.length) ins.push(D.v42 && ps[0].e42 ? `La pareja con más sinergia estimada es <b>${esc(sn(ps[0].a, T))} + ${esc(sn(ps[0].b, T))}</b>: la v4.2 la deja en <b>${fs(ps[0].sin42)}</b> por 100 posesiones sobre lo que suman por separado (${nv42("sinergia_pareja", ps[0], "s")} en la escala; ${fm(ps[0].min)} juntos); la temporada sola daba ${fs(ps[0].sinergia)}, pero la sinergia de una temporada casi no se repite en la siguiente.`
+    : `La pareja que más se potencia es <b>${esc(sn(ps[0].a, T))} + ${esc(sn(ps[0].b, T))}</b>: juntos rinden <b>${fs(ps[0].sinergia)}</b> por 100 posesiones por encima de lo que suman por separado (${nv("sinergia_pareja", ps[0].sinergia)} en la escala; ${fm(ps[0].min)} juntos).`);
   const hub = T.ros.filter((x) => ok(x.pagerank_asistencias)).sort((a, b) => b.pagerank_asistencias - a.pagerank_asistencias)[0];
   const dist = T.ros.filter((x) => ok(x.ast_dadas)).sort((a, b) => b.ast_dadas - a.ast_dadas)[0];
   if (hub && dist) ins.push(`<b>${esc(sn(dist.j, T))}</b> es quien más asiste (${fi(dist.ast_dadas)}) y <b>${esc(sn(hub.j, T))}</b> el destino principal de la red de pases (PageRank ${fp(100 * hub.pagerank_asistencias)}).`);
@@ -1271,7 +1315,7 @@ R.equipo = (el) => {
       <div class="label">Los 5 mejores (Net ajustado, escala 0–100)</div><div class="lrows">${top.map((q) => filaQ(q, T)).join("") || '<p class="note">Ningún quinteto llega al mínimo.</p>'}</div>
       ${bot.length ? `<div class="label">Los peores</div><div class="lrows">${bot.map((q) => filaQ(q, T)).join("")}</div>` : ""}
       ${aprende("Se ordena por <b>Net ajustado por muestra</b>: un quinteto con 30 posesiones y +40 de Net no es mejor que uno con 300 y +10. El ajuste acerca cada Net a la media en proporción a lo poco que se ha visto (k = 300 posesiones).", "muestra")}</div>
-    <div class="dcard"><h2>Parejas que más suman</h2><p class="hint">Sinergia WOWY con ${fi(thrP)}+ minutos juntos${T.pf !== S.f ? " (total de la temporada: en playoffs no se calculan parejas)" : ""}.</p>
+    <div class="dcard"><h2>Parejas que más suman</h2><p class="hint">Sinergia WOWY${D.v42 ? " (estimación v4.2)" : ""} con ${fi(thrP)}+ minutos juntos${T.pf !== S.f ? " (total de la temporada: en playoffs no se calculan parejas)" : ""}.</p>
       <div class="lrows">${pTop.map((p) => filaP(p, T)).join("") || '<p class="note">Sin parejas con minutos suficientes.</p>'}</div>
       ${pBot.length ? `<div class="label">Las que menos encajan</div><div class="lrows">${pBot.map((p) => filaP(p, T)).join("")}</div>` : ""}
       ${aprende("<b>Sinergia</b> > 0: la pareja rinde junta más de lo que predice sumar lo que aporta cada uno por separado. Mira también los minutos: con pocos, el número es frágil.", "wowy")}</div>
@@ -1435,8 +1479,8 @@ function qFicha(T) {
 const PMET = {
   min: { lab: "Minutos juntos", tipo: "seq", d: 0, get: (pp) => parV(pp, "min"), tip: "Minutos que han coincidido en pista." },
   pct: { lab: "% de minutos juntos", tipo: "seq", d: 0, get: (pp) => parV(pp, "pct_min_a_con_b"), tip: "Fila → columna: % de los minutos del jugador de la fila que juega con el de la columna (no es simétrico)." },
-  net: { lab: "Net juntos (aj.)", tipo: "div", fam: "net_pareja", sc: 15, d: 0, get: (pp) => parV(pp, "net_rtg_aj"), tip: "Net ajustado por muestra del equipo con los dos en pista (escala 0–100)." },
-  sinergia: { lab: "Sinergia WOWY", tipo: "div", fam: "sinergia_pareja", sc: 12, d: 0, get: (pp) => parV(pp, "sinergia"), tip: "Net juntos − (A sin B + B sin A − ninguno), escala 0–100. Más de 50 = se potencian." },
+  net: { get lab() { return D && D.v42 ? "Net juntos (v4.2)" : "Net juntos (aj.)"; }, tipo: "div", fam: "net_pareja", sc: 15, d: 0, get: (pp) => parV(pp, "net42"), get tip() { return D && D.v42 ? "Net del equipo con los dos en pista, estimación v4.2: la temporada contraída hacia lo que esperan sus jugadores y hacia su historial (escala 0–100)." : "Net ajustado por muestra del equipo con los dos en pista (escala 0–100)."; } },
+  sinergia: { get lab() { return D && D.v42 ? "Sinergia WOWY (v4.2)" : "Sinergia WOWY"; }, tipo: "div", fam: "sinergia_pareja", sc: 12, d: 0, get: (pp) => parV(pp, "sin42"), get tip() { return `Net juntos − (A sin B + B sin A − ninguno), escala 0–100. Más de 50 = se potencian.${D && D.v42 ? " Estimación v4.2: la de la temporada sola, contraída hacia su historial." : ""}`; } },
   sinergia_rapm: { lab: "Sinergia frente al RAPM", tipo: "div", fam: "sinergia_rapm", sc: 8, d: 0, get: (pp) => parV(pp, "sinergia_rapm"), tip: "(Net juntos − Net esperado por el RAPM de los 10 en pista) × peso de la muestra, escala 0–100." },
   ast: { lab: "Asistencias", tipo: "seq", d: 0, get: (pp) => parV(pp, "ast_a_a_b"), tip: "Fila → columna: asistencias del jugador de la fila al de la columna." },
 };
@@ -1451,6 +1495,7 @@ R.parejas = (el) => {
   const met = PMET[ui("pMet", "sinergia")] ? ui("pMet", "sinergia") : "sinergia";
   el.innerHTML = `
   ${T.pf !== S.f ? `<div class="warnbox">Las parejas no se calculan por separado en playoffs: se muestra <b>toda la temporada</b>. Los tríos sí son de playoffs.</div>` : ""}
+  ${notaV42()}
   <div class="gside">
     <div class="dcard"><div class="cardhead"><h2>Matriz de parejas · ${esc(T.nombre)}</h2><button class="btn ghost sm" type="button" data-toggle="pTodos">${ui("pTodos", false) ? "Solo la rotación" : "Mostrar todos"}</button></div>
       <div class="seg" role="group" aria-label="Métrica de la matriz">${Object.entries(PMET).map(([k, m]) => `<button class="segb" type="button" data-set="pMet" data-v="${k}" aria-pressed="${k === met}" ${tipA(m.tip)}>${m.lab}</button>`).join("")}</div>
@@ -1494,7 +1539,7 @@ function pMatriz(T, met) {
     const minj = parV(pp, "min"), c = M.tipo === "div" ? divC(v, max, false, 0.95) : seqC(v, max, 0.92);
     const alpha = M.tipo === "div" ? 0.28 + 0.72 * clamp(minj / 250, 0, 1) : 1;
     const ink = c && lum(c) > 0.32 ? "#0C1210" : "#F3F4F0";
-    const tip = `<b>${esc(J(a).nm)} + ${esc(J(b).nm)}</b><br>${esc(M.lab)}: <b>${M.tipo === "div" ? `${ESC.txt(v)}</b> en la escala (${fs(v0)} pts/100)<b>` : met === "pct" ? fp(v, 0) : f(v, M.d)}</b>${ok(nivelConjunto([a, b])) ? `<br>Nivel conjunto ${ESC.txt(nS("nivel", nivelConjunto([a, b])))}` : ""}<hr>${fm(minj)} juntos (${fp(parV(pp, "pct_min_a_con_b"), 0)} de los de ${esc(sn(a, T))})<br>Net aj. juntos ${fs(parV(pp, "net_rtg_aj"))}<br>Sinergia WOWY ${fs(parV(pp, "sinergia"))} · RAPM ${fs(parV(pp, "sinergia_rapm"))}<br>Asistencias ${esc(sn(a, T))} → ${esc(sn(b, T))}: ${fi(parV(pp, "ast_a_a_b"))}${minj < 120 ? "<br><b>Pocos minutos: poco fiable</b>" : ""}`;
+    const tip = `<b>${esc(J(a).nm)} + ${esc(J(b).nm)}</b><br>${esc(M.lab)}: <b>${M.tipo === "div" ? `${ESC.txt(v)}</b> en la escala (${fs(v0)} pts/100)<b>` : met === "pct" ? fp(v, 0) : f(v, M.d)}</b>${ok(nivelConjunto([a, b])) ? `<br>Nivel conjunto ${ESC.txt(nS("nivel", nivelConjunto([a, b])))}` : ""}<hr>${fm(minj)} juntos (${fp(parV(pp, "pct_min_a_con_b"), 0)} de los de ${esc(sn(a, T))})<br>${v42Txt("net_pareja", pp.p, "n")}<br>${v42Txt("sinergia_pareja", pp.p, "s")}<br>Sinergia frente al RAPM ${fs(parV(pp, "sinergia_rapm"))}<br>Asistencias ${esc(sn(a, T))} → ${esc(sn(b, T))}: ${fi(parV(pp, "ast_a_a_b"))}${minj < 120 ? "<br><b>Pocos minutos: poco fiable</b>" : ""}`;
     g += `<g class="hit" data-a="p" data-v="${esc(pid(a) + "," + pid(b))}" tabindex="0" role="button" aria-label="${esc(J(a).nm)} y ${esc(J(b).nm)}" ${tipA(tip)}><rect x="${x + 1}" y="${y + 1}" width="${cs - 2}" height="${cs - 2}" rx="3" fill="${c ? rgbS(c) : "var(--surface-2)"}" fill-opacity="${alpha.toFixed(2)}" stroke="${isSel ? "var(--ink)" : "none"}" stroke-width="2.2"/>` +
       (cs >= 26 && ok(v) ? `<text x="${x + cs / 2}" y="${y + cs / 2 + 3.5}" text-anchor="middle" font-size="${cs >= 34 ? 10.5 : 9.5}" font-weight="600" fill="${alpha < 0.6 ? "var(--ink)" : ink}" style="pointer-events:none">${M.tipo === "div" ? (ESC.modo === "original" ? fs(v0, 0) : ESC.txt(v)).replace("±", "") : f(v, 0)}</text>` : "") + `</g>`;
   }));
@@ -1524,6 +1569,9 @@ function pFicha(T) {
       <div class="formula" ${tipA("Modelo aditivo (valores originales, pts/100): si no hubiera química, el Net juntos sería lo que aporta A solo más lo que aporta B solo, partiendo de la base «ninguno»")}>Sinergia = ${fs(v("net_rtg_aj"))} − (${fs(v("net_rtg_aj_a_sin_b"))} + ${fs(v("net_rtg_aj_b_sin_a"))} − ${fs(v("net_rtg_aj_ninguno"))}) = <b class="${signCls(sg)}">${fs(sg)}</b></div>
       <p>${lectura}${ok(esperado) ? ` Si no hubiera química, juntos se esperaría un Net de ${fs(esperado)}.` : ""}</p>
       ${aprende(`<b>WOWY</b> («with or without you») compara cuatro situaciones del mismo equipo. «${esc(A)} sin ${esc(B)}» mide lo que aporta ${esc(A)} solo; «ninguno» es la base. Cuidado: si casi siempre juegan juntos, las situaciones «sin» tienen pocos minutos y el cálculo se vuelve inestable.`, "wowy")}</div>
+    ${D.v42 && pp.p.e42 ? (() => { const q = pp.p, xn = v42Info(q, "n"), xs = v42Info(q, "s"); return `<div class="stack" style="gap:6px"><div class="label">Estimación v4.2 (toda la temporada e historial)</div>
+      <div class="kv"><div ${tipA("Net del equipo con los dos en pista: estimación v4.2, escala 0–100")}><span>Net juntos</span><b>${nv42("net_pareja", q, "n")}</b></div><div ${tipA("Sinergia WOWY: estimación v4.2, escala 0–100")}><span>Sinergia</span><b>${nv42("sinergia_pareja", q, "s")}</b></div></div>
+      <p class="note">Rango del 80 %: Net juntos ${xn.hay ? rango42("net_pareja", xn) : "–"}; sinergia ${xs.hay ? rango42("sinergia_pareja", xs) : "–"}. Las barras y la fórmula de arriba son de la temporada sola${T.pf !== "total" ? ` (${esc(FNOM[T.pf])})` : ""}.</p></div>`; })() : ""}
     <div class="stack" style="gap:6px"><div class="label">Frente al RAPM</div>
       <p class="note">Con la calidad (RAPM) de los 10 jugadores que estaban en pista cuando coincidían, se esperaba un Net de <b>${fs(v("net_esperado"))}</b> por 100 posesiones; han hecho <b>${fs(v("net_rtg"))}</b>. Sinergia frente al RAPM, contraída por la muestra: <b>${nv("sinergia_rapm", v("sinergia_rapm"))}</b> en la escala (${fs(v("sinergia_rapm"))}).</p></div>`;
 }
@@ -1531,7 +1579,7 @@ function pTrios(T) {
   const cols = [
     { k: "nom", l: "Trío", txt: 1, cls: "name", get: (t) => nombresQ(ordenarPos(t.u, T), T), fmt: (v) => v },
     { k: "min", l: "Min", d: 0, tip: "Minutos juntos" }, { k: "poss", l: "Pos.", d: 0 },
-    { k: "net_rtg", l: "Net", tip: "Net bruto, escala 0–100", fmt: (v) => nv("net_trio", v, { sinColor: true }) }, { k: "net_rtg_aj", l: "Net aj.", tip: "Net ajustado por muestra, escala 0–100", fmt: (v) => `<b>${nv("net_trio", v)}</b>${nbar("net_trio", v)}` },
+    { k: "net_rtg", l: "Net", tip: "Net bruto, escala 0–100", fmt: (v) => nv("net_trio", v, { sinColor: true }) }, { k: "net42", l: D.v42 ? "Net v4.2" : "Net aj.", tip: D.v42 ? "Net estimado v4.2 (toda la temporada, contraída hacia lo que esperan sus jugadores y hacia su historial), escala 0–100. Rango del 80 % y temporada sola, al pasar el ratón" : "Net ajustado por muestra, escala 0–100", fmt: (v, t) => `<b>${nv42("net_trio", t, "n")}</b>${nbar("net_trio", v)}` },
     { k: "nivel_t", l: "Nivel", tip: "Nivel conjunto (media de L de los tres), escala 0–100", get: (t) => nivelConjunto(t.u), fmt: (v) => (ok(v) ? nivHtml(v) : "–") },
     { k: "net_esperado", l: "Esperado", tip: "Net esperado por el RAPM de los 10 en pista, escala 0–100", fmt: (v) => nv("net_trio", v, { sinColor: true }) },
     { k: "sinergia_rapm", l: "Sinergia", tip: "Sinergia frente al RAPM (contraída por la muestra), escala 0–100", fmt: (v) => `<b>${nv("sinergia_rapm", v)}</b>` },
@@ -1543,9 +1591,9 @@ function pTabla(T) {
   const s = pSel(T);
   const cols = [
     { k: "nom", l: "Pareja", txt: 1, cls: "name", get: (p) => `${sn(p.a, T)} + ${sn(p.b, T)}`, fmt: (v) => esc(v) },
-    { k: "min", l: "Min", d: 0 }, { k: "net_rtg_aj", l: "Net aj.", tip: "Net ajustado juntos, escala 0–100", fmt: (v) => nv("net_pareja", v, { sinColor: true }) },
+    { k: "min", l: "Min", d: 0 }, { k: "net42", l: D.v42 ? "Net v4.2" : "Net aj.", tip: D.v42 ? "Net juntos, estimación v4.2, escala 0–100" : "Net ajustado juntos, escala 0–100", fmt: (v, p) => nv42("net_pareja", p, "n", { sinColor: true }) },
     { k: "nivel_p", l: "Nivel", tip: "Nivel conjunto (media de L de los dos), escala 0–100", get: (p) => nivelConjunto([p.a, p.b]), fmt: (v) => (ok(v) ? nivHtml(v) : "–") },
-    { k: "sinergia", l: "Sinergia", tip: "Sinergia WOWY, escala 0–100", fmt: (v) => `<b>${nv("sinergia_pareja", v)}</b>${nbar("sinergia_pareja", v)}` },
+    { k: "sin42", l: "Sinergia", tip: D.v42 ? "Sinergia WOWY, estimación v4.2, escala 0–100" : "Sinergia WOWY, escala 0–100", fmt: (v, p) => `<b>${nv42("sinergia_pareja", p, "s")}</b>${nbar("sinergia_pareja", v)}` },
     { k: "sinergia_rapm", l: "Sin. RAPM", tip: "Sinergia frente al RAPM, escala 0–100", fmt: (v) => nv("sinergia_rapm", v, { sinColor: true }) },
     { k: "ast", l: "Asist.", d: 0, tip: "Asistencias entre ambos (en los dos sentidos)", get: (p) => (p.ast_a_a_b || 0) + (p.ast_b_a_a || 0) },
   ];
@@ -1782,8 +1830,8 @@ function jFicha(T0) {
     return `<div class="link" ${tipA(`${f(v, 1)} de ${ql} minutos por partido en el ${i + 1}.º cuarto (${fp(r[k], 0)} de sus minutos)`)}><span class="who">${i + 1}.º cuarto</span><span class="bar"><i style="width:${(100 * v) / ql}%;background:var(--accent)"></i></span><span class="n">${f(v, 1)}'</span><span class="n">${fp(r[k], 0)}</span></div>`; }).join("");
   const thrP = 60;
   const socios = T.P.filter((p) => (p.a === j || p.b === j)).map((p) => ({ p, o: p.a === j ? p.b : p.a })).sort((a, b) => b.p.min - a.p.min);
-  const best = socios.filter((s) => s.p.min >= thrP && ok(s.p.sinergia)).sort((a, b) => b.p.sinergia - a.p.sinergia);
-  const filaS = (s) => `<button class="lrow" type="button" data-a="p" data-v="${esc(pid(j) + "," + pid(s.o))}"><span class="who">${esc(sn(s.o, T))}<small>${fm(s.p.min)} juntos · ${fp(s.p.a === j ? s.p.pct_min_a_con_b : s.p.pct_min_b_con_a, 0)} de sus minutos</small></span>${nbar("sinergia_pareja", s.p.sinergia)}<span class="v">${nv("sinergia_pareja", s.p.sinergia)}</span></button>`;
+  const best = socios.filter((s) => s.p.min >= thrP && ok(s.p.sin42)).sort((a, b) => b.p.sin42 - a.p.sin42);
+  const filaS = (s) => `<button class="lrow" type="button" data-a="p" data-v="${esc(pid(j) + "," + pid(s.o))}"><span class="who">${esc(sn(s.o, T))}<small>${fm(s.p.min)} juntos · ${fp(s.p.a === j ? s.p.pct_min_a_con_b : s.p.pct_min_b_con_a, 0)} de sus minutos</small></span>${nbar("sinergia_pareja", s.p.sin42)}<span class="v">${nv42("sinergia_pareja", s.p, "s")}</span></button>`;
   const da = T.A.filter((a) => a.p === j).sort((a, b) => b.ast - a.ast).slice(0, 3), re = T.A.filter((a) => a.r === j).sort((a, b) => b.ast - a.ast).slice(0, 3);
   const ef = T.E.filter((e) => e.xi === j && Math.min(e.fga_con, e.fga_sin) >= 40 && ok(e.d_pts100)).sort((a, b) => b.d_pts100 - a.d_pts100);
   const efIn = T.E.filter((e) => e.yi === j && Math.min(e.fga_con, e.fga_sin) >= 40 && ok(e.d_pts100)).sort((a, b) => b.d_pts100 - a.d_pts100);
@@ -1798,7 +1846,7 @@ function jFicha(T0) {
       <div class="kv"><div><span>Titular</span><b>${fi(r.titular_partidos)}/${fi(r.gp)}</b></div><div ${tipA("Partidos en los que estaba en pista en el último tramo")}><span>Cierra</span><b>${fi(r.cierra_partidos)}/${fi(r.gp)}</b></div><div><span>Relevos/p</span><b>${f(r.relevos_por_partido, 1)}</b></div><div><span>Min/relevo</span><b>${f(r.min_por_relevo, 1)}</b></div><div ${tipA("Minutos en clutch y Net del equipo en ellos (escala 0–100)")}><span>Clutch</span><b>${fm(r.clutch_min)} · ${nv("net_equipo", r.clutch_net_rtg, { sinColor: true })}</b></div><div><span>Basura</span><b>${fm(r.basura_min)}</b></div></div></div>` : ""}
     <div class="stack" style="gap:6px"><div class="label">Dónde tira</div>${zonasSVG(r, null, o.nm)}</div>
     ${socios.length ? `<div class="stack" style="gap:5px"><div class="label">Socios con más minutos</div><div class="lrows">${socios.slice(0, 4).map(filaS).join("")}</div>
-      ${best.length > 1 ? `<div class="label">Mejor y peor encaje (sinergia WOWY, ${thrP}+ min)</div><div class="lrows">${filaS(best[0])}${filaS(best[best.length - 1])}</div>` : ""}</div>` : ""}
+      ${best.length > 1 ? `<div class="label">Mejor y peor encaje (sinergia WOWY${D.v42 ? " v4.2" : ""}, ${thrP}+ min)</div><div class="lrows">${filaS(best[0])}${filaS(best[best.length - 1])}</div>` : ""}</div>` : ""}
     ${da.length || re.length ? `<div class="stack" style="gap:4px"><div class="label">Pases</div>${(() => { const mx = Math.max(1, ...da.map((a) => a.ast), ...re.map((a) => a.ast)); const fila = (j2, a, col) => `<div class="link"><span class="who">${btnJ(j2, T)}</span><span class="bar"><i style="width:${(100 * a.ast) / mx}%;background:${col}"></i></span><span class="n">${fi(a.ast)}</span><span></span></div>`;
         return (da.length ? `<p class="note">Asiste sobre todo a…</p>${da.map((a) => fila(a.r, a, "var(--accent)")).join("")}` : "") + (re.length ? `<p class="note">Le asisten sobre todo…</p>${re.map((a) => fila(a.p, a, rgbS(PAL.pos))).join("")}` : ""); })()}
       <button class="btn ghost sm" type="button" data-a="nx" data-v="${esc(pid(j))}" data-ir="conexiones">Ver en la red →</button></div>` : ""}
@@ -1834,7 +1882,7 @@ R.liga = (el) => {
   const Qf = D.Q.filter((q) => q.fase === fz), Pf = D.P.filter((p) => p.fase === (fz === "playoffs" ? "total" : fz)), Of = D.on.filter((r) => r.fase === fz);
   const tq = ui(`lQ:${S.l}`, umbral(Qf.map((q) => q.poss), 40, 200, 10, 30)), tp = ui(`lP:${S.l}`, umbral(Pf.map((p) => p.min), 60, 400, 10, 60)), tj = ui(`lJ:${S.l}`, umbral(Of.map((r) => r.min_on), 150, 800, 25, 100));
   const qTop = Qf.filter((q) => q.poss >= tq).sort((a, b) => b.net_rtg_aj - a.net_rtg_aj).slice(0, 15);
-  const pTop = Pf.filter((p) => p.min >= tp && ok(p.sinergia)).sort((a, b) => b.sinergia - a.sinergia).slice(0, 15);
+  const pTop = Pf.filter((p) => p.min >= tp && ok(p.sin42)).sort((a, b) => b.sin42 - a.sin42).slice(0, 15);
   const jr = Of.filter((r) => (r.min_on || 0) >= tj && ok(r.rapm)).sort((a, b) => b.rapm - a.rapm);
   const jTop = jr.slice(0, 10), jBot = jr.slice(-10).reverse();
   const nomQ = (q) => ordenarPos(q.u, null).map((j) => J(j).sur).join(" · ");
@@ -1850,8 +1898,8 @@ R.liga = (el) => {
       <div class="tablebox flat"><table aria-label="Mejores quintetos"><thead><tr><th class="txt sticky">Quinteto</th><th class="txt">Equipo</th><th>Min</th><th ${tipA("Net ajustado por muestra, escala 0–100")}>Net aj.</th></tr></thead><tbody>${qTop.map((q) => filaL("lq", q.net_rtg_aj, esc(nomQ(q)), `${q.team_id}|${qKey(q)}`, `<td>${fm(q.min)}</td>`, `${esc(D.eqn[q.team_id])}<br>${fi(q.poss)} posesiones · Net ajustado ${fs(q.net_rtg_aj)} pts/100 (bruto ${fs(q.net_rtg)})${ok(nivelConjunto(q.u)) ? `<br>Nivel conjunto ${ESC.txt(nS("nivel", nivelConjunto(q.u)))}` : ""}`, "net_quinteto")).join("") || `<tr><td colspan="4" class="txt muted">Ninguno llega al mínimo.</td></tr>`}</tbody></table></div>
       ${aprende("Con el Net ajustado, un quinteto necesita muchas posesiones para destacar de verdad: es una clasificación prudente.", "muestra")}</div>
     <div class="dcard"><h2>Parejas con más sinergia</h2>${sld(`lP:${S.l}`, tp, maxPm, 10, "Mínimo de minutos juntos", "'")}
-      ${fz === "playoffs" ? `<p class="note">En playoffs se usa toda la temporada.</p>` : ""}
-      <div class="tablebox flat"><table aria-label="Parejas con más sinergia"><thead><tr><th class="txt sticky">Pareja</th><th class="txt">Equipo</th><th>Min</th><th ${tipA("Sinergia WOWY, escala 0–100")}>Sinergia</th></tr></thead><tbody>${pTop.map((p) => filaL("lp", p.sinergia, `${esc(J(p.a).sur)} + ${esc(J(p.b).sur)}`, `${p.team_id}|${pid(p.a)},${pid(p.b)}`, `<td>${fm(p.min)}</td>`, `${esc(J(p.a).nm)} + ${esc(J(p.b).nm)}<br>${esc(D.eqn[p.team_id])}<br>Sinergia ${fs(p.sinergia)} pts/100 · Net aj. juntos ${fs(p.net_rtg_aj)}`, "sinergia_pareja")).join("") || `<tr><td colspan="4" class="txt muted">Ninguna llega al mínimo.</td></tr>`}</tbody></table></div></div>
+      ${fz === "playoffs" ? `<p class="note">En playoffs se usa toda la temporada.</p>` : ""}${notaV42()}
+      <div class="tablebox flat"><table aria-label="Parejas con más sinergia"><thead><tr><th class="txt sticky">Pareja</th><th class="txt">Equipo</th><th>Min</th><th ${tipA(D.v42 ? "Sinergia WOWY, estimación v4.2, escala 0–100" : "Sinergia WOWY, escala 0–100")}>Sinergia</th></tr></thead><tbody>${pTop.map((p) => filaL("lp", p.sin42, `${esc(J(p.a).sur)} + ${esc(J(p.b).sur)}`, `${p.team_id}|${pid(p.a)},${pid(p.b)}`, `<td>${fm(p.min)}</td>`, `${esc(J(p.a).nm)} + ${esc(J(p.b).nm)}<br>${esc(D.eqn[p.team_id])}<br>${v42Txt("sinergia_pareja", p, "s")}<br>${v42Txt("net_pareja", p, "n")} (juntos)`, "sinergia_pareja")).join("") || `<tr><td colspan="4" class="txt muted">Ninguna llega al mínimo.</td></tr>`}</tbody></table></div></div>
   </div>
   <div class="dcard"><h2>RAPM: los que más y menos aportan</h2>${sld(`lJ:${S.l}`, tj, maxJm, 25, "Mínimo de minutos", "'")}
     <div class="g2">${[["Los 10 mejores", jTop], ["Los 10 peores", jBot]].map(([t, rows]) => `<div class="stack"><h3>${t}</h3><div class="tablebox flat"><table aria-label="${t}"><thead><tr><th class="txt sticky">Jugador</th><th class="txt">Equipo</th><th ${tipA("RAPM ofensivo, escala 0–100")}>ORAPM</th><th ${tipA("RAPM defensivo (más de 50 = mejor), escala 0–100")}>DRAPM</th><th ${tipA("RAPM, escala 0–100")}>RAPM</th></tr></thead><tbody>${rows.map((r) => filaL("lj", r.rapm, esc(J(r.j).nm), `${r.team_id}|${pid(r.j)}`, `<td>${nv("orapm_liga", r.orapm, { sinColor: true })}</td><td>${nv("drapm_liga", r.drapm, { sinColor: true })}</td>`, `${esc(J(r.j).nm)} · ${esc(D.eqn[r.team_id])}<br>${fm(r.min_on)} · RAPM ${fs(r.rapm)} pts/100 · on−off ${fs(r.net_rtg_onoff)}`, "rapm_liga")).join("")}</tbody></table></div></div>`).join("")}</div>

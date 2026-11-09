@@ -35,6 +35,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from bbmodel.mesa_quintetos import _equipos_alcance
+
 RAIZ = Path(__file__).resolve().parents[2]
 DIR_PROC = RAIZ / "data" / "processed"
 DIR_V42 = RAIZ / "data" / "modelos" / "v4_2" / "unidades"
@@ -54,13 +56,18 @@ def _mostradas(liga: str, temporada: str) -> tuple[set[str], set[str]] | None:
     if not ft.exists() and not fp.exists():
         return None
     tri, par = set(), set()
+    alcance = _equipos_alcance(liga, temporada)      # NCAA: sólo el top-50, como la página
     if ft.exists():
         t = pd.read_csv(ft, dtype={"team_id": str, "unidad": str}, usecols=["team_id", "unidad", "fase", "min"])
+        if alcance:
+            t = t[t["team_id"].isin(alcance)]
         t = t.sort_values("min", ascending=False).groupby(["team_id", "fase"]).head(TRIOS_POR_EQUIPO_FASE)
         tri = set(t["team_id"] + "#" + t["unidad"].map(_clave))
     if fp.exists():
         p = pd.read_csv(fp, dtype={"team_id": str, "unidad": str}, usecols=["team_id", "unidad", "fase", "min"])
         p = p[(p["min"] >= MIN_PAREJA) & p["fase"].isin(["regular", "total"])]
+        if alcance:
+            p = p[p["team_id"].isin(alcance)]
         par = set(p["team_id"] + "#" + p["unidad"].map(_clave))
     return tri, par
 
@@ -90,6 +97,9 @@ def exportar(salida: Path = SALIDA, ligas: list[str] | None = None, temporadas: 
     pares = sorted(set(zip(tr["liga"], tr["temporada"])) | set(zip(pa["liga"], pa["temporada"])))
     indice = {"generado": datetime.now(timezone.utc).isoformat(timespec="seconds"), "version": "4.2",
               "fuente": "data/modelos/v4_2/unidades (bbequipo/v42/unidades.py exportar)", "temporadas": {}}
+    fi = salida / "indice.json"
+    if (ligas or temporadas) and fi.exists():      # exportación parcial: se conserva el resto del índice
+        indice["temporadas"] = json.loads(fi.read_text(encoding="utf-8")).get("temporadas", {})
     total, n_t, n_p = 0, 0, 0
     for liga, temp in pares:
         if (ligas and liga not in ligas) or (temporadas and temp not in temporadas):
@@ -121,7 +131,7 @@ def exportar(salida: Path = SALIDA, ligas: list[str] | None = None, temporadas: 
     salida.mkdir(parents=True, exist_ok=True)
     (salida / "indice.json").write_text(json.dumps(indice, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     nf = sum(len(v) for v in indice["temporadas"].values())
-    return {"ficheros": nf, "bytes": total, "trios": n_t, "parejas": n_p, "salida": str(salida)}
+    return {"ficheros": nf, "bytes_escritos": total, "bytes_indice": sum(x["bytes"] for v in indice["temporadas"].values() for x in v.values()), "trios": n_t, "parejas": n_p, "salida": str(salida)}
 
 
 def main() -> None:
