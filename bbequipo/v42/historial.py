@@ -252,7 +252,9 @@ def exportar(destino: Path | None = None) -> dict:
             Pp = u["P"] + par[m]["tau2"] * (a - u["anio"])
             ids = u["persona_id"].astype(int).astype(str)
             # tamaño: en una temporada cerrada sólo hacen falta los jugadores que la juegan; en la en curso, todos (llegan nuevos)
-            keep = ids.isin(presentes[a]).to_numpy() if a != en_curso else np.ones(len(u), bool)
+            # (en curso: quienes jugaron alguna de las dos temporadas anteriores; quien vuelva tras más tiempo parte de la
+            # previa de su posición, como un recién llegado)
+            keep = ids.isin(presentes[a]).to_numpy() if a != en_curso else (u["anio"] >= a - 2).to_numpy()
             prev[m] = dict(zip(ids[keep], zip(np.round(u["m"].to_numpy()[keep], 4).tolist(), [float(f"{x:.4g}") for x in Pp.to_numpy()[keep]])))
         personas = sorted(set().union(*[set(v) for v in prev.values()])) if prev else []
         doc = {"version": "v4.2", "temporada": t, "metricas": pasan, "parametros": par,
