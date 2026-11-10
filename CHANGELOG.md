@@ -1,5 +1,19 @@
 # Registro de cambios
 
+## 2026-11-10 — Liga U de la ACB (sub-22): liga 21 del sistema
+
+* Fuente: la misma plataforma que las FEB (`baloncestoenvivo.feb.es`, competición `g=74`; `intrafeb.feb.es` KeyFacts y
+  BoxScore). Temporadas 2025-26 (206/206 partidos con jugada a jugada) y 2026-27 (en curso, en el botón). Adaptador FEB:
+  la página de equipo se pide por `/equipo/<id>` (Equipo.aspx redirigía a http://).
+* Decisiones prerregistradas (`.claude/skills/anadir-liga/decisiones/ligau.md`): escalón de contracción propio, país
+  ES, grupo `feb` de la v4.0, coordenadas FEB, id de persona FEB común con Primera/Segunda/Tercera FEB.
+* Reajuste global con 21 ligas (cadena de la skill): Liga U PER −2,97 σ frente a la EuroLeague (83 puentes, ±0,10; no
+  provisional). Demás ligas: niveles A |Δ| ≤ 0,11; normalizado v3.2 2025-26 |Δ| medio 0,5 PER (ACB −0,86, FEB +0,4/+0,8).
+  Estilos: `configs/styles.yaml → mezcla.k_fijo: 6` (la regla daría K = 7). Simuladores: auditorías sin fallos y
+  paridad; examen hacia la Liga U MAE minutos 5,5 (resto 5,0). v4.2 sin cambios apreciables.
+* Publicado en Jugadores (v36), Equipos (v12) y Metodología (v11). Skills `anadir-liga` (precedente FEB, incidencias)
+  y `actualizar-temporada` (21 ligas; hosts FEB en la red del entorno) actualizadas.
+
 ## 2026-11-10 — Lectura de fichaje sin textos de rango ni de confianza (comentario del CEO)
 
 * `artifact/kerno/atlas/informe_v3.js`: Nivel Kerno, Impacto y Net del equipo con él muestran solo la cifra; la franja

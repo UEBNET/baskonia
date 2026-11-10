@@ -150,3 +150,6 @@ Liga Endesa. Decisiones, cobertura y resultados: `.claude/skills/anadir-liga/dec
 * **Modelo (DECISIONES fijadas antes de ajustar):** escalón de contracción propio (`ligau: [ligau]`), país ES, grupo
   `feb` de la v4.0 (referencia IMPACTO `resto`), coordenadas de tiro del sistema FEB, 26 partidos de temporada regular
   por equipo en el simulador; en la recalibración de salida del simulador cuenta como origen `resto`.
+* **Resultados [DATO]** (cadena completa del 09/10-11-2026): nivel A PER −2,97 ± 0,10 (83 puentes, no provisional),
+  entre la Segunda y la Tercera FEB. Cambio en las demás ligas, simulador, estilos (K fijado en 6) y v4.2: ver
+  `decisiones/ligau.md` §4. Publicado en los tres artifacts (Jugadores v36, Equipos v12, Metodología v11).

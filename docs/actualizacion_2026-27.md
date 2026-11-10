@@ -6,6 +6,10 @@ que sigue la skill `.claude/skills/actualizar-temporada` → `python -m bbactual
 (rama `claude/jolly-thompson-qczxl4` desde el 09-11-2026; antes `claude/gallant-pascal-49bx9o`) y republicación de
 **los tres artifacts** de Kerno con sólo los ficheros de cada uno que cambian.
 
+**Ligas (10-11-2026): 21**, todas las `activa: true` de `config/sources.json`; la última, la Liga U de la ACB
+(`ligau`, adaptador FEB, competición `g=74`; necesita los hosts `baloncestoenvivo.feb.es` e `intrafeb.feb.es` en la red
+del entorno de la Routine).
+
 **v4.2 · tres artifacts (09-11-2026).** Kerno Analytics se dividió por secciones (docs/checkpoints/V42_sitios.md):
 Jugadores (https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, la URL de siempre, con el botón), Equipos
 (https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj) y Metodología (https://claude.ai/artifact/T83MBGZk5untACmegadfNn).

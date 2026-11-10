@@ -52,8 +52,28 @@ ids, cambios y coordenadas) en todos los partidos.
 
 ## 4. Resultados (Fase 6) [DATO]
 
-(se completa tras la cadena)
+* **Nivel A** (PER, DT de la EuroLeague, 2025-26): **−2,97 ± 0,10**, 83 puentes → **no provisional** (regla: < 50
+  puentes o error > 0,25). Entre la Segunda FEB (−1,81) y la Tercera FEB (−3,15). pts/100 −2,77; TS% −2,58.
+* **Identidad:** 214 de las 347 personas de la Liga U tienen otra liga (Tercera FEB 183, ACB 57, Segunda FEB 38,
+  BCL 18, Primera FEB 15, FEC 14, EuroCup 12, EuroLeague 5…).
+* **Estilos:** con la Liga U en la población la regla de selección de K daría 7 estilos; se fija K = 6 (taxonomía
+  vigente, `configs/styles.yaml → mezcla.k_fijo`). El 97 % de los equipos conserva su estilo principal (ARI 0,94).
+  Liga U 2025-26/26-27: old school 10, spacing 8, circulación 7, pistons 2, pintura 2.
+* **Simulador:** auditorías v3.2 y v3.3 sin fallos; paridad Python/navegador dentro de tolerancia. Examen (destino
+  2025-26): 30 fichajes hacia la Liga U (17 desde la Tercera FEB, 9 desde la Segunda): MAE de minutos 5,5 (resto
+  5,0) y de pts/100 6,1 (resto 4,2). En el examen sin fuga (corte ≤ 2024-25) la Liga U no existe aún: sin
+  predicción de producción para ella (correcto). El resto del examen no cambia (MAE minutos 4,99; pts/100 4,30).
+* **Cambio en las demás ligas:** niveles A, |Δ| PER ≤ 0,11 (FEC −0,11; ACB −0,01). Normalizado v3.2 de 2025-26: |Δ|
+  medio 0,51 PER (DT 7,8), 0,43 pts/100; por liga, ACB −0,86 PER de media, Tercera FEB +0,84, Segunda +0,60,
+  Primera +0,37; las demás, |media| < 0,3.
+* **Capas v4.2:** parámetros D3 prácticamente iguales (p. ej. tríos τ² 19,384 → 19,385); Net v4.2 de tríos y
+  parejas de 2025-26 de las demás ligas: diferencia máxima 0,0006 pts/100.
+* **Botón:** `bbactualiza --sin-descarga --forzar` → `ok`; la Liga U aparece en `data/artifact/2026-27/indice.json`.
+* **Incidencias:** reinicio del contenedor durante la normalización v3.2 (se reanudó por pasos) y falta de memoria
+  en `bbequipo rapm-producto` (pico ≈ 14 GB de 15): se añadió un fichero de intercambio de 12 GB (`/swapfile`).
 
-## 5. Publicación (Fase 7)
+## 5. Publicación (Fase 7) [DATO]
 
-(se completa tras publicar)
+Publicación completa (10-11-2026): Jugadores versión 36 (3 lotes), Equipos versión 12 (4 lotes), Metodología
+versión 11 (3 lotes). Quintetos y tríos/parejas v4.2 de la Liga U (2025-26 y 2026-27) en Equipos y Metodología.
+Antes se incorporaron al repositorio las versiones publicadas de `atlas/informe_v3.js` e `informe_equipo.js`.

@@ -123,3 +123,11 @@ en la página de quintetos. Scripts en línea de `index.html` y `clasico.html`: 
 **Primera publicación con el reparto (09-11-2026):** los tríos y parejas v4.2 de 2026-27 rehechos con los datos al día
 (13 480 tríos y 18 039 parejas frente a 7 907 y 13 761; G League aparece por primera vez, ruta nueva anotada en los
 manifiestos) en Equipos (versión 5) y Metodología (versión 5): 20 ficheros, 0,3 MB, página de cada sitio sin cambios.
+
+
+## Liga U (10-11-2026)
+
+Publicación completa con la liga 21: Jugadores versión 36 (88 ficheros en 3 lotes, 164 MB), Equipos versión 12
+(329 ficheros en 4 lotes, 174 MB; 368 ficheros publicados) y Metodología versión 11 (315 ficheros en 3 lotes, 166 MB).
+Rutas nuevas, en Equipos y Metodología: `quintetos/datos/<t>/ligau.gz.txt` y `quintetos/datos_v42/<t>/ligau.gz.txt`
+(2025-26 y 2026-27), anotadas en los manifiestos.

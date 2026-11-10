@@ -184,6 +184,16 @@ comando: los pasos hechos se saltan. La cadena **renombra** las cachés anterior
 `cache_*_antes_id_<fecha>`, varios GB): bórralas al terminar si falta disco. Son varias horas (redes CVAE ≈ 37 min con 4 procesos; exámenes del simulador y
 de la v4.0, lo más largo).
 
+**Incidencias conocidas (Liga U, 10-11-2026):**
+* `bbfit estilos --reusar-k` no reutiliza la tabla de K si cambia la población (una liga más): la regla puede elegir
+  otro K y entonces la adaptación falla (`KeyError: p_pistons`). `configs/styles.yaml → mezcla.k_fijo: 6` conserva la
+  taxonomía vigente; si se quiere revisar el número de estilos, es una decisión aparte con el usuario.
+* `bbequipo rapm-producto` llega a ≈ 14 GB de memoria con 21 ligas: en una máquina de 15 GB, añade antes un fichero de
+  intercambio (`fallocate -l 12G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile`).
+* Si el contenedor se reinicia, relanza `cadena.sh`: retoma en el paso que quedó a medias.
+* Antes de publicar, otra sesión puede haber publicado cambios (p. ej. la lectura de fichaje): compara las páginas
+  y los `.js` publicados con `artifact/kerno/` justo antes de la Fase 7 y fusiona la rama del botón.
+
 Los exámenes prerregistrados de la v4.0 (`bbequipo rapm-examen`, `sinergia-examen`, `conjunto-examen`,
 `equipo-examen`, `anclas-examen`) no van en la cadena: las decisiones vigentes se conservan. Ejecútalos si el
 usuario quiere saber cómo rinde la v4.0 con la liga nueva (recomendable si la liga es grande o muy distinta).
