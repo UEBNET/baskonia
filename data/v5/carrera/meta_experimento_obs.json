@@ -1,0 +1,12 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F4",
+ "config": "configs/v5/f4.yaml",
+ "hash_config": "d36db6a254df",
+ "hash_datos_entrada": "4af57cb2bbbde3cb",
+ "fecha": "2026-11-10T12:51:56+00:00",
+ "python": "3.13.18",
+ "paso": "experimento_obs",
+ "filas": 36,
+ "tiempo_s": 59
+}

@@ -215,9 +215,9 @@ def ajustar(M: dict, variante: str, tau0_ini: float, con_hessiana: bool = False)
           "log_s_R": np.log(0.3 * tau0_ini), "log_tau0": np.log(tau0_ini), "kappa": 0.0, "log_c": 0.0}
     x = np.r_[[x0[k] for k in libres], np.zeros(nq)]
     f = _nll_jax(M, libres, fijos, Q)
-    lim = {"log_c": (np.log(0.3), np.log(3.0)), "kappa": (-3.0, 3.0)}
+    lim = {"log_c": (np.log(0.05), np.log(5.0)), "kappa": (-3.0, 3.0)}
     b = [lim.get(k, (np.log(1e-4), np.log(10.0))) for k in libres] + [(-5.0, 5.0)] * nq
-    r = optimize.minimize(f, x, jac=True, method="L-BFGS-B", bounds=b, options={"maxiter": 500})
+    r = optimize.minimize(f, x, jac=True, method="L-BFGS-B", bounds=b, options={"maxiter": 2000})
     th = dict(fijos)
     th.update({k: float(r.x[i]) for i, k in enumerate(libres)})
     beta = np.asarray(r.x[len(libres):]) if edad else np.zeros(nb)
@@ -319,3 +319,30 @@ def simular(M: dict, mod: dict, rng) -> dict:
     S["y"] = np.where(M["mask"], y, 0.0)
     S["a_verdadero"] = a
     return S
+
+
+# ------------------------------------------------------------------ peso aprendido de cada temporada pasada
+def pesos_temporadas(mod: dict, v_tipica: float, n_temp: int = 4, edad_final: float = 27.0,
+                     cambio_liga_ultimo: bool = False, cambio_rol_ultimo: bool = False) -> np.ndarray:
+    """Peso de cada temporada pasada (de la más antigua a la última) en la predicción del nivel de la siguiente, para
+    un jugador tipo con n_temp temporadas consecutivas de exposición típica (v_tipica). La predicción del filtro es
+    lineal en las observaciones: m = Σ w_k y_k + resto; w_k se obtiene con observaciones unitarias. El resto (1 − Σw)
+    es el peso del prior (la media de su rol en la liga)."""
+    edades = edad_final - np.arange(n_temp)[::-1] - 1
+    base = {"y": np.zeros((1, n_temp)), "v": np.full((1, n_temp), v_tipica), "gap": np.r_[0, np.ones(n_temp - 1)][None],
+            "cl": np.zeros((1, n_temp)), "cr": np.zeros((1, n_temp)), "mask": np.ones((1, n_temp), bool),
+            "B": base_edad(edades)[None], "rol": np.zeros((1, n_temp), int), "personas": np.array(["tipo"])}
+    if cambio_liga_ultimo:
+        base["cl"][0, -1] = 1.0
+    if cambio_rol_ultimo:
+        base["cr"][0, -1] = 1.0
+    th = mod["th"]
+    beta = np.zeros_like(mod["beta"])         # los pesos no dependen de la curva de edad (sólo desplaza la media)
+    _, o0 = filtrar(base, th, beta)
+    w = np.zeros(n_temp)
+    for k in range(n_temp):
+        M = {**base, "y": base["y"].copy()}
+        M["y"][0, k] = 1.0
+        _, o = filtrar(M, th, beta)
+        w[k] = o["a"][0, -1] - o0["a"][0, -1]
+    return w

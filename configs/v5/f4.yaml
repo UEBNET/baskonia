@@ -8,8 +8,11 @@ examen:
   procesos: 4
   cortes: [2023, 2024, 2025]          # temporada objetivo (año de inicio): se ajusta con las anteriores
   min_minutos: 100                    # en la liga principal de la temporada objetivo
-  variantes: [solo_ultima, solo_ultima_deriva, deriva, d1, completo_sin_edad, completo, completo_gp, completo_rol]
+  variantes: [solo_ultima, solo_ultima_deriva, deriva, d1, completo_sin_edad, completo, completo_gp, completo_rol, completo_solo_ultima]
 seleccion:
   # regla fijada antes de ver el examen: entre las variantes con la cobertura del 80 % en [0,76; 0,84] en la mayoría
   # de las métricas, la de menor CRPS relativo medio; si otra más simple está a menos de 1 error estándar, la simple
   orden_simplicidad: [solo_ultima, solo_ultima_deriva, deriva, d1, completo_sin_edad, completo, completo_gp, completo_rol]
+experimento_obs:
+  metricas: [blk_pct, stl_p100, t3_pct, tpar, ast_pct, dreb_pct]
+  corte: 2024

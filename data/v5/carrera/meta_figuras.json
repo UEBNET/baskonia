@@ -1,0 +1,17 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F4",
+ "config": "configs/v5/f4.yaml",
+ "hash_config": "d36db6a254df",
+ "hash_datos_entrada": "4af57cb2bbbde3cb",
+ "fecha": "2026-11-10T13:00:25+00:00",
+ "python": "3.13.18",
+ "paso": "figuras",
+ "figuras": [
+  "docs/v5/figuras/f4_cobertura80.png",
+  "docs/v5/figuras/f4_historial.png",
+  "docs/v5/figuras/f4_pesos_temporadas.png",
+  "docs/v5/figuras/f4_curvas_edad.png"
+ ],
+ "tiempo_s": 1
+}

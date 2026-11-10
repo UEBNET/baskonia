@@ -88,7 +88,7 @@ def corte(o: pd.DataFrame, h: pd.DataFrame, casos_f3: pd.DataFrame, hiper_f3: pd
     c = casos_f3[(casos_f3["metrica"] == metrica) & (casos_f3["temporada"].str[:4].astype(int) < anio)]
     der = VM.deriva_momentos(c, hiper_f3)
     tau2_d = float(der[der["liga"] == "todas"]["tau2_d"].iloc[0])
-    filas, hip = [], []
+    filas, hip, ajustados = [], [], {}
     for v in variantes:
         if v == "solo_ultima":
             mod, sol = MOD.fijo(v, 0.0, tau0), True
@@ -96,8 +96,11 @@ def corte(o: pd.DataFrame, h: pd.DataFrame, casos_f3: pd.DataFrame, hiper_f3: pd
             mod, sol = MOD.fijo(v, 2 * tau2_d, tau0), True
         elif v == "deriva":
             mod, sol = MOD.fijo(v, 2 * tau2_d, tau0), False
+        elif v.endswith("_solo_ultima"):    # mismo modelo ajustado, pero prediciendo sólo desde la última temporada
+            mod, sol = ajustados[v[: -len("_solo_ultima")]], True
         else:
             mod, sol = MOD.ajustar(M, v, tau0), False
+            ajustados[v] = mod
         pred = MOD.predecir(M, mod, obj, solo_ultima=sol)
         filas.append(evaluar(pred, fam, v, rng).assign(metrica=metrica, anio=anio))
         hip.append({"metrica": metrica, "anio_objetivo": anio, "variante": v, "tau2_d": tau2_d, "tau0_f3": tau0,

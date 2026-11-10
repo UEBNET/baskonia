@@ -6,6 +6,7 @@
 Pasos:
 - datos: series por persona, temporada y métrica desde la capa de medida (bbnorm5/carrera/datos.py)
 - examen: examen fuera de tiempo de las variantes (bbnorm5/carrera/examen.py, modelo.py)
+- experimento_obs: observación por logit empírico frente a posterior F3 ÷ prior (descartada)
 - final: selección de la variante (regla fijada en la configuración) y ajuste con todas las temporadas: hiperparámetros,
   curvas de edad con bandas y nivel de carrera filtrado de cada persona-temporada
 - simulacion: examen de nivel por simulación con el diseño real (recuperación de parámetros y cobertura del nivel)
@@ -63,6 +64,29 @@ def examen(cfg: dict) -> dict:
     return {"casos": len(casos), "metricas": len(mets)}
 
 
+def experimento_obs(cfg: dict) -> dict:
+    """Experimento: observación de la temporada por logit empírico (por defecto) o por la posterior F3 ÷ prior."""
+    from bbnorm5.carrera import datos as CD
+    from bbnorm5.carrera import examen as EX
+    from bbnorm5.medida import datos as DM
+    d = DM.cargar()
+    h = pd.read_csv(DM.DIR / "hiperparametros.csv")
+    post = pd.read_parquet(DM.DIR / "posteriores.parquet")
+    nac = CD.nacimiento_persona(cfg["temporadas"])
+    casos = pd.read_parquet(DM.DIR / "validacion_casos.parquet")
+    res = []
+    for met in cfg["experimento_obs"]["metricas"]:
+        for modo in ("empirica", "posterior"):
+            o = CD.observaciones(d, met, h, post, nac, modo)
+            c, _ = EX.corte(o, CD._hiper_preferido(h), casos[casos["metrica"] == met], h, met,
+                            cfg["experimento_obs"]["corte"], cfg["semilla"], ["solo_ultima", "completo",
+                                                                              "completo_solo_ultima"])
+            res.append(EX.resumen(c, ["modelo"]).assign(metrica=met, modo=modo))
+    r = pd.concat(res, ignore_index=True)
+    r.to_csv(CD.DIR / "experimento_observacion.csv", index=False)
+    return {"filas": len(r)}
+
+
 def seleccion(cfg: dict) -> tuple[str, pd.DataFrame]:
     """Regla de la configuración: cobertura 80 % en rango en la mayoría de métricas; menor CRPS relativo medio (frente
     a `solo_ultima`); a igualdad dentro de 1 EE (bootstrap por persona), la más simple."""
@@ -97,7 +121,7 @@ def final(cfg: dict) -> dict:
     elegido, s = seleccion(cfg)
     o = CD.cargar()
     h = CD._hiper_preferido(pd.read_csv(DM.DIR / "hiperparametros.csv"))
-    hip, curvas, niveles = [], [], []
+    hip, curvas, niveles, pesos = [], [], [], []
     var_aj = elegido if elegido in MOD.VARIANTES else "completo"
     for met in DM.METRICAS:
         x = o[o["metrica"] == met]
@@ -107,8 +131,14 @@ def final(cfg: dict) -> dict:
         hip.append({"metrica": met, "variante": var_aj, **{k: mod["th"].get(k, np.nan) for k in MOD.PARAMS},
                     "logL": mod["logL"], "convergio": mod["convergio"],
                     **{f"se_{k}": float(np.sqrt(max(mod["cov"][i, i], 0))) for i, k in enumerate(mod["libres"])}})
-        if len(mod["beta"]) and np.any(mod["beta"] != 0):
-            curvas.append(MOD.curva_edad(mod).assign(metrica=met))
+        con_edad = mod if MOD.VARIANTES[var_aj][1] else MOD.ajustar(M, "completo", tau0, con_hessiana=True)
+        curvas.append(MOD.curva_edad(con_edad).assign(metrica=met, variante=con_edad["variante"]))
+        vt = float(x.loc[x["min_temp"] >= 300, "v"].median())
+        for esc, cl, cr in (("misma liga y rol", False, False), ("cambio de liga en la última", True, False),
+                            ("cambio de rol en la última", False, True)):
+            w = MOD.pesos_temporadas(mod, vt, 4, cambio_liga_ultimo=cl, cambio_rol_ultimo=cr)
+            pesos.append({"metrica": met, "escenario": esc, "v_tipica": vt, "peso_t-4": w[0], "peso_t-3": w[1],
+                          "peso_t-2": w[2], "peso_t-1": w[3], "peso_prior": 1 - w.sum()})
         _, out = MOD.filtrar(M, mod["th"], mod["beta"])
         pid, j = M["fila"]
         niveles.append(x.sort_values(["persona_v5", "anio"]).reset_index(drop=True)[
@@ -117,8 +147,8 @@ def final(cfg: dict) -> dict:
         print(f"  {met}: σ_η {np.exp(mod['th'].get('log_s_eta', -np.inf)):.3f}, σ_u {np.exp(mod['th'].get('log_s_u', -np.inf)):.3f}",
               flush=True)
     pd.DataFrame(hip).to_csv(CD.DIR / "hiperparametros.csv", index=False)
-    if curvas:
-        pd.concat(curvas).to_csv(CD.DIR / "curvas_edad.csv", index=False)
+    pd.concat(curvas).to_csv(CD.DIR / "curvas_edad.csv", index=False)
+    pd.DataFrame(pesos).to_csv(CD.DIR / "pesos_temporadas.csv", index=False)
     pd.concat(niveles).to_parquet(CD.DIR / "niveles_carrera.parquet")
     return {"variante_elegida": elegido, "variante_ajustada": var_aj}
 
@@ -175,6 +205,8 @@ def main(argv=None):
                    "con_edad": float(o["edad"].notna().mean())}
         elif paso == "examen":
             out = examen(cfg)
+        elif paso == "experimento_obs":
+            out = experimento_obs(cfg)
         elif paso == "final":
             out = final(cfg)
         elif paso == "simulacion":

@@ -1,0 +1,14 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F4",
+ "config": "configs/v5/f4.yaml",
+ "hash_config": "31ac1d17d6ac",
+ "hash_datos_entrada": "4af57cb2bbbde3cb",
+ "fecha": "2026-11-10T12:39:18+00:00",
+ "python": "3.13.18",
+ "paso": "datos",
+ "observaciones": 543171,
+ "personas": 17119,
+ "con_edad": 0.6346638535562465,
+ "tiempo_s": 9
+}
