@@ -337,8 +337,8 @@ Error medio (predicción − observado) en DT de la métrica, por rol. Máximo p
 
    Alternativa: reajustar con K = 3 y usar ese perfil (otro ajuste, ~1 h). Las cargas de esos tres ejes son las mismas.
 2. **¿Se audita ya el sesgo con los interiores (RIESGO 1)** o se trata en la F6 con el rol y el contexto?
-3. **PR de la F5** (acordado: PR en F1, F5, F8 y F10). La rama ya tiene un PR abierto (F0–F2), al que se han ido sumando
-   los commits de la F3–F5. ¿Actualizo ese PR para que cubra F0–F5, o abro uno nuevo sólo con la F3–F5 desde otra rama?
+3. **PR de la F5.** Hecho: el PR abierto de la rama (UEBNET/baskonia#6) se ha actualizado para cubrir F0–F5 (título y
+   descripción), en lugar de abrir otro con los mismos commits.
 
 ## 10. Siguiente fase propuesta y ajuste de inversión
 
