@@ -79,8 +79,38 @@ def partidos(liga: str, temporada: str) -> tuple[list[dict], dict]:
     with _capturar_varios(modulos) as cap:
         adapter.parse(doc["payload"], temporada)
     meta = {"bruto": str(Path(ruta).relative_to(C.RAIZ)) if Path(ruta).is_relative_to(C.RAIZ) else str(ruta),
-            "paquetes": len(doc["payload"].get("paquetes", [])) if isinstance(doc["payload"], dict) else 0}
+            "paquetes": len(doc["payload"].get("paquetes", [])) if isinstance(doc["payload"], dict) else 0,
+            "fechas_bruto": (doc["payload"].get("fechas") or {}) if isinstance(doc["payload"], dict) else {}}
     return cap, meta
+
+
+def completar_fechas(d: pd.DataFrame, liga: str, temporada: str, fechas_bruto: dict) -> pd.DataFrame:
+    """Fecha de los partidos sin ella en el formato estándar (ACB, BNXT, BSL, GBL):
+    1. `data/processed/<t>/entrenadores/<liga>_partidos.csv` si su fecha es ISO (ACB);
+    2. si no, el campo `fechas` del bruto de FIBA LiveStats («Mon, 07 Oct 2024 19:06:51 GMT»). Es la fecha de
+       modificación del fichero del partido, normalmente el mismo día o el siguiente: tolerancia de ±1 día, declarada.
+    `fecha_origen` dice de dónde sale cada fecha."""
+    if d.empty:
+        return d
+    ok = d["fecha"].astype(str).str.match(r"\d{4}-\d{2}-\d{2}")
+    d["fecha_origen"] = np.where(ok, "boxscore", None)
+    if ok.all():
+        return d
+    f = C.RAIZ / "data" / "processed" / temporada / "entrenadores" / f"{liga}_partidos.csv"
+    if f.exists():
+        e = pd.read_csv(f, usecols=["game_id", "fecha"], dtype=str).drop_duplicates("game_id")
+        e = e[e["fecha"].astype(str).str.match(r"\d{4}-\d{2}-\d{2}")]
+        m = d["game_id"].map(e.set_index("game_id")["fecha"].str[:10])
+        sel = ~ok & m.notna()
+        d.loc[sel, "fecha"], d.loc[sel, "fecha_origen"] = m[sel], "calendario"
+        ok = ok | sel
+    if not ok.all() and fechas_bruto:
+        fb = pd.to_datetime(pd.Series(fechas_bruto), errors="coerce", utc=True, format="%a, %d %b %Y %H:%M:%S %Z")
+        fb = fb.dt.strftime("%Y-%m-%d")
+        m = d["game_id"].map(fb)
+        sel = ~ok & m.notna()
+        d.loc[sel, "fecha"], d.loc[sel, "fecha_origen"] = m[sel], "modificacion_fichero"
+    return d
 
 
 def a_tabla(games: list[dict], liga: str, temporada: str) -> pd.DataFrame:
@@ -170,13 +200,14 @@ def construir(cfg: dict, ligas: list[str], temporadas: list[str]) -> pd.DataFram
             if not games:
                 resumen.append({"liga": liga, "temporada": t, "estado": "sin bruto"})
                 continue
-            d = a_tabla(games, liga, t)
+            d = completar_fechas(a_tabla(games, liga, t), liga, t, meta.get("fechas_bruto") or {})
             (sal / t).mkdir(parents=True, exist_ok=True)
             d.to_parquet(sal / t / f"{liga}.parquet", index=False, compression="zstd")
             chk = comprobar(d, liga, t)
             fila = {"liga": liga, "temporada": t, "estado": "ok", "partidos": int(d["game_id"].nunique()),
                     "lineas": int(len(d)), "lineas_jugadas": int(d["jugo"].sum()),
-                    "con_fecha": float((d["fecha"] != "NaT").mean()), "bruto": meta.get("bruto")}
+                    "con_fecha": float(d["fecha"].astype(str).str.match(r"\d{4}-\d{2}-\d{2}").mean()),
+                    "origen_fecha": ",".join(sorted(set(d["fecha_origen"].dropna()))), "bruto": meta.get("bruto")}
             for fase, r in chk.items():
                 for k, v in r.items():
                     fila[f"{fase}_{k}"] = v
