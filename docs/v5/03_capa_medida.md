@@ -473,7 +473,7 @@ empírico.)_
   árbol de `data/modelos/*` son los de la F0.
 - **No versionado:** `data/v5/medida/partidos.parquet` (46 MB) es regenerable en 30 s con el paso `datos`, y queda en
   `.gitignore`.
-- **Tests:** 8 nuevos en `tests/normalizacion_v5/test_medida_f3.py`; suite completa en §7 bis.
+- **Tests:** 8 nuevos en `tests/normalizacion_v5/test_medida_f3.py`; suite completa en verde: **349 passed**.
 
 ## 9. Riesgos detectados y decisiones que requieren al usuario
 

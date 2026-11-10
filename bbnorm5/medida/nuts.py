@@ -6,7 +6,12 @@ del rival con k_g ~ Poisson(n_g λ_u) frente a k_g ~ GammaPoisson, es decir, Bin
     k_g ~ Binomial(n_g, p_u)                         (modelo «bin»)
     k_g ~ BetaBinomial(n_g, c·p_u, c·(1 − p_u)),  c = (1 − ρ)/ρ      (modelo «bb»)
     logit p_u = μ_r(u) + σ·z_u,  z_u ~ N(0, 1)       (no centrado)
-    μ_r ~ N(0, 2²),  σ ~ HalfNormal(1),  ρ ~ Beta(1, 30)
+    μ_r ~ N(0, 2²),  σ ~ HalfNormal(1),  log c ~ N(5, 2²)   (en la Poisson, log δ ~ N(−3, 2²))
+
+La verosimilitud se escribe a mano (`_loglik`, la misma fórmula que `eb.loglik`) y entra con `numpyro.factor`; la
+log-verosimilitud por partido se guarda para el LOO. Primer intento descartado: `dist.BetaBinomial` con ρ ~ Beta(1, 30)
+en precisión simple dio R̂ 1,54, ESS 7 y divergencias en todas las muestras en ACB T3% (ρ ≈ 0, concentraciones
+enormes), y un elpd ~870 puntos por encima de la binomial, incompatible con ρ ≈ 0.
 
 Sirve para tres cosas:
 1. diagnósticos de la inferencia completa (R̂, ESS, divergencias);
@@ -28,6 +33,31 @@ from bbnorm5.medida import datos as D
 DIR = D.DIR / "nuts"
 
 
+def _loglik(k, n, eta, familia: str, sobred: bool, lc=None):
+    """Log-verosimilitud por partido, la misma fórmula que el Bayes empírico (`eb.loglik`), con su coeficiente
+    combinatorio, para que el LOO compare modelos con la misma constante."""
+    import jax.numpy as jnp
+    from jax.scipy.special import betaln, gammaln
+    if familia == "poisson":
+        m = n * jnp.exp(eta)
+        if not sobred:
+            return k * jnp.log(m) - m - gammaln(k + 1)
+        d = jnp.exp(lc)
+        s = m / d
+        return gammaln(k + s) - gammaln(s) - gammaln(k + 1) - s * jnp.log1p(d) + k * (lc - jnp.log1p(d))
+    lch = gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1)
+    if not sobred:
+        return lch + k * jax_log_expit(eta) + (n - k) * jax_log_expit(-eta)
+    c = jnp.exp(lc)
+    p = jnp.clip(1 / (1 + jnp.exp(-eta)), 1e-9, 1 - 1e-9)
+    return lch + betaln(k + c * p, n - k + c * (1 - p)) - betaln(c * p, c * (1 - p))
+
+
+def jax_log_expit(x):
+    import jax.numpy as jnp
+    return -jnp.logaddexp(0.0, -x)
+
+
 def _modelo(idx_u, rol_u, n, k=None, nr=3, sobred=True, familia="binomial"):
     import jax.numpy as jnp
     import numpyro
@@ -37,23 +67,17 @@ def _modelo(idx_u, rol_u, n, k=None, nr=3, sobred=True, familia="binomial"):
     nu = rol_u.shape[0]
     z = numpyro.sample("z", dist.Normal(0, 1).expand([nu]).to_event(1))
     eta = mu[rol_u] + s * z
-    if familia == "poisson":
-        lam = numpyro.deterministic("p", jnp.exp(eta))
-        m = n * lam[idx_u]
-        if sobred:
-            delta = numpyro.sample("delta", dist.HalfNormal(2.0))
-            numpyro.sample("k", dist.GammaPoisson(m / delta, 1 / delta), obs=k)
-        else:
-            numpyro.sample("k", dist.Poisson(m), obs=k)
-        return
-    p = numpyro.deterministic("p", jnp.clip(1 / (1 + jnp.exp(-eta)), 1e-6, 1 - 1e-6))
-    pg = p[idx_u]
-    if sobred:
-        rho = numpyro.sample("rho", dist.Beta(1.0, 30.0))
-        c = (1 - rho) / rho
-        numpyro.sample("k", dist.BetaBinomial(c * pg, c * (1 - pg), n), obs=k)
-    else:
-        numpyro.sample("k", dist.Binomial(n, probs=pg), obs=k)
+    numpyro.deterministic("p", jnp.exp(eta) if familia == "poisson" else 1 / (1 + jnp.exp(-eta)))
+    lc = None
+    if sobred and familia == "poisson":
+        lc = numpyro.sample("log_delta", dist.Normal(-3.0, 2.0))      # δ: exceso de varianza de la BinNeg1
+        numpyro.deterministic("delta", jnp.exp(lc))
+    elif sobred:
+        lc = numpyro.sample("log_c", dist.Normal(5.0, 2.0))           # c = (1 − ρ)/ρ: concentración por partido
+        numpyro.deterministic("rho", 1 / (1 + jnp.exp(lc)))
+    ll = _loglik(k, n, eta[idx_u], familia, sobred, lc)
+    numpyro.deterministic("ll", ll)
+    numpyro.factor("verosimilitud", ll.sum())
 
 
 def ajustar(d: pd.DataFrame, metrica: str, sobred: bool, cfg: dict):
@@ -61,6 +85,9 @@ def ajustar(d: pd.DataFrame, metrica: str, sobred: bool, cfg: dict):
     import jax
     import numpyro
     from numpyro.infer import MCMC, NUTS
+    # doble precisión: con ρ ≈ 0 la beta-binomial tiene concentraciones c ~ 10⁴ y en float32 las diferencias de lgamma
+    # pierden precisión; el gradiente sale ruidoso y la NUTS agota la profundidad del árbol en cada iteración
+    numpyro.enable_x64()
     fam, kc, nc, _ = D.METRICAS[metrica]
     x = d[d[nc] > 0]
     u = x.groupby(D.CLAVE + ["rol"], sort=False).size().reset_index()[D.CLAVE + ["rol"]]
@@ -69,13 +96,17 @@ def ajustar(d: pd.DataFrame, metrica: str, sobred: bool, cfg: dict):
     x = x.merge(u, on=D.CLAVE + ["rol"])
     idx_u = x["iu"].to_numpy()
     rol_u = u["rol"].map({r: i for i, r in enumerate(roles)}).to_numpy()
-    n = x[nc].to_numpy().astype(np.int32 if fam == "binomial" else np.float64)
-    k = x[kc].to_numpy().astype(np.int32)
+    n = x[nc].to_numpy(float)
+    k = x[kc].to_numpy(float)
     c = cfg["nuts"]
     mc = MCMC(NUTS(_modelo, target_accept_prob=0.9), num_warmup=c["calentamiento"], num_samples=c["muestras"],
               num_chains=c["cadenas"], chain_method="parallel", progress_bar=False)
-    mc.run(jax.random.PRNGKey(cfg["semilla"]), idx_u, rol_u, n, k, len(roles), sobred, fam)
-    idata = az.from_numpyro(mc, log_likelihood=True)
+    mc.run(jax.random.PRNGKey(cfg["semilla"]), idx_u, rol_u, n.astype(np.float64), k.astype(np.float64), len(roles),
+           sobred, fam)
+    idata = az.from_numpyro(mc, log_likelihood=False)
+    ll = idata.posterior["ll"]
+    idata.add_groups({"log_likelihood": {"k": ll.values}}, coords={"chain": ll["chain"].values, "draw": ll["draw"].values})
+    idata.posterior = idata.posterior.drop_vars("ll")
     div = int(mc.get_extra_fields()["diverging"].sum())
     return idata, u, roles, div
 
@@ -95,7 +126,7 @@ def ejecutar(cfg: dict) -> dict:
                 idata, u, roles, div = ajustar(d, met, sob, cfg)
                 fam = D.METRICAS[met][0]
                 par_sd = "rho" if fam == "binomial" else "delta"
-                var = ["mu", "sigma"] + ([par_sd] if sob else [])
+                var = ["mu", "sigma"] + ([par_sd, "log_c" if fam == "binomial" else "log_delta"] if sob else [])
                 sm = az.summary(idata, var_names=var)
                 zs = az.summary(idata, var_names=["z"])
                 loo = az.loo(idata, pointwise=True)
@@ -103,7 +134,7 @@ def ejecutar(cfg: dict) -> dict:
                 h = hip[(hip.liga == liga) & (hip.temporada == temp) & (hip.metrica == met) & (hip.datos == "temporada")
                         & (hip.modelo == ("jer_sd" if sob else "jer"))].iloc[0]
                 filas.append({"liga": liga, "temporada": temp, "metrica": met, "modelo": nom,
-                              "partidos_obs": int(idata.observed_data["k"].size), "unidades": len(u),
+                              "partidos_obs": int(idata.log_likelihood["k"].shape[-1]), "unidades": len(u),
                               "rhat_max": float(pd.concat([sm["r_hat"], zs["r_hat"]]).max()),
                               "ess_bulk_min": float(pd.concat([sm["ess_bulk"], zs["ess_bulk"]]).min()),
                               "ess_tail_min": float(pd.concat([sm["ess_tail"], zs["ess_tail"]]).min()),
