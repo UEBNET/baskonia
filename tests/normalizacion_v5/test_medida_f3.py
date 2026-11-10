@@ -79,3 +79,20 @@ def test_mitades_por_fecha_y_suficientes():
     assert u1[["K", "N", "G"]].iloc[0].tolist() == [3.0, 7.0, 2]      # el partido sin intentos no cuenta
     u2 = D.unidad_metrica(d, "t3_pct", 2)
     assert u2[["K", "N", "N2g"]].iloc[0].tolist() == [4.0, 7.0, 29.0]
+
+
+def test_binneg1_estable_igual_a_la_forma_gamma():
+    """La log-verosimilitud BinNeg1 de la NUTS (forma estable Σ log(m + jδ)) es la misma que con gammaln."""
+    numpyro = pytest.importorskip("numpyro")
+    numpyro.enable_x64()
+    import jax.numpy as jnp
+    from scipy import special
+    from bbnorm5.medida import nuts
+    k = np.array([0.0, 1.0, 3.0, 7.0])
+    m = np.array([0.5, 1.2, 2.0, 3.0])
+    for d in (0.4, 1e-3, 2.0):
+        a = np.array(nuts._loglik(jnp.array(k), jnp.ones(4), jnp.log(jnp.array(m)), "poisson", True, jnp.log(d)))
+        s = m / d
+        b = (special.gammaln(k + s) - special.gammaln(s) - special.gammaln(k + 1) - s * np.log1p(d)
+             + k * (np.log(d) - np.log1p(d)))
+        assert np.abs(a - b).max() < 1e-8

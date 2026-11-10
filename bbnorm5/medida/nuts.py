@@ -31,6 +31,7 @@ import pandas as pd
 from bbnorm5.medida import datos as D
 
 DIR = D.DIR / "nuts"
+KMAX_POISSON = 16      # máximo de robos de un jugador en un partido + margen (comprobado en `ajustar`)
 
 
 def _loglik(k, n, eta, familia: str, sobred: bool, lc=None):
@@ -42,9 +43,13 @@ def _loglik(k, n, eta, familia: str, sobred: bool, lc=None):
         m = n * jnp.exp(eta)
         if not sobred:
             return k * jnp.log(m) - m - gammaln(k + 1)
+        # forma exacta y estable cuando δ → 0 (k entero): lgamma(k+s) − lgamma(s) + k·log δ = Σ_{j<k} log(m + jδ),
+        # y (m/δ)·log(1+δ) → m. Con gammaln directo, s = m/δ ~ 10¹² y la diferencia es ruido numérico.
         d = jnp.exp(lc)
-        s = m / d
-        return gammaln(k + s) - gammaln(s) - gammaln(k + 1) - s * jnp.log1p(d) + k * (lc - jnp.log1p(d))
+        j = jnp.arange(KMAX_POISSON)[None, :]
+        suma = jnp.where(j < k[:, None], jnp.log(m[:, None] + j * d), 0.0).sum(axis=1)
+        l1p = jnp.where(d < 1e-6, 1 - d / 2, jnp.log1p(d) / d)
+        return suma - gammaln(k + 1) - m * l1p - k * jnp.log1p(d)
     lch = gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1)
     if not sobred:
         return lch + k * jax_log_expit(eta) + (n - k) * jax_log_expit(-eta)
@@ -102,6 +107,8 @@ def ajustar(d: pd.DataFrame, metrica: str, sobred: bool, cfg: dict):
     rol_u = u["rol"].map({r: i for i, r in enumerate(roles)}).to_numpy()
     n = x[nc].to_numpy(float)
     k = x[kc].to_numpy(float)
+    if fam == "poisson" and k.max() >= KMAX_POISSON:
+        raise ValueError(f"{metrica}: k máximo {k.max()} ≥ {KMAX_POISSON}")
     c = cfg["nuts"]
     mc = MCMC(NUTS(_modelo, target_accept_prob=0.9), num_warmup=c["calentamiento"], num_samples=c["muestras"],
               num_chains=c["cadenas"], chain_method="parallel", progress_bar=False)
