@@ -126,10 +126,10 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
 |---|---|
 | Nodos (liga, id) | 30.233 |
 | Personas en el crosswalk vigente | 20.423 |
-| **Personas v5** | **19.728** |
-| Uniones automáticas (mismo club en dos competiciones la misma temporada, apellido e inicial, sin conflicto) | **736** |
+| **Personas v5** | **19.707** (tras aceptar las 27 del usuario, 10-11-2026) |
+| Uniones (mismo club en dos competiciones la misma temporada, apellido e inicial, sin conflicto) | **757**: 736 automáticas y 21 de las 27 aceptadas por el usuario (6 repetían pareja en otra temporada) |
 | Personas separadas por conflicto fuerte (nacimiento o calendario) | **16** (43 nodos) |
-| Candidatas pendientes de revisión (no unidas) | 161 (27 con similitud ≥ 0,95) |
+| Candidatas pendientes de revisión (no unidas) | 134 (las 27 con similitud ≥ 0,95, aceptadas por el usuario el 10-11-2026) |
 | Avisos de nombre en personas del crosswalk (sólo aviso) | 432 |
 | Nodos con año de nacimiento | 40,6 % |
 
@@ -365,6 +365,14 @@ Diferencia media «en Europa − en su liga» de los ratios de **los mismos club
    dejo el resto fuera?
 3. **Ampliar la extracción** a ABA, Israel, LKL y la BSL de 2021-25 (RIESGO 4): ¿se valora ahora o tras la F6, con la
    ganancia medida?
+
+## 8 bis. Decisiones del usuario (10-11-2026)
+
+1. **Fecha truncada.** Aprobado y aplicado como tarea aparte: la fecha se guarda en ISO (`bbstats/entrenadores.py`,
+   `CHANGELOG.md`). Las capas que leen los tramos de entrenador (estilo por entrenador, roles, tendencias del
+   simulador) quedan pendientes de regenerar con aprobación.
+2. **Identidades.** Las 27 con similitud ≥ 0,95, aceptadas y aplicadas: 19.707 personas. Quedan 134 pendientes.
+3. **Ampliar la extracción.** Se valorará tras la F6.
 
 ## 9. Siguiente fase propuesta y ajuste de inversión
 
