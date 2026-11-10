@@ -1,0 +1,21 @@
+# F5 · Capa latente (encargo v5.0 §9, revisión 1.2; docs/v5/05_capa_latente.md)
+fase: F5
+salida: latente
+semilla: 20261113
+temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+pasos: [seleccion_k, residuo, examen, final, neuronal, figuras]
+ajuste:
+  submuestra_personas: 7000       # personas para estimar Λ y ψ; el filtro y las predicciones usan a todas
+  maxiter: 300
+  k_residuo: 3                    # factores de la correlación del residuo de la temporada entre métricas
+seleccion_k:
+  corte: 2024
+  K: [0, 3, 5, 6, 8]
+  # regla fijada antes de ver resultados: entre K ∈ {5, 6, 8} (rango del encargo), el de menor CRPS relativo medio
+  # (misma liga, frente a K = 0); si uno menor está a menos de 1 EE (bootstrap por persona), el menor
+examen:
+  cortes: [2023, 2024, 2025]
+final:
+  semillas_estabilidad: 3          # submuestras distintas para la estabilidad de las cargas
+neuronal:
+  epocas: 60

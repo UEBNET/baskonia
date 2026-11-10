@@ -1,0 +1,12 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F5",
+ "config": "configs/v5/f5.yaml",
+ "hash_config": "c3f8f7c0d77c",
+ "hash_datos_entrada": "4af57cb2bbbde3cb",
+ "fecha": "2026-11-10T14:06:52+00:00",
+ "python": "3.13.18",
+ "paso": "seleccion_k",
+ "K_elegido": 5,
+ "tiempo_s": 2007
+}
