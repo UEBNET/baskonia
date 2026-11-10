@@ -1,0 +1,17 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F5",
+ "config": "configs/v5/f5.yaml",
+ "hash_config": "f16852b292b2",
+ "hash_datos_entrada": "4af57cb2bbbde3cb",
+ "fecha": "2026-11-10T16:10:15+00:00",
+ "python": "3.13.18",
+ "paso": "neuronal",
+ "adoptar": false,
+ "dif_rel": 0.1442659311058645,
+ "ic95": [
+  0.1377354953012506,
+  0.1503305075202003
+ ],
+ "tiempo_s": 141
+}

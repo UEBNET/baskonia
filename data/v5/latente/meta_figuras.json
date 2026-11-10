@@ -1,0 +1,16 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F5",
+ "config": "configs/v5/f5.yaml",
+ "hash_config": "1a1c9bf8e468",
+ "hash_datos_entrada": "4af57cb2bbbde3cb",
+ "fecha": "2026-11-10T16:10:48+00:00",
+ "python": "3.13.18",
+ "paso": "figuras",
+ "figuras": [
+  "docs/v5/figuras/f5_seleccion_k.png",
+  "docs/v5/figuras/f5_cargas.png",
+  "docs/v5/figuras/f5_anchura_nivel.png"
+ ],
+ "tiempo_s": 1
+}

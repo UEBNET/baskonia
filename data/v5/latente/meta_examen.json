@@ -1,0 +1,13 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F5",
+ "config": "configs/v5/f5.yaml",
+ "hash_config": "f16852b292b2",
+ "hash_datos_entrada": "4af57cb2bbbde3cb",
+ "fecha": "2026-11-10T15:21:11+00:00",
+ "python": "3.13.18",
+ "paso": "examen",
+ "casos": 542808,
+ "K": 5,
+ "tiempo_s": 3056
+}
