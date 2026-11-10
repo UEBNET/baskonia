@@ -1,12 +1,12 @@
 {
- "jugadores": 71894,
- "con_H_estilo": 67204,
+ "jugadores": 72362,
+ "con_H_estilo": 67652,
  "nivel_categorias": {
-  "zonas": 42409,
-  "basico": 29145
+  "zonas": 42857,
+  "basico": 29165
  },
  "origen_zonas": {
-  "calibracion.json": 107,
+  "calibracion.json": 109,
   "sin_coordenadas": 15,
   "sin_tiros": 3
  },
@@ -26,18 +26,19 @@
   "gbl": 2.408,
   "gleague": 2.357,
   "lba": 2.398,
-  "lnb": 2.232,
-  "nba": 2.156,
-  "nbl": 2.38,
-  "ncaa": 1.566,
-  "vtb": 2.382
+  "ligau": 2.431,
+  "lnb": 2.231,
+  "nba": 2.157,
+  "nbl": 2.379,
+  "ncaa": 1.567,
+  "vtb": 2.384
  },
- "con_sigma": 25519,
+ "con_sigma": 25705,
  "sigma_mediana_por_liga": {
   "acb": 12.29,
   "bbl": 12.23,
   "bcl": 12.21,
-  "bnxt": 11.99,
+  "bnxt": 11.98,
   "bsl": 12.07,
   "cba": 12.1,
   "eurocup": 12.18,
@@ -45,14 +46,15 @@
   "feb1": 11.83,
   "feb2": 11.51,
   "feb3": 11.18,
-  "fec": 12.13,
+  "fec": 12.14,
   "gbl": 11.9,
   "gleague": 13.09,
   "lba": 12.29,
+  "ligau": 10.93,
   "lnb": 12.32,
   "nba": 12.77,
   "nbl": 12.3,
-  "ncaa": 12.22,
+  "ncaa": 12.21,
   "vtb": 11.96
  },
  "coef_contexto": {
@@ -396,6 +398,14 @@
    "log_min": 7.3694805978913465,
    "ctx_comp": -0.7524461854943713
   },
+  "ligau|2025-26": {
+   "log_min": 4.812381752351868,
+   "ctx_comp": -0.6102711158678079
+  },
+  "ligau|2026-27": {
+   "log_min": 8.255760354187995,
+   "ctx_comp": -0.7490731494875318
+  },
   "lnb|2021-22": {
    "log_min": 6.314101405821409,
    "ctx_comp": -0.5384011656792176
@@ -501,6 +511,6 @@
    "ctx_comp": -0.8448405547915381
   }
  },
- "equipos": 3081,
- "corr_H_estilo_H_rol": -0.07757875760347963
+ "equipos": 3110,
+ "corr_H_estilo_H_rol": -0.07741468718906322
 }

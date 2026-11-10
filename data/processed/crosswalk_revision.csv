@@ -1,13 +1,13 @@
 liga_a,id_a,nombre_a,nacimiento_a,nacionalidad_a,temporadas_a,liga_b,id_b,nombre_b,nacimiento_b,nacionalidad_b,temporadas_b,confianza,metodo,motivo
+feb3,2334297,L. SANCHEZ FERNANDEZ,,,2024-25,ligau,2334297,LUCAS SANCHEZ FERNANDEZ,2008-04-03,ES,"2025-26,2026-27",1.0,id_feb,uniría dos ids de la misma liga
 gleague,1631119,Jaylin Williams,2001,US,2022-23,gleague,1642444,Jaylin Williams,2000,US,"2024-25,2025-26",0.9,nombre_igual+anio_nac+nacionalidad,uniría dos ids de la misma liga
-eurocup,009911,"BROWNE, GARY",1993,,2020-21,eurocup,015182,"BROWNE, GARY",1993,,2026-27,0.8,nombre_igual+anio_nac,uniría dos ids de la misma liga
 feb3,1371069,A. SILVA CORDERO,,,2023-24,feb3,2710814,ABRAHAM SILVA CORDERO,1994-07-25,ES,2024-25,0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
 feb3,2162944,A. USAOLA REDONDO,,,2023-24,feb3,2544308,ADAHI USAOLA REDONDO,2004-04-30,ES,"2024-25,2025-26,2026-27",0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
-feb3,1876223,ALEJANDRO MONTERO ISLA,2003-04-27,ES,2024-25,feb3,2226351,I. MONTERO ISLA,,,2025-26,0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
 feb3,2451922,J. NVE MALEVA,,,2024-25,feb3,2846783,LUIS JAVIER NVE MALEVA,2006-06-14,GQ,"2025-26,2026-27",0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
 feb3,2439473,K. RODRIGUEZ AGUILERA,,,"2023-24,2024-25",feb3,2825930,KENNETH IVAN RODRIGUEZ AGUILERA,2006-05-06,US,"2025-26,2026-27",0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
 feb3,2433043,L. VALERA VILLEGAS,,,2024-25,feb3,2533948,LUIS ALBERTO VALERA VILLEGAS,1988-10-21,VE,"2023-24,2025-26,2026-27",0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
 feb3,2645066,V. CARRIZO ROMBERGER,,,2023-24,feb3,2745467,VALENTIN CARRIZO ROMBERGER,2002-03-22,ES,2024-25,0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
+ligau,2362551,E. LIMA TEIXEIRA,,,2025-26,ligau,2883214,ERICKSON AMERICO LIMA TEIXEIRA,2008-09-21,ES,2026-27,0.75,nombre_contenido+nombre_unico+trayectoria_contigua+club_comun,uniría dos ids de la misma liga
 acb,30003442,Aaron Ganal,,,"2024-25,2025-26",feb1,2081222,AARON PATRICK GANAL DAGURO,2004-03-25,AD,2022-23,0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
 acb,30003442,Aaron Ganal,,,"2024-25,2025-26",feb2,2081222,AARON PATRICK GANAL DAGURO,2004-03-25,AD,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30003442,Aaron Ganal,,,"2024-25,2025-26",feb3,2081222,AARON PATRICK GANAL DAGURO,2004-03-25,AD,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -15,38 +15,32 @@ acb,30001180,Adam Sollazzo,,,2021-22,feb1,2371546,ADAM MICHAEL SOLLAZZO,1990-04-
 acb,20212250,Adams Sola,,,2020-21,feb1,1875914,ADAMS SOLA IDDRISU,2000-07-27,ES,"2022-23,2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
 acb,30005324,Adria Rodriguez,,,"2025-26,2026-27",feb1,1957913,ADRIA RODRIGUEZ JUAN,2003-04-28,ES,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20212021,Adrián Del Cerro,,,2021-22,feb2,1796637,ADRIAN DEL CERRO MARTIN,2002-05-07,ES,"2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
-acb,30000661,Aiert Velasco,,,2025-26,feb3,2188464,AIERT VELASCO BILBAO,2004-02-23,ES,"2024-25,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20213481,Alejandro Sistac,,,2024-25,feb2,2009804,ALEJANDRO SISTAC RODRIGUEZ,2006-06-10,ES,2026-27,0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
 acb,20213481,Alejandro Sistac,,,2024-25,feb3,2009804,ALEJANDRO SISTAC RODRIGUEZ,2006-06-10,ES,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20211372,Alexis Bartolomé,,,2020-21,feb1,2433401,ALEXIS BARTOLOME FRASES,1998-09-23,AD,2022-23,0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
-acb,30005423,Alexis Pou,,,2026-27,feb3,1891986,ALEXIS POU BLINNIKOV,2005-06-07,ES,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30000170,Alonso Faure,,,2026-27,feb1,1853585,ALONSO FAURE RIBES,2002-02-20,ES,"2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,30004662,Alonso Reyes,,,2025-26,feb2,2103560,ALONSO REYES ABAD,2004-06-05,ES,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,30004662,Alonso Reyes,,,2025-26,feb3,2103560,ALONSO REYES ABAD,2004-06-05,ES,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20200277,Augusto Lima,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26",feb1,1583271,AUGUSTO CESAR LIMA BRITO,1991-09-17,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30003393,Charlie Moore,,,2024-25,lba,7030,Charlie Edward Moore,,,"2023-24,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30005328,David Duke Jr,1999,US,2025-26,nbl,c2782518-b3d6-11f0-b4a7-dbbbdd6e819b,David Duke Jnr,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,20209139,Edgar Vicedo,,,"2020-21,2021-22,2022-23,2023-24,2024-25",feb1,1715117,EDGAR BENJAMIN VICEDO AYALA,1994-08-24,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+acb,20209139,Edgar Vicedo,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2026-27",feb1,1715117,EDGAR BENJAMIN VICEDO AYALA,1994-08-24,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30000658,Elvis Ude,,,2021-22,feb3,2275950,ELVIS SOLUCHUKWU UDE UDE,2003-09-01,ES,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
 acb,20212720,Emil Stoilov,,,2020-21,feb1,2462416,EMIL EMILOV STOILOV,2002-02-07,BG,"2022-23,2023-24,2024-25,2026-27",0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
+acb,30004725,Eric del Castillo,,,2026-27,ligau,2081709,ERIC DEL CASTILLO LINDO,2007-05-31,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30002091,Fallou Niang,,,2022-23,feb1,2319991,SERIGNE FALLOU NIANG BEYE,2001-08-22,ES,"2023-24,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30002727,Germán Martínez,,,2023-24,feb1,1821694,GERMAN MARTINEZ DIAZ,1998-06-29,ES,"2022-23,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30002727,Germán Martínez,,,2023-24,feb3,2117260,GERMAN SABATER MARTINEZ,2005-05-26,ES,"2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30003531,Haydn Ling,,,2024-25,feb3,2579454,HAYDN HERBIE LING,2002-09-19,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+acb,30005391,Isaac Vazquez,,,2026-27,feb1,1778999,ISAAC VAZQUEZ PEREZ,2004-10-10,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20210887,Iván Aurrecoechea,,,"2024-25,2025-26",feb1,1384981,IVAN AURRECOECHEA ALCOLADO,1995-11-19,ES,"2022-23,2023-24,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,20213516,Jan Pumarola,,,2026-27,feb3,2150510,JAN PUMAROLA AGUILAR,2006-01-12,ES,2024-25,0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
+acb,30005525,Jaume Seguí,,,2026-27,ligau,2114387,JAUME SEGUI CAPELLA,2008-04-16,ES,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20211935,Javier López,,,"2020-21,2021-22",feb1,1525747,JAVIER LOPEZ SANTANA,1999-05-06,ES,"2022-23,2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30003403,Joaquín Rodríguez,,,"2024-25,2025-26",feb1,2680850,JOAQUÍN NAZAR RODRÍGUEZ OLIVERA,1999-06-14,ES,"2023-24,2024-25,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20203795,Josep Franch,,,2022-23,feb1,1072760,JOSEP FRANCH DE PABLO,1991-01-28,ES,"2022-23,2023-24,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20212312,Josep Peris,,,2026-27,feb1,1702420,JOSEP PERIS CRESPO,2000-08-08,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,20213168,José Tomás Martínez,,,"2024-25,2025-26",feb2,2010660,JOSE TOMAS MARTINEZ SANCHEZ,2005-03-17,ES,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30004675,Juan Garcia,,,2026-27,feb2,2130102,JUAN GARCIA-ABRIL GUERRERO,2003-01-04,ES,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30001179,Kevin Larsen,,,2021-22,feb1,2433482,KEVIN RICKI LARSEN,1993-07-17,DK,"2022-23,2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30002691,Keye Van der Vuurst,2001,,"2023-24,2024-25",bcl,226866,Keye van der Vuurst de Vries,,,"2020-21,2021-22,2022-23",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,30004854,Khory Brunot,,,"2025-26,2026-27",feb3,2735828,KHORY ROSEMBERT BRUNOT,2006-08-20,FR,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,30003443,Luca Medal,,,"2024-25,2025-26",feb3,2117870,LUCA MEDAL COPPINI,2006-05-29,ES,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20213218,Lucas Langarita,,,"2022-23,2023-24,2024-25,2025-26",feb1,1976940,LUCAS LANGARITA HERNANDEZ,2005-01-04,ES,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,30003470,Manuel Trujillo,,,"2024-25,2025-26",feb1,2116603,MANUEL TRUJILLO BRAVO,2007-03-20,ES,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30004017,Micah Speight,,,2025-26,feb1,2433193,MICAH MARQUIS SPEIGHT,1998-06-26,US,"2022-23,2023-24,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20212476,Miguel González,,,"2023-24,2024-25,2025-26,2026-27",feb1,1708910,MIGUEL GONZALEZ BURGOS,1999-03-20,ES,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20212478,Mikel Sanz,,,"2024-25,2025-26,2026-27",feb1,2026085,MIKEL SANZ ZARANDONA,1999-02-01,ES,"2022-23,2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -59,19 +53,20 @@ acb,30003426,Pol Campeny,,,2024-25,feb2,2146670,POL CAMPENY LLOVERAS,2005-08-18,
 acb,20210139,Pol Figueras,,,"2022-23,2023-24",feb1,1496030,POL FIGUERAS LOPEZ,1998-03-21,ES,"2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30004024,Pol Rios,,,2025-26,feb2,1957023,POL RIOS CADENAS,2004-07-30,ES,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30004024,Pol Rios,,,2025-26,feb3,1957023,POL RIOS CADENAS,2004-07-30,ES,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+acb,30002911,Rafael Rodríguez,,,2024-25,ligau,2181003,RAFAEL RODRIGUEZ GALVAN,2006-09-22,ES,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20201800,Rodrigo San Miguel,,,"2020-21,2021-22",feb1,891463,RODRIGO SAN MIGUEL DE LA IGLESIA,1985-01-21,ES,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20213207,Ruben Vicente,,,"2021-22,2022-23",feb2,2070535,RUBEN VICENTE SIMO,2005-02-14,ES,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30000132,Rubén López De La Torre,2002-03-13,ES,"2020-21,2022-23,2023-24,2025-26,2026-27",feb3,2411621,G. LOPEZ TORRE,,,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30003485,Santiago Martinez,,,2024-25,feb3,2012846,SANTIAGO MARTINEZ GRANDA,2004-03-24,ES,"2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30001138,Sean Smith,,,2021-22,feb1,1437961,SEAN SMITH GARCIA,1995-12-09,ES,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30001270,Sergi Huguet,,,"2021-22,2023-24",feb1,1765084,SERGI HUGUET CARRASCO,2002-08-31,ES,"2022-23,2023-24,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,20200250,Sergio Llorente,,,2022-23,feb1,1381662,SERGIO ANTONIO LLORENTE PAZ,1990-09-13,ES,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+acb,20200250,Sergio Llorente,,,2022-23,feb1,1381662,SERGIO ANTONIO LLORENTE PAZ,1990-09-13,ES,"2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30001252,Seydina Faye,,,2024-25,feb2,2736780,SEYDINA LIMAMOULAYE FAYE,2005-12-30,SN,"2024-25,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+acb,30001252,Seydina Faye,,,2024-25,ligau,2736780,SEYDINA LIMAMOULAYE FAYE,2005-12-30,SN,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20211649,Tomeu Rigo,,,"2020-21,2021-22,2022-23,2023-24",feb1,1489129,TOMEU RIGO GUAL,1997-05-08,ES,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30003985,Travis Munnings,,,2025-26,feb1,2734244,TRAVIS TRAYVON MUNNINGS,1994-09-14,BS,"2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,20210941,Viny Okouo,,,"2020-21,2021-22,2022-23",feb1,2022132,VINY PIERROT MARCEL OKOUO,1997-04-10,,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30002701,Zan Sisko,,,2023-24,euroleague,004571,"SISKO, ZAN MARK",1997,,"2020-21,2021-22,2022-23",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-acb,20213211,Álvaro Fernandez,,,2025-26,feb2,2101872,ÁLVARO FERNANDEZ RUIZ,2005-03-26,ES,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 acb,30002030,Ángel Corpas,,,2022-23,feb3,2039306,ANGEL CORPAS RUIZ,2004-05-04,ES,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bbl,52154,Abdul-Malik Abu,1995-09-16,NG,2021-22,bsl,abu-abdul,Abdul Malik Abu,,,2020-21,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bbl,2002992,Darnell Edge,1997,,2025-26,fec,273656,Darnell Antonio Edge,,,"2023-24,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -103,9 +98,9 @@ bcl,224316,Juan Marcos,,,2026-27,feb3,1241456,MARCOS DE JUAN SEVILLANO,1996-07-2
 bcl,227388,Kay Bruhnke,,,"2025-26,2026-27",eurocup,008259,"BRUHNKE, KAY PATRICK",2001,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,230848,Konstantin Kostadinov,,,"2024-25,2025-26",feb1,2218176,KONSTANTIN IROLAVOV KOSTADINOV,2003-03-25,BG,"2022-23,2023-24",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,296988,Manex Ansorregui,,,2026-27,feb1,2082685,MANEX ANSORREGUI DEBA,2002-04-11,ES,"2022-23,2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-bcl,344623,Manuel Trujillo,,,"2024-25,2025-26",feb1,2116603,MANUEL TRUJILLO BRAVO,2007-03-20,ES,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,211573,Maurice Ndour,,,"2020-21,2021-22,2023-24",vtb,155776,Maurice Daly Ndour,1992-06-18,SN,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,303745,Michael Hughes II,,,2023-24,fec,303745,Michael Anthony Hughes II,,,"2021-22,2023-24",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+bcl,339045,Rafael Rodriguez,,,"2024-25,2025-26",ligau,2181003,RAFAEL RODRIGUEZ GALVAN,2006-09-22,ES,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,256921,Ricards Vanags,,,2025-26,feb2,2791747,RICARDS DANIELS VANAGS,2002-12-29,LV,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,238043,Ruben Lopez De La Torre,2002-03-13,ES,2026-27,feb3,2411621,G. LOPEZ TORRE,,,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,300488,Ruben Vicente,,,2022-23,feb2,2070535,RUBEN VICENTE SIMO,2005-02-14,ES,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -114,8 +109,8 @@ bcl,282625,Stephen Thompson Jr.,1996,PR,2022-23,fec,282625,Stephen Mark Thompson
 bcl,282625,Stephen Thompson Jr.,1996,PR,2022-23,lba,6130,Stephen Mark Thompson Jr.,,,2021-22,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,224410,Troy Brown Jr,1999,,2024-25,nbl,98fe572c-c0fa-11f0-bf63-49d5428b62ac,Troy Brown Jnr,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,265371,William Garrett,,,2022-23,feb1,2711519,WILLIAM LEON GARRETT,1994-10-16,US,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+bcl,414344,Xabier Lopez,,,2025-26,ligau,2044955,XABIER LOPEZ RODRIGUEZ,2004-01-13,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bcl,284077,Xeyrius Williams,,,2026-27,fec,284077,Xeyrius Clifton Williams,,,"2022-23,2024-25",0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
-bcl,300743,Álvaro Fernandez,,,2022-23,feb2,2101872,ÁLVARO FERNANDEZ RUIZ,2005-03-26,ES,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bnxt,barcello-alexander,Alexander Barcello,,,2022-23,feb1,2640794,ALEXANDER MICHAEL BARCELLO,1998-08-31,US,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bnxt,meana-alonso,Alonso Meana,,,2026-27,feb2,1560358,ALONSO MEANA PEREZ,2000-03-20,ES,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bnxt,hyatt-aundre,Aundre Hyatt,,,2024-25,lnb,10449,Aundre Jordan Hyatt,2000-07-23,US,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -131,7 +126,7 @@ bnxt,pruitt-nigel,Nigel Pruitt,,,2021-22,feb1,2532035,NIGEL RACHARD PRUITT,1994-
 bnxt,lisboa-rafael,Rafael Lisboa,,,"2021-22,2022-23",feb1,2650871,RAFAEL DIAS MARQUES LISBOA SANTOS,1999-11-27,PT,"2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bnxt,wiel-randell,Randell Wiel,,,2024-25,feb3,2647287,RANDELL MICHAEL WIEL,2001-06-11,NL,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bnxt,brandsma-reinder,Reinder Brandsma,,,"2021-22,2022-23,2023-24,2024-25,2025-26",feb3,2893584,REINDER ANNE BRANDSMA,1999-11-11,NL,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-bnxt,llorente-sergio,Sergio Llorente,,,"2021-22,2022-23",feb1,1381662,SERGIO ANTONIO LLORENTE PAZ,1990-09-13,ES,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+bnxt,llorente-sergio,Sergio Llorente,,,"2021-22,2022-23",feb1,1381662,SERGIO ANTONIO LLORENTE PAZ,1990-09-13,ES,"2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bnxt,thorbjarnarson-thorir,Thorir Thorbjarnarson,,,2021-22,feb1,2532032,THORIR GUDMUNDUR THORBJARNARSON,1998-05-26,IS,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bsl,freeman-javon,Javon Jaleen  Freeman,,,2026-27,gleague,1631241,Javon Freeman-Liberty,1999,US,"2022-23,2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 bsl,freeman-javon,Javon Jaleen  Freeman,,,2026-27,nbl,a60fc635-7195-11f0-8b99-c10e42a83304,Javon Freeman-Liberty,1999,US,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -146,7 +141,7 @@ eurocup,013252,"ROBERTS, JOSHUA",1999-07-15,US,2024-25,fec,324401,Anthony Joshua
 eurocup,015245,"SCRUGGS, PAUL",1998,,2026-27,fec,348383,Paul Edwards Scruggs,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 eurocup,012089,"TAYLOR, RYAN",1995,US,2022-23,fec,303549,Ryan Joshua  Taylor,,,"2021-22,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 eurocup,014098,"WILLIAMS, DEANE",1996,,"2025-26,2026-27",lba,7410,Deane Alexander Williams,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-feb1,1384223,ALBERTO MARTIN MARIN,1995-03-28,ES,"2024-25,2025-26",feb3,2269660,P. MARTIN MARIN,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+feb1,2371569,ALF SYLVESTER BERG PEDERSEN,1998-05-27,DK,2022-23,fec,211560,Sylvester Pedersen,,,"2023-24,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2894665,BRYCE ADEN BAEZ PIERSON,2002-12-03,ES,2026-27,feb3,2125409,K. BAEZ PIERSON,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,1899194,CARLOS TABOADA HEISKANEN,2003-09-26,ES,2025-26,fec,271189,Carlos Taboada,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2527922,CHANDLER CHARLES JACOBS,1999-04-12,US,2022-23,ncaa,4897513,Chandler Jacobs,,,2021-22,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -158,7 +153,7 @@ feb1,1446122,FRANCISCO FERNANDO ALONSO MARTÍNEZ,1996-05-25,ES,"2023-24,2024-25"
 feb1,2643351,FRANCISCO JOSE RIBAU AMARANTE,2000-03-24,PT,"2023-24,2024-25",fec,219226,Francisco Amarante,,,"2021-22,2022-23,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2819327,GABRIEL MARVIN KALSCHEUR,1999-06-10,US,2025-26,fec,375611,Gabriel Kalscheur,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,1890104,J. BELEMENE DZABATOU,,,"2022-23,2023-24,2024-25",feb1,2820728,JUDICAËL ROMARIC BELEMENE-DZABATOU,1997-02-19,,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-feb1,1890104,J. BELEMENE DZABATOU,,,"2022-23,2023-24,2024-25",feb3,2375756,CEDRIC ALEXANDRE BELEMENE DZABATOU,1996-07-23,,"2023-24,2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+feb1,1890104,J. BELEMENE DZABATOU,,,"2022-23,2023-24,2024-25",feb3,2375756,CEDRIC ALEXANDRE BELEMENE DZABATOU,1996-07-23,,"2023-24,2024-25,2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2130102,J. GARCIA-ABRIL GUERRERO,2003-01-04,ES,"2022-23,2023-24,2024-25",feb3,2574426,A. GARCIA GUERRERO,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2612621,J. KASIBABU SHILALA,,,"2022-23,2023-24,2024-25",feb1,2820727,JONATHAN KASIBABU SHILALA MARTIN BARBER,1996-04-24,CD,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb1,2797651,JADEN AKWESI BEDIAKO,2000-09-24,GH,2024-25,gleague,1643173,Jaden Bediako,2000,US,2025-26,0.7,nombre_contenido+anio_nac+nacionalidad_distinta+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -185,7 +180,6 @@ feb1,1489129,TOMEU RIGO GUAL,1997-05-08,ES,2024-25,fec,204666,Tomeu Rigo,,,2023-
 feb1,2814207,TYLER BLAINE MCGHIE,2003-06-16,US,2025-26,ncaa,4703883,Tyler McGhie,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb2,2703996,ANDRE KEVIN GORDON II,1999-09-23,US,2023-24,ncaa,4431779,Andre Gordon,,,"2021-22,2022-23",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb2,1899194,CARLOS TABOADA HEISKANEN,2003-09-26,ES,"2024-25,2026-27",fec,271189,Carlos Taboada,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-feb2,2551714,I. DUKE TOUSSAINT,,,"2023-24,2024-25",feb2,2857724,IMRU AZARIAH DUKE TOUSSAINT,1999-07-20,TT,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb2,2335802,J. BITJAA KODY,,,"2023-24,2024-25,2025-26",feb2,2881233,JOHAN ERNEST BITJAA KODY,1993-04-03,CM,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb2,2815453,J. SIENCHE GUEMETA,,,2025-26,feb2,2916477,JACQUES-MÉLAINE SIENCHE GUEMETA,2001-01-16,CM,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb2,2816389,JOSE ANTONIO NVE MALEVA,2005-10-22,GQ,"2025-26,2026-27",feb3,2451922,J. NVE MALEVA,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -201,20 +195,20 @@ feb2,1834527,SANTIAGO PAZ VAZQUEZ,2003-03-09,ES,"2023-24,2025-26",feb3,2120378,D
 feb2,2371560,TIAGO FILIPE TEIXEIRA DO VALE DIAS,2004-11-19,PT,"2024-25,2025-26",fec,302104,Tiago Filipe,,,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb2,2880559,UWAIS DANILO ABDUL RAZAQUE,2004-03-19,MZ,2026-27,fec,307349,Uwais Razaque,,,"2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb2,1371559,VICTOR AGUILAR HERNANDEZ,1998-06-09,ES,"2023-24,2024-25,2025-26",feb3,1371461,A. AGUILAR HERNANDEZ,,,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-feb2,2101872,ÁLVARO FERNANDEZ RUIZ,2005-03-26,ES,"2023-24,2024-25",feb3,2300536,A. RUIZ FERNÁNDEZ,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,1773200,A. ABAD DE MIGUEL,,,2024-25,feb3,2825649,MARCELO MIGUEL VAN ZUUREN ABAD,2006-09-16,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2380740,A. LAJAY BOBEPARI,,,"2023-24,2024-25",feb3,2815844,ALI LAJAY BOBEPARI,2004-07-17,ES,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2587159,A. ONA EMBO,,,"2023-24,2024-25",lnb,5900,Renathan Ona Embo,1998-10-20,FR,"2020-21,2021-22,2022-23",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,1941639,ALEX MARTÍN ADELANTADO,2004-06-26,ES,"2023-24,2024-25,2025-26,2026-27",ncaa,5176185,Alex Martin,,,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+feb3,2650751,B. GONZALEZ RAMIREZ,,,"2023-24,2024-25",ligau,2827856,BRAYAN JESÚS GONZÁLEZ RAMÍREZ,2005-08-12,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2650738,BRANDON LEE CATALDO,1991-12-20,IT,"2023-24,2024-25,2025-26",ncaa,5311833,Brandon Lee,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,1874932,CARLOS CRESPO MONTESINOS,2003-07-27,ES,2025-26,feb3,2175456,R. MONTESINOS CRESPO,,,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,1899194,CARLOS TABOADA HEISKANEN,2003-09-26,ES,2023-24,fec,271189,Carlos Taboada,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,1634581,F. RAMIREZ SÁNCHEZ,,,2025-26,feb3,2017688,DAVID RAMÍREZ SÁNCHEZ,2003-07-21,ES,"2023-24,2024-25",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+feb3,2251974,G. DORTA PÉREZ,,,2024-25,ligau,2229563,HECTOR DORTA PEREZ,2008-06-02,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2411621,G. LOPEZ TORRE,,,"2023-24,2024-25,2025-26",fec,238043,Ruben Lopez De La Torre,2002-03-13,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2436955,G. MUKENDI KABANGA,,,2024-25,feb3,2817789,GULLIT MUKENDI KABANGA,1996-05-21,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2041121,GABRIEL PEREZ HERNANDEZ,2006-01-05,ES,2025-26,feb3,2233690,I. PÉREZ HERNÁNDEZ,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2579454,HAYDN HERBIE LING,2002-09-19,,2024-25,fec,332656,Haydn Ling,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
-feb3,1398628,JORDI IGLESIAS MARTINEZ,1997-05-09,ES,2023-24,feb3,2087872,V. IGLESIAS MARTINEZ,,,2024-25,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,1692354,JOSE MARIA MORENO FERNANDEZ,1999-04-27,ES,2024-25,feb3,2269485,J. FERNANDEZ MORENO,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2642683,K. DELGADO YEBOAH,,,"2023-24,2024-25",feb3,2815161,KWABENA ANIMA DELGADO YEBOAH,1999-04-13,CV,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2249276,L. GARCIA DE SANTIAGO,,,"2024-25,2025-26",feb3,2551858,SANTIAGO UMBRIA GARCIA,2000-05-03,ES,2023-24,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -225,6 +219,7 @@ feb3,1787870,N. MARTINEZ SERRANO,,,2024-25,feb3,2052159,PABLO MARTÍNEZ SERRANO,
 feb3,1804103,PABLO ANDRES VALVERDE,2001-10-02,ES,2024-25,feb3,1994958,M. ANDRES VALVERDE,,,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2267726,R. HENRIQUE RIBEIRO FORMOSO,,,"2023-24,2024-25,2025-26",feb3,2895289,RAINA ANDRÉ HENRIQUE RIBEIRO FORMOSO,2001-12-03,PT,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2469557,R. SANCHES CARDOSO MENDES,,,"2023-24,2024-25",feb3,2737134,ROESLEY DIEGO SANCHES CARDOSO MENDES,2002-03-11,CV,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+feb3,2791810,R. VINCENT MAGO,,,2025-26,ligau,2881729,RYAN OSABOHIEN VINCENT MAGO,2010-04-18,ES,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2754430,RUSSELL ANTHONY WILLIAMS,2006-02-08,US,2026-27,fec,350101,Anthony Williams,,,"2024-25,2025-26",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2432609,THOMAS ANTHONY YOME,1996-12-16,,"2023-24,2024-25,2025-26",ncaa,5106267,Anthony Thomas,,,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 feb3,2371328,V. TAVERAS RAFAEL,,,"2023-24,2024-25",feb3,2807682,VICTOR JULIO TAVERAS RAFAEL,2002-05-18,ES,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -244,10 +239,12 @@ fec,258249,London Tyus Perrantes,,,2021-22,gleague,1628506,London Perrantes,1994
 fec,323460,Malik James Osborne,,,"2022-23,2026-27",gbl,osborne-malik,Malik Osborne,1998-04-09,US,"2022-23,2023-24",0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,206514,Markeith Terrell Cummings,,,2021-22,lnb,9174,Markeith Cummings,1988-12-21,US,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,325497,Michael Lawrence Dixon,,,2023-24,gbl,dixon-michael,Michael Dixon,,,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+fec,293514,Nikola Tomic,,,2025-26,ligau,2882243,NIKOLA STIPO TOMIC,2005-01-05,DE,2026-27,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,341951,Pablo Abreu,,,2025-26,lba,7194,Pablo Giovanni Abreu,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,273123,Rashad Deandre Vaughn,,,"2020-21,2021-22",gleague,1626173,Rashad Vaughn,1996,US,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,257754,Reginald Joseph Connor Lynch,,,2021-22,lba,6251,Reginald Lynch,,,2021-22,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,284835,Render Antonio Woods,,,2021-22,gbl,woods-antonio,Antonio Woods,,,2021-22,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
+fec,321480,Ruben Valero,,,2023-24,ligau,2073295,RUBEN VALERO LOPEZ,2006-01-20,ES,"2025-26,2026-27",0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
 fec,303549,Ryan Joshua  Taylor,,,"2021-22,2024-25",lba,6856,Ryan Taylor,1994,US,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,259519,Supreme Shakur Hannah,,,2023-24,vtb,373448,Supreme Hannah,1994-05-17,US,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 fec,228939,Terry Du'Aun Allen,,,2021-22,lnb,133,Terry Allen,1993-12-29,US,2022-23,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
@@ -264,7 +261,6 @@ lnb,10460,Nelly Joseph,2001-11-20,NG,2025-26,ncaa,4703015,Nelly Junior Joseph,,,
 nba,dukeda01,David Duke Jr.,1999,US,"2021-22,2022-23,2023-24,2024-25",nbl,c2782518-b3d6-11f0-b4a7-dbbbdd6e819b,David Duke Jnr,,,2025-26,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 ncaa,4397340,Jordan Brown,,,2020-21,ncaa,4593465,Jordan Skipper-Brown,,,2021-22,0.7,nombre_contenido+nombre_unico+trayectoria_contigua,confianza bajo el umbral
 ncaa,4711593,Reese Waters,,,"2020-21,2022-23,2023-24",ncaa,5313927,Reese Dixon-Waters,,,2025-26,0.7,nombre_contenido+nombre_unico+club_comun,confianza bajo el umbral
-acb,30000661,Aiert Velasco,,,2025-26,feb2,2188464,AIERT VELASCO BILBAO,2004-02-23,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20200483,Albert Oliver,,,"2020-21,2021-22",feb3,1948875,ALBERT OLIVER HERNANDEZ,2000-09-17,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20212802,Alberto Alonso,,,2020-21,feb2,1879609,ALBERTO ALONSO CUEVAS,2001-04-01,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,30002818,Alonso Grela,,,2023-24,feb2,2533473,ALONSO GRELA ROJAS,2006-01-24,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -276,13 +272,18 @@ acb,20212256,Diego Alderete,,,2020-21,feb1,1676845,DIEGO ALDERETE DIAZ,2000-04-2
 acb,30005338,Elvar Fridriksson,1994,,2025-26,lba,6380,Elvar Mar Fridriksson,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20212720,Emil Stoilov,,,2020-21,feb2,2462416,EMIL EMILOV STOILOV,2002-02-07,BG,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20202155,Eulis Báez,,,"2020-21,2021-22,2022-23",feb3,2087418,GAVIN EULIS BAEZ PIERSON,2007-09-17,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+acb,20202155,Eulis Báez,,,"2020-21,2021-22,2022-23",ligau,2087418,GAVIN EULIS BAEZ PIERSON,2007-09-17,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+acb,30003478,Gildas Giménez,,,2024-25,ligau,2225315,GILDAS GIMENEZ FERNANDEZ,2007-01-12,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20210134,Ignacio Rosa,,,2022-23,feb2,1535344,IGNACIO ROSA POMPIDO,1999-07-01,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+acb,30005391,Isaac Vazquez,,,2026-27,feb2,1778999,ISAAC VAZQUEZ PEREZ,2004-10-10,ES,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+acb,30005391,Isaac Vazquez,,,2026-27,feb3,1778999,ISAAC VAZQUEZ PEREZ,2004-10-10,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20212350,Ismael Corraliza,,,2020-21,feb2,1759956,ISMAEL CORRALIZA COBA,2000-02-28,ES,"2023-24,2024-25,2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20204124,Jaime Fernández,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",bcl,175433,Jaime Fernandez,,,"2021-22,2022-23,2023-24,2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 acb,20204124,Jaime Fernández,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",eurocup,002364,"FERNANDEZ, JAIME",1993,,"2020-21,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 acb,20212348,Jaime Fernández,,,"2020-21,2021-22,2024-25,2025-26,2026-27",bcl,226983,Jaime Fernandez,,,2020-21,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 acb,20212348,Jaime Fernández,,,"2020-21,2021-22,2024-25,2025-26,2026-27",fec,226983,Jaime Fernandez,1993,,"2021-22,2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 acb,20211935,Javier López,,,"2020-21,2021-22",feb3,2033850,JAVIER LOPEZ MONTAÑA,1995-08-16,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+acb,20211935,Javier López,,,"2020-21,2021-22",ligau,2474089,JAVIER OCHOA LOPEZ,2008-06-17,ES,"2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20203795,Josep Franch,,,2022-23,feb2,1072760,JOSEP FRANCH DE PABLO,1991-01-28,ES,"2024-25,2025-26",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20212312,Josep Peris,,,2026-27,feb2,1702420,JOSEP PERIS CRESPO,2000-08-08,ES,"2023-24,2024-25",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,30004675,Juan Garcia,,,2026-27,feb1,1569199,JUAN ALBERTO ESTEVES-GARCIA COFFI,1998-08-07,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -290,8 +291,8 @@ acb,20212485,Juan José Santana,,,2020-21,feb1,1857448,JUAN JOSE SANTANA LUCHORO
 acb,20212485,Juan José Santana,,,2020-21,feb2,1857448,JUAN JOSE SANTANA LUCHORO,2001-04-08,ES,"2024-25,2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20209532,Julen Olaizola,,,2020-21,feb1,1558447,JULEN IMANOL OLAIZOLA GONZALEZ,1993-03-04,ES,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20209532,Julen Olaizola,,,2020-21,feb2,1558447,JULEN IMANOL OLAIZOLA GONZALEZ,1993-03-04,ES,"2023-24,2024-25",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+acb,30002477,Louis Riga,,,"2022-23,2023-24,2024-25",ligau,2892601,LOUIS NEA FRANÇOISE RIGA,2005-09-06,FR,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20210497,Marc Garcia,,,"2020-21,2021-22,2022-23",feb1,1763579,MARC GARCIA ANTONELL,1996-03-07,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-acb,20212078,Marc Peñarroya,,,2020-21,feb2,1951408,MARC PEÑARROYA CASTILLA,2002-04-17,ES,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20212078,Marc Peñarroya,,,2020-21,feb3,1951408,MARC PEÑARROYA CASTILLA,2002-04-17,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,30000068,Marques Townes,,,2020-21,feb1,2839186,MARQUES RASHAAD TOWNES VILLAR,1995-09-03,DO,"2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20209872,Mikel Motos,,,2020-21,feb1,1447983,MIKEL MOTOS CABODEVILLA,1993-01-30,ES,"2022-23,2023-24,2024-25,2025-26",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -317,6 +318,7 @@ acb,20212082,Toni Naspler,,,2021-22,feb1,1947677,TONI NASPLER PERAIRE,2003-07-11
 acb,20212082,Toni Naspler,,,2021-22,feb2,1947677,TONI NASPLER PERAIRE,2003-07-11,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 acb,20211660,Xabi López-Arostegui,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",eurocup,005356,"LOPEZ-AROSTEGUI, XABI",1997,,"2020-21,2021-22,2024-25",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 acb,20211660,Xabi López-Arostegui,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",euroleague,005356,"LOPEZ-AROSTEGUI, XABI",1997,,"2022-23,2023-24,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+acb,20203945,Álex López,,,"2020-21,2021-22,2023-24",ligau,2176449,ALEX LOPEZ MARTINEZ,2008-08-15,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bbl,52380,Aeneas Jung,,,2022-23,bbl,58147,Aeneas Jung,,,2023-24,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,52380,Aeneas Jung,,,2022-23,bcl,238618,Aeneas Jung,,,2023-24,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,58147,Aeneas Jung,,,2023-24,bcl,238618,Aeneas Jung,,,2023-24,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
@@ -650,9 +652,9 @@ bbl,47287,Joanic Grüttner Bacoul,,,2020-21,bnxt,bacoul-joanic,Joanic Bacoul,,,2
 bbl,2004102,Joe Wieskamp,,,2026-27,bcl,340478,Joe Wieskamp,1999,US,2026-27,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,2001682,Joel Aminu,,,"2025-26,2026-27",bcl,303594,Joel Aminu,,,"2024-25,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,56768,Joel Aminu,,,"2023-24,2024-25",bcl,303594,Joel Aminu,,,"2024-25,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
-bbl,55594,Joel Harms,,,2022-23,bbl,56621,Joel Harms,,,"2023-24,2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+bbl,55594,Joel Harms,,,2022-23,bbl,56621,Joel Harms,,,"2023-24,2024-25,2025-26,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,55594,Joel Harms,,,2022-23,bcl,348421,Joel Harms,,,2023-24,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
-bbl,56621,Joel Harms,,,"2023-24,2024-25,2025-26",bcl,348421,Joel Harms,,,2023-24,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+bbl,56621,Joel Harms,,,"2023-24,2024-25,2025-26,2026-27",bcl,348421,Joel Harms,,,2023-24,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,47176,Johannes Krug,,,2020-21,bbl,51721,Johannes Krug,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,47176,Johannes Krug,,,2020-21,fec,258736,Johannes Krug,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,51721,Johannes Krug,,,2021-22,fec,258736,Johannes Krug,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
@@ -826,6 +828,7 @@ bbl,2001131,Lloyd Pandi,,,"2024-25,2025-26",bcl,224226,Lloyd Pandi,,,"2022-23,20
 bbl,2001131,Lloyd Pandi,,,"2024-25,2025-26",fec,224226,Lloyd Pandi,,,2025-26,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,2004714,Lloyd Pandi,,,2026-27,bcl,224226,Lloyd Pandi,,,"2022-23,2023-24,2024-25,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,2004714,Lloyd Pandi,,,2026-27,fec,224226,Lloyd Pandi,,,2025-26,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+bbl,2005427,London Perrantes,1994,US,2026-27,fec,258249,London Tyus Perrantes,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bbl,47182,Lorenz Brenneke,,,2020-21,euroleague,007566,"BRENNEKE, LORENZ",2000,,2020-21,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,49461,Lorenz Brenneke,,,2021-22,bbl,52377,Lorenz Brenneke,,,2022-23,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,47683,Louis Olinde,,,2020-21,bbl,49497,Louis Olinde,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
@@ -1193,8 +1196,8 @@ bbl,2004292,Tobias Jensen,,,2026-27,euroleague,010726,"JENSEN, TOBIAS",2004,,202
 bbl,52664,Tobias Jensen,,,2022-23,bbl,56521,Tobias Jensen,,,"2023-24,2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,52664,Tobias Jensen,,,2022-23,eurocup,010726,"JENSEN, TOBIAS",2004,,"2022-23,2023-24,2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,56521,Tobias Jensen,,,"2023-24,2024-25,2025-26",eurocup,010726,"JENSEN, TOBIAS",2004,,"2022-23,2023-24,2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
-bbl,2001641,Tommy Kuhse,,,2025-26,bcl,338971,Tommy Kuhse,1997,US,"2024-25,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
-bbl,2001641,Tommy Kuhse,,,2025-26,fec,338971,Tommy Kuhse,1997,US,2025-26,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+bbl,2001641,Tommy Kuhse,,,"2025-26,2026-27",bcl,338971,Tommy Kuhse,1997,US,"2024-25,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+bbl,2001641,Tommy Kuhse,,,"2025-26,2026-27",fec,338971,Tommy Kuhse,1997,US,2025-26,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,56657,Tommy Kuhse,,,2023-24,bcl,338971,Tommy Kuhse,1997,US,"2024-25,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,47479,Tremmell Darden,,,2020-21,bbl,49473,Tremmell Darden,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bbl,47479,Tremmell Darden,,,2020-21,bcl,149798,Tremmell Darden,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
@@ -1249,10 +1252,10 @@ bbl,53268,Ziga Samar,,,2022-23,eurocup,007550,"SAMAR, ZIGA",2001,,"2022-23,2026-
 bbl,56566,Ziga Samar,,,"2023-24,2024-25",euroleague,007550,"SAMAR, ZIGA",2001,,"2023-24,2024-25",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bcl,211592,Ahmet Can Duran,,,2023-24,bsl,duran-ahmet,Ahmet Can Duran,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,286527,Alberto Alonso,,,2020-21,feb2,1879609,ALBERTO ALONSO CUEVAS,2001-04-01,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+bcl,160324,Alex Lopez,,,"2020-21,2023-24",ligau,2176449,ALEX LOPEZ MARTINEZ,2008-08-15,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,160119,Augusto Lima,,,"2022-23,2023-24",feb1,1583271,AUGUSTO CESAR LIMA BRITO,1991-09-17,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,157644,Can Maxim Mutaf,,,2021-22,fec,157644,Can Mutaf,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,196509,Denzel Andersson,,,"2021-22,2022-23",feb1,2524084,ROLAND DENZEL ANDERSSON,1996-09-21,SE,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-bcl,300446,Diego Fernandez Trujillo,,,"2022-23,2023-24,2024-25",feb3,2007163,DIEGO FERNANDEZ TRUJILLO,2005-05-09,ES,"2023-24,2024-25",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bcl,182947,Edgar Vicedo,,,2023-24,feb1,1715117,EDGAR BENJAMIN VICEDO AYALA,1994-08-24,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,211909,Goncalo Delgado,,,2026-27,feb1,2432909,GONÇALO PEREIRA DELGADO,1998-01-22,PT,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,299765,Guy Artman,,,2022-23,feb1,2642904,GUY ARTMAN NAHMIAS,2002-02-09,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1261,6 +1264,7 @@ bcl,324253,Hugo Marin,,,2023-24,feb3,2895369,HUGO MARÍN BIRKENER,2003-04-29,ES,
 bcl,218831,Ignacio Rosa,,,2022-23,feb2,1535344,IGNACIO ROSA POMPIDO,1999-07-01,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,175433,Jaime Fernandez,,,"2021-22,2022-23,2023-24,2024-25,2025-26",eurocup,002364,"FERNANDEZ, JAIME",1993,,"2020-21,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bcl,226983,Jaime Fernandez,,,2020-21,fec,226983,Jaime Fernandez,1993,,"2021-22,2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+bcl,238040,Javier Garcia,,,2020-21,ligau,2237206,JAVIER VIGUER GARCÍA DE LA VEGA,2008-02-26,ES,"2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,342053,Javon Jaleen Freeman,,,2024-25,bsl,freeman-javon,Javon Jaleen  Freeman,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,275282,Joanic Grüttner Bacoul,,,2020-21,bnxt,bacoul-joanic,Joanic Bacoul,,,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,295584,Jonathan Baehre,,,"2021-22,2022-23",bcl,348424,Jonathan Baehre,,,"2023-24,2024-25,2026-27",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
@@ -1272,6 +1276,7 @@ bcl,257708,Kendall Smith,1995-09-18,US,2023-24,gbl,smith-kendall,Kendall Smith,,
 bcl,226866,Keye van der Vuurst de Vries,,,"2020-21,2021-22,2022-23",eurocup,013286,"VAN DER VUURST, KEYE",2001,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,226866,Keye van der Vuurst de Vries,,,"2020-21,2021-22,2022-23",fec,226866,Keye Van Der Vuurst,2001,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,258249,London Perrantes,1994,US,2024-25,fec,258249,London Tyus Perrantes,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+bcl,288563,Louis  Riga,,,"2022-23,2023-24,2024-25",ligau,2892601,LOUIS NEA FRANÇOISE RIGA,2005-09-06,FR,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bcl,120114,Lynn Kidd,,,2026-27,lnb,10865,Lynn Kidd,2001-12-17,US,2026-27,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bcl,397700,Lynn Kidd,,,2025-26,bsl,kidd-lynn,Lynn Kidd,2001-12-17,US,2025-26,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 bcl,196785,Marc Garcia,,,2021-22,feb1,1763579,MARC GARCIA ANTONELL,1996-03-07,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1302,6 +1307,7 @@ bnxt,kostadinov-konstantin,Konstantin Kostadinov,,,2026-27,feb1,2218176,KONSTANT
 bnxt,nwogbo-lotanna,Lotanna Nwogbo,,,2021-22,feb1,2648543,LOTANNA AFAM NWOGBO,1993-05-30,NG,"2023-24,2024-25,2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bnxt,dijkstra-menno,Menno Dijkstra,,,"2024-25,2025-26,2026-27",feb1,2433298,MENNO LODEWIJK DIJKSTRA,1997-01-11,NL,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bnxt,nzege-michel,Michel Nzege,,,2022-23,fec,181322,Michel-Ofik Nzege,,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+bnxt,martinez-miguel,Miguel Martinez,,,2021-22,ligau,2062557,MIGUEL MARTINEZ LOPEZ,2007-01-30,ES,"2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bnxt,stilma-morgan,Morgan Stilma,,,2021-22,feb1,2734242,MORGAN SIETSE STILMA,2000-06-19,NL,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bnxt,stilma-morgan,Morgan Stilma,,,2021-22,feb2,2734242,MORGAN SIETSE STILMA,2000-06-19,NL,"2024-25,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bnxt,littleson-spencer,Spencer Littleson,,,2021-22,feb1,2650859,SPENCER PHILLIP LITTLESON,1998-05-29,US,"2023-24,2024-25,2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1316,7 +1322,6 @@ bsl,roberts-joshua,Joshua Artee Roberts,1999-07-15,US,2025-26,fec,324401,Anthony
 bsl,alston-justin,Justin Alston,,,2025-26,fec,238070,Justin Alexander Alston,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bsl,anderson-karvel,Karvel Markeese Anderson,1991-06-03,US,2020-21,lba,6615,Karvel Markeese Anderson,,,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 bsl,al-omer,Ömer Utku Al,,,"2020-21,2026-27",fec,211580,Omer Utku Al,1998,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-eurocup,009911,"BROWNE, GARY",1993,,2020-21,lba,771,Gary Browne,,,2020-21,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 eurocup,015064,"CAFFEY, MICHAEL",1993,,2026-27,fec,223295,Michael Anthony Caffey,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 eurocup,014907,"FRIDRIKSSON, ELVAR",1994,,2026-27,lba,6380,Elvar Mar Fridriksson,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 eurocup,010584,"HOLMAN, ARIC",1997,US,2020-21,lba,6613,Aric Jeremiah Holman,,,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1324,7 +1329,6 @@ eurocup,014850,"JOHNSON, JAYCE",1997,US,2026-27,fec,287335,Jayce Ryback Johnson,
 eurocup,009571,"SMITH, TAYLOR",1991,,2020-21,lba,6611,Taylor Lynn Smith,,,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 euroleague,004571,"SISKO, ZAN MARK",1997,,"2020-21,2021-22,2022-23",fec,197411,Zan Sisko,,,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 euroleague,004571,"SISKO, ZAN MARK",1997,,"2020-21,2021-22,2022-23",lba,9358,Zan Sisko,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-feb1,1876223,A. MONTERO ISLA,2003-04-27,ES,"2022-23,2024-25",feb3,2226351,I. MONTERO ISLA,,,2025-26,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 feb1,2640663,ABDOULAYE TANOR NGOM,1998-01-19,SN,"2023-24,2024-25,2025-26,2026-27",ncaa,4701240,Tanor Ngom,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2910592,BRYCEN LAMAR GOODINE,1999-09-29,CV,2026-27,ncaa,4431716,Brycen Goodine,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2820639,D. ADDAE-WUSU,,,2025-26,ncaa,4590361,Dylan Addae-Wusu,,,"2021-22,2023-24",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1332,7 +1336,7 @@ feb1,2863973,E. POLANCO TAVAREZ,,,2025-26,feb3,2467683,EDDY BRYAN POLANCO TAVARE
 feb1,2675260,EDDY RAFAEL POLANCO TAVAREZ,1994-08-05,DO,2023-24,feb1,2863973,E. POLANCO TAVAREZ,,,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2772828,FRANCISCO ANDRADE AMIEL,1996-01-20,PT,2026-27,fec,190732,Francisco Amiel,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2432909,GONÇALO PEREIRA DELGADO,1998-01-22,PT,2022-23,fec,211909,Goncalo Delgado,,,"2024-25,2025-26",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-feb1,2790234,J. TABOADA LÜHERS,,,2024-25,feb3,2706562,J. TABOADA LUHERS,,,2024-25,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+feb1,2790234,J. TABOADA LÜHERS,2007-06-05,UY,2024-25,feb3,2706562,J. TABOADA LUHERS,,,2024-25,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 feb1,2785180,JALEN CHRISTOPHER CONE,2000-12-14,US,"2024-25,2025-26,2026-27",ncaa,4431698,Jalen Cone,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2862573,JALEN JAMAL TATE,1998-06-18,US,"2025-26,2026-27",ncaa,4067442,Jalen Tate,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2814907,JAVONTE ELIZA BROWN,2002-09-19,CA,"2025-26,2026-27",ncaa,4702024,Javonte Brown,,,"2020-21,2021-22,2022-23",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1360,14 +1364,13 @@ feb1,2816849,SPENCER JOHN SVEJCAR,1994-11-08,,2025-26,fec,239995,Spencer Svejcar
 feb1,2734244,TRAVIS TRAYVON MUNNINGS,1994-09-14,BS,"2024-25,2025-26,2026-27",fec,224539,Travis Munnings,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,1371559,VICTOR AGUILAR HERNANDEZ,1998-06-09,ES,2026-27,feb3,1371461,A. AGUILAR HERNANDEZ,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb1,2752100,WILDENS CARL LEVEQUE,2000-06-11,HT,2026-27,ncaa,4431805,Wildens Leveque,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-feb2,1384223,ALBERTO MARTIN MARIN,1995-03-28,ES,2023-24,feb3,2269660,P. MARTIN MARIN,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2527922,CHANDLER CHARLES JACOBS,1999-04-12,US,"2023-24,2024-25,2025-26,2026-27",ncaa,4897513,Chandler Jacobs,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2524333,D. BORDON DRI,,,2023-24,feb2,2735652,D. BORDON DRI,,,2024-25,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
+feb2,2023523,D. POU BLINNIKOV,,,2024-25,ligau,1891986,ALEXIS POU BLINNIKOV,2005-06-07,ES,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2772828,FRANCISCO ANDRADE AMIEL,1996-01-20,PT,"2024-25,2025-26",fec,190732,Francisco Amiel,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2882503,JALEN ISAIAH MILLER,2003-03-09,US,2026-27,ncaa,4708076,Jalen Miller,,,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2736568,JORDAN JEAN PIERRE KELLIER,1998-11-20,JM,"2024-25,2026-27",ncaa,4702457,Jordan Kellier,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2534044,JOSHUA TYRON TOMAIC TOMAIC,1998-04-20,ES,"2023-24,2025-26",ncaa,4066375,Joshua Tomaic,,,"2020-21,2021-22",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-feb2,2707385,LEE ABRAHAM AALIYA,2004-11-08,GH,2023-24,fec,313451,Lee Aaliya,,,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2244783,M. DE LARREA ASENJO,,,2026-27,feb2,2246414,SERGIO DE LARREA ASENJO,2005-12-04,ES,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2734242,MORGAN SIETSE STILMA,2000-06-19,NL,"2024-25,2026-27",fec,221834,Morgan Stilma,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb2,2304342,N. EL HADJI,2003-03-05,SN,2023-24,fec,306259,Mame Samba Deme El Hadji,,,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1383,17 +1386,16 @@ feb3,2882512,BOGDAN-CRISTIAN CRET,2004-04-28,,2026-27,fec,285137,Bogdan Cret,,,2
 feb3,1949066,D. OLU ELIJAH,,,2023-24,feb3,2817035,DESTINY EBOLO OLU-ELIJAH,2002-03-19,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,1813083,DAVID JIMENEZ FERNANDEZ,2001-12-19,ES,2023-24,feb3,467674,A. JIMENEZ FERNANDEZ,,,"2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,1862952,FRANCISCO SANCHEZ SUAREZ,2002-05-17,ES,"2023-24,2024-25",feb3,2259340,S. SUAREZ SANCHEZ,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-feb3,2052876,G. VILLAREJO COSTA,2006-05-11,ES,2023-24,feb3,2195271,R. VILLAREJO COSTA,,,2024-25,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 feb3,1950105,I. PALLARES ARUMI,,,2023-24,feb3,2159547,P. PALLARES ARUMI,,,"2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 feb3,1933382,IAN GRANJA I BERNAD,2003-03-07,ES,"2024-25,2025-26,2026-27",ncaa,5106636,Ian Granja,,,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,1875150,JAVIER DIAZ PEREZ,1991-04-10,ES,2024-25,feb3,2044364,T. DIAZ PEREZ,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,2656559,JOONA DANIEL HEINONEN,2004-05-21,FI,2023-24,fec,270520,Joona Heinonen,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,2736568,JORDAN JEAN PIERRE KELLIER,1998-11-20,JM,2025-26,ncaa,4702457,Jordan Kellier,,,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,2579707,K. EL HADJI MALICK,,,2024-25,lba,9123,Malick Mane El Hadji Maodo,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-feb3,2735828,KHORY ROSEMBERT BRUNOT,2006-08-20,FR,2024-25,fec,374232,Khory Brunot,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,2641810,L. DE LA CRUZ DE LA ROSA,,,2023-24,feb3,2736806,L. DE LA CRUZ DE LA ROSA,,,"2024-25,2025-26",0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 feb3,2187467,M. SAN MILLAN GONZALEZ-QUEVEDO,2007-09-26,ES,"2025-26,2026-27",feb3,620368,C. MILLAN GONZALEZ,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,2895587,MIKE STEPHEN EMMANUEL YAYO,2003-04-17,CI,2026-27,ncaa,5164369,Emmanuel Stephen,,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+feb3,2557188,P. MARTINEZ ALONSO,,,2023-24,ligau,2094410,HUGO ALONSO MARTINEZ,2008-07-14,ES,2025-26,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,2108861,PABLO HERNANDEZ BLANCO,2007-06-10,ES,2025-26,fec,274570,Pablo Hernandez,,,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,891463,RODRIGO SAN MIGUEL DE LA IGLESIA,1985-01-21,ES,2024-25,fec,135504,Rodrigo San Miguel,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 feb3,2371560,TIAGO FILIPE TEIXEIRA DO VALE DIAS,2004-11-19,PT,2023-24,fec,302104,Tiago Filipe,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1407,6 +1409,7 @@ fec,284133,Anthony Tyrone Mathis,,,2023-24,ncaa,4701988,Anthony Mathis Jr.,1996,
 fec,203168,Bryant Dejuan Crawford,,,2021-22,vtb,429825,Bryant Crawford,1997-03-21,US,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,240917,Craig Adzeh,,,2024-25,lnb,54,Craig George Adzeh,2003-05-26,FR,"2020-21,2021-22",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,324564,Jaizec Lottie,1998,,2025-26,lba,7000,Jaizec Jordan Lottie,,,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+fec,238040,Javier Garcia,,,2021-22,ligau,2237206,JAVIER VIGUER GARCÍA DE LA VEGA,2008-02-26,ES,"2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,287335,Jayce Ryback Johnson,,,2020-21,gleague,1631384,Jayce Johnson,1997,US,"2022-23,2023-24",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,287335,Jayce Ryback Johnson,,,2020-21,lba,7438,Jayce Johnson,1997,US,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,271960,Joshua Henry Sharma,,,"2021-22,2024-25",gbl,sharma-joshua,Joshua-Hendry SHARMA,,,2026-27,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1422,7 +1425,7 @@ fec,219008,Muhaymin Mustafa,,,2021-22,gbl,muhaymin-mustafa,Mustafa Muhaymin,,,20
 fec,219008,Muhaymin Mustafa,,,2021-22,gbl,mustafa-muhaymin,Muhaymin Mustafa,,,2021-22,0.65,nombre_igual+trayectoria_contigua+club_comun,confianza bajo el umbral
 fec,348383,Paul Edwards Scruggs,,,2025-26,ncaa,4278591,Paul Scruggs,1998,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,273123,Rashad Deandre Vaughn,,,"2020-21,2021-22",gbl,vaughn-rashad,Rashad Vaughn,1996,US,"2023-24,2024-25",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-fec,282625,Stephen Mark Thompson Jr.,,,2021-22,gleague,1629808,Stephen Thompson,1996,PR,"2023-24,2024-25,2025-26",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+fec,282625,Stephen Mark Thompson Jr.,,,2021-22,gleague,1629808,Stephen Thompson,1996,PR,"2023-24,2024-25,2025-26,2026-27",0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,228939,Terry Du'Aun Allen,,,2021-22,lba,6998,Terry Allen,1993-12-29,US,2023-24,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 fec,213471,Vincent Laron Sanford,,,2023-24,lnb,6853,Vincent Sanford,1990-12-05,US,2020-21,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 gbl,fridriksson-elvar,Elvar Mar Fridriksson,1994,,"2023-24,2024-25",lba,6380,Elvar Mar Fridriksson,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1431,7 +1434,7 @@ gbl,joseph-nelly,Nelly Junior JOSEPH,2001-11-20,NG,2026-27,ncaa,4703015,Nelly Ju
 gleague,1628575,Jaylen Johnson,1996,US,"2021-22,2022-23",ncaa,4894462,Jaylen Crocker-Johnson,,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 gleague,1628992,Justin Jackson,1996,CA,"2020-21,2021-22,2023-24,2025-26",nba,jacksju01,Justin Jackson,1995,US,"2020-21,2021-22,2022-23,2023-24",0.65,nombre_igual+anio_nac+nacionalidad_distinta+trayectoria_contigua+club_comun,confianza bajo el umbral
 gleague,1628777,Maverick Rowan,1996,US,2022-23,lba,7417,Maverick Lewis Rowan,,,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
-gleague,1629808,Stephen Thompson,1996,PR,"2023-24,2024-25,2025-26",lba,6130,Stephen Mark Thompson Jr.,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
+gleague,1629808,Stephen Thompson,1996,PR,"2023-24,2024-25,2025-26,2026-27",lba,6130,Stephen Mark Thompson Jr.,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 gleague,1642550,Xavier Johnson,2000-03-01,US,2024-25,lba,6614,Xavier Alexander Johnson,,,2022-23,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 lba,6132,Bryant Dejuan Crawford,,,2021-22,vtb,429825,Bryant Crawford,1997-03-21,US,2024-25,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
 lba,7030,Charlie Edward Moore,,,"2023-24,2026-27",ncaa,4066345,Charlie Moore,,,2021-22,0.65,nombre_contenido+nombre_unico,confianza bajo el umbral
@@ -1871,10 +1874,10 @@ bbl,52640,Javontae Hawkins,,,2022-23,vtb,392934,Javontae Hawkins,1993-11-13,US,2
 bbl,2001387,JeQuan Lewis,,,2024-25,bbl,53267,JeQuan Lewis,,,2022-23,0.6,nombre_igual+club_comun,confianza bajo el umbral
 bbl,2001387,JeQuan Lewis,,,2024-25,bcl,258737,JeQuan Lewis,1994-09-07,US,"2021-22,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001387,JeQuan Lewis,,,2024-25,eurocup,012617,"LEWIS, JEQUAN",1994-09-07,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2001387,JeQuan Lewis,,,2024-25,lnb,9596,JeQuan Lewis,1994-09-07,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2001387,JeQuan Lewis,,,2024-25,lnb,9596,JeQuan Lewis,1994-09-07,US,"2023-24,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,53267,JeQuan Lewis,,,2022-23,bcl,258737,JeQuan Lewis,1994-09-07,US,"2021-22,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,53267,JeQuan Lewis,,,2022-23,eurocup,012617,"LEWIS, JEQUAN",1994-09-07,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,53267,JeQuan Lewis,,,2022-23,lnb,9596,JeQuan Lewis,1994-09-07,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,53267,JeQuan Lewis,,,2022-23,lnb,9596,JeQuan Lewis,1994-09-07,US,"2023-24,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2001685,Jeff Garrett Jr.,,,"2025-26,2026-27",bbl,56782,Jeff Garrett Jr.,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,50790,Jeff Roberson,,,2021-22,bbl,52531,Jeff Roberson,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,50790,Jeff Roberson,,,2021-22,bcl,274248,Jeff Roberson,1996-08-20,US,"2022-23,2023-24",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2456,8 +2459,8 @@ bbl,2000860,Timo Lanmüller,,,2024-25,bbl,56776,Timo Lanmüller,,,2023-24,0.6,no
 bbl,2004292,Tobias Jensen,,,2026-27,bbl,56521,Tobias Jensen,,,"2023-24,2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,2004292,Tobias Jensen,,,2026-27,eurocup,010726,"JENSEN, TOBIAS",2004,,"2022-23,2023-24,2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,56521,Tobias Jensen,,,"2023-24,2024-25,2025-26",euroleague,010726,"JENSEN, TOBIAS",2004,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-bbl,2001641,Tommy Kuhse,,,2025-26,bbl,56657,Tommy Kuhse,,,2023-24,0.6,nombre_igual+club_comun,confianza bajo el umbral
-bbl,2001641,Tommy Kuhse,,,2025-26,lba,7430,Tommy Kuhse,1997,US,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+bbl,2001641,Tommy Kuhse,,,"2025-26,2026-27",bbl,56657,Tommy Kuhse,,,2023-24,0.6,nombre_igual+club_comun,confianza bajo el umbral
+bbl,2001641,Tommy Kuhse,,,"2025-26,2026-27",lba,7430,Tommy Kuhse,1997,US,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,55877,Tommy Kuhse,,,2022-23,bbl,56657,Tommy Kuhse,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,55877,Tommy Kuhse,,,2022-23,gleague,1631339,Tommy Kuhse,1997,US,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 bbl,55877,Tommy Kuhse,,,2022-23,ncaa,4066735,Tommy Kuhse,1997,US,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2556,22 +2559,23 @@ bnxt,mathon-sukhmail,Sukhmail Mathon,,,2022-23,fec,318713,Sukhmail Mathon,1998,,
 bnxt,feie-tallir,Tallir Feie,,,2022-23,fec,300494,Feie Tallir,,,"2024-25,2025-26",0.6,nombre_igual+club_comun,confianza bajo el umbral
 eurocup,012089,"TAYLOR, RYAN",1995,US,2022-23,gbl,taylor-ryan,Ryan Taylor,,,"2021-22,2022-23,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 euroleague,014008,"ROBINSON, JUSTIN",1997-10-12,US,"2025-26,2026-27",lba,7434,Justin Robinson,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb1,2199737,A. MARTINEZ FERNÁNDEZ,,,2024-25,feb3,2213696,C. MARTINEZ FERNANDEZ,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb1,2199737,A. MARTINEZ FERNÁNDEZ,,,2024-25,feb3,2213696,C. MARTINEZ FERNANDEZ,,,"2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb1,2551714,I. DUKE TOUSSAINT,,,"2022-23,2024-25",feb2,2857724,I. DUKE TOUSSAINT,1999-07-20,TT,"2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb1,2127170,J. GONZALEZ VAZQUEZ,2006-05-18,ES,2023-24,feb3,2752076,S. GONZALEZ VAZQUEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb1,2790234,J. TABOADA LÜHERS,,,2024-25,feb3,2760349,J. TABOADA LUHERS,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb1,2790234,J. TABOADA LÜHERS,2007-06-05,UY,2024-25,feb3,2760349,J. TABOADA LUHERS,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb1,2436779,M. CARRERA GAMBOA,,,2022-23,feb1,2642635,M. CARRERA GAMBOA,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb1,2217363,MIHA LAPORNIK,1993-10-18,SI,"2023-24,2024-25",fec,175782,Miha Lapornik,,,"2020-21,2022-23",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb1,2274746,P. SALO BLAYA,2005-08-06,ES,2023-24,feb3,2153495,J. SALO BLAYA,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb1,2127161,S. GONZALEZ VAZQUEZ,2006-05-18,ES,2023-24,feb3,2752076,S. GONZALEZ VAZQUEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb1,2101872,Á. FERNANDEZ RUIZ,2005-03-26,ES,2026-27,feb3,2300536,A. RUIZ FERNÁNDEZ,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2153761,A. GARCIA MARTINEZ,2003-09-04,ES,2023-24,feb3,1801782,J. GARCIA MARTINEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2106906,A. HUGUET CARRASCO,,,"2023-24,2024-25",feb3,2173602,L. HUGUET CARRASCO,2008-09-30,ES,"2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb2,1895175,A. LÓPEZ MARTINEZ,2004-05-29,ES,2025-26,feb3,2062557,M. MARTINEZ LOPEZ,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2155408,D. LORENZO FERNANDEZ,,,2023-24,feb3,1671798,A. LORENZO FERNANDEZ,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2155408,D. LORENZO FERNANDEZ,,,2023-24,feb3,2300088,J. LORENZO FERNANDEZ,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb2,840825,E. RODRÍGUEZ PÉREZ,1996-10-30,ES,2023-24,feb3,1958108,P. RODRIGUEZ PEREZ,,,"2023-24,2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb2,840825,E. RODRÍGUEZ PÉREZ,1996-10-30,ES,2023-24,feb3,1958108,P. RODRIGUEZ PEREZ,,,"2023-24,2024-25,2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,840825,E. RODRÍGUEZ PÉREZ,1996-10-30,ES,2023-24,feb3,2326823,H. PÉREZ RODRÍGUEZ,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2087418,G. BAEZ PIERSON,2007-09-17,ES,2024-25,feb3,2125409,K. BAEZ PIERSON,,,2026-27,0.6,nombre_igual+club_comun,confianza bajo el umbral
+feb2,2551714,I. DUKE TOUSSAINT,,,"2023-24,2024-25",feb2,2857724,I. DUKE TOUSSAINT,1999-07-20,TT,"2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb2,1970786,I. FERNANDEZ MASIP,2005-12-19,ES,"2023-24,2024-25",feb3,2353906,A. FERNANDEZ MASIP,,,2026-27,0.6,nombre_igual+club_comun,confianza bajo el umbral
 feb2,2050266,I. PLATTEEUW FERNANDEZ,,,2024-25,feb3,1953234,U. PLATTEEUW FERNÁNDEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2263506,I. RODRIGUEZ FERNANDEZ,,,2025-26,feb3,1538023,M. FERNÁNDEZ RODRÍGUEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2263506,I. RODRIGUEZ FERNANDEZ,,,2025-26,feb3,2031755,V. FERNANDEZ RODRIGUEZ,2006-04-11,ES,"2023-24,2024-25,2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2579,11 +2583,10 @@ feb2,2263506,I. RODRIGUEZ FERNANDEZ,,,2025-26,feb3,2306318,I. RODRÍGUEZ FERNÁN
 feb2,2275700,I. TERREROS RIVAS,2003-12-08,ES,"2023-24,2024-25,2025-26",feb3,2275702,B. TERREROS RIVAS,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2269310,J. BALDERAS MARTÍN,2004-03-05,ES,"2023-24,2025-26",feb3,2411764,R. BALDERAS MARTÍN,,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,1722667,J. GARCIA PEREZ,,,2024-25,feb3,1111887,E. GARCÍA PEREZ,,,"2025-26,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb2,2129323,J. YÁNEZ GARCÍA,,,2024-25,feb3,2212625,I. GARCIA YAÑEZ,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb2,2129323,J. YÁNEZ GARCÍA,2009-05-21,ES,2024-25,feb3,2212625,I. GARCIA YAÑEZ,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2264756,L. GARCIA JIMENEZ,2007-01-09,ES,2025-26,feb3,2202285,O. GARCIA JIMENEZ,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,1876667,M. GARCIA MARTIN,,,2025-26,feb2,2450097,J. MARTIN GARCIA,2005-04-13,ES,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2415762,O. INDA HERNANDEZ,2008-05-17,ES,"2024-25,2025-26,2026-27",feb3,2557079,O. INDA HERNANDEZ,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb2,2133764,P. PARRA GOMEZ,2005-09-22,ES,2025-26,feb3,2179862,D. PARRA GOMEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,2031091,R. SANCHEZ CASTILLO,2005-04-26,ES,2026-27,feb3,1572794,E. CASTILLO SANCHEZ,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,1953234,U. PLATTEEUW FERNÁNDEZ,,,2023-24,feb2,2050266,I. PLATTEEUW FERNANDEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb2,1953234,U. PLATTEEUW FERNÁNDEZ,,,2023-24,feb3,2050266,I. PLATTEEUW FERNANDEZ,,,"2023-24,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2601,8 +2604,9 @@ feb3,1402324,A. PEREZ RUIZ,,,"2023-24,2024-25",feb3,2264299,J. PEREZ RUIZ,2008-0
 feb3,2138637,A. RODRIGUEZ DOMINGUEZ,,,2023-24,feb3,2171003,R. RODRIGUEZ DOMINGUEZ,,,"2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2292278,A. SEGURA MORENO,,,2026-27,feb3,2337448,J. SEGURA MORENO,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2246676,C. LOPEZ GARCIA,,,2024-25,feb3,2272193,J. GARCIA LOPEZ,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb3,2213696,C. MARTINEZ FERNANDEZ,,,2025-26,feb3,2328359,E. FERNANDEZ MARTINEZ,,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2390293,E. RAMOS BLANCO,,,"2023-24,2024-25",feb3,2440070,D. BLANCO RAMOS,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb3,2261895,E. VALERO MACIA,,,2023-24,feb3,2261897,G. VALERO MACIA,,,2026-27,0.6,nombre_igual+club_comun,confianza bajo el umbral
+feb3,2178096,F. PEÑA LOPEZ,,,2025-26,ligau,2135692,O. PEÑA LOPEZ,2006-10-11,ES,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,1825759,H. HERNANDEZ RODRIGUEZ,,,2023-24,feb3,2294536,P. HERNANDEZ RODRIGUEZ,,,"2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,1261556,I. FERNANDEZ GARCIA,,,2023-24,feb3,2227347,P. GARCIA FERNANDEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2034614,J. FERNANDEZ MARTIN,,,2023-24,feb3,2164251,J. MARTIN FERNANDEZ,2007-01-04,ES,"2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2611,13 +2615,15 @@ feb3,2272193,J. GARCIA LOPEZ,,,2023-24,feb3,2369149,M. GARCIA LOPEZ,,,"2024-25,2
 feb3,2188563,J. LÓPEZ GARCÍA,,,"2024-25,2025-26",feb3,2272193,J. GARCIA LOPEZ,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2388036,M. FERNANDEZ LOPEZ,,,2025-26,feb3,2450928,L. LOPEZ FERNANDEZ,,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2306600,M. GOMEZ PEREZ,,,"2024-25,2025-26",feb3,2364792,I. GÓMEZ PÉREZ,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb3,2049824,M. LOPEZ GARCÍA,,,2026-27,feb3,2188563,J. LÓPEZ GARCÍA,,,"2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb3,2049824,M. LOPEZ GARCÍA,,,2026-27,feb3,2369149,M. GARCIA LOPEZ,,,"2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2287077,M. PÉREZ GONZÁLEZ,,,2026-27,feb3,2292073,X. PEREZ GONZALEZ,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2221351,P. CARRION GALINDO,,,2025-26,feb3,2252482,L. CARRION GALINDO,,,2023-24,0.6,nombre_igual+club_comun,confianza bajo el umbral
 feb3,1999550,P. LOPEZ GARCIA,,,2024-25,feb3,2272193,J. GARCIA LOPEZ,,,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,1857370,P. MARTÍN FERNÁNDEZ,,,2023-24,feb3,2164251,J. MARTIN FERNANDEZ,2007-01-04,ES,"2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2661267,P. MENDES LIMA,,,2023-24,feb3,2750262,P. MENDES LIMA,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb3,1898747,P. OTERO GONZALEZ,,,2023-24,feb3,2246678,S. OTERO GONZALEZ,,,"2024-25,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-feb3,1060911,R. LOPEZ PEREZ,,,2025-26,feb3,2137337,A. PEREZ LOPEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb3,1898747,P. OTERO GONZALEZ,,,2023-24,feb3,2246678,S. OTERO GONZALEZ,2009-03-06,ES,"2024-25,2026-27",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+feb3,1060911,R. LOPEZ PEREZ,,,2025-26,feb3,2137337,A. PEREZ LOPEZ,2008-07-30,ES,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,1060911,R. LOPEZ PEREZ,,,2025-26,feb3,2214759,J. LOPEZ PEREZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2010690,R. PEREZ MARTIN,2005-02-18,ES,"2023-24,2025-26",feb3,2409943,A. PEREZ MARTIN,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 feb3,2127161,S. GONZALEZ VAZQUEZ,2006-05-18,ES,"2025-26,2026-27",feb3,2752076,S. GONZALEZ VAZQUEZ,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2634,6 +2640,7 @@ gbl,taylor-ryan,Ryan Taylor,,,"2021-22,2022-23,2025-26",gleague,1629807,Ryan Tay
 gbl,taylor-ryan,Ryan Taylor,,,"2021-22,2022-23,2025-26",lba,6856,Ryan Taylor,1994,US,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gbl,kendall-smith,Smith Kendall,,,"2022-23,2023-24",gleague,1629923,Kendall Smith,1995-09-18,US,"2021-22,2022-23",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gbl,kendall-smith,Smith Kendall,,,"2022-23,2023-24",vtb,420204,Kendall Smith,1995-09-18,US,2023-24,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+gleague,1643418,Cameron Carr,2005,,2026-27,ncaa,5113969,Cameron Carr,,,"2023-24,2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1641992,Donald Carey,1999,US,"2023-24,2024-25",ncaa,5261195,Donald Carey,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1631495,Donovan Williams,2001,US,"2022-23,2023-24,2024-25,2025-26",ncaa,4432255,Donovan Williams,,,"2020-21,2021-22",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1630552,Jalen Johnson,2001,US,2021-22,ncaa,4066817,Jalen Johnson,,,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2642,13 +2649,15 @@ gleague,1631378,Jalen Johnson,1997,US,2022-23,ncaa,4066817,Jalen Johnson,,,2021-
 gleague,1631119,Jaylin Williams,2001,US,2022-23,ncaa,4432823,Jaylin Williams,,,"2020-21,2021-22",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1642444,Jaylin Williams,2000,US,"2024-25,2025-26",nbl,bb900f37-8ba8-11f1-a10c-65253084e076,Jaylin Williams,,,2026-27,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 gleague,1642444,Jaylin Williams,2000,US,"2024-25,2025-26",ncaa,4431776,Jaylin Williams,,,"2021-22,2022-23,2023-24",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-gleague,1642937,Kobe Johnson,2002,US,2025-26,ncaa,4683857,Kobe Johnson,,,"2022-23,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
-gleague,1641869,Malachi Smith,1999,US,"2023-24,2024-25,2025-26",ncaa,4397784,Malachi Smith,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+gleague,1642937,Kobe Johnson,2002,US,"2025-26,2026-27",ncaa,4683857,Kobe Johnson,,,"2022-23,2024-25",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+gleague,1641869,Malachi Smith,1999,US,"2023-24,2024-25,2025-26,2026-27",ncaa,4397784,Malachi Smith,,,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+gleague,1643849,Reese Dixon-Waters,2002,US,2026-27,ncaa,5313927,Reese Dixon-Waters,,,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 lba,4754,Justin Robinson,,,"2020-21,2023-24",lba,7434,Justin Robinson,,,2024-25,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 lba,4754,Justin Robinson,,,"2020-21,2023-24",lnb,6650,Justin Robinson,1995-04-12,US,2022-23,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 lba,4754,Justin Robinson,,,"2020-21,2023-24",nba,robinju01,Justin Robinson,1997-10-12,US,"2020-21,2021-22",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 lba,7434,Justin Robinson,,,2024-25,lnb,10564,Justin Robinson,1997-10-12,US,2025-26,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 lba,7434,Justin Robinson,,,2024-25,nbl,6c0185e5-410d-11f0-b0cf-9dbbf7342624,Justin Robinson,1997-10-12,US,"2022-23,2023-24",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
+nba,carrca01,Cameron Carr,2004,,2026-27,ncaa,5113969,Cameron Carr,,,"2023-24,2024-25,2025-26",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 nba,willido02,Donovan Williams,2001,US,2022-23,ncaa,4432255,Donovan Williams,,,"2020-21,2021-22",0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 nba,johnsja05,Jalen Johnson,2001,US,"2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",ncaa,4066817,Jalen Johnson,,,2021-22,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
 nba,johnsja05,Jalen Johnson,2001,US,"2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",ncaa,4701230,Jalen Johnson,,,2020-21,0.6,nombre_igual+trayectoria_contigua,confianza bajo el umbral
@@ -2683,7 +2692,6 @@ acb,30003928,Demajeo Wiggins,,,2024-25,bbl,2003833,Demajeo Wiggins,,,2026-27,0.5
 acb,30003494,Derek Cooke,1991,,2024-25,bbl,50789,Derek Cooke Jr.,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 acb,30003494,Derek Cooke,1991,,2024-25,bbl,55872,Derek Cooke Jr.,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 acb,30003416,Derrick Alston Jr,1997,US,2024-25,bbl,54121,Derrick Alston Jr.,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
-acb,20213099,Diego Fernández,,,"2022-23,2024-25",feb3,2007163,DIEGO FERNANDEZ TRUJILLO,2005-05-09,ES,"2023-24,2024-25",0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
 acb,30000923,Elias Harris,1989,,2020-21,bbl,53035,Elias Harris,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 acb,30000923,Elias Harris,1989,,2020-21,bbl,56555,Elias Harris,,,"2023-24,2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
 acb,30002656,Eric Washington,1992,US,2023-24,bbl,18421,Eric Washington,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
@@ -2699,7 +2707,7 @@ acb,30003366,Jilson Bango,1999,,2024-25,bbl,55180,Jilson Bango,,,2022-23,0.55,no
 acb,30003978,Jon Axel Gudmundsson,1996-10-27,IS,2025-26,bbl,47837,Jon Axel Gudmundsson,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 acb,30003978,Jon Axel Gudmundsson,1996-10-27,IS,2025-26,bbl,49503,Jon Axel Gudmundsson,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 acb,30001917,Jonah Radebaugh,1997,,"2022-23,2023-24,2024-25,2025-26,2026-27",bbl,49248,Jonah Radebaugh,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
-acb,20213168,José Tomás Martínez,,,"2024-25,2025-26",feb3,2010660,JOSE TOMAS MARTINEZ SANCHEZ,2005-03-17,ES,"2023-24,2024-25",0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
+acb,30004675,Juan Garcia,,,2026-27,ligau,2125634,JUAN GARCIA SANCHEZ,2007-06-13,ES,"2025-26,2026-27",0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
 acb,30003944,Justin Jaworski,1999-06-21,US,"2025-26,2026-27",bbl,58701,Justin Jaworski,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 acb,30003340,Justin Robinson,1997-10-12,US,"2023-24,2026-27",bbl,50003,Justin Robinson,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 acb,30001999,Justinian Jessup,1998,,2022-23,bbl,2001668,Justinian Jessup,,,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
@@ -2934,8 +2942,10 @@ bbl,49440,Christoph Philipps,,,2021-22,bbl,56416,Christoph Philipps,,,2023-24,0.
 bbl,49440,Christoph Philipps,,,2021-22,bcl,211514,Christoph Philipps,1998,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,52365,Christoph Philipps,,,2022-23,bcl,211514,Christoph Philipps,1998,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,56416,Christoph Philipps,,,2023-24,bcl,211514,Christoph Philipps,1998,,2025-26,0.55,nombre_igual,confianza bajo el umbral
-bbl,49298,Christoph Tilly,,,2020-21,ncaa,5109790,Christoph Tilly,,,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
-bbl,49659,Christoph Tilly,,,2021-22,ncaa,5109790,Christoph Tilly,,,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
+bbl,49298,Christoph Tilly,,,2020-21,gleague,1643754,Christoph Tilly,2003,DE,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,49298,Christoph Tilly,,,2020-21,ncaa,5109790,Christoph Tilly,2003,DE,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
+bbl,49659,Christoph Tilly,,,2021-22,gleague,1643754,Christoph Tilly,2003,DE,2026-27,0.55,nombre_igual,confianza bajo el umbral
+bbl,49659,Christoph Tilly,,,2021-22,ncaa,5109790,Christoph Tilly,2003,DE,"2024-25,2025-26",0.55,nombre_igual,confianza bajo el umbral
 bbl,2001033,Christopher Carter,,,2025-26,bbl,53105,Christopher Carter,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001033,Christopher Carter,,,2025-26,bbl,56561,Christopher Carter,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 bbl,2001033,Christopher Carter,,,2025-26,fec,222913,Christopher Carter,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
@@ -3915,9 +3925,9 @@ bbl,47322,Timo Lanmüller,,,2020-21,bcl,228442,Timo Lanmüller,,,2026-27,0.55,no
 bbl,56776,Timo Lanmüller,,,2023-24,bcl,228442,Timo Lanmüller,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 bbl,2004292,Tobias Jensen,,,2026-27,bbl,52664,Tobias Jensen,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 bbl,52664,Tobias Jensen,,,2022-23,euroleague,010726,"JENSEN, TOBIAS",2004,,2026-27,0.55,nombre_igual,confianza bajo el umbral
-bbl,2001641,Tommy Kuhse,,,2025-26,bbl,55877,Tommy Kuhse,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
-bbl,2001641,Tommy Kuhse,,,2025-26,gleague,1631339,Tommy Kuhse,1997,US,2022-23,0.55,nombre_igual,confianza bajo el umbral
-bbl,2001641,Tommy Kuhse,,,2025-26,ncaa,4066735,Tommy Kuhse,1997,US,2021-22,0.55,nombre_igual,confianza bajo el umbral
+bbl,2001641,Tommy Kuhse,,,"2025-26,2026-27",bbl,55877,Tommy Kuhse,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
+bbl,2001641,Tommy Kuhse,,,"2025-26,2026-27",gleague,1631339,Tommy Kuhse,1997,US,2022-23,0.55,nombre_igual,confianza bajo el umbral
+bbl,2001641,Tommy Kuhse,,,"2025-26,2026-27",ncaa,4066735,Tommy Kuhse,1997,US,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bbl,55877,Tommy Kuhse,,,2022-23,bcl,338971,Tommy Kuhse,1997,US,"2024-25,2026-27",0.55,nombre_igual,confianza bajo el umbral
 bbl,55877,Tommy Kuhse,,,2022-23,fec,338971,Tommy Kuhse,1997,US,2025-26,0.55,nombre_igual,confianza bajo el umbral
 bbl,55877,Tommy Kuhse,,,2022-23,lba,7430,Tommy Kuhse,1997,US,2024-25,0.55,nombre_igual,confianza bajo el umbral
@@ -4020,9 +4030,6 @@ bsl,dejulius-david,David Dejulius,1999,,2026-27,ncaa,4706245,David Dejulius,,,20
 bsl,mustafa-muhaymin,Muhaymin Mustafa,,,"2025-26,2026-27",gbl,muhaymin-mustafa,Mustafa Muhaymin,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 bsl,mustafa-muhaymin,Muhaymin Mustafa,,,"2025-26,2026-27",gbl,mustafa-muhaymin,Muhaymin Mustafa,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 bsl,coskun-sarp,Sarp Coşkun,,,2025-26,eurocup,013519,"COSKUN, CENGIZ SARP",2007,,2025-26,0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
-eurocup,009911,"BROWNE, GARY",1993,,2020-21,nbl,77599c3c-410d-11f0-9d4a-2902fc2f936f,Gary Browne,,,"2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
-eurocup,015182,"BROWNE, GARY",1993,,2026-27,lba,771,Gary Browne,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
-eurocup,015182,"BROWNE, GARY",1993,,2026-27,nbl,77599c3c-410d-11f0-9d4a-2902fc2f936f,Gary Browne,,,"2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
 eurocup,013250,"DEJULIUS, DAVID",1999,,2024-25,ncaa,4397202,David DeJulius,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 eurocup,013250,"DEJULIUS, DAVID",1999,,2024-25,ncaa,4706245,David Dejulius,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 eurocup,015063,"REID, EFTON",2002,,2026-27,ncaa,4433594,Efton Reid III,,,"2021-22,2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
@@ -4041,7 +4048,7 @@ feb1,1765084,SERGI HUGUET CARRASCO,2002-08-31,ES,"2022-23,2023-24,2025-26,2026-2
 feb1,2376806,SERIGNE M M SY DIT DIAMIL BARRO,1995-11-17,SN,"2023-24,2024-25",fec,228084,Serigne M M Sy Dit Diamil Barro,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 feb1,2862313,SERIGNE M M SY DIT DIAMIL BARRO,1995-11-17,SN,"2025-26,2026-27",fec,228084,Serigne M M Sy Dit Diamil Barro,,,2021-22,0.55,nombre_igual,confianza bajo el umbral
 feb2,1895175,A. LÓPEZ MARTINEZ,2004-05-29,ES,2025-26,feb3,2114998,A. MARTINEZ LOPEZ,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
-feb2,2199737,A. MARTINEZ FERNÁNDEZ,,,2023-24,feb3,2213696,C. MARTINEZ FERNANDEZ,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
+feb2,2199737,A. MARTINEZ FERNÁNDEZ,,,2023-24,feb3,2213696,C. MARTINEZ FERNANDEZ,,,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
 feb2,2199737,A. MARTINEZ FERNÁNDEZ,,,2023-24,feb3,2328359,E. FERNANDEZ MARTINEZ,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 feb2,2544308,A. USAOLA REDONDO,2004-04-30,ES,2025-26,feb3,2162944,A. USAOLA REDONDO,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 feb2,2735659,A. VERA PICAZO,2006-01-25,ES,2025-26,feb3,2303945,A. VERA PICAZO,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
@@ -4067,18 +4074,24 @@ feb3,2323441,D. RODRIGUEZ GARCIA,,,2025-26,feb3,2339798,A. RODRIGUEZ GARCIA,,,20
 feb3,2323441,D. RODRIGUEZ GARCIA,,,2025-26,feb3,2451088,P. RODRÍGUEZ GARCÍA,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 feb3,1825759,H. HERNANDEZ RODRIGUEZ,,,2023-24,feb3,2579966,B. RODRÍGUEZ HERNÁNDEZ,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 feb3,2167082,I. GARCIA SANCHEZ,,,2023-24,feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
+feb3,2291969,J. BENITO INGELMO,,,"2023-24,2024-25",feb3,2342447,P. BENITO INGELMO,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 feb3,2034614,J. FERNANDEZ MARTIN,,,2023-24,feb3,2364622,A. MARTÍN FERNÁNDEZ,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 feb3,1443807,J. GARCIA GONZALEZ,,,2023-24,feb3,2264550,D. GONZALEZ GARCIA,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 feb3,1646686,J. GARCIA HERNANDEZ,,,2023-24,feb3,2026817,S. HERNANDEZ GARCIA,2002-08-22,ES,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
 feb3,1646686,J. GARCIA HERNANDEZ,,,2023-24,feb3,2407376,D. HERNÁNDEZ GARCÍA,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
-feb3,2125634,J. GARCIA SANCHEZ,,,"2023-24,2024-25",feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
+feb3,2125634,J. GARCIA SANCHEZ,2007-06-13,ES,"2023-24,2024-25",feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 feb3,1257709,J. RUIZ PEREZ,,,2023-24,feb3,1757837,R. PEREZ RUIZ,,,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
 feb3,1257709,J. RUIZ PEREZ,,,2023-24,feb3,2264299,J. PEREZ RUIZ,2008-04-04,ES,"2025-26,2026-27",0.55,nombre_igual,confianza bajo el umbral
-feb3,2129323,J. YÁNEZ GARCÍA,,,2026-27,feb3,2212625,I. GARCIA YAÑEZ,,,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
+feb3,2760349,J. TABOADA LUHERS,,,2024-25,ligau,2790234,JOAQUIN TABOADA LÜHERS,2007-06-05,UY,2025-26,0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
+feb3,2129323,J. YÁNEZ GARCÍA,2009-05-21,ES,2026-27,feb3,2212625,I. GARCIA YAÑEZ,,,"2023-24,2024-25",0.55,nombre_igual,confianza bajo el umbral
+feb3,2125409,K. BAEZ PIERSON,,,2026-27,ligau,2087418,GAVIN EULIS BAEZ PIERSON,2007-09-17,ES,2025-26,0.55,nombre_contenido+trayectoria_contigua+club_comun,confianza bajo el umbral
 feb3,2198872,M. GONZÁLEZ GÓMEZ,,,2023-24,feb3,2365480,A. GOMEZ GONZALEZ,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 feb3,2083631,M. JIMENA LLORCA,,,2025-26,feb3,2083632,T. JIMENA LLORCA,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
+feb3,2049824,M. LOPEZ GARCÍA,,,2026-27,feb3,2246676,C. LOPEZ GARCIA,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
+feb3,2049824,M. LOPEZ GARCÍA,,,2026-27,feb3,2272193,J. GARCIA LOPEZ,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 feb3,2150379,P. GARCIA RODRIGUEZ,,,2025-26,feb3,2339798,A. RODRIGUEZ GARCIA,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 feb3,2150379,P. GARCIA RODRIGUEZ,,,2025-26,feb3,2451088,P. RODRÍGUEZ GARCÍA,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
+feb3,1999550,P. LOPEZ GARCIA,,,2024-25,feb3,2049824,M. LOPEZ GARCÍA,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 feb3,1857370,P. MARTÍN FERNÁNDEZ,,,2023-24,feb3,2364622,A. MARTÍN FERNÁNDEZ,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 feb3,2285820,P. PEREZ MUÑOZ,,,2025-26,feb3,2638816,J. MUÑOZ PEREZ,,,2023-24,0.55,nombre_igual,confianza bajo el umbral
 feb3,2439403,S. SANCHEZ GARCIA,,,2023-24,feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
@@ -4095,17 +4108,19 @@ gbl,west-jarrod,Jarrod West,,,2022-23,lnb,10864,Jarrod West,1999-03-29,US,2026-2
 gbl,ryan-taylor,Taylor RYAN,,,2025-26,gleague,1629807,Ryan Taylor,1994,US,"2020-21,2021-22",0.55,nombre_igual,confianza bajo el umbral
 gbl,ryan-taylor,Taylor RYAN,,,2025-26,lba,6856,Ryan Taylor,1994,US,2022-23,0.55,nombre_igual,confianza bajo el umbral
 gbl,jarrod-west,West Jarrod,,,2022-23,lnb,10864,Jarrod West,1999-03-29,US,2026-27,0.55,nombre_igual,confianza bajo el umbral
+gleague,1643418,Cameron Carr,2005,,2026-27,ncaa,5264029,Cameron Carr,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
 gleague,1641992,Donald Carey,1999,US,"2023-24,2024-25",ncaa,4402802,Donald Carey,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 gleague,1631495,Donovan Williams,2001,US,"2022-23,2023-24,2024-25,2025-26",ncaa,4592304,Donovan Williams,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 gleague,1631378,Jalen Johnson,1997,US,2022-23,ncaa,4701230,Jalen Johnson,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 gleague,1631119,Jaylin Williams,2001,US,2022-23,nbl,bb900f37-8ba8-11f1-a10c-65253084e076,Jaylin Williams,,,2026-27,0.55,nombre_igual,confianza bajo el umbral
 gleague,1642444,Jaylin Williams,2000,US,"2024-25,2025-26",ncaa,4432823,Jaylin Williams,,,"2020-21,2021-22",0.55,nombre_igual,confianza bajo el umbral
 gleague,1629620,Justin Robinson,1997-10-12,US,"2020-21,2021-22",lba,7434,Justin Robinson,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
-gleague,1642937,Kobe Johnson,2002,US,2025-26,ncaa,4686333,Kobe Johnson,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
-gleague,1631474,Terrell Brown Jr.,1997,US,"2022-23,2023-24,2024-25,2025-26",ncaa,4395997,Terrell Brown Jr.,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
+gleague,1642937,Kobe Johnson,2002,US,"2025-26,2026-27",ncaa,4686333,Kobe Johnson,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
+gleague,1631474,Terrell Brown Jr.,1997,US,"2022-23,2023-24,2024-25,2025-26,2026-27",ncaa,4395997,Terrell Brown Jr.,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 lba,4754,Justin Robinson,,,"2020-21,2023-24",lnb,10564,Justin Robinson,1997-10-12,US,2025-26,0.55,nombre_igual,confianza bajo el umbral
 lba,7434,Justin Robinson,,,2024-25,lnb,6650,Justin Robinson,1995-04-12,US,2022-23,0.55,nombre_igual,confianza bajo el umbral
 lba,7434,Justin Robinson,,,2024-25,nba,robinju01,Justin Robinson,1997-10-12,US,"2020-21,2021-22",0.55,nombre_igual,confianza bajo el umbral
+nba,carrca01,Cameron Carr,2004,,2026-27,ncaa,5264029,Cameron Carr,,,2024-25,0.55,nombre_igual,confianza bajo el umbral
 nba,willido02,Donovan Williams,2001,US,2022-23,ncaa,4592304,Donovan Williams,,,2020-21,0.55,nombre_igual,confianza bajo el umbral
 nba,smithma02,Malachi Smith,1999,US,2025-26,ncaa,4397784,Malachi Smith,,,2022-23,0.55,nombre_igual,confianza bajo el umbral
 nbl,bb900f37-8ba8-11f1-a10c-65253084e076,Jaylin Williams,,,2026-27,ncaa,4431776,Jaylin Williams,,,"2021-22,2022-23,2023-24",0.55,nombre_igual,confianza bajo el umbral
@@ -4115,19 +4130,18 @@ ncaa,4402802,Donald Carey,,,2020-21,ncaa,5261195,Donald Carey,,,2024-25,0.55,nom
 ncaa,4593465,Jordan Skipper-Brown,,,2021-22,vtb,413869,Jordan Skipper-Brown,1998-01-07,US,2023-24,0.55,nombre_igual,confianza bajo el umbral
 ncaa,4396632,Tyler Harris,,,2021-22,ncaa,5176497,Tyler Harris,,,2025-26,0.55,nombre_igual,confianza bajo el umbral
 acb,30002690,Brandon Brown,1989-08-14,US,2023-24,fec,202869,Brandon Robert Brown,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-acb,20213099,Diego Fernández,,,"2022-23,2024-25",feb3,2020763,DIEGO CUETOS FERNANDEZ,2004-06-16,ES,"2023-24,2024-25,2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-acb,20213099,Diego Fernández,,,"2022-23,2024-25",feb3,2034412,DIEGO MARINEZ FERNANDEZ-URRUTIA,2003-11-06,ES,"2023-24,2024-25,2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-acb,20213099,Diego Fernández,,,"2022-23,2024-25",feb3,2139861,DIEGO FERNANDEZ CAÑAS,2003-05-28,ES,"2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20204124,Jaime Fernández,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",feb1,1692313,JAIME FERNANDEZ MANZANARES,2000-07-15,ES,"2022-23,2023-24",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20204124,Jaime Fernández,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",feb3,1626332,JAIME ONGIL FERNANDEZ,1999-10-05,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20204124,Jaime Fernández,,,"2020-21,2021-22,2022-23,2023-24,2024-25,2025-26,2026-27",feb3,1858549,JAIME FERNÁNDEZ HERNÁNDEZ,2002-07-11,ES,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20212348,Jaime Fernández,,,"2020-21,2021-22,2024-25,2025-26,2026-27",feb1,1692313,JAIME FERNANDEZ MANZANARES,2000-07-15,ES,"2022-23,2023-24",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20212348,Jaime Fernández,,,"2020-21,2021-22,2024-25,2025-26,2026-27",feb3,1626332,JAIME ONGIL FERNANDEZ,1999-10-05,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20212348,Jaime Fernández,,,"2020-21,2021-22,2024-25,2025-26,2026-27",feb3,1858549,JAIME FERNÁNDEZ HERNÁNDEZ,2002-07-11,ES,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-acb,20213168,José Tomás Martínez,,,"2024-25,2025-26",feb3,2435221,K. JOSE MARTÍNEZ,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+acb,20213168,José Tomás Martínez,2005-03-17,ES,"2024-25,2025-26",feb3,2435221,K. JOSE MARTÍNEZ,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,30004675,Juan Garcia,,,2026-27,feb3,2126357,JUAN GARCIA-MONGE DEL POZO,2006-04-26,ES,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,30004675,Juan Garcia,,,2026-27,feb3,2288447,JUAN MARIA GARCIA MUIÑOS,2007-05-07,ES,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,30004675,Juan Garcia,,,2026-27,feb3,2450097,JUAN MARTIN GARCIA,2005-04-13,ES,"2024-25,2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+acb,30004675,Juan Garcia,,,2026-27,ligau,2129323,JUAN EDUARDO YÁNEZ GARCÍA,2009-05-21,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+acb,30004675,Juan Garcia,,,2026-27,ligau,2330083,JUAN IGNACIO GARCÍA CORREA,2007-07-13,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20210497,Marc Garcia,,,"2020-21,2021-22,2022-23",feb2,1766189,MARC GARCIA CALVO,2001-02-03,ES,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20210497,Marc Garcia,,,"2020-21,2021-22,2022-23",feb2,1929882,MARC GARCIA LOPEZ,1996-10-11,ES,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,20210497,Marc Garcia,,,"2020-21,2021-22,2022-23",feb3,1929882,MARC GARCIA LOPEZ,1996-10-11,ES,"2023-24,2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4142,7 +4156,6 @@ acb,20210279,Sergio Rodríguez,,,"2020-21,2021-22,2022-23",feb1,1373532,SERGIO R
 acb,20210279,Sergio Rodríguez,,,"2020-21,2021-22,2022-23",feb3,835083,SERGIO RODRIGUEZ GREGORIO,1984-07-09,ES,"2023-24,2024-25,2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,30004697,Xabi López,,,2025-26,eurocup,005356,"LOPEZ-AROSTEGUI, XABI",1997,,"2020-21,2021-22,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 acb,30004697,Xabi López,,,2025-26,euroleague,005356,"LOPEZ-AROSTEGUI, XABI",1997,,"2022-23,2023-24,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-acb,20213211,Álvaro Fernandez,,,2025-26,feb3,1758620,ALVARO RODRIGUEZ FERNANDEZ,1999-02-09,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,2001489,Booker Coplin,,,"2024-25,2025-26",fec,303226,Booker Wade Coplin,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,6675,Booker Coplin,,,2024-25,fec,303226,Booker Wade Coplin,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,2001346,Deane Williams,,,2024-25,lba,7410,Deane Alexander Williams,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4153,6 +4166,7 @@ bbl,58701,Justin Jaworski,,,2023-24,feb1,2515575,JUSTIN KYLE JAWORSKI,1999-06-21
 bbl,58701,Justin Jaworski,,,2023-24,lba,7017,Justin Kyle Jaworski,1999-06-21,US,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,2001658,Malik Osborne,,,2025-26,fec,323460,Malik James Osborne,,,"2022-23,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,2000757,Niklas Wimberg,,,"2024-25,2025-26",feb1,2882210,JAN NIKLAS WIMBERG,1996-02-11,DE,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+bbl,2001290,Nikola Tomic,,,"2024-25,2025-26",ligau,2882243,NIKOLA STIPO TOMIC,2005-01-05,DE,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,2000746,Osaro Rich Igbineweka,,,"2024-25,2025-26,2026-27",fec,348526,Osaro Rich,1998,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,52384,Osaro Rich Igbineweka,,,2022-23,eurocup,011256,"RICH, OSARO",1998,,"2021-22,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bbl,52384,Osaro Rich Igbineweka,,,2022-23,fec,348526,Osaro Rich,1998,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4166,22 +4180,17 @@ bbl,47501,Yorman Polas Bartolo,,,2020-21,fec,162270,Yorman Polas,,,2024-25,0.5,n
 bbl,49481,Yorman Polas Bartolo,,,2021-22,fec,162270,Yorman Polas,,,2024-25,0.5,nombre_contenido+club_comun,confianza bajo el umbral
 bbl,52392,Yorman Polas Bartolo,,,2022-23,fec,162270,Yorman Polas,,,2024-25,0.5,nombre_contenido+club_comun,confianza bajo el umbral
 bcl,157644,Can Maxim Mutaf,,,2021-22,bsl,mutaf-can,Can Maxim Mutaf,,,"2020-21,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-bcl,300446,Diego Fernandez Trujillo,,,"2022-23,2023-24,2024-25",feb3,1825614,J. TRUJILLO FERNÁNDEZ,2001-03-25,ES,"2023-24,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bcl,175433,Jaime Fernandez,,,"2021-22,2022-23,2023-24,2024-25,2025-26",feb1,1692313,JAIME FERNANDEZ MANZANARES,2000-07-15,ES,"2022-23,2023-24",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bcl,175433,Jaime Fernandez,,,"2021-22,2022-23,2023-24,2024-25,2025-26",feb3,1626332,JAIME ONGIL FERNANDEZ,1999-10-05,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bcl,175433,Jaime Fernandez,,,"2021-22,2022-23,2023-24,2024-25,2025-26",feb3,1858549,JAIME FERNÁNDEZ HERNÁNDEZ,2002-07-11,ES,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bcl,183069,Toms Leimanis,,,"2020-21,2025-26",feb1,2371490,TOMS ELVIS LEIMANIS,1994-08-07,LV,"2022-23,2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 bcl,183069,Toms Leimanis,,,"2020-21,2025-26",feb1,2882642,TOMS ELVIS LEIMANIS,1994-08-07,LV,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-bcl,300743,Álvaro Fernandez,,,2022-23,feb3,1431465,ALVARO MARTIN FERNANDEZ,1992-09-10,ES,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-bcl,300743,Álvaro Fernandez,,,2022-23,feb3,2576543,ALVARO FERNANDEZ ALONSO,1998-06-28,ES,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 eurocup,010477,"BROWN, BRANDON",1989-08-14,US,"2020-21,2023-24",fec,202869,Brandon Robert Brown,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,2199737,A. MARTINEZ FERNÁNDEZ,,,2024-25,feb3,1144597,SERGIO MARTINEZ FERNANDEZ,1992-05-23,ES,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,2094445,ASIER GONZÁLEZ PÉREZ,2000-04-20,ES,"2024-25,2025-26,2026-27",feb3,2287077,M. PÉREZ GONZÁLEZ,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,2094445,ASIER GONZÁLEZ PÉREZ,2000-04-20,ES,"2024-25,2025-26,2026-27",feb3,2292073,X. PEREZ GONZALEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,833262,DANIEL RODRIGUEZ GARCIA,1984-02-13,ES,"2022-23,2023-24",feb3,2339798,A. RODRIGUEZ GARCIA,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,833262,DANIEL RODRIGUEZ GARCIA,1984-02-13,ES,"2022-23,2023-24",feb3,2451088,P. RODRÍGUEZ GARCÍA,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb1,2551714,I. DUKE TOUSSAINT,,,"2022-23,2024-25",feb2,2857724,IMRU AZARIAH DUKE TOUSSAINT,1999-07-20,TT,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb1,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2022-23,2025-26",feb3,2125634,J. GARCIA SANCHEZ,,,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2022-23,2025-26",feb3,2167082,I. GARCIA SANCHEZ,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2022-23,2025-26",feb3,2439403,S. SANCHEZ GARCIA,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb1,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2022-23,2025-26",feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4201,9 +4210,9 @@ feb1,2645066,V. CARRIZO ROMBERGER,,,2023-24,feb3,2745467,VALENTIN CARRIZO ROMBER
 feb2,1895175,A. LÓPEZ MARTINEZ,2004-05-29,ES,2025-26,feb3,2446717,L. MARTINEZ LOPEZ BREA,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2199737,A. MARTINEZ FERNÁNDEZ,,,2023-24,feb3,1144597,SERGIO MARTINEZ FERNANDEZ,1992-05-23,ES,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2816084,AILTON MANUEL LOPES MARQUES,1995-09-18,CV,2025-26,feb3,2762403,A. LOPES MARQUES,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb2,1876223,ALEJANDRO MONTERO ISLA,2003-04-27,ES,"2023-24,2025-26,2026-27",feb3,2226351,I. MONTERO ISLA,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,1777855,B. VAZQUEZ GOMEZ,,,2023-24,feb3,1691808,DIEGO GOMEZ VAZQUEZ,2000-07-15,ES,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,1777855,B. VAZQUEZ GOMEZ,,,2023-24,feb3,2586217,BENJAMÍN VAZQUEZ GÓMEZ,2002-09-11,ES,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb2,2735652,D. BORDON DRI,,,2024-25,ligau,2829962,DYLAN NICOLÁS BORDÓN DRI,2004-10-16,IT,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2155408,D. LORENZO FERNANDEZ,,,2023-24,feb3,1372979,HAUCHE FERNANDEZ LORENZO,1992-10-05,ES,"2023-24,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2023523,D. POU BLINNIKOV,,,2024-25,feb3,1891986,ALEXIS POU BLINNIKOV,2005-06-07,ES,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2209389,D. RUBIO CASTILLO,,,2024-25,feb3,1107308,ISMAEL RUBIO CASTILLO,1991-07-31,ES,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4211,11 +4220,9 @@ feb2,833262,DANIEL RODRIGUEZ GARCIA,1984-02-13,ES,2024-25,feb3,2150379,P. GARCIA
 feb2,833262,DANIEL RODRIGUEZ GARCIA,1984-02-13,ES,2024-25,feb3,2323441,D. RODRIGUEZ GARCIA,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,833262,DANIEL RODRIGUEZ GARCIA,1984-02-13,ES,2024-25,feb3,2339798,A. RODRIGUEZ GARCIA,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,833262,DANIEL RODRIGUEZ GARCIA,1984-02-13,ES,2024-25,feb3,2451088,P. RODRÍGUEZ GARCÍA,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb2,2052876,GERARD VILLAREJO COSTA,2006-05-11,ES,2025-26,feb3,2195271,R. VILLAREJO COSTA,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2116811,GONZALO RODRIGUEZ SOLER,2004-02-27,ES,"2025-26,2026-27",feb3,2410683,I. RODRÍGUEZ SOLER,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2263506,I. RODRIGUEZ FERNANDEZ,,,2025-26,feb3,1758620,ALVARO RODRIGUEZ FERNANDEZ,1999-02-09,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,1722667,J. GARCIA PEREZ,,,2024-25,feb3,1874283,ALBERTO PEREZ GARCIA,1998-07-30,ES,"2023-24,2024-25,2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb2,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2023-24,2024-25,2026-27",feb3,2125634,J. GARCIA SANCHEZ,,,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2023-24,2024-25,2026-27",feb3,2167082,I. GARCIA SANCHEZ,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2023-24,2024-25,2026-27",feb3,2439403,S. SANCHEZ GARCIA,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,1978541,JAVIER GARCIA SANCHEZ,2001-04-06,ES,"2023-24,2024-25,2026-27",feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4242,11 +4249,15 @@ feb2,2304342,N. EL HADJI,2003-03-05,SN,2023-24,feb3,2579707,K. EL HADJI MALICK,,
 feb2,2304342,N. EL HADJI,2003-03-05,SN,2023-24,lba,6746,Mame Saba Deme El Hadji,,,"2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2037929,N. GOMEZ MERODIO,,,2024-25,feb3,1847369,JORGE JAVIER GOMEZ MERODIO,2005-03-24,ES,"2024-25,2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,2816314,PATRICK MENDES LIMA,1995-05-02,CV,2025-26,feb3,2750262,P. MENDES LIMA,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb2,2274746,POL SALO BLAYA,2005-08-06,ES,2025-26,feb3,2153495,J. SALO BLAYA,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb2,1634709,SERGIO ROMERO SANCHEZ,2000-06-26,ES,"2023-24,2024-25,2025-26,2026-27",feb3,2097446,M. ROMERO SANCHEZ,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb2,2101872,ÁLVARO FERNANDEZ RUIZ,2005-03-26,ES,"2023-24,2024-25",feb3,2300536,A. RUIZ FERNÁNDEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1114796,A. GOMEZ LOPEZ,,,2024-25,feb3,1613746,EDUARDO GÓMEZ LÓPEZ,1997-06-04,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1769985,A. GONZÁLEZ MEDINA,,,2024-25,feb3,605215,JAIME MEDINA GONZALEZ,1987-03-17,ES,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2176449,A. LOPEZ MARTINEZ,2008-08-15,ES,"2023-24,2024-25,2026-27",feb3,2446717,L. MARTINEZ LOPEZ BREA,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2364622,A. MARTÍN FERNÁNDEZ,,,2025-26,ligau,2164251,JUAN MANUEL MARTIN FERNANDEZ,2007-01-04,ES,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2016827,A. MORENO VALERO,,,2026-27,ligau,2008960,ALEJANDRO MORENO VALERO,2004-02-18,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2002092,A. RODRIGUEZ LOPEZ,,,"2023-24,2024-25,2025-26",ligau,2044955,XABIER LOPEZ RODRIGUEZ,2004-01-13,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2300536,A. RUIZ FERNÁNDEZ,,,2025-26,ligau,2101872,ÁLVARO FERNANDEZ RUIZ,2005-03-26,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2303945,A. VERA PICAZO,,,2023-24,feb3,2735659,AMADEO VERA PICAZO,2006-01-25,ES,"2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2390811,A. VERA PICAZO,,,2023-24,feb3,2735659,AMADEO VERA PICAZO,2006-01-25,ES,"2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1393112,ADRIAN SANCHEZ RODRIGUEZ,1994-04-20,ES,"2023-24,2024-25",feb3,2070872,D. RODRIGUEZ SANCHEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4254,19 +4265,22 @@ feb3,1360283,ALBERTO ORTEGA PÉREZ,1996-03-10,ES,2023-24,feb3,2170168,R. ORTEGA 
 feb3,1758620,ALVARO RODRIGUEZ FERNANDEZ,1999-02-09,ES,"2025-26,2026-27",feb3,2306318,I. RODRÍGUEZ FERNÁNDEZ,,,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2349241,ANTON LOPEZ FERNANDEZ,2008-09-16,ES,2026-27,feb3,2388036,M. FERNANDEZ LOPEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2164012,CHRISTIAN DOMINGUEZ RODRIGUEZ,2002-04-07,ES,2023-24,feb3,2171003,R. RODRIGUEZ DOMINGUEZ,,,"2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2023523,D. POU BLINNIKOV,,,2025-26,ligau,1891986,ALEXIS POU BLINNIKOV,2005-06-07,ES,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1459664,DANIEL GARCÍA TEIJEIRO,1994-08-30,ES,2024-25,feb3,2619387,C. DANIEL GARCÍA,,,"2023-24,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2016742,DANIEL LOPEZ GARCIA,2000-05-25,ES,2026-27,feb3,2188563,J. LÓPEZ GARCÍA,,,"2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2016742,DANIEL LOPEZ GARCIA,2000-05-25,ES,2026-27,feb3,2369149,M. GARCIA LOPEZ,,,"2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1036015,DANIEL YUSTA GARCIA,1986-02-04,ES,2024-25,feb3,2619387,C. DANIEL GARCÍA,,,"2023-24,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1629747,DAVID GARCIA FERNANDEZ,1999-03-06,ES,2023-24,feb3,2227347,P. GARCIA FERNANDEZ,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb3,1999238,DIEGO FERNANDEZ MARTINEZ,2004-11-12,ES,2026-27,feb3,2213696,C. MARTINEZ FERNANDEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2137746,DIEGO GARCIA RODRIGUEZ,2006-03-20,ES,2026-27,feb3,2150379,P. GARCIA RODRIGUEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2137746,DIEGO GARCIA RODRIGUEZ,2006-03-20,ES,2026-27,feb3,2323441,D. RODRIGUEZ GARCIA,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1691808,DIEGO GOMEZ VAZQUEZ,2000-07-15,ES,"2023-24,2024-25",feb3,385496,A. GOMEZ VAZQUEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1613746,EDUARDO GÓMEZ LÓPEZ,1997-06-04,ES,2025-26,feb3,2055005,A. LOPEZ GOMEZ,,,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1613746,EDUARDO GÓMEZ LÓPEZ,1997-06-04,ES,2025-26,feb3,2390648,D. GOMEZ LOPEZ,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,1791708,ENRIQUE LOPEZ GARCIA,2003-01-12,ES,"2024-25,2025-26",feb3,2049824,M. LOPEZ GARCÍA,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1791708,ENRIQUE LOPEZ GARCIA,2003-01-12,ES,"2024-25,2025-26",feb3,2272193,J. GARCIA LOPEZ,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,ligau,2125634,JUAN GARCIA SANCHEZ,2007-06-13,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1261556,I. FERNANDEZ GARCIA,,,2023-24,feb3,1709034,DAVID FERNANDEZ GARCIA,2001-03-20,ES,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2212625,I. GARCIA YAÑEZ,,,"2023-24,2024-25",ligau,2129323,JUAN EDUARDO YÁNEZ GARCÍA,2009-05-21,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1382466,IGNACIO GONZÁLEZ GÓMEZ,1991-12-11,ES,"2023-24,2024-25,2026-27",feb3,2041391,A. GONZALEZ GOMEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1382466,IGNACIO GONZÁLEZ GÓMEZ,1991-12-11,ES,"2023-24,2024-25,2026-27",feb3,2365480,A. GOMEZ GONZALEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2231925,IVAN SOLNTSEV REMIRO,2008-09-30,ES,2026-27,feb3,2814609,I. SOLNTSEV REMIRO,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4274,14 +4288,18 @@ feb3,1736394,IÑIGO GONZALEZ GOMEZ,2000-10-26,ES,2024-25,feb3,2041391,A. GONZALE
 feb3,1736394,IÑIGO GONZALEZ GOMEZ,2000-10-26,ES,2024-25,feb3,2198872,M. GONZÁLEZ GÓMEZ,,,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1736394,IÑIGO GONZALEZ GOMEZ,2000-10-26,ES,2024-25,feb3,2365480,A. GOMEZ GONZALEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2034614,J. FERNANDEZ MARTIN,,,2023-24,feb3,2297835,MARTIN FERNANDEZ VEGA,2005-01-03,ES,"2024-25,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2214759,J. LOPEZ PEREZ,,,2024-25,ligau,2137337,ANTONIO DE LUIS PEREZ LOPEZ,2008-07-30,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2706562,J. TABOADA LUHERS,,,2024-25,ligau,2790234,JOAQUIN TABOADA LÜHERS,2007-06-05,UY,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1170192,JAVIER MARTIN RODRIGUEZ,1990-07-01,ES,2024-25,feb3,2579993,R. MARTIN RODRIGUEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1407191,JAVIER RODRIGUEZ FERNANDEZ,1984-04-13,ES,2023-24,feb3,1538023,M. FERNÁNDEZ RODRÍGUEZ,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2435221,K. JOSE MARTÍNEZ,,,2024-25,feb3,2813036,JOSÉ ANTONIO MARTÍNEZ TEJERO,2001-07-26,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2435221,K. JOSE MARTÍNEZ,,,2024-25,ligau,2010660,JOSE TOMAS MARTINEZ SANCHEZ,2005-03-17,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2252482,L. CARRION GALINDO,,,2023-24,feb3,2756659,LEO CARRIÓN GALINDO,2007-09-21,ES,"2025-26,2026-27",0.5,nombre_contenido+club_comun,confianza bajo el umbral
-feb3,2110654,LUCAS GARCIA SANCHEZ,2007-01-03,ES,2025-26,feb3,2125634,J. GARCIA SANCHEZ,,,"2023-24,2024-25",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2110654,LUCAS GARCIA SANCHEZ,2007-01-03,ES,2025-26,feb3,2546485,H. SANCHEZ GARCIA,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1538023,M. FERNÁNDEZ RODRÍGUEZ,,,2024-25,feb3,1758620,ALVARO RODRIGUEZ FERNANDEZ,1999-02-09,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb3,2062557,M. MARTINEZ LOPEZ,,,"2023-24,2024-25",feb3,2446717,L. MARTINEZ LOPEZ BREA,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2098853,M. LOZANO MARTINEZ,,,"2025-26,2026-27",ligau,2177613,ALEJANDRO LOZANO MARTINEZ,2008-05-26,ES,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2062557,M. MARTINEZ LOPEZ,2007-01-30,ES,"2023-24,2024-25",feb3,2446717,L. MARTINEZ LOPEZ BREA,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2323853,M. SANCHEZ FERNANDEZ,,,2024-25,ligau,2334297,LUCAS SANCHEZ FERNANDEZ,2008-04-03,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1929882,MARC GARCIA LOPEZ,1996-10-11,ES,"2023-24,2025-26,2026-27",feb3,1999550,P. LOPEZ GARCIA,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1929882,MARC GARCIA LOPEZ,1996-10-11,ES,"2023-24,2025-26,2026-27",feb3,2246676,C. LOPEZ GARCIA,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1889731,MARCOS MARTIN MARTINEZ,2001-10-14,ES,2025-26,feb3,2203581,R. MARTINEZ MARTIN,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
@@ -4290,15 +4308,17 @@ feb3,2090827,MARTÍN GONZÁLEZ GARCÍA,2008-01-09,ES,2026-27,feb3,2587199,A. MAR
 feb3,2161188,MIGUEL GONZALEZ BLAS,2005-11-19,ES,"2023-24,2025-26,2026-27",fec,199781,Miguel Gonzalez,,,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1651997,MIGUEL GONZALEZ MORENO,2000-01-21,ES,"2023-24,2026-27",fec,199781,Miguel Gonzalez,,,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1131430,MIGUEL GONZALEZ-MONJE PEREZ,1991-04-28,ES,"2023-24,2024-25,2025-26",fec,199781,Miguel Gonzalez,,,"2023-24,2024-25,2025-26",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2090891,P. FERRERAS CAMARERO,,,2024-25,ligau,2561463,DIEGO FERRERAS CAMARERO,2009-08-13,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1857370,P. MARTÍN FERNÁNDEZ,,,2023-24,feb3,2297835,MARTIN FERNANDEZ VEGA,2005-01-03,ES,"2024-25,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
-feb3,1958108,P. RODRIGUEZ PEREZ,,,"2023-24,2024-25,2025-26",feb3,840825,EDUARD RODRÍGUEZ PÉREZ,1996-10-30,ES,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1356901,PEDRO LUIS ORTEGA PÉREZ,1992-01-24,ES,2023-24,feb3,2170168,R. ORTEGA PÉREZ,,,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1060911,R. LOPEZ PEREZ,,,2025-26,feb3,2067751,ÓSCAR MAURO PÉREZ LÓPEZ,2005-01-15,ES,2024-25,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,1060911,R. LOPEZ PEREZ,,,2025-26,ligau,2137337,ANTONIO DE LUIS PEREZ LOPEZ,2008-07-30,ES,"2025-26,2026-27",0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2203581,R. MARTINEZ MARTIN,,,2026-27,feb3,2370091,N. MARTINEZ DE SAN VICENTE MARTIN,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2171003,R. RODRIGUEZ DOMINGUEZ,,,"2024-25,2025-26",feb3,2219398,IAN RODRÍGUEZ DOMINGUEZ,2005-02-17,ES,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1983489,S. LÓPEZ GONZÁLEZ,,,2024-25,feb3,514499,ADRIAN LOPEZ GONZALEZ,1991-05-12,ES,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,1144597,SERGIO MARTINEZ FERNANDEZ,1992-05-23,ES,"2023-24,2024-25,2025-26",feb3,2328359,E. FERNANDEZ MARTINEZ,,,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 feb3,2134033,V. SOLNTSEV REMIRO,,,2025-26,feb3,2231925,IVAN SOLNTSEV REMIRO,2008-09-30,ES,2026-27,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
+feb3,2101872,ÁLVARO FERNANDEZ RUIZ,2005-03-26,ES,2026-27,feb3,2300536,A. RUIZ FERNÁNDEZ,,,2025-26,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 fec,324401,Anthony Joshua Roberts,,,2023-24,lnb,9630,Anthony Roberts,2000-01-02,US,2023-24,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 fec,240382,Brandon Dwayne Brown,,,"2020-21,2021-22",lnb,1081,Brandon Brown,1989-08-14,US,2020-21,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral
 fec,220319,James Bernard Thompson Jr,,,2021-22,lnb,9355,James Thompson,1995-01-18,US,2022-23,0.5,nombre_contenido+trayectoria_contigua,confianza bajo el umbral

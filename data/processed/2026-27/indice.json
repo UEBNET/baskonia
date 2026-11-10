@@ -1,6 +1,6 @@
 {
   "temporada": "2026-27",
-  "generado": "2026-11-09T16:27:29.381041+00:00",
+  "generado": "2026-11-10T10:41:32.894229+00:00",
   "fases": [
     "regular",
     "playoffs",
@@ -41,7 +41,7 @@
     "bnxt": {
       "nombre": "BNXT League",
       "archivo": "ligas/bnxt.csv",
-      "fecha_extraccion": "2026-11-08T23:26:24.368486+00:00",
+      "fecha_extraccion": "2026-10-31T19:33:23.504317+00:00",
       "fases": {
         "regular": 199,
         "total": 199
@@ -59,7 +59,7 @@
     "cba": {
       "nombre": "Chinese Basketball Association",
       "archivo": "ligas/cba.csv",
-      "fecha_extraccion": "2026-11-08T23:26:42.162573+00:00",
+      "fecha_extraccion": "2026-10-31T19:06:35.917800+00:00",
       "fases": {
         "regular": 278,
         "total": 278
@@ -175,7 +175,7 @@
     "nbl": {
       "nombre": "National Basketball League (NBL)",
       "archivo": "ligas/nbl.csv",
-      "fecha_extraccion": "2026-11-08T23:26:13.921143+00:00",
+      "fecha_extraccion": "2026-10-31T17:37:50.091141+00:00",
       "fases": {
         "regular": 154,
         "total": 154
@@ -184,7 +184,7 @@
     "vtb": {
       "nombre": "VTB United League (Liga VTB)",
       "archivo": "ligas/vtb.csv",
-      "fecha_extraccion": "2026-11-08T23:26:35.097431+00:00",
+      "fecha_extraccion": "2026-10-31T18:17:09.103302+00:00",
       "fases": {
         "regular": 158,
         "total": 158

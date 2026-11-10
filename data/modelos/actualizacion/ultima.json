@@ -1,87 +1,84 @@
 {
  "temporada": "2026-27",
- "inicio": "2026-11-08T23:22:25+00:00",
- "fin": "2026-11-09T01:29:33+00:00",
- "estado": "ok",
- "nota": "primera actualización real, por pasos (8-9 nov. 2026); tiempos de cada paso en su ejecución",
+ "inicio": "2026-11-10T10:37:52+00:00",
  "pasos": {
   "descarga": {
    "estado": "ok",
-   "segundos": 1002,
+   "segundos": 421,
    "ligas": {
     "euroleague": {
      "estado": "ok",
-     "partidos_nuevos": 20,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "acb": {
      "estado": "ok",
-     "partidos_nuevos": 18,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "nba": {
      "estado": "ok",
-     "partidos_nuevos": 72,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "gleague": {
      "estado": "ok",
-     "partidos_nuevos": 18,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "lba": {
      "estado": "ok",
-     "partidos_nuevos": 15,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "bbl": {
      "estado": "ok",
-     "partidos_nuevos": 18,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "lnb": {
      "estado": "ok",
-     "partidos_nuevos": 17,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "eurocup": {
      "estado": "ok",
-     "partidos_nuevos": 16,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "bcl": {
      "estado": "ok",
-     "partidos_nuevos": 8,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "fec": {
      "estado": "ok",
-     "partidos_nuevos": 29,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "gbl": {
      "estado": "ok",
-     "partidos_nuevos": 14,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "bsl": {
      "estado": "ok",
-     "partidos_nuevos": 15,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "feb1": {
      "estado": "ok",
-     "partidos_nuevos": 18,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "feb2": {
      "estado": "ok",
-     "partidos_nuevos": 28,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "feb3": {
      "estado": "ok",
-     "partidos_nuevos": 134,
+     "partidos_nuevos": 0,
      "incidencias": []
     },
     "nbl": {
@@ -113,123 +110,196 @@
     "cba": {
      "estado": "ok",
      "partidos_nuevos": 0,
+     "incidencias": [
+      "última fecha 2026-10-29: más de 10 días sin partidos nuevos"
+     ]
+    },
+    "ligau": {
+     "estado": "ok",
+     "partidos_nuevos": 0,
      "incidencias": []
     }
    }
   },
   "pista": {
    "estado": "ok",
-   "segundos": 86
+   "segundos": 151,
+   "filas_pista": 6821,
+   "filas_interacciones": 11755,
+   "filas_nacionalidades": 7418
   },
   "normalizacion": {
    "estado": "ok",
-   "segundos": 72
+   "segundos": 130,
+   "filas": 7172,
+   "solo_v2": 0,
+   "b_vigente": 1165,
+   "personas_nuevas": 0
   },
   "contexto": {
    "estado": "ok",
-   "segundos": 91
+   "segundos": 158,
+   "filas_contexto": 6811
   },
   "roles": {
    "estado": "ok",
-   "segundos": 42
+   "segundos": 67,
+   "filas_roles": 6813
   },
   "entropia": {
    "estado": "ok",
-   "segundos": 127
+   "segundos": 235
   },
   "estilos": {
    "estado": "ok",
-   "segundos": 86
+   "segundos": 129,
+   "k": 6
   },
   "simulador": {
    "estado": "ok",
-   "segundos": 242,
+   "segundos": 391,
    "clubes": null
   },
   "artifact": {
    "estado": "ok",
-   "segundos": 590,
+   "segundos": 604,
    "subpasos": {
-    "tablas": 10,
+    "tablas": 14,
     "nacionalidades": 0,
-    "evaluacion": 311,
-    "normalizados": 8,
-    "atlas_estilos": 98,
-    "informe": 10,
-    "quintetos": 137,
-    "compactar": 15
+    "evaluacion": 222,
+    "normalizados": 12,
+    "atlas_estilos": 136,
+    "informe": 13,
+    "quintetos": 191,
+    "compactar": 16
    }
+  },
+  "v42": {
+   "estado": "ok",
+   "segundos": 77,
+   "trios": {
+    "filas_temporada": 13768,
+    "filas_antes": 13768
+   },
+   "parejas": {
+    "filas_temporada": 18601,
+    "filas_antes": 18601
+   },
+   "sinergia_pareja": {
+    "filas_temporada": 18601,
+    "filas_antes": 18601
+   },
+   "ficheros": 118
   },
   "publicacion": {
    "estado": "ok",
-   "segundos": 11,
-   "ficheros": 63,
-   "mb": 45.9,
-   "lote": "/home/user/baskonia/publicacion/lote0.json"
+   "segundos": 15,
+   "ficheros": 93,
+   "mb": 49.5,
+   "lote": "/home/user/baskonia/publicacion/lote0.json",
+   "sitios": {
+    "jugadores": {
+     "url": "https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC",
+     "ficheros": 27,
+     "mb": 37.7,
+     "lotes": 1
+    },
+    "equipos": {
+     "url": "https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj",
+     "ficheros": 75,
+     "mb": 36.0,
+     "lotes": 1
+    },
+    "metodologia": {
+     "url": "https://claude.ai/artifact/T83MBGZk5untACmegadfNn",
+     "ficheros": 64,
+     "mb": 35.0,
+     "lotes": 1
+    }
+   },
+   "rutas_nuevas": {
+    "quintetos/datos/2026-27/ligau.gz.txt": [
+     "equipos",
+     "metodologia"
+    ],
+    "quintetos/datos_v42/2026-27/ligau.gz.txt": [
+     "equipos",
+     "metodologia"
+    ],
+    "v40/calibracion.json.gz.txt": [
+     "jugadores"
+    ],
+    "v40/equipos_2026-27.json.gz.txt": [
+     "jugadores"
+    ]
+   },
+   "sin_sitio": [
+    "quintetos/datos_v42/indice.json.gz.txt"
+   ]
   }
  },
- "segundos": 2749,
- "huella": "e36f831ab2c60c056a97bb8428fb9963d45ee3eb8832911552e7f7aa9217a577",
+ "estado": "ok",
+ "huella": "b5d2dab038598b227c0595fd14880dd8a646a17f218f42d0118b8577bd80883b",
  "ligas_publicas": {
   "euroleague": {
    "estado": "ok",
-   "partidos_nuevos": 20
+   "partidos_nuevos": 0
   },
   "acb": {
    "estado": "ok",
-   "partidos_nuevos": 18
+   "partidos_nuevos": 0
   },
   "nba": {
    "estado": "ok",
-   "partidos_nuevos": 72
+   "partidos_nuevos": 0
   },
   "gleague": {
    "estado": "ok",
-   "partidos_nuevos": 18
+   "partidos_nuevos": 0
   },
   "lba": {
    "estado": "ok",
-   "partidos_nuevos": 15
+   "partidos_nuevos": 0
   },
   "bbl": {
    "estado": "ok",
-   "partidos_nuevos": 18
+   "partidos_nuevos": 0
   },
   "lnb": {
    "estado": "ok",
-   "partidos_nuevos": 17
+   "partidos_nuevos": 0
   },
   "eurocup": {
    "estado": "ok",
-   "partidos_nuevos": 16
+   "partidos_nuevos": 0
   },
   "bcl": {
    "estado": "ok",
-   "partidos_nuevos": 8
+   "partidos_nuevos": 0
   },
   "fec": {
    "estado": "ok",
-   "partidos_nuevos": 29
+   "partidos_nuevos": 0
   },
   "gbl": {
    "estado": "ok",
-   "partidos_nuevos": 14
+   "partidos_nuevos": 0
   },
   "bsl": {
    "estado": "ok",
-   "partidos_nuevos": 15
+   "partidos_nuevos": 0
   },
   "feb1": {
    "estado": "ok",
-   "partidos_nuevos": 18
+   "partidos_nuevos": 0
   },
   "feb2": {
    "estado": "ok",
-   "partidos_nuevos": 28
+   "partidos_nuevos": 0
   },
   "feb3": {
    "estado": "ok",
-   "partidos_nuevos": 134
+   "partidos_nuevos": 0
   },
   "nbl": {
    "estado": "ok",
@@ -250,6 +320,12 @@
   "cba": {
    "estado": "ok",
    "partidos_nuevos": 0
+  },
+  "ligau": {
+   "estado": "ok",
+   "partidos_nuevos": 0
   }
- }
+ },
+ "fin": "2026-11-10T11:17:53+00:00",
+ "segundos": 2401
 }
