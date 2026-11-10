@@ -7,7 +7,7 @@
   80 % / 90 %», «[a–b]», «confianza alta/moderada/baja», «una de cada cinco veces…», «con su margen de error»,
   «cuanto más ancha, menos seguros», «valor central, sin rango», la columna «Rango 90 %» de las tablas de simulación y
   los rangos de percentil de las secciones 04 y 05. Avisos y glosario reescritos en lenguaje directo.
-* Publicado en Jugadores (v30), Equipos (v7) y Metodología (v7). Comprobado en navegador: ningún texto de rango ni de
+* Publicado en Jugadores (v31, con el ajuste final de los textos «De dónde sale…» hecho por otra sesión sobre la v30), Equipos (v8) y Metodología (v8): el mismo fichero en los tres. Comprobado en navegador: ningún texto de rango ni de
   confianza en el informe completo, con y sin destino, sin errores de JavaScript.
 
 ## 2026-11-09 — Skill «anadir-liga» para los tres artifacts (v4.2)
