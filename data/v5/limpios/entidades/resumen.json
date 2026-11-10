@@ -1,12 +1,12 @@
 {
  "nodos": 30233,
  "personas_crosswalk": 20423,
- "personas_v5": 19724,
- "personas_con_conflicto_fuerte": 14,
- "nodos_separados": 35,
+ "personas_v5": 19728,
+ "personas_con_conflicto_fuerte": 16,
+ "nodos_separados": 43,
  "avisos_nombre": 432,
- "enlaces_perdidos_candidatos": 1137,
- "enlaces_unidos": 732,
+ "enlaces_perdidos_candidatos": 1141,
+ "enlaces_unidos": 736,
  "pares_de_clubes": 541,
  "nodos_con_nacimiento": 0.4061125260476962,
  "meta": {
@@ -15,7 +15,7 @@
   "config": null,
   "hash_config": "5084efcbd69b",
   "hash_datos_entrada": "49560fdafa277199",
-  "fecha": "2026-11-10T08:15:26+00:00",
+  "fecha": "2026-11-10T08:32:26+00:00",
   "python": "3.13.18"
  }
 }

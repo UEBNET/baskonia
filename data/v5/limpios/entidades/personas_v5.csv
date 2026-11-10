@@ -331,7 +331,7 @@ acb,30000013,P000328,Sergi Quintela,P000328,,False
 acb,30000015,P000329,Dani García,P000329,,False
 acb,30000019,P000330,Brandon Davies,P000330,,False
 acb,30000020,P000331,Cory Higgins,P000331,,False
-acb,30000021,P000332,Jordan Davis,P000332,,False
+acb,30000021,P000332,Jordan Davis,P000332,"unido: mismo club en dos competiciones, apellido e inicial",False
 acb,30000022,P000333,Frankie Ferrari,P000333,"unido: mismo club en dos competiciones, apellido e inicial",False
 acb,30000023,P000334,David Kravish,P000334,,False
 acb,30000024,P000335,William Magarity,P000335,,False
@@ -378,7 +378,7 @@ acb,30000124,P000375,G. Basterrechea,P000375,,False
 acb,30000130,P000376,Danilo Brnovic,P000376,,False
 acb,30000132,P000377,Rubén López De La Torre,P000377,,False
 acb,30000133,P000378,Marcis Steinbergs,P000378,,False
-acb,30000138,P000379,Juan Fernández,P000379,,False
+acb,30000138,P000379,Juan Fernández,P000379,"unido: mismo club en dos competiciones, apellido e inicial",False
 acb,30000145,P000380,Kriss Helmanis,P000380,,False
 acb,30000147,P000381,Roger Martí,P000381,,False
 acb,30000153,P000382,Zsombor Maronka,P000382,,False
@@ -2551,7 +2551,7 @@ bbl,55848,P002466,Scottie Reynolds,P002466,,False
 bbl,55861,P002467,Dayon Griffin,P002467,,False
 bbl,55864,P002468,Shakur Juiston,P002468,,False
 bbl,55866,P002469,Hassani Gravett,P002469,,False
-bbl,55867,P000332,Jordan Davis,P000332,,False
+bbl,55867,P000332,Jordan Davis,P000332-d1,separado: sin evidencia en una persona en conflicto (dudoso),True
 bbl,55870,P002470,Jack McVeigh,P002470,,False
 bbl,55871,P002471,Sam Waardenburg,P002471,,False
 bbl,55872,P002472,Derek Cooke Jr.,P002472,,False
@@ -3902,7 +3902,7 @@ bcl,230905,P003472,Ron Curry,P003472,,False
 bcl,230909,P003473,Grant Jerrett,P003473,,False
 bcl,231269,P003474,Andrzej Mazurczak,P003474,,False
 bcl,231321,P003475,Xavier Munford,P003475,,False
-bcl,231444,P000332,Jordan Davis,P000332,,False
+bcl,231444,P000332,Jordan Davis,P000332,separado: sin evidencia en una persona en conflicto (dudoso),False
 bcl,231456,P000728,Travante Williams,P000728,,False
 bcl,231483,P003476,Matt  Tiby,P003476,,False
 bcl,231590,P000368,Brancou Badio,P000368,,False
@@ -3911,7 +3911,7 @@ bcl,231629,P003477,Gerry Blakes,P003477,,False
 bcl,231645,P000449,Yannick Nzosa,P000449,,False
 bcl,235535,P003478,Devondrick Walker,P003478,,False
 bcl,235537,P000290,Gian Clavell,P000290,"unido: mismo club en dos competiciones, apellido e inicial",False
-bcl,235644,P000379,Juan Fernandez,P000379,,False
+bcl,235644,P000379,Juan Fernandez,P000379,separado: sin evidencia en una persona en conflicto (dudoso),False
 bcl,235734,P003479,Greg Brown III,P003479,"unido: mismo club en dos competiciones, apellido e inicial",False
 bcl,235735,P003480,Vernon Carey Jr.,P003480,,False
 bcl,235977,P003481,Davide Denegri,P003481,,False
@@ -5296,7 +5296,7 @@ bnxt,davidson-nick,P004516,Nick Davidson,P004516,,False
 bnxt,davis-antonio,P004517,Antonio Jr Davis,P004517,,False
 bnxt,davis-ar,P004518,Ar'mond Davis,P004518,,False
 bnxt,davis-deandre,P004519,Deandre Davis,P004519,,False
-bnxt,davis-jordan,P000332,Jordan Artwan Davis,P000332,,False
+bnxt,davis-jordan,P000332,Jordan Artwan Davis,P000332-d3,separado: sin evidencia en una persona en conflicto (dudoso),True
 bnxt,davis-ryan,P004520,Ryan Davis,P004520,,False
 bnxt,debacker-kobe,P004521,Kobe De Backer,P004521,,False
 bnxt,debeljak-lea,P004522,Lea Debeljak,P004522,,False
@@ -8150,7 +8150,7 @@ eurocup,005094,P000149,"THOMAS, DESHAUN",P000149,,False
 eurocup,005099,P000082,"HANGA, ADAM",P000082,,False
 eurocup,005113,P002852,"STIPANOVIC, ANDRIJA",P002852,,False
 eurocup,005159,P003217,"GREEN, ERICK",P003217,,False
-eurocup,005177,P000379,"FERNANDEZ, JUAN",P000379,,False
+eurocup,005177,P000379,"FERNANDEZ, JUAN",P000379,"unido: mismo club en dos competiciones, apellido e inicial",False
 eurocup,005181,P003153,"RAGLAND, JOE",P003153,,False
 eurocup,005199,P000167,"ABROMAITIS, TIM",P000167,,False
 eurocup,005216,P003033,"MCCOLLUM, ERRICK",P003033,,False
@@ -19920,7 +19920,7 @@ fec,350101,P015007,Anthony Williams,P015007,,False
 fec,350152,P015008,Tristan Ikpe,P015008,,False
 fec,350296,P015009,Jeriah Horne,P015009,,False
 fec,350430,P005354,Darren Williams,P005354,,False
-fec,350627,P000332,Jordan Davis,P000332,,False
+fec,350627,P000332,Jordan Davis,P000332-d4,separado: sin evidencia en una persona en conflicto (dudoso),True
 fec,350650,P015010,CJ Kelly,P015010,,False
 fec,350799,P004146,Zahir Porter,P004146,,False
 fec,350875,P015011,Jalen Shaw,P015011,,False
@@ -20430,7 +20430,7 @@ gbl,danusevicius-paulius,P003681,Paulius Danusevicius,P003681,,False
 gbl,darkokelly-zaccheus,P015337,Zaccheus DARKO-KELLY,P002637,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,davis-de,P015338,De'jon Davis,P015338,,False
 gbl,davis-devin,P003750,Devin Davis,P003750,,False
-gbl,davis-jordan,P000332,Jordan Deangelo Davis,P000332,,False
+gbl,davis-jordan,P000332,Jordan Deangelo Davis,P000332,separado: sin evidencia en una persona en conflicto (dudoso),False
 gbl,davis-jr,P015339,Jr Antonio-Lee Davis,P015339,,False
 gbl,davis-mike,P001155,Mike Davis,P001155,,False
 gbl,davis-shaheed,P014283,Shaheed Davis,P014283,,False
@@ -22911,7 +22911,7 @@ lba,1969,P016719,Abdel Fall,P016719,,False
 lba,1983,P003051,Matteo Fantinelli,P003051,,False
 lba,2020,P000100,James Feldeine,P000100,,False
 lba,2040,P016720,Giancarlo Ferrero,P016720,,False
-lba,2043,P000379,Juan Manuel Fernandez,P000379,,False
+lba,2043,P000379,Juan Manuel Fernandez,P000379,separado: conflicto de nacimiento o de calendario,False
 lba,2074,P016721,Ariel Filloy,P016721,,False
 lba,2079,P000521,Marko Filipovity,P000521,,False
 lba,21,P003462,Josh Adams,P003462,,False
@@ -27472,7 +27472,7 @@ ncaa,4433225,P016353,Tyler Kolek,P016353,,False
 ncaa,4433227,P018444,Jamel King,P018444,,False
 ncaa,4433231,P018445,Josh Ogundele,P018445,,False
 ncaa,4433232,P018446,Kiyron Powell,P018446,,False
-ncaa,4433242,P000332,Jordan Davis,P000332,,False
+ncaa,4433242,P000332,Jordan Davis,P000332-s1,separado: conflicto de nacimiento o de calendario,True
 ncaa,4433249,P016116,Moussa Diabate,P016116,,False
 ncaa,4433254,P016082,Kendall Brown,P016082,,False
 ncaa,4433255,P017561,Chet Holmgren,P017561,,False

@@ -132,8 +132,13 @@ def fechas_jugadas(temporadas: list[str]) -> pd.DataFrame:
     base = C.DIR_DATOS / "limpios" / "caja_partido"
     for t in temporadas:
         for f in sorted((base / t).glob("*.parquet")):
-            d = pd.read_parquet(f, columns=["liga", "player_id", "fecha", "jugo", "team_id"])
-            fr.append(d[d["jugo"] & d["player_id"].notna()])
+            d = pd.read_parquet(f)
+            d = d[d["jugo"] & d["player_id"].notna()]
+            # la prueba de calendario sólo usa fechas fiables: no la de modificación del fichero de FIBA LiveStats
+            # (aproximada, ±1 día o más: provocaba coincidencias falsas con los partidos europeos)
+            if "fecha_origen" in d:
+                d = d[d["fecha_origen"].isin(["boxscore", "calendario"])]
+            fr.append(d[["liga", "player_id", "fecha"]])
     d = pd.concat(fr, ignore_index=True) if fr else pd.DataFrame(columns=["liga", "player_id", "fecha"])
     d = d[d["fecha"].astype(str).str.match(r"\d{4}-\d{2}-\d{2}")]
     return d[["liga", "player_id", "fecha"]].drop_duplicates()
