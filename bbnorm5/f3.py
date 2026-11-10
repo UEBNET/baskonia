@@ -7,6 +7,7 @@ Pasos:
 - datos: jugador-partido de temporada regular con oportunidades reales, rol y mitad (bbnorm5/medida/datos.py)
 - ajuste: por liga-temporada y métrica, validación primera → segunda mitad y ajuste de la temporada completa
   (bbnorm5/medida/validacion.py, bbnorm5/medida/eb.py)
+- comprobaciones: contracción frente a exposición y sensibilidad del n* (bbnorm5/medida/comprobaciones.py)
 - nuts: contraste en NumPyro (NUTS) del modelo por partido en ligas representativas (bbnorm5/medida/nuts.py)
 - figuras: figuras del informe (bbnorm5/medida/figuras.py)
 """
@@ -26,9 +27,9 @@ def _una(args):
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     from bbnorm5.medida import datos as D
     from bbnorm5.medida import validacion as V
-    liga, temporada, semilla = args
+    liga, temporada, semilla, deriva = args
     d = pd.read_parquet(D.DIR / "partidos.parquet", filters=[("liga", "==", liga), ("temporada", "==", temporada)])
-    return V.liga_temporada(d, liga, temporada, semilla)
+    return V.liga_temporada(d, liga, temporada, semilla, deriva=deriva)
 
 
 def ajuste(cfg: dict) -> dict:
@@ -38,20 +39,33 @@ def ajuste(cfg: dict) -> dict:
     V.S, V.MIN_UNIDADES = a["muestras_predictiva"], a["min_unidades"]
     V.EVAL_MIN_PARTIDOS, V.EVAL_MIN_MINUTOS = a["eval_min_partidos"], a["eval_min_minutos"]
     ls = pd.read_parquet(D.DIR / "partidos.parquet", columns=["liga", "temporada"]).drop_duplicates()
-    tareas = [(l, t, cfg["semilla"]) for l, t in sorted(zip(ls["liga"], ls["temporada"]))]
-    casos, hiper, post = [], [], []
-    with ProcessPoolExecutor(a["procesos"]) as ex:
-        for (l, t, _), (c, h, p) in zip(tareas, ex.map(_una, tareas)):
-            print(f"  {l} {t}: {len(c)} casos", flush=True)
-            casos.append(c), hiper.append(h), post.append(p)
-    casos, hiper, post = (pd.concat(x, ignore_index=True) for x in (casos, hiper, post))
+    pares = sorted(zip(ls["liga"], ls["temporada"]))
+
+    def pasada(deriva):
+        tareas = [(l, t, cfg["semilla"], None if deriva is None else
+                   deriva[deriva["liga"] == l].set_index("metrica")["tau2_d"].to_dict()) for l, t in pares]
+        casos, hiper, post = [], [], []
+        with ProcessPoolExecutor(a["procesos"]) as ex:
+            for (l, t, _, _), (c, h, p) in zip(tareas, ex.map(_una, tareas)):
+                print(f"  {l} {t}: {len(c)} casos", flush=True)
+                casos.append(c), hiper.append(h), post.append(p)
+        return (pd.concat(x, ignore_index=True) for x in (casos, hiper, post))
+    # 1.ª pasada: sin deriva; con sus casos se estima τ²_d dejando fuera cada liga; 2.ª pasada: con deriva
+    casos, hiper, _ = pasada(None)
+    der = V.deriva_momentos(casos, hiper)
+    der.to_csv(D.DIR / "deriva_entre_mitades.csv", index=False)
+    casos, hiper, post = pasada(der)
+    # posteriores publicadas: sólo el modelo preferido para el nivel de la temporada completa (sin deriva, que es de
+    # validación): jer_sd en binomial y Poisson, jer en la normal
+    normal = post["metrica"].map(lambda m: D.METRICAS[m][0] == "normal")
+    post = post[(post["modelo"] == "jer_sd") | (normal & (post["modelo"] == "jer"))].reset_index(drop=True)
     casos.to_parquet(D.DIR / "validacion_casos.parquet")
     hiper.to_csv(D.DIR / "hiperparametros.csv", index=False)
     post.to_parquet(D.DIR / "posteriores.parquet")
     for nom, por in {"metrica": ["metrica", "modelo"], "liga": ["liga", "metrica", "modelo"],
                      "temporada": ["temporada", "metrica", "modelo"]}.items():
         V.resumen(casos, por).to_csv(D.DIR / f"validacion_por_{nom}.csv", index=False)
-    return {"ligas_temporada": len(tareas), "casos": len(casos), "unidades_posterior": len(post)}
+    return {"ligas_temporada": len(pares), "casos": len(casos), "unidades_posterior": len(post)}
 
 
 def main(argv=None):
@@ -70,6 +84,13 @@ def main(argv=None):
             out = {"jugador_partido": len(d), "unidades": int(d.groupby(D.CLAVE).ngroups)}
         elif paso == "ajuste":
             out = ajuste(cfg)
+        elif paso == "comprobaciones":
+            from bbnorm5.medida import comprobaciones as K
+            c = K.contraccion(pd.read_parquet(D.DIR / "posteriores.parquet"), pd.read_csv(D.DIR / "hiperparametros.csv"))
+            c.to_csv(D.DIR / "contraccion_por_exposicion.csv", index=False)
+            s = K.sensibilidad_estabilizacion(D.cargar())
+            s.to_csv(D.DIR / "estabilizacion_sensibilidad.csv", index=False)
+            out = {"max_dif_peso": float((c["w_empirico"] - c["w_teorico"]).abs().max())}
         elif paso == "nuts":
             from bbnorm5.medida import nuts
             out = nuts.ejecutar(cfg)

@@ -1,0 +1,14 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F3",
+ "config": "configs/v5/f3.yaml",
+ "hash_config": "9e8a4b475fc6",
+ "hash_datos_entrada": "985197aaad000bdf",
+ "fecha": "2026-11-10T09:21:50+00:00",
+ "python": "3.13.18",
+ "paso": "ajuste",
+ "ligas_temporada": 107,
+ "casos": 1676644,
+ "unidades_posterior": 1159859,
+ "tiempo_s": 592
+}

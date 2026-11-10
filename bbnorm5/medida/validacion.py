@@ -7,6 +7,9 @@ Modelos comparados (por métrica):
 - `jer`: jerárquico con media por rol, sin sobredispersión dentro de jugador.
 - `jer_sd`: jerárquico con la sobredispersión dentro de jugador estimada por momentos en la primera mitad.
 - Familia normal: un solo modelo (`jer`), cuya φ ya es la varianza dentro de jugador entre partidos.
+- `+deriva` (`jer_sd_d`, y `jer_d` en la normal): el preferido más una deriva del nivel entre mitades,
+  η₂ = η₁ + d, d ~ N(0, τ²_d). τ²_d se estima por momentos (`deriva_momentos`) con los casos de **las otras ligas**
+  (dejar una liga fuera), así que la liga evaluada no participa en su propia τ²_d.
 
 Se condiciona en las oportunidades de la segunda mitad (cuántos tiros, rebotes disponibles…): la capa de medida
 responde «dado el volumen, cuánto acierta»; el volumen y el rol son otra capa (F6–F7).
@@ -52,8 +55,71 @@ def _ajustes(u: pd.DataFrame, familia: str) -> dict:
     return {"jer": eb.ajustar(u, familia, False), "jer_sd": eb.ajustar(u, familia, True)}
 
 
-def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, metricas=None):
-    """Devuelve (casos de validación por unidad, hiperparámetros, posteriores de la temporada completa)."""
+def _con_deriva(tasa: np.ndarray, fam: str, tau2: float, rng) -> np.ndarray:
+    d = np.sqrt(tau2) * rng.standard_normal(tasa.shape)
+    if fam == "binomial":
+        from scipy import special
+        return special.expit(special.logit(np.clip(tasa, 1e-9, 1 - 1e-9)) + d)
+    if fam == "poisson":
+        return tasa * np.exp(d)
+    return tasa + d
+
+
+def deriva_momentos(casos: pd.DataFrame, hiper: pd.DataFrame) -> pd.DataFrame:
+    """τ²_d por métrica y liga, dejando fuera esa liga.
+
+    En la escala de la tasa, D = r₂ − r₁ (tasas crudas de cada mitad) tiene varianza ≈ τ²_d·g(p)² + v₁ + v₂, con
+    g(p) = p(1 − p) (binomial, deriva en logit) o p (Poisson, deriva en log) y v_h la varianza de muestreo de la mitad
+    h con la sobredispersión de la liga-temporada. p es la media posterior de la primera mitad (encogida: no explota
+    con pocos aciertos, a diferencia del logit empírico, que en simulación y en los datos infla τ²_d en tapones, robos
+    y libres). Se estandariza e = D/g y se despeja τ²_d con pesos 1/(v + τ²)² iterados (DerSimonian–Laird), ≥ 0."""
+    c = casos[casos["modelo"] == "crudo"].copy()
+    pm = casos[casos["modelo"].isin(["jer_sd", "jer"])].sort_values("modelo").drop_duplicates(
+        D.CLAVE + ["metrica"], keep="last")[D.CLAVE + ["metrica", "pred_media"]].rename(columns={"pred_media": "p1"})
+    c = c.merge(pm, on=D.CLAVE + ["metrica"])
+    h = hiper[(hiper["datos"] == "mitad1") & hiper["modelo"].isin(["jer_sd", "jer"])]
+    h = h.sort_values("modelo").drop_duplicates(["liga", "temporada", "metrica"], keep="last")
+    c = c.merge(h[["liga", "temporada", "metrica", "disp"]], on=["liga", "temporada", "metrica"])
+    fam = c["metrica"].map(lambda m: D.METRICAS[m][0]).to_numpy()
+    K1, N1, K2, N2, disp, p = (c[x].to_numpy(float) for x in ("K", "N", "K_2", "N_2", "disp", "p1"))
+    G1, G2 = c["G1"].to_numpy(float), c["G2"].to_numpy(float)
+    Dr = K2 / N2 - K1 / N1
+    infl = lambda n, g: 1 + disp * np.maximum(n / np.maximum(g, 1) - 1, 0)
+    e = np.full(len(c), np.nan)
+    v = np.full(len(c), np.nan)
+    b = fam == "binomial"
+    g = p * (1 - p)
+    e[b] = (Dr / g)[b]
+    v[b] = ((infl(N1, G1) / N1 + infl(N2, G2) / N2) / g)[b]
+    po = fam == "poisson"
+    e[po] = (Dr / p)[po]
+    v[po] = ((1 + disp) * (1 / N1 + 1 / N2) / p)[po]
+    no = fam == "normal"
+    e[no] = Dr[no]
+    v[no] = (disp * (1 / N1 + 1 / N2))[no]
+    c["e"], c["v"] = e, v
+    c = c[np.isfinite(c["e"]) & np.isfinite(c["v"])]
+
+    def tau2(x):
+        t = 0.0
+        for _ in range(30):
+            w = 1 / (x["v"] + t) ** 2
+            t_new = max(float((w * (x["e"] ** 2 - x["v"])).sum() / w.sum()), 0.0)
+            if abs(t_new - t) < 1e-8:
+                break
+            t = t_new
+        return t
+    filas = []
+    for met, x in c.groupby("metrica"):
+        filas.append({"metrica": met, "liga": "todas", "tau2_d": tau2(x)})
+        for liga in x["liga"].unique():
+            filas.append({"metrica": met, "liga": liga, "tau2_d": tau2(x[x["liga"] != liga])})
+    return pd.DataFrame(filas)
+
+
+def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, metricas=None, deriva: dict | None = None):
+    """Devuelve (casos de validación por unidad, hiperparámetros, posteriores de la temporada completa).
+    deriva: {métrica: τ²_d} estimada sin esta liga; si se da, añade los modelos con deriva entre mitades."""
     casos, hiper, post = [], [], []
     minutos = d.groupby(D.CLAVE + ["mitad"]).agg(min=("min", "sum"), G=("game_id", "nunique")).unstack("mitad")
     minutos.columns = [f"{a}{b}" for a, b in minutos.columns]
@@ -81,6 +147,9 @@ def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, met
         base = ev[D.CLAVE + ["rol", "K", "N", "G1", "G2", "min1", "min2", "K_2", "N_2"]].reset_index(drop=True)
         cand = dict(mods)
         cand["crudo"] = None
+        if deriva and met in deriva:
+            pref = "jer" if fam == "normal" else "jer_sd"
+            cand[pref + "_d"] = mods[pref]
         for nom, m in cand.items():
             if nom == "crudo":
                 t1 = (ev["K"] / ev["N"]).to_numpy(float)
@@ -96,6 +165,8 @@ def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, met
                 else:
                     tasa = eb.muestras_tasa({**m, "W": m["W"][fila]}, S, rng)
                     disp, phi = m["disp"], 0.0
+                if nom.endswith("_d"):
+                    tasa = _con_deriva(tasa, fam, deriva[met], rng)
             K2 = eb.muestras_conteo(tasa, N2r if fam == "binomial" else N2, ev["N2g_2"].to_numpy(float), fam, disp,
                                     rng, phi)
             r = eb.evaluar(K2 / N2r[:, None], y, fam != "normal", rng)

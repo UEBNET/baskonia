@@ -3,7 +3,7 @@ fase: F3
 salida: medida
 semilla: 20261111
 temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]   # completas; la 2026-27 en curso no
-pasos: [datos, ajuste, nuts, figuras]
+pasos: [datos, ajuste, comprobaciones, nuts, figuras]
 ajuste:
   procesos: 3
   muestras_predictiva: 400
@@ -11,8 +11,9 @@ ajuste:
   eval_min_partidos: 3        # por mitad
   eval_min_minutos: 50        # por mitad
 nuts:
-  ligas_temporada: [["acb", "2024-25"], ["nba", "2024-25"], ["feb2", "2023-24"]]
-  metricas: [t3_pct, tl_pct, tpar]
+  # NBA fuera por coste (26.000 partidos-jugador; ~25 min por ajuste con la CPU compartida): EuroLeague en su lugar
+  ligas_temporada: [["acb", "2024-25"], ["euroleague", "2024-25"], ["feb2", "2023-24"]]
+  metricas: [t3_pct, tpar, stl_p100]
   cadenas: 4
-  calentamiento: 1000
-  muestras: 1000
+  calentamiento: 500
+  muestras: 500

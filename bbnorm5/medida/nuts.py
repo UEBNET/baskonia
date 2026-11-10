@@ -1,6 +1,7 @@
 """F3.3 · Contraste en NumPyro (NUTS) del modelo **por partido** en ligas-temporada representativas.
 
-Para cada métrica de tiro (oportunidades enteras) y liga-temporada:
+Para cada métrica de tiro (oportunidades enteras) y liga-temporada (y, en la familia de conteos, robos por posesión
+del rival con k_g ~ Poisson(n_g λ_u) frente a k_g ~ GammaPoisson, es decir, BinNeg1 con Var = μ(1 + δ)):
 
     k_g ~ Binomial(n_g, p_u)                         (modelo «bin»)
     k_g ~ BetaBinomial(n_g, c·p_u, c·(1 − p_u)),  c = (1 − ρ)/ρ      (modelo «bb»)
@@ -27,7 +28,7 @@ from bbnorm5.medida import datos as D
 DIR = D.DIR / "nuts"
 
 
-def _modelo(idx_u, rol_u, n, k=None, nr=3, sobred=True):
+def _modelo(idx_u, rol_u, n, k=None, nr=3, sobred=True, familia="binomial"):
     import jax.numpy as jnp
     import numpyro
     import numpyro.distributions as dist
@@ -36,6 +37,15 @@ def _modelo(idx_u, rol_u, n, k=None, nr=3, sobred=True):
     nu = rol_u.shape[0]
     z = numpyro.sample("z", dist.Normal(0, 1).expand([nu]).to_event(1))
     eta = mu[rol_u] + s * z
+    if familia == "poisson":
+        lam = numpyro.deterministic("p", jnp.exp(eta))
+        m = n * lam[idx_u]
+        if sobred:
+            delta = numpyro.sample("delta", dist.HalfNormal(2.0))
+            numpyro.sample("k", dist.GammaPoisson(m / delta, 1 / delta), obs=k)
+        else:
+            numpyro.sample("k", dist.Poisson(m), obs=k)
+        return
     p = numpyro.deterministic("p", jnp.clip(1 / (1 + jnp.exp(-eta)), 1e-6, 1 - 1e-6))
     pg = p[idx_u]
     if sobred:
@@ -51,7 +61,7 @@ def ajustar(d: pd.DataFrame, metrica: str, sobred: bool, cfg: dict):
     import jax
     import numpyro
     from numpyro.infer import MCMC, NUTS
-    _, kc, nc, _ = D.METRICAS[metrica]
+    fam, kc, nc, _ = D.METRICAS[metrica]
     x = d[d[nc] > 0]
     u = x.groupby(D.CLAVE + ["rol"], sort=False).size().reset_index()[D.CLAVE + ["rol"]]
     roles = [r for r in ("E", "A", "I", "X") if (u["rol"] == r).any()]
@@ -59,12 +69,12 @@ def ajustar(d: pd.DataFrame, metrica: str, sobred: bool, cfg: dict):
     x = x.merge(u, on=D.CLAVE + ["rol"])
     idx_u = x["iu"].to_numpy()
     rol_u = u["rol"].map({r: i for i, r in enumerate(roles)}).to_numpy()
-    n = x[nc].to_numpy().astype(np.int32)
+    n = x[nc].to_numpy().astype(np.int32 if fam == "binomial" else np.float64)
     k = x[kc].to_numpy().astype(np.int32)
     c = cfg["nuts"]
     mc = MCMC(NUTS(_modelo, target_accept_prob=0.9), num_warmup=c["calentamiento"], num_samples=c["muestras"],
               num_chains=c["cadenas"], chain_method="parallel", progress_bar=False)
-    mc.run(jax.random.PRNGKey(cfg["semilla"]), idx_u, rol_u, n, k, len(roles), sobred)
+    mc.run(jax.random.PRNGKey(cfg["semilla"]), idx_u, rol_u, n, k, len(roles), sobred, fam)
     idata = az.from_numpyro(mc, log_likelihood=True)
     div = int(mc.get_extra_fields()["diverging"].sum())
     return idata, u, roles, div
@@ -83,7 +93,9 @@ def ejecutar(cfg: dict) -> dict:
             for sob in (False, True):
                 nom = "bb" if sob else "bin"
                 idata, u, roles, div = ajustar(d, met, sob, cfg)
-                var = ["mu", "sigma"] + (["rho"] if sob else [])
+                fam = D.METRICAS[met][0]
+                par_sd = "rho" if fam == "binomial" else "delta"
+                var = ["mu", "sigma"] + ([par_sd] if sob else [])
                 sm = az.summary(idata, var_names=var)
                 zs = az.summary(idata, var_names=["z"])
                 loo = az.loo(idata, pointwise=True)
@@ -99,9 +111,11 @@ def ejecutar(cfg: dict) -> dict:
                               "pareto_k_malos": int((loo.pareto_k > 0.7).sum()),
                               "sigma_nuts": float(sm.loc["sigma", "mean"]), "sigma_nuts_sd": float(sm.loc["sigma", "sd"]),
                               "sigma_eb": float(h["sigma"]),
-                              "rho_nuts": float(sm.loc["rho", "mean"]) if sob else 0.0,
-                              "rho_nuts_hdi": f"{sm.loc['rho', 'hdi_3%']:.4f}–{sm.loc['rho', 'hdi_97%']:.4f}" if sob else "",
-                              "rho_eb_momentos": float(h["disp"])})
+                              "sobred_parametro": par_sd,
+                              "sobred_nuts": float(sm.loc[par_sd, "mean"]) if sob else 0.0,
+                              "sobred_nuts_hdi94": f"{sm.loc[par_sd, 'hdi_3%']:.4f}–{sm.loc[par_sd, 'hdi_97%']:.4f}" if sob else "",
+                              "sobred_eb_momentos": float(h["disp"])})
+                pd.DataFrame(filas).to_csv(DIR / "diagnosticos_parcial.csv", index=False)
                 print(f"  {liga} {temp} {met} {nom}: R̂ {filas[-1]['rhat_max']:.3f}, ESS {filas[-1]['ess_bulk_min']:.0f}, "
                       f"div {div}, elpd {filas[-1]['elpd_loo']:.1f}", flush=True)
                 # posteriores por jugador frente al EB

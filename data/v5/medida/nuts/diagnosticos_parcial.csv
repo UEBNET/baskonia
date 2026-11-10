@@ -1,0 +1,2 @@
+liga,temporada,metrica,modelo,partidos_obs,unidades,rhat_max,ess_bulk_min,ess_tail_min,divergencias,elpd_loo,se_elpd,pareto_k_malos,sigma_nuts,sigma_nuts_sd,sigma_eb,sobred_parametro,sobred_nuts,sobred_nuts_hdi94,sobred_eb_momentos
+acb,2024-25,t3_pct,bin,4960,253,1.01,795.0,944.0,0,-5705.7691349983215,41.97068818503108,0,0.156,0.027,0.1517113904047582,rho,0.0,,0.0
