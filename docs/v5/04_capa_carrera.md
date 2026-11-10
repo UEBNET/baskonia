@@ -458,6 +458,21 @@ g(edad) − g(26), escala del enlace (en tasas, 0,1 ≈ 10 % relativo):
 3. **Producto.** ¿Publicamos el nivel de carrera (estrecho con historial) separado de la producción esperada (más
    ancha), como sugiere §4.3?
 
+## 9 bis. Decisiones del usuario (10-11-2026)
+
+1. **BLK%:** se acepta su sobrecobertura (85,8 %) hasta la F8.
+2. **3PAr:** el cambio de estilo como cambio de rol se trata en la F6, con el resto del contexto.
+3. **Se publican por separado el nivel y la producción.** Aplicado: `python -m bbnorm5.f4 --pasos proyeccion` →
+   `data/v5/carrera/proyeccion_2026_27.parquet` (`bbnorm5/carrera/proyeccion.py`).
+   - **Alcance:** 152.636 filas de 11.245 personas con temporada en 2024-25 o 2025-26.
+   - **Nivel de carrera proyectado** (`nivel_*`): la capacidad persistente en su liga y rol. Ancho mediano del 80 %:
+     T3% 6,6 puntos, AST% 7,4, DREB% 4,9.
+   - **Producción esperada** (`produccion_*`): con el volumen de su última temporada (`volumen_supuesto`), el
+     transitorio de la temporada y el azar de las oportunidades. Ancho mediano: T3% 22,6 puntos, AST% 13,8, DREB% 9,1.
+     - Más ancha por naturaleza. Incluye a jugadores de poco volumen, cuya producción es muy variable.
+   - Misma liga y rol que en su última temporada hasta la F6.
+   - El contrato de salida (F9) recogerá los dos objetos con nombre propio.
+
 ## 10. Siguiente fase propuesta y ajuste de inversión
 
 **F5 · Modelo factorial** (encargo §9): perfil latente del jugador a partir de las 14 métricas de carrera.

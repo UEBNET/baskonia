@@ -9,6 +9,7 @@ Pasos:
 - experimento_obs: observación por logit empírico frente a posterior F3 ÷ prior (descartada)
 - final: selección de la variante (regla fijada en la configuración) y ajuste con todas las temporadas: hiperparámetros,
   curvas de edad con bandas y nivel de carrera filtrado de cada persona-temporada
+- proyeccion: nivel de carrera proyectado y producción esperada para la temporada siguiente, por separado
 - simulacion: examen de nivel por simulación con el diseño real (recuperación de parámetros y cobertura del nivel)
 - figuras
 """
@@ -153,6 +154,29 @@ def final(cfg: dict) -> dict:
     return {"variante_elegida": elegido, "variante_ajustada": var_aj}
 
 
+def proyeccion(cfg: dict) -> dict:
+    """Decisión 3 de la puerta F4: nivel de carrera proyectado y producción esperada, por separado."""
+    from bbnorm5.carrera import datos as CD
+    from bbnorm5.carrera import modelo as MOD
+    from bbnorm5.carrera import proyeccion as PR
+    from bbnorm5.medida import datos as DM
+    o = CD.cargar()
+    hall = pd.read_csv(DM.DIR / "hiperparametros.csv")
+    h = CD._hiper_preferido(hall)
+    hip = pd.read_csv(CD.DIR / "hiperparametros.csv").set_index("metrica")
+    anio = int(cfg["temporadas"][-1][:4]) + 1
+    rng = np.random.default_rng(cfg["semilla"])
+    res = []
+    for met in DM.METRICAS:
+        x = o[o["metrica"] == met]
+        tau0 = float(h[h["metrica"] == met]["sigma"].median())
+        mod = MOD.ajustar(MOD.matrices(x), hip.loc[met, "variante"], tau0)
+        res.append(PR.proyectar(x, mod, h, met, anio, rng))
+    r = pd.concat(res, ignore_index=True)
+    r.to_parquet(CD.DIR / f"proyeccion_{anio}_{str(anio + 1)[2:]}.parquet")
+    return {"filas": len(r), "personas": int(r["persona_v5"].nunique()), "temporada": f"{anio}-{str(anio + 1)[2:]}"}
+
+
 def simulacion(cfg: dict) -> dict:
     from bbnorm5.carrera import datos as CD
     from bbnorm5.carrera import modelo as MOD
@@ -209,6 +233,8 @@ def main(argv=None):
             out = experimento_obs(cfg)
         elif paso == "final":
             out = final(cfg)
+        elif paso == "proyeccion":
+            out = proyeccion(cfg)
         elif paso == "simulacion":
             out = simulacion(cfg)
         elif paso == "figuras":
