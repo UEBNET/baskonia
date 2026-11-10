@@ -7,6 +7,10 @@ F0–F5 completadas con sus puertas (`docs/checkpoints/V40_F0.md` … `V40_F5.md
 equipo/a5, equipo/anclas) y `configs/simulation_v40.yaml`. Nada de la v3.2/v3.3 cambió. Pendientes fuera del encargo: integración
 en el flujo del simulador v4.0 y el artifact; examen limpio 2025-26 → 2026-27 antes de comunicar cifras de acierto.
 
+* **Lectura de fichaje (10-11-2026, comentario del CEO en el artifact)**: fuera el texto de los intervalos de Nivel Kerno,
+  Impacto, Net del equipo y Landing en toda la lectura (la banda del 80 % sigue dibujada en los gráficos); explicaciones más
+  escuetas en la hoja de anclas, «cómo leer» y glosario. Fuente: `artifact/atlas/informe_v3.js` (versión viva del artifact
+  Kerno v2.0, que incorpora los cambios de otras sesiones: rebranding Kerno, Landing v4.1, hoja 06 C).
 * **Informes con la v4.0 (05-11-2026, decisión del CEO)**: lectura de fichaje e informe de equipo con NIVEL CERNO e IMPACTO
   como cifras principales de 02 y 03 (hoja propia de anclas en la lectura; Net proyectado y anclas por jugador en el informe de
   equipo), vara de la liga del club de destino en toda la lectura, cálculo en el navegador (`artifact/atlas/v40.js` sobre el motor
