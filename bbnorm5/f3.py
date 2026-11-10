@@ -9,6 +9,7 @@ Pasos:
   (bbnorm5/medida/validacion.py, bbnorm5/medida/eb.py)
 - comprobaciones: contracción frente a exposición y sensibilidad del n* (bbnorm5/medida/comprobaciones.py)
 - nuts: contraste en NumPyro (NUTS) del modelo por partido en ligas representativas (bbnorm5/medida/nuts.py)
+- nuts_recomparar: rehace la comparación NUTS ↔ EB con las salidas EB actuales, sin volver a muestrear
 - figuras: figuras del informe (bbnorm5/medida/figuras.py)
 """
 from __future__ import annotations
@@ -94,6 +95,9 @@ def main(argv=None):
         elif paso == "nuts":
             from bbnorm5.medida import nuts
             out = nuts.ejecutar(cfg)
+        elif paso == "nuts_recomparar":
+            from bbnorm5.medida import nuts
+            out = nuts.recomparar(cfg)
         elif paso == "figuras":
             from bbnorm5.medida import figuras
             out = figuras.todas(cfg)

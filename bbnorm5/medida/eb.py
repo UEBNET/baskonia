@@ -17,8 +17,10 @@ Para cada métrica y liga-temporada, y para cada unidad u (persona en esa liga-t
 
 Ajuste: la verosimilitud marginal de cada unidad es ∫ L(K_u | η) N(η; μ_r, σ²) dη; se integra **exactamente** en una
 rejilla fija de η (paso 0,02 en la escala del enlace), que no depende de los hiperparámetros. Los hiperparámetros
-(μ_r, log σ) se maximizan con gradiente analítico (esperanzas posteriores en la rejilla). La posterior de cada unidad
-son los pesos de la rejilla.
+(μ_r, log σ) se maximizan con gradiente analítico (esperanzas posteriores en la rejilla), con un prior débil sobre las
+medias de rol, μ_r ~ N(μ_liga, 1²): sin él, un rol casi sin datos (los «X» sin posición, con exposición mínima y casi
+todos k = 0) llevaba su media al borde de la rejilla en 362 de 1.294 ajustes (detectado al contrastar con la NUTS en
+FEB2, robos). La posterior de cada unidad son los pesos de la rejilla.
 
 La sobredispersión (ρ, δ) **no** se estima por máxima verosimilitud de los totales de temporada: ahí se confunde
 con σ² (sólo la separa la forma en que la varianza crece con N, y en simulación sale sesgada al doble). Se estima
@@ -74,7 +76,10 @@ def loglik(K, N, N2g, eta, familia: str, disp: float = 0.0) -> np.ndarray:
 
 
 # ------------------------------------------------------------------ hiperparámetros (μ_r, σ) dada la verosimilitud
-def _marginal(par, LL, eta, idx_rol, nr):
+SD_ROL = 1.0     # prior débil de las medias de rol alrededor de la media de la liga: μ_r ~ N(μ_liga, SD_ROL²)
+
+
+def _marginal(par, LL, eta, idx_rol, nr, mu0=None):
     mu, ls = par[:nr], par[nr]
     s = np.exp(ls)
     z = (eta[None, :] - mu[idx_rol][:, None]) / s
@@ -89,14 +94,24 @@ def _marginal(par, LL, eta, idx_rol, nr):
     Ez2 = (W * z ** 2).sum(axis=1)
     g_mu = np.bincount(idx_rol, weights=Ez / s, minlength=nr)
     g_ls = (Ez2 - 1).sum()
-    return -lm.sum(), -np.r_[g_mu, g_ls], W
+    pen = 0.0
+    if mu0 is not None:     # sin él, un rol casi sin datos (p. ej. «X» con exposición mínima) se va al borde
+        pen = 0.5 * ((mu - mu0) ** 2).sum() / SD_ROL ** 2
+        g_mu = g_mu - (mu - mu0) / SD_ROL ** 2
+    return -lm.sum() + pen, -np.r_[g_mu, g_ls], W
 
 
 def ajustar_hiper(LL, eta, idx_rol, nr, x0=None):
+    """Máx. de la marginal en (μ_r, log σ). Primero con un solo rol (μ_liga) y después con las medias de rol bajo el
+    prior débil μ_r ~ N(μ_liga, SD_ROL²). Devuelve los parámetros, la log-marginal **sin** la penalización y los pesos."""
+    b1 = [(eta[0], eta[-1]), (np.log(0.01), np.log(4.0))]
+    z = np.zeros(len(idx_rol), int)
+    x1 = np.r_[eta[np.argmax(LL.sum(axis=0))], np.log(0.3)]
+    r1 = optimize.minimize(lambda p: _marginal(p, LL, eta, z, 1)[:2], x1, jac=True, method="L-BFGS-B", bounds=b1)
+    mu_liga = float(r1.x[0])
     if x0 is None:
-        mu0 = np.full(nr, eta[np.argmax(LL.sum(axis=0))])
-        x0 = np.r_[mu0, np.log(0.3)]
-    f = lambda p: _marginal(p, LL, eta, idx_rol, nr)[:2]
+        x0 = np.r_[np.full(nr, mu_liga), r1.x[1]]
+    f = lambda p: _marginal(p, LL, eta, idx_rol, nr, mu_liga)[:2]
     b = [(eta[0], eta[-1])] * nr + [(np.log(0.01), np.log(4.0))]
     r = optimize.minimize(f, x0, jac=True, method="L-BFGS-B", bounds=b)
     nll, _, W = _marginal(r.x, LL, eta, idx_rol, nr)

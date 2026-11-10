@@ -96,3 +96,14 @@ def test_binneg1_estable_igual_a_la_forma_gamma():
         b = (special.gammaln(k + s) - special.gammaln(s) - special.gammaln(k + 1) - s * np.log1p(d)
              + k * (np.log(d) - np.log1p(d)))
         assert np.abs(a - b).max() < 1e-8
+
+
+def test_rol_sin_datos_no_se_va_al_borde():
+    """Un rol con unidades de exposición mínima y k = 0 queda cerca de la media de la liga, no en el borde."""
+    rng = np.random.default_rng(4)
+    u, _ = _sim(rng, "poisson", 0.0, U=300, centro=-3.8)
+    x = pd.DataFrame({"K": 0.0, "N": rng.uniform(0.5, 3, 20), "G": 1, "N2g": 1.0, "N3g": 1.0, "Sk2": 0.0, "Skn": 0.0,
+                      "rol": "X"})
+    m = eb.ajustar(pd.concat([u, x], ignore_index=True), "poisson", False)
+    mu = dict(zip(m["roles"], m["par"][:len(m["roles"])]))
+    assert abs(mu["X"] - mu["E"]) < 1.5

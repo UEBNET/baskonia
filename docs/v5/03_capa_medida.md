@@ -21,8 +21,8 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
    funciona.**
    - Prueba: ajustar con la primera mitad de los partidos de cada jugador y predecir la segunda.
    - Escala: 107 ligas-temporada, 14 métricas y 31.354 jugadores-temporada evaluados.
-   - El intervalo del 80 % cubre entre el **78,7 % y el 81,6 %** en las 14 métricas (objetivo 76–84 %).
-   - Las del 50 % y el 95 % también están calibradas: 48,8–52,4 % y 94,1–95,7 %.
+   - El intervalo del 80 % cubre entre el **78,6 % y el 81,6 %** en las 14 métricas (objetivo 76–84 %).
+   - Las del 50 % y el 95 % también están calibradas: 48,5–52,4 % y 94,1–95,6 %.
    - La tasa cruda de la primera mitad, tomada como verdadera, cubre sólo un 44–66 %.
 2. **El error de predicción baja entre un 5 % y un 28 %** (CRPS) frente a la tasa cruda.
    - Más en tiro (T3% −28 %, TL% −25 %, T2% −25 %), que es donde más ruido hay.
@@ -39,7 +39,10 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
    - Se ha añadido una deriva entre mitades, estimada dejando fuera la liga evaluada.
    - Con ella, todas las métricas entran en el rango.
    - La deriva es la semilla de la dinámica temporal de la F4.
-5. **La contracción sigue la teoría** (prec = τ⁻² + n/σ²): la mediana empírica coincide con la teórica en los 7 tramos
+5. **La inferencia completa (NUTS) confirma el Bayes empírico** en ACB, EuroLeague y FEB2: mismos σ y sobredispersión,
+   medias por jugador con correlación ≥ 0,999, 0 divergencias. Además encontró un error del Bayes empírico, ya
+   corregido: la media del rol sin posición se iba al borde de la rejilla.
+6. **La contracción sigue la teoría** (prec = τ⁻² + n/σ²): la mediana empírica coincide con la teórica en los 7 tramos
    de exposición, con una diferencia máxima de 0,016.
    - Los puntos de estabilización coinciden con la F1 en TL%, FTr, pts/100 y pérdidas.
    - En T2% la diferencia se explica por el prior por rol.
@@ -67,7 +70,7 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
   - NumPyro NUTS del modelo **por partido** en ACB 2024-25, EuroLeague 2024-25 y FEB2 2023-24 (T3%, 3PAr y robos).
   - Diagnósticos (R̂, ESS, divergencias), LOO-PSIS binomial frente a beta-binomial (Poisson frente a binomial
     negativa en robos) y comparación con el Bayes empírico.
-- **F3.4 · Este informe**, 5 figuras y 8 tests.
+- **F3.4 · Este informe**, 5 figuras y 10 tests.
 
 ## 2. Las verosimilitudes, explicadas (y su correspondencia con el código)
 
@@ -192,18 +195,18 @@ unidad-métrica-modelo de 17.052 personas.
 
 | Métrica | Crudo 80 % | Jerárquico (+ sobred.) 80 % | **Preferido 50 %** | **Preferido 80 %** | **Preferido 95 %** |
 |---|---|---|---|---|---|
-| T2% | 61,9 | 78,6 | 48,9 | **78,7** | 94,5 |
-| T3% | 62,2 | 78,8 | 48,8 | **78,8** | 94,3 |
-| TL% | 59,1 | 78,9 | 49,8 | **79,7** | 94,8 |
-| 3PAr | 57,2 | 72,4 | 48,7 | **78,8** | 94,1 |
-| OREB% | 58,9 | 78,1 | 49,6 | **79,7** | 94,6 |
-| DREB% | 57,9 | 77,0 | 50,6 | **80,6** | 95,2 |
-| AST% | 55,0 | 76,5 | 51,7 | **81,4** | 95,7 |
-| TOV% | 62,2 | 78,6 | 48,9 | **79,2** | 94,6 |
-| BLK% | 60,2 | 79,1 | 49,9 | **79,8** | 94,9 |
-| Robos/100 | 61,2 | 78,5 | 50,2 | **80,0** | 95,0 |
-| Faltas/40 | 66,4 | 81,3 | 52,0 | **81,3** | 95,2 |
-| FTr | 44,5 | 77,3 | 50,2 | **79,2** | 94,2 |
+| T2% | 61,7 | 78,5 | 48,9 | **78,7** | 94,5 |
+| T3% | 62,2 | 78,8 | 48,8 | **78,9** | 94,3 |
+| TL% | 59,0 | 78,8 | 49,8 | **79,7** | 94,6 |
+| 3PAr | 57,0 | 72,6 | 48,5 | **78,6** | 94,1 |
+| OREB% | 59,0 | 78,0 | 49,6 | **79,5** | 94,7 |
+| DREB% | 57,9 | 77,0 | 50,4 | **80,6** | 95,2 |
+| AST% | 55,1 | 76,3 | 51,5 | **81,3** | 95,6 |
+| TOV% | 62,3 | 78,6 | 48,8 | **79,1** | 94,4 |
+| BLK% | 60,1 | 79,2 | 49,8 | **80,1** | 94,8 |
+| Robos/100 | 61,1 | 78,5 | 50,2 | **80,0** | 95,0 |
+| Faltas/40 | 66,4 | 81,4 | 52,0 | **81,3** | 95,1 |
+| FTr | 44,5 | 77,2 | 49,9 | **79,2** | 94,3 |
 | Pts/100 | 60,2 | 76,1 | 51,2 | **81,4** | 95,4 |
 | USG% | 57,8 | 73,0 | 52,4 | **81,6** | 95,3 |
 
@@ -217,9 +220,9 @@ unidad-métrica-modelo de 17.052 personas.
 | Corte | Cobertura del 80 % |
 |---|---|
 | Por exposición en la primera mitad, tercil bajo / medio / alto | 79,6 / 79,8 / 79,8 (binomial y Poisson); 82,5 / 81,3 / 80,7 (normal) |
-| Por rol E / A / I / X | 80,0 / 80,3 / 79,7 / 80,5 |
+| Por rol E / A / I / X | 80,1 / 80,3 / 79,7 / 80,4 |
 | Por temporada 2020-21 … 2025-26 | 79,8–80,2 |
-| Por liga y métrica (280 casillas) | 273 dentro de 76–84 %. Fuera: BSL TL% 85,2, BLK% 84,7 y faltas 84,2 (2 temporadas); faltas en BCL 84,2 y FEC 84,1; LBA T2% 75,7; NBA 3PAr 75,8 |
+| Por liga y métrica (280 casillas) | 275 dentro de 76–84 %. Fuera: BSL BLK% 84,9, faltas 85,1 y TL% 84,9 (2 temporadas); faltas en la FEC 84,5; NBA 3PAr 75,9 |
 
 ![Cobertura por liga](figuras/f3_cobertura_ligas.png)
 
@@ -229,22 +232,22 @@ unidad-métrica-modelo de 17.052 personas.
 
 | Métrica | Reducción frente a la tasa cruda |
 |---|---|
-| T3% | 28,4 % |
+| T3% | 28,3 % |
 | TL% | 25,3 % |
 | T2% | 24,8 % |
 | FTr | 21,2 % |
-| Robos/100 | 20,4 % |
+| Robos/100 | 20,3 % |
 | TOV% | 16,8 % |
-| BLK% | 16,5 % |
-| OREB% | 14,7 % |
+| BLK% | 16,4 % |
+| OREB% | 14,6 % |
 | DREB% | 14,2 % |
 | AST% | 12,1 % |
-| Faltas/40 | 11,4 % |
+| Faltas/40 | 11,3 % |
 | Pts/100 | 9,5 % |
 | USG% | 7,7 % |
-| 3PAr | 5,1 % |
+| 3PAr | 4,9 % |
 
-- La sobredispersión baja además el CRPS de FTr un 7,6 % (de 0,0829 a 0,0766).
+- La sobredispersión baja además el CRPS de FTr un 7,5 % (de 0,0829 a 0,0767).
 - En el resto, el cambio de CRPS entre las variantes del modelo es < 1 %: mejoran sobre todo la **calibración**, no el
   punto central.
 
@@ -277,7 +280,7 @@ estimación 0.
 - **Binomial negativa** en las de Poisson.
 - **Normal** con φ dentro de jugador.
 
-El contraste NUTS-LOO del §3.8 lo confirma o lo matiza.
+El contraste NUTS-LOO del §3.8 lo confirma en T3%, 3PAr y robos: los dos modelos empatan donde ρ ≈ 0.
 
 ### 3.4 Deriva del nivel entre mitades de temporada
 
@@ -288,7 +291,7 @@ rol):
 |---|---|---|---|
 | 3PAr | 0,201 | 1,157 | 0,03 |
 | AST% | 0,185 | 0,548 | 0,11 |
-| BLK% | 0,139 | 0,724 | 0,04 |
+| BLK% | 0,140 | 0,723 | 0,04 |
 | FTr | 0,117 | 0,383 | 0,09 |
 | TL% | 0,110 | 0,429 | 0,07 |
 | DREB% | 0,108 | 0,287 | 0,14 |
@@ -310,17 +313,17 @@ rol):
 ### 3.5 Contracción frente a exposición (`contraccion_por_exposicion.csv`)
 
 Peso de lo observado: teórico w = N/(N + n*_u) frente al empírico (η_post − μ_rol)/(η_obs − μ_rol). Mediana por
-tramo de N/n*_u, para 340.455 unidades-métrica con la tasa cruda a más de 0,25 de la media del rol.
+tramo de N/n*_u, para 340.466 unidades-métrica con la tasa cruda a más de 0,25 de la media del rol.
 
 | N / n* | Unidades | w teórico | w empírico |
 |---|---|---|---|
 | < 0,25 | 88.293 | 0,067 | 0,083 |
-| 0,25–0,5 | 34.997 | 0,265 | 0,277 |
-| 0,5–1 | 43.619 | 0,418 | 0,418 |
-| 1–2 | 49.822 | 0,587 | 0,589 |
-| 2–4 | 46.874 | 0,736 | 0,738 |
-| 4–8 | 34.014 | 0,844 | 0,845 |
-| ≥ 8 | 42.836 | 0,950 | 0,953 |
+| 0,25–0,5 | 34.988 | 0,265 | 0,277 |
+| 0,5–1 | 43.637 | 0,418 | 0,418 |
+| 1–2 | 49.815 | 0,587 | 0,589 |
+| 2–4 | 46.898 | 0,735 | 0,738 |
+| 4–8 | 33.991 | 0,844 | 0,845 |
+| ≥ 8 | 42.844 | 0,949 | 0,953 |
 
 Se cumple lo que pide el encargo: la posterior se acerca a lo observado al ritmo de prec = τ⁻² + n/σ². La pequeña
 diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
@@ -375,8 +378,65 @@ diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
 
 ### 3.8 Contraste NUTS por partido (`data/v5/medida/nuts/`)
 
-_(Se completa al terminar la ejecución: diagnósticos, LOO binomial frente a beta-binomial y acuerdo con el Bayes
-empírico.)_
+- **Configuración.** Modelo por partido (§2.4) en ACB 2024-25, EuroLeague 2024-25 y FEB2 2023-24, para T3%, 3PAr y
+  robos/100. Binomial frente a beta-binomial (robos: Poisson frente a BinNeg1).
+- **Muestreo.** 4 cadenas × 500 de calentamiento + 500 muestras, doble precisión, `target_accept_prob` 0,9.
+- **Parametrización.** Centrada cuando la exposición mediana por jugador supera 10·n* (regla fijada antes de ver los
+  diagnósticos): sólo 3PAr. No centrada en el resto.
+- **Coste.** 1.212 s en total.
+
+**Diagnósticos y LOO** (`diagnosticos.csv`, `comparacion_loo.csv`):
+
+| Liga | Métrica | Partidos-jugador | R̂ máx. | ESS bulk mín. | Divergencias | elpd bin | elpd sobred. | Δelpd (EE) | σ NUTS (DT) | σ EB | Sobred. NUTS (HDI 94 %) | Sobred. EB (momentos) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ACB | T3% | 4.960 | 1,01 | 646 | 0 | −5.705,8 | −5.705,6 | +0,2 (0,4) | 0,156 (0,027) | 0,152 | ρ 0,002 (0–0,005) | 0 |
+| ACB | 3PAr | 6.382 | 1,01 | 1.173 | 0 | −8.424,4 | −8.424,3 | +0,2 (1,1) | 1,280 (0,070) | 1,268 | ρ 0,002 (0–0,005) | 0,0025 |
+| ACB | Robos | 6.707 | 1,02 | 747 | 0 | −6.689,7 | −6.689,4 | +0,3 (0,7) | 0,238 (0,023) | 0,235 | δ 0,012 (0–0,030) | 0,0014 |
+| EuroLeague | T3% | 4.855 | 1,01 | 635 | 0 | −5.463,0 | −5.463,9 | −0,9 (0,4) | 0,147 (0,029) | 0,145 | ρ 0,002 (0–0,006) | 0 |
+| EuroLeague | 3PAr | 6.216 | 1,01 | 1.354 | 0 | −8.112,6 | −8.114,7 | −2,2 (0,7) | 1,222 (0,067) | 1,212 | ρ 0,001 (0–0,002) | 0 |
+| EuroLeague | Robos | 6.597 | 1,01 | 870 | 0 | −6.353,9 | −6.354,1 | −0,2 (1,1) | 0,208 (0,025) | 0,205 | δ 0,021 (0–0,047) | 0,014 |
+| FEB2 | T3% | 5.523 | 1,01 | 476 | 0 | −5.987,1 | −5.987,4 | −0,4 (0,4) | 0,155 (0,029) | 0,153 | ρ 0,002 (0–0,006) | 0,0017 |
+| FEB2 | 3PAr | 7.018 | 1,01 | 1.134 | 0 | −9.599,7 | −9.598,1 | +1,5 (1,5) | 1,041 (0,047) | 1,032 | ρ 0,003 (0–0,006) | 0,0011 |
+| FEB2 | Robos | 7.414 | 1,02 | 728 | 0 | −7.827,0 | −7.825,3 | +1,7 (1,3) | 0,306 (0,021) | 0,301 | δ 0,021 (0–0,047) | 0,027 |
+
+- Los diagnósticos de los modelos binomial y de Poisson son parecidos: R̂ ≤ 1,01, ESS bulk ≥ 549 y 0 divergencias.
+- Δelpd = elpd sobredispersado − elpd binomial/Poisson. Positivo favorece la sobredispersión.
+- Pareto k > 0,7 en 0–5 partidos de 4.855–7.414: el LOO-PSIS es fiable.
+
+**Lectura de la NUTS:**
+1. **La inferencia completa da los mismos hiperparámetros que el Bayes empírico.**
+   - σ coincide a menos de 0,013 en los 9 casos y siempre dentro de una DT posterior.
+   - La sobredispersión por momentos cae dentro del HDI del 94 % de la NUTS en los 9.
+2. **Sobredispersión.** En T3%, 3PAr y robos el LOO no distingue los dos modelos: |Δelpd| ≤ 2,2, del orden de su
+   error estándar. Es lo que decía el estimador de momentos (ρ y δ ≈ 0 en estas métricas).
+   - La elección de la beta-binomial y la BinNeg1 no cuesta nada donde no hace falta.
+   - Donde sí hace falta (AST%, rebote, TL%, FTr), la validación por mitades la respalda (§3.1: FTr pasa del 60,6 % al
+     77,2 % sólo con ella).
+3. **Posteriores por jugador** (`acuerdo_eb.csv`): las medias del Bayes empírico y de la NUTS se correlacionan
+   0,9992–1,0000 en 8 de los 9 casos, con una diferencia media de 0,0001–0,0011 en la tasa.
+   - La DT del Bayes empírico es un 0–5 % menor (cociente 0,950–0,999). Es lo esperado: el Bayes empírico no propaga
+     la incertidumbre de σ y de las medias de rol.
+   - **Excepción: FEB2 robos** (correlación 0,90). Son los jugadores **sin posición («X») con exposición casi nula**
+     (1–3 posesiones del rival en toda la temporada). La NUTS les da 2,9 % ± 2,8 % (casi el prior); el Bayes empírico,
+     1,2 % ± 0,4 %. Con tan poca información, el Bayes empírico se fía demasiado de una media de rol mal identificada
+     (RIESGO 6).
+
+**El contraste encontró un error real del Bayes empírico, ya corregido.**
+- En la primera versión, la media del rol «X» se iba al borde de la rejilla en 362 de 1.294 ajustes: robos, rebote y
+  pérdidas, sobre todo. En FEB2 robos la correlación con la NUTS era 0,75.
+- Corrección: un prior débil de las medias de rol, μ_rol ~ N(μ_liga, 1²) (`eb.ajustar_hiper`), con su test
+  (`test_rol_sin_datos_no_se_va_al_borde`, que falla sin el prior).
+- Tras corregirlo, ningún rol se aleja más de 2,6 de la mediana de los demás. La validación por mitades apenas cambia
+  (≤ 0,2 puntos): esos jugadores casi nunca llegan a 50 minutos por mitad.
+
+**Incidencias del muestreo, resueltas:**
+- `dist.BetaBinomial` con ρ ~ Beta(1, 30) en precisión simple: R̂ 1,54, ESS 7 y divergencias en todas las muestras. Su
+  elpd quedaba ~870 puntos por encima de la binomial, incompatible con ρ ≈ 0.
+  - Solución: la verosimilitud se escribe a mano (la misma fórmula que el Bayes empírico, con su coeficiente
+    combinatorio), con log c ~ N(5, 2²) y doble precisión.
+- La BinNeg1 con δ → 0 desbordaba la diferencia de lgamma (paso 10⁻¹⁶, log δ → −30).
+  - Solución: la forma exacta y estable Σ_{j<k} log(m + jδ), con test frente a la forma gamma (diferencia < 10⁻⁸).
+- 3PAr en no centrada: R̂ 1,08 y ESS 44. Se corrige con la parametrización centrada (regla de arriba).
 
 ## 4. Interpretación (LECTURA)
 
@@ -424,13 +484,14 @@ empírico.)_
    - **Alternativa:** dos binomiales (tiros + pérdidas sobre jugadas del equipo) más los libres aparte.
 4. **Beta-binomial de la unidad con ρ_ef por momentos.** La suma de partidos beta-binomiales no es exactamente
    beta-binomial.
-   - **Comprobación:** la NUTS por partido del §3.8.
+   - **Comprobado** con la NUTS por partido (§3.8): mismos σ y ρ, y medias por jugador con correlación ≥ 0,999 salvo en
+     los «X» de exposición casi nula.
 5. **Fechas aproximadas en BNXT, BSL y GBL** (F2): el orden de las mitades puede cambiar entre partidos cercanos.
-   - Su cobertura está en rango, salvo TL%, BLK% y faltas en la BSL (84–85 %, con 2 temporadas).
+   - Su cobertura está en rango, salvo TL%, BLK% y faltas en la BSL (84,9–85,1 %, con 2 temporadas).
 6. **Rol pos3 de la F1**, el de más minutos de la unidad. Un 6 % de las líneas no tiene posición («X»): llevan su
    propia media.
 7. **Deriva común por métrica** (no por liga ni por rol): se estima dejando fuera la liga evaluada.
-   - **Comprobación:** cobertura por liga (273/280 en rango).
+   - **Comprobación:** cobertura por liga (275/280 en rango).
 
 ## 6. Riesgos y verificaciones pendientes (RIESGO · VERIFICAR)
 
@@ -445,6 +506,12 @@ empírico.)_
    (sin deriva).
 5. **Ligas con pocas temporadas de caja** (BSL 2, FEB2 y FEB3 3, FEB1 4, BNXT 5). Son las de la F2; la ampliación de
    la extracción se valora tras la F6.
+6. **RIESGO · Jugadores sin posición y con exposición casi nula.** El Bayes empírico les da un intervalo demasiado
+   estrecho, porque no propaga la incertidumbre de la media de su rol (§3.8, FEB2 robos).
+   - Afecta a unidades con muy pocas oportunidades. En la validación (≥ 50 min por mitad) no se nota: rol X al
+     80,4 %.
+   - **Propuesta:** no publicar el nivel de una unidad con N < n*/4 y rol «X» sin la marca de «muestra insuficiente»,
+     o heredar el rol del historial en la F4.
 
 ## 7. Diagnósticos de inferencia
 
@@ -452,9 +519,13 @@ empírico.)_
   - Rejilla con paso 0,02, de la tasa mínima − 2,5 a la máxima + 2,5 en la escala del enlace.
   - L-BFGS-B con gradiente analítico.
   - 107 ligas-temporada × 14 métricas × (primera mitad + temporada) × 2–3 modelos, en 3 procesos.
-  - Dos pasadas (sin y con deriva): 592 s.
+  - Dos pasadas (sin y con deriva): 523 s.
 - **Normal:** τ² por perfil de verosimilitud acotado.
-- **NUTS:** §3.8.
+- **NUTS:**
+  - 18 ajustes con R̂ ≤ 1,02, ESS bulk ≥ 476, ESS tail ≥ 692 y 0 divergencias;
+  - 4 cadenas en paralelo, 1.212 s;
+  - semilla 20261111;
+  - detalles e incidencias en §3.8.
 - **SBC:** no se ha hecho en esta fase. Las simulaciones de los tests recuperan los parámetros y la calibración con el
   modelo correcto. La SBC completa está en la F8 según el encargo.
 - **Semillas:**
@@ -473,7 +544,7 @@ empírico.)_
   árbol de `data/modelos/*` son los de la F0.
 - **No versionado:** `data/v5/medida/partidos.parquet` (46 MB) es regenerable en 30 s con el paso `datos`, y queda en
   `.gitignore`.
-- **Tests:** 8 nuevos en `tests/normalizacion_v5/test_medida_f3.py`; suite completa en verde: **349 passed**.
+- **Tests:** 10 nuevos en `tests/normalizacion_v5/test_medida_f3.py`; suite completa en verde: **351 passed**.
 
 ## 9. Riesgos detectados y decisiones que requieren al usuario
 
@@ -482,6 +553,8 @@ empírico.)_
 2. **USG% como normal** en lugar de binomial (SUPUESTO 3), cambio frente a la tabla del encargo §7. ¿De acuerdo?
 3. **T3% (VERIFICAR 1).** ¿Se investiga ahora o en la F4, donde el historial del jugador cambia de todos modos el n*
    efectivo?
+4. **Jugadores sin posición y casi sin minutos (RIESGO 6).** ¿Marcamos su nivel como «muestra insuficiente» (N < n*/4)
+   en lugar de publicarlo con un intervalo que es demasiado estrecho?
 
 ## 10. Siguiente fase propuesta y ajuste de inversión
 

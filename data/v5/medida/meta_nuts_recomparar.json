@@ -1,0 +1,16 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F3",
+ "config": "configs/v5/f3.yaml",
+ "hash_config": "3ef83ef713e1",
+ "hash_datos_entrada": "985197aaad000bdf",
+ "fecha": "2026-11-10T11:45:35+00:00",
+ "python": "3.13.18",
+ "paso": "nuts_recomparar",
+ "corr_min": 0.8999053492753084,
+ "ratio_sd_rango": [
+  0.9500270575770566,
+  0.9986496234765843
+ ],
+ "tiempo_s": 0
+}

@@ -1,0 +1,15 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F3",
+ "config": "configs/v5/f3.yaml",
+ "hash_config": "3ef83ef713e1",
+ "hash_datos_entrada": "985197aaad000bdf",
+ "fecha": "2026-11-10T11:34:15+00:00",
+ "python": "3.13.18",
+ "paso": "nuts",
+ "ajustes": 18,
+ "rhat_max": 1.02,
+ "ess_min": 476.0,
+ "divergencias": 0,
+ "tiempo_s": 1212
+}

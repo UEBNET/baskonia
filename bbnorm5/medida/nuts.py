@@ -191,3 +191,30 @@ def ejecutar(cfg: dict) -> dict:
     acuerdo.to_csv(DIR / "acuerdo_eb.csv", index=False)
     return {"ajustes": len(r), "rhat_max": float(r["rhat_max"].max()), "ess_min": float(r["ess_bulk_min"].min()),
             "divergencias": int(r["divergencias"].sum())}
+
+
+def recomparar(cfg: dict) -> dict:
+    """Rehace la comparación con el Bayes empírico (σ, sobredispersión y posteriores por jugador) con las salidas EB
+    actuales, sin volver a muestrear: las posteriores NUTS por jugador están guardadas."""
+    post_eb = pd.read_parquet(D.DIR / "posteriores.parquet")
+    hip = pd.read_csv(D.DIR / "hiperparametros.csv")
+    hip = hip[hip["datos"] == "temporada"]
+    r = pd.read_csv(DIR / "diagnosticos.csv")
+    for i, x in r.iterrows():
+        h = hip[(hip.liga == x.liga) & (hip.temporada == x.temporada) & (hip.metrica == x.metrica)
+                & (hip.modelo == ("jer_sd" if x.modelo == "bb" else "jer"))].iloc[0]
+        r.loc[i, "sigma_eb"], r.loc[i, "sobred_eb_momentos"] = float(h["sigma"]), float(h["disp"])
+    r.to_csv(DIR / "diagnosticos.csv", index=False)
+    j = pd.read_csv(DIR / "posteriores_nuts_frente_eb.csv.gz", dtype={"temporada": str})
+    j = j[D.CLAVE + ["rol", "K", "N", "media_nuts", "sd_nuts", "metrica", "modelo"]]
+    pe = post_eb[D.CLAVE + ["rol", "metrica", "media", "sd"]]
+    j = j[j["modelo"] == "bb"].merge(pe, on=D.CLAVE + ["rol", "metrica"])
+    j.to_csv(DIR / "posteriores_nuts_frente_eb.csv.gz", index=False)
+    acuerdo = j.groupby(["liga", "temporada", "metrica", "modelo"]).apply(
+        lambda g: pd.Series({"unidades": len(g), "corr_media": np.corrcoef(g["media_nuts"], g["media"])[0, 1],
+                             "dif_media_abs": float((g["media_nuts"] - g["media"]).abs().mean()),
+                             "dif_media_max": float((g["media_nuts"] - g["media"]).abs().max()),
+                             "ratio_sd": float((g["sd"] / g["sd_nuts"]).median())}), include_groups=False).reset_index()
+    acuerdo.to_csv(DIR / "acuerdo_eb.csv", index=False)
+    return {"corr_min": float(acuerdo["corr_media"].min()), "ratio_sd_rango": [float(acuerdo["ratio_sd"].min()),
+                                                                               float(acuerdo["ratio_sd"].max())]}
