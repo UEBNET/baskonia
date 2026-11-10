@@ -1,23 +1,5 @@
 {
  "resumen": {
-  "entidades": {
-   "nodos": 30233,
-   "personas_crosswalk": 20423,
-   "personas_v5": 19707,
-   "personas_con_conflicto_fuerte": 16,
-   "nodos_separados": 43,
-   "avisos_nombre": 432,
-   "enlaces_perdidos_candidatos": 1141,
-   "enlaces_unidos": 757,
-   "pares_de_clubes": 541,
-   "nodos_con_nacimiento": 0.4061125260476962,
-   "tiempo_s": 59
-  },
-  "enfrentamientos": {
-   "clubes": 374,
-   "partidos": 5494,
-   "tiempo_s": 26
-  },
   "puentes": {
    "unidades": 73173,
    "personas": 18461,
@@ -26,20 +8,12 @@
    "aristas": 95,
    "tiempo_s": 24
   },
-  "contexto": {
-   "ligas_temporada": 125,
-   "equipos_temporada": 4738,
-   "equipos_con_estilo": 0.6764457577036724,
-   "contexto_filas": 42188,
-   "contexto_con_persona": 0.9998814828861288,
-   "tiempo_s": 11
-  },
   "contrato": {
    "tablas": {
     "caja_partido": 0.9917,
     "unidades": 1.0
    },
-   "tiempo_s": 6
+   "tiempo_s": 5
   }
  },
  "meta": {
@@ -48,7 +22,7 @@
   "config": "configs/v5/f2.yaml",
   "hash_config": "66cf340e27a3",
   "hash_datos_entrada": null,
-  "fecha": "2026-11-10T08:53:52+00:00",
+  "fecha": "2026-11-10T08:59:39+00:00",
   "python": "3.13.18"
  }
 }
