@@ -9,6 +9,8 @@ v5. Lleva:
   - oportunidades de rebote ofensivo y defensivo en pista;
   - tiros de campo y libres;
   - jugadas (TC + 0,44·TL + pérdidas);
+  - desde la F3: canastas de compañeros en pista (AST%), jugadas del equipo en pista (USG%), tiros de dos del rival
+    en pista (BLK%) y posesiones del rival en pista (robos); ver `exposiciones`;
 - rol: minutos por partido, % de titularidades y cuota de los minutos del equipo;
 - calidad media del rival: margen medio por partido del rival en esa competición, ponderado por los partidos que
   jugó contra él.
@@ -67,17 +69,37 @@ def _posesiones(fga, oreb, tov, fta):
     return fga - oreb + tov + 0.44 * fta
 
 
+EXPOSICIONES = ["poss_on", "oreb_op", "dreb_op", "plays", "ast_op", "usg_op", "blk_op", "stl_op"]
+
+
+def exposiciones(d: pd.DataFrame) -> pd.DataFrame:
+    """Oportunidades reales de cada familia de métrica en un partido, con la fracción de pista frac = min / (min de
+    equipo / 5):
+    - poss_on: posesiones del equipo en pista; stl_op: posesiones del rival en pista (robos);
+    - oreb_op / dreb_op: rebotes disponibles en pista;
+    - plays: jugadas propias (TC + 0,44·TL + pérdidas); usg_op: jugadas del equipo en pista (uso);
+    - ast_op: canastas de compañeros en pista (asistencias), = frac·TCm equipo − TCm propios, ≥ 0;
+    - blk_op: tiros de dos del rival en pista (tapones)."""
+    d = d.copy()
+    tm = d["team_min"].where(d["team_min"] > 0)
+    d["frac"] = (d["min"] / (tm / 5)).clip(0, 1)
+    d["poss_on"] = d["frac"] * _posesiones(d["team_fga"], d["team_oreb"], d["team_tov"], d["team_fta"])
+    d["stl_op"] = d["frac"] * _posesiones(d["opp_fga"], d["opp_oreb"], d["opp_tov"], d["opp_fta"])
+    d["oreb_op"] = d["frac"] * (d["team_oreb"] + d["opp_dreb"])
+    d["dreb_op"] = d["frac"] * (d["team_dreb"] + d["opp_oreb"])
+    d["plays"] = d["fga"] + 0.44 * d["fta"] + d["tov"]
+    d["usg_op"] = d["frac"] * (d["team_fga"] + 0.44 * d["team_fta"] + d["team_tov"])
+    d["ast_op"] = (d["frac"] * d["team_fgm"] - d["fgm"]).clip(lower=0)
+    d["blk_op"] = d["frac"] * d["opp_fg2a"]
+    return d
+
+
 def unidades(d: pd.DataFrame, personas: pd.DataFrame) -> pd.DataFrame:
     p = personas.set_index(["fuente_liga", "fuente_id"])["persona_v5"]
     d = d.copy()
     d["persona_v5"] = [p.get((l, i)) for l, i in zip(d["liga"], d["player_id"])]
     d = d.dropna(subset=["persona_v5"])
-    tm = d["team_min"].where(d["team_min"] > 0)
-    d["frac"] = (d["min"] / (tm / 5)).clip(0, 1)
-    d["poss_on"] = d["frac"] * _posesiones(d["team_fga"], d["team_oreb"], d["team_tov"], d["team_fta"])
-    d["oreb_op"] = d["frac"] * (d["team_oreb"] + d["opp_dreb"])
-    d["dreb_op"] = d["frac"] * (d["team_dreb"] + d["opp_oreb"])
-    d["plays"] = d["fga"] + 0.44 * d["fta"] + d["tov"]
+    d = exposiciones(d)
     d["titular"] = d["starter"].astype(str).str.lower().isin(["true", "1"])
     d["margen_eq"] = d["team_pts"] - d["opp_pts"]
     # calidad del rival: margen medio del rival en la competición-temporada-fase
@@ -85,7 +107,7 @@ def unidades(d: pd.DataFrame, personas: pd.DataFrame) -> pd.DataFrame:
         ["liga", "temporada", "fase", "team_id"])["margen_eq"].mean().rename("margen_rival")
     d = d.merge(eqm, left_on=["liga", "temporada", "fase", "opp_id"], right_index=True, how="left")
     clave = ["persona_v5", "liga", "temporada", "fase", "team_id"]
-    agg = {c: "sum" for c in NUM + ["poss_on", "oreb_op", "dreb_op", "plays"] if c in d}
+    agg = {c: "sum" for c in NUM + EXPOSICIONES if c in d}
     u = d.groupby(clave).agg({**agg, "game_id": "nunique", "titular": "mean", "margen_rival": "mean",
                               "team_min": "sum", "player_id": "first"}).reset_index()
     u = u.rename(columns={"game_id": "partidos", "titular": "pct_titular", "margen_rival": "rival_margen"})

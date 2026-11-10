@@ -1,0 +1,18 @@
+# F3 · Capa de medida (encargo v5.0 §7, revisión 1.2; docs/v5/03_capa_medida.md)
+fase: F3
+salida: medida
+semilla: 20261111
+temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]   # completas; la 2026-27 en curso no
+pasos: [datos, ajuste, nuts, figuras]
+ajuste:
+  procesos: 3
+  muestras_predictiva: 400
+  min_unidades: 30            # unidades con oportunidades en la liga-temporada para ajustar
+  eval_min_partidos: 3        # por mitad
+  eval_min_minutos: 50        # por mitad
+nuts:
+  ligas_temporada: [["acb", "2024-25"], ["nba", "2024-25"], ["feb2", "2023-24"]]
+  metricas: [t3_pct, tl_pct, tpar]
+  cadenas: 4
+  calentamiento: 1000
+  muestras: 1000
