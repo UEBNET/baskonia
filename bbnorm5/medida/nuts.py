@@ -58,15 +58,19 @@ def jax_log_expit(x):
     return -jnp.logaddexp(0.0, -x)
 
 
-def _modelo(idx_u, rol_u, n, k=None, nr=3, sobred=True, familia="binomial"):
+def _modelo(idx_u, rol_u, n, k=None, nr=3, sobred=True, familia="binomial", centrado=False):
     import jax.numpy as jnp
     import numpyro
     import numpyro.distributions as dist
     mu = numpyro.sample("mu", dist.Normal(0, 2).expand([nr]).to_event(1))
     s = numpyro.sample("sigma", dist.HalfNormal(1.0))
     nu = rol_u.shape[0]
-    z = numpyro.sample("z", dist.Normal(0, 1).expand([nu]).to_event(1))
-    eta = mu[rol_u] + s * z
+    if centrado:     # datos que dominan al prior (n por jugador ≫ n*): la parametrización centrada mezcla mejor
+        eta = numpyro.sample("eta", dist.Normal(mu[rol_u], s).to_event(1))
+        numpyro.deterministic("z", (eta - mu[rol_u]) / s)
+    else:
+        z = numpyro.sample("z", dist.Normal(0, 1).expand([nu]).to_event(1))
+        eta = mu[rol_u] + s * z
     numpyro.deterministic("p", jnp.exp(eta) if familia == "poisson" else 1 / (1 + jnp.exp(-eta)))
     lc = None
     if sobred and familia == "poisson":
@@ -101,13 +105,21 @@ def ajustar(d: pd.DataFrame, metrica: str, sobred: bool, cfg: dict):
     c = cfg["nuts"]
     mc = MCMC(NUTS(_modelo, target_accept_prob=0.9), num_warmup=c["calentamiento"], num_samples=c["muestras"],
               num_chains=c["cadenas"], chain_method="parallel", progress_bar=False)
+    # regla fijada antes de ver los diagnósticos: centrada si la exposición mediana por jugador supera 10·n* (EB)
+    n_u = np.bincount(idx_u, weights=n)
+    from bbnorm5.medida import eb
+    uu = D.unidad_metrica(d, metrica, None)
+    m_eb = eb.ajustar(uu, fam, False)
+    n_star = eb.puntos_estabilizacion(m_eb, uu)["n_estab"]
+    centrado = bool(np.median(n_u) > 10 * n_star)
     mc.run(jax.random.PRNGKey(cfg["semilla"]), idx_u, rol_u, n.astype(np.float64), k.astype(np.float64), len(roles),
-           sobred, fam)
+           sobred, fam, centrado)
     idata = az.from_numpyro(mc, log_likelihood=False)
     ll = idata.posterior["ll"]
     idata.add_groups({"log_likelihood": {"k": ll.values}}, coords={"chain": ll["chain"].values, "draw": ll["draw"].values})
     idata.posterior = idata.posterior.drop_vars("ll")
     div = int(mc.get_extra_fields()["diverging"].sum())
+    idata.attrs["centrado"] = int(centrado)
     return idata, u, roles, div
 
 
@@ -138,6 +150,7 @@ def ejecutar(cfg: dict) -> dict:
                               "rhat_max": float(pd.concat([sm["r_hat"], zs["r_hat"]]).max()),
                               "ess_bulk_min": float(pd.concat([sm["ess_bulk"], zs["ess_bulk"]]).min()),
                               "ess_tail_min": float(pd.concat([sm["ess_tail"], zs["ess_tail"]]).min()),
+                              "parametrizacion": "centrada" if idata.attrs.get("centrado") else "no centrada",
                               "divergencias": div, "elpd_loo": float(loo.elpd_loo), "se_elpd": float(loo.se),
                               "pareto_k_malos": int((loo.pareto_k > 0.7).sum()),
                               "sigma_nuts": float(sm.loc["sigma", "mean"]), "sigma_nuts_sd": float(sm.loc["sigma", "sd"]),
