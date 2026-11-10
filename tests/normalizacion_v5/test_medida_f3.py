@@ -107,3 +107,18 @@ def test_rol_sin_datos_no_se_va_al_borde():
     m = eb.ajustar(pd.concat([u, x], ignore_index=True), "poisson", False)
     mu = dict(zip(m["roles"], m["par"][:len(m["roles"])]))
     assert abs(mu["X"] - mu["E"]) < 1.5
+
+
+def test_sigma_comun_liga_da_una_fila_por_temporada():
+    """Con σ común a la liga (etiquetas «temporada|rol») los hiperparámetros salen por temporada con sus medias."""
+    from bbnorm5.medida import validacion as V
+    rng = np.random.default_rng(2)
+    a, _ = _sim(rng, "binomial", 0.0, U=200, centro=-0.4)
+    b, _ = _sim(rng, "binomial", 0.0, U=200, centro=-1.2)
+    u = pd.concat([a.assign(temporada="2023-24"), b.assign(temporada="2024-25")], ignore_index=True)
+    u = V._etiquetar(u, True)
+    m = eb.ajustar(u, "binomial", False)
+    h = V._hiper(m, u, liga="x", temporada="todas", metrica="t3_pct", modelo="jer", datos="temporada")
+    assert [x["temporada"] for x in h] == ["2023-24", "2024-25"]
+    assert h[0]["mu_E"] == pytest.approx(-0.4, abs=0.1) and h[1]["mu_E"] == pytest.approx(-1.2, abs=0.1)
+    assert h[0]["sigma"] == h[1]["sigma"] == pytest.approx(0.35, abs=0.08)

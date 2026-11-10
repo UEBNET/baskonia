@@ -5,7 +5,8 @@ semilla: 20261111
 temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]   # completas; la 2026-27 en curso no
 pasos: [datos, ajuste, comprobaciones, nuts, figuras]
 ajuste:
-  procesos: 3
+  procesos: 4
+  sigma_comun_liga: true     # decisión 3 de la puerta F3: σ común a las temporadas de cada liga
   muestras_predictiva: 400
   min_unidades: 30            # unidades con oportunidades en la liga-temporada para ajustar
   eval_min_partidos: 3        # por mitad

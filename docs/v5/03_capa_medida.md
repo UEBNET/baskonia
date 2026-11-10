@@ -21,8 +21,8 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
    funciona.**
    - Prueba: ajustar con la primera mitad de los partidos de cada jugador y predecir la segunda.
    - Escala: 107 ligas-temporada, 14 métricas y 31.354 jugadores-temporada evaluados.
-   - El intervalo del 80 % cubre entre el **78,6 % y el 81,6 %** en las 14 métricas (objetivo 76–84 %).
-   - Las del 50 % y el 95 % también están calibradas: 48,5–52,4 % y 94,1–95,6 %.
+   - El intervalo del 80 % cubre entre el **78,6 % y el 81,5 %** en las 14 métricas (objetivo 76–84 %).
+   - Las del 50 % y el 95 % también están calibradas: 48,8–52,3 % y 94,1–95,6 %.
    - La tasa cruda de la primera mitad, tomada como verdadera, cubre sólo un 44–66 %.
 2. **El error de predicción baja entre un 5 % y un 28 %** (CRPS) frente a la tasa cruda.
    - Más en tiro (T3% −28 %, TL% −25 %, T2% −25 %), que es donde más ruido hay.
@@ -46,7 +46,8 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
    de exposición, con una diferencia máxima de 0,016.
    - Los puntos de estabilización coinciden con la F1 en TL%, FTr, pts/100 y pérdidas.
    - En T2% la diferencia se explica por el prior por rol.
-   - En T3% el modelo da un n* algo mayor (~250 frente a 97–179): **VERIFICAR**.
+   - En T3% la diferencia venía de estimar σ con una sola liga-temporada (σ ≈ 0 en algunas). Con σ común por liga
+     (decisión 3), n* = 210 frente a 179 de la F1.
 
 ---
 
@@ -188,29 +189,30 @@ $$g(\pi_u) = \mu_{\text{rol}(u)} + \alpha_u, \qquad \alpha_u \sim \mathcal N(0, 
 ## 3. Resultados (DATO)
 
 Datos: `data/v5/medida/`. Validación: `validacion_casos.parquet` y `validacion_por_{metrica,liga,temporada}.csv`.
-Hiperparámetros: `hiperparametros.csv`. Posteriores de la temporada completa: `posteriores.parquet`, 1.159.859 filas
-unidad-métrica-modelo de 17.052 personas.
+Hiperparámetros: `hiperparametros.csv`. Posteriores de la temporada completa (modelo preferido): `posteriores.parquet`,
+629.022 filas unidad-métrica de 17.119 personas, con la marca `muestra_insuficiente`.
 
 ### 3.1 Cobertura del intervalo predictivo de la segunda mitad (31.354 jugadores-temporada; 28.408–31.354 por métrica)
 
 | Métrica | Crudo 80 % | Jerárquico (+ sobred.) 80 % | **Preferido 50 %** | **Preferido 80 %** | **Preferido 95 %** |
 |---|---|---|---|---|---|
-| T2% | 61,7 | 78,5 | 48,9 | **78,7** | 94,5 |
-| T3% | 62,2 | 78,8 | 48,8 | **78,9** | 94,3 |
-| TL% | 59,0 | 78,8 | 49,8 | **79,7** | 94,6 |
-| 3PAr | 57,0 | 72,6 | 48,5 | **78,6** | 94,1 |
-| OREB% | 59,0 | 78,0 | 49,6 | **79,5** | 94,7 |
-| DREB% | 57,9 | 77,0 | 50,4 | **80,6** | 95,2 |
-| AST% | 55,1 | 76,3 | 51,5 | **81,3** | 95,6 |
-| TOV% | 62,3 | 78,6 | 48,8 | **79,1** | 94,4 |
-| BLK% | 60,1 | 79,2 | 49,8 | **80,1** | 94,8 |
-| Robos/100 | 61,1 | 78,5 | 50,2 | **80,0** | 95,0 |
-| Faltas/40 | 66,4 | 81,4 | 52,0 | **81,3** | 95,1 |
-| FTr | 44,5 | 77,2 | 49,9 | **79,2** | 94,3 |
-| Pts/100 | 60,2 | 76,1 | 51,2 | **81,4** | 95,4 |
-| USG% | 57,8 | 73,0 | 52,4 | **81,6** | 95,3 |
+| T2% | 61,9 | 78,7 | 49,0 | **78,9** | 94,6 |
+| T3% | 62,0 | 79,0 | 48,8 | **78,7** | 94,4 |
+| TL% | 59,1 | 79,1 | 49,7 | **80,2** | 94,9 |
+| 3PAr | 57,2 | 72,3 | 48,8 | **78,6** | 94,1 |
+| OREB% | 58,9 | 78,2 | 49,3 | **79,8** | 94,8 |
+| DREB% | 58,0 | 77,1 | 50,4 | **80,6** | 95,2 |
+| AST% | 54,9 | 76,5 | 51,7 | **81,5** | 95,6 |
+| TOV% | 62,2 | 78,7 | 49,2 | **79,2** | 94,5 |
+| BLK% | 59,9 | 78,9 | 50,4 | **80,1** | 95,0 |
+| Robos/100 | 61,2 | 78,6 | 50,1 | **80,1** | 95,0 |
+| Faltas/40 | 66,5 | 81,4 | 52,2 | **81,5** | 95,3 |
+| FTr | 44,4 | 77,5 | 50,2 | **79,3** | 94,3 |
+| Pts/100 | 60,1 | 76,1 | 51,4 | **81,5** | 95,3 |
+| USG% | 57,9 | 73,1 | 52,3 | **81,5** | 95,4 |
 
-- Preferido = jerárquico + sobredispersión + deriva entre mitades (en la normal, jerárquico + deriva).
+- Preferido = jerárquico + sobredispersión + deriva entre mitades (en la normal, jerárquico + deriva), con σ común a
+  las temporadas de cada liga (decisión 3 de la puerta, §9 bis).
 - Intervalos predictivos centrales de la tasa de la segunda mitad, en %.
 
 ![Cobertura del 80 %](figuras/f3_cobertura80.png)
@@ -219,10 +221,10 @@ unidad-métrica-modelo de 17.052 personas.
 
 | Corte | Cobertura del 80 % |
 |---|---|
-| Por exposición en la primera mitad, tercil bajo / medio / alto | 79,6 / 79,8 / 79,8 (binomial y Poisson); 82,5 / 81,3 / 80,7 (normal) |
-| Por rol E / A / I / X | 80,1 / 80,3 / 79,7 / 80,4 |
-| Por temporada 2020-21 … 2025-26 | 79,8–80,2 |
-| Por liga y métrica (280 casillas) | 275 dentro de 76–84 %. Fuera: BSL BLK% 84,9, faltas 85,1 y TL% 84,9 (2 temporadas); faltas en la FEC 84,5; NBA 3PAr 75,9 |
+| Por exposición en la primera mitad, tercil bajo / medio / alto | 79,7 / 80,0 / 79,9 (binomial y Poisson); 82,4 / 81,6 / 80,5 (normal) |
+| Por rol E / A / I / X | 80,1 / 80,4 / 79,8 / 80,4 |
+| Por temporada 2020-21 … 2025-26 | 79,9–80,3 |
+| Por liga y métrica (280 casillas) | 276 dentro de 76–84 %. Fuera, todas por encima: BSL TL% 85,2 (2 temporadas), EuroCup USG% 84,5, FEB2 BLK% 84,8, FEC faltas 85,2 |
 
 ![Cobertura por liga](figuras/f3_cobertura_ligas.png)
 
@@ -232,22 +234,22 @@ unidad-métrica-modelo de 17.052 personas.
 
 | Métrica | Reducción frente a la tasa cruda |
 |---|---|
-| T3% | 28,3 % |
+| T3% | 28,5 % |
 | TL% | 25,3 % |
-| T2% | 24,8 % |
-| FTr | 21,2 % |
+| T2% | 24,9 % |
+| FTr | 21,3 % |
 | Robos/100 | 20,3 % |
-| TOV% | 16,8 % |
-| BLK% | 16,4 % |
-| OREB% | 14,6 % |
-| DREB% | 14,2 % |
-| AST% | 12,1 % |
-| Faltas/40 | 11,3 % |
+| TOV% | 16,9 % |
+| BLK% | 16,7 % |
+| OREB% | 14,8 % |
+| DREB% | 14,3 % |
+| AST% | 12,2 % |
+| Faltas/40 | 11,4 % |
 | Pts/100 | 9,5 % |
 | USG% | 7,7 % |
-| 3PAr | 4,9 % |
+| 3PAr | 5,0 % |
 
-- La sobredispersión baja además el CRPS de FTr un 7,5 % (de 0,0829 a 0,0767).
+- La sobredispersión baja además el CRPS de FTr un 7,7 %.
 - En el resto, el cambio de CRPS entre las variantes del modelo es < 1 %: mejoran sobre todo la **calibración**, no el
   punto central.
 
@@ -255,25 +257,25 @@ unidad-métrica-modelo de 17.052 personas.
 
 ### 3.3 Sobredispersión dentro de jugador, por familia
 
-Mediana y rango intercuartílico entre ligas-temporada; temporada completa. «Sin» = % de ligas-temporada con
-estimación 0.
+Mediana y rango intercuartílico entre ligas-temporada; temporada completa, con σ común por liga. «Sin» = % de las 20
+ligas con estimación 0.
 
 | Métrica | Parámetro | Mediana (RIC) | Sin | Oportunidades por partido (n̄_g) | Inflación de la varianza 1 + ρ(n̄_g − 1) |
 |---|---|---|---|---|---|
-| T2% | ρ | 0,0007 (0–0,004) | 41 % | 4,3 | 1,00 |
-| T3% | ρ | 0 (0–0,004) | 52 % | 3,3 | 1,00 |
-| 3PAr | ρ | 0 (0–0,003) | 54 % | 6,8 | 1,00 |
-| TOV% | ρ | 0,0003 (0–0,002) | 43 % | 8,7 | 1,00 |
-| TL% | ρ | 0,018 (0,012–0,026) | 1 % | 3,6 | 1,05 |
-| BLK% | ρ | 0,003 (0,002–0,004) | 5 % | 19,4 | 1,05 |
-| OREB% | ρ | 0,006 (0,005–0,007) | 0 % | 18,2 | 1,10 |
-| DREB% | ρ | 0,006 (0,005–0,008) | 0 % | 18,4 | 1,11 |
-| AST% | ρ | 0,020 (0,016–0,023) | 0 % | 12,1 | 1,22 |
-| Robos/100 | δ | 0,017 (0,003–0,031) | 21 % | — | 1,02 |
+| T2% | ρ | 0,0018 (0–0,0035) | 35 % | 4,3 | 1,01 |
+| T3% | ρ | 0 (0–0,0012) | 55 % | 3,3 | 1,00 |
+| 3PAr | ρ | 0,0003 (0–0,0009) | 50 % | 6,8 | 1,00 |
+| TOV% | ρ | 0,0004 (0–0,0016) | 40 % | 8,7 | 1,00 |
+| TL% | ρ | 0,019 (0,016–0,024) | 0 % | 3,6 | 1,05 |
+| BLK% | ρ | 0,0026 (0,0021–0,0031) | 0 % | 19,4 | 1,05 |
+| OREB% | ρ | 0,0056 (0,0052–0,0062) | 0 % | 18,2 | 1,10 |
+| DREB% | ρ | 0,0064 (0,0055–0,0071) | 0 % | 18,4 | 1,11 |
+| AST% | ρ | 0,020 (0,017–0,023) | 0 % | 12,1 | 1,22 |
+| Robos/100 | δ | 0,018 (0,009–0,026) | 10 % | — | 1,02 |
 | Faltas/40 | δ | 0 (0–0) | 100 % | — | 1,00 |
-| FTr | δ | 1,28 (1,21–1,34) | 0 % | — | 2,28 |
-| Pts/100 | φ | 0,44 (0,43–0,45) | — | — | (normal) |
-| USG% | φ | 0,154 (0,150–0,157) | — | — | (normal) |
+| FTr | δ | 1,28 (1,25–1,35) | 0 % | — | 2,28 |
+| Pts/100 | φ | 0,44 (0,44–0,45) | — | — | (normal) |
+| USG% | φ | 0,154 (0,150–0,156) | — | — | (normal) |
 
 **Elección por familia:**
 - **Beta-binomial** en todas las binomiales. Donde ρ = 0 coincide con la binomial, así que no cuesta nada.
@@ -289,20 +291,20 @@ rol):
 
 | Métrica | τ_d | σ mediana | τ²_d / σ² |
 |---|---|---|---|
-| 3PAr | 0,201 | 1,157 | 0,03 |
-| AST% | 0,185 | 0,548 | 0,11 |
-| BLK% | 0,140 | 0,723 | 0,04 |
-| FTr | 0,117 | 0,383 | 0,09 |
-| TL% | 0,110 | 0,429 | 0,07 |
-| DREB% | 0,108 | 0,287 | 0,14 |
-| OREB% | 0,105 | 0,421 | 0,06 |
-| Robos/100 | 0,104 | 0,294 | 0,13 |
-| TOV% | 0,051 | 0,299 | 0,03 |
-| T2% | 0,035 | 0,196 | 0,03 |
-| Pts/100 | 0,021 | 0,057 | 0,14 |
-| USG% | 0,016 | 0,045 | 0,13 |
-| T3% | 0 | 0,134 | 0 |
+| 3PAr | 0,202 | 1,171 | 0,03 |
+| AST% | 0,185 | 0,547 | 0,11 |
+| BLK% | 0,139 | 0,733 | 0,04 |
+| FTr | 0,116 | 0,384 | 0,09 |
+| TL% | 0,109 | 0,433 | 0,06 |
+| DREB% | 0,108 | 0,283 | 0,15 |
+| Robos/100 | 0,105 | 0,297 | 0,13 |
+| OREB% | 0,104 | 0,420 | 0,06 |
+| TOV% | 0,053 | 0,301 | 0,03 |
+| T2% | 0,038 | 0,193 | 0,04 |
+| Pts/100 | 0,020 | 0,057 | 0,13 |
+| USG% | 0,016 | 0,045 | 0,12 |
 | Faltas/40 | 0 | 0,278 | 0 |
+| T3% | 0 | 0,133 | 0 |
 
 - Fichero: `data/v5/medida/deriva_entre_mitades.csv`, con la versión «sin la liga» que usa cada liga.
 - **Primer estimador, descartado.** Con logits empíricos daba τ_d inflada en tapones, robos y libres. Con pocos
@@ -313,17 +315,17 @@ rol):
 ### 3.5 Contracción frente a exposición (`contraccion_por_exposicion.csv`)
 
 Peso de lo observado: teórico w = N/(N + n*_u) frente al empírico (η_post − μ_rol)/(η_obs − μ_rol). Mediana por
-tramo de N/n*_u, para 340.466 unidades-métrica con la tasa cruda a más de 0,25 de la media del rol.
+tramo de N/n*_u, para 342.382 unidades-métrica con la tasa cruda a más de 0,25 de la media del rol.
 
 | N / n* | Unidades | w teórico | w empírico |
 |---|---|---|---|
-| < 0,25 | 88.293 | 0,067 | 0,083 |
-| 0,25–0,5 | 34.988 | 0,265 | 0,277 |
-| 0,5–1 | 43.637 | 0,418 | 0,418 |
-| 1–2 | 49.815 | 0,587 | 0,589 |
-| 2–4 | 46.898 | 0,735 | 0,738 |
-| 4–8 | 33.991 | 0,844 | 0,845 |
-| ≥ 8 | 42.844 | 0,949 | 0,953 |
+| < 0,25 | 88.755 | 0,068 | 0,085 |
+| 0,25–0,5 | 35.627 | 0,265 | 0,278 |
+| 0,5–1 | 43.904 | 0,418 | 0,419 |
+| 1–2 | 50.047 | 0,587 | 0,588 |
+| 2–4 | 47.341 | 0,736 | 0,738 |
+| 4–8 | 33.968 | 0,844 | 0,845 |
+| ≥ 8 | 42.740 | 0,950 | 0,953 |
 
 Se cumple lo que pide el encargo: la posterior se acerca a lo observado al ritmo de prec = τ⁻² + n/σ². La pequeña
 diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
@@ -335,17 +337,18 @@ diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
 - **Comparación con la F1.** Sólo donde la F1 midió en las mismas oportunidades. En las demás la F1 usaba minutos o
   posesiones, y sus n* no son comparables.
 
-| Métrica | F3 mediana (RIC) | F1 REML | F1 división | Lectura |
+| Métrica | F3 mediana entre ligas (RIC) | F1 REML | F1 división | Lectura |
 |---|---|---|---|---|
-| TL% | 30 (26–34) | 33 | 32 | Coincide |
-| FTr | 52 (46–60) | 60 | 47 | Coincide (dentro del rango F1) |
-| Pts/100 | 135 (120–145) | 241 | 134 | Coincide con la cota inferior |
-| TOV% | 91 (82–103) | 119 | — | Coincide (por debajo de la cota superior) |
-| T2% | 106 (92–132) | 72 | 94 | **Por el prior por rol**: sin rol, 65 (§ abajo) |
-| 3PAr | 3,1 (2,9–3,5) | 6,8 | 6,0 | Escala logit: con una σ de 1,16 (rol interior frente a exterior), el n* en la media de la liga no es el de la escala lineal de la F1; el mismo orden de magnitud |
-| T3% | 253 (176–398) | 179 | 97 | **VERIFICAR**: el RIC toca la cota superior de la F1, pero la mediana queda por encima |
+| TL% | 30 (27–33) | 33 | 32 | Coincide |
+| FTr | 51 (48–58) | 60 | 47 | Coincide (dentro del rango F1) |
+| Pts/100 | 135 (123–145) | 241 | 134 | Coincide con la cota inferior |
+| TOV% | 87 (81–102) | 119 | — | Coincide (por debajo de la cota superior) |
+| T2% | 107 (99–116) | 72 | 94 | **Por el prior por rol**: sin rol, 65 (§ abajo) |
+| 3PAr | 3 (3–4) | 6,8 | 6,0 | Escala logit: con una σ de 1,17 (rol interior frente a exterior), el n* en la media de la liga no es el de la escala lineal de la F1; el mismo orden de magnitud |
+| T3% | 210 (190–286) | 179 | 97 | **Resuelto (decisión 3, §9 bis)**: con σ común por liga baja de 253 a 210; el resto (~10 %) es el prior por rol |
 
-**Sensibilidad** (`estabilizacion_sensibilidad.csv`; n* mediano):
+**Sensibilidad** (`estabilizacion_sensibilidad.csv`; n* mediano, con σ por liga-temporada como en la primera versión,
+para separar efectos):
 
 | Métrica | Todas · por rol | Todas · sin rol | ≥ 100 min · por rol | ≥ 100 min · sin rol |
 |---|---|---|---|---|
@@ -356,13 +359,17 @@ diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
 **Lectura (LECTURA):**
 - En T2% la media por rol se lleva parte de la señal (los interiores tiran mejor de dos). La F1, sin rol, medía la
   señal total.
-- En T3% ni el rol ni la población (minutos) explican la diferencia. La verosimilitud está bien para el tiro:
-  - es binomial casi pura (ρ ≈ 0);
-  - su exposición son los intentos;
-  - y valida al 78,8 %.
-- Hipótesis para la diferencia restante: la F1 promediaba la varianza de nivel de todas las ligas en un único REML,
-  mientras que aquí es la mediana de 107 ajustes separados de ~270 jugadores, con σ pequeña (0,13) y ruidosa.
-  Pendiente (VERIFICAR 1).
+- En T3% ni el rol ni la población (minutos) explicaban la diferencia. La verosimilitud está bien para el tiro: es
+  binomial casi pura (ρ ≈ 0), su exposición son los intentos y valida al 78,7 %.
+- **La causa era la σ de una sola liga-temporada.** En T3%, con 150–250 tiradores, la dispersión real entre ellos es
+  casi igual al ruido binomial, así que σ se estima con mucho ruido y a veces cae a 0.
+  - En la NBL, la dispersión observada entre los tiradores con ≥ 60 intentos (4,6 puntos) es exactamente la binomial,
+    y σ salía casi 0 en 5 de 6 temporadas.
+  - Con σ ≈ 0, a un tirador del 40 % se le encoge casi hasta la media de la liga: **problema de producto**, no sólo de
+    comparación.
+- **Solución adoptada (§9 bis):** σ común a las temporadas de cada liga, con medias propias por temporada y rol.
+  - n* de T3% = 210 de mediana entre ligas, frente a 179 de la F1 sin rol.
+  - La NBL sigue con n* alto (2.673): allí los tiradores apenas se diferencian. Es un DATO, no un fallo de estimación.
 
 ![Estabilización](figuras/f3_estabilizacion.png)
 
@@ -412,10 +419,14 @@ diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
    - La elección de la beta-binomial y la BinNeg1 no cuesta nada donde no hace falta.
    - Donde sí hace falta (AST%, rebote, TL%, FTr), la validación por mitades la respalda (§3.1: FTr pasa del 60,6 % al
      77,2 % sólo con ella).
-3. **Posteriores por jugador** (`acuerdo_eb.csv`): las medias del Bayes empírico y de la NUTS se correlacionan
-   0,9992–1,0000 en 8 de los 9 casos, con una diferencia media de 0,0001–0,0011 en la tasa.
-   - La DT del Bayes empírico es un 0–5 % menor (cociente 0,950–0,999). Es lo esperado: el Bayes empírico no propaga
-     la incertidumbre de σ y de las medias de rol.
+3. **Posteriores por jugador** (`acuerdo_eb.csv`). Con la versión final (σ común por liga), las medias del Bayes
+   empírico y de la NUTS (que usa sólo esa temporada) se correlacionan 0,994–1,000 en 8 de los 9 casos, con una
+   diferencia media de 0,0001–0,0041 en la tasa.
+   - Con σ por liga-temporada (la comparación limpia, mismo modelo) era 0,9992–1,0000 y la DT del Bayes empírico un
+     0–5 % menor (cociente 0,950–0,999). Es lo esperado: el Bayes empírico no propaga la incertidumbre de σ y de las
+     medias de rol.
+   - Con σ común, el cociente de DT va de 0,78 a 1,12. Es la diferencia entre la σ de la liga (todas sus temporadas) y
+     la de una temporada sola. Por ejemplo, EuroLeague T3%: 0,114 frente a 0,147 ± 0,029 de la NUTS en 2024-25.
    - **Excepción: FEB2 robos** (correlación 0,90). Son los jugadores **sin posición («X») con exposición casi nula**
      (1–3 posesiones del rival en toda la temporada). La NUTS les da 2,9 % ± 2,8 % (casi el prior); el Bayes empírico,
      1,2 % ± 0,4 %. Con tan poca información, el Bayes empírico se fía demasiado de una media de rol mal identificada
@@ -495,8 +506,7 @@ diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
 
 ## 6. Riesgos y verificaciones pendientes (RIESGO · VERIFICAR)
 
-1. **VERIFICAR · n* de T3%** por encima de la F1. Propuesta: REML conjunto de la F1 restringido a la misma población
-   de la F3, y el estimador de división de la F1 por liga-temporada.
+1. **Resuelto · n* de T3%** (§3.6 y §9 bis): σ común por liga.
 2. **RIESGO · Exposición por fracción de pista** (SUPUESTO 1). Comprobación con el jugada a jugada propuesta para la
    F6, donde importa más: el efecto de liga en rebote y uso.
 3. **VERIFICAR · Literatura de la «mano caliente».** Se cita de memoria; contrastar con una referencia antes de
@@ -519,7 +529,7 @@ diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
   - Rejilla con paso 0,02, de la tasa mínima − 2,5 a la máxima + 2,5 en la escala del enlace.
   - L-BFGS-B con gradiente analítico.
   - 107 ligas-temporada × 14 métricas × (primera mitad + temporada) × 2–3 modelos, en 3 procesos.
-  - Dos pasadas (sin y con deriva): 523 s.
+  - Dos pasadas (sin y con deriva), por liga con σ común: 679 s.
 - **Normal:** τ² por perfil de verosimilitud acotado.
 - **NUTS:**
   - 18 ajustes con R̂ ≤ 1,02, ESS bulk ≥ 476, ESS tail ≥ 692 y 0 divergencias;
@@ -552,9 +562,32 @@ diferencia del primer tramo es la corrección de 0,5 de la tasa cruda.
    sustituya por la dinámica entre temporadas? (Alternativa: llevar ya a la F3 una deriva por liga y rol.)
 2. **USG% como normal** en lugar de binomial (SUPUESTO 3), cambio frente a la tabla del encargo §7. ¿De acuerdo?
 3. **T3% (VERIFICAR 1).** ¿Se investiga ahora o en la F4, donde el historial del jugador cambia de todos modos el n*
-   efectivo?
+   efectivo? → Investigado y resuelto (§9 bis).
 4. **Jugadores sin posición y casi sin minutos (RIESGO 6).** ¿Marcamos su nivel como «muestra insuficiente» (N < n*/4)
    en lugar de publicarlo con un intervalo que es demasiado estrecho?
+
+## 9 bis. Decisiones del usuario (10-11-2026) y cambios aplicados
+
+1. **Deriva entre mitades.** Se usa para evaluar la F4: es la variante `deriva` del examen de carrera (paseo
+   aleatorio con σ_η² = 2τ²_d). Tras la auditoría se aplica la variante estadísticamente más robusta y explicativa
+   (`docs/v5/04_capa_carrera.md`).
+2. **USG% como normal.** Aprobado.
+3. **T3%: investigado ahora.**
+   - **Causa:** la σ de una sola liga-temporada está mal identificada en T3% y a veces cae a 0 (§3.6).
+   - **Experimento** (`data/v5/medida/sigma_comun/comparacion.csv`): misma validación por mitades, σ común a las
+     temporadas de cada liga frente a σ por liga-temporada.
+     - El CRPS mejora en las **14 métricas**: +0,01 % a +0,27 %, ≥ 2 errores estándar (bootstrap por jugador) en T3%,
+       BLK%, robos y faltas.
+     - La cobertura no cambia.
+   - **Adoptado** en todo el flujo (`configs/v5/f3.yaml: ajuste.sigma_comun_liga`). Todas las cifras de este informe
+     son ya las de la versión final, salvo la tabla de sensibilidad del §3.6 y la comparación limpia NUTS ↔ EB del
+     §3.8, que se dejan con σ por liga-temporada para separar efectos.
+   - **Efecto adicional:** se pueden ajustar también las ligas-temporada con menos de 30 unidades. Las posteriores pasan
+     de 625.973 a 629.022 filas.
+4. **«Muestra insuficiente».** Aplicado: `posteriores.parquet` lleva `muestra_insuficiente` = sin posición (rol X) y
+   N < n*/4 de su liga-temporada.
+   - Marca 20.471 unidades-métrica: el 3,3 % del total y el 29,9 % de las del rol X.
+   - Esas unidades no deben publicarse con intervalo, sólo con la marca.
 
 ## 10. Siguiente fase propuesta y ajuste de inversión
 

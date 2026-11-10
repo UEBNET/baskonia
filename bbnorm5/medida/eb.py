@@ -36,6 +36,13 @@ PASO = 0.02
 ROLES = ["E", "A", "I", "X"]
 
 
+def roles_de(u: pd.DataFrame) -> list[str]:
+    """Etiquetas de grupo de la media a priori: los roles conocidos en su orden y, si las hay, otras (p. ej.
+    «2024-25|E» cuando σ se comparte entre las temporadas de una liga y cada temporada tiene sus medias)."""
+    vistos = set(u["rol"])
+    return [r for r in ROLES if r in vistos] + sorted(vistos - set(ROLES))
+
+
 # ------------------------------------------------------------------ rejilla y verosimilitud por unidad
 def rejilla(K, N, familia: str) -> np.ndarray:
     tasa = (K + 0.5) / (N + 1.0)
@@ -145,7 +152,7 @@ def dispersion_momentos(u: pd.DataFrame, familia: str) -> float:
 def ajustar(u: pd.DataFrame, familia: str, sobredispersion: bool, disp: float | None = None) -> dict:
     """Ajusta una métrica en una liga-temporada. u: K, N, N2g, rol (+ sumas por partido si hay sobredispersión).
     Devuelve hiperparámetros, logL marginal, rejilla y pesos posteriores (U × J)."""
-    roles = [r for r in ROLES if (u["rol"] == r).any()]
+    roles = roles_de(u)
     idx = u["rol"].map({r: i for i, r in enumerate(roles)}).to_numpy()
     K, N, N2g = (u[c].to_numpy(float) for c in ("K", "N", "N2g"))
     eta = rejilla(K, N, familia)
@@ -188,7 +195,7 @@ def ajustar_normal(u: pd.DataFrame) -> dict:
     ok = G >= 2
     phi = float((S2[ok] - K[ok] ** 2 / N[ok]).sum() / (G[ok] - 1).sum())
     y = K / N
-    roles = [r for r in ROLES if (u["rol"] == r).any()]
+    roles = roles_de(u)
     idx = u["rol"].map({r: i for i, r in enumerate(roles)}).to_numpy()
     nr = len(roles)
 
@@ -221,14 +228,16 @@ def muestras_tasa(m: dict, S: int, rng) -> np.ndarray:
     return special.expit(e) if m["familia"] == "binomial" else np.exp(e)
 
 
-def muestras_conteo(tasa: np.ndarray, N2, N2g, familia: str, disp: float, rng, phi: float = 0.0) -> np.ndarray:
-    """U × S muestras de K2 dadas las tasas y las oportunidades de la segunda mitad (se condiciona en ellas)."""
+def muestras_conteo(tasa: np.ndarray, N2, N2g, familia: str, disp, rng, phi: float = 0.0) -> np.ndarray:
+    """U × S muestras de K2 dadas las tasas y las oportunidades de la segunda mitad (se condiciona en ellas).
+    disp puede ser un escalar o un vector por unidad."""
     N2 = np.asarray(N2, float)[:, None]
+    d = np.broadcast_to(np.asarray(disp, float), (N2.shape[0],))
     if familia == "binomial":
         n = np.round(N2).astype(np.int64)
         p = tasa
-        if disp > 0:
-            r = rho_efectiva(N2[:, 0], np.asarray(N2g, float), disp)[:, None]
+        if (d > 0).any():
+            r = rho_efectiva(N2[:, 0], np.asarray(N2g, float), d)[:, None]
             c = np.where(r > 1e-9, (1 - r) / np.maximum(r, 1e-12), 0)
             con = (r > 1e-9) & np.ones_like(p, bool)
             a, b = np.maximum(p * c, 1e-9), np.maximum((1 - p) * c, 1e-9)
@@ -236,8 +245,9 @@ def muestras_conteo(tasa: np.ndarray, N2, N2g, familia: str, disp: float, rng, p
         return rng.binomial(np.broadcast_to(n, p.shape), p).astype(float)
     if familia == "poisson":
         mu = N2 * tasa
-        if disp > 0:
-            mu = rng.gamma(mu / disp, disp)
+        if (d > 0).any():
+            dd = np.maximum(d, 1e-12)[:, None]
+            mu = np.where(d[:, None] > 0, rng.gamma(mu / dd, dd), mu)
         return rng.poisson(mu).astype(float)
     return tasa * N2 + np.sqrt(phi * N2) * rng.standard_normal(tasa.shape)
 

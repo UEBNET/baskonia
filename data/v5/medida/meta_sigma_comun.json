@@ -1,0 +1,13 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F3",
+ "config": "configs/v5/f3.yaml",
+ "hash_config": "c9abdf142af9",
+ "hash_datos_entrada": "985197aaad000bdf",
+ "fecha": "2026-11-10T12:25:28+00:00",
+ "python": "3.13.18",
+ "paso": "sigma_comun",
+ "casos": 434837,
+ "mejora_crps_mediana": 0.0008104473596693418,
+ "tiempo_s": 356
+}

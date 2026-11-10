@@ -37,16 +37,33 @@ def _semilla(base: int, *claves) -> int:
     return (base + zlib.crc32("|".join(map(str, claves)).encode())) % (2 ** 32)
 
 
-def _hiper(m: dict, u: pd.DataFrame, **extra) -> dict:
+def _hiper(m: dict, u: pd.DataFrame, **extra) -> list[dict]:
+    """Hiperparámetros por liga-temporada. Con σ común a la liga (etiquetas «temporada|rol»), una fila por temporada con
+    sus medias de rol, su tasa media y su n*, y la σ y la dispersión comunes."""
     nr = len(m["roles"])
     if m["familia"] == "normal":
-        h = {"sigma": m["tau2"] ** 0.5, "disp": m["phi"], "logL": m["logL"],
-             "n_estab": m["phi"] / m["tau2"], "tasa_media": float(u["K"].sum() / u["N"].sum())}
         mus = dict(zip(m["roles"], m["mu"]))
+        sig, disp = m["tau2"] ** 0.5, m["phi"]
     else:
-        h = {**eb.puntos_estabilizacion(m, u), "disp": m["disp"], "logL": m["logL"]}
         mus = dict(zip(m["roles"], m["par"][:nr]))
-    return {**extra, **h, "unidades": len(u), **{f"mu_{r}": mus.get(r, np.nan) for r in eb.ROLES}}
+        sig, disp = float(np.exp(m["par"][nr])), m["disp"]
+    comun = any("|" in r for r in m["roles"])
+    grupos = u.groupby("temporada") if comun else [(extra.get("temporada"), u)]
+    filas = []
+    for temp, x in grupos:
+        t = float(x["K"].sum() / x["N"].sum())
+        if m["familia"] == "normal":
+            nst, ng = disp / sig ** 2, np.nan
+        elif m["familia"] == "binomial":
+            ng = float(np.median(x["N2g"] / x["N"]))
+            nst = (1 + disp * (ng - 1)) / (sig ** 2 * t * (1 - t))
+        else:
+            nst, ng = (1 + disp) / (sig ** 2 * t), np.nan
+        pref = f"{temp}|" if comun else ""
+        filas.append({**extra, "temporada": temp, "tasa_media": t, "sigma": sig, "n_estab": nst, "n_partido_medio": ng,
+                      "disp": disp, "logL": m["logL"], "unidades": len(x), "sigma_comun_liga": comun,
+                      **{f"mu_{r}": mus.get(pref + r, np.nan) for r in eb.ROLES}})
+    return filas
 
 
 def _ajustes(u: pd.DataFrame, familia: str) -> dict:
@@ -117,7 +134,13 @@ def deriva_momentos(casos: pd.DataFrame, hiper: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(filas)
 
 
-def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, metricas=None, deriva: dict | None = None):
+def _etiquetar(u: pd.DataFrame, sigma_comun: bool) -> pd.DataFrame:
+    """Con σ común a las temporadas de una liga, cada temporada conserva sus propias medias de rol."""
+    return u.assign(rol=u["temporada"] + "|" + u["rol"]) if sigma_comun else u
+
+
+def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, metricas=None, deriva: dict | None = None,
+                   sigma_comun: bool = False):
     """Devuelve (casos de validación por unidad, hiperparámetros, posteriores de la temporada completa).
     deriva: {métrica: τ²_d} estimada sin esta liga; si se da, añade los modelos con deriva entre mitades."""
     casos, hiper, post = [], [], []
@@ -126,14 +149,14 @@ def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, met
     for met in (metricas or D.METRICAS):
         fam = D.METRICAS[met][0]
         rng = np.random.default_rng(_semilla(semilla, liga, temporada, met))
-        u1 = D.unidad_metrica(d, met, 1)
+        u1 = _etiquetar(D.unidad_metrica(d, met, 1), sigma_comun)
         if len(u1) < MIN_UNIDADES:
             continue
         # ---- validación: primera mitad → segunda
-        u2 = D.unidad_metrica(d, met, 2)
+        u2 = _etiquetar(D.unidad_metrica(d, met, 2), sigma_comun)
         mods = _ajustes(u1, fam)
         for nom, m in mods.items():
-            hiper.append(_hiper(m, u1, liga=liga, temporada=temporada, metrica=met, modelo=nom, datos="mitad1"))
+            hiper.extend(_hiper(m, u1, liga=liga, temporada=temporada, metrica=met, modelo=nom, datos="mitad1"))
         ev = u1.reset_index().merge(u2[D.CLAVE + ["K", "N", "N2g"]], on=D.CLAVE, suffixes=("", "_2"))
         ev = ev.merge(minutos, left_on=D.CLAVE, right_index=True)
         ev = ev[(ev["G1"] >= EVAL_MIN_PARTIDOS) & (ev["G2"] >= EVAL_MIN_PARTIDOS) & (ev["min1"] >= EVAL_MIN_MINUTOS)
@@ -173,9 +196,9 @@ def liga_temporada(d: pd.DataFrame, liga: str, temporada: str, semilla: int, met
             casos.append(base.assign(metrica=met, modelo=nom, pred_media=(K2 / N2r[:, None]).mean(axis=1), obs=y,
                                      pit=r["pit"].to_numpy(), crps=r["crps"].to_numpy()))
         # ---- temporada completa: hiperparámetros y posterior de cada unidad
-        u = D.unidad_metrica(d, met, None)
+        u = _etiquetar(D.unidad_metrica(d, met, None), sigma_comun)
         for nom, m in _ajustes(u, fam).items():
-            hiper.append(_hiper(m, u, liga=liga, temporada=temporada, metrica=met, modelo=nom, datos="temporada"))
+            hiper.extend(_hiper(m, u, liga=liga, temporada=temporada, metrica=met, modelo=nom, datos="temporada"))
             if fam == "normal":
                 ps = pd.DataFrame({"media": m["m_post"], "sd": np.sqrt(m["v_post"])})
                 ps["q10"], ps["q50"], ps["q90"] = (ps["media"] + z * ps["sd"] for z in (-1.2815515655, 0, 1.2815515655))

@@ -2,9 +2,9 @@
  "version_modelo": "5.0",
  "fase": "F3",
  "config": "configs/v5/f3.yaml",
- "hash_config": "3ef83ef713e1",
+ "hash_config": "e477f3a8cf6d",
  "hash_datos_entrada": "985197aaad000bdf",
- "fecha": "2026-11-10T11:45:37+00:00",
+ "fecha": "2026-11-10T12:38:45+00:00",
  "python": "3.13.18",
  "paso": "figuras",
  "figuras": [
@@ -14,5 +14,5 @@
   "docs/v5/figuras/f3_estabilizacion.png",
   "docs/v5/figuras/f3_cobertura_ligas.png"
  ],
- "tiempo_s": 2
+ "tiempo_s": 3
 }
