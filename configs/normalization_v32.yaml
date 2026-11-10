@@ -61,6 +61,7 @@ escalones:                      # mismos escalones que configs/normalization.yam
   feb1: [feb1]
   feb2: [feb2]
   feb3: [feb3]
+  ligau: [ligau]                # Liga U (ACB, U22): escalón propio (09-11-2026, fijado de antemano, sin mirar resultados)
 
 prediccion:
   muestras: 200                 # Monte Carlo por jugador (posterior de z, de μ, η, equipo, ψ y ruido de muestra)

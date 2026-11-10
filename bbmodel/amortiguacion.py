@@ -990,7 +990,7 @@ def ejemplos_puentes(tabla: pd.DataFrame, params: dict, ajuste: dict, trad: pd.D
     clave = ["liga", "temporada", "player_id"]
     ta = ta.set_index(clave)
     tr = trad.set_index(clave)
-    pares = [("feb3", "feb2"), ("feb2", "feb1"), ("feb1", "acb"), ("feb1", "eurocup"), ("feb2", "acb"), ("acb", "euroleague"),
+    pares = [("ligau", "acb"), ("ligau", "feb1"), ("feb3", "feb2"), ("feb2", "feb1"), ("feb1", "acb"), ("feb1", "eurocup"), ("feb2", "acb"), ("acb", "euroleague"),
              ("eurocup", "euroleague"), ("gleague", "euroleague"), ("bcl", "euroleague")]
     for anio in sorted(tabla["anio"].unique())[:-1]:
         try:

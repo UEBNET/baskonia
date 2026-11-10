@@ -1,9 +1,9 @@
 {
-  "generado": "2026-11-08T23:35:15.481640+00:00",
+  "generado": "2026-11-10T10:41:33.286686+00:00",
   "temporadas": [
     {
       "temporada": "2026-27",
-      "generado": "2026-11-08T23:35:15.396195+00:00",
+      "generado": "2026-11-10T10:41:32.894229+00:00",
       "fases": [
         "regular",
         "total"
@@ -68,6 +68,10 @@
           "regular": 232,
           "total": 232
         },
+        "ligau": {
+          "regular": 207,
+          "total": 207
+        },
         "lnb": {
           "regular": 204,
           "total": 204
@@ -88,7 +92,7 @@
     },
     {
       "temporada": "2025-26",
-      "generado": "2026-11-03T09:04:33.014963+00:00",
+      "generado": "2026-11-09T16:28:48.806857+00:00",
       "fases": [
         "regular",
         "playoffs",
@@ -169,6 +173,11 @@
           "playoffs": 103,
           "regular": 265,
           "total": 266
+        },
+        "ligau": {
+          "playoffs": 126,
+          "regular": 261,
+          "total": 261
         },
         "lnb": {
           "playoffs": 118,

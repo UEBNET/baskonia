@@ -128,7 +128,7 @@ UNIDADES_PISTA = {"euroleague": "cm desde el aro", "eurocup": "cm desde el aro",
                   "bbl": "unidades propias, media pista",
                   "bcl": "unidades de fiba.basketball, media pista", "fec": "unidades de fiba.basketball, media pista",
                   "bsl": "% de la pista completa (28 × 15 m)", "gbl": "% de la pista completa (28 × 15 m)",
-                  "feb1": "% de la pista completa (28 × 15 m)", "feb2": "% de la pista completa (28 × 15 m)",
+                  "feb1": "% de la pista completa (28 × 15 m)", "feb2": "% de la pista completa (28 × 15 m)", "ligau": "% de la pista completa (28 × 15 m)",
                   "feb3": "% de la pista completa (28 × 15 m)"}
 
 

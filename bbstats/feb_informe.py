@@ -38,7 +38,7 @@ from .lineups.stints import build
 from .raw_store import RawStore
 
 log = logging.getLogger(__name__)
-FEB = ("feb1", "feb2", "feb3")
+FEB = ("feb1", "feb2", "feb3", "ligau")  # ligau: Liga U de la ACB, mismo sistema FEB (g=74)
 FIBA_REF = ("acb", "lba", "bbl", "lnb", "bcl", "fec", "bsl", "gbl", "euroleague", "eurocup")
 
 

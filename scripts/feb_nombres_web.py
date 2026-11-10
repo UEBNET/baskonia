@@ -34,10 +34,11 @@ PAUSA = 0.7
 def objetivos() -> pd.DataFrame:
     """Equipo-temporadas de los jugadores FEB cuyo nombre canónico es sólo inicial."""
     n = pd.read_csv(RAIZ / "data" / "processed" / "nombres_canonicos.csv", dtype=str)
-    ini = n[n["nombre"].str.match(r"^[A-Z][a-z]?\.? ", na=False) & n["fuente_liga"].isin(["feb1", "feb2", "feb3"])]
+    ini = n[n["nombre"].str.match(r"^[A-Z][a-z]?\.? ", na=False) & n["fuente_liga"].isin(["feb1", "feb2", "feb3", "ligau"])]
     ids = set(ini["fuente_id"])
     filas = []
-    for f in sorted((RAIZ / "data" / "processed").glob("20*/ligas/feb*.csv")):
+    for f in sorted([*(RAIZ / "data" / "processed").glob("20*/ligas/feb*.csv"),
+                     *(RAIZ / "data" / "processed").glob("20*/ligas/ligau.csv")]):
         d = pd.read_csv(f, dtype=str, usecols=["player_id", "team_id", "temporada", "fase"], low_memory=False)
         d = d[(d["fase"] == "total") & d["player_id"].isin(ids)]
         filas.append(d[["player_id", "team_id", "temporada"]])

@@ -14,8 +14,9 @@ Fuentes públicas y anónimas (sin claves embebidas en JS):
                La API pide la cabecera `Authorization: Bearer <token>`; el token es ANÓNIMO: la propia página
                pública lo entrega a cualquier visitante en un campo oculto (`_ctl0_token`, caduca en 24 h, rol de
                sólo lectura). No es un secreto del código JS (igual que el token anónimo de la LNB).
-  Equipo       https://baloncestoenvivo.feb.es/Equipo.aspx?i=<id equipo>   (plantilla de esa temporada con fecha
-               de nacimiento, nacionalidad, formación, altura y puesto; entrenador principal)
+  Equipo       https://baloncestoenvivo.feb.es/equipo/<id equipo>         (plantilla de esa temporada con fecha
+               de nacimiento, nacionalidad, formación, altura y puesto; entrenador principal). Se pide la ruta
+               /equipo/<id> directamente: Equipo.aspx?i= redirige a http://, que algunos entornos no permiten.
                Del HTML se guarda sólo el fragmento del entrenador y de la tabla de plantilla.
 
 Formatos del jugada a jugada (verificado con datos reales):
@@ -367,7 +368,7 @@ class FebAdapter(BaseAdapter):
                     tid = str(t.get("id"))
                     if tid not in prev_teams and tid not in new_teams:
                         try:
-                            new_teams[tid] = team_fragment(self._page(http, f"{SITE}/Equipo.aspx?i={tid}"))
+                            new_teams[tid] = team_fragment(self._page(http, f"{SITE}/equipo/{tid}"))
                         except FetchError as exc:
                             self.soft_fail(f"equipo {tid}: {exc}")
             new[pid] = doc

@@ -129,3 +129,27 @@ normalizados, copias exactas; normalizados y explorador con ≥ 100 minutos, el 
 (la de regular y total, completa). Versión publicada: 235 ficheros, ≈ 247 MB. El generador de la evaluación de
 equipos de Quintetos (`artifact/herramientas/gen_equipos_quintetos.py`) se reconstruyó (no estaba en el repositorio)
 y se comprobó contra la versión publicada.
+
+## 9. Liga U de la ACB (`ligau`, añadida el 09-11-2026)
+
+Competición sub-22 de la ACB (desde 2025-26) para jugadores españoles U22 de los equipos vinculados a los clubes de la
+Liga Endesa. Decisiones, cobertura y resultados: `.claude/skills/anadir-liga/decisiones/ligau.md`.
+
+* **Fuente — DECISIÓN del usuario:** la misma plataforma que las FEB. La web oficial (ligau.com) enlaza ids de partido
+  FEB; en `baloncestoenvivo.feb.es` la competición es `g=74` (`slug: ligau`). Adaptador `feb` sin cambios de lógica (sólo
+  la página de equipo pasa a pedirse por `/equipo/<id>`, porque `Equipo.aspx?i=` redirige a `http://`). Descartado el
+  backend propio de ligau.com (exigiría sacar una clave del código de su web).
+* **Alcance:** 2025-26 (primera edición) y 2026-27 (en curso, entra en el botón «Actualizar 2026-27»).
+* **Fases:** liga regular y 2.ª fase (grupos A y B) = regular; play-out de acceso, eliminatorias, 3.er puesto y final =
+  playoffs.
+* **Cobertura [DATO]:** 2025-26, 206/206 partidos con jugada a jugada estructurado (cambios y coordenadas), quintetos
+  validados en 205; 2026-27, 42/42 partidos jugados al 09-11-2026.
+* **Identidad:** id de persona FEB (común a Primera, Segunda y Tercera FEB): la Liga U entra en el conjunto `FEB` del
+  crosswalk y es concurrente con la ACB y las FEB (doble licencia). Personas de la Liga U con otra liga: 214 de 347
+  (Tercera FEB 183, ACB 57, Segunda FEB 38, BCL 18, Primera FEB 15, FIBA Europe Cup 14, EuroCup 12, EuroLeague 5…).
+* **Modelo (DECISIONES fijadas antes de ajustar):** escalón de contracción propio (`ligau: [ligau]`), país ES, grupo
+  `feb` de la v4.0 (referencia IMPACTO `resto`), coordenadas de tiro del sistema FEB, 26 partidos de temporada regular
+  por equipo en el simulador; en la recalibración de salida del simulador cuenta como origen `resto`.
+* **Resultados [DATO]** (cadena completa del 09/10-11-2026): nivel A PER −2,97 ± 0,10 (83 puentes, no provisional),
+  entre la Segunda y la Tercera FEB. Cambio en las demás ligas, simulador, estilos (K fijado en 6) y v4.2: ver
+  `decisiones/ligau.md` §4. Publicado en los tres artifacts (Jugadores v36, Equipos v12, Metodología v11).

@@ -447,7 +447,7 @@ ${raw}`;
     return `<svg class="r3g" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${E(o.aria || "")}"><line x1="6" x2="${W - 6}" y1="${H / 2 - 2}" y2="${H / 2 - 2}" class="tr"/>${ticks}${lo != null && hi != null ? `<rect x="${X(lo)}" y="${H / 2 - 8}" width="${Math.max(2, X(hi) - X(lo))}" height="12" class="bd"/>` : ""}<line x1="${X(v)}" x2="${X(v)}" y1="${H / 2 - 11}" y2="${H / 2 + 7}" class="pt"/></svg>`;
   }
   function hojaAnclas(o) {
-    const { j, pos, an, anEsc, anCtx, apeJ, ligaAnc, clubAnc, d, rolA, s2 } = o, propio = anCtx && anCtx.propio, im = isFinite(an.IM);
+    const { j, pos, an, anEsc, anCtx, apeJ, ligaAnc, clubAnc, d, rolA, s2, minMuestra } = o, propio = anCtx && anCtx.propio, im = isFinite(an.IM);
     const gm = an.liga === "nba" || an.liga === "gleague" ? 48 : 40, minMed = anCtx && anCtx.res && anCtx.res.minutos ? anCtx.res.minutos.mediana : (s2 && s2.minutos ? s2.minutos.mediana : null);
     const lead = propio ? `${E(apeJ)} en ${E(clubAnc)}, con su plantilla y su rol de ${E(ROLN[rolA].toLowerCase())}: Nivel Kerno <b>${Math.round(an.NC)}</b> (${E(nivelTxt(an.NC))})${im ? ` e Impacto <b>${Math.round(an.IM)}</b> (${E(impTxt(an.IM))})` : ""}.`
       : `Como ${E(ROLN[rolA].toLowerCase())} de ${E(clubAnc)}, ${E(apeJ)} tendría Nivel Kerno <b>${Math.round(an.NC)}</b> (${E(nivelTxt(an.NC))})${im ? ` e Impacto <b>${Math.round(an.IM)}</b> (${E(impTxt(an.IM))})` : ""}.`;
@@ -465,7 +465,8 @@ ${raw}`;
     const como = `<div class="r3cols c2"><div class="r3blk"><h3>De dónde sale el Nivel Kerno</h3><p class="r3p">Se simula su temporada en ${E(clubAnc)} con el rol asignado y se calcula cuánto produce por partido. La nota es el percentil que ocupa esa producción entre los ${E(IF_POSN[an.pos || pos] || "jugadores")} de ${E(ligaAnc)}, ajustado con 5.500 fichajes reales.</p></div>
       <div class="r3blk"><h3>De dónde sale el Impacto</h3><p class="r3p">Se compara la plantilla con él y sin él: valor de cada jugador en una escala común a las 20 ligas, parejas y minutos. La diferencia de puntos se sitúa entre los fichajes reales de su grupo de ligas: 50 es un fichaje que no mueve al equipo.</p></div></div>`;
     const nota = `<p class="r3n">Los minutos salen de la simulación con el rol asignado.${propio ? " Sin club de destino, las anclas describen su papel en su club actual, con su propia plantilla." : ""}</p>`;
-    return `${ceja(2, "El jugador", "Nivel Kerno e Impacto: las dos anclas", lead)}<div class="r3anc">${cNC}${cIM}</div>${tablaRol}${como}${nota}`;
+    const avisoMuestra = minMuestra != null && isFinite(minMuestra) && minMuestra < 400 ? `<div class="r3muestra"><span class="r3lab"><i aria-hidden="true"></i>Muestra poco representativa · ${N(minMuestra, 0)} minutos en ${E(j.temporada)}</span><p>Con menos de 400 minutos jugados, Nivel Kerno e Impacto son orientativos: marcan una tendencia, no lo que va a ocurrir. Antes de decidir, contrástalos con vídeo y seguimiento en directo.</p></div>` : "";
+    return `${ceja(2, "El jugador", "Nivel Kerno e Impacto: las dos anclas", lead)}${avisoMuestra}<div class="r3anc">${cNC}${cIM}</div>${tablaRol}${como}${nota}`;
   }
 
   function paginas(c) {
@@ -532,7 +533,7 @@ ${raw}`;
         <div class="r3blk"><h3>Evolución de su nivel</h3>${evolucion(tray, j)}</div></div>` });
 
     // 2-bis · las dos anclas (v4.0): hoja propia cuando hay simulación (destino o club actual)
-    if (an) pags.push({ sec: "El jugador", num: 2, html: hojaAnclas({ j, pos, an, anEsc, anCtx, apeJ, ligaAnc, clubAnc, d, rolA, s2 }) });
+    if (an) pags.push({ sec: "El jugador", num: 2, html: hojaAnclas({ j, pos, an, anEsc, anCtx, apeJ, ligaAnc, clubAnc, d, rolA, s2, minMuestra: b.min }) });
 
     // 3 · conclusiones
     const ras = rasgos(R), s2ok = s2 && !s2.error, a = s2ok ? s2.adaptacion : null, eqv = s2ok ? s2.equipo : null;
@@ -736,7 +737,7 @@ ${raw}`;
           return `<td class="num"><b class="${cls}">${SG0(v, dec)}</b><small>${N(o.y, dec)}</small></td>`; };
         const grp = CTX6I.reduce((a, [g]) => { const l = a[a.length - 1]; if (l && l[0] === g) l[1]++; else a.push([g, 1]); return a; }, []);
         const D6 = c6.imp.length ? datos6(c6, j, gm) : null;
-        pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Impacto en la plantilla y en sus compañeros", lead6c)}
+        if (false) pags.push({ sec: "Contexto y conexiones", num: 6, html: `${ceja(6, "Contexto y conexiones", "Impacto en la plantilla y en sus compañeros", lead6c)}
           <div class="r3cols mn"><div class="r3blk"><h3>Minutos por partido, sin y con él</h3>${svgMinutos(mins, gm)}<p class="r3n">Gris: minutos de cada jugador en la plantilla actual simulada; negro: con ${E(apeJ)} dentro y su rol asignado. Medias de las temporadas simuladas.${notaMin()}</p></div>
             <div class="r3blk"><h3>Lugar en la plantilla por nivel</h3>${rankV(c6.orden || sim.orden, (o) => o.el, d.temporada, true)}<p class="r3n">Nivel por minutos (0–100). De arriba abajo, de más a menos nivel.${notaMin()}</p>
               ${(() => { const PN = { E: "Exteriores", A: "Aleros", I: "Interiores" }, acc = { E: [0, 0], A: [0, 0], I: [0, 0] };
@@ -1060,6 +1061,7 @@ ${raw}`;
 .r3kp.big.anc6 .idx b{font-size:34px}
 .r3kp .idx+.idx{border-left:2pt solid #0F2E25}
 .r3anc{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:4px 0 10px}
+.r3muestra{border-left:3px solid #A86A12;background:#E3E7E2;padding:7px 12px 8px;margin:2px 0 12px}.r3muestra .r3lab{display:flex;align-items:center;gap:6px;color:#0C1210}.r3muestra .r3lab i{width:0;height:0;border-left:4.5px solid transparent;border-right:4.5px solid transparent;border-bottom:8px solid #A86A12;display:inline-block}.r3muestra p{margin:3px 0 0;font-size:9.8px;line-height:1.45;color:#0C1210}
 .r3ancla{border-top:1.2px solid #0F2E25;padding-top:8px}
 .r3ancla .num{display:flex;align-items:flex-end;gap:12px;margin:2px 0 4px}
 .r3ancla .num b{font:620 54px/1 "Mona Sans",sans-serif;letter-spacing:-.03em;color:#0C1210}

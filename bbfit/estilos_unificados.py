@@ -376,6 +376,14 @@ def elegir(tabla: list[dict], c: dict) -> dict:
     4. Si ninguna opción cumple los umbrales, la más estable."""
     m = c["mezcla"]
     kt = m.get("k_taxonomia", m["k_min"])
+    if m.get("k_fijo"):        # taxonomía vigente fijada (p. ej. al añadir una liga): la regla queda como diagnóstico
+        kf = int(m["k_fijo"])
+        fam = min({f["covarianza"] for f in tabla}, key=lambda cv: min(f["bic"] for f in tabla if f["covarianza"] == cv))
+        todo = sorted([f for f in tabla if f["covarianza"] == fam], key=lambda f: f["k"])
+        regla = elegir(tabla, {**c, "mezcla": {k: v for k, v in m.items() if k != "k_fijo"}})
+        return {"covarianza": fam, "k_bic_global": min(todo, key=lambda f: f["bic"])["k"], "k_taxonomia": kt, "k": kf,
+                "caso": "fijado", "k_regla": regla["k"],
+                "motivo": f"K = {kf} fijado en configs/styles.yaml (mezcla.k_fijo: taxonomía vigente); la regla daría K = {regla['k']} ({regla['caso']})"}
     fam = min({f["covarianza"] for f in tabla}, key=lambda cv: min(f["bic"] for f in tabla if f["covarianza"] == cv))
     todo = sorted([f for f in tabla if f["covarianza"] == fam], key=lambda f: f["k"])
     k_bic_global = min(todo, key=lambda f: f["bic"])["k"]

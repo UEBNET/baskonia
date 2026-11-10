@@ -2,7 +2,7 @@
  "sitio": "jugadores",
  "pagina": "index.html",
  "sitio_json": "sitios/sitio_jugadores.json",
- "n_ficheros": 127,
+ "n_ficheros": 129,
  "mb_estimados": 163.9,
  "mib_estimados": 156.3,
  "ficheros": [
@@ -129,7 +129,9 @@
   "quintetos/estilos_unificados_clubes.gz.txt",
   "sitio.json",
   "v40/calibracion.json",
+  "v40/calibracion.json.gz.txt",
   "v40/equipos_2026-27.json",
+  "v40/equipos_2026-27.json.gz.txt",
   "v40/fichajes.json.gz.txt",
   "v40/index.html",
   "v40/resumen.json"

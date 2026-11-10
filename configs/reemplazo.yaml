@@ -21,7 +21,7 @@ libro:
   bootstrap: 2000
   nivel_intervalo: 0.90
   roles_clave: [TITULAR, GO_TO_GUY]  # volumen «de peso» para relacionar con el cambio de Net
-  club_clave: {feb1: equipo_codigo, feb2: equipo_codigo, feb3: equipo_codigo, defecto: team_id}
+  club_clave: {feb1: equipo_codigo, feb2: equipo_codigo, feb3: equipo_codigo, ligau: equipo_codigo, defecto: team_id}
 
 asignacion:                          # asignar_minutos: Plackett-Luce sobre nivel × encaje posicional
   simulaciones: 2000

@@ -12,7 +12,7 @@ MOD = RAIZ / "data" / "modelos"
 
 NOMBRES = {"euroleague": "EuroLeague", "eurocup": "EuroCup", "acb": "ACB", "nba": "NBA", "gleague": "G League",
            "lba": "LBA", "bbl": "BBL", "lnb": "LNB", "bcl": "BCL", "fec": "FIBA Europe Cup", "bsl": "BSL",
-           "gbl": "GBL", "feb1": "Primera FEB", "feb2": "Segunda FEB", "feb3": "Tercera FEB", "cba": "CBA",
+           "gbl": "GBL", "feb1": "Primera FEB", "feb2": "Segunda FEB", "feb3": "Tercera FEB", "ligau": "Liga U", "cba": "CBA",
            "bnxt": "BNXT", "ncaa": "NCAA (top-50)", "nbl": "NBL", "vtb": "VTB"}
 PIEZAS = {"ciclo": "Consistencia de ciclo", "film": "FiLM por liga", "cabezal_liga": "Cabezal por liga",
           "unicidad": "Factor propio ζ", "ipw": "Reponderación de puentes (IPW)", "K8": "Latente K = 8 (frente a 4)",

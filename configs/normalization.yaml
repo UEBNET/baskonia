@@ -30,6 +30,7 @@ escalones:
   feb1: [feb1]
   feb2: [feb2]
   feb3: [feb3]
+  ligau: [ligau]                # Liga U (ACB, U22): escalón propio (09-11-2026, fijado de antemano, sin mirar resultados)
 contraccion:
   tau2_inicial: 0.05
   tau2_minimo: 0.0025           # τ ≥ 0,05 DT: evita contraer del todo una temporada hacia su escalón

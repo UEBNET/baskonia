@@ -46,7 +46,7 @@ from .identidad import CONCURRENTES, SUFIJOS
 
 RAIZ = Path(__file__).resolve().parent.parent
 PROC = RAIZ / "data" / "processed"
-FEB = {"feb1", "feb2", "feb3"}
+FEB = {"feb1", "feb2", "feb3", "ligau"}   # ligau (Liga U ACB): mismo sistema e ids de persona FEB
 ID_INESTABLE = {"bbl"}            # ids de jugador que cambian entre temporadas: se permiten uniones en la liga
 # pares de ligas que se juegan a la vez (un jugador puede estar en las dos la misma temporada): además de las de
 # identidad.py, la ACB con las FEB y las FEB entre sí (jugadores vinculados / doble licencia)

@@ -1,651 +1,684 @@
 metrica,nombre,liga,m,m_se,s,s_se,psi,puentes
-pts_p100,Puntos por 100 posesiones,acb,-0.3011,0.0348,0.9827,0.0411,0.2415,1230
-pts_p100,Puntos por 100 posesiones,bbl,-0.5287,0.0458,0.9224,0.0416,0.2993,899
-pts_p100,Puntos por 100 posesiones,bcl,-0.4982,0.0382,1.1221,0.0502,0.0458,1107
-pts_p100,Puntos por 100 posesiones,bnxt,-0.9333,0.0977,0.8543,0.0782,0.01,203
-pts_p100,Puntos por 100 posesiones,bsl,-0.3976,0.0671,0.9315,0.0762,0.1037,292
-pts_p100,Puntos por 100 posesiones,cba,-1.2228,0.1331,1.2612,0.0943,0.1364,93
-pts_p100,Puntos por 100 posesiones,eurocup,-0.3989,0.0415,0.8107,0.0357,0.0736,1214
-pts_p100,Puntos por 100 posesiones,euroleague,-0.0,0.0,1.0,0.0,0.3249,1318
-pts_p100,Puntos por 100 posesiones,feb1,-0.8892,0.0777,1.0289,0.0522,0.1886,228
-pts_p100,Puntos por 100 posesiones,feb2,-1.8109,0.114,1.2396,0.1016,0.2925,353
-pts_p100,Puntos por 100 posesiones,feb3,-3.2357,0.1325,1.2363,0.0795,0.01,230
-pts_p100,Puntos por 100 posesiones,fec,-0.9074,0.0689,1.0644,0.077,0.2962,697
-pts_p100,Puntos por 100 posesiones,gbl,-0.4625,0.0562,0.8429,0.0613,0.01,532
-pts_p100,Puntos por 100 posesiones,gleague,0.0349,0.0517,0.7545,0.0614,0.1777,1238
-pts_p100,Puntos por 100 posesiones,lba,-0.4227,0.0491,0.8975,0.0411,0.1339,835
-pts_p100,Puntos por 100 posesiones,lnb,-0.3957,0.0355,0.935,0.025,0.3123,944
-pts_p100,Puntos por 100 posesiones,nba,0.7215,0.1107,1.0177,0.1214,0.3949,813
-pts_p100,Puntos por 100 posesiones,nbl,-0.506,0.1035,1.0013,0.0746,0.3866,189
-pts_p100,Puntos por 100 posesiones,ncaa,-0.21,0.0724,0.7709,0.0856,0.3568,486
-pts_p100,Puntos por 100 posesiones,vtb,-0.6432,0.0675,1.0303,0.0544,0.3493,332
-ts_pct,TS%,acb,-0.4463,0.063,0.9778,0.1138,0.8264,1230
-ts_pct,TS%,bbl,-0.8815,0.0874,1.1118,0.2098,0.5835,899
-ts_pct,TS%,bcl,-0.9772,0.1213,0.8039,0.1468,0.01,1107
-ts_pct,TS%,bnxt,-1.163,0.1137,0.767,0.0908,0.2272,203
-ts_pct,TS%,bsl,-0.7812,0.1319,0.9727,0.1075,0.01,292
-ts_pct,TS%,cba,-0.883,0.1448,1.2507,0.3246,0.9734,93
-ts_pct,TS%,eurocup,-0.7531,0.0709,0.7759,0.0727,0.5117,1214
-ts_pct,TS%,euroleague,-0.0,0.0,1.0,0.0,0.9592,1318
-ts_pct,TS%,feb1,-1.0024,0.1547,0.8614,0.0973,0.4092,228
-ts_pct,TS%,feb2,-1.6675,0.1961,1.1402,0.212,0.1781,353
-ts_pct,TS%,feb3,-2.9827,0.1034,1.1518,0.1402,0.01,230
-ts_pct,TS%,fec,-1.7669,0.1973,1.0797,0.1867,0.01,697
-ts_pct,TS%,gbl,-0.8708,0.0595,0.6527,0.0574,0.0223,532
-ts_pct,TS%,gleague,-0.7375,0.1633,2.5237,0.6028,1.1253,1238
-ts_pct,TS%,lba,-0.8356,0.0751,0.9078,0.0674,0.395,835
-ts_pct,TS%,lnb,-0.7408,0.0648,1.0917,0.1067,0.3679,944
-ts_pct,TS%,nba,0.2845,0.0633,1.1747,0.1536,0.9782,813
-ts_pct,TS%,nbl,-0.9806,0.161,1.1088,0.2859,1.0173,189
-ts_pct,TS%,ncaa,-0.9004,0.1531,1.1988,0.2376,0.5179,486
-ts_pct,TS%,vtb,-0.928,0.0925,1.1363,0.1392,0.6212,332
-efg_pct,eFG%,acb,-0.4596,0.0769,0.9993,0.1238,0.8635,1230
-efg_pct,eFG%,bbl,-0.884,0.0938,0.9528,0.1267,0.01,899
-efg_pct,eFG%,bcl,-1.1339,0.1441,0.8078,0.1289,0.01,1107
-efg_pct,eFG%,bnxt,-1.1814,0.1228,0.785,0.097,0.0928,203
-efg_pct,eFG%,bsl,-0.909,0.1777,1.0347,0.1648,0.01,292
-efg_pct,eFG%,cba,-0.7753,0.1778,1.1925,0.3748,0.8362,93
-efg_pct,eFG%,eurocup,-0.8191,0.0973,0.7882,0.0653,0.4606,1214
-efg_pct,eFG%,euroleague,-0.0,0.0,1.0,0.0,0.9655,1318
-efg_pct,eFG%,feb1,-0.9394,0.2023,0.8612,0.1221,0.5266,228
-efg_pct,eFG%,feb2,-1.538,0.252,1.1057,0.2204,0.01,353
-efg_pct,eFG%,feb3,-2.9162,0.1712,1.2852,0.1606,0.01,230
-efg_pct,eFG%,fec,-1.9582,0.1804,0.982,0.1093,0.01,697
-efg_pct,eFG%,gbl,-0.975,0.065,0.7214,0.0696,0.01,532
-efg_pct,eFG%,gleague,-0.7079,0.1433,2.0276,0.4898,0.985,1238
-efg_pct,eFG%,lba,-0.9316,0.0985,0.8842,0.0887,0.01,835
-efg_pct,eFG%,lnb,-0.7496,0.0894,0.8809,0.1258,0.01,944
-efg_pct,eFG%,nba,0.203,0.0875,1.2109,0.1956,0.9552,813
-efg_pct,eFG%,nbl,-1.1314,0.2441,1.0165,0.1457,2.1625,189
-efg_pct,eFG%,ncaa,-0.8857,0.1618,1.1271,0.1674,0.0113,486
-efg_pct,eFG%,vtb,-0.9083,0.1044,1.0643,0.1353,0.6017,332
-fg2_pct,T2%,acb,-0.2726,0.0721,1.0654,0.0748,0.4198,1230
-fg2_pct,T2%,bbl,-0.6016,0.1087,1.112,0.1881,0.5259,894
-fg2_pct,T2%,bcl,-0.7212,0.1268,0.996,0.1476,1.0841,1104
-fg2_pct,T2%,bnxt,-0.9934,0.1353,1.0666,0.1028,0.9925,203
-fg2_pct,T2%,bsl,-0.5347,0.0835,0.9562,0.1229,0.01,292
-fg2_pct,T2%,cba,-0.4115,0.3037,1.7866,0.9832,0.5859,93
-fg2_pct,T2%,eurocup,-0.5373,0.0545,0.8703,0.1017,0.0764,1212
-fg2_pct,T2%,euroleague,-0.0,0.0,1.0,0.0,0.5105,1318
-fg2_pct,T2%,feb1,-0.3548,0.0999,0.7414,0.0672,0.01,228
-fg2_pct,T2%,feb2,-0.6432,0.1526,1.0539,0.1307,0.01,353
-fg2_pct,T2%,feb3,-1.4338,0.1964,1.2409,0.1528,0.1397,230
-fg2_pct,T2%,fec,-1.2455,0.1516,0.9494,0.1489,0.01,697
-fg2_pct,T2%,gbl,-0.7283,0.0906,0.8173,0.07,1.5385,532
-fg2_pct,T2%,gleague,-0.2571,0.0852,1.4593,0.2528,1.1297,1238
-fg2_pct,T2%,lba,-0.689,0.1078,1.0821,0.1156,0.5963,835
-fg2_pct,T2%,lnb,-0.5065,0.077,0.9183,0.0943,0.1853,944
-fg2_pct,T2%,nba,0.0891,0.1065,1.0737,0.1899,0.8546,813
-fg2_pct,T2%,nbl,-0.5889,0.1324,0.7307,0.0885,0.01,189
-fg2_pct,T2%,ncaa,-0.4688,0.1578,0.9354,0.1322,0.1629,486
-fg2_pct,T2%,vtb,-0.7153,0.1345,1.2103,0.1267,0.9864,332
-fg3_pct,T3%,acb,-0.4118,0.1,0.8728,0.0668,0.01,1127
-fg3_pct,T3%,bbl,-0.7281,0.0969,0.9668,0.0747,0.01,847
-fg3_pct,T3%,bcl,-0.7903,0.1086,0.9958,0.1335,0.01,1033
-fg3_pct,T3%,bnxt,-0.783,0.1554,0.71,0.0641,0.01,192
-fg3_pct,T3%,bsl,-0.6207,0.1602,0.8778,0.1929,0.01,267
-fg3_pct,T3%,cba,-0.8919,0.2592,1.2362,0.2493,0.01,85
-fg3_pct,T3%,eurocup,-0.6319,0.0918,0.8773,0.0799,0.01,1104
-fg3_pct,T3%,euroleague,-0.0,0.0,1.0,0.0,0.01,1212
-fg3_pct,T3%,feb1,-1.0447,0.1421,1.0038,0.0833,0.01,214
-fg3_pct,T3%,feb2,-1.7346,0.184,1.1186,0.1799,0.01,338
-fg3_pct,T3%,feb3,-2.8151,0.1585,1.0774,0.1257,0.01,219
-fg3_pct,T3%,fec,-1.3907,0.168,1.2243,0.1723,0.01,646
-fg3_pct,T3%,gbl,-0.7122,0.0995,0.7708,0.0869,0.01,480
-fg3_pct,T3%,gleague,-0.6406,0.1038,1.016,0.0884,0.01,1191
-fg3_pct,T3%,lba,-0.711,0.1238,0.9336,0.1356,0.01,762
-fg3_pct,T3%,lnb,-0.6771,0.0769,0.9885,0.1224,0.01,862
-fg3_pct,T3%,nba,-0.0047,0.0874,0.8491,0.0818,0.01,781
-fg3_pct,T3%,nbl,-1.0023,0.2977,1.0698,0.0542,0.01,182
-fg3_pct,T3%,ncaa,-0.7777,0.0964,0.9233,0.1119,0.01,458
-fg3_pct,T3%,vtb,-0.5579,0.172,0.9669,0.1353,0.01,306
-ft_pct,TL%,acb,-0.199,0.0631,1.0013,0.1303,0.65,1223
-ft_pct,TL%,bbl,-0.4344,0.0667,1.1209,0.107,0.8337,897
-ft_pct,TL%,bcl,-0.4463,0.065,0.9143,0.0653,1.0301,1099
-ft_pct,TL%,bnxt,-0.7388,0.1182,0.9595,0.0703,0.4948,201
-ft_pct,TL%,bsl,-0.3388,0.1051,0.8305,0.0877,0.1528,292
-ft_pct,TL%,cba,-0.5035,0.1217,1.1691,0.146,1.3802,93
-ft_pct,TL%,eurocup,-0.4329,0.055,0.9433,0.0488,0.7277,1212
-ft_pct,TL%,euroleague,-0.0,0.0,1.0,0.0,1.4582,1309
-ft_pct,TL%,feb1,-0.7226,0.0984,0.9322,0.0618,0.2481,226
-ft_pct,TL%,feb2,-1.1981,0.1571,1.1111,0.217,0.4614,351
-ft_pct,TL%,feb3,-1.772,0.087,0.929,0.0673,0.01,229
-ft_pct,TL%,fec,-0.5817,0.0858,0.8813,0.0881,1.2672,695
-ft_pct,TL%,gbl,-0.4464,0.0844,0.8976,0.1076,1.1169,531
-ft_pct,TL%,gleague,-0.3637,0.0891,1.015,0.113,1.2659,1234
-ft_pct,TL%,lba,-0.2767,0.0679,0.9032,0.096,0.2562,831
-ft_pct,TL%,lnb,-0.4751,0.0425,1.0185,0.0647,0.4124,944
-ft_pct,TL%,nba,-0.0774,0.0774,0.8679,0.0821,0.5209,809
-ft_pct,TL%,nbl,-0.3277,0.14,0.9782,0.1513,0.3642,189
-ft_pct,TL%,ncaa,-0.4039,0.0858,0.8505,0.0777,0.5694,486
-ft_pct,TL%,vtb,-0.5072,0.1275,1.3349,0.2558,0.6933,331
-fg3a_rate,Triples / tiros de campo (3PAr),acb,0.0426,0.0146,1.073,0.0197,0.01,1230
-fg3a_rate,Triples / tiros de campo (3PAr),bbl,0.0299,0.022,1.124,0.029,0.0767,899
-fg3a_rate,Triples / tiros de campo (3PAr),bcl,-0.0099,0.0252,1.0243,0.0145,0.01,1107
-fg3a_rate,Triples / tiros de campo (3PAr),bnxt,0.0121,0.0394,1.191,0.0563,0.01,203
-fg3a_rate,Triples / tiros de campo (3PAr),bsl,-0.0261,0.0346,0.9435,0.028,0.01,292
-fg3a_rate,Triples / tiros de campo (3PAr),cba,0.0517,0.0763,1.0815,0.0592,0.09,93
-fg3a_rate,Triples / tiros de campo (3PAr),eurocup,0.0306,0.026,1.0203,0.0193,0.01,1214
-fg3a_rate,Triples / tiros de campo (3PAr),euroleague,-0.0,0.0,1.0,0.0,0.01,1318
-fg3a_rate,Triples / tiros de campo (3PAr),feb1,0.0941,0.0664,1.0576,0.0487,0.01,228
-fg3a_rate,Triples / tiros de campo (3PAr),feb2,0.069,0.1045,1.121,0.0684,0.0261,353
-fg3a_rate,Triples / tiros de campo (3PAr),feb3,0.2013,0.1109,1.1951,0.082,0.01,230
-fg3a_rate,Triples / tiros de campo (3PAr),fec,0.1124,0.0333,0.9863,0.0278,0.01,697
-fg3a_rate,Triples / tiros de campo (3PAr),gbl,0.0317,0.0348,1.0566,0.0272,0.01,532
-fg3a_rate,Triples / tiros de campo (3PAr),gleague,-0.2674,0.0347,1.1255,0.0416,0.1477,1238
-fg3a_rate,Triples / tiros de campo (3PAr),lba,0.0793,0.0303,1.0323,0.0241,0.01,835
-fg3a_rate,Triples / tiros de campo (3PAr),lnb,-0.2088,0.0286,1.0543,0.0261,0.01,944
-fg3a_rate,Triples / tiros de campo (3PAr),nba,-0.3679,0.0548,1.0258,0.0529,0.1466,813
-fg3a_rate,Triples / tiros de campo (3PAr),nbl,0.0823,0.0554,1.0964,0.0581,0.1804,189
-fg3a_rate,Triples / tiros de campo (3PAr),ncaa,-0.2128,0.0767,1.0755,0.0697,0.0613,486
-fg3a_rate,Triples / tiros de campo (3PAr),vtb,0.094,0.0385,1.0825,0.0378,0.01,332
-fta_rate,Tiros libres / tiros de campo (FTr),acb,-0.1979,0.0351,1.0362,0.0432,0.3593,1230
-fta_rate,Tiros libres / tiros de campo (FTr),bbl,-0.3111,0.0353,0.9906,0.0439,0.2009,899
-fta_rate,Tiros libres / tiros de campo (FTr),bcl,-0.1933,0.0644,0.8318,0.043,0.01,1107
-fta_rate,Tiros libres / tiros de campo (FTr),bnxt,-0.6201,0.1179,1.0996,0.0881,0.0175,203
-fta_rate,Tiros libres / tiros de campo (FTr),bsl,-0.0864,0.0759,0.9125,0.0805,0.0244,292
-fta_rate,Tiros libres / tiros de campo (FTr),cba,-0.4536,0.1628,1.1093,0.1412,0.2458,93
-fta_rate,Tiros libres / tiros de campo (FTr),eurocup,-0.1487,0.0559,0.9076,0.0403,0.0576,1214
-fta_rate,Tiros libres / tiros de campo (FTr),euroleague,-0.0,0.0,1.0,0.0,0.3914,1318
-fta_rate,Tiros libres / tiros de campo (FTr),feb1,-0.3297,0.0775,0.8609,0.0723,0.01,228
-fta_rate,Tiros libres / tiros de campo (FTr),feb2,-0.4417,0.0748,0.8827,0.0744,0.0898,353
-fta_rate,Tiros libres / tiros de campo (FTr),feb3,-0.8971,0.11,1.0252,0.0975,0.0839,230
-fta_rate,Tiros libres / tiros de campo (FTr),fec,-0.4382,0.0701,0.8608,0.043,0.01,697
-fta_rate,Tiros libres / tiros de campo (FTr),gbl,-0.2079,0.0675,1.0734,0.0601,0.259,532
-fta_rate,Tiros libres / tiros de campo (FTr),gleague,-0.1218,0.057,0.88,0.0454,0.01,1238
-fta_rate,Tiros libres / tiros de campo (FTr),lba,-0.1959,0.0502,0.9573,0.0483,0.2307,835
-fta_rate,Tiros libres / tiros de campo (FTr),lnb,-0.1188,0.0535,1.0167,0.045,0.1952,944
-fta_rate,Tiros libres / tiros de campo (FTr),nba,0.1909,0.0727,1.0716,0.0781,0.3537,813
-fta_rate,Tiros libres / tiros de campo (FTr),nbl,-0.0921,0.0959,1.2537,0.259,0.5405,189
-fta_rate,Tiros libres / tiros de campo (FTr),ncaa,-0.3035,0.0906,1.0857,0.0889,0.3272,486
-fta_rate,Tiros libres / tiros de campo (FTr),vtb,-0.3512,0.0773,0.9707,0.0565,0.1546,332
-usg_pct,USG%,acb,-0.1438,0.0166,0.9684,0.0307,0.2584,1225
-usg_pct,USG%,bbl,-0.2694,0.0339,0.8939,0.0213,0.2574,886
-usg_pct,USG%,bcl,-0.1706,0.032,0.9809,0.0415,0.0541,1097
-usg_pct,USG%,bnxt,-0.5007,0.0736,0.8882,0.0538,0.01,202
-usg_pct,USG%,bsl,-0.1561,0.05,0.8729,0.0551,0.1521,291
-usg_pct,USG%,cba,-1.0073,0.1351,1.2841,0.0883,0.1337,88
-usg_pct,USG%,eurocup,-0.182,0.0273,0.8558,0.0326,0.1676,1205
-usg_pct,USG%,euroleague,-0.0,0.0,1.0,0.0,0.323,1311
-usg_pct,USG%,feb1,-0.4682,0.059,1.0296,0.0577,0.2724,227
-usg_pct,USG%,feb2,-1.0891,0.0803,1.2045,0.0715,0.3421,353
-usg_pct,USG%,feb3,-2.1038,0.1209,1.2103,0.1101,0.0477,230
-usg_pct,USG%,fec,-0.3184,0.0404,0.8204,0.0313,0.1726,692
-usg_pct,USG%,gbl,-0.1471,0.0496,0.8372,0.0376,0.01,524
-usg_pct,USG%,gleague,0.249,0.0533,0.8215,0.0572,0.2856,1223
-usg_pct,USG%,lba,-0.1583,0.029,0.8705,0.026,0.1418,825
-usg_pct,USG%,lnb,-0.119,0.0359,0.907,0.032,0.2798,782
-usg_pct,USG%,nba,0.8767,0.1248,1.0927,0.1011,0.2683,813
-usg_pct,USG%,nbl,-0.2357,0.0765,1.0109,0.0712,0.1914,183
-usg_pct,USG%,ncaa,0.0267,0.0423,0.7919,0.0748,0.3299,485
-usg_pct,USG%,vtb,-0.339,0.0465,1.0745,0.0521,0.254,327
-ast_pct,AST%,acb,-0.125,0.033,1.0051,0.0332,0.2442,1230
-ast_pct,AST%,bbl,-0.3951,0.0346,0.8835,0.0358,0.01,899
-ast_pct,AST%,bcl,-0.311,0.0343,0.7944,0.0337,0.01,1107
-ast_pct,AST%,bnxt,-0.6251,0.0785,0.9327,0.0566,0.072,203
-ast_pct,AST%,bsl,-0.1772,0.057,0.7494,0.0368,0.01,292
-ast_pct,AST%,cba,-1.6614,0.2432,1.633,0.1885,0.1437,93
-ast_pct,AST%,eurocup,-0.3777,0.0265,1.0709,0.0352,0.3315,1214
-ast_pct,AST%,euroleague,-0.0,0.0,1.0,0.0,0.3146,1318
-ast_pct,AST%,feb1,-0.3314,0.0733,0.9243,0.0829,0.114,228
-ast_pct,AST%,feb2,-0.8909,0.1179,1.099,0.0948,0.2597,353
-ast_pct,AST%,feb3,-1.29,0.1215,0.8951,0.0586,0.0604,230
-ast_pct,AST%,fec,-0.4691,0.062,0.8063,0.041,0.01,697
-ast_pct,AST%,gbl,-0.3912,0.0441,0.9328,0.0395,0.1557,532
-ast_pct,AST%,gleague,-0.4721,0.0706,0.9998,0.0378,0.2118,1238
-ast_pct,AST%,lba,-0.285,0.0328,0.9305,0.0374,0.2634,835
-ast_pct,AST%,lnb,-0.296,0.0367,0.9845,0.0343,0.1654,944
-ast_pct,AST%,nba,0.0999,0.0871,1.1284,0.0426,0.4077,813
-ast_pct,AST%,nbl,-0.5412,0.0757,1.0101,0.081,0.28,189
-ast_pct,AST%,ncaa,-0.7807,0.0777,0.9306,0.052,0.1935,486
-ast_pct,AST%,vtb,-0.4306,0.073,0.9244,0.0526,0.01,332
-tov_pct,TOV%,acb,0.1461,0.0732,1.1259,0.0788,0.3065,1225
-tov_pct,TOV%,bbl,0.1567,0.071,0.9644,0.0642,0.2085,886
-tov_pct,TOV%,bcl,0.1249,0.0747,0.7915,0.0379,0.01,1097
-tov_pct,TOV%,bnxt,0.6254,0.0832,0.9457,0.1322,0.01,202
-tov_pct,TOV%,bsl,0.1388,0.1013,0.9731,0.1242,0.4637,291
-tov_pct,TOV%,cba,0.1967,0.1314,1.1215,0.1377,0.374,88
-tov_pct,TOV%,eurocup,0.0685,0.0651,0.8555,0.0625,0.0725,1205
-tov_pct,TOV%,euroleague,-0.0,0.0,1.0,0.0,0.2136,1311
-tov_pct,TOV%,feb1,0.5962,0.1451,0.9191,0.1071,0.01,227
-tov_pct,TOV%,feb2,0.9608,0.1294,1.0767,0.2327,0.2265,353
-tov_pct,TOV%,feb3,1.3822,0.0986,0.8802,0.099,0.01,230
-tov_pct,TOV%,fec,0.3051,0.0739,0.8881,0.0438,0.3777,692
-tov_pct,TOV%,gbl,0.0809,0.0862,0.8195,0.1023,0.01,524
-tov_pct,TOV%,gleague,-0.0198,0.0766,0.9547,0.0636,0.4529,1223
-tov_pct,TOV%,lba,0.024,0.0593,1.0793,0.0814,0.1988,825
-tov_pct,TOV%,lnb,0.1687,0.0422,1.019,0.0637,0.2457,782
-tov_pct,TOV%,nba,-0.0614,0.0749,0.9679,0.0684,0.5818,813
-tov_pct,TOV%,nbl,-0.0111,0.1031,0.9442,0.1144,0.4192,183
-tov_pct,TOV%,ncaa,0.0972,0.0862,0.7472,0.0528,0.1033,485
-tov_pct,TOV%,vtb,0.2491,0.0851,0.8835,0.0722,0.1448,327
-oreb_pct,OREB%,acb,0.0399,0.049,0.9811,0.0443,0.2758,1200
-oreb_pct,OREB%,bbl,0.0965,0.0557,0.9881,0.0323,0.3257,852
-oreb_pct,OREB%,bcl,-0.0918,0.0602,0.9201,0.0586,0.1048,979
-oreb_pct,OREB%,bnxt,-0.1851,0.0725,1.0479,0.0834,0.1049,201
-oreb_pct,OREB%,bsl,-0.1309,0.0887,1.0263,0.059,0.4153,287
-oreb_pct,OREB%,cba,-0.3312,0.1735,1.0406,0.1213,0.585,79
-oreb_pct,OREB%,eurocup,-0.0095,0.0454,1.0688,0.0726,0.2943,1100
-oreb_pct,OREB%,euroleague,-0.0,0.0,1.0,0.0,0.408,1183
-oreb_pct,OREB%,feb1,0.1265,0.0931,0.9975,0.1008,0.354,227
-oreb_pct,OREB%,feb2,0.1175,0.1162,1.0628,0.1033,0.3167,353
-oreb_pct,OREB%,feb3,-0.197,0.131,1.0003,0.0844,0.2633,230
-oreb_pct,OREB%,fec,-0.2183,0.0656,0.9195,0.0477,0.01,632
-oreb_pct,OREB%,gbl,-0.2266,0.0638,1.1601,0.0742,0.4673,512
-oreb_pct,OREB%,gleague,0.2254,0.1016,1.0918,0.1275,0.3676,1198
-oreb_pct,OREB%,lba,-0.1262,0.0564,1.0311,0.0514,0.3856,790
-oreb_pct,OREB%,nba,0.0852,0.1399,1.1653,0.2421,0.3535,809
-oreb_pct,OREB%,nbl,0.1159,0.0904,1.1308,0.1116,0.5048,179
-oreb_pct,OREB%,ncaa,0.3207,0.1212,0.9912,0.1101,0.2747,475
-oreb_pct,OREB%,vtb,0.0611,0.0813,1.0197,0.0823,0.4547,317
-dreb_pct,DREB%,acb,-0.0808,0.0525,1.0719,0.0618,0.4537,1200
-dreb_pct,DREB%,bbl,-0.4031,0.0604,1.1304,0.0603,0.3293,852
-dreb_pct,DREB%,bcl,-0.2832,0.0528,0.9535,0.0706,0.01,979
-dreb_pct,DREB%,bnxt,-0.9291,0.1265,1.3376,0.1327,0.2249,201
-dreb_pct,DREB%,bsl,-0.3167,0.0605,0.9444,0.072,0.1547,287
-dreb_pct,DREB%,cba,-1.3137,0.3249,1.4377,0.2114,0.2026,79
-dreb_pct,DREB%,eurocup,-0.3122,0.0487,1.1004,0.0604,0.4449,1100
-dreb_pct,DREB%,euroleague,-0.0,0.0,1.0,0.0,0.3391,1183
-dreb_pct,DREB%,feb1,-0.4826,0.0883,1.2344,0.1067,0.3267,227
-dreb_pct,DREB%,feb2,-0.8552,0.1214,1.2194,0.107,0.2236,353
-dreb_pct,DREB%,feb3,-1.7679,0.1234,1.135,0.0804,0.1084,230
-dreb_pct,DREB%,fec,-0.6194,0.0998,0.8839,0.0983,0.01,632
-dreb_pct,DREB%,gbl,-0.3197,0.0759,0.9081,0.0443,0.01,512
-dreb_pct,DREB%,gleague,0.152,0.065,1.1299,0.0754,0.4481,1198
-dreb_pct,DREB%,lba,-0.2302,0.0399,0.9225,0.0421,0.1387,790
-dreb_pct,DREB%,nba,0.5552,0.0832,1.2238,0.0764,0.4133,809
-dreb_pct,DREB%,nbl,-0.0538,0.0992,1.0774,0.0947,0.4453,179
-dreb_pct,DREB%,ncaa,0.0227,0.0807,0.9301,0.0734,0.3467,475
-dreb_pct,DREB%,vtb,-0.5891,0.105,1.2108,0.16,0.2917,317
-oreb_p100,Rebotes ofensivos por 100 pos.,acb,0.0859,0.0523,1.0157,0.0389,0.3306,1230
-oreb_p100,Rebotes ofensivos por 100 pos.,bbl,0.1926,0.0573,0.9682,0.0508,0.2894,899
-oreb_p100,Rebotes ofensivos por 100 pos.,bcl,0.0134,0.05,0.9647,0.0451,0.1958,1107
-oreb_p100,Rebotes ofensivos por 100 pos.,bnxt,-0.0681,0.0744,1.0517,0.0778,0.1416,203
-oreb_p100,Rebotes ofensivos por 100 pos.,bsl,-0.1016,0.0597,1.0284,0.0629,0.4351,292
-oreb_p100,Rebotes ofensivos por 100 pos.,cba,-0.2443,0.1061,0.9767,0.095,0.5872,93
-oreb_p100,Rebotes ofensivos por 100 pos.,eurocup,0.0738,0.0651,1.0258,0.0659,0.2395,1214
-oreb_p100,Rebotes ofensivos por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.3733,1318
-oreb_p100,Rebotes ofensivos por 100 pos.,feb1,0.2189,0.0918,0.9496,0.0866,0.2768,228
-oreb_p100,Rebotes ofensivos por 100 pos.,feb2,0.2122,0.0944,1.1686,0.0825,0.4027,353
-oreb_p100,Rebotes ofensivos por 100 pos.,feb3,-0.0555,0.0975,1.0409,0.094,0.29,230
-oreb_p100,Rebotes ofensivos por 100 pos.,fec,-0.0064,0.0886,0.9313,0.0588,0.01,697
-oreb_p100,Rebotes ofensivos por 100 pos.,gbl,-0.0872,0.0702,1.1744,0.0723,0.5149,532
-oreb_p100,Rebotes ofensivos por 100 pos.,gleague,0.2929,0.1048,1.1526,0.1472,0.4108,1238
-oreb_p100,Rebotes ofensivos por 100 pos.,lba,-0.0526,0.0594,1.0515,0.0517,0.3946,835
-oreb_p100,Rebotes ofensivos por 100 pos.,lnb,0.1167,0.0681,1.2355,0.0524,0.3642,944
-oreb_p100,Rebotes ofensivos por 100 pos.,nba,0.123,0.1157,1.1724,0.272,0.3379,813
-oreb_p100,Rebotes ofensivos por 100 pos.,nbl,0.1832,0.0893,1.1294,0.1335,0.4812,189
-oreb_p100,Rebotes ofensivos por 100 pos.,ncaa,0.4137,0.129,1.0169,0.1292,0.2921,486
-oreb_p100,Rebotes ofensivos por 100 pos.,vtb,0.1437,0.0917,1.05,0.0974,0.48,332
-dreb_p100,Rebotes defensivos por 100 pos.,acb,-0.1214,0.0491,1.057,0.0478,0.4253,1230
-dreb_p100,Rebotes defensivos por 100 pos.,bbl,-0.521,0.0678,1.1323,0.0768,0.3209,899
-dreb_p100,Rebotes defensivos por 100 pos.,bcl,-0.3332,0.0729,0.9539,0.0613,0.0721,1107
-dreb_p100,Rebotes defensivos por 100 pos.,bnxt,-0.9906,0.1122,1.2888,0.1118,0.2109,203
-dreb_p100,Rebotes defensivos por 100 pos.,bsl,-0.3156,0.0842,0.8992,0.052,0.0701,292
-dreb_p100,Rebotes defensivos por 100 pos.,cba,-1.5815,0.245,1.5897,0.182,0.1958,93
-dreb_p100,Rebotes defensivos por 100 pos.,eurocup,-0.3617,0.0715,1.1352,0.0549,0.4452,1214
-dreb_p100,Rebotes defensivos por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.2766,1318
-dreb_p100,Rebotes defensivos por 100 pos.,feb1,-0.6126,0.095,1.3464,0.198,0.3639,228
-dreb_p100,Rebotes defensivos por 100 pos.,feb2,-0.9999,0.1419,1.3312,0.1545,0.2791,353
-dreb_p100,Rebotes defensivos por 100 pos.,feb3,-2.0041,0.1379,1.2311,0.11,0.1648,230
-dreb_p100,Rebotes defensivos por 100 pos.,fec,-0.7739,0.0945,0.9226,0.0805,0.01,697
-dreb_p100,Rebotes defensivos por 100 pos.,gbl,-0.3941,0.0762,0.9218,0.0545,0.01,532
-dreb_p100,Rebotes defensivos por 100 pos.,gleague,0.079,0.0711,1.1847,0.0665,0.4696,1238
-dreb_p100,Rebotes defensivos por 100 pos.,lba,-0.2887,0.0723,0.9766,0.0487,0.231,835
-dreb_p100,Rebotes defensivos por 100 pos.,lnb,-0.2846,0.0749,1.1064,0.0622,0.2432,944
-dreb_p100,Rebotes defensivos por 100 pos.,nba,0.5412,0.0821,1.2953,0.097,0.4293,813
-dreb_p100,Rebotes defensivos por 100 pos.,nbl,-0.0789,0.1129,1.0567,0.0971,0.4767,189
-dreb_p100,Rebotes defensivos por 100 pos.,ncaa,-0.0873,0.1041,0.9602,0.0594,0.3456,486
-dreb_p100,Rebotes defensivos por 100 pos.,vtb,-0.652,0.0683,1.2423,0.0893,0.3195,332
-stl_pct,STL%,acb,-0.1797,0.0688,1.213,0.0603,0.5919,1230
-stl_pct,STL%,bbl,-0.2901,0.0818,1.0671,0.046,0.3272,899
-stl_pct,STL%,bcl,-0.385,0.0741,0.858,0.0632,0.01,1107
-stl_pct,STL%,bnxt,-0.925,0.1377,1.0238,0.1531,0.0938,203
-stl_pct,STL%,bsl,-0.3854,0.0948,1.4337,0.1027,0.4911,292
-stl_pct,STL%,cba,-1.0801,0.138,1.0227,0.1377,0.2502,93
-stl_pct,STL%,eurocup,-0.3182,0.074,1.1531,0.0524,0.4062,1214
-stl_pct,STL%,euroleague,-0.0,0.0,1.0,0.0,0.2048,1318
-stl_pct,STL%,feb1,-0.3057,0.1296,1.0394,0.151,0.3712,228
-stl_pct,STL%,feb2,-0.3242,0.1344,1.1364,0.1305,0.3986,353
-stl_pct,STL%,feb3,-0.3882,0.1246,0.8673,0.076,0.0913,230
-stl_pct,STL%,fec,-0.6067,0.1078,1.5237,0.1476,0.5091,697
-stl_pct,STL%,gbl,-0.2358,0.0984,1.0061,0.0624,0.16,532
-stl_pct,STL%,gleague,-0.0786,0.1171,1.0913,0.0743,0.24,1238
-stl_pct,STL%,lba,-0.3188,0.0777,0.9567,0.0515,0.01,835
-stl_pct,STL%,lnb,-0.078,0.0455,1.291,0.0845,0.3834,944
-stl_pct,STL%,nba,0.0836,0.1117,1.1129,0.0957,0.3818,813
-stl_pct,STL%,nbl,-0.5174,0.1681,1.1395,0.1849,0.5865,189
-stl_pct,STL%,ncaa,-0.296,0.1001,0.8279,0.0579,0.1654,486
-stl_pct,STL%,vtb,-0.4999,0.1063,1.2732,0.1562,0.4873,332
-blk_pct,BLK%,acb,-0.11,0.0426,1.0196,0.042,0.3934,1200
-blk_pct,BLK%,bbl,-0.1836,0.053,1.0673,0.0426,0.3054,852
-blk_pct,BLK%,bcl,-0.2639,0.0551,1.0142,0.0486,0.4455,979
-blk_pct,BLK%,bnxt,-0.4526,0.0999,0.954,0.098,0.0211,201
-blk_pct,BLK%,bsl,-0.2415,0.0683,1.0037,0.0882,0.4522,287
-blk_pct,BLK%,cba,-0.3256,0.1229,0.9722,0.0744,0.0934,79
-blk_pct,BLK%,eurocup,-0.1818,0.0485,1.1407,0.0574,0.4687,1100
-blk_pct,BLK%,euroleague,-0.0,0.0,1.0,0.0,0.3363,1183
-blk_pct,BLK%,feb1,-0.0477,0.112,1.04,0.1191,0.2965,227
-blk_pct,BLK%,feb2,0.0295,0.1518,1.2962,0.1224,0.5672,353
-blk_pct,BLK%,feb3,-0.431,0.1549,1.3294,0.1428,0.3935,230
-blk_pct,BLK%,fec,-0.4374,0.0577,1.2251,0.0825,0.5007,632
-blk_pct,BLK%,gbl,-0.2281,0.052,0.9228,0.0577,0.3445,512
-blk_pct,BLK%,gleague,0.4133,0.0724,1.0348,0.0591,0.1499,1198
-blk_pct,BLK%,lba,-0.1729,0.0406,1.0967,0.0618,0.4662,790
-blk_pct,BLK%,nba,0.6145,0.0937,1.0639,0.0967,0.3967,809
-blk_pct,BLK%,nbl,-0.0301,0.0675,1.2708,0.0927,0.4831,179
-blk_pct,BLK%,ncaa,0.3328,0.0885,0.9227,0.0561,0.0936,475
-blk_pct,BLK%,vtb,-0.2248,0.0805,0.9594,0.0787,0.3895,317
-stl_p100,Robos por 100 pos.,acb,-0.1674,0.0645,1.1806,0.0601,0.6245,1230
-stl_p100,Robos por 100 pos.,bbl,-0.2677,0.0773,1.0225,0.0419,0.3474,899
-stl_p100,Robos por 100 pos.,bcl,-0.3581,0.0657,0.8578,0.0577,0.01,1107
-stl_p100,Robos por 100 pos.,bnxt,-0.8794,0.1259,0.9637,0.136,0.0144,203
-stl_p100,Robos por 100 pos.,bsl,-0.3702,0.0896,1.3665,0.1008,0.5043,292
-stl_p100,Robos por 100 pos.,cba,-1.0394,0.1328,0.993,0.1323,0.2628,93
-stl_p100,Robos por 100 pos.,eurocup,-0.3147,0.0713,1.2187,0.0524,0.548,1214
-stl_p100,Robos por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.3603,1318
-stl_p100,Robos por 100 pos.,feb1,-0.2859,0.1255,0.9953,0.1444,0.3435,228
-stl_p100,Robos por 100 pos.,feb2,-0.3255,0.1302,1.2238,0.1419,0.5365,353
-stl_p100,Robos por 100 pos.,feb3,-0.3727,0.1206,0.8574,0.0775,0.1053,230
-stl_p100,Robos por 100 pos.,fec,-0.5731,0.1022,1.4746,0.1442,0.528,697
-stl_p100,Robos por 100 pos.,gbl,-0.2266,0.0934,0.9612,0.0556,0.1733,532
-stl_p100,Robos por 100 pos.,gleague,-0.0702,0.1109,1.0142,0.068,0.1796,1238
-stl_p100,Robos por 100 pos.,lba,-0.3127,0.0757,1.0152,0.0467,0.2511,835
-stl_p100,Robos por 100 pos.,lnb,-0.0727,0.0434,1.2363,0.0787,0.3908,944
-stl_p100,Robos por 100 pos.,nba,0.0826,0.1055,1.0628,0.0904,0.3856,813
-stl_p100,Robos por 100 pos.,nbl,-0.4896,0.1599,1.0857,0.1757,0.5698,189
-stl_p100,Robos por 100 pos.,ncaa,-0.2843,0.0962,0.8333,0.0561,0.2705,486
-stl_p100,Robos por 100 pos.,vtb,-0.4713,0.1019,1.1924,0.1445,0.4608,332
-blk_p100,Tapones por 100 pos.,acb,-0.1087,0.0447,1.0391,0.049,0.3358,1230
-blk_p100,Tapones por 100 pos.,bbl,-0.1972,0.0523,1.0924,0.0534,0.3104,899
-blk_p100,Tapones por 100 pos.,bcl,-0.2692,0.052,0.9534,0.0492,0.223,1107
-blk_p100,Tapones por 100 pos.,bnxt,-0.4152,0.0909,0.9672,0.0734,0.01,203
-blk_p100,Tapones por 100 pos.,bsl,-0.2312,0.0786,0.9649,0.0712,0.3584,292
-blk_p100,Tapones por 100 pos.,cba,-0.4306,0.1231,0.9674,0.1145,0.1233,93
-blk_p100,Tapones por 100 pos.,eurocup,-0.1961,0.041,1.1247,0.0463,0.4315,1214
-blk_p100,Tapones por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.2541,1318
-blk_p100,Tapones por 100 pos.,feb1,-0.0793,0.0639,0.9999,0.0938,0.2172,228
-blk_p100,Tapones por 100 pos.,feb2,-0.0193,0.1334,1.2835,0.1433,0.5226,353
-blk_p100,Tapones por 100 pos.,feb3,-0.505,0.1153,1.3456,0.1495,0.3826,230
-blk_p100,Tapones por 100 pos.,fec,-0.4254,0.0532,1.2301,0.0495,0.4832,697
-blk_p100,Tapones por 100 pos.,gbl,-0.2567,0.0512,0.9011,0.0401,0.2502,532
-blk_p100,Tapones por 100 pos.,gleague,0.4103,0.0831,1.0324,0.0564,0.1054,1238
-blk_p100,Tapones por 100 pos.,lba,-0.1667,0.0523,1.1454,0.0506,0.4661,835
-blk_p100,Tapones por 100 pos.,lnb,-0.1444,0.0347,1.164,0.0528,0.3701,944
-blk_p100,Tapones por 100 pos.,nba,0.6161,0.0869,1.0684,0.0649,0.3969,813
-blk_p100,Tapones por 100 pos.,nbl,-0.0604,0.1096,1.27,0.1286,0.4594,189
-blk_p100,Tapones por 100 pos.,ncaa,0.3272,0.0737,0.918,0.0656,0.0833,486
-blk_p100,Tapones por 100 pos.,vtb,-0.2462,0.0546,1.0191,0.0776,0.4043,332
-pf_p100,Faltas por 100 pos.,acb,0.2669,0.0404,1.1226,0.0748,0.2584,1225
-pf_p100,Faltas por 100 pos.,bbl,0.6232,0.0521,1.1206,0.0352,0.1937,886
-pf_p100,Faltas por 100 pos.,bcl,0.6131,0.0566,1.2409,0.0649,0.405,1097
-pf_p100,Faltas por 100 pos.,bnxt,0.7248,0.1018,0.9749,0.0576,0.281,202
-pf_p100,Faltas por 100 pos.,bsl,0.5227,0.0947,1.0097,0.0854,0.01,291
-pf_p100,Faltas por 100 pos.,cba,1.1642,0.2177,1.3536,0.1682,0.2777,88
-pf_p100,Faltas por 100 pos.,eurocup,0.521,0.0613,1.1117,0.0557,0.2688,1205
-pf_p100,Faltas por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.1562,1311
-pf_p100,Faltas por 100 pos.,feb1,0.8292,0.124,1.1622,0.0999,0.3459,227
-pf_p100,Faltas por 100 pos.,feb2,1.1415,0.0953,1.0408,0.0834,0.2782,353
-pf_p100,Faltas por 100 pos.,feb3,1.7663,0.1127,1.0938,0.07,0.01,230
-pf_p100,Faltas por 100 pos.,fec,0.666,0.0609,1.3179,0.0807,0.5407,692
-pf_p100,Faltas por 100 pos.,gbl,0.5769,0.0877,1.1668,0.0561,0.2386,524
-pf_p100,Faltas por 100 pos.,gleague,0.2154,0.059,0.9017,0.055,0.1249,1223
-pf_p100,Faltas por 100 pos.,lba,0.4383,0.0578,1.1592,0.0616,0.2783,825
-pf_p100,Faltas por 100 pos.,lnb,0.3015,0.0593,0.9716,0.0545,0.1993,782
-pf_p100,Faltas por 100 pos.,nba,-0.2985,0.078,1.018,0.06,0.4056,813
-pf_p100,Faltas por 100 pos.,nbl,0.2397,0.1002,1.167,0.1317,0.5443,183
-pf_p100,Faltas por 100 pos.,ncaa,0.5346,0.0632,0.8157,0.0666,0.1659,485
-pf_p100,Faltas por 100 pos.,vtb,0.7522,0.0977,1.1867,0.0628,0.2508,327
-drtg,DRtg individual,acb,0.4328,0.0742,0.9547,0.0885,0.01,1200
-drtg,DRtg individual,bbl,1.3786,0.2303,1.0204,0.0673,0.01,852
-drtg,DRtg individual,bcl,1.0964,0.144,1.1538,0.2079,0.01,979
-drtg,DRtg individual,bnxt,2.7327,0.3938,1.0856,0.1208,0.01,201
-drtg,DRtg individual,bsl,1.0486,0.1485,1.0979,0.1012,0.01,287
-drtg,DRtg individual,cba,1.5098,0.1899,1.2329,0.115,0.01,79
-drtg,DRtg individual,eurocup,0.7394,0.0913,0.8931,0.1186,0.01,1100
-drtg,DRtg individual,euroleague,-0.0,0.0,1.0,0.0,0.01,1183
-drtg,DRtg individual,feb1,2.3533,0.7857,19.9954,8.8545,1.0417,227
-drtg,DRtg individual,feb2,0.6763,0.289,2.6127,1.0941,0.8014,353
-drtg,DRtg individual,feb3,1.2897,0.2084,1.1291,0.1291,0.01,230
-drtg,DRtg individual,fec,2.0181,0.3151,1.2404,0.1679,0.01,632
-drtg,DRtg individual,gbl,1.287,0.1989,1.069,0.1207,0.01,512
-drtg,DRtg individual,gleague,0.6407,0.1033,1.2333,0.4133,0.01,1198
-drtg,DRtg individual,lba,1.0424,0.1512,0.9339,0.082,0.01,790
-drtg,DRtg individual,nba,0.1351,0.1074,0.9945,0.3211,0.01,809
-drtg,DRtg individual,nbl,0.904,0.1222,0.834,0.3103,0.01,179
-drtg,DRtg individual,ncaa,0.7799,0.0974,0.6005,0.1448,0.01,475
-drtg,DRtg individual,vtb,1.4199,0.2013,1.3658,0.1622,0.01,317
-per,PER,acb,-0.401,0.0338,0.9453,0.0421,0.4636,1225
-per,PER,bbl,-0.7988,0.0515,0.9398,0.0635,0.4424,886
-per,PER,bcl,-0.9706,0.0637,1.3318,0.0821,0.1208,1097
-per,PER,bnxt,-1.3969,0.0825,0.7937,0.0751,0.01,202
-per,PER,bsl,-0.6766,0.0633,0.993,0.0971,0.3534,291
-per,PER,cba,-1.5073,0.1585,1.2556,0.1445,0.2141,88
-per,PER,eurocup,-0.6422,0.0434,0.8714,0.0447,0.3591,1205
-per,PER,euroleague,-0.0,0.0,1.0,0.0,0.5223,1311
-per,PER,feb1,-1.0,0.1146,0.8861,0.0744,0.3184,227
-per,PER,feb2,-1.8377,0.0987,1.0963,0.0933,0.376,353
-per,PER,feb3,-3.2203,0.0713,1.1171,0.074,0.1693,230
-per,PER,fec,-1.3374,0.0699,1.2909,0.0804,0.494,692
-per,PER,gbl,-0.7459,0.0494,0.7346,0.0631,0.01,524
-per,PER,gleague,-0.2805,0.0424,0.7566,0.0645,0.2454,1223
-per,PER,lba,-0.6907,0.0577,0.9362,0.059,0.4535,825
-per,PER,lnb,-0.4747,0.0585,0.7116,0.0313,0.01,782
-per,PER,nba,0.4908,0.0832,1.0835,0.1271,0.4539,813
-per,PER,nbl,-0.6646,0.0935,0.9403,0.0783,0.5776,183
-per,PER,ncaa,-0.6067,0.0737,0.8944,0.1226,0.5457,485
-per,PER,vtb,-0.9505,0.0899,1.0786,0.0775,0.3412,327
-ortg,ORtg individual,acb,-0.4473,0.0576,0.7321,0.0507,0.4288,1200
-ortg,ORtg individual,bbl,-0.9543,0.099,1.0778,0.1101,0.5544,852
-ortg,ORtg individual,bcl,-1.2535,0.0763,1.5059,0.0988,0.6663,979
-ortg,ORtg individual,bnxt,-1.6878,0.0875,0.8561,0.0561,0.01,201
-ortg,ORtg individual,bsl,-0.7852,0.0942,0.8896,0.0986,0.01,287
-ortg,ORtg individual,cba,-1.0458,0.172,1.1488,0.2212,0.4453,79
-ortg,ORtg individual,eurocup,-0.7497,0.0611,0.8387,0.0499,0.4222,1100
-ortg,ORtg individual,euroleague,-0.0,0.0,1.0,0.0,0.8159,1183
-ortg,ORtg individual,feb1,-1.0904,0.1216,0.8264,0.0948,0.5132,227
-ortg,ORtg individual,feb2,-1.8414,0.1199,1.1092,0.1456,0.4393,353
-ortg,ORtg individual,feb3,-3.112,0.142,1.0314,0.1262,0.01,230
-ortg,ORtg individual,fec,-2.0963,0.2207,1.8512,0.2465,0.5336,632
-ortg,ORtg individual,gbl,-0.9842,0.0845,0.6434,0.0404,0.1264,512
-ortg,ORtg individual,gleague,-0.8192,0.1084,1.1893,0.3072,0.8851,1198
-ortg,ORtg individual,lba,-0.9228,0.0812,0.8643,0.1007,0.5457,790
-ortg,ORtg individual,nba,-0.2275,0.0911,1.0333,0.1055,0.7623,809
-ortg,ORtg individual,nbl,-0.9374,0.1194,1.092,0.1436,0.4391,179
-ortg,ORtg individual,ncaa,-1.1362,0.0866,0.7716,0.0705,0.01,475
-ortg,ORtg individual,vtb,-0.987,0.0818,1.1994,0.096,0.3806,317
-game_score_p40,Game Score por 40',acb,-0.3695,0.0313,0.9421,0.04,0.3892,1225
-game_score_p40,Game Score por 40',bbl,-0.7593,0.0502,0.9124,0.0598,0.3731,886
-game_score_p40,Game Score por 40',bcl,-0.9523,0.0585,1.3128,0.077,0.0729,1097
-game_score_p40,Game Score por 40',bnxt,-1.3593,0.0845,0.7777,0.0813,0.01,202
-game_score_p40,Game Score por 40',bsl,-0.6664,0.0634,0.9896,0.0885,0.3057,291
-game_score_p40,Game Score por 40',cba,-1.5234,0.1569,1.2525,0.1357,0.1846,88
-game_score_p40,Game Score por 40',eurocup,-0.6333,0.0424,0.9002,0.0469,0.3281,1205
-game_score_p40,Game Score por 40',euroleague,-0.0,0.0,1.0,0.0,0.452,1311
-game_score_p40,Game Score por 40',feb1,-0.9769,0.1182,0.8793,0.0861,0.2312,227
-game_score_p40,Game Score por 40',feb2,-1.8419,0.09,1.0798,0.0951,0.3286,353
-game_score_p40,Game Score por 40',feb3,-3.2014,0.0781,1.0905,0.0764,0.1454,230
-game_score_p40,Game Score por 40',fec,-1.4764,0.072,1.4392,0.08,0.0772,692
-game_score_p40,Game Score por 40',gbl,-0.7295,0.0445,0.7409,0.0607,0.01,524
-game_score_p40,Game Score por 40',gleague,-0.2386,0.0387,0.7673,0.0664,0.252,1223
-game_score_p40,Game Score por 40',lba,-0.6603,0.0542,0.9425,0.052,0.3802,825
-game_score_p40,Game Score por 40',lnb,-0.4666,0.0534,0.7227,0.0298,0.01,782
-game_score_p40,Game Score por 40',nba,0.5408,0.0997,1.1033,0.1359,0.428,813
-game_score_p40,Game Score por 40',nbl,-0.6235,0.09,0.9222,0.0847,0.4908,183
-game_score_p40,Game Score por 40',ncaa,-0.6026,0.0728,0.8818,0.1191,0.5041,485
-game_score_p40,Game Score por 40',vtb,-0.9316,0.0844,1.0735,0.0718,0.2997,327
-ws_per_40,Win Shares por 40',acb,-0.4016,0.0415,0.7239,0.0493,0.4663,1200
-ws_per_40,Win Shares por 40',bbl,-0.9424,0.0586,0.8212,0.0526,0.5656,852
-ws_per_40,Win Shares por 40',bcl,-1.1081,0.0659,1.1495,0.0861,0.6202,979
-ws_per_40,Win Shares por 40',bnxt,-1.7378,0.071,0.7818,0.0575,0.2312,201
-ws_per_40,Win Shares por 40',bsl,-0.789,0.0732,0.8318,0.0806,0.3008,287
-ws_per_40,Win Shares por 40',cba,-1.0978,0.1287,1.0658,0.1445,0.3604,79
-ws_per_40,Win Shares por 40',eurocup,-0.7144,0.054,0.7824,0.0493,0.5761,1100
-ws_per_40,Win Shares por 40',euroleague,-0.0,0.0,1.0,0.0,0.7648,1183
-ws_per_40,Win Shares por 40',feb1,-1.1438,0.0821,0.7583,0.0638,0.3751,227
-ws_per_40,Win Shares por 40',feb2,-1.8358,0.0732,1.0365,0.1427,0.661,353
-ws_per_40,Win Shares por 40',feb3,-2.8295,0.0723,0.8841,0.1078,0.2881,230
-ws_per_40,Win Shares por 40',fec,-1.756,0.0835,1.289,0.0949,0.1528,632
-ws_per_40,Win Shares por 40',gbl,-0.9125,0.066,0.6801,0.0496,0.3281,512
-ws_per_40,Win Shares por 40',gleague,-0.7471,0.1006,1.2387,0.3302,0.961,1198
-ws_per_40,Win Shares por 40',lba,-0.7978,0.06,0.7057,0.0548,0.4871,790
-ws_per_40,Win Shares por 40',nba,-0.0503,0.0741,1.0842,0.1182,0.6776,809
-ws_per_40,Win Shares por 40',nbl,-0.8489,0.0784,1.0521,0.1,0.8636,179
-ws_per_40,Win Shares por 40',ncaa,-1.0954,0.0757,0.9134,0.0969,0.6376,475
-ws_per_40,Win Shares por 40',vtb,-1.0,0.0815,1.0197,0.0738,0.3661,317
-pct_aro,"% de tiros en el aro (< 1,8 m)",acb,-0.0474,0.0366,1.1954,0.0419,0.1677,1189
-pct_aro,"% de tiros en el aro (< 1,8 m)",bbl,0.0678,0.0394,1.0402,0.0363,0.01,887
-pct_aro,"% de tiros en el aro (< 1,8 m)",bcl,-0.0314,0.0435,1.021,0.0328,0.01,1090
-pct_aro,"% de tiros en el aro (< 1,8 m)",bnxt,-0.0167,0.0555,1.1717,0.0508,0.01,199
-pct_aro,"% de tiros en el aro (< 1,8 m)",bsl,0.0812,0.0604,0.9845,0.0564,0.01,287
-pct_aro,"% de tiros en el aro (< 1,8 m)",eurocup,-0.0206,0.0438,1.0191,0.0307,0.01,1190
-pct_aro,"% de tiros en el aro (< 1,8 m)",euroleague,-0.0,0.0,1.0,0.0,0.01,1300
-pct_aro,"% de tiros en el aro (< 1,8 m)",feb1,-0.0236,0.1721,1.0485,0.0942,0.01,100
-pct_aro,"% de tiros en el aro (< 1,8 m)",feb2,-0.1851,0.1503,0.8972,0.0687,0.01,153
-pct_aro,"% de tiros en el aro (< 1,8 m)",feb3,-0.2036,0.127,0.9187,0.1329,0.066,109
-pct_aro,"% de tiros en el aro (< 1,8 m)",fec,-0.1068,0.0443,0.8231,0.0298,0.01,675
-pct_aro,"% de tiros en el aro (< 1,8 m)",gbl,-0.0296,0.0371,1.0608,0.0428,0.01,526
-pct_aro,"% de tiros en el aro (< 1,8 m)",gleague,0.3611,0.0566,1.192,0.0532,0.1457,1208
-pct_aro,"% de tiros en el aro (< 1,8 m)",lba,-0.2064,0.0429,1.151,0.0295,0.2004,823
-pct_aro,"% de tiros en el aro (< 1,8 m)",lnb,0.1399,0.0326,1.1171,0.0331,0.0618,859
-pct_aro,"% de tiros en el aro (< 1,8 m)",nba,0.2715,0.0795,1.0073,0.0486,0.01,803
-pct_aro,"% de tiros en el aro (< 1,8 m)",nbl,0.184,0.0743,0.9514,0.0747,0.01,180
-pct_aro,"% de tiros en el aro (< 1,8 m)",ncaa,0.5151,0.0648,1.0716,0.0676,0.01,476
-pct_aro,"% de tiros en el aro (< 1,8 m)",vtb,-0.0689,0.0394,1.166,0.0462,0.1259,228
-pct_corta,"% de tiros cortos (1,8-4,25 m)",acb,0.0177,0.0558,1.1648,0.0603,0.2862,1189
-pct_corta,"% de tiros cortos (1,8-4,25 m)",bbl,-0.0987,0.069,1.0228,0.0553,0.2411,887
-pct_corta,"% de tiros cortos (1,8-4,25 m)",bcl,-0.1204,0.0749,1.1545,0.06,0.5302,1090
-pct_corta,"% de tiros cortos (1,8-4,25 m)",bnxt,0.0578,0.0975,0.9588,0.0919,0.2424,199
-pct_corta,"% de tiros cortos (1,8-4,25 m)",bsl,-0.0748,0.0579,0.9347,0.0686,0.3333,287
-pct_corta,"% de tiros cortos (1,8-4,25 m)",eurocup,-0.0333,0.0554,1.0736,0.0564,0.21,1190
-pct_corta,"% de tiros cortos (1,8-4,25 m)",euroleague,-0.0,0.0,1.0,0.0,0.1824,1300
-pct_corta,"% de tiros cortos (1,8-4,25 m)",feb1,-0.0851,0.1347,0.9327,0.0698,0.01,100
-pct_corta,"% de tiros cortos (1,8-4,25 m)",feb2,0.0901,0.1515,1.0064,0.0869,0.01,153
-pct_corta,"% de tiros cortos (1,8-4,25 m)",feb3,-0.1166,0.1374,0.9901,0.0804,0.1307,109
-pct_corta,"% de tiros cortos (1,8-4,25 m)",fec,-0.1654,0.0773,1.0357,0.0658,0.3559,675
-pct_corta,"% de tiros cortos (1,8-4,25 m)",gbl,-0.0503,0.061,0.9583,0.0607,0.2533,526
-pct_corta,"% de tiros cortos (1,8-4,25 m)",gleague,0.0757,0.0531,1.0758,0.0761,0.4399,1208
-pct_corta,"% de tiros cortos (1,8-4,25 m)",lba,0.0731,0.0469,1.0103,0.0601,0.1442,823
-pct_corta,"% de tiros cortos (1,8-4,25 m)",lnb,0.058,0.0572,0.9705,0.0464,0.2484,859
-pct_corta,"% de tiros cortos (1,8-4,25 m)",nba,0.3436,0.0614,0.9666,0.0553,0.3633,803
-pct_corta,"% de tiros cortos (1,8-4,25 m)",nbl,-0.1079,0.076,0.8958,0.0778,0.4387,180
-pct_corta,"% de tiros cortos (1,8-4,25 m)",ncaa,0.0259,0.0631,0.7167,0.0434,0.01,476
-pct_corta,"% de tiros cortos (1,8-4,25 m)",vtb,-0.1269,0.0936,1.1698,0.1547,0.7219,228
-pct_media,% de tiros de media distancia,acb,-0.0782,0.0261,0.905,0.0423,0.2228,1189
-pct_media,% de tiros de media distancia,bbl,-0.0744,0.0332,0.8766,0.0238,0.1521,887
-pct_media,% de tiros de media distancia,bcl,-0.0286,0.0352,0.9565,0.0292,0.2721,1090
-pct_media,% de tiros de media distancia,bnxt,-0.0644,0.0556,0.9251,0.0622,0.1997,199
-pct_media,% de tiros de media distancia,bsl,0.0381,0.0688,0.9012,0.0514,0.1156,287
-pct_media,% de tiros de media distancia,eurocup,-0.0476,0.0333,0.8717,0.0282,0.2093,1190
-pct_media,% de tiros de media distancia,euroleague,-0.0,0.0,1.0,0.0,0.318,1300
-pct_media,% de tiros de media distancia,feb1,-0.1524,0.1225,0.8886,0.1339,0.01,100
-pct_media,% de tiros de media distancia,feb2,-0.0836,0.2034,1.2655,0.2094,0.3338,153
-pct_media,% de tiros de media distancia,feb3,-0.1671,0.2285,1.0427,0.2012,0.0393,109
-pct_media,% de tiros de media distancia,fec,-0.0914,0.0518,0.8862,0.0515,0.1891,675
-pct_media,% de tiros de media distancia,gbl,0.0195,0.0512,0.7817,0.0454,0.01,526
-pct_media,% de tiros de media distancia,gleague,-0.1304,0.0379,0.8965,0.0739,0.3401,1208
-pct_media,% de tiros de media distancia,lba,0.1153,0.0269,0.8656,0.0277,0.1631,823
-pct_media,% de tiros de media distancia,lnb,0.0124,0.0418,1.0253,0.0402,0.2988,859
-pct_media,% de tiros de media distancia,nba,0.073,0.0438,0.9988,0.0627,0.3804,803
-pct_media,% de tiros de media distancia,nbl,-0.4197,0.051,0.8146,0.0588,0.0924,180
-pct_media,% de tiros de media distancia,ncaa,-0.2215,0.0489,0.6148,0.0578,0.01,476
-pct_media,% de tiros de media distancia,vtb,0.0589,0.0587,0.9234,0.0866,0.4947,228
-pct_t3_esquina,% de tiros que son triples de esquina,acb,-0.043,0.0501,1.071,0.0384,0.01,1189
-pct_t3_esquina,% de tiros que son triples de esquina,bbl,0.0637,0.0606,1.0251,0.0261,0.01,887
-pct_t3_esquina,% de tiros que son triples de esquina,bcl,-0.0643,0.0494,0.8967,0.0308,0.01,1090
-pct_t3_esquina,% de tiros que son triples de esquina,bnxt,0.0376,0.0937,1.0957,0.1023,0.01,199
-pct_t3_esquina,% de tiros que son triples de esquina,bsl,0.0357,0.0811,1.1919,0.0629,0.3223,287
-pct_t3_esquina,% de tiros que son triples de esquina,eurocup,-0.013,0.0614,0.9811,0.043,0.01,1190
-pct_t3_esquina,% de tiros que son triples de esquina,euroleague,-0.0,0.0,1.0,0.0,0.01,1300
-pct_t3_esquina,% de tiros que son triples de esquina,feb1,-0.0139,0.1287,0.9845,0.0653,0.01,100
-pct_t3_esquina,% de tiros que son triples de esquina,feb2,-0.1202,0.1496,1.0268,0.1069,0.0298,153
-pct_t3_esquina,% de tiros que son triples de esquina,feb3,0.4065,0.1372,1.0167,0.0737,0.01,109
-pct_t3_esquina,% de tiros que son triples de esquina,fec,0.0192,0.0657,0.8599,0.0339,0.01,675
-pct_t3_esquina,% de tiros que son triples de esquina,gbl,-0.0591,0.0719,0.8775,0.0485,0.01,526
-pct_t3_esquina,% de tiros que son triples de esquina,gleague,0.0235,0.0491,1.2075,0.0672,0.2592,1208
-pct_t3_esquina,% de tiros que son triples de esquina,lba,-0.0141,0.0588,1.125,0.0484,0.2223,823
-pct_t3_esquina,% de tiros que son triples de esquina,lnb,-0.1687,0.0382,0.9792,0.0409,0.01,859
-pct_t3_esquina,% de tiros que son triples de esquina,nba,-0.3429,0.0623,1.1801,0.0533,0.3405,803
-pct_t3_esquina,% de tiros que son triples de esquina,nbl,0.1984,0.1282,0.9248,0.1239,0.0619,180
-pct_t3_esquina,% de tiros que son triples de esquina,ncaa,-0.0616,0.0766,0.9626,0.0776,0.01,476
-pct_t3_esquina,% de tiros que son triples de esquina,vtb,0.2153,0.0789,1.1884,0.0752,0.01,228
-pct_asistidas,% de sus canastas que son asistidas,acb,0.0652,0.0337,0.9819,0.0326,0.3494,1220
-pct_asistidas,% de sus canastas que son asistidas,bbl,0.0506,0.0309,0.8611,0.0341,0.01,891
-pct_asistidas,% de sus canastas que son asistidas,bcl,0.062,0.0373,0.9245,0.0468,0.3936,1092
-pct_asistidas,% de sus canastas que son asistidas,bnxt,0.1538,0.0701,0.9857,0.099,0.3538,203
-pct_asistidas,% de sus canastas que son asistidas,bsl,-0.0278,0.0658,0.931,0.0604,0.2256,291
-pct_asistidas,% de sus canastas que son asistidas,cba,0.1137,0.1448,1.2155,0.0648,0.6195,86
-pct_asistidas,% de sus canastas que son asistidas,eurocup,-0.0065,0.0385,0.9593,0.0335,0.277,1195
-pct_asistidas,% de sus canastas que son asistidas,euroleague,-0.0,0.0,1.0,0.0,0.3788,1301
-pct_asistidas,% de sus canastas que son asistidas,feb1,0.1377,0.0713,0.9876,0.0682,0.3792,228
-pct_asistidas,% de sus canastas que son asistidas,feb2,0.1458,0.0585,0.8806,0.0905,0.01,353
-pct_asistidas,% de sus canastas que son asistidas,feb3,0.2968,0.0757,1.1158,0.1135,0.2845,230
-pct_asistidas,% de sus canastas que son asistidas,fec,-0.0294,0.0604,0.8413,0.0508,0.2834,679
-pct_asistidas,% de sus canastas que son asistidas,gbl,-0.1326,0.0549,0.9703,0.0447,0.3035,528
-pct_asistidas,% de sus canastas que son asistidas,gleague,-0.2326,0.0565,1.0062,0.0823,0.3729,1224
-pct_asistidas,% de sus canastas que son asistidas,lba,0.0056,0.0416,0.9075,0.042,0.0988,828
-pct_asistidas,% de sus canastas que son asistidas,lnb,-0.0309,0.0467,0.8465,0.0341,0.01,875
-pct_asistidas,% de sus canastas que son asistidas,nba,-0.4724,0.0748,1.2684,0.1652,0.5023,808
-pct_asistidas,% de sus canastas que son asistidas,nbl,-0.0201,0.1278,1.0875,0.1062,0.6518,186
-pct_asistidas,% de sus canastas que son asistidas,ncaa,-0.1516,0.0723,1.0221,0.0859,0.4021,484
-pct_asistidas,% de sus canastas que son asistidas,vtb,0.0594,0.1108,1.084,0.1495,0.7244,247
-rapm,RAPM (impacto en pista por 100 pos.),acb,-0.4794,0.108,1.0955,0.6757,0.01,1196
-rapm,RAPM (impacto en pista por 100 pos.),bbl,-1.4394,0.2554,5.3604,2.3725,0.7344,514
-rapm,RAPM (impacto en pista por 100 pos.),bcl,-1.6692,0.3243,4.2286,1.0725,0.5707,1044
-rapm,RAPM (impacto en pista por 100 pos.),bnxt,-1.2079,0.1003,0.9506,0.7052,0.01,181
-rapm,RAPM (impacto en pista por 100 pos.),bsl,-0.9667,0.4427,1.3086,1.2973,0.01,288
-rapm,RAPM (impacto en pista por 100 pos.),cba,-0.9123,0.3231,1.8044,0.8333,0.0167,86
-rapm,RAPM (impacto en pista por 100 pos.),eurocup,-1.0309,0.329,3.8397,2.999,0.609,1153
-rapm,RAPM (impacto en pista por 100 pos.),euroleague,-0.0,0.0,1.0,0.0,0.01,1250
-rapm,RAPM (impacto en pista por 100 pos.),feb1,-2.6968,0.5108,19.3317,3.9884,0.7699,227
-rapm,RAPM (impacto en pista por 100 pos.),feb2,-1.7725,0.2168,19.7871,0.813,0.7141,352
-rapm,RAPM (impacto en pista por 100 pos.),feb3,-0.5739,0.0878,0.9688,0.1527,0.01,230
-rapm,RAPM (impacto en pista por 100 pos.),fec,-3.1751,0.9313,5.8751,2.1851,0.4171,636
-rapm,RAPM (impacto en pista por 100 pos.),gbl,-1.1552,0.2474,1.2969,0.2254,0.01,504
-rapm,RAPM (impacto en pista por 100 pos.),gleague,-1.6584,0.4037,18.6038,5.4756,0.7781,1011
-rapm,RAPM (impacto en pista por 100 pos.),lba,-0.7134,0.1394,0.9056,0.5917,0.01,808
-rapm,RAPM (impacto en pista por 100 pos.),lnb,-0.9183,0.1448,1.1197,0.621,0.01,844
-rapm,RAPM (impacto en pista por 100 pos.),nba,-0.2986,0.4671,10.1804,6.6371,0.7819,684
-rapm,RAPM (impacto en pista por 100 pos.),nbl,-0.4074,0.3631,0.7129,4.2763,0.01,177
-rapm,RAPM (impacto en pista por 100 pos.),ncaa,-8.6283,1.0467,19.9986,2.3006,0.3993,149
-rapm,RAPM (impacto en pista por 100 pos.),vtb,-1.2054,0.1974,2.4233,0.5498,0.2399,240
-orapm,RAPM ofensivo,acb,-0.2531,0.1282,1.0727,1.0673,0.6474,1196
-orapm,RAPM ofensivo,bbl,-0.5788,0.1671,1.2987,1.1525,0.7274,514
-orapm,RAPM ofensivo,bcl,-0.7286,0.3218,1.4796,1.2429,0.4525,1044
-orapm,RAPM ofensivo,bnxt,-0.8922,0.1339,0.8029,0.7244,0.5021,181
-orapm,RAPM ofensivo,bsl,-0.4023,0.298,0.9843,1.5567,0.5997,288
-orapm,RAPM ofensivo,cba,-0.5889,0.1108,1.2943,0.4334,0.5752,86
-orapm,RAPM ofensivo,eurocup,-0.4245,0.144,1.1432,0.812,0.6428,1153
-orapm,RAPM ofensivo,euroleague,-0.0,0.0,1.0,0.0,0.6529,1250
-orapm,RAPM ofensivo,feb1,-0.5068,0.0732,1.0149,0.3002,0.7157,227
-orapm,RAPM ofensivo,feb2,-0.8703,0.4913,1.3866,5.9091,0.7282,352
-orapm,RAPM ofensivo,feb3,-1.2463,0.0823,0.8114,0.1233,0.4876,230
-orapm,RAPM ofensivo,fec,-0.9703,0.5916,1.5005,1.6909,0.3402,636
-orapm,RAPM ofensivo,gbl,-0.5523,0.2131,0.8034,0.4288,0.4709,504
-orapm,RAPM ofensivo,gleague,-0.5631,0.4638,3.5393,6.8181,0.7769,1011
-orapm,RAPM ofensivo,lba,-0.5599,0.1423,1.215,0.8626,0.8361,808
-orapm,RAPM ofensivo,lnb,-0.4971,0.1154,1.1681,0.5513,0.6939,844
-orapm,RAPM ofensivo,nba,-0.0091,0.3703,1.7812,7.5414,0.766,684
-orapm,RAPM ofensivo,nbl,-0.4733,0.5743,1.5489,4.6908,0.6794,177
-orapm,RAPM ofensivo,ncaa,-1.2969,2.498,2.1095,7.3938,0.387,149
-orapm,RAPM ofensivo,vtb,-0.5786,0.1287,1.1449,0.2703,0.5048,240
-drapm,RAPM defensivo (> 0 = mejor defensa),acb,-0.1023,0.0567,1.4058,0.7311,0.7252,1196
-drapm,RAPM defensivo (> 0 = mejor defensa),bbl,-0.3527,0.0935,1.23,1.0824,0.7102,514
-drapm,RAPM defensivo (> 0 = mejor defensa),bcl,-0.3596,0.1019,1.2147,0.5404,0.7067,1044
-drapm,RAPM defensivo (> 0 = mejor defensa),bnxt,-0.7838,0.1086,1.1193,0.2373,0.6479,181
-drapm,RAPM defensivo (> 0 = mejor defensa),bsl,-0.4472,0.1017,1.2328,0.5875,0.7333,288
-drapm,RAPM defensivo (> 0 = mejor defensa),cba,-0.5574,0.1416,1.4978,0.5579,0.5556,86
-drapm,RAPM defensivo (> 0 = mejor defensa),eurocup,-0.3157,0.0661,1.6805,0.6699,0.6354,1153
-drapm,RAPM defensivo (> 0 = mejor defensa),euroleague,-0.0,0.0,1.0,0.0,0.7559,1250
-drapm,RAPM defensivo (> 0 = mejor defensa),feb1,-0.3347,0.0885,1.2672,0.456,0.73,227
-drapm,RAPM defensivo (> 0 = mejor defensa),feb2,-0.4269,0.0866,1.3944,0.2156,0.647,352
-drapm,RAPM defensivo (> 0 = mejor defensa),feb3,-0.6655,0.0737,1.3473,0.2676,0.6279,230
-drapm,RAPM defensivo (> 0 = mejor defensa),fec,-0.6434,0.064,0.9212,0.113,0.5306,636
-drapm,RAPM defensivo (> 0 = mejor defensa),gbl,-0.3578,0.0646,0.8434,0.1715,0.5643,504
-drapm,RAPM defensivo (> 0 = mejor defensa),gleague,-0.3592,0.152,2.6611,1.715,0.7836,1011
-drapm,RAPM defensivo (> 0 = mejor defensa),lba,-0.2808,0.0574,1.1392,0.9368,0.6766,808
-drapm,RAPM defensivo (> 0 = mejor defensa),lnb,-0.3138,0.0625,1.1741,0.8819,0.7336,844
-drapm,RAPM defensivo (> 0 = mejor defensa),nba,-0.0126,0.0628,2.1705,0.2837,0.7899,684
-drapm,RAPM defensivo (> 0 = mejor defensa),nbl,-0.4344,0.1863,1.5929,3.3914,0.6823,177
-drapm,RAPM defensivo (> 0 = mejor defensa),ncaa,-0.8319,0.4418,1.3717,1.1036,0.3982,149
-drapm,RAPM defensivo (> 0 = mejor defensa),vtb,-0.4056,0.1202,1.194,0.5497,0.5784,240
+pts_p100,Puntos por 100 posesiones,acb,-0.292,0.0281,0.9822,0.0361,0.2413,1268
+pts_p100,Puntos por 100 posesiones,bbl,-0.5114,0.0431,0.8908,0.0251,0.2284,921
+pts_p100,Puntos por 100 posesiones,bcl,-0.4785,0.0332,1.1124,0.0332,0.0512,1110
+pts_p100,Puntos por 100 posesiones,bnxt,-0.8956,0.0763,0.8519,0.0601,0.01,208
+pts_p100,Puntos por 100 posesiones,bsl,-0.3981,0.0532,0.9211,0.0498,0.0621,321
+pts_p100,Puntos por 100 posesiones,cba,-1.1821,0.1202,1.2259,0.0739,0.1325,93
+pts_p100,Puntos por 100 posesiones,eurocup,-0.3843,0.0368,0.8089,0.0288,0.0546,1253
+pts_p100,Puntos por 100 posesiones,euroleague,-0.0,0.0,1.0,0.0,0.3311,1345
+pts_p100,Puntos por 100 posesiones,feb1,-0.8568,0.0779,1.001,0.0512,0.2283,251
+pts_p100,Puntos por 100 posesiones,feb2,-1.6747,0.0969,1.152,0.0805,0.3129,387
+pts_p100,Puntos por 100 posesiones,feb3,-3.0045,0.1218,1.1998,0.0971,0.0646,313
+pts_p100,Puntos por 100 posesiones,fec,-0.8759,0.0629,1.0502,0.0509,0.2806,703
+pts_p100,Puntos por 100 posesiones,gbl,-0.4765,0.0585,0.8658,0.0578,0.0117,540
+pts_p100,Puntos por 100 posesiones,gleague,0.0456,0.0481,0.7426,0.0632,0.1738,1250
+pts_p100,Puntos por 100 posesiones,lba,-0.4015,0.0316,0.8939,0.0379,0.1249,864
+pts_p100,Puntos por 100 posesiones,ligau,-2.772,0.1224,1.2228,0.0726,0.0927,83
+pts_p100,Puntos por 100 posesiones,lnb,-0.3781,0.0471,0.9275,0.0361,0.2993,970
+pts_p100,Puntos por 100 posesiones,nba,0.6798,0.1067,1.0238,0.104,0.4345,831
+pts_p100,Puntos por 100 posesiones,nbl,-0.4988,0.0631,0.9811,0.0647,0.3792,191
+pts_p100,Puntos por 100 posesiones,ncaa,-0.1928,0.0717,0.7569,0.0715,0.3549,502
+pts_p100,Puntos por 100 posesiones,vtb,-0.6075,0.0698,1.0042,0.0615,0.3401,335
+ts_pct,TS%,acb,-0.4453,0.0668,0.9839,0.0914,0.7669,1268
+ts_pct,TS%,bbl,-0.8681,0.0899,1.0722,0.1702,0.449,921
+ts_pct,TS%,bcl,-0.9571,0.1,0.8068,0.0686,0.01,1110
+ts_pct,TS%,bnxt,-1.1326,0.1057,0.801,0.0756,0.355,208
+ts_pct,TS%,bsl,-0.7619,0.1326,0.9586,0.1046,0.01,321
+ts_pct,TS%,cba,-0.8878,0.1281,1.2741,0.2904,1.0237,93
+ts_pct,TS%,eurocup,-0.752,0.0852,0.8137,0.0625,0.6601,1253
+ts_pct,TS%,euroleague,-0.0,0.0,1.0,0.0,1.0592,1345
+ts_pct,TS%,feb1,-0.9926,0.1323,0.7984,0.0885,0.3123,251
+ts_pct,TS%,feb2,-1.5891,0.198,1.2271,0.1757,0.4906,387
+ts_pct,TS%,feb3,-2.8656,0.129,1.0969,0.09,0.01,313
+ts_pct,TS%,fec,-1.747,0.1807,1.1324,0.1612,0.01,703
+ts_pct,TS%,gbl,-0.8656,0.0688,0.6504,0.0456,0.2841,540
+ts_pct,TS%,gleague,-0.7219,0.168,2.549,0.3348,1.1368,1250
+ts_pct,TS%,lba,-0.8162,0.0582,0.8915,0.0605,0.3301,864
+ts_pct,TS%,ligau,-2.5768,0.2076,1.1034,0.1309,0.7687,83
+ts_pct,TS%,lnb,-0.7156,0.0958,1.0518,0.101,0.3336,970
+ts_pct,TS%,nba,0.2898,0.0561,1.169,0.117,0.952,831
+ts_pct,TS%,nbl,-1.0059,0.1615,1.0923,0.1312,1.0945,191
+ts_pct,TS%,ncaa,-0.8627,0.1653,1.1234,0.3837,0.6463,502
+ts_pct,TS%,vtb,-0.9128,0.0922,1.1475,0.1592,0.7372,335
+efg_pct,eFG%,acb,-0.4483,0.0739,0.9948,0.1023,0.681,1268
+efg_pct,eFG%,bbl,-0.8661,0.0956,0.9432,0.0891,0.01,921
+efg_pct,eFG%,bcl,-1.0808,0.1106,0.8011,0.0885,0.01,1110
+efg_pct,eFG%,bnxt,-1.1246,0.1295,0.8148,0.0857,0.2017,208
+efg_pct,eFG%,bsl,-0.8345,0.1456,0.9821,0.1086,0.01,321
+efg_pct,eFG%,cba,-0.7839,0.1439,1.2224,0.2623,0.9789,93
+efg_pct,eFG%,eurocup,-0.8107,0.116,0.8291,0.0769,0.7015,1253
+efg_pct,eFG%,euroleague,-0.0,0.0,1.0,0.0,1.1327,1345
+efg_pct,eFG%,feb1,-0.9327,0.1939,0.7793,0.1114,0.2793,251
+efg_pct,eFG%,feb2,-1.4937,0.2794,1.1612,0.2518,0.2833,387
+efg_pct,eFG%,feb3,-2.7768,0.2087,1.1898,0.0972,0.01,313
+efg_pct,eFG%,fec,-1.8531,0.1881,0.9744,0.1278,0.01,703
+efg_pct,eFG%,gbl,-0.9607,0.0944,0.701,0.0416,0.01,540
+efg_pct,eFG%,gleague,-0.677,0.1658,2.0437,0.2833,1.0157,1250
+efg_pct,eFG%,lba,-0.8996,0.062,0.8832,0.0697,0.0807,864
+efg_pct,eFG%,ligau,-2.4573,0.2212,1.0912,0.1217,0.6943,83
+efg_pct,eFG%,lnb,-0.7241,0.0991,0.8657,0.0909,0.01,970
+efg_pct,eFG%,nba,0.2102,0.0611,1.1917,0.1521,0.8885,831
+efg_pct,eFG%,nbl,-1.1258,0.218,1.0145,0.1133,2.2881,191
+efg_pct,eFG%,ncaa,-0.8579,0.1308,1.0869,0.1997,0.2003,502
+efg_pct,eFG%,vtb,-0.8864,0.1163,1.1051,0.1718,0.7557,335
+fg2_pct,T2%,acb,-0.2765,0.0945,1.0781,0.1016,0.3881,1268
+fg2_pct,T2%,bbl,-0.5971,0.1135,1.1103,0.1194,0.5173,916
+fg2_pct,T2%,bcl,-0.7077,0.125,0.9976,0.1011,1.0979,1107
+fg2_pct,T2%,bnxt,-0.9871,0.1308,1.0784,0.1139,1.0268,208
+fg2_pct,T2%,bsl,-0.5174,0.1031,0.9199,0.1468,0.01,321
+fg2_pct,T2%,cba,-0.3946,0.2104,1.7635,1.2181,0.6441,93
+fg2_pct,T2%,eurocup,-0.5374,0.1041,0.8899,0.0881,0.1661,1251
+fg2_pct,T2%,euroleague,-0.0,0.0,1.0,0.0,0.6109,1345
+fg2_pct,T2%,feb1,-0.3708,0.1509,0.7365,0.0716,0.0552,251
+fg2_pct,T2%,feb2,-0.6458,0.1678,1.0103,0.0961,0.01,387
+fg2_pct,T2%,feb3,-1.3737,0.2025,1.1756,0.1513,0.1365,313
+fg2_pct,T2%,fec,-1.224,0.1446,0.9327,0.0816,0.01,703
+fg2_pct,T2%,gbl,-0.7378,0.0911,0.8165,0.045,1.7806,540
+fg2_pct,T2%,gleague,-0.282,0.0823,1.5019,0.2647,1.1388,1250
+fg2_pct,T2%,lba,-0.678,0.1028,1.0463,0.0712,0.5327,864
+fg2_pct,T2%,ligau,-0.9901,0.2079,1.0828,0.1357,1.0468,83
+fg2_pct,T2%,lnb,-0.4921,0.0837,0.8446,0.0748,0.01,970
+fg2_pct,T2%,nba,0.0741,0.1293,1.0918,0.1773,0.8187,831
+fg2_pct,T2%,nbl,-0.6393,0.1395,0.7586,0.0942,0.01,191
+fg2_pct,T2%,ncaa,-0.5134,0.1428,0.9255,0.1252,0.2235,502
+fg2_pct,T2%,vtb,-0.6958,0.1352,1.2347,0.1497,1.0308,335
+fg3_pct,T3%,acb,-0.403,0.0656,0.8767,0.0628,0.01,1163
+fg3_pct,T3%,bbl,-0.7162,0.0827,0.9547,0.0892,0.01,869
+fg3_pct,T3%,bcl,-0.7776,0.0827,1.005,0.1086,0.01,1036
+fg3_pct,T3%,bnxt,-0.7395,0.0658,0.7259,0.0713,0.01,197
+fg3_pct,T3%,bsl,-0.5931,0.1456,0.9075,0.1227,0.01,292
+fg3_pct,T3%,cba,-0.8802,0.1858,1.2269,0.1524,0.01,85
+fg3_pct,T3%,eurocup,-0.6225,0.0988,0.8804,0.0922,0.01,1141
+fg3_pct,T3%,euroleague,-0.0,0.0,1.0,0.0,0.01,1232
+fg3_pct,T3%,feb1,-0.9742,0.1815,0.9358,0.0517,0.01,235
+fg3_pct,T3%,feb2,-1.6671,0.2431,1.1721,0.2068,0.01,370
+fg3_pct,T3%,feb3,-2.6758,0.1432,0.9827,0.1272,0.01,300
+fg3_pct,T3%,fec,-1.3687,0.238,1.2635,0.2209,0.01,652
+fg3_pct,T3%,gbl,-0.703,0.0994,0.7535,0.0747,0.01,487
+fg3_pct,T3%,gleague,-0.6005,0.0582,0.9841,0.1092,0.01,1203
+fg3_pct,T3%,lba,-0.6947,0.0905,0.9456,0.1067,0.01,791
+fg3_pct,T3%,ligau,-2.7482,0.3263,1.0439,0.1259,0.01,81
+fg3_pct,T3%,lnb,-0.6452,0.084,0.9663,0.0711,0.01,883
+fg3_pct,T3%,nba,0.0081,0.0956,0.8297,0.081,0.01,799
+fg3_pct,T3%,nbl,-0.9788,0.2571,1.0672,0.0482,0.01,184
+fg3_pct,T3%,ncaa,-0.7322,0.1198,0.8781,0.0838,0.01,473
+fg3_pct,T3%,vtb,-0.5539,0.1338,0.9571,0.1563,0.01,309
+ft_pct,TL%,acb,-0.2096,0.0645,1.0228,0.0967,0.6177,1261
+ft_pct,TL%,bbl,-0.4425,0.0761,1.1081,0.1318,0.79,919
+ft_pct,TL%,bcl,-0.4449,0.0667,0.9309,0.0719,1.0228,1102
+ft_pct,TL%,bnxt,-0.7593,0.1204,0.9679,0.0995,0.5434,206
+ft_pct,TL%,bsl,-0.3297,0.07,0.8311,0.1025,0.01,321
+ft_pct,TL%,cba,-0.4901,0.1003,1.1384,0.1526,1.3843,93
+ft_pct,TL%,eurocup,-0.4319,0.0492,0.9722,0.0585,0.8255,1251
+ft_pct,TL%,euroleague,-0.0,0.0,1.0,0.0,1.4778,1336
+ft_pct,TL%,feb1,-0.7378,0.1262,0.966,0.114,0.1601,249
+ft_pct,TL%,feb2,-1.1796,0.1449,1.2637,0.1939,0.6036,385
+ft_pct,TL%,feb3,-1.8386,0.1151,0.9902,0.0876,0.01,312
+ft_pct,TL%,fec,-0.5736,0.0745,0.9083,0.0755,1.1618,701
+ft_pct,TL%,gbl,-0.4382,0.0844,0.8804,0.1114,1.0636,539
+ft_pct,TL%,gleague,-0.3749,0.0839,1.0075,0.0903,1.2871,1246
+ft_pct,TL%,lba,-0.2771,0.0698,0.8994,0.0968,0.2731,860
+ft_pct,TL%,ligau,-1.8318,0.2419,0.9445,0.0999,0.01,83
+ft_pct,TL%,lnb,-0.4729,0.0553,1.0024,0.066,0.3464,970
+ft_pct,TL%,nba,-0.102,0.0575,0.86,0.0706,0.7033,827
+ft_pct,TL%,nbl,-0.3544,0.1071,0.9245,0.1138,0.4052,191
+ft_pct,TL%,ncaa,-0.4214,0.0982,0.8516,0.0649,0.6039,502
+ft_pct,TL%,vtb,-0.5028,0.0844,1.3489,0.1698,0.752,334
+fg3a_rate,Triples / tiros de campo (3PAr),acb,0.049,0.014,1.0733,0.0205,0.01,1268
+fg3a_rate,Triples / tiros de campo (3PAr),bbl,0.0311,0.0236,1.1279,0.0355,0.0764,921
+fg3a_rate,Triples / tiros de campo (3PAr),bcl,-0.0059,0.0259,1.0307,0.0178,0.01,1110
+fg3a_rate,Triples / tiros de campo (3PAr),bnxt,0.0183,0.0498,1.1899,0.0545,0.01,208
+fg3a_rate,Triples / tiros de campo (3PAr),bsl,-0.0116,0.0338,0.9571,0.0305,0.01,321
+fg3a_rate,Triples / tiros de campo (3PAr),cba,0.0534,0.075,1.0774,0.0544,0.1002,93
+fg3a_rate,Triples / tiros de campo (3PAr),eurocup,0.031,0.0219,1.0199,0.0238,0.01,1253
+fg3a_rate,Triples / tiros de campo (3PAr),euroleague,-0.0,0.0,1.0,0.0,0.01,1345
+fg3a_rate,Triples / tiros de campo (3PAr),feb1,0.1052,0.0573,1.0602,0.0551,0.01,251
+fg3a_rate,Triples / tiros de campo (3PAr),feb2,0.0384,0.0866,1.1414,0.0452,0.0254,387
+fg3a_rate,Triples / tiros de campo (3PAr),feb3,0.1565,0.0818,1.2268,0.0557,0.01,313
+fg3a_rate,Triples / tiros de campo (3PAr),fec,0.1179,0.0342,0.9922,0.0258,0.01,703
+fg3a_rate,Triples / tiros de campo (3PAr),gbl,0.0386,0.0394,1.0535,0.0394,0.01,540
+fg3a_rate,Triples / tiros de campo (3PAr),gleague,-0.2605,0.0361,1.133,0.0319,0.1558,1250
+fg3a_rate,Triples / tiros de campo (3PAr),lba,0.0805,0.0364,1.0174,0.0227,0.01,864
+fg3a_rate,Triples / tiros de campo (3PAr),ligau,-0.1872,0.1212,1.0473,0.0719,0.01,83
+fg3a_rate,Triples / tiros de campo (3PAr),lnb,-0.202,0.0223,1.0593,0.0218,0.01,970
+fg3a_rate,Triples / tiros de campo (3PAr),nba,-0.3602,0.0531,1.0295,0.0356,0.1309,831
+fg3a_rate,Triples / tiros de campo (3PAr),nbl,0.0913,0.0643,1.1072,0.0606,0.1906,191
+fg3a_rate,Triples / tiros de campo (3PAr),ncaa,-0.2112,0.0553,1.0679,0.056,0.0667,502
+fg3a_rate,Triples / tiros de campo (3PAr),vtb,0.0674,0.0369,1.0642,0.0368,0.01,335
+fta_rate,Tiros libres / tiros de campo (FTr),acb,-0.2072,0.048,1.0388,0.0383,0.3174,1268
+fta_rate,Tiros libres / tiros de campo (FTr),bbl,-0.3144,0.0529,0.9923,0.0546,0.1699,921
+fta_rate,Tiros libres / tiros de campo (FTr),bcl,-0.2035,0.0613,0.8419,0.0488,0.01,1110
+fta_rate,Tiros libres / tiros de campo (FTr),bnxt,-0.6442,0.0786,1.1102,0.1033,0.0258,208
+fta_rate,Tiros libres / tiros de campo (FTr),bsl,-0.1287,0.0729,0.9503,0.0565,0.01,321
+fta_rate,Tiros libres / tiros de campo (FTr),cba,-0.4562,0.1354,1.0969,0.1,0.251,93
+fta_rate,Tiros libres / tiros de campo (FTr),eurocup,-0.1575,0.0428,0.9242,0.049,0.0549,1253
+fta_rate,Tiros libres / tiros de campo (FTr),euroleague,-0.0,0.0,1.0,0.0,0.3137,1345
+fta_rate,Tiros libres / tiros de campo (FTr),feb1,-0.3392,0.1064,0.8579,0.0684,0.01,251
+fta_rate,Tiros libres / tiros de campo (FTr),feb2,-0.3968,0.0968,0.8843,0.0722,0.1136,387
+fta_rate,Tiros libres / tiros de campo (FTr),feb3,-0.8257,0.1089,1.0036,0.0903,0.1201,313
+fta_rate,Tiros libres / tiros de campo (FTr),fec,-0.4538,0.062,0.8849,0.0523,0.0266,703
+fta_rate,Tiros libres / tiros de campo (FTr),gbl,-0.227,0.0715,1.0744,0.0731,0.2849,540
+fta_rate,Tiros libres / tiros de campo (FTr),gleague,-0.1349,0.0383,0.8771,0.0402,0.01,1250
+fta_rate,Tiros libres / tiros de campo (FTr),lba,-0.2125,0.0449,0.986,0.0531,0.2872,864
+fta_rate,Tiros libres / tiros de campo (FTr),ligau,-0.6123,0.1633,1.09,0.1433,0.3059,83
+fta_rate,Tiros libres / tiros de campo (FTr),lnb,-0.1197,0.0446,1.0285,0.0398,0.1765,970
+fta_rate,Tiros libres / tiros de campo (FTr),nba,0.1833,0.0637,1.064,0.0634,0.3256,831
+fta_rate,Tiros libres / tiros de campo (FTr),nbl,-0.1135,0.1167,1.2347,0.221,0.5469,191
+fta_rate,Tiros libres / tiros de campo (FTr),ncaa,-0.3153,0.0643,1.1109,0.0584,0.3352,502
+fta_rate,Tiros libres / tiros de campo (FTr),vtb,-0.3605,0.093,0.9691,0.0679,0.1594,335
+usg_pct,USG%,acb,-0.1437,0.0243,0.9828,0.0298,0.2838,1264
+usg_pct,USG%,bbl,-0.2637,0.0338,0.8883,0.0302,0.2335,908
+usg_pct,USG%,bcl,-0.1609,0.0425,0.988,0.031,0.0826,1100
+usg_pct,USG%,bnxt,-0.4884,0.0557,0.8955,0.0561,0.01,207
+usg_pct,USG%,bsl,-0.1837,0.0491,0.925,0.0604,0.2189,320
+usg_pct,USG%,cba,-0.992,0.1368,1.2723,0.0846,0.1367,88
+usg_pct,USG%,eurocup,-0.1733,0.037,0.8717,0.0338,0.1903,1244
+usg_pct,USG%,euroleague,-0.0,0.0,1.0,0.0,0.3309,1338
+usg_pct,USG%,feb1,-0.4589,0.083,0.9947,0.0592,0.2693,250
+usg_pct,USG%,feb2,-1.023,0.1072,1.1403,0.0752,0.3477,387
+usg_pct,USG%,feb3,-1.9942,0.1124,1.2256,0.1016,0.1937,313
+usg_pct,USG%,fec,-0.306,0.0591,0.8268,0.0459,0.1738,698
+usg_pct,USG%,gbl,-0.1462,0.0549,0.8586,0.0361,0.0503,532
+usg_pct,USG%,gleague,0.2632,0.064,0.8198,0.0554,0.2972,1235
+usg_pct,USG%,lba,-0.1391,0.0346,0.8549,0.0255,0.0982,854
+usg_pct,USG%,ligau,-1.7997,0.1486,1.186,0.093,0.1319,83
+usg_pct,USG%,lnb,-0.1052,0.031,0.9203,0.031,0.3077,810
+usg_pct,USG%,nba,0.8735,0.1048,1.0964,0.0978,0.2827,831
+usg_pct,USG%,nbl,-0.2266,0.0773,1.0019,0.0668,0.2092,185
+usg_pct,USG%,ncaa,0.0419,0.0863,0.7957,0.0754,0.3412,501
+usg_pct,USG%,vtb,-0.319,0.0559,1.0689,0.0393,0.2745,330
+ast_pct,AST%,acb,-0.1339,0.0334,1.0034,0.024,0.2491,1268
+ast_pct,AST%,bbl,-0.3867,0.0299,0.9051,0.0369,0.0868,921
+ast_pct,AST%,bcl,-0.3095,0.0446,0.795,0.0307,0.01,1110
+ast_pct,AST%,bnxt,-0.6028,0.0579,0.9131,0.0581,0.0742,208
+ast_pct,AST%,bsl,-0.199,0.0603,0.746,0.0341,0.01,321
+ast_pct,AST%,cba,-1.656,0.1907,1.627,0.1331,0.1464,93
+ast_pct,AST%,eurocup,-0.3327,0.0313,0.9874,0.0248,0.2451,1253
+ast_pct,AST%,euroleague,-0.0,0.0,1.0,0.0,0.3167,1345
+ast_pct,AST%,feb1,-0.3464,0.0763,0.9488,0.0768,0.1639,251
+ast_pct,AST%,feb2,-0.9266,0.1007,1.1367,0.0668,0.2958,387
+ast_pct,AST%,feb3,-1.368,0.0729,0.9935,0.083,0.1473,313
+ast_pct,AST%,fec,-0.4512,0.0466,0.7472,0.0349,0.01,703
+ast_pct,AST%,gbl,-0.3828,0.0422,0.9128,0.0308,0.1163,540
+ast_pct,AST%,gleague,-0.4602,0.0639,1.0092,0.0331,0.215,1250
+ast_pct,AST%,lba,-0.2778,0.0343,0.8937,0.0377,0.1814,864
+ast_pct,AST%,ligau,-1.5414,0.2045,1.0027,0.1861,0.01,83
+ast_pct,AST%,lnb,-0.2983,0.024,0.9915,0.0293,0.185,970
+ast_pct,AST%,nba,0.1267,0.0824,1.1304,0.0726,0.4017,831
+ast_pct,AST%,nbl,-0.5364,0.0766,0.9971,0.0687,0.2808,191
+ast_pct,AST%,ncaa,-0.7752,0.0796,0.9488,0.0533,0.1997,502
+ast_pct,AST%,vtb,-0.4259,0.0638,0.9205,0.047,0.01,335
+tov_pct,TOV%,acb,0.1551,0.0553,1.1182,0.0622,0.356,1264
+tov_pct,TOV%,bbl,0.167,0.0484,0.9993,0.0762,0.3912,908
+tov_pct,TOV%,bcl,0.1292,0.0482,0.8141,0.0448,0.01,1100
+tov_pct,TOV%,bnxt,0.6488,0.1079,0.9777,0.1024,0.01,207
+tov_pct,TOV%,bsl,0.1214,0.1079,1.1144,0.1385,1.416,320
+tov_pct,TOV%,cba,0.1968,0.109,1.0955,0.1494,0.4063,88
+tov_pct,TOV%,eurocup,0.067,0.057,0.859,0.0546,0.1713,1244
+tov_pct,TOV%,euroleague,-0.0,0.0,1.0,0.0,0.2403,1338
+tov_pct,TOV%,feb1,0.6068,0.1373,0.9526,0.1402,0.01,250
+tov_pct,TOV%,feb2,1.067,0.1231,1.1145,0.1537,0.2863,387
+tov_pct,TOV%,feb3,1.5149,0.113,0.9764,0.1155,0.01,313
+tov_pct,TOV%,fec,0.2987,0.0793,0.88,0.0548,0.4376,698
+tov_pct,TOV%,gbl,0.0908,0.0834,0.824,0.0723,0.01,532
+tov_pct,TOV%,gleague,-0.0086,0.0521,0.9778,0.0803,0.467,1235
+tov_pct,TOV%,lba,0.0254,0.0635,1.0552,0.0988,0.2076,854
+tov_pct,TOV%,ligau,1.8249,0.1704,0.816,0.1014,0.01,83
+tov_pct,TOV%,lnb,0.1744,0.0425,0.989,0.0576,0.1214,810
+tov_pct,TOV%,nba,-0.0532,0.0634,0.9751,0.0726,0.5608,831
+tov_pct,TOV%,nbl,-0.0014,0.1088,1.0287,0.1162,0.4924,185
+tov_pct,TOV%,ncaa,0.1121,0.056,0.7679,0.0585,0.1394,501
+tov_pct,TOV%,vtb,0.2599,0.0835,0.8984,0.1057,0.2266,330
+oreb_pct,OREB%,acb,0.0253,0.0289,1.0451,0.0357,0.3862,1236
+oreb_pct,OREB%,bbl,0.0877,0.0508,1.0029,0.0614,0.2951,873
+oreb_pct,OREB%,bcl,-0.0995,0.0566,0.9305,0.0568,0.1089,982
+oreb_pct,OREB%,bnxt,-0.2037,0.1073,1.1156,0.1352,0.107,206
+oreb_pct,OREB%,bsl,-0.1502,0.071,1.0207,0.0833,0.3682,313
+oreb_pct,OREB%,cba,-0.3282,0.1507,1.026,0.1485,0.5856,79
+oreb_pct,OREB%,eurocup,-0.0211,0.0376,1.1103,0.0483,0.3327,1136
+oreb_pct,OREB%,euroleague,-0.0,0.0,1.0,0.0,0.3784,1209
+oreb_pct,OREB%,feb1,0.1026,0.0675,1.0478,0.1081,0.4568,250
+oreb_pct,OREB%,feb2,0.0571,0.1081,1.0525,0.0956,0.1794,387
+oreb_pct,OREB%,feb3,-0.2509,0.1088,1.0128,0.0783,0.1774,313
+oreb_pct,OREB%,fec,-0.2306,0.0751,0.8888,0.0737,0.01,639
+oreb_pct,OREB%,gbl,-0.2217,0.0665,1.0858,0.0744,0.3824,519
+oreb_pct,OREB%,gleague,0.2308,0.0888,1.0842,0.0974,0.3734,1210
+oreb_pct,OREB%,lba,-0.1331,0.0449,1.0519,0.051,0.3812,815
+oreb_pct,OREB%,ligau,-0.0922,0.1859,0.9418,0.0927,0.01,83
+oreb_pct,OREB%,nba,0.0929,0.0821,1.1603,0.1576,0.364,827
+oreb_pct,OREB%,nbl,0.1124,0.0944,1.1271,0.0916,0.5034,181
+oreb_pct,OREB%,ncaa,0.3183,0.0972,0.9677,0.0815,0.2823,490
+oreb_pct,OREB%,vtb,0.077,0.0812,1.0272,0.0908,0.4539,320
+dreb_pct,DREB%,acb,-0.1081,0.0466,1.0716,0.0342,0.4254,1236
+dreb_pct,DREB%,bbl,-0.4238,0.0722,1.1343,0.0823,0.3185,873
+dreb_pct,DREB%,bcl,-0.3018,0.0806,0.9451,0.0719,0.01,982
+dreb_pct,DREB%,bnxt,-0.9235,0.1396,1.3369,0.141,0.2253,206
+dreb_pct,DREB%,bsl,-0.3178,0.0689,0.9017,0.064,0.01,313
+dreb_pct,DREB%,cba,-1.3278,0.2191,1.4488,0.1461,0.2017,79
+dreb_pct,DREB%,eurocup,-0.3336,0.0439,1.0938,0.0559,0.4097,1136
+dreb_pct,DREB%,euroleague,-0.0,0.0,1.0,0.0,0.3867,1209
+dreb_pct,DREB%,feb1,-0.5047,0.1106,1.2262,0.1764,0.3887,250
+dreb_pct,DREB%,feb2,-0.8378,0.118,1.2867,0.1338,0.2732,387
+dreb_pct,DREB%,feb3,-1.7906,0.1383,1.257,0.112,0.2305,313
+dreb_pct,DREB%,fec,-0.6398,0.0703,0.8624,0.066,0.01,639
+dreb_pct,DREB%,gbl,-0.349,0.0786,0.9903,0.0627,0.1459,519
+dreb_pct,DREB%,gleague,0.1315,0.0586,1.1351,0.0461,0.4565,1210
+dreb_pct,DREB%,lba,-0.2572,0.0544,0.9222,0.0584,0.0817,815
+dreb_pct,DREB%,ligau,-1.6013,0.1769,1.0336,0.1624,0.0292,83
+dreb_pct,DREB%,nba,0.5317,0.0722,1.2208,0.0787,0.3955,827
+dreb_pct,DREB%,nbl,-0.0871,0.1019,1.096,0.1089,0.4552,181
+dreb_pct,DREB%,ncaa,0.0091,0.0837,0.935,0.0756,0.3573,490
+dreb_pct,DREB%,vtb,-0.5728,0.0999,1.1959,0.1579,0.2971,320
+oreb_p100,Rebotes ofensivos por 100 pos.,acb,0.0728,0.0496,1.0702,0.0343,0.3903,1268
+oreb_p100,Rebotes ofensivos por 100 pos.,bbl,0.1838,0.041,1.0006,0.0611,0.2763,921
+oreb_p100,Rebotes ofensivos por 100 pos.,bcl,0.004,0.0797,0.9901,0.0722,0.1987,1110
+oreb_p100,Rebotes ofensivos por 100 pos.,bnxt,-0.0948,0.0916,1.1086,0.0579,0.1369,208
+oreb_p100,Rebotes ofensivos por 100 pos.,bsl,-0.1267,0.0759,1.0352,0.0511,0.412,321
+oreb_p100,Rebotes ofensivos por 100 pos.,cba,-0.2439,0.0943,0.9768,0.1023,0.5863,93
+oreb_p100,Rebotes ofensivos por 100 pos.,eurocup,0.0606,0.0406,1.0947,0.0596,0.3102,1253
+oreb_p100,Rebotes ofensivos por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.319,1345
+oreb_p100,Rebotes ofensivos por 100 pos.,feb1,0.2046,0.0768,0.9922,0.1031,0.3571,251
+oreb_p100,Rebotes ofensivos por 100 pos.,feb2,0.1783,0.1155,1.15,0.0768,0.2806,387
+oreb_p100,Rebotes ofensivos por 100 pos.,feb3,-0.0796,0.0989,1.0564,0.0866,0.22,313
+oreb_p100,Rebotes ofensivos por 100 pos.,fec,-0.0158,0.0763,0.9239,0.0558,0.01,703
+oreb_p100,Rebotes ofensivos por 100 pos.,gbl,-0.0827,0.0558,1.0907,0.0711,0.3996,540
+oreb_p100,Rebotes ofensivos por 100 pos.,gleague,0.2886,0.0959,1.1675,0.1169,0.4145,1250
+oreb_p100,Rebotes ofensivos por 100 pos.,lba,-0.0625,0.063,1.0594,0.0584,0.3499,864
+oreb_p100,Rebotes ofensivos por 100 pos.,ligau,0.049,0.1376,0.992,0.102,0.01,83
+oreb_p100,Rebotes ofensivos por 100 pos.,lnb,0.1302,0.0646,1.226,0.056,0.3144,970
+oreb_p100,Rebotes ofensivos por 100 pos.,nba,0.1151,0.1403,1.1953,0.2053,0.3408,831
+oreb_p100,Rebotes ofensivos por 100 pos.,nbl,0.1736,0.0746,1.1502,0.1142,0.4798,191
+oreb_p100,Rebotes ofensivos por 100 pos.,ncaa,0.3992,0.1267,1.0148,0.1127,0.3,502
+oreb_p100,Rebotes ofensivos por 100 pos.,vtb,0.1591,0.0546,1.0749,0.1086,0.4759,335
+dreb_p100,Rebotes defensivos por 100 pos.,acb,-0.1537,0.0451,1.0593,0.0366,0.4027,1268
+dreb_p100,Rebotes defensivos por 100 pos.,bbl,-0.541,0.0569,1.1438,0.0646,0.3191,921
+dreb_p100,Rebotes defensivos por 100 pos.,bcl,-0.3532,0.0931,0.9459,0.0876,0.0596,1110
+dreb_p100,Rebotes defensivos por 100 pos.,bnxt,-0.9897,0.0826,1.2912,0.1038,0.2147,208
+dreb_p100,Rebotes defensivos por 100 pos.,bsl,-0.3499,0.0733,0.9225,0.0601,0.0707,321
+dreb_p100,Rebotes defensivos por 100 pos.,cba,-1.6009,0.2125,1.6062,0.1381,0.1971,93
+dreb_p100,Rebotes defensivos por 100 pos.,eurocup,-0.3792,0.0603,1.1171,0.0532,0.4168,1253
+dreb_p100,Rebotes defensivos por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.316,1345
+dreb_p100,Rebotes defensivos por 100 pos.,feb1,-0.6175,0.0873,1.3036,0.0963,0.3785,251
+dreb_p100,Rebotes defensivos por 100 pos.,feb2,-1.0009,0.1113,1.4221,0.0994,0.3224,387
+dreb_p100,Rebotes defensivos por 100 pos.,feb3,-2.0478,0.1253,1.3251,0.1289,0.2444,313
+dreb_p100,Rebotes defensivos por 100 pos.,fec,-0.7955,0.0752,0.8978,0.063,0.01,703
+dreb_p100,Rebotes defensivos por 100 pos.,gbl,-0.4172,0.0677,0.9786,0.0516,0.1079,540
+dreb_p100,Rebotes defensivos por 100 pos.,gleague,0.0608,0.0608,1.1872,0.0453,0.4782,1250
+dreb_p100,Rebotes defensivos por 100 pos.,lba,-0.3197,0.0576,0.9767,0.0433,0.2004,864
+dreb_p100,Rebotes defensivos por 100 pos.,ligau,-1.7872,0.1585,1.0755,0.1216,0.01,83
+dreb_p100,Rebotes defensivos por 100 pos.,lnb,-0.2895,0.0668,1.0804,0.0639,0.2318,970
+dreb_p100,Rebotes defensivos por 100 pos.,nba,0.5183,0.0947,1.292,0.0826,0.4219,831
+dreb_p100,Rebotes defensivos por 100 pos.,nbl,-0.1101,0.0934,1.0849,0.091,0.4949,191
+dreb_p100,Rebotes defensivos por 100 pos.,ncaa,-0.0951,0.0623,0.9649,0.0716,0.357,502
+dreb_p100,Rebotes defensivos por 100 pos.,vtb,-0.643,0.1055,1.2433,0.1844,0.3247,335
+stl_pct,STL%,acb,-0.1842,0.0713,1.2072,0.0734,0.5627,1268
+stl_pct,STL%,bbl,-0.2846,0.0617,1.1222,0.0645,0.4742,921
+stl_pct,STL%,bcl,-0.3721,0.087,0.8539,0.0569,0.01,1110
+stl_pct,STL%,bnxt,-0.9218,0.0928,1.0211,0.1029,0.0974,208
+stl_pct,STL%,bsl,-0.3683,0.1047,1.367,0.1052,0.408,321
+stl_pct,STL%,cba,-1.0661,0.1027,1.0259,0.1115,0.2513,93
+stl_pct,STL%,eurocup,-0.301,0.0879,1.1056,0.0577,0.3216,1253
+stl_pct,STL%,euroleague,-0.0,0.0,1.0,0.0,0.176,1345
+stl_pct,STL%,feb1,-0.355,0.1295,1.1103,0.1261,0.4879,251
+stl_pct,STL%,feb2,-0.3257,0.1416,1.1835,0.1054,0.366,387
+stl_pct,STL%,feb3,-0.4071,0.1206,0.9626,0.0761,0.1035,313
+stl_pct,STL%,fec,-0.6157,0.1038,1.5075,0.1503,0.5231,703
+stl_pct,STL%,gbl,-0.2251,0.0649,1.0294,0.0678,0.1874,540
+stl_pct,STL%,gleague,-0.0683,0.0822,1.0938,0.0852,0.2499,1250
+stl_pct,STL%,lba,-0.305,0.1112,0.9364,0.0903,0.01,864
+stl_pct,STL%,ligau,-0.4166,0.1906,0.7934,0.0944,0.01,83
+stl_pct,STL%,lnb,-0.074,0.0656,1.2453,0.0585,0.3092,970
+stl_pct,STL%,nba,0.0888,0.1144,1.1515,0.1298,0.4867,831
+stl_pct,STL%,nbl,-0.5046,0.1488,1.2011,0.1615,0.5906,191
+stl_pct,STL%,ncaa,-0.2889,0.112,0.8267,0.0578,0.1661,502
+stl_pct,STL%,vtb,-0.4817,0.1228,1.2926,0.1436,0.4798,335
+blk_pct,BLK%,acb,-0.1078,0.048,0.9874,0.0452,0.3002,1236
+blk_pct,BLK%,bbl,-0.1899,0.0524,1.0554,0.0656,0.2884,873
+blk_pct,BLK%,bcl,-0.2688,0.0717,1.0189,0.0552,0.4509,982
+blk_pct,BLK%,bnxt,-0.4501,0.1105,0.9391,0.0787,0.0232,206
+blk_pct,BLK%,bsl,-0.2543,0.0584,0.9846,0.082,0.4304,313
+blk_pct,BLK%,cba,-0.3147,0.1134,0.9769,0.1072,0.1103,79
+blk_pct,BLK%,eurocup,-0.178,0.0507,1.1465,0.0473,0.4498,1136
+blk_pct,BLK%,euroleague,-0.0,0.0,1.0,0.0,0.348,1209
+blk_pct,BLK%,feb1,-0.096,0.0736,1.073,0.1277,0.3427,250
+blk_pct,BLK%,feb2,-0.017,0.1471,1.2449,0.1775,0.5462,387
+blk_pct,BLK%,feb3,-0.4813,0.1322,1.2845,0.1167,0.3935,313
+blk_pct,BLK%,fec,-0.4354,0.0493,1.2299,0.0774,0.5194,639
+blk_pct,BLK%,gbl,-0.233,0.0634,0.877,0.0578,0.3051,519
+blk_pct,BLK%,gleague,0.4213,0.0759,1.0398,0.0574,0.155,1210
+blk_pct,BLK%,lba,-0.1598,0.057,1.0991,0.0475,0.4773,815
+blk_pct,BLK%,ligau,-0.1092,0.1171,0.9597,0.1002,0.01,83
+blk_pct,BLK%,nba,0.6239,0.0642,1.0388,0.0583,0.3253,827
+blk_pct,BLK%,nbl,-0.0171,0.0892,1.2846,0.1691,0.4878,181
+blk_pct,BLK%,ncaa,0.3451,0.0726,0.933,0.0658,0.0991,490
+blk_pct,BLK%,vtb,-0.2043,0.085,0.9746,0.0687,0.3967,320
+stl_p100,Robos por 100 pos.,acb,-0.1808,0.0684,1.2053,0.073,0.6094,1268
+stl_p100,Robos por 100 pos.,bbl,-0.2697,0.059,1.0827,0.0616,0.4639,921
+stl_p100,Robos por 100 pos.,bcl,-0.3619,0.0819,0.8563,0.0551,0.01,1110
+stl_p100,Robos por 100 pos.,bnxt,-0.8938,0.0896,0.9725,0.0921,0.01,208
+stl_p100,Robos por 100 pos.,bsl,-0.3795,0.1029,1.4261,0.1034,0.5125,321
+stl_p100,Robos por 100 pos.,cba,-1.0423,0.1001,1.0042,0.1069,0.2522,93
+stl_p100,Robos por 100 pos.,eurocup,-0.2929,0.0852,1.0681,0.0544,0.3179,1253
+stl_p100,Robos por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.2828,1345
+stl_p100,Robos por 100 pos.,feb1,-0.3519,0.1292,1.1356,0.1363,0.5577,251
+stl_p100,Robos por 100 pos.,feb2,-0.3137,0.1407,1.1755,0.1034,0.3656,387
+stl_p100,Robos por 100 pos.,feb3,-0.3975,0.121,0.9458,0.0755,0.0673,313
+stl_p100,Robos por 100 pos.,fec,-0.5976,0.1002,1.464,0.1449,0.5205,703
+stl_p100,Robos por 100 pos.,gbl,-0.2169,0.0615,0.9497,0.0595,0.0602,540
+stl_p100,Robos por 100 pos.,gleague,-0.063,0.0789,1.0301,0.079,0.1682,1250
+stl_p100,Robos por 100 pos.,lba,-0.2996,0.107,0.9312,0.09,0.0361,864
+stl_p100,Robos por 100 pos.,ligau,-0.4091,0.1941,0.7861,0.0951,0.01,83
+stl_p100,Robos por 100 pos.,lnb,-0.0761,0.064,1.2407,0.0585,0.3539,970
+stl_p100,Robos por 100 pos.,nba,0.0891,0.1095,1.1172,0.1225,0.476,831
+stl_p100,Robos por 100 pos.,nbl,-0.4886,0.1455,1.1651,0.1561,0.5632,191
+stl_p100,Robos por 100 pos.,ncaa,-0.2849,0.106,0.8477,0.0554,0.2688,502
+stl_p100,Robos por 100 pos.,vtb,-0.4623,0.1179,1.2273,0.1343,0.4457,335
+blk_p100,Tapones por 100 pos.,acb,-0.1078,0.0413,1.0221,0.0386,0.2774,1268
+blk_p100,Tapones por 100 pos.,bbl,-0.2012,0.047,1.0824,0.0518,0.2999,921
+blk_p100,Tapones por 100 pos.,bcl,-0.2673,0.0514,0.9575,0.0516,0.2258,1110
+blk_p100,Tapones por 100 pos.,bnxt,-0.4083,0.0894,0.9485,0.0541,0.01,208
+blk_p100,Tapones por 100 pos.,bsl,-0.2573,0.08,0.981,0.0854,0.3737,321
+blk_p100,Tapones por 100 pos.,cba,-0.4237,0.1066,0.9705,0.0871,0.1403,93
+blk_p100,Tapones por 100 pos.,eurocup,-0.1959,0.0484,1.1389,0.0473,0.4297,1253
+blk_p100,Tapones por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.267,1345
+blk_p100,Tapones por 100 pos.,feb1,-0.1195,0.0999,1.0446,0.1161,0.2965,251
+blk_p100,Tapones por 100 pos.,feb2,-0.0449,0.166,1.2274,0.118,0.4838,387
+blk_p100,Tapones por 100 pos.,feb3,-0.5358,0.1815,1.3236,0.0929,0.3955,313
+blk_p100,Tapones por 100 pos.,fec,-0.4216,0.0795,1.2293,0.083,0.4958,703
+blk_p100,Tapones por 100 pos.,gbl,-0.2557,0.0536,0.8942,0.0455,0.3006,540
+blk_p100,Tapones por 100 pos.,gleague,0.4209,0.0593,1.0362,0.0519,0.1105,1250
+blk_p100,Tapones por 100 pos.,lba,-0.1532,0.0533,1.1386,0.0572,0.4688,864
+blk_p100,Tapones por 100 pos.,ligau,-0.129,0.2097,0.9871,0.1127,0.01,83
+blk_p100,Tapones por 100 pos.,lnb,-0.1393,0.0472,1.1167,0.0448,0.2928,970
+blk_p100,Tapones por 100 pos.,nba,0.6285,0.085,1.0489,0.0768,0.3397,831
+blk_p100,Tapones por 100 pos.,nbl,-0.0462,0.121,1.281,0.102,0.4649,191
+blk_p100,Tapones por 100 pos.,ncaa,0.3412,0.0898,0.9255,0.0622,0.0923,502
+blk_p100,Tapones por 100 pos.,vtb,-0.2271,0.0767,1.0304,0.0775,0.4114,335
+pf_p100,Faltas por 100 pos.,acb,0.2659,0.0526,1.1023,0.0399,0.2168,1264
+pf_p100,Faltas por 100 pos.,bbl,0.6126,0.0426,1.1133,0.0378,0.2124,908
+pf_p100,Faltas por 100 pos.,bcl,0.5976,0.0633,1.2265,0.0851,0.3985,1100
+pf_p100,Faltas por 100 pos.,bnxt,0.6999,0.1139,0.9623,0.0781,0.2849,207
+pf_p100,Faltas por 100 pos.,bsl,0.4836,0.0725,1.0007,0.0723,0.01,320
+pf_p100,Faltas por 100 pos.,cba,1.1387,0.2492,1.3398,0.1737,0.277,88
+pf_p100,Faltas por 100 pos.,eurocup,0.503,0.0386,1.0684,0.048,0.2104,1244
+pf_p100,Faltas por 100 pos.,euroleague,-0.0,0.0,1.0,0.0,0.1978,1338
+pf_p100,Faltas por 100 pos.,feb1,0.8486,0.132,1.1731,0.0692,0.3403,250
+pf_p100,Faltas por 100 pos.,feb2,1.114,0.1073,1.0241,0.0583,0.3497,387
+pf_p100,Faltas por 100 pos.,feb3,1.6784,0.0724,1.0705,0.0626,0.1018,313
+pf_p100,Faltas por 100 pos.,fec,0.6506,0.0687,1.3311,0.0757,0.5415,698
+pf_p100,Faltas por 100 pos.,gbl,0.5776,0.0686,1.2159,0.063,0.3056,532
+pf_p100,Faltas por 100 pos.,gleague,0.203,0.0567,0.8834,0.0603,0.1216,1235
+pf_p100,Faltas por 100 pos.,lba,0.4283,0.0457,1.1432,0.0478,0.2413,854
+pf_p100,Faltas por 100 pos.,ligau,1.5388,0.1309,0.9598,0.1688,0.1764,83
+pf_p100,Faltas por 100 pos.,lnb,0.2961,0.0605,0.9111,0.0368,0.01,810
+pf_p100,Faltas por 100 pos.,nba,-0.3028,0.0592,0.9785,0.0668,0.3549,831
+pf_p100,Faltas por 100 pos.,nbl,0.2101,0.0945,1.1189,0.1031,0.547,185
+pf_p100,Faltas por 100 pos.,ncaa,0.5288,0.0858,0.79,0.0587,0.1342,501
+pf_p100,Faltas por 100 pos.,vtb,0.7504,0.083,1.1897,0.0782,0.2485,330
+drtg,DRtg individual,acb,0.4016,0.0626,0.9154,0.0665,0.534,1236
+drtg,DRtg individual,bbl,0.9858,0.0404,0.8686,0.0764,0.4712,873
+drtg,DRtg individual,bcl,0.9142,0.0606,1.0692,0.0975,0.7294,982
+drtg,DRtg individual,bnxt,1.7816,0.0791,0.8318,0.069,0.2551,206
+drtg,DRtg individual,bsl,0.8879,0.0685,0.9884,0.0757,0.3659,313
+drtg,DRtg individual,cba,1.1795,0.0554,1.0417,0.0838,0.3598,79
+drtg,DRtg individual,eurocup,0.6882,0.0386,0.8973,0.0725,0.6358,1136
+drtg,DRtg individual,euroleague,-0.0,0.0,1.0,0.0,0.7497,1209
+drtg,DRtg individual,feb1,1.1245,0.1138,0.9949,0.0701,0.552,250
+drtg,DRtg individual,feb2,1.4367,0.0835,1.2742,0.2096,0.798,387
+drtg,DRtg individual,feb3,1.9566,0.0787,0.7587,0.1056,0.2064,313
+drtg,DRtg individual,fec,1.3728,0.0487,0.8814,0.0661,0.3454,639
+drtg,DRtg individual,gbl,0.9705,0.0602,0.7881,0.073,0.2613,519
+drtg,DRtg individual,gleague,0.6151,0.0823,1.7059,0.5223,0.5107,1210
+drtg,DRtg individual,lba,0.7719,0.0528,0.7942,0.0656,0.4439,815
+drtg,DRtg individual,ligau,1.7044,0.1075,0.8807,0.1824,0.01,83
+drtg,DRtg individual,nba,0.1064,0.0853,1.5457,0.3306,0.867,827
+drtg,DRtg individual,nbl,0.8295,0.1083,1.1518,0.1503,0.8278,181
+drtg,DRtg individual,ncaa,0.9356,0.0817,0.9094,0.1081,0.5493,490
+drtg,DRtg individual,vtb,1.022,0.0594,1.146,0.0853,0.4987,320
+per,PER,acb,-0.4141,0.0349,0.9499,0.0495,0.4542,1264
+per,PER,bbl,-0.8051,0.0563,0.94,0.051,0.4288,908
+per,PER,bcl,-0.9752,0.0748,1.3384,0.1007,0.1338,1100
+per,PER,bnxt,-1.408,0.0951,0.8185,0.0653,0.01,207
+per,PER,bsl,-0.6652,0.1006,0.9283,0.0974,0.2561,320
+per,PER,cba,-1.4885,0.117,1.2301,0.0935,0.2138,88
+per,PER,eurocup,-0.649,0.0474,0.8835,0.042,0.3722,1244
+per,PER,euroleague,-0.0,0.0,1.0,0.0,0.522,1338
+per,PER,feb1,-1.026,0.1026,0.8804,0.0481,0.306,250
+per,PER,feb2,-1.8115,0.0941,1.1288,0.1032,0.5031,387
+per,PER,feb3,-3.1482,0.0656,1.1541,0.0983,0.2472,313
+per,PER,fec,-1.4511,0.0822,1.3582,0.0875,0.4589,698
+per,PER,gbl,-0.7728,0.0571,0.7695,0.057,0.0294,532
+per,PER,gleague,-0.2883,0.0609,0.7578,0.0596,0.2699,1235
+per,PER,lba,-0.693,0.0437,0.9398,0.0526,0.4339,854
+per,PER,ligau,-2.9732,0.1022,1.1218,0.1465,0.1079,83
+per,PER,lnb,-0.4705,0.0464,0.7433,0.0347,0.0839,810
+per,PER,nba,0.4573,0.0939,1.1083,0.0959,0.5022,831
+per,PER,nbl,-0.6868,0.0949,0.9334,0.078,0.5805,185
+per,PER,ncaa,-0.6049,0.0791,0.8621,0.0853,0.5543,501
+per,PER,vtb,-0.9195,0.0733,1.0524,0.0599,0.3437,330
+ortg,ORtg individual,acb,-0.4438,0.0832,0.7029,0.0662,0.1624,1236
+ortg,ORtg individual,bbl,-0.9283,0.0903,1.0881,0.101,0.6274,873
+ortg,ORtg individual,bcl,-1.2133,0.1044,1.4555,0.1538,0.6632,982
+ortg,ORtg individual,bnxt,-1.6551,0.1353,0.878,0.0756,0.01,206
+ortg,ORtg individual,bsl,-0.7386,0.088,0.8332,0.1088,0.01,313
+ortg,ORtg individual,cba,-0.997,0.1399,1.1128,0.1834,0.4508,79
+ortg,ORtg individual,eurocup,-0.7378,0.0732,0.8339,0.0498,0.4787,1136
+ortg,ORtg individual,euroleague,-0.0,0.0,1.0,0.0,0.9977,1209
+ortg,ORtg individual,feb1,-1.066,0.0873,0.792,0.0782,0.4447,250
+ortg,ORtg individual,feb2,-1.7567,0.1311,1.2919,0.157,0.7261,387
+ortg,ORtg individual,feb3,-2.9411,0.0957,1.0634,0.1088,0.1032,313
+ortg,ORtg individual,fec,-1.9928,0.2892,1.7124,0.3232,0.523,639
+ortg,ORtg individual,gbl,-0.9721,0.0739,0.6587,0.0332,0.3285,519
+ortg,ORtg individual,gleague,-0.8054,0.1235,1.272,0.3069,0.9336,1210
+ortg,ORtg individual,lba,-0.895,0.081,0.8287,0.0551,0.4631,815
+ortg,ORtg individual,ligau,-2.9503,0.1639,1.0822,0.1183,0.2926,83
+ortg,ORtg individual,nba,-0.1866,0.0858,1.0175,0.1092,0.7725,827
+ortg,ORtg individual,nbl,-0.9163,0.1305,1.1009,0.1153,0.4556,181
+ortg,ORtg individual,ncaa,-1.0896,0.0941,0.7287,0.0902,0.01,490
+ortg,ORtg individual,vtb,-0.9464,0.0916,1.1491,0.0977,0.3875,320
+game_score_p40,Game Score por 40',acb,-0.3821,0.0329,0.9431,0.047,0.3856,1264
+game_score_p40,Game Score por 40',bbl,-0.7666,0.0538,0.9116,0.0483,0.3549,908
+game_score_p40,Game Score por 40',bcl,-0.9637,0.0658,1.3285,0.0796,0.1088,1100
+game_score_p40,Game Score por 40',bnxt,-1.3766,0.0896,0.8048,0.0624,0.01,207
+game_score_p40,Game Score por 40',bsl,-0.6625,0.0916,0.9397,0.0891,0.2324,320
+game_score_p40,Game Score por 40',cba,-1.5127,0.1265,1.2306,0.0888,0.1897,88
+game_score_p40,Game Score por 40',eurocup,-0.6447,0.0456,0.9191,0.0382,0.3551,1244
+game_score_p40,Game Score por 40',euroleague,-0.0,0.0,1.0,0.0,0.4617,1338
+game_score_p40,Game Score por 40',feb1,-1.0147,0.1021,0.8945,0.0488,0.2454,250
+game_score_p40,Game Score por 40',feb2,-1.8444,0.1009,1.1402,0.1163,0.4852,387
+game_score_p40,Game Score por 40',feb3,-3.1513,0.0651,1.1075,0.1032,0.1894,313
+game_score_p40,Game Score por 40',fec,-1.4986,0.0904,1.4147,0.0974,0.1068,698
+game_score_p40,Game Score por 40',gbl,-0.7636,0.0629,0.7806,0.0608,0.0142,532
+game_score_p40,Game Score por 40',gleague,-0.2427,0.0632,0.7701,0.0628,0.2815,1235
+game_score_p40,Game Score por 40',lba,-0.6602,0.0427,0.9329,0.0464,0.3499,854
+game_score_p40,Game Score por 40',ligau,-2.9691,0.0979,1.1187,0.154,0.0818,83
+game_score_p40,Game Score por 40',lnb,-0.4617,0.0451,0.7458,0.0357,0.088,810
+game_score_p40,Game Score por 40',nba,0.4861,0.1068,1.1388,0.1109,0.4874,831
+game_score_p40,Game Score por 40',nbl,-0.6436,0.0941,0.9131,0.0781,0.4982,185
+game_score_p40,Game Score por 40',ncaa,-0.6007,0.0815,0.8591,0.0871,0.5143,501
+game_score_p40,Game Score por 40',vtb,-0.9048,0.0659,1.0502,0.051,0.3059,330
+ws_per_40,Win Shares por 40',acb,-0.4197,0.055,0.7125,0.0361,0.4175,1236
+ws_per_40,Win Shares por 40',bbl,-0.931,0.0571,0.7695,0.0606,0.48,873
+ws_per_40,Win Shares por 40',bcl,-1.1105,0.0749,1.145,0.0697,0.6237,982
+ws_per_40,Win Shares por 40',bnxt,-1.7356,0.1131,0.8064,0.0593,0.2477,206
+ws_per_40,Win Shares por 40',bsl,-0.7751,0.071,0.8089,0.0742,0.3133,313
+ws_per_40,Win Shares por 40',cba,-1.0748,0.0884,1.0251,0.1073,0.3597,79
+ws_per_40,Win Shares por 40',eurocup,-0.7339,0.0579,0.8148,0.051,0.653,1136
+ws_per_40,Win Shares por 40',euroleague,-0.0,0.0,1.0,0.0,0.8253,1209
+ws_per_40,Win Shares por 40',feb1,-1.1828,0.0795,0.7554,0.0619,0.3403,250
+ws_per_40,Win Shares por 40',feb2,-1.8648,0.1162,1.2095,0.125,0.7799,387
+ws_per_40,Win Shares por 40',feb3,-2.9218,0.0472,0.9729,0.0852,0.2877,313
+ws_per_40,Win Shares por 40',fec,-1.6263,0.1105,1.0915,0.1032,0.4246,639
+ws_per_40,Win Shares por 40',gbl,-0.9265,0.0424,0.6551,0.0288,0.2955,519
+ws_per_40,Win Shares por 40',gleague,-0.7679,0.0921,1.3588,0.2213,1.005,1210
+ws_per_40,Win Shares por 40',lba,-0.8045,0.0642,0.7137,0.05,0.52,815
+ws_per_40,Win Shares por 40',ligau,-2.7348,0.0786,0.9131,0.1195,0.1368,83
+ws_per_40,Win Shares por 40',nba,-0.0493,0.0776,1.109,0.1,0.7543,827
+ws_per_40,Win Shares por 40',nbl,-0.8545,0.0918,1.0593,0.0874,0.8673,181
+ws_per_40,Win Shares por 40',ncaa,-1.0917,0.0629,0.8946,0.086,0.6594,490
+ws_per_40,Win Shares por 40',vtb,-0.9769,0.0818,0.9927,0.0803,0.382,320
+pct_aro,"% de tiros en el aro (< 1,8 m)",acb,-0.0569,0.0233,1.2029,0.042,0.1771,1227
+pct_aro,"% de tiros en el aro (< 1,8 m)",bbl,0.0652,0.0284,1.053,0.0314,0.01,909
+pct_aro,"% de tiros en el aro (< 1,8 m)",bcl,-0.0392,0.0368,1.0287,0.025,0.01,1093
+pct_aro,"% de tiros en el aro (< 1,8 m)",bnxt,-0.0316,0.0613,1.1567,0.0617,0.01,204
+pct_aro,"% de tiros en el aro (< 1,8 m)",bsl,0.0681,0.0598,0.9949,0.0404,0.01,316
+pct_aro,"% de tiros en el aro (< 1,8 m)",eurocup,-0.0238,0.0337,1.0156,0.028,0.01,1229
+pct_aro,"% de tiros en el aro (< 1,8 m)",euroleague,-0.0,0.0,1.0,0.0,0.01,1327
+pct_aro,"% de tiros en el aro (< 1,8 m)",feb1,-0.0609,0.0964,1.0276,0.074,0.01,123
+pct_aro,"% de tiros en el aro (< 1,8 m)",feb2,-0.0777,0.1023,0.9728,0.085,0.01,187
+pct_aro,"% de tiros en el aro (< 1,8 m)",feb3,-0.1167,0.1019,1.0277,0.1458,0.1301,192
+pct_aro,"% de tiros en el aro (< 1,8 m)",fec,-0.1165,0.0282,0.8365,0.0348,0.01,681
+pct_aro,"% de tiros en el aro (< 1,8 m)",gbl,-0.0454,0.033,1.0756,0.0368,0.0361,534
+pct_aro,"% de tiros en el aro (< 1,8 m)",gleague,0.3431,0.0599,1.1927,0.0385,0.1537,1220
+pct_aro,"% de tiros en el aro (< 1,8 m)",lba,-0.1989,0.0374,1.0974,0.0338,0.1381,852
+pct_aro,"% de tiros en el aro (< 1,8 m)",ligau,0.0274,0.1246,0.9727,0.1433,0.01,83
+pct_aro,"% de tiros en el aro (< 1,8 m)",lnb,0.1257,0.0359,1.1255,0.0423,0.0589,885
+pct_aro,"% de tiros en el aro (< 1,8 m)",nba,0.2532,0.0763,1.0044,0.0412,0.01,821
+pct_aro,"% de tiros en el aro (< 1,8 m)",nbl,0.153,0.0848,0.9525,0.0781,0.01,182
+pct_aro,"% de tiros en el aro (< 1,8 m)",ncaa,0.4928,0.0984,1.0593,0.0608,0.01,492
+pct_aro,"% de tiros en el aro (< 1,8 m)",vtb,-0.0467,0.0539,1.1262,0.0559,0.0955,231
+pct_corta,"% de tiros cortos (1,8-4,25 m)",acb,0.0153,0.0493,1.1095,0.0391,0.2324,1227
+pct_corta,"% de tiros cortos (1,8-4,25 m)",bbl,-0.0838,0.0615,1.014,0.0671,0.2817,909
+pct_corta,"% de tiros cortos (1,8-4,25 m)",bcl,-0.1107,0.0702,1.1173,0.0418,0.5085,1093
+pct_corta,"% de tiros cortos (1,8-4,25 m)",bnxt,0.059,0.0676,0.9584,0.1052,0.2434,204
+pct_corta,"% de tiros cortos (1,8-4,25 m)",bsl,-0.0579,0.066,0.8345,0.0634,0.0606,316
+pct_corta,"% de tiros cortos (1,8-4,25 m)",eurocup,-0.0293,0.0629,1.0534,0.0637,0.2192,1229
+pct_corta,"% de tiros cortos (1,8-4,25 m)",euroleague,-0.0,0.0,1.0,0.0,0.2406,1327
+pct_corta,"% de tiros cortos (1,8-4,25 m)",feb1,-0.1051,0.0853,0.9589,0.0911,0.01,123
+pct_corta,"% de tiros cortos (1,8-4,25 m)",feb2,0.0739,0.1149,0.9912,0.0657,0.01,187
+pct_corta,"% de tiros cortos (1,8-4,25 m)",feb3,-0.0919,0.1157,1.0117,0.072,0.1296,192
+pct_corta,"% de tiros cortos (1,8-4,25 m)",fec,-0.1674,0.0647,1.0559,0.0944,0.3637,681
+pct_corta,"% de tiros cortos (1,8-4,25 m)",gbl,-0.0562,0.0575,0.9928,0.0602,0.3884,534
+pct_corta,"% de tiros cortos (1,8-4,25 m)",gleague,0.0688,0.0579,1.0803,0.0908,0.4526,1220
+pct_corta,"% de tiros cortos (1,8-4,25 m)",lba,0.0672,0.0575,0.9578,0.0593,0.0504,852
+pct_corta,"% de tiros cortos (1,8-4,25 m)",ligau,0.2508,0.1837,1.0,0.1691,0.2244,83
+pct_corta,"% de tiros cortos (1,8-4,25 m)",lnb,0.0657,0.0477,1.0126,0.0619,0.452,885
+pct_corta,"% de tiros cortos (1,8-4,25 m)",nba,0.3255,0.0528,0.9952,0.0795,0.4193,821
+pct_corta,"% de tiros cortos (1,8-4,25 m)",nbl,-0.1156,0.1142,0.8997,0.1016,0.4507,182
+pct_corta,"% de tiros cortos (1,8-4,25 m)",ncaa,0.0382,0.0683,0.6949,0.0469,0.01,492
+pct_corta,"% de tiros cortos (1,8-4,25 m)",vtb,-0.0781,0.1113,1.1641,0.1368,0.7141,231
+pct_media,% de tiros de media distancia,acb,-0.0726,0.0251,0.9096,0.0512,0.2476,1227
+pct_media,% de tiros de media distancia,bbl,-0.0612,0.0364,0.8652,0.0411,0.1458,909
+pct_media,% de tiros de media distancia,bcl,-0.0066,0.0412,0.9119,0.0389,0.1941,1093
+pct_media,% de tiros de media distancia,bnxt,-0.0471,0.0551,0.9251,0.0777,0.2011,204
+pct_media,% de tiros de media distancia,bsl,0.0,0.0564,0.8455,0.0464,0.01,316
+pct_media,% de tiros de media distancia,eurocup,-0.0445,0.0403,0.8696,0.0398,0.2308,1229
+pct_media,% de tiros de media distancia,euroleague,-0.0,0.0,1.0,0.0,0.3544,1327
+pct_media,% de tiros de media distancia,feb1,-0.1695,0.1312,0.8627,0.0943,0.01,123
+pct_media,% de tiros de media distancia,feb2,-0.0432,0.1366,1.1829,0.1902,0.1631,187
+pct_media,% de tiros de media distancia,feb3,-0.1244,0.1898,1.0874,0.1304,0.0884,192
+pct_media,% de tiros de media distancia,fec,-0.0817,0.0328,0.9113,0.0553,0.2318,681
+pct_media,% de tiros de media distancia,gbl,0.0274,0.037,0.8011,0.0382,0.01,534
+pct_media,% de tiros de media distancia,gleague,-0.121,0.0496,0.9049,0.0539,0.3435,1220
+pct_media,% de tiros de media distancia,lba,0.1138,0.0302,0.8549,0.0324,0.1366,852
+pct_media,% de tiros de media distancia,ligau,-0.0305,0.2449,1.0984,0.106,0.2698,83
+pct_media,% de tiros de media distancia,lnb,0.0287,0.0428,0.9876,0.0339,0.2539,885
+pct_media,% de tiros de media distancia,nba,0.0857,0.0648,1.0148,0.0699,0.3867,821
+pct_media,% de tiros de media distancia,nbl,-0.4196,0.0631,0.8497,0.0796,0.0978,182
+pct_media,% de tiros de media distancia,ncaa,-0.2123,0.0612,0.6146,0.0524,0.01,492
+pct_media,% de tiros de media distancia,vtb,0.0652,0.0652,0.9165,0.092,0.491,231
+pct_t3_esquina,% de tiros que son triples de esquina,acb,-0.0313,0.0426,1.0742,0.0412,0.01,1227
+pct_t3_esquina,% de tiros que son triples de esquina,bbl,0.0755,0.0463,1.0387,0.0368,0.01,909
+pct_t3_esquina,% de tiros que son triples de esquina,bcl,-0.0575,0.063,0.8964,0.0403,0.01,1093
+pct_t3_esquina,% de tiros que son triples de esquina,bnxt,0.0406,0.0912,1.0975,0.0586,0.01,204
+pct_t3_esquina,% de tiros que son triples de esquina,bsl,0.0671,0.0884,1.255,0.0395,0.3373,316
+pct_t3_esquina,% de tiros que son triples de esquina,eurocup,-0.0137,0.0494,0.9772,0.0397,0.01,1229
+pct_t3_esquina,% de tiros que son triples de esquina,euroleague,-0.0,0.0,1.0,0.0,0.01,1327
+pct_t3_esquina,% de tiros que son triples de esquina,feb1,-0.0575,0.1248,0.9172,0.0804,0.01,123
+pct_t3_esquina,% de tiros que son triples de esquina,feb2,-0.1864,0.1089,1.0458,0.0642,0.2682,187
+pct_t3_esquina,% de tiros que son triples de esquina,feb3,0.3091,0.1445,0.969,0.0642,0.01,192
+pct_t3_esquina,% de tiros que son triples de esquina,fec,0.0193,0.0645,0.8725,0.0405,0.01,681
+pct_t3_esquina,% de tiros que son triples de esquina,gbl,-0.0467,0.0687,0.8847,0.0353,0.01,534
+pct_t3_esquina,% de tiros que son triples de esquina,gleague,0.047,0.0557,1.2168,0.0654,0.2698,1220
+pct_t3_esquina,% de tiros que son triples de esquina,lba,-0.005,0.0515,1.1494,0.0586,0.2937,852
+pct_t3_esquina,% de tiros que son triples de esquina,ligau,0.1499,0.1788,1.106,0.1333,0.01,83
+pct_t3_esquina,% de tiros que son triples de esquina,lnb,-0.1547,0.0398,1.027,0.0404,0.0232,885
+pct_t3_esquina,% de tiros que son triples de esquina,nba,-0.3139,0.0569,1.1764,0.0715,0.3021,821
+pct_t3_esquina,% de tiros que son triples de esquina,nbl,0.2129,0.1115,0.9325,0.1095,0.0554,182
+pct_t3_esquina,% de tiros que son triples de esquina,ncaa,-0.0535,0.0602,0.9382,0.0905,0.01,492
+pct_t3_esquina,% de tiros que son triples de esquina,vtb,0.165,0.0904,1.2114,0.096,0.01,231
+pct_asistidas,% de sus canastas que son asistidas,acb,0.0636,0.0348,0.9741,0.0368,0.3522,1258
+pct_asistidas,% de sus canastas que son asistidas,bbl,0.0366,0.0393,0.8526,0.0342,0.01,913
+pct_asistidas,% de sus canastas que son asistidas,bcl,0.0479,0.0451,0.9151,0.0416,0.3955,1095
+pct_asistidas,% de sus canastas que son asistidas,bnxt,0.1545,0.0929,1.0511,0.072,0.3552,208
+pct_asistidas,% de sus canastas que son asistidas,bsl,-0.0166,0.0463,0.84,0.073,0.01,320
+pct_asistidas,% de sus canastas que son asistidas,cba,0.1302,0.1525,1.205,0.0865,0.6021,86
+pct_asistidas,% de sus canastas que son asistidas,eurocup,-0.0122,0.0465,0.9406,0.0325,0.2406,1234
+pct_asistidas,% de sus canastas que son asistidas,euroleague,-0.0,0.0,1.0,0.0,0.399,1328
+pct_asistidas,% de sus canastas que son asistidas,feb1,0.1667,0.0849,0.9817,0.0814,0.3736,251
+pct_asistidas,% de sus canastas que son asistidas,feb2,0.1115,0.1108,0.9177,0.0846,0.0992,387
+pct_asistidas,% de sus canastas que son asistidas,feb3,0.2719,0.1301,1.1191,0.0873,0.3018,313
+pct_asistidas,% de sus canastas que son asistidas,fec,-0.033,0.0535,0.8035,0.048,0.0936,685
+pct_asistidas,% de sus canastas que son asistidas,gbl,-0.1378,0.0613,0.9772,0.0496,0.3487,536
+pct_asistidas,% de sus canastas que son asistidas,gleague,-0.2256,0.0441,0.9989,0.0738,0.3814,1236
+pct_asistidas,% de sus canastas que son asistidas,lba,0.004,0.0347,0.9205,0.0337,0.1555,857
+pct_asistidas,% de sus canastas que son asistidas,ligau,0.2286,0.1488,0.9939,0.1375,0.3186,83
+pct_asistidas,% de sus canastas que son asistidas,lnb,-0.042,0.0358,0.8846,0.0528,0.1187,901
+pct_asistidas,% de sus canastas que son asistidas,nba,-0.5002,0.0767,1.2451,0.1406,0.3277,826
+pct_asistidas,% de sus canastas que son asistidas,nbl,-0.0342,0.0813,1.0825,0.1033,0.6667,188
+pct_asistidas,% de sus canastas que son asistidas,ncaa,-0.1542,0.0655,0.9806,0.0676,0.4099,500
+pct_asistidas,% de sus canastas que son asistidas,vtb,0.0557,0.07,1.1807,0.1344,0.7339,250
+rapm,RAPM (impacto en pista por 100 pos.),acb,-0.2384,0.0898,1.0928,0.2297,0.6453,1234
+rapm,RAPM (impacto en pista por 100 pos.),bbl,-0.5888,0.6636,1.233,4.5417,0.6699,536
+rapm,RAPM (impacto en pista por 100 pos.),bcl,-0.65,0.3492,1.0802,1.3442,0.5656,1047
+rapm,RAPM (impacto en pista por 100 pos.),bnxt,-0.973,0.1876,0.7862,0.1546,0.5185,186
+rapm,RAPM (impacto en pista por 100 pos.),bsl,-0.5061,0.256,1.0928,0.8837,0.5419,317
+rapm,RAPM (impacto en pista por 100 pos.),cba,-0.6912,0.2421,1.4626,0.3578,0.4833,86
+rapm,RAPM (impacto en pista por 100 pos.),eurocup,-0.473,0.1893,1.2506,0.828,0.6304,1192
+rapm,RAPM (impacto en pista por 100 pos.),euroleague,-0.0,0.0,1.0,0.0,0.6829,1277
+rapm,RAPM (impacto en pista por 100 pos.),feb1,-0.616,0.0856,1.1711,0.3289,0.6587,250
+rapm,RAPM (impacto en pista por 100 pos.),feb2,-1.0518,0.463,1.9328,3.3501,0.6753,386
+rapm,RAPM (impacto en pista por 100 pos.),feb3,-1.6583,0.0938,1.3134,0.239,0.5146,313
+rapm,RAPM (impacto en pista por 100 pos.),fec,-0.9125,0.7606,0.9866,1.6994,0.3406,642
+rapm,RAPM (impacto en pista por 100 pos.),gbl,-0.5471,0.2572,0.7603,0.2386,0.3714,512
+rapm,RAPM (impacto en pista por 100 pos.),gleague,-0.6065,0.4778,3.1558,6.7034,0.7732,1023
+rapm,RAPM (impacto en pista por 100 pos.),lba,-0.5183,0.1367,1.0337,0.6328,0.6961,837
+rapm,RAPM (impacto en pista por 100 pos.),ligau,-1.4979,0.1732,0.8208,0.2188,0.0767,83
+rapm,RAPM (impacto en pista por 100 pos.),lnb,-0.511,0.1598,1.0521,0.2688,0.641,870
+rapm,RAPM (impacto en pista por 100 pos.),nba,-0.0261,0.2643,1.7215,6.9787,0.7383,702
+rapm,RAPM (impacto en pista por 100 pos.),nbl,-0.557,0.6473,1.5206,6.3708,0.7052,179
+rapm,RAPM (impacto en pista por 100 pos.),ncaa,-1.7064,2.3109,2.4816,7.2308,0.4214,165
+rapm,RAPM (impacto en pista por 100 pos.),vtb,-0.5751,0.2002,1.098,0.3547,0.4695,243
+orapm,RAPM ofensivo,acb,-0.2633,0.0567,1.1187,0.6635,0.6495,1234
+orapm,RAPM ofensivo,bbl,-0.5893,0.1242,1.3824,0.9022,0.696,536
+orapm,RAPM ofensivo,bcl,-0.7302,0.2243,1.4787,0.9856,0.4615,1047
+orapm,RAPM ofensivo,bnxt,-0.8809,0.0971,0.8084,0.0932,0.5463,186
+orapm,RAPM ofensivo,bsl,-0.4071,0.1571,1.0862,1.0885,0.5229,317
+orapm,RAPM ofensivo,cba,-0.5911,0.1451,1.2765,0.6675,0.5902,86
+orapm,RAPM ofensivo,eurocup,-0.4325,0.0891,1.1511,0.5943,0.6331,1192
+orapm,RAPM ofensivo,euroleague,-0.0,0.0,1.0,0.0,0.6826,1277
+orapm,RAPM ofensivo,feb1,-0.5518,0.0841,1.1441,0.2912,0.6898,250
+orapm,RAPM ofensivo,feb2,-0.9678,0.1677,1.6712,3.9846,0.7318,386
+orapm,RAPM ofensivo,feb3,-1.4765,0.0898,1.0424,0.1933,0.5509,313
+orapm,RAPM ofensivo,fec,-0.9589,0.3967,1.4679,1.0138,0.3613,642
+orapm,RAPM ofensivo,gbl,-0.5549,0.1041,0.8144,0.1166,0.4987,512
+orapm,RAPM ofensivo,gleague,-0.5739,0.2398,3.5519,3.7853,0.7779,1023
+orapm,RAPM ofensivo,lba,-0.5592,0.0656,1.227,0.3294,0.8219,837
+orapm,RAPM ofensivo,ligau,-1.4246,0.1303,0.8015,0.2363,0.3271,83
+orapm,RAPM ofensivo,lnb,-0.4893,0.0668,1.1782,0.3141,0.6791,870
+orapm,RAPM ofensivo,nba,-0.0159,0.0776,1.9512,3.9304,0.752,702
+orapm,RAPM ofensivo,nbl,-0.4909,0.1439,1.5505,0.5191,0.69,179
+orapm,RAPM ofensivo,ncaa,-1.0302,1.4326,1.5235,4.1491,0.4218,165
+orapm,RAPM ofensivo,vtb,-0.5605,0.0845,1.1017,0.2085,0.5358,243
+drapm,RAPM defensivo (> 0 = mejor defensa),acb,-0.1013,0.0601,1.4748,0.9719,0.7225,1234
+drapm,RAPM defensivo (> 0 = mejor defensa),bbl,-0.3601,0.2441,1.3308,3.4898,0.6879,536
+drapm,RAPM defensivo (> 0 = mejor defensa),bcl,-0.3647,0.1334,1.2245,1.2471,0.7267,1047
+drapm,RAPM defensivo (> 0 = mejor defensa),bnxt,-0.7764,0.149,1.1015,0.169,0.6698,186
+drapm,RAPM defensivo (> 0 = mejor defensa),bsl,-0.4131,0.0843,1.2767,0.2263,0.7151,317
+drapm,RAPM defensivo (> 0 = mejor defensa),cba,-0.5342,0.0913,1.4656,0.3954,0.5777,86
+drapm,RAPM defensivo (> 0 = mejor defensa),eurocup,-0.322,0.09,1.761,0.8479,0.6439,1192
+drapm,RAPM defensivo (> 0 = mejor defensa),euroleague,-0.0,0.0,1.0,0.0,0.7992,1277
+drapm,RAPM defensivo (> 0 = mejor defensa),feb1,-0.3873,0.0861,1.4138,0.3522,0.7384,250
+drapm,RAPM defensivo (> 0 = mejor defensa),feb2,-0.5469,0.1743,1.8268,0.9541,0.6661,386
+drapm,RAPM defensivo (> 0 = mejor defensa),feb3,-0.8738,0.0908,1.6342,0.3243,0.6553,313
+drapm,RAPM defensivo (> 0 = mejor defensa),fec,-0.6366,0.1081,0.9204,0.0848,0.5513,642
+drapm,RAPM defensivo (> 0 = mejor defensa),gbl,-0.3647,0.068,0.8825,0.1543,0.6121,512
+drapm,RAPM defensivo (> 0 = mejor defensa),gleague,-0.375,0.0785,2.8066,3.7507,0.7882,1023
+drapm,RAPM defensivo (> 0 = mejor defensa),lba,-0.2861,0.0475,1.1849,0.102,0.6764,837
+drapm,RAPM defensivo (> 0 = mejor defensa),ligau,-0.6968,0.0735,0.88,0.1453,0.3048,83
+drapm,RAPM defensivo (> 0 = mejor defensa),lnb,-0.3273,0.0776,1.287,1.0086,0.6975,870
+drapm,RAPM defensivo (> 0 = mejor defensa),nba,-0.0094,0.0786,2.3569,3.763,0.7729,702
+drapm,RAPM defensivo (> 0 = mejor defensa),nbl,-0.3905,0.1452,1.6556,3.9693,0.6989,179
+drapm,RAPM defensivo (> 0 = mejor defensa),ncaa,-0.7019,0.5521,1.1331,4.0525,0.423,165
+drapm,RAPM defensivo (> 0 = mejor defensa),vtb,-0.3752,0.0716,1.1551,0.2535,0.6105,243

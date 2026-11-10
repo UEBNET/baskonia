@@ -1,7 +1,7 @@
 {
  "version": "v4.0",
- "generado": "2026-11-04T12:07:28",
- "huella_config": "dee22d77e7",
+ "generado": "2026-11-10T08:21:19",
+ "huella_config": "5b38dba0c3",
  "reglas": {
   "tramos": {
    "basura": "excluir",
@@ -74,13 +74,13 @@
   "roles_ajuste": "por_temporada"
  },
  "totales": {
-  "liga_temporadas": 115,
-  "incluidas": 99,
-  "incluidas_con_aviso": 12,
-  "excluidas": 4,
-  "tramos_validos_incluidos": 960245,
-  "posesiones_incluidas": 2863868.8600000003,
-  "partidos_pbp_incluidos": 38679
+  "liga_temporadas": 118,
+  "incluidas": 102,
+  "incluidas_con_aviso": 11,
+  "excluidas": 5,
+  "tramos_validos_incluidos": 978417,
+  "posesiones_incluidas": 2913469.86,
+  "partidos_pbp_incluidos": 39335
  },
  "por_temporada": {
   "2020-21": {
@@ -116,14 +116,16 @@
    ]
   },
   "2025-26": {
-   "tramos_validos": 240227,
-   "ligas": 20,
+   "tramos_validos": 246144,
+   "ligas": 21,
    "excluidas": []
   },
   "2026-27": {
-   "tramos_validos": 30060,
-   "ligas": 18,
-   "excluidas": []
+   "tramos_validos": 42315,
+   "ligas": 20,
+   "excluidas": [
+    "gleague"
+   ]
   }
  },
  "excluidas": [
@@ -146,6 +148,11 @@
    "liga": "ncaa",
    "temporada": "2024-25",
    "motivo": "partidos con quintetos 27% < 50%"
+  },
+  {
+   "liga": "gleague",
+   "temporada": "2026-27",
+   "motivo": "0.0 tramos por partido < 4 (quintetos casi fijos)"
   }
  ],
  "con_aviso": [
@@ -203,11 +210,6 @@
    "liga": "nbl",
    "temporada": "2025-26",
    "motivo": "cobertura parcial 54%"
-  },
-  {
-   "liga": "nba",
-   "temporada": "2026-27",
-   "motivo": "cobertura parcial 90%"
   }
  ],
  "huecos_declarados_comprobados": [
@@ -1133,6 +1135,14 @@
    "pista": 235,
    "crosswalk_fraccion": 1.0
   },
+  "ligau|2025-26": {
+   "capacidad": 261,
+   "capacidad_min_300": 133,
+   "roles": 257,
+   "estilos": 216,
+   "pista": 257,
+   "crosswalk_fraccion": 1.0
+  },
   "lnb|2025-26": {
    "capacidad": 270,
    "capacidad_min_300": 159,
@@ -1174,27 +1184,27 @@
    "crosswalk_fraccion": 1.0
   },
   "acb|2026-27": {
-   "capacidad": 250,
+   "capacidad": 263,
    "capacidad_min_300": 0,
-   "roles": 240,
-   "estilos": 198,
-   "pista": 240,
+   "roles": 252,
+   "estilos": 209,
+   "pista": 252,
    "crosswalk_fraccion": 1.0
   },
   "bbl|2026-27": {
-   "capacidad": 247,
+   "capacidad": 257,
    "capacidad_min_300": 0,
-   "roles": 227,
-   "estilos": 181,
-   "pista": 227,
+   "roles": 242,
+   "estilos": 196,
+   "pista": 242,
    "crosswalk_fraccion": 1.0
   },
   "bcl|2026-27": {
-   "capacidad": 428,
+   "capacidad": 436,
    "capacidad_min_300": 0,
-   "roles": 388,
-   "estilos": 206,
-   "pista": 388,
+   "roles": 394,
+   "estilos": 257,
+   "pista": 394,
    "crosswalk_fraccion": 1.0
   },
   "bnxt|2026-27": {
@@ -1206,11 +1216,11 @@
    "crosswalk_fraccion": 1.0
   },
   "bsl|2026-27": {
-   "capacidad": 255,
+   "capacidad": 263,
    "capacidad_min_300": 0,
-   "roles": 231,
-   "estilos": 147,
-   "pista": 231,
+   "roles": 241,
+   "estilos": 168,
+   "pista": 241,
    "crosswalk_fraccion": 1.0
   },
   "cba|2026-27": {
@@ -1222,83 +1232,91 @@
    "crosswalk_fraccion": 1.0
   },
   "eurocup|2026-27": {
-   "capacidad": 411,
+   "capacidad": 419,
    "capacidad_min_300": 0,
-   "roles": 409,
-   "estilos": 321,
-   "pista": 411,
+   "roles": 419,
+   "estilos": 342,
+   "pista": 420,
    "crosswalk_fraccion": 1.0
   },
   "euroleague|2026-27": {
-   "capacidad": 288,
+   "capacidad": 292,
    "capacidad_min_300": 0,
-   "roles": 287,
-   "estilos": 237,
-   "pista": 287,
+   "roles": 290,
+   "estilos": 253,
+   "pista": 290,
    "crosswalk_fraccion": 1.0
   },
   "feb1|2026-27": {
-   "capacidad": 235,
+   "capacidad": 242,
    "capacidad_min_300": 0,
-   "roles": 226,
-   "estilos": 184,
-   "pista": 229,
+   "roles": 234,
+   "estilos": 197,
+   "pista": 236,
    "crosswalk_fraccion": 1.0
   },
   "feb2|2026-27": {
-   "capacidad": 347,
+   "capacidad": 353,
    "capacidad_min_300": 0,
-   "roles": 326,
-   "estilos": 262,
-   "pista": 326,
+   "roles": 332,
+   "estilos": 293,
+   "pista": 332,
    "crosswalk_fraccion": 1.0
   },
   "feb3|2026-27": {
-   "capacidad": 1822,
+   "capacidad": 1910,
    "capacidad_min_300": 0,
-   "roles": 1733,
-   "estilos": 1229,
-   "pista": 1735,
+   "roles": 1817,
+   "estilos": 1424,
+   "pista": 1820,
    "crosswalk_fraccion": 1.0
   },
   "fec|2026-27": {
-   "capacidad": 619,
+   "capacidad": 637,
    "capacidad_min_300": 0,
-   "roles": 571,
-   "estilos": 405,
-   "pista": 571,
+   "roles": 590,
+   "estilos": 443,
+   "pista": 591,
    "crosswalk_fraccion": 1.0
   },
   "gbl|2026-27": {
-   "capacidad": 202,
+   "capacidad": 209,
    "capacidad_min_300": 0,
-   "roles": 197,
-   "estilos": 132,
-   "pista": 197,
+   "roles": 203,
+   "estilos": 149,
+   "pista": 203,
    "crosswalk_fraccion": 1.0
   },
   "lba|2026-27": {
-   "capacidad": 226,
+   "capacidad": 232,
    "capacidad_min_300": 0,
-   "roles": 196,
+   "roles": 204,
+   "estilos": 166,
+   "pista": 204,
+   "crosswalk_fraccion": 1.0
+  },
+  "ligau|2026-27": {
+   "capacidad": 207,
+   "capacidad_min_300": 0,
+   "roles": 202,
    "estilos": 156,
-   "pista": 196,
+   "pista": 202,
    "crosswalk_fraccion": 1.0
   },
   "lnb|2026-27": {
-   "capacidad": 195,
+   "capacidad": 204,
    "capacidad_min_300": 0,
-   "roles": 192,
-   "estilos": 162,
-   "pista": 195,
+   "roles": 202,
+   "estilos": 173,
+   "pista": 204,
    "crosswalk_fraccion": 1.0
   },
   "nba|2026-27": {
-   "capacidad": 425,
-   "capacidad_min_300": 0,
-   "roles": 417,
-   "estilos": 296,
-   "pista": 424,
+   "capacidad": 459,
+   "capacidad_min_300": 36,
+   "roles": 459,
+   "estilos": 354,
+   "pista": 459,
    "crosswalk_fraccion": 1.0
   },
   "nbl|2026-27": {
@@ -1318,5 +1336,5 @@
    "crosswalk_fraccion": 1.0
   }
  },
- "tiempo_s": 29
+ "tiempo_s": 27
 }
