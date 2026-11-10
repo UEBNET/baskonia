@@ -58,6 +58,9 @@ mezcla:
   #  4. si nada cumple, el más estable.
   estabilidad_min: 0.60
   cuota_min: 0.04
+  k_fijo: 6                     # 09-11-2026 (Liga U): se conserva la taxonomía vigente de 6 estilos (nombres, p_<estilo> de la
+                                # adaptación, v4.0 y páginas). Con la Liga U en la población la regla de arriba elegiría K = 7;
+                                # queda anotado en seleccion_k.json (k_regla) como diagnóstico. Quitar para volver a la regla.
   diagnostico:                  # alternativas descartadas, medidas en cada ejecución (no cambian la salida)
     covarianzas_equipos: ["full", "tied"]
     k_max: 8
