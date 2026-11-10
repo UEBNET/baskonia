@@ -303,6 +303,30 @@ def pares_cvae(tabla: pd.DataFrame, cfg: dict, mets: list[str], progreso=print) 
 Z80 = 1.2815515655446004
 
 
+def _simetrica_tril(v, n: int) -> np.ndarray:
+    """Matriz simétrica n × n a partir de su triangular inferior en el orden de np.tril_indices (el de la escritura,
+    más arriba en este módulo, y el de la lectura de bbfit.sim_insumos.covarianza_destino); None → NaN."""
+    X = np.zeros((n, n))
+    X[np.tril_indices(n)] = [np.nan if x is None else x for x in v]
+    return X + X.T - np.diag(np.diag(X))
+
+
+def sd_par_matriz(cv: dict) -> np.ndarray:
+    """DT del nivel de cada par de nodos, sd(δ_a − δ_b), de un fichero covarianza/<m>.json.
+    Usa `sd_par_triangular` (mezcla con la cota de Cauchy-Schwarz); donde falta, √(Σ_aa + Σ_bb − 2Σ_ab) con
+    `cov_triangular` (igual que bbfit.sim_insumos.var_par). Corrige la lectura anterior, que usaba np.triu_indices
+    sobre datos escritos con np.tril_indices (DT desordenadas y diagonal ≠ 0) y, sin `sd_par_triangular`, tomaba
+    covarianzas por desviaciones típicas."""
+    n = len(cv["nodos"])
+    S = _simetrica_tril(cv["cov_triangular"], n)
+    d = np.diag(S)
+    desde_cov = np.sqrt(np.maximum(d[:, None] + d[None, :] - 2 * S, 0.0))
+    if cv.get("sd_par_triangular") is None:
+        return desde_cov
+    P = _simetrica_tril(cv["sd_par_triangular"], n)
+    return np.where(np.isfinite(P), P, desde_cov)
+
+
 def vara_artifact(dir_dest: Path | None = None, temp: str = "2025-26") -> dict:
     """Constantes para que el artifact exprese los equivalentes EuroLeague de «Datos Normalizados» en la vara de
     cualquier liga (liga elegida = 0). Por métrica: transformación, s y δ de cada liga en `temp` (EuroLeague: s = 1,
@@ -319,10 +343,7 @@ def vara_artifact(dir_dest: Path | None = None, temp: str = "2025-26") -> dict:
         if f.exists():
             cv = json.loads(f.read_text(encoding="utf-8"))
             nod = cv["nodos"]
-            n = len(nod)
-            T = np.zeros((n, n))
-            T[np.triu_indices(n)] = cv.get("sd_par_triangular") or cv["cov_triangular"]
-            T = T + T.T - np.diag(np.diag(T))
+            T = sd_par_matriz(cv)
             ix = {x: i for i, x in enumerate(nod)}
             for o in nod:
                 sp[o] = [_sig(T[ix[o], ix[f"{d}:{temp}"]], 4) if f"{d}:{temp}" in ix else None for d in ligas]

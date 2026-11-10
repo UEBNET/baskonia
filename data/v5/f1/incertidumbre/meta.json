@@ -1,0 +1,12 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F1",
+ "config": "configs/v5/f1.yaml",
+ "hash_config": "f505a1d5830d",
+ "hash_datos_entrada": "b649646db94c3cb8",
+ "fecha": "2026-11-09T20:39:51+00:00",
+ "python": "3.13.18",
+ "paso": "incertidumbre",
+ "temporada": "2025-26",
+ "supuesto": "exposición en destino = exposición en origen"
+}

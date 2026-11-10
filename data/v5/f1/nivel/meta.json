@@ -1,0 +1,11 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F1",
+ "config": "configs/v5/f1.yaml",
+ "hash_config": "f505a1d5830d",
+ "hash_datos_entrada": "bf96bc89eaa0c020",
+ "fecha": "2026-11-09T20:55:17+00:00",
+ "python": "3.13.18",
+ "paso": "nivel",
+ "temporada": "2025-26"
+}
