@@ -70,3 +70,13 @@ def test_bref_y_fiba():
     s = extractor_fiba_livestats(doc)
     assert [x["entrenador"] for x in s] == ["Juan Pérez", "Ana Ruiz"]
     assert [x["puntos"] for x in s] == [80.0, 75.0]
+
+
+def test_fecha_estandar_iso():
+    """La fecha del partido sale siempre en ISO (AAAA-MM-DD); la RFC 2822 de FIBA LiveStats ya no se trunca."""
+    from bbstats.entrenadores import _fecha
+    assert _fecha("Mon, 07 Oct 2024 19:06:51 GMT") == "2024-10-07"
+    assert _fecha("2024-10-07T20:30:00") == "2024-10-07"
+    assert _fecha("2024-10-07") == "2024-10-07"
+    assert _fecha("07/10/2024") == "2024-10-07"
+    assert _fecha("texto") is None and _fecha(None) is None

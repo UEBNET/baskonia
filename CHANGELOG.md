@@ -1,5 +1,29 @@
 # Registro de cambios
 
+## 2026-11-10 — Corrección: fecha de los partidos de BNXT, BSL y GBL en entrenadores (formato ISO)
+
+* **Fallo.** `bbstats/entrenadores.py::_fecha` cortaba la fecha a 10 caracteres. Con la fecha RFC 2822 de FIBA
+  LiveStats («Mon, 07 Oct 2024 19:06:51 GMT») quedaba «Mon, 07 Oc»: ilegible y ordenada alfabéticamente por día de la
+  semana.
+  * Afectaba a `data/processed/<t>/entrenadores/{bnxt,bsl,gbl}_partidos.csv` y `_tramos.csv` (6.658 filas de
+    partido, todas las temporadas).
+  * Lo heredaba la tabla de partidos por jugador de roles (`data/modelos/roles/partidos_jugador`).
+* **Corrección.**
+  * `_fecha` devuelve siempre ISO (AAAA-MM-DD): admite ISO con o sin hora, RFC 2822 y dd/mm/aaaa. Si no reconoce el
+    formato devuelve vacío, nunca un texto truncado.
+  * Test en `tests/test_entrenadores.py`.
+* **Regenerado sin descarga.** `python -m bbstats entrenadores --ligas bnxt bsl gbl --sin-descarga`, más
+  `entrenadores.csv` y `entrenadores_cobertura.csv`.
+  * Al ordenarse bien los partidos, cambian 29 de los 353 tramos club-temporada-entrenador de esas ligas y el
+    entrenador asignado en 15 filas de partido (relleno de huecos por orden cronológico).
+* **Sin regenerar todavía (pendiente de aprobación):** las capas que leen esos tramos o esas fechas.
+  * Estilo por entrenador (`bbestilo entrenadores`).
+  * Roles y partidos por jugador (`bbfit roles`).
+  * Tendencias de entrenador del simulador.
+* La fecha sigue siendo la de modificación del fichero del partido en FIBA LiveStats, normalmente el mismo día o el
+  siguiente.
+* Tarea aparte aprobada por el usuario el 10-11-2026 (encargo v5.0, F2 §5 riesgo 1).
+
 ## 2026-11-09 — Corrección: DT de nivel por par en `vara.json` (rangos con vara ≠ EuroLeague)
 
 * **Fallo.** `bbnorm3/destino.py::vara_artifact` leía `sd_par_triangular` con `np.triu_indices`, pero
