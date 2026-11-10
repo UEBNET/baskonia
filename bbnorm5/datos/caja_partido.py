@@ -26,6 +26,7 @@ import pandas as pd
 from bbnorm5 import config as C
 
 LIGAS_BOX = ["acb", "bbl", "cba", "feb1", "feb2", "feb3", "gbl", "bsl", "bnxt", "bcl", "fec", "lba", "ncaa", "nbl", "vtb"]
+FECHA_APROXIMADA = {"bnxt", "bsl", "gbl"}     # fecha = modificación del fichero del partido (FIBA LiveStats)
 CAMPOS_ID = ("name", "dorsal", "posicion", "nacionalidad", "altura_cm", "edad", "fecha_nacimiento")
 
 
@@ -102,7 +103,10 @@ def completar_fechas(d: pd.DataFrame, liga: str, temporada: str, fechas_bruto: d
         e = e[e["fecha"].astype(str).str.match(r"\d{4}-\d{2}-\d{2}")]
         m = d["game_id"].map(e.set_index("game_id")["fecha"].str[:10])
         sel = ~ok & m.notna()
-        d.loc[sel, "fecha"], d.loc[sel, "fecha_origen"] = m[sel], "calendario"
+        # en BNXT, BSL y GBL la fecha del calendario de entrenadores es la misma de modificación del fichero de
+        # FIBA LiveStats (ya en ISO desde el 10-11-2026): sigue siendo aproximada
+        origen = "modificacion_fichero" if liga in FECHA_APROXIMADA else "calendario"
+        d.loc[sel, "fecha"], d.loc[sel, "fecha_origen"] = m[sel], origen
         ok = ok | sel
     if not ok.all() and fechas_bruto:
         fb = pd.to_datetime(pd.Series(fechas_bruto), errors="coerce", utc=True, format="%a, %d %b %Y %H:%M:%S %Z")

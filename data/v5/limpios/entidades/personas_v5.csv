@@ -1384,7 +1384,7 @@ bbl,2001867,P000782,Xavier Rathan-Mayes,P000782,,False
 bbl,2001872,P001363,Adrian Worthy,P001363,,False
 bbl,2001873,P001364,Leonhard Laar,P001364,,False
 bbl,2001874,P001365,Christopher Ledlum,P001365,,False
-bbl,2001882,P001366,Janne Müller,P001366,,False
+bbl,2001882,P001366,Janne Müller,P001366,"unido: mismo club en dos competiciones, apellido e inicial",False
 bbl,2001889,P001367,Justin Edler-Davis,P001367,"unido: mismo club en dos competiciones, apellido e inicial",False
 bbl,2001891,P001368,Eric Reed II,P001368,"unido: mismo club en dos competiciones, apellido e inicial",False
 bbl,2001892,P001369,Zacharie Perrin,P001369,,False
@@ -1472,7 +1472,7 @@ bbl,2002962,P001445,Booker Coplin,P001445,"unido: mismo club en dos competicione
 bbl,2002971,P001446,Patrick Heckmann,P001197,"unido: mismo club en dos competiciones, apellido e inicial",True
 bbl,2002982,P001447,Justin Simon,P001200,"unido: mismo club en dos competiciones, apellido e inicial",True
 bbl,2002987,P001448,Tomislav Zubcic,P001448,,False
-bbl,2002990,P001449,Tibor Pleiß,P001449,,False
+bbl,2002990,P001449,Tibor Pleiß,P001449,"unido: mismo club en dos competiciones, apellido e inicial",False
 bbl,2002992,P001450,Darnell Edge,P001450,,False
 bbl,2002995,P001451,Ross Williams,P001451,,False
 bbl,2003000,P001452,Esli Edigin,P001452,,False
@@ -2628,7 +2628,7 @@ bbl,56471,P002542,Kevin Wohlrath,P002542,,False
 bbl,56472,P002543,Eddy Edigin Jr,P001158,"unido: mismo club en dos competiciones, apellido e inicial",True
 bbl,56474,P002544,Seth Hinrichs,P000402,"unido: mismo club en dos competiciones, apellido e inicial",True
 bbl,56475,P002545,Fedor Zugic,P002089,"unido: mismo club en dos competiciones, apellido e inicial",True
-bbl,56476,P002546,Leif Möller,P002546,,False
+bbl,56476,P002546,Leif Möller,P002546,"unido: mismo club en dos competiciones, apellido e inicial",False
 bbl,56478,P002547,Maximilian Ugrai,P002547,"unido: mismo club en dos competiciones, apellido e inicial",False
 bbl,56479,P002548,Niklas Würzner,P002548,"unido: mismo club en dos competiciones, apellido e inicial",False
 bbl,56483,P002549,Jeff Roberson,P002317,"unido: mismo club en dos competiciones, apellido e inicial",True
@@ -2915,7 +2915,7 @@ bcl,139447,P002803,Evangelos Margaritis,P002803,,False
 bcl,140195,P002804,Vassilis Xanthopoulos,P002804,"unido: mismo club en dos competiciones, apellido e inicial",False
 bcl,140616,P000034,Quino Colom,P000034,,False
 bcl,140645,P002805,Hadi Ozdemir,P002805,,False
-bcl,140650,P002806,Ioannis Bourousis,P002806,,False
+bcl,140650,P002806,Ioannis Bourousis,P002806,"unido: mismo club en dos competiciones, apellido e inicial",False
 bcl,141109,P002807,Yogev Ohayon,P002807,,False
 bcl,141376,P002808,Mikko Koivisto,P002808,,False
 bcl,141548,P002809,Murat Göktas,P002809,,False
@@ -3012,7 +3012,7 @@ bcl,156578,P002872,Jose Barbosa,P002872,,False
 bcl,156628,P000047,Dani Perez,P000047,,False
 bcl,156905,P002873,Keith Langford,P002873,,False
 bcl,157251,P002874,Marcus Slaughter,P002874,,False
-bcl,157637,P002875,Tibor Pleiss,P002875,,False
+bcl,157637,P002875,Tibor Pleiss,P001449,"unido: mismo club en dos competiciones, apellido e inicial",True
 bcl,157644,P002876,Can Maxim Mutaf,P002876,,False
 bcl,157711,P000287,Bruno Fitipaldo,P000287,,False
 bcl,157782,P000169,Vítor Benite,P000169,,False
@@ -3062,7 +3062,7 @@ bcl,167301,P002906,Vitalis Chikoko,P002906,,False
 bcl,167306,P002907,Eimantas Bendzius,P002907,,False
 bcl,167309,P000716,Evaldas Kairys,P000716,,False
 bcl,167497,P002908,Nicolás Laprovittola,P000183,,True
-bcl,167552,P000494,Ioannis Athinaiou,P000494,,False
+bcl,167552,P000494,Ioannis Athinaiou,P000494,"unido: mismo club en dos competiciones, apellido e inicial",False
 bcl,167625,P002909,Paul Lacombe,P002909,,False
 bcl,168262,P002910,Mathieu  Wojciechowski,P002910,,False
 bcl,168265,P002911,Tommaso Raspino,P002911,,False
@@ -3456,7 +3456,7 @@ bcl,203480,P003172,Panagiotis Filippakos,P003172,,False
 bcl,203528,P000965,Amar Alibegovic,P000965,,False
 bcl,203585,P003173,Terrance Ferguson,P003173,,False
 bcl,203622,P000226,Mike Tobey,P000226,,False
-bcl,203657,P003174,Ioannis Chatzinikolas,P003174,,False
+bcl,203657,P003174,Ioannis Chatzinikolas,P003174,"unido: mismo club en dos competiciones, apellido e inicial",False
 bcl,203704,P003175,Dominik Olejniczak,P003175,,False
 bcl,203706,P003176,Przemyslaw Zolnierewicz,P003176,,False
 bcl,203707,P003177,Daniel Relvao,P003177,,False
@@ -3745,7 +3745,7 @@ bcl,220534,P000434,Aaron Jones,P000434,,False
 bcl,220572,P000334,David Kravish,P000334,,False
 bcl,220611,P003364,Dustin Hogue,P003364,,False
 bcl,220619,P003365,Aaron White,P003365,,False
-bcl,220681,P003366,Tyran De Lattibeaudiere,P003366,,False
+bcl,220681,P003366,Tyran De Lattibeaudiere,P003366,"unido: mismo club en dos competiciones, apellido e inicial",False
 bcl,220715,P003367,Alfonzo McKinnie,P003367,,False
 bcl,220731,P003368,Marek Klassen,P003368,,False
 bcl,220769,P003369,Auston Barnes,P003369,,False
@@ -6102,8 +6102,8 @@ bnxt,vaara-luukas,P003692,Luukas Vaara,P003692,,False
 bnxt,valinskas-paulius,P003060,Paulius Valinskas,P003060,,False
 bnxt,vanbree-luuk,P005222,Luuk Van Bree,P005222,"unido: mismo club en dos competiciones, apellido e inicial",False
 bnxt,vanbrussel-tiemen,P005223,Tiemen Vanbrussel,P005223,,False
-bnxt,vanbuggenhout-j,P005224,J Van Buggenhout,P005224,,False
-bnxt,vanbuggenhout-jo,P005225,Jo Van Buggenhout,P005225,"unido: mismo club en dos competiciones, apellido e inicial",False
+bnxt,vanbuggenhout-j,P005224,J Van Buggenhout,P005224,"unido: mismo club en dos competiciones, apellido e inicial",False
+bnxt,vanbuggenhout-jo,P005225,Jo Van Buggenhout,P005224,"unido: mismo club en dos competiciones, apellido e inicial",True
 bnxt,vancleemput-vince,P005226,Vince Van Cleemput,P005226,"unido: mismo club en dos competiciones, apellido e inicial",False
 bnxt,vandee-floris,P005227,Floris Van Dee,P005227,,False
 bnxt,vandegaer-maxime,P005228,Maxime Van De Gaer,P005228,,False
@@ -6753,7 +6753,7 @@ bsl,phillip-tarik,P000588,Tarik Tobias Phillip,P000588,,False
 bsl,pierre-dyshawn,P002983,Dyshawn Pierre,P002983,,False
 bsl,pipes-p,P005620,P.j. Pipes,P005620,,False
 bsl,pipes-shawn,P005621,Shawn Oneal Pipes Jr,P005621,,False
-bsl,pleiss-tibor,P002875,Tibor Pleiss,P002875,,False
+bsl,pleiss-tibor,P002875,Tibor Pleiss,P001449,,True
 bsl,poirier-vincent,P000233,Vincent Poirier,P000233,,False
 bsl,ponitka-mateusz,P005622,Mateusz Ponitka,P005622,,False
 bsl,postel-efe,P003934,Efe Evan Postel,P003934,,False
@@ -8546,7 +8546,7 @@ eurocup,010042,P000450,"MONTERO, JEAN",P000450,,False
 eurocup,010044,P000295,"PEREZ, GERARDO",P000295,,False
 eurocup,010062,P000567,"UBAL, AGUSTIN",P000567,,False
 eurocup,010063,P003606,"NIKOLAIDIS, ALEXANDROS",P003606,,False
-eurocup,010070,P006872,"MOELLER, LEIF",P006872,,False
+eurocup,010070,P006872,"MOELLER, LEIF",P002546,"unido: mismo club en dos competiciones, apellido e inicial",True
 eurocup,010072,P006873,"RATAJ, MICHAEL",P001514,"unido: mismo club en dos competiciones, apellido e inicial",True
 eurocup,010074,P006874,"RICHARDSON, ALEXANDER",P001521,"unido: mismo club en dos competiciones, apellido e inicial",True
 eurocup,010079,P001515,"LIEDTKE, LENNY",P001515,,False
@@ -8567,7 +8567,7 @@ eurocup,010224,P006879,"EMEJURU, GIOVANNI",P006879,,False
 eurocup,010230,P000597,"TRICE, TRAVIS",P000597,,False
 eurocup,010248,P000794,"JONES, MARVIN",P000794,,False
 eurocup,010253,P006880,"CHAPELLI, ALESSANDRO",P006880,,False
-eurocup,010254,P000512,"CRAWFORD, DREW",P000512,,False
+eurocup,010254,P000512,"CRAWFORD, DREW",P000512,"unido: mismo club en dos competiciones, apellido e inicial",False
 eurocup,010283,P006881,"GORDON, KACPER",P006881,,False
 eurocup,010285,P006882,"STERNICKI, TYMOTEUSZ",P006882,,False
 eurocup,010303,P006883,"RADOVANOVIC, NIKOLA",P006883,,False
@@ -8720,7 +8720,7 @@ eurocup,011071,P000762,"HORNSBY, KEITH",P000762,,False
 eurocup,011072,P006942,"HO-YOU-FAT , STEEVE",P006942,,False
 eurocup,011078,P000603,"THOMPSON, DARIUS",P000603,,False
 eurocup,011079,P002989,"GADDY, ABDUL",P002989,,False
-eurocup,011080,P003305,"GKIKAS, NIKOS",P003305,,False
+eurocup,011080,P003305,"GKIKAS, NIKOS",P003305,"unido: mismo club en dos competiciones, apellido e inicial",False
 eurocup,011081,P005466,"ENGINDENIZ, DORUKHAN",P005466,,False
 eurocup,011082,P005596,"OGUT, CAN",P005596,,False
 eurocup,011083,P005496,"GOZENELI, BURAK",P005496,,False
@@ -8915,7 +8915,7 @@ eurocup,012242,P007015,"HASSAN, PATRICK",P007015,,False
 eurocup,012244,P007016,"ODZEBE, GIANNIS",P007016,,False
 eurocup,012259,P000673,"HEIDEGGER, MAX",P000673,,False
 eurocup,012268,P001488,"ATAMNA, ADAM",P001488,,False
-eurocup,012271,P007017,"MUELLER, JANNE",P007017,,False
+eurocup,012271,P007017,"MUELLER, JANNE",P001366,"unido: mismo club en dos competiciones, apellido e inicial",True
 eurocup,012289,P007018,"AIRHIENBUWA, THEO",P007018,,False
 eurocup,012290,P007019,"VANIN, LORENZO",P007019,,False
 eurocup,012303,P007020,"KOMAGUM, JONATHAN",P007020,,False
@@ -9576,7 +9576,7 @@ euroleague,004790,P000612,"CORNELIE, PETR",P000612,,False
 euroleague,004834,P000170,"PUSTOVYI, ARTEM",P000170,,False
 euroleague,004846,P006723,"TIMOR, BAR",P006723,,False
 euroleague,004862,P006724,"SEELEY, DENNIS",P001878,"unido: mismo club en dos competiciones, apellido e inicial",True
-euroleague,004863,P000665,"JOVIC, STEFAN",P000665,,False
+euroleague,004863,P000665,"JOVIC, STEFAN",P000665,"unido: mismo club en dos competiciones, apellido e inicial",False
 euroleague,004866,P000444,"KALINIC, NIKOLA",P000444,,False
 euroleague,004884,P000298,"LABEYRIE, LOUIS",P000298,,False
 euroleague,004887,P000233,"POIRIER, VINCENT",P000233,,False
@@ -9947,7 +9947,7 @@ euroleague,011217,P000622,"TAYLOR, KAMERON",P000622,,False
 euroleague,011218,P006960,"EVANS, KEENAN",P006960,,False
 euroleague,011219,P007350,"SORKIN, ROMAN",P007350,,False
 euroleague,011220,P007351,"ZIV, IFTAH",P007351,,False
-euroleague,011221,P000854,"ANTETOKOUNMPO, KOSTAS",P000854,,False
+euroleague,011221,P000854,"ANTETOKOUNMPO, KOSTAS",P000854,"unido: mismo club en dos competiciones, apellido e inicial",False
 euroleague,011223,P000440,"FRANKAMP, CONNER",P000440,,False
 euroleague,011224,P001178,"NAPIER, SHABAZZ",P001178,,False
 euroleague,011225,P007352,"LEE, PARIS",P007352,,False
@@ -9976,7 +9976,7 @@ euroleague,011330,P007359,"BUIKA, DOVYDAS",P007359,,False
 euroleague,011386,P003879,"YAACOV, NOAM",P003879,,False
 euroleague,011396,P000801,"CHOUGKAZ, NIKOS",P000801,"unido: mismo club en dos competiciones, apellido e inicial",False
 euroleague,011433,P007360,"MAYER, OMER",P007360,,False
-euroleague,011442,P007361,"SAMODUROV, ALEXANDROS",P007361,,False
+euroleague,011442,P007361,"SAMODUROV, ALEXANDROS",P007361,"unido: mismo club en dos competiciones, apellido e inicial",False
 euroleague,011620,P007362,"MACHOWSKI, NILS",P007362,,False
 euroleague,011626,P007363,"DOERRIES, AMON",P007363,,False
 euroleague,011631,P007364,"RAPIEQUE, ELIAS",P002561,"unido: mismo club en dos competiciones, apellido e inicial",True
@@ -10282,7 +10282,7 @@ euroleague,LCZ,P005835,"MOTIEJUNAS, DONATAS",P005835,,False
 euroleague,LEM,P001007,"RADOSEVIC, LEON",P001007,"unido: mismo club en dos competiciones, apellido e inicial",False
 euroleague,LFW,P000028,"RUBIO, RICKY",P000028,,False
 euroleague,LHI,P002853,"VORONTSEVICH, ANDREY",P002853,,False
-euroleague,LHK,P002875,"PLEISS, TIBOR",P002875,,False
+euroleague,LHK,P002875,"PLEISS, TIBOR",P001449,,True
 euroleague,LKY,P007453,"KHVOSTOV, DMITRY",P007453,"unido: mismo club en dos competiciones, apellido e inicial",False
 euroleague,LLH,P007454,"FRIDZON, VITALY",P007454,,False
 euroleague,LME,P007247,"MARKOVIC, STEFAN",P007247,,False
@@ -17777,7 +17777,7 @@ fec,173128,P013852,Gregory Vargas,P013852,,False
 fec,173260,P002939,Oleksandr Belikov,P002939,,False
 fec,173291,P006997,Josh Ward-Hibbert,P006997,,False
 fec,173441,P013853,Maksym Lutsenko,P013853,,False
-fec,173523,P005522,Stefan Jankovic,P005522,,False
+fec,173523,P005522,Stefan Jankovic,P005522,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,173616,P002942,Fabian Bleck,P001121,"unido: mismo club en dos competiciones, apellido e inicial",True
 fec,173711,P013854,Marquis Teague,P013854,,False
 fec,173908,P002943,Owen Klassen,P001264,"unido: mismo club en dos competiciones, apellido e inicial",True
@@ -18019,7 +18019,7 @@ fec,195911,P013962,Boban Stajic,P013962,,False
 fec,195945,P013963,Fraser Malcolm,P013963,,False
 fec,195950,P000840,Sam Dekker,P000840,,False
 fec,195955,P006830,Aaron Harrison,P006830,,False
-fec,195967,P000427,Robert Upshaw,P000427,,False
+fec,195967,P000427,Robert Upshaw,P000427,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,195975,P013964,Antonio Vrankovic,P013964,,False
 fec,196024,P013965,James Calvin Young,P013965,,False
 fec,196053,P003106,Axel Julien,P003106,,False
@@ -18298,7 +18298,7 @@ fec,211638,P000355,Arnoldas Kulboka,P000355,,False
 fec,211649,P005211,Einaras Tubutis,P005211,,False
 fec,211698,P000602,Toni Nakic,P000602,,False
 fec,211709,P003277,Dimitris Moraitis,P003277,,False
-fec,211710,P014090,Ioannis Agravanis,P014090,,False
+fec,211710,P014090,Ioannis Agravanis,P014090,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,211730,P014091,Darko Bajo,P014091,,False
 fec,211731,P004812,Luka Kotrulja,P004812,,False
 fec,211734,P014092,Mate Kalajzic,P014092,,False
@@ -18601,7 +18601,7 @@ fec,227475,P014247,Efe Yurtlu,P014247,,False
 fec,227498,P014248,Marcu Badiu,P014248,,False
 fec,227513,P003446,Vadzim Stubeda,P003446,,False
 fec,227545,P014249,Isaiah Williams,P014249,,False
-fec,227575,P014250,Aleksandr Vinnik,P014250,,False
+fec,227575,P014250,Aleksandr Vinnik,P014250,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,227578,P001160,Jaron Johnson,P001160,,False
 fec,227597,P014251,Drilon Hajrizi,P014251,,False
 fec,227716,P000649,Adam Smith,P000649,,False
@@ -18726,7 +18726,7 @@ fec,238070,P014308,Justin Alexander Alston,P014308,,False
 fec,238106,P007314,Jason George,P001735,,True
 fec,238107,P003507,Lukas Herzog,P001309,,True
 fec,238155,P003509,Zois Karampelas,P003509,,False
-fec,238168,P014309,Ioannis Sidiroilias,P014309,,False
+fec,238168,P014309,Ioannis Sidiroilias,P014309,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,238171,P014310,Fotios Georgalas,P014310,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,238175,P014311,Dimitrios Klonaras,P014311,,False
 fec,238182,P014312,238182,P014312,,False
@@ -19103,7 +19103,7 @@ fec,271225,P003712,Sean McDermott,P003712,,False
 fec,271315,P014513,Rinol Gashi,P014513,,False
 fec,271371,P003715,Kenny Goins,P003715,,False
 fec,271464,P014514,David Kertesz,P014514,,False
-fec,271540,P014515,Jo Van Buggenhout,P005225,"unido: mismo club en dos competiciones, apellido e inicial",True
+fec,271540,P014515,Jo Van Buggenhout,P005224,"unido: mismo club en dos competiciones, apellido e inicial",True
 fec,271541,P014516,Tom Di Maria,P004578,"unido: mismo club en dos competiciones, apellido e inicial",True
 fec,271544,P003717,Joppe Mennes,P003717,,False
 fec,271613,P014517,Nicholas McGlynn,P004921,"unido: mismo club en dos competiciones, apellido e inicial",True
@@ -19114,7 +19114,7 @@ fec,271852,P014521,Elias Liassides,P014521,,False
 fec,271855,P014522,Charalambos Savva,P014522,,False
 fec,271927,P014523,Ilias Manias,P014523,,False
 fec,271929,P014524,Georgios Petanidis,P014524,"unido: mismo club en dos competiciones, apellido e inicial",False
-fec,271931,P014525,Ioannis Efstathiadis,P014525,,False
+fec,271931,P014525,Ioannis Efstathiadis,P014525,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,271960,P014526,Joshua Henry Sharma,P014526,,False
 fec,271961,P014527,Karl Gustav Jurtsenko,P014527,,False
 fec,271964,P014528,Rashard Marque Odomes,P014528,,False
@@ -19815,7 +19815,7 @@ fec,344180,P014940,Thor Perv,P014940,,False
 fec,344260,P014941,Bryce McBride,P014941,,False
 fec,344301,P014942,Gera Tcheishvili,P014942,,False
 fec,344366,P014943,Ludgy Debaut,P014943,,False
-fec,344367,P014944,Ioannis Karakostas,P014944,,False
+fec,344367,P014944,Ioannis Karakostas,P014944,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,344397,P014945,Alexandros Kalaitzakis,P014945,,False
 fec,344421,P014946,Lukas Cvetkova,P014946,,False
 fec,344601,P000324,Enric Sanmartin,P000324,,False
@@ -20220,7 +20220,7 @@ fec,422420,P015226,Charlie Williams,P015226,,False
 fec,422421,P015227,Elijah Walsh,P015227,,False
 fec,422422,P015228,Chandler Pigge,P015228,,False
 fec,422430,P015229,Deyan Hristov,P015229,,False
-fec,422457,P015230,Ioannis Rallis,P015230,,False
+fec,422457,P015230,Ioannis Rallis,P015230,"unido: mismo club en dos competiciones, apellido e inicial",False
 fec,422458,P015231,Dianisi Grigorian,P015231,,False
 fec,422459,P015232,Nikoloz Ochkhikidze,P015232,,False
 fec,422462,P015233,Valeriane Tsuleiskiri,P015233,,False
@@ -20260,7 +20260,7 @@ gbl,agbelese-danny,P000182,Danny Agbelese,P000182,,False
 gbl,aggelakos-alexandros,P015260,Alexandros Aggelakos,P015260,,False
 gbl,aggelopoulos-nikos,P015261,Nikos Aggelopoulos,P015261,,False
 gbl,agravanis-dimitrios,P000733,Dimitrios Agravanis,P000733,"unido: mismo club en dos competiciones, apellido e inicial",False
-gbl,agravanis-giannis,P015262,Giannis Agravanis,P015262,,False
+gbl,agravanis-giannis,P015262,Giannis Agravanis,P014090,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,agravanis-ioannis,P014090,Ioannis AGRAVANIS,P014090,,False
 gbl,aivazidis-giannikos,P015263,Giannikos Aivazidis,P015263,,False
 gbl,akin-ntan,P015264,Ntan AKIN,P015264,,False
@@ -20283,7 +20283,7 @@ gbl,andusic-danilo,P015270,Danilo ANDUSIC,P006672,"unido: mismo club en dos comp
 gbl,angola-braian,P000885,Braian Angola,P000885,,False
 gbl,anosike-o,P015271,O.d. Anosike,P015271,,False
 gbl,antetokounmpo-alex,P000462,Alex ANTETOKOUNMPO,P000462,,False
-gbl,antetokounmpo-costas,P015272,Costas Antetokounmpo,P015272,,False
+gbl,antetokounmpo-costas,P015272,Costas Antetokounmpo,P000854,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,antetokounmpo-kostas,P000854,Kostas ANTETOKOUNMPO,P000854,,False
 gbl,antetokounmpo-thanasis,P006801,Thanasis ANTETOKOUNMPO,P006801,,False
 gbl,appleby-tyree,P014967,Tyree APPLEBY,P014967,,False
@@ -20299,7 +20299,7 @@ gbl,asonitis-evangelos,P015274,Evangelos ASONITIS,P015274,,False
 gbl,asteriadis-asterios,P015275,Asterios Asteriadis,P015275,,False
 gbl,athanasopoulos-konstantinos,P015276,Konstantinos Athanasopoulos,P015276,,False
 gbl,athanasopoulos-theodoros,P015277,Theodoros Athanasopoulos,P015277,,False
-gbl,athinaiou-giannis,P015278,Giannis Athinaiou,P015278,,False
+gbl,athinaiou-giannis,P015278,Giannis Athinaiou,P000494,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,auguste-zach,P006804,Zach Auguste,P006804,,False
 gbl,avdalas-neoklis,P003904,Neoklis Avdalas,P003904,,False
 gbl,bacon-dwayne,P006439,Dwayne Bacon,P006439,,False
@@ -20347,7 +20347,7 @@ gbl,bonga-isaac,P007296,Isaac BONGA,P002590,,True
 gbl,bothwell-mike,P001216,Mike BOTHWELL,P001216,,False
 gbl,boundouris-christos,P015295,Christos Boundouris,P015295,,False
 gbl,bourneles-giorgos,P015296,Giorgos BOURNELES,P015296,,False
-gbl,bourousis-giannis,P015297,Giannis Bourousis,P015297,,False
+gbl,bourousis-giannis,P015297,Giannis Bourousis,P002806,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,bowlin-skyler,P002077,Skyler Bowlin,P002077,,False
 gbl,brajkovic-luca,P015298,Luca Brajkovic,P015298,,False
 gbl,bray-tj,P000468,Tj Bray,P000468,,False
@@ -20388,7 +20388,7 @@ gbl,chatzikiriakos-giorgos,P020424,Giorgos Chatzikiriakos,P020424,,False
 gbl,chatzikyriakos-giorgos,P015314,Giorgos Chatzikyriakos,P014762,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,chatzilamprou-chrysostomos,P007063,Chrysostomos CHATZILAMPROU,P007063,,False
 gbl,chatzilamproy-chrysostomos,P015315,Χρυσόστομος Χατζηλαμπρου,P015315,,False
-gbl,chatzinikolas-giannis,P015316,Giannis Chatzinikolas,P015316,,False
+gbl,chatzinikolas-giannis,P015316,Giannis Chatzinikolas,P003174,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,chatzis-costas,P015317,Costas Chatzis,P015317,,False
 gbl,chatzis-dimitrios,P015318,Dimitrios Chatzis,P015318,,False
 gbl,chatzis-konstantinos,P015319,Κωνσταντίνος Χατζής,P015319,,False
@@ -20464,7 +20464,7 @@ gbl,ebanks-david,P015354,David Ebanks,P015354,,False
 gbl,echenique-jaime,P000415,Jaime Echenique,P000415,,False
 gbl,eddie-jarell,P000359,Jarell Eddie,P000359,,False
 gbl,edlerdavis-justin,P015355,Justin Parker EDLER-DAVIS,P015355,,False
-gbl,efstathiadis-giannis,P015356,Giannis Efstathiadis,P015356,,False
+gbl,efstathiadis-giannis,P015356,Giannis Efstathiadis,P014525,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,ellis-elbert,P015357,Elbert ELLIS,P004223,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,elmore-jonathan,P015358,Jonathan Elmore,P015358,,False
 gbl,enechionyia-obbi,P015359,Obbi Enechionyia,P007785,"unido: mismo club en dos competiciones, apellido e inicial",True
@@ -20539,7 +20539,7 @@ gbl,giannopoulos-charis,P007248,Charis Giannopoulos,P007248,,False
 gbl,giannopoylos-charalampos,P015379,Χαράλαμπος Γιαννόπουλος,P015379,,False
 gbl,giatroudis-vassilis,P015380,Vassilis Giatroudis,P015380,,False
 gbl,gielo-tomasz,P000203,Tomasz Gielo,P000203,,False
-gbl,gikas-nikos,P015381,Nikos Gikas,P015381,,False
+gbl,gikas-nikos,P015381,Nikos Gikas,P003305,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,gilmore-michael,P003727,Michael Earl Gilmore,P003727,,False
 gbl,giotis-marios,P015382,Marios Giotis,P015382,,False
 gbl,giouzelis-giorgos,P015383,Giorgos Giouzelis,P003782,"unido: mismo club en dos competiciones, apellido e inicial",True
@@ -20691,7 +20691,7 @@ gbl,kapetakis-evdoxios,P004169,Evdoxios KAPETAKIS,P004169,,False
 gbl,kapetakis-eydoxios,P015439,Ευδόξιος Καπετάκης,P015439,,False
 gbl,kapirelis-dimitrios,P015440,Dimitrios KAPIRELIS,P015440,,False
 gbl,karagiannidis-antonis,P015441,Antonis Karagiannidis,P003877,"unido: mismo club en dos competiciones, apellido e inicial",True
-gbl,karakostas-giannis,P015442,Giannis KARAKOSTAS,P015442,,False
+gbl,karakostas-giannis,P015442,Giannis KARAKOSTAS,P014944,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,karampelas-zois,P003509,Zois Karampelas,P003509,,False
 gbl,karlis-emmanouel,P015443,Emmanouel Karlis,P015443,,False
 gbl,karlis-michalis,P015444,Michalis Karlis,P003948,"unido: mismo club en dos competiciones, apellido e inicial",True
@@ -20977,7 +20977,7 @@ gbl,radanov-aleksa,P001433,Aleksa Radanov,P001433,,False
 gbl,radicevic-nicola,P015564,Nicola Radicevic,P000606,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,raduljica-miroslav,P007448,Miroslav Raduljica,P007448,,False
 gbl,ragland-joseph,P015565,Joseph Alexander Ragland,P003153,"unido: mismo club en dos competiciones, apellido e inicial",True
-gbl,rallis-giannis,P015566,Giannis RALLIS,P015566,,False
+gbl,rallis-giannis,P015566,Giannis RALLIS,P015230,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,randle-chasson,P002947,Chasson Jermar RANDLE,P002947,,False
 gbl,rantoylitsa-miroslav,P015567,Μίροσλαβ Ραντούλιτσα,P015567,,False
 gbl,rautins-andrew,P015568,Andrew Rautins,P015568,,False
@@ -21003,7 +21003,7 @@ gbl,sachpatzidis-giannis,P015578,Giannis Sachpatzidis,P015578,,False
 gbl,salash-maksim,P000161,Maksim SALASH,P000161,,False
 gbl,saloustros-christos,P003235,Christos Saloustros,P003235,,False
 gbl,samodurov-alexandros,P007361,Alexandros Samodurov,P007361,,False
-gbl,samontourov-alexandros,P015579,Alexandros SAMONTOUROV,P015579,,False
+gbl,samontourov-alexandros,P015579,Alexandros SAMONTOUROV,P007361,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,samontoyrov-alexandros,P015580,Αλέξανδρος Σαμοντούροβ,P015580,,False
 gbl,sanders-corey,P003661,Corey Sanders,P003661,,False
 gbl,sanogo-ismael,P007034,Ismael Sanogo,P007034,,False
@@ -21023,7 +21023,7 @@ gbl,shuler-jamal,P015588,Jamal Shuler,P015588,,False
 gbl,sibande-nike,P000779,Nike Sibande,P000779,,False
 gbl,sibert-jordan,P003445,Jordan Sibert,P003445,,False
 gbl,sideris-christos,P015589,Christos Sideris,P015589,,False
-gbl,sidiroilias-giannis,P015590,Giannis Sidiroilias,P015590,,False
+gbl,sidiroilias-giannis,P015590,Giannis Sidiroilias,P014309,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,sikma-lukas,P015591,Lukas Sikma,P001689,"unido: mismo club en dos competiciones, apellido e inicial",True
 gbl,silva-chris,P003143,Chris SILVA,P003143,,False
 gbl,simmons-gerel,P002459,Gerel Simmons,P002459,,False
@@ -22869,7 +22869,7 @@ lba,1333,P006800,Luca Conti,P006800,,False
 lba,1343,P000835,Derek Cooke,P000835,,False
 lba,1363,P016707,Andrea Coronica,P016707,,False
 lba,1410,P007249,David Reginald Cournooh,P007249,,False
-lba,1416,P016708,Andrew Crawford,P016708,,False
+lba,1416,P016708,Andrew Crawford,P000512,"unido: mismo club en dos competiciones, apellido e inicial",True
 lba,1467,P002816,Marco Cusin,P002816,,False
 lba,1476,P006686,Bruno Cerella,P006686,,False
 lba,1528,P016709,Gianmaria Danese,P016709,,False
@@ -23657,7 +23657,7 @@ lba,7452,P007015,Patrick Hassan,P007015,,False
 lba,7453,P017000,Eric Paschall,P017000,,False
 lba,7454,P016096,Jordan Hall,P016096,,False
 lba,7455,P000918,Dario Dreznjak,P000918,,False
-lba,7456,P002875,Tibor Pleiss,P002875,,False
+lba,7456,P002875,Tibor Pleiss,P001449,,True
 lba,7457,P004025,David Mccormack,P001228,,True
 lba,7458,P003475,Xavier Munford,P003475,,False
 lba,7459,P017001,Matias Zanotto,P017001,,False
@@ -24191,7 +24191,7 @@ lnb,1893,P000748,Corey Davis,P000748,,False
 lnb,19,P017170,Charles-Noé Abouo,P017170,,False
 lnb,1915,P007263,Nando De Colo,P005448,,True
 lnb,1917,P017171,Nicolas De Jong,P017171,,False
-lnb,1920,P017172,Tyran De Lattibaudiere,P017172,,False
+lnb,1920,P017172,Tyran De Lattibaudiere,P003366,"unido: mismo club en dos competiciones, apellido e inicial",True
 lnb,1922,P003711,Nathan De Sousa,P003711,,False
 lnb,1942,P017173,Jordan Degre,P017173,,False
 lnb,1960,P003806,Leopold Delaunay,P003806,,False
@@ -29654,7 +29654,7 @@ vtb,149742,P000768,Janis Strelnieks,P000768,,False
 vtb,149882,P003050,Rauno Nurger,P003050,,False
 vtb,150071,P001177,Johannes Voigtmann,P001177,,False
 vtb,150096,P005575,Luka Mitrovic,P005575,,False
-vtb,150444,P020135,Alexandr Vinnik,P020135,,False
+vtb,150444,P020135,Alexandr Vinnik,P014250,"unido: mismo club en dos competiciones, apellido e inicial",True
 vtb,150615,P007273,Nikola Milutinov,P007273,,False
 vtb,150634,P006713,Drew Gordon,P006713,,False
 vtb,150868,P020136,Vitali Liutych,P020136,,False
@@ -29682,7 +29682,7 @@ vtb,153240,P020145,Andrey Stabrovskii,P003203,"unido: mismo club en dos competic
 vtb,153443,P020146,Kiryl Sitnik,P020146,,False
 vtb,153677,P003446,Vadzim Stubeda,P003446,,False
 vtb,154018,P020147,Kristofer Richard,P020147,,False
-vtb,154020,P020148,Robert Apshou,P020148,,False
+vtb,154020,P020148,Robert Apshou,P000427,"unido: mismo club en dos competiciones, apellido e inicial",True
 vtb,15410,P013902,Alexey Babushkin,P013902,,False
 vtb,154368,P001048,Vince Hunter,P001048,,False
 vtb,154827,P020149,Daniil Abramov,P020149,,False
@@ -29691,7 +29691,7 @@ vtb,155376,P020150,Vsevolod Shirobokov,P020150,,False
 vtb,155382,P003040,Jamar Smith,P003040,,False
 vtb,155383,P020151,Martinsh Meyers,P020151,,False
 vtb,155399,P000540,Ismael Bako,P000540,,False
-vtb,155408,P020152,Stefan Yovich,P020152,,False
+vtb,155408,P020152,Stefan Yovich,P000665,"unido: mismo club en dos competiciones, apellido e inicial",True
 vtb,155415,P000487,Malcolm Thomas,P000487,,False
 vtb,155481,P000896,Will Clyburn,P000896,,False
 vtb,155518,P003024,Matic Rebec,P003024,,False
@@ -29926,7 +29926,7 @@ vtb,334847,P007204,Anthony Hickey,P007204,,False
 vtb,334848,P014267,Skylar Spencer,P014267,,False
 vtb,334849,P003709,Jaylen Barford,P003709,,False
 vtb,334853,P020286,Darol Hernandez-Zinenko,P013912,"unido: mismo club en dos competiciones, apellido e inicial",True
-vtb,334854,P020287,Stefan Yankovich,P020287,,False
+vtb,334854,P020287,Stefan Yankovich,P005522,"unido: mismo club en dos competiciones, apellido e inicial",True
 vtb,334857,P014371,Angelo Warner,P014371,,False
 vtb,334932,P007356,Jarrell Isaiah Brantley,P007356,,False
 vtb,334934,P006072,O. J. Mayo,P006072,"unido: mismo club en dos competiciones, apellido e inicial",False

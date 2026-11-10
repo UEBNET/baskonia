@@ -331,7 +331,10 @@ def resolver(temporadas: list[str]) -> dict:
             rev.append({"tipo": "enlace_perdido", "nodo_a": r.nodo_a, "nodo_b": r.nodo_b, "nombre_a": r.nombre_a,
                         "nombre_b": r.nombre_b, "detalle": f"{r.temporada} · {r.club} · sim {r.similitud} · "
                         f"apellido+inicial {r.apellido_inicial} · nac {r.conflicto_nacimiento} · fechas {r.fechas_comunes}",
-                        "accion_v5": "unido" if r.automatico else "pendiente (no unido)",
+                        "accion_v5": "unido" if r.automatico else (
+                            "unido (aceptado por el usuario)" if decis.get((r.nodo_a, r.nodo_b)) == "aceptar" else
+                            "no unido (rechazado por el usuario)" if decis.get((r.nodo_a, r.nodo_b)) == "rechazar" else
+                            "pendiente (no unido)"),
                         "decision_usuario": decis.get((r.nodo_a, r.nodo_b), "")})
     pd.DataFrame(rev).to_csv(rev_f, index=False)
     clubes.to_csv(DIR / "pares_de_clubes.csv", index=False)
