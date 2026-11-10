@@ -20,3 +20,4 @@ matplotlib==3.11.2
 pyyaml==6.0.3
 pytest>=7
 brotli==1.1.0
+rapidfuzz==3.10.1
