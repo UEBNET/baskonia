@@ -1,0 +1,12 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F1",
+ "config": "configs/v5/f1.yaml",
+ "hash_config": "40f5947fd571",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-10T10:48:41+00:00",
+ "python": "3.13.18",
+ "procedimiento": "bbnorm3.flujo.lolo (1 semilla, corte = max(validacion.anios))",
+ "config_v32": "configs/normalization_v32.yaml",
+ "tiempo_s": 6757
+}

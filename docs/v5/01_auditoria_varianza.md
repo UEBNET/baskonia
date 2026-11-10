@@ -63,7 +63,7 @@ python -m bbnorm5.diagnostico.lolo --config configs/v5/f1.yaml v2    # dejar fue
 | 5.1 | **División de muestra** (partidos alternos por fecha): r clásico + Spearman-Brown, y un estimador de momentos con exposición heterogénea (el comparable con el REML), con IC por bootstrap | Tabla jugador-partido `data/modelos/roles/partidos_jugador`, 10 métricas reconstruibles, entre 14.997 y 16.216 jugador-liga-temporadas con ≥ 10 partidos por mitad |
 | 5.2 | **Descomposición de la varianza** de la traducción de la v3.2 en nivel del jugador (v_j), traducción (Var(δ_o − δ_d), covarianza conjunta) y residual de temporada (ψ + σ²/n + η²), por métrica y por par de ligas | `v3_2/destino` (capacidad, constantes, covarianza) 2025-26, jugadores con ≥ 300 min, 20 × 20 pares |
 | 5.3 | **Cobertura 50/80/95, PIT, CRPS, RMSE, MAE y sesgo** por métrica, liga de origen, liga de destino, puesto, tramo de minutos y corte | (a) Examen fuera de tiempo de cambios de liga (cortes 2022-2024, 44.128 predicciones, ya calculado en `casos_combinada_v32.csv.gz`). (b) **Examen de la v4.2 D1 reconstruido caso a caso** con sus propias funciones (227.758 predicciones) |
-| 5.3 | **Dejar fuera una liga (LOLO)** | v2 con 20 ligas (hecho) y v2 de 15 ligas (DATO del repositorio). v3.2: **en ejecución** (§3.4) |
+| 5.3 | **Dejar fuera una liga (LOLO)** | v2 con 20 ligas, v2 de 15 ligas (DATO del repositorio) y v3.2 (hecho, §3.4) |
 | 5.4 | **Nivel frente a lo publicado.** DT de credibilidad del nivel con una temporada y con el historial hasta t (modelo anidado), frente a la DT propia publicada | 2025-26, ≥ 300 min |
 | 5.4 | **Simulación con intervalos exactos** de las dos pruebas que sugerían «rangos demasiado anchos» (la de la D1 y la de t ⊕ t+1) | Estructura real de personas, temporadas y exposiciones; 6 métricas × 2 réplicas |
 
@@ -324,12 +324,50 @@ DATO: `data/v5/f1/lolo_v2/validacion_lolo.csv`, 33 métricas × 19 ligas.
 La versión anterior, de 15 ligas (`data/modelos/normalizacion_amortiguada/validacion_lolo.csv`), da lo mismo en las
 ligas comunes: error global 0,287 y cobertura 0,893.
 
-**LOLO de la v3.2 (CVAE, 1 semilla, corte 2024): en ejecución.**
-- Salida en `data/v5/f1/lolo_v32/`.
-- Con 4 núcleos compartidos, cada red tarda entre 25 y 55 minutos: la primera liga (ACB) ya está; quedan 18.
-- Se añadirá a este documento y al PR cuando termine.
-- **No cambia la recomendación de §6**, que no depende de él. Lo que puede cambiar es la magnitud del sesgo por liga
-  mal conectada que tendrá que medir la F6.
+**LOLO de la v3.2** (CVAE, 1 semilla, corte 2024; `bbnorm3.flujo.lolo`). Terminado el 10-11-2026 (6.757 s).
+DATO: `data/v5/f1/lolo_v32/validacion/lolo.csv`, 33 métricas × 19 ligas, 2.706 casos.
+
+Las dos versiones tienen escalas distintas, así que se comparan en unidades relativas:
+- **error relativo** = |error del nivel sin puentes| / DT del nivel completo entre competiciones (por métrica);
+- **DT relativa** = DT del intervalo sin puentes / esa misma DT.
+
+| Liga | v3.2 · error relativo | v3.2 · DT relativa | v3.2 · cobertura 80 % | v2 · error relativo | v2 · DT relativa | v2 · cobertura 90 % |
+|---|---|---|---|---|---|---|
+| LBA | 0,12 | 5,2 | 1,00 | 0,21 | 0,30 | 0,93 |
+| LNB | 0,16 | 5,2 | 1,00 | 0,29 | 0,29 | 0,92 |
+| BSL | 0,24 | 5,3 | 1,00 | 0,17 | 0,30 | 0,97 |
+| VTB | 0,29 | 5,3 | 1,00 | 0,18 | 0,29 | 0,97 |
+| BBL | 0,31 | 5,1 | 1,00 | 0,30 | 0,28 | 0,89 |
+| GBL | 0,31 | 5,1 | 1,00 | 0,16 | 0,33 | 0,99 |
+| BCL | 0,33 | 6,0 | 1,00 | 0,17 | 0,34 | 0,99 |
+| Primera FEB | 0,33 | 29,6 | 1,00 | 1,47 | 5,6 | 1,00 |
+| NBL | 0,38 | 5,1 | 1,00 | 0,11 | 0,31 | 1,00 |
+| EuroCup | 0,45 | 5,9 | 1,00 | 0,39 | 0,31 | 0,72 |
+| ACB | 0,51 | 5,2 | 1,00 | 0,34 | 0,28 | 0,76 |
+| NCAA | 0,72 | 29,6 | 1,00 | 0,90 | 6,0 | 1,00 |
+| FEC | 0,78 | 6,0 | 1,00 | 0,37 | 0,26 | 0,76 |
+| NBA | 1,00 | 6,8 | 1,00 | 1,26 | 6,0 | 1,00 |
+| CBA | 1,10 | 6,7 | 1,00 | 0,34 | 0,48 | 0,94 |
+| G League | 1,14 | 29,6 | 1,00 | 0,69 | 6,0 | 1,00 |
+| BNXT | 1,21 | 6,7 | 1,00 | 0,92 | 0,76 | 0,70 |
+| Segunda FEB | 1,57 | 29,8 | 1,00 | 2,74 | 5,6 | 1,00 |
+| Tercera FEB | 3,26 | 30,5 | 1,00 | 4,18 | 5,6 | 0,74 |
+| **Global** | **0,65** | **6,0** | **1,00** | **0,61** | **0,44** | **0,91** |
+
+**LECTURA (v3.2).**
+- **Centro.** Sin sus puentes, la v3.2 sitúa el nivel de una liga con un error parecido al de la v2 (0,65 frente a
+  0,61 DT entre competiciones).
+  - Es mejor en las FEB, la NBA, la NCAA, la LBA y la LNB.
+  - Es peor en CBA, NBL, GBL, BCL, VTB y FEC.
+  - Ninguna de las dos identifica bien el nivel de las ligas solas en su escalón: G League, Segunda y Tercera FEB,
+    BNXT.
+- **Anchura.** La cobertura del 100 % no es un mérito: la DT del intervalo sin puentes es **5–30 veces** la
+  dispersión entre ligas. El intervalo de la v3.2 sin puentes no informa. Es el prior de la red, no una medida.
+  - La v2, en cambio, se sobreconfía en las ligas bien conectadas (ACB, EuroCup, FEC: cobertura 0,72–0,76).
+- **Conclusión para la F6.** Ninguna de las dos versiones vigentes da un nivel de liga fiable sin puentes. Hacen falta
+  los puentes intra-temporada de la F2 y la fuerza por enfrentamientos como segunda vía, y medir el sesgo por liga en
+  la F6 frente a esta tabla.
+- **No cambia la recomendación de §6.**
 
 **LECTURA.**
 - La traducción pesa poco en la **anchura**, pero mucho en el **centro** de las ligas sin puentes propios.
@@ -501,7 +539,7 @@ REML. La posterior de cada temporada es **exacta por construcción**: cubre el n
    examen limpio es 2025-26 → 2026-27 (decisión 10 de la F0).
 5. **VERIFICAR.** La referencia externa de estabilización (Blackport, 750 triples a fiabilidad 0,7) se ha citado de
    fuentes secundarias.
-6. **VERIFICAR.** LOLO de la v3.2: en ejecución. El de la v2 con 20 ligas ya está (§3.4).
+6. **Hecho (10-11-2026).** LOLO de la v3.2 terminado e incorporado a §3.4: centro comparable a la v2; intervalo sin puentes no informativo.
 
 ## 9. Diagnósticos de inferencia
 
