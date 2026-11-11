@@ -64,7 +64,8 @@ def observaciones(d: pd.DataFrame, metrica: str, hiper: pd.DataFrame, post: pd.D
                 var_name="rol", value_name="mu")
     mu["rol"] = mu["rol"].str[3:]
     u = u.merge(mu.dropna(), on=["liga", "temporada", "rol"]).merge(
-        h[["liga", "temporada", "disp", "sigma"]], on=["liga", "temporada"])
+        h[["liga", "temporada", "disp", "sigma"] + [f"mu_{r}" for r in ("E", "A", "I", "X")]],
+        on=["liga", "temporada"])     # medias de todos los roles de la liga-temporada (para el cambio de rol, F4)
     p = post[post["metrica"] == metrica][DM.CLAVE + ["media", "q10", "q50", "q90"]]
     u = u.merge(p, on=DM.CLAVE, how="left")
     K, N, N2g = (u[c].to_numpy(float) for c in ("K", "N", "N2g"))

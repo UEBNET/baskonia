@@ -31,7 +31,7 @@ def proyectar(o: pd.DataFrame, mod: dict, h: pd.DataFrame, metrica: str, anio: i
     obj = ult[["persona_v5", "liga", "rol", "edad", "anio", "K", "N", "N2g", "temporada"]].copy()
     obj["gap"] = (anio - obj["anio"]).astype(float)
     obj["edad"] = obj["edad"] + obj["gap"]
-    obj["cl"], obj["cr"] = 0.0, 0.0
+    obj["cl"], obj["cr"], obj["dmu"] = 0.0, 0.0, 0.0
     obj = obj.merge(EX._liga_previa(h, metrica, anio), on=["liga", "rol"])
     p = MOD.predecir(M, mod, obj)
     inv = {"binomial": special.expit, "poisson": np.exp}.get(fam, lambda z: z)

@@ -44,7 +44,13 @@ def objetivo(o: pd.DataFrame, hist: pd.DataFrame, anio: int, h: pd.DataFrame, me
     x["gap"] = (x["anio"] - x["anio_ult"]).astype(float)
     x["cl"] = (x["liga"] != x["liga_ult"]).astype(float)
     x["cr"] = (x["rol"] != x["rol_ult"]).astype(float)
-    return x.merge(_liga_previa(h, metrica, anio), on=["liga", "rol"])
+    lp = _liga_previa(h, metrica, anio)
+    x = x.merge(lp, on=["liga", "rol"])
+    # media del rol anterior en la liga de destino (temporada previa): para el desplazamiento por cambio de rol
+    x = x.merge(lp[["liga", "rol", "mu_prev"]].rename(columns={"rol": "rol_ult", "mu_prev": "mu_prev_rol_ult"}),
+                on=["liga", "rol_ult"], how="left")
+    x["dmu"] = np.where(x["cr"] > 0, (x["mu_prev_rol_ult"] - x["mu_prev"]).fillna(0.0), 0.0)
+    return x
 
 
 def evaluar(pred: pd.DataFrame, fam: str, nombre: str, rng) -> pd.DataFrame:

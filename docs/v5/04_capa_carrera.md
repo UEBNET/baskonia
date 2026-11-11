@@ -473,6 +473,91 @@ g(edad) − g(26), escala del enlace (en tasas, 0,1 ≈ 10 % relativo):
    - Misma liga y rol que en su última temporada hasta la F6.
    - El contrato de salida (F9) recogerá los dos objetos con nombre propio.
 
+## 9 ter. Auditoría del sesgo con los interiores y corrección del cambio de rol (puerta F5, 11-11-2026)
+
+**Origen.** El examen por rol de la F5 destapó que la F4 sobrestimaba a los interiores la temporada siguiente:
+BLK% +0,47 DT, T3% +0,37 y OREB% +0,19 (error medio, predicción − observado). El usuario pidió auditarlo.
+
+**Hipótesis probadas** (`examen_casos.parquet`, modelo `completo`):
+
+| Hipótesis | Resultado |
+|---|---|
+| Deriva de la media del rol entre temporadas | Descartada: ≤ 0,03 logit por temporada en los tres roles |
+| Edad desconocida (la curva no actúa) | Parcial: en BLK% sesgo de 0,89 sin edad frente a 0,36 con edad, pero va con la NCAA y la G League |
+| **Cambio de rol** | **Causa principal en rebote y tapones** |
+| **Volumen de la temporada siguiente** | **Causa principal en T3%** y parte de BLK% |
+
+**1. El cambio de rol. Corregido.**
+- **Qué pasaba.**
+  - El 97 % de los cambios hacia «interior» vienen de «sin posición» (X → I: 500 de 516).
+  - El modelo conservaba la *posición relativa* a la media del rol: relativo a la media de X (una mezcla de todos los
+    puestos, con pocos tapones) un pívot parece muy por encima de la media.
+  - Sumado a la media de los interiores, se le sobrestimaba: BLK% +2,84 DT y OREB% +1,78 DT en esos casos.
+- **Corrección.** Al cambiar de rol, el nivel se desplaza en φ · (μ del rol anterior − μ del nuevo), en la
+  liga-temporada actual.
+  - φ = 1 conserva el nivel absoluto; φ = 0, la posición relativa.
+  - φ se aprende por métrica, por máxima verosimilitud (`carrera/modelo.py`, `phi_rol`).
+  - Test: `test_cambio_de_rol_conserva_el_nivel_absoluto_con_phi_1`.
+
+| Métrica | φ aprendido (EE) | Cob. 80 % antes → después | Cambio del CRPS |
+|---|---|---|---|
+| T2% | 0,17 (0,02) | 78,5 → 78,7 | 0,0 % |
+| T3% | 0,00 (0,06) | 79,6 → 79,9 | 0,0 % |
+| TL% | 0,47 (0,05) | 79,9 → 80,1 | −0,2 % |
+| 3PAr | 0,75 (0,02) | 75,7 → 75,7 | −3,6 % |
+| OREB% | 0,65 (0,02) | 82,2 → 82,1 | −5,1 % |
+| DREB% | 0,43 (0,02) | 79,7 → 79,8 | −0,9 % |
+| AST% | 0,70 (0,03) | 82,2 → 82,1 | −1,2 % |
+| TOV% | −0,04 (0,02) | 79,1 → 78,8 | 0,0 % |
+| BLK% | 0,61 (0,02) | 85,8 → 85,0 | −6,2 % |
+| Robos/100 | 0,28 (0,04) | 83,0 → 82,9 | 0,0 % |
+| Faltas/40 | 0,25 (0,02) | 80,6 → 80,8 | −0,3 % |
+| FTr | 0,49 (0,05) | 76,7 → 76,7 | −0,3 % |
+| Pts/100 | 0,03 (0,02) | 81,3 → 81,3 | 0,0 % |
+| USG% | 0,05 (0,02) | 80,3 → 80,3 | 0,0 % |
+
+**Efecto:**
+- El CRPS relativo a «sólo la última» pasa de 0,968 a **0,951**. La regla de selección sigue eligiendo `completo`.
+- La cobertura total se mantiene: 80,3 %.
+
+**Sesgo de los interiores, antes → después:**
+
+| Caso | Métrica | Antes | Después |
+|---|---|---|---|
+| Todos | BLK% | +0,47 DT | +0,31 |
+| Todos | OREB% | +0,19 | +0,09 |
+| Todos | DREB% | +0,13 | +0,09 |
+| Con cambio de rol | BLK% | +2,84 | +0,90 |
+| Con cambio de rol | OREB% | +1,78 | +0,37 |
+
+**Lectura de φ:**
+- Al cambiar de rol se conserva sobre todo el nivel absoluto en lo que depende del puesto: 3PAr 0,75, AST% 0,70,
+  OREB% 0,65, BLK% 0,61.
+- En lo que no depende del puesto (T3%, pts, USG%, TOV%) se conserva la posición relativa (φ ≈ 0).
+
+**2. Volumen de la temporada siguiente. Se lleva a la F6.**
+- **T3% de los interiores:**
+
+  | Triples en la temporada siguiente | Sobrestimación |
+  |---|---|
+  | ≤ 11 | +13 puntos (PIT medio 0,37) |
+  | Más de 79 | Ligera subestimación (PIT medio 0,57) |
+
+  El mismo patrón, más suave, en exteriores y aleros.
+- **Lectura:** quien apenas tira triples la temporada siguiente es quien no los metía; el entrenador le corta el
+  volumen. La capa de medida condiciona en el volumen, pero no modela que el volumen depende del acierto.
+- **En BLK%** el sesgo crece cuando suben las oportunidades: +0,24 DT si bajan mucho, +0,41 si suben mucho. Más minutos
+  frente a más tiros rivales significan menos tapones por oportunidad.
+- **Propuesta:** la F6 incluye la relación volumen–eficiencia por métrica y rol, la «curva uso-eficiencia» de la
+  revisión 1.2, como parte del contexto de la proyección de producción.
+- **Restos tras la corrección:** T3% interiores +0,37 DT y BLK% interiores +0,31 DT.
+
+**Ficheros actualizados:** `data/v5/carrera/*`, incluida `proyeccion_2026_27.parquet`.
+- Las tablas del §3 son las de la versión anterior a esta corrección. Las cifras de esta sección sustituyen a las del
+  §3.2 donde difieren.
+- La capa latente (F5) se ajustó con la F4 anterior. Afecta poco, porque de la F5 sólo se adoptan los perfiles, y se
+  recalculará en la F6 con la F4 corregida.
+
 ## 10. Siguiente fase propuesta y ajuste de inversión
 
 **F5 · Modelo factorial** (encargo §9): perfil latente del jugador a partir de las 14 métricas de carrera.

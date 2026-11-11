@@ -2,12 +2,12 @@
  "version_modelo": "5.0",
  "fase": "F4",
  "config": "configs/v5/f4.yaml",
- "hash_config": "b09768191563",
- "hash_datos_entrada": "4af57cb2bbbde3cb",
- "fecha": "2026-11-10T12:46:52+00:00",
+ "hash_config": "92539749a9db",
+ "hash_datos_entrada": "c33bfdc10c5ec613",
+ "fecha": "2026-11-11T07:40:41+00:00",
  "python": "3.13.18",
  "paso": "examen",
  "casos": 1628424,
  "metricas": 14,
- "tiempo_s": 203
+ "tiempo_s": 208
 }

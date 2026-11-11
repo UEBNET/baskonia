@@ -2,12 +2,12 @@
  "version_modelo": "5.0",
  "fase": "F4",
  "config": "configs/v5/f4.yaml",
- "hash_config": "d36db6a254df",
- "hash_datos_entrada": "4af57cb2bbbde3cb",
- "fecha": "2026-11-10T12:49:48+00:00",
+ "hash_config": "92539749a9db",
+ "hash_datos_entrada": "c33bfdc10c5ec613",
+ "fecha": "2026-11-11T07:41:41+00:00",
  "python": "3.13.18",
  "paso": "final",
  "variante_elegida": "completo",
  "variante_ajustada": "completo",
- "tiempo_s": 62
+ "tiempo_s": 60
 }

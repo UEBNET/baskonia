@@ -340,6 +340,29 @@ Error medio (predicción − observado) en DT de la métrica, por rol. Máximo p
 3. **PR de la F5.** Hecho: el PR abierto de la rama (UEBNET/baskonia#6) se ha actualizado para cubrir F0–F5 (título y
    descripción), en lugar de abrir otro con los mismos commits.
 
+## 9 bis. Decisiones del usuario (11-11-2026)
+
+1. **Se adopta la recomendación.**
+   - Las proyecciones siguen con la F4.
+   - Los 3 perfiles estables (tiro y anotación, interior frente a exterior, creación) pasan a la F6 como descriptor
+     adicional del tipo de jugador.
+   - **Los seis estilos unificados (Spacing, Circulación, Isolation, Old-School, Pistons, Pintura) no se pierden ni se
+     sustituyen.** Siguen describiendo *cómo* juega cada jugador y equipo y el estilo de cada liga, y la F6 los usa
+     como contexto. Los perfiles miden otra cosa: el *nivel* relativo en las métricas de producción.
+   - **Relación entre perfiles y estilos** (`perfiles_frente_estilos.csv`, 30.995 persona-temporadas):
+
+     | Perfil | Correlaciones principales |
+     |---|---|
+     | Interior frente a exterior | Pintura +0,47, Spacing −0,45 |
+     | Creación | Isolation +0,40, Spacing −0,37, Circulación +0,28 |
+     | Tiro y anotación | ≤ \|0,17\| con todos |
+
+     Rol + 3 perfiles explican entre el 16 % (Pistons) y el 52 % (Pintura) de la pertenencia a cada estilo. El rol solo
+     explica entre el 5 % y el 29 %. Son descriptores complementarios: ninguno sobra.
+2. **Sesgo con los interiores: auditado y corregido en la F4** (`04_capa_carrera.md`, §9 ter). La causa principal era el
+   paso de «sin posición» a «interior». Lo que queda (volumen–eficiencia) va a la F6.
+3. **PR.** Basta con actualizar el PR abierto: hecho.
+
 ## 10. Siguiente fase propuesta y ajuste de inversión
 
 **F6 · Ligas y contexto** (encargo §10 y revisión 1.2). Es la fase central para el objetivo del usuario: el impacto de

@@ -2,11 +2,11 @@
  "version_modelo": "5.0",
  "fase": "F4",
  "config": "configs/v5/f4.yaml",
- "hash_config": "d36db6a254df",
- "hash_datos_entrada": "4af57cb2bbbde3cb",
- "fecha": "2026-11-10T12:50:57+00:00",
+ "hash_config": "92539749a9db",
+ "hash_datos_entrada": "c33bfdc10c5ec613",
+ "fecha": "2026-11-11T07:44:02+00:00",
  "python": "3.13.18",
  "paso": "simulacion",
  "filas": 112,
- "tiempo_s": 70
+ "tiempo_s": 63
 }

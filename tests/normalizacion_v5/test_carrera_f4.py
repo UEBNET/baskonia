@@ -46,7 +46,7 @@ def test_gradiente_jax_coherente_con_el_filtro_numpy():
     M = MOD.matrices(o)
     libres, edad = MOD.VARIANTES["completo"]
     f = MOD._nll_jax(M, libres, {"kappa": 0.0, "log_c": 0.0}, MOD.penalizacion(edad, MOD.n_base()))
-    x = np.r_[np.log([0.1, 0.2, 0.15, 0.1, 0.4]), 0.05, 0.1, rng.normal(0, 0.05, MOD.n_base())]
+    x = np.r_[np.log([0.1, 0.2, 0.15, 0.1, 0.4]), 0.05, 0.1, 0.7, rng.normal(0, 0.05, MOD.n_base())]
     val, _ = f(x)
     th = dict(zip(libres, x[:len(libres)]))
     beta = x[len(libres):]
@@ -79,3 +79,18 @@ def test_recupera_parametros_en_simulacion():
     _, out = MOD.filtrar(S, rec["th"], rec["beta"])
     z = (S["a_verdadero"] - out["a"]) / np.sqrt(out["P"])
     assert (np.abs(z[S["mask"]]) <= 1.2816).mean() == pytest.approx(0.80, abs=0.03)
+
+
+def test_cambio_de_rol_conserva_el_nivel_absoluto_con_phi_1():
+    """Con φ = 1, al cambiar de rol se conserva el nivel absoluto: la posición relativa se desplaza en
+    μ(rol anterior) − μ(rol nuevo) de la liga-temporada."""
+    o = _obs(anios=(2020, 2021), ligas=("a", "a"), roles=("X", "I"))
+    o["mu"] = [-4.0, -3.0]
+    for r, m in zip("EAIX", (-4.5, -4.0, -3.0, -4.0)):
+        o[f"mu_{r}"] = m
+    M = MOD.matrices(o)
+    assert M["dmu"][0].tolist() == [0.0, -1.0]
+    th = {"log_tau0": np.log(1e-3), "kappa": 0.5, "log_c": 0.0, "phi_rol": 1.0, "log_s_R": np.log(1e-6)}
+    M["v"][:] = 1e6           # sin información: la predicción del segundo año es la media desplazada
+    _, out = MOD.filtrar(M, th, np.zeros(MOD.n_base()))
+    assert out["m_pred"][0, 1] == pytest.approx(-0.5, abs=1e-3)
