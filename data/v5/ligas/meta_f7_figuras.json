@@ -1,0 +1,15 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F7",
+ "config": "configs/v5/f7.yaml",
+ "hash_config": "d8ba8086030d",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-11T11:28:34+00:00",
+ "python": "3.13.18",
+ "paso": "figuras",
+ "figuras": [
+  "docs/v5/figuras/f7_sesgo_direccion.png",
+  "docs/v5/figuras/f7_precision_ligas.png"
+ ],
+ "tiempo_s": 1
+}

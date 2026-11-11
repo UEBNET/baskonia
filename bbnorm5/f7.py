@@ -46,6 +46,9 @@ def main(argv=None):
             from bbnorm5.ligas import modelo as LM
             cfg6 = C.cargar("configs/v5/f6.yaml")
             out = f6.lambda_intra(cfg6, bloques=LM.BLOQUES_PASO2, pares="pares_paso2.parquet", sufijo="paso2_")
+        elif paso == "figuras":
+            from bbnorm5.ligas import figuras_f7
+            out = figuras_f7.todas(cfg)
         elif paso == "proyeccion_paso2":
             import numpy as np
             import pandas as pd

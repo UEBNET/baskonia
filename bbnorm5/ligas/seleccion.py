@@ -168,7 +168,8 @@ def gls_paso2(intra: pd.DataFrame, inter: pd.DataFrame, metrica: str, variante: 
         X, y, v, w = np.vstack([Xa, Xb[ok]]), np.r_[ya, yb[ok]], np.r_[va, vb[ok]], np.r_[wa, wb[ok]]
     else:
         X, y, v, w = Xa, ya, va, wa
-    pr = np.r_[np.full(L, 1 / (2 * ya.std()) ** 2), np.full(len(LD.CONTEXTO), 1 / 0.25), np.full(len(extra), 1 / 1.0)]
+    esc = max(float(np.std(y)), 1e-3)          # prior débil de λ: 2 DT de todas las diferencias (intra + traspasos)
+    pr = np.r_[np.full(L, 1 / (2 * esc) ** 2), np.full(len(LD.CONTEXTO), 1 / 0.25), np.full(len(extra), 1 / 1.0)]
     s2 = 0.0
     for _ in range(10):
         ww = w / (v + s2)
