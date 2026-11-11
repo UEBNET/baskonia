@@ -6,5 +6,13 @@
   "divergencias": 0,
   "pasos_medios": 127.0,
   "tiempo_s": 14061
+ },
+ "paso2_tiro": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 425.0,
+  "ess_tail_min": 495.0,
+  "divergencias": 0,
+  "pasos_medios": 127.0,
+  "tiempo_s": 3234
  }
 }
