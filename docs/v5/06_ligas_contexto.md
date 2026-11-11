@@ -383,6 +383,28 @@ Modelo final = traducción con peso + los cuatro bloques + recalibración de la 
 4. **Extracción:** ¿se mira si la fuente FEB tiene licencias dobles o vinculados? Es lo único que daría puentes de la
    misma temporada a las FEB. ABA, Israel y LKL ampliarían el catálogo, pero no ayudan a las ligas mal conectadas.
 
+## 9 bis. Decisiones del usuario (11-11-2026)
+
+1. **Se adopta la F6.2** como el objeto «proyección en contexto» de la revisión 1.2.
+2. **Reagrupar los bloques de la NUTS:** pendiente de la respuesta del usuario a la explicación.
+   - **Qué cambiaría:** los rangos publicados de la traducción (uso, asistencias y rebote en las ligas mal conectadas).
+   - **Qué no cambiaría:** la proyección en contexto, que usa el GLS por métrica.
+   - **Propuesta:** hacerlo una sola vez en el reajuste del paso 2 (F7), que añade los traspasos entre temporadas y
+     obliga a reajustar de todos modos.
+3. **GO a la F7.**
+4. **Licencias dobles y vinculados FEB: no hay datos que añadir.**
+   - **Qué contiene la fuente FEB** (`data/raw/feb*`):
+     - caja por partido;
+     - plantillas de Primera y Segunda FEB, con la columna «Formación» SÍ/NO, que es el cupo de formación local;
+     - ninguna marca de jugador vinculado, cedido o con doble licencia;
+     - la Tercera FEB no trae plantillas.
+   - **Puentes ACB–FEB de la misma temporada:** sólo existen si el jugador juega en las dos, y entonces ya aparece en las
+     dos cajas. La resolución de identidades ya los une: 3–6 por temporada con ≥ 50 minutos en ambas.
+   - **Coincidencias de nombre sin enlazar:** 39 con ≥ 50 minutos, y son homónimos, no enlaces perdidos. Por ejemplo,
+     «Sergio Rodríguez» del Real Madrid frente a SERGIO RODRÍGUEZ FEBLES de Estudiantes, o «Alberto Díaz» de Unicaja
+     frente a ALBERTO DÍAZ FERREIRA de Chantada.
+   - **Conclusión:** las FEB sólo se pueden identificar mejor con los traspasos entre temporadas (F7).
+
 ## 10. Siguiente fase propuesta y ajuste de inversión
 
 **F7 · Sesgo de selección en los traspasos** (encargo §11):
