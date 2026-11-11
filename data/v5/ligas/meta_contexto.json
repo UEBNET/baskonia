@@ -1,0 +1,21 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F6",
+ "config": "configs/v5/f6.yaml",
+ "hash_config": "a68b8327af99",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-11T08:28:36+00:00",
+ "python": "3.13.18",
+ "paso": "contexto",
+ "casos": 1206054,
+ "superan_navaja": [
+  "liga+peso",
+  "liga+peso+todos",
+  "liga+volumen",
+  "liga+companeros",
+  "liga+tipo",
+  "liga+estilo_liga",
+  "liga+todos"
+ ],
+ "tiempo_s": 167
+}
