@@ -22,14 +22,14 @@ from bbnorm5 import config as C
 DIR = C.DIR_DATOS / "ligas"
 
 
-def lambda_intra(cfg: dict) -> dict:
+def lambda_intra(cfg: dict, bloques: dict | None = None, pares: str = "pares_intra.parquet", sufijo: str = "") -> dict:
     import arviz as az
     from bbnorm5.ligas import modelo as LM
-    p = pd.read_parquet(DIR / "pares_intra.parquet")
+    p = pd.read_parquet(DIR / pares)
     out = {}
-    for bloque, mets in LM.BLOQUES.items():
-        for fz in ([False, True] if bloque in cfg["nuts"]["bloques_con_fuerza"] else [False]):
-            nombre = f"{bloque}{'_fuerza' if fz else ''}"
+    for bloque, mets in (bloques or LM.BLOQUES).items():
+        for fz in ([False, True] if (bloque in cfg["nuts"]["bloques_con_fuerza"] and not sufijo) else [False]):
+            nombre = f"{sufijo}{bloque}{'_fuerza' if fz else ''}"
             t0 = time.time()
             I = LM.indices(p, cfg["temporadas"], mets)
             mc = LM.ajustar(I, cfg, fz)
@@ -37,8 +37,8 @@ def lambda_intra(cfg: dict) -> dict:
             lam = np.asarray(s["lambda"])                         # cadenas × draws × L × T × M
             e = mc.get_extra_fields(group_by_chain=True)
             idata = az.from_dict(posterior={k: np.asarray(v) for k, v in s.items()
-                                            if k in ("lambda", "s_base", "s_rw", "s_c", "beta", "gamma_fuerza")})
-            sm = az.summary(idata, var_names=[v for v in ("s_base", "s_rw", "s_c", "beta", "gamma_fuerza")
+                                            if k in ("lambda", "s_base", "s_rw", "s_c", "s_inter", "beta", "gamma_fuerza")})
+            sm = az.summary(idata, var_names=[v for v in ("s_base", "s_rw", "s_c", "s_inter", "beta", "gamma_fuerza")
                                               if v in idata.posterior])
             sl = az.summary(idata, var_names=["lambda"])
             sl = sl[sl["sd"] > 1e-12]                              # fuera la referencia (≡ 0)
@@ -53,7 +53,7 @@ def lambda_intra(cfg: dict) -> dict:
                            "pasos_medios": float(np.asarray(e["num_steps"]).mean()),
                            "tiempo_s": round(time.time() - t0)}
             print(f"  {nombre}: {out[nombre]}", flush=True)
-            C.escribir_json(out, DIR / "lambda_intra_diagnosticos.json")
+            C.escribir_json(out, DIR / f"lambda_{sufijo}diagnosticos.json" if sufijo else DIR / "lambda_intra_diagnosticos.json")
     return out
 
 

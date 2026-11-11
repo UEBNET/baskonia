@@ -27,3 +27,8 @@ data/v5/latente/*_casos.parquet
 data/v5/carrera/observaciones.parquet
 data/v5/ligas/contexto_base.parquet
 data/v5/ligas/contexto_casos.parquet
+data/v5/ligas/seleccion_base.parquet
+data/v5/ligas/contexto_base_paso2.parquet
+data/v5/ligas/contexto_casos_paso2.parquet
+data/v5/ligas/seleccion_casos.parquet
+data/v5/ligas/paso1_frente_paso2.parquet

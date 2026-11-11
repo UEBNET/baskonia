@@ -36,6 +36,11 @@ REF = "acb"
 BLOQUES = {"tiro": ["t2_pct", "t3_pct", "tl_pct", "tpar", "ftr", "pts_p100"],
            "rebote_defensa": ["oreb_pct", "dreb_pct", "blk_pct", "stl_p100", "pf_p40"],
            "creacion": ["ast_pct", "tov_pct", "usg_pct"]}
+# F7 (decisión del usuario): bloques reagrupados por la correlación de λ entre métricas que mostró la F6.1
+# (pts–USG 0,98, pts–AST 0,92, pts–DREB 0,81, pts–OREB 0,74)
+BLOQUES_PASO2 = {"volumen_papel": ["pts_p100", "usg_pct", "ast_pct", "dreb_pct", "oreb_pct"],
+                 "tiro": ["t2_pct", "t3_pct", "tl_pct", "tpar", "ftr"],
+                 "defensa_cuidado": ["blk_pct", "stl_p100", "pf_p40", "tov_pct"]}
 
 
 def indices(p: pd.DataFrame, temporadas: list[str], metricas: list[str] | None = None) -> dict:
@@ -53,6 +58,8 @@ def indices(p: pd.DataFrame, temporadas: list[str], metricas: list[str] | None =
     return {"ligas": ligas, "temporadas": temporadas, "metricas": metricas, "escala": esc.reindex(metricas).to_numpy(),
             "a": p["liga_a"].map(il).to_numpy(), "b": p["liga_b"].map(il).to_numpy(),
             "t": p["temporada"].map(it).to_numpy(), "m": p["metrica"].map(im).to_numpy(),
+            "t_a": (p["temporada_a"] if "temporada_a" in p else p["temporada"]).map(it).to_numpy(),
+            "inter": (p["tipo"] == "traspaso_entre_temporadas").to_numpy() if "tipo" in p else np.zeros(len(p), bool),
             "d": p["d"].to_numpy(float) / e, "var": p["var"].to_numpy(float) / e ** 2,
             "x": p[LD.CONTEXTO].to_numpy(float)}
 
@@ -81,8 +88,15 @@ def _modelo(I, fuerza=None, d=None):
     beta = numpyro.sample("beta", dist.Normal(0, 0.5).expand([M, len(LD.CONTEXTO)]).to_event(2))
     s_c = numpyro.sample("s_c", dist.HalfNormal(0.5).expand([M]).to_event(1))
     a, b, t, m = I["a"], I["b"], I["t"], I["m"]
-    mu = lam[b, t, m] - lam[a, t, m] + (jnp.asarray(I["x"]) * beta[m]).sum(-1)
-    sd = jnp.sqrt(jnp.asarray(I["var"]) + s_c[m] ** 2)
+    t_a = I.get("t_a", t)
+    mu = lam[b, t, m] - lam[a, t_a, m] + (jnp.asarray(I["x"]) * beta[m]).sum(-1)
+    if I.get("inter") is not None and np.any(I["inter"]):
+        # traspasos entre temporadas: su propia varianza extra (la de la proyección F4 ya va en var)
+        s_i = numpyro.sample("s_inter", dist.HalfNormal(0.5).expand([M]).to_event(1))
+        extra = jnp.where(jnp.asarray(I["inter"]), s_i[m] ** 2, s_c[m] ** 2)
+    else:
+        extra = s_c[m] ** 2
+    sd = jnp.sqrt(jnp.asarray(I["var"]) + extra)
     numpyro.sample("d", dist.Normal(mu, sd), obs=d)
 
 

@@ -1,0 +1,19 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F7",
+ "config": "configs/v5/f7.yaml",
+ "hash_config": "d8ba8086030d",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-11T11:19:19+00:00",
+ "python": "3.13.18",
+ "paso": "examen",
+ "filas": 226115,
+ "z_sube": {
+  "crudo": 0.085,
+  "encogido": 0.048,
+  "encogido_heckman": 0.016,
+  "encogido_ipw": 0.053,
+  "paso1": 0.063
+ },
+ "tiempo_s": 15
+}

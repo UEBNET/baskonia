@@ -181,7 +181,7 @@ MODELOS = {
 RECALIBRAR = {"liga+peso+todos+recal"}
 
 
-def preparar(cfg: dict) -> pd.DataFrame:
+def preparar(cfg: dict, cortes: list[int] | None = None, salida: str = "contexto_base.parquet") -> pd.DataFrame:
     o = CD.cargar()
     h = CD._hiper_preferido(pd.read_csv(DM.DIR / "hiperparametros.csv"))
     perf = pd.read_parquet(C.DIR_DATOS / "latente" / "perfiles_latentes.parquet")
@@ -189,7 +189,7 @@ def preparar(cfg: dict) -> pd.DataFrame:
     liga = pd.read_csv(C.DIR_DATOS / "contexto" / "estilo_liga.csv")
     pares = pd.read_parquet(DIR / "pares_intra.parquet")
     filas = []
-    for anio in cfg["contexto"]["cortes"]:
+    for anio in (cortes or cfg["contexto"]["cortes"]):
         pp = pares[pares["temporada"].str[:4].astype(int) < anio]
         lam = gls.todas(pp, list(DM.METRICAS))
         for met in DM.METRICAS:
@@ -198,11 +198,11 @@ def preparar(cfg: dict) -> pd.DataFrame:
             filas.append(rasgos(b, lam, perf, ctx, liga))
             print(f"  base {anio} {met}: {len(b)}", flush=True)
     x = pd.concat(filas, ignore_index=True)
-    x.to_parquet(DIR / "contexto_base.parquet")
+    x.to_parquet(DIR / salida)
     return x
 
 
-def examen(cfg: dict, x: pd.DataFrame | None = None) -> pd.DataFrame:
+def examen(cfg: dict, x: pd.DataFrame | None = None, sufijo: str = "") -> pd.DataFrame:
     x = pd.read_parquet(DIR / "contexto_base.parquet") if x is None else x
     casos, coefs, escalas = [], [], []
     for test in cfg["contexto"]["cortes_prueba"]:
@@ -243,9 +243,9 @@ def examen(cfg: dict, x: pd.DataFrame | None = None) -> pd.DataFrame:
                 casos.append(EX.evaluar(y, fam, nom, rng).assign(metrica=met, anio=test))
             print(f"  prueba {test} {met}", flush=True)
     c = pd.concat(casos, ignore_index=True)
-    c.to_parquet(DIR / "contexto_casos.parquet")
-    pd.concat(coefs).to_csv(DIR / "contexto_coeficientes.csv", index=False)
-    pd.DataFrame(escalas).to_csv(DIR / "contexto_escala_cambio_liga.csv", index=False)
+    c.to_parquet(DIR / f"contexto_casos{sufijo}.parquet")
+    pd.concat(coefs).to_csv(DIR / f"contexto_coeficientes{sufijo}.csv", index=False)
+    pd.DataFrame(escalas).to_csv(DIR / f"contexto_escala_cambio_liga{sufijo}.csv", index=False)
     return c
 
 
