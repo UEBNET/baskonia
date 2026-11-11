@@ -6,6 +6,7 @@ Pasos:
 - base: proyección F4 sin fugas de cada persona en cada temporada objetivo 2021-22 … 2025-26 (bbnorm5/ligas/contexto.py)
 - proyeccion_paso2: la proyección en contexto (F6.2) con λ del paso 2 frente a λ del paso 1
 - pares_paso2 · lambda_paso2: NUTS del paso 2 (puentes intra + traspasos, bloques reagrupados)
+- resumen_paso2: diagnósticos, traducción, ciclos, compatibilidad y precisión frente al paso 1 (bbnorm5/ligas/resumen_paso2.py)
 - examen: selección (multinomial: seguir / subir / bajar), λ con traspasos entre temporadas (crudo, encogido, IPW y
   Heckman) y prueba de sesgo por dirección del cambio (bbnorm5/ligas/seleccion.py)
 """
@@ -46,6 +47,9 @@ def main(argv=None):
             from bbnorm5.ligas import modelo as LM
             cfg6 = C.cargar("configs/v5/f6.yaml")
             out = f6.lambda_intra(cfg6, bloques=LM.BLOQUES_PASO2, pares="pares_paso2.parquet", sufijo="paso2_")
+        elif paso == "resumen_paso2":
+            from bbnorm5.ligas import resumen_paso2 as R2
+            out = R2.ejecutar(C.cargar("configs/v5/f6.yaml"))
         elif paso == "figuras":
             from bbnorm5.ligas import figuras_f7
             out = figuras_f7.todas(cfg)

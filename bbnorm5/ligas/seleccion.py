@@ -234,6 +234,7 @@ def ejecutar(cfg: dict) -> dict:
         pickle.dump(modelos, f)
     s = c.groupby(["variante", "direccion"]).agg(n=("z", "size"), z_medio=("z", "mean"), residuo_medio=("residuo", "mean"))
     s.to_csv(DIR / "sesgo_por_direccion.csv")
+    comparar_variantes(c, cfg["semilla"]).to_csv(DIR / "seleccion_variantes.csv", index=False)
     return {"filas": len(c), "z_sube": s["z_medio"].xs("sube", level="direccion").round(3).to_dict()}
 
 
@@ -287,3 +288,32 @@ def pares_paso2(cfg: dict, variante: str = "encogido") -> pd.DataFrame:
     out = pd.concat([intra, inter], ignore_index=True)
     out.to_parquet(DIR / "pares_paso2.parquet")
     return out
+
+
+def comparar_variantes(c: pd.DataFrame, semilla: int, B: int = 400) -> pd.DataFrame:
+    """CRPS normal de cada variante en los cambios de liga, relativo al paso 1 y al encogido (IC 95 % por bootstrap de
+    personas), cobertura del 80 % y sesgo medio por dirección."""
+    c = c[np.isfinite(c["z"]) & (c["z"] != 0)].copy()
+    sd, z = c["residuo"] / c["z"], c["z"]
+    c["crps"] = sd * (z * (2 * stats.norm.cdf(z) - 1) + 2 * stats.norm.pdf(z) - 1 / np.sqrt(np.pi))
+    c["cub80"] = z.abs() <= stats.norm.ppf(0.9)
+    w = c.pivot_table(index=["corte", "metrica", "persona_v5", "direccion"], columns="variante", values="crps").dropna()
+    per = w.groupby(level="persona_v5").sum()
+    P, n = per.to_numpy(), len(per)
+    rng = np.random.default_rng(semilla)
+    Bs = np.array([P[rng.integers(0, n, n)].sum(0) for _ in range(B)])
+    cols = list(per.columns)
+    filas = []
+    for j, v in enumerate(cols):
+        fila = {"variante": v}
+        for ref in ("paso1", "encogido"):
+            k = cols.index(ref)
+            b = Bs[:, j] / Bs[:, k] - 1
+            fila[f"dif_crps_{ref}"] = P.sum(0)[j] / P.sum(0)[k] - 1
+            fila[f"ic95_lo_{ref}"], fila[f"ic95_hi_{ref}"] = np.quantile(b, [0.025, 0.975])
+        g = c[c["variante"] == v]
+        fila["cobertura80"] = g["cub80"].mean()
+        for d in ("sube", "baja"):
+            fila[f"z_{d}"] = g.loc[g["direccion"] == d, "z"].mean()
+        filas.append(fila)
+    return pd.DataFrame(filas)

@@ -43,3 +43,36 @@ def test_regresion_a_la_media_crudo_sesga_y_encogido_no():
     lb = lambda g: g["lambda"][g["ligas"].index("b")]
     assert lb(crudo) < -0.3 - 0.15          # la liga de destino parece más difícil de lo que es
     assert lb(enc) == pytest.approx(-0.3, abs=0.03)
+
+
+def test_comparar_variantes_ordena_por_crps():
+    """La variante con residuos menores tiene CRPS menor que el paso 1 y su IC no cruza 0."""
+    import pandas as pd
+    from bbnorm5.ligas import seleccion as LS
+    rng = np.random.default_rng(3)
+    n = 4000
+    base = pd.DataFrame({"corte": 2025, "metrica": "pts_p100", "persona_v5": np.arange(n) % 800,
+                         "direccion": rng.choice(["sube", "baja"], n)})
+    base = base.drop_duplicates(["persona_v5", "direccion"])
+    filas = []
+    for v, sesgo in (("paso1", 0.5), ("encogido", 0.0), ("crudo", 0.3)):
+        r = rng.normal(sesgo, 1.0, len(base))
+        filas.append(base.assign(variante=v, residuo=r, z=r / 1.0))
+    t = LS.comparar_variantes(pd.concat(filas, ignore_index=True), semilla=1, B=200).set_index("variante")
+    assert t.loc["encogido", "dif_crps_paso1"] < 0 and t.loc["encogido", "ic95_hi_paso1"] < 0
+    assert t.loc["crudo", "dif_crps_encogido"] > 0
+
+
+def test_correlacion_bloques_y_frente_paso1():
+    """Dos métricas con λ idénticos entre ligas dan correlación 1; el mismo posterior frente a sí mismo da z = 0."""
+    from bbnorm5.ligas import resumen_paso2 as R2
+    rng = np.random.default_rng(4)
+    ligas, temps = ["acb", "a", "b", "c", "d"], ["2024-25", "2025-26"]
+    lam = rng.normal(size=(300, len(ligas), len(temps)))
+    lam[:, 0] = 0.0
+    x = {"m1": {"lam": lam, "ligas": ligas, "temporadas": temps, "bloque": "uno"},
+         "m2": {"lam": 2 * lam, "ligas": ligas, "temporadas": temps, "bloque": "uno"}}
+    cb = R2.correlacion_bloques(x, "2025-26")
+    assert np.isclose(cb["r_media"].iloc[0], 1.0)
+    fp = R2.frente_paso1(x, x, "2025-26")
+    assert np.allclose(fp["z"], 0.0) and np.allclose(fp["ratio_sd"], 1.0)
