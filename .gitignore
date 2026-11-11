@@ -24,3 +24,4 @@ data/v5/medida/sigma_comun/validacion_casos.parquet
 data/v5/medida/sigma_comun/posteriores.parquet
 data/v5/carrera/examen_casos.parquet
 data/v5/latente/*_casos.parquet
+data/v5/carrera/observaciones.parquet
