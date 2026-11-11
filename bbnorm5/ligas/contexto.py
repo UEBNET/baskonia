@@ -176,7 +176,9 @@ MODELOS = {
     "liga+peso": (True, ["peso_liga"]),
     "liga+todos": (True, ["volumen", "companeros", "tipo", "estilo_liga"]),
     "liga+peso+todos": (True, ["peso_liga", "volumen", "companeros", "tipo", "estilo_liga"]),
+    "liga+peso+todos+recal": (True, ["peso_liga", "volumen", "companeros", "tipo", "estilo_liga"]),
 }
+RECALIBRAR = {"liga+peso+todos+recal"}
 
 
 def preparar(cfg: dict) -> pd.DataFrame:
@@ -202,7 +204,7 @@ def preparar(cfg: dict) -> pd.DataFrame:
 
 def examen(cfg: dict, x: pd.DataFrame | None = None) -> pd.DataFrame:
     x = pd.read_parquet(DIR / "contexto_base.parquet") if x is None else x
-    casos, coefs = [], []
+    casos, coefs, escalas = [], [], []
     for test in cfg["contexto"]["cortes_prueba"]:
         for met in DM.METRICAS:
             fam = DM.METRICAS[met][0]
@@ -222,12 +224,28 @@ def examen(cfg: dict, x: pd.DataFrame | None = None) -> pd.DataFrame:
                     coefs.append(pd.DataFrame({"prueba": test, "metrica": met, "modelo": nom, "variable": cols,
                                                "beta": fit["beta"], "sd": np.sqrt(np.diag(fit["cov"]))}))
                 y = aplicar(te, cols, fit, con_liga)
+                if con_liga and nom in RECALIBRAR:
+                    # recalibración de la varianza no muestral en los cambios de liga, estimada en el entrenamiento por
+                    # máxima verosimilitud: r ~ N(0, f·v_pred + v_obs) en los cambios de liga de los cortes anteriores
+                    # (el estimador por momentos encogía demasiado en sucesos raros: 1.ª versión descartada)
+                    trp = aplicar(tr, cols, fit, con_liga)
+                    rr = eta - (trp["mu_prev"] + trp["m_nivel"]).to_numpy()
+                    cm = (trp["cl"] > 0).to_numpy() & np.isfinite(rr)
+                    vp = trp["v_y_sin_muestreo"].to_numpy(float)
+                    vo_c = np.asarray(vo, float)[cm]
+                    nll = lambda lf: 0.5 * np.sum(np.log(np.exp(lf) * vp[cm] + vo_c) + rr[cm] ** 2 / (np.exp(lf) * vp[cm] + vo_c))
+                    f = float(np.exp(optimize.minimize_scalar(nll, bounds=(np.log(0.3), np.log(2.0)), method="bounded").x))
+                    escalas.append({"prueba": test, "metrica": met, "modelo": nom, "factor_var_cambio_liga": f})
+                    k = (y["cl"] > 0).to_numpy()
+                    for col in ("v_nivel", "v_y_sin_muestreo"):
+                        y.loc[k, col] = y.loc[k, col] * f
                 rng = np.random.default_rng((cfg["semilla"] + zlib.crc32(f"{test}|{met}|{nom}".encode())) % 2 ** 32)
                 casos.append(EX.evaluar(y, fam, nom, rng).assign(metrica=met, anio=test))
             print(f"  prueba {test} {met}", flush=True)
     c = pd.concat(casos, ignore_index=True)
     c.to_parquet(DIR / "contexto_casos.parquet")
     pd.concat(coefs).to_csv(DIR / "contexto_coeficientes.csv", index=False)
+    pd.DataFrame(escalas).to_csv(DIR / "contexto_escala_cambio_liga.csv", index=False)
     return c
 
 
@@ -241,7 +259,8 @@ def navaja(c: pd.DataFrame, semilla: int) -> pd.DataFrame:
     p = p.div(p.groupby(level="metrica")["base_F4"].transform("mean"), axis=0)
     filas = []
     comparaciones = ([("liga", "base_F4"), ("liga+peso", "base_F4"), ("liga+peso+todos", "base_F4"),
-                      ("liga+peso+todos", "liga+todos")] + [(m, "liga") for m in MODELOS if m.startswith("liga+")])
+                      ("liga+peso+todos", "liga+todos"), ("liga+peso+todos+recal", "base_F4"),
+                      ("liga+peso+todos+recal", "liga+peso+todos")] + [(m, "liga") for m in MODELOS if m.startswith("liga+") and m not in RECALIBRAR])
     for sub, mask in (("todos", np.ones(len(p), bool)), ("cambio de liga", (cl == 1).to_numpy())):
         q = p[mask]
         per = q.index.get_level_values("persona_v5")

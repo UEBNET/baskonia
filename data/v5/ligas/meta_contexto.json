@@ -4,18 +4,19 @@
  "config": "configs/v5/f6.yaml",
  "hash_config": "a68b8327af99",
  "hash_datos_entrada": null,
- "fecha": "2026-11-11T08:28:36+00:00",
+ "fecha": "2026-11-11T08:45:25+00:00",
  "python": "3.13.18",
  "paso": "contexto",
- "casos": 1206054,
+ "casos": 1340060,
  "superan_navaja": [
   "liga+peso",
   "liga+peso+todos",
+  "liga+peso+todos+recal",
   "liga+volumen",
   "liga+companeros",
   "liga+tipo",
   "liga+estilo_liga",
   "liga+todos"
  ],
- "tiempo_s": 167
+ "tiempo_s": 154
 }
