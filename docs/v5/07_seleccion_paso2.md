@@ -405,7 +405,7 @@ Correlación entre métricas de los efectos de liga (entre ligas, 2025-26, media
   - orden por CRPS de `comparar_variantes`;
   - correlación entre métricas y compatibilidad de `resumen_paso2`.
 
-  Suite completa: __SUITE__
+  Suite completa en verde: **368 passed**.
 
 ## 10. Riesgos detectados y decisiones que requieren al usuario
 
