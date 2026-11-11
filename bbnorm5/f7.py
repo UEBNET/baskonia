@@ -25,6 +25,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(prog="bbnorm5.f7")
     ap.add_argument("--config", default="configs/v5/f7.yaml")
     ap.add_argument("--pasos", nargs="*")
+    ap.add_argument("--bloques", nargs="*", help="lambda_paso2: sólo estos bloques (por defecto, todos)")
     a = ap.parse_args(argv)
     cfg = C.cargar(a.config)
     resumen = {}
@@ -46,7 +47,8 @@ def main(argv=None):
             from bbnorm5 import f6
             from bbnorm5.ligas import modelo as LM
             cfg6 = C.cargar("configs/v5/f6.yaml")
-            out = f6.lambda_intra(cfg6, bloques=LM.BLOQUES_PASO2, pares="pares_paso2.parquet", sufijo="paso2_")
+            bl = {k: v for k, v in LM.BLOQUES_PASO2.items() if not a.bloques or k in a.bloques}
+            out = f6.lambda_intra(cfg6, bloques=bl, pares="pares_paso2.parquet", sufijo="paso2_")
         elif paso == "resumen_paso2":
             from bbnorm5.ligas import resumen_paso2 as R2
             out = R2.ejecutar(C.cargar("configs/v5/f6.yaml"))

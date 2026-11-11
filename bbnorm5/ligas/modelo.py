@@ -31,6 +31,7 @@ from bbnorm5.medida import datos as DM
 
 METRICAS = list(DM.METRICAS)
 REF = "acb"
+TROZO = 8_192
 # bloques de métricas correlacionadas (si el modelo de las 14 es demasiado grande para NUTS): tiro y anotación;
 # rebote, defensa y faltas; creación y uso
 BLOQUES = {"tiro": ["t2_pct", "t3_pct", "tl_pct", "tpar", "ftr", "pts_p100"],
@@ -87,17 +88,22 @@ def _modelo(I, fuerza=None, d=None):
     numpyro.deterministic("lambda", lam * jnp.asarray(I["escala"]))      # de vuelta a la escala del enlace
     beta = numpyro.sample("beta", dist.Normal(0, 0.5).expand([M, len(LD.CONTEXTO)]).to_event(2))
     s_c = numpyro.sample("s_c", dist.HalfNormal(0.5).expand([M]).to_event(1))
-    a, b, t, m = I["a"], I["b"], I["t"], I["m"]
-    t_a = I.get("t_a", t)
-    mu = lam[b, t, m] - lam[a, t_a, m] + (jnp.asarray(I["x"]) * beta[m]).sum(-1)
-    if I.get("inter") is not None and np.any(I["inter"]):
+    hay_inter = I.get("inter") is not None and np.any(I["inter"])
+    if hay_inter:
         # traspasos entre temporadas: su propia varianza extra (la de la proyección F4 ya va en var)
         s_i = numpyro.sample("s_inter", dist.HalfNormal(0.5).expand([M]).to_event(1))
-        extra = jnp.where(jnp.asarray(I["inter"]), s_i[m] ** 2, s_c[m] ** 2)
-    else:
-        extra = s_c[m] ** 2
-    sd = jnp.sqrt(jnp.asarray(I["var"]) + extra)
-    numpyro.sample("d", dist.Normal(mu, sd), obs=d)
+    n = len(I["m"])
+    # verosimilitud por trozos de ≤ TROZO filas: idéntica (suma de log-verosimilitudes), pero XLA en CPU pasa a una
+    # estrategia ~100 veces más lenta en el gradiente de los gather por encima de ~40.000 filas (F7, paso 2)
+    cortes = list(range(0, n, TROZO)) + [n]
+    for k, (i0, i1) in enumerate(zip(cortes[:-1], cortes[1:])):
+        sl = slice(i0, i1)
+        a, b, t, m = I["a"][sl], I["b"][sl], I["t"][sl], I["m"][sl]
+        t_a = I["t_a"][sl] if "t_a" in I else t
+        mu = lam[b, t, m] - lam[a, t_a, m] + (jnp.asarray(I["x"][sl]) * beta[m]).sum(-1)
+        extra = jnp.where(jnp.asarray(I["inter"][sl]), s_i[m] ** 2, s_c[m] ** 2) if hay_inter else s_c[m] ** 2
+        sd = jnp.sqrt(jnp.asarray(I["var"][sl]) + extra)
+        numpyro.sample("d" if len(cortes) == 2 else f"d_{k}", dist.Normal(mu, sd), obs=None if d is None else d[sl])
 
 
 def fuerza_prior(I: dict) -> dict:

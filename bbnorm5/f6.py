@@ -26,7 +26,9 @@ def lambda_intra(cfg: dict, bloques: dict | None = None, pares: str = "pares_int
     import arviz as az
     from bbnorm5.ligas import modelo as LM
     p = pd.read_parquet(DIR / pares)
-    out = {}
+    fdiag = DIR / f"lambda_{sufijo}diagnosticos.json" if sufijo else DIR / "lambda_intra_diagnosticos.json"
+    # se conservan los bloques ya ajustados (se puede ajustar un bloque cada vez)
+    out = json.loads(fdiag.read_text(encoding="utf-8")) if (sufijo and fdiag.exists()) else {}
     for bloque, mets in (bloques or LM.BLOQUES).items():
         for fz in ([False, True] if (bloque in cfg["nuts"]["bloques_con_fuerza"] and not sufijo) else [False]):
             nombre = f"{sufijo}{bloque}{'_fuerza' if fz else ''}"
@@ -53,7 +55,7 @@ def lambda_intra(cfg: dict, bloques: dict | None = None, pares: str = "pares_int
                            "pasos_medios": float(np.asarray(e["num_steps"]).mean()),
                            "tiempo_s": round(time.time() - t0)}
             print(f"  {nombre}: {out[nombre]}", flush=True)
-            C.escribir_json(out, DIR / f"lambda_{sufijo}diagnosticos.json" if sufijo else DIR / "lambda_intra_diagnosticos.json")
+            C.escribir_json(out, fdiag)
     return out
 
 
