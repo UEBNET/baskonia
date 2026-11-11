@@ -1,0 +1,34 @@
+{
+ "tiro": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 342.0,
+  "ess_tail_min": 353.0,
+  "divergencias": 0,
+  "pasos_medios": 191.08533333333332,
+  "tiempo_s": 3377
+ },
+ "tiro_fuerza": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 349.0,
+  "ess_tail_min": 454.0,
+  "divergencias": 0,
+  "pasos_medios": 169.41066666666666,
+  "tiempo_s": 2784
+ },
+ "rebote_defensa": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 405.0,
+  "ess_tail_min": 882.0,
+  "divergencias": 0,
+  "pasos_medios": 127.0,
+  "tiempo_s": 1327
+ },
+ "creacion": {
+  "rhat_max": 1.02,
+  "ess_bulk_min": 318.0,
+  "ess_tail_min": 638.0,
+  "divergencias": 0,
+  "pasos_medios": 127.55466666666666,
+  "tiempo_s": 918
+ }
+}

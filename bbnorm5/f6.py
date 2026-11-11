@@ -84,9 +84,12 @@ def main(argv=None):
                 cob80=("c80", "mean"), crps=("crps", "mean"))
             r.to_csv(DIR / "contexto_resumen.csv")
             out = {"casos": len(c), "superan_navaja": nv.loc[nv["supera_navaja"], "modelo"].unique().tolist()}
+        elif paso == "figuras":
+            from bbnorm5.ligas import figuras as LF
+            out = LF.todas(cfg)
         elif paso == "resumen_intra":
-            from bbnorm5.ligas import resumen
-            out = resumen.intra(cfg)
+            from bbnorm5.ligas import resumen as LR
+            out = LR.intra(cfg)
         else:
             raise ValueError(paso)
         out["tiempo_s"] = round(time.time() - t0)

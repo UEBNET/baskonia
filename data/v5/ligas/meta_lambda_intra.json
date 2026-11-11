@@ -1,0 +1,43 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F6",
+ "config": "configs/v5/f6.yaml",
+ "hash_config": "6bfb332349f1",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-11T10:37:47+00:00",
+ "python": "3.13.18",
+ "paso": "lambda_intra",
+ "tiro": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 342.0,
+  "ess_tail_min": 353.0,
+  "divergencias": 0,
+  "pasos_medios": 191.08533333333332,
+  "tiempo_s": 3377
+ },
+ "tiro_fuerza": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 349.0,
+  "ess_tail_min": 454.0,
+  "divergencias": 0,
+  "pasos_medios": 169.41066666666666,
+  "tiempo_s": 2784
+ },
+ "rebote_defensa": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 405.0,
+  "ess_tail_min": 882.0,
+  "divergencias": 0,
+  "pasos_medios": 127.0,
+  "tiempo_s": 1327
+ },
+ "creacion": {
+  "rhat_max": 1.02,
+  "ess_bulk_min": 318.0,
+  "ess_tail_min": 638.0,
+  "divergencias": 0,
+  "pasos_medios": 127.55466666666666,
+  "tiempo_s": 918
+ },
+ "tiempo_s": 8408
+}

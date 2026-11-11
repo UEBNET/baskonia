@@ -1,0 +1,16 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F6",
+ "config": "configs/v5/f6.yaml",
+ "hash_config": "a68b8327af99",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-11T10:39:16+00:00",
+ "python": "3.13.18",
+ "paso": "resumen_intra",
+ "triangulos": 1194,
+ "ciclo_conjunta_max": 2.220446049250313e-16,
+ "ciclo_pares_mediana_abs": 0.10957320595742805,
+ "reduccion_sd_fuerza_mediana": 0.01724905016278988,
+ "ratio_sd_v5_v32_mediana": 1.531801646042652,
+ "tiempo_s": 5
+}
