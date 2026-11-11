@@ -1,5 +1,19 @@
 # Registro de cambios
 
+## 2026-11-11 — Kerno: menú por sitios y botón sólo en Jugadores
+
+* Raíl izquierdo de los tres artifacts (Jugadores A7rufkL84rvRFcUBFBxFbC v37, Equipos SXFgQ6CpytxT3ZZupcEFcj v13,
+  Metodología T83MBGZk5untACmegadfNn v12): arriba, una tarjeta por sitio con su inicial (J · E · M), qué ofrece y
+  cuántas herramientas tiene; el sitio abierto va relleno y dice «Estás aquí», los otros llevan «Abrir» (pestaña nueva,
+  con el club y la temporada de ese momento). Debajo, las herramientas agrupadas por sitio: «En este sitio · X» (se
+  abren aquí) y luego «En Y» para cada otro sitio (se abren en una pestaña nueva). Una vista compartida («Tu equipo hoy»)
+  aparece en cada sitio que la tiene.
+* El botón «Actualizar 2026-27» queda sólo en Jugadores (el único con la capacidad `mcp`); en Equipos y Metodología se
+  han quitado el botón, su panel, su CSS y su script.
+* Páginas fuente: `artifact/kerno.html` (Jugadores, con botón) y `artifact/kerno_sitios.py`, que genera
+  `artifact/kerno-equipos.html` y `artifact/kerno-metodologia.html` (título propio y sin botón). Tras tocar
+  `kerno.html`, ejecutar `python3 artifact/kerno_sitios.py` y publicar cada página en su artifact.
+
 ## 2026-11-09 — Skill «anadir-liga»
 
 * `.claude/skills/anadir-liga/`: procedimiento para incorporar una liga nueva a todo el sistema (decisiones fijadas de

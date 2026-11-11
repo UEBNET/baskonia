@@ -183,6 +183,41 @@ select:hover, input:hover { border-color: var(--text-2); }
 .rail-foot { display: grid; gap: 6px; border-top: 1px solid var(--rule); margin: 0 16px 0 20px; padding-top: 14px; }
 .rail-foot p { margin: 0; font-size: 12.5px; color: var(--muted); }
 .rail-foot .label { color: var(--text); }
+/* sitios (v4.2): el producto en tres artifacts. Nombre del sitio arriba del raíl; lo de otro sitio, enlace a ese artifact */
+/* raíl: los tres sitios de Kerno Analytics, qué hay en cada uno y dónde estás. Cada sitio lleva su inicial en Geist Mono
+   (J · E · M); el sitio abierto va relleno en Racing (oscuro: Chalk) y con el texto «Estás aquí»: nunca solo por color */
+.rail-sitios { display: grid; gap: 6px; margin: 0 16px 24px 20px; padding-bottom: 18px; border-bottom: 1px solid var(--rule); }
+.rail-sitios > .label { margin-bottom: 2px; }
+.sitio { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 1px 10px; align-items: center; width: 100%; padding: 9px 10px; border: 1px solid var(--rule); background: transparent; color: var(--text); text-decoration: none; text-align: left; font: inherit; cursor: pointer; }
+a.sitio:hover, button.sitio:hover { background: var(--raised); }
+.sitio .ini, .rail-grupo .ini { display: grid; place-items: center; font: 500 12px/1 var(--f-mono); letter-spacing: .02em; border: 1px solid var(--rule-strong); color: var(--text); }
+.sitio .ini { grid-row: 1 / 4; align-self: start; width: 28px; height: 28px; }
+.sitio b { font: 620 14px/1.2 var(--f-sans); letter-spacing: .005em; }
+.sitio small { grid-column: 2 / 4; font: 420 12px/1.35 var(--f-sans); color: var(--muted); }
+.sitio .cnt { grid-column: 2 / 4; margin-top: 4px; font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); }
+.sitio .est { display: inline-flex; align-items: center; font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.sitio.aqui { background: var(--surface-2); border-color: var(--rule-strong); box-shadow: inset 3px 0 0 var(--brand); cursor: default; }
+.sitio.aqui:hover { background: var(--surface-2); }
+.sitio.aqui .ini, .rail-grupo.aqui .ini { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.sitio.aqui .est { color: var(--text); }
+.sitio.off { cursor: default; opacity: .6; }
+.rail-grupo { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 1px 8px; align-items: center; margin: 0 16px 14px 20px; }
+.rail-grupo .ini { grid-row: 1 / 3; width: 22px; height: 22px; font-size: 10.5px; }
+.rail-grupo b { font: 620 12.5px/1.2 var(--f-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--text); }
+.rail-grupo small { font: 420 12px/1.3 var(--f-sans); color: var(--muted); }
+.rail-grupo.otro { margin-top: 6px; padding-top: 18px; border-top: 1px solid var(--rule-strong); }
+.rail .rail-grupo + .sec .sec-h { border-top: 0; padding-top: 0; }
+.rail .sec.fuera .sec-h { border-top-color: var(--rule); }
+a.nav { text-decoration: none; }
+.nav.fuera { color: var(--muted); }
+.nav.fuera:hover { color: var(--text); }
+.nav.fuera .k-arrow { opacity: .7; }
+.nav .fuera-t { display: inline-flex; align-items: center; flex: none; font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.nav.off { cursor: default; opacity: .6; }
+.nav.off:hover { background: transparent; color: var(--muted); }
+.k-arrow { display: inline-block; width: .95em; height: .95em; margin: 0 0 0 .3em; vertical-align: -.1em; background: currentColor; flex: none;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat; }
 
 .main { position: relative; min-width: 0; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }
 /* cabecera de vista: ceja mono, título corto en Bombardier (H1), entradilla Mona en S700 */
@@ -275,6 +310,7 @@ td.n b { font-weight: 600; }
 .conf i::before, .conf i::after, .conf i span { content: ""; background: var(--ctx-band); }
 .conf.alta i::before, .conf.alta i span, .conf.alta i::after, .conf.moderada i::before, .conf.moderada i span, .conf.baja i::before { background: var(--brand); }
 .conf.alta { color: var(--text); }
+.conf.mini { gap: 0; vertical-align: 1px; margin-left: 4px; } .conf.mini i { grid-template-columns: repeat(3, 5px); height: 7px; }
 
 /* perfil por percentiles: banda = intervalo del 80 %, punto = estimación; marcas en 25 / 50 / 75 */
 .pbar { position: relative; height: 18px; min-width: 120px; background: linear-gradient(90deg, transparent calc(25% - .5px), var(--grid) calc(25% - .5px) calc(25% + .5px), transparent calc(25% + .5px) calc(50% - .5px), var(--context) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px) calc(75% - .5px), var(--grid) calc(75% - .5px) calc(75% + .5px), transparent calc(75% + .5px)), var(--track); }
@@ -473,9 +509,9 @@ td.n b { font-weight: 600; }
 <div class="app">
   <header class="head" id="head">
     <button class="ibtn menu-btn" type="button" id="menuBtn" aria-label="Abrir navegación" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/></svg></button>
-    <a class="brand" href="#inicio" aria-label="Kerno Analytics · inicio">
+    <a class="brand" id="brandLink" href="#inicio" aria-label="Kerno Analytics · inicio">
       <span class="logo"><span class="pos"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-80.00 -80.00 835.90 319.00" width="835.9" height="319.0" role="img" aria-label="KERNO Analytics"><title>KERNO Analytics — horizontal (positive)</title><g transform="translate(-22.942 0.000) scale(1.59000)"><path fill="#0F2E25" d="M14.429 0.000 L18.629 0.000 L18.629 100.000 L14.429 100.000ZM21.029 0.000 L21.044 36.587 L21.153 38.604 L21.368 40.612 L21.687 42.606 L22.145 44.727 L26.226 43.734 L25.790 41.698 L25.479 39.645 L25.291 37.576 L25.229 0.000ZM41.305 71.508 L70.810 100.000 L76.852 99.996 L44.222 68.486ZM27.629 0.000 L27.645 36.531 L27.703 37.685 L31.894 37.407 L31.829 0.000ZM42.609 63.592 L80.311 100.000 L86.357 100.000 L45.527 60.571ZM34.229 0.000 L34.229 31.294 L38.429 31.294 L38.429 0.000ZM46.331 58.011 L89.812 100.000 L95.858 100.000 L49.249 54.990ZM25.229 100.000 L25.242 67.531 L25.363 65.457 L25.609 63.395 L25.978 61.351 L26.469 59.333 L27.081 57.348 L27.811 55.403 L28.657 53.506 L29.616 51.664 L30.684 49.882 L31.857 48.168 L33.131 46.527 L34.501 44.967 L80.998 0.000 L74.952 0.000 L32.183 41.317 L30.802 42.791 L29.501 44.335 L28.281 45.944 L27.148 47.615 L26.103 49.343 L25.149 51.123 L24.290 52.951 L23.527 54.821 L22.863 56.727 L22.299 58.666 L21.837 60.632 L21.478 62.619 L21.223 64.623 L21.074 66.636 L21.029 100.000ZM38.429 100.000 L38.453 67.474 L38.651 65.433 L39.044 63.419 L39.628 61.453 L40.399 59.552 L41.350 57.734 L42.470 56.016 L43.751 54.414 L44.934 53.177 L100.000 0.000 L93.954 0.000 L41.293 50.882 L39.940 52.418 L38.714 54.057 L37.623 55.789 L36.675 57.602 L35.875 59.486 L35.229 61.428 L34.741 63.416 L34.413 65.437 L34.249 67.477 L34.229 100.000Z"/><path fill="#8A6B35" d="M31.829 100.000 L31.847 67.492 L31.992 65.482 L32.283 63.487 L32.716 61.519 L33.291 59.587 L34.003 57.702 L34.850 55.873 L35.826 54.110 L36.928 52.422 L38.148 50.817 L39.481 49.305 L90.499 0.000 L84.453 0.000 L36.700 46.137 L35.312 47.661 L34.025 49.271 L32.844 50.961 L31.774 52.722 L30.819 54.549 L29.983 56.434 L29.270 58.368 L28.682 60.344 L28.223 62.353 L27.893 64.388 L27.695 66.440 L27.629 100.000Z"/></g><path fill="#0F2E25" transform="translate(191.058 100.000)" d="M86.71875 0.0 60.15625 -69.6875 82.96875 -100.0H61.71875L25.9375 -52.96875V-100.0H7.8125V0.0H25.9375V-26.09375L46.875 -53.4375L67.96875 0.0Z M181.875 0.0V-17.34375H137.8125V-40.9375H167.65625V-59.0625H137.8125V-82.65625H181.875V-100.0H119.53125V0.0Z M284.6875 0.0 269.0625 -38.59375 281.5625 -51.09375V-87.5L269.0625 -100.0H219.375V0.0H237.5V-38.59375H249.53125L264.53125 0.0ZM263.4375 -56.71875H237.5V-82.65625H263.4375Z M382.03125 0.0V-100.0H364.21875V-43.28125L335.625 -100.0H319.84375V0.0H337.8125L337.65625 -56.71875L366.25 0.0Z M484.84375 -12.5V-87.5L472.34375 -100.0H435.15625L422.65625 -87.5V-12.5L435.15625 0.0H472.34375ZM466.71875 -17.34375H440.78125V-82.65625H466.71875Z"/><path fill="#0F2E25" transform="translate(191.058 159.000)" d="M0.7645022969850351 0.0 7.528431723151408 -23.0H11.90818799515845L18.672117421324824 0.0H15.134618624834946L9.71830985915493 -19.462473522777287L4.302001093474912 0.0ZM4.535221153581646 -5.992924134160431 5.57184482628191 -9.148161896181778H13.864774892027949L14.901398564728213 -5.992924134160431Z M60.553633611974576 0.0V-23.0H64.68716581102828L72.82459936007646 -3.4598088653994274L72.25445337429852 -3.343187960772447V-23.0H75.58462743624834V0.0H71.45109523719465L63.31366168814645 -19.540191134600573L63.8838076739244 -19.68272713674626V0.0Z M117.46614362689809 0.0 124.23007305306447 -23.0H128.6098293250715L135.3737587512379 0.0H131.83625995474802L126.41995118906799 -19.462473522777287L121.00364242338797 0.0ZM121.2368624834947 -5.992924134160431 122.27348615619496 -9.148161896181778H130.566416221941L131.60303989464128 -5.992924134160431Z M178.22710592780314 0.0V-23.0H181.62207267653773V-1.302253916565801L179.5617502561757 -3.2005926427706863H192.61021242813322V0.0Z M241.45002424213246 0.0V-9.45915888396787L234.5953890088578 -23.0H238.36612961460165L243.12159251898106 -12.94483143981074L247.87705542336045 -23.0H251.64779602910428L244.84499099086705 -9.45915888396787V0.0Z M299.77492980957027 0.0V-19.799407357229313H293.04987797266995V-23.0H309.8949483952052V-19.799407357229313H303.16989655830486V0.0Z M352.6316805987291 0.0V-3.2005926427706863H358.1257504745268V-19.799407357229313H352.6316805987291V-23.0H367.01478709905916V-19.799407357229313H361.5207172232614V-3.2005926427706863H367.01478709905916V0.0Z M418.2647603209589 0.5183098591549296Q415.4918013881629 0.5183098591549296 413.5610959764937 -0.9361969853790714Q411.63039056482444 -2.3907038299130723 410.6261642241142 -5.079436224279269Q409.6219378834039 -7.768168618645467 409.6219378834039 -11.467605633802817Q409.6219378834039 -15.192957746478873 410.6261642241142 -17.884929775184307Q411.63039056482444 -20.576901803889744 413.5610959764937 -22.047605831522336Q415.4918013881629 -23.51830985915493 418.2647603209589 -23.51830985915493Q421.41349904234977 -23.51830985915493 423.5644857487208 -21.45154474822568Q425.71547245509186 -19.384779637296432 426.389272899359 -15.64645910128741L422.8323362968337 -15.445613635425836Q422.3464247582663 -17.86222860846721 421.134883568992 -19.10293144978268Q419.9233423797177 -20.34363429109815 418.2647603209589 -20.34363429109815Q416.59322170203836 -20.34363429109815 415.45942580532017 -19.310257172920334Q414.32562990860197 -18.276880054742517 413.7360560027646 -16.29111173387984Q413.14648209692723 -14.305343413017164 413.14648209692723 -11.467605633802817Q413.14648209692723 -8.662262220785651 413.7360560027646 -6.689451448682329Q414.32562990860197 -4.716640676579005 415.45942580532017 -3.686503192740427Q416.59322170203836 -2.6563657089018484 418.2647603209589 -2.6563657089018484Q420.05939515879453 -2.6563657089018484 421.31952789736465 -4.0104478433098585Q422.5796606359347 -5.364529977717869 423.0137419794646 -8.007903536944323L426.5447634844712 -7.832973168601452Q425.9487083327602 -3.9002884126045334 423.77180652887046 -1.6909892767248018Q421.5949047249807 0.5183098591549296 418.2647603209589 0.5183098591549296Z M476.8228997888699 0.5183098591549296Q474.33500890597486 0.5183098591549296 472.465854569556 -0.4859154929577465Q470.596700233137 -1.4901408450704225 469.49853339396725 -3.2847905118700482Q468.4003665547975 -5.079440178669674 468.20600035761436 -7.4960650376870595L471.6916689590669 -7.703389772227112Q471.9119502537687 -6.0642395879181334 472.6019459039392 -4.9336803597463685Q473.29194155410977 -3.8031211315746036 474.3868638159523 -3.229743420238226Q475.4817860777948 -2.6563657089018484 476.94600193937055 -2.6563657089018484Q478.37134218887536 -2.6563657089018484 479.34964453468854 -3.0224196742957745Q480.3279468805017 -3.3884736396897006 480.8365348708461 -4.1076240217182Q481.34512286119053 -4.826774403746699 481.34512286119053 -5.856908921792473Q481.34512286119053 -6.88704541703345 480.8689272598481 -7.632112873775858Q480.3927316585057 -8.377180330518266 479.12287902832026 -9.018585419990647Q477.85302639813483 -9.659990509463027 475.4234647509077 -10.327309707856514Q473.0586779957086 -10.988153591961927 471.5750154307191 -11.810970295650858Q470.0913528657295 -12.633786999339788 469.40783055265183 -13.84209844025088Q468.7243082395741 -15.050409881161972 468.7243082395741 -16.832103976397445Q468.7243082395741 -18.834079366334727 469.6475476761938 -20.340419371698943Q470.57078711281355 -21.846759377063158 472.30712632729967 -22.682534618109045Q474.0434655417858 -23.51830985915493 476.460088423608 -23.51830985915493Q478.85727349939475 -23.51830985915493 480.56121834768373 -22.57887422803422Q482.26516319597266 -21.63943859691351 483.2531913649867 -19.964648480482502Q484.24121953400083 -18.289858364051497 484.4744573888644 -16.067597725022008L480.97583025005497 -15.86675225916043Q480.7944225902288 -17.194917318854532 480.2307637819101 -18.20561699665768Q479.6671049735915 -19.216316674460828 478.70175918794007 -19.77997548277949Q477.7364134022887 -20.34363429109815 476.3499448104643 -20.34363429109815Q474.45812885123235 -20.34363429109815 473.34053211480796 -19.430119689081756Q472.2229353783835 -18.51660508706536 472.2229353783835 -17.013515590613995Q472.2229353783835 -16.022252730248677 472.6732158822073 -15.364649469080105Q473.123496386031 -14.707046207911532 474.2605348828812 -14.198456240371918Q475.39757337973145 -13.689866272832306 477.4448898100517 -13.11324892715669Q480.1919277137433 -12.361701213138204 481.81164305780965 -11.386630592883472Q483.431358401876 -10.41155997262874 484.137554200938 -9.080151324204994Q484.84374999999994 -7.74874267578125 484.84374999999994 -5.869871413539832Q484.84374999999994 -3.9715564136773764 483.84600391656573 -2.523525872029049Q482.8482578331315 -1.0754953303807218 481.05036952059027 -0.2785927356128961Q479.252481208049 0.5183098591549296 476.8228997888699 0.5183098591549296Z"/></svg></span><span class="neg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-80.00 -80.00 835.90 319.00" width="835.9" height="319.0" role="img" aria-label="KERNO Analytics"><title>KERNO Analytics — horizontal (negative)</title><g transform="translate(-22.942 0.000) scale(1.59000)"><path fill="#F3F4F0" d="M14.429 0.000 L18.629 0.000 L18.629 100.000 L14.429 100.000ZM21.029 0.000 L21.044 36.587 L21.153 38.604 L21.368 40.612 L21.687 42.606 L22.145 44.727 L26.226 43.734 L25.790 41.698 L25.479 39.645 L25.291 37.576 L25.229 0.000ZM41.305 71.508 L70.810 100.000 L76.852 99.996 L44.222 68.486ZM27.629 0.000 L27.645 36.531 L27.703 37.685 L31.894 37.407 L31.829 0.000ZM42.609 63.592 L80.311 100.000 L86.357 100.000 L45.527 60.571ZM34.229 0.000 L34.229 31.294 L38.429 31.294 L38.429 0.000ZM46.331 58.011 L89.812 100.000 L95.858 100.000 L49.249 54.990ZM25.229 100.000 L25.242 67.531 L25.363 65.457 L25.609 63.395 L25.978 61.351 L26.469 59.333 L27.081 57.348 L27.811 55.403 L28.657 53.506 L29.616 51.664 L30.684 49.882 L31.857 48.168 L33.131 46.527 L34.501 44.967 L80.998 0.000 L74.952 0.000 L32.183 41.317 L30.802 42.791 L29.501 44.335 L28.281 45.944 L27.148 47.615 L26.103 49.343 L25.149 51.123 L24.290 52.951 L23.527 54.821 L22.863 56.727 L22.299 58.666 L21.837 60.632 L21.478 62.619 L21.223 64.623 L21.074 66.636 L21.029 100.000ZM38.429 100.000 L38.453 67.474 L38.651 65.433 L39.044 63.419 L39.628 61.453 L40.399 59.552 L41.350 57.734 L42.470 56.016 L43.751 54.414 L44.934 53.177 L100.000 0.000 L93.954 0.000 L41.293 50.882 L39.940 52.418 L38.714 54.057 L37.623 55.789 L36.675 57.602 L35.875 59.486 L35.229 61.428 L34.741 63.416 L34.413 65.437 L34.249 67.477 L34.229 100.000Z"/><path fill="#B8975C" d="M31.829 100.000 L31.847 67.492 L31.992 65.482 L32.283 63.487 L32.716 61.519 L33.291 59.587 L34.003 57.702 L34.850 55.873 L35.826 54.110 L36.928 52.422 L38.148 50.817 L39.481 49.305 L90.499 0.000 L84.453 0.000 L36.700 46.137 L35.312 47.661 L34.025 49.271 L32.844 50.961 L31.774 52.722 L30.819 54.549 L29.983 56.434 L29.270 58.368 L28.682 60.344 L28.223 62.353 L27.893 64.388 L27.695 66.440 L27.629 100.000Z"/></g><path fill="#F3F4F0" transform="translate(191.058 100.000)" d="M86.71875 0.0 60.15625 -69.6875 82.96875 -100.0H61.71875L25.9375 -52.96875V-100.0H7.8125V0.0H25.9375V-26.09375L46.875 -53.4375L67.96875 0.0Z M181.875 0.0V-17.34375H137.8125V-40.9375H167.65625V-59.0625H137.8125V-82.65625H181.875V-100.0H119.53125V0.0Z M284.6875 0.0 269.0625 -38.59375 281.5625 -51.09375V-87.5L269.0625 -100.0H219.375V0.0H237.5V-38.59375H249.53125L264.53125 0.0ZM263.4375 -56.71875H237.5V-82.65625H263.4375Z M382.03125 0.0V-100.0H364.21875V-43.28125L335.625 -100.0H319.84375V0.0H337.8125L337.65625 -56.71875L366.25 0.0Z M484.84375 -12.5V-87.5L472.34375 -100.0H435.15625L422.65625 -87.5V-12.5L435.15625 0.0H472.34375ZM466.71875 -17.34375H440.78125V-82.65625H466.71875Z"/><path fill="#F3F4F0" transform="translate(191.058 159.000)" d="M0.7645022969850351 0.0 7.528431723151408 -23.0H11.90818799515845L18.672117421324824 0.0H15.134618624834946L9.71830985915493 -19.462473522777287L4.302001093474912 0.0ZM4.535221153581646 -5.992924134160431 5.57184482628191 -9.148161896181778H13.864774892027949L14.901398564728213 -5.992924134160431Z M60.553633611974576 0.0V-23.0H64.68716581102828L72.82459936007646 -3.4598088653994274L72.25445337429852 -3.343187960772447V-23.0H75.58462743624834V0.0H71.45109523719465L63.31366168814645 -19.540191134600573L63.8838076739244 -19.68272713674626V0.0Z M117.46614362689809 0.0 124.23007305306447 -23.0H128.6098293250715L135.3737587512379 0.0H131.83625995474802L126.41995118906799 -19.462473522777287L121.00364242338797 0.0ZM121.2368624834947 -5.992924134160431 122.27348615619496 -9.148161896181778H130.566416221941L131.60303989464128 -5.992924134160431Z M178.22710592780314 0.0V-23.0H181.62207267653773V-1.302253916565801L179.5617502561757 -3.2005926427706863H192.61021242813322V0.0Z M241.45002424213246 0.0V-9.45915888396787L234.5953890088578 -23.0H238.36612961460165L243.12159251898106 -12.94483143981074L247.87705542336045 -23.0H251.64779602910428L244.84499099086705 -9.45915888396787V0.0Z M299.77492980957027 0.0V-19.799407357229313H293.04987797266995V-23.0H309.8949483952052V-19.799407357229313H303.16989655830486V0.0Z M352.6316805987291 0.0V-3.2005926427706863H358.1257504745268V-19.799407357229313H352.6316805987291V-23.0H367.01478709905916V-19.799407357229313H361.5207172232614V-3.2005926427706863H367.01478709905916V0.0Z M418.2647603209589 0.5183098591549296Q415.4918013881629 0.5183098591549296 413.5610959764937 -0.9361969853790714Q411.63039056482444 -2.3907038299130723 410.6261642241142 -5.079436224279269Q409.6219378834039 -7.768168618645467 409.6219378834039 -11.467605633802817Q409.6219378834039 -15.192957746478873 410.6261642241142 -17.884929775184307Q411.63039056482444 -20.576901803889744 413.5610959764937 -22.047605831522336Q415.4918013881629 -23.51830985915493 418.2647603209589 -23.51830985915493Q421.41349904234977 -23.51830985915493 423.5644857487208 -21.45154474822568Q425.71547245509186 -19.384779637296432 426.389272899359 -15.64645910128741L422.8323362968337 -15.445613635425836Q422.3464247582663 -17.86222860846721 421.134883568992 -19.10293144978268Q419.9233423797177 -20.34363429109815 418.2647603209589 -20.34363429109815Q416.59322170203836 -20.34363429109815 415.45942580532017 -19.310257172920334Q414.32562990860197 -18.276880054742517 413.7360560027646 -16.29111173387984Q413.14648209692723 -14.305343413017164 413.14648209692723 -11.467605633802817Q413.14648209692723 -8.662262220785651 413.7360560027646 -6.689451448682329Q414.32562990860197 -4.716640676579005 415.45942580532017 -3.686503192740427Q416.59322170203836 -2.6563657089018484 418.2647603209589 -2.6563657089018484Q420.05939515879453 -2.6563657089018484 421.31952789736465 -4.0104478433098585Q422.5796606359347 -5.364529977717869 423.0137419794646 -8.007903536944323L426.5447634844712 -7.832973168601452Q425.9487083327602 -3.9002884126045334 423.77180652887046 -1.6909892767248018Q421.5949047249807 0.5183098591549296 418.2647603209589 0.5183098591549296Z M476.8228997888699 0.5183098591549296Q474.33500890597486 0.5183098591549296 472.465854569556 -0.4859154929577465Q470.596700233137 -1.4901408450704225 469.49853339396725 -3.2847905118700482Q468.4003665547975 -5.079440178669674 468.20600035761436 -7.4960650376870595L471.6916689590669 -7.703389772227112Q471.9119502537687 -6.0642395879181334 472.6019459039392 -4.9336803597463685Q473.29194155410977 -3.8031211315746036 474.3868638159523 -3.229743420238226Q475.4817860777948 -2.6563657089018484 476.94600193937055 -2.6563657089018484Q478.37134218887536 -2.6563657089018484 479.34964453468854 -3.0224196742957745Q480.3279468805017 -3.3884736396897006 480.8365348708461 -4.1076240217182Q481.34512286119053 -4.826774403746699 481.34512286119053 -5.856908921792473Q481.34512286119053 -6.88704541703345 480.8689272598481 -7.632112873775858Q480.3927316585057 -8.377180330518266 479.12287902832026 -9.018585419990647Q477.85302639813483 -9.659990509463027 475.4234647509077 -10.327309707856514Q473.0586779957086 -10.988153591961927 471.5750154307191 -11.810970295650858Q470.0913528657295 -12.633786999339788 469.40783055265183 -13.84209844025088Q468.7243082395741 -15.050409881161972 468.7243082395741 -16.832103976397445Q468.7243082395741 -18.834079366334727 469.6475476761938 -20.340419371698943Q470.57078711281355 -21.846759377063158 472.30712632729967 -22.682534618109045Q474.0434655417858 -23.51830985915493 476.460088423608 -23.51830985915493Q478.85727349939475 -23.51830985915493 480.56121834768373 -22.57887422803422Q482.26516319597266 -21.63943859691351 483.2531913649867 -19.964648480482502Q484.24121953400083 -18.289858364051497 484.4744573888644 -16.067597725022008L480.97583025005497 -15.86675225916043Q480.7944225902288 -17.194917318854532 480.2307637819101 -18.20561699665768Q479.6671049735915 -19.216316674460828 478.70175918794007 -19.77997548277949Q477.7364134022887 -20.34363429109815 476.3499448104643 -20.34363429109815Q474.45812885123235 -20.34363429109815 473.34053211480796 -19.430119689081756Q472.2229353783835 -18.51660508706536 472.2229353783835 -17.013515590613995Q472.2229353783835 -16.022252730248677 472.6732158822073 -15.364649469080105Q473.123496386031 -14.707046207911532 474.2605348828812 -14.198456240371918Q475.39757337973145 -13.689866272832306 477.4448898100517 -13.11324892715669Q480.1919277137433 -12.361701213138204 481.81164305780965 -11.386630592883472Q483.431358401876 -10.41155997262874 484.137554200938 -9.080151324204994Q484.84374999999994 -7.74874267578125 484.84374999999994 -5.869871413539832Q484.84374999999994 -3.9715564136773764 483.84600391656573 -2.523525872029049Q482.8482578331315 -1.0754953303807218 481.05036952059027 -0.2785927356128961Q479.252481208049 0.5183098591549296 476.8228997888699 0.5183098591549296Z"/></svg></span></span>
-      <span class="prod"><b>KERNO BASKETBALL</b><span>ELITE SPORTS ANALYTICS · v2.0</span></span>
+      <span class="prod"><b>KERNO BASKETBALL</b><span id="prodSitio">ELITE SPORTS ANALYTICS · v2.0</span></span>
     </a>
     <div class="hnav" role="group" aria-label="Navegación">
       <button class="ibtn" type="button" id="backBtn" aria-label="Atrás: volver a la pantalla anterior" title="Volver a la pantalla anterior" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l-6 6 6 6M4.5 12H20" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/></svg><span>Atrás</span></button>
@@ -498,7 +534,7 @@ td.n b { font-weight: 600; }
     </div>
     <div class="pop" id="setPop" role="dialog" aria-label="Ajustes de lectura" hidden>
       <div class="row"><span class="label">Vara</span><p>La vara es la liga de tu club en la temporada elegida. Cambia sola al cambiar de club.</p></div>
-      <div class="row"><span class="label">Escala de nivel</span><div class="seg" id="setEsc" role="group" aria-label="Escala"><button type="button" data-v="escala">±100</button><button type="button" data-v="original">Originales</button></div></div>
+      <div class="row"><span class="label">Escala de nivel</span><div class="seg" id="setEsc" role="group" aria-label="Escala"><button type="button" data-v="escala">0–100</button><button type="button" data-v="original">Originales</button></div></div>
       <div class="row"><span class="label">Ayudas de lectura</span><div class="seg" id="setAyu" role="group" aria-label="Ayudas"><button type="button" data-v="1">Visibles</button><button type="button" data-v="0">Plegadas</button></div></div>
       <div class="row"><span class="label">Modo de color</span><div class="seg" id="setTema" role="group" aria-label="Modo de color"><button type="button" data-v="sistema">Sistema</button><button type="button" data-v="light">Día</button><button type="button" data-v="dark">Noche</button></div></div>
     </div>
@@ -506,7 +542,7 @@ td.n b { font-weight: 600; }
 
   <div class="body">
     <div class="railscrim" id="railScrim"></div>
-    <nav class="rail" id="rail" aria-label="Flujo de decisión"></nav>
+    <nav class="rail" id="rail" aria-label="Sitios y herramientas de Kerno Analytics"></nav>
     <main class="main" id="main">
       <div class="vhead" id="vhead"></div>
       <div class="pane" id="paneNative"><div class="view" id="view"></div></div>
@@ -567,15 +603,15 @@ async function cargarJSON(path) {
   const r = await fetch(path); if (!r.ok) throw new Error(`${path} (${r.status})`); return jsonDe(r);
 }
 
-const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3"];
-const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB" };
+const LIGA_ORD = ["euroleague", "eurocup", "acb", "lba", "bsl", "gbl", "lnb", "bbl", "vtb", "bcl", "fec", "bnxt", "nba", "gleague", "ncaa", "cba", "nbl", "feb1", "feb2", "feb3", "ligau"];
+const LIGA_N = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa", lba: "LBA", bsl: "BSL", gbl: "GBL", lnb: "LNB", bbl: "BBL", vtb: "VTB", bcl: "BCL", fec: "FIBA Europe Cup", bnxt: "BNXT", nba: "NBA", gleague: "G League", ncaa: "NCAA", cba: "CBA", nbl: "NBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", ligau: "Liga U" };
 const ligaN = (l) => LIGA_N[l] || String(l || "").toUpperCase();
 const ligaOrd = (a, b) => (LIGA_ORD.indexOf(a) + 1 || 99) - (LIGA_ORD.indexOf(b) + 1 || 99);
 const POS = { E: "Exterior", A: "Alero", I: "Interior" }, POSP = { E: "exteriores", A: "aleros", I: "interiores" };
 
 // métricas que la normalización traduce a equivalente EuroLeague (con intervalo del 80 % y percentil EL por posición)
 const M = {
-  rapm: { n: "Valor v4.0", c: "valor v4.0", d: 1, sg: 1 }, NC: { n: "Nivel Kerno", d: 0 }, IM: { n: "Impacto", d: 0 }, dnet: { n: "Δ Net del equipo", d: 1, sg: 1 },
+  rapm: { n: "RAPM proyectado", c: "RAPM proyectado", d: 0 }, NC: { n: "Nivel Kerno", d: 0 }, IM: { n: "Impacto", d: 0 }, dnet: { n: "Δ Net del equipo", d: 1, sg: 1 },
   per: { n: "PER", c: "PER", d: 1 }, ws_per_40: { n: "Win shares por 40′", c: "win shares", d: 3 }, game_score_p40: { n: "Game score por 40′", d: 1 },
   ortg: { n: "Rating ofensivo", d: 1 }, drtg: { n: "Rating defensivo", c: "rating defensivo", d: 1 },
   pts_p100: { n: "Puntos por 100 posesiones", c: "volumen de puntos", d: 1 }, ts_pct: { n: "Tiro verdadero (TS%)", c: "eficiencia de tiro (TS%)", d: 1, pc: 1 }, efg_pct: { n: "eFG%", d: 1, pc: 1 },
@@ -588,7 +624,7 @@ const M = {
   pct_t3_esquina: { n: "Triples de esquina", d: 1, pc: 1 }, pct_asistidas: { n: "Canastas asistidas", d: 1, pc: 1 },
 };
 const GRUPOS = [
-  ["Valor", "Valor v4.0 (RAPM multiliga con prior del perfil) y medidas de producción", ["rapm", "per", "ws_per_40"]],
+  ["Valor", "RAPM proyectado (RAPM multiliga v4.0 con prior del perfil, 0–100) y medidas de producción", ["rapm", "per", "ws_per_40"]],
   ["Anotación", "Volumen y eficiencia", ["pts_p100", "ts_pct", "fg2_pct", "fg3_pct", "ft_pct", "fta_rate"]],
   ["Creación y cuidado del balón", "", ["ast_pct", "tov_pct"]],
   ["Rebote", "", ["oreb_pct", "dreb_pct"]],
@@ -602,16 +638,47 @@ const SEAS = {}, PEND = {};
 function temporada(t) {
   if (SEAS[t]) return Promise.resolve(SEAS[t]);
   if (PEND[t]) return PEND[t];
-  PEND[t] = cargarJSON(`datos/normalizados/${t}/regular.json`).then((d) => {
+  PEND[t] = cargarJSON(`datos/normalizados/${t}/regular.json`).then(async (d) => {
     const I = {}; d.columnas.forEach((c, i) => { I[c] = i; });
     const T = { temp: t, I, rows: d.filas };
     T.rows.forEach((r) => { r.T = T; });
     T.byKey = new Map(T.rows.map((r) => [rk(r), r]));
+    await historialV42(T);
     SEAS[t] = T; v4Mapear(T); return T;
   }).catch((e) => { delete PEND[t]; throw e; });
   return PEND[t];
 }
 const g = (r, c) => { const i = r.T.I[c]; return i == null ? null : r[i]; };
+// ---------------------------------------------------------------------------------------------- normalización v4.2
+// Historial del jugador (configs/v42.yaml → normalizacion_v42; bbequipo/v42/historial.py): la previa de sus temporadas
+// cerradas (atlas/v42/historial/<t>, estado del filtro de Kalman antes de la temporada t) se combina aquí con sus filas de
+// la temporada cargada; la temporada en curso se actualiza sola con la rutina mensual. Sólo las métricas que pasaron su
+// examen. El valor de una temporada (v3.2) queda en r.v32[m] = [valor, lo, hi].
+const Z80H = 1.2815515655446004;
+async function historialV42(T) {
+  let H; try { H = await cargarJSON(`atlas/v42/historial/${T.temp}.json`); } catch (e) { return; }
+  if (!H || !Array.isArray(H.metricas)) return;
+  const I = T.I, porP = new Map();
+  T.rows.forEach((r) => { const p = g(r, "persona_id"); if (p == null || !isFinite(+p)) return; const k = String(Math.round(+p)); if (!porP.has(k)) porP.set(k, []); porP.get(k).push(r); });
+  H.metricas.forEach((m, k) => {
+    const P = H.parametros[m], tf = P.transf; if (I[m] == null || I[m + "_lo"] == null || I[m + "_hi"] == null) return;
+    // D1-c: el filtro trabaja con la desviación frente a la media de la temporada (ponderada por minutos, ≥ 100 min)
+    let mS = 0;
+    if (P.centrado) { let sw = 0, sy = 0; T.rows.forEach((r) => { const v = r[I[m]], mi = +g(r, "min") || 0; if (mi >= 100 && typeof v === "number" && isFinite(v)) { sw += mi; sy += mi * TRv(v, tf); } }); mS = sw ? sy / sw : 0; }
+    porP.forEach((rows, pid) => {
+      const pre = H.previa[pid] && H.previa[pid][k], rp = rows.find((r) => P.pos[g(r, "pos3")]);
+      let [mu, Pv] = pre || P.pos[rp ? g(rp, "pos3") : "A"], n = 0;
+      rows.forEach((r) => { const v = r[I[m]], lo = r[I[m + "_lo"]], hi = r[I[m + "_hi"]]; if (![v, lo, hi].every((x) => typeof x === "number" && isFinite(x))) return;
+        const s = (TRv(hi, tf) - TRv(lo, tf)) / (2 * Z80H), R = P.c * s * s; if (!(R > 0)) return;
+        const K = Pv / (Pv + R); mu += K * (TRv(v, tf) - mS - mu); Pv *= 1 - K; n++; });
+      if (!n) return;
+      const sd = Math.sqrt(Pv), val = TRvInv(mS + mu, tf), lo = TRvInv(mS + mu - Z80H * sd, tf), hi = TRvInv(mS + mu + Z80H * sd, tf);
+      rows.forEach((r) => { if (typeof r[I[m]] !== "number" || !isFinite(r[I[m]])) return; (r.v32 = r.v32 || {})[m] = [r[I[m]], r[I[m + "_lo"]], r[I[m + "_hi"]]];
+        r[I[m]] = val; r[I[m + "_lo"]] = lo; r[I[m + "_hi"]] = hi; if (I[m + "_pctel"] != null) r[I[m + "_pctel"]] = null; });
+    });
+  });
+  T.v42 = H.metricas.slice();
+}
 const rk = (r) => `${r.T.temp}|${g(r, "player_uid")}|${g(r, "team_id")}`;
 function porClave(k) { const t = String(k || "").split("|")[0]; return SEAS[t] ? SEAS[t].byKey.get(k) || null : null; }
 
@@ -663,7 +730,12 @@ function convVara(r, m) {
   o.pl = 100 * Phi(o.zlo); o.ph = 100 * Phi(o.zhi);
   return o;
 }
-function est(r, m, dir) {
+// v4.1 K4: el RAPM proyectado se lee en 0–100 (50 = jugador medio de la vara), con la curva de las escalas del Atlas:
+// U = 50 + 50·tanh(x / (2·DT)), x = pts/100 sobre el jugador medio, DT = 1,2426 (familia «rapm» del bloque de escalas)
+const DT_RAPM = 1.2426, U_RAPM = (x) => (x == null || !isFinite(x) ? x : 50 + 50 * Math.tanh(x / (2 * DT_RAPM)));
+const rapm01 = (e) => (e ? { ...e, v: U_RAPM(e.v), lo: U_RAPM(e.lo), hi: U_RAPM(e.hi) } : e);
+function est(r, m, dir) { const e = est0(r, m, dir); return m === "rapm" ? rapm01(e) : e; }
+function est0(r, m, dir) {
   if (m === "rapm") { const e4 = estV4(r); if (e4 || !V4D) return e4; }  // sin persona v4.0: el valor anterior (misma escala)
   if (VARA() !== "euroleague") {
     const c = convVara(r, m); if (!c || !isFinite(c.v)) return null;
@@ -732,7 +804,7 @@ function v4Base(liga, t) {
   }
   V4BASE.set(k, o); return o;
 }
-// valor v4.0 de una fila con la forma de est(): punto y rango en pts/100 sobre el jugador medio de la vara, percentil por posición
+// RAPM proyectado de una fila con la forma de est(): punto y rango en pts/100 sobre el jugador medio de la vara (est() lo pasa a 0–100), percentil por posición
 function estV4(r) {
   if (!V4D || !window.CernoV40 || !CernoV40.listo()) return null;
   const per = v4Persona(r); if (!per && g(r, "rapm") != null) return null;
@@ -742,7 +814,7 @@ function estV4(r) {
   return { m: "rapm", v, lo, hi, p, pl, ph, s: 1, w: ph - pl, fuente: B.f };
 }
 const v4Club = () => (V4D && V4D.porClub ? V4D.porClub.get(`${CTX.liga}|${CTX.id}|${CTX.temp}`) || null : null);
-const v4SinClub = () => `Nivel Kerno, Impacto y Net proyectado de la v4.0 se calculan sobre la plantilla del club en el motor del Atlas, que tiene ${["2025-26", "2026-27"].join(" y ")}. Con ${CTX.temp} se muestra el valor v4.0 de cada jugador.`;
+const v4SinClub = () => `Nivel Kerno, Impacto y Net proyectado de la v4.0 se calculan sobre la plantilla del club en el motor del Atlas, que tiene ${["2025-26", "2026-27"].join(" y ")}. Con ${CTX.temp} se muestra el RAPM proyectado de cada jugador.`;
 function v4Plantilla() {
   const club = v4Club(); if (!club) return null;
   const k = `P|${club.liga}|${club.team}|${club.temporada}`; if (V4C.has(k)) return V4C.get(k);
@@ -782,12 +854,34 @@ const v4ClubT = (liga, id, t) => { const o = V4CLUBES && V4CLUBES.clubes[`${liga
 const ancE = (a, k) => (a && isFinite(a[k]) ? { m: k, v: a[k], lo: a[k + "_lo80"], hi: a[k + "_hi80"], p: a[k], pl: Math.min(a[k + "_lo80"], a[k]), ph: Math.max(a[k + "_hi80"], a[k]), s: 1, w: a[k + "_hi80"] - a[k + "_lo80"] } : null);
 const dnetE = (a) => (a && isFinite(a.delta_net) ? { m: "dnet", v: a.delta_net, lo: a.delta_lo80, hi: a.delta_hi80, p: 50, pl: 50, ph: 50, s: 0, w: 0 } : null);
 const nivelTxt = (x) => (x >= 75 ? "muy alto" : x >= 60 ? "alto" : x >= 40 ? "medio" : x >= 25 ? "bajo" : "muy bajo");
-const confDe = (w) => (w <= 30 ? "alta" : w <= 55 ? "moderada" : "baja");
-const confHTML = (w) => { const c = confDe(w); return `<span class="conf ${c}" title="Ancho del intervalo: ${Math.round(w)} puntos de percentil"><i><span></span></i>${c}</span>`; };
+// v4.2 · C (configs/v42.yaml → presentacion_v42): confianza alta · moderada · baja desde la anchura del rango del 80 %, con
+// los terciles de esa anchura en su familia (métricas o ajuste) sobre la temporada cerrada de referencia (REF_T, 400+ min).
+// Sin esa temporada cargada todavía, los cortes anteriores (30 y 55 puntos de percentil). Las anclas llevan su sello (K2).
+const CORTES_C = {};
+function cortesC(fam) {
+  if (CORTES_C[fam]) return CORTES_C[fam];
+  const T = SEAS[REF_T]; if (!T || !REF) return [30, 55];
+  const ws = [], ok = (r) => (g(r, "min") || 0) >= 400;
+  if (fam === "ajuste") T.rows.forEach((r) => { if (!ok(r)) return; Object.values(PERFILES).forEach((P) => { const a = ajuste(r, P); if (a && isFinite(a.w)) ws.push(a.w); }); });
+  else T.rows.forEach((r) => { if (!ok(r)) return; Object.keys(M).forEach((m) => { if (["NC", "IM", "dnet"].includes(m)) return; const e = est(r, m); if (e && isFinite(e.w)) ws.push(e.w); }); });
+  if (ws.length < 30) return [30, 55];
+  ws.sort((x, y) => x - y);
+  return (CORTES_C[fam] = [ws[Math.floor(ws.length / 3)], ws[Math.floor((2 * ws.length) / 3)]]);
+}
+const SELLO_ANCLA = { NC: "alta", IM: "moderada", dnet: "alta" };
+const confDe = (w, fam = "metricas") => { const [a, b] = cortesC(fam); return w <= a ? "alta" : w <= b ? "moderada" : "baja"; };
+const confHTML = (w, fam = "ajuste", tip = "") => { const c = confDe(w, fam); return `<span class="conf ${c}" title="${tip || `Rango del 80 %: ${Math.round(w)} puntos de percentil de ancho`}"><i><span></span></i>${c}</span>`; };
 const fmtM = (m, v) => { const k = M[m] || { d: 1 }; return k.sg ? sgn(v, k.d) : fmt(v, k.d); };
-const valHTML = (e) => (e ? `<b>${fmtM(e.m, e.v)}${M[e.m] && M[e.m].pc ? " %" : ""}</b> <span class="rng">[${rngTxt(fmtM(e.m, e.lo), fmtM(e.m, e.hi))}]</span>` : "—");
+// completo = ficha (punto y rango); si no, tablas y listas: punto y confianza, con el rango al pasar el ratón (v4.2 · C)
+const valHTML = (e, completo = false) => {
+  if (!e) return "—";
+  const v = `${fmtM(e.m, e.v)}${M[e.m] && M[e.m].pc ? " %" : ""}`, r = rngTxt(fmtM(e.m, e.lo), fmtM(e.m, e.hi));
+  if (completo) return `<b>${v}</b> <span class="rng">[${r}]</span>`;
+  const c = SELLO_ANCLA[e.m] || confDe(e.w), t = `Rango del 80 %: ${r}`;
+  return `<b title="${t}">${v}</b> <span class="conf mini ${c}" title="${t} · confianza ${c}"><i><span></span></i></span>`;
+};
 const tier = (e) => (!e ? "" : e.s === 0 ? "t-neu" : e.s == null ? "t-aj" : e.p >= 60 ? "t-hi" : e.p <= 40 ? "t-lo" : "t-mid");
-const pbar = (e, s = "") => (e ? `<div class="pbar ${s ? "" : tier(e)}" role="img" aria-label="Percentil ${Math.round(e.p)}, rango ${Math.round(e.pl)}–${Math.round(e.ph)}"><span class="b ${s}" style="left:${e.pl.toFixed(1)}%;width:${Math.max(0.6, e.ph - e.pl).toFixed(1)}%"></span><span class="p ${s}" style="left:${e.p.toFixed(1)}%"></span></div>` : `<div class="pbar"></div>`);
+const pbar = (e, s = "", completo = false) => (e ? `<div class="pbar ${s ? "" : tier(e)}" role="img" aria-label="Percentil ${Math.round(e.p)}, rango ${Math.round(e.pl)}–${Math.round(e.ph)}">${completo ? `<span class="b ${s}" style="left:${e.pl.toFixed(1)}%;width:${Math.max(0.6, e.ph - e.pl).toFixed(1)}%"></span>` : ""}<span class="p ${s}" style="left:${e.p.toFixed(1)}%"></span></div>` : `<div class="pbar"></div>`);
 
 let EQ = null, EQP = null, ESCL = null, EUC = null, BQP = null;
 // banquillo: etapas de entrenador por club-temporada (equipos), escala de nivel (índice de Equipos) y estilo por etapa
@@ -873,20 +967,20 @@ function publicarCtx(extra) {
 
 // ---------------------------------------------------------------------------------------------- flujo y navegación
 const NAV = [
-  { t: "Lectura", items: [["inicio", "Tu equipo hoy", null, 1]] },
-  { n: "01", t: "Diagnóstico", q: "¿Cómo está mi equipo?", items: [
+  { t: "Lectura", en: ["jugadores", "equipos"], items: [["inicio", "Tu equipo hoy", null, 1]] },
+  { n: "01", t: "Diagnóstico", en: ["equipos"], q: "¿Cómo está mi equipo?", items: [
     ["eq-evaluacion", "Evaluación", ["equipos", "evaluacion"]], ["eq-rotacion", "Rotación", ["equipos", "equipo"]], ["eq-quintetos", "Quintetos", ["equipos", "quintetos"]],
     ["eq-parejas", "Parejas y tríos", ["equipos", "parejas"]], ["eq-conexiones", "Conexiones", ["equipos", "conexiones"]], ["eq-impacto", "Impacto en pista", ["equipos", "jugadores"]],
     ["eq-liga", "La liga", ["equipos", "liga"]], ["eq-informe", "Informe de equipo", ["informe", "informeq"]]] },
-  { n: "02", t: "Mercado", q: "¿Quién cubre lo que falta?", items: [
+  { n: "02", t: "Mercado", en: ["jugadores"], q: "¿Quién cubre lo que falta?", items: [
     ["necesidad", "Por necesidad", null, 1], ["mk-datos", "Datos de jugadores", ["jugadores", "datos"]], ["mk-parecidos", "Buscar parecidos", ["jugadores", "parecidos"]], ["mk-estilos", "Mapa de estilos", ["estilos", "comparar"]]] },
-  { n: "03", t: "Evaluación", q: "¿Este jugador, sí o no?", items: [
+  { n: "03", t: "Evaluación", en: ["jugadores"], q: "¿Este jugador, sí o no?", items: [
     ["ficha", "Ficha de jugador", null, 1], ["lista", "Lista corta", null, 1], ["ev-informe", "Lectura de fichaje", ["informe", "informe"]], ["ev-quimica", "Química de perfiles", ["estilos", "quimica"]]] },
-  { n: "04", t: "Decisión", q: "¿Qué pasa si lo fichamos?", items: [
+  { n: "04", t: "Decisión", en: ["jugadores"], q: "¿Qué pasa si lo fichamos?", items: [
     ["de-fichajes", "Simular fichajes", ["planificacion", "simulador"]], ["de-plantilla", "Simular plantilla", ["planificacion", "equipo"]]] },
-  { n: "05", t: "Modelo de equipo", q: "¿Cuánto vale el fichaje para el equipo?", items: [
+  { n: "05", t: "Modelo de equipo", en: ["jugadores"], q: "¿Cuánto vale el fichaje para el equipo?", items: [
     ["v40-resumen", "Resumen v4.0", null, 1], ["v40-anclas", "Nivel Kerno e Impacto", null, 1], ["v40-equipos", "Equipos 2026-27", null, 1], ["v40-metodo", "Método y límites", null, 1]] },
-  { t: "Método", q: "Cómo se calcula y dónde termina lo que sabemos", items: [
+  { t: "Método", en: ["metodologia"], q: "Cómo se calcula y dónde termina lo que sabemos", items: [
     ["como-leer", "Cómo leer los datos", null, 1], ["me-ligas", "Evaluación de ligas", ["metodologia", "evaluacion"]], ["me-normalizacion", "Normalización de ligas", ["metodologia", "normalizacion"]],
     ["me-claves", "Claves del estilo", ["metodologia", "claves"]], ["me-guia", "Guía de conceptos", ["metodologia", "guia"]]] },
 ];
@@ -933,10 +1027,85 @@ function marcarAplica() {
 }
 const ITEM = {}, LEG2ID = {};
 NAV.forEach((s) => s.items.forEach(([id, n, leg, nuevo]) => { ITEM[id] = { id, n, leg, nuevo, sec: s }; if (leg) LEG2ID[leg.join("/")] = id; }));
+// ---------------------------------------------------------------------------------------------- sitios (v4.2)
+// El producto se publica en tres artifacts con los mismos ficheros fuente (límite de 256 MiB por versión): Jugadores (el
+// original), Equipos (01 Diagnóstico) y Metodología (Método). Cada artifact publica un sitio.json {sitio, urls}; sin él,
+// «jugadores». Las herramientas de otro sitio siguen en el raíl como enlaces a ese artifact (pestaña nueva), con el club,
+// la temporada (y la ficha o el jugador pedidos) en el enlace: #<vista>&club=<liga>|<id>&temp=<t>[&f=<ficha>][&q.<k>=<v>].
+const SITIOS = {
+  jugadores: { n: "Jugadores", ini: "J", inicio: "inicio", d: "Mercado, evaluación de jugadores, simuladores y modelo de equipo" },
+  equipos: { n: "Equipos", ini: "E", inicio: "inicio", d: "Diagnóstico de tu equipo: rotación, quintetos, parejas, impacto y liga" },
+  metodologia: { n: "Metodología", ini: "M", inicio: "como-leer", d: "Cómo se calcula cada dato y dónde termina lo que sabemos" },
+};
+let SITIO = { sitio: "jugadores", urls: {} };
+const SN = () => SITIOS[SITIO.sitio].n;
+const INICIO = () => SITIOS[SITIO.sitio].inicio;
+async function cargarSitio() {
+  try {
+    const r = await fetch("sitio.json", { cache: "no-cache" });
+    if (r.ok) { const d = await r.json(); if (d && SITIOS[d.sitio]) SITIO = { sitio: d.sitio, urls: d.urls && typeof d.urls === "object" ? d.urls : {} }; }
+  } catch (e) { /* sin sitio.json: Jugadores, como antes de la separación */ }
+  const ini = ITEM[INICIO()], pr = $("prodSitio"), br = $("brandLink"), hb = $("homeBtn");
+  if (pr) pr.textContent = `KERNO ANALYTICS · ${SN().toUpperCase()}`;
+  if (br) { br.href = "#" + ini.id; br.setAttribute("aria-label", `Kerno Analytics · ${SN()} · inicio`); }
+  if (hb) { hb.setAttribute("aria-label", `Inicio: ${ini.n}`); hb.title = ini.n; }
+  document.title = `Kerno Analytics · ${SN()}`;
+}
+const propio = (id) => !!ITEM[id] && ITEM[id].sec.en.includes(SITIO.sitio);
+const sitioDe = (id) => (propio(id) ? SITIO.sitio : ITEM[id].sec.en[0]);
+const urlFuera = (id, q) => urlA(sitioDe(id), id, q);
+function urlA(sitio, id, q) {
+  const base = String((SITIO.urls || {})[sitio] || "").trim();
+  if (!/^https?:\/\//.test(base)) return "";
+  const p = new URLSearchParams();
+  if (CTX.liga && CTX.id) p.set("club", `${CTX.liga}|${CTX.id}`);
+  if (CTX.temp) p.set("temp", CTX.temp);
+  if (id === "ficha" && LS.get("cerno.v2.ficha")) p.set("f", LS.get("cerno.v2.ficha"));
+  if (q) Object.entries(q).forEach(([k, v]) => { if (v != null && v !== "") p.set("q." + k, String(v)); });
+  return `${base.split("#")[0]}#${id}&${p.toString()}`;
+}
+function abrirFuera(id, q) {
+  const n = SITIOS[sitioDe(id)].n, u = urlFuera(id, q);
+  if (!u) { toast(`«${ITEM[id].n}» está en Kerno Analytics · ${n}, todavía sin enlace`); return; }
+  let w = null; try { w = window.open(u, "_blank"); if (w) w.opener = null; } catch (e) { w = null; }
+  toast(w ? `«${ITEM[id].n}» se abre en Kerno Analytics · ${n}` : `«${ITEM[id].n}» está en Kerno Analytics · ${n}: ábrelo desde el menú`);
+}
+// lo que llega en el enlace de otro sitio: vista, club, temporada, ficha y parámetros de la herramienta de detalle
+function leerHash() {
+  const [id, ...resto] = location.hash.replace(/^#/, "").split("&"), p = new URLSearchParams(resto.join("&")), q = {};
+  p.forEach((v, k) => { if (k.startsWith("q.")) q[k.slice(2)] = v; });
+  return { id: id || "", p, q: Object.keys(q).length ? q : null };
+}
+function navFuera(id, n, k) {
+  const sn = SITIOS[k].n, u = urlA(k, id);
+  return u ? `<a class="nav fuera" href="${esc(u)}" target="_blank" rel="noopener" data-fuera="${id}" data-sitio="${k}" title="Se abre en Kerno Analytics · ${esc(sn)}, en una pestaña nueva"><span>${esc(n)}<span class="sr"> (en Kerno Analytics · ${esc(sn)}, pestaña nueva)</span></span><i class="k-arrow" aria-hidden="true"></i></a>`
+    : `<span class="nav fuera off" aria-disabled="true" title="Está en Kerno Analytics · ${esc(sn)}, que todavía no tiene enlace">${esc(n)}<span class="fuera-t">sin enlace</span></span>`;
+}
+// cuántas herramientas tiene cada sitio (una vista compartida, como «Tu equipo hoy», cuenta en cada sitio que la tiene)
+const nHerr = (k) => NAV.filter((s) => s.en.includes(k)).reduce((a, s) => a + s.items.length, 0);
+const herrTxt = (n) => `${n} ${n === 1 ? "herramienta" : "herramientas"}`;
 function pintarRail() {
-  $("rail").innerHTML = NAV.map((s) => `<div class="sec"><div class="sec-h"><span class="n">${s.n || "··"}</span><span class="t">${esc(s.t)}</span>${s.q ? `<span class="q">${esc(s.q)}</span>` : ""}</div>
-    ${s.items.map(([id, n, , nuevo]) => `<button class="nav" type="button" data-go="${id}">${esc(n)}${nuevo ? `<span class="new">v2</span>` : ""}</button>`).join("")}</div>`).join("")
-    + `<div class="rail-foot"><p class="label">Discreción por diseño</p><p>La lista corta y los ajustes se guardan solo en este navegador.</p></div>`;
+  const yo = SITIO.sitio, ks = Object.keys(SITIOS), otrosK = ks.filter((k) => k !== yo);
+  const sec = (s, k) => `<div class="sec${k ? " fuera" : ""}"><div class="sec-h"><span class="n">${s.n || "··"}</span><span class="t">${esc(s.t)}</span>${s.q ? `<span class="q">${esc(s.q)}</span>` : ""}</div>
+    ${s.items.map(([id, n, , nuevo]) => (k ? navFuera(id, n, k) : `<button class="nav" type="button" data-go="${id}">${esc(n)}${nuevo ? `<span class="new">v2</span>` : ""}</button>`)).join("")}</div>`;
+  // 1. los tres sitios: qué ofrece cada uno, cuántas herramientas tiene y cuál está abierto
+  const tarjeta = (k) => {
+    const S2 = SITIOS[k], cab = `<span class="ini" aria-hidden="true">${S2.ini}</span><b>${esc(S2.n)}</b>`, pie = `<small>${esc(S2.d)}</small><span class="cnt">${herrTxt(nHerr(k))}</span>`;
+    if (k === yo) return `<button class="sitio aqui" type="button" data-go="${INICIO()}" aria-current="true" title="Estás en Kerno Analytics · ${esc(S2.n)}">${cab}<span class="est">Estás aquí</span>${pie}</button>`;
+    const u = urlA(k, S2.inicio);
+    return u ? `<a class="sitio" href="${esc(u)}" target="_blank" rel="noopener" data-fuera="${S2.inicio}" data-sitio="${k}" title="Abrir Kerno Analytics · ${esc(S2.n)} en una pestaña nueva">${cab}<span class="est">Abrir<i class="k-arrow" aria-hidden="true"></i></span>${pie}</a>`
+      : `<span class="sitio off" aria-disabled="true" title="Kerno Analytics · ${esc(S2.n)} todavía no tiene enlace">${cab}<span class="est">Sin enlace</span>${pie}</span>`;
+  };
+  // 2. cabecera de cada grupo de herramientas: las de este sitio primero; después, las de cada otro sitio
+  const grupo = (k, aqui, n) => `<div class="rail-grupo${aqui ? " aqui" : " otro"}"><span class="ini" aria-hidden="true">${SITIOS[k].ini}</span><b>${aqui ? `En este sitio · ${esc(SITIOS[k].n)}` : `En ${esc(SITIOS[k].n)}`}</b>
+    <small>${herrTxt(n)} · ${aqui ? "se abren aquí" : "se abren en una pestaña nueva"}</small></div>`;
+  const mios = NAV.filter((s) => s.en.includes(yo));
+  const deOtro = otrosK.map((k) => [k, NAV.filter((s) => s.en.includes(k) && !s.en.includes(yo))]).filter(([, xs]) => xs.length);
+  const sinUrl = deOtro.some(([k]) => !String((SITIO.urls || {})[k] || "").trim());
+  $("rail").innerHTML = `<div class="rail-sitios"><span class="label">Kerno Analytics · ${ks.length} sitios</span>${ks.map(tarjeta).join("")}</div>`
+    + grupo(yo, true, nHerr(yo)) + mios.map((s) => sec(s, "")).join("")
+    + deOtro.map(([k, xs]) => grupo(k, false, xs.reduce((a, s) => a + s.items.length, 0)) + xs.map((s) => sec(s, k)).join("")).join("")
+    + `<div class="rail-foot"><p class="label">Discreción por diseño</p><p>La lista corta y los ajustes se guardan solo en este navegador.</p>${sinUrl ? `<p>Las herramientas atenuadas están en otro sitio de Kerno Analytics que todavía no tiene enlace.</p>` : ""}</div>`;
 }
 function marcarNav() { document.querySelectorAll("#rail .nav").forEach((b) => { if (b.dataset.go === S.route) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); }); }
 
@@ -955,12 +1124,15 @@ function atras() {
   if (HIST.length < 2) return; HIST.pop(); const p = HIST[HIST.length - 1];
   if (p.f) LS.set("cerno.v2.ficha", p.f); atrasando = true; navegar(p.id);
 }
-function navegar(id) { if (!ITEM[id]) id = "inicio"; if (location.hash.slice(1) === id) ir(id); else location.hash = id; }
+function navegar(id) {
+  if (ITEM[id] && !propio(id)) { const q = S.q; S.q = null; abrirFuera(id, q); return; }  // herramienta de otro sitio: su artifact, en pestaña nueva
+  if (!ITEM[id]) id = INICIO(); if (location.hash.slice(1) === id) ir(id); else location.hash = id;
+}
 function ir(id) {
-  const it = ITEM[id] || ITEM.inicio; S.route = it.id; S.tk++; apuntar(it.id);
+  const it = ITEM[id] && propio(id) ? ITEM[id] : ITEM[INICIO()]; S.route = it.id; S.tk++; apuntar(it.id);
   marcarNav(); marcarAplica(); cerrarRail();
   const sec = it.sec, vh = $("vhead");
-  document.title = it.id === "inicio" ? "Kerno Analytics" : `${it.n} · Kerno`;
+  document.title = it.id === INICIO() ? `Kerno Analytics · ${SN()}` : `${it.n} · Kerno Analytics · ${SN()}`;
   vh.hidden = it.id === "inicio";
   vh.innerHTML = `<div><div class="eyebrow">${sec.n ? `<span>${sec.n} · ${esc(sec.t.toUpperCase())}</span>` : `<span>${esc(sec.t.toUpperCase())}</span>`}${it.leg ? `<span class="tag">Herramienta de detalle</span>` : ""}</div><h1>${esc(it.n)}</h1>${LEAD[it.id] ? `<p>${esc(LEAD[it.id])}</p>` : ""}</div>
     ${(() => { const a = APLICA[it.id] ?? "ct", p = []; if (a.includes("c")) p.push(esc(clubActual() ? clubActual().nombre : "")); if (a.includes("t")) p.push(esc(CTX.temp || "")); if (a.includes("c")) p.push("vara " + esc(VN()));
@@ -976,7 +1148,7 @@ function abrirLegado(area, tool, q) {
   legEspera = `${area}/${tool}`; clearTimeout(legEsperaT); legEsperaT = setTimeout(() => { legEspera = null; }, 6000);
   if (!LEG) {
     LEG = document.createElement("iframe"); LEG.className = "legacy"; LEG.title = "Herramienta de detalle";
-    LEG.src = `clasico.html?embed=1&ir=${encodeURIComponent(area)}/${encodeURIComponent(tool)}`;
+    LEG.src = `clasico.html?embed=1&sitio=${SITIO.sitio}&ir=${encodeURIComponent(area)}/${encodeURIComponent(tool)}`;
     $("paneLegacy").appendChild(LEG); legPend = q ? { area, tool, q } : null; return;
   }
   if (legListo) LEG.contentWindow.postMessage({ cernoIr: { area, tool, q } }, "*"); else legPend = { area, tool, q };
@@ -986,8 +1158,9 @@ window.addEventListener("message", async (e) => {
   if (!LEG || e.source !== LEG.contentWindow) return;
   const d = e.data || {};
   if (d.cernoListo) { legListo = true; if (legPend) { LEG.contentWindow.postMessage({ cernoIr: legPend }, "*"); legPend = null; } }
+  if (d.cernoFuera) { const id = LEG2ID[`${d.cernoFuera.area}/${d.cernoFuera.tool}`]; if (id) abrirFuera(id, d.cernoFuera.q || null); }  // clasico: herramienta de otro sitio
   if (d.cernoNav && legEspera) { const k = `${d.cernoNav.area}/${d.cernoNav.tool}`; if (k === legEspera || LEG2ID[k] === S.route) { legEspera = null; clearTimeout(legEsperaT); } }
-  else if (d.cernoNav) { const id = LEG2ID[`${d.cernoNav.area}/${d.cernoNav.tool}`]; if (id && id !== S.route && ITEM[S.route] && ITEM[S.route].leg) { S.route = id; apuntar(id); marcarNav(); marcarAplica(); try { history.replaceState(null, "", "#" + id); } catch (er) { /* */ } const it = ITEM[id]; $("vhead").querySelector("h1").textContent = it.n; document.title = `${it.n} · Kerno`; } }
+  else if (d.cernoNav) { const id = LEG2ID[`${d.cernoNav.area}/${d.cernoNav.tool}`]; if (id && propio(id) && id !== S.route && ITEM[S.route] && ITEM[S.route].leg) { S.route = id; apuntar(id); marcarNav(); marcarAplica(); try { history.replaceState(null, "", "#" + id); } catch (er) { /* */ } const it = ITEM[id]; $("vhead").querySelector("h1").textContent = it.n; document.title = `${it.n} · Kerno`; } }
   if (d.cernoRelay) {
     const { id, op, args } = d.cernoRelay, res = (o) => { try { LEG.contentWindow.postMessage({ cernoRelayRes: Object.assign({ id }, o) }, "*"); } catch (er) { /* */ } };
     try {
@@ -1094,9 +1267,9 @@ VISTAS.inicio = async (tk) => {
       const arriba = con.filter((x) => x.a.NC_lo80 > 50).length, abajo = con.filter((x) => x.a.NC_hi80 < 50).length, mejor = con.slice().sort((x, y) => y.a.NC - x.a.NC)[0];
       const clave = ev.filter((x) => x.a && isFinite(x.a.delta_net)).sort((x, y) => y.a.delta_net - x.a.delta_net)[0];
       const lect = `${arriba ? `${arriba} ${arriba === 1 ? "jugador produce" : "jugadores producen"} con claridad por encima de lo esperable para su puesto (todo su rango de Nivel Kerno por encima de 50)` : "Nadie produce todavía con claridad por encima de lo esperable para su puesto"}, ${abajo ? `${abajo} por debajo` : "nadie claramente por debajo"} y ${con.length - arriba - abajo} en la zona media.${mejor ? ` El Nivel Kerno más alto es el de ${g(mejor.r, "nombre")} (${Math.round(mejor.a.NC)}).` : ""}${clave && clave.a.delta_net > 0 ? ` Sin ${g(clave.r, "nombre")}, el Net proyectado del equipo bajaría ${fmt(clave.a.delta_net, 1)} puntos por 100 posesiones: es la pieza que más pesa.` : ""}`;
-      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">Modelo v4.0 · Nivel Kerno e Impacto (0–100, rango del 80 %) en ${esc(nomC)} ${esc(CTX.temp)} · Δ Net: lo que pierde el equipo sin él · valor v4.0 frente al jugador medio de ${esc(VN())}</p></div><span class="tag">Lectura</span></div>
+      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">Modelo v4.0 · Nivel Kerno e Impacto (0–100, rango del 80 %) en ${esc(nomC)} ${esc(CTX.temp)} · Δ Net: lo que pierde el equipo sin él · RAPM proyectado en 0–100 (50 = jugador medio de ${esc(VN())})</p></div><span class="tag">Lectura</span></div>
       <p class="note" style="color:var(--text-2);font-size:15px">${esc(lect)}</p>
-      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n" title="Minutos por partido proyectados por el motor">Min/p</th><th class="n" title="Percentil esperado de producción entre los de su puesto en la liga del club">Nivel Kerno</th><th class="bar">0–100</th><th class="n" title="Percentil del cambio del equipo con él en pista frente a sin él">Impacto</th><th class="n" title="Puntos por 100 posesiones que perdería el equipo sin él">Δ Net</th><th class="n" title="RAPM multiliga v4.0, pts/100 sobre el jugador medio de la vara">Valor v4.0</th></tr></thead><tbody>
+      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n" title="Minutos por partido proyectados por el motor">Min/p</th><th class="n" title="Percentil esperado de producción entre los de su puesto en la liga del club">Nivel Kerno</th><th class="bar">0–100</th><th class="n" title="Percentil del cambio del equipo con él en pista frente a sin él">Impacto</th><th class="n" title="Puntos por 100 posesiones que perdería el equipo sin él">Δ Net</th><th class="n" title="RAPM multiliga v4.0 en 0–100 (50 = jugador medio de la vara)">RAPM proyectado</th></tr></thead><tbody>
       ${ev.map(({ r, a, e }) => { const nc = ancE(a, "NC"), im = ancE(a, "IM");
         return `<tr class="go" data-k="${esc(rk(r))}" tabindex="0"><td><div class="who"><b>${esc(g(r, "nombre"))}</b><span>${POS[g(r, "pos3")] || "s/d"}${g(r, "edad") ? " · " + Math.round(g(r, "edad")) + " años" : ""}</span></div></td>
           <td class="n">${Math.round(g(r, "min"))}</td><td class="n">${a && isFinite(a.minutos) ? fmt(a.minutos, 1) : "—"}</td><td class="n">${valHTML(nc)}</td><td>${pbar(nc)}</td><td class="n">${valHTML(im)}</td><td class="n">${valHTML(dnetE(a))}</td><td class="n">${valHTML(e)}</td></tr>`; }).join("")}
@@ -1104,9 +1277,9 @@ VISTAS.inicio = async (tk) => {
     } else {
       const ev = ro.map((r) => ({ r, e: est(r, "rapm") })).filter((x) => x.e);
       const suma = ev.filter((x) => x.e.pl > 50).length, resta = ev.filter((x) => x.e.ph < 50).length;
-      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">Valor v4.0 (RAPM multiliga) · pts/100 sobre el jugador medio de ${esc(VN())} · percentil frente a su posición</p></div><span class="tag">Lectura</span></div>
+      plant = `<div class="block"><div class="block-h"><div><h3 class="h2">La plantilla, leída en su liga</h3><p class="sub">RAPM proyectado (RAPM multiliga v4.0) · 0–100, 50 = jugador medio de ${esc(VN())} · percentil frente a su posición</p></div><span class="tag">Lectura</span></div>
       <p class="note" style="color:var(--text-2);font-size:15px">${esc(`${suma} ${suma === 1 ? "jugador está" : "jugadores están"} con claridad por encima del jugador medio de su posición y ${resta} por debajo. ${V4D ? v4SinClub() : "No se pudo cargar el modelo v4.0."}`)}</p>
-      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n">Valor v4.0</th><th class="bar">Percentil</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
+      <div class="tw"><table class="v4t"><thead><tr><th>Jugador</th><th class="n">Min</th><th class="n">RAPM proyectado</th><th class="bar">Percentil</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
       ${ro.map((r) => { const e = est(r, "rapm"), ts = est(r, "ts_pct"), us = est(r, "usg_pct", 0);
         return `<tr class="go" data-k="${esc(rk(r))}" tabindex="0"><td><div class="who"><b>${esc(g(r, "nombre"))}</b><span>${POS[g(r, "pos3")] || "s/d"}${g(r, "edad") ? " · " + Math.round(g(r, "edad")) + " años" : ""}</span></div></td>
           <td class="n">${Math.round(g(r, "min"))}</td><td class="n">${valHTML(e)}</td><td>${pbar(e)}</td><td class="n">${valHTML(ts)}</td><td class="n">${us ? fmt(us.v) + " %" : "—"}</td></tr>`; }).join("")}
@@ -1131,7 +1304,7 @@ function banquilloHTML() {
       <td class="n">${e.pj ?? "—"}</td><td class="n">${n ? `${e.w}–${e.l}` : "—"}</td>
       <td><div class="wl" role="img" aria-label="${pct == null ? "Sin balance" : Math.round(pct) + " % de victorias"}"><i style="width:${pct == null ? 0 : pct.toFixed(1)}%"></i></div></td><td class="n">${pct == null ? "—" : Math.round(pct) + " %"}</td>
       <td class="n">${S == null ? "—" : `${sgn(S.net)} <span class="rng">${ord(S.puesto)}</span>`}</td><td>${estiloEt(e)}</td></tr>`; };
-  const cab = (conT) => `<thead><tr>${conT ? "<th>Temporada</th>" : ""}<th>Entrenador · etapa</th><th class="n">PJ</th><th class="n">Balance</th><th colspan="2">% victorias</th><th class="n" title="Net v4.0 de la plantilla de la temporada con sus minutos reales (Σ minutos × valor v4.0), pts/100 frente a la media de su liga, y su puesto">Net v4.0</th><th>Estilo de su etapa</th></tr></thead>`;
+  const cab = (conT) => `<thead><tr>${conT ? "<th>Temporada</th>" : ""}<th>Entrenador · etapa</th><th class="n">PJ</th><th class="n">Balance</th><th colspan="2">% victorias</th><th class="n" title="Net v4.0 de la plantilla de la temporada con sus minutos reales (Σ minutos × RAPM multiliga v4.0), pts/100 frente a la media de su liga, y su puesto">Net v4.0</th><th>Estilo de su etapa</th></tr></thead>`;
   let lect;
   if (hoyT.length > 1) lect = `${hoyT.length} entrenadores en ${CTX.temp}: ${hoyT.map((e) => `${e.n} (${e.w}–${e.l})`).join(", ")}. Las cifras de equipo de arriba y el Net v4.0 son de la temporada entera; el estilo de cada etapa se calcula solo con sus partidos.`;
   else if (hoyT.length === 1) lect = `${hoyT[0].n} dirige ${enCurso(CTX.temp) ? "la temporada hasta ahora" : "toda la temporada"}: ${hoyT[0].w}–${hoyT[0].l} en ${hoyT[0].pj} partidos.`;
@@ -1173,9 +1346,9 @@ VISTAS.ficha = async (tk) => {
   const flojos = favs.filter((e) => e.p <= 30 && e.ph <= 50).sort((a, b) => a.p - b.p).slice(0, 2);
   const lista = (a) => a.map((e) => `${(M[e.m].c || M[e.m].n.toLowerCase())} (percentil ${Math.round(e.p)})`).join(", ");
   const an4 = v4Anclas(r), clubN4 = (clubActual() || {}).nombre || "tu club";
-  const vTxt = imp ? `valor v4.0 ${sgn(imp.v)} [${rngTxt(sgn(imp.lo), sgn(imp.hi))}] por 100 posesiones frente al jugador medio de ${VN()} (percentil ${Math.round(imp.p)} entre ${POSP[pos] || "jugadores"})` : "";
+  const vTxt = imp ? `RAPM proyectado ${fmt(imp.v, 0)} [${rngTxt(fmt(imp.lo, 0), fmt(imp.hi, 0))}] en la escala 0–100 (50 = jugador medio de ${VN()}; percentil ${Math.round(imp.p)} entre ${POSP[pos] || "jugadores"})` : "";
   const readH = an4 && isFinite(an4.NC) ? `${an4.propio ? "En" : "Como fichaje de"} ${clubN4}: Nivel Kerno ${Math.round(an4.NC)} [${Math.round(an4.NC_lo80)}–${Math.round(an4.NC_hi80)}], ${nivelTxt(an4.NC)} para su puesto${isFinite(an4.IM) ? `, e Impacto ${Math.round(an4.IM)} [${Math.round(an4.IM_lo80)}–${Math.round(an4.IM_hi80)}]` : ""}.${vTxt ? ` Su ${vTxt}.` : ""}`
-    : imp ? `${vTxt.charAt(0).toUpperCase()}${vTxt.slice(1)}.` : "Sin valor v4.0 para este jugador.";
+    : imp ? `${vTxt.charAt(0).toUpperCase()}${vTxt.slice(1)}.` : "Sin RAPM proyectado para este jugador.";
   const anc4 = an4 && isFinite(an4.NC) ? `<div class="block"><div class="block-h"><div><h3 class="h2">Nivel Kerno e Impacto en ${esc(clubN4)}</h3><p class="sub">Modelo v4.0 · ${esc(CTX.temp)} · ${an4.propio ? "con la plantilla actual: qué pierde el equipo sin él" : "simulado como fichaje con el rol que le da el motor"} · rangos del 80 %</p></div><span class="tag">Lectura</span></div>
       <div class="kpis">
         <div class="kpi key"><span class="label" title="Percentil esperado de su producción (minutos × puntos por 100) entre los de su puesto en ${esc(ligaN(CTX.liga))}">Nivel Kerno</span><span class="v">${Math.round(an4.NC)}</span><span class="r">[${Math.round(an4.NC_lo80)}–${Math.round(an4.NC_hi80)}] · ${nivelTxt(an4.NC)}</span></div>
@@ -1213,7 +1386,7 @@ VISTAS.ficha = async (tk) => {
     </div>
     ${anc4}
     <div class="block"><div class="block-h"><div><h3 class="h2">Perfil por percentiles</h3><p class="sub">Frente a ${POSP[pos] || "jugadores"} de ${esc(VN())} · equivalente ${REF_T} · marcas en 25 / 50 / 75 · banda = intervalo del 80 %</p></div><span class="tag">Lectura</span></div>
-      <div class="prof">${GRUPOS.map(([n, d, ms]) => `<div class="g"><span>${n}</span><small>${esc(d)}</small></div>` + ms.map((m) => { const e = est(r, m); return `<div class="m">${M[m].n}${e && e.s === -1 ? "<small>menos es mejor; la barra ya está invertida</small>" : ""}</div>${pbar(e)}<div class="val">${valHTML(e)}</div>`; }).join("")).join("")}
+      <div class="prof">${GRUPOS.map(([n, d, ms]) => `<div class="g"><span>${n}</span><small>${esc(d)}</small></div>` + ms.map((m) => { const e = est(r, m); return `<div class="m">${M[m].n}${e && e.s === -1 ? "<small>menos es mejor; la barra ya está invertida</small>" : ""}</div>${pbar(e, "", true)}<div class="val">${valHTML(e, true)}</div>`; }).join("")).join("")}
         <div></div><div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div></div>
     <div class="block" id="trayBlock">${tray ? trayHTML(tray) : ""}</div>
     <div class="callout"><span class="label">Qué cambiaría la lectura</span><p>${esc(cambio)}</p></div>
@@ -1236,24 +1409,24 @@ function trayResumen(tr) {
   if (xs.length < 2) return `<span class="v">${tr.filas.length} temporada${tr.filas.length === 1 ? "" : "s"}</span><p>Sin dos temporadas completas para leer una tendencia.</p>`;
   const a = xs[xs.length - 2], b = xs[xs.length - 1], solapa = !(a.e.hi < b.e.lo || b.e.hi < a.e.lo);
   const dir = b.e.v > a.e.v ? "sube" : b.e.v < a.e.v ? "baja" : "se mantiene";
-  return `<span class="v">${solapa ? "Sin cambio claro" : dir === "sube" ? "Al alza" : "A la baja"}</span><p>Valor v4.0 ${sgn(a.e.v)} en ${a.x.T.temp} y ${sgn(b.e.v)} en ${b.x.T.temp}${solapa ? ": los rangos se solapan." : "."}</p>`;
+  return `<span class="v">${solapa ? "Sin cambio claro" : dir === "sube" ? "Al alza" : "A la baja"}</span><p>RAPM proyectado ${fmt(a.e.v, 0)} en ${a.x.T.temp} y ${fmt(b.e.v, 0)} en ${b.x.T.temp}${solapa ? ": los rangos se solapan." : "."}</p>`;
 }
 function trayHTML(tr) {
   const pts = tr.filas.map((x) => ({ x, e: est(x, "rapm") })).filter((o) => o.e);
   if (!pts.length) return "";
   const W = 720, H = 240, L = 46, R = 40, Tp = 18, B = 34, n = pts.length;
-  let lo = Math.min(-1, ...pts.map((p) => p.e.lo)), hi = Math.max(1, ...pts.map((p) => p.e.hi)); lo = Math.floor(lo); hi = Math.ceil(hi);
+  let lo = Math.min(40, ...pts.map((p) => p.e.lo)), hi = Math.max(60, ...pts.map((p) => p.e.hi)); lo = Math.max(0, Math.floor(lo / 10) * 10); hi = Math.min(100, Math.ceil(hi / 10) * 10);
   const xs = (i) => L + (n === 1 ? (W - L - R) / 2 : (i * (W - L - R)) / (n - 1)), ys = (v) => Tp + ((hi - v) * (H - Tp - B)) / (hi - lo);
-  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valor v4.0 por temporada con intervalo del 80 %">`;
-  for (let v = lo; v <= hi; v++) svg += `<line class="${v === 0 ? "zl" : "gl"}" x1="${L}" x2="${W - R}" y1="${ys(v)}" y2="${ys(v)}"/><text class="ax" x="${L - 8}" y="${ys(v) + 4}" text-anchor="end">${sgn(v, 0).replace("+0", "0")}</text>`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="RAPM proyectado por temporada con intervalo del 80 %">`;
+  for (let v = lo; v <= hi; v += 10) svg += `<line class="${v === 50 ? "zl" : "gl"}" x1="${L}" x2="${W - R}" y1="${ys(v)}" y2="${ys(v)}"/><text class="ax" x="${L - 8}" y="${ys(v) + 4}" text-anchor="end">${v}</text>`;
   pts.forEach((p, i) => { svg += `<rect class="bd" x="${xs(i) - 9}" y="${ys(p.e.hi)}" width="18" height="${Math.max(1, ys(p.e.lo) - ys(p.e.hi))}"/><text class="ax" x="${xs(i)}" y="${H - 12}" text-anchor="middle">${p.x.T.temp}</text>`; });
   svg += `<polyline class="ln" points="${pts.map((p, i) => `${xs(i)},${ys(p.e.v)}`).join(" ")}" stroke-dasharray="${0}"/>`;
-  pts.forEach((p, i) => { const last = i === n - 1 && n > 1; svg += `<circle class="pt${i === n - 1 ? " rd" : ""}" cx="${xs(i)}" cy="${ys(p.e.v)}" r="4"/><text class="lb" x="${xs(i) + (last ? -14 : 14)}" y="${ys(p.e.v) - 8}" text-anchor="${last ? "end" : "start"}">${sgn(p.e.v)}</text>`; });
+  pts.forEach((p, i) => { const last = i === n - 1 && n > 1; svg += `<circle class="pt${i === n - 1 ? " rd" : ""}" cx="${xs(i)}" cy="${ys(p.e.v)}" r="4"/><text class="lb" x="${xs(i) + (last ? -14 : 14)}" y="${ys(p.e.v) - 8}" text-anchor="${last ? "end" : "start"}">${fmt(p.e.v, 0)}</text>`; });
   svg += `</svg>`;
-  return `<div class="block-h"><div><h3 class="h2">Trayectoria del valor v4.0</h3><p class="sub">RAPM multiliga v4.0 · pts/100 frente al jugador medio de ${esc(VN())} ${esc(CTX.temp)} · punto y rango del 80 % por temporada</p></div><span class="tag">Lectura</span></div>
+  return `<div class="block-h"><div><h3 class="h2">Trayectoria del RAPM proyectado</h3><p class="sub">RAPM multiliga v4.0 · 0–100, 50 = jugador medio de ${esc(VN())} ${esc(CTX.temp)} · punto y rango del 80 % por temporada</p></div><span class="tag">Lectura</span></div>
     <div class="chart">${svg}</div>
-    <div class="tw"><table><thead><tr><th>Temporada</th><th>Equipo</th><th class="n">Min</th><th class="n">Valor v4.0</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
-    ${tr.filas.map((x) => { const u = est(x, "usg_pct", 0); return `<tr class="go" data-k="${esc(rk(x))}" tabindex="0"><td class="num">${x.T.temp}${enCurso(x.T.temp) ? " · en curso" : ""}</td><td>${esc(g(x, "equipo"))} <span class="rng">${esc(ligaN(g(x, "liga")))}</span></td><td class="n">${Math.round(g(x, "min"))}</td><td class="n">${valHTML(est(x, "rapm"))}</td><td class="n">${valHTML(est(x, "ts_pct"))}</td><td class="n">${u ? fmt(u.v) + " %" : "—"}</td></tr>`; }).join("")}
+    <div class="tw"><table><thead><tr><th>Temporada</th><th>Equipo</th><th class="n">Min</th><th class="n">RAPM proyectado</th><th class="n">TS%</th><th class="n">Uso</th></tr></thead><tbody>
+    ${tr.filas.map((x) => { const u = est(x, "usg_pct", 0); return `<tr class="go" data-k="${esc(rk(x))}" tabindex="0"><td class="num">${x.T.temp}${enCurso(x.T.temp) ? " · en curso" : ""}</td><td>${esc(g(x, "equipo"))} <span class="rng">${esc(ligaN(g(x, "liga")))}</span></td><td class="n">${Math.round(g(x, "min"))}</td><td class="n">${valHTML(est(x, "rapm"), true)}</td><td class="n">${valHTML(est(x, "ts_pct"))}</td><td class="n">${u ? fmt(u.v) + " %" : "—"}</td></tr>`; }).join("")}
     </tbody></table></div><p class="note">Una fila por temporada: la competición con más minutos.</p>`;
 }
 
@@ -1265,9 +1438,9 @@ const PERFILES = {
   aro: { n: "Protector del aro", d: "Tapones, rebote defensivo e impacto atrás", w: [["blk_pct", 3, 1], ["dreb_pct", 2, 1], ["drtg", 1, -1], ["rapm", 1, 1]] },
   rebote: { n: "Reboteador", d: "Segundas opciones y cierre del rebote", w: [["oreb_pct", 2, 1], ["dreb_pct", 2, 1], ["pct_aro", 1, 1]] },
   perimetro: { n: "Defensor exterior", d: "Robos e impacto defensivo sin cargarse de faltas", w: [["stl_pct", 2, 1], ["drtg", 1, -1], ["pf_p100", 1, -1], ["rapm", 1, 1]] },
-  impacto: { n: "Valor global", d: "El de más valor v4.0 (RAPM multiliga), sin atender al rol", w: [["rapm", 3, 1], ["per", 1, 1], ["ws_per_40", 1, 1]] },
+  impacto: { n: "Valor global", d: "El de más RAPM proyectado (RAPM multiliga v4.0), sin atender al rol", w: [["rapm", 3, 1], ["per", 1, 1], ["ws_per_40", 1, 1]] },
 };
-const CORTO = {"fg3_pct": "T3%", "fg3a_rate": "% T3", "ts_pct": "TS%", "pct_t3_esquina": "T3 esq.", "ast_pct": "AST%", "tov_pct": "TOV%", "usg_pct": "USG%", "pts_p100": "Pts/100", "fta_rate": "FTr", "blk_pct": "BLK%", "dreb_pct": "DREB%", "oreb_pct": "OREB%", "drtg": "DRtg", "stl_pct": "STL%", "pf_p100": "Faltas/100", "pct_aro": "% aro", "rapm": "Valor v4.0", "per": "PER", "ws_per_40": "WS/40"};  // cabeceras cortas de tabla
+const CORTO = {"fg3_pct": "T3%", "fg3a_rate": "% T3", "ts_pct": "TS%", "pct_t3_esquina": "T3 esq.", "ast_pct": "AST%", "tov_pct": "TOV%", "usg_pct": "USG%", "pts_p100": "Pts/100", "fta_rate": "FTr", "blk_pct": "BLK%", "dreb_pct": "DREB%", "oreb_pct": "OREB%", "drtg": "DRtg", "stl_pct": "STL%", "pf_p100": "Faltas/100", "pct_aro": "% aro", "rapm": "RAPM proy.", "per": "PER", "ws_per_40": "WS/40"};  // cabeceras cortas de tabla
 const NEC = Object.assign({ perfil: "tirador", liga: "todas", pos: "todas", edad: "", min: "", excluir: true, orden: "punto", ver: 40 }, LS.json("cerno.v2.nec", {}));
 const guardarNec = () => LS.set("cerno.v2.nec", JSON.stringify(Object.assign({}, NEC, { ver: 40 })));
 function ajuste(r, P) {
@@ -1304,16 +1477,16 @@ VISTAS.necesidad = async (tk) => {
       <div class="ctrl"><span class="label">Orden</span><div class="seg" id="nOrden" role="group" aria-label="Orden"><button type="button" data-v="punto" aria-pressed="${NEC.orden === "punto"}">Por el punto</button><button type="button" data-v="prudente" aria-pressed="${NEC.orden === "prudente"}">Prudente (extremo bajo)</button>${c4 ? `<button type="button" data-v="nc" aria-pressed="${NEC.orden === "nc"}" title="Nivel Kerno v4.0 como fichaje de ${esc(nomC4)}, entre los 150 de mejor ajuste">Por Nivel Kerno</button>` : ""}</div></div>
       <label class="check"><input type="checkbox" id="nExc" ${NEC.excluir ? "checked" : ""}>Excluir a ${esc(clubActual() ? clubActual().nombre : "mi club")}</label>
     </div>
-    <div class="block"><div class="block-h"><div><h3 class="h2">${xs.length ? `${esc(g(xs[0].r, "nombre"))} es el candidato con mejor ajuste: ${Math.round(xs[0].a.p)} [${Math.round(xs[0].a.pl)}–${Math.round(xs[0].a.ph)}]` : "Ningún jugador cumple los filtros"}</h3>
+    <div class="block"><div class="block-h"><div><h3 class="h2">${xs.length ? `${esc(g(xs[0].r, "nombre"))} es el candidato con mejor ajuste: ${Math.round(xs[0].a.p)} (confianza ${confDe(xs[0].a.w, "ajuste")})` : "Ningún jugador cumple los filtros"}</h3>
       <p class="sub">Ajuste al perfil «${esc(P.n)}» · 0–100 · ${xs.length.toLocaleString("es-ES")} candidatos · ${esc(CTX.temp)}${c4 ? ` · Nivel Kerno e Impacto v4.0 como fichajes de ${esc(nomC4)}` : ""}${NEC.orden === "nc" ? " · ordenados por Nivel Kerno" : ""}</p></div><span class="tag">Lectura</span></div>
-      ${top.length ? `<div class="rank">${top.map((o) => `<div class="who"><b>${esc(g(o.r, "nombre"))}</b><span>${filaJug(o.r)}</span></div>${pbar({ p: o.a.p, pl: o.a.pl, ph: o.a.ph, s: null })}<div class="val"><b>${Math.round(o.a.p)}</b> <span class="rng">[${Math.round(o.a.pl)}–${Math.round(o.a.ph)}]</span></div>`).join("")}
+      ${top.length ? `<div class="rank">${top.map((o) => `<div class="who"><b>${esc(g(o.r, "nombre"))}</b><span>${filaJug(o.r)}</span></div>${pbar({ p: o.a.p, pl: o.a.pl, ph: o.a.ph, s: null })}<div class="val"><b title="Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}">${Math.round(o.a.p)}</b> ${confHTML(o.a.w, "ajuste", `Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}`)}</div>`).join("")}
         <div></div><div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div>` : ""}</div>
     ${filas.length ? `<div class="block"><div class="tw"><table><thead><tr><th class="n">#</th><th>Jugador</th><th class="n">Edad</th><th class="n">Min</th><th class="n">Ajuste</th><th>Confianza</th>${c4 ? `<th class="n" title="Nivel Kerno v4.0 como fichaje de ${esc(nomC4)} (0–100, rango del 80 %)">Nivel Kerno</th><th class="n" title="Impacto v4.0 como fichaje de ${esc(nomC4)}">Impacto</th>` : ""}${P.w.map(([m]) => `<th class="n" title="${esc(M[m].n)}">${esc(CORTO[m] || M[m].n)}</th>`).join("")}<th></th></tr></thead><tbody>
       ${filas.map((o, i) => `<tr class="go${i === 0 ? " top" : ""}" data-k="${esc(rk(o.r))}" tabindex="0"><td class="n">${i + 1}</td><td><div class="who"><b>${esc(g(o.r, "nombre"))}</b><span>${filaJug(o.r)}</span></div></td><td class="n">${g(o.r, "edad") ? Math.round(g(o.r, "edad")) : "—"}</td><td class="n">${Math.round(g(o.r, "min"))}</td>
-        <td class="n"><b>${Math.round(o.a.p)}</b> <span class="rng">[${Math.round(o.a.pl)}–${Math.round(o.a.ph)}]</span></td><td>${confHTML(o.a.w)}</td>${c4 ? `<td class="n">${valHTML(ancE(o.an, "NC"))}</td><td class="n">${valHTML(ancE(o.an, "IM"))}</td>` : ""}${P.w.map(([m]) => { const e = est(o.r, m); return `<td class="n">${e ? fmtM(m, e.v) : "—"}</td>`; }).join("")}
+        <td class="n"><b title="Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}">${Math.round(o.a.p)}</b></td><td>${confHTML(o.a.w, "ajuste", `Rango del 80 %: ${Math.round(o.a.pl)}–${Math.round(o.a.ph)}`)}</td>${c4 ? `<td class="n">${valHTML(ancE(o.an, "NC"))}</td><td class="n">${valHTML(ancE(o.an, "IM"))}</td>` : ""}${P.w.map(([m]) => { const e = est(o.r, m); return `<td class="n">${e ? fmtM(m, e.v) : "—"}</td>`; }).join("")}
         <td><button class="btn quiet" type="button" style="min-height:28px;padding:3px 9px" data-lista="${esc(rk(o.r))}">${enLista(rk(o.r)) ? "En la lista" : "+ Lista"}</button></td></tr>`).join("")}
       </tbody></table></div>${xs.length > filas.length ? `<div><button class="btn quiet" type="button" data-act="mas">Ver 40 más (${filas.length} de ${xs.length})</button></div>` : ""}</div>` : ""}
-    <div class="callout"><span class="label">Cómo se calcula</span><p>Ajuste = media ponderada de los percentiles del jugador frente a los de su posición en ${esc(VN())}, la liga de tu club. El rango usa los extremos de cada intervalo del 80 % con los mismos pesos: es prudente, porque supone que todas las métricas fallan a la vez en la misma dirección. «Prudente» ordena por el extremo bajo: premia a quien tiene el ajuste más seguro, no el más alto. Es un perfil estadístico, no el encaje en tu sistema: eso se lee en la lectura de fichaje.</p></div>
+    <div class="callout"><span class="label">Cómo se calcula</span><p>Ajuste = media ponderada de los percentiles del jugador frente a los de su posición en ${esc(VN())}, la liga de tu club. Las métricas con historial (normalización v4.2: uso, pérdidas, robos, tapones, rebote, proporción de triples, puntos/100, canastas asistidas) combinan todas sus temporadas; el resto, la temporada sola. La confianza (alta, moderada o baja) sale de la anchura del rango del 80 % frente a la del resto de jugadores; el rango completo aparece al pasar el ratón y en la ficha. Ese rango usa los extremos de cada intervalo del 80 % con los mismos pesos: es prudente, porque supone que todas las métricas fallan a la vez en la misma dirección. «Prudente» ordena por el extremo bajo: premia a quien tiene el ajuste más seguro, no el más alto. Es un perfil estadístico, no el encaje en tu sistema: eso se lee en la lectura de fichaje.</p></div>
     ${pie(CTX.temp)}`;
   $("nLiga").value = NEC.liga;
 };
@@ -1337,7 +1510,7 @@ VISTAS.lista = async (tk) => {
         return `<div class="m">${M[m].n}</div>${bar}<div class="val">${es.map((e, i) => `<span style="display:inline-flex;align-items:center;gap:4px;margin-left:8px"><i style="width:8px;height:3px;background:var(--${cls[i]});display:inline-block"></i>${e ? fmtM(m, e.v) : "—"}</span>`).join("")}</div>`; }).join("")).join("")}
         <div></div><div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div></div>` : `<p class="note">Marca hasta tres jugadores para compararlos.</p>`;
   V().innerHTML = `<div class="block"><div class="block-h"><div><h3 class="h2">${a.length} ${a.length === 1 ? "candidato" : "candidatos"} en la lista corta</h3><p class="sub">Marca hasta tres para compararlos</p></div></div>
-    <div class="tw"><table><thead><tr><th>Comparar</th><th>Jugador</th><th class="n">Temporada</th>${v4Club() ? `<th class="n" title="Como fichaje de ${esc((clubActual() || {}).nombre || "tu club")}, ${esc(CTX.temp)}">Nivel Kerno</th><th class="n">Impacto</th><th class="n" title="Δ Net del equipo con él">Δ Net</th>` : ""}<th class="n">Valor v4.0</th><th>Confianza</th><th></th></tr></thead><tbody>
+    <div class="tw"><table><thead><tr><th>Comparar</th><th>Jugador</th><th class="n">Temporada</th>${v4Club() ? `<th class="n" title="Como fichaje de ${esc((clubActual() || {}).nombre || "tu club")}, ${esc(CTX.temp)}">Nivel Kerno</th><th class="n">Impacto</th><th class="n" title="Δ Net del equipo con él">Δ Net</th>` : ""}<th class="n">RAPM proyectado</th><th>Confianza</th><th></th></tr></thead><tbody>
     ${a.map((x) => { const r = porClave(x.k), e = r ? est(r, "rapm") : null;
       return `<tr><td><label class="check"><input type="checkbox" data-cmp="${esc(x.k)}" ${x.cmp ? "checked" : ""} ${!x.cmp && sel.length >= 3 ? "disabled" : ""}><span class="sr">Comparar ${esc(x.nombre)}</span></label></td>
         <td><div class="who"><b>${esc(x.nombre)}</b><span>${esc(x.equipo)} · ${esc(ligaN(x.liga))}</span></div></td><td class="n">${esc(x.temp)}</td>${v4Club() ? (() => { const a = r ? v4Anclas(r) : null; return `<td class="n">${valHTML(ancE(a, "NC"))}</td><td class="n">${valHTML(ancE(a, "IM"))}</td><td class="n">${valHTML(dnetE(a))}</td>`; })() : ""}<td class="n">${valHTML(e)}</td><td>${e ? confHTML(e.w) : "—"}</td>
@@ -1356,7 +1529,7 @@ VISTAS["como-leer"] = () => {
         <tr><td>Nivel Kerno (v4.0)</td><td>De 0 a 100: percentil esperado de la producción del jugador (minutos por partido × puntos por 100 posesiones) entre los de su puesto en la liga del club elegido, con los minutos que le da el motor en esa plantilla. 50 = fichaje mediano. Calibrado con 4.560 fichajes reales de 2022 a 2026; rango del 80 %.</td></tr>
         <tr><td>Impacto (v4.0)</td><td>De 0 a 100: percentil del cambio esperado del Net del equipo con él en pista frente a sin él (capa 4), calibrado con el on/off real. Para los jugadores del club, lo que perdería el equipo sin él; para el resto, lo que ganaría como fichaje.</td></tr>
         <tr><td>Δ Net del equipo</td><td>El mismo cambio en puntos por 100 posesiones, con su rango del 80 %.</td></tr>
-        <tr><td>Valor v4.0</td><td>RAPM multiliga con prior del perfil (capa 1 de la v4.0): un valor por jugador y temporada en una escala común a las 20 ligas. Se expresa en puntos por 100 posesiones sobre el jugador medio de la vara (la liga del club en la temporada elegida), con su rango del 80 % y su percentil por posición. Sustituye al antiguo impacto neto (RAPM por liga).</td></tr>
+        <tr><td>RAPM proyectado</td><td>RAPM multiliga con prior del perfil (capa 1 de la v4.0): un valor por jugador y temporada en una escala común a las 20 ligas. Se expresa de 0 a 100, con 50 = el jugador medio de la vara (la liga del club en la temporada elegida): 50 + 50·tanh(x / 2·DT), con x en puntos por 100 posesiones y DT = 1,24, la curva de las escalas del Atlas. Lleva su rango del 80 % y su percentil por posición. Sustituye al antiguo impacto neto (RAPM por liga).</td></tr>
         <tr><td>Net proyectado v4.0</td><td>Net de la plantilla frente a la media de su liga (capa 4), con rango del 80 % y puesto. En temporadas pasadas y en el banquillo se usa el Net v4.0 con los minutos reales de cada jugador.</td></tr>
         <tr><td>Percentil</td><td>Posición frente a los jugadores de la vara de su misma posición (exterior, alero, interior). 50 = jugador medio de esa liga en ese rol. Con la EuroLeague, percentil real entre sus jugadores de 2025-26; con otra liga, percentil aproximado frente al jugador medio de su posición en esa liga, como en «Datos normalizados». En métricas donde menos es mejor (pérdidas, rating defensivo, faltas) la barra ya está invertida: a la derecha siempre es mejor.</td></tr>
         <tr><td>Banda del percentil</td><td>Los extremos del intervalo del 80 %, llevados a percentil con la misma referencia.</td></tr>
@@ -1398,6 +1571,7 @@ function cerrarRail() { $("rail").classList.remove("open"); $("railScrim").class
 document.addEventListener("click", (e) => {
   const t = e.target;
   const go = t.closest("[data-go]"); if (go) { navegar(go.dataset.go); return; }
+  const fa = t.closest("a[data-fuera]"); if (fa) { const u = fa.dataset.sitio ? urlA(fa.dataset.sitio, fa.dataset.fuera) : urlFuera(fa.dataset.fuera); if (u) fa.href = u; cerrarRail(); return; }  // enlace a otro sitio con el contexto de ahora
   if (t.closest("[data-lista]")) { const r = porClave(t.closest("[data-lista]").dataset.lista); if (r) { alternarLista(r); t.closest("[data-lista]").textContent = enLista(rk(r)) ? "En la lista" : "+ Lista"; } e.stopPropagation(); return; }
   if (t.closest("[data-quitar]")) { LISTA.set(LISTA.get().filter((x) => x.k !== t.closest("[data-quitar]").dataset.quitar)); ir("lista"); return; }
   if (t.closest("#searchRes [data-k]")) { const r = porClave(t.closest("[data-k]").dataset.k); cerrarBusqueda(); if (r) abrirFicha(r); return; }
@@ -1453,15 +1627,23 @@ $("searchIn").addEventListener("input", buscar);
 $("searchClose").addEventListener("click", cerrarBusqueda);
 $("searchBtn").addEventListener("click", abrirBusqueda);
 $("backBtn").addEventListener("click", atras);
-$("homeBtn").addEventListener("click", () => navegar("inicio"));
+$("homeBtn").addEventListener("click", () => navegar(INICIO()));
 $("setBtn").addEventListener("click", () => { const p = $("setPop"); p.hidden = !p.hidden; $("setBtn").setAttribute("aria-expanded", String(!p.hidden)); });
 $("menuBtn").addEventListener("click", () => { const o = !$("rail").classList.contains("open"); $("rail").classList.toggle("open", o); $("railScrim").classList.toggle("on", o); $("menuBtn").setAttribute("aria-expanded", String(o)); });
 $("railScrim").addEventListener("click", cerrarRail);
-window.addEventListener("hashchange", () => { if (S.silencio) { S.silencio = false; return; } ir(location.hash.slice(1) || "inicio"); });
+window.addEventListener("hashchange", () => { if (S.silencio) { S.silencio = false; return; } const H = leerHash(); if (H.q) S.q = H.q; ir(H.id || INICIO()); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (CTX.tema === "sistema") { aplicarTema(); publicarCtx(); } });
 
 // ---------------------------------------------------------------------------------------------- arranque
 (async function arrancar() {
+  await cargarSitio();
+  // enlace desde otro sitio de Kerno Analytics: club, temporada, ficha y parámetros de la herramienta pedida
+  const H = leerHash(), club = String(H.p.get("club") || "").split("|");
+  if (club.length === 2 && club[0] && club[1]) { if (club[0] !== CTX.liga || club[1] !== CTX.id) CTX.ent = ""; CTX.liga = club[0]; CTX.id = club[1]; }
+  if (/^\d{4}-\d{2}$/.test(H.p.get("temp") || "")) CTX.temp = H.p.get("temp");
+  if (H.p.get("f")) LS.set("cerno.v2.ficha", H.p.get("f"));
+  if (H.q) S.q = H.q;
+  if (location.hash.includes("&")) { try { history.replaceState(null, "", "#" + (H.id || INICIO())); } catch (e) { /* */ } }
   aplicarTema(); pintarRail();
   V().innerHTML = cargando("Preparando Kerno Analytics");
   try {
@@ -1475,7 +1657,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if
   pintarCtx(); pintarAjustes(); guardarCtx();
   const prev = LS.json("cerno.ctx", {}), igual = prev && prev.stamp && prev.club && prev.club.liga === CTX.liga && prev.club.id === CTX.id && prev.club.temp === CTX.temp && prev.vara === VARA();
   if (igual) LS.set("cerno.ctx", JSON.stringify(Object.assign(prev, { tema: temaResuelto(), escala: CTX.escala, ayudas: CTX.ayudas }))); else publicarCtx();
-  pintarEnt(); ir(location.hash.slice(1) || "inicio");
+  pintarEnt(); ir(H.id || INICIO());
   banquillo().then(() => pintarEnt()).catch(() => { const el = $("ctxEnt"); if (el) { el.innerHTML = `<option value="">Sin datos</option>`; el.disabled = true; } });
 })();
 (function () {

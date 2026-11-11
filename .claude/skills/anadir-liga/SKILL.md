@@ -174,7 +174,8 @@ Cambian todas las temporadas, así que se publica **completo** (no el parche del
    `v40/calibracion.json`), que `artifact/empaquetar.py` no incluye.
 4. Páginas: para cada una (`index.html` = la app Kerno, `clasico.html`, `atlas/index.html`, `quintetos/index.html`,
    `v40/index.html`) lee la versión publicada (`read` con `path`), añade la liga a sus listas (`LIGA_ORD`/`LIGA_N`,
-   `LIGAS_INFO`) y publícala; guarda la copia en el repositorio (`artifact/kerno.html` para `index.html`).
+   `LIGAS_INFO`) y publícala; guarda la copia en el repositorio (`artifact/kerno.html` para `index.html`). Si cambia la página, ejecuta
+   `python3 artifact/kerno_sitios.py` y publica también `artifact/kerno-equipos.html` y `artifact/kerno-metodologia.html` en sus artifacts (sin botón).
    Comprueba en Playwright (1440 y 390 px, claro y oscuro) que no hay errores de JavaScript.
 5. Límite conocido: `atlas/v40/clubes_v40.json` y `atlas/v40/mapa_personas.json` no se generan en este repositorio
    (`docs/actualizacion_2026-27.md` §5): la liga nueva no estará en ellos y la página calcula su Net v4.0 en vivo.
