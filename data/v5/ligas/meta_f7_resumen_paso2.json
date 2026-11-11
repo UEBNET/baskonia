@@ -1,0 +1,62 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F7",
+ "config": "configs/v5/f7.yaml",
+ "hash_config": "d8ba8086030d",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-11T22:33:31+00:00",
+ "python": "3.13.18",
+ "paso": "resumen_paso2",
+ "diagnosticos": {
+  "paso2_volumen_papel": {
+   "rhat_max": 1.01,
+   "ess_bulk_min": 774.0,
+   "ess_tail_min": 915.0,
+   "divergencias": 0,
+   "pasos_medios": 127.0,
+   "tiempo_s": 14061
+  },
+  "paso2_tiro": {
+   "rhat_max": 1.01,
+   "ess_bulk_min": 425.0,
+   "ess_tail_min": 495.0,
+   "divergencias": 0,
+   "pasos_medios": 127.0,
+   "tiempo_s": 3234
+  },
+  "paso2_defensa_cuidado": {
+   "rhat_max": 1.01,
+   "ess_bulk_min": 814.0,
+   "ess_tail_min": 936.0,
+   "divergencias": 1,
+   "pasos_medios": 126.98666666666666,
+   "tiempo_s": 2356
+  }
+ },
+ "ciclo_conjunta_max": 1.1102230246251565e-16,
+ "ciclo_pares_mediana_abs": 0.10957320595742805,
+ "z_abs_mediana": 0.5410973637117393,
+ "z_abs_max": 3.03675405236762,
+ "ratio_sd_por_liga": {
+  "bbl": 0.851,
+  "bcl": 0.969,
+  "bnxt": 0.814,
+  "bsl": 0.725,
+  "cba": 0.679,
+  "eurocup": 0.945,
+  "euroleague": 0.9,
+  "feb1": 0.456,
+  "feb2": 0.457,
+  "feb3": 0.45,
+  "fec": 0.909,
+  "gbl": 0.902,
+  "gleague": 0.5,
+  "lba": 0.908,
+  "lnb": 0.889,
+  "nba": 0.556,
+  "nbl": 0.677,
+  "ncaa": 0.339,
+  "vtb": 0.767
+ },
+ "tiempo_s": 7
+}

@@ -6,6 +6,7 @@ import pandas as pd
 
 from bbnorm5 import config as C
 from bbnorm5.diagnostico.figuras import CLAY, LAKE, RACING, S400, _cabecera, _guardar, estilo
+from bbnorm5.medida.figuras import NOM
 
 PIE = "Datos públicos · 20 ligas, temporada regular 2020-21 a 2025-26 · Kerno Analytics · v5.0 F7"
 DIR = C.DIR_DATOS / "ligas"
@@ -52,11 +53,37 @@ def fig_precision(cfg):
     ax.set_yticks(yy, r.index)
     ax.axvline(1, color=S400, lw=1)
     ax.xaxis.set_major_formatter(lambda v, p: f"{v:.1f}".replace(".", ","))
-    ax.set_xlabel("DT de λ con traspasos ÷ DT sólo con puentes de la misma temporada (mediana de las 14 métricas)")
+    ax.set_xlabel("DT del efecto de liga con traspasos ÷ DT sólo con puentes de la misma temporada (mediana de las 14 métricas)")
     _cabecera(fig, ax, F, "Los traspasos entre temporadas identifican a la NCAA y a las FEB",
               "Precisión del efecto de liga · paso 2 (encogido) frente al paso 1 · corte 2025-26", PIE)
     return _guardar(fig, "f7_precision_ligas", cfg)
 
 
+def fig_traduccion(cfg):
+    """Traducción desde la ACB (2025-26): paso 1 (F6.1) frente a paso 2 (F7, publicada), media y rango del 80 %."""
+    plt, F = estilo()
+    t2 = pd.read_csv(DIR / "traduccion_acb_legible_paso2_2025-26.csv")
+    t1 = pd.read_csv(DIR / "traduccion_acb_legible_2025-26.csv")
+    mets = ["pts_p100", "usg_pct", "ast_pct", "dreb_pct"]
+    orden = t2[t2["metrica"] == "pts_p100"].sort_values("media")["hacia"].tolist()
+    fig, axs = plt.subplots(1, 4, figsize=(11.0, 5.8), sharey=True)
+    fig.subplots_adjust(left=0.11, right=0.98, top=0.80, bottom=0.11, wspace=0.08)
+    y = np.arange(len(orden))
+    for ax, m in zip(axs, mets):
+        ax.axvline(0, color=S400, lw=1)
+        for t, col, off, et in ((t1, S400, -0.17, "Paso 1 · puentes de la misma temporada"),
+                                (t2, RACING, 0.17, "Paso 2 · + traspasos (publicada)")):
+            x = t[t["metrica"] == m].set_index("hacia").reindex(orden)
+            ax.hlines(y + off, x["q10"], x["q90"], color=col, lw=3, alpha=0.4)
+            ax.plot(x["media"], y + off, "o", color=col, ms=4.5, label=et if m == mets[-1] else None)
+        ax.set_title(NOM[m] + " (puntos)", fontsize=9.5, loc="left", fontfamily=F["titulo"])
+        ax.xaxis.set_major_formatter(lambda v, p: f"{v:+.0f}")
+    axs[0].set_yticks(y, orden)
+    axs[3].legend(loc="lower right", fontsize=7.5)
+    _cabecera(fig, axs[0], F, "Con los traspasos, la NCAA y las FEB dejan de ser una incógnita",
+              "Efecto de pasar de la ACB a cada competición · 2025-26 · media y rango del 80 % · NUTS, bloques reagrupados", PIE)
+    return _guardar(fig, "f7_traduccion_paso2", cfg)
+
+
 def todas(cfg) -> dict:
-    return {"figuras": [str(f.relative_to(C.RAIZ)) for f in (fig_sesgo(cfg), fig_precision(cfg))]}
+    return {"figuras": [str(f.relative_to(C.RAIZ)) for f in (fig_sesgo(cfg), fig_precision(cfg), fig_traduccion(cfg))]}

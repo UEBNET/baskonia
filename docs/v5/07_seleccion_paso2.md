@@ -3,11 +3,11 @@
 Fecha: 11-11-2026 · Kerno Analytics · normalización cruzada v5.0.
 Código: `bbnorm5/ligas/seleccion.py`, `bbnorm5/ligas/resumen_paso2.py`, `bbnorm5/ligas/figuras_f7.py`, `bbnorm5/f7.py`.
 Configuración: `configs/v5/f7.yaml` (la NUTS usa la de la F6, `configs/v5/f6.yaml`). Datos: `data/v5/ligas/`.
-Figuras: `docs/v5/figuras/f7_*.png`. Tests: `tests/normalizacion_v5/test_seleccion_f7.py`.
+Figuras: `docs/v5/figuras/f7_sesgo_direccion.png`, `f7_precision_ligas.png`, `f7_traduccion_paso2.png`. Tests: `tests/normalizacion_v5/test_seleccion_f7.py`.
 
 ```bash
 python -m bbnorm5.f7 --config configs/v5/f7.yaml --pasos base examen proyeccion_paso2 figuras   # ~5 min
-python -m bbnorm5.f7 --config configs/v5/f7.yaml --pasos pares_paso2 lambda_paso2 resumen_paso2  # NUTS (__TIEMPO__)
+python -m bbnorm5.f7 --config configs/v5/f7.yaml --pasos pares_paso2 lambda_paso2 resumen_paso2  # NUTS (~2 h con la verosimilitud por trozos)
 ```
 
 Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
@@ -28,14 +28,23 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
      significativamente peores que ella (IC que no cruzan 0).
    - IPW no mueve el sesgo.
    - Heckman lo traslada de las subidas a las bajadas (+0,016 / −0,044) y empeora el CRPS un 0,13 %.
-3. **Los traspasos entre temporadas identifican a las ligas mal conectadas.**
+3. **Los traspasos entre temporadas identifican a las ligas mal conectadas** (GLS sin fugas del examen, frente al GLS
+   sólo con puentes intra; la NUTS, en el punto 5).
    - La DT del efecto de liga cae a un **12 % en la NCAA** (de 6 puentes de la misma temporada a 713 traspasos).
    - Cae al 33–41 % en las FEB, al 36–39 % en NBA y G League, al 43–47 % en CBA y NBL y al 65–74 % en Europa.
 4. **La proyección en contexto (F6.2) con los λ del paso 2 mejora** un 1,6 % en los cambios de liga (IC −1,9 % a
    −1,3 %), sin cambio en quien sigue en su liga.
    - Al ir a la NBA o a la G League, −5,2 % (IC −6,1 % a −4,4 %).
    - Cobertura del 80 % en los cambios de liga: 78,6 % (antes 78,0 %).
-5. **NUTS del paso 2 con los bloques reagrupados (decisión del usuario):** __RESUMEN_NUTS__
+5. **NUTS del paso 2 con los bloques reagrupados (decisión del usuario):** 0 divergencias en dos bloques y 1 en 3.000
+   draws en el tercero, R̂ ≤ 1,01 y ESS ≥ 425.
+   - Es la **matriz de traducción que se publica** (`traduccion_paso2_2025-26.csv.gz`).
+   - Frente a la F6.1, la DT del efecto de liga cae al **34 % en la NCAA**, al 45–46 % en las FEB, al 50–56 % en NBA y
+     G League y al 85–97 % en Europa (mediana de las 14 métricas).
+   - Es compatible con la F6.1: mediana de |z| 0,54; un 3,4 % de los pares liga–métrica supera |z| > 2.
+   - Con los bloques reagrupados, pts/100 y USG% se mueven casi a la par entre ligas (correlación 0,99).
+   - **Corrección técnica:** el gradiente de la NUTS era ~80 veces más lento por encima de ~40.000 filas (XLA en CPU).
+     Se evalúa la verosimilitud por trozos, con resultado idéntico (§4.1).
 
 ---
 
@@ -242,7 +251,104 @@ puentes intra. Examen 2024-25 y 2025-26: 134.006 predicciones. IC 95 % por boots
 
 ## 4. NUTS del paso 2 (DATO)
 
-__SECCION_NUTS__
+### 4.1 Diagnósticos (`lambda_paso2_diagnosticos.json`, `diagnosticos_paso2_<bloque>.csv`)
+
+| Bloque | Filas | R̂ máx. | ESS bulk mín. | ESS tail mín. | Divergencias | Pasos medios | Tiempo |
+|---|---|---|---|---|---|---|---|
+| Volumen y papel (pts, USG, AST, DREB, OREB) | 50.571 | 1,01 | 774 | 915 | 0 | 127 | 3 h 54 min* |
+| Tiro (T2, T3, TL, 3PAr, FTr) | 49.239 | 1,01 | 425 | 495 | 0 | 127 | 54 min |
+| Defensa y cuidado (BLK, STL, PF, TOV) | 40.464 | 1,01 | 814 | 936 | 1 | 127 | 39 min |
+
+4 cadenas × 750 de calentamiento + 750 muestras; `target_accept` 0,9; profundidad máxima 10 (la configuración de la
+F6).
+
+- **\* Corrección técnica.** El primer bloque se ajustó antes de detectar el problema; el bloque de tiro se perdió en un
+  reinicio del contenedor tras 5,5 h.
+  - **Causa:** por encima de ~40.000 filas, XLA en CPU pasa a una estrategia del gradiente de los *gather* ~100 veces
+    más lenta (980 ms por gradiente frente a 7–12 ms).
+  - **Solución:** la verosimilitud se evalúa por trozos de 8.192 filas (`modelo.TROZO`), sumando las
+    log-verosimilitudes. La log-densidad coincide con la de antes hasta 10⁻¹⁶ en los tres bloques.
+  - **No cambia la F6:** el modelo es idéntico y sus bloques tienen menos filas.
+- **La divergencia del bloque de defensa** es 1 de 3.000 draws. Con R̂ y ESS en rango no se reajusta.
+  **VERIFICAR** en la recalibración si se repite.
+- **Varianza extra de los traspasos (`s_inter`):** 0,02–0,07 en DT estandarizadas, frente a 0,02–0,47 de los puentes
+  intra (`s_c`).
+  - **LECTURA:** el traspaso, con la varianza de la proyección F4, no necesita apenas ruido añadido. La incertidumbre de
+    la F4 está bien medida.
+  - Los puentes intra sí lo necesitan: el mismo jugador tiene papeles distintos en dos competiciones a la vez (sobre
+    todo en volumen: 0,25–0,47).
+
+### 4.2 Matriz de traducción publicada (`traduccion_paso2_2025-26.csv.gz`; figura `f7_traduccion_paso2.png`)
+
+Del mismo jugador al pasar de la ACB a cada competición, 2025-26, en puntos de la tasa media de la ACB; media y rango
+del 80 % (`traduccion_acb_legible_paso2_2025-26.csv`):
+
+| Hacia | Pts/100 | USG% | AST% | T2% | T3% | DREB% | TOV% |
+|---|---|---|---|---|---|---|---|
+| EuroLeague | −1,4 (−1,7 a −1,2) | −0,5 (−0,7 a −0,3) | +0,7 (+0,4 a +1,0) | −0,1 (−0,7 a +0,4) | +0,3 (−0,2 a +0,7) | +1,2 (+1,0 a +1,4) | +0,3 (+0,1 a +0,6) |
+| EuroCup | +0,1 (−0,2 a +0,5) | +0,2 (0,0 a +0,4) | +2,8 (+2,5 a +3,2) | +1,8 (+1,2 a +2,5) | +0,3 (−0,3 a +0,9) | +2,3 (+2,0 a +2,5) | +1,4 (+1,1 a +1,8) |
+| BCL | +0,7 (+0,4 a +1,0) | +0,3 (0,0 a +0,5) | +3,9 (+3,4 a +4,3) | +0,3 (−0,4 a +1,0) | +1,0 (+0,4 a +1,6) | +0,7 (+0,4 a +0,9) | +0,9 (+0,6 a +1,3) |
+| LBA | +0,8 (+0,4 a +1,1) | +0,2 (−0,1 a +0,4) | +1,7 (+1,3 a +2,1) | +1,5 (+0,8 a +2,2) | +0,9 (+0,3 a +1,6) | +1,3 (+1,0 a +1,5) | 0,0 (−0,4 a +0,3) |
+| NBA | −7,8 (−8,2 a −7,3) | −6,3 (−6,6 a −6,0) | −0,1 (−0,6 a +0,3) | −0,4 (−1,2 a +0,4) | +0,3 (−0,4 a +1,0) | +0,3 (0,0 a +0,6) | −0,9 (−1,3 a −0,5) |
+| G League | −1,2 (−1,6 a −0,8) | −1,9 (−2,2 a −1,6) | +3,5 (+3,1 a +4,1) | +1,9 (+1,2 a +2,6) | +1,0 (+0,5 a +1,6) | +2,0 (+1,7 a +2,3) | +0,1 (−0,2 a +0,5) |
+| Primera FEB | +3,0 (+2,3 a +3,6) | +2,1 (+1,7 a +2,6) | +2,8 (+2,0 a +3,6) | −0,2 (−1,2 a +0,8) | +1,0 (+0,2 a +1,8) | +2,3 (+1,8 a +2,8) | −0,5 (−1,0 a 0,0) |
+| Segunda FEB | +5,0 (+4,3 a +5,8) | +3,8 (+3,2 a +4,3) | +4,6 (+3,5 a +5,6) | +0,2 (−0,9 a +1,4) | +0,2 (−0,7 a +1,1) | +2,9 (+2,3 a +3,5) | −1,4 (−2,0 a −0,9) |
+| NCAA | −0,1 (−0,7 a +0,5) | −0,7 (−1,1 a −0,3) | +2,5 (+1,8 a +3,2) | +0,8 (−0,3 a +2,0) | +0,8 (−0,1 a +1,7) | +1,2 (+0,8 a +1,6) | −0,3 (−0,8 a +0,3) |
+
+**Cambios frente a la F6.1 que importan:**
+- **NCAA, puntos:** de −2,1 (−4,5 a +0,1) a −0,1 (−0,7 a +0,5). Un jugador de nivel ACB anotaría en la NCAA lo mismo
+  por posesión, pero con menos uso (−0,7) y más asistencias (+2,5).
+- **NBA, puntos:** de −6,4 (−7,1 a −5,6) a −7,8 (−8,2 a −7,3). Es el mayor desplazamiento (|z| ≈ 2).
+  - **LECTURA:** los puentes intra de la NBA son casi todos NBA–G League (contratos dual). Los traspasos añaden el salto
+    directo Europa → NBA, que es más duro.
+- **FEB, asistencias:** de +6,3 (+4,3 a +8,5) y +6,8 (+4,3 a +9,5) a +2,8 y +4,6. La F6.1 tenía 39–73 puentes; los
+  traspasos acotan el efecto.
+- **NCAA, asistencias:** de −1,1 (−3,1 a +1,3) a +2,5 (+1,8 a +3,2).
+
+### 4.3 Ciclos (`ciclos_paso2.csv`)
+
+- **Estimación conjunta:** residuo máximo de los triángulos 1,1·10⁻¹⁶ (coherente por construcción).
+- **Por pares independientes (sólo puentes intra):** mediana |r| 0,11, igual que en la F6.1. Es la incoherencia que
+  evita la estimación conjunta.
+
+### 4.4 Precisión y compatibilidad frente a la F6.1 (`paso2_frente_paso1_nuts.csv`)
+
+DT de λ del paso 2 ÷ DT de la F6.1 (NUTS frente a NUTS, 2025-26, mediana de las 14 métricas):
+
+| Liga | Ratio | | Liga | Ratio |
+|---|---|---|---|---|
+| NCAA | 0,34 | | BSL | 0,73 |
+| Primera, Segunda y Tercera FEB | 0,45–0,46 | | VTB | 0,77 |
+| G League | 0,50 | | BNXT | 0,81 |
+| NBA | 0,56 | | BBL, LNB | 0,85–0,89 |
+| NBL, CBA | 0,68 | | EuroLeague, GBL, FEC, LBA | 0,90–0,91 |
+| | | | EuroCup, BCL | 0,95–0,97 |
+
+- Las ganancias son menores que en el GLS (§2.4) porque la NUTS de la F6.1 ya tomaba prestada información entre
+  temporadas y entre métricas.
+- **Compatibilidad:** mediana de |z| 0,54, percentil 90 1,62. Un 3,4 % supera |z| > 2 (lo esperable por azar es ~4,6 %).
+  - Los mayores: PF/40 en la NCAA (z −3,0) y en la NBA (+2,6), 3PAr en la NBA (+2,7), USG% en la BNXT (+3,0).
+  - PF/40 vuelve a aparecer (§7, riesgo 2).
+
+### 4.5 ¿Sirvió reagrupar los bloques? (`correlacion_metricas_paso2.csv`)
+
+Correlación entre métricas de los efectos de liga (entre ligas, 2025-26, media sobre draws):
+
+| Par | F6.1 (bloque) | Paso 2 (bloque) |
+|---|---|---|
+| pts/100 – USG% | 0,95 (distintos) | **0,99** (volumen y papel) |
+| pts/100 – AST% | 0,86 (distintos) | 0,83 (volumen y papel) |
+| pts/100 – DREB% | 0,75 (distintos) | 0,80 (volumen y papel) |
+| pts/100 – OREB% | 0,64 (distintos) | 0,64 (volumen y papel) |
+| PF/40 – TOV% | 0,47 (distintos) | 0,69 (defensa y cuidado) |
+| BLK% – STL/100 | 0,71 (mismo) | 0,41 (mismo) |
+
+- **LECTURA:** las correlaciones que motivaron el cambio se confirman dentro del bloque. pts/100 y USG% son casi el
+  mismo efecto de liga: una liga que quita uso quita puntos en la misma proporción.
+- **Lo que no se puede separar:** la ganancia de precisión de §4.4 mezcla dos cosas, los traspasos y el reagrupamiento.
+  Separarlas exigiría ajustar el paso 1 con los bloques nuevos (~2 h). No cambia ninguna decisión, así que no se hizo.
+- **Dónde se nota más el reagrupamiento:** en las ligas mal conectadas. Por ejemplo, en la NCAA y las FEB el rango de
+  AST% y DREB% se estrecha a la par que el de pts/100.
 
 ## 5. Interpretación (LECTURA)
 
@@ -293,14 +399,44 @@ __SECCION_NUTS__
   el paso 2 va en `lambda_paso2_<bloque>.npz` y `traduccion_paso2_2025-26.csv.gz`.
 - **No versionado:** `seleccion_base.parquet`, `seleccion_casos.parquet`, `paso1_frente_paso2.parquet` y
   `contexto_*_paso2.parquet` (regenerables).
-- **Tests:** __TESTS__
+- **Tests:** 4 nuevos en `test_seleccion_f7.py`:
+  - recuperación del probit;
+  - regresión a la media simulada (`crudo` sesgado, `encogido` no);
+  - orden por CRPS de `comparar_variantes`;
+  - correlación entre métricas y compatibilidad de `resumen_paso2`.
+
+  Suite completa: __SUITE__
 
 ## 10. Riesgos detectados y decisiones que requieren al usuario
 
-__DECISIONES__
+1. **¿Se adopta la variante `encogido` (traspasos con el nivel encogido de la F4, sin IPW ni Heckman) para λ?** Es la de
+   menor error. El modelo de selección queda como diagnóstico en cada recalibración.
+2. **¿Se publica la traducción del paso 2 (NUTS, bloques reagrupados) en lugar de la de la F6.1?**
+   - Es compatible con ella y mucho más precisa en NCAA, FEB, NBA y G League.
+   - El mayor cambio de lectura es el salto ACB → NBA en puntos: −7,8 en lugar de −6,4.
+   - La F6.1 queda guardada (`traduccion_2025-26.csv.gz`), no se destruye.
+3. **¿Se adopta la proyección en contexto con λ del paso 2** (−1,6 % de error en los cambios de liga, §3) como la
+   versión que entra en el examen de la F8?
+4. **Pendientes de antes, sin cambios:**
+   - regenerar las capas afectadas por la corrección de fechas de los entrenadores;
+   - revisar los 134 candidatos de identidad;
+   - ampliación de la extracción (ABA, Israel, LKL, BSL 2021-25). La F6 mostró que no ayuda a las ligas mal conectadas;
+     la F7 lo confirma, porque esas ligas se identifican con los traspasos.
 
 ## 11. Siguiente fase propuesta y ajuste de inversión
 
-__SIGUIENTE__
+**F8 · Validación** (revisión 1.2, criterio 9):
+- **Examen principal:** producción de la temporada siguiente de fichajes reales con su equipo real (banco V32_corte,
+  ~4.956 fichajes), frente al motor v3.3 y la v4.2.
+- Más el examen de nivel por simulación (SBC) y el resto del protocolo 1.1.
+- **Criterio 10:** anchura del intervalo frente a la v3.3 con la misma cobertura.
+- **Criterio 11:** navaja para el estilo de liga y de compañeros en ese examen.
+- **Pendientes que se resuelven en la F8:**
+  - sobrecobertura de BLK% (decisión de la F4);
+  - cobertura al ir a la NBA y la G League (75,7 %);
+  - PF/40 en los traspasos.
+
+**Inversión: alta.** Es el examen que decide si la v5 sustituye al motor publicado. Usa todo lo construido de la F3 a la
+F7, sin modelos nuevos.
 
 **Esperando GO.**
