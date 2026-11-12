@@ -7,6 +7,9 @@ Pasos:
 - predicciones: predicciones fuera de tiempo de la v5 (2023-24 a 2025-26) con sus variantes
 - banco: banco de fichajes reales V32_corte con la producción aplicada de la v3.3 (y el centro de la v4.2)
 - fichajes: examen principal (WIS con IC por persona, cobertura, anchura, navaja de estilos)
+- protocolo: protocolo de la F1 (v5 frente a v3.2, v2 y v1 en los mismos cambios de liga)
+- lolo · puentes_fuera · sbc: capa de ligas (dejar fuera una liga, jugadores puente dejados fuera, SBC de λ)
+- fugas: auditoría de fugas
 """
 from __future__ import annotations
 
@@ -39,6 +42,30 @@ def main(argv=None):
             out = {"filas": len(VF.banco_v33())}
         elif paso == "fichajes":
             out = VF.comparar(cfg)
+        elif paso == "protocolo":
+            from bbnorm5.validacion import protocolo as VP
+            out = VP.comparar(cfg, C.cargar("configs/v5/f1.yaml"))
+        elif paso in ("lolo", "puentes_fuera", "sbc"):
+            from bbnorm5.validacion import ligas as VL
+            cfg7 = C.cargar("configs/v5/f7.yaml")
+            if paso == "lolo":
+                d = VL.lolo(cfg7)
+                g = d.groupby("variante")
+                out = {"error_rel_mediana": g["error_rel"].median().round(3).to_dict(),
+                       "cobertura80": g["cubre80"].mean().round(3).to_dict()}
+            elif paso == "puentes_fuera":
+                d = VL.puentes_fuera(cfg7, semilla=cfg["semilla"])
+                g = d.groupby("variante")
+                out = {"cobertura80": g["z"].apply(lambda z: float((z.abs() <= 1.2816).mean())).round(3).to_dict(),
+                       "crps_medio": g["crps"].mean().round(4).to_dict(), "casos": int(len(d) / 2)}
+            else:
+                d = VL.sbc_lambda(cfg7, R=int(cfg.get("sbc", {}).get("replicas", 100)), semilla=cfg["semilla"])
+                from scipy import stats
+                out = {"ks_p": float(stats.kstest(d["u"], "uniform").pvalue),
+                       "cobertura80": float(((d["u"] > 0.1) & (d["u"] < 0.9)).mean()), "n": int(len(d))}
+        elif paso == "fugas":
+            from bbnorm5.validacion import fugas as VFu
+            out = VFu.ejecutar(cfg)
         else:
             raise ValueError(paso)
         out["tiempo_s"] = round(time.time() - t0)

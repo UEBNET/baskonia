@@ -32,3 +32,6 @@ data/v5/ligas/contexto_base_paso2.parquet
 data/v5/ligas/contexto_casos_paso2.parquet
 data/v5/ligas/seleccion_casos.parquet
 data/v5/ligas/paso1_frente_paso2.parquet
+data/v5/validacion/*_casos.parquet
+data/v5/validacion/base_v5.parquet
+data/v5/validacion/predicciones_v5.parquet

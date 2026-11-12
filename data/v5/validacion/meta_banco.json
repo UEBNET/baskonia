@@ -1,0 +1,12 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F8",
+ "config": "configs/v5/f8.yaml",
+ "hash_config": "d0b6af7fdad0",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-12T08:02:42+00:00",
+ "python": "3.13.18",
+ "paso": "banco",
+ "filas": 56898,
+ "tiempo_s": 29
+}

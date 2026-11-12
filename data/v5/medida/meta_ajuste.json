@@ -3,14 +3,14 @@
  "fase": "F3",
  "config": "configs/v5/f3.yaml",
  "hash_config": "e477f3a8cf6d",
- "hash_datos_entrada": "985197aaad000bdf",
- "fecha": "2026-11-10T12:37:43+00:00",
+ "hash_datos_entrada": "34f99b1ed42d3b61",
+ "fecha": "2026-11-12T08:05:09+00:00",
  "python": "3.13.18",
  "paso": "ajuste",
  "ligas": 20,
  "sigma_comun_liga": true,
  "muestra_insuficiente": 20471,
- "casos": 1676644,
- "unidades_posterior": 629022,
- "tiempo_s": 679
+ "casos": 1676694,
+ "unidades_posterior": 628980,
+ "tiempo_s": 705
 }

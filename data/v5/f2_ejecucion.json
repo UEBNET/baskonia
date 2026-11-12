@@ -1,19 +1,27 @@
 {
  "resumen": {
   "puentes": {
-   "unidades": 73173,
-   "personas": 18461,
-   "puentes_intra": 8148,
-   "puentes_inter": 3506,
-   "aristas": 95,
-   "tiempo_s": 24
+   "unidades": 73168,
+   "personas": 18443,
+   "puentes_intra": 8153,
+   "puentes_inter": 3509,
+   "aristas": 93,
+   "tiempo_s": 27
+  },
+  "contexto": {
+   "ligas_temporada": 125,
+   "equipos_temporada": 4738,
+   "equipos_con_estilo": 0.6764457577036724,
+   "contexto_filas": 42188,
+   "contexto_con_persona": 0.9998814828861288,
+   "tiempo_s": 11
   },
   "contrato": {
    "tablas": {
     "caja_partido": 0.9917,
     "unidades": 1.0
    },
-   "tiempo_s": 5
+   "tiempo_s": 6
   }
  },
  "meta": {
@@ -22,7 +30,7 @@
   "config": "configs/v5/f2.yaml",
   "hash_config": "66cf340e27a3",
   "hash_datos_entrada": null,
-  "fecha": "2026-11-10T08:59:39+00:00",
+  "fecha": "2026-11-12T07:52:49+00:00",
   "python": "3.13.18"
  }
 }

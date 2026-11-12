@@ -3,12 +3,12 @@
  "fase": "F4",
  "config": "configs/v5/f4.yaml",
  "hash_config": "92539749a9db",
- "hash_datos_entrada": "c33bfdc10c5ec613",
- "fecha": "2026-11-11T07:43:00+00:00",
+ "hash_datos_entrada": "63bbb635adb19625",
+ "fecha": "2026-11-12T08:07:53+00:00",
  "python": "3.13.18",
  "paso": "proyeccion",
- "filas": 152636,
- "personas": 11245,
+ "filas": 152609,
+ "personas": 11243,
  "temporada": "2026-27",
- "tiempo_s": 79
+ "tiempo_s": 88
 }
