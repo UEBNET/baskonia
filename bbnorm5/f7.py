@@ -26,6 +26,8 @@ def main(argv=None):
     ap.add_argument("--config", default="configs/v5/f7.yaml")
     ap.add_argument("--pasos", nargs="*")
     ap.add_argument("--bloques", nargs="*", help="lambda_paso2: sólo estos bloques (por defecto, todos)")
+    ap.add_argument("--muestras", type=int, help="lambda_paso2: calentamiento y muestras por cadena (si un bloque no "
+                                                  "llega a R̂ < 1,01 y ESS > 400 con los de la configuración)")
     a = ap.parse_args(argv)
     cfg = C.cargar(a.config)
     resumen = {}
@@ -47,6 +49,8 @@ def main(argv=None):
             from bbnorm5 import f6
             from bbnorm5.ligas import modelo as LM
             cfg6 = C.cargar("configs/v5/f6.yaml")
+            if a.muestras:
+                cfg6["nuts"]["calentamiento"] = cfg6["nuts"]["muestras"] = int(a.muestras)
             bl = {k: v for k, v in LM.BLOQUES_PASO2.items() if not a.bloques or k in a.bloques}
             out = f6.lambda_intra(cfg6, bloques=bl, pares="pares_paso2.parquet", sufijo="paso2_")
         elif paso == "resumen_paso2":
