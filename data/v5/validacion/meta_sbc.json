@@ -2,13 +2,13 @@
  "version_modelo": "5.0",
  "fase": "F8",
  "config": "configs/v5/f8.yaml",
- "hash_config": "5df254752c8b",
+ "hash_config": "12c0d5ecb84b",
  "hash_datos_entrada": null,
- "fecha": "2026-11-12T10:43:49+00:00",
+ "fecha": "2026-11-12T15:39:41+00:00",
  "python": "3.13.18",
  "paso": "sbc",
- "ks_p": 0.08758928256707099,
- "cobertura80": 0.7983082706766917,
- "n": 26600,
- "tiempo_s": 61
+ "ks_p": 0.7879075315877808,
+ "cobertura80": 0.8016526610644258,
+ "n": 35700,
+ "tiempo_s": 180
 }

@@ -1,45 +1,45 @@
 {
  "criterio1": {
   "nivel_sim_rango": [
-   0.7801593844462764,
+   0.7798845836768343,
    0.8164007836551918
   ],
-  "nivel_sim_en_rango": "70/70",
-  "predictivo_global": 0.8262827525997635,
-  "predictivo_metricas_en_rango": "10/14",
-  "predictivo_ligas_en_rango": "15/20",
-  "predictivo_cambio_liga": 0.8284723908771775,
+  "nivel_sim_en_rango": "95/95",
+  "predictivo_global": 0.8298499303888828,
+  "predictivo_metricas_en_rango": "12/19",
+  "predictivo_ligas_en_rango": "14/20",
+  "predictivo_cambio_liga": 0.829876209993169,
   "lolo_cob80_lambda": {
    "sin_nada": 1.0,
-   "sin_puentes_intra": 0.832,
-   "sin_traspasos": 0.814
+   "sin_puentes_intra": 0.798,
+   "sin_traspasos": 0.801
   }
  },
  "criterio3": {
-  "saltos": 504,
-  "z_abs_mediana": 0.3266664533427326,
-  "cuota_z_abs_mayor_2": 0.005952380952380952,
-  "salto_rel_mediano": 0.08858671887310836,
+  "saltos": 660,
+  "z_abs_mediana": 0.3475550618586942,
+  "cuota_z_abs_mayor_2": 0.012121212121212121,
+  "salto_rel_mediano": 0.09073693163795049,
   "ciclo_conjunta_max": 1.1102230246251563e-16,
   "triangulos": 1194
  },
  "criterio5": {
-  "casos": 457518,
+  "casos": 585999,
   "ece_por_umbral": {
-   "25": 0.0206,
-   "50": 0.0145,
-   "75": 0.0303
+   "25": 0.0238,
+   "50": 0.0139,
+   "75": 0.0301
   },
   "habilidad_brier_por_umbral": {
    "25": 0.223,
-   "50": 0.27,
-   "75": 0.251
+   "50": 0.28,
+   "75": 0.261
   },
-  "ece_max_metrica": 0.06768554797595606
+  "ece_max_metrica": 0.10590057009879274
  },
  "criterio2": {
-  "metricas_mas_estrechas": "13/13",
-  "ratio_global": 0.5491064641482861
+  "metricas_mas_estrechas": "18/18",
+  "ratio_global": 0.5990708877908529
  },
  "criterio4": {
   "temporada": "2025-26",

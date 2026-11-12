@@ -4,7 +4,7 @@
  "config": "configs/v5/f8.yaml",
  "hash_config": "12c0d5ecb84b",
  "hash_datos_entrada": null,
- "fecha": "2026-11-12T12:14:31+00:00",
+ "fecha": "2026-11-12T15:33:38+00:00",
  "python": "3.13.18",
  "paso": "fugas",
  "identidades": {
@@ -15,9 +15,9 @@
  },
  "rol_volumen_todas": {
   "metrica": "todas",
-  "casos": 180978,
-  "condicionada_frente_ex_ante": -0.06397478199294593,
-  "solo_exposicion_t_frente_ex_ante": 0.0024089323611071745
+  "casos": 234158,
+  "condicionada_frente_ex_ante": -0.05756240617885999,
+  "solo_exposicion_t_frente_ex_ante": 0.004191568125079481
  },
- "tiempo_s": 1
+ "tiempo_s": 2
 }
