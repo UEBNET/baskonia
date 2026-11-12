@@ -52,10 +52,25 @@ def _lado(pi: pd.DataFrame, s: str, metrica: str, h: pd.DataFrame) -> pd.DataFra
     return pd.DataFrame({"y": y, "v": v, "N": N})
 
 
+def _con_pista(pi: pd.DataFrame) -> pd.DataFrame:
+    """F9 bis: añade a cada lado del puente los conteos de jugada a jugada (zonas y asistidas) de la capa de medida,
+    sumados por persona, liga y temporada (temporada regular, como el resto de la medida)."""
+    cols = sorted({c for _, k, n, _ in DM.METRICAS_PBP.values() for c in (k, n)})
+    if all(f"{c}_a" in pi.columns for c in cols):
+        return pi
+    d = pd.read_parquet(DM.DIR / "partidos.parquet", columns=["persona_v5", "liga", "temporada"] + cols)
+    s = d.groupby(["persona_v5", "liga", "temporada"])[cols].sum(min_count=1).reset_index()
+    for lado in ("a", "b"):
+        pi = pi.merge(s.rename(columns={"liga": f"liga_{lado}", **{c: f"{c}_{lado}" for c in cols}}),
+                      on=["persona_v5", f"liga_{lado}", "temporada"], how="left")
+    return pi
+
+
 def pares(temporadas: list[str], min_minutos: float = 50.0) -> pd.DataFrame:
     """Tabla larga: una fila por puente y métrica."""
     pi = pd.read_parquet(C.DIR_DATOS / "puentes" / "puentes_intra.parquet")
     pi = pi[pi["temporada"].isin(temporadas) & (pi["min_a"] >= min_minutos) & (pi["min_b"] >= min_minutos)].reset_index(drop=True)
+    pi = _con_pista(pi)
     h = pd.read_csv(DM.DIR / "hiperparametros.csv")
     h = h[h["datos"] == "temporada"].sort_values("modelo").drop_duplicates(["liga", "temporada", "metrica"], keep="last")
     ctx = pd.DataFrame({
