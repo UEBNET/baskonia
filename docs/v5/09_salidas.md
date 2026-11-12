@@ -372,6 +372,7 @@ siguen en su liga), es demasiado estrecho para quien cambia. **RIESGO** (§9).
   - los pasos para regenerar y republicar allí con las 21 ligas.
 - Tests: 6 nuevos en `test_salidas_f9.py` (sello, grupos, factores de recalibración, umbrales, derivadas, por 100) y 1
   en `test_validacion_f8.py` (alineación de factores).
+- Suite completa en verde: **380 passed**.
 
 ## 9. Riesgos detectados y decisiones que requieren al usuario
 
