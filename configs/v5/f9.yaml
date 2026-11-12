@@ -15,3 +15,6 @@ sello:                         # regla fijada antes de ver las salidas (glosario
 recalibracion:
   aplicar: true                # decisión 4 de la F8: adoptada (mejora el examen de fichajes, IC < 0; recalibracion.json)
   min_casos: 30
+# Decisión del usuario en la puerta de la F9 (12-11-2026): estas zonas pierden frente a la v3.2 en el examen de la F1
+# (+4 % a +8 %, IC que no cruza 0); el formato publicado las deja con la v3.2. La v5 las sigue calculando (destinos.parquet).
+publicar_con_v32: [pct_aro, pct_media, pct_t3_esquina]

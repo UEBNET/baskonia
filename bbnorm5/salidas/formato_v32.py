@@ -136,7 +136,7 @@ def _derivadas_normalizado(v: pd.DataFrame, comp: dict, nuevas: dict, k: dict, r
         _poner(v, nuevas, m32, *(j[c].to_numpy(float) * f for c in ("c", "lo", "hi", "lo50", "hi50")))
 
 
-def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
+def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict, excluir: tuple = ()) -> list:
     from bbnorm5.ligas import modelo as LM
     from bbnorm5.ligas import resumen_paso2 as LR2
     from bbnorm5.salidas import derivadas as DV
@@ -156,6 +156,8 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
         nt = niv[niv["temporada"] == t]
         nuevas, comp = {}, {}
         for m5, m3 in A_V32.items():
+            if m5 in excluir:          # decisión del usuario (puerta F9): se publica con la v3.2
+                continue
             fam = DM.METRICAS[m5][0]
             inv = _inv(fam)
             g = nt[nt["metrica"] == m5].drop_duplicates(["persona_v5", "liga"])
@@ -200,7 +202,7 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
     return escritos
 
 
-def destinos(d: pd.DataFrame, k: dict) -> list:
+def destinos(d: pd.DataFrame, k: dict, excluir: tuple = ()) -> list:
     per = pd.read_csv(C.DIR_DATOS / "limpios" / "entidades" / "personas_v5.csv", dtype=str)
     cw = per.drop_duplicates("persona_v5").set_index("persona_v5")["persona_crosswalk"]
     t = d["temporada_objetivo"].iloc[0]
@@ -213,7 +215,7 @@ def destinos(d: pd.DataFrame, k: dict) -> list:
         base.insert(0, "liga_destino", liga)
         base = base.set_index("persona_v5")
         from bbnorm5.salidas import derivadas as DV
-        lista = [(m5, m3, k[m5]) for m5, m3 in A_V32.items()] + \
+        lista = [(m5, m3, k[m5]) for m5, m3 in A_V32.items() if m5 not in excluir] + \
                 [(m, m, 100.0) for m in ("efg_pct", "ts_pct", *DV.POR_100)]
         for m5, m3, kk in lista:
             x = g[g["metrica"] == m5].set_index("persona_v5")
@@ -239,12 +241,14 @@ def generar(cfg: dict) -> dict:
     o = o[o["N"] > 0].assign(tasa=lambda x: x["K"] / x["N"])
     o = o.groupby(["persona_v5", "liga", "temporada", "metrica"], as_index=False)["tasa"].mean()
     k = factores_unidad(niv, o)
-    n = normalizado(niv, o, k)
+    excluir = tuple(cfg.get("publicar_con_v32", []))
+    n = normalizado(niv, o, k, excluir)
     anio = int(cfg["anio_objetivo"])
     temp_obj = f"{anio}-{str(anio + 1)[2:]}"
     d = pd.read_parquet(C.DIR_DATOS / "salidas" / temp_obj / "destinos.parquet")
-    e = destinos(d, k)
+    e = destinos(d, k, excluir)
     meta = {**C.metadatos(cfg, None, {"paso": "formato_v32"}), "factor_unidades": k, "normalizado": n,
-            "destinos": e, "metricas_v5": A_V32}
+            "destinos": e, "metricas_v5": {a: b for a, b in A_V32.items() if a not in excluir},
+            "publicadas_con_v32": list(excluir)}
     C.escribir_json(meta, DIR / "meta.json")
     return {"factor_unidades": k, "temporadas": len(n), "ligas_destino": len(e)}

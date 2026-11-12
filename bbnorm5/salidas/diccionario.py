@@ -86,9 +86,11 @@ def columnas_destinos() -> list[dict]:
     return out
 
 
-def columnas_formato_v32() -> list[dict]:
+def columnas_formato_v32(excluir: tuple = ()) -> list[dict]:
     out = []
     for m5, m3 in F.A_V32.items():
+        if m5 in excluir:
+            continue
         f = "formato_v32/normalizado/<temporada>.csv.gz"
         u = "unidades de la v3.2"
         if m5 != "pf_p40":
@@ -211,7 +213,7 @@ def glosario(cfg: dict) -> list[dict]:
 
 
 def generar(cfg: dict) -> dict:
-    d = columnas_destinos() + columnas_formato_v32()
+    d = columnas_destinos() + columnas_formato_v32(tuple(cfg.get("publicar_con_v32", [])))
     C.escribir_json(d, DIR / "diccionario_columnas_v5.json")
     g = glosario(cfg)
     C.escribir_json(g, DIR / "glosario_v5.json")

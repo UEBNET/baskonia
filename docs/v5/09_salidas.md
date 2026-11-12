@@ -386,6 +386,22 @@ siguen en su liga), es demasiado estrecho para quien cambia. **RIESGO** (§9).
 4. **PR [UEBNET/baskonia#7](https://github.com/UEBNET/baskonia/pull/7)** a producción: revisión y fusión, y después la
    regeneración con 21 ligas.
 
+## 9 bis. Decisiones del usuario (12-11-2026)
+
+1. **Activación (B):** la v5 **no** se activa en los artifacts hasta la F10. El formato queda preparado.
+2. **Zonas de aro, media distancia y triple de esquina:** en el formato publicado se quedan con la **v3.2**
+   (`publicar_con_v32` en `configs/v5/f9.yaml`).
+   - La v5 las sigue calculando en `destinos.parquet` para seguir mejorándolas.
+   - Del formato publicado salen 23 de las 26 métricas: 16 modeladas (tiros cortos y % asistidas incluidos) y las 7
+     derivadas.
+3. **Recalibración:** se mantiene en todas las métricas, también en BLK%, triple de esquina y media distancia, por el
+   criterio fijado.
+4. **PR [UEBNET/baskonia#7](https://github.com/UEBNET/baskonia/pull/7): fusionada** en `claude/jolly-thompson-qczxl4`
+   (`fd0bf66`).
+   - La sesión de producción que regenera con las 21 ligas y republica **no se pudo lanzar desde aquí**: el control de
+     permisos la bloqueó como despliegue a producción.
+   - Instrucciones listas para lanzarla: `docs/v5/operaciones/regeneracion_produccion_pr7.md`.
+
 ## 10. Siguiente fase propuesta y ajuste de inversión
 
 **F10 · Estudio de viabilidad aguas abajo:**
