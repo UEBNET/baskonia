@@ -52,12 +52,14 @@ VARIANTES = {
     "final_sin_companeros": (True, [b for b in TODOS if b != "companeros"]),
 }
 # ex ante (lo que se sabe al fichar): sin el bloque de volumen (usa las oportunidades reales de T), rol de T desconocido
-# (mezcla con las probabilidades de transición de rol de los años anteriores) y exposición de la temporada anterior
+# (mezcla con las probabilidades de transición de rol de los años anteriores) y exposición de T desconocida (la de la
+# temporada anterior por un cociente N_T/N_ult sorteado de los años anteriores)
 EX_ANTE = {
     "ex_ante": [b for b in TODOS if b != "volumen"],
     "ex_ante_sin_estilo_liga": [b for b in TODOS if b not in ("volumen", "estilo_liga")],
     "ex_ante_sin_companeros": [b for b in TODOS if b not in ("volumen", "companeros")],
 }
+N_EXPOSICION = 4                       # exposiciones de T sorteadas por caso (× 400 draws)
 ROLES = ["E", "A", "I", "X"]          # X: sin reparto de roles (ligas o temporadas sin jugada a jugada)
 
 
@@ -111,15 +113,24 @@ def exante(tr: pd.DataFrame, te: pd.DataFrame, fam: str, bloques: list[str], lp:
     f = LC.factor_recalibracion(tr, cols, fit, True, eta, vo)
     pr = prob_rol(tr)
     P = np.array([pr.get((ru, bool(c > 0)), np.full(len(ROLES), 1 / len(ROLES))) for ru, c in zip(te["rol_ult"], te["cl"])])
+    # exposición de T desconocida: N_ult × cociente N_T / N_ult sacado de los años de entrenamiento (por cambio de liga)
     nu = np.where(np.isfinite(te["N_ult"].to_numpy(float)) & (te["N_ult"].to_numpy(float) > 0),
                   te["N_ult"].to_numpy(float), te["N"].to_numpy(float))
+    lr = np.log((tr["N"].to_numpy(float) + 1) / (tr["N_ult"].to_numpy(float) + 1))
+    cl_tr, cl_te = (tr["cl"] > 0).to_numpy(), (te["cl"] > 0).to_numpy()
+    ok_lr = np.isfinite(lr)
+    exps = []
+    for _ in range(N_EXPOSICION):
+        r = np.where(cl_te, rng.choice(lr[ok_lr & cl_tr], len(te)) if (ok_lr & cl_tr).any() else 0.0,
+                     rng.choice(lr[ok_lr & ~cl_tr], len(te)))
+        exps.append(np.maximum((nu + 1) * np.exp(r) - 1, 1.0))
     ks_r, tn_r = [], []
     for k, rr in enumerate(ROLES):
         y, valido = con_rol(te, rr, lp)
         P[~valido, k] = 0.0
         y = LC.recalibrar(LC.aplicar(y, cols, fit, True), f)
-        ks, tn = EX.muestras_predictivas(y, fam, rng, nu)
-        ks_r.append(ks), tn_r.append(tn)
+        dr = [EX.muestras_predictivas(y, fam, rng, ne) for ne in exps]
+        ks_r.append(np.concatenate([d[0] for d in dr], axis=1)), tn_r.append(np.concatenate([d[1] for d in dr], axis=1))
     sin = P.sum(axis=1) <= 0
     if sin.any():           # ningún rol con media previa en la liga de destino: el rol observado (casos marginales)
         P[sin, te["rol"].map({r: i for i, r in enumerate(ROLES)}).fillna(3).astype(int).to_numpy()[sin]] = 1.0
