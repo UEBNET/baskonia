@@ -4,7 +4,7 @@
  "config": "configs/v5/f7.yaml",
  "hash_config": "d8ba8086030d",
  "hash_datos_entrada": null,
- "fecha": "2026-11-12T17:58:33+00:00",
+ "fecha": "2026-11-12T21:47:09+00:00",
  "python": "3.13.18",
  "paso": "lambda_paso2",
  "paso2_volumen_papel": {
@@ -16,12 +16,12 @@
   "tiempo_s": 3994
  },
  "paso2_tiro": {
-  "rhat_max": 1.03,
-  "ess_bulk_min": 210.0,
-  "ess_tail_min": 89.0,
+  "rhat_max": 1.01,
+  "ess_bulk_min": 796.0,
+  "ess_tail_min": 1076.0,
   "divergencias": 0,
-  "pasos_medios": 128.36533333333333,
-  "tiempo_s": 5729
+  "pasos_medios": 127.17066666666666,
+  "tiempo_s": 6370
  },
  "paso2_defensa_cuidado": {
   "rhat_max": 1.01,
@@ -39,5 +39,5 @@
   "pasos_medios": 127.256,
   "tiempo_s": 5820
  },
- "tiempo_s": 3996
+ "tiempo_s": 6377
 }

@@ -88,6 +88,9 @@ def correlacion_bloques(lam: dict, temporada: str) -> pd.DataFrame:
             ligas = [l for l in a["ligas"] if l in b["ligas"] and l != LM.REF]
             x = a["lam"][:, [a["ligas"].index(l) for l in ligas], a["temporadas"].index(temporada)]
             y = b["lam"][:, [b["ligas"].index(l) for l in ligas], b["temporadas"].index(temporada)]
+            # bloques con distinto número de draws (p. ej., un bloque relanzado con más muestras): submuestra regular
+            n = min(len(x), len(y))
+            x, y = x[np.linspace(0, len(x) - 1, n).astype(int)], y[np.linspace(0, len(y) - 1, n).astype(int)]
             xc, yc = x - x.mean(1, keepdims=True), y - y.mean(1, keepdims=True)
             r = (xc * yc).sum(1) / np.sqrt((xc ** 2).sum(1) * (yc ** 2).sum(1))
             filas.append({"m1": m1, "m2": m2, "mismo_bloque": a["bloque"] == b["bloque"], "r_media": r.mean(),

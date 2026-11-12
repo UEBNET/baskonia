@@ -1,0 +1,168 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F9",
+ "config": "configs/v5/f9.yaml",
+ "hash_config": "cee66a9d137d",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-12T21:54:08+00:00",
+ "python": "3.13.18",
+ "paso": "formato_v32",
+ "factor_unidades": {
+  "t2_pct": 100.0,
+  "t3_pct": 100.0,
+  "tl_pct": 100.0,
+  "tpar": 100.0,
+  "ftr": 100.0,
+  "oreb_pct": 100.0,
+  "dreb_pct": 100.0,
+  "ast_pct": 100.0,
+  "tov_pct": 100.0,
+  "blk_pct": 100.0,
+  "stl_p100": 100.0,
+  "pts_p100": 100.0,
+  "usg_pct": 100.0,
+  "pct_aro": 100.0,
+  "pct_corta": 100.0,
+  "pct_media": 100.0,
+  "pct_t3_esquina": 100.0,
+  "pct_asistidas": 100.0,
+  "pf_p40": 40.0
+ },
+ "normalizado": [
+  {
+   "temporada": "2020-21",
+   "filas": 5465,
+   "con_v5": 4282
+  },
+  {
+   "temporada": "2021-22",
+   "filas": 5987,
+   "con_v5": 4567
+  },
+  {
+   "temporada": "2022-23",
+   "filas": 6144,
+   "con_v5": 4961
+  },
+  {
+   "temporada": "2023-24",
+   "filas": 9162,
+   "con_v5": 7609
+  },
+  {
+   "temporada": "2024-25",
+   "filas": 9264,
+   "con_v5": 7656
+  },
+  {
+   "temporada": "2025-26",
+   "filas": 9648,
+   "con_v5": 7908
+  }
+ ],
+ "destinos": [
+  {
+   "liga": "acb",
+   "filas": 11246
+  },
+  {
+   "liga": "bbl",
+   "filas": 11246
+  },
+  {
+   "liga": "bcl",
+   "filas": 11246
+  },
+  {
+   "liga": "bnxt",
+   "filas": 11246
+  },
+  {
+   "liga": "bsl",
+   "filas": 11246
+  },
+  {
+   "liga": "cba",
+   "filas": 11246
+  },
+  {
+   "liga": "eurocup",
+   "filas": 11246
+  },
+  {
+   "liga": "euroleague",
+   "filas": 11246
+  },
+  {
+   "liga": "feb1",
+   "filas": 11246
+  },
+  {
+   "liga": "feb2",
+   "filas": 11246
+  },
+  {
+   "liga": "feb3",
+   "filas": 11246
+  },
+  {
+   "liga": "fec",
+   "filas": 11246
+  },
+  {
+   "liga": "gbl",
+   "filas": 11246
+  },
+  {
+   "liga": "gleague",
+   "filas": 11246
+  },
+  {
+   "liga": "lba",
+   "filas": 11246
+  },
+  {
+   "liga": "lnb",
+   "filas": 11246
+  },
+  {
+   "liga": "nba",
+   "filas": 11246
+  },
+  {
+   "liga": "nbl",
+   "filas": 11246
+  },
+  {
+   "liga": "ncaa",
+   "filas": 11246
+  },
+  {
+   "liga": "vtb",
+   "filas": 11246
+  }
+ ],
+ "metricas_v5": {
+  "t2_pct": "fg2_pct",
+  "t3_pct": "fg3_pct",
+  "tl_pct": "ft_pct",
+  "tpar": "fg3a_rate",
+  "ftr": "fta_rate",
+  "oreb_pct": "oreb_pct",
+  "dreb_pct": "dreb_pct",
+  "ast_pct": "ast_pct",
+  "tov_pct": "tov_pct",
+  "blk_pct": "blk_pct",
+  "stl_p100": "stl_p100",
+  "pts_p100": "pts_p100",
+  "usg_pct": "usg_pct",
+  "pf_p40": "pf_p40",
+  "pct_corta": "pct_corta",
+  "pct_asistidas": "pct_asistidas"
+ },
+ "publicadas_con_v32": [
+  "pct_aro",
+  "pct_media",
+  "pct_t3_esquina"
+ ]
+}

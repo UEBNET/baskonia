@@ -68,8 +68,8 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
    - Intervalo de nivel un 45 % más estrecho que el intervalo publicado por la v3.2, en las 13 métricas. Matiz: el
      intervalo de la v3.2 es, en anchura, un predictivo (§4.2).
    - Probabilidades de umbral calibradas (error medio de 1,4 a 3,0 puntos).
-   - **Criterio 4: no se cumple en tiro.** La v5 es más ancha que la v3.2 en T2% y T3% (×1,35 y ×1,44) y más estrecha en
-     3PAr (×0,77). La v3.2 se sobreconfía (F1).
+   - **Criterio 4: no se cumple en tiro.** La v5 es más ancha que la v3.2 en T2% y T3% (×1,38 y ×1,46) y más estrecha en
+     3PAr (×0,76). La v3.2 se sobreconfía (F1).
 7. **Fugas.**
    - La proyección **publicada condicionada** (rol, volumen y exposición reales de la temporada objetivo) no es una
      predicción ex ante: su ventaja de un 6,4 % es fuga.
@@ -338,11 +338,12 @@ DT de la traducción ACB → liga en 2025-26, en puntos de la tasa de la ACB; la
 
 | Métrica | v5 / v3.2 (mediana de 19 ligas) | Más estrecha la v5 en |
 |---|---|---|
-| T2% | 1,33 | FEB1, FEB2 |
-| T3% | 1,45 | FEB1, FEB2, FEB3 |
-| 3PAr | **0,75** | las 19 |
+| T2% | 1,38 | FEB1, FEB2, FEB3 |
+| T3% | 1,46 | FEB1, FEB2, FEB3 |
+| 3PAr | **0,76** | las 19 |
 
-**Rehecho con la NUTS del paso 2 con las identidades revisadas** (§6). Antes: 1,35, 1,44 y 0,77.
+**Rehecho con la NUTS del paso 2 con las identidades revisadas** (§6), incluida la repetición del bloque de tiro.
+Antes de la revisión de identidades: 1,35, 1,44 y 0,77.
 
 **No se cumple en tiro.** La DT de la v3.2 no es comparable en confianza: en la F1, sus ligas mejor conectadas cubrían
 0,72–0,76 y la LOLO daba errores de 0,27–2,05 DT. La v5 está calibrada (SBC §4.6, LOLO §3.4).
@@ -417,19 +418,19 @@ temporada):
 |---|---|---|---|---|
 | volumen_papel | 1,01 | 762 / 1.122 | 0 | 67 min |
 | defensa_cuidado | 1,01 | 793 / 434 | 3 en 3.000 | 83 min |
-| tiro | **1,03** | **210 / 89** | 0 | 95 min |
+| tiro (repetido con 1.500 + 1.500 draws por cadena) | 1,01 | 796 / 1.076 | 0 | 106 min |
 | zonas (F9 bis, nuevo) | 1,01 | 371 / 580 | 0 | 97 min |
 
-- **Tiro no cumple el umbral** (R̂ < 1,01 y ESS > 400) en 3 de sus 610 parámetros, todos de TL%:
-  - la DT base de λ (`s_base[2]`): ESS 210 en el centro y 89 en las colas, R̂ 1,03;
-  - λ de dos ligas en 2020-21: R̂ 1,02.
-
-  Es la geometría de una DT jerárquica cerca de 0: el TL% apenas varía entre ligas (DT base 0,043). La ejecución
-  anterior del mismo bloque sí cumplía (R̂ 1,01, ESS 425).
-  - **En curso:** repetición con 1.500 + 1.500 draws por cadena. Si tampoco llega, la solución es reparametrizar esa DT,
-    no más draws.
+- **Tiro, repetido.** La primera ejecución no cumplía el umbral (R̂ < 1,01 y ESS > 400) en 3 de sus 610 parámetros,
+  todos de TL%: la DT base de λ (`s_base[2]`, ESS 210 / 89, R̂ 1,03) y λ de dos ligas en 2020-21 (R̂ 1,02).
+  - Causa: la geometría de una DT jerárquica cerca de 0; el TL% apenas varía entre ligas (DT base 0,043).
+  - Con el doble de draws por cadena cumple con holgura: R̂ 1,01, ESS 796 en el centro y 1.076 en las colas, sin
+    divergencias. No hace falta reparametrizar; queda como mejora opcional para la F10 si se quiere acortar el tiempo.
+  - El bloque de tiro tiene ahora 6.000 draws y los demás 3.000; la correlación entre bloques submuestra al mínimo común.
 - **Efecto en la traducción publicada:** mínimo.
   - ACB → NBA en pts/100: −7,82 (antes −7,76); ACB → FEB1: +2,98 (antes +2,95); ACB → EuroLeague: −1,43 (igual).
+  - En tiro, la repetición mueve la traducción desde la ACB como mucho 0,02 puntos en T2%, T3% y TL% y 0,04 en 3PAr
+    y FTr (p. ej., ACB → NBA en T2%: −0,54 frente a −0,55 de la primera ejecución). Los demás bloques no cambian.
   - Compatibilidad con el paso 1: |z| mediano 0,55; 4,1 % por encima de 2 (en la F7: 0,54 y 3,4 %).
   - DT del efecto de liga frente a la F6.1: NCAA 0,34; FEB 0,45–0,46; G League y NBA 0,50–0,55; Europa 0,72–0,96.
 - **Ciclos:** residuo de la conjunta ≤ 2,2 × 10⁻¹⁶ en 1.554 triángulos.
@@ -479,12 +480,14 @@ temporada):
 3. **RIESGO · tiro en cambios de liga:** la v5 pierde frente a la v3.2 en T2% y T3%.
    - **VERIFICAR:** un término de cambio de liga por familia de tiro en la F6.2, o la recalibración del punto 1.
 4. **VERIFICAR · DREB% en las FEB:** salto de 3 DT entre 2023 y 2024 (§4.3).
-5. **VERIFICAR · NUTS del paso 2** con las identidades revisadas (§6) y el criterio 4 con ella.
+5. **Hecho · NUTS del paso 2** con las identidades revisadas: los cuatro bloques cumplen R̂ ≤ 1,01 y ESS > 400 (tiro,
+   tras repetirlo con el doble de draws; §6). El criterio 4 está rehecho con ella.
 
 ## 10. Diagnósticos de inferencia
 
 - **SBC de λ:** §4.6.
-- **NUTS del paso 2:** §6, en curso. La anterior: R̂ ≤ 1,01, ESS ≥ 425 y 1 divergencia en 3.000 draws.
+- **NUTS del paso 2:** §6. Los cuatro bloques con R̂ ≤ 1,01 y ESS ≥ 371; 3 divergencias en 3.000 draws (defensa_cuidado).
+  La anterior: R̂ ≤ 1,01, ESS ≥ 425 y 1 divergencia en 3.000 draws.
 - **Examen por simulación de la F4:** rehecho, 118 s.
 - **Predicciones v5:** 1.447.824 filas, 8 modelos, 19 min.
 - **Semilla** F8 20261116. Bootstrap de 1.000 réplicas por jugadores.

@@ -41,5 +41,3 @@ data/v5/validacion/*_casos_*.parquet
 data/v5/validacion/predicciones_v5_*.parquet
 data/v5/salidas/*/draws_liga_actual.parquet
 data/v5/salidas/*/destinos.parquet
-# provisional hasta la traducción definitiva (NUTS del paso 2 completa): se versiona entonces
-data/v5/salidas/formato_v32/

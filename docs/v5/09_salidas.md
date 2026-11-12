@@ -58,11 +58,12 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
 5. **El sello ordena la incertidumbre** dentro de cada métrica: anchura del predictivo relativa a la mediana de la
    métrica de 0,88 (alta), 0,94 (media) y 1,50 (baja).
 6. **Formato para el artifact sin modificarlo.** El CSV de cada temporada tiene las mismas filas y columnas que el de la
-   v3.2 (equivalente EuroLeague 2025-26), con la v5 en las 26 métricas y la v3.2 conservada en `<m>_v32`. Activarlo es
+   v3.2 (equivalente EuroLeague 2025-26), con la v5 en 23 de las 26 métricas (aro, media distancia y triple de esquina siguen en la v3.2, decisión 2) y la
+   v3.2 conservada en `<m>_v32`. Activarlo es
    cambiar la carpeta de origen (§6).
-7. **Pendiente para cerrar la publicación:**
-   - la NUTS del paso 2 de los bloques volumen_papel y zonas, y repetir el de tiro (R̂ 1,03 en la DT base de TL%);
-   - después, el formato v3.2 (usa esa traducción) y el criterio 4.
+7. **Traducción publicada completa.** Los cuatro bloques de la NUTS del paso 2 cumplen R̂ ≤ 1,01 y ESS > 400 (tiro,
+   tras repetirlo con el doble de draws). El formato v3.2 y el criterio 4 están rehechos con ella y el formato se
+   versiona en `data/v5/salidas/formato_v32/`.
 
 ---
 
@@ -245,14 +246,18 @@ siguen en su liga), es demasiado estrecho para quien cambia. **RIESGO** (§9).
 ### 2.5 Formato para el artifact (`formato_v32/`)
 
 Regenerado con la traducción publicada actual y con aro, media distancia y triple de esquina en la v3.2 (decisión 2).
-Se versiona cuando termine la repetición del bloque de tiro: es la que fija T2%, T3%, TL%, 3PAr y FTr en el
-equivalente EuroLeague.
+Versionado con la traducción definitiva (los cuatro bloques de la NUTS del paso 2 convergidos; §7): 27 ficheros,
+224 MB, el mayor de 24 MB.
 
-- **Normalizado por temporada.** 6 temporadas, 111 MB; 2024-25: 9.264 filas, como la v3.2, y 1.075 columnas (879 de
-  la v3.2 + 196 nuevas). No falta ninguna columna de la v3.2.
-- **Cobertura de la v5:** 7.656 filas con alguna métrica de la v5 (`fuente_norm` = «V5+V3.2»); 1.608 sólo con la v3.2,
-  porque no tienen persona v5.
-- **Destinos.** 20 ligas, 119 MB.
+- **Normalizado por temporada.** 6 temporadas, 108 MB; 2024-25: 9.264 filas, como la v3.2, y 1.051 columnas (879 de
+  la v3.2 + 172 nuevas; las tres zonas publicadas con la v3.2 no llevan columnas v5). No falta ninguna columna de la
+  v3.2.
+- **Cobertura de la v5:** 7.656 filas con alguna métrica de la v5 (`fuente_norm` = «V5+V3.2»); 1.608 sólo con la v3.2.
+  - Tienen persona v5, pero la capa de carrera no les da nivel en esa liga y temporada: mediana de 69 minutos (364 en
+    el resto), el 57 % por debajo de los 100 minutos que exige la F4 en la liga principal. Son sobre todo competiciones
+    europeas jugadas como segunda liga (BCL 276, EuroCup 123, EuroLeague 96) y la FEC (220).
+  - En las 6 temporadas, 36.983 de 45.670 filas (81 %) llevan la v5.
+- **Destinos.** 20 ligas, 107 MB.
 - **v5 frente a v3.2 en las mismas filas** (2024-25, equivalente EuroLeague 2025-26):
 
 | Métrica | Filas | Correlación | Mediana v5 | Mediana v3.2 | Ancho 80 % v5 | Ancho 80 % v3.2 |
@@ -262,19 +267,20 @@ equivalente EuroLeague.
 | T3% | 6.748 | 0,82 | 32,1 | 30,0 | 6,6 | 6,8 |
 | USG% | 7.538 | 0,95 | 15,9 | 15,2 | 5,2 | 4,8 |
 | AST% | 7.531 | 0,94 | 8,7 | 8,6 | 5,2 | 6,0 |
-| % en el aro | 6.859 | 0,94 | 28,7 | 26,3 | 14,8 | 13,5 |
-| % media distancia | 6.859 | 0,83 | 5,9 | 5,4 | 5,6 | 6,2 |
-| % triple de esquina | 6.859 | 0,80 | 5,4 | 4,9 | 5,9 | 5,1 |
+| % tiros cortos | 6.859 | 0,82 | 20,3 | 18,9 | 11,2 | 10,2 |
 | % asistidas | 7.015 | 0,91 | 61,9 | 64,0 | 15,6 | 17,9 |
 | eFG% | 6.168 | 0,89 | 50,1 | 48,5 | 6,5 | 7,6 |
 | TS% | 6.168 | 0,91 | 53,3 | 51,8 | 6,4 | 7,4 |
 | OREB/100 | 7.538 | 0,96 | 1,86 | 1,86 | 1,12 | 1,17 |
 | BLK/100 | 7.538 | 0,93 | 0,42 | 0,24 | 0,42 | 0,40 |
 | STL% | 7.538 | 0,80 | 1,60 | 1,41 | 0,74 | 0,70 |
-| PF/100 | 7.538 | 0,88 | 7,2 | 7,0 | 2,7 | 2,5 |
+| PF/100 | 7.538 | 0,89 | 7,2 | 7,0 | 2,7 | 2,5 |
+
+Aro, media distancia y triple de esquina no salen en la tabla: se publican con la v3.2 (decisión 2). Antes de
+excluirlas, sus correlaciones con la v3.2 eran 0,94, 0,83 y 0,80.
 
 **LECTURA.**
-- Las dos versiones ordenan a los jugadores de forma parecida (correlación 0,80–0,96).
+- Las dos versiones ordenan a los jugadores de forma parecida (correlación 0,80–0,96 en las métricas publicadas).
 - El ancho del 80 % en esta tabla es el **equivalente EuroLeague**: suma la incertidumbre del nivel y la de la
   traducción. Por eso es parecido al de la v3.2, aunque el nivel en su liga sea un 40 % más estrecho (§2.2).
 - **BLK% (y BLK/100):** la mediana del nivel de la v5 (1,0 % en su liga) supera la del observado (0,6 %), sobre todo
@@ -346,9 +352,8 @@ equivalente EuroLeague.
    activarlas.
 4. **VERIFICAR · TS% y eFG% sin probabilidades de umbral propias:** faltan los percentiles de la liga × rol de esas dos
    métricas.
-5. **VERIFICAR · NUTS del paso 2:** volumen_papel, defensa_cuidado y zonas, hechas; tiro, en repetición con más draws
-   (informe 08 §6). El formato v3.2 y el criterio 4
-   esperan a la traducción publicada completa.
+5. **Hecho · NUTS del paso 2:** los cuatro bloques convergen (§7; informe 08 §6). El formato v3.2 y el criterio 4
+   están rehechos con la traducción completa.
 6. **RIESGO · volumen:** el parquet completo (656 MB) y los draws (637 MB) no se versionan; se regeneran con la orden de
    la cabecera.
 
@@ -361,7 +366,7 @@ equivalente EuroLeague.
 | Bloque | Estado | R̂ máx. | ESS mín. (centro / colas) | Divergencias |
 |---|---|---|---|---|
 | defensa_cuidado | Hecho | 1,01 | 793 / 434 | 3 en 3.000 |
-| tiro | Por repetir con 1.500 + 1.500 draws por cadena | 1,03 (DT base de TL%) | 210 / 89 | 0 |
+| tiro | Hecho, repetido con 1.500 + 1.500 draws por cadena (la primera ejecución: R̂ 1,03 y ESS 210 / 89 en la DT base de TL%) | 1,01 | 796 / 1.076 | 0 |
 | zonas | Hecho | 1,01 | 371 / 580 | 0 |
 | volumen_papel | Hecho | 1,01 | 762 / 1.122 | 0 |
 
@@ -415,6 +420,6 @@ equivalente EuroLeague.
 - Impacto y RAPM;
 - Landing.
 
-Sin NUTS nuevas, salvo las del paso 2 pendientes de la F9.
+Sin NUTS nuevas.
 
 Esperando GO.

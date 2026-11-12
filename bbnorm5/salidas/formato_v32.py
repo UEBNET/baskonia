@@ -198,7 +198,7 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict, excluir: tuple = 
         num = v.select_dtypes("number").columns
         v[num] = v[num].round(4)
         v.to_csv(DIR / "normalizado" / f"{t}.csv.gz", index=False, compression="gzip")
-        escritos.append({"temporada": t, "filas": len(v), "con_v5": int((v["persona_v5"].notna()).sum())})
+        escritos.append({"temporada": t, "filas": len(v), "con_v5": int((v["fuente_norm"] == "V5+V3.2").sum())})
     return escritos
 
 
