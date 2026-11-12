@@ -4,9 +4,9 @@
  "config": "configs/v5/f8.yaml",
  "hash_config": "12c0d5ecb84b",
  "hash_datos_entrada": null,
- "fecha": "2026-11-12T11:56:30+00:00",
+ "fecha": "2026-11-12T15:05:33+00:00",
  "python": "3.13.18",
  "paso": "base",
- "filas": 260930,
- "tiempo_s": 7
+ "filas": 338002,
+ "tiempo_s": 10
 }
