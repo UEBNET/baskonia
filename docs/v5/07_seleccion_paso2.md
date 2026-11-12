@@ -423,6 +423,19 @@ Correlación entre métricas de los efectos de liga (entre ligas, 2025-26, media
    - ampliación de la extracción (ABA, Israel, LKL, BSL 2021-25). La F6 mostró que no ayuda a las ligas mal conectadas;
      la F7 lo confirma, porque esas ligas se identifican con los traspasos.
 
+## 10 bis. Decisiones del usuario (12-11-2026)
+
+1. **Se adopta la variante `encogido`** (traspasos con el nivel encogido de la F4, sin IPW ni Heckman) para λ. El modelo
+   de selección queda como diagnóstico en cada recalibración.
+2. **Se publica la traducción del paso 2** (NUTS, bloques reagrupados) en lugar de la de la F6.1.
+   - Manifiesto: `data/v5/ligas/traduccion_publicada.json`.
+   - La F6.1 se conserva (`traduccion_2025-26.csv.gz`, `lambda_<bloque>.npz`).
+3. **Entra en el examen de la F8 la proyección en contexto con λ del paso 2.**
+4. **GO a la F8**, con todos los pendientes:
+   - regenerar las capas afectadas por la fecha de los entrenadores;
+   - revisar los 134 candidatos de identidad.
+   - **No se amplía la extracción a más ligas por ahora.**
+
 ## 11. Siguiente fase propuesta y ajuste de inversión
 
 **F8 · Validación** (revisión 1.2, criterio 9):

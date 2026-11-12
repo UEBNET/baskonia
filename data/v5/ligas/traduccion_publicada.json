@@ -1,0 +1,18 @@
+{
+ "version_modelo": "5.0",
+ "decision": "usuario 12-11-2026 (puerta F7)",
+ "temporada": "2025-26",
+ "traduccion": "data/v5/ligas/traduccion_paso2_2025-26.csv.gz",
+ "traduccion_acb_legible": "data/v5/ligas/traduccion_acb_legible_paso2_2025-26.csv",
+ "lambda": {
+  "volumen_papel": "data/v5/ligas/lambda_paso2_volumen_papel.npz",
+  "tiro": "data/v5/ligas/lambda_paso2_tiro.npz",
+  "defensa_cuidado": "data/v5/ligas/lambda_paso2_defensa_cuidado.npz"
+ },
+ "diagnosticos": "data/v5/ligas/lambda_paso2_diagnosticos.json",
+ "proyeccion_en_contexto": {
+  "lambda": "GLS por corte, variante encogido (data/v5/ligas/lambda_paso2_modelos.pkl)",
+  "modelo": "liga+peso+todos+recal"
+ },
+ "sustituye_a": "data/v5/ligas/traduccion_2025-26.csv.gz (F6.1, conservada)"
+}
