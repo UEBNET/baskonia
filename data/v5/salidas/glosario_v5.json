@@ -42,6 +42,12 @@
   "en": "Player who plays in two competitions in the same season (e.g. domestic league and a European cup). Compares the two leagues while the player is unchanged."
  },
  {
+  "termino": "métrica derivada",
+  "term": "derived metric",
+  "es": "Métrica de la v3.2 que la v5 no mide directamente y calcula desde las suyas: TS% y eFG% con draws conjuntos de T2%, T3%, TL%, 3PAr y FTr (correlación de la capa latente); OREB/100, DREB/100, BLK/100, STL% y PF/100 convirtiendo la tasa de la v5 con las oportunidades por posesión de la liga.",
+  "en": "A v3.2 metric that v5 does not measure directly and computes from its own: TS% and eFG% from joint draws of 2P%, 3P%, FT%, 3PAr and FTr (latent-layer correlation); OREB/100, DREB/100, BLK/100, STL% and PF/100 by converting the v5 rate with the league's opportunities per possession."
+ },
+ {
   "termino": "ex ante",
   "term": "ex ante",
   "es": "Lo que se sabe al fichar: rol, minutos y oportunidades de la temporada siguiente desconocidos. Es la proyección por defecto; la que fija rol y minutos es un escenario.",

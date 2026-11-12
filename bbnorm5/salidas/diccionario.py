@@ -122,6 +122,27 @@ def columnas_formato_v32() -> list[dict]:
                 _c(f"{m3}_p_supera_p50", "destino", "P(nivel > mediana de la liga de destino × rol)",
                    "P(level > median of destination league × role)", "probabilidad", g),
                 _c(f"{m3}_sello", "destino", "Sello de fiabilidad", "Reliability seal", "", g)]
+    # F9 bis: derivadas (TS%, eFG% y variantes por 100 posesiones), mismas columnas que las demás
+    f = "formato_v32/normalizado/<temporada>.csv.gz"
+    g = "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+    deriv = {"efg_pct": ("eFG% derivado de T2%, T3% y 3PAr de la v5 (draws conjuntos con la correlación de la F5)",
+                         "eFG% derived from v5 T2%, T3% and 3PAr (joint draws with the F5 correlation)"),
+             "ts_pct": ("TS% derivado de T2%, T3%, TL%, 3PAr y FTr de la v5 (draws conjuntos)",
+                        "TS% derived from v5 T2%, T3%, FT%, 3PAr and FTr (joint draws)"),
+             "oreb_p100": ("OREB/100 = OREB% de la v5 × rebotes disponibles por posesión de la liga × 100",
+                           "OREB/100 = v5 OREB% × league rebound chances per possession × 100"),
+             "dreb_p100": ("DREB/100 = DREB% de la v5 × rebotes disponibles por posesión de la liga × 100",
+                           "DREB/100 = v5 DREB% × league rebound chances per possession × 100"),
+             "blk_p100": ("BLK/100 = BLK% de la v5 × tiros de dos del rival por posesión de la liga × 100",
+                          "BLK/100 = v5 BLK% × league opponent 2PA per possession × 100"),
+             "stl_pct": ("STL% = robos por posesión del rival de la v5 × 100", "STL% = v5 steals per opponent possession × 100"),
+             "pf_p100": ("PF/100 = faltas por minuto de la v5 × minutos por posesión de la liga × 100",
+                         "PF/100 = v5 fouls per minute × league minutes per possession × 100")}
+    for m3, (es, en) in deriv.items():
+        out += [_c(m3, "v5 derivada", es + "; si `fuente` = V5", en + "; if source is V5", "unidades de la v3.2", f),
+                _c(f"{m3}_v32", "v3.2", "Valor publicado por la v3.2 (conservado)", "Value published by v3.2 (kept)", "", f),
+                _c(f"fuente_{m3}", "v5 derivada", "V5 si la fila tiene la derivada de la v5", "V5 if derived from v5", "", f),
+                _c(f"{m3}_nivel", "destino", es + " (nivel en la liga de destino, mediana)", en + " (destination level)", "", g)]
     out.append(_c("fuente_norm", "v5", "V5+V3.2 si alguna métrica viene de la v5", "V5+V3.2 if any metric comes from v5", "",
                   "formato_v32/normalizado/<temporada>.csv.gz"))
     return out
@@ -174,6 +195,13 @@ def glosario(cfg: dict) -> list[dict]:
                "Compara las dos ligas sin que el jugador haya cambiado.",
          "en": "Player who plays in two competitions in the same season (e.g. domestic league and a European cup). "
                "Compares the two leagues while the player is unchanged."},
+        {"termino": "métrica derivada", "term": "derived metric",
+         "es": "Métrica de la v3.2 que la v5 no mide directamente y calcula desde las suyas: TS% y eFG% con draws conjuntos "
+               "de T2%, T3%, TL%, 3PAr y FTr (correlación de la capa latente); OREB/100, DREB/100, BLK/100, STL% y PF/100 "
+               "convirtiendo la tasa de la v5 con las oportunidades por posesión de la liga.",
+         "en": "A v3.2 metric that v5 does not measure directly and computes from its own: TS% and eFG% from joint draws "
+               "of 2P%, 3P%, FT%, 3PAr and FTr (latent-layer correlation); OREB/100, DREB/100, BLK/100, STL% and PF/100 "
+               "by converting the v5 rate with the league's opportunities per possession."},
         {"termino": "ex ante", "term": "ex ante",
          "es": "Lo que se sabe al fichar: rol, minutos y oportunidades de la temporada siguiente desconocidos. Es la "
                "proyección por defecto; la que fija rol y minutos es un escenario.",

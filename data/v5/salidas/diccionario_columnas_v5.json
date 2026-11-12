@@ -2781,6 +2781,1113 @@
   "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
  },
  {
+  "columna": "pct_aro",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "pct_aro: **nivel v5** de la temporada en su liga (mediana) si `fuente_pct_aro` = V5; si no, la v3.2",
+  "descripcion_en": "pct_aro: **v5 level** of the season in own league (median) if source is V5; otherwise v3.2",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_lo",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 80 % del nivel",
+  "descripcion_en": "Lower end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_hi",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 80 % del nivel",
+  "descripcion_en": "Upper end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_pctel",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Percentil del nivel en su liga y temporada",
+  "descripcion_en": "Percentile of the level in league and season",
+  "unidades": "0–100",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_v32_lo",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior de la v3.2",
+  "descripcion_en": "v3.2 lower end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_v32_hi",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior de la v3.2",
+  "descripcion_en": "v3.2 upper end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_lo50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 50 % del nivel",
+  "descripcion_en": "Lower end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_hi50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 50 % del nivel",
+  "descripcion_en": "Upper end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_obs_v5",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Observado de la temporada según la v5",
+  "descripcion_en": "Season observed value per v5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_pct_aro",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene nivel v5; V3.2 si no",
+  "descripcion_en": "V5 if the row has a v5 level; V3.2 otherwise",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel en la liga de destino (mediana)",
+  "descripcion_en": "Level in destination league (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_nivel_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 10",
+  "descripcion_en": "Level: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_nivel_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 90",
+  "descripcion_en": "Level: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_pred",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo de la temporada objetivo (mediana)",
+  "descripcion_en": "Target-season predictive (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_pred_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 10",
+  "descripcion_en": "Predictive: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_pred_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 90",
+  "descripcion_en": "Predictive: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_p_supera_p50",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "P(nivel > mediana de la liga de destino × rol)",
+  "descripcion_en": "P(level > median of destination league × role)",
+  "unidades": "probabilidad",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_aro_sello",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Sello de fiabilidad",
+  "descripcion_en": "Reliability seal",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "pct_corta: **nivel v5** de la temporada en su liga (mediana) si `fuente_pct_corta` = V5; si no, la v3.2",
+  "descripcion_en": "pct_corta: **v5 level** of the season in own league (median) if source is V5; otherwise v3.2",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_lo",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 80 % del nivel",
+  "descripcion_en": "Lower end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_hi",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 80 % del nivel",
+  "descripcion_en": "Upper end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_pctel",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Percentil del nivel en su liga y temporada",
+  "descripcion_en": "Percentile of the level in league and season",
+  "unidades": "0–100",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_v32_lo",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior de la v3.2",
+  "descripcion_en": "v3.2 lower end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_v32_hi",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior de la v3.2",
+  "descripcion_en": "v3.2 upper end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_lo50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 50 % del nivel",
+  "descripcion_en": "Lower end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_hi50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 50 % del nivel",
+  "descripcion_en": "Upper end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_obs_v5",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Observado de la temporada según la v5",
+  "descripcion_en": "Season observed value per v5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_pct_corta",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene nivel v5; V3.2 si no",
+  "descripcion_en": "V5 if the row has a v5 level; V3.2 otherwise",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel en la liga de destino (mediana)",
+  "descripcion_en": "Level in destination league (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_nivel_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 10",
+  "descripcion_en": "Level: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_nivel_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 90",
+  "descripcion_en": "Level: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_pred",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo de la temporada objetivo (mediana)",
+  "descripcion_en": "Target-season predictive (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_pred_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 10",
+  "descripcion_en": "Predictive: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_pred_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 90",
+  "descripcion_en": "Predictive: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_p_supera_p50",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "P(nivel > mediana de la liga de destino × rol)",
+  "descripcion_en": "P(level > median of destination league × role)",
+  "unidades": "probabilidad",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_corta_sello",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Sello de fiabilidad",
+  "descripcion_en": "Reliability seal",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "pct_media: **nivel v5** de la temporada en su liga (mediana) si `fuente_pct_media` = V5; si no, la v3.2",
+  "descripcion_en": "pct_media: **v5 level** of the season in own league (median) if source is V5; otherwise v3.2",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_lo",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 80 % del nivel",
+  "descripcion_en": "Lower end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_hi",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 80 % del nivel",
+  "descripcion_en": "Upper end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_pctel",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Percentil del nivel en su liga y temporada",
+  "descripcion_en": "Percentile of the level in league and season",
+  "unidades": "0–100",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_v32_lo",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior de la v3.2",
+  "descripcion_en": "v3.2 lower end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_v32_hi",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior de la v3.2",
+  "descripcion_en": "v3.2 upper end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_lo50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 50 % del nivel",
+  "descripcion_en": "Lower end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_hi50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 50 % del nivel",
+  "descripcion_en": "Upper end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_obs_v5",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Observado de la temporada según la v5",
+  "descripcion_en": "Season observed value per v5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_pct_media",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene nivel v5; V3.2 si no",
+  "descripcion_en": "V5 if the row has a v5 level; V3.2 otherwise",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_media_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel en la liga de destino (mediana)",
+  "descripcion_en": "Level in destination league (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media_nivel_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 10",
+  "descripcion_en": "Level: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media_nivel_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 90",
+  "descripcion_en": "Level: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media_pred",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo de la temporada objetivo (mediana)",
+  "descripcion_en": "Target-season predictive (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media_pred_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 10",
+  "descripcion_en": "Predictive: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media_pred_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 90",
+  "descripcion_en": "Predictive: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media_p_supera_p50",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "P(nivel > mediana de la liga de destino × rol)",
+  "descripcion_en": "P(level > median of destination league × role)",
+  "unidades": "probabilidad",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_media_sello",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Sello de fiabilidad",
+  "descripcion_en": "Reliability seal",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "pct_t3_esquina: **nivel v5** de la temporada en su liga (mediana) si `fuente_pct_t3_esquina` = V5; si no, la v3.2",
+  "descripcion_en": "pct_t3_esquina: **v5 level** of the season in own league (median) if source is V5; otherwise v3.2",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_lo",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 80 % del nivel",
+  "descripcion_en": "Lower end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_hi",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 80 % del nivel",
+  "descripcion_en": "Upper end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_pctel",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Percentil del nivel en su liga y temporada",
+  "descripcion_en": "Percentile of the level in league and season",
+  "unidades": "0–100",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_v32_lo",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior de la v3.2",
+  "descripcion_en": "v3.2 lower end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_v32_hi",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior de la v3.2",
+  "descripcion_en": "v3.2 upper end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_lo50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 50 % del nivel",
+  "descripcion_en": "Lower end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_hi50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 50 % del nivel",
+  "descripcion_en": "Upper end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_obs_v5",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Observado de la temporada según la v5",
+  "descripcion_en": "Season observed value per v5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_pct_t3_esquina",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene nivel v5; V3.2 si no",
+  "descripcion_en": "V5 if the row has a v5 level; V3.2 otherwise",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel en la liga de destino (mediana)",
+  "descripcion_en": "Level in destination league (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_nivel_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 10",
+  "descripcion_en": "Level: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_nivel_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 90",
+  "descripcion_en": "Level: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_pred",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo de la temporada objetivo (mediana)",
+  "descripcion_en": "Target-season predictive (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_pred_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 10",
+  "descripcion_en": "Predictive: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_pred_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 90",
+  "descripcion_en": "Predictive: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_p_supera_p50",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "P(nivel > mediana de la liga de destino × rol)",
+  "descripcion_en": "P(level > median of destination league × role)",
+  "unidades": "probabilidad",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_t3_esquina_sello",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Sello de fiabilidad",
+  "descripcion_en": "Reliability seal",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "pct_asistidas: **nivel v5** de la temporada en su liga (mediana) si `fuente_pct_asistidas` = V5; si no, la v3.2",
+  "descripcion_en": "pct_asistidas: **v5 level** of the season in own league (median) if source is V5; otherwise v3.2",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_lo",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 80 % del nivel",
+  "descripcion_en": "Lower end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_hi",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 80 % del nivel",
+  "descripcion_en": "Upper end of the 80% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_pctel",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Percentil del nivel en su liga y temporada",
+  "descripcion_en": "Percentile of the level in league and season",
+  "unidades": "0–100",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_v32_lo",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior de la v3.2",
+  "descripcion_en": "v3.2 lower end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_v32_hi",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior de la v3.2",
+  "descripcion_en": "v3.2 upper end",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_lo50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo inferior del intervalo del 50 % del nivel",
+  "descripcion_en": "Lower end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_hi50",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Extremo superior del intervalo del 50 % del nivel",
+  "descripcion_en": "Upper end of the 50% level interval",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_obs_v5",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "Observado de la temporada según la v5",
+  "descripcion_en": "Season observed value per v5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_pct_asistidas",
+  "grupo": "v5",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene nivel v5; V3.2 si no",
+  "descripcion_en": "V5 if the row has a v5 level; V3.2 otherwise",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel en la liga de destino (mediana)",
+  "descripcion_en": "Level in destination league (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_nivel_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 10",
+  "descripcion_en": "Level: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_nivel_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Nivel: percentil 90",
+  "descripcion_en": "Level: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_pred",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo de la temporada objetivo (mediana)",
+  "descripcion_en": "Target-season predictive (median)",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_pred_lo",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 10",
+  "descripcion_en": "Predictive: 10th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_pred_hi",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Predictivo: percentil 90",
+  "descripcion_en": "Predictive: 90th percentile",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_p_supera_p50",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "P(nivel > mediana de la liga de destino × rol)",
+  "descripcion_en": "P(level > median of destination league × role)",
+  "unidades": "probabilidad",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pct_asistidas_sello",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "Sello de fiabilidad",
+  "descripcion_en": "Reliability seal",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "efg_pct",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "eFG% derivado de T2%, T3% y 3PAr de la v5 (draws conjuntos con la correlación de la F5); si `fuente` = V5",
+  "descripcion_en": "eFG% derived from v5 T2%, T3% and 3PAr (joint draws with the F5 correlation); if source is V5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "efg_pct_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_efg_pct",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene la derivada de la v5",
+  "descripcion_en": "V5 if derived from v5",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "efg_pct_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "eFG% derivado de T2%, T3% y 3PAr de la v5 (draws conjuntos con la correlación de la F5) (nivel en la liga de destino, mediana)",
+  "descripcion_en": "eFG% derived from v5 T2%, T3% and 3PAr (joint draws with the F5 correlation) (destination level)",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "ts_pct",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "TS% derivado de T2%, T3%, TL%, 3PAr y FTr de la v5 (draws conjuntos); si `fuente` = V5",
+  "descripcion_en": "TS% derived from v5 T2%, T3%, FT%, 3PAr and FTr (joint draws); if source is V5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "ts_pct_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_ts_pct",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene la derivada de la v5",
+  "descripcion_en": "V5 if derived from v5",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "ts_pct_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "TS% derivado de T2%, T3%, TL%, 3PAr y FTr de la v5 (draws conjuntos) (nivel en la liga de destino, mediana)",
+  "descripcion_en": "TS% derived from v5 T2%, T3%, FT%, 3PAr and FTr (joint draws) (destination level)",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "oreb_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "OREB/100 = OREB% de la v5 × rebotes disponibles por posesión de la liga × 100; si `fuente` = V5",
+  "descripcion_en": "OREB/100 = v5 OREB% × league rebound chances per possession × 100; if source is V5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "oreb_p100_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_oreb_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene la derivada de la v5",
+  "descripcion_en": "V5 if derived from v5",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "oreb_p100_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "OREB/100 = OREB% de la v5 × rebotes disponibles por posesión de la liga × 100 (nivel en la liga de destino, mediana)",
+  "descripcion_en": "OREB/100 = v5 OREB% × league rebound chances per possession × 100 (destination level)",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "dreb_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "DREB/100 = DREB% de la v5 × rebotes disponibles por posesión de la liga × 100; si `fuente` = V5",
+  "descripcion_en": "DREB/100 = v5 DREB% × league rebound chances per possession × 100; if source is V5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "dreb_p100_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_dreb_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene la derivada de la v5",
+  "descripcion_en": "V5 if derived from v5",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "dreb_p100_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "DREB/100 = DREB% de la v5 × rebotes disponibles por posesión de la liga × 100 (nivel en la liga de destino, mediana)",
+  "descripcion_en": "DREB/100 = v5 DREB% × league rebound chances per possession × 100 (destination level)",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "blk_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "BLK/100 = BLK% de la v5 × tiros de dos del rival por posesión de la liga × 100; si `fuente` = V5",
+  "descripcion_en": "BLK/100 = v5 BLK% × league opponent 2PA per possession × 100; if source is V5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "blk_p100_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_blk_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene la derivada de la v5",
+  "descripcion_en": "V5 if derived from v5",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "blk_p100_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "BLK/100 = BLK% de la v5 × tiros de dos del rival por posesión de la liga × 100 (nivel en la liga de destino, mediana)",
+  "descripcion_en": "BLK/100 = v5 BLK% × league opponent 2PA per possession × 100 (destination level)",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "stl_pct",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "STL% = robos por posesión del rival de la v5 × 100; si `fuente` = V5",
+  "descripcion_en": "STL% = v5 steals per opponent possession × 100; if source is V5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "stl_pct_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_stl_pct",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene la derivada de la v5",
+  "descripcion_en": "V5 if derived from v5",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "stl_pct_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "STL% = robos por posesión del rival de la v5 × 100 (nivel en la liga de destino, mediana)",
+  "descripcion_en": "STL% = v5 steals per opponent possession × 100 (destination level)",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
+  "columna": "pf_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "PF/100 = faltas por minuto de la v5 × minutos por posesión de la liga × 100; si `fuente` = V5",
+  "descripcion_en": "PF/100 = v5 fouls per minute × league minutes per possession × 100; if source is V5",
+  "unidades": "unidades de la v3.2",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pf_p100_v32",
+  "grupo": "v3.2",
+  "origen": "normalización v5",
+  "descripcion": "Valor publicado por la v3.2 (conservado)",
+  "descripcion_en": "Value published by v3.2 (kept)",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "fuente_pf_p100",
+  "grupo": "v5 derivada",
+  "origen": "normalización v5",
+  "descripcion": "V5 si la fila tiene la derivada de la v5",
+  "descripcion_en": "V5 if derived from v5",
+  "unidades": "",
+  "fichero": "formato_v32/normalizado/<temporada>.csv.gz"
+ },
+ {
+  "columna": "pf_p100_nivel",
+  "grupo": "destino",
+  "origen": "normalización v5",
+  "descripcion": "PF/100 = faltas por minuto de la v5 × minutos por posesión de la liga × 100 (nivel en la liga de destino, mediana)",
+  "descripcion_en": "PF/100 = v5 fouls per minute × league minutes per possession × 100 (destination level)",
+  "unidades": "",
+  "fichero": "formato_v32/destinos/<temporada>/<liga>.csv.gz"
+ },
+ {
   "columna": "fuente_norm",
   "grupo": "v5",
   "origen": "normalización v5",
