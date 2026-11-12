@@ -3,11 +3,11 @@
  "fase": "F4",
  "config": "configs/v5/f4.yaml",
  "hash_config": "92539749a9db",
- "hash_datos_entrada": "c33bfdc10c5ec613",
- "fecha": "2026-11-11T07:40:41+00:00",
+ "hash_datos_entrada": "842ce4c7ee4b2856",
+ "fecha": "2026-11-12T14:42:35+00:00",
  "python": "3.13.18",
  "paso": "examen",
- "casos": 1628424,
- "metricas": 14,
- "tiempo_s": 208
+ "casos": 2107422,
+ "metricas": 19,
+ "tiempo_s": 1056
 }
