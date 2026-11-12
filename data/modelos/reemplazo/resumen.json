@@ -1,12 +1,12 @@
 {
  "uso_eficiencia": {
-  "personas": 22205,
-  "con_estimacion_propia_ts": 209,
+  "personas": 22313,
+  "con_estimacion_propia_ts": 205,
   "beta_ts_grupo": {
-   "A": -0.2903,
-   "E": 0.0947,
-   "I": -0.0643,
-   "NA": 0.0042
+   "A": -0.2021,
+   "E": 0.1365,
+   "I": -0.0197,
+   "NA": 0.0479
   },
   "tau2_ts_grupo": {
    "A": 0.0,
@@ -15,85 +15,85 @@
    "NA": 0.0
   },
   "beta_tov_grupo": {
-   "A": 0.0096,
-   "E": -0.1003,
-   "I": -0.1118,
+   "A": 0.0053,
+   "E": -0.0988,
+   "I": -0.1106,
    "NA": NaN
   },
-  "w_media_ts": 1.862219103273609e-10,
+  "w_media_ts": 6.2019998806460735e-12,
   "beta_ts_partido_grupo_mco": {
-   "A": 0.1623,
-   "E": 0.2317,
-   "I": -0.0043,
-   "NA": 0.0484
+   "A": 0.1643,
+   "E": 0.2307,
+   "I": -0.0047,
+   "NA": 0.0482
   },
   "beta_ts_tramos_grupo_mco": {
-   "A": 0.0465,
-   "E": 0.1152,
-   "I": 0.0716,
+   "A": 0.0631,
+   "E": 0.1177,
+   "I": 0.075,
    "NA": NaN
   },
   "iv_grupos": [
    {
     "pos3_p": "A",
-    "beta_iv": -0.2903,
-    "beta_iv_sd": 0.2547,
-    "beta_iv_lo": -0.7464,
-    "beta_iv_hi": 0.1027,
-    "primera_etapa": 3.1809,
-    "n_filas": 86244,
-    "n_personas": 1959
+    "beta_iv": -0.2021,
+    "beta_iv_sd": 0.2577,
+    "beta_iv_lo": -0.6299,
+    "beta_iv_hi": 0.173,
+    "primera_etapa": 3.3908,
+    "n_filas": 87713,
+    "n_personas": 2120
    },
    {
     "pos3_p": "E",
-    "beta_iv": 0.0947,
-    "beta_iv_sd": 0.1132,
-    "beta_iv_lo": -0.0911,
-    "beta_iv_hi": 0.2842,
-    "primera_etapa": 4.2425,
-    "n_filas": 300153,
-    "n_personas": 6641
+    "beta_iv": 0.1365,
+    "beta_iv_sd": 0.1133,
+    "beta_iv_lo": -0.0446,
+    "beta_iv_hi": 0.3172,
+    "primera_etapa": 4.3422,
+    "n_filas": 303894,
+    "n_personas": 6946
    },
    {
     "pos3_p": "I",
-    "beta_iv": -0.0643,
-    "beta_iv_sd": 0.1665,
-    "beta_iv_lo": -0.3313,
-    "beta_iv_hi": 0.1835,
-    "primera_etapa": 2.9664,
-    "n_filas": 233736,
-    "n_personas": 5375
+    "beta_iv": -0.0197,
+    "beta_iv_sd": 0.1684,
+    "beta_iv_lo": -0.2921,
+    "beta_iv_hi": 0.2672,
+    "primera_etapa": 3.0216,
+    "n_filas": 237469,
+    "n_personas": 5649
    },
    {
     "pos3_p": "NA",
-    "beta_iv": 9.7111,
-    "beta_iv_sd": 17.9346,
-    "beta_iv_lo": -23.9835,
-    "beta_iv_hi": 19.4608,
-    "primera_etapa": 0.8049,
-    "n_filas": 7596,
-    "n_personas": 2896
+    "beta_iv": -3.7461,
+    "beta_iv_sd": 31.0147,
+    "beta_iv_lo": -19.1896,
+    "beta_iv_hi": 24.8779,
+    "primera_etapa": -0.2361,
+    "n_filas": 5803,
+    "n_personas": 2247
    },
    {
     "pos3_p": "todos",
-    "beta_iv": 0.0042,
-    "beta_iv_sd": 0.0961,
-    "beta_iv_lo": -0.1491,
-    "beta_iv_hi": 0.1491,
-    "primera_etapa": 3.6342,
-    "n_filas": 627729,
-    "n_personas": 16871
+    "beta_iv": 0.0479,
+    "beta_iv_sd": 0.0915,
+    "beta_iv_lo": -0.0857,
+    "beta_iv_hi": 0.2046,
+    "primera_etapa": 3.7335,
+    "n_filas": 634879,
+    "n_personas": 16962
    }
   ]
  },
  "libro": {
   "transiciones_club": 1842,
-  "cierre_identidad_max": 1.0480505352461478e-13,
-  "relleno_clave_mediana": 0.9587873474187477,
+  "cierre_identidad_max": 1.021405182655144e-13,
+  "relleno_clave_mediana": 0.9660818052606587,
   "estrategias_clave": {
-   "externa": 1662,
+   "externa": 1664,
    "interna_rol": 138,
-   "interna_minutos": 27
+   "interna_minutos": 25
   },
   "asociacion": [
    {
@@ -147,46 +147,46 @@
   "persistencia": {
    "RESIDUAL": NaN,
    "PROFUNDIDAD": 0.4387596899224806,
-   "ROTACION": 0.5633595284872298,
-   "TITULAR": 0.6555935515388374,
-   "GO_TO_GUY": 0.6791171477079796
+   "ROTACION": 0.5628066732090284,
+   "TITULAR": 0.6566440349175557,
+   "GO_TO_GUY": 0.6800670016750419
   },
-  "n_retornos": 5317
+  "n_retornos": 5342
  },
  "calidad_companeros": {
-  "filas": 49040,
-  "con_L_pct": 0.9286500815660685,
+  "filas": 49280,
+  "con_L_pct": 0.9290178571428571,
   "efecto": [
    {
     "produccion": "ts_pct",
-    "pendiente_por_unidad_L": 5.5903023344857905,
-    "ic_lo": 5.14179570126384,
-    "ic_hi": 6.0480161315507885,
-    "n_filas": 15293,
-    "n_personas": 4421,
+    "pendiente_por_unidad_L": 5.5851615135877575,
+    "ic_lo": 5.1320118748791765,
+    "ic_hi": 6.068200595173033,
+    "n_filas": 15326,
+    "n_personas": 4424,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "usg_pct",
-    "pendiente_por_unidad_L": -2.3298811444994665,
-    "ic_lo": -2.6200046114307125,
-    "ic_hi": -1.9955990343601582,
-    "n_filas": 15294,
-    "n_personas": 4421,
+    "pendiente_por_unidad_L": -2.312279658408459,
+    "ic_lo": -2.6214086558207192,
+    "ic_hi": -1.9594456617846574,
+    "n_filas": 15327,
+    "n_personas": 4424,
     "nota": "asociación dentro de jugador, no causal"
    },
    {
     "produccion": "pts_100",
-    "pendiente_por_unidad_L": 0.45307034707338983,
-    "ic_lo": -0.014679725998170636,
-    "ic_hi": 0.8376273187672524,
-    "n_filas": 15294,
-    "n_personas": 4421,
+    "pendiente_por_unidad_L": 0.47128152813061713,
+    "ic_lo": 0.019919564437082708,
+    "ic_hi": 0.8540047230325153,
+    "n_filas": 15327,
+    "n_personas": 4424,
     "nota": "asociación dentro de jugador, no causal"
    }
   ]
  },
  "tendencias": {
-  "entrenadores": 1086
+  "entrenadores": 1089
  }
 }

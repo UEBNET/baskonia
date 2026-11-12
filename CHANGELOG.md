@@ -1,5 +1,31 @@
 # Registro de cambios
 
+## 2026-11-12 — Regeneración de roles y reemplazo tras la corrección de fechas de BNXT, BSL y GBL
+
+* **Aprobado por el usuario** en la puerta de la F7 del encargo v5.0 (12-11-2026): «aplicar los pendientes».
+* **Roles (`python -m bbfit roles`, las 20 ligas y 7 temporadas, sin descarga).**
+  * Las 17 ligas no afectadas se reproducen **exactamente** (`player_role_season`, `player_role_spells` y
+    `partidos_jugador`, columna a columna).
+  * BNXT, BSL y GBL:
+    * los partidos jugados y sus estadísticas son idénticos;
+    * el rol principal de cada jugador-temporada no cambia;
+    * cambian los tramos de rol dentro de la temporada (4.875 → 5.034) y las filas de partidos **no jugados** dentro
+      de cada tramo (p. ej. 2025-26: 7.665 → 3.547). Con la fecha truncada, los tramos abarcaban partidos que no
+      les correspondían.
+* **Reemplazo (`python -m bbfit reemplazo`; tendencias de entrenador, libro de roles, uso–eficiencia).**
+  * Hasta 2025-26 y fuera de BNXT, BSL y GBL: idéntico.
+  * Cambian:
+    * BNXT, BSL y GBL;
+    * la temporada 2026-27, que incorpora los partidos descargados después del último ajuste (8-11-2026);
+    * las estimaciones agregadas que mezclan todas las ligas (p. ej. `uso_eficiencia_grupos.csv`).
+* **No regenerado: estilo por entrenador (`bbestilo entrenadores`).**
+  * Al regenerarlo cambia el estilo del 30 % de los tramos también en ligas y temporadas no afectadas, y se añaden 7
+    ligas.
+  * Se debe a cambios anteriores a la corrección: identidades del 03-11, tablas de entrenadores de todas las ligas del
+    01-11 y ligas nuevas.
+  * La tabla publicada se mantuvo a propósito en su momento (58031e5). Queda como decisión aparte del usuario.
+* **Sin republicar** en los artifacts: el simulador exportado sigue leyendo la versión publicada hasta que se decida.
+
 ## 2026-11-10 — Corrección: fecha de los partidos de BNXT, BSL y GBL en entrenadores (formato ISO)
 
 * **Fallo.** `bbstats/entrenadores.py::_fecha` cortaba la fecha a 10 caracteres. Con la fecha RFC 2822 de FIBA

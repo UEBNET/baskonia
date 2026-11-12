@@ -1,21 +1,21 @@
 {
- "filas_temporada": 55658,
- "filas_tramos": 60625,
+ "filas_temporada": 55899,
+ "filas_tramos": 61051,
  "fuente": {
-  "pbp": 48604,
+  "pbp": 48845,
   "box": 7054
  },
- "rol_probabilistico_pct": 0.2856911854540228,
- "top10_anotadores_gtg_pct": 0.6675675675675675,
- "top10_anotadores_gtg_o_titular_pct": 0.9486486486486486,
+ "rol_probabilistico_pct": 0.24402941018622873,
+ "top10_anotadores_gtg_pct": 0.6882882882882883,
+ "top10_anotadores_gtg_o_titular_pct": 0.9513513513513514,
  "menos5min_residual_pct": 1.0,
- "tramos_por_jugador_equipo": 1.089241438786877,
+ "tramos_por_jugador_equipo": 1.0921662283761784,
  "motivos_inicio": {
-  "inicio": 47103,
+  "inicio": 47342,
   "temporada_caja": 7054,
-  "entrenador": 2898,
-  "cambio_detectado": 2069,
-  "traspaso": 1501
+  "entrenador": 2995,
+  "cambio_detectado": 2157,
+  "traspaso": 1503
  },
  "tamanos_mb_partidos_jugador": {
   "2020-21": 3.3,
@@ -23,7 +23,7 @@
   "2022-23": 5.7,
   "2023-24": 8.4,
   "2024-25": 8.1,
-  "2025-26": 10.3,
-  "2026-27": 1.2
+  "2025-26": 10.2,
+  "2026-27": 1.7
  }
 }
