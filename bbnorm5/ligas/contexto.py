@@ -199,8 +199,11 @@ MODELOS = {
     "liga+todos": (True, ["volumen", "companeros", "tipo", "estilo_liga"]),
     "liga+peso+todos": (True, ["peso_liga", "volumen", "companeros", "tipo", "estilo_liga"]),
     "liga+peso+todos+recal": (True, ["peso_liga", "volumen", "companeros", "tipo", "estilo_liga"]),
+    # publicado (criterio 11 de la revisión 1.2, F8): el estilo de liga no supera la navaja en los fichajes reales
+    "publicado": (True, ["peso_liga", "volumen", "companeros", "tipo"]),
 }
-RECALIBRAR = {"liga+peso+todos+recal"}
+RECALIBRAR = {"liga+peso+todos+recal", "publicado"}
+PUBLICADO = "publicado"
 
 
 def preparar(cfg: dict, cortes: list[int] | None = None, salida: str = "contexto_base.parquet") -> pd.DataFrame:

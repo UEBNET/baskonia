@@ -1,0 +1,44 @@
+{
+ "criterio1": {
+  "nivel_sim_rango": [
+   0.7801593844462764,
+   0.8164007836551918
+  ],
+  "nivel_sim_en_rango": "70/70",
+  "predictivo_global": 0.826293803666744,
+  "predictivo_metricas_en_rango": "10/14",
+  "predictivo_ligas_en_rango": "15/20",
+  "predictivo_cambio_liga": 0.8283840770096924,
+  "lolo_cob80_lambda": {
+   "sin_nada": 1.0,
+   "sin_puentes_intra": 0.832,
+   "sin_traspasos": 0.814
+  }
+ },
+ "criterio3": {
+  "saltos": 504,
+  "z_abs_mediana": 0.32666645334273336,
+  "cuota_z_abs_mayor_2": 0.005952380952380952,
+  "salto_rel_mediano": 0.08858671887310834,
+  "ciclo_conjunta_max": 1.1102230246251563e-16,
+  "triangulos": 1194
+ },
+ "criterio5": {
+  "casos": 457518,
+  "ece_por_umbral": {
+   "25": 0.0206,
+   "50": 0.0143,
+   "75": 0.0303
+  },
+  "habilidad_brier_por_umbral": {
+   "25": 0.223,
+   "50": 0.27,
+   "75": 0.251
+  },
+  "ece_max_metrica": 0.06743644808030363
+ },
+ "criterio2": {
+  "metricas_mas_estrechas": "13/13",
+  "ratio_global": 0.5491506437677994
+ }
+}

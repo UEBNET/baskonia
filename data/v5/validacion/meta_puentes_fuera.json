@@ -1,0 +1,20 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F8",
+ "config": "configs/v5/f8.yaml",
+ "hash_config": "5df254752c8b",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-12T10:42:48+00:00",
+ "python": "3.13.18",
+ "paso": "puentes_fuera",
+ "cobertura80": {
+  "encogido": 0.803,
+  "paso1": 0.83
+ },
+ "crps_medio": {
+  "encogido": 0.2705,
+  "paso1": 0.271
+ },
+ "casos": 75090,
+ "tiempo_s": 12
+}

@@ -59,6 +59,9 @@ EX_ANTE = {
     "ex_ante_sin_estilo_liga": [b for b in TODOS if b not in ("volumen", "estilo_liga")],
     "ex_ante_sin_companeros": [b for b in TODOS if b not in ("volumen", "companeros")],
 }
+# examen principal: las publicadas (criterio 11: sin estilo de liga) y, como referencia, las de todos los bloques
+MODELOS_INTERVALO = ["ex_ante_sin_estilo_liga", "final_sin_estilo_liga", "ex_ante", "final"]
+MODELOS_EXAMEN = MODELOS_INTERVALO + ["final_exposicion_t", "base_F4"]
 N_EXPOSICION = 4                       # exposiciones de T sorteadas por caso (× 400 draws)
 ROLES = ["E", "A", "I", "X"]          # X: sin reparto de roles (ligas o temporadas sin jugada a jugada)
 
@@ -366,7 +369,7 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
     cols = [c for c in d.columns if c.startswith("v33_") or "__q" in c or c.endswith("__media")]
     for c in cols:
         d[c] = np.clip(d[c].to_numpy(float), 0.0, techo)
-    completos = d[[c for c in cols if c.startswith("v33_") or any(m in c for m in ("ex_ante__", "final__"))]].notna().all(axis=1)
+    completos = d[[c for c in cols if c.startswith("v33_") or any(c.startswith(f"{m}__") for m in MODELOS_INTERVALO)]].notna().all(axis=1)
     d = d[completos].copy()
     d["y"] = d["real"]
     out = {"casos_banco": int(n_banco), "con_prediccion_v5": int(n_cruce), "comparables": int(len(d)),
@@ -386,7 +389,7 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
         s33 = puntuar(g, "v33")
         s33o = puntuar(go, "v33")
         fila = {"metrica": m, "casos": len(g), "personas": g["persona_v5"].nunique()}
-        for mod in ("ex_ante", "final", "final_exposicion_t", "base_F4"):
+        for mod in MODELOS_EXAMEN:
             s5 = puntuar(g, mod)
             # «todas»: cada métrica normalizada por el WIS medio de la v3.3 en esa métrica
             if m == "todas":
@@ -401,11 +404,11 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
                 fila["wis_ex_ante_frente_v33_oraculo"], fila["ic_lo_oraculo"], fila["ic_hi_oraculo"] = _boot_ratio(
                     g["persona_v5"].to_numpy(), a, bor, B, rng)
         y = g["y"].to_numpy(float)
-        for mod, lo, hi in (("v33", g["v33_lo80"], g["v33_hi80"]), ("ex_ante", g["ex_ante__q10"], g["ex_ante__q90"]),
-                            ("final", g["final__q10"], g["final__q90"])):
+        for mod, lo, hi in [("v33", g["v33_lo80"], g["v33_hi80"])] + [(m_, g[f"{m_}__q10"], g[f"{m_}__q90"])
+                                                                          for m_ in MODELOS_INTERVALO]:
             fila[f"cob80_{mod}"] = float(((y >= lo) & (y <= hi)).mean())
             fila[f"ancho80_{mod}"] = float(np.median(hi - lo))
-        for mod in ("ex_ante", "final"):
+        for mod in MODELOS_INTERVALO:
             fila[f"ratio_ancho80_{mod}_v33"] = float(np.median((g[f"{mod}__q90"] - g[f"{mod}__q10"]) /
                                                                np.maximum(g["v33_hi80"] - g["v33_lo80"], 1e-9)))
             fila[f"mae_{mod}"] = float(np.nanmean(np.abs(y - g[f"{mod}__media"])))

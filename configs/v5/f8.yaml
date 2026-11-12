@@ -3,7 +3,7 @@ fase: F8
 salida: validacion
 semilla: 20261116
 temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
-pasos: [base, predicciones, banco, fichajes, protocolo, lolo, puentes_fuera, sbc, fugas]
+pasos: [base, predicciones, banco, fichajes, protocolo, lolo, puentes_fuera, sbc, fugas, criterios, figuras]
 sbc:
   replicas: 100
 examen:

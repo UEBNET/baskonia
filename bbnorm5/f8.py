@@ -10,6 +10,8 @@ Pasos:
 - protocolo: protocolo de la F1 (v5 frente a v3.2, v2 y v1 en los mismos cambios de liga)
 - lolo · puentes_fuera · sbc: capa de ligas (dejar fuera una liga, jugadores puente dejados fuera, SBC de λ)
 - fugas: auditoría de fugas
+- criterios: criterios de éxito 1–5 del encargo (§17)
+- figuras: figuras del informe 08
 """
 from __future__ import annotations
 
@@ -45,7 +47,11 @@ def main(argv=None):
         elif paso == "protocolo":
             from bbnorm5.validacion import protocolo as VP
             cfg1 = C.cargar("configs/v5/f1.yaml")
-            out = {"ex_ante": VP.comparar(cfg, cfg1), "condicionada": VP.comparar(cfg, cfg1, modelo="final", sufijo="_condicionada")}
+            out = {"ex_ante": VP.comparar(cfg, cfg1), "condicionada": VP.comparar(cfg, cfg1, modelo="final", sufijo="_condicionada"),
+                   # publicada (criterio 11: sin el bloque de estilo de liga)
+                   "ex_ante_publicada": VP.comparar(cfg, cfg1, modelo="ex_ante_sin_estilo_liga", sufijo="_publicada"),
+                   "condicionada_publicada": VP.comparar(cfg, cfg1, modelo="final_sin_estilo_liga",
+                                                         sufijo="_condicionada_publicada")}
         elif paso in ("lolo", "puentes_fuera", "sbc"):
             from bbnorm5.validacion import ligas as VL
             cfg7 = C.cargar("configs/v5/f7.yaml")
@@ -67,6 +73,12 @@ def main(argv=None):
         elif paso == "fugas":
             from bbnorm5.validacion import fugas as VFu
             out = VFu.ejecutar(cfg)
+        elif paso == "figuras":
+            from bbnorm5.validacion import figuras_f8
+            out = figuras_f8.todas(cfg)
+        elif paso == "criterios":
+            from bbnorm5.validacion import criterios as VC
+            out = VC.ejecutar(cfg, tuple(int(x) for x in cfg.get("criterios", [1, 2, 3, 4, 5])))
         else:
             raise ValueError(paso)
         out["tiempo_s"] = round(time.time() - t0)

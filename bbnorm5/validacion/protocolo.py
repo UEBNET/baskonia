@@ -28,7 +28,9 @@ DIR = VF.DIR
 EQ = {"fg2_pct": "t2_pct", "fg3_pct": "t3_pct", "ft_pct": "tl_pct", "fg3a_rate": "tpar", "fta_rate": "ftr",
       "oreb_pct": "oreb_pct", "dreb_pct": "dreb_pct", "ast_pct": "ast_pct", "tov_pct": "tov_pct", "blk_pct": "blk_pct",
       "stl_p100": "stl_p100", "pts_p100": "pts_p100", "usg_pct": "usg_pct"}
-MODELOS_V32 = {"v3.2": ("v3_centro_z", "sd_v32c"), "v2": ("v2_centro_z", "v2_sd_z"), "v1": ("algoritmo_A_z", None)}
+MODELOS_V32 = {"v3.2": ("v3_centro_z", "sd_v32c"), "v2": ("v2_centro_z", "v2_sd_z"), "v1": ("algoritmo_A_z", None),
+               # intervalo publicado sin recalibrar: es de nivel (F1 §4.1); sólo para comparar anchuras (criterio 2)
+               "v3.2_nivel": ("v3_centro_z", "v3_sd_z")}
 NIV = {50: 0.25, 80: 0.10, 90: 0.05, 95: 0.025}
 
 

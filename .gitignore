@@ -35,3 +35,5 @@ data/v5/ligas/paso1_frente_paso2.parquet
 data/v5/validacion/*_casos.parquet
 data/v5/validacion/base_v5.parquet
 data/v5/validacion/predicciones_v5.parquet
+data/v5/validacion/protocolo_f1_casos*_publicada.parquet
+data/v5/validacion/puentes_fuera.parquet

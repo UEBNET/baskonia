@@ -12,7 +12,17 @@
  "diagnosticos": "data/v5/ligas/lambda_paso2_diagnosticos.json",
  "proyeccion_en_contexto": {
   "lambda": "GLS por corte, variante encogido (data/v5/ligas/lambda_paso2_modelos.pkl)",
-  "modelo": "liga+peso+todos+recal"
+  "modelo": "publicado",
+  "bloques": [
+   "peso_liga",
+   "volumen",
+   "companeros",
+   "tipo"
+  ],
+  "apagados": {
+   "estilo_liga": "criterio 11 (F8): no supera la navaja en los fichajes reales (+0,08 %, IC −0,04 % a +0,21 %)"
+  },
+  "ex_ante": "sin el bloque de volumen; rol y exposición de la temporada objetivo integrados (F8, validacion/fichajes.py)"
  },
  "sustituye_a": "data/v5/ligas/traduccion_2025-26.csv.gz (F6.1, conservada)"
 }
