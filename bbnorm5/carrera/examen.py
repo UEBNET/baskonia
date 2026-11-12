@@ -53,6 +53,30 @@ def objetivo(o: pd.DataFrame, hist: pd.DataFrame, anio: int, h: pd.DataFrame, me
     return x
 
 
+def muestras_predictivas(pred: pd.DataFrame, fam: str, rng, N_muestreo=None) -> tuple:
+    """Draws de la tasa observada de la temporada objetivo (S por caso) y de la tasa de nivel. Con `N_muestreo` el ruido
+    de muestreo usa esa exposición en lugar de la observada (p. ej. la de la temporada anterior, conocida en t)."""
+    n = len(pred)
+    eta_nivel = pred["mu_prev"].to_numpy()[:, None] + pred["m_nivel"].to_numpy()[:, None] + \
+        np.sqrt(pred["v_nivel"].to_numpy())[:, None] * rng.standard_normal((n, S))
+    sd_u = np.sqrt(np.maximum(pred["v_y_sin_muestreo"] - pred["v_nivel"], 0)).to_numpy()[:, None]
+    eta = eta_nivel + sd_u * rng.standard_normal((n, S))
+    inv = {"binomial": special.expit, "poisson": np.exp}.get(fam, lambda z: z)
+    tasa, tasa_nivel = inv(eta), inv(eta_nivel)
+    N = pred["N"].to_numpy(float) if N_muestreo is None else np.asarray(N_muestreo, float)
+    K = pred["K"].to_numpy(float)
+    Nr = np.maximum(np.round(N), K if N_muestreo is None else 1) if fam == "binomial" else N
+    disp = pred["disp_prev"].to_numpy(float)
+    if fam == "normal":
+        Ks = tasa * Nr[:, None] + np.sqrt(disp[:, None] * Nr[:, None]) * rng.standard_normal(tasa.shape)
+    else:
+        n2g = pred["N2g"].to_numpy(float)
+        if N_muestreo is not None:      # Σ n_g² escala con el cuadrado de la exposición (mismo reparto entre partidos)
+            n2g = n2g * (Nr / np.maximum(pred["N"].to_numpy(float), 1e-9)) ** 2
+        Ks = eb.muestras_conteo(tasa, Nr, n2g, fam, disp, rng)
+    return Ks / Nr[:, None], tasa_nivel
+
+
 def evaluar(pred: pd.DataFrame, fam: str, nombre: str, rng) -> pd.DataFrame:
     n = len(pred)
     eta_nivel = pred["mu_prev"].to_numpy()[:, None] + pred["m_nivel"].to_numpy()[:, None] + \

@@ -185,7 +185,20 @@ def gls_paso2(intra: pd.DataFrame, inter: pd.DataFrame, metrica: str, variante: 
     cl = np.zeros((L + 1, L + 1))
     cl[1:, 1:] = cov[:L, :L]
     return {"ligas": ligas, "lambda": lam, "cov": cl, "theta": beta[L + len(LD.CONTEXTO):], "s_c2": s2,
-            "n_inter": int(len(b))}
+            "n_inter": int(len(b)), "beta_ctx": beta[L:L + len(LD.CONTEXTO)]}
+
+
+def modelos_paso2(cfg: dict, anios: list[int], variante: str = "encogido") -> dict:
+    """GLS del paso 2 por año objetivo y métrica, con puentes intra y traspasos anteriores al año (sin fugas)."""
+    x = preparar(cfg)
+    intra = pd.read_parquet(DIR / "pares_intra.parquet")
+    mods = {}
+    for T in anios:
+        inter = x[(x["anio_obj"] < T) & (x["cl"] > 0)]
+        it = intra[intra["temporada"].str[:4].astype(int) < T]
+        for met in DM.METRICAS:
+            mods[(T, met, variante)] = gls_paso2(it, inter, met, variante)
+    return mods
 
 
 def ejecutar(cfg: dict) -> dict:
@@ -241,11 +254,20 @@ def ejecutar(cfg: dict) -> dict:
 def proyeccion_paso2(cfg: dict, variante: str = "encogido") -> pd.DataFrame:
     """La proyección en contexto de la F6.2 con λ del paso 2 (puentes intra + traspasos, misma variante para todos los
     cortes, sin fugas) en lugar de λ sólo con puentes intra. Rehace las columnas que dependen de λ y repite el examen."""
+    x = con_lambda_paso2(pd.read_parquet(DIR / "contexto_base.parquet"), variante)
+    x.to_parquet(DIR / "contexto_base_paso2.parquet")
+    return LC.examen(cfg, x, sufijo="_paso2")
+
+
+def con_lambda_paso2(x: pd.DataFrame, variante: str = "encogido", mods: dict | None = None) -> pd.DataFrame:
+    """Rehace en la base de la proyección en contexto las columnas que dependen de λ con el GLS del paso 2 de cada
+    temporada objetivo (estimado sólo con temporadas anteriores: sin fugas). `mods`: {(año, métrica, variante): GLS};
+    por defecto, los del examen de la F7."""
     import pickle
     from bbnorm5.ligas import gls
-    with open(DIR / "lambda_paso2_modelos.pkl", "rb") as f:
-        mods = pickle.load(f)
-    x = pd.read_parquet(DIR / "contexto_base.parquet")
+    if mods is None:
+        with open(DIR / "lambda_paso2_modelos.pkl", "rb") as f:
+            mods = pickle.load(f)
     partes = []
     for (anio, met), g in x.groupby(["anio_obj", "metrica"], sort=False):
         m = mods.get((anio, met, variante))
@@ -263,10 +285,7 @@ def proyeccion_paso2(cfg: dict, variante: str = "encogido") -> pd.DataFrame:
         for r in ("E", "I"):
             g[f"dl_rol_{r}"] = g["delta_lambda"] * (g["rol"] == r)
         partes.append(g)
-    y = pd.concat(partes, ignore_index=True)
-    y.to_parquet(DIR / "contexto_base_paso2.parquet")
-    c = LC.examen(cfg, y, sufijo="_paso2")
-    return c
+    return pd.concat(partes, ignore_index=True)
 
 
 def pares_paso2(cfg: dict, variante: str = "encogido") -> pd.DataFrame:

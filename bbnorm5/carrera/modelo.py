@@ -285,6 +285,9 @@ def predecir(M_hist: dict, mod: dict, objetivo: pd.DataFrame, solo_ultima: bool 
     x["m_nivel"] = x["a"] + gT - x["g_last"] + th.get("phi_rol", 0.0) * dmu
     x["v_nivel"] = x["P"] + var_w
     x["v_y_sin_muestreo"] = x["v_nivel"] + s2["u"]
+    # constantes del ajuste para rehacer la predicción con otro rol (F8: rol de la temporada objetivo desconocido)
+    x["phi_rol"] = float(th.get("phi_rol", 0.0))
+    x["s2_R"] = float(s2["R"])
     return x
 
 

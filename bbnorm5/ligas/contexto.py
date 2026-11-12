@@ -165,6 +165,28 @@ def aplicar(x: pd.DataFrame, cols: list[str], fit: dict | None, con_liga: bool) 
     return y
 
 
+# ------------------------------------------------------------------ recalibración de la varianza en los cambios de liga
+def factor_recalibracion(tr: pd.DataFrame, cols: list[str], fit: dict | None, con_liga: bool, eta, vo) -> float:
+    """Factor f de la varianza no muestral en los cambios de liga, por máxima verosimilitud en el entrenamiento:
+    r ~ N(0, f·v_pred + v_obs) en los cambios de liga de los cortes anteriores (el estimador por momentos encogía
+    demasiado en sucesos raros: 1.ª versión descartada)."""
+    trp = aplicar(tr, cols, fit, con_liga)
+    rr = eta - (trp["mu_prev"] + trp["m_nivel"]).to_numpy()
+    cm = (trp["cl"] > 0).to_numpy() & np.isfinite(rr)
+    vp = trp["v_y_sin_muestreo"].to_numpy(float)
+    vo_c = np.asarray(vo, float)[cm]
+    nll = lambda lf: 0.5 * np.sum(np.log(np.exp(lf) * vp[cm] + vo_c) + rr[cm] ** 2 / (np.exp(lf) * vp[cm] + vo_c))
+    return float(np.exp(optimize.minimize_scalar(nll, bounds=(np.log(0.3), np.log(2.0)), method="bounded").x))
+
+
+def recalibrar(y: pd.DataFrame, f: float) -> pd.DataFrame:
+    y = y.copy()
+    k = (y["cl"] > 0).to_numpy()
+    for col in ("v_nivel", "v_y_sin_muestreo"):
+        y.loc[k, col] = y.loc[k, col] * f
+    return y
+
+
 # ------------------------------------------------------------------ examen con navaja
 MODELOS = {
     "base_F4": (False, []),
@@ -225,20 +247,9 @@ def examen(cfg: dict, x: pd.DataFrame | None = None, sufijo: str = "") -> pd.Dat
                                                "beta": fit["beta"], "sd": np.sqrt(np.diag(fit["cov"]))}))
                 y = aplicar(te, cols, fit, con_liga)
                 if con_liga and nom in RECALIBRAR:
-                    # recalibración de la varianza no muestral en los cambios de liga, estimada en el entrenamiento por
-                    # máxima verosimilitud: r ~ N(0, f·v_pred + v_obs) en los cambios de liga de los cortes anteriores
-                    # (el estimador por momentos encogía demasiado en sucesos raros: 1.ª versión descartada)
-                    trp = aplicar(tr, cols, fit, con_liga)
-                    rr = eta - (trp["mu_prev"] + trp["m_nivel"]).to_numpy()
-                    cm = (trp["cl"] > 0).to_numpy() & np.isfinite(rr)
-                    vp = trp["v_y_sin_muestreo"].to_numpy(float)
-                    vo_c = np.asarray(vo, float)[cm]
-                    nll = lambda lf: 0.5 * np.sum(np.log(np.exp(lf) * vp[cm] + vo_c) + rr[cm] ** 2 / (np.exp(lf) * vp[cm] + vo_c))
-                    f = float(np.exp(optimize.minimize_scalar(nll, bounds=(np.log(0.3), np.log(2.0)), method="bounded").x))
+                    f = factor_recalibracion(tr, cols, fit, con_liga, eta, vo)
                     escalas.append({"prueba": test, "metrica": met, "modelo": nom, "factor_var_cambio_liga": f})
-                    k = (y["cl"] > 0).to_numpy()
-                    for col in ("v_nivel", "v_y_sin_muestreo"):
-                        y.loc[k, col] = y.loc[k, col] * f
+                    y = recalibrar(y, f)
                 rng = np.random.default_rng((cfg["semilla"] + zlib.crc32(f"{test}|{met}|{nom}".encode())) % 2 ** 32)
                 casos.append(EX.evaluar(y, fam, nom, rng).assign(metrica=met, anio=test))
             print(f"  prueba {test} {met}", flush=True)
