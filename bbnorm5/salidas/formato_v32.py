@@ -3,10 +3,13 @@ sin tocar el artifact (encargo §13: «columnas adicionales, nunca menos»).
 
 1. **Por temporada** (`formato_v32/normalizado/<temporada>.csv.gz`). Mismas filas, columnas, nombres y unidades que
    `data/modelos/v3_2/normalizado/<temporada>.csv.gz`:
-   - en las 13 métricas que modela la v5, `<m>`, `<m>_lo`, `<m>_hi` y `<m>_pctel` pasan a ser el **nivel de la v5** de
-     esa temporada en su liga: mediana, intervalo del 80 % y percentil en su liga y temporada;
+   - en las 13 métricas que modela la v5, `<m>`, `<m>_lo`, `<m>_hi` y `<m>_pctel` pasan a ser, como en la v3.2, el
+     **equivalente EuroLeague 2025-26** con la v5: nivel de la temporada en su liga (F4) + λ(EuroLeague, 2025-26) −
+     λ(liga, temporada) de la traducción publicada (NUTS del paso 2); intervalo del 80 % con la varianza del nivel y la
+     de la traducción; percentil entre los jugadores de la EuroLeague de su posición esa temporada;
+   - `<m>_nivel_liga`: el nivel de la v5 en su propia liga;
    - el valor de la v3.2 se conserva en `<m>_v32`, `<m>_v32_lo` y `<m>_v32_hi`;
-   - columnas nuevas: `<m>_lo50` / `<m>_hi50` (intervalo del 50 %), `<m>_obs_v5` y `fuente_<m>` («V5» o «V3.2»);
+   - más columnas nuevas: `<m>_lo50` / `<m>_hi50` (intervalo del 50 %), `<m>_obs_v5` y `fuente_<m>` («V5» o «V3.2»);
    - las métricas que la v5 no modela (TS%, eFG%, PER, RAPM…) quedan con la v3.2;
    - PF/40 de la v5 va aparte (`pf_p40*`): no es la PF/100 de la v3.2.
 2. **Por liga de destino** (`formato_v32/destinos/<temporada objetivo>/<liga>.csv.gz`). Una fila por jugador y, por
@@ -33,6 +36,7 @@ A_V32 = {"t2_pct": "fg2_pct", "t3_pct": "fg3_pct", "tl_pct": "ft_pct", "tpar": "
          "oreb_pct": "oreb_pct", "dreb_pct": "dreb_pct", "ast_pct": "ast_pct", "tov_pct": "tov_pct",
          "blk_pct": "blk_pct", "stl_p100": "stl_p100", "pts_p100": "pts_p100", "usg_pct": "usg_pct", "pf_p40": "pf_p40"}
 Z = {80: stats.norm.ppf(0.9), 50: stats.norm.ppf(0.75)}
+VARA = ("euroleague", "2025-26")      # como la v3.2: equivalente EuroLeague 2025-26
 
 
 def _inv(fam: str):
@@ -64,7 +68,39 @@ def factores_unidad(niv: pd.DataFrame, obs: pd.DataFrame) -> dict:
     return out
 
 
+def _traduccion(z: dict, ligas: np.ndarray, t: str) -> tuple[np.ndarray, np.ndarray]:
+    """Media y varianza de λ(EuroLeague, temporada de la vara) − λ(liga, t) con los draws de la NUTS del paso 2."""
+    il = {l: i for i, l in enumerate(z["ligas"])}
+    it = {tt: i for i, tt in enumerate(z["temporadas"])}
+    m, v = np.full(len(ligas), np.nan), np.full(len(ligas), np.nan)
+    if t not in it or VARA[0] not in il or VARA[1] not in it:
+        return m, v
+    ref = z["lam"][:, il[VARA[0]], it[VARA[1]]]
+    for l in set(ligas):
+        if l in il:
+            d = ref - z["lam"][:, il[l], it[t]]
+            k = ligas == l
+            m[k], v[k] = float(d.mean()), float(d.var())
+    return m, v
+
+
+def _pctel(c: np.ndarray, v: pd.DataFrame) -> np.ndarray:
+    """Percentil entre los jugadores de la EuroLeague de la misma posición (pos3) de esa temporada, como la v3.2."""
+    out = np.full(len(c), np.nan)
+    pos = v["pos3"].astype(str).to_numpy()
+    ref = (v["liga"] == VARA[0]).to_numpy() & np.isfinite(c)
+    for p in set(pos):
+        r = np.sort(c[ref & (pos == p)])
+        sel = (pos == p) & np.isfinite(c)
+        if len(r):
+            out[sel] = 100 * np.searchsorted(r, c[sel], side="right") / len(r)
+    return out
+
+
 def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
+    from bbnorm5.ligas import modelo as LM
+    from bbnorm5.ligas import resumen_paso2 as LR2
+    lam = LR2.cargar(LM.BLOQUES_PASO2, "paso2_")
     per = _personas()
     escritos = []
     (DIR / "normalizado").mkdir(parents=True, exist_ok=True)
@@ -81,9 +117,13 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
             fam = DM.METRICAS[m5][0]
             inv = _inv(fam)
             g = nt[nt["metrica"] == m5].drop_duplicates(["persona_v5", "liga"])
-            eta = (g["mu"] + g["nivel_carrera"]).to_numpy(float)
-            sd = np.sqrt(g["var_nivel_carrera"].to_numpy(float))
+            eta_liga = (g["mu"] + g["nivel_carrera"]).to_numpy(float)
+            # equivalente EuroLeague de la temporada de la vara (como la v3.2): + λ(EuroLeague, vara) − λ(liga, t)
+            dm, dv = _traduccion(lam[m5], g["liga"].to_numpy(), t)
+            eta = eta_liga + dm
+            sd = np.sqrt(g["var_nivel_carrera"].to_numpy(float) + dv)
             val = pd.DataFrame({"persona_v5": g["persona_v5"].to_numpy(), "liga": g["liga"].to_numpy(),
+                                "nivel_liga": inv(eta_liga) * k[m5],
                                 "c": inv(eta) * k[m5], "lo": inv(eta - Z[80] * sd) * k[m5],
                                 "hi": inv(eta + Z[80] * sd) * k[m5], "lo50": inv(eta - Z[50] * sd) * k[m5],
                                 "hi50": inv(eta + Z[50] * sd) * k[m5]})
@@ -97,12 +137,11 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
                 v[m3] = np.where(hay, j["c"], v[m3])
                 v[f"{m3}_lo"] = np.where(hay, j["lo"], v[f"{m3}_lo"])
                 v[f"{m3}_hi"] = np.where(hay, j["hi"], v[f"{m3}_hi"])
-                pct = v.loc[hay].groupby("liga")[m3].rank(pct=True) * 100
-                v[f"{m3}_pctel"] = np.where(hay, pct.reindex(v.index), v[f"{m3}_pctel"])
+                v[f"{m3}_pctel"] = np.where(hay, _pctel(j["c"].to_numpy(float), v), v[f"{m3}_pctel"])
             else:
-                c_ = pd.Series(j["c"].to_numpy(), index=v.index)
-                nuevas[m3], nuevas[f"{m3}_lo"], nuevas[f"{m3}_hi"] = c_.to_numpy(), j["lo"].to_numpy(), j["hi"].to_numpy()
-                nuevas[f"{m3}_pctel"] = (c_.groupby(v["liga"]).rank(pct=True) * 100).to_numpy()
+                nuevas[m3], nuevas[f"{m3}_lo"], nuevas[f"{m3}_hi"] = j["c"].to_numpy(), j["lo"].to_numpy(), j["hi"].to_numpy()
+                nuevas[f"{m3}_pctel"] = _pctel(j["c"].to_numpy(float), v)
+            nuevas[f"{m3}_nivel_liga"] = j["nivel_liga"].to_numpy()
             nuevas[f"{m3}_lo50"], nuevas[f"{m3}_hi50"] = j["lo50"].to_numpy(), j["hi50"].to_numpy()
             nuevas[f"{m3}_obs_v5"] = j["tasa"].to_numpy()
             nuevas[f"fuente_{m3}"] = np.where(hay, "V5", "V3.2")
