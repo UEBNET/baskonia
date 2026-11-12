@@ -22,5 +22,13 @@
   "divergencias": 3,
   "pasos_medios": 125.97333333333333,
   "tiempo_s": 4986
+ },
+ "paso2_zonas": {
+  "rhat_max": 1.01,
+  "ess_bulk_min": 371.0,
+  "ess_tail_min": 580.0,
+  "divergencias": 0,
+  "pasos_medios": 127.256,
+  "tiempo_s": 5820
  }
 }

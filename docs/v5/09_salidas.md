@@ -242,9 +242,43 @@ siguen en su liga), es demasiado estrecho para quien cambia. **RIESGO** (§9).
 - **Probabilidades de umbral (criterio 5, ahora con 19 métricas).** Error de calibración 0,014–0,030 según el umbral.
   - Peores: triple de esquina en el percentil 25 (0,106, casi sin habilidad: 0,04) y media distancia en el 75 (0,081).
 
-### 2.5 Formato para el artifact
+### 2.5 Formato para el artifact (`formato_v32/`; versión provisional hasta la traducción definitiva)
 
-PENDIENTE: se genera al terminar la NUTS del bloque «zonas» (§7).
+- **Normalizado por temporada.** 6 temporadas, 111 MB; 2024-25: 9.264 filas, como la v3.2, y 1.075 columnas (879 de
+  la v3.2 + 196 nuevas). No falta ninguna columna de la v3.2.
+- **Cobertura de la v5:** 7.656 filas con alguna métrica de la v5 (`fuente_norm` = «V5+V3.2»); 1.608 sólo con la v3.2,
+  porque no tienen persona v5.
+- **Destinos.** 20 ligas, 119 MB.
+- **v5 frente a v3.2 en las mismas filas** (2024-25, equivalente EuroLeague 2025-26):
+
+| Métrica | Filas | Correlación | Mediana v5 | Mediana v3.2 | Ancho 80 % v5 | Ancho 80 % v3.2 |
+|---|---|---|---|---|---|---|
+| Pts/100 | 7.538 | 0,95 | 14,8 | 15,4 | 7,0 | 6,4 |
+| T2% | 7.216 | 0,87 | 49,6 | 48,9 | 8,6 | 8,1 |
+| T3% | 6.748 | 0,82 | 32,1 | 30,0 | 6,6 | 6,8 |
+| USG% | 7.538 | 0,95 | 15,9 | 15,2 | 5,2 | 4,8 |
+| AST% | 7.531 | 0,94 | 8,7 | 8,6 | 5,2 | 6,0 |
+| % en el aro | 6.859 | 0,94 | 28,7 | 26,3 | 14,8 | 13,5 |
+| % media distancia | 6.859 | 0,83 | 5,9 | 5,4 | 5,6 | 6,2 |
+| % triple de esquina | 6.859 | 0,80 | 5,4 | 4,9 | 5,9 | 5,1 |
+| % asistidas | 7.015 | 0,91 | 61,9 | 64,0 | 15,6 | 17,9 |
+| eFG% | 6.168 | 0,89 | 50,1 | 48,5 | 6,5 | 7,6 |
+| TS% | 6.168 | 0,91 | 53,3 | 51,8 | 6,4 | 7,4 |
+| OREB/100 | 7.538 | 0,96 | 1,86 | 1,86 | 1,12 | 1,17 |
+| BLK/100 | 7.538 | 0,93 | 0,42 | 0,24 | 0,42 | 0,40 |
+| STL% | 7.538 | 0,80 | 1,60 | 1,41 | 0,74 | 0,70 |
+| PF/100 | 7.538 | 0,88 | 7,2 | 7,0 | 2,7 | 2,5 |
+
+**LECTURA.**
+- Las dos versiones ordenan a los jugadores de forma parecida (correlación 0,80–0,96).
+- El ancho del 80 % en esta tabla es el **equivalente EuroLeague**: suma la incertidumbre del nivel y la de la
+  traducción. Por eso es parecido al de la v3.2, aunque el nivel en su liga sea un 40 % más estrecho (§2.2).
+- **BLK% (y BLK/100):** la mediana del nivel de la v5 (1,0 % en su liga) supera la del observado (0,6 %), sobre todo
+  en los exteriores (0,53 frente a 0,22).
+  - El encogimiento en la escala logit hacia la media del rol sube a quien tiene pocos tapones: un suceso raro, con
+    muchos ceros.
+  - En el examen fuera de muestra, el predictivo queda algo alto en BLK% y en media distancia (PIT medio 0,44 y 0,43).
+    **VERIFICAR** (§6).
 
 ---
 
@@ -303,11 +337,14 @@ PENDIENTE: se genera al terminar la NUTS del bloque «zonas» (§7).
      cambio posterior a ver los resultados y se trata como tal.
 2. **RIESGO · zonas frente a la v3.2:** pierde un 4–8 % en aro, media distancia y triple de esquina.
    - **Opción:** publicar esas tres zonas con la v3.2 en el híbrido (`fuente_<m>` = V3.2) hasta mejorarlas.
-3. **VERIFICAR · TS% y eFG% sin probabilidades de umbral propias:** faltan los percentiles de la liga × rol de esas dos
+3. **VERIFICAR · sesgo al alza en BLK% y media distancia:** PIT medio 0,44 y 0,43; el 52 % y el 56 % de los
+   observados quedan por debajo de la mediana predicha. Revisar el prior del rol en métricas raras (F3) antes de
+   activarlas.
+4. **VERIFICAR · TS% y eFG% sin probabilidades de umbral propias:** faltan los percentiles de la liga × rol de esas dos
    métricas.
-4. **VERIFICAR · NUTS del paso 2:** volumen_papel y zonas en curso, y tiro por repetir. El formato v3.2 y el criterio 4
+5. **VERIFICAR · NUTS del paso 2:** zonas hecha; volumen_papel en curso; tiro por repetir. El formato v3.2 y el criterio 4
    esperan a la traducción publicada completa.
-5. **RIESGO · volumen:** el parquet completo (656 MB) y los draws (637 MB) no se versionan; se regeneran con la orden de
+6. **RIESGO · volumen:** el parquet completo (656 MB) y los draws (637 MB) no se versionan; se regeneran con la orden de
    la cabecera.
 
 ## 7. Diagnósticos de inferencia
@@ -320,8 +357,8 @@ PENDIENTE: se genera al terminar la NUTS del bloque «zonas» (§7).
 |---|---|---|---|---|
 | defensa_cuidado | Hecho | 1,01 | 793 / 434 | 3 en 3.000 |
 | tiro | Por repetir con 1.500 + 1.500 draws por cadena | 1,03 (DT base de TL%) | 210 / 89 | 0 |
-| zonas | En curso | | | |
-| volumen_papel | En cola | | | |
+| zonas | Hecho | 1,01 | 371 / 580 | 0 |
+| volumen_papel | En curso | | | |
 
 ## 8. Verificación de no regresión
 
