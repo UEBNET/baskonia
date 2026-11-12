@@ -40,3 +40,4 @@ data/v5/validacion/puentes_fuera.parquet
 data/v5/validacion/*_casos_*.parquet
 data/v5/validacion/predicciones_v5_*.parquet
 data/v5/salidas/*/draws_liga_actual.parquet
+data/v5/salidas/*/destinos.parquet
