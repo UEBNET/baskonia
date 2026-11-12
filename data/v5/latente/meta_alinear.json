@@ -1,0 +1,25 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F5",
+ "config": "configs/v5/f5.yaml",
+ "hash_config": "1a1c9bf8e468",
+ "hash_datos_entrada": "63bbb635adb19625",
+ "fecha": "2026-11-12T11:47:25+00:00",
+ "python": "3.13.18",
+ "paso": "alinear",
+ "permutacion": {
+  "F1": "F1",
+  "F2": "F3",
+  "F3": "F2",
+  "F4": "F4",
+  "F5": "F5"
+ },
+ "signos": [
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0
+ ],
+ "tiempo_s": 0
+}

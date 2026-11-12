@@ -302,6 +302,21 @@ def varimax(L: np.ndarray, iters: int = 200, tol: float = 1e-8) -> tuple[np.ndar
     return Lr * sg, R * sg
 
 
+def alinear(L: np.ndarray, ref: np.ndarray) -> np.ndarray:
+    """Permutación con signo P (k × k) que lleva las columnas de L a las de `ref` (máxima |congruencia de Tucker| por
+    pares, asignación húngara). El factorial sólo está identificado salvo orden y signo: sin esto, una semilla distinta
+    puede intercambiar z2 y z3 y cambiar su significado."""
+    from scipy.optimize import linear_sum_assignment
+    num = ref.T @ L
+    den = np.sqrt(np.outer((ref ** 2).sum(0), (L ** 2).sum(0)))
+    C = num / den
+    fila, col = linear_sum_assignment(-np.abs(C))
+    P = np.zeros((L.shape[1], ref.shape[1]))
+    for i, j in zip(fila, col):
+        P[j, i] = np.sign(C[i, j]) or 1.0
+    return P
+
+
 def congruencia(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     """Congruencia de Tucker por factor tras alinear B con A (Procrustes ortogonal)."""
     u, _, vt = np.linalg.svd(B.T @ A)

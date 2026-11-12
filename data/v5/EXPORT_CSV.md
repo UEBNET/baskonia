@@ -125,7 +125,21 @@ de sus compañeros, ponderada por minutos y sin contarle a él.
 
 No tiene nivel ni intervalo: es una variable de contexto.
 
-## 4. `data/v5/latente/perfiles_latentes.csv.gz`
+## 4. `data/v5/latente/perfiles_latentes.csv.gz` y `perfiles_latentes_20261112.csv.gz`
+
+> **Usar `perfiles_latentes_20261112.csv.gz`** (añadido el 12-11-2026, decisión del usuario en la puerta de la F8). Es la
+> F5 regenerada con las identidades revisadas, como las otras tres tablas, con las mismas columnas y el mismo
+> significado de cada factor:
+> - 39.948 filas; antes 39.960, porque las uniones de identidades juntan algunas personas;
+> - commit de origen: el de la puerta de la F8.
+>
+> El fichero antiguo se conserva sin cambios.
+>
+> **Correlación entre versiones** en las persona-temporadas comunes: z2 0,87; z3 0,98; z5 0,92.
+>
+> **Orden de los factores.** Un factorial sólo fija los factores salvo orden y signo. Desde la F8 se alinean con las
+> cargas de referencia (`data/v5/latente/cargas_referencia.csv`, las del ajuste que describe el informe 05), así que z2,
+> z3 y z5 conservan su significado.
 
 **Qué es.** El perfil latente (F5, modelo factorial dinámico) de cada persona en cada temporada: E[z | estado filtrado]
 = Λᵀ Σ₀⁻¹ (a − κ − g), con la historia hasta esa temporada.
@@ -135,6 +149,7 @@ No tiene nivel ni intervalo: es una variable de contexto.
 | Origen | `perfiles_latentes.parquet` |
 | Filas | 39.960 |
 | Commit de origen | a3e7f15 (10-11-2026; F5 con las identidades de entonces, anterior a la revisión de la F8) |
+| Fichero nuevo | `perfiles_latentes_20261112.csv.gz`: 39.948 filas, 1,4 MB, F5 regenerada (12-11-2026) |
 | Tamaño | 1,4 MB |
 
 **Limitaciones**

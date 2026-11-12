@@ -506,6 +506,41 @@ temporada):
 6. **Exportación CSV para la presentación:** `perfiles_latentes.csv.gz` es anterior a la regeneración de la F5. ¿Se
    reexporta?
 
+## 12 bis. Decisiones del usuario (12-11-2026)
+
+1. **El estilo de liga queda apagado** en la proyección publicada (criterio 11). El código del bloque se conserva.
+2. **Publicación de la proyección:**
+   - **ex ante** por defecto;
+   - **condicionada** sólo como **escenario**, con el rol y los minutos fijados por el analista y la etiqueta
+     «escenario».
+3. **Criterio 10 aceptado como no cumplido.** Se publica el **nivel** («capacidad», estrecho) separado del
+   **predictivo** («lo que registrará la próxima temporada», ancho).
+4. **Ajuste por métrica y par de ligas (origen-destino) en la F9**, como el de la v3.2.
+   - Condición: se adopta sólo si mejora el mismo examen con un intervalo que no cruce cero.
+   - Si no, queda documentado y descartado.
+5. **Roles, reemplazo y estilos de entrenador** (regenerados en la F8.0b) se republican en los artifacts **con la F9**.
+6. **Perfiles latentes reexportados** como fichero nuevo: `data/v5/latente/perfiles_latentes_20261112.csv.gz`. El
+   antiguo se conserva.
+
+### Hallazgo al reexportar: el orden de los factores (corregido)
+
+- **Qué pasó.** Al comparar la exportación antigua con la nueva, z2 y z3 apenas se parecían (correlación ≈ 0). Las
+  cargas mostraban que se habían **intercambiado**:
+  - el nuevo z2 era el factor interior–exterior (3PAr −0,69; OREB%, BLK% y FTr +0,28);
+  - el nuevo z3 era el de tiro (TL% +0,31, TOV% −0,11).
+  - z5 (creación) no cambió.
+- **Causa.** Un modelo factorial sólo fija los factores salvo orden y signo. Al corregir la F5 (§11), gana la semilla
+  de arranque 2 en lugar de la 0, y esa semilla los ordena de otra forma.
+- **Corrección** (`latente/modelo.py: alinear`, paso `alinear` de la F5, test nuevo):
+  - al final de la F5, los factores se alinean con las cargas de referencia `data/v5/latente/cargas_referencia.csv`,
+    que son las que interpreta el informe 05;
+  - la alineación es una asignación húngara por |congruencia| más el signo;
+  - z2 vuelve a ser tiro y anotación (congruencia con la referencia 0,93), z3 interior–exterior (0,995) y z5
+    creación (0,985).
+- **Efecto en los resultados.** Ninguno: la proyección usa los tres perfiles estables juntos (z2, z3 y z5), y su
+  ajuste no depende del orden. Se regeneraron la F6.2, la F7 y la F8 con los perfiles alineados, y se comprobó que las
+  cifras de este informe no cambian (§12 ter).
+
 ## 13. Siguiente fase propuesta y ajuste de inversión
 
 **F9 · Contrato de salida** (§13 del encargo):

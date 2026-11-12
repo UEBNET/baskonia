@@ -7,8 +7,10 @@ Pasos:
 - seleccion_k: K ∈ {0, 3, 5, 6, 8} en un corte (regla fijada en la configuración)
 - residuo: experimento del residuo de la temporada correlacionado entre métricas (K = 0 y K elegido)
 - examen: K elegido (cambios correlacionados y diagonales) frente a K = 0, en los tres cortes
-- final: ajuste con todas las temporadas, cargas rotadas (varimax), estabilidad entre submuestras y cortes, perfil
-  latente z de cada persona-temporada y sesgo por rol
+- final: ajuste con todas las temporadas, cargas rotadas (varimax) y alineadas con `cargas_referencia.csv` (orden y
+  signo de los factores), estabilidad entre submuestras y cortes, perfil latente z de cada persona-temporada y sesgo
+  por rol
+- alinear: aplica esa alineación a la salida ya guardada de `final`, sin repetir el ajuste
 - neuronal: alternativa neuronal frente al factorial (criterio: mejora con IC que no cruce 0 y sin peor calibración)
 - figuras
 """
@@ -147,6 +149,11 @@ def final(cfg: dict) -> dict:
     mod = ML.ajustar(Ssub, K, "corr", x0=mod["x"], maxiter=cfg["ajuste"]["maxiter"], kr=cfg["ajuste"]["k_residuo"])
     print(f"  refinado: logL {mod['logL']:.1f}, convergió {mod['convergio']}", flush=True)
     Lr, R = ML.varimax(mod["L"])
+    # orden y signo de los factores fijados por las cargas de referencia (las que interpreta el informe 05)
+    ref = DIR / "cargas_referencia.csv"
+    if ref.exists():
+        P = ML.alinear(Lr, pd.read_csv(ref, index_col=0).loc[ML.METRICAS].to_numpy(float))
+        Lr, R = Lr @ P, R @ P
     cargas = pd.DataFrame(Lr, index=ML.METRICAS, columns=[f"F{k + 1}" for k in range(K)])
     # escala comparable: carga / DT de la capacidad de la métrica (correlación métrica-factor)
     sd = np.sqrt(np.diag(mod["L"] @ mod["L"].T + np.diag(mod["psi"])))
@@ -185,6 +192,37 @@ def final(cfg: dict) -> dict:
     return {"K": K, "logL": mod["logL"], "congruencia_min": float(pd.DataFrame(est).drop(columns="comparacion").min().min())}
 
 
+def alinear(cfg: dict) -> dict:
+    """Aplica a la salida ya guardada de `final` la alineación con las cargas de referencia (la misma que hace `final`
+    desde la F8): permuta y cambia de signo las columnas de cargas, estabilidad, perfiles y la rotación guardada. Evita
+    repetir el ajuste (determinista) cuando sólo cambia el orden de los factores."""
+    from bbnorm5.latente import modelo as ML
+    car = pd.read_csv(DIR / "cargas_varimax.csv", index_col=0)
+    ref = pd.read_csv(DIR / "cargas_referencia.csv", index_col=0).loc[car.index]
+    P = ML.alinear(car.to_numpy(float), ref.to_numpy(float))
+    if np.allclose(P, np.eye(len(P))):
+        return {"permutacion": "identidad"}
+    fs = list(car.columns)
+    zc = [f"z{k + 1}" for k in range(len(fs))]
+    pd.DataFrame(car.to_numpy(float) @ P, index=car.index, columns=fs).to_csv(DIR / "cargas_varimax.csv")
+    cc = pd.read_csv(DIR / "cargas_correlacion.csv", index_col=0)
+    cc[fs] = cc[fs].to_numpy(float) @ P
+    cc.to_csv(DIR / "cargas_correlacion.csv")
+    es = pd.read_csv(DIR / "estabilidad_cargas.csv")
+    es[fs] = es[fs].to_numpy(float) @ np.abs(P)
+    es.to_csv(DIR / "estabilidad_cargas.csv", index=False)
+    z = pd.read_parquet(DIR / "perfiles_latentes.parquet")
+    z[zc] = z[zc].to_numpy(float) @ P
+    z.to_parquet(DIR / "perfiles_latentes.parquet")
+    with open(DIR / "modelo_final.pkl", "rb") as f:
+        m = pickle.load(f)
+    m["R"] = m["R"] @ P
+    with open(DIR / "modelo_final.pkl", "wb") as f:
+        pickle.dump(m, f)
+    orden = {fs[j]: fs[i] for j, i in zip(*np.nonzero(P))}
+    return {"permutacion": orden, "signos": [float(P[j, i]) for j, i in zip(*np.nonzero(P))]}
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="bbnorm5.f5")
     ap.add_argument("--config", default="configs/v5/f5.yaml")
@@ -197,6 +235,8 @@ def main(argv=None):
         print(f"== {paso}", flush=True)
         if paso == "seleccion_k":
             out = seleccion_k(cfg)
+        elif paso == "alinear":
+            out = alinear(cfg)
         elif paso == "residuo":
             out = residuo(cfg)
         elif paso == "examen":

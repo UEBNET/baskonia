@@ -87,3 +87,19 @@ def test_gls_paso2_no_mira_el_futuro():
     a = LS.gls_paso2(todo[todo["temporada"].str[:4].astype(int) < T], vacio, "m", "encogido")
     b = LS.gls_paso2(intra, vacio, "m", "encogido")
     assert np.allclose(a["lambda"], b["lambda"])
+
+
+def test_alinear_factores_recupera_orden_y_signo():
+    """F8: la alineación con las cargas de referencia deshace una permutación con cambio de signo."""
+    import numpy as np
+    from bbnorm5.latente import modelo as ML
+    rng = np.random.default_rng(3)
+    ref = rng.normal(size=(14, 5))
+    P0 = np.zeros((5, 5))
+    for i, (j, s) in enumerate(zip([2, 0, 1, 4, 3], [1, -1, 1, 1, -1])):
+        P0[i, j] = s
+    L = ref @ P0 + 0.05 * rng.normal(size=(14, 5))
+    P = ML.alinear(L, ref)
+    assert np.allclose(np.abs(P).sum(0), 1) and np.allclose(np.abs(P).sum(1), 1)
+    assert np.corrcoef((L @ P).ravel(), ref.ravel())[0, 1] > 0.99
+    assert np.allclose(ML.alinear(ref, ref), np.eye(5))
