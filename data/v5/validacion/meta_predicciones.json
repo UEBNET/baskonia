@@ -1,0 +1,12 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F8",
+ "config": "configs/v5/f8.yaml",
+ "hash_config": "5df254752c8b",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-12T08:55:38+00:00",
+ "python": "3.13.18",
+ "paso": "predicciones",
+ "filas": 1447824,
+ "tiempo_s": 354
+}

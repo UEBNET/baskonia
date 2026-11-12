@@ -1,0 +1,23 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F8",
+ "config": "configs/v5/f8.yaml",
+ "hash_config": "5df254752c8b",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-12T08:55:48+00:00",
+ "python": "3.13.18",
+ "paso": "fugas",
+ "identidades": {
+  "personas_unidas_v5": 595,
+  "casos_persona_anio": 13036,
+  "casos_con_union_de_evidencia_posterior": 284,
+  "cuota": 0.021785823872353484
+ },
+ "rol_volumen_todas": {
+  "metrica": "todas",
+  "casos": 180978,
+  "condicionada_frente_ex_ante": -0.07150469975044438,
+  "solo_exposicion_t_frente_ex_ante": -0.005708986740037836
+ },
+ "tiempo_s": 1
+}

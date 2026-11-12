@@ -77,11 +77,13 @@ def casos_v32(cfg1: dict) -> pd.DataFrame:
     return c
 
 
-def comparar(cfg: dict, cfg1: dict, p: pd.DataFrame | None = None) -> dict:
+def comparar(cfg: dict, cfg1: dict, p: pd.DataFrame | None = None, modelo: str = "ex_ante", sufijo: str = "") -> dict:
+    """`modelo`: la v5 ex ante (rol de T desconocido, sin volumen, exposición anterior; la comparable) o la
+    condicionada al rol y al volumen de T («final»)."""
     p = pd.read_parquet(DIR / "predicciones_v5.parquet") if p is None else p
     c = casos_v32(cfg1)
     n0 = len(c)
-    pv = p[p["modelo"] == "final"]
+    pv = p[p["modelo"] == modelo]
     c = c.merge(pv, left_on=["persona_v5", "liga_d", "anio_obj", "met5"],
                 right_on=["persona_v5", "liga", "anio", "metrica"], suffixes=("", "_v5"), how="inner")
     # escala de la v5 frente a la de la v3.2 (1 o 100 según la métrica) y mismo registro
@@ -101,7 +103,7 @@ def comparar(cfg: dict, cfg1: dict, p: pd.DataFrame | None = None) -> dict:
         c[f"wis_{mod}"] = VF.wis(y, c[f"{mod}__q50"], {a: c[f"{mod}__lo{a}"] for a in (50, 80, 90)},
                                  {a: c[f"{mod}__hi{a}"] for a in (50, 80, 90)})
     c["tramo_min_d"] = pd.cut(c["min_d"], [0, 600, 1200, np.inf], labels=["300-600", "600-1200", "≥1200"]).astype(str)
-    c.to_parquet(DIR / "protocolo_f1_casos.parquet")
+    c.to_parquet(DIR / f"protocolo_f1_casos{sufijo}.parquet")
     rng = np.random.default_rng(cfg["semilla"])
     B = int(cfg["examen"].get("bootstrap", 1000))
     filas = []
@@ -126,9 +128,8 @@ def comparar(cfg: dict, cfg1: dict, p: pd.DataFrame | None = None) -> dict:
                 fila[f"mejora_{ref}"] = hi < 0
             filas.append(fila)
     t = pd.DataFrame(filas)
-    t.to_csv(DIR / "protocolo_f1.csv", index=False)
-    pit = c[["metrica", "anio", "pit"]]
-    pit.to_csv(DIR / "protocolo_f1_pit.csv.gz", index=False)
+    t.to_csv(DIR / f"protocolo_f1{sufijo}.csv", index=False)
+    c[["metrica", "anio", "pit"]].to_csv(DIR / f"protocolo_f1_pit{sufijo}.csv.gz", index=False)
     glob = t[t["por"] == "global"].iloc[0].to_dict()
     return {"casos_f1": int(n0), "casos_comunes": int(len(c)), "personas": int(c["persona_v5"].nunique()),
             "global": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in glob.items()},

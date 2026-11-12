@@ -44,7 +44,8 @@ def main(argv=None):
             out = VF.comparar(cfg)
         elif paso == "protocolo":
             from bbnorm5.validacion import protocolo as VP
-            out = VP.comparar(cfg, C.cargar("configs/v5/f1.yaml"))
+            cfg1 = C.cargar("configs/v5/f1.yaml")
+            out = {"ex_ante": VP.comparar(cfg, cfg1), "condicionada": VP.comparar(cfg, cfg1, modelo="final", sufijo="_condicionada")}
         elif paso in ("lolo", "puentes_fuera", "sbc"):
             from bbnorm5.validacion import ligas as VL
             cfg7 = C.cargar("configs/v5/f7.yaml")

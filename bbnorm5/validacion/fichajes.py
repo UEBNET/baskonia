@@ -327,11 +327,17 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
     B = int(cfg["examen"].get("bootstrap", 1000))
     bb = b[b["metrica"].isin(COMUNES) & (b["min_total_real"] >= cfg["examen"]["min_minutos_destino"])
            & b["anio"].isin(cfg["examen"]["cortes_prueba"])].copy()
-    # misma persona-temporada-liga; el observado de la v5 es la liga entera, el del banco el equipo de destino:
-    # se exige que coincidan (un solo equipo en la liga de destino)
+    # Factor de definición por métrica (la v3.3 estima las posesiones con otra fórmula: pts/100 y STL/100 ≈ +1,8 %):
+    # mediana de real / (100·obs v5) en el corte 2021-22 del banco (fuera de la prueba: sin fugas)
+    bv = pd.read_parquet(DIR / "base_v5.parquet", columns=["persona_v5", "liga", "anio_obj", "metrica", "K", "N"])
+    bv = bv[bv["metrica"].isin(COMUNES)].drop_duplicates(["persona_v5", "liga", "anio_obj", "metrica"])
+    cal = b[(b["corte"] == "2021-22") & b["metrica"].isin(COMUNES) & (b["min_total_real"] >= 300)].merge(
+        bv, left_on=["persona_v5", "liga_d", "anio", "metrica"], right_on=["persona_v5", "liga", "anio_obj", "metrica"])
+    k = (cal["real"] / (100 * cal["K"] / cal["N"])).replace([np.inf, -np.inf], np.nan).groupby(cal["metrica"]).median()
     pv = p[p["metrica"].isin(COMUNES)].copy()
+    esc = 100.0 * pv["metrica"].map(k).fillna(1.0).to_numpy()
     for c in ["obs", "media"] + [_q(q) for q in CUANTILES]:
-        pv[c] = pv[c] * 100.0
+        pv[c] = pv[c] * esc
     claves = ["persona_v5", "liga", "anio", "metrica"]
     ancho = pv.pivot_table(index=claves, columns="modelo", values=[_q(q) for q in CUANTILES] + ["media", "obs", "crps"],
                            aggfunc="first")
@@ -339,12 +345,21 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
     ancho = ancho.reset_index()
     d = bb.merge(ancho, left_on=["persona_v5", "liga_d", "anio", "metrica"], right_on=claves, how="inner")
     n_banco, n_cruce = len(bb), len(d)
+    # el observado de la v5 es la liga entera y el del banco el equipo de destino: fuera los casos en que difieren
+    # más de un 5 % tras el factor de definición (varios equipos en la liga de destino)
     d["obs_v5"] = d["final__obs"]
-    tol = np.maximum(0.005 * np.abs(d["real"]), 0.05)
-    d = d[np.isfinite(d["real"]) & (np.abs(d["real"] - d["obs_v5"]) <= tol)].copy()
+    d = d[np.isfinite(d["real"]) & (np.abs(d["real"] / d["obs_v5"].replace(0, np.nan) - 1) <= 0.05)].copy()
+    # intervalos recortados al soporte de la métrica (porcentajes en [0, 100], tasas ≥ 0): sólo puede favorecer a quien
+    # se salga de él (en USG% la v3.3 tiene un 1 % de casos con límites de ±10¹⁰)
+    techo = np.where(d["metrica"].str.endswith("_pct"), 100.0, np.inf)
+    cols = [c for c in d.columns if c.startswith("v33_") or "__q" in c or c.endswith("__media")]
+    for c in cols:
+        d[c] = np.clip(d[c].to_numpy(float), 0.0, techo)
+    completos = d[[c for c in cols if c.startswith("v33_") or any(m in c for m in ("ex_ante__", "final__"))]].notna().all(axis=1)
+    d = d[completos].copy()
     d["y"] = d["real"]
-    out = {"casos_banco": int(n_banco), "con_prediccion_v5": int(n_cruce), "mismo_observado": int(len(d)),
-           "personas": int(d["persona_v5"].nunique())}
+    out = {"casos_banco": int(n_banco), "con_prediccion_v5": int(n_cruce), "comparables": int(len(d)),
+           "personas": int(d["persona_v5"].nunique()), "factor_definicion": k.round(4).to_dict()}
 
     def puntuar(x: pd.DataFrame, modelo: str) -> np.ndarray:
         if modelo.startswith("v33"):
@@ -360,7 +375,7 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
         s33 = puntuar(g, "v33")
         s33o = puntuar(go, "v33")
         fila = {"metrica": m, "casos": len(g), "personas": g["persona_v5"].nunique()}
-        for mod in ("final", "final_exposicion_t", "base_F4"):
+        for mod in ("ex_ante", "final", "final_exposicion_t", "base_F4"):
             s5 = puntuar(g, mod)
             # «todas»: cada métrica normalizada por el WIS medio de la v3.3 en esa métrica
             if m == "todas":
@@ -371,17 +386,19 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
                 a, bref, bor = s5, s33, s33o
             fila[f"wis_{mod}_frente_v33"], fila[f"ic_lo_{mod}"], fila[f"ic_hi_{mod}"] = _boot_ratio(
                 g["persona_v5"].to_numpy(), a, bref, B, rng)
-            if mod == "final":
-                fila["wis_final_frente_v33_oraculo"], fila["ic_lo_oraculo"], fila["ic_hi_oraculo"] = _boot_ratio(
+            if mod == "ex_ante":
+                fila["wis_ex_ante_frente_v33_oraculo"], fila["ic_lo_oraculo"], fila["ic_hi_oraculo"] = _boot_ratio(
                     g["persona_v5"].to_numpy(), a, bor, B, rng)
         y = g["y"].to_numpy(float)
-        for mod, lo, hi in (("v33", g["v33_lo80"], g["v33_hi80"]), ("final", g["final__q10"], g["final__q90"]),
-                            ("final_exposicion_t", g["final_exposicion_t__q10"], g["final_exposicion_t__q90"])):
+        for mod, lo, hi in (("v33", g["v33_lo80"], g["v33_hi80"]), ("ex_ante", g["ex_ante__q10"], g["ex_ante__q90"]),
+                            ("final", g["final__q10"], g["final__q90"])):
             fila[f"cob80_{mod}"] = float(((y >= lo) & (y <= hi)).mean())
             fila[f"ancho80_{mod}"] = float(np.median(hi - lo))
-        fila["ratio_ancho80_final_v33"] = float(np.median((g["final__q90"] - g["final__q10"]) / (g["v33_hi80"] - g["v33_lo80"])))
+        for mod in ("ex_ante", "final"):
+            fila[f"ratio_ancho80_{mod}_v33"] = float(np.median((g[f"{mod}__q90"] - g[f"{mod}__q10"]) /
+                                                               np.maximum(g["v33_hi80"] - g["v33_lo80"], 1e-9)))
+            fila[f"mae_{mod}"] = float(np.nanmean(np.abs(y - g[f"{mod}__media"])))
         fila["mae_v33"] = float(np.nanmean(np.abs(y - g["v33_pred"])))
-        fila["mae_final"] = float(np.nanmean(np.abs(y - g["final__media"])))
         if "v42_pred" in g:
             fila["mae_v42"] = float(np.nanmean(np.abs(y - g["v42_pred"])))
         filas.append(fila)
@@ -393,11 +410,12 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
     fich = d[["persona_v5", "liga_d", "anio"]].drop_duplicates().rename(columns={"liga_d": "liga"})
     q = p.merge(fich, on=["persona_v5", "liga", "anio"])
     pv2 = q.pivot_table(index=["persona_v5", "liga", "anio", "metrica"], columns="modelo", values="crps").dropna()
-    pv2 = pv2.div(pv2.groupby(level="metrica")["final"].transform("mean"), axis=0)
+    pv2 = pv2.div(pv2.groupby(level="metrica")["ex_ante"].transform("mean"), axis=0)
     per = pv2.index.get_level_values("persona_v5").to_numpy()
-    for sin in ("final_sin_estilo_liga", "final_sin_companeros", "base_F4"):
-        r, lo, hi = _boot_ratio(per, pv2["final"].to_numpy(), pv2[sin].to_numpy(), B, rng)
-        nav.append({"comparacion": f"final frente a {sin}", "dif_crps_rel": r, "ic95_lo": lo, "ic95_hi": hi,
+    for ref, sin in (("ex_ante", "ex_ante_sin_estilo_liga"), ("ex_ante", "ex_ante_sin_companeros"),
+                     ("final", "final_sin_estilo_liga"), ("final", "final_sin_companeros"), ("ex_ante", "base_F4")):
+        r, lo, hi = _boot_ratio(per, pv2[ref].to_numpy(), pv2[sin].to_numpy(), B, rng)
+        nav.append({"comparacion": f"{ref} frente a {sin}", "dif_crps_rel": r, "ic95_lo": lo, "ic95_hi": hi,
                     "supera_navaja": hi < 0, "casos": len(pv2)})
     pd.DataFrame(nav).to_csv(DIR / "navaja_fichajes.csv", index=False)
     out["tabla"] = tabla.round(4).to_dict(orient="records")
