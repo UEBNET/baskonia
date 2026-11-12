@@ -488,6 +488,8 @@ temporada):
   - cobertura del oráculo;
   - el GLS del paso 2 no mira hacia delante.
 
+  Suite completa en verde: **373 passed**.
+
 ## 12. Riesgos detectados y decisiones que requieren al usuario
 
 1. **¿Se publica la proyección en contexto sin el estilo de liga?** Es lo que manda el criterio 11 y ya está aplicado
