@@ -51,3 +51,19 @@ def test_umbrales_con_respaldo_de_liga():
     u = SD.umbrales(o, "m", 2026)
     assert set(zip(u["liga"], u["rol"])) == {("a", "E"), ("a", "I"), ("a", "todos"), ("b", "X"), ("b", "todos")}
     assert (u["umbral_p25"] <= u["umbral_p50"]).all() and (u["umbral_p50"] <= u["umbral_p75"]).all()
+
+
+def test_tiro_compuesto_formula_exacta_con_intervalos_estrechos():
+    from bbnorm5.salidas import derivadas as DV
+    v = {"t2_pct": 0.55, "t3_pct": 0.35, "tl_pct": 0.78, "tpar": 0.40, "ftr": 0.25}
+    q = {m: (np.array([x * 0.999]), np.array([x]), np.array([x * 1.001])) for m, x in v.items()}
+    r = DV.tiro_compuesto(q, np.eye(5), np.random.default_rng(0), cuantiles=(0.5,))
+    efg = (1 - 0.4) * 0.55 + 1.5 * 0.4 * 0.35
+    ts = (2 * 0.6 * 0.55 + 3 * 0.4 * 0.35 + 0.25 * 0.78) / (2 * (1 + 0.44 * 0.25))
+    assert abs(r["efg_pct"][0.5][0] - efg) < 1e-3 and abs(r["ts_pct"][0.5][0] - ts) < 1e-3
+
+
+def test_por_100_conversion():
+    from bbnorm5.salidas import derivadas as DV
+    assert np.isclose(DV.por_100(np.array([0.10]), "oreb_p100", 0.45)[0], 4.5)
+    assert np.isclose(DV.por_100(np.array([0.02]), "stl_pct", 0.7)[0], 2.0)      # la oportunidad ya es la posesión

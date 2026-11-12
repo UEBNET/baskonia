@@ -34,7 +34,9 @@ DIR = C.DIR_DATOS / "salidas" / "formato_v32"
 V32 = C.RAIZ / "data" / "modelos" / "v3_2" / "normalizado"
 A_V32 = {"t2_pct": "fg2_pct", "t3_pct": "fg3_pct", "tl_pct": "ft_pct", "tpar": "fg3a_rate", "ftr": "fta_rate",
          "oreb_pct": "oreb_pct", "dreb_pct": "dreb_pct", "ast_pct": "ast_pct", "tov_pct": "tov_pct",
-         "blk_pct": "blk_pct", "stl_p100": "stl_p100", "pts_p100": "pts_p100", "usg_pct": "usg_pct", "pf_p40": "pf_p40"}
+         "blk_pct": "blk_pct", "stl_p100": "stl_p100", "pts_p100": "pts_p100", "usg_pct": "usg_pct", "pf_p40": "pf_p40",
+         "pct_aro": "pct_aro", "pct_corta": "pct_corta", "pct_media": "pct_media", "pct_t3_esquina": "pct_t3_esquina",
+         "pct_asistidas": "pct_asistidas"}
 Z = {80: stats.norm.ppf(0.9), 50: stats.norm.ppf(0.75)}
 VARA = ("euroleague", "2025-26")      # como la v3.2: equivalente EuroLeague 2025-26
 
@@ -97,10 +99,50 @@ def _pctel(c: np.ndarray, v: pd.DataFrame) -> np.ndarray:
     return out
 
 
+def _poner(v: pd.DataFrame, nuevas: dict, m3: str, c, lo, hi, lo50, hi50) -> None:
+    """Sustituye en `v` la métrica de la v3.2 `m3` por la de la v5 donde la hay (conserva la v3.2 en `<m3>_v32*`)."""
+    hay = np.isfinite(c)
+    for s_ in ("", "_lo", "_hi"):
+        nuevas[f"{m3}_v32{s_}"] = v[f"{m3}{s_}"].to_numpy()
+    v[m3] = np.where(hay, c, v[m3])
+    v[f"{m3}_lo"] = np.where(hay, lo, v[f"{m3}_lo"])
+    v[f"{m3}_hi"] = np.where(hay, hi, v[f"{m3}_hi"])
+    v[f"{m3}_pctel"] = np.where(hay, _pctel(np.asarray(c, float), v), v[f"{m3}_pctel"])
+    nuevas[f"{m3}_lo50"], nuevas[f"{m3}_hi50"] = lo50, hi50
+    nuevas[f"fuente_{m3}"] = np.where(hay, "V5", "V3.2")
+
+
+def _derivadas_normalizado(v: pd.DataFrame, comp: dict, nuevas: dict, k: dict, raz: pd.Series) -> None:
+    """F9 bis: TS% y eFG% (draws conjuntos de sus componentes, equivalente EuroLeague) y variantes por 100 posesiones
+    (razón oportunidades / posesión de la EuroLeague de la vara)."""
+    from bbnorm5.salidas import derivadas as DV
+    q = {m: tuple(comp[m][c].to_numpy(float) / k[m] for c in ("lo", "c", "hi")) for m in DV.COMPONENTES}
+    ok = np.all([np.isfinite(q[m][1]) for m in DV.COMPONENTES], axis=0)
+    qs = (0.1, 0.25, 0.5, 0.75, 0.9)
+    r = DV.tiro_compuesto({m: tuple(a[ok] for a in q[m]) for m in DV.COMPONENTES}, DV.correlacion(),
+                          np.random.default_rng(20261117), cuantiles=qs)
+    for nom in ("efg_pct", "ts_pct"):
+        if nom not in v.columns:
+            continue
+        out = {qq: np.full(len(v), np.nan) for qq in qs}
+        for qq in qs:
+            out[qq][ok] = r[nom][qq] * 100
+        _poner(v, nuevas, nom, out[0.5], out[0.1], out[0.9], out[0.25], out[0.75])
+    for m32, (m5, col) in DV.POR_100.items():
+        if m32 not in v.columns or m5 not in comp:
+            continue
+        j = comp[m5]
+        f = (1.0 if col is None else float(raz[col])) * 100 / k[m5]
+        _poner(v, nuevas, m32, *(j[c].to_numpy(float) * f for c in ("c", "lo", "hi", "lo50", "hi50")))
+
+
 def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
     from bbnorm5.ligas import modelo as LM
     from bbnorm5.ligas import resumen_paso2 as LR2
+    from bbnorm5.salidas import derivadas as DV
     lam = LR2.cargar(LM.BLOQUES_PASO2, "paso2_")
+    r_ = DV.razones()
+    raz = r_[(r_["liga"] == VARA[0]) & (r_["temporada"] == VARA[1])].iloc[0]     # razones de la vara (EuroLeague)
     per = _personas()
     escritos = []
     (DIR / "normalizado").mkdir(parents=True, exist_ok=True)
@@ -112,7 +154,7 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
         n0, c0 = len(v), list(v.columns)
         v = v.merge(per, on=["liga", "player_id"], how="left")
         nt = niv[niv["temporada"] == t]
-        nuevas = {}
+        nuevas, comp = {}, {}
         for m5, m3 in A_V32.items():
             fam = DM.METRICAS[m5][0]
             inv = _inv(fam)
@@ -145,8 +187,10 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict) -> list:
             nuevas[f"{m3}_lo50"], nuevas[f"{m3}_hi50"] = j["lo50"].to_numpy(), j["hi50"].to_numpy()
             nuevas[f"{m3}_obs_v5"] = j["tasa"].to_numpy()
             nuevas[f"fuente_{m3}"] = np.where(hay, "V5", "V3.2")
+            comp[m5] = j
+        _derivadas_normalizado(v, comp, nuevas, k, raz)
         v = pd.concat([v, pd.DataFrame(nuevas, index=v.index)], axis=1)
-        v["fuente_norm"] = np.where(v[[f"fuente_{m3}" for m3 in A_V32.values()]].eq("V5").any(axis=1), "V5+V3.2",
+        v["fuente_norm"] = np.where(v[[c for c in v.columns if c.startswith("fuente_") and c != "fuente_norm"]].eq("V5").any(axis=1), "V5+V3.2",
                                     v["fuente_norm"])
         assert len(v) == n0 and all(c in v.columns for c in c0), "el formato de la v3.2 no se conserva"
         num = v.select_dtypes("number").columns
@@ -168,9 +212,13 @@ def destinos(d: pd.DataFrame, k: dict) -> list:
         base.insert(1, "persona_id", base["persona_v5"].map(cw).to_numpy())
         base.insert(0, "liga_destino", liga)
         base = base.set_index("persona_v5")
-        for m5, m3 in A_V32.items():
+        from bbnorm5.salidas import derivadas as DV
+        lista = [(m5, m3, k[m5]) for m5, m3 in A_V32.items()] + \
+                [(m, m, 100.0) for m in ("efg_pct", "ts_pct", *DV.POR_100)]
+        for m5, m3, kk in lista:
             x = g[g["metrica"] == m5].set_index("persona_v5")
-            kk = k[m5]
+            if x.empty:
+                continue
             cols = {f"{m3}_nivel": x["nivel_q50"] * kk, f"{m3}_nivel_lo": x["nivel_q10"] * kk,
                     f"{m3}_nivel_hi": x["nivel_q90"] * kk, f"{m3}_pred": x["pred_q50"] * kk,
                     f"{m3}_pred_lo": x["pred_q10"] * kk, f"{m3}_pred_hi": x["pred_q90"] * kk,

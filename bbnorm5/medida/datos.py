@@ -36,6 +36,16 @@ METRICAS = {
     "pts_p100": ("normal", "pts", "poss_on", "Puntos por posesión en pista"),
     "usg_pct": ("normal", "plays", "usg_op", "USG%: jugadas propias / jugadas del equipo en pista"),
 }
+METRICAS_BASE = dict(METRICAS)          # las 14 de la F3 (las que usa la capa latente, F5)
+# F9 bis: métricas de jugada a jugada de la v3.2 (sólo ligas con jugada a jugada; zonas sólo con coordenadas válidas)
+METRICAS_PBP = {
+    "pct_aro": ("binomial", "fga_aro", "fga_pbp", "% de sus tiros de campo en el aro (< 1,8 m)"),
+    "pct_corta": ("binomial", "fga_corta", "fga_pbp", "% de sus tiros de campo cortos (1,8–4,25 m)"),
+    "pct_media": ("binomial", "fga_media", "fga_pbp", "% de sus tiros de campo de media distancia"),
+    "pct_t3_esquina": ("binomial", "fga_t3_esquina", "fga_pbp", "% de sus tiros de campo que son triples de esquina"),
+    "pct_asistidas": ("binomial", "fgm_asist", "fgm_pbp", "% de sus canastas que son asistidas"),
+}
+METRICAS.update(METRICAS_PBP)
 CLAVE = ["persona_v5", "liga", "temporada"]
 
 
@@ -56,6 +66,10 @@ def partidos(temporadas: list[str]) -> pd.DataFrame:
     d = d.assign(persona_v5=[p.get((l, i)) for l, i in zip(d["liga"], d["player_id"])]).dropna(subset=["persona_v5"])
     d = P.exposiciones(d)
     d = d[d["min"] > 0]
+    fp = C.DIR_DATOS / "medida" / "pista_partidos.parquet"
+    if fp.exists():          # F9 bis: zonas y asistidas por partido (bbnorm5.datos.pista_partido)
+        pp = pd.read_parquet(fp)
+        d = d.merge(pp, on=["liga", "temporada", "game_id", "player_id"], how="left")
     pos = _pos3(temporadas)
     d["rol"] = [pos.get(x, "X") for x in zip(d["liga"], d["temporada"], d["player_id"])]
     # rol de la unidad: el de más minutos

@@ -28,7 +28,7 @@ from scipy import optimize
 from bbnorm5.carrera import modelo as MC
 from bbnorm5.medida import datos as DM
 
-METRICAS = list(DM.METRICAS)
+METRICAS = list(DM.METRICAS_BASE)          # las 14 de la F3 (F9 bis añade otras a DM.METRICAS)
 GRANDE = 1e6
 
 

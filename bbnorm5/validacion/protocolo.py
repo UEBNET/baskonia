@@ -27,7 +27,12 @@ from bbnorm5.validacion import fichajes as VF
 DIR = VF.DIR
 EQ = {"fg2_pct": "t2_pct", "fg3_pct": "t3_pct", "ft_pct": "tl_pct", "fg3a_rate": "tpar", "fta_rate": "ftr",
       "oreb_pct": "oreb_pct", "dreb_pct": "dreb_pct", "ast_pct": "ast_pct", "tov_pct": "tov_pct", "blk_pct": "blk_pct",
-      "stl_p100": "stl_p100", "pts_p100": "pts_p100", "usg_pct": "usg_pct"}
+      "stl_p100": "stl_p100", "pts_p100": "pts_p100", "usg_pct": "usg_pct",
+      # F9 bis: zonas de tiro y % asistidas (jugada a jugada)
+      "pct_aro": "pct_aro", "pct_corta": "pct_corta", "pct_media": "pct_media", "pct_t3_esquina": "pct_t3_esquina",
+      "pct_asistidas": "pct_asistidas",
+      # F9 bis: derivadas de los componentes de tiro (draws conjuntos con la correlación de la F5)
+      "efg_pct": "efg_pct", "ts_pct": "ts_pct"}
 MODELOS_V32 = {"v3.2": ("v3_centro_z", "sd_v32c"), "v2": ("v2_centro_z", "v2_sd_z"), "v1": ("algoritmo_A_z", None),
                # intervalo publicado sin recalibrar: es de nivel (F1 §4.1); sólo para comparar anchuras (criterio 2)
                "v3.2_nivel": ("v3_centro_z", "v3_sd_z")}
@@ -79,10 +84,43 @@ def casos_v32(cfg1: dict) -> pd.DataFrame:
     return c
 
 
+def derivadas_tiro(p: pd.DataFrame, modelo: str, semilla: int) -> pd.DataFrame:
+    """eFG% y TS% del modelo `modelo` desde los predictivos de sus componentes (draws conjuntos, correlación de la F5);
+    el observado es exacto: eFG = (1 − 3PAr)·T2 + 1,5·3PAr·T3, TS = [2(1 − 3PAr)·T2 + 3·3PAr·T3 + FTr·TL] / 2(1 + 0,44·FTr)."""
+    from bbnorm5.salidas import derivadas as DV
+    q = p[(p["modelo"] == modelo) & p["metrica"].isin(DV.COMPONENTES)]
+    k = ["persona_v5", "liga", "anio"]
+    w = {m: g.drop_duplicates(k).set_index(k) for m, g in q.groupby("metrica")}
+    if set(w) != set(DV.COMPONENTES):
+        return pd.DataFrame()
+    idx = w[DV.COMPONENTES[0]].index
+    for m in DV.COMPONENTES[1:]:
+        idx = idx.intersection(w[m].index)
+    w = {m: v.loc[idx] for m, v in w.items()}
+    r = DV.tiro_compuesto({m: (w[m]["q10"].to_numpy(), w[m]["q50"].to_numpy(), w[m]["q90"].to_numpy())
+                           for m in DV.COMPONENTES}, DV.correlacion(), np.random.default_rng(semilla), n=1000,
+                          cuantiles=tuple(VF.CUANTILES))
+    o = {m: w[m]["obs"].to_numpy(float) for m in DV.COMPONENTES}
+    obs = {"efg_pct": (1 - o["tpar"]) * o["t2_pct"] + 1.5 * o["tpar"] * o["t3_pct"],
+           "ts_pct": (2 * (1 - o["tpar"]) * o["t2_pct"] + 3 * o["tpar"] * o["t3_pct"] + o["ftr"] * o["tl_pct"]) /
+                     (2 * (1 + 0.44 * o["ftr"]))}
+    base = w["t2_pct"].reset_index()[k + [c for c in ("liga_ult", "rol", "cambio_liga", "temporadas_hist", "N",
+                                                        "N_ult", "min_temp", "edad") if c in w["t2_pct"].columns]]
+    filas = []
+    for nom in ("efg_pct", "ts_pct"):
+        f = base.copy()
+        f["metrica"], f["modelo"], f["obs"], f["media"] = nom, modelo, obs[nom], r[nom]["media"]
+        for qq in VF.CUANTILES:
+            f[VF._q(qq)] = r[nom][qq]
+        filas.append(f)
+    return pd.concat(filas, ignore_index=True)
+
+
 def comparar(cfg: dict, cfg1: dict, p: pd.DataFrame | None = None, modelo: str = "ex_ante", sufijo: str = "") -> dict:
     """`modelo`: la v5 ex ante (rol de T desconocido, sin volumen, exposición anterior; la comparable) o la
     condicionada al rol y al volumen de T («final»)."""
     p = pd.read_parquet(DIR / "predicciones_v5.parquet") if p is None else p
+    p = pd.concat([p, derivadas_tiro(p, modelo, cfg["semilla"])], ignore_index=True)
     c = casos_v32(cfg1)
     n0 = len(c)
     pv = p[p["modelo"] == modelo]

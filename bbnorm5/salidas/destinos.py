@@ -177,7 +177,9 @@ def _resumir(te: pd.DataFrame, fam: str, aj: dict, lp: pd.DataFrame, rng, um: pd
     return out, dr
 
 
-def generar(cfg: dict) -> dict:
+def generar(cfg: dict, metricas: list[str] | None = None, parte: str | None = None) -> dict:
+    """Todas las métricas en un proceso o, con `metricas` y `parte`, sólo esas (para repartir entre procesos);
+    `unir` junta las partes y añade las derivadas."""
     anio = int(cfg["anio_objetivo"])
     o = CD.cargar()
     H = CD._hiper_preferido(pd.read_csv(DM.DIR / "hiperparametros.csv"))
@@ -197,7 +199,7 @@ def generar(cfg: dict) -> dict:
     salida = DIR / temp_obj
     salida.mkdir(parents=True, exist_ok=True)
     partes, draws = [], []
-    for met in DM.METRICAS:
+    for met in (metricas or list(DM.METRICAS)):
         fam = DM.METRICAS[met][0]
         x = filas_destino(o, H, met, anio, perf, ctx, mods)
         tr = base[base["metrica"] == met]
@@ -239,8 +241,12 @@ def generar(cfg: dict) -> dict:
         partes.append(y)
         print(f"  {met}: {len(y)} filas", flush=True)
     t = pd.concat(partes, ignore_index=True)
-    t.to_parquet(salida / "destinos.parquet")
     d = pd.concat(draws, ignore_index=True)
+    if parte is not None:
+        t.to_parquet(salida / f"destinos_parte{parte}.parquet")
+        d.to_parquet(salida / f"draws_parte{parte}.parquet")
+        return {"parte": parte, "metricas": metricas, "filas": len(t)}
+    t.to_parquet(salida / "destinos.parquet")
     d.to_parquet(salida / "draws_liga_actual.parquet")
     entradas = [C.DIR_DATOS / "carrera" / "observaciones.parquet", C.DIR_DATOS / "latente" / "perfiles_latentes.parquet",
                 C.DIR_DATOS / "contexto" / "contexto_companeros.parquet", C.DIR_DATOS / "validacion" / "base_v5.parquet",
@@ -253,3 +259,91 @@ def generar(cfg: dict) -> dict:
             "regla_sello": cfg["sello"]}
     C.escribir_json(meta, salida / "meta.json")
     return {"filas": len(t), "personas": meta["personas"], "draws": len(d)}
+
+
+# ------------------------------------------------------------------ unión de partes y métricas derivadas (F9 bis)
+def derivadas(t: pd.DataFrame, cfg: dict) -> pd.DataFrame:
+    """TS% y eFG% (draws conjuntos de sus componentes) y variantes «por 100 posesiones» de la v3.2 (razón de la liga
+    de destino en la última temporada), con las mismas columnas que las demás métricas. Escala: fracción."""
+    from bbnorm5.salidas import derivadas as DV
+    anio = int(cfg["anio_objetivo"])
+    ult = f"{anio - 1}-{str(anio)[2:]}"
+    clave = ["persona_v5", "liga_destino"]
+    base_cols = ["persona_v5", "liga_origen", "temporada_ult", "rol_ult", "edad", "temporadas_hist", "liga_destino",
+                 "cambio_liga", "temporada_objetivo", "sello", "exposicion_acumulada", "exposicion_relativa",
+                 "conectividad", "traduccion_media", "traduccion_dt", "traduccion_q10", "traduccion_q90"]
+    filas = []
+    # 1. TS% y eFG%
+    w = {m: t[t["metrica"] == m].set_index(clave) for m in DV.COMPONENTES}
+    idx = w[DV.COMPONENTES[0]].index
+    for m in DV.COMPONENTES[1:]:
+        idx = idx.intersection(w[m].index)
+    w = {m: v.loc[idx] for m, v in w.items()}
+    R = DV.correlacion()
+    rng = np.random.default_rng(cfg["semilla"] + 7)
+    qn, qp = [0.1, 0.25, 0.5, 0.75, 0.9], [0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975]
+    nv = DV.tiro_compuesto({m: (w[m]["nivel_q10"].to_numpy(), w[m]["nivel_q50"].to_numpy(), w[m]["nivel_q90"].to_numpy())
+                            for m in DV.COMPONENTES}, R, rng, cuantiles=qn)
+    pr = DV.tiro_compuesto({m: (w[m]["pred_q10"].to_numpy(), w[m]["pred_q50"].to_numpy(), w[m]["pred_q90"].to_numpy())
+                            for m in DV.COMPONENTES}, R, rng, cuantiles=qp)
+    ref = w["t2_pct"].reset_index()
+    sello_min = pd.concat([w[m]["sello"].map({"baja": 0, "media": 1, "alta": 2}) for m in DV.COMPONENTES], axis=1).min(axis=1)
+    for nom in ("efg_pct", "ts_pct"):
+        f = ref[[c for c in base_cols if c in ref.columns]].copy()
+        f["metrica"] = nom
+        for q in qn:
+            f[f"nivel_{_nom(q)}"] = nv[nom][q]
+        f["nivel_media"] = nv[nom]["media"]
+        for q in qp:
+            f[f"pred_{_nom(q)}"] = pr[nom][q]
+        f["pred_media"] = pr[nom]["media"]
+        f["sello"] = sello_min.map({0: "baja", 1: "media", 2: "alta"}).to_numpy()   # el peor de sus componentes
+        for u in UMBRALES:          # sin umbrales propios para las derivadas (VERIFICAR: percentiles de TS% y eFG%)
+            f[f"p_supera_p{u}"] = np.nan
+        f["derivada"] = "tiro_compuesto"
+        filas.append(f)
+    # 2. variantes por 100 posesiones (conversión de unidades con la razón de la liga de destino)
+    raz = DV.razones()
+    raz = raz[raz["temporada"] == ult].set_index("liga")
+    for m32, (m5, col) in DV.POR_100.items():
+        x = t[t["metrica"] == m5].copy()
+        r = 1.0 if col is None else x["liga_destino"].map(raz[col]).to_numpy(float)
+        cols = [c for c in x.columns if c.startswith(("nivel_q", "pred_q")) or c in ("nivel_media", "pred_media")]
+        for c in cols:
+            x[c] = x[c].to_numpy(float) * r
+        x = x.drop(columns=[c for c in x.columns if c.startswith("umbral_p")])
+        x["metrica"] = m32
+        x["derivada"] = f"por_100:{m5}"
+        filas.append(x)
+    return pd.concat(filas, ignore_index=True)
+
+
+def unir(cfg: dict) -> dict:
+    anio = int(cfg["anio_objetivo"])
+    temp_obj = f"{anio}-{str(anio + 1)[2:]}"
+    salida = DIR / temp_obj
+    partes = sorted(salida.glob("destinos_parte*.parquet"))
+    t = pd.concat([pd.read_parquet(f) for f in partes], ignore_index=True)
+    t["derivada"] = ""
+    dv = derivadas(t, cfg)
+    t = pd.concat([t, dv], ignore_index=True)
+    t.to_parquet(salida / "destinos.parquet")
+    d = pd.concat([pd.read_parquet(f) for f in sorted(salida.glob("draws_parte*.parquet"))], ignore_index=True)
+    d.to_parquet(salida / "draws_liga_actual.parquet")
+    for f in partes + sorted(salida.glob("draws_parte*.parquet")):
+        f.unlink()
+    nst = n_estabilizacion()
+    entradas = [C.DIR_DATOS / "carrera" / "observaciones.parquet", C.DIR_DATOS / "latente" / "perfiles_latentes.parquet",
+                C.DIR_DATOS / "contexto" / "contexto_companeros.parquet", C.DIR_DATOS / "validacion" / "base_v5.parquet",
+                C.DIR_DATOS / "ligas" / "pares_paso2.parquet", DM.DIR / "hiperparametros.csv"]
+    o = CD.cargar()
+    meta = {**C.metadatos(cfg, [e for e in entradas if e.exists()], {"paso": "destinos"}), "temporada_objetivo": temp_obj,
+            "temporadas_entrenamiento": sorted(o.loc[o["anio"] < anio, "temporada"].unique().tolist()),
+            "lambda": "GLS del paso 2, variante encogido, todas las temporadas", "bloques_contexto": BLOQUES,
+            "recalibracion_grupo": bool(cfg.get("recalibracion", {}).get("aplicar")),
+            "draws_por_caso": int(cfg["draws"]["por_caso"]), "filas": len(t), "personas": int(t["persona_v5"].nunique()),
+            "metricas_modeladas": sorted(t.loc[t["derivada"] == "", "metrica"].unique().tolist()),
+            "metricas_derivadas": sorted(dv["metrica"].unique().tolist()),
+            "n_estabilizacion": nst.round(1).to_dict(), "regla_sello": cfg["sello"]}
+    C.escribir_json(meta, salida / "meta.json")
+    return {"filas": len(t), "personas": meta["personas"], "derivadas": len(dv), "draws": len(d)}

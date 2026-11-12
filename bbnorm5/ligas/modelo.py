@@ -41,7 +41,9 @@ BLOQUES = {"tiro": ["t2_pct", "t3_pct", "tl_pct", "tpar", "ftr", "pts_p100"],
 # (pts–USG 0,98, pts–AST 0,92, pts–DREB 0,81, pts–OREB 0,74)
 BLOQUES_PASO2 = {"volumen_papel": ["pts_p100", "usg_pct", "ast_pct", "dreb_pct", "oreb_pct"],
                  "tiro": ["t2_pct", "t3_pct", "tl_pct", "tpar", "ftr"],
-                 "defensa_cuidado": ["blk_pct", "stl_p100", "pf_p40", "tov_pct"]}
+                 "defensa_cuidado": ["blk_pct", "stl_p100", "pf_p40", "tov_pct"],
+                 # F9 bis: zonas de tiro y % asistidas (sólo ligas con jugada a jugada)
+                 "zonas": ["pct_aro", "pct_corta", "pct_media", "pct_t3_esquina", "pct_asistidas"]}
 
 
 def indices(p: pd.DataFrame, temporadas: list[str], metricas: list[str] | None = None) -> dict:

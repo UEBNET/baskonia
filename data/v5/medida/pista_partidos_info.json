@@ -1,0 +1,421 @@
+{
+ "acb|2020-21": {
+  "tiros": 43406,
+  "acierto_zonas": 0.9985
+ },
+ "bbl|2020-21": {
+  "tiros": 38050,
+  "acierto_zonas": 0.9971
+ },
+ "bcl|2020-21": {
+  "tiros": 9676,
+  "acierto_zonas": 0.9976
+ },
+ "bsl|2020-21": {
+  "tiros": 25163,
+  "acierto_zonas": 0.9983
+ },
+ "cba|2020-21": {},
+ "eurocup|2020-21": {
+  "tiros": 15096,
+  "acierto_zonas": 0.993
+ },
+ "euroleague|2020-21": {
+  "tiros": 36893,
+  "acierto_zonas": 0.9941
+ },
+ "fec|2020-21": {
+  "tiros": 2952,
+  "acierto_zonas": 0.998
+ },
+ "gbl|2020-21": {
+  "tiros": 15637,
+  "acierto_zonas": 0.9987
+ },
+ "gleague|2020-21": {
+  "tiros": 24157,
+  "acierto_zonas": 0.9993
+ },
+ "lba|2020-21": {
+  "tiros": 26743,
+  "acierto_zonas": 0.9988
+ },
+ "lnb|2020-21": {},
+ "nba|2020-21": {
+  "tiros": 190983,
+  "acierto_zonas": 0.9988
+ },
+ "nbl|2020-21": {
+  "tiros": 21915,
+  "acierto_zonas": 0.9983
+ },
+ "ncaa|2020-21": {
+  "tiros": 114665,
+  "acierto_zonas": 0.9944
+ },
+ "vtb|2020-21": {},
+ "acb|2021-22": {
+  "tiros": 39080,
+  "acierto_zonas": 0.9978
+ },
+ "bbl|2021-22": {
+  "tiros": 38527,
+  "acierto_zonas": 0.9967
+ },
+ "bcl|2021-22": {
+  "tiros": 16842,
+  "acierto_zonas": 0.998
+ },
+ "bnxt|2021-22": {
+  "tiros": 37005,
+  "acierto_zonas": 0.9973
+ },
+ "cba|2021-22": {
+  "tiros": 58596,
+  "acierto_zonas": NaN
+ },
+ "eurocup|2021-22": {
+  "tiros": 21835,
+  "acierto_zonas": 0.9955
+ },
+ "euroleague|2021-22": {
+  "tiros": 33762,
+  "acierto_zonas": 0.994
+ },
+ "fec|2021-22": {
+  "tiros": 17623,
+  "acierto_zonas": 0.9981
+ },
+ "gbl|2021-22": {
+  "tiros": 19395,
+  "acierto_zonas": 0.9979
+ },
+ "gleague|2021-22": {
+  "tiros": 81418,
+  "acierto_zonas": 0.9992
+ },
+ "lba|2021-22": {
+  "tiros": 30953,
+  "acierto_zonas": 0.9931
+ },
+ "lnb|2021-22": {
+  "tiros": 37928,
+  "acierto_zonas": 0.9981
+ },
+ "nba|2021-22": {
+  "tiros": 216722,
+  "acierto_zonas": 0.9989
+ },
+ "nbl|2021-22": {
+  "tiros": 19328,
+  "acierto_zonas": 0.9984
+ },
+ "ncaa|2021-22": {
+  "tiros": 150678,
+  "acierto_zonas": 0.9962
+ },
+ "vtb|2021-22": {
+  "tiros": 4311,
+  "acierto_zonas": 0.9988
+ },
+ "acb|2022-23": {
+  "tiros": 39273,
+  "acierto_zonas": 0.9976
+ },
+ "bbl|2022-23": {
+  "tiros": 38848,
+  "acierto_zonas": 0.9969
+ },
+ "bcl|2022-23": {
+  "tiros": 17574,
+  "acierto_zonas": 0.9972
+ },
+ "bnxt|2022-23": {
+  "tiros": 33541,
+  "acierto_zonas": 0.9974
+ },
+ "cba|2022-23": {
+  "tiros": 66469,
+  "acierto_zonas": NaN
+ },
+ "eurocup|2022-23": {
+  "tiros": 22724,
+  "acierto_zonas": 0.9944
+ },
+ "euroleague|2022-23": {
+  "tiros": 37301,
+  "acierto_zonas": 0.9943
+ },
+ "feb1|2022-23": {
+  "tiros": 37804,
+  "acierto_zonas": NaN
+ },
+ "fec|2022-23": {
+  "tiros": 17415,
+  "acierto_zonas": 0.996
+ },
+ "gbl|2022-23": {
+  "tiros": 16055,
+  "acierto_zonas": 0.9963
+ },
+ "gleague|2022-23": {
+  "tiros": 85344,
+  "acierto_zonas": 0.9992
+ },
+ "lba|2022-23": {
+  "tiros": 30221,
+  "acierto_zonas": 0.9924
+ },
+ "lnb|2022-23": {
+  "tiros": 38680,
+  "acierto_zonas": 0.9985
+ },
+ "nba|2022-23": {
+  "tiros": 217219,
+  "acierto_zonas": 0.9992
+ },
+ "nbl|2022-23": {
+  "tiros": 20086,
+  "acierto_zonas": 0.9976
+ },
+ "ncaa|2022-23": {
+  "tiros": 150509,
+  "acierto_zonas": 0.9959
+ },
+ "vtb|2022-23": {
+  "tiros": 23413,
+  "acierto_zonas": 0.9985
+ },
+ "acb|2023-24": {
+  "tiros": 39038,
+  "acierto_zonas": 0.9973
+ },
+ "bbl|2023-24": {
+  "tiros": 39816,
+  "acierto_zonas": 0.9966
+ },
+ "bcl|2023-24": {
+  "tiros": 17500,
+  "acierto_zonas": 0.9982
+ },
+ "bnxt|2023-24": {
+  "tiros": 35548,
+  "acierto_zonas": 0.9985
+ },
+ "cba|2023-24": {
+  "tiros": 82408,
+  "acierto_zonas": NaN
+ },
+ "eurocup|2023-24": {
+  "tiros": 23008,
+  "acierto_zonas": 0.9943
+ },
+ "euroleague|2023-24": {
+  "tiros": 38171,
+  "acierto_zonas": 0.9953
+ },
+ "feb1|2023-24": {
+  "tiros": 37727,
+  "acierto_zonas": 0.9914
+ },
+ "feb2|2023-24": {
+  "tiros": 46243,
+  "acierto_zonas": NaN
+ },
+ "feb3|2023-24": {
+  "tiros": 224764,
+  "acierto_zonas": NaN
+ },
+ "fec|2023-24": {
+  "tiros": 19214,
+  "acierto_zonas": 0.9977
+ },
+ "gbl|2023-24": {
+  "tiros": 16321,
+  "acierto_zonas": 0.9979
+ },
+ "gleague|2023-24": {
+  "tiros": 94164,
+  "acierto_zonas": 0.9994
+ },
+ "lba|2023-24": {
+  "tiros": 30349,
+  "acierto_zonas": 0.9913
+ },
+ "lnb|2023-24": {
+  "tiros": 38000,
+  "acierto_zonas": 0.9979
+ },
+ "nba|2023-24": {
+  "tiros": 218702,
+  "acierto_zonas": 0.9999
+ },
+ "nbl|2023-24": {
+  "tiros": 20056,
+  "acierto_zonas": 0.9988
+ },
+ "ncaa|2023-24": {
+  "tiros": 156800,
+  "acierto_zonas": 0.9963
+ },
+ "vtb|2023-24": {
+  "tiros": 32785,
+  "acierto_zonas": 0.9978
+ },
+ "acb|2024-25": {
+  "tiros": 39664,
+  "acierto_zonas": 0.9975
+ },
+ "bbl|2024-25": {
+  "tiros": 34798,
+  "acierto_zonas": 0.9976
+ },
+ "bcl|2024-25": {
+  "tiros": 18167,
+  "acierto_zonas": 0.9985
+ },
+ "bnxt|2024-25": {
+  "tiros": 42346,
+  "acierto_zonas": 0.998
+ },
+ "cba|2024-25": {
+  "tiros": 38820,
+  "acierto_zonas": NaN
+ },
+ "eurocup|2024-25": {
+  "tiros": 22684,
+  "acierto_zonas": 0.9945
+ },
+ "euroleague|2024-25": {
+  "tiros": 38533,
+  "acierto_zonas": 0.9961
+ },
+ "feb1|2024-25": {
+  "tiros": 39111,
+  "acierto_zonas": 0.9913
+ },
+ "feb2|2024-25": {
+  "tiros": 46753,
+  "acierto_zonas": 0.9896
+ },
+ "feb3|2024-25": {
+  "tiros": 229833,
+  "acierto_zonas": 0.9903
+ },
+ "fec|2024-25": {
+  "tiros": 21278,
+  "acierto_zonas": 0.9977
+ },
+ "gbl|2024-25": {
+  "tiros": 15799,
+  "acierto_zonas": 0.9979
+ },
+ "gleague|2024-25": {
+  "tiros": 94444,
+  "acierto_zonas": 0.9991
+ },
+ "lba|2024-25": {
+  "tiros": 31174,
+  "acierto_zonas": 0.9908
+ },
+ "lnb|2024-25": {
+  "tiros": 29804,
+  "acierto_zonas": 0.9982
+ },
+ "nba|2024-25": {
+  "tiros": 219527,
+  "acierto_zonas": 1.0
+ },
+ "nbl|2024-25": {
+  "tiros": 21053,
+  "acierto_zonas": 0.9983
+ },
+ "ncaa|2024-25": {
+  "tiros": 150412,
+  "acierto_zonas": 0.998
+ },
+ "vtb|2024-25": {
+  "tiros": 32926,
+  "acierto_zonas": 0.9977
+ },
+ "acb|2025-26": {
+  "tiros": 39814,
+  "acierto_zonas": 0.9969
+ },
+ "bbl|2025-26": {
+  "tiros": 39828,
+  "acierto_zonas": 0.9965
+ },
+ "bcl|2025-26": {
+  "tiros": 18374,
+  "acierto_zonas": 0.9977
+ },
+ "bnxt|2025-26": {
+  "tiros": 39010,
+  "acierto_zonas": 0.9982
+ },
+ "bsl|2025-26": {
+  "tiros": 29994,
+  "acierto_zonas": 0.9981
+ },
+ "cba|2025-26": {
+  "tiros": 56593,
+  "acierto_zonas": NaN
+ },
+ "eurocup|2025-26": {
+  "tiros": 23025,
+  "acierto_zonas": 0.995
+ },
+ "euroleague|2025-26": {
+  "tiros": 48864,
+  "acierto_zonas": 0.9962
+ },
+ "feb1|2025-26": {
+  "tiros": 34422,
+  "acierto_zonas": 0.9927
+ },
+ "feb2|2025-26": {
+  "tiros": 47414,
+  "acierto_zonas": 0.9931
+ },
+ "feb3|2025-26": {
+  "tiros": 239635,
+  "acierto_zonas": 0.9913
+ },
+ "fec|2025-26": {
+  "tiros": 21716,
+  "acierto_zonas": 0.9977
+ },
+ "gbl|2025-26": {
+  "tiros": 19684,
+  "acierto_zonas": 0.9969
+ },
+ "gleague|2025-26": {
+  "tiros": 99750,
+  "acierto_zonas": 0.999
+ },
+ "lba|2025-26": {
+  "tiros": 27475,
+  "acierto_zonas": 0.9907
+ },
+ "lnb|2025-26": {
+  "tiros": 30437,
+  "acierto_zonas": 0.9985
+ },
+ "nba|2025-26": {
+  "tiros": 219159,
+  "acierto_zonas": 1.0
+ },
+ "nbl|2025-26": {
+  "tiros": 23855,
+  "acierto_zonas": 0.9988
+ },
+ "ncaa|2025-26": {
+  "tiros": 156186,
+  "acierto_zonas": 0.998
+ },
+ "vtb|2025-26": {
+  "tiros": 28037,
+  "acierto_zonas": 0.9985
+ }
+}
