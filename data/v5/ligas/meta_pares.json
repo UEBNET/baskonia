@@ -2,12 +2,12 @@
  "version_modelo": "5.0",
  "fase": "F6",
  "config": "configs/v5/f6.yaml",
- "hash_config": "6bfb332349f1",
+ "hash_config": "a68b8327af99",
  "hash_datos_entrada": null,
- "fecha": "2026-11-11T08:17:39+00:00",
+ "fecha": "2026-11-12T08:40:42+00:00",
  "python": "3.13.18",
  "paso": "pares",
- "filas": 74993,
- "puentes": 5412,
+ "filas": 75090,
+ "puentes": 5419,
  "tiempo_s": 1
 }
