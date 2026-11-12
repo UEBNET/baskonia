@@ -2,9 +2,9 @@
  "version_modelo": "5.0",
  "fase": "F8",
  "config": "configs/v5/f8.yaml",
- "hash_config": "5df254752c8b",
+ "hash_config": "12c0d5ecb84b",
  "hash_datos_entrada": null,
- "fecha": "2026-11-12T10:41:03+00:00",
+ "fecha": "2026-11-12T12:14:31+00:00",
  "python": "3.13.18",
  "paso": "fugas",
  "identidades": {
@@ -16,8 +16,8 @@
  "rol_volumen_todas": {
   "metrica": "todas",
   "casos": 180978,
-  "condicionada_frente_ex_ante": -0.06401861830917221,
-  "solo_exposicion_t_frente_ex_ante": 0.0024034245571056267
+  "condicionada_frente_ex_ante": -0.06397478199294593,
+  "solo_exposicion_t_frente_ex_ante": 0.0024089323611071745
  },
  "tiempo_s": 1
 }

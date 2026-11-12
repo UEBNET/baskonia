@@ -541,6 +541,22 @@ temporada):
   ajuste no depende del orden. Se regeneraron la F6.2, la F7 y la F8 con los perfiles alineados, y se comprobó que las
   cifras de este informe no cambian (§12 ter).
 
+### 12 ter. Comprobación tras alinear los factores (DATO)
+
+Se regeneraron con los perfiles alineados la F6.2 (contexto), la F7 (base, examen y proyección del paso 2) y la F8
+(base, predicciones, fichajes, protocolo, fugas, criterios y figuras).
+
+Diferencia máxima frente a las cifras anteriores:
+
+| Tabla | Razones de error frente a la v3.3 / v3.2 | Otras columnas |
+|---|---|---|
+| `examen_fichajes.csv` | 0,0005 (global: −7,61 % → −7,62 %; IC −8,7 % a −6,4 %) | anchos ≤ 0,013 puntos |
+| `protocolo_f1_publicada.csv` | 0,0025 | MAE ≤ 0,05 |
+| `navaja_fichajes.csv` | 0,0002 | |
+
+Las diferencias vienen del muestreo Monte Carlo de las predicciones (rol y exposición sorteados), no del modelo. Ninguna
+conclusión ni decisión cambia.
+
 ## 13. Siguiente fase propuesta y ajuste de inversión
 
 **F9 · Contrato de salida** (§13 del encargo):

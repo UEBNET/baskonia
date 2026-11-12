@@ -1,0 +1,62 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F8",
+ "config": "configs/v5/f8.yaml",
+ "hash_config": "12c0d5ecb84b",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-12T12:14:37+00:00",
+ "python": "3.13.18",
+ "paso": "criterios",
+ "criterio1": {
+  "nivel_sim_rango": [
+   0.7801593844462764,
+   0.8164007836551918
+  ],
+  "nivel_sim_en_rango": "70/70",
+  "predictivo_global": 0.8262827525997635,
+  "predictivo_metricas_en_rango": "10/14",
+  "predictivo_ligas_en_rango": "15/20",
+  "predictivo_cambio_liga": 0.8284723908771775,
+  "lolo_cob80_lambda": {
+   "sin_nada": 1.0,
+   "sin_puentes_intra": 0.832,
+   "sin_traspasos": 0.814
+  }
+ },
+ "criterio2": {
+  "metricas_mas_estrechas": "13/13",
+  "ratio_global": 0.5491064641482861
+ },
+ "criterio3": {
+  "saltos": 504,
+  "z_abs_mediana": 0.3266664533427326,
+  "cuota_z_abs_mayor_2": 0.005952380952380952,
+  "salto_rel_mediano": 0.08858671887310836,
+  "ciclo_conjunta_max": 1.1102230246251563e-16,
+  "triangulos": 1194
+ },
+ "criterio4": {
+  "temporada": "2025-26",
+  "ratio_mediano_por_metrica": {
+   "t2_pct": 1.352,
+   "t3_pct": 1.441,
+   "tpar": 0.773
+  },
+  "ratio_mediano": 1.2050283747060209
+ },
+ "criterio5": {
+  "casos": 457518,
+  "ece_por_umbral": {
+   "25": 0.0206,
+   "50": 0.0145,
+   "75": 0.0303
+  },
+  "habilidad_brier_por_umbral": {
+   "25": 0.223,
+   "50": 0.27,
+   "75": 0.251
+  },
+  "ece_max_metrica": 0.06768554797595606
+ },
+ "tiempo_s": 7
+}

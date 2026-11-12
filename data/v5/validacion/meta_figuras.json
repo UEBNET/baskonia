@@ -1,0 +1,15 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F8",
+ "config": "configs/v5/f8.yaml",
+ "hash_config": "12c0d5ecb84b",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-12T12:14:39+00:00",
+ "python": "3.13.18",
+ "paso": "figuras",
+ "fig_fichajes": "/home/user/baskonia/docs/v5/figuras/f8_fichajes_v33.png",
+ "fig_protocolo": "/home/user/baskonia/docs/v5/figuras/f8_protocolo_f1.png",
+ "fig_umbrales": "/home/user/baskonia/docs/v5/figuras/f8_fiabilidad_umbrales.png",
+ "fig_sbc": "/home/user/baskonia/docs/v5/figuras/f8_sbc_lambda.png",
+ "tiempo_s": 2
+}

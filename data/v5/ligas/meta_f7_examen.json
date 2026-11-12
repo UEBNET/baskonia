@@ -4,7 +4,7 @@
  "config": "configs/v5/f7.yaml",
  "hash_config": "d8ba8086030d",
  "hash_datos_entrada": null,
- "fecha": "2026-11-12T10:19:16+00:00",
+ "fecha": "2026-11-12T11:53:21+00:00",
  "python": "3.13.18",
  "paso": "examen",
  "filas": 226465,
@@ -15,5 +15,5 @@
   "encogido_ipw": 0.06,
   "paso1": 0.078
  },
- "tiempo_s": 15
+ "tiempo_s": 24
 }
