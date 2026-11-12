@@ -18,13 +18,16 @@
     * BNXT, BSL y GBL;
     * la temporada 2026-27, que incorpora los partidos descargados después del último ajuste (8-11-2026);
     * las estimaciones agregadas que mezclan todas las ligas (p. ej. `uso_eficiencia_grupos.csv`).
-* **No regenerado: estilo por entrenador (`bbestilo entrenadores`).**
-  * Al regenerarlo cambia el estilo del 30 % de los tramos también en ligas y temporadas no afectadas, y se añaden 7
-    ligas.
-  * Se debe a cambios anteriores a la corrección: identidades del 03-11, tablas de entrenadores de todas las ligas del
-    01-11 y ligas nuevas.
-  * La tabla publicada se mantuvo a propósito en su momento (58031e5). Queda como decisión aparte del usuario.
-* **Sin republicar** en los artifacts: el simulador exportado sigue leyendo la versión publicada hasta que se decida.
+* **Estilo por entrenador (`python -m bbestilo entrenadores`), regenerado por decisión del usuario (12-11-2026).**
+  * Pasa de 2.086 a 3.239 tramos club-temporada-entrenador: entran BNXT, CBA, Primera, Segunda y Tercera FEB, NCAA y VTB.
+  * En los 2.009 tramos comunes cambia el estilo de 606.
+    * Sólo una parte se debe a la corrección de fechas (BSL y GBL).
+    * El resto son cambios anteriores a la tabla que se había conservado (58031e5): identidades del 03-11, tablas de
+      entrenadores de todas las ligas del 01-11 y ligas nuevas.
+  * Cálculo determinista: dos ejecuciones dan la misma tabla.
+  * Lo lee la exportación del Atlas (`clubes.json`, campo `entrenadores`).
+* **Sin republicar** en los artifacts: el simulador y el Atlas publicados siguen con la versión anterior hasta que se
+  republiquen.
 
 ## 2026-11-10 — Corrección: fecha de los partidos de BNXT, BSL y GBL en entrenadores (formato ISO)
 
