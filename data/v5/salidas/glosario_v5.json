@@ -1,0 +1,50 @@
+[
+ {
+  "termino": "nivel",
+  "term": "level",
+  "es": "Capacidad persistente del jugador en una liga y temporada, sin el ruido de la temporada ni el del muestreo. Es lo que el jugador «es»; su intervalo se estrecha con el historial.",
+  "en": "The player's persistent ability in a league and season, without season or sampling noise. What the player 'is'; its interval narrows with history."
+ },
+ {
+  "termino": "predictivo",
+  "term": "predictive",
+  "es": "Lo que el jugador registrará en la temporada siguiente: el nivel más el ruido de la temporada (rachas, minutos, rol) y del muestreo. Es más ancho que el nivel y no se estrecha mucho con más datos.",
+  "en": "What the player will record next season: the level plus season noise (streaks, minutes, role) and sampling noise. Wider than the level and it does not narrow much with more data."
+ },
+ {
+  "termino": "traducción",
+  "term": "translation",
+  "es": "Diferencia de dificultad entre dos ligas para una métrica, λ_destino − λ_origen, con su incertidumbre. Se estima con los puentes de la misma temporada y los traspasos entre temporadas.",
+  "en": "Difficulty difference between two leagues for a metric, λ_destination − λ_origin, with its uncertainty. Estimated from same-season bridges and between-season transfers."
+ },
+ {
+  "termino": "probabilidad de umbral",
+  "term": "threshold probability",
+  "es": "Probabilidad de que el nivel en la liga de destino supere el percentil 25, 50 o 75 de los jugadores de esa liga y su rol (≥ 300 min, tres temporadas anteriores).",
+  "en": "Probability that the level in the destination league exceeds the 25th, 50th or 75th percentile of players in that league and role (≥ 300 min, previous three seasons)."
+ },
+ {
+  "termino": "sello de fiabilidad",
+  "term": "reliability seal",
+  "es": "Alta, media o baja. **Alta**: exposición acumulada ≥ 3 veces el punto de estabilización de la métrica, ≥ 2 temporadas de historial y DT de la traducción ≤ 0,25 DT de λ entre ligas (0 si sigue en su liga). **Baja**: exposición < 1 vez el punto de estabilización o DT de la traducción > 0,5 DT de λ entre ligas. **Media**: el resto.",
+  "en": "High, medium or low. **High**: cumulative exposure ≥ 3 × the metric's stabilisation point, ≥ 2 seasons of history and translation SD ≤ 0.25 between-league SDs of λ (0 if staying). **Low**: exposure < 1 × the stabilisation point or translation SD > 0.5 between-league SDs. **Medium**: otherwise."
+ },
+ {
+  "termino": "punto de estabilización",
+  "term": "stabilisation point",
+  "es": "Oportunidades (tiros, posesiones, minutos…) con las que una temporada mide la métrica con fiabilidad 0,5.",
+  "en": "Opportunities (shots, possessions, minutes…) at which one season measures the metric with reliability 0.5."
+ },
+ {
+  "termino": "puente intra-temporada",
+  "term": "same-season bridge",
+  "es": "Jugador que juega en dos competiciones la misma temporada (p. ej. su liga y una competición europea). Compara las dos ligas sin que el jugador haya cambiado.",
+  "en": "Player who plays in two competitions in the same season (e.g. domestic league and a European cup). Compares the two leagues while the player is unchanged."
+ },
+ {
+  "termino": "ex ante",
+  "term": "ex ante",
+  "es": "Lo que se sabe al fichar: rol, minutos y oportunidades de la temporada siguiente desconocidos. Es la proyección por defecto; la que fija rol y minutos es un escenario.",
+  "en": "What is known when signing: next season's role, minutes and opportunities unknown. The default projection; fixing role and minutes is a scenario."
+ }
+]
