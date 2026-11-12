@@ -4,59 +4,67 @@
  "config": "configs/v5/f7.yaml",
  "hash_config": "d8ba8086030d",
  "hash_datos_entrada": null,
- "fecha": "2026-11-11T22:33:31+00:00",
+ "fecha": "2026-11-12T20:01:16+00:00",
  "python": "3.13.18",
  "paso": "resumen_paso2",
  "diagnosticos": {
   "paso2_volumen_papel": {
    "rhat_max": 1.01,
-   "ess_bulk_min": 774.0,
-   "ess_tail_min": 915.0,
+   "ess_bulk_min": 762.0,
+   "ess_tail_min": 1122.0,
    "divergencias": 0,
    "pasos_medios": 127.0,
-   "tiempo_s": 14061
+   "tiempo_s": 3994
   },
   "paso2_tiro": {
-   "rhat_max": 1.01,
-   "ess_bulk_min": 425.0,
-   "ess_tail_min": 495.0,
+   "rhat_max": 1.03,
+   "ess_bulk_min": 210.0,
+   "ess_tail_min": 89.0,
    "divergencias": 0,
-   "pasos_medios": 127.0,
-   "tiempo_s": 3234
+   "pasos_medios": 128.36533333333333,
+   "tiempo_s": 5729
   },
   "paso2_defensa_cuidado": {
    "rhat_max": 1.01,
-   "ess_bulk_min": 814.0,
-   "ess_tail_min": 936.0,
-   "divergencias": 1,
-   "pasos_medios": 126.98666666666666,
-   "tiempo_s": 2356
+   "ess_bulk_min": 793.0,
+   "ess_tail_min": 434.0,
+   "divergencias": 3,
+   "pasos_medios": 125.97333333333333,
+   "tiempo_s": 4986
+  },
+  "paso2_zonas": {
+   "rhat_max": 1.01,
+   "ess_bulk_min": 371.0,
+   "ess_tail_min": 580.0,
+   "divergencias": 0,
+   "pasos_medios": 127.256,
+   "tiempo_s": 5820
   }
  },
- "ciclo_conjunta_max": 1.1102230246251565e-16,
- "ciclo_pares_mediana_abs": 0.10957320595742805,
- "z_abs_mediana": 0.5410973637117393,
- "z_abs_max": 3.03675405236762,
+ "ciclo_conjunta_max": 2.220446049250313e-16,
+ "ciclo_pares_mediana_abs": 0.12371424467068032,
+ "z_abs_mediana": 0.548785828041888,
+ "z_abs_max": 3.0203610430629833,
  "ratio_sd_por_liga": {
-  "bbl": 0.851,
-  "bcl": 0.969,
-  "bnxt": 0.814,
-  "bsl": 0.725,
+  "bbl": 0.858,
+  "bcl": 0.958,
+  "bnxt": 0.818,
+  "bsl": 0.722,
   "cba": 0.679,
-  "eurocup": 0.945,
-  "euroleague": 0.9,
+  "eurocup": 0.919,
+  "euroleague": 0.889,
   "feb1": 0.456,
-  "feb2": 0.457,
+  "feb2": 0.462,
   "feb3": 0.45,
-  "fec": 0.909,
-  "gbl": 0.902,
-  "gleague": 0.5,
-  "lba": 0.908,
-  "lnb": 0.889,
-  "nba": 0.556,
-  "nbl": 0.677,
-  "ncaa": 0.339,
-  "vtb": 0.767
+  "fec": 0.903,
+  "gbl": 0.904,
+  "gleague": 0.501,
+  "lba": 0.9,
+  "lnb": 0.896,
+  "nba": 0.55,
+  "nbl": 0.68,
+  "ncaa": 0.338,
+  "vtb": 0.77
  },
- "tiempo_s": 7
+ "tiempo_s": 18
 }

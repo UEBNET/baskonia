@@ -338,11 +338,11 @@ DT de la traducción ACB → liga en 2025-26, en puntos de la tasa de la ACB; la
 
 | Métrica | v5 / v3.2 (mediana de 19 ligas) | Más estrecha la v5 en |
 |---|---|---|
-| T2% | 1,35 | FEB1, FEB2 (0,95–0,96) |
-| T3% | 1,44 | FEB1, FEB2, FEB3 (0,80–0,92) |
-| 3PAr | **0,77** | las 19 |
+| T2% | 1,33 | FEB1, FEB2 |
+| T3% | 1,45 | FEB1, FEB2, FEB3 |
+| 3PAr | **0,75** | las 19 |
 
-**Calculado con la NUTS del paso 2 anterior a la revisión de identidades;** se rehace con la nueva (§6).
+**Rehecho con la NUTS del paso 2 con las identidades revisadas** (§6). Antes: 1,35, 1,44 y 0,77.
 
 **No se cumple en tiro.** La DT de la v3.2 no es comparable en confianza: en la F1, sus ligas mejor conectadas cubrían
 0,72–0,76 y la LOLO daba errores de 0,27–2,05 DT. La v5 está calibrada (SBC §4.6, LOLO §3.4).
@@ -403,7 +403,7 @@ temporada):
 
 ---
 
-## 6. NUTS del paso 2 con las identidades revisadas (en curso)
+## 6. NUTS del paso 2 con las identidades revisadas
 
 - **Por qué se rehace.** La revisión de identidades movió el GLS del paso 2 una mediana de 0,06 DT, pero hasta 3 DT en
   pts/100 de FEB2 y FEB3 (2024) y en 3PAr de la NBA.
@@ -411,7 +411,28 @@ temporada):
   anterior tardó unas 5,5 h.
 - **Qué no afecta.** Al examen de este informe, que usa el GLS por año, ya regenerado. Sí afecta a la matriz de
   traducción publicada y al criterio 4.
-- **Pendiente:** este apartado se completa con R̂, ESS, divergencias y el cambio frente a la NUTS anterior.
+- **Diagnósticos** (`lambda_paso2_diagnosticos.json`; 4 cadenas):
+
+| Bloque | R̂ máx. | ESS mín. (centro / colas) | Divergencias | Tiempo |
+|---|---|---|---|---|
+| volumen_papel | 1,01 | 762 / 1.122 | 0 | 67 min |
+| defensa_cuidado | 1,01 | 793 / 434 | 3 en 3.000 | 83 min |
+| tiro | **1,03** | **210 / 89** | 0 | 95 min |
+| zonas (F9 bis, nuevo) | 1,01 | 371 / 580 | 0 | 97 min |
+
+- **Tiro no cumple el umbral** (R̂ < 1,01 y ESS > 400) en 3 de sus 610 parámetros, todos de TL%:
+  - la DT base de λ (`s_base[2]`): ESS 210 en el centro y 89 en las colas, R̂ 1,03;
+  - λ de dos ligas en 2020-21: R̂ 1,02.
+
+  Es la geometría de una DT jerárquica cerca de 0: el TL% apenas varía entre ligas (DT base 0,043). La ejecución
+  anterior del mismo bloque sí cumplía (R̂ 1,01, ESS 425).
+  - **En curso:** repetición con 1.500 + 1.500 draws por cadena. Si tampoco llega, la solución es reparametrizar esa DT,
+    no más draws.
+- **Efecto en la traducción publicada:** mínimo.
+  - ACB → NBA en pts/100: −7,82 (antes −7,76); ACB → FEB1: +2,98 (antes +2,95); ACB → EuroLeague: −1,43 (igual).
+  - Compatibilidad con el paso 1: |z| mediano 0,55; 4,1 % por encima de 2 (en la F7: 0,54 y 3,4 %).
+  - DT del efecto de liga frente a la F6.1: NCAA 0,34; FEB 0,45–0,46; G League y NBA 0,50–0,55; Europa 0,72–0,96.
+- **Ciclos:** residuo de la conjunta ≤ 2,2 × 10⁻¹⁶ en 1.554 triángulos.
 
 ---
 

@@ -4,7 +4,7 @@
  "config": "configs/v5/f7.yaml",
  "hash_config": "d8ba8086030d",
  "hash_datos_entrada": null,
- "fecha": "2026-11-11T22:34:15+00:00",
+ "fecha": "2026-11-12T20:01:17+00:00",
  "python": "3.13.18",
  "paso": "figuras",
  "figuras": [
@@ -12,5 +12,5 @@
   "docs/v5/figuras/f7_precision_ligas.png",
   "docs/v5/figuras/f7_traduccion_paso2.png"
  ],
- "tiempo_s": 1
+ "tiempo_s": 2
 }

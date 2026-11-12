@@ -242,7 +242,11 @@ siguen en su liga), es demasiado estrecho para quien cambia. **RIESGO** (§9).
 - **Probabilidades de umbral (criterio 5, ahora con 19 métricas).** Error de calibración 0,014–0,030 según el umbral.
   - Peores: triple de esquina en el percentil 25 (0,106, casi sin habilidad: 0,04) y media distancia en el 75 (0,081).
 
-### 2.5 Formato para el artifact (`formato_v32/`; versión provisional hasta la traducción definitiva)
+### 2.5 Formato para el artifact (`formato_v32/`)
+
+Regenerado con la traducción publicada actual y con aro, media distancia y triple de esquina en la v3.2 (decisión 2).
+Se versiona cuando termine la repetición del bloque de tiro: es la que fija T2%, T3%, TL%, 3PAr y FTr en el
+equivalente EuroLeague.
 
 - **Normalizado por temporada.** 6 temporadas, 111 MB; 2024-25: 9.264 filas, como la v3.2, y 1.075 columnas (879 de
   la v3.2 + 196 nuevas). No falta ninguna columna de la v3.2.
@@ -342,7 +346,8 @@ siguen en su liga), es demasiado estrecho para quien cambia. **RIESGO** (§9).
    activarlas.
 4. **VERIFICAR · TS% y eFG% sin probabilidades de umbral propias:** faltan los percentiles de la liga × rol de esas dos
    métricas.
-5. **VERIFICAR · NUTS del paso 2:** zonas hecha; volumen_papel en curso; tiro por repetir. El formato v3.2 y el criterio 4
+5. **VERIFICAR · NUTS del paso 2:** volumen_papel, defensa_cuidado y zonas, hechas; tiro, en repetición con más draws
+   (informe 08 §6). El formato v3.2 y el criterio 4
    esperan a la traducción publicada completa.
 6. **RIESGO · volumen:** el parquet completo (656 MB) y los draws (637 MB) no se versionan; se regeneran con la orden de
    la cabecera.
@@ -358,7 +363,7 @@ siguen en su liga), es demasiado estrecho para quien cambia. **RIESGO** (§9).
 | defensa_cuidado | Hecho | 1,01 | 793 / 434 | 3 en 3.000 |
 | tiro | Por repetir con 1.500 + 1.500 draws por cadena | 1,03 (DT base de TL%) | 210 / 89 | 0 |
 | zonas | Hecho | 1,01 | 371 / 580 | 0 |
-| volumen_papel | En curso | | | |
+| volumen_papel | Hecho | 1,01 | 762 / 1.122 | 0 |
 
 ## 8. Verificación de no regresión
 
