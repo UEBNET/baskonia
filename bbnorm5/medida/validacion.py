@@ -52,6 +52,7 @@ def _hiper(m: dict, u: pd.DataFrame, **extra) -> list[dict]:
     filas = []
     for temp, x in grupos:
         t = float(x["K"].sum() / x["N"].sum())
+        t = min(max(t, 1e-6), 1 - 1e-6) if m["familia"] == "binomial" else max(t, 1e-6)    # n* sin división por 0
         if m["familia"] == "normal":
             nst, ng = disp / sig ** 2, np.nan
         elif m["familia"] == "binomial":

@@ -6,6 +6,7 @@ Misma fuente y clasificación que `bbmodel/pista.py` (la de la v3.2), pero sin a
 - `data/processed/<t>/quintetos/<liga>/tiros.csv.gz`, temporada regular, tiros de campo (T2, T3);
 - zonas con la calibración de coordenadas de `bbmodel.zonas` por liga y temporada; si separa 2 y 3 en menos del 95 %
   de los tiros, esa liga-temporada queda sin zonas (como en la v3.2), pero conserva las asistidas;
+- control de calidad: zonas sólo si hay ≥ 2.000 tiros con zona en la liga-temporada y ≥ 5 % en el aro;
 - `fga_pbp` = tiros de campo con zona; `fgm_pbp` = canastas; `fgm_asist` = canastas con asistente.
 """
 from __future__ import annotations
@@ -16,6 +17,8 @@ import pandas as pd
 from bbnorm5 import config as C
 
 ZONAS_V5 = ["aro", "corta", "media", "t3_esquina"]
+MIN_TIROS_ZONA = 2000          # tiros de campo con zona en la liga-temporada
+MIN_CUOTA_ARO = 0.05           # en baloncesto, entre el 25 % y el 45 % de los tiros son en el aro
 COLS = ["fga_pbp", "fgm_pbp", "fgm_asist"] + [f"fga_{z}" for z in ZONAS_V5]
 
 
@@ -41,8 +44,16 @@ def liga_temporada(liga: str, temporada: str) -> tuple[pd.DataFrame, dict]:
             s = Z.perfil_tiro(t, sis)
             gz = s.groupby(["game_id", "player_id", "zona"]).size().unstack(fill_value=0)
             gz = gz.reindex(columns=Z.ZONAS, fill_value=0)
-            out = out.join(gz[ZONAS_V5].add_prefix("fga_"), how="outer")
-            out["fga_pbp"] = gz.sum(axis=1).reindex(out.index)
+            tot = float(gz.to_numpy().sum())
+            aro = float(gz["aro"].sum()) / tot if tot else 0.0
+            info["tiros_con_zona"], info["cuota_aro"] = int(tot), round(aro, 4)
+            # control de calidad (F9 bis): sin coordenadas útiles la calibración puede pasar y las zonas salir vacías
+            # (FEB1 2023-24: 116 tiros con zona y 0 % en el aro, igual en la v3.2)
+            if tot >= MIN_TIROS_ZONA and aro >= MIN_CUOTA_ARO:
+                out = out.join(gz[ZONAS_V5].add_prefix("fga_"), how="outer")
+                out["fga_pbp"] = gz.sum(axis=1).reindex(out.index)
+            else:
+                info["zonas_descartadas"] = True
     out = out.reset_index()
     for c in COLS:
         if c not in out:
