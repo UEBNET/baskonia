@@ -17,10 +17,10 @@
  },
  "paso2_defensa_cuidado": {
   "rhat_max": 1.01,
-  "ess_bulk_min": 814.0,
-  "ess_tail_min": 936.0,
-  "divergencias": 1,
-  "pasos_medios": 126.98666666666666,
-  "tiempo_s": 2356
+  "ess_bulk_min": 793.0,
+  "ess_tail_min": 434.0,
+  "divergencias": 3,
+  "pasos_medios": 125.97333333333333,
+  "tiempo_s": 4986
  }
 }
