@@ -36,7 +36,9 @@ def fig_fichajes(cfg):
     ax.xaxis.set_major_formatter(_pct)
     ax.set_xlabel("WIS de la v5 ÷ WIS de la v3.3 − 1 (IC 95 % por bootstrap de personas; negativo = mejor la v5)")
     ax.legend(loc="upper right", fontsize=8)
-    _cabecera(fig, ax, F, "La v5 ex ante mejora a la v3.3 en los fichajes reales en 4 de 5 métricas",
+    met = t[t["metrica"] != "todas"]
+    _cabecera(fig, ax, F, f"La v5 ex ante mejora a la v3.3 en los fichajes reales en {int((met[f'ic_hi_{m}'] < 0).sum())} "
+                          f"de {len(met)} métricas",
               "Temporada siguiente al fichaje · cortes 2022-23 a 2024-25 · intervalos del 50, 80 y 90 %", PIE)
     return _guardar(fig, "f8_fichajes_v33", cfg)
 
@@ -82,7 +84,8 @@ def fig_umbrales(cfg):
         a.set_major_formatter(lambda v, p: f"{v:.1f}".replace(".", ","))
     ax.legend(loc="upper left", fontsize=8)
     _cabecera(fig, ax, F, "Las probabilidades de umbral están calibradas (error medio 1,4–3,0 puntos)",
-              "Predictivo publicado (ex ante) · temporadas 2023-24 a 2025-26 · 14 métricas", PIE)
+              f"Predictivo publicado (ex ante) · temporadas 2023-24 a 2025-26 · "
+              f"{pd.read_csv(DIR / 'criterio5_umbrales.csv')['metrica'].nunique() - 1} métricas", PIE)
     return _guardar(fig, "f8_fiabilidad_umbrales", cfg)
 
 
@@ -98,7 +101,7 @@ def fig_sbc(cfg):
     ax.set_ylabel("Réplicas × ligas × métricas")
     ax.xaxis.set_major_formatter(lambda v, p: f"{v:.1f}".replace(".", ","))
     _cabecera(fig, ax, F, "El estimador de λ del paso 2 está calibrado en simulación",
-              f"SBC · {d['replica'].nunique()} réplicas × 14 métricas con el diseño real · cobertura del 80 %: "
+              f"SBC · {d['replica'].nunique()} réplicas × {d['metrica'].nunique()} métricas con el diseño real · cobertura del 80 %: "
               f"{((d['u'] > 0.1) & (d['u'] < 0.9)).mean() * 100:.1f} %".replace(".", ","), PIE)
     return _guardar(fig, "f8_sbc_lambda", cfg)
 
