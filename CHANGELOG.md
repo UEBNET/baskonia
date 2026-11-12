@@ -24,6 +24,47 @@
 * Publicado en Jugadores (v31, con el ajuste final de los textos «De dónde sale…» hecho por otra sesión sobre la v30), Equipos (v8) y Metodología (v8): el mismo fichero en los tres. Comprobado en navegador: ningún texto de rango ni de
   confianza en el informe completo, con y sin destino, sin errores de JavaScript.
 
+## 2026-11-10 — Corrección: fecha de los partidos de BNXT, BSL y GBL en entrenadores (formato ISO)
+
+* **Fallo.** `bbstats/entrenadores.py::_fecha` cortaba la fecha a 10 caracteres. Con la fecha RFC 2822 de FIBA
+  LiveStats («Mon, 07 Oct 2024 19:06:51 GMT») quedaba «Mon, 07 Oc»: ilegible y ordenada alfabéticamente por día de la
+  semana.
+  * Afectaba a `data/processed/<t>/entrenadores/{bnxt,bsl,gbl}_partidos.csv` y `_tramos.csv` (6.658 filas de
+    partido, todas las temporadas).
+  * Lo heredaba la tabla de partidos por jugador de roles (`data/modelos/roles/partidos_jugador`).
+* **Corrección.**
+  * `_fecha` devuelve siempre ISO (AAAA-MM-DD): admite ISO con o sin hora, RFC 2822 y dd/mm/aaaa. Si no reconoce el
+    formato devuelve vacío, nunca un texto truncado.
+  * Test en `tests/test_entrenadores.py`.
+* **Regenerado sin descarga.** `python -m bbstats entrenadores --ligas bnxt bsl gbl --sin-descarga`, más
+  `entrenadores.csv` y `entrenadores_cobertura.csv`.
+  * Al ordenarse bien los partidos, cambian 29 de los 353 tramos club-temporada-entrenador de esas ligas y el
+    entrenador asignado en 15 filas de partido (relleno de huecos por orden cronológico).
+* **Sin regenerar todavía (pendiente de aprobación):** las capas que leen esos tramos o esas fechas.
+  * Estilo por entrenador (`bbestilo entrenadores`).
+  * Roles y partidos por jugador (`bbfit roles`).
+  * Tendencias de entrenador del simulador.
+* La fecha sigue siendo la de modificación del fichero del partido en FIBA LiveStats, normalmente el mismo día o el
+  siguiente.
+* Tarea aparte aprobada por el usuario el 10-11-2026 (encargo v5.0, F2 §5 riesgo 1).
+
+## 2026-11-09 — Corrección: DT de nivel por par en `vara.json` (rangos con vara ≠ EuroLeague)
+
+* **Fallo.** `bbnorm3/destino.py::vara_artifact` leía `sd_par_triangular` con `np.triu_indices`, pero
+  `bbnorm3.destino` lo escribe en el orden de `np.tril_indices`. Las DT del nivel de cada par (origen → liga de la vara)
+  quedaban desordenadas y la diagonal salía ≠ 0. Ejemplo en pts/100: ACB 2025-26 → EuroLeague 0,1343 en lugar de 0,0504;
+  ACB → ACB 0,1427 en lugar de 0. Sin `sd_par_triangular`, además, tomaba covarianzas por DT.
+* **Efecto.** Afectaba sólo a la **anchura del rango** que el artifact muestra cuando la vara no es la EuroLeague (por
+  defecto, la liga del club). El centro no cambia. El simulador en Python leía bien (`bbfit/sim_insumos.py`).
+* **Corrección.**
+  * Nueva función `bbnorm3.destino.sd_par_matriz`: lectura en el orden `tril` y, donde falta la DT de la mezcla,
+    √(Σ_aa + Σ_bb − 2Σ_ab), igual que `bbfit.sim_insumos.var_par`.
+  * Test nuevo: `tests/test_v32.py::test_vara_sd_par_lee_triangular_inferior`.
+* **Republicación.** `datos/normalizados/vara.json.gz.txt` en los tres artifacts de Kerno (Jugadores v29, Equipos v6,
+  Metodología v6). Sólo cambia el campo `sp`; el resto del fichero es idéntico al publicado (comprobado campo a campo) y el
+  publicado coincide byte a byte con el generado (sha256 `327eed4a…`).
+* Tarea aparte del encargo v5.0 (F0 §6.1), aprobada por el usuario el 09-11-2026.
+
 ## 2026-11-09 — Skill «anadir-liga» para los tres artifacts (v4.2)
 
 * Fase 7 reescrita: páginas y código en `artifact/kerno/` (comparados antes con lo publicado), reparto completo con

@@ -289,8 +289,29 @@ def _norm(s) -> str:
 
 
 def _fecha(v) -> str | None:
+    """Fecha del partido en formato estándar ISO (AAAA-MM-DD), venga como venga de la fuente.
+
+    - ISO (con o sin hora): «2024-10-07», «2024-10-07T20:30:00» → los 10 primeros caracteres.
+    - RFC 2822, la de FIBA LiveStats (BNXT, BSL, GBL): «Mon, 07 Oct 2024 19:06:51 GMT» → «2024-10-07». Antes se
+      cortaba a 10 caracteres («Mon, 07 Oc») y la fecha quedaba ilegible; corregido el 10-11-2026 (encargo v5.0, F2).
+    - Si no se reconoce, None (nunca un texto truncado)."""
     s = _s(v)
-    return s[:10] if s else None
+    if not s:
+        return None
+    if re.match(r"\d{4}-\d{2}-\d{2}", s):
+        return s[:10]
+    from datetime import datetime as _dt
+    from email.utils import parsedate_to_datetime
+    try:
+        return parsedate_to_datetime(s).date().isoformat()
+    except (TypeError, ValueError, IndexError):
+        pass
+    for fmt in ("%d/%m/%Y", "%d.%m.%Y", "%Y/%m/%d"):
+        try:
+            return _dt.strptime(s[:10], fmt).date().isoformat()
+        except ValueError:
+            continue
+    return None
 
 
 # =============================================================================================== lectores

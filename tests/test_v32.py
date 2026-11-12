@@ -164,3 +164,22 @@ def test_configuracion_final_quita_las_piezas():
         assert c["red"]["verosimilitud"] == "normal" and c["_completa"]["red"]["verosimilitud"] == "student"
     if "K8" in q:
         assert c["latente"]["K"] == 4
+
+
+def test_vara_sd_par_lee_triangular_inferior():
+    """vara.json: la DT por par se lee en el mismo orden (np.tril_indices) en que bbnorm3.destino la escribe; la
+    diagonal es 0 y, sin sd_par_triangular, se deriva de la covarianza (no se toman covarianzas por DT)."""
+    from bbnorm3.destino import sd_par_matriz
+    S = np.array([[0.004, 0.001, 0.0005], [0.001, 0.006, 0.002], [0.0005, 0.002, 0.009]])
+    P = np.array([[0.0, 0.05, 0.11], [0.05, 0.0, 0.07], [0.11, 0.07, 0.0]])
+    il = np.tril_indices(3)
+    cv = {"nodos": ["a", "b", "c"], "cov_triangular": list(S[il]), "sd_par_triangular": list(P[il])}
+    assert np.allclose(sd_par_matriz(cv), P)
+    cv_sin = {"nodos": ["a", "b", "c"], "cov_triangular": list(S[il])}
+    T = sd_par_matriz(cv_sin)
+    assert T[0, 2] == pytest.approx(np.sqrt(0.004 + 0.009 - 2 * 0.0005))
+    assert np.allclose(np.diag(T), 0.0)
+    # un par sin DT de la mezcla (None) toma la de la covarianza
+    Pn = list(P[il]); Pn[3] = None             # posición (2, 0) en el orden tril
+    T2 = sd_par_matriz({"nodos": ["a", "b", "c"], "cov_triangular": list(S[il]), "sd_par_triangular": Pn})
+    assert T2[2, 0] == pytest.approx(np.sqrt(0.004 + 0.009 - 2 * 0.0005)) and T2[1, 0] == pytest.approx(0.05)
