@@ -139,10 +139,11 @@ def final(cfg: dict) -> dict:
         Ssub = ML.submuestra(S, cfg["ajuste"]["submuestra_personas"], np.random.default_rng(cfg["semilla"] + 100 + sem))
         mods.append(ML.ajustar(Ssub, K, "corr", maxiter=cfg["ajuste"]["maxiter"], kr=cfg["ajuste"]["k_residuo"]))
         print(f"  semilla {sem}: logL {mods[-1]['logL']:.1f}", flush=True)
-    mod = max(mods, key=lambda m: m["logL"])
+    i_mejor = int(np.argmax([m["logL"] for m in mods]))    # (list.index comparaba diccionarios con arrays)
+    mod = mods[i_mejor]
     # refina el mejor (arranque en caliente) para acercarlo a la convergencia
     Ssub = ML.submuestra(S, cfg["ajuste"]["submuestra_personas"],
-                         np.random.default_rng(cfg["semilla"] + 100 + mods.index(mod)))
+                         np.random.default_rng(cfg["semilla"] + 100 + i_mejor))
     mod = ML.ajustar(Ssub, K, "corr", x0=mod["x"], maxiter=cfg["ajuste"]["maxiter"], kr=cfg["ajuste"]["k_residuo"])
     print(f"  refinado: logL {mod['logL']:.1f}, convergió {mod['convergio']}", flush=True)
     Lr, R = ML.varimax(mod["L"])
