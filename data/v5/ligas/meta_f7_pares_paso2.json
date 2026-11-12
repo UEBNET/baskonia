@@ -4,10 +4,10 @@
  "config": "configs/v5/f7.yaml",
  "hash_config": "d8ba8086030d",
  "hash_datos_entrada": null,
- "fecha": "2026-11-11T11:22:47+00:00",
+ "fecha": "2026-11-12T08:45:43+00:00",
  "python": "3.13.18",
  "paso": "pares_paso2",
- "filas": 140274,
- "traspasos": 65281,
- "tiempo_s": 4
+ "filas": 140469,
+ "traspasos": 65379,
+ "tiempo_s": 3
 }

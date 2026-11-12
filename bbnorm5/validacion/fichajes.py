@@ -58,7 +58,7 @@ EX_ANTE = {
     "ex_ante_sin_estilo_liga": [b for b in TODOS if b not in ("volumen", "estilo_liga")],
     "ex_ante_sin_companeros": [b for b in TODOS if b not in ("volumen", "companeros")],
 }
-ROLES = ["E", "A", "I"]
+ROLES = ["E", "A", "I", "X"]          # X: sin reparto de roles (ligas o temporadas sin jugada a jugada)
 
 
 def _q(nombre: float) -> str:
@@ -71,6 +71,8 @@ def con_rol(te: pd.DataFrame, r: str, lp: pd.DataFrame) -> pd.DataFrame:
     previa), desplazamiento y varianza del cambio de rol respecto al último rol, ajuste de liga y Δλ × rol."""
     y = te.copy()
     mu_r = y[["liga"]].merge(lp[lp["rol"] == r][["liga", "mu_prev"]], on="liga", how="left")["mu_prev"].to_numpy(float)
+    valido = np.isfinite(mu_r)
+    mu_r = np.where(valido, mu_r, y["mu_prev"].to_numpy(float))      # sin media previa de r: peso 0 en la mezcla
     phi, s2r = y["phi_rol"].to_numpy(float), y["s2_R"].to_numpy(float)
     cr_r = (y["rol_ult"] != r).to_numpy(float)
     dmu_r = np.where(cr_r > 0, np.nan_to_num(y["mu_prev_rol_ult"].to_numpy(float) - mu_r), 0.0)
@@ -83,9 +85,9 @@ def con_rol(te: pd.DataFrame, r: str, lp: pd.DataFrame) -> pd.DataFrame:
     y["mu_prev"], y["rol"], y["cr"], y["dmu"] = mu_r, r, cr_r, dmu_r
     for rr in ("E", "I"):
         y[f"dl_rol_{rr}"] = y["delta_lambda"] * (rr == r)
-    for rr in ROLES:
+    for rr in ("E", "A", "I"):
         y[f"vol_{rr}"] = 0.0
-    return y, np.isfinite(mu_r)
+    return y, valido
 
 
 def prob_rol(tr: pd.DataFrame) -> dict:
@@ -108,24 +110,28 @@ def exante(tr: pd.DataFrame, te: pd.DataFrame, fam: str, bloques: list[str], lp:
     fit = LC.ajustar_beta(tr[cols].to_numpy(float)[ok], r[ok], w[ok], grupos)
     f = LC.factor_recalibracion(tr, cols, fit, True, eta, vo)
     pr = prob_rol(tr)
-    P = np.array([pr.get((ru, bool(c > 0)), np.full(3, 1 / 3)) for ru, c in zip(te["rol_ult"], te["cl"])])
+    P = np.array([pr.get((ru, bool(c > 0)), np.full(len(ROLES), 1 / len(ROLES))) for ru, c in zip(te["rol_ult"], te["cl"])])
     nu = np.where(np.isfinite(te["N_ult"].to_numpy(float)) & (te["N_ult"].to_numpy(float) > 0),
                   te["N_ult"].to_numpy(float), te["N"].to_numpy(float))
     ks_r, tn_r = [], []
     for k, rr in enumerate(ROLES):
         y, valido = con_rol(te, rr, lp)
         P[~valido, k] = 0.0
-        y.loc[~valido, "mu_prev"] = te.loc[~valido, "mu_prev"].to_numpy()       # (peso 0; evita NaN)
         y = LC.recalibrar(LC.aplicar(y, cols, fit, True), f)
         ks, tn = EX.muestras_predictivas(y, fam, rng, nu)
         ks_r.append(ks), tn_r.append(tn)
+    sin = P.sum(axis=1) <= 0
+    if sin.any():           # ningún rol con media previa en la liga de destino: el rol observado (casos marginales)
+        P[sin, te["rol"].map({r: i for i, r in enumerate(ROLES)}).fillna(3).astype(int).to_numpy()[sin]] = 1.0
     P = P / P.sum(axis=1, keepdims=True)
     u = rng.random(ks_r[0].shape)
-    c0, c1 = P[:, [0]], P[:, [0]] + P[:, [1]]
-    ks = np.where(u < c0, ks_r[0], np.where(u < c1, ks_r[1], ks_r[2]))
-    tn = np.where(u < c0, tn_r[0], np.where(u < c1, tn_r[1], tn_r[2]))
+    cum = np.cumsum(P, axis=1)
+    k = (u[:, :, None] >= cum[:, None, :-1]).sum(axis=2)            # índice del rol de cada draw
+    ks = np.choose(k, ks_r)
+    tn = np.choose(k, tn_r)
     out = _resumen(ks, tn, te, fam, rng, discreta=False)
-    out["p_rol_real"] = P[np.arange(len(te)), te["rol"].map({r: i for i, r in enumerate(ROLES)}).fillna(1).astype(int).to_numpy()]
+    out["p_rol_real"] = P[np.arange(len(te)), te["rol"].map({r: i for i, r in enumerate(ROLES)}).fillna(3).astype(int).to_numpy()]
+    out["sin_rol_previo"] = sin
     out["factor_recal"] = f
     return out
 

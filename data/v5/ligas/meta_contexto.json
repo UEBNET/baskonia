@@ -4,7 +4,7 @@
  "config": "configs/v5/f6.yaml",
  "hash_config": "a68b8327af99",
  "hash_datos_entrada": null,
- "fecha": "2026-11-11T08:45:25+00:00",
+ "fecha": "2026-11-12T08:43:28+00:00",
  "python": "3.13.18",
  "paso": "contexto",
  "casos": 1340060,
@@ -18,5 +18,5 @@
   "liga+estilo_liga",
   "liga+todos"
  ],
- "tiempo_s": 154
+ "tiempo_s": 167
 }

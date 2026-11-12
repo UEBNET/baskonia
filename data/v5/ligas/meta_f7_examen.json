@@ -4,16 +4,16 @@
  "config": "configs/v5/f7.yaml",
  "hash_config": "d8ba8086030d",
  "hash_datos_entrada": null,
- "fecha": "2026-11-11T11:32:56+00:00",
+ "fecha": "2026-11-12T08:45:40+00:00",
  "python": "3.13.18",
  "paso": "examen",
- "filas": 226115,
+ "filas": 226465,
  "z_sube": {
-  "crudo": 0.085,
-  "encogido": 0.048,
-  "encogido_heckman": 0.016,
-  "encogido_ipw": 0.053,
-  "paso1": 0.063
+  "crudo": 0.093,
+  "encogido": 0.055,
+  "encogido_heckman": 0.022,
+  "encogido_ipw": 0.06,
+  "paso1": 0.078
  },
- "tiempo_s": 14
+ "tiempo_s": 16
 }
