@@ -106,6 +106,23 @@ def prob_rol(tr: pd.DataFrame) -> dict:
 
 
 def exante(tr: pd.DataFrame, te: pd.DataFrame, fam: str, bloques: list[str], lp: pd.DataFrame, eta, vo, rng) -> pd.DataFrame:
+    ks, tn, P, sin, f = exante_muestras(tr, te, fam, bloques, lp, eta, vo, rng)
+    out = _resumen(ks, tn, te, fam, rng, discreta=False)
+    out["p_rol_real"] = P[np.arange(len(te)), te["rol"].map({r: i for i, r in enumerate(ROLES)}).fillna(3).astype(int).to_numpy()]
+    out["sin_rol_previo"] = sin
+    out["factor_recal"] = f
+    return out
+
+
+def exante_muestras(tr: pd.DataFrame, te: pd.DataFrame, fam: str, bloques: list[str], lp: pd.DataFrame, eta, vo, rng):
+    """Draws ex ante (rol y exposición de T desconocidos): tasa observada `ks` y tasa de nivel `tn` (casos × draws),
+    probabilidades de rol P, casos sin rol previo y factor de recalibración de la F6.2."""
+    return muestras_exante(te, fam, ajuste_exante(tr, bloques, eta, vo), lp, rng)
+
+
+def ajuste_exante(tr: pd.DataFrame, bloques: list[str], eta, vo) -> dict:
+    """Lo que la versión ex ante aprende de los años de entrenamiento: coeficientes de contexto, factor de
+    recalibración de la F6.2, transición de rol y cocientes de exposición N_T / N_ult (F9: se reutiliza por trozos)."""
     cols = [c for b in bloques for c in LC.BLOQUES[b]]
     trl = LC.aplicar(tr, [], None, True)
     r = eta - (trl["mu_prev"] + trl["m_nivel"]).to_numpy()
@@ -113,15 +130,19 @@ def exante(tr: pd.DataFrame, te: pd.DataFrame, fam: str, bloques: list[str], lp:
     ok = np.isfinite(r) & np.isfinite(w)
     grupos = np.concatenate([[k] * len(LC.BLOQUES[b]) for k, b in enumerate(bloques)])
     fit = LC.ajustar_beta(tr[cols].to_numpy(float)[ok], r[ok], w[ok], grupos)
-    f = LC.factor_recalibracion(tr, cols, fit, True, eta, vo)
-    pr = prob_rol(tr)
+    lr = np.log((tr["N"].to_numpy(float) + 1) / (tr["N_ult"].to_numpy(float) + 1))
+    return {"cols": cols, "fit": fit, "f": LC.factor_recalibracion(tr, cols, fit, True, eta, vo), "pr": prob_rol(tr),
+            "lr": lr, "cl_tr": (tr["cl"] > 0).to_numpy(), "ok_lr": np.isfinite(lr)}
+
+
+def muestras_exante(te: pd.DataFrame, fam: str, aj: dict, lp: pd.DataFrame, rng):
+    cols, fit, f, pr = aj["cols"], aj["fit"], aj["f"], aj["pr"]
+    lr, cl_tr, ok_lr = aj["lr"], aj["cl_tr"], aj["ok_lr"]
     P = np.array([pr.get((ru, bool(c > 0)), np.full(len(ROLES), 1 / len(ROLES))) for ru, c in zip(te["rol_ult"], te["cl"])])
     # exposición de T desconocida: N_ult × cociente N_T / N_ult sacado de los años de entrenamiento (por cambio de liga)
     nu = np.where(np.isfinite(te["N_ult"].to_numpy(float)) & (te["N_ult"].to_numpy(float) > 0),
                   te["N_ult"].to_numpy(float), te["N"].to_numpy(float))
-    lr = np.log((tr["N"].to_numpy(float) + 1) / (tr["N_ult"].to_numpy(float) + 1))
-    cl_tr, cl_te = (tr["cl"] > 0).to_numpy(), (te["cl"] > 0).to_numpy()
-    ok_lr = np.isfinite(lr)
+    cl_te = (te["cl"] > 0).to_numpy()
     exps = []
     for _ in range(N_EXPOSICION):
         r = np.where(cl_te, rng.choice(lr[ok_lr & cl_tr], len(te)) if (ok_lr & cl_tr).any() else 0.0,
@@ -143,11 +164,7 @@ def exante(tr: pd.DataFrame, te: pd.DataFrame, fam: str, bloques: list[str], lp:
     k = (u[:, :, None] >= cum[:, None, :-1]).sum(axis=2)            # índice del rol de cada draw
     ks = np.choose(k, ks_r)
     tn = np.choose(k, tn_r)
-    out = _resumen(ks, tn, te, fam, rng, discreta=False)
-    out["p_rol_real"] = P[np.arange(len(te)), te["rol"].map({r: i for i, r in enumerate(ROLES)}).fillna(3).astype(int).to_numpy()]
-    out["sin_rol_previo"] = sin
-    out["factor_recal"] = f
-    return out
+    return ks, tn, P, sin, f
 
 
 # ------------------------------------------------------------------ predicciones de la v5
@@ -182,12 +199,15 @@ def _resumen(ks: np.ndarray, tn: np.ndarray, y: pd.DataFrame, fam: str, rng, dis
     return out
 
 
-def predicciones_v5(cfg: dict, x: pd.DataFrame | None = None) -> pd.DataFrame:
+def predicciones_v5(cfg: dict, x: pd.DataFrame | None = None, cortes: list[int] | None = None,
+                    sufijo: str = "") -> pd.DataFrame:
+    """Predicciones de todas las variantes para cada temporada objetivo de `cortes` (por defecto, las de la prueba),
+    cada una sólo con las temporadas anteriores. `sufijo` separa la salida (p. ej. el corte de calibración de la F9)."""
     x = pd.read_parquet(DIR / "base_v5.parquet") if x is None else x
     from bbnorm5.carrera import datos as CD
     H = CD._hiper_preferido(pd.read_csv(DM.DIR / "hiperparametros.csv"))
     filas, coefs = [], []
-    for T in cfg["examen"]["cortes_prueba"]:
+    for T in (cortes or cfg["examen"]["cortes_prueba"]):
         for met in DM.METRICAS:
             fam = DM.METRICAS[met][0]
             xm = x[x["metrica"] == met]
@@ -233,8 +253,8 @@ def predicciones_v5(cfg: dict, x: pd.DataFrame | None = None) -> pd.DataFrame:
                                         exante(tr, te, fam, bloques, lp, eta, vo, rng)], axis=1))
             print(f"  v5 {T} {met}", flush=True)
     p = pd.concat(filas, ignore_index=True)
-    p.to_parquet(DIR / "predicciones_v5.parquet")
-    pd.concat(coefs).to_csv(DIR / "coeficientes_contexto.csv", index=False)
+    p.to_parquet(DIR / f"predicciones_v5{sufijo}.parquet")
+    pd.concat(coefs).to_csv(DIR / f"coeficientes_contexto{sufijo}.csv", index=False)
     return p
 
 
@@ -334,8 +354,13 @@ def recalibrar_oraculo(d: pd.DataFrame, pre: str, centro: str) -> pd.DataFrame:
     return d
 
 
-def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = None) -> dict:
+def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = None, modelos_extra: tuple = (),
+             sufijo: str = "") -> dict:
+    """`modelos_extra`: modelos de `p` que se puntúan además de los de siempre (p. ej. la recalibración de la F9);
+    `sufijo` separa las salidas."""
     p = pd.read_parquet(DIR / "predicciones_v5.parquet") if p is None else p
+    m_int = MODELOS_INTERVALO + list(modelos_extra)
+    m_exa = MODELOS_EXAMEN + list(modelos_extra)
     b = pd.read_parquet(DIR / "banco_v33.parquet") if b is None else b
     rng = np.random.default_rng(cfg["semilla"])
     B = int(cfg["examen"].get("bootstrap", 1000))
@@ -369,7 +394,7 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
     cols = [c for c in d.columns if c.startswith("v33_") or "__q" in c or c.endswith("__media")]
     for c in cols:
         d[c] = np.clip(d[c].to_numpy(float), 0.0, techo)
-    completos = d[[c for c in cols if c.startswith("v33_") or any(c.startswith(f"{m}__") for m in MODELOS_INTERVALO)]].notna().all(axis=1)
+    completos = d[[c for c in cols if c.startswith("v33_") or any(c.startswith(f"{m}__") for m in m_int)]].notna().all(axis=1)
     d = d[completos].copy()
     d["y"] = d["real"]
     out = {"casos_banco": int(n_banco), "con_prediccion_v5": int(n_cruce), "comparables": int(len(d)),
@@ -389,7 +414,7 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
         s33 = puntuar(g, "v33")
         s33o = puntuar(go, "v33")
         fila = {"metrica": m, "casos": len(g), "personas": g["persona_v5"].nunique()}
-        for mod in MODELOS_EXAMEN:
+        for mod in m_exa:
             s5 = puntuar(g, mod)
             # «todas»: cada métrica normalizada por el WIS medio de la v3.3 en esa métrica
             if m == "todas":
@@ -405,10 +430,10 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
                     g["persona_v5"].to_numpy(), a, bor, B, rng)
         y = g["y"].to_numpy(float)
         for mod, lo, hi in [("v33", g["v33_lo80"], g["v33_hi80"])] + [(m_, g[f"{m_}__q10"], g[f"{m_}__q90"])
-                                                                          for m_ in MODELOS_INTERVALO]:
+                                                                          for m_ in m_int]:
             fila[f"cob80_{mod}"] = float(((y >= lo) & (y <= hi)).mean())
             fila[f"ancho80_{mod}"] = float(np.median(hi - lo))
-        for mod in MODELOS_INTERVALO:
+        for mod in m_int:
             fila[f"ratio_ancho80_{mod}_v33"] = float(np.median((g[f"{mod}__q90"] - g[f"{mod}__q10"]) /
                                                                np.maximum(g["v33_hi80"] - g["v33_lo80"], 1e-9)))
             fila[f"mae_{mod}"] = float(np.nanmean(np.abs(y - g[f"{mod}__media"])))
@@ -417,8 +442,8 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
             fila["mae_v42"] = float(np.nanmean(np.abs(y - g["v42_pred"])))
         filas.append(fila)
     tabla = pd.DataFrame(filas)
-    tabla.to_csv(DIR / "examen_fichajes.csv", index=False)
-    d.to_parquet(DIR / "examen_fichajes_casos.parquet")
+    tabla.to_csv(DIR / f"examen_fichajes{sufijo}.csv", index=False)
+    d.to_parquet(DIR / f"examen_fichajes_casos{sufijo}.parquet")
     # criterio 11: navaja del estilo de liga y de compañeros (CRPS propio de la v5, todas las métricas, mismos fichajes)
     nav = []
     fich = d[["persona_v5", "liga_d", "anio"]].drop_duplicates().rename(columns={"liga_d": "liga"})
@@ -431,7 +456,7 @@ def comparar(cfg: dict, p: pd.DataFrame | None = None, b: pd.DataFrame | None = 
         r, lo, hi = _boot_ratio(per, pv2[ref].to_numpy(), pv2[sin].to_numpy(), B, rng)
         nav.append({"comparacion": f"{ref} frente a {sin}", "dif_crps_rel": r, "ic95_lo": lo, "ic95_hi": hi,
                     "supera_navaja": hi < 0, "casos": len(pv2)})
-    pd.DataFrame(nav).to_csv(DIR / "navaja_fichajes.csv", index=False)
+    pd.DataFrame(nav).to_csv(DIR / f"navaja_fichajes{sufijo}.csv", index=False)
     out["tabla"] = tabla.round(4).to_dict(orient="records")
     out["navaja"] = nav
     return out
