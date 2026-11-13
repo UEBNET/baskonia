@@ -1,0 +1,121 @@
+{
+ "temporada": "2024-25",
+ "ligas": {
+  "esf_1nac": {
+   "nombre": "Primera Nacional Masculina (1ª División Masculina · Euskadi)",
+   "filas": 762,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion",
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 274,
+    "liga_regular": 246,
+    "copa": 195,
+    "fase_clasificacion": 47
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 199,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2024-25/esf_1nac_2024-25_20261113T123849Z.json.gz",
+   "errores": []
+  },
+  "esf_2nac": {
+   "nombre": "Segunda Nacional Masculina (2ª División Masculina · Euskadi)",
+   "filas": 549,
+   "fases": [
+    "liga_regular",
+    "fase_clasificacion",
+    "total"
+   ],
+   "filas_por_fase": {
+    "liga_regular": 250,
+    "total": 250,
+    "fase_clasificacion": 49
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 185,
+   "partidos_con_acta": 184,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2024-25/esf_2nac_2024-25_20261113T123849Z.json.gz",
+   "errores": []
+  },
+  "esf_jun": {
+   "nombre": "Liga Vasca Junior Masculina",
+   "filas": 1037,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa",
+    "total",
+    "total_a1",
+    "total_a2"
+   ],
+   "filas_por_fase": {
+    "total": 243,
+    "segunda_fase": 215,
+    "total_a1": 150,
+    "primera_fase": 125,
+    "total_a2": 121,
+    "copa": 75,
+    "fase_clasificacion": 59,
+    "tercera_fase": 49
+   },
+   "divisiones": [
+    "A1",
+    "A2",
+    "cruce",
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 151,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2024-25/esf_jun_2024-25_20261113T123849Z.json.gz",
+   "errores": []
+  },
+  "esf_cad": {
+   "nombre": "Liga Vasca Cadete Masculina",
+   "filas": 886,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa",
+    "total",
+    "total_a1",
+    "total_a2"
+   ],
+   "filas_por_fase": {
+    "total": 201,
+    "segunda_fase": 170,
+    "total_a1": 140,
+    "primera_fase": 103,
+    "total_a2": 95,
+    "copa": 86,
+    "tercera_fase": 46,
+    "fase_clasificacion": 45
+   },
+   "divisiones": [
+    "A1",
+    "A2",
+    "cruce",
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 152,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2024-25/esf_cad_2024-25_20261113T123849Z.json.gz",
+   "errores": []
+  }
+ }
+}
