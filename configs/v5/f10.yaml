@@ -1,0 +1,18 @@
+# F10 · Estudio de viabilidad aguas abajo (encargo v5.0 §14; revisión 1.2: prototipo de la proyección en contexto
+# conectado al motor de minutos, sin tocar el simulador publicado). Nada de lo que escribe esta fase lo lee el producto.
+fase: F10
+salida: aguas_abajo
+semilla: 20261113
+pasos: [landing]
+bootstrap: 500                 # remuestreos por persona para los IC
+
+# Landing (adaptación): δ de la primera temporada en una liga nueva (§14.4). Criterios fijados antes de ver los
+# resultados del módulo (la exploración previa sólo miró medias globales por métrica, sin IC).
+landing:
+  min_minutos: 300             # minutos de la temporada objetivo
+  lambda: paso1                # traducción sólo con puentes intra-temporada (el paso 2 se estima con los propios
+                               # traspasos y absorbería δ: circular)
+  identificable:
+    min_personas: 100          # personas distintas con cambio en el grupo
+    semiancho_ic95: 0.10       # semiancho del IC 95 % de δ, en DT del residuo
+  relevante: 0.10              # |δ| ≥ 0,10 DT con IC que no cruza 0

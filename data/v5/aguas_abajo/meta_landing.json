@@ -1,0 +1,19 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F10",
+ "config": "configs/v5/f10.yaml",
+ "hash_config": "2a71ff33c6ca",
+ "hash_datos_entrada": "2722de941128628b",
+ "fecha": "2026-11-13T07:42:03+00:00",
+ "python": "3.13.18",
+ "transiciones": 255485,
+ "primera": 61019,
+ "segunda": 16617,
+ "celdas": 76,
+ "identificables": 19,
+ "relevantes": 17,
+ "persisten": 3,
+ "pasajeros": 9,
+ "media_abs_delta": 0.11482737867838777,
+ "semiancho_ic_mediano": 0.17407919246479922
+}
