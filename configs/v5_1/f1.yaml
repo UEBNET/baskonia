@@ -1,0 +1,18 @@
+# v5.1 · F1 · Versión combinada v5 / v3.2 (docs/v5_1/00_encargo_v5_1.md §2–3). Regla fijada antes de examinarla.
+fase: v5.1-F1
+salida: ../v5_1/salidas/combinada        # data/v5_1/salidas/combinada (relativa a data/v5)
+semilla: 20261114
+bootstrap: 500
+pesos:
+  rejilla: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+  # w = 0,5 + n / (n + n0) · (ŵ − 0,5): ŵ minimiza el WIS en los casos de calibración; la mezcla al 50 % (sin ajustar)
+  # fue la más robusta en la F10 bis, así que las métricas con pocos casos se quedan cerca de ella
+  n0: 300
+  sin_examen: 0.5                       # métricas que el examen de la F1 no cubre (faltas)
+examen:
+  # cada corte de prueba usa sólo los anteriores para fijar los pesos
+  cortes_prueba: [2023, 2024]
+publicar:
+  # regla de publicación (encargo v5.1 §3.1): mejora a la v3.2 en el examen de la F1 con IC 95 % < 0 y cobertura del
+  # 80 % en [0,76, 0,84] (la de fichajes frente a la v3.3, F10 bis §13.1, se repite en la F2 con la producción)
+  cobertura_80: [0.76, 0.84]

@@ -23,6 +23,8 @@ observados de las dos versiones en las mismas filas.
 """
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from scipy import special, stats
@@ -136,7 +138,12 @@ def _derivadas_normalizado(v: pd.DataFrame, comp: dict, nuevas: dict, k: dict, r
         _poner(v, nuevas, m32, *(j[c].to_numpy(float) * f for c in ("c", "lo", "hi", "lo50", "hi50")))
 
 
-def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict, excluir: tuple = ()) -> list:
+def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict, excluir: tuple = (), dir_salida: Path | None = None,
+                pesos: dict | None = None) -> list:
+    """Tablas normalizadas por temporada en el formato de la v3.2. `pesos` (v5.1 F1, versión combinada): {métrica de la
+    v3.2: w}; en cada métrica publicada, centro e intervalos = w·v5 + (1 − w)·v3.2 (promedio de cuantiles) donde están
+    las dos; la v5 se conserva en `<m>_v5*` y la v3.2 en `<m>_v32*`."""
+    DIRN = (dir_salida or DIR) / "normalizado"
     from bbnorm5.ligas import modelo as LM
     from bbnorm5.ligas import resumen_paso2 as LR2
     from bbnorm5.salidas import derivadas as DV
@@ -145,7 +152,7 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict, excluir: tuple = 
     raz = r_[(r_["liga"] == VARA[0]) & (r_["temporada"] == VARA[1])].iloc[0]     # razones de la vara (EuroLeague)
     per = _personas()
     escritos = []
-    (DIR / "normalizado").mkdir(parents=True, exist_ok=True)
+    DIRN.mkdir(parents=True, exist_ok=True)
     for t in sorted(niv["temporada"].unique()):
         f = V32 / f"{t}.csv.gz"
         if not f.exists():
@@ -192,14 +199,39 @@ def normalizado(niv: pd.DataFrame, obs: pd.DataFrame, k: dict, excluir: tuple = 
             comp[m5] = j
         _derivadas_normalizado(v, comp, nuevas, k, raz)
         v = pd.concat([v, pd.DataFrame(nuevas, index=v.index)], axis=1)
-        v["fuente_norm"] = np.where(v[[c for c in v.columns if c.startswith("fuente_") and c != "fuente_norm"]].eq("V5").any(axis=1), "V5+V3.2",
-                                    v["fuente_norm"])
+        if pesos:
+            combinar(v, pesos)
+        fu = v[[c for c in v.columns if c.startswith("fuente_") and c != "fuente_norm"]]
+        v["fuente_norm"] = np.where(fu.eq("COMB").any(axis=1), "COMBINADA",
+                                    np.where(fu.eq("V5").any(axis=1), "V5+V3.2", v["fuente_norm"]))
         assert len(v) == n0 and all(c in v.columns for c in c0), "el formato de la v3.2 no se conserva"
         num = v.select_dtypes("number").columns
         v[num] = v[num].round(4)
-        v.to_csv(DIR / "normalizado" / f"{t}.csv.gz", index=False, compression="gzip")
+        v.to_csv(DIRN / f"{t}.csv.gz", index=False, compression="gzip")
         escritos.append({"temporada": t, "filas": len(v), "con_v5": int((v["fuente_norm"] == "V5+V3.2").sum())})
     return escritos
+
+
+def combinar(v: pd.DataFrame, pesos: dict) -> None:
+    """v5.1 F1 · versión combinada, en el sitio. Para cada métrica con v5 (`fuente_<m>` = V5) y v3.2 (`<m>_v32`):
+    centro, lo y hi = w·v5 + (1 − w)·v3.2 (promedio de cuantiles: el intervalo del 80 % combina los dos del 80 %);
+    percentil recalculado frente a la EuroLeague de su puesto. Sin v3.2, queda la v5; sin v5, la v3.2."""
+    for m3, w in pesos.items():
+        if f"fuente_{m3}" not in v.columns or m3 not in v.columns:
+            continue
+        v5 = v[f"fuente_{m3}"].eq("V5").to_numpy()
+        for s_ in ("", "_lo", "_hi"):
+            v[f"{m3}_v5{s_}"] = np.where(v5, v[f"{m3}{s_}"], np.nan)
+        if f"{m3}_v32" not in v.columns:
+            continue
+        hay32 = np.isfinite(v[f"{m3}_v32"].to_numpy(float)) & np.isfinite(v[f"{m3}_v32_lo"].to_numpy(float))
+        ambos = v5 & hay32
+        for s_ in ("", "_lo", "_hi"):
+            a, b = v[f"{m3}_v5{s_}"].to_numpy(float), v[f"{m3}_v32{s_}"].to_numpy(float)
+            v[f"{m3}{s_}"] = np.where(ambos, w * a + (1 - w) * b, v[f"{m3}{s_}"])
+        v[f"{m3}_pctel"] = np.where(ambos, _pctel(v[m3].to_numpy(float), v), v[f"{m3}_pctel"])
+        v[f"peso_v5_{m3}"] = np.where(ambos, w, np.where(v5, 1.0, 0.0))
+        v[f"fuente_{m3}"] = np.where(ambos, "COMB", v[f"fuente_{m3}"])
 
 
 def destinos(d: pd.DataFrame, k: dict, excluir: tuple = ()) -> list:

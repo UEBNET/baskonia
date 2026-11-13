@@ -1,0 +1,91 @@
+{
+ "version_modelo": "5.0",
+ "fase": "v5.1-F1",
+ "config": "configs/v5_1/f1.yaml",
+ "hash_config": "bc34f2700b8f",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-13T17:02:12+00:00",
+ "python": "3.13.18",
+ "paso": "generar",
+ "factor_unidades": {
+  "t2_pct": 100.0,
+  "t3_pct": 100.0,
+  "tl_pct": 100.0,
+  "tpar": 100.0,
+  "ftr": 100.0,
+  "oreb_pct": 100.0,
+  "dreb_pct": 100.0,
+  "ast_pct": 100.0,
+  "tov_pct": 100.0,
+  "blk_pct": 100.0,
+  "stl_p100": 100.0,
+  "pts_p100": 100.0,
+  "usg_pct": 100.0,
+  "pct_aro": 100.0,
+  "pct_corta": 100.0,
+  "pct_media": 100.0,
+  "pct_t3_esquina": 100.0,
+  "pct_asistidas": 100.0,
+  "pf_p40": 40.0
+ },
+ "normalizado": [
+  {
+   "temporada": "2020-21",
+   "filas": 5465,
+   "con_v5": 52
+  },
+  {
+   "temporada": "2021-22",
+   "filas": 5987,
+   "con_v5": 50
+  },
+  {
+   "temporada": "2022-23",
+   "filas": 6144,
+   "con_v5": 46
+  },
+  {
+   "temporada": "2023-24",
+   "filas": 9162,
+   "con_v5": 125
+  },
+  {
+   "temporada": "2024-25",
+   "filas": 9264,
+   "con_v5": 118
+  },
+  {
+   "temporada": "2025-26",
+   "filas": 9648,
+   "con_v5": 131
+  }
+ ],
+ "pesos": {
+  "fg2_pct": 0.42,
+  "fg3_pct": 0.342,
+  "ft_pct": 0.5,
+  "fg3a_rate": 0.5,
+  "fta_rate": 0.578,
+  "oreb_pct": 0.438,
+  "dreb_pct": 0.5,
+  "ast_pct": 0.565,
+  "tov_pct": 0.421,
+  "blk_pct": 0.357,
+  "stl_p100": 0.41,
+  "pts_p100": 0.579,
+  "usg_pct": 0.575,
+  "pf_p40": 0.5,
+  "pct_aro": 0.424,
+  "pct_corta": 0.424,
+  "pct_media": 0.272,
+  "pct_t3_esquina": 0.348,
+  "pct_asistidas": 0.5,
+  "efg_pct": 0.5,
+  "ts_pct": 0.576,
+  "oreb_p100": 0.438,
+  "dreb_p100": 0.5,
+  "blk_p100": 0.357,
+  "stl_pct": 0.41,
+  "pf_p100": 0.5
+ }
+}

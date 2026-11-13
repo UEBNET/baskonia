@@ -1,0 +1,92 @@
+{
+ "version_modelo": "5.0",
+ "fase": "v5.1-F1",
+ "config": "configs/v5_1/f1.yaml",
+ "hash_config": "bc34f2700b8f",
+ "hash_datos_entrada": "056305325c2e4796",
+ "fecha": "2026-11-13T17:00:27+00:00",
+ "python": "3.13.18",
+ "examen": {
+  "v5": {
+   "casos": 12669,
+   "personas": 789,
+   "cobertura80": 0.7611,
+   "wis_medio": 1.0181,
+   "frente_v3.2": 0.0181,
+   "ic_lo_v3.2": 0.0059,
+   "ic_hi_v3.2": 0.0302,
+   "frente_v5": 0.0,
+   "ic_lo_v5": 0.0,
+   "ic_hi_v5": 0.0
+  },
+  "v3.2": {
+   "casos": 12669,
+   "personas": 789,
+   "cobertura80": 0.8086,
+   "wis_medio": 1.0,
+   "frente_v3.2": 0.0,
+   "ic_lo_v3.2": 0.0,
+   "ic_hi_v3.2": 0.0,
+   "frente_v5": -0.0178,
+   "ic_lo_v5": -0.0282,
+   "ic_hi_v5": -0.0066
+  },
+  "combinada": {
+   "casos": 12669,
+   "personas": 789,
+   "cobertura80": 0.803,
+   "wis_medio": 0.9711,
+   "frente_v3.2": -0.0289,
+   "ic_lo_v3.2": -0.0349,
+   "ic_hi_v3.2": -0.0233,
+   "frente_v5": -0.0462,
+   "ic_lo_v5": -0.0524,
+   "ic_hi_v5": -0.0408
+  },
+  "mezcla_50": {
+   "casos": 12669,
+   "personas": 789,
+   "cobertura80": 0.8024,
+   "wis_medio": 0.9714,
+   "frente_v3.2": -0.0286,
+   "ic_lo_v3.2": -0.0346,
+   "ic_hi_v3.2": -0.0228,
+   "frente_v5": -0.0459,
+   "ic_lo_v5": -0.0512,
+   "ic_hi_v5": -0.0402
+  }
+ },
+ "decision": {
+  "mejora_v32_ic_bajo_0": true,
+  "cobertura_en_rango": true,
+  "publicar": true
+ },
+ "pesos": {
+  "fg2_pct": 0.42,
+  "fg3_pct": 0.342,
+  "ft_pct": 0.5,
+  "fg3a_rate": 0.5,
+  "fta_rate": 0.578,
+  "oreb_pct": 0.438,
+  "dreb_pct": 0.5,
+  "ast_pct": 0.565,
+  "tov_pct": 0.421,
+  "blk_pct": 0.357,
+  "stl_p100": 0.41,
+  "pts_p100": 0.579,
+  "usg_pct": 0.575,
+  "pf_p40": 0.5,
+  "pct_aro": 0.424,
+  "pct_corta": 0.424,
+  "pct_media": 0.272,
+  "pct_t3_esquina": 0.348,
+  "pct_asistidas": 0.5,
+  "efg_pct": 0.5,
+  "ts_pct": 0.576,
+  "oreb_p100": 0.438,
+  "dreb_p100": 0.5,
+  "blk_p100": 0.357,
+  "stl_pct": 0.41,
+  "pf_p100": 0.5
+ }
+}
