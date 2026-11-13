@@ -545,10 +545,9 @@ pre.cmd { margin: 0; padding: 12px 14px; background: var(--surface-2); border-le
     </a>
     <div class="ctx" aria-label="Contexto de trabajo">
       <label class="ctx-f"><span class="label">Temporada</span><select id="ctxTemp" aria-label="Temporada"></select></label>
-      <label class="ctx-f"><span class="label">Liga</span><select id="ctxLiga" aria-label="Liga"></select></label>
-      <label class="ctx-f" id="fUnit"><span class="label">Fase · división</span><select id="ctxUnit" aria-label="Fase y división"></select></label>
-      <label class="ctx-f" id="fMin"><span class="label">Minutos mín.</span><input type="number" id="ctxMin" min="0" step="10" value="100" aria-label="Minutos mínimos"></label>
-      <div class="ctx-f"><span class="label">Buscar</span><button class="ibtn" type="button" id="searchBtn" aria-label="Buscar jugador"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" stroke="currentColor" stroke-width="1.75" fill="none"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></svg><span>Jugador</span><kbd>/</kbd></button></div>
+      <label class="ctx-f"><span class="label">Competición</span><select id="ctxLiga" aria-label="Competición"></select></label>
+      <label class="ctx-f"><span class="label">Liga</span><select id="ctxDiv" aria-label="Liga (división)"></select></label>
+      <label class="ctx-f"><span class="label">Equipo</span><select id="ctxEq" aria-label="Equipo"></select></label>
       <div class="ctx-f"><span class="label">Datos</span><button class="ibtn" type="button" id="updBtn" aria-expanded="false" aria-controls="updPop" aria-label="Ejecutar la extracción"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 9.5A7.8 7.8 0 0 0 5 7.2M4.5 14.5A7.8 7.8 0 0 0 19 16.8" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/><path d="M5 3.5v4h4M19 20.5v-4h-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/></svg><span id="updEst">Ejecutar</span></button></div>
     </div>
     <div class="pop" id="updPop" role="dialog" aria-labelledby="updTit" hidden>
@@ -570,14 +569,6 @@ pre.cmd { margin: 0; padding: 12px 14px; background: var(--surface-2); border-le
   </div>
 </div>
 
-<div class="scrim" id="search" hidden>
-  <div class="dialog" role="dialog" aria-modal="true" aria-label="Buscar jugador">
-    <div class="in"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" stroke="currentColor" stroke-width="1.75" fill="none"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></svg>
-      <input type="search" id="searchIn" placeholder="Nombre del jugador" autocomplete="off" aria-label="Nombre del jugador"><button class="ibtn" type="button" id="searchClose">Esc</button></div>
-    <p class="hint label" id="searchHint">Temporada y liga en contexto</p>
-    <div class="res" id="searchRes" role="listbox" aria-label="Resultados"></div>
-  </div>
-</div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
@@ -613,8 +604,8 @@ const filas = (t) => (t && t.filas ? t.filas.map((f) => { const o = {}; t.column
 // ---------------------------------------------------------------------------------------------- estado
 let IDX = null, CAR = null;
 const CACHE = new Map();
-const CTX = { temp: null, liga: null, unit: "total|todas", min: 100 };
-const S = { route: "inicio", tk: 0, pid: null, tid: null, preset: "basico", sort: { k: "min", d: -1 }, eqSort: { k: "win_pct", d: -1 }, q: "", team: "", lim: 120 };
+const CTX = { temp: null, liga: null, div: "todas", fase: "todas", team: "", min: 100 };
+const S = { route: "inicio", tk: 0, pid: null, tid: null, preset: "basico", sort: { k: "min", d: -1 }, eqSort: { k: "win_pct", d: -1 }, q: "", lim: 120 };
 const ligaN = (l) => (IDX && IDX.ligas[l] ? IDX.ligas[l].corto || IDX.ligas[l].nombre : l);
 const ligaDiv = (l) => !!(IDX && IDX.ligas[l] && IDX.ligas[l].divisiones);
 async function doc(t = CTX.temp, l = CTX.liga) {
@@ -624,8 +615,9 @@ async function doc(t = CTX.temp, l = CTX.liga) {
   return CACHE.get(k);
 }
 const unitKey = (r) => `${r.fase}|${r.division}`;
+const limpiaFase = (n) => String(n || "").replace(/^(LVJM|LVCM|LVNRJM|LVNRCM|CVNRJM|CVNRCM|\d\s*ª?\s*Mas\.?)\s*-\s*/i, "").replace(/[-\s]+(LVJM|LVCM|LVJMas|LVCMas)$/i, "").replace(/Clasif\w*/i, "Clasificación");
 const unitTxt = (u) => {
-  const nom = u.fase === "total" ? "Todas las fases" : u.fase.startsWith("total_") ? `Toda la división ${u.division}` : (u.fase_nombre || u.fase);
+  const nom = u.fase === "total" ? "Todas las fases" : u.fase.startsWith("total_") ? `Toda la división ${u.division}` : limpiaFase(u.fase_nombre || u.fase);
   const d = ["única", "todas"].includes(u.division) || u.fase.startsWith("total_") ? "" : ` · ${u.division === "cruce" ? "cruce A1-A2" : u.division}`;
   return nom + d;
 };
@@ -633,26 +625,63 @@ function temporadaInfo(t = CTX.temp) { return (IDX.temporadas.find((x) => x.temp
 function unidades() { return ((temporadaInfo()[CTX.liga] || {}).unidades) || []; }
 function conActa(t = CTX.temp, l = CTX.liga) { return ((temporadaInfo(t)[l] || {}).con_acta) || 0; }
 
-// ---------------------------------------------------------------------------------------------- contexto (cabecera)
-function pintarCtx() {
+// ---------------------------------------------------------------------------------------------- contexto (filtros máster)
+// Temporada · Competición (Primera, Segunda, Junior, Cadete) · Liga (A1 / A2 / ambas; senior: liga única) · Equipo.
+// La fase, los minutos mínimos y la búsqueda de jugadores son controles internos de cada pestaña.
+const divisiones = () => (ligaDiv(CTX.liga) ? ["todas", "A1", "A2"] : ["única"]);
+const divTxt = (d) => ({ todas: "A1 y A2", "única": "Liga única", A1: "Liga A1", A2: "Liga A2", cruce: "Cruce A1-A2" }[d] || d);
+const sinDiv = () => ["todas", "única"].includes(CTX.div);
+function fasesDisp() {
+  const m = new Map();
+  unidades().filter((u) => !u.fase.startsWith("total") && (sinDiv() || u.division === CTX.div)).forEach((u) => { if (!m.has(u.fase)) m.set(u.fase, limpiaFase(u.fase_nombre || u.fase)); });
+  return [...m];
+}
+const claveTotal = () => (CTX.div === "única" ? "total|única" : CTX.div === "todas" ? "total|todas" : `total_${CTX.div.toLowerCase()}|${CTX.div}`);
+function enAmbito(rows) {
+  if (CTX.fase === "todas") { const k = claveTotal(); return rows.filter((r) => unitKey(r) === k); }
+  return rows.filter((r) => r.fase === CTX.fase && (sinDiv() || r.division === CTX.div));
+}
+const deEquipo = (rows) => (CTX.team ? rows.filter((r) => r.team_id === CTX.team) : rows);
+const faseTxt = () => (CTX.fase === "todas" ? "Todas las fases" : ((fasesDisp().find(([k]) => k === CTX.fase) || [0, CTX.fase])[1]));
+const ambitoTxt = () => `${faseTxt()} · ${divTxt(CTX.div)}`;
+function equiposAmbito(d) {
+  const rows = d.eq.filter((r) => (sinDiv() ? r.fase === "total" : r.fase === `total_${CTX.div.toLowerCase()}`));
+  return [...new Map(rows.map((r) => [r.team_id, r.equipo])).entries()].sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+}
+function equipoN() { const o = $("ctxEq").selectedOptions[0]; return CTX.team && o ? o.textContent : ""; }
+async function pintarCtx() {
   $("ctxTemp").innerHTML = IDX.temporadas.map((t) => `<option value="${t.temporada}"${t.temporada === CTX.temp ? " selected" : ""}>${t.temporada}</option>`).join("");
   const ls = Object.keys(IDX.ligas).filter((l) => temporadaInfo()[l]);
   if (!ls.includes(CTX.liga)) CTX.liga = ls[0];
   $("ctxLiga").innerHTML = ls.map((l) => `<option value="${l}"${l === CTX.liga ? " selected" : ""}>${esc(ligaN(l))}</option>`).join("");
-  const us = unidades();
-  if (us.length && !us.some((u) => unitKey(u) === CTX.unit)) { const t = us.find((u) => u.fase === "total"); CTX.unit = t ? unitKey(t) : unitKey(us[0]); }
-  const fases = us.filter((u) => !u.fase.startsWith("total")), tots = us.filter((u) => u.fase.startsWith("total"));
-  $("ctxUnit").innerHTML = (us.length ? `<optgroup label="Agregados">${tots.map((u) => `<option value="${unitKey(u)}"${unitKey(u) === CTX.unit ? " selected" : ""}>${esc(unitTxt(u))}</option>`).join("")}</optgroup>`
-    + `<optgroup label="Fases (orden cronológico)">${fases.map((u) => `<option value="${unitKey(u)}"${unitKey(u) === CTX.unit ? " selected" : ""}>${esc(unitTxt(u))}</option>`).join("")}</optgroup>` : `<option>Sin datos</option>`);
-  $("ctxUnit").disabled = !us.length;
-  $("ctxMin").value = CTX.min;
+  if (!divisiones().includes(CTX.div)) CTX.div = divisiones()[0];
+  $("ctxDiv").innerHTML = divisiones().map((d) => `<option value="${d}"${d === CTX.div ? " selected" : ""}>${divTxt(d)}</option>`).join("");
+  $("ctxDiv").disabled = divisiones().length < 2;
+  if (CTX.fase !== "todas" && !fasesDisp().some(([k]) => k === CTX.fase)) CTX.fase = "todas";
+  const eqs = equiposAmbito(await doc());
+  if (CTX.team && !eqs.some(([id]) => id === CTX.team)) CTX.team = "";
+  $("ctxEq").innerHTML = `<option value="">Todos los equipos</option>` + eqs.map(([id, n]) => `<option value="${esc(id)}"${id === CTX.team ? " selected" : ""}>${esc(n)}</option>`).join("");
 }
 function guardarCtx() { LS.set("kerno.basque.ctx", JSON.stringify(CTX)); }
-["ctxTemp", "ctxLiga", "ctxUnit"].forEach((id) => $(id).addEventListener("change", (e) => {
-  if (id === "ctxTemp") CTX.temp = e.target.value; if (id === "ctxLiga") CTX.liga = e.target.value; if (id === "ctxUnit") CTX.unit = e.target.value;
-  if (id !== "ctxUnit") { S.team = ""; } pintarCtx(); guardarCtx(); ir(S.route);
-}));
-$("ctxMin").addEventListener("change", (e) => { CTX.min = Math.max(0, Number(e.target.value) || 0); guardarCtx(); ir(S.route); });
+async function cambiarCtx(k, v) {
+  CTX[k] = v;
+  if (k === "temp" || k === "liga") { CTX.fase = "todas"; }
+  if (k === "team" && v) S.tid = v;
+  await pintarCtx(); guardarCtx(); ir(S.route);
+}
+$("ctxTemp").addEventListener("change", (e) => cambiarCtx("temp", e.target.value));
+$("ctxLiga").addEventListener("change", (e) => cambiarCtx("liga", e.target.value));
+$("ctxDiv").addEventListener("change", (e) => cambiarCtx("div", e.target.value));
+$("ctxEq").addEventListener("change", (e) => cambiarCtx("team", e.target.value));
+// controles internos de cada pestaña
+function ctrlFase(conMin = true) {
+  return `<label class="ctrl"><span class="label">Fase</span><select id="iFase"><option value="todas">Todas las fases</option>${fasesDisp().map(([k, n]) => `<option value="${esc(k)}"${k === CTX.fase ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>`
+    + (conMin ? `<label class="ctrl"><span class="label">Minutos mín.</span><input type="number" id="iMin" min="0" step="10" value="${CTX.min}"></label>` : "");
+}
+function enlazarCtrl() {
+  const f = $("iFase"); if (f) f.addEventListener("change", (e) => { CTX.fase = e.target.value; guardarCtx(); ir(S.route); });
+  const m = $("iMin"); if (m) m.addEventListener("change", (e) => { CTX.min = Math.max(0, Number(e.target.value) || 0); guardarCtx(); ir(S.route); });
+}
 
 // ---------------------------------------------------------------------------------------------- navegación
 const NAV = [
@@ -664,16 +693,16 @@ const NAV = [
 ];
 const ITEM = {}; NAV.forEach((s) => s.items.forEach(([id, n]) => { ITEM[id] = { id, n, sec: s }; }));
 const LEAD = {
-  jugadores: "Todos los jugadores de la unidad elegida, con las mismas columnas en las cuatro ligas. Pulsa una fila para abrir su ficha.",
+  jugadores: "Jugadores de la temporada, competición, liga y equipo elegidos arriba, con las mismas columnas en las cuatro competiciones. Pulsa una fila para abrir su ficha.",
   ficha: "Perfil del jugador frente a los de su misma unidad (fase y división), su evolución por fases y su trayectoria entre temporadas.",
-  equipos: "Récord, ritmo, ratings y cuatro factores de cada equipo en la unidad elegida. En Junior y Cadete, A1 y A2 se leen por separado.",
+  equipos: "Récord, ritmo, ratings y cuatro factores de cada equipo. En Junior y Cadete, A1 y A2 son ligas distintas: elígelas en el filtro Liga.",
   equipo: "Plantilla, quintetos más usados y resultados del equipo en la temporada.",
   fases: "Cómo cambia el juego de una fase a otra y entre divisiones: ritmo, eficiencia y tipos de punto por unidad.",
   calidad: "Cobertura de partidos con acta y jugada a jugada, y controles de cada temporada y liga.",
   extraccion: "Arquitectura por capas, norma de completitud y cómo se lanza la actualización.",
   diccionario: "Las 673 columnas de la tabla de jugadores, con su grupo, su origen y su definición.",
 };
-const APLICA = { inicio: "", jugadores: "tlum", ficha: "tlum", equipos: "tlu", equipo: "tl", fases: "tl", calidad: "", extraccion: "", diccionario: "" };
+const APLICA = { inicio: 0, jugadores: 1, ficha: 1, equipos: 1, equipo: 1, fases: 1, calidad: 0, extraccion: 0, diccionario: 0 };
 function pintarRail() {
   $("rail").innerHTML = NAV.map((s) => `<div class="sec"><div class="sec-h"><span class="n">${s.n}</span><span class="t">${esc(s.t)}</span><span class="q">${esc(s.q)}</span></div>
     ${s.items.map(([id, n]) => `<button class="nav" type="button" data-go="${id}">${esc(n)}</button>`).join("")}</div>`).join("")
@@ -691,10 +720,7 @@ function ir(id) {
   const it = ITEM[id] || ITEM.inicio; S.route = it.id; S.tk++;
   marcarNav(); cerrarRail();
   document.title = it.id === "inicio" ? "Kerno Basque Analytics" : `${it.n} · Kerno Basque Analytics`;
-  const a = APLICA[it.id] || "";
-  $("fUnit").classList.toggle("off", !a.includes("u")); $("fMin").classList.toggle("off", !a.includes("m"));
-  const u = unidades().find((x) => unitKey(x) === CTX.unit);
-  const ap = []; if (a.includes("t")) ap.push(CTX.temp); if (a.includes("l")) ap.push(ligaN(CTX.liga)); if (a.includes("u") && u) ap.push(unitTxt(u)); if (a.includes("m")) ap.push(`${CTX.min}+ min`);
+  const ap = APLICA[it.id] ? [CTX.temp, ligaN(CTX.liga), divTxt(CTX.div), equipoN() || "Todos los equipos"] : [];
   $("vhead").hidden = it.id === "inicio";
   $("vhead").innerHTML = `<div><div class="eyebrow"><span>${it.sec.n} · ${esc(it.sec.t.toUpperCase())}</span></div><h1>${esc(it.n)}</h1>${LEAD[it.id] ? `<p>${esc(LEAD[it.id])}</p>` : ""}</div>`
     + (ap.length ? `<div class="aplica"><span class="label">Aplicado</span><span>${esc(ap.join(" · "))}</span></div>` : `<div class="aplica"><span class="label">Sin filtros</span><span>Todas las temporadas y ligas</span></div>`);
@@ -706,7 +732,6 @@ const vivo = (tk) => tk === S.tk;
 const pie = (k, txt) => `<p class="src">${ticks(k)}<span>${txt || `Datos públicos · basketbasko.com (Federación Vasca de Baloncesto) · jugada a jugada y acta digital de cada partido · extracción ${esc((IDX.generado || "").slice(0, 10))}`}</span></p>`;
 
 // ---------------------------------------------------------------------------------------------- utilidades de datos
-function enUnidad(rows) { return rows.filter((r) => unitKey(r) === CTX.unit); }
 function pctl(vals, v, inv) { const xs = vals.filter((x) => x != null && isFinite(x)); if (v == null || !xs.length) return null; const b = xs.filter((x) => (inv ? x > v : x < v)).length, e = xs.filter((x) => x === v).length; return 100 * (b + 0.5 * e) / xs.length; }
 function mediaP(rows, k, w = "min") { let s = 0, n = 0; rows.forEach((r) => { if (r[k] != null && r[w] > 0) { s += r[k] * r[w]; n += r[w]; } }); return n ? s / n : null; }
 
@@ -727,7 +752,7 @@ VISTAS.inicio = async (tk) => {
   const T = IDX.totales, cob = IDX.cobertura;
   const temps = [...new Set(cob.map((c) => c.temporada))].sort().reverse(), ligas = Object.keys(IDX.ligas);
   const d = await doc(); if (!vivo(tk)) return;
-  const tot = d.jug.filter((r) => r.fase === "total" && (r.min || 0) >= CTX.min);
+  const tot = deEquipo(d.jug.filter((r) => unitKey(r) === claveTotal() && (r.min || 0) >= CTX.min));
   const top = [...tot].filter((r) => r.per != null).sort((a, b) => b.per - a.per).slice(0, 8);
   const maxP = top.length ? top[0].per : 1;
   const conA = cob.filter((c) => c.con_acta > 0), val = conA.reduce((a, c) => a + c.con_acta * (c.pbp_cuadra_pct || 0), 0) / Math.max(1, conA.reduce((a, c) => a + c.con_acta, 0));
@@ -747,7 +772,7 @@ VISTAS.inicio = async (tk) => {
     <p class="note">2018-19 a 2021-22: la web sólo publica calendario, resultados y plantillas; esas temporadas aportan récords de equipo por fase y división. Cronología = acta en el ${fmt(val, 1)} % de los partidos con acta.</p>
   </section>
   <section class="block">
-    <div class="block-h"><div><h2 class="h2">PER más alto · ${esc(ligaN(CTX.liga))} ${esc(CTX.temp)}</h2><p class="sub">Todas las fases · ${CTX.min}+ minutos · PER normalizado a 15 dentro de la liga</p></div><button class="btn sec" type="button" data-go="jugadores">Ver la tabla</button></div>
+    <div class="block-h"><div><h2 class="h2">PER más alto · ${esc(ligaN(CTX.liga))} ${esc(CTX.temp)}</h2><p class="sub">Todas las fases · ${esc(divTxt(CTX.div))}${CTX.team ? " · " + esc(equipoN()) : ""} · ${CTX.min}+ minutos · PER normalizado a 15</p></div><button class="btn sec" type="button" data-go="jugadores">Ver la tabla</button></div>
     ${top.length ? `<div class="rank">${top.map((r) => `<div class="who"><b>${esc(r.nombre)}</b><span>${esc(r.equipo)} · ${int(r.gp)} PJ · ${fmt(r.min, 0)} min</span></div>
       <div class="pbar"><span class="p" style="left:${Math.max(0, Math.min(100, 100 * r.per / maxP)).toFixed(1)}%"></span></div><div class="val"><b>${fmt(r.per, 1)}</b> PER · ${fmt(r.pts_pg, 1)} pts</div>`).join("")}</div>` : `<p class="empty">Esta temporada y liga no tienen acta digital: sólo resultados de equipo.</p>`}
   </section>
@@ -766,11 +791,10 @@ VISTAS.inicio = async (tk) => {
 
 VISTAS.jugadores = async (tk) => {
   const d = await doc(); if (!vivo(tk)) return;
-  const all = enUnidad(d.jug);
-  const equipos = [...new Map(all.map((r) => [r.team_id, r.equipo])).entries()].sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+  const all = deEquipo(enAmbito(d.jug));
   const cols = COLS[S.preset];
   const pintar = () => {
-    let rs = all.filter((r) => (r.min || 0) >= CTX.min && (!S.team || r.team_id === S.team) && (!S.q || norm(r.nombre).includes(norm(S.q))));
+    let rs = all.filter((r) => (r.min || 0) >= CTX.min && (!S.q || norm(r.nombre).includes(norm(S.q))));
     const k = S.sort.k; rs.sort((a, b) => { const x = a[k], y = b[k]; if (x == null) return 1; if (y == null) return -1; return (typeof x === "string" ? String(x).localeCompare(y) : x - y) * S.sort.d; });
     const vis = rs.slice(0, S.lim);
     const ths = [["nombre", "Jugador"], ...cols.map(([c, n]) => [c, n])].map(([c, n], i) => `<th class="${i ? "n" : ""}" data-k="${c}"${S.sort.k === c ? ` aria-sort="${S.sort.d < 0 ? "descending" : "ascending"}"` : ""}>${esc(n)}</th>`).join("");
@@ -783,16 +807,16 @@ VISTAS.jugadores = async (tk) => {
   $("view").innerHTML = `<section class="block">
     <div class="ctrls">
       <div class="ctrl"><span class="label">Vista</span><div class="seg" id="seg">${PRESETS.map(([k, n]) => `<button type="button" data-v="${k}" aria-pressed="${k === S.preset}">${n}</button>`).join("")}</div></div>
-      <label class="ctrl"><span class="label">Equipo</span><select id="fTeam"><option value="">Todos</option>${equipos.map(([id, n]) => `<option value="${esc(id)}"${id === S.team ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
-      <label class="ctrl"><span class="label">Filtrar por nombre</span><input type="search" id="fQ" value="${esc(S.q)}" placeholder="Nombre"></label>
+      ${ctrlFase(true)}
+      <label class="ctrl"><span class="label">Buscar jugador</span><input type="search" id="fQ" value="${esc(S.q)}" placeholder="Nombre o apellido"></label>
       <span class="label" id="cnt" role="status"></span>
     </div>
     ${all.length ? `<div class="tw tall" id="tbl"></div><button class="btn quiet more" type="button" id="more">Mostrar 200 más</button>` : `<p class="empty">Sin estadísticas individuales en esta unidad (temporada sin acta digital o fase sin partidos).</p>`}
     <p class="note">PER, ORtg, DRtg y Win Shares se calculan con las fórmulas comunes del repositorio dentro de la unidad elegida. Asistencias y tapones sólo existen donde la mesa los registra (2026-27; tapones en parte de 2025-26); donde no, aparecen como «—» y entran a 0 en esas fórmulas para todos por igual. RAPM: estimación de una temporada, ruidosa con pocos minutos.</p>
   </section>${pie(1)}`;
+  enlazarCtrl();
   if (!all.length) return;
   $("seg").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { S.preset = b.dataset.v; const c0 = COLS[S.preset][2] || COLS[S.preset][0]; if (!COLS[S.preset].some(([c]) => c === S.sort.k)) S.sort = { k: c0[0], d: -1 }; VISTAS.jugadores(S.tk); }));
-  $("fTeam").addEventListener("change", (e) => { S.team = e.target.value; pintar(); });
   $("fQ").addEventListener("input", (e) => { S.q = e.target.value; pintar(); });
   $("more").addEventListener("click", () => { S.lim += 200; pintar(); });
   pintar();
@@ -806,13 +830,14 @@ const PERFIL = [
 ];
 VISTAS.ficha = async (tk) => {
   const d = await doc(); if (!vivo(tk)) return;
-  let rows = d.jug.filter((r) => r.player_id === S.pid && (!S.tid || r.team_id === S.tid));
+  let rows = d.jug.filter((r) => r.player_id === S.pid && (!S.tid || r.team_id === S.tid) && (!CTX.team || r.team_id === CTX.team));
   if (!rows.length) {
-    const tot = d.jug.filter((r) => r.fase === "total" && (r.min || 0) >= Math.max(CTX.min, 100)).sort((a, b) => (b.per || 0) - (a.per || 0));
+    const amb = deEquipo(enAmbito(d.jug)), tot = (amb.length ? amb : deEquipo(d.jug.filter((r) => r.fase === "total"))).filter((r) => (r.min || 0) > 0)
+      .sort((a, b) => ((b.min || 0) >= Math.max(CTX.min, 100)) - ((a.min || 0) >= Math.max(CTX.min, 100)) || (b.per || 0) - (a.per || 0));
     if (!tot.length) { $("view").innerHTML = `<p class="empty">Esta temporada y liga no tienen estadísticas individuales. Elige otra temporada (2022-23 en adelante).</p>${pie(1)}`; return; }
     S.pid = tot[0].player_id; S.tid = tot[0].team_id; rows = d.jug.filter((r) => r.player_id === S.pid && r.team_id === S.tid);
   }
-  const t = rows.find((r) => unitKey(r) === CTX.unit) || rows.find((r) => r.fase === "total") || rows[0];
+  const t = enAmbito(rows)[0] || rows.find((r) => r.fase === "total") || rows[0];
   const pares = d.jug.filter((r) => unitKey(r) === unitKey(t) && (r.min || 0) >= CTX.min);
   const nom = t.nombre || "";
   if (!CAR) CAR = filas(await cargarJSON("datos/carreras.json").catch(() => null));
@@ -825,6 +850,10 @@ VISTAS.ficha = async (tk) => {
   const zonas = Z.map(([, n, f, p]) => { const lg = mediaP(pares, p, "fga_con_coord"); return `<div class="m">${esc(n)}</div><div class="hb"><i style="width:${Math.min(100, t[f] || 0).toFixed(1)}%"></i></div><div class="val">${fmt(t[f], 1)} % de sus tiros · <b>${fmt(t[p], 1)} %</b> (unidad ${fmt(lg, 1)} %)</div>`; }).join("");
   const fasesR = rows.slice().sort((a, b) => (a.fase_orden || 0) - (b.fase_orden || 0));
   $("view").innerHTML = `
+  <section class="block"><div class="ctrls">
+    <label class="ctrl"><span class="label">Buscar jugador</span><input type="search" id="fBus" placeholder="Nombre o apellido" autocomplete="off" aria-controls="fBusRes"></label>
+    ${ctrlFase(true)}
+  </div><div class="res" id="fBusRes" role="listbox" aria-label="Jugadores encontrados"></div></section>
   <section class="block hero">
     <div class="eyebrow"><span>${esc(ligaN(CTX.liga).toUpperCase())} · ${esc(CTX.temp)} · ${esc(unitTxt(t).toUpperCase())}</span><span class="tag">Dato</span></div>
     <h2 class="read-h${bombOK(nom) ? " disp" : ""}">${esc(nom)}</h2>
@@ -849,27 +878,36 @@ VISTAS.ficha = async (tk) => {
   </div>
   <section class="block"><div class="block-h"><div><h2 class="h2">Por fase y división</h2><p class="sub">Cada fase con su propio contexto de liga · ${esc(CTX.temp)}</p></div></div>
     <div class="tw"><table><thead><tr><th>Fase</th><th>División</th><th class="n">PJ</th><th class="n">Min</th><th class="n">Pts/p</th><th class="n">Reb/p</th><th class="n">TS%</th><th class="n">USG%</th><th class="n">PER</th><th class="n">On−off</th></tr></thead><tbody>
-    ${fasesR.map((r) => `<tr${unitKey(r) === unitKey(t) ? ' class="sel"' : ""}><td>${esc(r.fase_nombre || r.fase)}</td><td>${esc(r.division)}</td><td class="n">${int(r.gp)}</td><td class="n">${fmt(r.min, 0)}</td><td class="n">${fmt(r.pts_pg, 1)}</td><td class="n">${fmt(r.reb_pg, 1)}</td><td class="n">${fmt(r.ts_pct, 1)}</td><td class="n">${fmt(r.usg_pct, 1)}</td><td class="n">${fmt(r.per, 1)}</td><td class="n">${sgn(r.pbp_net_rtg_onoff, 1)}</td></tr>`).join("")}
+    ${fasesR.map((r) => `<tr${unitKey(r) === unitKey(t) ? ' class="sel"' : ""}><td>${esc(limpiaFase(r.fase_nombre || r.fase))}</td><td>${esc(r.division)}</td><td class="n">${int(r.gp)}</td><td class="n">${fmt(r.min, 0)}</td><td class="n">${fmt(r.pts_pg, 1)}</td><td class="n">${fmt(r.reb_pg, 1)}</td><td class="n">${fmt(r.ts_pct, 1)}</td><td class="n">${fmt(r.usg_pct, 1)}</td><td class="n">${fmt(r.per, 1)}</td><td class="n">${sgn(r.pbp_net_rtg_onoff, 1)}</td></tr>`).join("")}
     </tbody></table></div></section>
   <section class="block"><div class="block-h"><div><h2 class="h2">Trayectoria</h2><p class="sub">Todas las temporadas con acta · por persona federada</p></div></div>
     ${tray.length ? `<div class="tw"><table><thead><tr><th>Temporada</th><th>Liga</th><th>Equipo</th><th class="n">PJ</th><th class="n">Min</th><th class="n">Pts/p</th><th class="n">Reb/p</th><th class="n">TS%</th><th class="n">USG%</th><th class="n">PER</th></tr></thead><tbody>
     ${tray.map((c) => `<tr${c.temporada === CTX.temp && c.liga === CTX.liga ? ' class="sel"' : ""}><td class="num">${c.temporada}</td><td>${esc(ligaN(c.liga))}</td><td>${esc(c.equipo)}</td><td class="n">${int(c.gp)}</td><td class="n">${fmt(c.min, 0)}</td><td class="n">${fmt(c.pts_pg, 1)}</td><td class="n">${fmt(c.reb_pg, 1)}</td><td class="n">${fmt(c.ts_pct, 1)}</td><td class="n">${fmt(c.usg_pct, 1)}</td><td class="n">${fmt(c.per, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">Sin identificador de persona federada para enlazar temporadas.</p>`}
   </section>${pie(2)}`;
+  enlazarCtrl();
+  const base = deEquipo(d.jug.filter((r) => r.fase === "total"));
+  $("fBus").addEventListener("input", (e) => {
+    const q = norm(e.target.value), rs = q.length < 2 ? [] : base.filter((r) => norm(r.nombre).includes(q)).slice(0, 25);
+    $("fBusRes").innerHTML = rs.map((r) => `<button type="button" role="option" data-p="${esc(r.player_id)}" data-t="${esc(r.team_id)}"><b>${esc(r.nombre)}</b><span>${esc(r.equipo)}</span><em>${int(r.gp)} PJ · ${fmt(r.pts_pg, 1)} pts</em></button>`).join("")
+      || (q.length >= 2 ? `<p class="note">Sin resultados en ${esc(CTX.temp)} · ${esc(ligaN(CTX.liga))}${CTX.team ? " · " + esc(equipoN()) : ""}.</p>` : "");
+    $("fBusRes").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { S.pid = b.dataset.p; S.tid = b.dataset.t; VISTAS.ficha(++S.tk); }));
+  });
 };
 
 const EQC = [["gp", "PJ", 0], ["w", "V", 0], ["l", "D", 0], ["win_pct", "% V", 1], ["pts_pg", "Pts/p", 1], ["opp_pts_pg", "Rival/p", 1], ["margen_pg", "Margen", 1], ["team_pace", "Ritmo", 1], ["team_ortg", "ORtg", 1], ["team_drtg", "DRtg", 1], ["team_netrtg", "Net", 1], ["efg_pct", "eFG%", 1], ["tov_pct", "TOV%", 1], ["oreb_pct", "OREB%", 1], ["ft_rate", "FTr", 1], ["opp_efg_pct", "eFG% riv.", 1]];
 VISTAS.equipos = async (tk) => {
   const d = await doc(); if (!vivo(tk)) return;
-  const rs = enUnidad(d.eq);
+  const rs = enAmbito(d.eq);
   const pintar = () => {
     const k = S.eqSort.k; rs.sort((a, b) => { const x = a[k], y = b[k]; if (x == null) return 1; if (y == null) return -1; return (typeof x === "string" ? String(x).localeCompare(y) : x - y) * S.eqSort.d; });
     $("tbl").innerHTML = `<table class="tsort"><thead><tr><th data-k="equipo">Equipo</th>${EQC.map(([c, n]) => `<th class="n" data-k="${c}"${S.eqSort.k === c ? ` aria-sort="${S.eqSort.d < 0 ? "descending" : "ascending"}"` : ""}>${n}</th>`).join("")}</tr></thead><tbody>
-      ${rs.map((r) => `<tr class="go" data-t="${esc(r.team_id)}"><td><div class="who"><b>${esc(r.equipo)}</b><span>${esc([r.grupos, r.divisiones_equipo && !["única"].includes(r.divisiones_equipo) ? "div. " + r.divisiones_equipo : ""].filter(Boolean).join(" · "))}</span></div></td>${EQC.map(([c, , dd]) => `<td class="n">${c === "margen_pg" || c === "team_netrtg" ? sgn(r[c], dd) : fmt(r[c], dd)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      ${rs.map((r) => `<tr class="go${r.team_id === CTX.team ? " sel" : ""}" data-t="${esc(r.team_id)}"><td><div class="who"><b>${esc(r.equipo)}</b><span>${esc([r.grupos, r.divisiones_equipo && !["única"].includes(r.divisiones_equipo) ? "div. " + r.divisiones_equipo : ""].filter(Boolean).join(" · "))}</span></div></td>${EQC.map(([c, , dd]) => `<td class="n">${c === "margen_pg" || c === "team_netrtg" ? sgn(r[c], dd) : fmt(r[c], dd)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
     $("tbl").querySelectorAll("th[data-k]").forEach((th) => th.addEventListener("click", () => { const k2 = th.dataset.k; S.eqSort = { k: k2, d: S.eqSort.k === k2 ? -S.eqSort.d : (k2 === "equipo" || ["l", "team_drtg", "tov_pct", "opp_pts_pg", "opp_efg_pct"].includes(k2) ? 1 : -1) }; pintar(); }));
-    $("tbl").querySelectorAll("tr[data-t]").forEach((tr) => tr.addEventListener("click", () => { S.tid = tr.dataset.t; navegar("equipo"); }));
+    $("tbl").querySelectorAll("tr[data-t]").forEach((tr) => tr.addEventListener("click", () => { S.tid = tr.dataset.t; CTX.team = tr.dataset.t; pintarCtx().then(() => { guardarCtx(); navegar("equipo"); }); }));
   };
-  $("view").innerHTML = `<section class="block">${rs.length ? `<div class="tw" id="tbl"></div>` : `<p class="empty">Sin partidos en esta unidad.</p>`}
-    <p class="note">Ritmo y ratings por 100 posesiones con totales de equipo y rival de la unidad (sin acta digital, sólo récord y puntos). ${ligaDiv(CTX.liga) ? "Junior y Cadete: A1 y A2 son divisiones distintas; elige «Toda la división A1/A2» o una fase concreta para no mezclarlas." : ""}</p></section>${pie(3)}`;
+  $("view").innerHTML = `<section class="block"><div class="ctrls">${ctrlFase(false)}</div>${rs.length ? `<div class="tw" id="tbl"></div>` : `<p class="empty">Sin partidos en esta fase y liga.</p>`}
+    <p class="note">Ritmo y ratings por 100 posesiones con totales de equipo y rival de la unidad (sin acta digital, sólo récord y puntos). ${ligaDiv(CTX.liga) ? "Junior y Cadete: A1 y A2 son divisiones distintas; elige la liga A1 o A2 en los filtros superiores para no mezclarlas." : ""} Pulsa un equipo para fijarlo como filtro y abrir su ficha.</p></section>${pie(3)}`;
+  enlazarCtrl();
   if (rs.length) pintar();
 };
 
@@ -877,9 +915,11 @@ VISTAS.equipo = async (tk) => {
   const d = await doc(); if (!vivo(tk)) return;
   const eqs = d.eq.filter((r) => r.fase === "total");
   if (!eqs.length) { $("view").innerHTML = `<p class="empty">Sin equipos en esta temporada y liga.</p>${pie(3)}`; return; }
+  if (CTX.team) S.tid = CTX.team;
   if (!S.tid || !eqs.some((r) => r.team_id === S.tid)) S.tid = [...eqs].sort((a, b) => (b.w || 0) - (a.w || 0) || (b.win_pct || 0) - (a.win_pct || 0))[0].team_id;
   const t = eqs.find((r) => r.team_id === S.tid), uRows = d.eq.filter((r) => r.team_id === S.tid).sort((a, b) => (a.fase_orden || 0) - (b.fase_orden || 0));
-  const plant = d.jug.filter((r) => r.team_id === S.tid && r.fase === "total").sort((a, b) => (b.min || 0) - (a.min || 0));
+  const plantAmb = enAmbito(d.jug).filter((r) => r.team_id === S.tid);
+  const plant = (plantAmb.length ? plantAmb : d.jug.filter((r) => r.team_id === S.tid && r.fase === "total")).sort((a, b) => (b.min || 0) - (a.min || 0));
   const qs = d.qui.filter((q) => q.team_id === S.tid && q.fase === "total").sort((a, b) => b.min - a.min).slice(0, 6);
   const res = d.par.filter((p) => p.local_id === S.tid || p.visitante_id === S.tid).sort((a, b) => String(a.fecha).localeCompare(b.fecha));
   const lig = d.eq.filter((r) => r.fase === "total");
@@ -892,7 +932,6 @@ VISTAS.equipo = async (tk) => {
     <h2 class="read-h${bombOK(t.equipo) ? " disp" : ""}">${esc(t.equipo)}</h2>
     <p class="read-lead strong"><span class="hl">${int(t.w)}-${int(t.l)}</span> en todas las fases, con ${sgn(t.margen_pg, 1)} puntos de margen por partido${t.team_netrtg != null ? ` y Net ${sgn(t.team_netrtg, 1)} por 100 posesiones` : ""}.</p>
     <div class="idt">${t.club ? `<span>Club <b>${esc(t.club)}</b></span>` : ""}<span>División <b>${esc(t.divisiones_equipo || "—")}</b></span>${t.entrenadores ? `<span>Cuerpo técnico <b>${esc(t.entrenadores)}</b></span>` : ""}</div>
-    <div class="ctrls"><label class="ctrl"><span class="label">Cambiar de equipo</span><select id="selEq">${[...eqs].sort((a, b) => String(a.equipo).localeCompare(b.equipo)).map((r) => `<option value="${esc(r.team_id)}"${r.team_id === S.tid ? " selected" : ""}>${esc(r.equipo)}</option>`).join("")}</select></label></div>
   </section>
   <section class="block"><div class="kpis">
     <div class="kpi key"><span class="label">Récord</span><span class="v">${int(t.w)}-${int(t.l)}</span><span class="r">${fmt(t.win_pct, 1)} % de victorias · ${int(t.gp)} PJ</span></div>
@@ -904,11 +943,12 @@ VISTAS.equipo = async (tk) => {
   <div class="split">
     <section class="block"><div class="block-h"><div><h2 class="h2">Cuatro factores frente a la liga</h2><p class="sub">Todas las fases · a favor a la derecha</p></div></div><div class="zone">${ff}</div></section>
     <section class="block"><div class="block-h"><div><h2 class="h2">Por fase y división</h2></div></div><div class="tw"><table><thead><tr><th>Fase</th><th>Div.</th><th class="n">V-D</th><th class="n">Margen</th><th class="n">Net</th></tr></thead><tbody>
-      ${uRows.map((r) => `<tr><td>${esc(r.fase_nombre || r.fase)}</td><td>${esc(r.division)}</td><td class="n">${int(r.w)}-${int(r.l)}</td><td class="n">${sgn(r.margen_pg, 1)}</td><td class="n">${sgn(r.team_netrtg, 1)}</td></tr>`).join("")}</tbody></table></div></section>
+      ${uRows.map((r) => `<tr><td>${esc(limpiaFase(r.fase_nombre || r.fase))}</td><td>${esc(r.division)}</td><td class="n">${int(r.w)}-${int(r.l)}</td><td class="n">${sgn(r.margen_pg, 1)}</td><td class="n">${sgn(r.team_netrtg, 1)}</td></tr>`).join("")}</tbody></table></div></section>
   </div>
-  <section class="block"><div class="block-h"><div><h2 class="h2">Plantilla</h2><p class="sub">Todas las fases · ordenada por minutos</p></div></div>
-    ${plant.length ? `<div class="tw"><table><thead><tr><th>Jugador</th><th class="n">PJ</th><th class="n">Min</th><th class="n">Pts/p</th><th class="n">Reb/p</th><th class="n">TS%</th><th class="n">USG%</th><th class="n">PER</th><th class="n">On−off</th></tr></thead><tbody>
-    ${plant.map((r) => `<tr class="go" data-p="${esc(r.player_id)}"><td>${esc(r.nombre)}</td><td class="n">${int(r.gp)}</td><td class="n">${fmt(r.min, 0)}</td><td class="n">${fmt(r.pts_pg, 1)}</td><td class="n">${fmt(r.reb_pg, 1)}</td><td class="n">${fmt(r.ts_pct, 1)}</td><td class="n">${fmt(r.usg_pct, 1)}</td><td class="n">${fmt(r.per, 1)}</td><td class="n">${sgn(r.pbp_net_rtg_onoff, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">Sin estadísticas individuales esta temporada.</p>`}</section>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Plantilla</h2><p class="sub">${esc(ambitoTxt())} · ordenada por minutos</p></div></div>
+    <div class="ctrls">${ctrlFase(false)}<label class="ctrl"><span class="label">Buscar jugador</span><input type="search" id="fRos" placeholder="Nombre o apellido"></label></div>
+    ${plant.length ? `<div class="tw"><table id="tRos"><thead><tr><th>Jugador</th><th class="n">PJ</th><th class="n">Min</th><th class="n">Pts/p</th><th class="n">Reb/p</th><th class="n">TS%</th><th class="n">USG%</th><th class="n">PER</th><th class="n">On−off</th></tr></thead><tbody>
+    ${plant.map((r) => `<tr class="go" data-p="${esc(r.player_id)}" data-n="${esc(norm(r.nombre))}"><td>${esc(r.nombre)}</td><td class="n">${int(r.gp)}</td><td class="n">${fmt(r.min, 0)}</td><td class="n">${fmt(r.pts_pg, 1)}</td><td class="n">${fmt(r.reb_pg, 1)}</td><td class="n">${fmt(r.ts_pct, 1)}</td><td class="n">${fmt(r.usg_pct, 1)}</td><td class="n">${fmt(r.per, 1)}</td><td class="n">${sgn(r.pbp_net_rtg_onoff, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">Sin estadísticas individuales esta temporada.</p>`}</section>
   <section class="block"><div class="block-h"><div><h2 class="h2">Quintetos más usados</h2><p class="sub">Todas las fases · Net ajustado por muestra (contracción hacia la media)</p></div></div>
     ${qs.length ? `<div class="tw"><table><thead><tr><th>Quinteto</th><th class="n">Min</th><th class="n">Posesiones</th><th class="n">ORtg</th><th class="n">DRtg</th><th class="n">Net</th><th class="n">Net aj.</th></tr></thead><tbody>
     ${qs.map((q) => `<tr><td>${esc(q.jugadores)}</td><td class="n">${fmt(q.min, 0)}</td><td class="n">${fmt(q.poss, 0)}</td><td class="n">${fmt(q.ortg, 1)}</td><td class="n">${fmt(q.drtg, 1)}</td><td class="n">${sgn(q.net_rtg, 1)}</td><td class="n">${sgn(q.net_rtg_aj, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">Sin quintetos (temporada sin jugada a jugada).</p>`}</section>
@@ -917,19 +957,24 @@ VISTAS.equipo = async (tk) => {
     ${res.map((p) => { const loc = p.local_id === S.tid, pf = loc ? p.pts_local : p.pts_visitante, pc = loc ? p.pts_visitante : p.pts_local;
       return `<tr><td class="num">${esc(p.fecha)}</td><td>${esc(p.fase)}${p.grupo ? " · " + esc(p.grupo) : ""}</td><td>${esc(p.division)}</td><td>${esc(p.local)} – ${esc(p.visitante)}</td><td class="n ${pf > pc ? "hi" : pf < pc ? "lo" : ""}">${pf == null ? "—" : `${int(p.pts_local)}-${int(p.pts_visitante)}`}</td></tr>`; }).join("")}</tbody></table></div></section>
   ${pie(3)}`;
-  $("selEq").addEventListener("change", (e) => { S.tid = e.target.value; VISTAS.equipo(S.tk); });
+  enlazarCtrl();
+  if (!CTX.team) { CTX.team = S.tid; pintarCtx().then(() => { guardarCtx(); const a = $("vhead").querySelector(".aplica span:last-child"); if (a) a.textContent = [CTX.temp, ligaN(CTX.liga), divTxt(CTX.div), equipoN()].join(" · "); }); }
+  const fr = $("fRos"); if (fr) fr.addEventListener("input", (e) => { const q = norm(e.target.value); $("view").querySelectorAll("#tRos tr[data-n]").forEach((tr) => { tr.hidden = !!q && !tr.dataset.n.includes(q); }); });
   $("view").querySelectorAll("tr[data-p]").forEach((tr) => tr.addEventListener("click", () => { S.pid = tr.dataset.p; navegar("ficha"); }));
 };
 
 VISTAS.fases = async (tk) => {
   const d = await doc(); if (!vivo(tk)) return;
-  const us = unidades();
+  const us = unidades().filter((u) => sinDiv() || u.division === CTX.div);
   const filasU = us.map((u) => { const e = d.eq.filter((r) => unitKey(r) === unitKey(u)), j = d.jug.filter((r) => unitKey(r) === unitKey(u)), n = e.length || 1, av = (k) => { const v = e.filter((r) => r[k] != null); return v.length ? v.reduce((a, r) => a + r[k], 0) / v.length : null; };
     const pts = (k) => { const s = e.reduce((a, r) => a + (r[k] || 0), 0), t = e.reduce((a, r) => a + (r.pts_pg || 0) * (r.gp || 0), 0); return t ? 100 * s / t : null; };
     return { u, eq: e.length, jug: j.filter((r) => r.min > 0).length, gp: e.reduce((a, r) => a + (r.gp || 0), 0) / 2, pace: av("team_pace"), ortg: av("team_ortg"), efg: av("efg_pct"), tov: av("tov_pct"), ftr: av("ft_rate"), tpar: av("fg3a_rate"), fb: pts("pts_fastbreak"), sc: pts("pts_2ndchance"), pp: av("pts_pg") }; });
   $("view").innerHTML = `<section class="block"><div class="block-h"><div><h2 class="h2">${esc(ligaN(CTX.liga))} · ${esc(CTX.temp)}</h2><p class="sub">Medias de equipo por unidad · fases en orden cronológico</p></div><span class="tag dato">Dato</span></div>
     ${filasU.length ? `<div class="tw"><table><thead><tr><th>Unidad</th><th class="n">Partidos</th><th class="n">Equipos</th><th class="n">Jugadores</th><th class="n">Pts/p</th><th class="n">Ritmo</th><th class="n">ORtg</th><th class="n">eFG%</th><th class="n">TOV%</th><th class="n">FTr</th><th class="n">3PAr</th><th class="n">% pts contra.</th><th class="n">% pts 2.ª op.</th></tr></thead><tbody>
-    ${filasU.map((f) => `<tr${unitKey(f.u) === CTX.unit ? ' class="sel"' : ""}><td>${esc(unitTxt(f.u))}</td><td class="n">${int(f.gp)}</td><td class="n">${int(f.eq)}</td><td class="n">${int(f.jug)}</td><td class="n">${fmt(f.pp, 1)}</td><td class="n">${fmt(f.pace, 1)}</td><td class="n">${fmt(f.ortg, 1)}</td><td class="n">${fmt(f.efg, 1)}</td><td class="n">${fmt(f.tov, 1)}</td><td class="n">${fmt(f.ftr, 1)}</td><td class="n">${fmt(f.tpar, 1)}</td><td class="n">${fmt(f.fb, 1)}</td><td class="n">${fmt(f.sc, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">Sin datos.</p>`}</section>
+    ${filasU.map((f) => `<tr${(CTX.fase === "todas" ? unitKey(f.u) === claveTotal() : f.u.fase === CTX.fase) ? ' class="sel"' : ""}><td>${esc(unitTxt(f.u))}</td><td class="n">${int(f.gp)}</td><td class="n">${int(f.eq)}</td><td class="n">${int(f.jug)}</td><td class="n">${fmt(f.pp, 1)}</td><td class="n">${fmt(f.pace, 1)}</td><td class="n">${fmt(f.ortg, 1)}</td><td class="n">${fmt(f.efg, 1)}</td><td class="n">${fmt(f.tov, 1)}</td><td class="n">${fmt(f.ftr, 1)}</td><td class="n">${fmt(f.tpar, 1)}</td><td class="n">${fmt(f.fb, 1)}</td><td class="n">${fmt(f.sc, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">Sin datos.</p>`}</section>
+  ${CTX.team ? (() => { const er = d.eq.filter((r) => r.team_id === CTX.team && (sinDiv() || r.division === CTX.div)).sort((a, b) => (a.fase_orden || 0) - (b.fase_orden || 0));
+    return `<section class="block"><div class="block-h"><div><h2 class="h2">${esc(equipoN())} por fase</h2><p class="sub">Récord y ratings del equipo en cada unidad</p></div></div><div class="tw"><table><thead><tr><th>Unidad</th><th class="n">PJ</th><th class="n">V-D</th><th class="n">Margen</th><th class="n">Ritmo</th><th class="n">ORtg</th><th class="n">DRtg</th><th class="n">Net</th><th class="n">eFG%</th></tr></thead><tbody>
+    ${er.map((r) => `<tr><td>${esc(unitTxt(r))}</td><td class="n">${int(r.gp)}</td><td class="n">${int(r.w)}-${int(r.l)}</td><td class="n">${sgn(r.margen_pg, 1)}</td><td class="n">${fmt(r.team_pace, 1)}</td><td class="n">${fmt(r.team_ortg, 1)}</td><td class="n">${fmt(r.team_drtg, 1)}</td><td class="n">${sgn(r.team_netrtg, 1)}</td><td class="n">${fmt(r.efg_pct, 1)}</td></tr>`).join("")}</tbody></table></div></section>`; })() : ""}
   <section class="block"><div class="block-h"><h2 class="h2">Cómo se leen las fases y divisiones</h2></div>
     <p class="note">Cada fila es una fase en una división, con su propio contexto de liga: el PER medio es 15 dentro de cada unidad, así que un mismo jugador puede tener PER distinto en la primera fase (A1) y en la segunda fase (A2). «Todas las fases» une la temporada completa; «Toda la división A1» y «Toda la división A2» separan las dos divisiones de Junior y Cadete. La Fase de Clasificación cruza equipos de A1 y A2: esos partidos van como «cruce» y sólo cuentan en «Todas las fases».</p></section>${pie(4)}`;
 };
@@ -977,25 +1022,6 @@ VISTAS.diccionario = async () => {
   $("fD").addEventListener("input", (e) => pintar(e.target.value)); pintar("");
 };
 
-// ---------------------------------------------------------------------------------------------- búsqueda
-let SR = [], SI = 0;
-async function abrirBusqueda() { $("search").hidden = false; $("searchIn").value = ""; $("searchHint").textContent = `${CTX.temp} · ${ligaN(CTX.liga)} · todas las fases`; $("searchRes").innerHTML = ""; $("searchIn").focus(); }
-function cerrarBusqueda() { $("search").hidden = true; }
-$("searchBtn").addEventListener("click", abrirBusqueda);
-$("searchClose").addEventListener("click", cerrarBusqueda);
-$("search").addEventListener("click", (e) => { if (e.target === $("search")) cerrarBusqueda(); });
-$("searchIn").addEventListener("input", async (e) => {
-  const q = norm(e.target.value); const d = await doc();
-  SR = q.length < 2 ? [] : d.jug.filter((r) => r.fase === "total" && norm(r.nombre).includes(q)).slice(0, 30); SI = 0;
-  $("searchRes").innerHTML = SR.map((r, i) => `<button type="button" role="option" aria-selected="${i === SI}" data-i="${i}"><b>${esc(r.nombre)}</b><span>${esc(r.equipo)}</span><em>${int(r.gp)} PJ · ${fmt(r.pts_pg, 1)} pts</em></button>`).join("") || (q.length >= 2 ? `<p class="hint">Sin resultados en esta temporada y liga.</p>` : "");
-  $("searchRes").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => elegir(Number(b.dataset.i))));
-});
-function elegir(i) { const r = SR[i]; if (!r) return; S.pid = r.player_id; S.tid = r.team_id; cerrarBusqueda(); navegar("ficha"); }
-document.addEventListener("keydown", (e) => {
-  if (e.key === "/" && $("search").hidden && !/input|select|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); abrirBusqueda(); }
-  else if (!$("search").hidden) { if (e.key === "Escape") cerrarBusqueda(); if (e.key === "Enter") elegir(SI); }
-});
-
 // ---------------------------------------------------------------------------------------------- arranque
 (async function () {
   try { IDX = await cargarJSON("datos/indice.json"); } catch (e) { $("view").innerHTML = `<p class="empty">No se pudo cargar el índice de datos.</p>`; return; }
@@ -1003,8 +1029,8 @@ document.addEventListener("keydown", (e) => {
   const conDatos = IDX.temporadas.filter((t) => Object.values(t.ligas).reduce((a, l) => a + (l.con_acta || 0), 0) >= 300);
   CTX.temp = IDX.temporadas.some((t) => t.temporada === guard.temp) ? guard.temp : (conDatos[0] || IDX.temporadas[0]).temporada;
   CTX.liga = guard.liga && IDX.ligas[guard.liga] ? guard.liga : Object.keys(IDX.ligas)[0];
-  CTX.unit = guard.unit || "total|única"; CTX.min = guard.min != null ? guard.min : 100;
-  pintarCtx(); pintarRail();
+  CTX.div = guard.div || "todas"; CTX.fase = guard.fase || "todas"; CTX.team = guard.team || ""; CTX.min = guard.min != null ? guard.min : 100;
+  await pintarCtx(); pintarRail();
   ir(location.hash.slice(1) || "inicio");
 })();
 </script>
