@@ -1,0 +1,212 @@
+[
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "n_min",
+  "publicado": 6027,
+  "reproducido": 6031
+ },
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "mae_min",
+  "publicado": 4.858921213993897,
+  "reproducido": 4.8486171512298855
+ },
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "acierto_rol",
+  "publicado": 0.42823958851833416,
+  "reproducido": 0.43409053225004146
+ },
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "logloss_rol",
+  "publicado": 1.2572606563978113,
+  "reproducido": 1.255796818444953
+ },
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "mae_pts_p100",
+  "publicado": 3.856050084037659,
+  "reproducido": 3.851622119553034
+ },
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "cob50_pts_p100",
+  "publicado": 0.46289363576304776,
+  "reproducido": 0.45926904447380007
+ },
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "cob90_pts_p100",
+  "publicado": 0.8628055494384497,
+  "reproducido": 0.857331571994716
+ },
+ {
+  "examen": "simulador V32_inicio_adapt",
+  "medida": "mae_ts_pct",
+  "publicado": 5.968595977675533,
+  "reproducido": 5.959894802537301
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "n_min",
+  "publicado": 6027,
+  "reproducido": 6031
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "mae_min",
+  "publicado": 4.870894429365851,
+  "reproducido": 4.861810243598407
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "acierto_rol",
+  "publicado": 0.4274099883855981,
+  "reproducido": 0.4335931023047587
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "logloss_rol",
+  "publicado": 1.2637672113280396,
+  "reproducido": 1.2625831643755683
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "mae_pts_p100",
+  "publicado": 3.852027283394097,
+  "reproducido": 3.8551524086423363
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "cob50_pts_p100",
+  "publicado": 0.4223559361258968,
+  "reproducido": 0.4208699676075891
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "cob90_pts_p100",
+  "publicado": 0.8359176116639667,
+  "reproducido": 0.8264692272096251
+ },
+ {
+  "examen": "simulador V32_corte_inicio_adapt",
+  "medida": "mae_ts_pct",
+  "publicado": 5.242188192942335,
+  "reproducido": 5.223138177210452
+ },
+ {
+  "examen": "equipo F4 (ΔNet)",
+  "medida": "n",
+  "publicado": 933,
+  "reproducido": 933
+ },
+ {
+  "examen": "equipo F4 (ΔNet)",
+  "medida": "mae_f4",
+  "publicado": 4.058308042001169,
+  "reproducido": 4.036594187304433
+ },
+ {
+  "examen": "equipo F4 (ΔNet)",
+  "medida": "mae_persistencia",
+  "publicado": 4.894961629153269,
+  "reproducido": 4.894961629153269
+ },
+ {
+  "examen": "equipo F4 (ΔNet)",
+  "medida": "mae_aditivo_f1",
+  "publicado": 4.0548647276351035,
+  "reproducido": 4.040446722780723
+ },
+ {
+  "examen": "equipo F4 (ΔNet)",
+  "medida": "mae_gbm_directo",
+  "publicado": 4.227022183663723,
+  "reproducido": 4.169616126016861
+ },
+ {
+  "examen": "equipo F4 (ΔNet)",
+  "medida": "cobertura_80",
+  "publicado": 0.7652733118971061,
+  "reproducido": 0.7631296891747053
+ },
+ {
+  "examen": "equipo F4 (ΔNet)",
+  "medida": "puerta",
+  "publicado": true,
+  "reproducido": true
+ },
+ {
+  "examen": "Nivel Kerno",
+  "medida": "fichajes",
+  "publicado": 4560,
+  "reproducido": 4564
+ },
+ {
+  "examen": "Nivel Kerno",
+  "medida": "separacion",
+  "publicado": 0.7094468546637744,
+  "reproducido": 0.7090668627623146
+ },
+ {
+  "examen": "Nivel Kerno",
+  "medida": "cobertura_80",
+  "publicado": 0.7824561403508772,
+  "reproducido": 0.7815512708150745
+ },
+ {
+  "examen": "Nivel Kerno",
+  "medida": "anchura_80",
+  "publicado": 70.2270062248581,
+  "reproducido": 69.91879504720171
+ },
+ {
+  "examen": "Nivel Kerno",
+  "medida": "corr_nk1_nk2",
+  "publicado": 0.9785129439921424,
+  "reproducido": 0.9776907031319921
+ },
+ {
+  "examen": "Nivel Kerno",
+  "medida": "puerta",
+  "publicado": true,
+  "reproducido": true
+ },
+ {
+  "examen": "Impacto (on/off)",
+  "medida": "fichajes",
+  "publicado": 3598,
+  "reproducido": 3599
+ },
+ {
+  "examen": "Impacto (on/off)",
+  "medida": "spearman",
+  "publicado": 0.14914778668183,
+  "reproducido": 0.1405841738859741
+ },
+ {
+  "examen": "Impacto (on/off)",
+  "medida": "spearman_ic95",
+  "publicado": [
+   0.11720030980220493,
+   0.18356642316064795
+  ],
+  "reproducido": [
+   0.11028854191796626,
+   0.17403739216942984
+  ]
+ },
+ {
+  "examen": "Impacto (ΔNet equipo, paquete)",
+  "medida": "spearman",
+  "publicado": 0.12800690639156304,
+  "reproducido": 0.13412084122206328
+ },
+ {
+  "examen": "Impacto",
+  "medida": "puerta",
+  "publicado": false,
+  "reproducido": false
+ }
+]
