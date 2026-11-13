@@ -1,0 +1,44 @@
+name: EJECUTAR Federación Vasca (basketbasko.com)
+
+# Sólo se ejecuta a mano (botón "Run workflow" en la pestaña Actions). No hay programación periódica.
+on:
+  workflow_dispatch:
+    inputs:
+      ligas:
+        description: "Ligas separadas por espacios (vacío = todas las activas: esf_1nac esf_2nac esf_jun esf_cad esf_jun_sel esf_cad_sel)"
+        required: false
+        default: ""
+      temporada:
+        description: "Temporada a actualizar (sólo esa)"
+        required: false
+        default: "2026-27"
+
+permissions:
+  contents: write
+
+jobs:
+  ejecutar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Ejecutar
+        env:
+          LIGAS: ${{ inputs.ligas }}
+          TEMPORADA: ${{ inputs.temporada }}
+        run: |
+          ARGS=()
+          if [ -n "$LIGAS" ]; then read -ra L <<< "$LIGAS"; ARGS+=(--ligas "${L[@]}"); fi
+          python -m bbstats.esf ejecutar --temporada "$TEMPORADA" "${ARGS[@]}" || echo "Alguna liga terminó con error (ver informe)"
+          python -m bbstats.esf artifact
+      - name: Guardar en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/basko
+          git commit -m "Datos Federación Vasca: ejecución manual ${{ inputs.temporada }}" || echo "sin cambios"
+          git push

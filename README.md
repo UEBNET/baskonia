@@ -696,3 +696,22 @@ Otros documentos: [`docs/data_dictionary.md`](docs/data_dictionary.md) (todas la
 [`docs/normalizacion_amortiguada.md`](docs/normalizacion_amortiguada.md), [`docs/estilos_de_juego.md`](docs/estilos_de_juego.md),
 [`docs/contexto_y_quimica.md`](docs/contexto_y_quimica.md), [`docs/AUDIT_2026-10-21.md`](docs/AUDIT_2026-10-21.md)
 (línea base del proyecto multifase) y [`CHANGELOG.md`](CHANGELOG.md).
+
+
+---
+
+## Federación Vasca de Baloncesto (`bbstats.esf`, nov. 2026)
+
+Capa nueva para las competiciones de [basketbasko.com](https://basketbasko.com/es/competicion-esf/): **Primera
+Nacional y Segunda Nacional masculinas** y **Liga Vasca Junior y Cadete masculinas** (divisiones A1 y A2, todas sus
+fases), de 2018-19 a 2026-27. Un adaptador por liga, bruto original con fecha, todo calculado desde el jugada a jugada
+de cada partido, las mismas columnas en todas las ligas y salida por fase × división y total. Sólo descarga al pulsar
+EJECUTAR:
+
+```bash
+python ejecutar_basko.py                      # temporada en curso, todas las ligas activas
+python -m bbstats.esf historico               # carga histórica
+python -m bbstats.esf reprocesar              # sin red, desde los brutos
+```
+
+Pauta completa, columnas, validación y limitaciones: [`docs/BASKO.md`](docs/BASKO.md).

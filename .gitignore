@@ -10,3 +10,4 @@ docs/articulo/_trabajo/
 # MLflow local (los resúmenes versionados están en data/modelos/)
 experimentos/
 data/modelos/roles/_cache/
+data/basko/artifact/

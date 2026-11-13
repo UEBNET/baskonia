@@ -557,3 +557,17 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
 - **Entrenadores**: uno por equipo y temporada (página del equipo), `metodo = temporada`.
 - **Pendiente**: las listas de ligas de `bbmodel`/`bbestilo` (A/B, VaDE…) aún no incluyen las FEB; no se han
   reentrenado los modelos. Resultados y riesgos: `docs/checkpoints/F1.md`.
+
+
+## 9f. Federación Vasca de Baloncesto (nov. 2026): `bbstats.esf`
+
+- Ligas `esf_1nac`, `esf_2nac` (senior masculinas), `esf_jun`, `esf_cad` (Liga Vasca masculina, divisiones A1/A2) en
+  `config/basko.json`; datos en `data/basko/` (raw y processed propios, no en `data/raw`/`data/processed`).
+- Fuente: API pública del widget de basketbasko.com (Optimal Way Consulting): calendario por grupos, acta digital y
+  jugada a jugada (desde 2022-23; 2018-22 sólo resultados y plantillas).
+- Salida por **fase × división** (`fase`, `division`) + `total` (todas) + `total_a1`/`total_a2`. 480 columnas comunes +
+  extensiones ESF + `pbp_*` = 673 columnas en todas las ligas. Asistencias y tapones: la mesa los registra en 2026-27 (tapones
+  también en parte de 2025-26); donde no, esos conteos vacíos y PER, ORtg, WS, Game Score, PIE… calculados igualmente
+  con ellos a 0 (`registra_asistencias`, `registra_tapones`).
+- `player_id` = uuid de persona federada (estable entre temporadas). Detalle: `docs/BASKO.md`.
+- `bbstats/lineups/run.write_outputs` admite `phases=` (fases propias); el resto de ligas no cambia.

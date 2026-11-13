@@ -176,7 +176,9 @@ def _write(df: pd.DataFrame, cols: list, path: Path) -> None:
 
 
 def write_outputs(liga: str, season: str, results: list, official: dict, src: PBPSource, ctx: Ctx,
-                  names: dict, teams: dict, out: Path, cfg: dict, lcfg: dict) -> dict:
+                  names: dict, teams: dict, out: Path, cfg: dict, lcfg: dict, phases: list | None = None) -> dict:
+    """`phases`: fases a calcular además de "total" (por defecto regular/playoffs/total; la capa ESF pasa sus
+    fases propias: primera_fase, segunda_fase, copa…)."""
     qcfg = {**(cfg.get("quintetos") or {}), **(lcfg.get("quintetos") or {})}
     k = float(qcfg.get("contraccion_posesiones", 300))
     lam = float(qcfg.get("rapm_lambda", 1500))
@@ -202,7 +204,7 @@ def write_outputs(liga: str, season: str, results: list, official: dict, src: PB
     rows_all = M.team_rows(seg) if not seg.empty else pd.DataFrame()
     nm = lambda ids: " / ".join(names.get(p) or p for p in ids.split("|"))  # noqa: E731
     tables = {"quintetos": [], "trios": [], "parejas": [], "jugadores": [], "asistencias": [], "equipos": []}
-    for fase in M.PHASES:
+    for fase in (phases or M.PHASES):
         rows = rows_all if fase == "total" or rows_all.empty else rows_all[rows_all["fase"] == fase]
         ast_f = assists if fase == "total" or assists.empty else assists[assists["fase"] == fase]
         if rows.empty and ast_f.empty:

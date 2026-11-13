@@ -1,0 +1,137 @@
+{
+  "_descripcion": "Capa Federación Vasca de Baloncesto (ESF / basketbasko.com). Un adaptador por liga; las ligas se activan o desactivan aquí sin tocar código. Sólo se descarga al ejecutar (python ejecutar_basko.py o python -m bbstats.esf ejecutar).",
+  "temporada_inicial": "2018-19",
+  "temporada_por_defecto": "2026-27",
+  "rutas": {
+    "bruto": "data/basko/raw",
+    "procesado": "data/basko/processed"
+  },
+  "fuente": {
+    "pagina_publica": "https://basketbasko.com/es/competicion-esf/",
+    "_pagina_publica": "Página pública de Resultados - Federación Vasca. Su HTML declara (owbasketSettings) las URL de la API que usa el widget de resultados; se leen en cada ejecución para no depender de una clave fija.",
+    "esb_url_reserva": "https://esb.optimalwayconsulting.com/esf/1/GxgkvuHIaZfnRat0UN9xafd8TyzGDHjN",
+    "msstats_url_reserva": "https://msstats.optimalwayconsulting.com/v1",
+    "fede": "esf",
+    "zona": "1",
+    "sexo": "M"
+  },
+  "http": {
+    "delay_s": 0.25,
+    "timeout_s": 60,
+    "retries": 4,
+    "delay_por_dominio": {
+      "esb.optimalwayconsulting.com": 0.2,
+      "msstats.optimalwayconsulting.com": 0.2,
+      "basketbasko.com": 1.0
+    }
+  },
+  "partidos_por_paquete": 350,
+  "reintentar_sin_datos_dias": 30,
+  "minutos_partido": 40,
+  "quintetos": {
+    "contraccion_posesiones": 300,
+    "rapm_lambda": 1500,
+    "excluir_si_dif_min_s": 120
+  },
+  "ligas": {
+    "esf_1nac": {
+      "nombre": "Primera Nacional Masculina (1ª División Masculina · Euskadi)",
+      "nombre_corto": "Primera Nacional",
+      "categorias": [
+        "46"
+      ],
+      "nivel": "senior",
+      "activa": true,
+      "_sexo": "Sólo categoría MASCULINA (fuente.sexo = M; idCategory 46 = 1ª División Masculina, 3 = 2ª División Masculina)."
+    },
+    "esf_2nac": {
+      "nombre": "Segunda Nacional Masculina (2ª División Masculina · Euskadi)",
+      "nombre_corto": "Segunda Nacional",
+      "categorias": [
+        "3"
+      ],
+      "nivel": "senior",
+      "activa": true,
+      "_sexo": "Sólo categoría MASCULINA (fuente.sexo = M; idCategory 46 = 1ª División Masculina, 3 = 2ª División Masculina)."
+    },
+    "esf_jun": {
+      "nombre": "Liga Vasca Junior Masculina",
+      "nombre_corto": "Junior Masculino",
+      "categorias": [
+        "54"
+      ],
+      "nivel": "junior",
+      "activa": true,
+      "divisiones": true
+    },
+    "esf_cad": {
+      "nombre": "Liga Vasca Cadete Masculina",
+      "nombre_corto": "Cadete Masculino",
+      "categorias": [
+        "29"
+      ],
+      "nivel": "cadete",
+      "activa": true,
+      "divisiones": true
+    },
+    "esf_jun_sel": {
+      "nombre": "Campeonatos interterritoriales Junior Masculino (Euskadi-Navarra y Vasco-Navarro-Riojano, selecciones)",
+      "nombre_corto": "Junior · selecciones",
+      "categorias": [
+        "74",
+        "100"
+      ],
+      "nivel": "junior",
+      "activa": false,
+      "_nota": "Selecciones territoriales, no clubes (no forman parte de la Liga Vasca). Desactivada por defecto; activa=true para extraerla como liga aparte."
+    },
+    "esf_cad_sel": {
+      "nombre": "Campeonatos interterritoriales Cadete Masculino (Euskadi-Navarra y Vasco-Navarro-Riojano, selecciones)",
+      "nombre_corto": "Cadete · selecciones",
+      "categorias": [
+        "71",
+        "101"
+      ],
+      "nivel": "cadete",
+      "activa": false,
+      "_nota": "Selecciones territoriales, no clubes (no forman parte de la Liga Vasca). Desactivada por defecto; activa=true para extraerla como liga aparte."
+    }
+  },
+  "fases_tipo": [
+    [
+      "copa",
+      "copa"
+    ],
+    [
+      "final a cuatro|cruces|ascenso|play|final|semifinal|cuartos|octavos",
+      "eliminatoria"
+    ],
+    [
+      "clasific",
+      "clasificacion"
+    ],
+    [
+      ".",
+      "liga"
+    ]
+  ],
+  "_fases_tipo": "Tipo de cada fase (por nombre de competición de la web, primera coincidencia). Sólo es un atributo para filtrar: TODAS las fases se agregan en 'total'.",
+  "reglas_division": [
+    [
+      "grupo",
+      "a\\s*-?\\s*2\\b",
+      "A2"
+    ],
+    [
+      "grupo",
+      "a\\s*-?\\s*1\\b",
+      "A1"
+    ],
+    [
+      "fase",
+      "^(primera_fase|tercera_fase|copa|final_a_cuatro|cruces_a_1|liga_regular)$",
+      "A1"
+    ]
+  ],
+  "_reglas_division": "Ligas con divisiones (Junior y Cadete: A1 y A2 son divisiones distintas). Cada partido toma la división de la primera regla que coincide (sobre el grupo o la fase): Segunda Fase grupo A-1 = A1, grupo A-2 = A2; Primera Fase, Tercera Fase, Copa, Final a Cuatro y Cruces = A1. Si ninguna coincide (p.ej. Fase de Clasificación), se deduce de los equipos: los dos de A1 -> A1, los dos de A2 -> A2, uno de cada -> 'cruce'. Las métricas se calculan por fase y división (contexto de liga propio de cada división); 'total' une todas las fases y divisiones y 'total_a1' / 'total_a2' cada división por separado."
+}
