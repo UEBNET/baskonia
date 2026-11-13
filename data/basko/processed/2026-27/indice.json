@@ -1,0 +1,95 @@
+{
+ "temporada": "2026-27",
+ "ligas": {
+  "esf_1nac": {
+   "nombre": "Primera Nacional Masculina (1ª División Masculina · Euskadi)",
+   "filas": 626,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 233,
+    "liga_regular": 208,
+    "copa": 185
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 46,
+   "partidos_con_acta": 46,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2026-27/esf_1nac_2026-27_20261113T123217Z.json.gz",
+   "errores": []
+  },
+  "esf_2nac": {
+   "nombre": "Segunda Nacional Masculina (2ª División Masculina · Euskadi)",
+   "filas": 560,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 205,
+    "liga_regular": 188,
+    "copa": 167
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 40,
+   "partidos_con_acta": 40,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2026-27/esf_2nac_2026-27_20261113T123217Z.json.gz",
+   "errores": []
+  },
+  "esf_jun": {
+   "nombre": "Liga Vasca Junior Masculina",
+   "filas": 327,
+   "fases": [
+    "primera_fase",
+    "total",
+    "total_a1"
+   ],
+   "filas_por_fase": {
+    "primera_fase": 109,
+    "total": 109,
+    "total_a1": 109
+   },
+   "divisiones": [
+    "A1",
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 32,
+   "partidos_con_acta": 32,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2026-27/esf_jun_2026-27_20261113T123217Z.json.gz",
+   "errores": []
+  },
+  "esf_cad": {
+   "nombre": "Liga Vasca Cadete Masculina",
+   "filas": 333,
+   "fases": [
+    "primera_fase",
+    "total",
+    "total_a1"
+   ],
+   "filas_por_fase": {
+    "primera_fase": 111,
+    "total": 111,
+    "total_a1": 111
+   },
+   "divisiones": [
+    "A1",
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 32,
+   "partidos_con_acta": 32,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2026-27/esf_cad_2026-27_20261113T123217Z.json.gz",
+   "errores": []
+  }
+ }
+}
