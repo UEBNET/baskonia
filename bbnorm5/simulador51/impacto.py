@@ -68,6 +68,20 @@ def instalar_bloque_v5():
 
     tabla_prior._v51 = True
     RP.tabla_prior = tabla_prior
+    # el bloque v5 entra SÓLO en el prior del RAPM: las redes de sinergia y de conjunto (F2 y F3 de la v4.0, versionadas)
+    # se entrenaron con los rasgos vigentes (44 columnas) y los siguen recibiendo igual
+    from bbequipo import sinergia as SG
+    orig_init = SG.Rasgos.__init__
+
+    def init(self, T, cfg):
+        T2 = T.copy(deep=False)
+        bl2 = dict(T.attrs["bloques"])
+        bl2.pop("v5", None)
+        bl2["mascara"] = [c for c in bl2["mascara"] if c != "m_v5"]
+        T2.attrs["bloques"] = bl2
+        orig_init(self, T2, cfg)
+
+    SG.Rasgos.__init__ = init
 
 
 def configuracion(cfg_eq: dict) -> dict:
