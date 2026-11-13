@@ -1,0 +1,77 @@
+{
+ "temporada": "2019-20",
+ "ligas": {
+  "esf_1nac": {
+   "nombre": "Primera Nacional Masculina (1ª División Masculina · Euskadi)",
+   "filas": 127,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 127
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 114,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2019-20/esf_1nac_2019-20_20261113T125543Z.json.gz",
+   "errores": []
+  },
+  "esf_2nac": {
+   "nombre": "Segunda Nacional Masculina (2ª División Masculina · Euskadi)",
+   "filas": 145,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 145
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 125,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2019-20/esf_2nac_2019-20_20261113T125543Z.json.gz",
+   "errores": []
+  },
+  "esf_jun": {
+   "nombre": "Liga Vasca Junior Masculina",
+   "filas": 120,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 120
+   },
+   "divisiones": [
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 95,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2019-20/esf_jun_2019-20_20261113T125543Z.json.gz",
+   "errores": []
+  },
+  "esf_cad": {
+   "nombre": "Liga Vasca Cadete Masculina",
+   "filas": 126,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 126
+   },
+   "divisiones": [
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 95,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2019-20/esf_cad_2019-20_20261113T125543Z.json.gz",
+   "errores": []
+  }
+ }
+}
