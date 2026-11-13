@@ -1,0 +1,123 @@
+{
+ "temporada": "2025-26",
+ "ligas": {
+  "esf_1nac": {
+   "nombre": "Primera Nacional Masculina (1ª División Masculina · Euskadi)",
+   "filas": 765,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion",
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 273,
+    "liga_regular": 250,
+    "copa": 194,
+    "fase_clasificacion": 48
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 199,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2025-26/esf_1nac_2025-26_20261113T123333Z.json.gz",
+   "errores": []
+  },
+  "esf_2nac": {
+   "nombre": "Segunda Nacional Masculina (2ª División Masculina · Euskadi)",
+   "filas": 724,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion",
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 249,
+    "liga_regular": 235,
+    "copa": 191,
+    "fase_clasificacion": 49
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 199,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2025-26/esf_2nac_2025-26_20261113T123333Z.json.gz",
+   "errores": []
+  },
+  "esf_jun": {
+   "nombre": "Liga Vasca Junior Masculina",
+   "filas": 1043,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa",
+    "total",
+    "total_a1",
+    "total_a2"
+   ],
+   "filas_por_fase": {
+    "total": 247,
+    "segunda_fase": 199,
+    "total_a1": 162,
+    "total_a2": 121,
+    "primera_fase": 120,
+    "copa": 79,
+    "fase_clasificacion": 67,
+    "tercera_fase": 48
+   },
+   "divisiones": [
+    "A1",
+    "A2",
+    "cruce",
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 153,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2025-26/esf_jun_2025-26_20261113T123333Z.json.gz",
+   "errores": []
+  },
+  "esf_cad": {
+   "nombre": "Liga Vasca Cadete Masculina",
+   "filas": 861,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa",
+    "total",
+    "total_a1",
+    "total_a2"
+   ],
+   "filas_por_fase": {
+    "total": 189,
+    "segunda_fase": 175,
+    "total_a1": 129,
+    "primera_fase": 99,
+    "total_a2": 95,
+    "copa": 81,
+    "tercera_fase": 47,
+    "fase_clasificacion": 46
+   },
+   "divisiones": [
+    "A1",
+    "A2",
+    "cruce",
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 153,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2025-26/esf_cad_2025-26_20261113T123333Z.json.gz",
+   "errores": []
+  }
+ }
+}
