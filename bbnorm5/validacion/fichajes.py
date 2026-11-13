@@ -30,6 +30,8 @@ from __future__ import annotations
 import os
 import zlib
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -259,8 +261,10 @@ def predicciones_v5(cfg: dict, x: pd.DataFrame | None = None, cortes: list[int] 
 
 
 # ------------------------------------------------------------------ banco de fichajes reales con la v3.3 aplicada
-def banco_v33() -> pd.DataFrame:
-    """Producción aplicada de la v3.3 por fichaje (centro e intervalos 50/80/90) y el observado con el equipo real."""
+def banco_v33(salida: Path | None = None) -> pd.DataFrame:
+    """Producción aplicada de la v3.3 por fichaje (centro e intervalos 50/80/90) y el observado con el equipo real.
+    `salida`: fichero donde guardarlo (por defecto, data/v5/validacion/banco_v33.parquet). Lee las ejecuciones del examen
+    de `bbfit.validacion.DIR_VAL` (la v5.1 la redirige a las reproducidas en su F0)."""
     previo = os.environ.get("CERNO_SIMULADOR")
     os.environ["CERNO_SIMULADOR"] = "v32"          # las ejecuciones del examen V32_corte viven en la carpeta v3_2
     try:
@@ -309,8 +313,9 @@ def banco_v33() -> pd.DataFrame:
     mp = per.groupby("persona_crosswalk")["persona_v5"].agg(lambda s: s.mode().iloc[0])
     b["persona_v5"] = b["persona_id"].map(mp)
     b["anio"] = b["temporada_d"].str[:4].astype(int)
-    DIR.mkdir(parents=True, exist_ok=True)
-    b.to_parquet(DIR / "banco_v33.parquet")
+    destino = salida or DIR / "banco_v33.parquet"
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    b.to_parquet(destino)
     return b
 
 

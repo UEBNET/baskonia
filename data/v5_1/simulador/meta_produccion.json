@@ -1,0 +1,62 @@
+{
+ "version_modelo": "5.0",
+ "fase": "v5.1-F2",
+ "config": "configs/v5_1/f2.yaml",
+ "hash_config": "01d13b1bd88c",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-13T17:14:05+00:00",
+ "python": "3.13.18",
+ "casos": 26025,
+ "excluidos_v33_defectuoso": 1436,
+ "examen": {
+  "v5": {
+   "casos": 19856,
+   "personas": 2282,
+   "frente_v33": -0.0809,
+   "ic_lo": -0.0914,
+   "ic_hi": -0.0699,
+   "cobertura80": 0.789
+  },
+  "v3.3": {
+   "casos": 19856,
+   "personas": 2282,
+   "frente_v33": 0.0,
+   "ic_lo": 0.0,
+   "ic_hi": 0.0,
+   "cobertura80": 0.8178
+  },
+  "combinada": {
+   "casos": 19856,
+   "personas": 2282,
+   "frente_v33": -0.1034,
+   "ic_lo": -0.1101,
+   "ic_hi": -0.0967,
+   "cobertura80": 0.8271
+  },
+  "mezcla_50": {
+   "casos": 19856,
+   "personas": 2282,
+   "frente_v33": -0.0942,
+   "ic_lo": -0.1004,
+   "ic_hi": -0.0887,
+   "cobertura80": 0.8326
+  }
+ },
+ "decision": {
+  "mejora_v33_ic_bajo_0": true,
+  "cobertura_no_peor": true,
+  "cobertura_en_rango": true,
+  "publicar": true
+ },
+ "pesos": {
+  "ast_pct": 0.776,
+  "blk_p100": 0.756,
+  "dreb_p100": 0.765,
+  "oreb_p100": 0.763,
+  "pts_p100": 0.591,
+  "stl_p100": 0.683,
+  "tov_pct": 0.5,
+  "ts_pct": 0.591,
+  "usg_pct": 0.592
+ }
+}

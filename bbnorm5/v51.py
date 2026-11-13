@@ -5,6 +5,10 @@
 F1 · versión combinada:
 - examen: pesos por métrica con la regla fijada, examen fuera de muestra y decisión de publicación
 - generar: tablas normalizadas de la versión combinada en el formato de la v3.2 (data/v5_1/salidas/combinada/)
+
+F2 · simulador (configs/v5_1/f2.yaml):
+- produccion: producción por liga de destino combinada v5 / v3.3 en las 9 métricas, examen y decisión
+- ensamblaje: contribución por partido con los minutos del motor y dependencias estimadas; jugador, equipo y grupos de cinco
 """
 from __future__ import annotations
 
@@ -28,6 +32,12 @@ def main(argv=None):
         if paso == "examen":
             from bbnorm5.salidas import combinada
             out = combinada.ejecutar_examen(cfg)
+        elif paso == "produccion":
+            from bbnorm5.simulador51 import produccion
+            out = produccion.ejecutar(cfg)
+        elif paso == "ensamblaje":
+            from bbnorm5.simulador51 import ensamblaje
+            out = ensamblaje.ejecutar(cfg)
         elif paso == "generar":
             from bbnorm5.salidas import combinada
             out = combinada.generar(cfg)
