@@ -12,6 +12,9 @@ F2 · simulador (configs/v5_1/f2.yaml):
 
 F3 · Nivel Kerno (configs/v5_1/f2.yaml):
 - nivel_kerno: NK con la contribución de la F2 frente al NK vigente reproducido; rango del año, rango de nivel y sello
+
+F4 · Impacto (configs/v5_1/f2.yaml):
+- impacto: RAPM multiliga con el perfil de nivel de la v5 en el prior; exámenes de equipo e Impacto frente a la F0
 """
 from __future__ import annotations
 
@@ -44,6 +47,9 @@ def main(argv=None):
         elif paso == "nivel_kerno":
             from bbnorm5.simulador51 import nivel_kerno
             out = nivel_kerno.ejecutar(cfg)
+        elif paso == "impacto":
+            from bbnorm5.simulador51 import impacto
+            out = impacto.ejecutar(cfg)
         elif paso == "generar":
             from bbnorm5.salidas import combinada
             out = combinada.generar(cfg)
