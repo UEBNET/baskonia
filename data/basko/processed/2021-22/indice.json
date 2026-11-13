@@ -1,0 +1,77 @@
+{
+ "temporada": "2021-22",
+ "ligas": {
+  "esf_1nac": {
+   "nombre": "Primera Nacional Masculina (1ª División Masculina · Euskadi)",
+   "filas": 142,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 142
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 214,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2021-22/esf_1nac_2021-22_20261113T125453Z.json.gz",
+   "errores": []
+  },
+  "esf_2nac": {
+   "nombre": "Segunda Nacional Masculina (2ª División Masculina · Euskadi)",
+   "filas": 164,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 164
+   },
+   "divisiones": [
+    "única"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 227,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2021-22/esf_2nac_2021-22_20261113T125453Z.json.gz",
+   "errores": []
+  },
+  "esf_jun": {
+   "nombre": "Liga Vasca Junior Masculina",
+   "filas": 164,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 164
+   },
+   "divisiones": [
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2021-22/esf_jun_2021-22_20261113T125453Z.json.gz",
+   "errores": []
+  },
+  "esf_cad": {
+   "nombre": "Liga Vasca Cadete Masculina",
+   "filas": 159,
+   "fases": [
+    "total"
+   ],
+   "filas_por_fase": {
+    "total": 159
+   },
+   "divisiones": [
+    "todas"
+   ],
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 0,
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2021-22/esf_cad_2021-22_20261113T125453Z.json.gz",
+   "errores": []
+  }
+ }
+}
