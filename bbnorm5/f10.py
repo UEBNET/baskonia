@@ -4,7 +4,11 @@
     python -m bbnorm5.f10 --config configs/v5/f10.yaml --pasos landing
 
 Pasos:
+- por_partido: contribución por partido (producción v5 × minutos del motor v3.3), jugador, equipo y grupos de cinco
+- nivel_kerno: NK desde el predictivo y desde el nivel de la v5, con el examen del NK vigente
+- impacto: fiabilidad del RAPM, predicción del RAPM de t+1 con carrera, perfil v5 y grafo, y puentes
 - landing: δ de la primera temporada en una liga nueva por métrica y grupo de origen-destino, y su persistencia
+- figuras: figuras del informe 10
 
 Las salidas van a `data/v5/aguas_abajo/`. Ningún proceso del producto las lee.
 """
@@ -27,9 +31,21 @@ def main(argv=None):
     for paso in (a.pasos or cfg["pasos"]):
         t0 = time.time()
         print(f"== {paso}", flush=True)
-        if paso == "landing":
+        if paso == "por_partido":
+            from bbnorm5.aguas_abajo import por_partido
+            out = por_partido.ejecutar(cfg)
+        elif paso == "nivel_kerno":
+            from bbnorm5.aguas_abajo import nivel_kerno
+            out = nivel_kerno.ejecutar(cfg)
+        elif paso == "impacto":
+            from bbnorm5.aguas_abajo import impacto
+            out = impacto.ejecutar(cfg)
+        elif paso == "landing":
             from bbnorm5.aguas_abajo import landing
             out = landing.ejecutar(cfg)
+        elif paso == "figuras":
+            from bbnorm5.aguas_abajo import figuras_f10
+            out = {"figuras": figuras_f10.todas(cfg)}
         else:
             raise ValueError(paso)
         out["tiempo_s"] = round(time.time() - t0)

@@ -1,0 +1,126 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F10",
+ "config": "configs/v5/f10.yaml",
+ "hash_config": "23da7639bb43",
+ "hash_datos_entrada": "9c7a717245beb173",
+ "fecha": "2026-11-13T07:59:06+00:00",
+ "python": "3.13.18",
+ "fiabilidad": {
+  "rapm": 0.322,
+  "orapm": 0.28,
+  "drapm": 0.254,
+  "ast_pct": 0.774,
+  "blk_pct": 0.598,
+  "dreb_pct": 0.7,
+  "ftr": 0.664,
+  "oreb_pct": 0.692,
+  "pct_asistidas": 0.741,
+  "pts_p100": 0.777,
+  "stl_p100": 0.563,
+  "t2_pct": 0.423,
+  "t3_pct": 0.248,
+  "tov_pct": 0.627,
+  "tpar": 0.897,
+  "usg_pct": 0.797
+ },
+ "prediccion": [
+  {
+   "grupo": "siguen",
+   "conjunto": "t",
+   "casos": 5252,
+   "spearman": 0.321,
+   "dif_frente_t": 0.0,
+   "ic_lo": 0.0,
+   "ic_hi": 0.0
+  },
+  {
+   "grupo": "siguen",
+   "conjunto": "carrera",
+   "casos": 5252,
+   "spearman": 0.339,
+   "dif_frente_t": 0.017,
+   "ic_lo": 0.006,
+   "ic_hi": 0.03
+  },
+  {
+   "grupo": "siguen",
+   "conjunto": "carrera_perfil",
+   "casos": 5252,
+   "spearman": 0.364,
+   "dif_frente_t": 0.043,
+   "ic_lo": 0.016,
+   "ic_hi": 0.062
+  },
+  {
+   "grupo": "siguen",
+   "conjunto": "carrera_perfil_grafo",
+   "casos": 5252,
+   "spearman": 0.375,
+   "dif_frente_t": 0.053,
+   "ic_lo": 0.028,
+   "ic_hi": 0.072
+  },
+  {
+   "grupo": "siguen",
+   "conjunto": "perfil",
+   "casos": 5252,
+   "spearman": 0.294,
+   "dif_frente_t": -0.027,
+   "ic_lo": -0.064,
+   "ic_hi": -0.001
+  },
+  {
+   "grupo": "cambian",
+   "conjunto": "t",
+   "casos": 1208,
+   "spearman": 0.017,
+   "dif_frente_t": 0.0,
+   "ic_lo": 0.0,
+   "ic_hi": 0.0
+  },
+  {
+   "grupo": "cambian",
+   "conjunto": "carrera",
+   "casos": 1208,
+   "spearman": 0.039,
+   "dif_frente_t": 0.022,
+   "ic_lo": -0.002,
+   "ic_hi": 0.039
+  },
+  {
+   "grupo": "cambian",
+   "conjunto": "carrera_perfil",
+   "casos": 1208,
+   "spearman": 0.078,
+   "dif_frente_t": 0.061,
+   "ic_lo": 0.022,
+   "ic_hi": 0.107
+  },
+  {
+   "grupo": "cambian",
+   "conjunto": "carrera_perfil_grafo",
+   "casos": 1208,
+   "spearman": 0.294,
+   "dif_frente_t": 0.277,
+   "ic_lo": 0.22,
+   "ic_hi": 0.35
+  },
+  {
+   "grupo": "cambian",
+   "conjunto": "perfil",
+   "casos": 1208,
+   "spearman": 0.089,
+   "dif_frente_t": 0.072,
+   "ic_lo": 0.024,
+   "ic_hi": 0.137
+  }
+ ],
+ "puentes": {
+  "jugadores_puente": 2505,
+  "pares_de_ligas": 87,
+  "r_rapm": 0.13009223574339654,
+  "r_orapm": 0.11748457981659427,
+  "r_drapm": 0.15677992360666979
+ }
+}

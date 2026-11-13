@@ -3,7 +3,7 @@
 fase: F10
 salida: aguas_abajo
 semilla: 20261113
-pasos: [landing]
+pasos: [por_partido, nivel_kerno, impacto, landing, figuras]
 bootstrap: 500                 # remuestreos por persona para los IC
 
 # Landing (adaptación): δ de la primera temporada en una liga nueva (§14.4). Criterios fijados antes de ver los
@@ -16,3 +16,13 @@ landing:
     min_personas: 100          # personas distintas con cambio en el grupo
     semiancho_ic95: 0.10       # semiancho del IC 95 % de δ, en DT del residuo
   relevante: 0.10              # |δ| ≥ 0,10 DT con IC que no cruza 0
+
+# Prototipo por partido (§14.1 y revisión 1.2): producción v5 × minutos del motor v3.3, en los fichajes de la F8.
+por_partido:
+  draws: 2000                  # por caso
+
+# Impacto y RAPM (§14.3): fiabilidad, predicción fuera de tiempo del RAPM de t+1 y puentes intra-temporada.
+impacto:
+  min_posesiones: 500          # por persona, liga y temporada
+  min_posesiones_puente: 300   # en cada una de las dos ligas de la misma temporada
+  cortes: [2023, 2024, 2025]   # temporada t+1 de prueba; se entrena con las anteriores
