@@ -20,6 +20,12 @@ python -m bbstats.esf artifact                 # datos del Artifact «Kerno Basq
 python -m pytest -q tests/test_esf.py
 ```
 
+Desde el Artifact **Kerno Basque Analytics** (https://claude.ai/artifact/5bU3CLLhW7i3K9pcQyaSX7): botón «Ejecutar» de la
+cabecera, que lanza la tarea bajo demanda «EJECUTAR Kerno Basque Analytics» (`trig_01Tmstsk4KswuUPmpBjhHgKf`, sin
+programación): abre una sesión de Claude Code que actualiza la temporada elegida, sube los datos a FTAB y vuelve a
+publicar los datos de la página. Código de la página: `artifact/kerno-basque/index.html` (datos:
+`python -m bbstats.esf artifact` → `data/basko/artifact/`).
+
 También desde GitHub: pestaña *Actions* → «EJECUTAR Federación Vasca» → *Run workflow*
 (`.github/workflows/ejecutar_basko.yml`, sólo manual). Cada ejecución descarga **sólo lo nuevo** (partidos ya guardados
 con acta no se vuelven a pedir) y regenera la salida de esa temporada.

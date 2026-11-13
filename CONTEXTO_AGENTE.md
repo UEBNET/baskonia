@@ -571,3 +571,5 @@ Cobertura y lagunas por liga: `docs/INVESTIGACION_QUINTETOS.md`.
   con ellos a 0 (`registra_asistencias`, `registra_tapones`).
 - `player_id` = uuid de persona federada (estable entre temporadas). Detalle: `docs/BASKO.md`.
 - `bbstats/lineups/run.write_outputs` admite `phases=` (fases propias); el resto de ligas no cambia.
+- Artifact «Kerno Basque Analytics»: https://claude.ai/artifact/5bU3CLLhW7i3K9pcQyaSX7 (código `artifact/kerno-basque/index.html`,
+  datos `python -m bbstats.esf artifact`); botón Ejecutar = tarea bajo demanda `trig_01Tmstsk4KswuUPmpBjhHgKf`.

@@ -1,0 +1,1071 @@
+<title>Kerno Basque Analytics</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IktFUk5PIj48dGl0bGU+S0VSTk88L3RpdGxlPjxkZWZzPjxjbGlwUGF0aCBpZD0iZSI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTEuNTIiLz48L2NsaXBQYXRoPjwvZGVmcz48ZyBjbGlwLXBhdGg9InVybCgjZSkiPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iIzBGMkUyNSIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDcuMzI3IDEwLjI0MCkgc2NhbGUoMC40MzUyMCkiPjxwYXRoIGZpbGw9IiNGM0Y0RjAiIGQ9Ik0xMC40NDUgMC4wMDAgTDE3LjQ0NSAwLjAwMCBMMTcuNDQ1IDEwMC4wMDAgTDEwLjQ0NSAxMDAuMDAwWk0yMS4wNDUgMC4wMDAgTDIxLjA1NyAzNy41NDggTDIxLjE1NSAzOS40NDEgTDIxLjE4MCAzOS43NDkgTDI4LjE1NSAzOS4xNjMgTDI4LjA1MiAzNy4yNDAgTDI4LjA0NSAwLjAwMFpNNDIuNzI2IDczLjE1OCBMNzAuNTIyIDEwMC4wMDAgTDgwLjU5OSAxMDAuMDAwIEw0Ny41ODkgNjguMTIzWk0zMS42NDUgMC4wMDAgTDMxLjY0NSAyOS4wMjYgTDM4LjY0NSAyOS4wMjYgTDM4LjY0NSAwLjAwMFpNNDUuOTQ2IDYxLjUzMiBMODUuNzgxIDEwMC4wMDAgTDk1Ljg1OCAxMDAuMDAwIEw1MC44MDkgNTYuNDk3Wk0zOC42NDUgMTAwLjAwMCBMMzguNjY2IDY2LjQ5NCBMMzguODQ5IDY0LjYwNyBMMzkuMjE3IDYyLjc0OCBMMzkuNzY2IDYwLjkzNCBMNDAuNDkyIDU5LjE4NCBMNDEuMzg2IDU3LjUxMyBMNDIuNDQxIDU1LjkzOCBMNDMuNjQ2IDU0LjQ3NiBMMTAwLjAwMCAwLjAwMCBMODkuOTIzIDAuMDAwIEwzOS4wMDggNDkuMTg5IEwzNy43MzAgNTAuNjExIEwzNi41NjAgNTIuMTIzIEwzNS41MDIgNTMuNzE2IEwzNC41NjQgNTUuMzgxIEwzMy43NTAgNTcuMTExIEwzMy4wNjMgNTguODk2IEwzMi41MDkgNjAuNzI1IEwzMi4wOTAgNjIuNTkxIEwzMS44MDggNjQuNDgxIEwzMS42NjQgNjYuMzg4IEwzMS42NDUgMTAwLjAwMFoiLz48cGF0aCBmaWxsPSIjQjg5NzVDIiBkPSJNMjguMDQ1IDEwMC4wMDAgTDI4LjA1OCA2Ni41MDUgTDI4LjE3OCA2NC41ODkgTDI4LjQyMCA2Mi42ODYgTDI4Ljc4NCA2MC44MDIgTDI5LjI2OSA1OC45NDYgTDI5Ljg3MiA1Ny4xMjQgTDMwLjU5MiA1NS4zNDUgTDMxLjQyNCA1My42MTYgTDMyLjM2NiA1MS45NDUgTDMzLjQxMyA1MC4zMzcgTDM0LjU2MiA0OC44MDAgTDM1LjgwNyA0Ny4zNDAgTDg0Ljc0MSAwLjAwMCBMNzQuNjY0IDAuMDAwIEwzMS42MDggNDEuNTk2IEwzMC4zMTQgNDIuOTgxIEwyOS4wOTMgNDQuNDMxIEwyNy45NDggNDUuOTQyIEwyNi44ODMgNDcuNTEwIEwyNS45MDAgNDkuMTMxIEwyNS4wMDEgNTAuODAwIEwyNC4xOTAgNTIuNTE0IEwyMy40NjggNTQuMjY3IEwyMi44MzcgNTYuMDU0IEwyMi4zMDAgNTcuODcyIEwyMS44NTYgNTkuNzE1IEwyMS41MDggNjEuNTc5IEwyMS4yNTcgNjMuNDU4IEwyMS4xMDIgNjUuMzQ3IEwyMS4wNDUgMTAwLjAwMFoiLz48L2c+PC9nPjwvc3ZnPg==">
+<style>
+/* KERNO Analytics · armazón de la app (v2.0 de la herramienta) · sistema de marca Kerno v2.0
+   Concepto: instrumento de lectura. Cabecera Racing con el contexto fijo (club · temporada · entrenador), raíl de decisión
+   numerado 01–04 a la izquierda y un área de trabajo donde cada estimación se lee como punto + rango + confianza.
+   Racing = marca y autoridad · Sage = neutros · latón = solo la lectura (un filete por pantalla) · Lake/Clay = datos. */
+@font-face { font-family: "Bombardier"; src: url("kerno/fonts/Bombardier.woff") format("woff"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Mona Sans"; src: url("kerno/fonts/MonaSans-Variable.woff2") format("woff2"); font-weight: 200 900; font-stretch: 75% 125%; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("kerno/fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+/* ------------------------------------------------------------------ tokens Kerno (kerno-base.css, Anexo B) */
+:root {
+  /* núcleo */
+  --k-racing: #0F2E25; --k-ink: #0C1210; --k-chalk: #F3F4F0; --k-white: #FFFFFF;
+  --k-brass: #B8975C; --k-brass-deep: #8A6B35;
+  --k-r900: #0F2E25; --k-r800: #163B30; --k-r700: #1F4A3D; --k-r600: #2C5C4C; --k-r300: #7FA597; --k-r100: #DCE7E2;
+  --k-s900: #1D2723; --k-s800: #2B3631; --k-s700: #3F4B45; --k-s600: #56625C; --k-s500: #707B75;
+  --k-s400: #8F9993; --k-s300: #B2BAB5; --k-s200: #CFD5D0; --k-s100: #E3E7E2;
+  --k-good: #2F7D3A; --k-warning: #A86A12; --k-critical: #B3392E;
+  --k-lake: #2B6FBF; --k-clay: #D35C2A; --k-jade: #12997A;
+  --k-div-1: #B04A20; --k-div-2: #D9805A; --k-div-6: #6F9AD3;
+
+  /* alias semánticos · claro (Chalk) */
+  --surface: var(--k-chalk); --surface-2: var(--k-white); --raised: var(--k-s100);
+  --text: var(--k-ink); --text-2: var(--k-s700); --muted: var(--k-s600); --faint: var(--k-s500);
+  --rule: var(--k-s200); --rule-strong: var(--k-racing); --field-line: var(--k-s300);
+  --brand: var(--k-racing); --on-brand: var(--k-chalk); --brand-hover: var(--k-r700);
+  --read: var(--k-brass-deep); --link: var(--k-racing); --focus: var(--k-brass-deep);
+  --grid: var(--k-s200); --track: var(--k-s100); --context: var(--k-s400); --ctx-band: var(--k-s200);
+  --s1: #2B6FBF; --s2: #D35C2A; --s3: #12997A;
+  --band: rgba(15, 46, 37, .14); --hl-row: var(--k-r100);
+  --callout-bg: var(--k-racing); --callout-text: var(--k-chalk); --callout-read: var(--k-brass);
+  /* datos: Lake por encima de la media, Clay por debajo, Sage en la zona media o en estilo */
+  --b-hi: rgba(43, 111, 191, .22); --b-lo: rgba(211, 92, 42, .22); --b-mid: rgba(15, 46, 37, .14); --b-neu: rgba(112, 123, 117, .18);
+  --p-hi: #2B6FBF; --p-lo: #D35C2A; --p-mid: var(--k-racing); --p-neu: var(--k-s500);
+  --v-pos: #2B6FBF; --v-neg: #B04A20;
+  /* cabecera y portadas */
+  --head-bg: var(--k-racing); --head-text: var(--k-chalk); --head-muted: var(--k-s300); --head-line: var(--k-r700); --head-field: var(--k-r800);
+  --hero-bg: var(--k-racing); --hero-text: var(--k-chalk); --hero-muted: var(--k-s300); --hero-line: var(--k-r600);
+  --hero-estela: url("kerno/patterns/kerno-estela-bleed-racing.svg");
+  --loader: url("kerno/motion/kerno-loader-chalk.svg");
+  --shade: rgba(12, 18, 16, .42);
+  --f-display: "Bombardier", "Mona Sans", sans-serif;
+  --f-sans: "Mona Sans", sans-serif;
+  --f-serif: "Mona Sans", sans-serif; /* alias heredado: ya no hay serif */
+  --f-mono: "Geist Mono", monospace;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+  --rail: 256px; --head: 64px;
+  color-scheme: light;
+}
+/* modo oscuro sobre Racing: tarjetas R800, reglas R700, texto Chalk, secundario S300, llamadas en Ink, lectura en Brass */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --surface: var(--k-racing); --surface-2: var(--k-r800); --raised: var(--k-r800);
+  --text: var(--k-chalk); --text-2: var(--k-s300); --muted: var(--k-s400); --faint: var(--k-s500);
+  --rule: var(--k-r700); --rule-strong: var(--k-chalk); --field-line: var(--k-r600);
+  --brand: var(--k-chalk); --on-brand: var(--k-racing); --brand-hover: var(--k-s200);
+  --read: var(--k-brass); --link: var(--k-chalk); --focus: var(--k-brass);
+  --grid: var(--k-r700); --track: var(--k-r800); --context: var(--k-s500); --ctx-band: var(--k-r700);
+  --s1: #3A82D6; --s2: #D9662F; --s3: #17A07D;
+  --band: rgba(243, 244, 240, .16); --hl-row: var(--k-r700);
+  --callout-bg: var(--k-ink); --callout-text: var(--k-chalk); --callout-read: var(--k-brass);
+  --b-hi: rgba(58, 130, 214, .34); --b-lo: rgba(217, 102, 47, .32); --b-mid: rgba(243, 244, 240, .16); --b-neu: rgba(143, 153, 147, .2);
+  --p-hi: #3A82D6; --p-lo: #D9662F; --p-mid: var(--k-chalk); --p-neu: var(--k-s400);
+  --v-pos: #6F9AD3; --v-neg: #D9805A;
+  --head-bg: var(--k-racing); --head-line: var(--k-r700); --head-field: var(--k-r800);
+  --hero-bg: var(--k-ink); --hero-line: var(--k-s800);
+  --hero-estela: url("kerno/patterns/kerno-estela-bleed-ink.svg");
+  --loader: url("kerno/motion/kerno-loader-racing.svg");
+  --shade: rgba(12, 18, 16, .72);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --surface: var(--k-racing); --surface-2: var(--k-r800); --raised: var(--k-r800);
+  --text: var(--k-chalk); --text-2: var(--k-s300); --muted: var(--k-s400); --faint: var(--k-s500);
+  --rule: var(--k-r700); --rule-strong: var(--k-chalk); --field-line: var(--k-r600);
+  --brand: var(--k-chalk); --on-brand: var(--k-racing); --brand-hover: var(--k-s200);
+  --read: var(--k-brass); --link: var(--k-chalk); --focus: var(--k-brass);
+  --grid: var(--k-r700); --track: var(--k-r800); --context: var(--k-s500); --ctx-band: var(--k-r700);
+  --s1: #3A82D6; --s2: #D9662F; --s3: #17A07D;
+  --band: rgba(243, 244, 240, .16); --hl-row: var(--k-r700);
+  --callout-bg: var(--k-ink); --callout-text: var(--k-chalk); --callout-read: var(--k-brass);
+  --b-hi: rgba(58, 130, 214, .34); --b-lo: rgba(217, 102, 47, .32); --b-mid: rgba(243, 244, 240, .16); --b-neu: rgba(143, 153, 147, .2);
+  --p-hi: #3A82D6; --p-lo: #D9662F; --p-mid: var(--k-chalk); --p-neu: var(--k-s400);
+  --v-pos: #6F9AD3; --v-neg: #D9805A;
+  --head-bg: var(--k-racing); --head-line: var(--k-r700); --head-field: var(--k-r800);
+  --hero-bg: var(--k-ink); --hero-line: var(--k-s800);
+  --hero-estela: url("kerno/patterns/kerno-estela-bleed-ink.svg");
+  --loader: url("kerno/motion/kerno-loader-racing.svg");
+  --shade: rgba(12, 18, 16, .72);
+  color-scheme: dark; }
+
+/* ------------------------------------------------------------------ base */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--surface); color: var(--text); font: 420 15.5px/1.5 var(--f-sans); font-stretch: 98%; font-feature-settings: "kern"; -webkit-font-smoothing: antialiased; overflow: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--head-bg); }
+button, select, input { font: inherit; color: inherit; }
+a { color: var(--link); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+::selection { background: var(--hl-row); }
+b, strong { font-weight: 620; }
+.num, .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.label { font: 500 11.5px/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ------------------------------------------------------------------ armazón */
+/* el armazón ocupa siempre la ventana entera del visor, también al ampliarlo: fijo a los cuatro bordes y no dependiente
+   de la cadena html → body → .app ni del margen inferior que el visor pueda reservar */
+.app { position: fixed; inset: 0; padding-top: env(safe-area-inset-top, 0px); display: grid; grid-template-rows: auto minmax(0, 1fr); }
+
+/* cabecera Racing: logotipo horizontal negativo del kit, controles sobre R800 con filetes R700, texto Chalk / S300 */
+.head { position: relative; z-index: 40; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; min-height: var(--head);
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--head-bg); color: var(--head-text); box-shadow: inset 0 -1px 0 var(--head-line); }
+.brand { display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; flex: none; }
+.logo { width: 156px; line-height: 0; margin: -4px 0 -4px -12px; } /* archivo de 156 px ≈ marca de 126 px (81 %): por encima del mínimo de 120 */
+.logo span { display: block; }
+.logo svg { width: 100%; height: auto; display: block; }
+.logo .pos { display: none !important; } /* la cabecera es siempre Racing: logotipo negativo */
+.logo .neg { display: block !important; }
+.prod { display: grid; gap: 4px; border-left: 1px solid var(--head-line); padding-left: 16px; }
+.prod b { font: 500 11px/1 var(--f-mono); letter-spacing: .1em; color: var(--head-text); }
+.prod span { font: 500 10.5px/1 var(--f-mono); letter-spacing: .1em; color: var(--head-muted); }
+.ctx { display: flex; align-items: center; gap: 8px 14px; flex-wrap: wrap; margin-left: auto; min-width: 0; }
+.ctx-f { display: grid; gap: 4px; min-width: 0; transition: opacity .2s var(--ease); }
+.ctx-f select { min-width: 0; max-width: 260px; }
+.ctx-f.off { opacity: .42; }
+.ctx-f.off .label::after { content: " · no aplica aquí"; text-transform: none; letter-spacing: 0; }
+.head .label { color: var(--head-muted); }
+#varaTxt { color: var(--head-text); }
+select, input[type="number"], input[type="search"], input[type="text"] { background-color: var(--surface-2); border: 1px solid var(--field-line); border-radius: 0; padding: 6px 28px 6px 10px; min-height: 34px; font-size: 14px; color: var(--text); }
+input[type="number"], input[type="search"], input[type="text"] { padding-right: 10px; }
+select { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 52%, calc(100% - 9px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
+select:hover, input:hover { border-color: var(--text-2); }
+.ibtn { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 6px 10px; border: 1px solid var(--field-line); border-radius: 0; background: transparent; cursor: pointer; font-size: 14px; color: var(--text); transition: border-color .2s var(--ease), background-color .2s var(--ease); }
+.ibtn:hover { border-color: var(--text); }
+.ibtn svg { width: 18px; height: 18px; flex: none; }
+.ibtn kbd { font: 500 11px var(--f-mono); color: var(--muted); border: 1px solid var(--rule); padding: 1px 5px; }
+.head select, .head .ibtn { background-color: var(--head-field); color: var(--head-text); border-color: var(--head-line); }
+.head select { background-image: linear-gradient(45deg, transparent 50%, var(--head-muted) 50%), linear-gradient(135deg, var(--head-muted) 50%, transparent 50%); }
+.head select:disabled { opacity: .55; }
+.head .ibtn:hover, .head select:hover { border-color: var(--k-r300); }
+.head .ibtn kbd { color: var(--head-muted); border-color: var(--head-line); }
+.head option, .head optgroup { background: var(--surface); color: var(--text); }
+.head :focus-visible { outline-color: var(--k-brass); }
+.hnav { display: flex; align-items: center; gap: 8px; flex: none; }
+.hnav .ibtn { padding: 6px 12px 6px 9px; font-weight: 500; }
+.head .hnav .ibtn:disabled { opacity: .4; cursor: default; }
+.head .hnav .ibtn:disabled:hover { border-color: var(--head-line); }
+@media (min-width: 861px) and (max-width: 1499px) { .prod { display: none; } }
+@media (min-width: 861px) and (max-width: 1299px) { .hnav .ibtn { padding: 6px 9px; } .hnav .ibtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+@media (max-width: 520px) { .hnav { margin-left: auto; } .hnav .ibtn { padding: 6px 9px; } .hnav .ibtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+
+/* botones: primario relleno Racing con texto Chalk (Chalk con texto Racing en oscuro); secundario solo filete */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 36px; padding: 7px 16px; border: 1.5px solid var(--brand); background: var(--brand); color: var(--on-brand); border-radius: 0; cursor: pointer; font: 600 14px/1.2 var(--f-sans); text-decoration: none; transition: background-color .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease); }
+.btn:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+.btn.sec { background: transparent; color: var(--brand); border-color: var(--brand); }
+.btn.sec:hover { background: var(--hl-row); }
+.btn.quiet { background: transparent; color: var(--text); border: 1px solid var(--field-line); font-weight: 500; }
+.btn.quiet:hover { border-color: var(--brand); background: transparent; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn svg { width: 16px; height: 16px; }
+
+/* cuerpo: raíl + área de trabajo */
+.body { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); min-height: 0; }
+
+/* raíl de decisión: superficie Chalk (oscuro: Racing), pasos en Geist Mono, activo con filete Racing (oscuro: Chalk) */
+.rail { background: var(--surface); border-right: 1px solid var(--rule); overflow-y: auto; padding: 20px 0 calc(32px + env(safe-area-inset-bottom, 0px)); padding-left: max(0px, env(safe-area-inset-left, 0px)); }
+.rail .sec { padding: 0 16px 0 20px; display: grid; gap: 1px; margin-bottom: 22px; }
+.sec-h { display: grid; grid-template-columns: 22px 1fr; gap: 0 8px; align-items: baseline; margin-bottom: 6px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.rail .sec:first-child .sec-h { border-top: 0; padding-top: 0; }
+.sec-h .n { font: 500 11.5px var(--f-mono); letter-spacing: .04em; color: var(--text); font-variant-numeric: tabular-nums; }
+.sec-h .t { font: 620 13.5px/1.2 var(--f-sans); letter-spacing: .005em; }
+.sec-h .q { grid-column: 2; font: 420 12.5px/1.35 var(--f-sans); color: var(--muted); margin-top: 2px; }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; border: 0; background: transparent; cursor: pointer;
+  padding: 6px 10px 6px 28px; margin-left: -10px; width: calc(100% + 10px); border-radius: 0; font-size: 14px; color: var(--text-2);
+  box-shadow: inset 3px 0 0 transparent; transition: background-color .16s var(--ease), color .16s var(--ease), box-shadow .16s var(--ease); }
+.nav:hover { background: var(--raised); color: var(--text); }
+.nav[aria-current="page"] { color: var(--text); font-weight: 620; background: var(--surface-2); box-shadow: inset 3px 0 0 var(--brand); }
+.nav .new { font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--rule); padding: 2px 4px; }
+.rail-foot { display: grid; gap: 6px; border-top: 1px solid var(--rule); margin: 0 16px 0 20px; padding-top: 14px; }
+.rail-foot p { margin: 0; font-size: 12.5px; color: var(--muted); }
+.rail-foot .label { color: var(--text); }
+/* sitios (v4.2): el producto en tres artifacts. Nombre del sitio arriba del raíl; lo de otro sitio, enlace a ese artifact */
+/* raíl: los tres sitios de Kerno Analytics, qué hay en cada uno y dónde estás. Cada sitio lleva su inicial en Geist Mono
+   (J · E · M); el sitio abierto va relleno en Racing (oscuro: Chalk) y con el texto «Estás aquí»: nunca solo por color */
+.rail-sitios { display: grid; gap: 6px; margin: 0 16px 24px 20px; padding-bottom: 18px; border-bottom: 1px solid var(--rule); }
+.rail-sitios > .label { margin-bottom: 2px; }
+.sitio { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 1px 10px; align-items: center; width: 100%; padding: 9px 10px; border: 1px solid var(--rule); background: transparent; color: var(--text); text-decoration: none; text-align: left; font: inherit; cursor: pointer; }
+a.sitio:hover, button.sitio:hover { background: var(--raised); }
+.sitio .ini, .rail-grupo .ini { display: grid; place-items: center; font: 500 12px/1 var(--f-mono); letter-spacing: .02em; border: 1px solid var(--rule-strong); color: var(--text); }
+.sitio .ini { grid-row: 1 / 4; align-self: start; width: 28px; height: 28px; }
+.sitio b { font: 620 14px/1.2 var(--f-sans); letter-spacing: .005em; }
+.sitio small { grid-column: 2 / 4; font: 420 12px/1.35 var(--f-sans); color: var(--muted); }
+.sitio .cnt { grid-column: 2 / 4; margin-top: 4px; font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); }
+.sitio .est { display: inline-flex; align-items: center; font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.sitio.aqui { background: var(--surface-2); border-color: var(--rule-strong); box-shadow: inset 3px 0 0 var(--brand); cursor: default; }
+.sitio.aqui:hover { background: var(--surface-2); }
+.sitio.aqui .ini, .rail-grupo.aqui .ini { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.sitio.aqui .est { color: var(--text); }
+.sitio.off { cursor: default; opacity: .6; }
+.rail-grupo { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 1px 8px; align-items: center; margin: 0 16px 14px 20px; }
+.rail-grupo .ini { grid-row: 1 / 3; width: 22px; height: 22px; font-size: 10.5px; }
+.rail-grupo b { font: 620 12.5px/1.2 var(--f-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--text); }
+.rail-grupo small { font: 420 12px/1.3 var(--f-sans); color: var(--muted); }
+.rail-grupo.otro { margin-top: 6px; padding-top: 18px; border-top: 1px solid var(--rule-strong); }
+.rail .rail-grupo + .sec .sec-h { border-top: 0; padding-top: 0; }
+.rail .sec.fuera .sec-h { border-top-color: var(--rule); }
+a.nav { text-decoration: none; }
+.nav.fuera { color: var(--muted); }
+.nav.fuera:hover { color: var(--text); }
+.nav.fuera .k-arrow { opacity: .7; }
+.nav .fuera-t { display: inline-flex; align-items: center; flex: none; font: 500 9.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.nav.off { cursor: default; opacity: .6; }
+.nav.off:hover { background: transparent; color: var(--muted); }
+.k-arrow { display: inline-block; width: .95em; height: .95em; margin: 0 0 0 .3em; vertical-align: -.1em; background: currentColor; flex: none;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 12h16M13 6l6 6-6 6' fill='none' stroke='black' stroke-width='2'/></svg>") center / contain no-repeat; }
+
+.main { position: relative; min-width: 0; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+/* cabecera de vista: ceja mono, título corto en Bombardier (H1), entradilla Mona en S700 */
+.vhead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; padding-block: 18px 16px; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); border-bottom: 1px solid var(--rule); background: var(--surface); }
+.vhead h1 { margin: 8px 0 0; font: 400 34px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; text-wrap: balance; }
+.vhead p { margin: 8px 0 0; color: var(--text-2); font-size: 14.5px; line-height: 1.45; max-width: 78ch; }
+.vhead .eyebrow span:first-child { color: var(--text); }
+.aplica { display: grid; gap: 4px; justify-items: end; text-align: right; }
+.aplica span:last-child { font: 450 12.5px var(--f-mono); color: var(--text-2); }
+.pane { min-height: 0; overflow-y: auto; }
+.pane[hidden] { display: none !important; }
+.legacy { width: 100%; height: 100%; border: 0; display: block; background: var(--surface); }
+.v40frame { width: 100%; min-height: 720px; border: 0; display: block; background: transparent; }
+.view { padding-block: 24px calc(64px + env(safe-area-inset-bottom, 0px)); padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); display: grid; gap: 40px; max-width: 1680px; }
+
+/* ------------------------------------------------------------------ cargando: la Estela se traza (loader del kit) */
+.loading { display: grid; justify-items: start; gap: 12px; padding: 40px 0; color: var(--muted); }
+.loading .estela { width: 56px; height: 64px; background: var(--loader) center / contain no-repeat; }
+
+/* ------------------------------------------------------------------ piezas de lectura */
+.eyebrow { font: 500 12px/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.read-h { margin: 0; font: 640 44px/48px var(--f-sans); font-stretch: 92%; letter-spacing: -.015em; text-wrap: balance; max-width: 21ch; }
+.read-h.disp { font: 400 64px/62px var(--f-display); font-stretch: normal; letter-spacing: .03em; text-transform: uppercase; max-width: none; }
+.read-lead { margin: 0; font: 420 20px/29px var(--f-sans); color: var(--text-2); max-width: 62ch; }
+/* LA LECTURA: filete de latón bajo la cifra decisiva (Brass Deep en claro, Brass sobre Racing/oscuro). Uno por pantalla */
+.hl { background-image: linear-gradient(var(--read), var(--read)); background-repeat: no-repeat; background-size: 100% 4px; background-position: 0 100%;
+  padding-bottom: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.h2 { margin: 0; font: 620 22px/28px var(--f-sans); font-stretch: 95%; letter-spacing: -.005em; text-wrap: balance; }
+.h3 { margin: 0; font: 620 16px/21px var(--f-sans); font-stretch: 95%; }
+.sub { margin: 6px 0 0; font: 500 11.5px/1.45 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.note { font-size: 13.5px; color: var(--muted); margin: 0; max-width: 80ch; }
+.block { display: grid; gap: 16px; min-width: 0; }
+
+/* Títulos de bloque · versión Kerno de la petición del CEO (06-11-2026): un marcador visible en cada título para delimitar
+   las secciones de un vistazo. Antes era la marca Index (filete y cuadrado amarillos); ahora, filete superior Racing con un
+   tramo inicial más grueso y unas mini-calles en Racing (Chalk en oscuro) junto al título. Sin amarillo ni latón: el latón
+   queda solo para la lectura. */
+.block-h { position: relative; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 20px; border-top: 1px solid var(--rule-strong); padding-top: 14px; }
+.block-h::before { content: ""; position: absolute; left: 0; top: -1px; width: 64px; height: 4px; background: var(--brand); }
+.block-h .h2::before { content: ""; display: inline-block; width: 13px; height: 11px; margin-right: 10px; vertical-align: 0;
+  background: linear-gradient(to bottom, var(--brand) 0 2px, transparent 2px 3px, var(--brand) 3px 5px, transparent 5px 6px, var(--brand) 6px 8px, transparent 8px 9px, var(--brand) 9px 11px); }
+
+/* etiquetas de evidencia (DATO · LECTURA · SUPUESTO): Geist Mono, filete en currentColor */
+.tag { display: inline-flex; align-items: center; font: 500 10px/1 var(--f-mono); letter-spacing: .1em; padding: 4px 6px; border: 1px solid currentColor; border-radius: 0; color: var(--text-2); text-transform: uppercase; white-space: nowrap; }
+.tag.dato { color: var(--brand); }
+.tag.hip, .tag.supuesto { border-style: dashed; color: var(--text-2); }
+.src { display: flex; align-items: flex-end; gap: 14px; margin: 0; border-top: 1px solid var(--rule); padding-top: 14px; font: 500 11.5px/1.5 var(--f-mono); color: var(--muted); letter-spacing: .02em; }
+/* marcador de calles del pie: 8 marcas finas; la del paso actual (01–04), más alta y en latón */
+.k-ticks { display: inline-flex; gap: 5px; align-items: flex-end; height: 14px; flex: none; margin-bottom: 3px; }
+.k-ticks i { width: 2px; height: 9px; background: var(--context); }
+.k-ticks i.on { height: 14px; width: 3px; background: var(--read); }
+
+/* cifras clave: cifra en Bombardier, rango en Geist Mono; la tarjeta clave con filete Racing */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(156px, 100%), 1fr)); gap: 16px; }
+.kpi { display: grid; gap: 8px; align-content: start; min-width: 0; background: var(--surface-2); border-top: 1px solid var(--rule); padding: 14px 16px 16px; }
+.kpi.key { border-top: 3px solid var(--brand); padding-top: 12px; }
+.kpi .v { font: 400 36px/1 var(--f-display); letter-spacing: .02em; font-variant-numeric: tabular-nums; color: var(--brand); }
+.kpi .v.pos { color: var(--v-pos); }
+.kpi .v.neg { color: var(--v-neg); }
+.kpi .r { font: 450 12.5px/1.45 var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .kpi { padding: 12px; } .kpi .v { font-size: 28px; } }
+
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+@media (max-width: 1000px) { .split { grid-template-columns: minmax(0, 1fr); } }
+
+/* tablas: cabecera de etiqueta mono con filete Racing, cifras mono a la derecha, fila protagonista en R100 (R700 en oscuro) */
+.tw { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th { font: 500 10.5px/1.25 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 8px 10px; border-bottom: 1.5px solid var(--rule-strong); background: transparent; white-space: normal; vertical-align: bottom; overflow-wrap: normal; }
+td { padding: 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+th.n, td.n { text-align: right; }
+td.n { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-size: 13.5px; white-space: nowrap; }
+td.num { font-family: var(--f-mono); font-size: 13px; }
+td .btn { white-space: nowrap; }
+tbody tr.go { cursor: pointer; }
+tbody tr.go:hover td { background: var(--raised); }
+tbody tr.top td { background: var(--hl-row); }
+tbody tr.top td:first-child { box-shadow: inset 3px 0 0 var(--brand); }
+tbody tr.sel td { background: var(--hl-row); font-weight: 620; }
+tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--brand); }
+.who { display: grid; gap: 2px; min-width: 160px; }
+.who b { font-weight: 620; }
+.who span { font-size: 12.5px; color: var(--muted); }
+.rng { font: 450 12px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+td.n b { font-weight: 600; }
+
+/* confianza: medidor de tres segmentos en Racing (Chalk en oscuro) + etiqueta */
+.conf { display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--f-mono); white-space: nowrap; color: var(--text-2); }
+.conf i { display: inline-grid; grid-template-columns: repeat(3, 7px); gap: 2px; height: 9px; }
+.conf i::before, .conf i::after, .conf i span { content: ""; background: var(--ctx-band); }
+.conf.alta i::before, .conf.alta i span, .conf.alta i::after, .conf.moderada i::before, .conf.moderada i span, .conf.baja i::before { background: var(--brand); }
+.conf.alta { color: var(--text); }
+.conf.mini { gap: 0; vertical-align: 1px; margin-left: 4px; } .conf.mini i { grid-template-columns: repeat(3, 5px); height: 7px; }
+
+/* perfil por percentiles: banda = intervalo del 80 %, punto = estimación; marcas en 25 / 50 / 75 */
+.pbar { position: relative; height: 18px; min-width: 120px; background: linear-gradient(90deg, transparent calc(25% - .5px), var(--grid) calc(25% - .5px) calc(25% + .5px), transparent calc(25% + .5px) calc(50% - .5px), var(--context) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px) calc(75% - .5px), var(--grid) calc(75% - .5px) calc(75% + .5px), transparent calc(75% + .5px)), var(--track); }
+.pbar .b { position: absolute; top: 4px; bottom: 4px; background: var(--band); }
+.pbar .p { position: absolute; top: 0; bottom: 0; width: 3px; margin-left: -1.5px; background: var(--brand); }
+.pbar .p.s1 { background: var(--s1); } .pbar .p.s2 { background: var(--s2); } .pbar .p.s3 { background: var(--s3); }
+.pbar .b.s1 { background: color-mix(in srgb, var(--s1) 30%, transparent); } .pbar .b.s2 { background: color-mix(in srgb, var(--s2) 30%, transparent); } .pbar .b.s3 { background: color-mix(in srgb, var(--s3) 30%, transparent); }
+.pbar.multi { height: 36px; }
+.pbar.multi .b { height: 6px; bottom: auto; }
+.pbar.multi .p { height: 12px; bottom: auto; }
+/* Lake por encima de la media de la vara, Clay por debajo, Racing/Sage en la zona media y en estilo */
+.pbar.t-hi .b { background: var(--b-hi); } .pbar.t-hi .p { background: var(--p-hi); }
+.pbar.t-lo .b { background: var(--b-lo); } .pbar.t-lo .p { background: var(--p-lo); }
+.pbar.t-mid .b { background: var(--b-mid); } .pbar.t-mid .p { background: var(--p-mid); }
+.pbar.t-neu .b { background: var(--b-neu); } .pbar.t-neu .p { background: var(--p-neu); }
+.pbar.t-aj .b { background: var(--band); } .pbar.t-aj .p { background: var(--brand); }
+.prof { display: grid; grid-template-columns: minmax(150px, 210px) minmax(120px, 1fr) minmax(130px, auto); gap: 6px 16px; align-items: center; }
+.prof .g { grid-column: 1 / -1; margin-top: 14px; font: 620 14px var(--f-sans); border-bottom: 1px solid var(--rule-strong); padding-bottom: 5px; display: flex; justify-content: space-between; gap: 12px; }
+.prof .g small { font: 420 12.5px var(--f-sans); color: var(--muted); }
+.prof .m { font-size: 14px; }
+.prof .m small { display: block; color: var(--muted); font-size: 12px; }
+.prof .val { font: 450 13px var(--f-mono); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.prof .val b { font-weight: 600; }
+.axis { display: flex; justify-content: space-between; font: 500 10.5px var(--f-mono); color: var(--muted); }
+@media (max-width: 640px) { .prof { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .prof .m { grid-column: 1 / -1; } .prof .val { text-align: left; } }
+
+/* barras divergentes (cuatro factores): Lake a favor, Clay en contra, desde el eje de la media */
+.dv { position: relative; height: 14px; background: var(--track); min-width: 110px; }
+.dv::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--rule-strong); }
+.dv i { position: absolute; top: 3px; bottom: 3px; }
+.dv i.up { background: var(--p-hi); } .dv i.dn { background: var(--p-lo); }
+
+/* balance de victorias por etapa */
+.wl { position: relative; height: 10px; background: var(--track); min-width: 90px; }
+.wl::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--context); }
+.wl i { position: absolute; left: 0; top: 2px; bottom: 2px; background: var(--brand); }
+
+/* ranking con rangos: protagonista en Racing; el primero, punto de latón (la lectura dibujada) */
+.rank { display: grid; grid-template-columns: minmax(150px, 240px) minmax(140px, 1fr) minmax(118px, auto); gap: 8px 16px; align-items: center; }
+.rank .who { min-width: 0; }
+.rank .val { font: 450 13px var(--f-mono); text-align: right; white-space: nowrap; }
+.rank .val b { font-weight: 600; font-size: 14px; }
+.rank > .pbar:nth-child(2) .p { background: var(--read); width: 4px; margin-left: -2px; }
+@media (max-width: 640px) { .rank { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .rank .who { grid-column: 1 / -1; } }
+
+/* tarjetas de acción: tarjeta con regla superior Racing, etiqueta mono, título Mona 620 y texto S700 */
+.acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.act { display: grid; gap: 8px; align-content: start; text-align: left; border: 0; border-top: 2px solid var(--rule-strong); background: var(--surface-2); padding: 14px 16px 18px; cursor: pointer; border-radius: 0; transition: background-color .2s var(--ease); }
+.act:hover { background: var(--hl-row); }
+.act .label { color: var(--muted); }
+.act b { font: 620 17px/22px var(--f-sans); font-stretch: 95%; }
+.act span { font-size: 14px; color: var(--text-2); }
+
+/* llamada: fondo Racing (Ink en oscuro), etiqueta mono en Brass, texto Chalk */
+.callout { background: var(--callout-bg); color: var(--callout-text); padding: 18px 22px; display: grid; gap: 8px; }
+.callout .label { color: var(--callout-read); }
+.callout p { margin: 0; font-size: 15px; line-height: 1.5; }
+
+/* controles */
+.ctrls { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: flex-end; }
+.ctrl { display: grid; gap: 6px; min-width: 0; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--field-line); }
+.seg button { border: 0; background: transparent; padding: 6px 12px; min-height: 32px; cursor: pointer; font-size: 13.5px; color: var(--text-2); transition: background-color .16s var(--ease), color .16s var(--ease); }
+.seg button:hover { background: var(--raised); color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--rule); background: var(--surface-2); padding: 8px 12px; cursor: pointer; border-radius: 0; text-align: left; display: grid; gap: 2px; transition: border-color .16s var(--ease); }
+.chip b { font-size: 14px; font-weight: 620; }
+.chip span { font-size: 12px; color: var(--muted); }
+.chip:hover { border-color: var(--brand); }
+.chip[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); }
+.chip[aria-pressed="true"] b { color: var(--on-brand); }
+.chip[aria-pressed="true"] span { color: var(--on-brand); opacity: .78; }
+.check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.check input { width: 16px; height: 16px; accent-color: var(--brand); }
+.weights { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--text-2); }
+.weights span b { font-family: var(--f-mono); font-weight: 500; color: var(--text); }
+
+/* ficha */
+.idt { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px; color: var(--text-2); }
+.idt span b { color: var(--text); font-weight: 600; }
+/* las cuatro preguntas (Encaje · Valor · Trayectoria · Riesgo) */
+.q4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.q4 > div { padding: 14px 16px 16px; display: grid; gap: 6px; align-content: start; background: var(--surface-2); border-top: 2px solid var(--rule-strong); }
+.q4 .label { color: var(--muted); }
+.q4 .v { font: 620 19px/1.2 var(--f-sans); font-stretch: 95%; }
+.q4 p { margin: 0; font-size: 13.5px; color: var(--text-2); }
+@media (max-width: 900px) { .q4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .q4 { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
+.tabsrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 6px; display: inline-block; }
+/* gráficos: rejilla S200, ejes Geist Mono, banda de incertidumbre, protagonista Racing */
+.chart { max-width: 820px; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart .gl { stroke: var(--grid); stroke-width: 1; }
+.chart .zl { stroke: var(--context); stroke-width: 1; }
+.chart .ax { font: 500 11px var(--f-mono); fill: var(--muted); }
+.chart .bd { fill: var(--band); }
+.chart .ln { stroke: var(--brand); stroke-width: 1.75; fill: none; }
+.chart .pt { fill: var(--brand); }
+.chart .pt.rd { fill: var(--read); stroke: var(--brand); stroke-width: 1.5; } /* la temporada más reciente: punto de latón */
+.chart .lb { font: 500 12px var(--f-mono); fill: var(--text); }
+
+/* ------------------------------------------------------------------ portadas (lectura de equipo y ficha)
+   Racing (Ink en oscuro) con la Estela a sangre recortada a la derecha: una por pantalla. Titular largo en Mona 640 ancho 92,
+   corto (nombre) en Bombardier mayúsculas; la lectura, filete de latón bajo la cifra decisiva; entradilla Mona en S300;
+   las calles como cierre inferior. */
+.block.hero { --read: var(--k-brass); --brand: var(--k-chalk); --on-brand: var(--k-racing); --brand-hover: var(--k-s200);
+  background: var(--hero-bg); color: var(--hero-text); padding: 36px 40px 48px; gap: 18px; position: relative; overflow: hidden; isolation: isolate; }
+/* la Estela mide 1,5 veces el alto de la portada y deja ver sus 290 px izquierdos (fuste y cruce): recortada arriba, abajo y a la derecha */
+.block.hero::before { content: ""; position: absolute; z-index: -1; top: 50%; right: 290px; height: 150%; aspect-ratio: 1; transform: translate(100%, -50%);
+  background: var(--hero-estela) center / contain no-repeat; pointer-events: none; }
+.block.hero > * { max-width: calc(100% - 320px); }
+.block.hero::after { content: ""; position: absolute; left: 40px; bottom: 20px; width: min(240px, 30%); height: 11px;
+  background: linear-gradient(to bottom, var(--hero-line) 0 2px, transparent 2px 3px, var(--hero-line) 3px 5px, transparent 5px 6px, var(--k-brass) 6px 8px, transparent 8px 9px, var(--hero-line) 9px 11px); }
+.block.hero .eyebrow { color: var(--hero-muted); }
+.block.hero .tag { color: var(--hero-muted); }
+.block.hero .read-h { color: var(--hero-text); }
+.block.hero .read-lead { color: var(--hero-muted); }
+.block.hero .read-lead.strong { color: var(--hero-text); font-size: 19px; line-height: 28px; }
+.block.hero .idt { color: var(--hero-muted); }
+.block.hero .idt b { color: var(--hero-text); }
+.block.hero .btn.quiet { color: var(--hero-text); border-color: var(--hero-line); }
+.block.hero .btn.quiet:hover { border-color: var(--hero-muted); }
+.block.hero .btn.sec:hover { background: rgba(243, 244, 240, .08); }
+.block.hero :focus-visible { outline-color: var(--k-brass); }
+
+/* búsqueda */
+.scrim { position: fixed; inset: 0; background: var(--shade); z-index: 80; display: grid; align-items: start; justify-items: center; padding: max(60px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px)); }
+.dialog { width: min(640px, 100%); background: var(--surface); border-top: 3px solid var(--brand); display: grid; max-height: min(70vh, 640px); grid-template-rows: auto auto minmax(0, 1fr); box-shadow: 0 0 0 1px var(--rule); }
+.dialog .in { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--rule); }
+.dialog .in input { flex: 1; border: 0; background: transparent; font-size: 18px; padding: 4px 0; min-width: 0; }
+.dialog .in input:focus-visible { outline: none; }
+.dialog .hint { margin: 0; padding: 8px 14px; border-bottom: 1px solid var(--rule); }
+.res { overflow-y: auto; }
+.res button { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--rule); background: transparent; padding: 10px 14px; cursor: pointer; }
+.res button[aria-selected="true"], .res button:hover { background: var(--hl-row); }
+.res button[aria-selected="true"] { box-shadow: inset 3px 0 0 var(--brand); }
+.res b { font-weight: 620; }
+.res span { font-size: 12.5px; color: var(--muted); grid-column: 1; }
+.res em { font: 500 12px var(--f-mono); font-style: normal; color: var(--muted); grid-row: 1 / span 2; grid-column: 2; align-self: center; }
+
+/* ajustes */
+.pop { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(100% + 6px); z-index: 50; width: min(340px, calc(100vw - 32px)); background: var(--surface); color: var(--text); border-top: 3px solid var(--brand); box-shadow: 0 0 0 1px var(--rule); padding: 16px; display: grid; gap: 14px; }
+.pop .row { display: grid; gap: 6px; }
+.pop p { margin: 0; font-size: 12.5px; color: var(--muted); }
+.pop .label { color: var(--muted); }
+/* aviso breve: llamada Racing (Ink en oscuro) */
+.toast { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--callout-bg); color: var(--callout-text); padding: 11px 18px; font-size: 14px; z-index: 90; box-shadow: inset 3px 0 0 var(--k-r600); }
+
+/* móvil */
+.menu-btn { display: none; }
+@media (max-width: 860px) {
+  :root { --rail: 0px; }
+  body { overflow: hidden; }
+  .body { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: fixed; z-index: 70; top: 0; bottom: 0; left: 0; width: min(300px, 86vw); transform: translateX(-102%); transition: transform .24s var(--ease); padding-top: max(18px, env(safe-area-inset-top, 0px)); border-right: 1px solid var(--rule-strong); }
+  .rail.open { transform: none; }
+  .menu-btn { display: inline-flex; }
+  .ctx { margin-left: 0; width: 100%; }
+  .ctx-f { flex: 1 1 140px; }
+  .ctx-f select { max-width: none; width: 100%; }
+  .prod { display: none; }
+  .read-h { font-size: 30px; line-height: 34px; }
+  .read-h.disp { font-size: 40px; line-height: 40px; }
+  .read-lead { font-size: 17px; line-height: 25px; }
+  .view { gap: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .vhead { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .vhead h1 { font-size: 28px; }
+  .aplica { justify-items: start; text-align: left; }
+  .block.hero { padding: 26px 20px 132px; }
+  .block.hero > * { max-width: none; }
+  .block.hero::before { top: auto; bottom: -150px; right: -70px; width: 270px; height: 270px; aspect-ratio: auto; transform: none; }
+  .block.hero::after { left: 20px; bottom: 20px; width: 96px; }
+}
+.railscrim { display: none; }
+@media (max-width: 860px) { .railscrim.on { display: block; position: fixed; inset: 0; z-index: 65; background: var(--shade); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+/* botón «Actualizar 2026-27»: lanza la actualización de la temporada en curso (Routine de Claude Code) y sigue su estado.
+   El estado va en texto en el propio botón (Actualizar · En marcha · Con error) y en el panel; el giro del icono solo
+   acompaña al texto mientras corre. */
+#updBtn:disabled { opacity: .55; cursor: not-allowed; }
+#updBtn[data-st="run"] svg { animation: k-upd-giro 1.4s linear infinite; }
+@keyframes k-upd-giro { to { transform: rotate(360deg); } }
+#updPop .upd-datos { color: var(--text); font-size: 13.5px; line-height: 1.45; }
+#updPop .upd-datos b { font-weight: 620; }
+#updPop .upd-acc { display: flex; flex-wrap: wrap; gap: 8px; }
+#updPop .upd-ult { margin: 0; border-top: 1px solid var(--rule); padding-top: 10px; font-size: 12.5px; color: var(--text-2); }
+#updPop .upd-ult:empty { display: none; }
+
+/* ------------------------------------------------------------------ Kerno Basque Analytics: piezas propias */
+.logo img { width: 100%; height: auto; display: block; }
+.ctx-f input[type="number"] { width: 92px; }
+.head input[type="number"] { background-color: var(--head-field); color: var(--head-text); border-color: var(--head-line); }
+.tsort th { cursor: pointer; user-select: none; }
+.tsort th[aria-sort="descending"]::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+.tsort th[aria-sort="ascending"]::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 6px; border-left: 1.5px solid currentColor; border-top: 1.5px solid currentColor; transform: translateY(2px) rotate(45deg); }
+.tw.tall { max-height: 68vh; overflow: auto; }
+.tw.tall thead th { position: sticky; top: 0; background: var(--surface); z-index: 1; }
+td.n.hi { color: var(--v-pos); font-weight: 600; } td.n.lo { color: var(--v-neg); }
+.cov td.n { min-width: 74px; }
+.cov .cell { display: grid; gap: 3px; }
+.cov .bar { height: 4px; background: var(--track); position: relative; }
+.cov .bar i { position: absolute; inset: 0 auto 0 0; background: var(--brand); }
+.chipline { display: flex; flex-wrap: wrap; gap: 6px 8px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; padding: 5px 7px; border: 1px solid var(--rule); color: var(--text-2); white-space: nowrap; }
+.pill.on { border-color: var(--rule-strong); color: var(--text); }
+.zone { display: grid; grid-template-columns: minmax(130px, 180px) minmax(120px, 1fr) minmax(150px, auto); gap: 6px 16px; align-items: center; }
+.zone .hb { height: 14px; background: var(--track); position: relative; }
+.zone .hb i { position: absolute; inset: 2px auto 2px 0; background: var(--brand); }
+.zone .hb b { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--context); }
+.zone .val { font: 450 13px var(--f-mono); text-align: right; white-space: nowrap; }
+@media (max-width: 640px) { .zone { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .zone .m { grid-column: 1 / -1; } .zone .val { text-align: left; } }
+pre.cmd { margin: 0; padding: 12px 14px; background: var(--surface-2); border-left: 3px solid var(--rule-strong); overflow-x: auto; font: 450 13px/1.6 var(--f-mono); color: var(--text); }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.more { justify-self: start; }
+.empty { padding: 28px 0; color: var(--muted); }
+.ctrls input[type="search"] { min-width: 220px; }
+</style>
+<script>try { const t = localStorage.getItem("kerno.basque.tema"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) { /* */ }</script>
+
+<div class="app">
+  <header class="head" id="head">
+    <button class="ibtn menu-btn" type="button" id="menuBtn" aria-label="Abrir navegación" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/></svg></button>
+    <a class="brand" href="#inicio" aria-label="Kerno Analytics · inicio">
+      <span class="logo"><span class="neg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-80.00 -80.00 835.90 319.00" width="835.9" height="319.0" role="img" aria-label="KERNO Analytics"><title>KERNO Analytics — horizontal (negative)</title><g transform="translate(-22.942 0.000) scale(1.59000)"><path fill="#F3F4F0" d="M14.429 0.000 L18.629 0.000 L18.629 100.000 L14.429 100.000ZM21.029 0.000 L21.044 36.587 L21.153 38.604 L21.368 40.612 L21.687 42.606 L22.145 44.727 L26.226 43.734 L25.790 41.698 L25.479 39.645 L25.291 37.576 L25.229 0.000ZM41.305 71.508 L70.810 100.000 L76.852 99.996 L44.222 68.486ZM27.629 0.000 L27.645 36.531 L27.703 37.685 L31.894 37.407 L31.829 0.000ZM42.609 63.592 L80.311 100.000 L86.357 100.000 L45.527 60.571ZM34.229 0.000 L34.229 31.294 L38.429 31.294 L38.429 0.000ZM46.331 58.011 L89.812 100.000 L95.858 100.000 L49.249 54.990ZM25.229 100.000 L25.242 67.531 L25.363 65.457 L25.609 63.395 L25.978 61.351 L26.469 59.333 L27.081 57.348 L27.811 55.403 L28.657 53.506 L29.616 51.664 L30.684 49.882 L31.857 48.168 L33.131 46.527 L34.501 44.967 L80.998 0.000 L74.952 0.000 L32.183 41.317 L30.802 42.791 L29.501 44.335 L28.281 45.944 L27.148 47.615 L26.103 49.343 L25.149 51.123 L24.290 52.951 L23.527 54.821 L22.863 56.727 L22.299 58.666 L21.837 60.632 L21.478 62.619 L21.223 64.623 L21.074 66.636 L21.029 100.000ZM38.429 100.000 L38.453 67.474 L38.651 65.433 L39.044 63.419 L39.628 61.453 L40.399 59.552 L41.350 57.734 L42.470 56.016 L43.751 54.414 L44.934 53.177 L100.000 0.000 L93.954 0.000 L41.293 50.882 L39.940 52.418 L38.714 54.057 L37.623 55.789 L36.675 57.602 L35.875 59.486 L35.229 61.428 L34.741 63.416 L34.413 65.437 L34.249 67.477 L34.229 100.000Z"/><path fill="#B8975C" d="M31.829 100.000 L31.847 67.492 L31.992 65.482 L32.283 63.487 L32.716 61.519 L33.291 59.587 L34.003 57.702 L34.850 55.873 L35.826 54.110 L36.928 52.422 L38.148 50.817 L39.481 49.305 L90.499 0.000 L84.453 0.000 L36.700 46.137 L35.312 47.661 L34.025 49.271 L32.844 50.961 L31.774 52.722 L30.819 54.549 L29.983 56.434 L29.270 58.368 L28.682 60.344 L28.223 62.353 L27.893 64.388 L27.695 66.440 L27.629 100.000Z"/></g><path fill="#F3F4F0" transform="translate(191.058 100.000)" d="M86.71875 0.0 60.15625 -69.6875 82.96875 -100.0H61.71875L25.9375 -52.96875V-100.0H7.8125V0.0H25.9375V-26.09375L46.875 -53.4375L67.96875 0.0Z M181.875 0.0V-17.34375H137.8125V-40.9375H167.65625V-59.0625H137.8125V-82.65625H181.875V-100.0H119.53125V0.0Z M284.6875 0.0 269.0625 -38.59375 281.5625 -51.09375V-87.5L269.0625 -100.0H219.375V0.0H237.5V-38.59375H249.53125L264.53125 0.0ZM263.4375 -56.71875H237.5V-82.65625H263.4375Z M382.03125 0.0V-100.0H364.21875V-43.28125L335.625 -100.0H319.84375V0.0H337.8125L337.65625 -56.71875L366.25 0.0Z M484.84375 -12.5V-87.5L472.34375 -100.0H435.15625L422.65625 -87.5V-12.5L435.15625 0.0H472.34375ZM466.71875 -17.34375H440.78125V-82.65625H466.71875Z"/><path fill="#F3F4F0" transform="translate(191.058 159.000)" d="M0.7645022969850351 0.0 7.528431723151408 -23.0H11.90818799515845L18.672117421324824 0.0H15.134618624834946L9.71830985915493 -19.462473522777287L4.302001093474912 0.0ZM4.535221153581646 -5.992924134160431 5.57184482628191 -9.148161896181778H13.864774892027949L14.901398564728213 -5.992924134160431Z M60.553633611974576 0.0V-23.0H64.68716581102828L72.82459936007646 -3.4598088653994274L72.25445337429852 -3.343187960772447V-23.0H75.58462743624834V0.0H71.45109523719465L63.31366168814645 -19.540191134600573L63.8838076739244 -19.68272713674626V0.0Z M117.46614362689809 0.0 124.23007305306447 -23.0H128.6098293250715L135.3737587512379 0.0H131.83625995474802L126.41995118906799 -19.462473522777287L121.00364242338797 0.0ZM121.2368624834947 -5.992924134160431 122.27348615619496 -9.148161896181778H130.566416221941L131.60303989464128 -5.992924134160431Z M178.22710592780314 0.0V-23.0H181.62207267653773V-1.302253916565801L179.5617502561757 -3.2005926427706863H192.61021242813322V0.0Z M241.45002424213246 0.0V-9.45915888396787L234.5953890088578 -23.0H238.36612961460165L243.12159251898106 -12.94483143981074L247.87705542336045 -23.0H251.64779602910428L244.84499099086705 -9.45915888396787V0.0Z M299.77492980957027 0.0V-19.799407357229313H293.04987797266995V-23.0H309.8949483952052V-19.799407357229313H303.16989655830486V0.0Z M352.6316805987291 0.0V-3.2005926427706863H358.1257504745268V-19.799407357229313H352.6316805987291V-23.0H367.01478709905916V-19.799407357229313H361.5207172232614V-3.2005926427706863H367.01478709905916V0.0Z M418.2647603209589 0.5183098591549296Q415.4918013881629 0.5183098591549296 413.5610959764937 -0.9361969853790714Q411.63039056482444 -2.3907038299130723 410.6261642241142 -5.079436224279269Q409.6219378834039 -7.768168618645467 409.6219378834039 -11.467605633802817Q409.6219378834039 -15.192957746478873 410.6261642241142 -17.884929775184307Q411.63039056482444 -20.576901803889744 413.5610959764937 -22.047605831522336Q415.4918013881629 -23.51830985915493 418.2647603209589 -23.51830985915493Q421.41349904234977 -23.51830985915493 423.5644857487208 -21.45154474822568Q425.71547245509186 -19.384779637296432 426.389272899359 -15.64645910128741L422.8323362968337 -15.445613635425836Q422.3464247582663 -17.86222860846721 421.134883568992 -19.10293144978268Q419.9233423797177 -20.34363429109815 418.2647603209589 -20.34363429109815Q416.59322170203836 -20.34363429109815 415.45942580532017 -19.310257172920334Q414.32562990860197 -18.276880054742517 413.7360560027646 -16.29111173387984Q413.14648209692723 -14.305343413017164 413.14648209692723 -11.467605633802817Q413.14648209692723 -8.662262220785651 413.7360560027646 -6.689451448682329Q414.32562990860197 -4.716640676579005 415.45942580532017 -3.686503192740427Q416.59322170203836 -2.6563657089018484 418.2647603209589 -2.6563657089018484Q420.05939515879453 -2.6563657089018484 421.31952789736465 -4.0104478433098585Q422.5796606359347 -5.364529977717869 423.0137419794646 -8.007903536944323L426.5447634844712 -7.832973168601452Q425.9487083327602 -3.9002884126045334 423.77180652887046 -1.6909892767248018Q421.5949047249807 0.5183098591549296 418.2647603209589 0.5183098591549296Z M476.8228997888699 0.5183098591549296Q474.33500890597486 0.5183098591549296 472.465854569556 -0.4859154929577465Q470.596700233137 -1.4901408450704225 469.49853339396725 -3.2847905118700482Q468.4003665547975 -5.079440178669674 468.20600035761436 -7.4960650376870595L471.6916689590669 -7.703389772227112Q471.9119502537687 -6.0642395879181334 472.6019459039392 -4.9336803597463685Q473.29194155410977 -3.8031211315746036 474.3868638159523 -3.229743420238226Q475.4817860777948 -2.6563657089018484 476.94600193937055 -2.6563657089018484Q478.37134218887536 -2.6563657089018484 479.34964453468854 -3.0224196742957745Q480.3279468805017 -3.3884736396897006 480.8365348708461 -4.1076240217182Q481.34512286119053 -4.826774403746699 481.34512286119053 -5.856908921792473Q481.34512286119053 -6.88704541703345 480.8689272598481 -7.632112873775858Q480.3927316585057 -8.377180330518266 479.12287902832026 -9.018585419990647Q477.85302639813483 -9.659990509463027 475.4234647509077 -10.327309707856514Q473.0586779957086 -10.988153591961927 471.5750154307191 -11.810970295650858Q470.0913528657295 -12.633786999339788 469.40783055265183 -13.84209844025088Q468.7243082395741 -15.050409881161972 468.7243082395741 -16.832103976397445Q468.7243082395741 -18.834079366334727 469.6475476761938 -20.340419371698943Q470.57078711281355 -21.846759377063158 472.30712632729967 -22.682534618109045Q474.0434655417858 -23.51830985915493 476.460088423608 -23.51830985915493Q478.85727349939475 -23.51830985915493 480.56121834768373 -22.57887422803422Q482.26516319597266 -21.63943859691351 483.2531913649867 -19.964648480482502Q484.24121953400083 -18.289858364051497 484.4744573888644 -16.067597725022008L480.97583025005497 -15.86675225916043Q480.7944225902288 -17.194917318854532 480.2307637819101 -18.20561699665768Q479.6671049735915 -19.216316674460828 478.70175918794007 -19.77997548277949Q477.7364134022887 -20.34363429109815 476.3499448104643 -20.34363429109815Q474.45812885123235 -20.34363429109815 473.34053211480796 -19.430119689081756Q472.2229353783835 -18.51660508706536 472.2229353783835 -17.013515590613995Q472.2229353783835 -16.022252730248677 472.6732158822073 -15.364649469080105Q473.123496386031 -14.707046207911532 474.2605348828812 -14.198456240371918Q475.39757337973145 -13.689866272832306 477.4448898100517 -13.11324892715669Q480.1919277137433 -12.361701213138204 481.81164305780965 -11.386630592883472Q483.431358401876 -10.41155997262874 484.137554200938 -9.080151324204994Q484.84374999999994 -7.74874267578125 484.84374999999994 -5.869871413539832Q484.84374999999994 -3.9715564136773764 483.84600391656573 -2.523525872029049Q482.8482578331315 -1.0754953303807218 481.05036952059027 -0.2785927356128961Q479.252481208049 0.5183098591549296 476.8228997888699 0.5183098591549296Z"/></svg></span></span>
+      <span class="prod"><b>KERNO BASKETBALL</b><span>BASQUE ANALYTICS · FEDERACIÓN VASCA</span></span>
+    </a>
+    <div class="ctx" aria-label="Contexto de trabajo">
+      <label class="ctx-f"><span class="label">Temporada</span><select id="ctxTemp" aria-label="Temporada"></select></label>
+      <label class="ctx-f"><span class="label">Liga</span><select id="ctxLiga" aria-label="Liga"></select></label>
+      <label class="ctx-f" id="fUnit"><span class="label">Fase · división</span><select id="ctxUnit" aria-label="Fase y división"></select></label>
+      <label class="ctx-f" id="fMin"><span class="label">Minutos mín.</span><input type="number" id="ctxMin" min="0" step="10" value="100" aria-label="Minutos mínimos"></label>
+      <div class="ctx-f"><span class="label">Buscar</span><button class="ibtn" type="button" id="searchBtn" aria-label="Buscar jugador"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" stroke="currentColor" stroke-width="1.75" fill="none"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></svg><span>Jugador</span><kbd>/</kbd></button></div>
+      <div class="ctx-f"><span class="label">Datos</span><button class="ibtn" type="button" id="updBtn" aria-expanded="false" aria-controls="updPop" aria-label="Ejecutar la extracción"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 9.5A7.8 7.8 0 0 0 5 7.2M4.5 14.5A7.8 7.8 0 0 0 19 16.8" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/><path d="M5 3.5v4h4M19 20.5v-4h-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" fill="none"/></svg><span id="updEst">Ejecutar</span></button></div>
+    </div>
+    <div class="pop" id="updPop" role="dialog" aria-labelledby="updTit" hidden>
+      <div class="row"><span class="label" id="updTit">Ejecutar la extracción</span><p class="upd-datos" id="updDatos">Cargando el estado de los datos…</p></div>
+      <div class="row"><label class="label" for="updTemp">Temporada a actualizar</label><select id="updTemp"></select></div>
+      <div class="row"><p>Descarga de basketbasko.com sólo los partidos nuevos de las cuatro ligas (actas y jugada a jugada), guarda el bruto con fecha, recalcula esa temporada, la sube a la rama FTAB y vuelve a publicar esta página. Las demás temporadas no cambian.</p><p>Tarda entre 10 y 40 minutos. Puedes cerrar la página: se publicará igualmente.</p></div>
+      <div class="upd-acc"><button class="btn" type="button" id="updGo">Ejecutar ahora</button><button class="btn quiet" type="button" id="updNo">Cancelar</button></div>
+      <p class="upd-ult" id="updUlt" role="status" aria-live="polite"></p>
+    </div>
+  </header>
+
+  <div class="body">
+    <div class="railscrim" id="railScrim"></div>
+    <nav class="rail" id="rail" aria-label="Herramientas de Kerno Basque Analytics"></nav>
+    <main class="main" id="main">
+      <div class="vhead" id="vhead"></div>
+      <div class="pane" id="pane"><div class="view" id="view"></div></div>
+    </main>
+  </div>
+</div>
+
+<div class="scrim" id="search" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-label="Buscar jugador">
+    <div class="in"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" stroke="currentColor" stroke-width="1.75" fill="none"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></svg>
+      <input type="search" id="searchIn" placeholder="Nombre del jugador" autocomplete="off" aria-label="Nombre del jugador"><button class="ibtn" type="button" id="searchClose">Esc</button></div>
+    <p class="hint label" id="searchHint">Temporada y liga en contexto</p>
+    <div class="res" id="searchRes" role="listbox" aria-label="Resultados"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+"use strict";
+/* =====================================================================================================
+   Kerno Basque Analytics · Federación Vasca de Baloncesto (basketbasko.com)
+   Datos: data/basko (rama FTAB de uebnet/baskonia), generados con `python -m bbstats.esf artifact`.
+   Cada fila nace del jugada a jugada de cada partido; el acta digital es el control.
+   ===================================================================================================== */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const LS = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } } };
+const norm = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const fmt = (v, d = 1) => { if (v == null || v === "" || !isFinite(v)) return "—"; const f = Math.pow(10, d), x = Math.round(v * f) / f; return (x === 0 ? 0 : x).toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }).replace("-", "−"); };
+const sgn = (v, d = 1) => { const t = fmt(v, d); return t !== "—" && v > 0 ? "+" + t : t; };
+const int = (v) => fmt(v, 0);
+const bombOK = (s) => /^[ -~À-ÞŁŒŠŸŽ]*$/.test(String(s || "").toLocaleUpperCase("es"));
+const ticks = (k) => `<span class="k-ticks" aria-hidden="true">${[0, 1, 2, 3, 4, 5, 6, 7].map((i) => `<i${i === k ? ' class="on"' : ""}></i>`).join("")}</span>`;
+
+async function jsonDe(r) {
+  const txt = (await r.text()).trim();
+  if (!txt.startsWith("H4sI")) return JSON.parse(txt);
+  const bin = atob(txt), u8 = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  return JSON.parse(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).text());
+}
+async function cargarJSON(path) {
+  try { const r = await fetch(path + ".gz.txt"); if (r.ok) return await jsonDe(r); } catch (e) { /* sin versión comprimida */ }
+  const r = await fetch(path); if (!r.ok) throw new Error(`${path} (${r.status})`); return jsonDe(r);
+}
+const filas = (t) => (t && t.filas ? t.filas.map((f) => { const o = {}; t.columnas.forEach((c, i) => { o[c] = f[i]; }); return o; }) : []);
+
+// ---------------------------------------------------------------------------------------------- estado
+let IDX = null, CAR = null;
+const CACHE = new Map();
+const CTX = { temp: null, liga: null, unit: "total|todas", min: 100 };
+const S = { route: "inicio", tk: 0, pid: null, tid: null, preset: "basico", sort: { k: "min", d: -1 }, eqSort: { k: "win_pct", d: -1 }, q: "", team: "", lim: 120 };
+const ligaN = (l) => (IDX && IDX.ligas[l] ? IDX.ligas[l].corto || IDX.ligas[l].nombre : l);
+const ligaDiv = (l) => !!(IDX && IDX.ligas[l] && IDX.ligas[l].divisiones);
+async function doc(t = CTX.temp, l = CTX.liga) {
+  const k = `${t}/${l}`;
+  if (!CACHE.has(k)) CACHE.set(k, cargarJSON(`datos/${t}/${l}.json`).then((d) => ({
+    jug: filas(d.jugadores), eq: filas(d.equipos), par: filas(d.partidos), qui: filas(d.quintetos) })).catch(() => ({ jug: [], eq: [], par: [], qui: [] })));
+  return CACHE.get(k);
+}
+const unitKey = (r) => `${r.fase}|${r.division}`;
+const unitTxt = (u) => {
+  const nom = u.fase === "total" ? "Todas las fases" : u.fase.startsWith("total_") ? `Toda la división ${u.division}` : (u.fase_nombre || u.fase);
+  const d = ["única", "todas"].includes(u.division) || u.fase.startsWith("total_") ? "" : ` · ${u.division === "cruce" ? "cruce A1-A2" : u.division}`;
+  return nom + d;
+};
+function temporadaInfo(t = CTX.temp) { return (IDX.temporadas.find((x) => x.temporada === t) || {}).ligas || {}; }
+function unidades() { return ((temporadaInfo()[CTX.liga] || {}).unidades) || []; }
+function conActa(t = CTX.temp, l = CTX.liga) { return ((temporadaInfo(t)[l] || {}).con_acta) || 0; }
+
+// ---------------------------------------------------------------------------------------------- contexto (cabecera)
+function pintarCtx() {
+  $("ctxTemp").innerHTML = IDX.temporadas.map((t) => `<option value="${t.temporada}"${t.temporada === CTX.temp ? " selected" : ""}>${t.temporada}</option>`).join("");
+  const ls = Object.keys(IDX.ligas).filter((l) => temporadaInfo()[l]);
+  if (!ls.includes(CTX.liga)) CTX.liga = ls[0];
+  $("ctxLiga").innerHTML = ls.map((l) => `<option value="${l}"${l === CTX.liga ? " selected" : ""}>${esc(ligaN(l))}</option>`).join("");
+  const us = unidades();
+  if (us.length && !us.some((u) => unitKey(u) === CTX.unit)) { const t = us.find((u) => u.fase === "total"); CTX.unit = t ? unitKey(t) : unitKey(us[0]); }
+  const fases = us.filter((u) => !u.fase.startsWith("total")), tots = us.filter((u) => u.fase.startsWith("total"));
+  $("ctxUnit").innerHTML = (us.length ? `<optgroup label="Agregados">${tots.map((u) => `<option value="${unitKey(u)}"${unitKey(u) === CTX.unit ? " selected" : ""}>${esc(unitTxt(u))}</option>`).join("")}</optgroup>`
+    + `<optgroup label="Fases (orden cronológico)">${fases.map((u) => `<option value="${unitKey(u)}"${unitKey(u) === CTX.unit ? " selected" : ""}>${esc(unitTxt(u))}</option>`).join("")}</optgroup>` : `<option>Sin datos</option>`);
+  $("ctxUnit").disabled = !us.length;
+  $("ctxMin").value = CTX.min;
+}
+function guardarCtx() { LS.set("kerno.basque.ctx", JSON.stringify(CTX)); }
+["ctxTemp", "ctxLiga", "ctxUnit"].forEach((id) => $(id).addEventListener("change", (e) => {
+  if (id === "ctxTemp") CTX.temp = e.target.value; if (id === "ctxLiga") CTX.liga = e.target.value; if (id === "ctxUnit") CTX.unit = e.target.value;
+  if (id !== "ctxUnit") { S.team = ""; } pintarCtx(); guardarCtx(); ir(S.route);
+}));
+$("ctxMin").addEventListener("change", (e) => { CTX.min = Math.max(0, Number(e.target.value) || 0); guardarCtx(); ir(S.route); });
+
+// ---------------------------------------------------------------------------------------------- navegación
+const NAV = [
+  { n: "01", t: "Lectura", q: "Qué hay y con qué calidad", items: [["inicio", "Panorama"]] },
+  { n: "02", t: "Jugadores", q: "Rendimiento individual", items: [["jugadores", "Tabla de jugadores"], ["ficha", "Ficha de jugador"]] },
+  { n: "03", t: "Equipos", q: "Clubes por fase y división", items: [["equipos", "Clasificación y ratings"], ["equipo", "Ficha de equipo"]] },
+  { n: "04", t: "Competición", q: "Fases, divisiones y datos", items: [["fases", "Fases y divisiones"], ["calidad", "Calidad de los datos"]] },
+  { n: "05", t: "Extracción", q: "Cómo se obtiene y se actualiza", items: [["extraccion", "Pauta y ejecución"], ["diccionario", "Diccionario de columnas"]] },
+];
+const ITEM = {}; NAV.forEach((s) => s.items.forEach(([id, n]) => { ITEM[id] = { id, n, sec: s }; }));
+const LEAD = {
+  jugadores: "Todos los jugadores de la unidad elegida, con las mismas columnas en las cuatro ligas. Pulsa una fila para abrir su ficha.",
+  ficha: "Perfil del jugador frente a los de su misma unidad (fase y división), su evolución por fases y su trayectoria entre temporadas.",
+  equipos: "Récord, ritmo, ratings y cuatro factores de cada equipo en la unidad elegida. En Junior y Cadete, A1 y A2 se leen por separado.",
+  equipo: "Plantilla, quintetos más usados y resultados del equipo en la temporada.",
+  fases: "Cómo cambia el juego de una fase a otra y entre divisiones: ritmo, eficiencia y tipos de punto por unidad.",
+  calidad: "Cobertura de partidos con acta y jugada a jugada, y controles de cada temporada y liga.",
+  extraccion: "Arquitectura por capas, norma de completitud y cómo se lanza la actualización.",
+  diccionario: "Las 673 columnas de la tabla de jugadores, con su grupo, su origen y su definición.",
+};
+const APLICA = { inicio: "", jugadores: "tlum", ficha: "tlum", equipos: "tlu", equipo: "tl", fases: "tl", calidad: "", extraccion: "", diccionario: "" };
+function pintarRail() {
+  $("rail").innerHTML = NAV.map((s) => `<div class="sec"><div class="sec-h"><span class="n">${s.n}</span><span class="t">${esc(s.t)}</span><span class="q">${esc(s.q)}</span></div>
+    ${s.items.map(([id, n]) => `<button class="nav" type="button" data-go="${id}">${esc(n)}</button>`).join("")}</div>`).join("")
+    + `<div class="rail-foot"><p class="label">Fuente</p><p>Datos públicos · basketbasko.com · Federación Vasca de Baloncesto. Extracción ${esc((IDX.generado || "").slice(0, 10))}.</p><p>Primera y Segunda Nacional masculinas · Liga Vasca Junior y Cadete masculinas (A1 y A2).</p></div>`;
+  $("rail").querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => navegar(b.dataset.go)));
+}
+function marcarNav() { document.querySelectorAll("#rail .nav").forEach((b) => { if (b.dataset.go === S.route) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); }); }
+function navegar(id) { if (location.hash.slice(1) === id) ir(id); else location.hash = id; }
+window.addEventListener("hashchange", () => ir(location.hash.slice(1) || "inicio"));
+function cerrarRail() { $("rail").classList.remove("open"); $("railScrim").classList.remove("on"); $("menuBtn").setAttribute("aria-expanded", "false"); }
+$("menuBtn").addEventListener("click", () => { const o = !$("rail").classList.contains("open"); $("rail").classList.toggle("open", o); $("railScrim").classList.toggle("on", o); $("menuBtn").setAttribute("aria-expanded", String(o)); });
+$("railScrim").addEventListener("click", cerrarRail);
+
+function ir(id) {
+  const it = ITEM[id] || ITEM.inicio; S.route = it.id; S.tk++;
+  marcarNav(); cerrarRail();
+  document.title = it.id === "inicio" ? "Kerno Basque Analytics" : `${it.n} · Kerno Basque Analytics`;
+  const a = APLICA[it.id] || "";
+  $("fUnit").classList.toggle("off", !a.includes("u")); $("fMin").classList.toggle("off", !a.includes("m"));
+  const u = unidades().find((x) => unitKey(x) === CTX.unit);
+  const ap = []; if (a.includes("t")) ap.push(CTX.temp); if (a.includes("l")) ap.push(ligaN(CTX.liga)); if (a.includes("u") && u) ap.push(unitTxt(u)); if (a.includes("m")) ap.push(`${CTX.min}+ min`);
+  $("vhead").hidden = it.id === "inicio";
+  $("vhead").innerHTML = `<div><div class="eyebrow"><span>${it.sec.n} · ${esc(it.sec.t.toUpperCase())}</span></div><h1>${esc(it.n)}</h1>${LEAD[it.id] ? `<p>${esc(LEAD[it.id])}</p>` : ""}</div>`
+    + (ap.length ? `<div class="aplica"><span class="label">Aplicado</span><span>${esc(ap.join(" · "))}</span></div>` : `<div class="aplica"><span class="label">Sin filtros</span><span>Todas las temporadas y ligas</span></div>`);
+  $("pane").scrollTop = 0;
+  $("view").innerHTML = `<div class="loading"><div class="estela"></div><span>Cargando datos…</span></div>`;
+  (VISTAS[it.id] || VISTAS.inicio)(S.tk).catch((e) => { $("view").innerHTML = `<p class="empty">No se pudieron cargar los datos (${esc(e.message)}).</p>`; });
+}
+const vivo = (tk) => tk === S.tk;
+const pie = (k, txt) => `<p class="src">${ticks(k)}<span>${txt || `Datos públicos · basketbasko.com (Federación Vasca de Baloncesto) · jugada a jugada y acta digital de cada partido · extracción ${esc((IDX.generado || "").slice(0, 10))}`}</span></p>`;
+
+// ---------------------------------------------------------------------------------------------- utilidades de datos
+function enUnidad(rows) { return rows.filter((r) => unitKey(r) === CTX.unit); }
+function pctl(vals, v, inv) { const xs = vals.filter((x) => x != null && isFinite(x)); if (v == null || !xs.length) return null; const b = xs.filter((x) => (inv ? x > v : x < v)).length, e = xs.filter((x) => x === v).length; return 100 * (b + 0.5 * e) / xs.length; }
+function mediaP(rows, k, w = "min") { let s = 0, n = 0; rows.forEach((r) => { if (r[k] != null && r[w] > 0) { s += r[k] * r[w]; n += r[w]; } }); return n ? s / n : null; }
+
+const COLS = {
+  basico: [["gp", "PJ", 0], ["min_pg", "Min/p", 1], ["pts_pg", "Pts/p", 1], ["reb_pg", "Reb/p", 1], ["oreb_pg", "RO/p", 1], ["stl_pg", "Rec/p", 1], ["tov_pg", "Pér/p", 1], ["pf_pg", "Fal/p", 1], ["pfd_pg", "FR/p", 1], ["ast_pg", "Ast/p", 1], ["blk_pg", "Tap/p", 1], ["pir_pg", "Val/p", 1], ["plus_minus_pg", "+/- p", 1], ["ts_pct", "TS%", 1]],
+  tiro: [["fga_pg", "TC/p", 1], ["efg_pct", "eFG%", 1], ["ts_pct", "TS%", 1], ["fg2_pct", "T2%", 1], ["fg3_pct", "T3%", 1], ["ft_pct", "TL%", 1], ["fg3a_rate", "3PAr", 1], ["fta_rate", "FTr", 1], ["frec_aro", "% aro", 1], ["fg_pct_aro", "Aro%", 1], ["frec_pintura", "% zona", 1], ["frec_media", "% media", 1], ["frec_triple_esquina", "% T3 esq.", 1], ["dist_tiro_media", "Dist. m", 1]],
+  avanzadas: [["usg_pct", "USG%", 1], ["per", "PER", 1], ["ortg", "ORtg", 1], ["drtg", "DRtg", 1], ["net_rtg", "Net", 1], ["ws", "WS", 2], ["ws_per_40", "WS/40", 3], ["game_score_pg", "GmSc/p", 1], ["pie", "PIE", 1], ["ast_pct", "AST%", 1], ["oreb_pct", "OREB%", 1], ["dreb_pct", "DREB%", 1], ["stl_pct", "STL%", 1], ["tov_pct", "TOV%", 1]],
+  impacto: [["pbp_net_rtg_on", "Net en pista", 1], ["pbp_net_rtg_off", "Net fuera", 1], ["pbp_net_rtg_onoff", "On−off", 1], ["pbp_net_rtg_aj_onoff", "On−off aj.", 1], ["pbp_rapm", "RAPM", 1], ["pbp_orapm", "ORAPM", 1], ["pbp_drapm", "DRAPM", 1], ["pbp_min_pct_equipo", "% min eq.", 1], ["pbp_relevos_por_partido", "Relevos/p", 1], ["pbp_min_por_relevo", "Min/relevo", 1], ["pbp_titular_partidos", "Titular", 0]],
+  contexto: [["pct_pts_contraataque", "% pts contra.", 1], ["pct_pts_segunda_oportunidad", "% 2.ª op.", 1], ["pct_pts_tras_perdida", "% tras pérd.", 1], ["pts_paint", "Pts zona", 0], ["clutch_pts", "Pts clutch", 0], ["clutch_ts_pct", "TS% clutch", 1], ["clutch_pts_p40", "Pts/40 clutch", 1], ["pbp_clutch_min", "Min clutch", 1], ["pbp_clutch_plus_minus", "+/- clutch", 0], ["pts_std", "Desv. pts", 1], ["pts_max", "Máx. pts", 0], ["partidos_20_pts", "20+ pts", 0]],
+};
+const PRESETS = [["basico", "Básico"], ["tiro", "Tiro y zonas"], ["avanzadas", "Avanzadas"], ["impacto", "Impacto en pista"], ["contexto", "Contexto y clutch"]];
+const INV = new Set(["drtg", "tov_pct", "tov_pg", "pf_pg"]);
+
+// ---------------------------------------------------------------------------------------------- vistas
+const VISTAS = {};
+
+VISTAS.inicio = async (tk) => {
+  const T = IDX.totales, cob = IDX.cobertura;
+  const temps = [...new Set(cob.map((c) => c.temporada))].sort().reverse(), ligas = Object.keys(IDX.ligas);
+  const d = await doc(); if (!vivo(tk)) return;
+  const tot = d.jug.filter((r) => r.fase === "total" && (r.min || 0) >= CTX.min);
+  const top = [...tot].filter((r) => r.per != null).sort((a, b) => b.per - a.per).slice(0, 8);
+  const maxP = top.length ? top[0].per : 1;
+  const conA = cob.filter((c) => c.con_acta > 0), val = conA.reduce((a, c) => a + c.con_acta * (c.pbp_cuadra_pct || 0), 0) / Math.max(1, conA.reduce((a, c) => a + c.con_acta, 0));
+  $("view").innerHTML = `
+  <section class="block hero">
+    <div class="eyebrow"><span>KERNO BASKETBALL · FEDERACIÓN VASCA</span><span class="tag">Dato</span></div>
+    <h2 class="read-h"><span class="hl">${int(T.con_acta)} partidos</span> leídos acción a acción, de la Primera Nacional al Cadete</h2>
+    <p class="read-lead">Primera y Segunda Nacional masculinas y Liga Vasca Junior y Cadete masculinas, divisiones A1 y A2, de 2018-19 a 2026-27. Cada estadística nace del jugada a jugada del partido y se contrasta con su acta digital.</p>
+    <div class="idt"><span><b>${int(T.partidos)}</b> partidos en calendario</span><span><b>${int(T.eventos)}</b> acciones</span><span><b>${int(T.tiros)}</b> tiros con coordenadas</span><span><b>${int(T.jugadores)}</b> jugadores distintos</span></div>
+  </section>
+  <section class="block">
+    <div class="block-h"><div><h2 class="h2">Cobertura por temporada y liga</h2><p class="sub">Partidos con acta digital / partidos jugados · el acta existe desde 2022-23</p></div><span class="tag dato">Dato</span></div>
+    <div class="tw"><table class="cov"><thead><tr><th>Temporada</th>${ligas.map((l) => `<th class="n">${esc(ligaN(l))}</th>`).join("")}</tr></thead><tbody>
+    ${temps.map((t) => `<tr><td class="num">${t}</td>${ligas.map((l) => { const c = cob.find((x) => x.temporada === t && x.liga === l); if (!c) return `<td class="n">—</td>`; const p = c.partidos ? 100 * c.con_acta / c.partidos : 0;
+      return `<td class="n"><div class="cell"><span>${int(c.con_acta)} / ${int(c.partidos)}</span><span class="bar"><i style="width:${p.toFixed(0)}%"></i></span></div></td>`; }).join("")}</tr>`).join("")}
+    </tbody></table></div>
+    <p class="note">2018-19 a 2021-22: la web sólo publica calendario, resultados y plantillas; esas temporadas aportan récords de equipo por fase y división. Cronología = acta en el ${fmt(val, 1)} % de los partidos con acta.</p>
+  </section>
+  <section class="block">
+    <div class="block-h"><div><h2 class="h2">PER más alto · ${esc(ligaN(CTX.liga))} ${esc(CTX.temp)}</h2><p class="sub">Todas las fases · ${CTX.min}+ minutos · PER normalizado a 15 dentro de la liga</p></div><button class="btn sec" type="button" data-go="jugadores">Ver la tabla</button></div>
+    ${top.length ? `<div class="rank">${top.map((r) => `<div class="who"><b>${esc(r.nombre)}</b><span>${esc(r.equipo)} · ${int(r.gp)} PJ · ${fmt(r.min, 0)} min</span></div>
+      <div class="pbar"><span class="p" style="left:${Math.max(0, Math.min(100, 100 * r.per / maxP)).toFixed(1)}%"></span></div><div class="val"><b>${fmt(r.per, 1)}</b> PER · ${fmt(r.pts_pg, 1)} pts</div>`).join("")}</div>` : `<p class="empty">Esta temporada y liga no tienen acta digital: sólo resultados de equipo.</p>`}
+  </section>
+  <section class="block">
+    <div class="block-h"><h2 class="h2">Por dónde empezar</h2></div>
+    <div class="acts">
+      <button class="act" type="button" data-go="jugadores"><span class="label">02 · Jugadores</span><b>Tabla de jugadores</b><span>Básico, tiro y zonas, avanzadas, impacto en pista y clutch, por fase y división.</span></button>
+      <button class="act" type="button" data-go="equipos"><span class="label">03 · Equipos</span><b>Clasificación y ratings</b><span>Récord, ritmo, ORtg/DRtg y cuatro factores; A1 y A2 por separado.</span></button>
+      <button class="act" type="button" data-go="fases"><span class="label">04 · Competición</span><b>Fases y divisiones</b><span>Cómo cambia el juego entre la primera fase, la segunda y la copa.</span></button>
+      <button class="act" type="button" data-go="extraccion"><span class="label">05 · Extracción</span><b>Pauta y ejecución</b><span>Capas, norma de completitud y cómo lanzar la actualización.</span></button>
+    </div>
+  </section>
+  ${pie(0)}`;
+  $("view").querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => navegar(b.dataset.go)));
+};
+
+VISTAS.jugadores = async (tk) => {
+  const d = await doc(); if (!vivo(tk)) return;
+  const all = enUnidad(d.jug);
+  const equipos = [...new Map(all.map((r) => [r.team_id, r.equipo])).entries()].sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+  const cols = COLS[S.preset];
+  const pintar = () => {
+    let rs = all.filter((r) => (r.min || 0) >= CTX.min && (!S.team || r.team_id === S.team) && (!S.q || norm(r.nombre).includes(norm(S.q))));
+    const k = S.sort.k; rs.sort((a, b) => { const x = a[k], y = b[k]; if (x == null) return 1; if (y == null) return -1; return (typeof x === "string" ? String(x).localeCompare(y) : x - y) * S.sort.d; });
+    const vis = rs.slice(0, S.lim);
+    const ths = [["nombre", "Jugador"], ...cols.map(([c, n]) => [c, n])].map(([c, n], i) => `<th class="${i ? "n" : ""}" data-k="${c}"${S.sort.k === c ? ` aria-sort="${S.sort.d < 0 ? "descending" : "ascending"}"` : ""}>${esc(n)}</th>`).join("");
+    $("tbl").innerHTML = `<table class="tsort"><thead><tr>${ths}</tr></thead><tbody>${vis.map((r) => `<tr class="go" data-p="${esc(r.player_id)}" data-t="${esc(r.team_id)}"><td><div class="who"><b>${esc(r.nombre)}</b><span>${esc(r.equipo)}${r.division && !["única", "todas"].includes(r.division) ? " · " + esc(r.division) : ""}</span></div></td>${cols.map(([c, , dd]) => `<td class="n">${c.includes("onoff") || c.includes("plus_minus") || c.includes("rapm") || c === "net_rtg" || c.startsWith("pbp_net") ? sgn(r[c], dd) : fmt(r[c], dd)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    $("cnt").textContent = `${rs.length} jugadores${rs.length > S.lim ? ` · se muestran ${S.lim}` : ""}`;
+    $("more").hidden = rs.length <= S.lim;
+    $("tbl").querySelectorAll("th[data-k]").forEach((th) => th.addEventListener("click", () => { const k2 = th.dataset.k; S.sort = { k: k2, d: S.sort.k === k2 ? -S.sort.d : (k2 === "nombre" || INV.has(k2) ? 1 : -1) }; pintar(); }));
+    $("tbl").querySelectorAll("tr[data-p]").forEach((tr) => tr.addEventListener("click", () => { S.pid = tr.dataset.p; S.tid = tr.dataset.t; navegar("ficha"); }));
+  };
+  $("view").innerHTML = `<section class="block">
+    <div class="ctrls">
+      <div class="ctrl"><span class="label">Vista</span><div class="seg" id="seg">${PRESETS.map(([k, n]) => `<button type="button" data-v="${k}" aria-pressed="${k === S.preset}">${n}</button>`).join("")}</div></div>
+      <label class="ctrl"><span class="label">Equipo</span><select id="fTeam"><option value="">Todos</option>${equipos.map(([id, n]) => `<option value="${esc(id)}"${id === S.team ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
+      <label class="ctrl"><span class="label">Filtrar por nombre</span><input type="search" id="fQ" value="${esc(S.q)}" placeholder="Nombre"></label>
+      <span class="label" id="cnt" role="status"></span>
+    </div>
+    ${all.length ? `<div class="tw tall" id="tbl"></div><button class="btn quiet more" type="button" id="more">Mostrar 200 más</button>` : `<p class="empty">Sin estadísticas individuales en esta unidad (temporada sin acta digital o fase sin partidos).</p>`}
+    <p class="note">PER, ORtg, DRtg y Win Shares se calculan con las fórmulas comunes del repositorio dentro de la unidad elegida. Asistencias y tapones sólo existen donde la mesa los registra (2026-27; tapones en parte de 2025-26); donde no, aparecen como «—» y entran a 0 en esas fórmulas para todos por igual. RAPM: estimación de una temporada, ruidosa con pocos minutos.</p>
+  </section>${pie(1)}`;
+  if (!all.length) return;
+  $("seg").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { S.preset = b.dataset.v; const c0 = COLS[S.preset][2] || COLS[S.preset][0]; if (!COLS[S.preset].some(([c]) => c === S.sort.k)) S.sort = { k: c0[0], d: -1 }; VISTAS.jugadores(S.tk); }));
+  $("fTeam").addEventListener("change", (e) => { S.team = e.target.value; pintar(); });
+  $("fQ").addEventListener("input", (e) => { S.q = e.target.value; pintar(); });
+  $("more").addEventListener("click", () => { S.lim += 200; pintar(); });
+  pintar();
+};
+
+const PERFIL = [
+  ["Anotación", [["pts_p40", "Puntos por 40′", 1], ["usg_pct", "Uso (USG%)", 1], ["ts_pct", "Tiro verdadero (TS%)", 1], ["fta_rate", "Tiros libres por tiro (FTr)", 1], ["pct_pts_contraataque", "% de puntos al contraataque", 1]]],
+  ["Tiro", [["frec_aro", "% de tiros en el aro", 1], ["fg_pct_aro", "Acierto en el aro", 1], ["fg3a_rate", "% de tiros que son triples", 1], ["fg3_pct", "Acierto en triples", 1], ["ft_pct", "Acierto en tiros libres", 1]]],
+  ["Rebote, balón y faltas", [["oreb_pct", "Rebote ofensivo (OREB%)", 1], ["dreb_pct", "Rebote defensivo (DREB%)", 1], ["stl_pct", "Recuperaciones (STL%)", 1], ["tov_pct", "Pérdidas por jugada (TOV%)", 1, 1], ["pfd_p40", "Faltas recibidas por 40′", 1]]],
+  ["Impacto", [["per", "PER", 1], ["ws_per_40", "Win Shares por 40′", 3], ["pbp_net_rtg_onoff", "On − off del Net", 1], ["pbp_rapm", "RAPM", 1], ["pbp_clutch_plus_minus", "+/- en clutch", 0]]],
+];
+VISTAS.ficha = async (tk) => {
+  const d = await doc(); if (!vivo(tk)) return;
+  let rows = d.jug.filter((r) => r.player_id === S.pid && (!S.tid || r.team_id === S.tid));
+  if (!rows.length) {
+    const tot = d.jug.filter((r) => r.fase === "total" && (r.min || 0) >= Math.max(CTX.min, 100)).sort((a, b) => (b.per || 0) - (a.per || 0));
+    if (!tot.length) { $("view").innerHTML = `<p class="empty">Esta temporada y liga no tienen estadísticas individuales. Elige otra temporada (2022-23 en adelante).</p>${pie(1)}`; return; }
+    S.pid = tot[0].player_id; S.tid = tot[0].team_id; rows = d.jug.filter((r) => r.player_id === S.pid && r.team_id === S.tid);
+  }
+  const t = rows.find((r) => unitKey(r) === CTX.unit) || rows.find((r) => r.fase === "total") || rows[0];
+  const pares = d.jug.filter((r) => unitKey(r) === unitKey(t) && (r.min || 0) >= CTX.min);
+  const nom = t.nombre || "";
+  if (!CAR) CAR = filas(await cargarJSON("datos/carreras.json").catch(() => null));
+  if (!vivo(tk)) return;
+  const pid = t.persona_uuid || t.player_id, tray = (CAR || []).filter((c) => c.id === pid).sort((a, b) => String(a.temporada).localeCompare(b.temporada));
+  const perfil = PERFIL.map(([g, ms]) => `<div class="g"><span>${esc(g)}</span><small>percentil frente a ${pares.length} jugadores de la unidad con ${CTX.min}+ min</small></div>`
+    + ms.map(([k, n, dd, inv]) => { const p = pctl(pares.map((r) => r[k]), t[k], inv); const tone = p == null ? "t-neu" : p >= 66 ? "t-hi" : p <= 33 ? "t-lo" : "t-mid";
+      return `<div class="m">${esc(n)}</div><div class="pbar ${tone}">${p == null ? "" : `<span class="p" style="left:${p.toFixed(1)}%"></span>`}</div><div class="val"><b>${k.includes("onoff") || k.includes("rapm") || k.includes("plus") ? sgn(t[k], dd) : fmt(t[k], dd)}</b> · p${p == null ? "—" : fmt(p, 0)}</div>`; }).join("")).join("");
+  const Z = [["aro", "Aro (< 1,25 m)", "frec_aro", "fg_pct_aro"], ["pintura", "Zona", "frec_pintura", "fg_pct_pintura"], ["media", "Media distancia", "frec_media", "fg_pct_media"], ["esq", "Triple de esquina", "frec_triple_esquina", "fg3_pct_esquina"], ["front", "Triple frontal", "frec_triple_frontal", "fg3_pct_frontal"]];
+  const zonas = Z.map(([, n, f, p]) => { const lg = mediaP(pares, p, "fga_con_coord"); return `<div class="m">${esc(n)}</div><div class="hb"><i style="width:${Math.min(100, t[f] || 0).toFixed(1)}%"></i></div><div class="val">${fmt(t[f], 1)} % de sus tiros · <b>${fmt(t[p], 1)} %</b> (unidad ${fmt(lg, 1)} %)</div>`; }).join("");
+  const fasesR = rows.slice().sort((a, b) => (a.fase_orden || 0) - (b.fase_orden || 0));
+  $("view").innerHTML = `
+  <section class="block hero">
+    <div class="eyebrow"><span>${esc(ligaN(CTX.liga).toUpperCase())} · ${esc(CTX.temp)} · ${esc(unitTxt(t).toUpperCase())}</span><span class="tag">Dato</span></div>
+    <h2 class="read-h${bombOK(nom) ? " disp" : ""}">${esc(nom)}</h2>
+    <p class="read-lead strong"><span class="hl">${fmt(t.pts_pg, 1)} puntos y PER ${fmt(t.per, 1)}</span> en ${int(t.gp)} partidos y ${fmt(t.min, 0)} minutos, con ${fmt(t.ts_pct, 1)} % de tiro verdadero.</p>
+    <div class="idt"><span>Equipo <b>${esc(t.equipo)}</b></span>${t.club ? `<span>Club <b>${esc(t.club)}</b></span>` : ""}${t.dorsal != null ? `<span>Dorsal <b>${esc(t.dorsal)}</b></span>` : ""}<span>Grupos <b>${esc(t.grupos || "—")}</b></span><span>Cobertura <b>${esc(t.cobertura || "—")}</b></span></div>
+  </section>
+  <section class="block"><div class="kpis">
+    <div class="kpi key"><span class="label">Puntos / partido</span><span class="v">${fmt(t.pts_pg, 1)}</span><span class="r">${fmt(t.pts_p40, 1)} por 40′ · máx. ${int(t.pts_max)}</span></div>
+    <div class="kpi"><span class="label">Rebotes / partido</span><span class="v">${fmt(t.reb_pg, 1)}</span><span class="r">${fmt(t.oreb_pct, 1)} % OREB · ${fmt(t.dreb_pct, 1)} % DREB</span></div>
+    <div class="kpi"><span class="label">Uso</span><span class="v">${fmt(t.usg_pct, 1)}</span><span class="r">USG% · TOV% ${fmt(t.tov_pct, 1)}</span></div>
+    <div class="kpi"><span class="label">ORtg · DRtg</span><span class="v">${fmt(t.ortg, 0)}</span><span class="r">DRtg ${fmt(t.drtg, 0)} · WS ${fmt(t.ws, 2)}</span></div>
+    <div class="kpi"><span class="label">On − off del Net</span><span class="v ${t.pbp_net_rtg_onoff > 0 ? "pos" : t.pbp_net_rtg_onoff < 0 ? "neg" : ""}">${sgn(t.pbp_net_rtg_onoff, 1)}</span><span class="r">en pista ${sgn(t.pbp_net_rtg_on, 1)} · fuera ${sgn(t.pbp_net_rtg_off, 1)}</span></div>
+    <div class="kpi"><span class="label">RAPM</span><span class="v ${t.pbp_rapm > 0 ? "pos" : t.pbp_rapm < 0 ? "neg" : ""}">${sgn(t.pbp_rapm, 1)}</span><span class="r">ataque ${sgn(t.pbp_orapm, 1)} · defensa ${sgn(t.pbp_drapm, 1)} · estimación</span></div>
+  </div></section>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Perfil frente a su unidad</h2><p class="sub">Percentil 0–100 · marcas en 25, 50 y 75</p></div><span class="tag dato">Dato</span></div>
+    <div class="prof">${perfil}</div><div class="axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div></section>
+  <div class="split">
+    <section class="block"><div class="block-h"><div><h2 class="h2">Zonas de tiro</h2><p class="sub">${int(t.fga_con_coord)} tiros con coordenadas · distancia media ${fmt(t.dist_tiro_media, 1)} m</p></div></div><div class="zone">${zonas}</div></section>
+    <section class="block"><div class="block-h"><div><h2 class="h2">Cómo anota</h2><p class="sub">Del jugada a jugada · % de sus puntos</p></div></div>
+      <div class="zone">${[["Contraataque", "pct_pts_contraataque"], ["Segunda oportunidad", "pct_pts_segunda_oportunidad"], ["Tras pérdida del rival", "pct_pts_tras_perdida"], ["Segunda mitad", "pct_pts_segunda_mitad"]].map(([n, k]) => `<div class="m">${n}</div><div class="hb"><i style="width:${Math.min(100, t[k] || 0).toFixed(1)}%"></i></div><div class="val"><b>${fmt(t[k], 1)} %</b></div>`).join("")}
+      <div class="m">Clutch</div><div class="hb"><i style="width:${Math.min(100, (t.clutch_pts_p40 || 0) * 2).toFixed(1)}%"></i></div><div class="val"><b>${int(t.clutch_pts)}</b> pts · ${fmt(t.pbp_clutch_min, 1)} min · TS% ${fmt(t.clutch_ts_pct, 1)}</div></div></section>
+  </div>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Por fase y división</h2><p class="sub">Cada fase con su propio contexto de liga · ${esc(CTX.temp)}</p></div></div>
+    <div class="tw"><table><thead><tr><th>Fase</th><th>División</th><th class="n">PJ</th><th class="n">Min</th><th class="n">Pts/p</th><th class="n">Reb/p</th><th class="n">TS%</th><th class="n">USG%</th><th class="n">PER</th><th class="n">On−off</th></tr></thead><tbody>
+    ${fasesR.map((r) => `<tr${unitKey(r) === unitKey(t) ? ' class="sel"' : ""}><td>${esc(r.fase_nombre || r.fase)}</td><td>${esc(r.division)}</td><td class="n">${int(r.gp)}</td><td class="n">${fmt(r.min, 0)}</td><td class="n">${fmt(r.pts_pg, 1)}</td><td class="n">${fmt(r.reb_pg, 1)}</td><td class="n">${fmt(r.ts_pct, 1)}</td><td class="n">${fmt(r.usg_pct, 1)}</td><td class="n">${fmt(r.per, 1)}</td><td class="n">${sgn(r.pbp_net_rtg_onoff, 1)}</td></tr>`).join("")}
+    </tbody></table></div></section>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Trayectoria</h2><p class="sub">Todas las temporadas con acta · por persona federada</p></div></div>
+    ${tray.length ? `<div class="tw"><table><thead><tr><th>Temporada</th><th>Liga</th><th>Equipo</th><th class="n">PJ</th><th class="n">Min</th><th class="n">Pts/p</th><th class="n">Reb/p</th><th class="n">TS%</th><th class="n">USG%</th><th class="n">PER</th></tr></thead><tbody>
+    ${tray.map((c) => `<tr${c.temporada === CTX.temp && c.liga === CTX.liga ? ' class="sel"' : ""}><td class="num">${c.temporada}</td><td>${esc(ligaN(c.liga))}</td><td>${esc(c.equipo)}</td><td class="n">${int(c.gp)}</td><td class="n">${fmt(c.min, 0)}</td><td class="n">${fmt(c.pts_pg, 1)}</td><td class="n">${fmt(c.reb_pg, 1)}</td><td class="n">${fmt(c.ts_pct, 1)}</td><td class="n">${fmt(c.usg_pct, 1)}</td><td class="n">${fmt(c.per, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">Sin identificador de persona federada para enlazar temporadas.</p>`}
+  </section>${pie(2)}`;
+};
+
+const EQC = [["gp", "PJ", 0], ["w", "V", 0], ["l", "D", 0], ["win_pct", "% V", 1], ["pts_pg", "Pts/p", 1], ["opp_pts_pg", "Rival/p", 1], ["margen_pg", "Margen", 1], ["team_pace", "Ritmo", 1], ["team_ortg", "ORtg", 1], ["team_drtg", "DRtg", 1], ["team_netrtg", "Net", 1], ["efg_pct", "eFG%", 1], ["tov_pct", "TOV%", 1], ["oreb_pct", "OREB%", 1], ["ft_rate", "FTr", 1], ["opp_efg_pct", "eFG% riv.", 1]];
+VISTAS.equipos = async (tk) => {
+  const d = await doc(); if (!vivo(tk)) return;
+  const rs = enUnidad(d.eq);
+  const pintar = () => {
+    const k = S.eqSort.k; rs.sort((a, b) => { const x = a[k], y = b[k]; if (x == null) return 1; if (y == null) return -1; return (typeof x === "string" ? String(x).localeCompare(y) : x - y) * S.eqSort.d; });
+    $("tbl").innerHTML = `<table class="tsort"><thead><tr><th data-k="equipo">Equipo</th>${EQC.map(([c, n]) => `<th class="n" data-k="${c}"${S.eqSort.k === c ? ` aria-sort="${S.eqSort.d < 0 ? "descending" : "ascending"}"` : ""}>${n}</th>`).join("")}</tr></thead><tbody>
+      ${rs.map((r) => `<tr class="go" data-t="${esc(r.team_id)}"><td><div class="who"><b>${esc(r.equipo)}</b><span>${esc([r.grupos, r.divisiones_equipo && !["única"].includes(r.divisiones_equipo) ? "div. " + r.divisiones_equipo : ""].filter(Boolean).join(" · "))}</span></div></td>${EQC.map(([c, , dd]) => `<td class="n">${c === "margen_pg" || c === "team_netrtg" ? sgn(r[c], dd) : fmt(r[c], dd)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    $("tbl").querySelectorAll("th[data-k]").forEach((th) => th.addEventListener("click", () => { const k2 = th.dataset.k; S.eqSort = { k: k2, d: S.eqSort.k === k2 ? -S.eqSort.d : (k2 === "equipo" || ["l", "team_drtg", "tov_pct", "opp_pts_pg", "opp_efg_pct"].includes(k2) ? 1 : -1) }; pintar(); }));
+    $("tbl").querySelectorAll("tr[data-t]").forEach((tr) => tr.addEventListener("click", () => { S.tid = tr.dataset.t; navegar("equipo"); }));
+  };
+  $("view").innerHTML = `<section class="block">${rs.length ? `<div class="tw" id="tbl"></div>` : `<p class="empty">Sin partidos en esta unidad.</p>`}
+    <p class="note">Ritmo y ratings por 100 posesiones con totales de equipo y rival de la unidad (sin acta digital, sólo récord y puntos). ${ligaDiv(CTX.liga) ? "Junior y Cadete: A1 y A2 son divisiones distintas; elige «Toda la división A1/A2» o una fase concreta para no mezclarlas." : ""}</p></section>${pie(3)}`;
+  if (rs.length) pintar();
+};
+
+VISTAS.equipo = async (tk) => {
+  const d = await doc(); if (!vivo(tk)) return;
+  const eqs = d.eq.filter((r) => r.fase === "total");
+  if (!eqs.length) { $("view").innerHTML = `<p class="empty">Sin equipos en esta temporada y liga.</p>${pie(3)}`; return; }
+  if (!S.tid || !eqs.some((r) => r.team_id === S.tid)) S.tid = [...eqs].sort((a, b) => (b.w || 0) - (a.w || 0) || (b.win_pct || 0) - (a.win_pct || 0))[0].team_id;
+  const t = eqs.find((r) => r.team_id === S.tid), uRows = d.eq.filter((r) => r.team_id === S.tid).sort((a, b) => (a.fase_orden || 0) - (b.fase_orden || 0));
+  const plant = d.jug.filter((r) => r.team_id === S.tid && r.fase === "total").sort((a, b) => (b.min || 0) - (a.min || 0));
+  const qs = d.qui.filter((q) => q.team_id === S.tid && q.fase === "total").sort((a, b) => b.min - a.min).slice(0, 6);
+  const res = d.par.filter((p) => p.local_id === S.tid || p.visitante_id === S.tid).sort((a, b) => String(a.fecha).localeCompare(b.fecha));
+  const lig = d.eq.filter((r) => r.fase === "total");
+  const FF = [["efg_pct", "eFG% propio", 0], ["tov_pct", "Pérdidas (TOV%)", 1], ["oreb_pct", "Rebote ofensivo", 0], ["ft_rate", "Tiros libres (FTr)", 0], ["opp_efg_pct", "eFG% del rival", 1], ["opp_tov_pct", "Pérdidas forzadas", 0], ["dreb_pct", "Rebote defensivo", 0], ["opp_ft_rate", "FTr del rival", 1]];
+  const ff = FF.map(([k, n, inv]) => { const m = lig.reduce((a, r) => a + (r[k] || 0), 0) / Math.max(1, lig.filter((r) => r[k] != null).length), dv = t[k] == null ? 0 : (t[k] - m) * (inv ? -1 : 1), w = Math.min(50, Math.abs(dv) * 4);
+    return `<div class="m">${esc(n)}</div><div class="dv"><i class="${dv >= 0 ? "up" : "dn"}" style="${dv >= 0 ? `left:50%;width:${w}%` : `left:${50 - w}%;width:${w}%`}"></i></div><div class="val"><b>${fmt(t[k], 1)}</b> · liga ${fmt(m, 1)}</div>`; }).join("");
+  $("view").innerHTML = `
+  <section class="block hero">
+    <div class="eyebrow"><span>${esc(ligaN(CTX.liga).toUpperCase())} · ${esc(CTX.temp)}</span><span class="tag">Dato</span></div>
+    <h2 class="read-h${bombOK(t.equipo) ? " disp" : ""}">${esc(t.equipo)}</h2>
+    <p class="read-lead strong"><span class="hl">${int(t.w)}-${int(t.l)}</span> en todas las fases, con ${sgn(t.margen_pg, 1)} puntos de margen por partido${t.team_netrtg != null ? ` y Net ${sgn(t.team_netrtg, 1)} por 100 posesiones` : ""}.</p>
+    <div class="idt">${t.club ? `<span>Club <b>${esc(t.club)}</b></span>` : ""}<span>División <b>${esc(t.divisiones_equipo || "—")}</b></span>${t.entrenadores ? `<span>Cuerpo técnico <b>${esc(t.entrenadores)}</b></span>` : ""}</div>
+    <div class="ctrls"><label class="ctrl"><span class="label">Cambiar de equipo</span><select id="selEq">${[...eqs].sort((a, b) => String(a.equipo).localeCompare(b.equipo)).map((r) => `<option value="${esc(r.team_id)}"${r.team_id === S.tid ? " selected" : ""}>${esc(r.equipo)}</option>`).join("")}</select></label></div>
+  </section>
+  <section class="block"><div class="kpis">
+    <div class="kpi key"><span class="label">Récord</span><span class="v">${int(t.w)}-${int(t.l)}</span><span class="r">${fmt(t.win_pct, 1)} % de victorias · ${int(t.gp)} PJ</span></div>
+    <div class="kpi"><span class="label">Ritmo</span><span class="v">${fmt(t.team_pace, 1)}</span><span class="r">posesiones por 40′</span></div>
+    <div class="kpi"><span class="label">ORtg</span><span class="v">${fmt(t.team_ortg, 1)}</span><span class="r">puntos por 100 posesiones</span></div>
+    <div class="kpi"><span class="label">DRtg</span><span class="v">${fmt(t.team_drtg, 1)}</span><span class="r">encajados por 100 posesiones</span></div>
+    <div class="kpi"><span class="label">Clutch</span><span class="v ${t.pbp_clutch_net_rtg > 0 ? "pos" : t.pbp_clutch_net_rtg < 0 ? "neg" : ""}">${sgn(t.pbp_clutch_net_rtg, 1)}</span><span class="r">Net en ${fmt(t.pbp_min_clutch, 0)} min de clutch</span></div>
+  </div></section>
+  <div class="split">
+    <section class="block"><div class="block-h"><div><h2 class="h2">Cuatro factores frente a la liga</h2><p class="sub">Todas las fases · a favor a la derecha</p></div></div><div class="zone">${ff}</div></section>
+    <section class="block"><div class="block-h"><div><h2 class="h2">Por fase y división</h2></div></div><div class="tw"><table><thead><tr><th>Fase</th><th>Div.</th><th class="n">V-D</th><th class="n">Margen</th><th class="n">Net</th></tr></thead><tbody>
+      ${uRows.map((r) => `<tr><td>${esc(r.fase_nombre || r.fase)}</td><td>${esc(r.division)}</td><td class="n">${int(r.w)}-${int(r.l)}</td><td class="n">${sgn(r.margen_pg, 1)}</td><td class="n">${sgn(r.team_netrtg, 1)}</td></tr>`).join("")}</tbody></table></div></section>
+  </div>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Plantilla</h2><p class="sub">Todas las fases · ordenada por minutos</p></div></div>
+    ${plant.length ? `<div class="tw"><table><thead><tr><th>Jugador</th><th class="n">PJ</th><th class="n">Min</th><th class="n">Pts/p</th><th class="n">Reb/p</th><th class="n">TS%</th><th class="n">USG%</th><th class="n">PER</th><th class="n">On−off</th></tr></thead><tbody>
+    ${plant.map((r) => `<tr class="go" data-p="${esc(r.player_id)}"><td>${esc(r.nombre)}</td><td class="n">${int(r.gp)}</td><td class="n">${fmt(r.min, 0)}</td><td class="n">${fmt(r.pts_pg, 1)}</td><td class="n">${fmt(r.reb_pg, 1)}</td><td class="n">${fmt(r.ts_pct, 1)}</td><td class="n">${fmt(r.usg_pct, 1)}</td><td class="n">${fmt(r.per, 1)}</td><td class="n">${sgn(r.pbp_net_rtg_onoff, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">Sin estadísticas individuales esta temporada.</p>`}</section>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Quintetos más usados</h2><p class="sub">Todas las fases · Net ajustado por muestra (contracción hacia la media)</p></div></div>
+    ${qs.length ? `<div class="tw"><table><thead><tr><th>Quinteto</th><th class="n">Min</th><th class="n">Posesiones</th><th class="n">ORtg</th><th class="n">DRtg</th><th class="n">Net</th><th class="n">Net aj.</th></tr></thead><tbody>
+    ${qs.map((q) => `<tr><td>${esc(q.jugadores)}</td><td class="n">${fmt(q.min, 0)}</td><td class="n">${fmt(q.poss, 0)}</td><td class="n">${fmt(q.ortg, 1)}</td><td class="n">${fmt(q.drtg, 1)}</td><td class="n">${sgn(q.net_rtg, 1)}</td><td class="n">${sgn(q.net_rtg_aj, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">Sin quintetos (temporada sin jugada a jugada).</p>`}</section>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Resultados</h2><p class="sub">${res.length} partidos</p></div></div>
+    <div class="tw tall"><table><thead><tr><th>Fecha</th><th>Fase</th><th>Div.</th><th>Partido</th><th class="n">Resultado</th></tr></thead><tbody>
+    ${res.map((p) => { const loc = p.local_id === S.tid, pf = loc ? p.pts_local : p.pts_visitante, pc = loc ? p.pts_visitante : p.pts_local;
+      return `<tr><td class="num">${esc(p.fecha)}</td><td>${esc(p.fase)}${p.grupo ? " · " + esc(p.grupo) : ""}</td><td>${esc(p.division)}</td><td>${esc(p.local)} – ${esc(p.visitante)}</td><td class="n ${pf > pc ? "hi" : pf < pc ? "lo" : ""}">${pf == null ? "—" : `${int(p.pts_local)}-${int(p.pts_visitante)}`}</td></tr>`; }).join("")}</tbody></table></div></section>
+  ${pie(3)}`;
+  $("selEq").addEventListener("change", (e) => { S.tid = e.target.value; VISTAS.equipo(S.tk); });
+  $("view").querySelectorAll("tr[data-p]").forEach((tr) => tr.addEventListener("click", () => { S.pid = tr.dataset.p; navegar("ficha"); }));
+};
+
+VISTAS.fases = async (tk) => {
+  const d = await doc(); if (!vivo(tk)) return;
+  const us = unidades();
+  const filasU = us.map((u) => { const e = d.eq.filter((r) => unitKey(r) === unitKey(u)), j = d.jug.filter((r) => unitKey(r) === unitKey(u)), n = e.length || 1, av = (k) => { const v = e.filter((r) => r[k] != null); return v.length ? v.reduce((a, r) => a + r[k], 0) / v.length : null; };
+    const pts = (k) => { const s = e.reduce((a, r) => a + (r[k] || 0), 0), t = e.reduce((a, r) => a + (r.pts_pg || 0) * (r.gp || 0), 0); return t ? 100 * s / t : null; };
+    return { u, eq: e.length, jug: j.filter((r) => r.min > 0).length, gp: e.reduce((a, r) => a + (r.gp || 0), 0) / 2, pace: av("team_pace"), ortg: av("team_ortg"), efg: av("efg_pct"), tov: av("tov_pct"), ftr: av("ft_rate"), tpar: av("fg3a_rate"), fb: pts("pts_fastbreak"), sc: pts("pts_2ndchance"), pp: av("pts_pg") }; });
+  $("view").innerHTML = `<section class="block"><div class="block-h"><div><h2 class="h2">${esc(ligaN(CTX.liga))} · ${esc(CTX.temp)}</h2><p class="sub">Medias de equipo por unidad · fases en orden cronológico</p></div><span class="tag dato">Dato</span></div>
+    ${filasU.length ? `<div class="tw"><table><thead><tr><th>Unidad</th><th class="n">Partidos</th><th class="n">Equipos</th><th class="n">Jugadores</th><th class="n">Pts/p</th><th class="n">Ritmo</th><th class="n">ORtg</th><th class="n">eFG%</th><th class="n">TOV%</th><th class="n">FTr</th><th class="n">3PAr</th><th class="n">% pts contra.</th><th class="n">% pts 2.ª op.</th></tr></thead><tbody>
+    ${filasU.map((f) => `<tr${unitKey(f.u) === CTX.unit ? ' class="sel"' : ""}><td>${esc(unitTxt(f.u))}</td><td class="n">${int(f.gp)}</td><td class="n">${int(f.eq)}</td><td class="n">${int(f.jug)}</td><td class="n">${fmt(f.pp, 1)}</td><td class="n">${fmt(f.pace, 1)}</td><td class="n">${fmt(f.ortg, 1)}</td><td class="n">${fmt(f.efg, 1)}</td><td class="n">${fmt(f.tov, 1)}</td><td class="n">${fmt(f.ftr, 1)}</td><td class="n">${fmt(f.tpar, 1)}</td><td class="n">${fmt(f.fb, 1)}</td><td class="n">${fmt(f.sc, 1)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">Sin datos.</p>`}</section>
+  <section class="block"><div class="block-h"><h2 class="h2">Cómo se leen las fases y divisiones</h2></div>
+    <p class="note">Cada fila es una fase en una división, con su propio contexto de liga: el PER medio es 15 dentro de cada unidad, así que un mismo jugador puede tener PER distinto en la primera fase (A1) y en la segunda fase (A2). «Todas las fases» une la temporada completa; «Toda la división A1» y «Toda la división A2» separan las dos divisiones de Junior y Cadete. La Fase de Clasificación cruza equipos de A1 y A2: esos partidos van como «cruce» y sólo cuentan en «Todas las fases».</p></section>${pie(4)}`;
+};
+
+VISTAS.calidad = async () => {
+  const c = IDX.cobertura.slice().sort((a, b) => String(b.temporada).localeCompare(a.temporada) || String(a.liga).localeCompare(b.liga));
+  $("view").innerHTML = `<section class="block"><div class="block-h"><div><h2 class="h2">Controles por temporada y liga</h2><p class="sub">Cronología frente al acta · quintetos reconstruidos con el +/- del acta</p></div><span class="tag dato">Dato</span></div>
+    <div class="tw"><table><thead><tr><th>Temporada</th><th>Liga</th><th class="n">Partidos</th><th class="n">Con acta</th><th class="n">Acciones</th><th class="n">Tiros</th><th class="n">Jugadores</th><th class="n">Equipos</th><th class="n">Cronología = acta</th><th class="n">Quintetos válidos</th></tr></thead><tbody>
+    ${c.map((x) => `<tr><td class="num">${x.temporada}</td><td>${esc(ligaN(x.liga))}</td><td class="n">${int(x.partidos)}</td><td class="n">${int(x.con_acta)}</td><td class="n">${int(x.eventos)}</td><td class="n">${int(x.tiros)}</td><td class="n">${int(x.jugadores)}</td><td class="n">${int(x.equipos)}</td><td class="n">${x.pbp_cuadra_pct == null ? "—" : fmt(x.pbp_cuadra_pct, 1) + " %"}</td><td class="n">${x.quintetos_validos_pct == null ? "—" : fmt(x.quintetos_validos_pct, 1) + " %"}</td></tr>`).join("")}</tbody></table></div></section>
+  <div class="split">
+    <section class="block"><div class="block-h"><h2 class="h2">Lo que la fuente no publica</h2></div>
+      <p class="note">Asistencias y tapones: la mesa los registra en 2026-27; en 2025-26 sólo tapones en unos 4 de cada 10 partidos, y antes ninguno. Donde no se registran, esos conteos quedan vacíos, nunca 0, y PER, ORtg, DRtg, Win Shares, Game Score y PIE se calculan igualmente con ellos a 0 para todos. Edad, altura, peso, posición y nacionalidad: la web no los publica. 2018-19 a 2021-22: no existe acta digital.</p></section>
+    <section class="block"><div class="block-h"><h2 class="h2">Invariantes comprobados</h2></div>
+      <p class="note">Dentro de cada fase y división: PER medio ponderado por minutos = 15 y USG% medio = 20. Win Shares de la temporada ≈ victorias (2025-26: Junior 155,6 frente a 153; Primera Nacional 200,1 frente a 199). Zonas de tiro: las coordenadas clasifican como de 2 o de 3 el 99,9 % de los tiros igual que la mesa.</p></section>
+  </div>${pie(5)}`;
+};
+
+VISTAS.extraccion = async () => {
+  $("view").innerHTML = `<section class="block"><div class="block-h"><div><h2 class="h2">Arquitectura por capas</h2><p class="sub">Repositorio uebnet/baskonia · rama FTAB · bbstats/esf</p></div></div>
+    <div class="steps">
+      <div class="act"><span class="label">Capa 1 · Extractores</span><b>Un adaptador por liga</b><span>Primera Nacional, Segunda Nacional, Junior y Cadete masculinos, configurados en config/basko.json. Recorren categoría, fases, grupos, calendario, acta y jugada a jugada de cada partido.</span></div>
+      <div class="act"><span class="label">Capa 2 · Almacén bruto</span><b>JSON original con fecha</b><span>data/basko/raw/&lt;liga&gt;/&lt;temporada&gt;/ · sin tocar, de sólo lectura e incremental. Permite reprocesar sin volver a descargar.</span></div>
+      <div class="act"><span class="label">Capa 3 · Jugada a jugada</span><b>Eventos normalizados</b><span>Catálogo completo de acciones, posesiones, zonas de tiro, clutch y quién está en pista. El acta es el control.</span></div>
+      <div class="act"><span class="label">Capa 4 · Métricas</span><b>Mismas fórmulas en todas las ligas</b><span>Por fase y división, total de temporada y total de cada división. Quintetos, on/off y RAPM.</span></div>
+      <div class="act"><span class="label">Capa 5 · Salida unificada</span><b>673 columnas iguales</b><span>Jugadores, equipos, partidos, boxscores, jugada a jugada, tiros, plantillas y quintetos por liga y temporada.</span></div>
+    </div></section>
+  <section class="block"><div class="block-h"><div><h2 class="h2">Ejecutar la actualización</h2><p class="sub">Sólo cuando se pide: no hay tareas programadas</p></div></div>
+    <p class="note">Desde esta página: botón «Ejecutar» de la cabecera (cuenta propietaria, conector Claude Code Remote). Desde el repositorio:</p>
+    <pre class="cmd">python ejecutar_basko.py                       # temporada en curso, todas las ligas
+python ejecutar_basko.py esf_jun esf_cad       # sólo esas ligas
+python ejecutar_basko.py --temporada 2024-25   # otra temporada (sólo esa)
+python -m bbstats.esf historico                # carga histórica 2018-19 a 2026-27
+python -m bbstats.esf reprocesar               # sin red, desde los brutos</pre>
+    <p class="note">También en GitHub: Actions, «EJECUTAR Federación Vasca», Run workflow. Cada ejecución descarga sólo los partidos nuevos y regenera esa temporada.</p></section>
+  <section class="block"><div class="block-h"><h2 class="h2">Norma de completitud</h2></div>
+    <p class="note">Ninguna fila ni columna se elimina: todas las ligas tienen las mismas 673 columnas. Lo que la fuente no mide queda vacío, nunca 0. Las métricas compuestas se calculan siempre con lo que sí se mide. Cada partido se agrega en su fase y división y en los totales; los jugadores sin acta digital (2018-19 a 2021-22) figuran con su plantilla. Pauta completa en docs/BASKO.md.</p></section>${pie(6)}`;
+};
+
+VISTAS.diccionario = async () => {
+  const D = IDX.diccionario || [];
+  const pintar = (q) => { const n = norm(q), rs = D.filter((r) => !n || norm(r.columna + " " + r.descripcion + " " + r.grupo).includes(n));
+    $("tbl").innerHTML = `<table><thead><tr><th>Columna</th><th>Grupo</th><th>Origen</th><th>Descripción</th></tr></thead><tbody>${rs.map((r) => `<tr><td class="num">${esc(r.columna)}</td><td>${esc(r.grupo)}</td><td>${esc(r.origen)}</td><td>${esc(r.descripcion)}</td></tr>`).join("")}</tbody></table>`;
+    $("cnt").textContent = `${rs.length} de ${D.length} columnas`; };
+  $("view").innerHTML = `<section class="block"><div class="ctrls"><label class="ctrl"><span class="label">Buscar columna</span><input type="search" id="fD" placeholder="p.ej. clutch, on, zona"></label><span class="label" id="cnt"></span></div><div class="tw tall" id="tbl"></div></section>${pie(7)}`;
+  $("fD").addEventListener("input", (e) => pintar(e.target.value)); pintar("");
+};
+
+// ---------------------------------------------------------------------------------------------- búsqueda
+let SR = [], SI = 0;
+async function abrirBusqueda() { $("search").hidden = false; $("searchIn").value = ""; $("searchHint").textContent = `${CTX.temp} · ${ligaN(CTX.liga)} · todas las fases`; $("searchRes").innerHTML = ""; $("searchIn").focus(); }
+function cerrarBusqueda() { $("search").hidden = true; }
+$("searchBtn").addEventListener("click", abrirBusqueda);
+$("searchClose").addEventListener("click", cerrarBusqueda);
+$("search").addEventListener("click", (e) => { if (e.target === $("search")) cerrarBusqueda(); });
+$("searchIn").addEventListener("input", async (e) => {
+  const q = norm(e.target.value); const d = await doc();
+  SR = q.length < 2 ? [] : d.jug.filter((r) => r.fase === "total" && norm(r.nombre).includes(q)).slice(0, 30); SI = 0;
+  $("searchRes").innerHTML = SR.map((r, i) => `<button type="button" role="option" aria-selected="${i === SI}" data-i="${i}"><b>${esc(r.nombre)}</b><span>${esc(r.equipo)}</span><em>${int(r.gp)} PJ · ${fmt(r.pts_pg, 1)} pts</em></button>`).join("") || (q.length >= 2 ? `<p class="hint">Sin resultados en esta temporada y liga.</p>` : "");
+  $("searchRes").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => elegir(Number(b.dataset.i))));
+});
+function elegir(i) { const r = SR[i]; if (!r) return; S.pid = r.player_id; S.tid = r.team_id; cerrarBusqueda(); navegar("ficha"); }
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && $("search").hidden && !/input|select|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); abrirBusqueda(); }
+  else if (!$("search").hidden) { if (e.key === "Escape") cerrarBusqueda(); if (e.key === "Enter") elegir(SI); }
+});
+
+// ---------------------------------------------------------------------------------------------- arranque
+(async function () {
+  try { IDX = await cargarJSON("datos/indice.json"); } catch (e) { $("view").innerHTML = `<p class="empty">No se pudo cargar el índice de datos.</p>`; return; }
+  const guard = (() => { try { return JSON.parse(LS.get("kerno.basque.ctx")) || {}; } catch (e) { return {}; } })();
+  const conDatos = IDX.temporadas.filter((t) => Object.values(t.ligas).reduce((a, l) => a + (l.con_acta || 0), 0) >= 300);
+  CTX.temp = IDX.temporadas.some((t) => t.temporada === guard.temp) ? guard.temp : (conDatos[0] || IDX.temporadas[0]).temporada;
+  CTX.liga = guard.liga && IDX.ligas[guard.liga] ? guard.liga : Object.keys(IDX.ligas)[0];
+  CTX.unit = guard.unit || "total|única"; CTX.min = guard.min != null ? guard.min : 100;
+  pintarCtx(); pintarRail();
+  ir(location.hash.slice(1) || "inicio");
+})();
+</script>
+
+<script id="kerno-upd-js">
+/* Botón «Ejecutar»: la página no ejecuta Python. Con la capacidad `mcp` (conector «Claude Code Remote») lanza la tarea
+   «EJECUTAR Kerno Basque Analytics» (fire_trigger) y sigue su última ejecución (get_trigger). La tarea abre una sesión
+   de Claude Code que actualiza la temporada pedida en la rama FTAB y vuelve a publicar esta página. */
+(function () {
+  "use strict";
+  const TRIGGER = "trig_01Tmstsk4KswuUPmpBjhHgKf", SERVER = "Claude Code Remote", MAX_MS = 3 * 3600e3, CADA_MS = 60e3;
+  const el = (i) => document.getElementById(i);
+  const btn = el("updBtn"), pop = el("updPop"), est = el("updEst"), go = el("updGo"), no = el("updNo"), ult = el("updUlt"), dat = el("updDatos"), sel = el("updTemp");
+  const mem = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } } };
+  const escU = (t) => String(t == null ? "" : t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fecha = (t) => { const d = new Date(t); return isNaN(d) ? "" : d.toLocaleString("es-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }); };
+  let mcp = null, timer = 0;
+  const abierto = () => !pop.hidden;
+  function abrir(on) { pop.hidden = !on; btn.setAttribute("aria-expanded", String(on)); if (on) leerEstado(); }
+  btn.addEventListener("click", (e) => { e.stopPropagation(); abrir(!abierto()); });
+  no.addEventListener("click", () => { abrir(false); btn.focus(); });
+  document.addEventListener("click", (e) => { if (abierto() && !pop.contains(e.target) && !btn.contains(e.target)) abrir(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && abierto()) { abrir(false); btn.focus(); } });
+  ["2026-27", "2025-26", "2024-25", "2023-24", "2022-23"].forEach((t) => { const o = document.createElement("option"); o.value = o.textContent = t; sel.appendChild(o); });
+  const ETQ = { run: "En marcha", err: "Con error" };
+  function pinta(st, txt) { if (st === "run" || st === "err") btn.dataset.st = st; else delete btn.dataset.st; est.textContent = ETQ[st] || "Ejecutar"; ult.innerHTML = txt || ""; }
+  fetch("datos/indice.json").then((r) => r.json()).then((d) => { dat.innerHTML = `Datos publicados el <b>${escU(fecha(d.generado))}</b>.`; }).catch(() => { dat.textContent = ""; });
+  const errorTxt = (e) => ({
+    server_not_connected: "Falta el conector «Claude Code Remote» en tu cuenta: claude.ai, Ajustes, Conectores.",
+    needs_reauth: "Hay que volver a conectar «Claude Code Remote» en claude.ai, Ajustes, Conectores.",
+    not_in_manifest: "No has permitido a esta página usar «Claude Code Remote». Puedes cambiarlo en los permisos del artifact.",
+    approval_required: "La acción necesita tu aprobación: pulsa de nuevo y acepta el aviso de claude.ai.",
+    blocked_by_policy: "La política de tu organización no permite lanzar la actualización desde aquí.",
+    tool_error: "No se pudo lanzar o consultar la actualización con tu cuenta: solo la cuenta propietaria puede lanzarla.",
+  }[e && e.code] || `No se pudo contactar con Claude Code Remote (${escU((e && e.code) || "error")}).`);
+  function ejecucion(lr) {
+    if (!lr) return ["", "Todavía no se ha lanzado ninguna ejecución con el botón."];
+    const s = String(lr.status || "");
+    if (/RUNNING|PENDING|QUEUED|STARTED/.test(s) || (!lr.finished_at && lr.fired_at)) return ["run", `Ejecución en marcha desde ${escU(fecha(lr.fired_at))}. La página se publicará sola al terminar.`];
+    if (/SUCCEEDED/.test(s)) return ["ok", `Última ejecución: terminó el ${escU(fecha(lr.finished_at || lr.fired_at))}.`];
+    if (/FAILED|ERROR|CANCEL/.test(s)) return ["err", `La última ejecución (${escU(fecha(lr.fired_at))}) terminó con error; los datos publicados son los anteriores.`];
+    return ["", `Última ejecución: ${escU(fecha(lr.fired_at))}.`];
+  }
+  async function leerEstado() {
+    if (!mcp || TRIGGER.startsWith("@@")) return null;
+    try { const r = await mcp.callTool(SERVER, "get_trigger", { trigger_id: TRIGGER }, { cache: false }); const t = (r && r.payload && (r.payload.trigger || r.payload)) || {};
+      const [st, txt] = ejecucion(t.last_run); pinta(st, txt); go.disabled = st === "run"; return t.last_run || null; }
+    catch (e) { pinta("", escU(errorTxt(e))); return null; }
+  }
+  function seguir() {
+    clearTimeout(timer); const t0 = Number(mem.get("kerno.basque.lanzado") || 0); if (!t0 || Date.now() - t0 > MAX_MS) return;
+    timer = setTimeout(async () => { const lr = await leerEstado(); if (lr && lr.finished_at && new Date(lr.finished_at) >= new Date(t0 - 120e3)) { mem.set("kerno.basque.lanzado", ""); } else seguir(); }, CADA_MS);
+  }
+  go.addEventListener("click", async () => {
+    if (!mcp) return; go.disabled = true; pinta("run", "Lanzando la ejecución…");
+    try { await mcp.callTool(SERVER, "fire_trigger", { trigger_id: TRIGGER, text: `temporada=${sel.value} origen=boton-kerno-basque` }, { cache: false });
+      mem.set("kerno.basque.lanzado", String(Date.now())); pinta("run", "Ejecución lanzada. Tarda entre 10 y 40 minutos; puedes cerrar la página."); seguir(); }
+    catch (e) { go.disabled = false; const dud = e && (e.code === "server_unavailable" || e.code === "upstream_error"); pinta(dud ? "" : "err", dud ? "No hubo respuesta: puede que se haya lanzado igualmente. Comprueba el estado en unos minutos antes de volver a pulsar." : escU(errorTxt(e))); }
+  });
+  const sinMcp = () => { go.disabled = true; pinta("", "Para ejecutar la extracción, abre esta página en claude.ai con la cuenta propietaria."); };
+  if (TRIGGER.startsWith("@@")) { sinMcp(); return; }
+  (window.claude && window.claude.use ? window.claude.use("mcp") : Promise.resolve(null)).then((m) => { mcp = m; if (!m) { sinMcp(); return; } leerEstado().then(seguir); }).catch(sinMcp);
+})();
+</script>
