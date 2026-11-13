@@ -166,3 +166,32 @@ total = j[j.fase == "total"]                          # todas las fases y divisi
 ```
 
 Todas las ligas y temporadas tienen las mismas columnas: se concatenan sin transformaciones.
+
+## Kerno Basque Analytics: misma tipología que «Kerno Analytics · Equipos»
+
+El Artifact https://claude.ai/artifact/5bU3CLLhW7i3K9pcQyaSX7 replica el sitio general de equipos sobre las cuatro
+ligas vascas (Primera y Segunda Nacional, Junior y Cadete; 2022-23 en adelante, con jugada a jugada):
+
+- **Lectura** (tu equipo hoy: diferencial, ratings, Nivel Kerno de la plantilla, banquillo, cuatro factores, estilo).
+- **01 Diagnóstico**: evaluación, rotación, quintetos, parejas y tríos, conexiones, impacto en pista, la liga e
+  **informe de equipo en PDF** (14 páginas: identidad, veredicto, huella del entrenador con **tiempos muertos**,
+  rotación, ataque, defensa y stops, quintetos de referencia, red de pases, glosario).
+- **02 Estilos**: los seis estilos unificados (Pistons, Isolation, Old-School, Spacing, Circulación, Pintura), con
+  los doce rasgos medidos frente a su propia liga, y el mapa de estilos.
+- **03 Jugadores**: Nivel Kerno de la liga, ficha (percentiles, trayectoria) y lista corta con comparativa.
+- **04 Federación Vasca**: la vista anterior (tabla de jugadores, clasificación por fase, fases, calidad, extracción).
+- Ikurriña en miniatura en la esquina de la barra de filtros (única diferencia visual con el sitio general).
+
+**Nivel Kerno vasco** (`bbstats/esf/kerno.py::nivel_kerno`), sin simulador ni puente entre ligas: Producción = media
+de la puntuación normal por rangos (frente a su liga y temporada, contraída con k = 300 min) de PER, WS/40, GmSc/40 y
+PIE; Impacto = la de RAPM y on/off ajustado; NK = 0,6·P + 0,4·I re-estandarizado y llevado a 0–100 con
+50 + 50·tanh(z/2); rango del 80 % = z ± 1,2816·√(300/(min+300)).
+
+Regenerar y montar:
+
+    python -m bbstats.esf artifact          # vista Federación Vasca  → data/basko/artifact/datos
+    python -m bbstats.esf kerno             # equipos, quintetos, estilos, Nivel Kerno, Atlas → data/basko/artifact/sitio
+    python artifact/kerno-basque/montar.py  # publicacion/kerno-basque/ + publicacion/kerno-basque.json (lista para publicar)
+
+Código del sitio: `artifact/kerno-basque/sitio/` (`_build.py` ensambla `index.html`); las páginas `quintetos/` y
+`atlas/` son las del sitio general con los parches de `artifact/kerno-basque/parches/`.

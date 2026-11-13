@@ -4,6 +4,8 @@
     python -m bbstats.esf historico [--desde 2018-19] [--hasta 2026-27] [--ligas ...] [--sin-procesar]
     python -m bbstats.esf reprocesar [--temporadas 2024-25 2025-26] [--ligas ...]       # sin red
     python -m bbstats.esf estado
+    python -m bbstats.esf artifact      # datos de la vista «Federación Vasca» (data/basko/artifact/datos)
+    python -m bbstats.esf kerno         # datos de Kerno Basque Analytics: quintetos, estilos, Nivel Kerno, Atlas (…/artifact/sitio)
 """
 from __future__ import annotations
 
@@ -31,7 +33,8 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--ligas", nargs="*")
     r.add_argument("--temporadas", nargs="*")
     sub.add_parser("estado", help="temporadas, ligas y filas disponibles")
-    sub.add_parser("artifact", help="datos del Artifact Kerno Basque Analytics (data/basko/artifact)")
+    sub.add_parser("artifact", help="datos de la vista Federación Vasca del Artifact (data/basko/artifact)")
+    sub.add_parser("kerno", help="datos de Kerno Basque Analytics: equipos, quintetos, estilos, Nivel Kerno y Atlas (data/basko/artifact/sitio)")
     a = ap.parse_args(argv)
     cfg = P.load_config()
     if a.cmd == "ejecutar":
@@ -44,6 +47,10 @@ def main(argv: list[str] | None = None) -> int:
     elif a.cmd == "artifact":
         from .artifact import exportar
         print(exportar())
+        return 0
+    elif a.cmd == "kerno":
+        from .kerno import exportar as exportar_kerno
+        print(exportar_kerno())
         return 0
     else:
         idx = P.ruta(cfg, "procesado") / "temporadas.json"
