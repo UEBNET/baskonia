@@ -1,0 +1,698 @@
+{
+ "version": "1.0.0",
+ "modo": "reprocesar",
+ "inicio": "2026-11-13T13:14:24.802155+00:00",
+ "fin": "2026-11-13T13:22:06.010985+00:00",
+ "resultados": [
+  {
+   "liga": "esf_1nac",
+   "temporada": "2018-19",
+   "estado": "ok",
+   "partidos_calendario": 185,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 119,
+   "fases": [
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2018-19/esf_1nac_2018-19_20261113T125559Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.9
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2018-19",
+   "estado": "ok",
+   "partidos_calendario": 159,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 137,
+   "fases": [
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2018-19/esf_2nac_2018-19_20261113T125559Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.9
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2018-19",
+   "estado": "ok",
+   "partidos_calendario": 122,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 119,
+   "fases": [
+    "liga_regular",
+    "final_a_cuatro",
+    "segunda_fase",
+    "tercera_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2018-19/esf_jun_2018-19_20261113T125559Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.9
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2018-19",
+   "estado": "ok",
+   "partidos_calendario": 122,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 124,
+   "fases": [
+    "liga_regular",
+    "final_a_cuatro",
+    "segunda_fase",
+    "tercera_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2018-19/esf_cad_2018-19_20261113T125559Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.9
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2019-20",
+   "estado": "ok",
+   "partidos_calendario": 114,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 127,
+   "fases": [
+    "liga_regular"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2019-20/esf_1nac_2019-20_20261113T125543Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.8
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2019-20",
+   "estado": "ok",
+   "partidos_calendario": 125,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 145,
+   "fases": [
+    "liga_regular"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2019-20/esf_2nac_2019-20_20261113T125543Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.9
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2019-20",
+   "estado": "ok",
+   "partidos_calendario": 95,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 120,
+   "fases": [
+    "l_v",
+    "final_a_cuatro",
+    "segunda_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2019-20/esf_jun_2019-20_20261113T125543Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.9
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2019-20",
+   "estado": "ok",
+   "partidos_calendario": 95,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 126,
+   "fases": [
+    "l_v",
+    "final_a_cuatro",
+    "segunda_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2019-20/esf_cad_2019-20_20261113T125543Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.9
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2020-21",
+   "estado": "ok",
+   "partidos_calendario": 134,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 113,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "ascenso"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2020-21/esf_1nac_2020-21_20261113T125527Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.8
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2020-21",
+   "estado": "ok",
+   "partidos_calendario": 42,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 78,
+   "fases": [
+    "liga_regular"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2020-21/esf_2nac_2020-21_20261113T125527Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.8
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2020-21",
+   "estado": "ok",
+   "partidos_calendario": 89,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 125,
+   "fases": [
+    "l_v",
+    "fase_clasificacion",
+    "segunda_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2020-21/esf_jun_2020-21_20261113T125527Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.8
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2020-21",
+   "estado": "ok",
+   "partidos_calendario": 89,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 124,
+   "fases": [
+    "l_v",
+    "fase_clasificacion",
+    "segunda_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2020-21/esf_cad_2020-21_20261113T125527Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 0.8
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2021-22",
+   "estado": "ok",
+   "partidos_calendario": 214,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 142,
+   "fases": [
+    "copa",
+    "primera_fase",
+    "segunda_fase",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2021-22/esf_1nac_2021-22_20261113T125453Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 1.2
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2021-22",
+   "estado": "ok",
+   "partidos_calendario": 227,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 164,
+   "fases": [
+    "primera_fase",
+    "segunda_fase",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2021-22/esf_2nac_2021-22_20261113T125453Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 1.2
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2021-22",
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 164,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "cruces_a_1",
+    "segunda_fase",
+    "final_a_cuatro"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2021-22/esf_jun_2021-22_20261113T125453Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 1.2
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2021-22",
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 0,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 159,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "cruces_a_1",
+    "segunda_fase",
+    "final_a_cuatro"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2021-22/esf_cad_2021-22_20261113T125453Z.json.gz",
+   "errores": [],
+   "notas": [
+    "temporada sin acta digital en la web: sólo calendario, resultados y plantillas"
+   ],
+   "duracion_s": 1.2
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2022-23",
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 197,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 821,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2022-23/esf_1nac_2022-23_20261113T124935Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 80.6
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2022-23",
+   "estado": "ok",
+   "partidos_calendario": 185,
+   "partidos_con_acta": 183,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 580,
+   "fases": [
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2022-23/esf_2nac_2022-23_20261113T124935Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 78.1
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2022-23",
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 147,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 960,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "final_a_cuatro"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2022-23/esf_jun_2022-23_20261113T124935Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 91.4
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2022-23",
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 147,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 861,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "final_a_cuatro"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2022-23/esf_cad_2022-23_20261113T124935Z.json.gz",
+   "errores": [],
+   "notas": [
+    "partido 56296: la cronología no cuadra con el acta; boxscore del acta"
+   ],
+   "duracion_s": 91.2
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2023-24",
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 198,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 736,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2023-24/esf_1nac_2023-24_20261113T124401Z.json.gz",
+   "errores": [],
+   "notas": [
+    "partido 59184: la cronología no cuadra con el acta; boxscore del acta"
+   ],
+   "duracion_s": 88.6
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2023-24",
+   "estado": "ok",
+   "partidos_calendario": 185,
+   "partidos_con_acta": 185,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 519,
+   "fases": [
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2023-24/esf_2nac_2023-24_20261113T124401Z.json.gz",
+   "errores": [],
+   "notas": [
+    "partido 59402: la cronología no cuadra con el acta; boxscore del acta"
+   ],
+   "duracion_s": 82.8
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2023-24",
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 147,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 939,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2023-24/esf_jun_2023-24_20261113T124401Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 96.5
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2023-24",
+   "estado": "ok",
+   "partidos_calendario": 148,
+   "partidos_con_acta": 148,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 863,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2023-24/esf_cad_2023-24_20261113T124401Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 97.5
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2024-25",
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 199,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 762,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2024-25/esf_1nac_2024-25_20261113T123849Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 94.2
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2024-25",
+   "estado": "ok",
+   "partidos_calendario": 185,
+   "partidos_con_acta": 184,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 549,
+   "fases": [
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2024-25/esf_2nac_2024-25_20261113T123849Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 89.8
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2024-25",
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 151,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 1037,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2024-25/esf_jun_2024-25_20261113T123849Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 104.9
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2024-25",
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 152,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 886,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2024-25/esf_cad_2024-25_20261113T123849Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 103.9
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2025-26",
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 199,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 765,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2025-26/esf_1nac_2025-26_20261113T123333Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 103.2
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2025-26",
+   "estado": "ok",
+   "partidos_calendario": 199,
+   "partidos_con_acta": 199,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 724,
+   "fases": [
+    "copa",
+    "liga_regular",
+    "fase_clasificacion"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2025-26/esf_2nac_2025-26_20261113T123333Z.json.gz",
+   "errores": [],
+   "notas": [
+    "partido 85611: la cronología no cuadra con el acta; boxscore del acta"
+   ],
+   "duracion_s": 101.6
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2025-26",
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 153,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 1043,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2025-26/esf_jun_2025-26_20261113T123333Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 113.7
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2025-26",
+   "estado": "ok",
+   "partidos_calendario": 153,
+   "partidos_con_acta": 153,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 861,
+   "fases": [
+    "primera_fase",
+    "fase_clasificacion",
+    "segunda_fase",
+    "tercera_fase",
+    "copa"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2025-26/esf_cad_2025-26_20261113T123333Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 112.9
+  },
+  {
+   "liga": "esf_1nac",
+   "temporada": "2026-27",
+   "estado": "ok",
+   "partidos_calendario": 46,
+   "partidos_con_acta": 46,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 626,
+   "fases": [
+    "copa",
+    "liga_regular"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_1nac/2026-27/esf_1nac_2026-27_20261113T123217Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 45.3
+  },
+  {
+   "liga": "esf_2nac",
+   "temporada": "2026-27",
+   "estado": "ok",
+   "partidos_calendario": 40,
+   "partidos_con_acta": 40,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 560,
+   "fases": [
+    "copa",
+    "liga_regular"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_2nac/2026-27/esf_2nac_2026-27_20261113T123217Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 43.0
+  },
+  {
+   "liga": "esf_jun",
+   "temporada": "2026-27",
+   "estado": "ok",
+   "partidos_calendario": 32,
+   "partidos_con_acta": 32,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 327,
+   "fases": [
+    "primera_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_jun/2026-27/esf_jun_2026-27_20261113T123217Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 43.5
+  },
+  {
+   "liga": "esf_cad",
+   "temporada": "2026-27",
+   "estado": "ok",
+   "partidos_calendario": 32,
+   "partidos_con_acta": 32,
+   "partidos_nuevos": 0,
+   "filas_jugadores": 333,
+   "fases": [
+    "primera_fase"
+   ],
+   "archivo_bruto": "/home/user/baskonia/data/basko/raw/esf_cad/2026-27/esf_cad_2026-27_20261113T123217Z.json.gz",
+   "errores": [],
+   "notas": [],
+   "duracion_s": 44.6
+  }
+ ]
+}

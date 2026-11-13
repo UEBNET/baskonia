@@ -1,0 +1,426 @@
+{
+ "temporadas": [
+  {
+   "temporada": "2026-27",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 626,
+     "fases": [
+      "copa",
+      "liga_regular",
+      "total"
+     ],
+     "partidos_con_acta": 46,
+     "partidos_calendario": 46
+    },
+    "esf_2nac": {
+     "filas": 560,
+     "fases": [
+      "copa",
+      "liga_regular",
+      "total"
+     ],
+     "partidos_con_acta": 40,
+     "partidos_calendario": 40
+    },
+    "esf_jun": {
+     "filas": 327,
+     "fases": [
+      "primera_fase",
+      "total",
+      "total_a1"
+     ],
+     "partidos_con_acta": 32,
+     "partidos_calendario": 32
+    },
+    "esf_cad": {
+     "filas": 333,
+     "fases": [
+      "primera_fase",
+      "total",
+      "total_a1"
+     ],
+     "partidos_con_acta": 32,
+     "partidos_calendario": 32
+    }
+   }
+  },
+  {
+   "temporada": "2025-26",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 765,
+     "fases": [
+      "copa",
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 199,
+     "partidos_calendario": 199
+    },
+    "esf_2nac": {
+     "filas": 724,
+     "fases": [
+      "copa",
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 199,
+     "partidos_calendario": 199
+    },
+    "esf_jun": {
+     "filas": 1043,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "tercera_fase",
+      "copa",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 153,
+     "partidos_calendario": 153
+    },
+    "esf_cad": {
+     "filas": 861,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "tercera_fase",
+      "copa",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 153,
+     "partidos_calendario": 153
+    }
+   }
+  },
+  {
+   "temporada": "2024-25",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 762,
+     "fases": [
+      "copa",
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 199,
+     "partidos_calendario": 199
+    },
+    "esf_2nac": {
+     "filas": 549,
+     "fases": [
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 184,
+     "partidos_calendario": 185
+    },
+    "esf_jun": {
+     "filas": 1037,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "tercera_fase",
+      "copa",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 151,
+     "partidos_calendario": 153
+    },
+    "esf_cad": {
+     "filas": 886,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "tercera_fase",
+      "copa",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 152,
+     "partidos_calendario": 153
+    }
+   }
+  },
+  {
+   "temporada": "2023-24",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 736,
+     "fases": [
+      "copa",
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 198,
+     "partidos_calendario": 199
+    },
+    "esf_2nac": {
+     "filas": 519,
+     "fases": [
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 185,
+     "partidos_calendario": 185
+    },
+    "esf_jun": {
+     "filas": 939,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "tercera_fase",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 147,
+     "partidos_calendario": 148
+    },
+    "esf_cad": {
+     "filas": 863,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "tercera_fase",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 148,
+     "partidos_calendario": 148
+    }
+   }
+  },
+  {
+   "temporada": "2022-23",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 821,
+     "fases": [
+      "copa",
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 197,
+     "partidos_calendario": 199
+    },
+    "esf_2nac": {
+     "filas": 580,
+     "fases": [
+      "liga_regular",
+      "fase_clasificacion",
+      "total"
+     ],
+     "partidos_con_acta": 183,
+     "partidos_calendario": 185
+    },
+    "esf_jun": {
+     "filas": 960,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "final_a_cuatro",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 147,
+     "partidos_calendario": 148
+    },
+    "esf_cad": {
+     "filas": 861,
+     "fases": [
+      "primera_fase",
+      "fase_clasificacion",
+      "segunda_fase",
+      "final_a_cuatro",
+      "total",
+      "total_a1",
+      "total_a2"
+     ],
+     "partidos_con_acta": 147,
+     "partidos_calendario": 148
+    }
+   }
+  },
+  {
+   "temporada": "2021-22",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 142,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 214
+    },
+    "esf_2nac": {
+     "filas": 164,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 227
+    },
+    "esf_jun": {
+     "filas": 164,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 148
+    },
+    "esf_cad": {
+     "filas": 159,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 148
+    }
+   }
+  },
+  {
+   "temporada": "2020-21",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 113,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 134
+    },
+    "esf_2nac": {
+     "filas": 78,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 42
+    },
+    "esf_jun": {
+     "filas": 125,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 89
+    },
+    "esf_cad": {
+     "filas": 124,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 89
+    }
+   }
+  },
+  {
+   "temporada": "2019-20",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 127,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 114
+    },
+    "esf_2nac": {
+     "filas": 145,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 125
+    },
+    "esf_jun": {
+     "filas": 120,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 95
+    },
+    "esf_cad": {
+     "filas": 126,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 95
+    }
+   }
+  },
+  {
+   "temporada": "2018-19",
+   "ligas": {
+    "esf_1nac": {
+     "filas": 119,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 185
+    },
+    "esf_2nac": {
+     "filas": 137,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 159
+    },
+    "esf_jun": {
+     "filas": 119,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 122
+    },
+    "esf_cad": {
+     "filas": 124,
+     "fases": [
+      "total"
+     ],
+     "partidos_con_acta": 0,
+     "partidos_calendario": 122
+    }
+   }
+  }
+ ],
+ "ligas": {
+  "esf_1nac": "Primera Nacional Masculina (1ª División Masculina · Euskadi)",
+  "esf_2nac": "Segunda Nacional Masculina (2ª División Masculina · Euskadi)",
+  "esf_jun": "Liga Vasca Junior Masculina",
+  "esf_cad": "Liga Vasca Cadete Masculina",
+  "esf_jun_sel": "Campeonatos interterritoriales Junior Masculino (Euskadi-Navarra y Vasco-Navarro-Riojano, selecciones)",
+  "esf_cad_sel": "Campeonatos interterritoriales Cadete Masculino (Euskadi-Navarra y Vasco-Navarro-Riojano, selecciones)"
+ }
+}

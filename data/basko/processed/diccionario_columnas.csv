@@ -1,0 +1,674 @@
+columna,grupo,origen,descripcion
+liga,identidad,contexto,"Código interno de la liga (euroleague, acb, nba, ...)"
+liga_nombre,identidad,contexto,Nombre oficial de la competición
+pais,identidad,contexto,País / ámbito de la competición
+temporada,identidad,contexto,Temporada canónica (p.ej. 2025-26)
+fase,identidad,contexto,"Fase: regular (temporada regular), playoffs (play-in + playoffs + final four/finales) o total"
+fuente,identidad,contexto,Origen de los datos (URL base / proveedor)
+fecha_extraccion,identidad,contexto,Fecha UTC de la descarga del JSON bruto usado
+archivo_bruto,identidad,contexto,Ruta del JSON bruto del que sale esta fila (trazabilidad)
+player_id,identidad,contexto,Identificador del jugador en la fuente
+player_uid,identidad,contexto,Identificador único global: <liga>:<player_id>
+nombre,identidad,contexto,Nombre completo del jugador
+dorsal,identidad,contexto,Dorsal
+posicion,identidad,contexto,Posición publicada por la fuente
+altura_cm,identidad,contexto,Altura en centímetros
+peso_kg,identidad,contexto,Peso en kilogramos
+edad,identidad,contexto,Edad
+fecha_nacimiento,identidad,contexto,Fecha de nacimiento
+nacionalidad,identidad,contexto,Nacionalidad / país
+team_id,identidad,contexto,Identificador del equipo en la fuente
+equipo,identidad,contexto,Nombre del equipo
+equipo_codigo,identidad,contexto,Código / abreviatura del equipo
+minutos_partido,identidad,contexto,"Duración reglamentaria del partido en la liga (40 FIBA, 48 NBA)"
+calidad_contexto,identidad,contexto,completo = hay totales de equipo y rival; parcial = solo equipo; sin_contexto
+gp,totales,fuente,Partidos jugados
+gs,totales,fuente,Partidos como titular
+min,totales,fuente,Minutos totales
+pts,totales,fuente,Puntos
+fgm,totales,fuente,Tiros de campo anotados (T2+T3)
+fga,totales,fuente,Tiros de campo intentados
+fg2m,totales,fuente,Tiros de 2 anotados
+fg2a,totales,fuente,Tiros de 2 intentados
+fg3m,totales,fuente,Triples anotados
+fg3a,totales,fuente,Triples intentados
+ftm,totales,fuente,Tiros libres anotados
+fta,totales,fuente,Tiros libres intentados
+oreb,totales,fuente,Rebotes ofensivos
+dreb,totales,fuente,Rebotes defensivos
+reb,totales,fuente,Rebotes totales
+ast,totales,fuente,Asistencias
+stl,totales,fuente,Robos
+tov,totales,fuente,Pérdidas
+blk,totales,fuente,Tapones a favor
+blka,totales,fuente,Tapones recibidos
+pf,totales,fuente,Faltas personales cometidas
+pfd,totales,fuente,Faltas recibidas
+plus_minus,totales,fuente,Más/menos (+/-) acumulado
+pir,totales,fuente,Valoración (PIR / VAL) acumulada
+dunks,totales,fuente,Mates
+fastbreaks,totales,fuente,Contraataques (número de acciones; ACB 'C')
+pts_fastbreak,totales,fuente,Puntos de contraataque
+pts_paint,totales,fuente,Puntos en la pintura
+pts_2ndchance,totales,fuente,Puntos de segunda oportunidad
+pts_off_tov,totales,fuente,Puntos tras pérdida rival
+dd2,totales,fuente,Dobles-dobles
+td3,totales,fuente,Triples-dobles
+min_pg,por_partido,calculado,Minutos totales por partido
+pts_pg,por_partido,calculado,Puntos por partido
+fgm_pg,por_partido,calculado,Tiros de campo anotados (T2+T3) por partido
+fga_pg,por_partido,calculado,Tiros de campo intentados por partido
+fg2m_pg,por_partido,calculado,Tiros de 2 anotados por partido
+fg2a_pg,por_partido,calculado,Tiros de 2 intentados por partido
+fg3m_pg,por_partido,calculado,Triples anotados por partido
+fg3a_pg,por_partido,calculado,Triples intentados por partido
+ftm_pg,por_partido,calculado,Tiros libres anotados por partido
+fta_pg,por_partido,calculado,Tiros libres intentados por partido
+oreb_pg,por_partido,calculado,Rebotes ofensivos por partido
+dreb_pg,por_partido,calculado,Rebotes defensivos por partido
+reb_pg,por_partido,calculado,Rebotes totales por partido
+ast_pg,por_partido,calculado,Asistencias por partido
+stl_pg,por_partido,calculado,Robos por partido
+tov_pg,por_partido,calculado,Pérdidas por partido
+blk_pg,por_partido,calculado,Tapones a favor por partido
+blka_pg,por_partido,calculado,Tapones recibidos por partido
+pf_pg,por_partido,calculado,Faltas personales cometidas por partido
+pfd_pg,por_partido,calculado,Faltas recibidas por partido
+plus_minus_pg,por_partido,calculado,Más/menos (+/-) acumulado por partido
+pir_pg,por_partido,calculado,Valoración (PIR / VAL) acumulada por partido
+dunks_pg,por_partido,calculado,Mates por partido
+fastbreaks_pg,por_partido,calculado,Contraataques (número de acciones; ACB 'C') por partido
+pts_fastbreak_pg,por_partido,calculado,Puntos de contraataque por partido
+pts_paint_pg,por_partido,calculado,Puntos en la pintura por partido
+pts_2ndchance_pg,por_partido,calculado,Puntos de segunda oportunidad por partido
+pts_off_tov_pg,por_partido,calculado,Puntos tras pérdida rival por partido
+pts_p36,por_36,calculado,Puntos por 36 minutos
+fgm_p36,por_36,calculado,Tiros de campo anotados (T2+T3) por 36 minutos
+fga_p36,por_36,calculado,Tiros de campo intentados por 36 minutos
+fg2m_p36,por_36,calculado,Tiros de 2 anotados por 36 minutos
+fg2a_p36,por_36,calculado,Tiros de 2 intentados por 36 minutos
+fg3m_p36,por_36,calculado,Triples anotados por 36 minutos
+fg3a_p36,por_36,calculado,Triples intentados por 36 minutos
+ftm_p36,por_36,calculado,Tiros libres anotados por 36 minutos
+fta_p36,por_36,calculado,Tiros libres intentados por 36 minutos
+oreb_p36,por_36,calculado,Rebotes ofensivos por 36 minutos
+dreb_p36,por_36,calculado,Rebotes defensivos por 36 minutos
+reb_p36,por_36,calculado,Rebotes totales por 36 minutos
+ast_p36,por_36,calculado,Asistencias por 36 minutos
+stl_p36,por_36,calculado,Robos por 36 minutos
+tov_p36,por_36,calculado,Pérdidas por 36 minutos
+blk_p36,por_36,calculado,Tapones a favor por 36 minutos
+blka_p36,por_36,calculado,Tapones recibidos por 36 minutos
+pf_p36,por_36,calculado,Faltas personales cometidas por 36 minutos
+pfd_p36,por_36,calculado,Faltas recibidas por 36 minutos
+plus_minus_p36,por_36,calculado,Más/menos (+/-) acumulado por 36 minutos
+pir_p36,por_36,calculado,Valoración (PIR / VAL) acumulada por 36 minutos
+dunks_p36,por_36,calculado,Mates por 36 minutos
+fastbreaks_p36,por_36,calculado,Contraataques (número de acciones; ACB 'C') por 36 minutos
+pts_fastbreak_p36,por_36,calculado,Puntos de contraataque por 36 minutos
+pts_paint_p36,por_36,calculado,Puntos en la pintura por 36 minutos
+pts_2ndchance_p36,por_36,calculado,Puntos de segunda oportunidad por 36 minutos
+pts_off_tov_p36,por_36,calculado,Puntos tras pérdida rival por 36 minutos
+pts_p40,por_40,calculado,Puntos por 40 minutos
+fgm_p40,por_40,calculado,Tiros de campo anotados (T2+T3) por 40 minutos
+fga_p40,por_40,calculado,Tiros de campo intentados por 40 minutos
+fg2m_p40,por_40,calculado,Tiros de 2 anotados por 40 minutos
+fg2a_p40,por_40,calculado,Tiros de 2 intentados por 40 minutos
+fg3m_p40,por_40,calculado,Triples anotados por 40 minutos
+fg3a_p40,por_40,calculado,Triples intentados por 40 minutos
+ftm_p40,por_40,calculado,Tiros libres anotados por 40 minutos
+fta_p40,por_40,calculado,Tiros libres intentados por 40 minutos
+oreb_p40,por_40,calculado,Rebotes ofensivos por 40 minutos
+dreb_p40,por_40,calculado,Rebotes defensivos por 40 minutos
+reb_p40,por_40,calculado,Rebotes totales por 40 minutos
+ast_p40,por_40,calculado,Asistencias por 40 minutos
+stl_p40,por_40,calculado,Robos por 40 minutos
+tov_p40,por_40,calculado,Pérdidas por 40 minutos
+blk_p40,por_40,calculado,Tapones a favor por 40 minutos
+blka_p40,por_40,calculado,Tapones recibidos por 40 minutos
+pf_p40,por_40,calculado,Faltas personales cometidas por 40 minutos
+pfd_p40,por_40,calculado,Faltas recibidas por 40 minutos
+plus_minus_p40,por_40,calculado,Más/menos (+/-) acumulado por 40 minutos
+pir_p40,por_40,calculado,Valoración (PIR / VAL) acumulada por 40 minutos
+dunks_p40,por_40,calculado,Mates por 40 minutos
+fastbreaks_p40,por_40,calculado,Contraataques (número de acciones; ACB 'C') por 40 minutos
+pts_fastbreak_p40,por_40,calculado,Puntos de contraataque por 40 minutos
+pts_paint_p40,por_40,calculado,Puntos en la pintura por 40 minutos
+pts_2ndchance_p40,por_40,calculado,Puntos de segunda oportunidad por 40 minutos
+pts_off_tov_p40,por_40,calculado,Puntos tras pérdida rival por 40 minutos
+pts_p100,por_100_pos,calculado,Puntos por 100 posesiones de su equipo con él en pista
+fgm_p100,por_100_pos,calculado,Tiros de campo anotados (T2+T3) por 100 posesiones de su equipo con él en pista
+fga_p100,por_100_pos,calculado,Tiros de campo intentados por 100 posesiones de su equipo con él en pista
+fg2m_p100,por_100_pos,calculado,Tiros de 2 anotados por 100 posesiones de su equipo con él en pista
+fg2a_p100,por_100_pos,calculado,Tiros de 2 intentados por 100 posesiones de su equipo con él en pista
+fg3m_p100,por_100_pos,calculado,Triples anotados por 100 posesiones de su equipo con él en pista
+fg3a_p100,por_100_pos,calculado,Triples intentados por 100 posesiones de su equipo con él en pista
+ftm_p100,por_100_pos,calculado,Tiros libres anotados por 100 posesiones de su equipo con él en pista
+fta_p100,por_100_pos,calculado,Tiros libres intentados por 100 posesiones de su equipo con él en pista
+oreb_p100,por_100_pos,calculado,Rebotes ofensivos por 100 posesiones de su equipo con él en pista
+dreb_p100,por_100_pos,calculado,Rebotes defensivos por 100 posesiones de su equipo con él en pista
+reb_p100,por_100_pos,calculado,Rebotes totales por 100 posesiones de su equipo con él en pista
+ast_p100,por_100_pos,calculado,Asistencias por 100 posesiones de su equipo con él en pista
+stl_p100,por_100_pos,calculado,Robos por 100 posesiones de su equipo con él en pista
+tov_p100,por_100_pos,calculado,Pérdidas por 100 posesiones de su equipo con él en pista
+blk_p100,por_100_pos,calculado,Tapones a favor por 100 posesiones de su equipo con él en pista
+blka_p100,por_100_pos,calculado,Tapones recibidos por 100 posesiones de su equipo con él en pista
+pf_p100,por_100_pos,calculado,Faltas personales cometidas por 100 posesiones de su equipo con él en pista
+pfd_p100,por_100_pos,calculado,Faltas recibidas por 100 posesiones de su equipo con él en pista
+plus_minus_p100,por_100_pos,calculado,Más/menos (+/-) acumulado por 100 posesiones de su equipo con él en pista
+pir_p100,por_100_pos,calculado,Valoración (PIR / VAL) acumulada por 100 posesiones de su equipo con él en pista
+dunks_p100,por_100_pos,calculado,Mates por 100 posesiones de su equipo con él en pista
+fastbreaks_p100,por_100_pos,calculado,Contraataques (número de acciones; ACB 'C') por 100 posesiones de su equipo con él en pista
+pts_fastbreak_p100,por_100_pos,calculado,Puntos de contraataque por 100 posesiones de su equipo con él en pista
+pts_paint_p100,por_100_pos,calculado,Puntos en la pintura por 100 posesiones de su equipo con él en pista
+pts_2ndchance_p100,por_100_pos,calculado,Puntos de segunda oportunidad por 100 posesiones de su equipo con él en pista
+pts_off_tov_p100,por_100_pos,calculado,Puntos tras pérdida rival por 100 posesiones de su equipo con él en pista
+fg_pct,tiro,calculado,% tiros de campo
+fg2_pct,tiro,calculado,% tiros de 2
+fg3_pct,tiro,calculado,% triples
+ft_pct,tiro,calculado,% tiros libres
+efg_pct,tiro,calculado,eFG%: (FGM + 0.5*3PM) / FGA
+ts_pct,tiro,calculado,TS%: PTS / (2*(FGA + 0.44*FTA))
+tsa,tiro,calculado,Intentos de tiro reales: FGA + 0.44*FTA
+pts_per_fga,tiro,calculado,Puntos por tiro de campo intentado
+pts_per_tsa,tiro,calculado,Puntos por intento real de tiro
+fg3a_rate,tiro,calculado,3PAr: triples intentados / FGA
+fta_rate,tiro,calculado,FTr: FTA / FGA
+ft_per_fga,tiro,calculado,FTM / FGA
+fg2a_share,tiro,calculado,Proporción de tiros de 2 sobre FGA
+pct_pts_2,tiro,calculado,% de los puntos que llegan de 2
+pct_pts_3,tiro,calculado,% de los puntos que llegan de 3
+pct_pts_ft,tiro,calculado,% de los puntos que llegan de tiro libre
+pct_pts_paint,tiro,calculado,% de los puntos en la pintura
+pct_pts_fastbreak,tiro,calculado,% de los puntos al contraataque
+dunk_rate,tiro,calculado,Mates / tiros de 2 intentados
+min_pct,ratios,calculado,% de los minutos disponibles del equipo que juega
+usg_pct,ratios,calculado,USG%: % de posesiones del equipo que usa en pista
+ast_pct,ratios,calculado,AST%: % de canastas de compañeros asistidas en pista
+tov_pct,ratios,calculado,TOV%: pérdidas por cada 100 jugadas propias
+oreb_pct,ratios,calculado,OREB%: % de rebotes ofensivos disponibles capturados
+dreb_pct,ratios,calculado,DREB%: % de rebotes defensivos disponibles capturados
+reb_pct,ratios,calculado,REB%: % de rebotes totales disponibles capturados
+stl_pct,ratios,calculado,STL%: % de posesiones rivales que acaban en robo suyo
+blk_pct,ratios,calculado,BLK%: % de tiros de 2 rivales que tapona
+ast_to,ratios,calculado,Asistencias / pérdidas
+ast_ratio,ratios,calculado,AST ratio: asistencias por cada 100 jugadas propias
+tov_ratio,ratios,calculado,TOV ratio (Hollinger): pérdidas por cada 100 jugadas propias
+stl_to_tov,ratios,calculado,Robos / pérdidas
+blk_to_pf,ratios,calculado,Tapones / faltas
+stl_plus_blk_p40,ratios,calculado,Robos + tapones por 40 minutos
+pfd_to_pf,ratios,calculado,Faltas recibidas / faltas cometidas
+pts_share,ratios,calculado,% de los puntos del equipo
+reb_share,ratios,calculado,% de los rebotes del equipo
+ast_share,ratios,calculado,% de las asistencias del equipo
+fga_share,ratios,calculado,% de los tiros de campo del equipo
+poss_on_court,ratios,calculado,Posesiones estimadas del equipo con el jugador en pista
+poss_used,ratios,calculado,Posesiones usadas: FGA + 0.44*FTA + TOV
+game_score,ratings,calculado,Game Score (Hollinger) acumulado
+game_score_pg,ratings,calculado,Game Score por partido
+game_score_p40,ratings,calculado,Game Score por 40 minutos
+eff,ratings,calculado,"EFF (NBA): PTS+REB+AST+STL+BLK-fallos-TOV, acumulado"
+eff_pg,ratings,calculado,EFF por partido
+pir_calc,ratings,calculado,PIR calculado con la fórmula Euroliga (comprobación de 'pir')
+pie,ratings,calculado,PIE: impacto del jugador sobre el total del partido (equipo + rival)
+uper,ratings,calculado,"PER sin ajustar (uPER, Hollinger)"
+per,ratings,calculado,PER ajustado al ritmo y normalizado a media de liga = 15
+ortg,ratings,calculado,Rating ofensivo individual (Dean Oliver): puntos producidos /100 posesiones
+drtg,ratings,calculado,Rating defensivo individual (Dean Oliver): puntos permitidos /100 posesiones
+net_rtg,ratings,calculado,ortg - drtg
+floor_pct,ratings,calculado,Floor%: % de posesiones propias que acaban en anotación
+pprod,ratings,calculado,Puntos producidos (Dean Oliver)
+scposs,ratings,calculado,Posesiones anotadoras (Dean Oliver)
+totposs,ratings,calculado,Posesiones individuales totales (Dean Oliver)
+stops,ratings,calculado,Stops defensivos (Dean Oliver)
+stop_pct,ratings,calculado,Stop%: % de posesiones rivales detenidas
+ows,ratings,calculado,Offensive Win Shares
+dws,ratings,calculado,Defensive Win Shares
+ws,ratings,calculado,Win Shares totales
+ws_per_40,ratings,calculado,Win Shares por 40 minutos
+ws_per_48,ratings,calculado,Win Shares por 48 minutos
+team_gp,contexto_equipo,contexto,Equipo: gp (totales de temporada)
+team_w,contexto_equipo,contexto,Equipo: w (totales de temporada)
+team_l,contexto_equipo,contexto,Equipo: l (totales de temporada)
+team_min,contexto_equipo,contexto,Equipo: min (totales de temporada)
+team_pts,contexto_equipo,contexto,Equipo: pts (totales de temporada)
+team_fgm,contexto_equipo,contexto,Equipo: fgm (totales de temporada)
+team_fga,contexto_equipo,contexto,Equipo: fga (totales de temporada)
+team_fg2m,contexto_equipo,contexto,Equipo: fg2m (totales de temporada)
+team_fg2a,contexto_equipo,contexto,Equipo: fg2a (totales de temporada)
+team_fg3m,contexto_equipo,contexto,Equipo: fg3m (totales de temporada)
+team_fg3a,contexto_equipo,contexto,Equipo: fg3a (totales de temporada)
+team_ftm,contexto_equipo,contexto,Equipo: ftm (totales de temporada)
+team_fta,contexto_equipo,contexto,Equipo: fta (totales de temporada)
+team_oreb,contexto_equipo,contexto,Equipo: oreb (totales de temporada)
+team_dreb,contexto_equipo,contexto,Equipo: dreb (totales de temporada)
+team_reb,contexto_equipo,contexto,Equipo: reb (totales de temporada)
+team_ast,contexto_equipo,contexto,Equipo: ast (totales de temporada)
+team_stl,contexto_equipo,contexto,Equipo: stl (totales de temporada)
+team_tov,contexto_equipo,contexto,Equipo: tov (totales de temporada)
+team_blk,contexto_equipo,contexto,Equipo: blk (totales de temporada)
+team_pf,contexto_equipo,contexto,Equipo: pf (totales de temporada)
+opp_min,contexto_rival,contexto,Rivales del equipo: min (totales de temporada)
+opp_pts,contexto_rival,contexto,Rivales del equipo: pts (totales de temporada)
+opp_fgm,contexto_rival,contexto,Rivales del equipo: fgm (totales de temporada)
+opp_fga,contexto_rival,contexto,Rivales del equipo: fga (totales de temporada)
+opp_fg2m,contexto_rival,contexto,Rivales del equipo: fg2m (totales de temporada)
+opp_fg2a,contexto_rival,contexto,Rivales del equipo: fg2a (totales de temporada)
+opp_fg3m,contexto_rival,contexto,Rivales del equipo: fg3m (totales de temporada)
+opp_fg3a,contexto_rival,contexto,Rivales del equipo: fg3a (totales de temporada)
+opp_ftm,contexto_rival,contexto,Rivales del equipo: ftm (totales de temporada)
+opp_fta,contexto_rival,contexto,Rivales del equipo: fta (totales de temporada)
+opp_oreb,contexto_rival,contexto,Rivales del equipo: oreb (totales de temporada)
+opp_dreb,contexto_rival,contexto,Rivales del equipo: dreb (totales de temporada)
+opp_reb,contexto_rival,contexto,Rivales del equipo: reb (totales de temporada)
+opp_ast,contexto_rival,contexto,Rivales del equipo: ast (totales de temporada)
+opp_stl,contexto_rival,contexto,Rivales del equipo: stl (totales de temporada)
+opp_tov,contexto_rival,contexto,Rivales del equipo: tov (totales de temporada)
+opp_blk,contexto_rival,contexto,Rivales del equipo: blk (totales de temporada)
+opp_pf,contexto_rival,contexto,Rivales del equipo: pf (totales de temporada)
+team_poss,contexto_liga,calculado,Posesiones del equipo en la temporada
+opp_poss,contexto_liga,calculado,Posesiones de los rivales
+team_pace,contexto_liga,calculado,Ritmo del equipo (posesiones por partido reglamentario)
+team_ortg,contexto_liga,calculado,Puntos del equipo por 100 posesiones
+team_drtg,contexto_liga,calculado,Puntos permitidos por 100 posesiones
+team_netrtg,contexto_liga,calculado,team_ortg - team_drtg
+lg_pace,contexto_liga,calculado,Ritmo medio de la liga
+lg_ortg,contexto_liga,calculado,Puntos por 100 posesiones de la liga
+lg_pts_per_game,contexto_liga,calculado,Puntos por partido y equipo en la liga
+src_ortg,metricas_fuente,fuente,Rating ofensivo oficial de la fuente
+src_drtg,metricas_fuente,fuente,Rating defensivo oficial de la fuente
+src_netrtg,metricas_fuente,fuente,Net rating oficial
+src_pace,metricas_fuente,fuente,Ritmo oficial con el jugador en pista
+src_poss,metricas_fuente,fuente,Posesiones oficiales
+src_pie,metricas_fuente,fuente,PIE oficial (NBA)
+src_usg_pct,metricas_fuente,fuente,USG% oficial
+src_ts_pct,metricas_fuente,fuente,TS% oficial
+src_efg_pct,metricas_fuente,fuente,eFG% oficial
+src_ast_pct,metricas_fuente,fuente,AST% oficial
+src_ast_ratio,metricas_fuente,fuente,AST ratio oficial
+src_tov_ratio,metricas_fuente,fuente,TOV ratio / TOV% oficial
+src_oreb_pct,metricas_fuente,fuente,OREB% oficial
+src_dreb_pct,metricas_fuente,fuente,DREB% oficial
+src_reb_pct,metricas_fuente,fuente,REB% oficial
+src_fta_rate,metricas_fuente,fuente,Free throw rate oficial
+src_fg3a_rate,metricas_fuente,fuente,3PA rate oficial
+src_def_ws,metricas_fuente,fuente,Defensive win shares oficiales (NBA)
+src_pct_fga_2pt,metricas_fuente,fuente,% FGA de 2 (oficial)
+src_pct_fga_3pt,metricas_fuente,fuente,% FGA de 3 (oficial)
+src_pct_pts_mid,metricas_fuente,fuente,% puntos de media distancia
+src_pct_ast_fgm,metricas_fuente,fuente,% canastas asistidas
+src_pct_uast_fgm,metricas_fuente,fuente,% canastas no asistidas
+src_pct_ast_3pm,metricas_fuente,fuente,% triples asistidos
+src_pct_uast_2pm,metricas_fuente,fuente,% canastas de 2 no asistidas
+src_fantasy_pts,metricas_fuente,fuente,Puntos fantasy oficiales
+src_contested_shots,metricas_fuente,fuente,Tiros rivales defendidos (hustle)
+src_contested_shots_3pt,metricas_fuente,fuente,Triples rivales defendidos (hustle)
+src_deflections,metricas_fuente,fuente,Desvíos (hustle)
+src_charges_drawn,metricas_fuente,fuente,Faltas en ataque provocadas (hustle)
+src_screen_assists,metricas_fuente,fuente,Bloqueos que acaban en canasta (hustle)
+src_screen_ast_pts,metricas_fuente,fuente,Puntos tras bloqueo (hustle)
+src_loose_balls,metricas_fuente,fuente,Balones sueltos recuperados (hustle)
+src_box_outs,metricas_fuente,fuente,Bloqueos de rebote (hustle)
+src_dist_miles,metricas_fuente,fuente,Distancia recorrida en millas (tracking)
+src_avg_speed,metricas_fuente,fuente,Velocidad media (tracking)
+src_touches,metricas_fuente,fuente,Toques de balón (tracking)
+src_time_of_poss,metricas_fuente,fuente,Tiempo de posesión en minutos (tracking)
+src_drives,metricas_fuente,fuente,Penetraciones (tracking)
+src_drive_pts,metricas_fuente,fuente,Puntos tras penetración (tracking)
+src_passes_made,metricas_fuente,fuente,Pases realizados (tracking)
+src_potential_ast,metricas_fuente,fuente,Asistencias potenciales (tracking)
+src_secondary_ast,metricas_fuente,fuente,Asistencias secundarias (tracking)
+src_ft_ast,metricas_fuente,fuente,Asistencias a tiro libre (tracking)
+src_ast_pts_created,metricas_fuente,fuente,Puntos creados con asistencias (tracking)
+src_catch_shoot_fgm,metricas_fuente,fuente,Catch & shoot anotados (tracking)
+src_catch_shoot_fga,metricas_fuente,fuente,Catch & shoot intentados (tracking)
+src_catch_shoot_pts,metricas_fuente,fuente,Puntos en catch & shoot (tracking)
+src_pull_up_fgm,metricas_fuente,fuente,Tiros tras bote anotados (tracking)
+src_pull_up_fga,metricas_fuente,fuente,Tiros tras bote intentados (tracking)
+src_pull_up_pts,metricas_fuente,fuente,Puntos en tiros tras bote (tracking)
+src_paint_touches,metricas_fuente,fuente,Toques en la pintura (tracking)
+src_post_touches,metricas_fuente,fuente,Toques en el poste (tracking)
+src_elbow_touches,metricas_fuente,fuente,Toques en el codo (tracking)
+src_per,metricas_fuente,fuente,PER oficial de Basketball-Reference
+src_ows,metricas_fuente,fuente,Offensive Win Shares (Basketball-Reference)
+src_dws,metricas_fuente,fuente,Defensive Win Shares (Basketball-Reference)
+src_ws,metricas_fuente,fuente,Win Shares (Basketball-Reference)
+src_ws48,metricas_fuente,fuente,Win Shares por 48 minutos (Basketball-Reference)
+src_obpm,metricas_fuente,fuente,Offensive Box Plus/Minus
+src_dbpm,metricas_fuente,fuente,Defensive Box Plus/Minus
+src_bpm,metricas_fuente,fuente,Box Plus/Minus
+src_vorp,metricas_fuente,fuente,Value Over Replacement Player
+src_stl_pct,metricas_fuente,fuente,STL% oficial
+src_blk_pct,metricas_fuente,fuente,BLK% oficial
+src_pos_pg_pct,metricas_fuente,fuente,% de minutos como base (estimado jugada a jugada)
+src_pos_sg_pct,metricas_fuente,fuente,% de minutos como escolta
+src_pos_sf_pct,metricas_fuente,fuente,% de minutos como alero
+src_pos_pf_pct,metricas_fuente,fuente,% de minutos como ala-pívot
+src_pos_c_pct,metricas_fuente,fuente,% de minutos como pívot
+src_on_court_pm100,metricas_fuente,fuente,+/- del equipo por 100 posesiones con él en pista
+src_on_off_pm100,metricas_fuente,fuente,+/- on-off por 100 posesiones
+src_tov_bad_pass,metricas_fuente,fuente,Pérdidas por mal pase
+src_tov_lost_ball,metricas_fuente,fuente,Pérdidas de balón en bote/manejo
+src_fouls_shooting,metricas_fuente,fuente,Faltas personales en tiro cometidas
+src_fouls_offensive,metricas_fuente,fuente,Faltas en ataque cometidas
+src_drawn_shooting,metricas_fuente,fuente,Faltas en tiro recibidas
+src_drawn_offensive,metricas_fuente,fuente,Faltas en ataque provocadas
+src_astd_pts,metricas_fuente,fuente,Puntos generados con sus asistencias
+src_and1,metricas_fuente,fuente,Jugadas de 2+1 / 3+1
+src_avg_shot_dist,metricas_fuente,fuente,Distancia media de tiro (pies)
+src_pct_fga_00_03,metricas_fuente,fuente,% FGA a 0-3 pies
+src_pct_fga_03_10,metricas_fuente,fuente,% FGA a 3-10 pies
+src_pct_fga_10_16,metricas_fuente,fuente,% FGA a 10-16 pies
+src_pct_fga_16_3p,metricas_fuente,fuente,% FGA de 16 pies a la línea de 3
+src_fg_pct_00_03,metricas_fuente,fuente,FG% a 0-3 pies
+src_fg_pct_03_10,metricas_fuente,fuente,FG% a 3-10 pies
+src_fg_pct_10_16,metricas_fuente,fuente,FG% a 10-16 pies
+src_fg_pct_16_3p,metricas_fuente,fuente,FG% de 16 pies a la línea de 3
+src_pct_ast_fg2,metricas_fuente,fuente,% de canastas de 2 asistidas
+src_pct_ast_fg3,metricas_fuente,fuente,% de triples asistidos
+src_pct_fga_dunk,metricas_fuente,fuente,% de FGA que son mates
+src_pct_fg3a_corner,metricas_fuente,fuente,% de triples desde la esquina
+src_fg3_pct_corner,metricas_fuente,fuente,3P% desde la esquina
+src_eff,metricas_fuente,fuente,Valoración / eficiencia publicada por la liga
+src_oer,metricas_fuente,fuente,Offensive efficiency rating publicado por la liga (LBA)
+bn_player_id,basketnews,fuente,Id del jugador en BasketNews (trazabilidad del cruce)
+bn_usg_pct,basketnews,fuente,USG% (BasketNews)
+bn_ts_pct,basketnews,fuente,TS% (BasketNews)
+bn_ast_pct,basketnews,fuente,AST% (BasketNews)
+bn_tov_pct,basketnews,fuente,TOV% (BasketNews)
+bn_stl_pct,basketnews,fuente,STL% (BasketNews)
+bn_blk_pct,basketnews,fuente,BLK% (BasketNews)
+bn_oreb_pct,basketnews,fuente,OREB% (BasketNews)
+bn_dreb_pct,basketnews,fuente,DREB% (BasketNews)
+bn_fg3a_rate,basketnews,fuente,3PAr (BasketNews)
+bn_ast_to,basketnews,fuente,AST/TO (BasketNews)
+bn_poss_pg,basketnews,fuente,Posesiones individuales por partido
+bn_ortg_ind,basketnews,fuente,Rating ofensivo individual (BasketNews)
+bn_drtg_ind,basketnews,fuente,Rating defensivo individual (BasketNews)
+bn_netrtg_ind,basketnews,fuente,Net rating individual (BasketNews)
+bn_stops_pg,basketnews,fuente,Stops defensivos por partido
+bn_foul_stops_pg,basketnews,fuente,Stops por falta por partido
+bn_stop_pct,basketnews,fuente,Stop% (BasketNews)
+bn_created_pts_pg,basketnews,fuente,Puntos creados por partido (propios + asistidos)
+bn_assisted_pts_pg,basketnews,fuente,Puntos generados con asistencias por partido
+bn_3fta_poss_pg,basketnews,fuente,Posesiones con tiro libre de 3 por partido
+bn_pir_pg,basketnews,fuente,PIR por partido (BasketNews)
+bn_min_on,basketnews,fuente,Minutos con el jugador en pista
+bn_poss_on,basketnews,fuente,Posesiones del equipo con él en pista
+bn_poss_on_pct,basketnews,fuente,% de las posesiones del equipo con él en pista
+bn_pts_on,basketnews,fuente,Puntos del equipo con él en pista
+bn_opp_pts_on,basketnews,fuente,Puntos del rival con él en pista
+bn_net_pts_on,basketnews,fuente,Diferencial de puntos con él en pista
+bn_ortg_on,basketnews,fuente,ORtg del equipo con él en pista
+bn_drtg_on,basketnews,fuente,DRtg del equipo con él en pista
+bn_netrtg_on,basketnews,fuente,Net rating del equipo con él en pista
+bn_ortg_off,basketnews,fuente,ORtg del equipo con él en el banquillo
+bn_drtg_off,basketnews,fuente,DRtg del equipo con él en el banquillo
+bn_netrtg_off,basketnews,fuente,Net rating del equipo con él en el banquillo
+bn_ortg_onoff,basketnews,fuente,ORtg on - off
+bn_drtg_onoff,basketnews,fuente,DRtg on - off
+bn_netrtg_onoff,basketnews,fuente,Net rating on - off (impacto)
+bn_2p_pct_on,basketnews,fuente,2P% del equipo con él en pista
+bn_2p_pct_onoff,basketnews,fuente,2P% del equipo: diferencia on - off
+bn_3p_pct_on,basketnews,fuente,3P% del equipo con él en pista
+bn_3p_pct_onoff,basketnews,fuente,3P% del equipo: diferencia on - off
+bn_fg3a_rate_on,basketnews,fuente,3PAr del equipo con él en pista
+bn_fg3a_rate_onoff,basketnews,fuente,3PAr del equipo: diferencia on - off
+bn_ast_pct_on,basketnews,fuente,AST% del equipo con él en pista
+bn_ast_pct_onoff,basketnews,fuente,AST% del equipo: diferencia on - off
+bn_tov_pct_on,basketnews,fuente,TOV% del equipo con él en pista
+bn_tov_pct_onoff,basketnews,fuente,TOV% del equipo: diferencia on - off
+bn_oreb_pct_on,basketnews,fuente,OREB% del equipo con él en pista
+bn_oreb_pct_onoff,basketnews,fuente,OREB% del equipo: diferencia on - off
+bn_dreb_pct_on,basketnews,fuente,DREB% del equipo con él en pista
+bn_dreb_pct_onoff,basketnews,fuente,DREB% del equipo: diferencia on - off
+bn_reb_pct_on,basketnews,fuente,REB% del equipo con él en pista
+bn_reb_pct_onoff,basketnews,fuente,REB% del equipo: diferencia on - off
+bn_foul_rate_on,basketnews,fuente,Faltas cometidas (tasa) del equipo con él en pista
+bn_foul_rate_onoff,basketnews,fuente,Faltas cometidas (tasa) del equipo: diferencia on - off
+bn_fouled_rate_on,basketnews,fuente,Faltas recibidas (tasa) del equipo con él en pista
+bn_fouled_rate_onoff,basketnews,fuente,Faltas recibidas (tasa) del equipo: diferencia on - off
+bn_opp_2p_pct_on,basketnews,fuente,2P% del rival con él en pista
+bn_opp_2p_pct_onoff,basketnews,fuente,2P% del rival: diferencia on - off
+bn_opp_3p_pct_on,basketnews,fuente,3P% del rival con él en pista
+bn_opp_3p_pct_onoff,basketnews,fuente,3P% del rival: diferencia on - off
+bn_opp_fg3a_rate_on,basketnews,fuente,3PAr del rival con él en pista
+bn_opp_fg3a_rate_onoff,basketnews,fuente,3PAr del rival: diferencia on - off
+bn_opp_ast_pct_on,basketnews,fuente,AST% del rival con él en pista
+bn_opp_ast_pct_onoff,basketnews,fuente,AST% del rival: diferencia on - off
+bn_opp_tov_pct_on,basketnews,fuente,TOV% del rival con él en pista
+bn_opp_tov_pct_onoff,basketnews,fuente,TOV% del rival: diferencia on - off
+rs_gp,contexto_fase,calculado,gp del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_min_pg,contexto_fase,calculado,min_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_pts_pg,contexto_fase,calculado,pts_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_pts_p40,contexto_fase,calculado,pts_p40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_reb_p40,contexto_fase,calculado,reb_p40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_ast_p40,contexto_fase,calculado,ast_p40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_ts_pct,contexto_fase,calculado,ts_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_efg_pct,contexto_fase,calculado,efg_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_usg_pct,contexto_fase,calculado,usg_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_ast_pct,contexto_fase,calculado,ast_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_tov_pct,contexto_fase,calculado,tov_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_reb_pct,contexto_fase,calculado,reb_pct del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_per,contexto_fase,calculado,per del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_ortg,contexto_fase,calculado,ortg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_drtg,contexto_fase,calculado,drtg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_net_rtg,contexto_fase,calculado,net_rtg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_game_score_pg,contexto_fase,calculado,game_score_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_pir_pg,contexto_fase,calculado,pir_pg del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_ws_per_40,contexto_fase,calculado,ws_per_40 del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_pie,contexto_fase,calculado,pie del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+rs_bn_netrtg_onoff,contexto_fase,calculado,bn_netrtg_onoff del mismo jugador y equipo en la temporada regular (sólo filas de playoffs)
+delta_min_pg,contexto_fase,calculado,min_pg en playoffs menos min_pg en temporada regular
+delta_pts_pg,contexto_fase,calculado,pts_pg en playoffs menos pts_pg en temporada regular
+delta_pts_p40,contexto_fase,calculado,pts_p40 en playoffs menos pts_p40 en temporada regular
+delta_reb_p40,contexto_fase,calculado,reb_p40 en playoffs menos reb_p40 en temporada regular
+delta_ast_p40,contexto_fase,calculado,ast_p40 en playoffs menos ast_p40 en temporada regular
+delta_ts_pct,contexto_fase,calculado,ts_pct en playoffs menos ts_pct en temporada regular
+delta_efg_pct,contexto_fase,calculado,efg_pct en playoffs menos efg_pct en temporada regular
+delta_usg_pct,contexto_fase,calculado,usg_pct en playoffs menos usg_pct en temporada regular
+delta_ast_pct,contexto_fase,calculado,ast_pct en playoffs menos ast_pct en temporada regular
+delta_tov_pct,contexto_fase,calculado,tov_pct en playoffs menos tov_pct en temporada regular
+delta_reb_pct,contexto_fase,calculado,reb_pct en playoffs menos reb_pct en temporada regular
+delta_per,contexto_fase,calculado,per en playoffs menos per en temporada regular
+delta_ortg,contexto_fase,calculado,ortg en playoffs menos ortg en temporada regular
+delta_drtg,contexto_fase,calculado,drtg en playoffs menos drtg en temporada regular
+delta_net_rtg,contexto_fase,calculado,net_rtg en playoffs menos net_rtg en temporada regular
+delta_game_score_pg,contexto_fase,calculado,game_score_pg en playoffs menos game_score_pg en temporada regular
+delta_pir_pg,contexto_fase,calculado,pir_pg en playoffs menos pir_pg en temporada regular
+delta_ws_per_40,contexto_fase,calculado,ws_per_40 en playoffs menos ws_per_40 en temporada regular
+delta_pie,contexto_fase,calculado,pie en playoffs menos pie en temporada regular
+delta_bn_netrtg_onoff,contexto_fase,calculado,bn_netrtg_onoff en playoffs menos bn_netrtg_onoff en temporada regular
+division,esf,calculado (jugada a jugada / acta ESF),División de la fila: A1 | A2 | cruce (partidos entre divisiones) | todas (total de ligas con divisiones) | única (ligas sin divisiones). Junior y Cadete: A1 y A2 son divisiones distintas
+categoria,esf,calculado (jugada a jugada / acta ESF),Categoría de la web (nombre oficial de la inscripción en la temporada)
+nivel,esf,calculado (jugada a jugada / acta ESF),senior | junior | cadete
+fase_nombre,esf,calculado (jugada a jugada / acta ESF),Nombre original de la fase en la web (o 'Todas las fases' en total)
+fase_tipo,esf,calculado (jugada a jugada / acta ESF),liga | clasificacion | eliminatoria | copa | total
+fase_orden,esf,calculado (jugada a jugada / acta ESF),Orden cronológico de la fase en la temporada (1 = primera); total = 99
+grupos,esf,calculado (jugada a jugada / acta ESF),Grupos de la fase en los que ha jugado el equipo
+club,esf,calculado (jugada a jugada / acta ESF),Entidad (club) inscrita del equipo
+cobertura,esf,calculado (jugada a jugada / acta ESF),acta_y_jugada | solo_acta | sin_acta_digital (temporadas 2018-19 a 2021-22: sólo resultados)
+partidos_con_acta,esf,calculado (jugada a jugada / acta ESF),Partidos del jugador con acta digital en la fase
+partidos_pbp,esf,calculado (jugada a jugada / acta ESF),Partidos del jugador con jugada a jugada en la fase
+persona_uuid,esf,calculado (jugada a jugada / acta ESF),"Uuid de la persona federada (acta y fichas de equipo): estable entre partidos, equipos y temporadas; = player_id cuando existe"
+licencia_id,esf,calculado (jugada a jugada / acta ESF),Id de licencia de la temporada
+acta_uuid,esf,calculado (jugada a jugada / acta ESF),Uuid del jugador en el acta digital
+min_pbp,esf,calculado (jugada a jugada / acta ESF),Minutos exactos reconstruidos con las entradas y salidas del jugada a jugada
+min_acta,esf,calculado (jugada a jugada / acta ESF),"Minutos del acta (enteros, redondeados por la mesa)"
+plus_minus_acta,esf,calculado (jugada a jugada / acta ESF),+/- del acta
+pf_ofensivas,esf,calculado (jugada a jugada / acta ESF),Faltas en ataque
+pf_antideportivas,esf,calculado (jugada a jugada / acta ESF),Faltas antideportivas
+pf_tecnicas,esf,calculado (jugada a jugada / acta ESF),Faltas técnicas
+pf_descalificantes,esf,calculado (jugada a jugada / acta ESF),Faltas descalificantes
+pf_tiro,esf,calculado (jugada a jugada / acta ESF),Faltas personales con tiros libres
+tl_viajes,esf,calculado (jugada a jugada / acta ESF),Viajes a la línea provocados en sus faltas (rival)
+and1,esf,calculado (jugada a jugada / acta ESF),Canastas con tiro libre adicional
+violaciones,esf,calculado (jugada a jugada / acta ESF),Violaciones
+saltos_ganados,esf,calculado (jugada a jugada / acta ESF),Saltos iniciales ganados
+fga_aro,esf,calculado (jugada a jugada / acta ESF),"Tiros de campo a < 1,25 m del aro"
+fgm_aro,esf,calculado (jugada a jugada / acta ESF),"Canastas a < 1,25 m"
+fg_pct_aro,esf,calculado (jugada a jugada / acta ESF),% de acierto en el aro
+fga_pintura,esf,calculado (jugada a jugada / acta ESF),Tiros de 2 en la zona (sin el aro)
+fgm_pintura,esf,calculado (jugada a jugada / acta ESF),Canastas en la zona (sin el aro)
+fg_pct_pintura,esf,calculado (jugada a jugada / acta ESF),% en la zona (sin el aro)
+fga_media,esf,calculado (jugada a jugada / acta ESF),Tiros de media distancia (2 fuera de la zona)
+fgm_media,esf,calculado (jugada a jugada / acta ESF),Canastas de media distancia
+fg_pct_media,esf,calculado (jugada a jugada / acta ESF),% de media distancia
+fg3a_esquina,esf,calculado (jugada a jugada / acta ESF),Triples de esquina intentados
+fg3m_esquina,esf,calculado (jugada a jugada / acta ESF),Triples de esquina anotados
+fg3_pct_esquina,esf,calculado (jugada a jugada / acta ESF),% de triples de esquina
+fg3a_frontal,esf,calculado (jugada a jugada / acta ESF),Triples frontales intentados
+fg3m_frontal,esf,calculado (jugada a jugada / acta ESF),Triples frontales anotados
+fg3_pct_frontal,esf,calculado (jugada a jugada / acta ESF),% de triples frontales
+fga_con_coord,esf,calculado (jugada a jugada / acta ESF),Tiros de campo con coordenadas en el acta
+frec_aro,esf,calculado (jugada a jugada / acta ESF),% de sus tiros de campo en el aro
+frec_pintura,esf,calculado (jugada a jugada / acta ESF),% en la zona (sin el aro)
+frec_media,esf,calculado (jugada a jugada / acta ESF),% de media distancia
+frec_triple_esquina,esf,calculado (jugada a jugada / acta ESF),% triples de esquina
+frec_triple_frontal,esf,calculado (jugada a jugada / acta ESF),% triples frontales
+dist_tiro_media,esf,calculado (jugada a jugada / acta ESF),Distancia media de tiro (m)
+fgm_asistidos,esf,calculado (jugada a jugada / acta ESF),Canastas propias asistidas (si la mesa registra asistencias)
+pct_fgm_asistidos,esf,calculado (jugada a jugada / acta ESF),% de canastas asistidas
+pts_q1,esf,calculado (jugada a jugada / acta ESF),Puntos en el 1.er cuarto
+pts_q2,esf,calculado (jugada a jugada / acta ESF),Puntos en el 2.º cuarto
+pts_q3,esf,calculado (jugada a jugada / acta ESF),Puntos en el 3.er cuarto
+pts_q4,esf,calculado (jugada a jugada / acta ESF),Puntos en el 4.º cuarto
+pts_ot,esf,calculado (jugada a jugada / acta ESF),Puntos en prórrogas
+pct_pts_segunda_mitad,esf,calculado (jugada a jugada / acta ESF),"% de sus puntos en la segunda mitad (3.º, 4.º y prórrogas)"
+clutch_pts,esf,calculado (jugada a jugada / acta ESF),"Puntos en clutch (últimos 5 min del 4.º/prórroga, ±5)"
+clutch_fga,esf,calculado (jugada a jugada / acta ESF),Tiros de campo en clutch
+clutch_fgm,esf,calculado (jugada a jugada / acta ESF),Canastas en clutch
+clutch_fg3a,esf,calculado (jugada a jugada / acta ESF),Triples intentados en clutch
+clutch_fg3m,esf,calculado (jugada a jugada / acta ESF),Triples anotados en clutch
+clutch_fta,esf,calculado (jugada a jugada / acta ESF),Tiros libres intentados en clutch
+clutch_ftm,esf,calculado (jugada a jugada / acta ESF),Tiros libres anotados en clutch
+clutch_tov,esf,calculado (jugada a jugada / acta ESF),Pérdidas en clutch
+clutch_oreb,esf,calculado (jugada a jugada / acta ESF),Rebotes ofensivos en clutch
+clutch_dreb,esf,calculado (jugada a jugada / acta ESF),Rebotes defensivos en clutch
+clutch_stl,esf,calculado (jugada a jugada / acta ESF),Recuperaciones en clutch
+clutch_pf,esf,calculado (jugada a jugada / acta ESF),Faltas en clutch
+clutch_ts_pct,esf,calculado (jugada a jugada / acta ESF),TS% en clutch
+clutch_pts_p40,esf,calculado (jugada a jugada / acta ESF),Puntos por 40 minutos de clutch
+pct_pts_contraataque,esf,calculado (jugada a jugada / acta ESF),% de puntos al contraataque
+pct_pts_segunda_oportunidad,esf,calculado (jugada a jugada / acta ESF),% de puntos de segunda oportunidad
+pct_pts_tras_perdida,esf,calculado (jugada a jugada / acta ESF),% de puntos tras pérdida del rival
+game_score_max,esf,calculado (jugada a jugada / acta ESF),Mejor Game Score en un partido
+pts_max,esf,calculado (jugada a jugada / acta ESF),Máximo de puntos en un partido
+pts_std,esf,calculado (jugada a jugada / acta ESF),Desviación típica de sus puntos por partido (regularidad)
+game_score_std,esf,calculado (jugada a jugada / acta ESF),Desviación típica del Game Score por partido
+partidos_10_pts,esf,calculado (jugada a jugada / acta ESF),Partidos con 10 o más puntos
+partidos_20_pts,esf,calculado (jugada a jugada / acta ESF),Partidos con 20 o más puntos
+registra_asistencias,esf,calculado (jugada a jugada / acta ESF),"La mesa registró asistencias en algún partido de la fila (si no, ast vacío y las métricas compuestas las cuentan como 0)"
+registra_tapones,esf,calculado (jugada a jugada / acta ESF),"La mesa registró tapones en algún partido de la fila (si no, blk/blka vacíos y las métricas compuestas los cuentan como 0)"
+pbp_gp,quintetos_onoff,calculado (jugada a jugada),Partidos con minutos en el jugada a jugada
+pbp_tramos,quintetos_onoff,calculado (jugada a jugada),Tramos jugados
+pbp_min_pct_equipo,quintetos_onoff,calculado (jugada a jugada),% de los minutos del equipo en pista
+pbp_quintetos_distintos,quintetos_onoff,calculado (jugada a jugada),Quintetos distintos en los que ha jugado
+pbp_titular_partidos,quintetos_onoff,calculado (jugada a jugada),Partidos en el quinteto inicial (según el jugada a jugada)
+pbp_cierra_partidos,quintetos_onoff,calculado (jugada a jugada),Partidos en pista en el último tramo del partido
+pbp_relevos,quintetos_onoff,calculado (jugada a jugada),Veces que entra a pista (relevos o turnos)
+pbp_relevos_por_partido,quintetos_onoff,calculado (jugada a jugada),Relevos por partido
+pbp_min_por_partido,quintetos_onoff,calculado (jugada a jugada),Minutos por partido
+pbp_min_por_relevo,quintetos_onoff,calculado (jugada a jugada),Duración media de cada relevo (minutos)
+pbp_pct_min_q1,quintetos_onoff,calculado (jugada a jugada),% de sus minutos en el 1.er cuarto
+pbp_pct_min_q2,quintetos_onoff,calculado (jugada a jugada),% en el 2.º cuarto
+pbp_pct_min_q3,quintetos_onoff,calculado (jugada a jugada),% en el 3.er cuarto
+pbp_pct_min_q4,quintetos_onoff,calculado (jugada a jugada),% en el 4.º cuarto
+pbp_pct_min_prorroga,quintetos_onoff,calculado (jugada a jugada),% en prórrogas
+pbp_min_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Minutos juntos en pista
+pbp_poss_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Posesiones (media de ataque y defensa)
+pbp_pts_for_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Puntos a favor
+pbp_pts_against_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Puntos en contra
+pbp_plus_minus_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: +/-
+pbp_pm_por40_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: +/- por 40 minutos
+pbp_ortg_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Rating ofensivo: puntos por 100 posesiones
+pbp_drtg_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Rating defensivo: puntos permitidos por 100 posesiones
+pbp_net_rtg_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Rating neto (ORtg − DRtg)
+pbp_ortg_aj_on,quintetos_onoff,calculado (jugada a jugada),"Con el jugador en pista: ORtg ajustado por muestra (contracción bayesiana hacia la media de la liga, k posesiones)"
+pbp_drtg_aj_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: DRtg ajustado por muestra
+pbp_net_rtg_aj_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Net ajustado por muestra (comparable entre unidades con pocos minutos)
+pbp_net_rtg_suerte_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Net ajustado por suerte (ORtg − DRtg_suerte)
+pbp_net_rtg_suerte_aj_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Net ajustado por suerte y por muestra
+pbp_ritmo_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Posesiones por partido completo (40 o 48 minutos)
+pbp_efg_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: eFG% a favor
+pbp_opp_efg_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: eFG% del rival
+pbp_ts_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: TS% a favor
+pbp_opp_ts_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: TS% del rival
+pbp_tov_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Pérdidas por 100 jugadas
+pbp_opp_tov_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Pérdidas forzadas al rival por 100 jugadas
+pbp_oreb_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: % de rebote ofensivo
+pbp_dreb_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: % de rebote defensivo
+pbp_ft_rate_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: Tiros libres intentados por cada 100 tiros de campo
+pbp_opp_ft_rate_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: FTr del rival
+pbp_fg3a_rate_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: % de tiros de campo que son triples
+pbp_opp_fg3a_rate_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: 3PAr del rival
+pbp_ast_pct_on,quintetos_onoff,calculado (jugada a jugada),Con el jugador en pista: % de canastas asistidas
+pbp_min_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Minutos juntos en pista
+pbp_poss_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Posesiones (media de ataque y defensa)
+pbp_pts_for_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Puntos a favor
+pbp_pts_against_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Puntos en contra
+pbp_plus_minus_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: +/-
+pbp_pm_por40_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: +/- por 40 minutos
+pbp_ortg_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Rating ofensivo: puntos por 100 posesiones
+pbp_drtg_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Rating defensivo: puntos permitidos por 100 posesiones
+pbp_net_rtg_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Rating neto (ORtg − DRtg)
+pbp_ortg_aj_off,quintetos_onoff,calculado (jugada a jugada),"Con el jugador en el banquillo: ORtg ajustado por muestra (contracción bayesiana hacia la media de la liga, k posesiones)"
+pbp_drtg_aj_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: DRtg ajustado por muestra
+pbp_net_rtg_aj_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Net ajustado por muestra (comparable entre unidades con pocos minutos)
+pbp_net_rtg_suerte_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Net ajustado por suerte (ORtg − DRtg_suerte)
+pbp_net_rtg_suerte_aj_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Net ajustado por suerte y por muestra
+pbp_ritmo_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Posesiones por partido completo (40 o 48 minutos)
+pbp_efg_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: eFG% a favor
+pbp_opp_efg_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: eFG% del rival
+pbp_ts_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: TS% a favor
+pbp_opp_ts_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: TS% del rival
+pbp_tov_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Pérdidas por 100 jugadas
+pbp_opp_tov_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Pérdidas forzadas al rival por 100 jugadas
+pbp_oreb_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: % de rebote ofensivo
+pbp_dreb_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: % de rebote defensivo
+pbp_ft_rate_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: Tiros libres intentados por cada 100 tiros de campo
+pbp_opp_ft_rate_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: FTr del rival
+pbp_fg3a_rate_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: % de tiros de campo que son triples
+pbp_opp_fg3a_rate_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: 3PAr del rival
+pbp_ast_pct_off,quintetos_onoff,calculado (jugada a jugada),Con el jugador en el banquillo: % de canastas asistidas
+pbp_ortg_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Rating ofensivo: puntos por 100 posesiones
+pbp_drtg_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Rating defensivo: puntos permitidos por 100 posesiones
+pbp_net_rtg_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Rating neto (ORtg − DRtg)
+pbp_net_rtg_aj_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Net ajustado por muestra (comparable entre unidades con pocos minutos)
+pbp_net_rtg_suerte_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Net ajustado por suerte (ORtg − DRtg_suerte)
+pbp_net_rtg_suerte_aj_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Net ajustado por suerte y por muestra
+pbp_ritmo_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Posesiones por partido completo (40 o 48 minutos)
+pbp_efg_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: eFG% a favor
+pbp_opp_efg_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: eFG% del rival
+pbp_ts_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: TS% a favor
+pbp_opp_ts_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: TS% del rival
+pbp_tov_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Pérdidas por 100 jugadas
+pbp_opp_tov_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Pérdidas forzadas al rival por 100 jugadas
+pbp_oreb_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: % de rebote ofensivo
+pbp_dreb_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: % de rebote defensivo
+pbp_ft_rate_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: Tiros libres intentados por cada 100 tiros de campo
+pbp_opp_ft_rate_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: FTr del rival
+pbp_fg3a_rate_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: % de tiros de campo que son triples
+pbp_ast_pct_onoff,quintetos_onoff,calculado (jugada a jugada),On − Off: % de canastas asistidas
+pbp_clutch_min,quintetos_onoff,calculado (jugada a jugada),"Minutos en clutch (últimos 5 min del último cuarto o prórroga, ±5 puntos)"
+pbp_basura_min,quintetos_onoff,calculado (jugada a jugada),Minutos de la basura
+pbp_net_rtg_on_sin_basura,quintetos_onoff,calculado (jugada a jugada),Net en pista sin minutos de la basura
+pbp_net_rtg_onoff_sin_basura,quintetos_onoff,calculado (jugada a jugada),On − Off del Net sin minutos de la basura
+pbp_net_rtg_aj_onoff_sin_basura,quintetos_onoff,calculado (jugada a jugada),On − Off del Net_aj sin minutos de la basura
+pbp_clutch_plus_minus,quintetos_onoff,calculado (jugada a jugada),+/- en clutch
+pbp_clutch_net_rtg,quintetos_onoff,calculado (jugada a jugada),Net en clutch
+pbp_clutch_net_rtg_aj,quintetos_onoff,calculado (jugada a jugada),Net_aj en clutch
+pbp_orapm,quintetos_onoff,calculado (jugada a jugada),"RAPM ofensivo (puntos por 100 posesiones sobre la media, ajustado por compañeros y rivales)"
+pbp_drapm,quintetos_onoff,calculado (jugada a jugada),RAPM defensivo (> 0 = mejor defensa)
+pbp_rapm,quintetos_onoff,calculado (jugada a jugada),RAPM total (ORAPM + DRAPM)
+pbp_rapm_poss,quintetos_onoff,calculado (jugada a jugada),Posesiones ofensivas en la regresión RAPM
+pbp_ast_dadas,quintetos_onoff,calculado (jugada a jugada),Asistencias dadas (jugada a jugada)
+pbp_ast_recibidas,quintetos_onoff,calculado (jugada a jugada),Canastas propias asistidas
+pbp_pct_canastas_asistidas,quintetos_onoff,calculado (jugada a jugada),% de sus canastas que fueron asistidas
+pbp_pts_generados_asist,quintetos_onoff,calculado (jugada a jugada),Puntos generados con sus asistencias
+pbp_socios_asistencia,quintetos_onoff,calculado (jugada a jugada),Compañeros distintos a los que asiste
+pbp_socios_asistido_por,quintetos_onoff,calculado (jugada a jugada),Compañeros distintos que le asisten
+pbp_hhi_asistencias,quintetos_onoff,calculado (jugada a jugada),Concentración de sus asistencias (HHI 0–10.000; alto = siempre al mismo)
+pbp_receptor_principal,quintetos_onoff,calculado (jugada a jugada),Compañero al que más asiste
+pbp_asistente_principal,quintetos_onoff,calculado (jugada a jugada),Compañero que más le asiste
+pbp_pagerank_asistencias,quintetos_onoff,calculado (jugada a jugada),Centralidad PageRank en la red de asistencias de su equipo
