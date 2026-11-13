@@ -164,22 +164,27 @@ def comparar(B: int = 500, semilla: int = 20261116) -> dict:
                                                                                   ib["criterio_redefinido_onoff"]["fichajes"]]}
     r["im_paquete"] = {"f0": ia["paquete"]["monotonia"], "v51": ib["paquete"]["monotonia"]}
     r["im_puerta"] = {"f0": ia["puerta"], "v51": ib["puerta"]}
-    # pareado por fichaje: correlación con el on/off del jugador en destino
-    xa = pd.read_csv(f0 / "anclas" / "im_examen.csv.gz", low_memory=False)
-    xb = pd.read_csv(f4 / "anclas" / "im_examen.csv.gz", low_memory=False)
-    kk = [c for c in ("persona_id", "liga_d", "team_d", "corte") if c in xa.columns and c in xb.columns]
-    real = "net_rtg_aj_onoff" if "net_rtg_aj_onoff" in xa.columns else None
-    if real is None:
-        rr = pd.read_csv(C.RAIZ / "data" / "modelos" / "roles" / "player_role_season.csv.gz",
-                         usecols=["liga", "temporada", "team_id", "persona_id", "net_rtg_aj_onoff", "min_total"],
-                         dtype={"team_id": str}, low_memory=False)
-        rr = rr[rr["min_total"] >= 300].rename(columns={"liga": "liga_d", "team_id": "team_d", "temporada": "temporada_d"})
-        for x in (xa, xb):
-            x["temporada_d"] = x["anio"].map(lambda a_: f"{a_ + 1}-{str(a_ + 2)[-2:]}")
-            x["team_d"] = x["team_d"].astype(str)
-        xa = xa.merge(rr, on=["liga_d", "team_d", "temporada_d", "persona_id"], how="inner")
-        real = "net_rtg_aj_onoff"
-    mm = xa[kk + ["IM", real]].merge(xb[kk + ["IM"]], on=kk, suffixes=("_f0", "_v51")).dropna()
-    mm = mm[mm["corte"].isin([2022, 2023, 2024]) if mm["corte"].dtype != object else mm["corte"].str[:4].astype(int).isin([2022, 2023, 2024])]
-    r["im_onoff_pareado"] = {"fichajes": int(len(mm)), **_spearman_dif(mm, "IM_v51", "IM_f0", real, "persona_id", B, rng)}
+    # pareado por fichaje: correlación con el on/off ajustado del jugador en destino (≥ 300 min), todos y por cambio de liga
+    xa = pd.read_csv(f0 / "anclas" / "im_examen.csv.gz", low_memory=False, dtype={"team_d": str})
+    xb = pd.read_csv(f4 / "anclas" / "im_examen.csv.gz", low_memory=False, dtype={"team_d": str})
+    rr = pd.read_csv(C.RAIZ / "data" / "modelos" / "roles" / "player_role_season.csv.gz",
+                     usecols=["liga", "temporada", "team_id", "persona_id", "net_rtg_aj_onoff", "min_total"],
+                     dtype={"team_id": str}, low_memory=False)
+    rr = rr[rr["min_total"] >= 300]
+    k = ["anio", "persona_id", "liga_d", "team_d"]
+    mm = xa[k + ["IM"]].merge(xb[k + ["IM"]], on=k, suffixes=("_f0", "_v51"))
+    mm["temporada_d"] = mm["anio"].map(lambda x: f"{x + 1}-{str(x + 2)[-2:]}")
+    mm["temporada_o"] = mm["anio"].map(lambda x: f"{x}-{str(x + 1)[-2:]}")
+    mm = mm.merge(rr.rename(columns={"liga": "liga_d", "team_id": "team_d", "temporada": "temporada_d"})[
+        ["liga_d", "team_d", "temporada_d", "persona_id", "net_rtg_aj_onoff"]],
+        on=["liga_d", "team_d", "temporada_d", "persona_id"]).dropna(subset=["IM_f0", "IM_v51", "net_rtg_aj_onoff"])
+    mm = mm[mm["anio"].isin([2022, 2023, 2024])]
+    prev = rr.sort_values("min_total", ascending=False).drop_duplicates(["persona_id", "temporada"])
+    mm = mm.merge(prev.rename(columns={"temporada": "temporada_o", "liga": "liga_o"})[["persona_id", "temporada_o", "liga_o"]],
+                  on=["persona_id", "temporada_o"], how="left")
+    mm["cambia"] = mm["liga_o"].notna() & (mm["liga_o"] != mm["liga_d"])
+    r["im_onoff_pareado"] = {}
+    for nom, x in (("todos", mm), ("cambian_de_liga", mm[mm["cambia"]]), ("misma_liga", mm[~mm["cambia"]])):
+        r["im_onoff_pareado"][nom] = {"fichajes": int(len(x)),
+                                      **_spearman_dif(x, "IM_v51", "IM_f0", "net_rtg_aj_onoff", "persona_id", B, rng)}
     return r
