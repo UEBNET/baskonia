@@ -32,3 +32,8 @@ def test_reescalar_conserva_la_mediana_y_no_da_negativos():
     R = EN._reescalar(D, 0.5)
     assert np.allclose(np.median(R, axis=1), np.median(D, axis=1))
     assert (R >= 0).all() and np.all(np.std(R, axis=1) < np.std(D, axis=1))
+
+
+def test_corte_de_la_temporada_de_destino():
+    from bbnorm5.simulador51 import nivel_kerno as NK
+    assert NK._corte(2024) == "2023-24" and NK._corte(2025) == "2024-25"

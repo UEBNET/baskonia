@@ -9,6 +9,9 @@ F1 · versión combinada:
 F2 · simulador (configs/v5_1/f2.yaml):
 - produccion: producción por liga de destino combinada v5 / v3.3 en las 9 métricas, examen y decisión
 - ensamblaje: contribución por partido con los minutos del motor y dependencias estimadas; jugador, equipo y grupos de cinco
+
+F3 · Nivel Kerno (configs/v5_1/f2.yaml):
+- nivel_kerno: NK con la contribución de la F2 frente al NK vigente reproducido; rango del año, rango de nivel y sello
 """
 from __future__ import annotations
 
@@ -38,6 +41,9 @@ def main(argv=None):
         elif paso == "ensamblaje":
             from bbnorm5.simulador51 import ensamblaje
             out = ensamblaje.ejecutar(cfg)
+        elif paso == "nivel_kerno":
+            from bbnorm5.simulador51 import nivel_kerno
+            out = nivel_kerno.ejecutar(cfg)
         elif paso == "generar":
             from bbnorm5.salidas import combinada
             out = combinada.generar(cfg)
