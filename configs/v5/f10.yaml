@@ -3,7 +3,7 @@
 fase: F10
 salida: aguas_abajo
 semilla: 20261113
-pasos: [por_partido, nivel_kerno, impacto, landing, figuras]
+pasos: [por_partido, nivel_kerno, impacto, landing, hibrido, figuras]
 bootstrap: 500                 # remuestreos por persona para los IC
 
 # Landing (adaptación): δ de la primera temporada en una liga nueva (§14.4). Criterios fijados antes de ver los
@@ -16,6 +16,9 @@ landing:
     min_personas: 100          # personas distintas con cambio en el grupo
     semiancho_ic95: 0.10       # semiancho del IC 95 % de δ, en DT del residuo
   relevante: 0.10              # |δ| ≥ 0,10 DT con IC que no cruza 0
+  examen_min_personas: 30      # examen de publicación: δ por métrica y grupo sólo con ≥ 30 personas en la calibración
+  grupos_agrupados:            # examen de publicación con más casos (pregunta del usuario: americanos a Europa)
+    llegada_EEUU_Europa_pro: [EEUU_a_Europa, otro_desde_EEUU]
 
 # Prototipo por partido (§14.1 y revisión 1.2): producción v5 × minutos del motor v3.3, en los fichajes de la F8.
 por_partido:
@@ -26,3 +29,11 @@ impacto:
   min_posesiones: 500          # por persona, liga y temporada
   min_posesiones_puente: 300   # en cada una de las dos ligas de la misma temporada
   cortes: [2023, 2024, 2025]   # temporada t+1 de prueba; se entrena con las anteriores
+
+# Híbrido por métrica v5 / v3.2 (pregunta del usuario en la puerta de la F10): reglas decididas con el corte de
+# calibración y evaluadas en los siguientes (examen de la F1).
+hibrido:
+  calibracion: [2022]
+  prueba: [2023, 2024]
+  fichajes_calibracion: [2023]  # examen de fichajes de la F8 (temporada de destino): v5 frente a la v3.3
+  fichajes_prueba: [2024, 2025]

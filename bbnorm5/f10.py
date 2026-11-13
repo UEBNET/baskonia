@@ -8,6 +8,7 @@ Pasos:
 - nivel_kerno: NK desde el predictivo y desde el nivel de la v5, con el examen del NK vigente
 - impacto: fiabilidad del RAPM, predicción del RAPM de t+1 con carrera, perfil v5 y grafo, y puentes
 - landing: δ de la primera temporada en una liga nueva por métrica y grupo de origen-destino, y su persistencia
+- hibrido: ¿la mejor versión (v5 o v3.2) en cada métrica? Decidido con un corte, examinado en los siguientes
 - figuras: figuras del informe 10
 
 Las salidas van a `data/v5/aguas_abajo/`. Ningún proceso del producto las lee.
@@ -43,6 +44,9 @@ def main(argv=None):
         elif paso == "landing":
             from bbnorm5.aguas_abajo import landing
             out = landing.ejecutar(cfg)
+        elif paso == "hibrido":
+            from bbnorm5.aguas_abajo import hibrido
+            out = hibrido.ejecutar(cfg)
         elif paso == "figuras":
             from bbnorm5.aguas_abajo import figuras_f10
             out = {"figuras": figuras_f10.todas(cfg)}

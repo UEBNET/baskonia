@@ -8,6 +8,7 @@ Fecha: 13-11-2026 · Kerno Analytics · normalización cruzada v5.0.
 - `bbnorm5/aguas_abajo/nivel_kerno.py`: Nivel Kerno recalculado con la v5 y el examen del NK vigente.
 - `bbnorm5/aguas_abajo/impacto.py`: fiabilidad del RAPM, predicción del RAPM de t+1 y puentes intra-temporada.
 - `bbnorm5/aguas_abajo/landing.py`: efecto de la primera temporada en una liga nueva.
+- `bbnorm5/aguas_abajo/hibrido.py`: mezcla de la v5 y la v3.2 por métrica (F10 bis).
 - `bbnorm5/aguas_abajo/figuras_f10.py`.
 - `bbnorm5/f10.py`.
 
@@ -16,7 +17,7 @@ resultados.
 
 **Salidas.** En `data/v5/aguas_abajo/`. Ningún proceso del producto las lee.
 
-**Tests.** `tests/normalizacion_v5/test_aguas_abajo_f10.py` (6).
+**Tests.** `tests/normalizacion_v5/test_aguas_abajo_f10.py` (8).
 
 ```bash
 python -m bbnorm5.f10 --config configs/v5/f10.yaml          # ≈ 1 min
@@ -51,9 +52,12 @@ predice el de t+1 con correlación de rangos 0,02; con el perfil y la traducció
 
 **Landing: no hay penalización general por cambiar de liga.**
 - Con la traducción de los puentes, la primera temporada rinde lo esperado.
-- Lo que hay es un cambio de perfil (menos triples y más rebote), en su mayoría pasajero.
-- Sólo es identificable entre ligas europeas (19 de 76 celdas). En las FEB y en la NBA/G League el error de traducción
-  es 2,5 y 6,5 veces el de muestreo.
+- Lo que hay es un cambio de perfil, en su mayoría pasajero: menos triples y más rebote en el agregado.
+- **Americanos de NBA/G League a Europa:** en el primer año cambian de papel (más uso y más tiro propio). En el segundo
+  mejoran más de lo previsto: T2% +0,39 DT y pts/100 +0,35 DT (§13.2).
+- **Identificabilidad:** 52 de 190 celdas. La NCAA no es identificable: el error de su traducción es 10 veces el de
+  muestreo.
+- **La proyección publicada ya recoge el primer año.** Añadirle el efecto no la mejora en ningún grupo.
 
 **Criterio 8: cumplido.** El plan B (§5 de la revisión) no se activa: la F8 cumple el criterio 9 sin minutos de oráculo.
 
@@ -140,6 +144,14 @@ Residuo de la primera temporada en una liga nueva, η_obs − η̂, con η̂ = r
 - **Criterios fijados antes:**
   - identificable con ≥ 100 personas y semiancho del IC 95 % ≤ 0,10 DT;
   - relevante con |δ| ≥ 0,10 DT e IC sin el 0.
+- **Grupos** (corregido en la F10 bis): los 10 de la Landing vigente (`bbfit.adaptacion.grupo_nacionalidad`).
+  - La nacionalidad se une por persona: v3.2 normalizada de todas las temporadas y crosswalk.
+  - La primera versión usaba los grupos de la recalibración, en los que «entre ligas europeas» incluía llegadas desde
+    la NCAA (125 personas), la CBA y la NBL.
+- **Con la traducción publicada (paso 2):** además del efecto total (paso 1), la misma medida dice si la proyección
+  actual ya recoge la caída.
+- **Examen de publicación:** δ estimado con las temporadas anteriores y aplicado a la proyección publicada (ex ante,
+  recalibrada) de la siguiente. Se publica sólo si baja el WIS con IC que no cruza 0 (la regla del criterio 11).
 
 ---
 
@@ -252,7 +264,7 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
 
 ![Impacto](figuras/f10_impacto_rapm.png)
 
-### 2.5 Landing (`landing_delta.csv`, `landing_persistencia.csv`)
+### 2.5 Landing (`landing_delta.csv`, `landing_persistencia.csv`, `landing_examen_publicacion.csv`)
 
 **Muestra:** 255.485 transiciones con 300 min o más (61.019 primeras temporadas en liga nueva y 16.617 segundas).
 
@@ -261,22 +273,33 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
   - 3PAr −0,19 [−0,30, −0,08], unos −2,3 puntos de 3PAr;
   - OREB% +0,19 [+0,05, +0,33], +0,35 puntos.
 - Pts/100 −0,06 [−0,18, +0,05].
+- Con la traducción publicada, todas quedan en |δ| ≤ 0,11.
 
-**Por grupo:**
+**Por grupo** (primera temporada, 19 métricas por grupo):
 
-| Grupo | Error típico mediano (muestreo / traducción) | Identificables | Relevantes (\|δ\| ≥ 0,10, IC sin 0) |
-|---|---|---|---|
-| Entre ligas europeas | 0,022 / 0,026 | **19 de 19** | 8: 3PAr −0,20, FTr −0,13, DREB% +0,13, OREB% +0,11, % corta +0,13, % media +0,13, T3% +0,13, USG% +0,12 |
-| A la EuroLeague | 0,056 / 0,046 | 0 | 9; T2% +0,30 y T3% +0,36 (+2,0 y +2,2 puntos) |
-| Con las FEB | 0,046 / **0,115** | 0 | 0 |
-| Con NBA y G League | 0,032 / **0,209** | 0 | 0 |
+| Grupo | Personas | Error típico mediano (muestreo / traducción) | Identificables | Relevantes |
+|---|---|---|---|---|
+| NCAA a profesional | 550 | 0,042 / **0,405** | 0 | 2 |
+| Extranjero no europeo que cambia de país | 494 | 0,032 / 0,016 | **19** | 8 |
+| Sin nacionalidad | 413 | 0,039 / 0,017 | 17 | 8 |
+| Europeo que cambia de liga | 286 | 0,044 / 0,017 | 16 | 4 |
+| Nacional en su país (p. ej. FEB → ACB) | 229 | 0,062 / 0,138 | 0 | 0 |
+| **EE. UU. (nacionalidad) de NBA/G League a Europa** | 228 | 0,063 / 0,070 | 0 | **13** |
+| NBA ↔ G League | 207 | 0,062 / 0,090 | 0 | 1 |
+| Hacia EE. UU. | 163 | 0,081 / 0,072 | 0 | 8 |
+| Extranjero dentro de su liga de país | 64 | 0,115 / 0,157 | 0 | 0 |
+| No estadounidense de NBA/G League a Europa | 61 | 0,127 / 0,080 | 0 | 5 |
 
-**Persistencia** (19 celdas relevantes: 17 por grupo y 2 en el agregado de todos los cambios):
-- **9 pasajeras:** la segunda temporada vuelve o se invierte.
-  - Hacia la EuroLeague: T2% +0,30 → −0,12; T3% +0,36 → −0,22; pts/100 +0,20 → −0,02; robos y % en el aro.
-  - Entre ligas europeas: DREB%, OREB% y FTr; y OREB% en el agregado.
-- **3 persisten:** 3PAr hacia la EuroLeague y en el agregado, y % de tiros cortos entre ligas europeas.
-- Las otras 7 quedan entre ambas: la segunda temporada no es distinguible ni de 0 ni de la primera.
+**Persistencia** (49 celdas relevantes por grupo): 21 pasajeras y 10 persistentes. Las demás no se distinguen.
+
+**Examen de publicación** (WIS de la proyección publicada con δ frente a sin δ; temporadas de prueba 2024-25 y
+2025-26):
+- **Primera temporada:** ningún grupo mejora. Empeora entre +0,6 % (europeo que cambia de liga) y +1,8 % (hacia
+  EE. UU.).
+  - EE. UU. a Europa: +1,4 % [−0,0, +2,8].
+  - Llegadas profesionales de EE. UU. a Europa, todas: +1,6 % [+0,4, +2,9].
+- **Segunda temporada:** tampoco.
+  - Llegadas profesionales de EE. UU. a Europa: +1,4 % [−2,7, +5,7], con sólo 16 personas y la cohorte de 2025.
 
 ![Landing](figuras/f10_landing.png)
 
@@ -331,17 +354,22 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
    - la correlación entre compañeros de §2.2 es la que hace falta para que la banda del equipo cubra.
 4. **Examen:** el del IMPACTO v4.0 (correlación de rangos con el on/off de t+1, hoy 0,149).
 
-### 3.4 Landing (v5.2)
+### 3.4 Landing (v5.1, con la ampliación del usuario)
 
-- **No publicar un δ de producción general:** no lo hay.
-- **Entre ligas europeas**, publicar el cambio de perfil de la primera temporada (3PAr, rebote, FTr), marcándolo como
-  pasajero o persistente.
-- **Hacia la EuroLeague,** el T2% y el T3% suben en la primera temporada y bajan en la segunda. Es lo contrario de una
-  adaptación: selección por forma o un error de traducción del paso 1 en esa vara. **VERIFICAR** antes de publicarlo.
-- **En las FEB y en NBA/G League no es identificable:** la traducción del paso 1 es poco precisa ahí. Hacen falta más
-  puentes (F6 §4.4).
-- **El escalón NK₁ − NK₂** pasa a ser NK con y sin δ por métrica, en los grupos donde δ sea identificable. Fuera de
-  ellos, el sello de la Landing sigue en BAJA.
+- **No corregir la proyección del primer año:** la traducción publicada ya incluye la caída media y añadirla empeora
+  (§2.5).
+- **Publicar la Landing como lectura propia, con su rango y su sello:**
+  - **cambio de perfil del primer año** por grupo (p. ej., el americano que llega a Europa: más uso, más tiro propio,
+    menos asistido);
+  - **mejora esperada del segundo año** donde exista (americanos de NBA/G League a Europa, §13.2).
+- **Modelo para la v5.1:**
+  - δ₁ (primer año) y δ₂ (segundo año) jerárquicos por grupo y métrica;
+  - para ganar potencia, contraídos a través del perfil latente de la F5, con 3 factores en lugar de 19 métricas;
+  - examen fuera de tiempo al cerrar 2026-27, que añade una cohorte.
+- **NCAA y FEB no son identificables:** la traducción del paso 1 es poco precisa ahí. Hacen falta más puentes
+  (F6 §4.4).
+- **El escalón NK₁ − NK₂** pasa a ser el NK del primer año frente al NK de nivel (adaptado), con δ₂ donde sea
+  identificable.
 
 ---
 
@@ -352,7 +380,7 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
 | 1 | **Nivel Kerno** con la contribución ensamblada de la v5 | +0,10 de correlación de rangos; separación +4 puntos; rango −9 puntos | Bajo: sólo cambia cómo se ensambla C | v5.1 (primer paso) |
 | 2 | **Producción del simulador** con draws de la v5 y dependencia estimada | −1,5 % por jugador; cobertura de equipo 0,58 → 0,89 | Medio: índice L, reentrenar el GBM, cachés | v5.1 |
 | 3 | **Prior del RAPM e Impacto** con perfil y traducción de la v5 | 0,02 → 0,29 en quienes cambian de liga | Medio: RAPM multiliga y sus cachés | v5.2 |
-| 4 | **Landing** por métrica y grupo identificable | Sin efecto general; Europa | Bajo | v5.2 |
+| 4 | **Landing** por grupo: cambio de perfil y mejora del segundo año | Sin efecto general; EE. UU. → Europa en el segundo año | Bajo | v5.1 |
 | 5 | **Tablas normalizadas del artifact** con selector v3.2 / v5 (F9 §3) | Intervalos calibrados y 26 métricas; en el examen de la F1, empate con la v3.2 | Bajo: carpeta de origen | Cuando lo decidas |
 
 **Lo que no conviene tocar:**
@@ -376,7 +404,8 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
 4. **El RAPM sólo funciona dentro de la liga.** Para fichajes de otra liga, el Impacto necesita la producción
    traducida. Es justo lo que la v5 aporta.
 5. **La adaptación de un fichaje es sobre todo cambio de papel, no de nivel.** La primera temporada se lanzan menos
-   triples y se coge más rebote. Casi todo se deshace al año siguiente.
+   triples y se coge más rebote. Casi todo se deshace al año siguiente. La excepción es el americano que llega a
+   Europa: mejora en el segundo año (§13.2).
 
 ## 6. Supuestos (SUPUESTO)
 
@@ -398,8 +427,8 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
    publicar bandas de quinteto o de equipo hay que propagar la innovación de λ de t+1 como componente común.
 2. **RIESGO · minutos anchos.** Con los minutos del motor, la contribución cubre de más (0,90). La v5.1 debe recalibrar
    la predictiva de minutos o publicar C con la calibración isotónica del NK.
-3. **VERIFICAR · subida del tiro en la primera temporada hacia la EuroLeague** (T2% +2,0, T3% +2,2 puntos) y bajada al
-   año siguiente: traducción del paso 1 en esa vara o selección por forma.
+3. **VERIFICAR · mejora del segundo año de los americanos en Europa:** 61 personas. Está en las cohortes de 2022 a 2024
+   pero no en la de 2025, y el examen fuera de tiempo sólo tiene 16 casos.
 4. **RIESGO · cachés ausentes.** El examen V32_corte, el RAPM multiliga y el examen del IMPACTO no se pueden rehacer
    hasta regenerarlas (horas de cálculo en la v5.1).
 5. **VERIFICAR · quintetos reales.** Este prototipo usa grupos de cinco fichajes. El quinteto con todo el plantel
@@ -420,7 +449,7 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
   `bbequipo/anclas.py` y `bbfit` se importan en sólo lectura.
 - **Comprobado:** ningún fichero de `data/modelos/` ni de los artifacts cambió (sólo registros de MLflow de ejecuciones
   anteriores).
-- **Tests:** suite completa, **386 passed** (380 de antes y 6 nuevos). La F10 entera se reejecuta en 1 min con los
+- **Tests:** suite completa, **388 passed** (380 de antes y 8 nuevos). La F10 entera se reejecuta en 1 min con los
   mismos resultados (semillas fijas).
 
 ## 10. Criterios de éxito
@@ -441,19 +470,109 @@ predictiva de minutos es ancha en quien acaba jugando ≥ 300 min (cobertura de 
    **Recomendación: A.** El F1 da empate con la v3.2; el valor de la v5 está aguas abajo, que llega con la v5.1.
 2. **Orden de migración (§4).** Recomendación: empezar la v5.1 por el **Nivel Kerno** (valor alto, riesgo bajo) y
    seguir con la producción del simulador.
-3. **Landing.** Recomendación: dejar de publicar la adaptación v3.1 como efecto de producción (hoy no lo es) y publicar
-   sólo el cambio de perfil identificable entre ligas europeas.
+3. **Landing.** Recomendación: §13.2.
 4. **Cachés del simulador y de la v4.0.** Regenerarlas al empezar la v5.1 (horas de cálculo).
 
-## 12. Siguiente fase propuesta y ajuste de inversión
+## 12. Siguiente fase
 
-**F11 · Documentación, artículo científico y cierre** (encargo §15):
-- `CHANGELOG_v5.md`;
-- artículo científico v5 (sin borrar la v3.2);
-- guía didáctica del desarrollador;
-- test de que la v3.2 y la v1 producen las mismas salidas (hash);
-- PR final con la auditoría global.
+Por decisión del usuario (§13), se abre la **v5.1** con el Nivel Kerno, el Impacto y la Landing dentro: encargo en
+`docs/v5_1/00_encargo_v5_1.md`. La F11 de la v5.0 (documentación, artículo y cierre) se hace al final de la v5.1, con
+todo integrado.
 
-Sin NUTS. Después, encargo v5.1 (simulación) y v5.2 (anclas).
+## 13. F10 bis · Respuestas a la puerta (13-11-2026)
 
-Esperando GO.
+Preguntas y decisiones del usuario:
+1. ¿Se puede aplicar en cada métrica la versión con menor error?
+2. Abrir la v5.1 con el Nivel Kerno, el Impacto y la Landing dentro.
+3. Evaluar publicar la adaptación de los americanos que llegan a Europa.
+4. Cachés: «haz lo que consideres mejor».
+
+### 13.1 Una versión por métrica: mejor mezclar que elegir (`hibrido.py`)
+
+Reglas decididas con el corte de calibración y examinadas en los siguientes, que no se usaron para decidir:
+
+| Regla | Examen de la F1 frente a la v3.2 (2023-24; 12.669 casos, 789 personas) | Cobertura 80 % | Fichajes reales frente a la v3.3 (2024-25 y 2025-26; 12.935 casos) | Cobertura 80 % |
+|---|---|---|---|---|
+| v5 entera | +1,8 % [+0,7, +3,0] | 0,76 | −6,2 % [−7,5, −4,8] | 0,79 |
+| v3.2 (v3.3) entera | 0 | 0,81 | 0 | 0,82 |
+| Elegir la mejor por métrica | +0,3 % [−0,2, +0,8] | 0,79 | −6,2 % (elige la v5 en las 5) | 0,79 |
+| Elegir con prudencia | +1,2 % [+0,2, +2,1] | 0,78 | −6,2 % | 0,79 |
+| **Mezclar con peso por métrica** | **−2,5 %** [−3,0, −2,0] | 0,80 | **−8,2 %** [−9,1, −7,3] | 0,81 |
+| Mezclar al 50 % | −2,9 % [−3,5, −2,2] | 0,80 | −8,1 % [−8,8, −7,5] | 0,83 |
+| Oráculo (elige mirando el examen) | −0,9 % [−1,6, −0,2] | 0,80 | −6,2 % | 0,79 |
+
+**LECTURA.**
+- **Elegir no gana fuera de muestra.** Las diferencias por métrica son pequeñas y cambian de un corte a otro.
+  Ni siquiera el oráculo pasa de −0,9 %.
+- **Mezclar las dos distribuciones gana en casi todas las métricas.** Es el promedio de cuantiles: w·v5 + (1 − w)·v3.2.
+  - Tiene la cobertura en su sitio.
+  - En los fichajes reales suma 2 puntos a la ventaja de la v5.
+  - El peso medio de la v5 en los fichajes es 0,72; en la F1, entre 0,1 y 0,7 según la métrica.
+- **Por qué funciona:** los errores de las dos versiones no van a la par (la CVAE de la v3.2 y la carrera de la v5).
+- **Propuesta:** publicar una **versión combinada** («Kerno v5.1 combinada»):
+  - pesos por métrica fijados fuera de muestra (`hibrido_decisiones_todos.csv`);
+  - incluye las tres zonas que hoy van con la v3.2;
+  - las derivadas (TS%, eFG%) salen de los componentes ya combinados.
+
+  Es la fase 1 de la v5.1.
+
+### 13.2 Adaptación de los americanos que llegan a Europa
+
+Grupo `EEUU_a_Europa` de la Landing vigente: nacionalidad EE. UU., de la NBA o la G League a una liga europea.
+228 personas en el primer año.
+
+**Primer año, frente a su nivel traducido con puentes** (DT del residuo; IC 95 %; en la escala de la métrica):
+
+| Más | | Menos | |
+|---|---|---|---|
+| Pts/100 | +0,29 [+0,14, +0,45] · +1,7 | % de canastas asistidas | −0,52 [−0,71, −0,33] · −6,1 puntos |
+| USG% | +0,23 [+0,06, +0,40] · +0,9 | 3PAr | −0,36 [−0,51, −0,21] · −4,1 |
+| % de tiros de media distancia | +0,80 [+0,64, +0,96] · +2,6 | % de triples de esquina | −0,43 [−0,58, −0,28] · −2,4 |
+| % de tiros cortos | +0,44 [+0,25, +0,62] · +2,3 | FTr | −0,29 [−0,53, −0,06] · −3,2 |
+| T3% | +0,49 [+0,26, +0,71] · +2,9 | TL% | −0,31 [−0,51, −0,11] · −2,6 |
+| TOV% | +0,28 [+0,06, +0,49] · +1,0 | BLK% | −0,40 [−0,55, −0,25] |
+
+**Segundo año en la misma liga europea** (residuo frente a la proyección de carrera, sin traducción):
+
+| Grupo | Personas | Pts/100 | T2% | TOV% | 3PAr |
+|---|---|---|---|---|---|
+| Americanos de NBA/G League | 42 | +0,52 [+0,23, +0,81] · +1,8 | +0,49 [+0,21, +0,77] · +2,9 | −0,34 [−0,58, −0,10] · −1,0 | −0,29 [−0,58, −0,01] |
+| Todas las llegadas profesionales de EE. UU. | 61 | +0,35 [+0,13, +0,57] | +0,39 [+0,18, +0,61] | −0,24 [−0,49, −0,00] | −0,27 [−0,51, −0,04] |
+
+- **Por cohorte** (pts/100, todas las llegadas): 2022 +0,13 (13 personas), 2023 +0,69 (18), 2024 +0,46 (23),
+  2025 +0,00 (20).
+- **Examen de publicación:**
+  - aplicar el efecto del primer año a la proyección publicada empeora un 1,4 % [−0,0, +2,8];
+  - el del segundo año sólo se puede examinar en 2025: 16 personas, +1,4 % [−2,7, +5,7].
+
+**LECTURA.**
+1. **La adaptación existe, pero no como una caída de producción el primer año.**
+   - El primer año es un **cambio de papel:** más uso y más tiro propio de media distancia, menos tiro asistido y de
+     esquina, peor tiro libre y más pérdidas.
+   - El segundo año, el jugador **mejora en eficiencia** (T2%, pérdidas) más de lo que espera el modelo de carrera.
+   - Es lo que describen los estudios externos que citas: la mejora del segundo año.
+2. **La proyección publicada ya recoge el primer año.** La traducción del paso 2 se estima con estos mismos traspasos,
+   que van casi siempre de EE. UU. a Europa. Por eso añadir un efecto empeora la proyección.
+3. **Lo que no recoge es la mejora del segundo año.**
+   - Está en 3 de 4 cohortes.
+   - Con 61 personas no pasa la regla de identificabilidad fijada antes (semiancho ≤ 0,10 DT).
+   - El examen fuera de tiempo sólo tiene la cohorte de 2025, justo la que no la muestra.
+
+**Propuesta: publicarlo, pero como lectura de la Landing, no como corrección de la proyección.**
+- «Adaptación EE. UU. → Europa»: perfil del primer año y mejora esperada del segundo, con su IC y sello BAJA, y la nota
+  de que coincide con la literatura externa.
+- **La proyección del segundo año no se corrige** hasta que el examen fuera de tiempo lo apruebe con la cohorte de
+  2026-27.
+- En la v5.1, el modelo jerárquico de δ₁ y δ₂, contraído a través del perfil latente, gana potencia. La regla de
+  publicación sigue siendo la misma.
+
+### 13.3 Cachés (decisión 4)
+
+Se regeneran en la fase 0 de la v5.1, en `experimentos/`, con la versión de la normalización en la clave de cada caché:
+- las de la V32_corte del simulador;
+- las del RAPM multiliga y el examen F4 de la v4.0;
+- las del algoritmo A por corte.
+
+No tocan nada publicado.
+
+Esperando GO a la fase 1 de la v5.1 tras su fase 0.

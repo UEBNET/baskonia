@@ -1,0 +1,227 @@
+{
+ "version_modelo": "5.0",
+ "fase": "F10",
+ "config": "configs/v5/f10.yaml",
+ "hash_config": "3b13ecfc667a",
+ "hash_datos_entrada": "056305325c2e4796",
+ "fecha": "2026-11-13T10:06:33+00:00",
+ "python": "3.13.18",
+ "calibracion": [
+  2022
+ ],
+ "prueba": [
+  2023,
+  2024
+ ],
+ "examen": {
+  "v5": {
+   "wis_frente_v32": 0.0181,
+   "ic_lo": 0.0067,
+   "ic_hi": 0.0295,
+   "cobertura80": 0.7611,
+   "casos": 12669,
+   "personas": 789
+  },
+  "v3.2": {
+   "wis_frente_v32": 0.0,
+   "ic_lo": 0.0,
+   "ic_hi": 0.0,
+   "cobertura80": 0.8086,
+   "casos": 12669,
+   "personas": 789
+  },
+  "elegir": {
+   "wis_frente_v32": 0.003,
+   "ic_lo": -0.0021,
+   "ic_hi": 0.0078,
+   "cobertura80": 0.7934,
+   "casos": 12669,
+   "personas": 789
+  },
+  "elegir_prudente": {
+   "wis_frente_v32": 0.0117,
+   "ic_lo": 0.0017,
+   "ic_hi": 0.0213,
+   "cobertura80": 0.7761,
+   "casos": 12669,
+   "personas": 789
+  },
+  "mezclar": {
+   "wis_frente_v32": -0.025,
+   "ic_lo": -0.03,
+   "ic_hi": -0.0197,
+   "cobertura80": 0.8039,
+   "casos": 12669,
+   "personas": 789
+  },
+  "mezclar_50": {
+   "wis_frente_v32": -0.0286,
+   "ic_lo": -0.0346,
+   "ic_hi": -0.0222,
+   "cobertura80": 0.8024,
+   "casos": 12669,
+   "personas": 789
+  },
+  "oraculo": {
+   "wis_frente_v32": -0.0094,
+   "ic_lo": -0.0157,
+   "ic_hi": -0.0018,
+   "cobertura80": 0.8044,
+   "casos": 12669,
+   "personas": 789
+  }
+ },
+ "examen_fichajes": {
+  "v5": {
+   "wis_frente_v32": -0.0621,
+   "ic_lo": -0.0753,
+   "ic_hi": -0.0484,
+   "cobertura80": 0.7863,
+   "casos": 12935
+  },
+  "v3.2": {
+   "wis_frente_v32": 0.0,
+   "ic_lo": 0.0,
+   "ic_hi": 0.0,
+   "cobertura80": 0.8196,
+   "casos": 12935
+  },
+  "elegir": {
+   "wis_frente_v32": -0.0621,
+   "ic_lo": -0.0746,
+   "ic_hi": -0.0495,
+   "cobertura80": 0.7863,
+   "casos": 12935
+  },
+  "elegir_prudente": {
+   "wis_frente_v32": -0.0621,
+   "ic_lo": -0.0732,
+   "ic_hi": -0.0505,
+   "cobertura80": 0.7863,
+   "casos": 12935
+  },
+  "mezclar": {
+   "wis_frente_v32": -0.082,
+   "ic_lo": -0.091,
+   "ic_hi": -0.0731,
+   "cobertura80": 0.8136,
+   "casos": 12935
+  },
+  "mezclar_50": {
+   "wis_frente_v32": -0.0812,
+   "ic_lo": -0.0876,
+   "ic_hi": -0.0749,
+   "cobertura80": 0.8314,
+   "casos": 12935
+  },
+  "oraculo": {
+   "wis_frente_v32": -0.0621,
+   "ic_lo": -0.0756,
+   "ic_hi": -0.0496,
+   "cobertura80": 0.7863,
+   "casos": 12935
+  }
+ },
+ "decision_todos": {
+  "ast_pct": {
+   "elegir": "v5",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.6
+  },
+  "blk_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v3.2",
+   "w_mezcla": 0.3
+  },
+  "dreb_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.5
+  },
+  "efg_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.5
+  },
+  "fg2_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v3.2",
+   "w_mezcla": 0.4
+  },
+  "fg3_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v3.2",
+   "w_mezcla": 0.3
+  },
+  "fg3a_rate": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.5
+  },
+  "ft_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.5
+  },
+  "fta_rate": {
+   "elegir": "v5",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.6
+  },
+  "oreb_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v3.2",
+   "w_mezcla": 0.4
+  },
+  "pct_aro": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v3.2",
+   "w_mezcla": 0.4
+  },
+  "pct_asistidas": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.5
+  },
+  "pct_corta": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.4
+  },
+  "pct_media": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v3.2",
+   "w_mezcla": 0.2
+  },
+  "pct_t3_esquina": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v3.2",
+   "w_mezcla": 0.3
+  },
+  "pts_p100": {
+   "elegir": "v5",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.8
+  },
+  "stl_p100": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.3
+  },
+  "tov_pct": {
+   "elegir": "v3.2",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.4
+  },
+  "ts_pct": {
+   "elegir": "v5",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.6
+  },
+  "usg_pct": {
+   "elegir": "v5",
+   "elegir_prudente": "v5",
+   "w_mezcla": 0.6
+  }
+ }
+}

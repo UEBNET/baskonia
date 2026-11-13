@@ -2,9 +2,9 @@
  "version_modelo": "5.0",
  "fase": "F10",
  "config": "configs/v5/f10.yaml",
- "hash_config": "23da7639bb43",
+ "hash_config": "3b13ecfc667a",
  "hash_datos_entrada": "9c7a717245beb173",
- "fecha": "2026-11-13T07:59:06+00:00",
+ "fecha": "2026-11-13T10:06:19+00:00",
  "python": "3.13.18",
  "fiabilidad": {
   "rapm": 0.322,

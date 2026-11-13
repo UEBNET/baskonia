@@ -105,14 +105,16 @@ def fig_landing(cfg):
     plt, F = estilo()
     t = pd.read_csv(DIR / "landing_delta.csv")
     t = t[(t["fase"] == "primera") & (t["grupo"] != "todos")]
-    grupos = ["europa", "a_euroleague", "feb", "nba_gleague"]
-    eg = {"europa": "Entre ligas europeas", "a_euroleague": "A la EuroLeague", "feb": "Con las FEB",
-          "nba_gleague": "Con NBA y G League"}
+    grupos = ["EEUU_a_Europa", "otro_desde_EEUU", "NCAA_a_profesional", "europeo_cambia_liga",
+              "extranjero_cambia_pais", "nacional_mismo_pais"]
+    eg = {"EEUU_a_Europa": "EE. UU.\nNBA/GL a Europa", "otro_desde_EEUU": "No EE. UU.\nNBA/GL a Europa",
+          "NCAA_a_profesional": "NCAA a\nprofesional", "europeo_cambia_liga": "Europeo\ncambia de liga",
+          "extranjero_cambia_pais": "Extranjero\ncambia de país", "nacional_mismo_pais": "Nacional\nen su país"}
     mets = t.groupby("metrica")["delta"].apply(lambda s: s.abs().mean()).sort_values().index.tolist()
     M = t.pivot_table(index="metrica", columns="grupo", values="delta").loc[mets, grupos]
     S = t.pivot_table(index="metrica", columns="grupo", values="se").loc[mets, grupos]
-    fig, ax = plt.subplots(figsize=(8.2, 7.2))
-    fig.subplots_adjust(left=0.20, right=0.92, top=0.86, bottom=0.10)
+    fig, ax = plt.subplots(figsize=(9.6, 7.4))
+    fig.subplots_adjust(left=0.16, right=0.93, top=0.86, bottom=0.13)
     im = ax.imshow(M.to_numpy(), cmap="RdBu_r", vmin=-0.4, vmax=0.4, aspect="auto")
     ax.grid(False)
     for i in range(M.shape[0]):
@@ -122,13 +124,13 @@ def fig_landing(cfg):
             oscuro = abs(v) > 0.22
             ax.text(k, i, _n(v), ha="center", va="center", fontsize=7.5, fontweight="bold" if sig else "normal",
                     color=("white" if oscuro else "black") if sig else ("#E6E9E7" if oscuro else S400))
-    ax.set_xticks(range(len(grupos)), [f"{eg[g]}\nDT ±{_n(S[g].median())}" for g in grupos], fontsize=8)
+    ax.set_xticks(range(len(grupos)), [f"{eg[g]}\nDT ±{_n(S[g].median())}" for g in grupos], fontsize=7.5)
     ax.set_yticks(range(len(mets)), [NOM.get(m, m) for m in mets])
     fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02)
     n_id = int(t["identificable"].sum())
     _cabecera(fig, ax, F, f"No hay penalización general por cambiar de liga; el efecto sólo se identifica en {n_id} "
                           f"de {len(t)} celdas",
-              "Primera temporada en DT del residuo · negrita: IC 95 % sin el 0 · en FEB y NBA domina la traducción",
+              "Primera temporada en DT del residuo · negrita: IC 95 % sin el 0 · grupos de la Landing vigente",
               "Datos públicos · transiciones de 2020-21 a 2025-26 con 300 min o más · Kerno Analytics · v5.0 F10")
     return _guardar(fig, "f10_landing", cfg)
 
