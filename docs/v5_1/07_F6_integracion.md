@@ -221,7 +221,11 @@ hace al publicar, sitio a sitio.
    **Las páginas publicadas no salían del repositorio.** Se habían editado directamente en los artifacts (por ejemplo, el raíl de los tres sitios), y `artifact/kerno/index.html` está desfasado. Por eso los cambios de la v5.1 se aplicaron hunk a hunk sobre cada página publicada. El ensayo se repitió con la página publicada de Jugadores: el modo v3.2 da el mismo texto que antes y la v5.1 no da errores.
 
    En Equipos y Metodología no hay botón «Actualizar». La fila del selector, que iba en el mismo hunk que ese panel, se añadió a mano y se comprobó en el navegador.
-3. **Pendiente:**
-   - **`clasico.html`** (la tabla «Datos normalizados» de la vista clásica): sigue la versión anterior, con la v3.2, hasta republicarlo con su cambio. El cambio está en el repositorio (`artifact/kerno/clasico.html`, idéntico al publicado salvo la v5.1). Antes de publicarlo hay que leerlo entero (463 KB).
-   - **Texto de «Por necesidad»** («Cómo se calcula»): menciona el historial v4.2, que en la v5.1 no se aplica. Retocarlo en la próxima publicación de la página.
+3. **Segunda publicación** (el mismo día, [UEBNET/baskonia#10](https://github.com/UEBNET/baskonia/pull/10)): Jugadores v40, Equipos v16 y Metodología v14→15.
+   - **`clasico.html` de la v5.1:** «Datos normalizados» de la vista clásica lee `regular_v51`, mezcla la vara de la v5 y explica «V5.1» en la ficha. Antes de publicarlo se leyó entero (4.191 líneas).
+   - **Textos según la versión:**
+     - «Por necesidad» → «Cómo se calcula»: en v5.1 explica que la v5 ya lleva la carrera del jugador; en v3.2 mantiene el historial v4.2.
+     - La nota y las descripciones de columna de la vista clásica: en v5.1 hablan de la combinación v5 · v3.2, no de A+B.
+   - **Ensayo repetido:** v3.2 idéntico en las seis vistas; v5.1 sin errores.
+4. **Pendiente:**
    - **Segunda entrega:** simulador y Nivel Kerno v5.1 en el navegador.
