@@ -1219,12 +1219,12 @@ function colDesc(c) {
   if (st.src !== "norm") return st.dict[c] || c;
   if (NORM_DESC[c] && !NORM_M.includes(c)) return NORM_DESC[c];
   const m = c.replace(/_(pctel|obs|ctx)$/, "");
-  if (!NORM_M.includes(m)) return st.dict[c] || (c === "fuente_norm" ? "Algoritmos usados: A+B, o sólo A cuando B no traduce al jugador" : c);
+  if (!NORM_M.includes(m)) return st.dict[c] || (c === "fuente_norm" ? (NORMV === "v51" ? "Fuente: V5.1 (combinación de la v5 y la v3.2) o V3.2 donde no hay v5" : "Algoritmos usados: A+B, o sólo A cuando B no traduce al jugador") : c);
   const d = descOf(m) ? ` — ${descOf(m)}` : "";
   if (c.endsWith("_pctel")) return st.vara !== "euroleague" ? `Percentil aproximado en la vara de ${varaNombre()} (Φ(z) frente al jugador medio de su posición en esa liga, 2025-26)${d}` : `Percentil entre los jugadores de la EuroLeague de su posición (A+B)${d}`;
   if (c.endsWith("_obs")) return `Valor observado en su liga${d}`;
   if (c.endsWith("_ctx")) return `Valor neutro de contexto: lo que marcaría con compañeros de nivel medio (equivalente EuroLeague sin el efecto de su plantilla)${d}`;
-  return `Equivalente ${varaNombre()} 2025-26 (A+B; sólo A donde B no traduce)${d}`;
+  return `Equivalente ${varaNombre()} 2025-26 (${NORMV === "v51" ? "v5.1: combinación de la v5 y la v3.2" : "A+B; sólo A donde B no traduce"})${d}`;
 }
 // ---------------------------------------------------------------- vara de destino (v3.2): cualquier liga = 0
 // datos/normalizados/vara.json (bbnorm3.destino.vara_artifact): los equivalentes EuroLeague se expresan con la misma
@@ -1352,7 +1352,7 @@ function etiquetasVara() {
   NORM_M.forEach((m) => { LABELS[m + "_pctel"] = (LABELS[m] || m) + " p." + ab; });
   const b = document.querySelector('#srcSeg [data-src="normalizados"]'); if (b) b.textContent = "Normalizados " + ab;
   const n = document.getElementById("normNote");
-  if (n && !n.dataset.base) n.dataset.base = n.innerHTML;
+  if (n && !n.dataset.base) n.dataset.base = NORMV === "v51" ? "<b>Datos normalizados (normalización v5.1).</b> Cada valor es el equivalente EuroLeague 2025-26 del jugador: en cada métrica, la combinación de la v5 (carrera del jugador y traducción entre ligas con los jugadores que cambian de liga) y la v3.2 (algoritmos A y B) que menos falla fuera de muestra; donde no hay v5, la v3.2. Todos los jugadores de todas las competiciones y temporadas, temporada regular. «p.EL» = percentil entre los jugadores de EuroLeague de su posición; «liga» = valor original en su competición. Pulsa una fila para ver el intervalo; las columnas A y B de la ficha son las de la v3.2." : n.innerHTML;
   if (n) n.innerHTML = st.vara === "euroleague" ? n.dataset.base : `<b>Datos normalizados en la vara de ${varaNombre()} (= 0).</b> Cada valor es la misma capacidad del jugador expresada como equivalente ${varaNombre()} 2025-26: se parte del equivalente EuroLeague (A+B) y se traduce con el nivel y la escala de esa liga; el intervalo del 80 % suma la incertidumbre del nivel del par de ligas (su liga → ${varaNombre()}). «p.» = percentil aproximado frente al jugador medio de su posición en esa liga; «liga» = valor original en su competición. Elige «EuroLeague» para volver a los valores publicados.`;
 }
 // vara única de toda la herramienta: Ajustes (#ebVara), «Datos normalizados» (#varaSel) y «Normalización de ligas»
