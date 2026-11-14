@@ -1,14 +1,16 @@
 """v5.1 F6 · Producto para el artifact: la versión combinada como superposición de la v3.2 y su vara.
 
-1. **Superposición por temporada** (`data/v5_1/producto/superposicion/<t>.csv.gz`). Una fila por (liga, player_id,
-   team_id) con valor combinado de la v5.1 en alguna métrica, con:
-   - las 100 columnas que la v5.1 cambia (25 métricas × valor, `_lo`, `_hi`, `_pctel`; esquema v1);
-   - `v51_comb` y `v51_solo`: máscaras de bits en el orden de `ORDEN` (métrica combinada w·v5 + (1 − w)·v3.2, o sólo
-     v5 por no haber v3.2).
+1. **Componente v5 por temporada** (`data/v5_1/producto/superposicion/<t>.csv.gz`). Una fila por (liga, player_id,
+   team_id) con v5 en alguna métrica: `<m>_v5`, `<m>_v5_lo` y `<m>_v5_hi` de las 25 métricas del esquema v1 que la
+   v5.1 cambia (equivalente EuroLeague 2025-26 de la v5, F9 y F1 de la v5.1).
 
-   La producción la aplica fila a fila sobre su tabla v3.2 (`aplicar`): las filas que la v5.1 no cubre (Liga U,
-   jugadores que el botón añada después de la última ejecución, métricas sin v5) siguen con la v3.2. `fuente_norm` dice
-   cuál es cuál («V5.1» o «V3.2»).
+   **La combinación se hace en producción** (`aplicar`), sobre la v3.2 que esté publicada en cada momento: centro e
+   intervalo = w·v5 + (1 − w)·v3.2 donde están las dos, la v5 donde sólo está ella, la v3.2 en el resto; percentil
+   recalculado entre los jugadores de la EuroLeague de su posición (como `formato_v32.combinar`). Motivo: la v3.2 de
+   producción se reajustó con la Liga U (21 ligas) y la recalibración mensual la cambia en 2026-27; combinar con una
+   copia fija mezclaría versiones. Las filas sin v5 (Liga U, jugadores nuevos posteriores) siguen con la v3.2;
+   `fuente_norm` dice cuál es cuál («V5.1» o «V3.2») y las máscaras `v51_comb` / `v51_solo` (bits en el orden de
+   `ORDEN`) qué métricas son combinadas o sólo v5.
 
 2. **Vara** (`data/v5_1/producto/vara_v51.json`). Para expresar los equivalentes EuroLeague 2025-26 en la liga del club
    como hace `vara.json` con la v3.2, pero con la traducción de la v5. En la escala del enlace de cada métrica
@@ -54,28 +56,36 @@ def _tabla_combinada(t: str) -> Path:
     return f if f.exists() else COMBINADA / "normalizado" / f"{t}.csv.gz"
 
 
+V5S = ("_v5", "_v5_lo", "_v5_hi")
+
+
 def superposicion(t: str) -> dict:
     v = pd.read_csv(_tabla_combinada(t), low_memory=False, dtype={"player_id": str, "team_id": str})
-    comb = np.zeros(len(v), np.int64)
-    solo = np.zeros(len(v), np.int64)
-    for b, m in enumerate(ORDEN):
-        f = v.get(f"fuente_{m}")
-        if f is None:
-            continue
-        comb |= np.where(f.eq("COMB"), 1 << b, 0)
-        solo |= np.where(f.eq("V5"), 1 << b, 0)
-    s = v[CLAVE + COLUMNAS].assign(v51_comb=comb, v51_solo=solo)
-    s = s[(comb | solo) > 0]
+    cols = [m + s_ for m in ORDEN for s_ in V5S if m + s_ in v.columns]
+    s = v[CLAVE + cols]
+    s = s[s[cols].notna().any(axis=1)]
     assert not s.duplicated(CLAVE).any(), "clave de fila duplicada"
     DIR.joinpath("superposicion").mkdir(parents=True, exist_ok=True)
     s.to_csv(DIR / "superposicion" / f"{t}.csv.gz", index=False, compression="gzip")
-    return {"temporada": t, "filas": int(len(s)), "de": int(len(v)), "combinadas": int((comb > 0).sum())}
+    return {"temporada": t, "filas": int(len(s)), "de": int(len(v)), "metricas": len(cols) // 3}
 
 
-def aplicar(v32: pd.DataFrame, sup: pd.DataFrame) -> pd.DataFrame:
-    """Tabla v3.2 (esquema v1) → tabla v5.1: en cada fila con superposición, sus 100 columnas pasan a ser las de la
-    v5.1 donde la máscara de su métrica lo dice; `fuente_norm` = «V5.1» en esas filas. Mismas filas y columnas
-    (más las dos máscaras)."""
+def _pctel(c: np.ndarray, v: pd.DataFrame) -> np.ndarray:
+    """Percentil entre los jugadores de la EuroLeague de la misma posición de la tabla (= formato_v32._pctel)."""
+    out = np.full(len(c), np.nan)
+    pos = v["pos3"].astype(str).to_numpy()
+    ref = (v["liga"] == VARA[0]).to_numpy() & np.isfinite(c)
+    for p in set(pos):
+        r = np.sort(c[ref & (pos == p)])
+        sel = (pos == p) & np.isfinite(c)
+        if len(r):
+            out[sel] = 100 * np.searchsorted(r, c[sel], side="right") / len(r)
+    return out
+
+
+def aplicar(v32: pd.DataFrame, sup: pd.DataFrame, pesos: dict) -> pd.DataFrame:
+    """Tabla v3.2 vigente (esquema v1) + componente v5 → tabla v5.1. Mismas filas y columnas, más las dos máscaras;
+    `fuente_norm` = «V5.1» en las filas con alguna métrica de la v5."""
     v = v32.copy()
     for c in ("player_id", "team_id"):
         v[c] = v[c].astype(str)
@@ -83,14 +93,24 @@ def aplicar(v32: pd.DataFrame, sup: pd.DataFrame) -> pd.DataFrame:
     for c in ("player_id", "team_id"):
         s[c] = s[c].astype(str)
     j = v[CLAVE].merge(s, on=CLAVE, how="left")
-    comb = j["v51_comb"].fillna(0).astype(np.int64).to_numpy()
-    solo = j["v51_solo"].fillna(0).astype(np.int64).to_numpy()
+    assert len(j) == len(v)
+    comb = np.zeros(len(v), np.int64)
+    solo = np.zeros(len(v), np.int64)
     for b, m in enumerate(ORDEN):
-        k = ((comb | solo) >> b) & 1 == 1
-        for s_ in SUF:
-            c = m + s_
-            if c in v.columns:
-                v[c] = np.where(k, j[c].to_numpy(float), v[c].to_numpy(float))
+        if m not in v.columns or m + "_v5" not in j.columns:
+            continue
+        a = {s_: j[m + s_].to_numpy(float) for s_ in V5S}
+        hay5 = np.isfinite(a["_v5"])
+        hay32 = np.isfinite(v[m].to_numpy(float)) & np.isfinite(v[m + "_lo"].to_numpy(float))
+        ambos, sol = hay5 & hay32, hay5 & ~hay32
+        w = float(pesos.get(m, 0.5))
+        for s5, s3 in zip(V5S, ("", "_lo", "_hi")):
+            x3 = v[m + s3].to_numpy(float)
+            v[m + s3] = np.where(ambos, w * a[s5] + (1 - w) * x3, np.where(sol, a[s5], x3))
+        if m + "_pctel" in v.columns:
+            v[m + "_pctel"] = np.where(hay5, _pctel(v[m].to_numpy(float), v), v[m + "_pctel"].to_numpy(float))
+        comb |= np.where(ambos, 1 << b, 0)
+        solo |= np.where(sol, 1 << b, 0)
     v["v51_comb"], v["v51_solo"] = comb, solo
     v["fuente_norm"] = np.where((comb | solo) > 0, "V5.1", "V3.2")
     assert len(v) == len(v32)
