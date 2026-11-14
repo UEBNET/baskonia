@@ -1,0 +1,12 @@
+# F8 · Validación integral (encargo v5.0 §12, revisión 1.2 criterios 9–11)
+fase: F8
+salida: validacion
+semilla: 20261116
+temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+pasos: [base, predicciones, banco, fichajes, protocolo, lolo, puentes_fuera, sbc, fugas, criterios, figuras]
+sbc:
+  replicas: 100
+examen:
+  cortes_prueba: [2023, 2024, 2025]     # temporadas objetivo (t+1) de los cortes 2022-23 a 2024-25 del banco V32_corte
+  min_minutos_destino: 300              # población de producción del examen del simulador
+  bootstrap: 1000

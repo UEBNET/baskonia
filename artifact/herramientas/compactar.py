@@ -78,7 +78,7 @@ def main(raiz: str = "data/artifact") -> None:
             tablas(p)
         elif p.stem.startswith("evaluacion_"):
             _w(p, _r(json.loads(p.read_text(encoding="utf-8"))))
-    for p in sorted(R.glob("normalizados/20*-*/regular.json")):
+    for p in sorted([*R.glob("normalizados/20*-*/regular.json"), *R.glob("normalizados/20*-*/regular_v51.json")]):
         print(p, "columnas duplicadas quitadas:", normalizados(p))
     for p in sorted(R.glob("normalizacion/jugadores_*.json")):
         d = json.loads(p.read_text(encoding="utf-8"))

@@ -1,0 +1,29 @@
+# v5.1 · F2 · Simulador: producción combinada por liga de destino y ensamblaje (docs/v5_1/00_encargo_v5_1.md §2).
+# Reglas fijadas antes de examinar.
+fase: v5.1-F2
+salida: ../v5_1/simulador                   # data/v5_1/simulador (relativa a data/v5)
+semilla: 20261115
+bootstrap: 500
+reproducido: experimentos/v5_1/F0/validacion  # examen V32_corte reproducido en la F0 (motor de minutos v3.3)
+# producción: las 9 métricas que publica el simulador
+metricas:
+  pts_p100: {v5: pts_p100}
+  usg_pct: {v5: usg_pct}
+  ast_pct: {v5: ast_pct}
+  stl_p100: {v5: stl_p100}
+  tov_pct: {v5: tov_pct}
+  ts_pct: {derivada: tiro}                    # de T2%, T3%, TL%, 3PAr y FTr (draws conjuntos, F9 bis)
+  oreb_p100: {v5: oreb_pct, razon: oreb_op}   # × oportunidades / posesión de la liga de destino en t (ex ante)
+  dreb_p100: {v5: dreb_pct, razon: dreb_op}
+  blk_p100: {v5: blk_pct, razon: blk_op}
+pesos:                                        # la regla de la F1 (combinada): rejilla y contracción hacia 0,5
+  rejilla: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+  n0: 300
+  calibracion: [2023]                         # temporada de destino; se examina en las siguientes
+prueba: [2024, 2025]
+ensamblaje:
+  draws: 2000
+min_minutos: 300                              # como el examen de fichajes de la F8
+publicar:
+  # sustituye a la v3.3 si mejora su examen con IC 95 % < 0 y la cobertura del 80 % no se aleja más de 0,80
+  cobertura_80: [0.76, 0.84]

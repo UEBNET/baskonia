@@ -1,0 +1,20 @@
+# F6 · Ligas y contexto (encargo v5.0 §10, revisión 1.2; docs/v5/06_ligas_contexto.md)
+fase: F6
+salida: ligas
+semilla: 20261114
+temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+pasos: [pares, lambda_intra, resumen_intra]
+pares:
+  min_minutos: 50          # minutos mínimos en cada competición del puente
+nuts:
+  cadenas: 4
+  calentamiento: 750
+  muestras: 750
+  target_accept: 0.9
+  max_tree_depth: 10
+  # bloques de métricas correlacionadas (el modelo de las 14 a la vez no es viable en NUTS: §F6.1); el prior de
+  # fuerza por enfrentamientos sólo afecta a pts/100 (bloque «tiro»), que se ajusta con y sin él
+  bloques_con_fuerza: [tiro]
+contexto:
+  cortes: [2023, 2024, 2025]          # temporadas objetivo de las que se construye la base F4 (sin fugas)
+  cortes_prueba: [2024, 2025]         # se prueba en éstas, entrenando con las anteriores

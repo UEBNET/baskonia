@@ -1,0 +1,20 @@
+# F9 · Contrato de salida v5 y sello de fiabilidad (encargo v5.0 §13)
+fase: F9
+salida: salidas
+semilla: 20261117
+anio_objetivo: 2026            # temporada objetivo 2026-27 (proyección con todas las temporadas hasta 2025-26)
+pasos: [destinos, formato_v32, diccionario]
+draws:
+  por_caso: 500                # draws del nivel y del predictivo por persona y métrica (liga actual), aparte
+sello:                         # regla fijada antes de ver las salidas (glosario)
+  alta_exposicion: 3.0         # exposición acumulada ≥ 3 × n* (n*: oportunidades con fiabilidad de una temporada 0,5)
+  alta_temporadas: 2           # y ≥ 2 temporadas de historial
+  alta_conectividad: 0.25      # y DT de Δλ ≤ 0,25 DT de λ entre ligas (0 si sigue en su liga)
+  baja_exposicion: 1.0         # baja si la exposición < 1 × n* ...
+  baja_conectividad: 0.5       # ... o la DT de Δλ > 0,5 DT de λ entre ligas
+recalibracion:
+  aplicar: true                # decisión 4 de la F8: adoptada (mejora el examen de fichajes, IC < 0; recalibracion.json)
+  min_casos: 30
+# Decisión del usuario en la puerta de la F9 (12-11-2026): estas zonas pierden frente a la v3.2 en el examen de la F1
+# (+4 % a +8 %, IC que no cruza 0); el formato publicado las deja con la v3.2. La v5 las sigue calculando (destinos.parquet).
+publicar_con_v32: [pct_aro, pct_media, pct_t3_esquina]

@@ -84,6 +84,13 @@ def p_roles(ctx):
     return {"filas_roles": capas.roles(ctx["temporada"])}
 
 
+def p_normalizacion_v51(ctx):
+    """v5.1: componente v5 de la temporada en curso con los modelos congelados (tras la v3.2 final del contexto y los
+    partidos por jugador de roles, que usa la caja de las ligas agregadas)."""
+    from . import normalizacion51
+    return normalizacion51.ejecutar(ctx["temporada"], progreso=ctx["log"])
+
+
 def p_entropia(ctx):
     from . import capas
     capas.entropia()
@@ -107,6 +114,7 @@ def p_artifact(ctx):
     t = ctx["temporada"]
     sub = [("tablas", lambda: A.tablas(t)), ("nacionalidades", lambda: A.nacionalidades_json(t)),
            ("evaluacion", lambda: A.evaluacion(t)), ("normalizados", lambda: A.normalizados(t)),
+           ("normalizados_v51", lambda: A.normalizados_v51(t)),
            ("atlas_estilos", A.atlas_estilos),
            ("informe", lambda: A.informe(t)),          # lee datos/<t>/regular.json en filas: antes de compactar
            ("quintetos", lambda: A.quintetos(t)), ("compactar", A.compactar)]
@@ -141,7 +149,7 @@ def p_publicacion(ctx):
 
 
 PASOS = [("descarga", p_descarga), ("pista", p_pista), ("normalizacion", p_normalizacion), ("contexto", p_contexto),
-         ("roles", p_roles), ("entropia", p_entropia), ("estilos", p_estilos), ("simulador", p_simulador),
+         ("roles", p_roles), ("normalizacion_v51", p_normalizacion_v51), ("entropia", p_entropia), ("estilos", p_estilos), ("simulador", p_simulador),
          ("artifact", p_artifact), ("v42", p_v42), ("publicacion", p_publicacion)]
 NOMBRES = [n for n, _ in PASOS]
 

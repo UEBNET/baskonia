@@ -1,0 +1,16 @@
+# F2 · Capa de datos: contrato, entidades, puentes y contexto (encargo v5.0, revisión 1.2; docs/v5/02_datos_y_puentes.md)
+fase: F2
+salida: f2
+semilla: 20261110
+temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26", "2026-27"]
+pasos: [caja, caja_agregados, entidades, enfrentamientos, puentes, contexto, contrato]
+puentes:
+  min_minutos_grafo: 150     # puente intra con ≥ 150 min en ambas competiciones para el grafo y los recuentos
+  min_minutos_inter: 150     # liga principal con ≥ 150 min en t y en t+1
+entidades:
+  tolerancia_nacimiento: 1.5 # años (2,0 si alguno es estimado con la edad)
+  fechas_conflicto: 2        # coincidencias de fecha en ligas no concurrentes para separar
+  similitud_revision: 0.85
+  similitud_automatica: 0.97
+clubes:
+  min_compartidos: 3         # personas compartidas para considerar el mismo club

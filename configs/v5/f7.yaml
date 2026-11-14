@@ -1,0 +1,14 @@
+# F7 · Sesgo de selección en los traspasos (encargo v5.0 §11) y paso 2 de la F6 (traspasos entre temporadas)
+fase: F7
+salida: ligas
+semilla: 20261115
+temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+pasos: [base, examen, proyeccion_paso2]
+base:
+  cortes: [2021, 2022, 2023, 2024, 2025]     # temporadas objetivo con proyección F4 sin fugas
+examen:
+  cortes_prueba: [2023, 2024, 2025]          # se estima λ (paso 2) y la selección con lo anterior y se prueba aquí
+  min_minutos_traspaso: 100                  # minutos en la liga principal de destino
+  recorte_pesos: [0.01, 0.99]                # IPW estabilizados y recortados en estos percentiles
+contexto:
+  cortes: [2021, 2022, 2023, 2024, 2025]

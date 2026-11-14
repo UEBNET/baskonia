@@ -198,6 +198,10 @@ Los exámenes prerregistrados de la v4.0 (`bbequipo rapm-examen`, `sinergia-exam
 `equipo-examen`, `anclas-examen`) no van en la cadena: las decisiones vigentes se conservan. Ejecútalos si el
 usuario quiere saber cómo rinde la v4.0 con la liga nueva (recomendable si la liga es grande o muy distinta).
 
+**v5.1 (normalización por defecto del portal).** La v5 no tiene la liga nueva hasta que se reajusta (medida, carrera y
+traducción entre ligas con la NUTS del paso 2; `docs/v5_1/07_F6_integracion.md`). Mientras tanto la v5.1 deja sus
+filas con la v3.2 (`fuente_norm` = «V3.2»), igual que la Liga U: no hay que hacer nada para que el botón la trate.
+
 ## Fase 5 · El botón con la liga nueva
 
 ```
