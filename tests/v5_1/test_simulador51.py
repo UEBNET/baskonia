@@ -37,3 +37,18 @@ def test_reescalar_conserva_la_mediana_y_no_da_negativos():
 def test_corte_de_la_temporada_de_destino():
     from bbnorm5.simulador51 import nivel_kerno as NK
     assert NK._corte(2024) == "2023-24" and NK._corte(2025) == "2024-25"
+
+
+def test_contraccion_latente_recupera_un_efecto_de_factor():
+    """Si los δ de las métricas siguen exactamente Λγ (sin desviación propia), la contracción devuelve Λγ y τ = 0."""
+    from bbnorm5.simulador51 import landing51 as L51
+    L = pd.read_csv(L51.CARGAS, index_col=0)[L51.FACTORES]
+    gam = np.array([3.0, -2.0, 1.5])                         # cargas de 0,04 a 0,8: señal de 0,1 a 1,5 DT
+    rng = np.random.default_rng(3)
+    se = np.full(len(L), 0.05)
+    d = L.to_numpy() @ gam + rng.normal(0, 0.01, len(L))
+    t = pd.DataFrame({"metrica": L.index, "fase": "segunda", "grupo": "EEUU_a_Europa", "delta": d, "se": se,
+                      "delta_escala": d * 2})
+    r = L51.contraer(t)
+    assert np.allclose(r["delta_lat"], L.to_numpy() @ gam, atol=0.03)
+    assert (r["se_lat"] <= r["se"] + 1e-9).all()               # contraer nunca da menos precisión

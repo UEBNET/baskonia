@@ -1,0 +1,827 @@
+{
+ "version_modelo": "5.0",
+ "fase": "v5.1-F2",
+ "config": "configs/v5_1/f2.yaml",
+ "hash_config": "01d13b1bd88c",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-14T10:30:56+00:00",
+ "python": "3.13.18",
+ "identificables_directo": 72,
+ "identificables_contraido": 191,
+ "celdas": 410,
+ "examen": [
+  {
+   "fase": "primera",
+   "grupo": "EEUU_a_Europa",
+   "casos": 1934,
+   "personas": 102,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0115,
+   "ic_lo": -0.0022,
+   "ic_hi": 0.0251,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "NCAA_a_profesional",
+   "casos": 5217,
+   "personas": 288,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0064,
+   "ic_lo": -0.0003,
+   "ic_hi": 0.0122,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "desconocido",
+   "casos": 4616,
+   "personas": 225,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.014,
+   "ic_lo": 0.0076,
+   "ic_hi": 0.0201,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "europeo_cambia_liga",
+   "casos": 3325,
+   "personas": 171,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0018,
+   "ic_lo": -0.0031,
+   "ic_hi": 0.0079,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "extranjero_cambia_pais",
+   "casos": 6678,
+   "personas": 292,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0067,
+   "ic_lo": 0.0045,
+   "ic_hi": 0.0088,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "extranjero_mismo_pais",
+   "casos": 512,
+   "personas": 35,
+   "anios_prueba": "2025",
+   "wis_con_delta_frente_sin": 0.0013,
+   "ic_lo": -0.0176,
+   "ic_hi": 0.0193,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "hacia_EEUU",
+   "casos": 1342,
+   "personas": 75,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0216,
+   "ic_lo": 0.0045,
+   "ic_hi": 0.04,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "intra_EEUU",
+   "casos": 1834,
+   "personas": 93,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0057,
+   "ic_lo": -0.0026,
+   "ic_hi": 0.0145,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "llegada_EEUU_Europa_pro",
+   "casos": 2542,
+   "personas": 136,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0168,
+   "ic_lo": 0.0045,
+   "ic_hi": 0.0295,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "nacional_mismo_pais",
+   "casos": 1684,
+   "personas": 115,
+   "anios_prueba": "2025",
+   "wis_con_delta_frente_sin": 0.0071,
+   "ic_lo": 0.0031,
+   "ic_hi": 0.0109,
+   "publicar": false
+  },
+  {
+   "fase": "primera",
+   "grupo": "otro_desde_EEUU",
+   "casos": 534,
+   "personas": 34,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0487,
+   "ic_lo": 0.0096,
+   "ic_hi": 0.0842,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "EEUU_a_Europa",
+   "casos": 171,
+   "personas": 9,
+   "anios_prueba": "2025",
+   "wis_con_delta_frente_sin": -0.0098,
+   "ic_lo": -0.0312,
+   "ic_hi": 0.0142,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "NCAA_a_profesional",
+   "casos": 2207,
+   "personas": 120,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0027,
+   "ic_lo": -0.0068,
+   "ic_hi": 0.0114,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "desconocido",
+   "casos": 1193,
+   "personas": 68,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0077,
+   "ic_lo": -0.0044,
+   "ic_hi": 0.0189,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "europeo_cambia_liga",
+   "casos": 1301,
+   "personas": 76,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0081,
+   "ic_lo": 0.0022,
+   "ic_hi": 0.0139,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "extranjero_cambia_pais",
+   "casos": 1666,
+   "personas": 92,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0116,
+   "ic_lo": 0.0033,
+   "ic_hi": 0.0189,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "hacia_EEUU",
+   "casos": 264,
+   "personas": 14,
+   "anios_prueba": "2025",
+   "wis_con_delta_frente_sin": 0.0328,
+   "ic_lo": -0.0273,
+   "ic_hi": 0.0845,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "intra_EEUU",
+   "casos": 1005,
+   "personas": 53,
+   "anios_prueba": "2024,2025",
+   "wis_con_delta_frente_sin": 0.0204,
+   "ic_lo": 0.0072,
+   "ic_hi": 0.0342,
+   "publicar": false
+  },
+  {
+   "fase": "segunda",
+   "grupo": "llegada_EEUU_Europa_pro",
+   "casos": 304,
+   "personas": 16,
+   "anios_prueba": "2025",
+   "wis_con_delta_frente_sin": -0.0022,
+   "ic_lo": -0.034,
+   "ic_hi": 0.0331,
+   "publicar": false
+  }
+ ],
+ "escalon_por_grupo": {
+  "EEUU_a_Europa": {
+   "fichajes": 102,
+   "delta2_pts": 1.097,
+   "escalon_medio": 4.037
+  },
+  "NCAA_a_profesional": {
+   "fichajes": 142,
+   "delta2_pts": -0.474,
+   "escalon_medio": -1.693
+  },
+  "desconocido": {
+   "fichajes": 572,
+   "delta2_pts": 0.007,
+   "escalon_medio": 0.072
+  },
+  "europeo_cambia_liga": {
+   "fichajes": 157,
+   "delta2_pts": 0.081,
+   "escalon_medio": 0.471
+  },
+  "extranjero_cambia_pais": {
+   "fichajes": 333,
+   "delta2_pts": -0.104,
+   "escalon_medio": -0.546
+  },
+  "extranjero_mismo_pais": {
+   "fichajes": 318,
+   "delta2_pts": -0.405,
+   "escalon_medio": -1.805
+  },
+  "hacia_EEUU": {
+   "fichajes": 26,
+   "delta2_pts": -0.151,
+   "escalon_medio": -0.498
+  },
+  "intra_EEUU": {
+   "fichajes": 314,
+   "delta2_pts": 0.096,
+   "escalon_medio": 0.398
+  },
+  "nacional_mismo_pais": {
+   "fichajes": 958,
+   "delta2_pts": -0.068,
+   "escalon_medio": -0.381
+  },
+  "otro_desde_EEUU": {
+   "fichajes": 30,
+   "delta2_pts": 0.096,
+   "escalon_medio": 0.544
+  }
+ },
+ "segundo_anio": {
+  "EEUU_a_Europa": {
+   "fichajes": 16,
+   "cambio_realizado": -6.11,
+   "escalon_previsto": 4.01
+  },
+  "NCAA_a_profesional": {
+   "fichajes": 57,
+   "cambio_realizado": 10.23,
+   "escalon_previsto": -1.59
+  },
+  "desconocido": {
+   "fichajes": 203,
+   "cambio_realizado": 1.25,
+   "escalon_previsto": 0.08
+  },
+  "europeo_cambia_liga": {
+   "fichajes": 50,
+   "cambio_realizado": -3.59,
+   "escalon_previsto": 0.5
+  },
+  "extranjero_cambia_pais": {
+   "fichajes": 72,
+   "cambio_realizado": -5.1,
+   "escalon_previsto": -0.55
+  },
+  "extranjero_mismo_pais": {
+   "fichajes": 75,
+   "cambio_realizado": 0.39,
+   "escalon_previsto": -1.94
+  },
+  "hacia_EEUU": {
+   "fichajes": 11,
+   "cambio_realizado": -1.95,
+   "escalon_previsto": -0.54
+  },
+  "intra_EEUU": {
+   "fichajes": 128,
+   "cambio_realizado": 1.55,
+   "escalon_previsto": 0.4
+  },
+  "nacional_mismo_pais": {
+   "fichajes": 296,
+   "cambio_realizado": 0.45,
+   "escalon_previsto": -0.39
+  },
+  "otro_desde_EEUU": {
+   "fichajes": 11,
+   "cambio_realizado": 3.58,
+   "escalon_previsto": 0.49
+  }
+ },
+ "spearman_segundo_anio": {
+  "NK51": 0.5003666179368489,
+  "fichajes": 919
+ },
+ "eeuu_a_europa": [
+  {
+   "fase": "primera",
+   "metrica": "ast_pct",
+   "personas": 228,
+   "delta": 0.013,
+   "ic_lo": -0.15,
+   "ic_hi": 0.177,
+   "delta_lat": 0.027,
+   "ic_lo_lat": -0.128,
+   "ic_hi_lat": 0.182,
+   "delta_escala": 0.074,
+   "delta_lat_escala": 0.149
+  },
+  {
+   "fase": "segunda",
+   "metrica": "ast_pct",
+   "personas": 42,
+   "delta": 0.037,
+   "ic_lo": -0.216,
+   "ic_hi": 0.29,
+   "delta_lat": -0.011,
+   "ic_lo_lat": -0.201,
+   "ic_hi_lat": 0.179,
+   "delta_escala": 0.17,
+   "delta_lat_escala": -0.05
+  },
+  {
+   "fase": "primera",
+   "metrica": "blk_pct",
+   "personas": 228,
+   "delta": -0.403,
+   "ic_lo": -0.553,
+   "ic_hi": -0.253,
+   "delta_lat": -0.362,
+   "ic_lo_lat": -0.505,
+   "ic_hi_lat": -0.219,
+   "delta_escala": -0.481,
+   "delta_lat_escala": -0.432
+  },
+  {
+   "fase": "segunda",
+   "metrica": "blk_pct",
+   "personas": 42,
+   "delta": 0.277,
+   "ic_lo": 0.061,
+   "ic_hi": 0.492,
+   "delta_lat": 0.215,
+   "ic_lo_lat": 0.042,
+   "ic_hi_lat": 0.388,
+   "delta_escala": 0.157,
+   "delta_lat_escala": 0.122
+  },
+  {
+   "fase": "primera",
+   "metrica": "dreb_pct",
+   "personas": 228,
+   "delta": 0.08,
+   "ic_lo": -0.106,
+   "ic_hi": 0.267,
+   "delta_lat": 0.077,
+   "ic_lo_lat": -0.097,
+   "ic_hi_lat": 0.251,
+   "delta_escala": 0.273,
+   "delta_lat_escala": 0.261
+  },
+  {
+   "fase": "segunda",
+   "metrica": "dreb_pct",
+   "personas": 42,
+   "delta": -0.075,
+   "ic_lo": -0.336,
+   "ic_hi": 0.186,
+   "delta_lat": 0.015,
+   "ic_lo_lat": -0.178,
+   "ic_hi_lat": 0.209,
+   "delta_escala": -0.197,
+   "delta_lat_escala": 0.04
+  },
+  {
+   "fase": "primera",
+   "metrica": "ftr",
+   "personas": 228,
+   "delta": -0.293,
+   "ic_lo": -0.526,
+   "ic_hi": -0.06,
+   "delta_lat": -0.22,
+   "ic_lo_lat": -0.429,
+   "ic_hi_lat": -0.01,
+   "delta_escala": -3.154,
+   "delta_lat_escala": -2.366
+  },
+  {
+   "fase": "segunda",
+   "metrica": "ftr",
+   "personas": 42,
+   "delta": 0.251,
+   "ic_lo": -0.009,
+   "ic_hi": 0.511,
+   "delta_lat": 0.249,
+   "ic_lo_lat": 0.056,
+   "ic_hi_lat": 0.442,
+   "delta_escala": 2.011,
+   "delta_lat_escala": 1.996
+  },
+  {
+   "fase": "primera",
+   "metrica": "oreb_pct",
+   "personas": 228,
+   "delta": 0.248,
+   "ic_lo": 0.06,
+   "ic_hi": 0.436,
+   "delta_lat": 0.221,
+   "ic_lo_lat": 0.046,
+   "ic_hi_lat": 0.396,
+   "delta_escala": 0.365,
+   "delta_lat_escala": 0.325
+  },
+  {
+   "fase": "segunda",
+   "metrica": "oreb_pct",
+   "personas": 42,
+   "delta": 0.045,
+   "ic_lo": -0.231,
+   "ic_hi": 0.321,
+   "delta_lat": 0.12,
+   "ic_lo_lat": -0.08,
+   "ic_hi_lat": 0.319,
+   "delta_escala": 0.057,
+   "delta_lat_escala": 0.15
+  },
+  {
+   "fase": "primera",
+   "metrica": "pct_aro",
+   "personas": 218,
+   "delta": -0.098,
+   "ic_lo": -0.271,
+   "ic_hi": 0.074,
+   "delta_lat": -0.098,
+   "ic_lo_lat": -0.271,
+   "ic_hi_lat": 0.074,
+   "delta_escala": -1.052,
+   "delta_lat_escala": -1.052
+  },
+  {
+   "fase": "segunda",
+   "metrica": "pct_aro",
+   "personas": 40,
+   "delta": 0.184,
+   "ic_lo": -0.096,
+   "ic_hi": 0.464,
+   "delta_lat": 0.184,
+   "ic_lo_lat": -0.096,
+   "ic_hi_lat": 0.464,
+   "delta_escala": 1.391,
+   "delta_lat_escala": 1.391
+  },
+  {
+   "fase": "primera",
+   "metrica": "pct_asistidas",
+   "personas": 221,
+   "delta": -0.52,
+   "ic_lo": -0.71,
+   "ic_hi": -0.329,
+   "delta_lat": -0.52,
+   "ic_lo_lat": -0.71,
+   "ic_hi_lat": -0.329,
+   "delta_escala": -6.088,
+   "delta_lat_escala": -6.088
+  },
+  {
+   "fase": "segunda",
+   "metrica": "pct_asistidas",
+   "personas": 40,
+   "delta": -0.261,
+   "ic_lo": -0.536,
+   "ic_hi": 0.014,
+   "delta_lat": -0.261,
+   "ic_lo_lat": -0.536,
+   "ic_hi_lat": 0.014,
+   "delta_escala": -2.324,
+   "delta_lat_escala": -2.324
+  },
+  {
+   "fase": "primera",
+   "metrica": "pct_corta",
+   "personas": 218,
+   "delta": 0.437,
+   "ic_lo": 0.251,
+   "ic_hi": 0.623,
+   "delta_lat": 0.437,
+   "ic_lo_lat": 0.251,
+   "ic_hi_lat": 0.623,
+   "delta_escala": 2.325,
+   "delta_lat_escala": 2.325
+  },
+  {
+   "fase": "segunda",
+   "metrica": "pct_corta",
+   "personas": 40,
+   "delta": 0.201,
+   "ic_lo": -0.062,
+   "ic_hi": 0.465,
+   "delta_lat": 0.201,
+   "ic_lo_lat": -0.062,
+   "ic_hi_lat": 0.465,
+   "delta_escala": 1.068,
+   "delta_lat_escala": 1.068
+  },
+  {
+   "fase": "primera",
+   "metrica": "pct_media",
+   "personas": 218,
+   "delta": 0.802,
+   "ic_lo": 0.641,
+   "ic_hi": 0.963,
+   "delta_lat": 0.802,
+   "ic_lo_lat": 0.641,
+   "ic_hi_lat": 0.963,
+   "delta_escala": 2.548,
+   "delta_lat_escala": 2.548
+  },
+  {
+   "fase": "segunda",
+   "metrica": "pct_media",
+   "personas": 40,
+   "delta": 0.31,
+   "ic_lo": 0.09,
+   "ic_hi": 0.531,
+   "delta_lat": 0.31,
+   "ic_lo_lat": 0.09,
+   "ic_hi_lat": 0.531,
+   "delta_escala": 1.476,
+   "delta_lat_escala": 1.476
+  },
+  {
+   "fase": "primera",
+   "metrica": "pct_t3_esquina",
+   "personas": 218,
+   "delta": -0.427,
+   "ic_lo": -0.575,
+   "ic_hi": -0.279,
+   "delta_lat": -0.427,
+   "ic_lo_lat": -0.575,
+   "ic_hi_lat": -0.279,
+   "delta_escala": -2.423,
+   "delta_lat_escala": -2.423
+  },
+  {
+   "fase": "segunda",
+   "metrica": "pct_t3_esquina",
+   "personas": 40,
+   "delta": -0.073,
+   "ic_lo": -0.278,
+   "ic_hi": 0.132,
+   "delta_lat": -0.073,
+   "ic_lo_lat": -0.278,
+   "ic_hi_lat": 0.132,
+   "delta_escala": -0.265,
+   "delta_lat_escala": -0.265
+  },
+  {
+   "fase": "primera",
+   "metrica": "pf_p40",
+   "personas": 228,
+   "delta": 0.053,
+   "ic_lo": -0.133,
+   "ic_hi": 0.238,
+   "delta_lat": 0.048,
+   "ic_lo_lat": -0.125,
+   "ic_hi_lat": 0.221,
+   "delta_escala": 0.051,
+   "delta_lat_escala": 0.046
+  },
+  {
+   "fase": "segunda",
+   "metrica": "pf_p40",
+   "personas": 42,
+   "delta": -0.054,
+   "ic_lo": -0.309,
+   "ic_hi": 0.2,
+   "delta_lat": -0.068,
+   "ic_lo_lat": -0.259,
+   "ic_hi_lat": 0.123,
+   "delta_escala": -0.043,
+   "delta_lat_escala": -0.054
+  },
+  {
+   "fase": "primera",
+   "metrica": "pts_p100",
+   "personas": 228,
+   "delta": 0.295,
+   "ic_lo": 0.136,
+   "ic_hi": 0.453,
+   "delta_lat": 0.266,
+   "ic_lo_lat": 0.116,
+   "ic_hi_lat": 0.416,
+   "delta_escala": 1.719,
+   "delta_lat_escala": 1.552
+  },
+  {
+   "fase": "segunda",
+   "metrica": "pts_p100",
+   "personas": 42,
+   "delta": 0.419,
+   "ic_lo": 0.157,
+   "ic_hi": 0.68,
+   "delta_lat": 0.252,
+   "ic_lo_lat": 0.058,
+   "ic_hi_lat": 0.446,
+   "delta_escala": 1.824,
+   "delta_lat_escala": 1.097
+  },
+  {
+   "fase": "primera",
+   "metrica": "stl_p100",
+   "personas": 228,
+   "delta": 0.168,
+   "ic_lo": -0.036,
+   "ic_hi": 0.372,
+   "delta_lat": 0.15,
+   "ic_lo_lat": -0.038,
+   "ic_hi_lat": 0.337,
+   "delta_escala": 0.111,
+   "delta_lat_escala": 0.099
+  },
+  {
+   "fase": "segunda",
+   "metrica": "stl_p100",
+   "personas": 42,
+   "delta": -0.02,
+   "ic_lo": -0.306,
+   "ic_hi": 0.266,
+   "delta_lat": -0.021,
+   "ic_lo_lat": -0.224,
+   "ic_hi_lat": 0.182,
+   "delta_escala": -0.012,
+   "delta_lat_escala": -0.013
+  },
+  {
+   "fase": "primera",
+   "metrica": "t2_pct",
+   "personas": 228,
+   "delta": -0.028,
+   "ic_lo": -0.256,
+   "ic_hi": 0.2,
+   "delta_lat": -0.021,
+   "ic_lo_lat": -0.227,
+   "ic_hi_lat": 0.184,
+   "delta_escala": -0.183,
+   "delta_lat_escala": -0.141
+  },
+  {
+   "fase": "segunda",
+   "metrica": "t2_pct",
+   "personas": 42,
+   "delta": 0.523,
+   "ic_lo": 0.265,
+   "ic_hi": 0.781,
+   "delta_lat": 0.342,
+   "ic_lo_lat": 0.15,
+   "ic_hi_lat": 0.534,
+   "delta_escala": 2.926,
+   "delta_lat_escala": 1.913
+  },
+  {
+   "fase": "primera",
+   "metrica": "t3_pct",
+   "personas": 219,
+   "delta": 0.485,
+   "ic_lo": 0.26,
+   "ic_hi": 0.71,
+   "delta_lat": 0.393,
+   "ic_lo_lat": 0.189,
+   "ic_hi_lat": 0.597,
+   "delta_escala": 2.889,
+   "delta_lat_escala": 2.34
+  },
+  {
+   "fase": "segunda",
+   "metrica": "t3_pct",
+   "personas": 42,
+   "delta": 0.136,
+   "ic_lo": -0.155,
+   "ic_hi": 0.428,
+   "delta_lat": 0.103,
+   "ic_lo_lat": -0.102,
+   "ic_hi_lat": 0.308,
+   "delta_escala": 0.753,
+   "delta_lat_escala": 0.57
+  },
+  {
+   "fase": "primera",
+   "metrica": "tl_pct",
+   "personas": 225,
+   "delta": -0.309,
+   "ic_lo": -0.51,
+   "ic_hi": -0.107,
+   "delta_lat": -0.271,
+   "ic_lo_lat": -0.456,
+   "ic_hi_lat": -0.085,
+   "delta_escala": -2.547,
+   "delta_lat_escala": -2.233
+  },
+  {
+   "fase": "segunda",
+   "metrica": "tl_pct",
+   "personas": 40,
+   "delta": 0.055,
+   "ic_lo": -0.243,
+   "ic_hi": 0.353,
+   "delta_lat": 0.131,
+   "ic_lo_lat": -0.077,
+   "ic_hi_lat": 0.338,
+   "delta_escala": 0.377,
+   "delta_lat_escala": 0.903
+  },
+  {
+   "fase": "primera",
+   "metrica": "tov_pct",
+   "personas": 228,
+   "delta": 0.276,
+   "ic_lo": 0.061,
+   "ic_hi": 0.49,
+   "delta_lat": 0.246,
+   "ic_lo_lat": 0.05,
+   "ic_hi_lat": 0.441,
+   "delta_escala": 0.947,
+   "delta_lat_escala": 0.844
+  },
+  {
+   "fase": "segunda",
+   "metrica": "tov_pct",
+   "personas": 42,
+   "delta": -0.311,
+   "ic_lo": -0.577,
+   "ic_hi": -0.045,
+   "delta_lat": -0.261,
+   "ic_lo_lat": -0.456,
+   "ic_hi_lat": -0.065,
+   "delta_escala": -0.952,
+   "delta_lat_escala": -0.798
+  },
+  {
+   "fase": "primera",
+   "metrica": "tpar",
+   "personas": 228,
+   "delta": -0.357,
+   "ic_lo": -0.508,
+   "ic_hi": -0.206,
+   "delta_lat": -0.344,
+   "ic_lo_lat": -0.488,
+   "ic_hi_lat": -0.2,
+   "delta_escala": -4.061,
+   "delta_lat_escala": -3.912
+  },
+  {
+   "fase": "segunda",
+   "metrica": "tpar",
+   "personas": 42,
+   "delta": -0.407,
+   "ic_lo": -0.684,
+   "ic_hi": -0.13,
+   "delta_lat": -0.445,
+   "ic_lo_lat": -0.645,
+   "ic_hi_lat": -0.245,
+   "delta_escala": -3.223,
+   "delta_lat_escala": -3.526
+  },
+  {
+   "fase": "primera",
+   "metrica": "usg_pct",
+   "personas": 228,
+   "delta": 0.23,
+   "ic_lo": 0.064,
+   "ic_hi": 0.396,
+   "delta_lat": 0.206,
+   "ic_lo_lat": 0.049,
+   "ic_hi_lat": 0.363,
+   "delta_escala": 0.94,
+   "delta_lat_escala": 0.842
+  },
+  {
+   "fase": "segunda",
+   "metrica": "usg_pct",
+   "personas": 42,
+   "delta": 0.199,
+   "ic_lo": -0.065,
+   "ic_hi": 0.464,
+   "delta_lat": 0.119,
+   "ic_lo_lat": -0.076,
+   "ic_hi_lat": 0.314,
+   "delta_escala": 0.632,
+   "delta_lat_escala": 0.379
+  }
+ ]
+}

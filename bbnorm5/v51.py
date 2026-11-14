@@ -15,6 +15,9 @@ F3 · Nivel Kerno (configs/v5_1/f2.yaml):
 
 F4 · Impacto (configs/v5_1/f2.yaml):
 - impacto: RAPM multiliga con el perfil de nivel de la v5 en el prior; exámenes de equipo e Impacto frente a la F0
+
+F5 · Landing (configs/v5_1/f2.yaml; la Landing de la F10 con configs/v5/f10.yaml):
+- landing: δ₁ y δ₂ por grupo contraídos a través del perfil latente, examen de publicación y escalón en puntos de NK
 """
 from __future__ import annotations
 
@@ -50,6 +53,9 @@ def main(argv=None):
         elif paso == "impacto":
             from bbnorm5.simulador51 import impacto
             out = impacto.ejecutar(cfg)
+        elif paso == "landing":
+            from bbnorm5.simulador51 import landing51
+            out = landing51.ejecutar(cfg)
         elif paso == "generar":
             from bbnorm5.salidas import combinada
             out = combinada.generar(cfg)
