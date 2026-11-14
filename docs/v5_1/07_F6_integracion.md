@@ -62,7 +62,7 @@ Etiquetas: **DATO**, **LECTURA**, **SUPUESTO**, **RIESGO**, **VERIFICAR**.
    - Selector «Normalización» en Ajustes, con v5.1 por defecto.
    - En v5.1 no se aplica el historial v4.2: la v5 ya lleva la carrera.
    - Vara de la v5 mezclada con la de la v3.2. Sus valores coinciden con la referencia en Python hasta el último decimal.
-5. **Pendiente de tu GO** (§6): subir la rama de integración y publicar en los tres artifacts tras el ensayo privado.
+5. **Pendiente de tu GO** (§7): subir la rama de integración y publicar en los tres artifacts tras el ensayo privado.
 
 ---
 
@@ -178,14 +178,36 @@ algunos casos durante el ensayo.
 - **Tests de esta rama:** `tests/v5_1/` (13).
 - **Histórico:** sólo se publica el componente v5 ya versionado; la v3.2 histórica no se toca.
 
-## 6. Qué falta para publicar (puerta)
+## 6. Ensayo en copia privada (DATO)
 
-1. **Ensayo privado.** Copia privada del artifact Jugadores con las páginas nuevas y los ficheros v5.1. Se comprueba:
-   - carga y selector;
-   - vara en varias ligas;
-   - ficha clásica;
-   - tamaños.
-2. **Permiso para subir `claude/v51-produccion`** (desde `claude/jolly-thompson-qczxl4`) y abrir el PR a la rama de
+**Copia local completa** del artifact Jugadores (versión 1794406427-45a5):
+- los ficheros de datos publicados;
+- las páginas de la rama de integración;
+- `regular_v51.json` y `vara_v51.json`.
+
+No se publicó como artifact privado: hacerlo exige leer enteras antes las cuatro páginas HTML (1,3 MB). Ese paso se
+hace al publicar, sitio a sitio.
+
+**Recorrido** de Chromium, con la vara de un club de la ACB, por estas vistas:
+- inicio;
+- lista;
+- por necesidad;
+- ficha;
+- cómo leer;
+- «Datos normalizados» de la vista clásica.
+
+**Resultados:**
+
+| Comprobación | Resultado |
+|---|---|
+| Modo v3.2 frente a las páginas publicadas hoy, con los mismos datos | Texto idéntico en las 6 vistas: **sin regresión** |
+| Modo v5.1 | Cambian las cifras de inicio, por necesidad, cómo leer y la tabla clásica; el pie dice «normalización v5.1 (combinada v5 · v3.2)» |
+| Errores de página | 0 en los tres recorridos |
+| Base v3.2 de la combinación frente a la publicada (2025-26 y 2026-27) | 0 celdas distintas en las filas V3.2 |
+
+## 7. Qué falta para publicar (puerta)
+
+1. **Permiso para subir `claude/v51-produccion`** (desde `claude/jolly-thompson-qczxl4`) y abrir el PR a la rama de
    producción.
-3. **GO para publicar en los tres artifacts**, uno detrás de otro.
-4. **Segunda entrega:** simulador y Nivel Kerno v5.1 en el motor del navegador.
+2. **GO para publicar en los tres artifacts**, uno detrás de otro.
+3. **Segunda entrega:** simulador y Nivel Kerno v5.1 en el motor del navegador.
