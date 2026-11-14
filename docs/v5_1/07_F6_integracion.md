@@ -205,9 +205,23 @@ hace al publicar, sitio a sitio.
 | Errores de página | 0 en los tres recorridos |
 | Base v3.2 de la combinación frente a la publicada (2025-26 y 2026-27) | 0 celdas distintas en las filas V3.2 |
 
-## 7. Qué falta para publicar (puerta)
+## 7. Publicación (14-11-2026, con el GO del usuario)
 
-1. **Permiso para subir `claude/v51-produccion`** (desde `claude/jolly-thompson-qczxl4`) y abrir el PR a la rama de
-   producción.
-2. **GO para publicar en los tres artifacts**, uno detrás de otro.
-3. **Segunda entrega:** simulador y Nivel Kerno v5.1 en el motor del navegador.
+1. **Integración en producción:**
+   - [UEBNET/baskonia#8](https://github.com/UEBNET/baskonia/pull/8) fusionado en `claude/jolly-thompson-qczxl4`: portal, botón, recalibración, kit, producto, skills y tests;
+   - [UEBNET/baskonia#9](https://github.com/UEBNET/baskonia/pull/9): manifiestos de los tres sitios con las 8 rutas nuevas.
+2. **Artifacts publicados** (capacidades conservadas):
+
+   | Sitio | Versión | Publicado |
+   |---|---|---|
+   | Jugadores | 39 | página con el selector v5.1, `regular_v51` de 2020-21 a 2026-27 y `vara_v51` |
+   | Equipos | 15 | lo mismo |
+   | Metodología | 14 | lo mismo |
+
+   **Las páginas publicadas no salían del repositorio.** Se habían editado directamente en los artifacts (por ejemplo, el raíl de los tres sitios), y `artifact/kerno/index.html` está desfasado. Por eso los cambios de la v5.1 se aplicaron hunk a hunk sobre cada página publicada. El ensayo se repitió con la página publicada de Jugadores: el modo v3.2 da el mismo texto que antes y la v5.1 no da errores.
+
+   En Equipos y Metodología no hay botón «Actualizar». La fila del selector, que iba en el mismo hunk que ese panel, se añadió a mano y se comprobó en el navegador.
+3. **Pendiente:**
+   - **`clasico.html`** (la tabla «Datos normalizados» de la vista clásica): sigue la versión anterior, con la v3.2, hasta republicarlo con su cambio. El cambio está en el repositorio (`artifact/kerno/clasico.html`, idéntico al publicado salvo la v5.1). Antes de publicarlo hay que leerlo entero (463 KB).
+   - **Texto de «Por necesidad»** («Cómo se calcula»): menciona el historial v4.2, que en la v5.1 no se aplica. Retocarlo en la próxima publicación de la página.
+   - **Segunda entrega:** simulador y Nivel Kerno v5.1 en el navegador.
