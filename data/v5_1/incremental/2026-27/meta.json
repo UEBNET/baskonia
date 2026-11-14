@@ -1,0 +1,23 @@
+{
+ "version_modelo": "5.0",
+ "fase": "v5.1-F6-incremental",
+ "config": null,
+ "hash_config": "da1c4ed80999",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-14T10:59:54+00:00",
+ "python": "3.13.18",
+ "temporada": "2026-27",
+ "zonas_filas": 30910,
+ "jugador_partido": 32726,
+ "personas": 5744,
+ "personas_nuevas": 90,
+ "niveles": 104346,
+ "normalizado": [
+  {
+   "temporada": "2026-27",
+   "filas": 6965,
+   "con_v5": 81
+  }
+ ],
+ "tiempo_s": 32
+}

@@ -18,6 +18,9 @@ F4 · Impacto (configs/v5_1/f2.yaml):
 
 F5 · Landing (configs/v5_1/f2.yaml; la Landing de la F10 con configs/v5/f10.yaml):
 - landing: δ₁ y δ₂ por grupo contraídos a través del perfil latente, examen de publicación y escalón en puntos de NK
+
+F6 · Integración (cualquier config):
+- incremental: proceso paralelo de la temporada en curso con los modelos congelados (data/v5_1/incremental/<t>/)
 """
 from __future__ import annotations
 
@@ -32,6 +35,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(prog="bbnorm5.v51")
     ap.add_argument("--config", default="configs/v5_1/f1.yaml")
     ap.add_argument("--pasos", nargs="*", default=["examen", "generar"])
+    ap.add_argument("--temporada", default="2026-27")
+    ap.add_argument("--rehacer-caja", action="store_true")
     a = ap.parse_args(argv)
     cfg = C.cargar(a.config)
     resumen = {}
@@ -56,6 +61,9 @@ def main(argv=None):
         elif paso == "landing":
             from bbnorm5.simulador51 import landing51
             out = landing51.ejecutar(cfg)
+        elif paso == "incremental":
+            from bbnorm5.simulador51 import incremental
+            out = incremental.ejecutar(a.temporada, rehacer_caja=a.rehacer_caja)
         elif paso == "generar":
             from bbnorm5.salidas import combinada
             out = combinada.generar(cfg)

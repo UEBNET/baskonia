@@ -52,3 +52,30 @@ def test_contraccion_latente_recupera_un_efecto_de_factor():
     r = L51.contraer(t)
     assert np.allclose(r["delta_lat"], L.to_numpy() @ gam, atol=0.03)
     assert (r["se_lat"] <= r["se"] + 1e-9).all()               # contraer nunca da menos precisión
+
+
+def test_traduccion_extrapolada_temporada_sin_nuts():
+    """λ de una temporada sin NUTS: la de la última, con la varianza de la innovación de un año añadida."""
+    import numpy as np
+    from bbnorm5.simulador51 import incremental as I
+
+    def original(z, ligas, t):
+        i = z["temporadas"].index(t)
+        return np.full(len(ligas), float(i)), np.full(len(ligas), 0.01)
+
+    rng = np.random.default_rng(0)
+    lam = rng.normal(size=(200, 3, 2))
+    lam[:, :, 1] = lam[:, :, 0] + rng.normal(scale=0.1, size=(200, 3))
+    z = {"temporadas": ["2024-25", "2025-26"], "lam": lam}
+    f = I._traduccion_extrapolada(original)
+    m, v = f(z, np.array(["a", "b"]), "2025-26")
+    assert np.allclose(m, 1.0) and np.allclose(v, 0.01)
+    m, v = f(z, np.array(["a", "b"]), "2026-27")
+    assert np.allclose(m, 1.0)
+    assert 0.01 + 0.005 < v[0] < 0.01 + 0.02          # 0,1² de innovación
+
+
+def test_anterior():
+    from bbnorm5.simulador51 import incremental as I
+    assert I._anterior("2026-27") == "2025-26"
+    assert I._anterior("2030-31") == "2029-30"

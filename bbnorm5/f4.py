@@ -122,7 +122,7 @@ def final(cfg: dict) -> dict:
     elegido, s = seleccion(cfg)
     o = CD.cargar()
     h = CD._hiper_preferido(pd.read_csv(DM.DIR / "hiperparametros.csv"))
-    hip, curvas, niveles, pesos = [], [], [], []
+    hip, curvas, niveles, pesos, modelos = [], [], [], [], {}
     var_aj = elegido if elegido in MOD.VARIANTES else "completo"
     for met in DM.METRICAS:
         x = o[o["metrica"] == met]
@@ -141,6 +141,7 @@ def final(cfg: dict) -> dict:
             pesos.append({"metrica": met, "escenario": esc, "v_tipica": vt, "peso_t-4": w[0], "peso_t-3": w[1],
                           "peso_t-2": w[2], "peso_t-1": w[3], "peso_prior": 1 - w.sum()})
         _, out = MOD.filtrar(M, mod["th"], mod["beta"])
+        modelos[met] = {"variante": mod["variante"], "th": dict(mod["th"]), "beta": np.asarray(mod["beta"])}
         pid, j = M["fila"]
         niveles.append(x.sort_values(["persona_v5", "anio"]).reset_index(drop=True)[
             ["persona_v5", "liga", "temporada", "rol", "edad", "y", "v", "mu"]].assign(
@@ -151,6 +152,9 @@ def final(cfg: dict) -> dict:
     pd.concat(curvas).to_csv(CD.DIR / "curvas_edad.csv", index=False)
     pd.DataFrame(pesos).to_csv(CD.DIR / "pesos_temporadas.csv", index=False)
     pd.concat(niveles).to_parquet(CD.DIR / "niveles_carrera.parquet")
+    # v5.1 F6: parámetros congelados (θ y β de la curva de edad) para el proceso paralelo de la temporada en curso
+    import pickle
+    (CD.DIR / "modelos_final.pkl").write_bytes(pickle.dumps(modelos))
     return {"variante_elegida": elegido, "variante_ajustada": var_aj}
 
 
