@@ -1,0 +1,41 @@
+# F1 · Auditoría de varianza y calibración de lo existente (encargo v5.0, docs/v5/01_auditoria_varianza.md)
+# Todo hiperparámetro de la fase vive aquí. Semillas fijas.
+fase: F1
+salida: f1                       # data/v5/f1/
+semilla: 20261109
+
+datos:
+  fase_competicion: regular      # sólo temporada regular (como la v1/v3.2)
+  temporadas: ["2020-21", "2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]   # 2026-27 en curso: fuera
+  min_minutos: 100               # filas jugador-liga-temporada que entran en la descomposición
+
+varianza:                        # §5.1: y = μ + b_{ℓt} (fijo) + a_i + u_{it} + ε, Var(ε) = σ²/n
+  exposicion_minima: 1           # n > 0 en su unidad (intentos, posesiones, minutos)
+  bootstrap: 200                 # IC de σ² por bootstrap de personas
+  fiabilidad_objetivo: 0.5       # n* = exposición con ρ = 0,5
+
+division_muestra:                # §5.1, método split-half con la tabla jugador-partido
+  min_partidos: 10               # partidos por mitad (pares / impares) para entrar
+  ligas_excluidas: []
+
+calibracion:                     # §5.3
+  niveles: [0.5, 0.8, 0.95]
+  cortes: [2022, 2023, 2024]     # los del examen anidado v3.2 (2021 sólo recalibra)
+  tramos_minutos: [300, 800, 1500]
+  bootstrap: 1000
+
+v32:
+  config: configs/normalization_v32.yaml
+  casos: data/modelos/v3_2/validacion/casos_combinada_v32.csv.gz
+  normalizado: data/modelos/v3_2/normalizado
+  destino: data/modelos/v3_2/destino
+
+v42:
+  config: configs/v42.yaml
+
+lolo:
+  anio: 2024                     # corte del LOLO (como bbnorm3.flujo.lolo y bbmodel.amortiguacion)
+
+simulacion:                      # §5.4: prueba de la D1 y de la sobrecobertura con intervalos exactos por construcción
+  metricas: [pts_p100, fg3_pct, stl_pct, ast_pct, ts_pct, oreb_pct]
+  repeticiones: 2

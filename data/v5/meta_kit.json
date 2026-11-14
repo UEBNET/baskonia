@@ -1,0 +1,24 @@
+{
+ "version_modelo": "5.0",
+ "fase": "v5.1-F6-kit",
+ "config": null,
+ "hash_config": "329898911739",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-14T11:04:17+00:00",
+ "python": "3.13.18",
+ "ultima": "2025-26",
+ "tamanos": {
+  "v5/carrera/modelos_final.pkl": 4933,
+  "v5/carrera/nacimiento_persona.csv": 141731,
+  "v5/carrera/observaciones.parquet": 15743807,
+  "v5/latente/correlacion_capacidades.csv": 4065,
+  "v5/ligas/lambda_paso2_defensa_cuidado.npz": 3502799,
+  "v5/ligas/lambda_paso2_tiro.npz": 8757299,
+  "v5/ligas/lambda_paso2_volumen_papel.npz": 4360506,
+  "v5/ligas/lambda_paso2_zonas.npz": 4375609,
+  "v5/limpios/entidades/personas_v5.csv": 1681240,
+  "v5/medida/hiperparametros.csv": 295781,
+  "v5/medida/partidos.parquet": 9167,
+  "v5_1/salidas/combinada/meta.json": 1625
+ }
+}

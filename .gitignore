@@ -18,3 +18,9 @@ data/modelos/v3_2/validacion/ablacion/escala_*.pkl
 # lote de publicación incremental del artifact (python -m bbactualiza)
 publicacion/
 publicacion_completa/
+
+# v5.1 (proceso paralelo de la temporada en curso): intermedios regenerables en cada actualización; se versiona sólo
+# el componente v5 que se publica (data/v5_1/producto/superposicion/<t>.csv.gz)
+data/v5/limpios/caja_partido/
+data/v5/medida/pista_partidos.parquet
+data/v5_1/incremental/

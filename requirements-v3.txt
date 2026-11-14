@@ -3,3 +3,4 @@
 # requirements.txt, no descargue PyTorch.
 #   pip install -r requirements.txt -r requirements-v3.txt --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.5.1
+pyarrow>=14   # v5.1: proceso paralelo de la temporada en curso (bbnorm5, Parquet)

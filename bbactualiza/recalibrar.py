@@ -132,7 +132,7 @@ def equipos_v40(temporada: str = TEMPORADA) -> Path:
 
 
 def p_boton() -> None:
-    _sh(sys.executable, "-m", "bbactualiza", "--sin-descarga", "--forzar", "--pasos", "contexto", "roles", "entropia",
+    _sh(sys.executable, "-m", "bbactualiza", "--sin-descarga", "--forzar", "--pasos", "contexto", "roles", "normalizacion_v51", "entropia",
         "estilos", "simulador", "artifact", "v42", "publicacion")
 
 

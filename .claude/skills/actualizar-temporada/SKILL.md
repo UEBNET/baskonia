@@ -1,6 +1,6 @@
 ---
 name: actualizar-temporada
-description: Backend del botón «Actualizar 2026-27» de Kerno Analytics, que desde la v4.2 son tres artifacts (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn). Descarga sólo los partidos nuevos de la temporada en curso en las 21 ligas (con la Liga U de la ACB desde el 09-11-2026), aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3, tríos y parejas v4.2) sin reajustar ni tocar el histórico, sube los datos a Git y republica en cada artifact sólo los ficheros suyos que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
+description: Backend del botón «Actualizar 2026-27» de Kerno Analytics, que desde la v4.2 son tres artifacts (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn). Descarga sólo los partidos nuevos de la temporada en curso en las 21 ligas (con la Liga U de la ACB desde el 09-11-2026), aplica a esa temporada los modelos ya ajustados (normalización v3.2 y v5.1, contexto, roles, estilos, simulador v3.3, tríos y parejas v4.2) sin reajustar ni tocar el histórico, sube los datos a Git y republica en cada artifact sólo los ficheros suyos que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
 ---
 
 # Actualizar la temporada en curso (botón del artifact)
@@ -75,9 +75,10 @@ y el resto de líneas queda byte a byte igual.
 | `normalizacion` | A con σ², τ², enlace congelados (μ del entorno recentrado), amortiguada con los δ y λ guardados, B vigente, ids de persona estables, v2 y **v3.2 incremental** (CVAE congelada de la última recalibración + v2 al día, con los pesos por métrica del examen) | traducciones A/B/amortiguada, `normalizado/2026-27.csv`, `v3_2/normalizado/2026-27.csv.gz` |
 | `contexto` | contexto de nivel con la escala fija 2020-26 y segunda pasada del dataset normalizado | `contexto/2026-27.csv`, filas 2026-27 de `por_jugador_liga.csv` |
 | `roles` | roles por minutos y tramos (reglas y BOCPD) | filas 2026-27 de `roles/*` |
+| `normalizacion_v51` | v5.1 (`bbactualiza.normalizacion51`): caja por partido de 2026-27 desde los brutos, medida y carrera de la v5 con los parámetros congelados (kit de `data/v5/`) y equivalente EuroLeague 2025-26 de la v5 (≈ 2 min) | `data/v5_1/producto/superposicion/2026-27.csv.gz` (los intermedios, en carpetas ignoradas por Git) |
 | `entropia`, `estilos` | entropía y volatilidad; estilos unificados con la mezcla ajustada en 2020-26 (semilla fija) | `entropia/`, `estilos_unificados/` |
 | `simulador` | dataset del simulador v3.3 y exportación al navegador con los pesos congelados | `data/artifact/simulador/` |
-| `artifact` | tablas de datos, nacionalidades, evaluación de ligas, normalizados v3.2, Atlas (estilos e informe), quintetos | `data/artifact/` (no versionado) |
+| `artifact` | tablas de datos, nacionalidades, evaluación de ligas, normalizados v3.2 y v5.1 (`regular_v51.json`: la v3.2 recién calculada combinada por métrica con la v5, más `vara_v51.json`), Atlas (estilos e informe), quintetos | `data/artifact/` (no versionado) |
 | `v42` | tríos, parejas y sinergia v4.2 de la temporada con los parámetros congelados (`bbequipo.v42.actualizar`; el filtro es causal, las temporadas cerradas no cambian). La previa del historial de jugador v4.2 sólo depende de temporadas cerradas: no se toca | filas 2026-27 de `data/modelos/v4_2/unidades/*_v42.csv.gz`, `artifact/kerno/quintetos/datos_v42/2026-27/`, su `indice.json` |
 | `publicacion` | lote con sólo las rutas que dependen de 2026-27 (`.gz.txt` = gzip en base64), repartido entre los tres artifacts | `publicacion/lote0.json`, `lote_<sitio>_<n>.json`, `sitios.json` |
 
@@ -90,7 +91,9 @@ partidos nuevos), `--ligas …` (descarga sólo esas ligas). El último informe 
 Lo que exige reajustar modelos no cabe en una pulsación rápida y va en la tarea programada mensual
 (`python -m bbactualiza.recalibrar`, ver `docs/actualizacion_2026-27.md`): reentrenar las 20 redes CVAE de la
 normalización v3.2 (los jugadores nuevos de 2026-27 tienen entretanto sólo la v2), el RAPM y los perfiles del modelo
-de equipo v4.0 (`atlas/v40/`, `v40/`) y los pesos del simulador.
+de equipo v4.0 (`atlas/v40/`, `v40/`) y los pesos del simulador. La v5 de la v5.1 no se reajusta cada mes: sus modelos
+(medida, carrera, traducción entre ligas) quedan congelados hasta el siguiente reajuste anual; la recalibración vuelve a
+combinarla con la v3.2 recién reentrenada al pasar por el botón.
 
 ## Reglas
 

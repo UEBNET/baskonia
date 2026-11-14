@@ -101,6 +101,41 @@ def normalizados(temporada: str = TEMPORADA) -> None:
     _dump(indice, DA / "normalizados" / "indice.json")
 
 
+def _v51_tabla(temporada: str):
+    """Tabla v5.1 de una temporada: la v3.2 publicada (esquema v1) con el componente v5 combinado (bbnorm5.producto51)."""
+    from bbnorm5.salidas import producto51 as P
+    sup = P.DIR / "superposicion" / f"{temporada}.csv.gz"
+    if not sup.exists():
+        return None
+    cols = pd.read_csv(RAIZ / "data/modelos/normalizado" / f"{temporada}.csv", nrows=0).columns
+    v32 = pd.read_csv(RAIZ / "data/modelos/v3_2/normalizado" / f"{temporada}.csv.gz", low_memory=False)[list(cols)]
+    pesos = {m: e["w"] for m, e in json.loads((P.DIR / "vara_v51.json").read_text(encoding="utf-8"))["metricas"].items()}
+    df = P.aplicar(v32, pd.read_csv(sup, dtype={"player_id": str, "team_id": str}), pesos)
+    # <m>_am*: copias de la v3.2 que ninguna página lee (compactar las quita cuando son idénticas a <m>; en la v5.1 no lo son)
+    return df.drop(columns=[m + s for m in P.ORDEN for s in ("_am", "_am_lo", "_am_hi", "_am_pctel") if m + s in df.columns])
+
+
+def normalizados_v51(temporada: str = TEMPORADA) -> dict:
+    """v5.1 (encargo v5.1 F6): datos/normalizados/<t>/regular_v51.json (mismo esquema que regular.json, más las máscaras
+    v51_comb y v51_solo) y datos/normalizados/vara_v51.json."""
+    from bbmodel.dataset_normalizado import _columnar, _dump
+    from bbmodel.nombres import aplicar
+    from bbnorm5.salidas import producto51 as P
+    df = _v51_tabla(temporada)
+    if df is None:
+        return {"temporada": temporada, "filas": 0}
+    df = aplicar(df, fuente=False)
+    _dump(_columnar(df), DA / "normalizados" / temporada / "regular_v51.json")
+    _dump(json.loads((P.DIR / "vara_v51.json").read_text(encoding="utf-8")), DA / "normalizados" / "vara_v51.json")
+    return {"temporada": temporada, "filas": int(len(df)), "v51": int((df["fuente_norm"] == "V5.1").sum())}
+
+
+def normalizados_v51_todas() -> list[dict]:
+    from bbnorm5.salidas import producto51 as P
+    ts = sorted(f.name[:7] for f in (P.DIR / "superposicion").glob("*.csv.gz"))
+    return [normalizados_v51(t) for t in ts]
+
+
 def compactar() -> None:
     _py("artifact/herramientas/compactar.py", str(DA))
 
@@ -160,7 +195,8 @@ def mapa(temporada: str = TEMPORADA) -> dict[str, Path]:
             m[f"datos/{temporada}/{p.name}"] = p
     if (DA / PREVIA / "evaluacion_regular.json").exists():          # «puentes» hacia la temporada en curso
         m[f"datos/{PREVIA}/evaluacion_regular.json"] = DA / PREVIA / "evaluacion_regular.json"
-    for rel in (f"normalizados/{temporada}/regular.json", "normalizados/indice.json",
+    for rel in (f"normalizados/{temporada}/regular.json", f"normalizados/{temporada}/regular_v51.json",
+                "normalizados/vara_v51.json", "normalizados/indice.json",
                 f"normalizacion/jugadores_{temporada}.json"):
         if (DA / rel).exists():
             m[f"datos/{rel}"] = DA / rel

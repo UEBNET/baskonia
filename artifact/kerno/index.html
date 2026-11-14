@@ -506,13 +506,14 @@ td.n b { font-weight: 600; }
     </div>
     <div class="pop" id="updPop" role="dialog" aria-labelledby="updTit" hidden>
       <div class="row"><span class="label" id="updTit">Actualizar la temporada 2026-27</span><p class="upd-datos" id="updDatos">Cargando el estado de los datos…</p></div>
-      <div class="row"><p>Descarga los partidos nuevos de las 20 ligas y aplica a 2026-27 los modelos ya ajustados: normalización v3.2, contexto, roles, estilos y simulador. El histórico (2020-21 a 2025-26) no cambia. Si no hay partidos nuevos, no se recalcula nada.</p>
+      <div class="row"><p>Descarga los partidos nuevos de las 20 ligas y aplica a 2026-27 los modelos ya ajustados: normalización v3.2 y v5.1, contexto, roles, estilos y simulador. El histórico (2020-21 a 2025-26) no cambia. Si no hay partidos nuevos, no se recalcula nada.</p>
         <p>Tarda entre 30 y 90 minutos, según las webs de las ligas. Al terminar se publican los datos nuevos en esta página. El modelo de equipo v4.0 se reajusta aparte, una vez al mes.</p></div>
       <div class="upd-acc"><button class="btn" type="button" id="updGo">Actualizar ahora</button><button class="btn quiet" type="button" id="updNo">Cancelar</button></div>
       <p class="upd-ult" id="updUlt" role="status" aria-live="polite"></p>
     </div>
     <div class="pop" id="setPop" role="dialog" aria-label="Ajustes de lectura" hidden>
       <div class="row"><span class="label">Vara</span><p>La vara es la liga de tu club en la temporada elegida. Cambia sola al cambiar de club.</p></div>
+      <div class="row"><span class="label">Normalización</span><div class="seg" id="setNorm" role="group" aria-label="Normalización"><button type="button" data-v="v51">v5.1</button><button type="button" data-v="v32">v3.2</button></div><p>v5.1: en cada métrica, la combinación de la v5 y la v3.2 que menos falla fuera de muestra (por defecto). v3.2: la anterior. Al cambiar, la página se recarga.</p></div>
       <div class="row"><span class="label">Escala de nivel</span><div class="seg" id="setEsc" role="group" aria-label="Escala"><button type="button" data-v="escala">0–100</button><button type="button" data-v="original">Originales</button></div></div>
       <div class="row"><span class="label">Ayudas de lectura</span><div class="seg" id="setAyu" role="group" aria-label="Ayudas"><button type="button" data-v="1">Visibles</button><button type="button" data-v="0">Plegadas</button></div></div>
       <div class="row"><span class="label">Modo de color</span><div class="seg" id="setTema" role="group" aria-label="Modo de color"><button type="button" data-v="sistema">Sistema</button><button type="button" data-v="light">Día</button><button type="button" data-v="dark">Noche</button></div></div>
@@ -612,17 +613,26 @@ const GRUPOS = [
 ];
 let SENT = {}; // sentido de cada métrica: 1 más es mejor, −1 menos es mejor, 0 estilo (de datos/normalizados/vara.json)
 let VARA_LIGAS = ["euroleague"];
+// v5.1 (encargo v5.1 F6): versión de la normalización, común a las páginas (almacenamiento local «kerno.norm»).
+// «v51» (por defecto): combinación por métrica de la v5 y la v3.2 (datos/normalizados/<t>/regular_v51.json) con su vara
+// (vara_v51.json); «v32»: la v3.2 con el historial v4.2. Al cambiarla, la página se recarga (ninguna caché mezcla versiones).
+const NORMV = (() => { try { return localStorage.getItem("kerno.norm") === "v32" ? "v32" : "v51"; } catch (e) { return "v51"; } })();
+const NORM_TXT = () => (NORMV === "v51" ? "normalización v5.1 (combinada v5 · v3.2)" : "normalización v3.2");
+let VARA51 = null;
 
 const SEAS = {}, PEND = {};
 function temporada(t) {
   if (SEAS[t]) return Promise.resolve(SEAS[t]);
   if (PEND[t]) return PEND[t];
-  PEND[t] = cargarJSON(`datos/normalizados/${t}/regular.json`).then(async (d) => {
+  const url = (v) => `datos/normalizados/${t}/${v === "v51" ? "regular_v51" : "regular"}.json`;
+  // v5.1: si la temporada no tiene tabla v5.1, la v3.2 (T.norm dice cuál se cargó)
+  PEND[t] = cargarJSON(url(NORMV)).then((d) => [d, NORMV])
+    .catch((e) => (NORMV === "v51" ? cargarJSON(url("v32")).then((d) => [d, "v32"]) : Promise.reject(e))).then(async ([d, nv]) => {
     const I = {}; d.columnas.forEach((c, i) => { I[c] = i; });
-    const T = { temp: t, I, rows: d.filas };
+    const T = { temp: t, I, rows: d.filas, norm: nv };
     T.rows.forEach((r) => { r.T = T; });
     T.byKey = new Map(T.rows.map((r) => [rk(r), r]));
-    await historialV42(T);
+    if (nv !== "v51") await historialV42(T);          // la v5 ya lleva su filtro de carrera
     SEAS[t] = T; v4Mapear(T); return T;
   }).catch((e) => { delete PEND[t]; throw e; });
   return PEND[t];
@@ -688,7 +698,7 @@ const VN = () => ligaN(VARA());
 const TRv = (x, t) => { if (typeof x !== "number" || !isFinite(x)) return NaN; if (t === "raiz") return Math.sqrt(Math.max(0, x)); if (t === "log1") return Math.log1p(Math.max(0, x)); if (t === "proporcion") return Math.asin(Math.sqrt(Math.min(100, Math.max(0, x)) / 100)); return x; };
 const TRvInv = (y, t) => { if (!isFinite(y)) return NaN; if (t === "raiz") return Math.max(0, y) ** 2; if (t === "log1") return Math.expm1(Math.max(0, y)); if (t === "proporcion") return 100 * Math.sin(Math.min(Math.PI / 2, Math.max(0, y))) ** 2; return y; };
 function Phi(z) { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989422804014327 * Math.exp(-z * z / 2), p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429)))); return z > 0 ? 1 - p : p; }
-function convVara(r, m) {
+function convVara32(r, m) {
   const ld = VARA(), k = VARAD && VARAD.metricas && VARAD.metricas[m];
   if (!k || !k.s || k.s[ld] == null) return null;
   const tf = k.transf, sd_ = k.s[ld], dd = k.delta[ld], sop = (k.soporte && k.soporte[ld]) || [-Infinity, Infinity];
@@ -707,6 +717,39 @@ function convVara(r, m) {
     const sdE = Math.abs(ze - zEL(x)) / Z, vj = Math.max(sdE * sdE - spE * spE, 0.1 * sdE * sdE), zz = zd + sg * Z * Math.sqrt((vj + spD * spD) / (sd_ * sd_) + ext * ext);
     o[sx] = aD(zz); o["z" + sx] = zz; });
   o.pl = 100 * Phi(o.zlo); o.ph = 100 * Phi(o.zhi);
+  return o;
+}
+// v5.1: la traducción de la v5 (vara_v51.json, bbnorm5.salidas.producto51) es un desplazamiento en la escala del enlace
+// (logit, log o identidad): η_d = η_EL − Δ_d; cada cola, como la v3.2, con la DT por par de nodos de la NUTS del paso 2.
+// En una métrica combinada, valor en la vara = w·(conversión v5) + (1 − w)·(conversión v3.2), con la w de la combinada
+// (sólo v5: w = 1); percentil frente al jugador medio de su posición en la vara, como la v3.2. Las métricas derivadas
+// (TS%, eFG%, por 100, STL%) no tienen Δ propio y se convierten con la v3.2.
+const ENL51 = { binomial: [(x) => Math.log(x / (1 - x)), (y) => 1 / (1 + Math.exp(-y))], poisson: [(x) => Math.log(x), (y) => Math.exp(y)], normal: [(x) => x, (y) => y] };
+function conv51(r, m, e) {
+  const ld = VARA(), L = VARA51.ligas; if (!e.delta || e.delta[ld] == null) return null;
+  const [f, fi] = ENL51[e.familia] || ENL51.normal, k = e.k, Z = VARA51.z80 || 1.2816;
+  const enl = (x) => f(e.familia === "binomial" ? Math.min(1 - 1e-6, Math.max(1e-6, x / k)) : e.familia === "poisson" ? Math.max(1e-9, x / k) : x / k), inv = (y) => fi(y) * k;
+  const v = g(r, m); if (typeof v !== "number" || !isFinite(v)) return null;
+  let nodo = g(r, "liga") + ":" + r.T.temp;
+  if (!e.sp[nodo]) { const c = Object.keys(e.sp).filter((x) => x.startsWith(g(r, "liga") + ":")).sort(); nodo = c.length ? c[c.length - 1] : null; }
+  const sp = nodo ? e.sp[nodo] : null, spE = (sp && sp[L.indexOf("euroleague")]) || 0, spD = (sp && sp[L.indexOf(ld)]) || 0;
+  const ee = enl(v), ed = ee - e.delta[ld], o = { v: inv(ed) };
+  [["lo", -1], ["hi", 1]].forEach(([sx, sg]) => { const x = g(r, m + "_" + sx); if (typeof x !== "number" || !isFinite(x)) { o[sx] = null; return; }
+    const sdE = Math.abs(ee - enl(x)) / Z, vj = Math.max(sdE * sdE - spE * spE, 0.1 * sdE * sdE); o[sx] = inv(ed + sg * Z * Math.sqrt(vj + spD * spD)); });
+  return o;
+}
+function convVara(r, m) {
+  const c = convVara32(r, m);
+  if (!c || r.T.norm !== "v51" || !VARA51 || !VARA51.metricas) return c;
+  const e = VARA51.metricas[m], b = (VARA51.orden || []).indexOf(m); if (!e || b < 0) return c;
+  const comb = ((+g(r, "v51_comb") || 0) >> b) & 1, solo = ((+g(r, "v51_solo") || 0) >> b) & 1; if (!comb && !solo) return c;
+  const c5 = conv51(r, m, e); if (!c5 || !isFinite(c5.v)) return c;
+  const w = solo ? 1 : e.w, mez = (a, z) => (a == null || !isFinite(a) ? z : z == null || !isFinite(z) ? a : w * a + (1 - w) * z);
+  const k = VARAD.metricas[m], ld = VARA(), p = ["E", "A", "I"].includes(g(r, "pos3")) ? g(r, "pos3") : "A";
+  const muD = k.mu[ld + "|" + p], tauD = k.tau[ld + "|" + p];
+  const pz = (x) => (x == null || !isFinite(x) || muD == null || !tauD ? null : 100 * Phi((TRv(x, k.transf) - muD) / tauD));
+  const o = { v: mez(c5.v, c.v), lo: mez(c5.lo, c.lo), hi: mez(c5.hi, c.hi) };
+  o.p = pz(o.v) ?? c.p; o.pl = pz(o.lo) ?? o.p; o.ph = pz(o.hi) ?? o.p;
   return o;
 }
 // v4.1 K4: el RAPM proyectado se lee en 0–100 (50 = jugador medio de la vara), con la curva de las escalas del Atlas:
@@ -935,7 +978,7 @@ function pintarEnt() {
 }
 function pintarAjustes() {
   const marca = (id, v) => $(id).querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
-  marca("setEsc", CTX.escala); marca("setAyu", CTX.ayudas ? "1" : "0"); marca("setTema", CTX.tema);
+  marca("setEsc", CTX.escala); marca("setAyu", CTX.ayudas ? "1" : "0"); marca("setTema", CTX.tema); marca("setNorm", NORMV);
 }
 // lo que se comparte con las herramientas de detalle (mismo origen: almacenamiento local + mensaje al marco)
 function publicarCtx(extra) {
@@ -1136,7 +1179,7 @@ const cargando = (txt) => `<div class="loading"><div class="estela" aria-hidden=
 const vigente = (tk) => tk === S.tk;
 // pie: marcador de calles (8 marcas; la del paso actual 01–04, en latón) + fuente y fecha
 const ticks = () => { const n = +((ITEM[S.route] || ITEM.inicio).sec.n || 0); return `<span class="k-ticks" aria-hidden="true">${[1, 2, 3, 4, 5, 6, 7, 8].map((i) => `<i${i === Math.max(1, n) ? ' class="on"' : ""}></i>`).join("")}</span>`; };
-const pie = (t) => `<p class="src">${ticks()}<span>Datos públicos · ligas oficiales · ${esc(t || "")} · normalización v3.2 · vara ${esc(VN())} (liga de tu club) · intervalo del 80 %</span></p>`;
+const pie = (t) => `<p class="src">${ticks()}<span>Datos públicos · ligas oficiales · ${esc(t || "")} · ${NORM_TXT()} · vara ${esc(VN())} (liga de tu club) · intervalo del 80 %</span></p>`;
 function toast(t) { const el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { el.hidden = true; }, 2400); }
 const fallo = (e) => `<div class="callout"><span class="label">No se pudieron cargar los datos</span><p>${esc(e && e.message ? e.message : e)}. Recarga la página; si persiste, el archivo no está publicado junto a la herramienta.</p></div>`;
 function filaJug(r) { return `${esc(g(r, "equipo"))} · ${esc(ligaN(g(r, "liga")))}${g(r, "pos3") ? " · " + POS[g(r, "pos3")] : ""}`; }
@@ -1482,7 +1525,7 @@ VISTAS["como-leer"] = () => {
     ["Estilos · Química de perfiles", "03 Evaluación · Química de perfiles"], ["Planificación (2 simuladores)", "04 Decisión"], ["Informe · Informe equipo", "01 Diagnóstico · Informe de equipo"], ["Informe · Lectura de fichaje", "03 Evaluación · Lectura de fichaje"], ["Metodología (4)", "Método"]];
   V().innerHTML = `
     <div class="block"><div class="block-h"><h3 class="h2">Toda estimación es un punto con su rango</h3></div>
-      <p class="note" style="font-size:15px;color:var(--text-2)">Las vistas nuevas muestran cada métrica de jugador como <b>punto [extremo bajo–extremo alto]</b>. El rango es el intervalo del 80 %: en 8 de cada 10 casos el valor real cae dentro. Viene de la normalización v3.2 (combinación de dos algoritmos con amortiguación y una red jerárquica), que traduce cada liga a un equivalente común. <b>La vara es siempre la liga de tu club</b> en la temporada elegida (ahora, ${esc(VN())}): todos los valores se expresan como equivalente ${esc(VN())} ${REF_T}. Cambiar de club cambia la vara.</p>
+      <p class="note" style="font-size:15px;color:var(--text-2)">Las vistas nuevas muestran cada métrica de jugador como <b>punto [extremo bajo–extremo alto]</b>. El rango es el intervalo del 80 %: en 8 de cada 10 casos el valor real cae dentro. ${NORMV === "v51" ? "Viene de la normalización v5.1: en cada métrica, la combinación de la v5 (medida bayesiana por partido, carrera de cada jugador y traducción entre ligas con los jugadores que cambian de liga) y la v3.2 (dos algoritmos con amortiguación y una red jerárquica) que menos falla fuera de muestra. Traduce cada liga a un equivalente común." : "Viene de la normalización v3.2 (combinación de dos algoritmos con amortiguación y una red jerárquica), que traduce cada liga a un equivalente común."} <b>La vara es siempre la liga de tu club</b> en la temporada elegida (ahora, ${esc(VN())}): todos los valores se expresan como equivalente ${esc(VN())} ${REF_T}. Cambiar de club cambia la vara.</p>
       <div class="tw"><table><thead><tr><th>Concepto</th><th>Cómo se lee</th></tr></thead><tbody>
         <tr><td>Nivel Kerno (v4.0)</td><td>De 0 a 100: percentil esperado de la producción del jugador (minutos por partido × puntos por 100 posesiones) entre los de su puesto en la liga del club elegido, con los minutos que le da el motor en esa plantilla. 50 = fichaje mediano. Calibrado con 4.560 fichajes reales de 2022 a 2026; rango del 80 %.</td></tr>
         <tr><td>Impacto (v4.0)</td><td>De 0 a 100: percentil del cambio esperado del Net del equipo con él en pista frente a sin él (capa 4), calibrado con el on/off real. Para los jugadores del club, lo que perdería el equipo sin él; para el resto, lo que ganaría como fichaje.</td></tr>
@@ -1547,6 +1590,10 @@ document.addEventListener("click", (e) => {
   }
   const pf = t.closest("[data-perfil]"); if (pf) { NEC.perfil = pf.dataset.perfil; NEC.ver = 40; guardarNec(); ir("necesidad"); return; }
   const sb = t.closest("#nPos [data-v], #nOrden [data-v]"); if (sb) { NEC[sb.parentElement.id === "nPos" ? "pos" : "orden"] = sb.dataset.v; NEC.ver = 40; guardarNec(); ir("necesidad"); return; }
+  const nb = t.closest("#setNorm [data-v]"); if (nb) {
+    try { localStorage.setItem("kerno.norm", nb.dataset.v); } catch (e) { /* sin almacenamiento: se queda la de esta carga */ }
+    if (nb.dataset.v !== NORMV) location.reload(); return;
+  }
   const ab = t.closest("#setEsc [data-v], #setAyu [data-v], #setTema [data-v]"); if (ab) {
     const id = ab.parentElement.id; if (id === "setEsc") CTX.escala = ab.dataset.v; else if (id === "setAyu") CTX.ayudas = ab.dataset.v === "1"; else { CTX.tema = ab.dataset.v; aplicarTema(); }
     guardarCtx(); pintarAjustes(); publicarCtx(); return;
@@ -1605,7 +1652,9 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if
   aplicarTema(); pintarRail();
   V().innerHTML = cargando("Preparando Kerno Analytics");
   try {
-    const [ix, va] = await Promise.all([cargarJSON("datos/normalizados/indice.json"), cargarJSON("datos/normalizados/vara.json").catch(() => null)]);
+    const [ix, va, v51] = await Promise.all([cargarJSON("datos/normalizados/indice.json"), cargarJSON("datos/normalizados/vara.json").catch(() => null),
+      NORMV === "v51" ? cargarJSON("datos/normalizados/vara_v51.json").catch(() => null) : null]);
+    VARA51 = v51;
     TEMPS = Object.keys(ix.temporadas || {}).sort().reverse();
     Object.values(ix.temporadas || {}).forEach((t) => Object.entries(t.ligas || {}).forEach(([k, v]) => { if (!LIGA_N[k] && v.nombre) LIGA_N[k] = v.nombre; }));
     if (va && va.metricas) { VARAD = va; Object.entries(va.metricas).forEach(([m, o]) => { SENT[m] = +o.sentido || 0; }); VARA_LIGAS = va.ligas || VARA_LIGAS; }

@@ -1234,16 +1234,45 @@ function colDesc(c) {
 const VARA_NOMBRES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa (ACB)", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "BCL", fec: "FIBA Europe Cup", bsl: "BSL", gbl: "GBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", cba: "CBA", bnxt: "BNXT", ncaa: "NCAA (top-50)", nbl: "NBL", vtb: "VTB", ligau: "Liga U" };
 const varaNombre = () => VARA_NOMBRES[st.vara] || st.vara || "EuroLeague";
 let VARA = null;
-async function cargarVara() { if (!VARA) VARA = await getJSON("datos/normalizados/vara.json").catch(() => null); return VARA; }
+// v5.1 (encargo v5.1 F6): versión de la normalización elegida en Ajustes de la página principal («kerno.norm»; por defecto
+// v5.1, la combinación por métrica de la v5 y la v3.2). Su vara: vara_v51.json (bbnorm5.salidas.producto51).
+const NORMV = (() => { try { return localStorage.getItem("kerno.norm") === "v32" ? "v32" : "v51"; } catch (e) { return "v51"; } })();
+async function cargarVara() {
+  if (!VARA) {
+    const [vd, v51] = await Promise.all([getJSON("datos/normalizados/vara.json").catch(() => null),
+      NORMV === "v51" ? getJSON("datos/normalizados/vara_v51.json").catch(() => null) : null]);
+    if (vd) vd.v51 = v51;
+    VARA = vd;
+  }
+  return VARA;
+}
 const TRv = (x, t) => { if (typeof x !== "number" || !isFinite(x)) return NaN; if (t === "raiz") return Math.sqrt(Math.max(0, x)); if (t === "log1") return Math.log1p(Math.max(0, x)); if (t === "proporcion") return Math.asin(Math.sqrt(Math.min(100, Math.max(0, x)) / 100)); return x; };
 const TRvInv = (y, t) => { if (!isFinite(y)) return NaN; if (t === "raiz") return Math.max(0, y) ** 2; if (t === "log1") return Math.expm1(Math.max(0, y)); if (t === "proporcion") return 100 * Math.sin(Math.min(Math.PI / 2, Math.max(0, y))) ** 2; return y; };
 function Phi(z) { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989422804014327 * Math.exp(-z * z / 2), p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429)))); return z > 0 ? 1 - p : p; }
+// v5.1: en las filas y métricas combinadas (máscaras v51_comb y v51_solo), valor en la vara = w·(traducción de la v5:
+// desplazamiento Δ_d en la escala del enlace, con la DT por par de nodos) + (1 − w)·(traducción de la v3.2 de arriba),
+// con la w de la combinada; percentil frente al jugador medio de su posición en la vara, como la v3.2.
+const ENL51 = { binomial: [(x) => Math.log(x / (1 - x)), (y) => 1 / (1 + Math.exp(-y))], poisson: [(x) => Math.log(x), (y) => Math.exp(y)], normal: [(x) => x, (y) => y] };
+function conv51(e, L, ld, liga, temp, v, lo, hi) {
+  if (!e || !e.delta || e.delta[ld] == null || typeof v !== "number" || !isFinite(v)) return null;
+  const [f, fi] = ENL51[e.familia] || ENL51.normal, k = e.k, Z = 1.2815516;
+  const enl = (x) => f(e.familia === "binomial" ? Math.min(1 - 1e-6, Math.max(1e-6, x / k)) : e.familia === "poisson" ? Math.max(1e-9, x / k) : x / k), inv = (y) => fi(y) * k;
+  let nodo = liga + ":" + temp;
+  if (!e.sp[nodo]) { const c = Object.keys(e.sp).filter((x) => x.startsWith(liga + ":")).sort(); nodo = c.length ? c[c.length - 1] : null; }
+  const sp = nodo ? e.sp[nodo] : null, spE = (sp && sp[L.indexOf("euroleague")]) || 0, spD = (sp && sp[L.indexOf(ld)]) || 0;
+  const ee = enl(v), ed = ee - e.delta[ld], o = { v: inv(ed) };
+  [["lo", lo, -1], ["hi", hi, 1]].forEach(([sx, x, sg]) => { if (typeof x !== "number" || !isFinite(x)) { o[sx] = null; return; }
+    const sdE = Math.abs(ee - enl(x)) / Z, vj = Math.max(sdE * sdE - spE * spE, 0.1 * sdE * sdE); o[sx] = inv(ed + sg * Z * Math.sqrt(vj + spD * spD)); });
+  return o;
+}
 function convertirVara(idx, rows, vd, ld) {
   const ligas = vd.ligas, iE = ligas.indexOf("euroleague"), iD = ligas.indexOf(ld), Z = vd.z80;
   const out = rows.map((r) => r.slice());
+  const V51 = vd.v51 && vd.v51.metricas && idx.v51_comb != null ? vd.v51 : null;
   NORM_M.forEach((m) => {
     const k = vd.metricas[m], ic = idx[m];
     if (ic == null) return;
+    const e51 = V51 && V51.metricas[m], b51 = V51 ? V51.orden.indexOf(m) : -1;
     const cols = ["_lo", "_hi", "_pctel", "_A", "_B", "_ctx"].map((s) => idx[m + s]);
     if (!k) { out.forEach((r) => { r[ic] = null; cols.forEach((c) => { if (c != null) r[c] = null; }); }); return; }
     const tf = k.transf, sd_ = k.s[ld], dd = k.delta[ld], [sl, sh] = k.soporte[ld] || [-Infinity, Infinity];
@@ -1252,7 +1281,7 @@ function convertirVara(idx, rows, vd, ld) {
       const muE = k.mu["euroleague|" + p], tauE = k.tau["euroleague|" + p], muD = k.mu[ld + "|" + p], tauD = k.tau[ld + "|" + p];
       const zEL = (x) => (TRv(x, tf) - muE) / tauE, aD = (z) => TRvInv(muD + tauD * z, tf);
       const conv = (x) => (typeof x === "number" && isFinite(x) ? aD((zEL(x) - dd) / sd_) : null);
-      const v = r[ic];
+      const v = r[ic], v0 = [v, r[idx[m + "_lo"]], r[idx[m + "_hi"]]];
       if (typeof v !== "number" || !isFinite(v)) { cols.forEach((c) => { if (c != null && c !== idx[m + "_obs"]) r[c] = null; }); return; }
       const ze = zEL(v), zd = (ze - dd) / sd_, ext = zd - Math.min(sh, Math.max(sl, zd));
       let nodo = r[idx.liga] + ":" + r[idx.temporada];
@@ -1266,6 +1295,18 @@ function convertirVara(idx, rows, vd, ld) {
         r[c] = aD(zd + sg * Z * Math.sqrt((vj + spD * spD) / (sd_ * sd_) + ext * ext));
       });
       if (idx[m + "_pctel"] != null) r[idx[m + "_pctel"]] = 100 * Phi(k.sentido === "-1" || k.sentido === -1 ? -zd : zd);
+      if (e51 && b51 >= 0) {
+        const comb = ((+r[idx.v51_comb] || 0) >> b51) & 1, solo = ((+r[idx.v51_solo] || 0) >> b51) & 1;
+        const c5 = comb || solo ? conv51(e51, V51.ligas, ld, r[idx.liga], r[idx.temporada], ...v0) : null;
+        if (c5 && isFinite(c5.v)) {
+          const w = solo ? 1 : e51.w, mez = (a, z) => (a == null || !isFinite(a) ? z : z == null || !isFinite(z) ? a : w * a + (1 - w) * z);
+          r[ic] = mez(c5.v, r[ic]);
+          if (idx[m + "_lo"] != null) r[idx[m + "_lo"]] = mez(c5.lo, r[idx[m + "_lo"]]);
+          if (idx[m + "_hi"] != null) r[idx[m + "_hi"]] = mez(c5.hi, r[idx[m + "_hi"]]);
+          const zm = (TRv(r[ic], tf) - muD) / tauD;
+          if (idx[m + "_pctel"] != null && isFinite(zm)) r[idx[m + "_pctel"]] = 100 * Phi(k.sentido === "-1" || k.sentido === -1 ? -zm : zm);
+        }
+      }
       ["_A", "_B", "_ctx"].forEach((s) => { const c = idx[m + s]; if (c != null) r[c] = conv(r[c]); });
       if (ext) { if (idx.vara_extrapolacion == null) idx.vara_extrapolacion = Object.keys(idx).length; r[idx.vara_extrapolacion] = 1; }
     });
@@ -1423,8 +1464,9 @@ async function loadPhase(season, phase, vara = st.vara) {
       .then(([base, vd]) => { if (!(vd && vd.ligas.includes(ld))) return base; const idx2 = { ...base.idx }; return { idx: idx2, rows: convertirVara(idx2, base.rows, vd, ld) }; });
   }
   if (!st.cache[key]) {
-    const url = src === "norm" ? `datos/normalizados/${season}/regular.json` : `datos/${season}/${phase}.json`;
-    st.cache[key] = Promise.all([getJSON(url), src === "norm" ? null : getJSON(`datos/${season}/nacionalidades.json`).catch(() => null)]).then(([doc, nac]) => {
+    const url = src === "norm" ? `datos/normalizados/${season}/regular${NORMV === "v51" ? "_v51" : ""}.json` : `datos/${season}/${phase}.json`;
+    const doc0 = src === "norm" && NORMV === "v51" ? getJSON(url).catch(() => getJSON(`datos/normalizados/${season}/regular.json`)) : getJSON(url);   // sin v5.1: la v3.2
+    st.cache[key] = Promise.all([doc0, src === "norm" ? null : getJSON(`datos/${season}/nacionalidades.json`).catch(() => null)]).then(([doc, nac]) => {
       const idx = {}; doc.columnas.forEach((c, i) => (idx[c] = i));
       if (nac) addNationality(idx, doc.filas, nac);
       derive(idx, doc.filas);
@@ -1945,7 +1987,7 @@ function panelNorm(g, R) {
   }).join(""); }).join("");
   const pista = NORM_PISTA.some((m) => g(m) != null) ? "" : `<div class="note">Sin datos jugada a jugada para esta liga y temporada (BBL 2020-23 y LNB 2020-21 no tienen quintetos): la fila «Pista» no se traduce.</div>`;
   return head + kv + ctxBlock(g, R) + `<div class="nrm-table"><table><thead><tr><th>Métrica</th><th title="Valor observado en su liga">Su liga</th><th title="Equivalente ${varaNombre()} A+B">${st.vara === "euroleague" ? "EL" : st.vara.toUpperCase()}</th><th title="Intervalo del 80 %">Interv. 80 %</th><th title="${st.vara === "euroleague" ? "Percentil entre los jugadores de EuroLeague de su posición" : "Percentil aproximado en la vara de " + varaNombre()}">p.${st.vara === "euroleague" ? "EL" : st.vara.toUpperCase()}</th><th>A</th><th>B</th></tr></thead><tbody>${filas}</tbody></table></div>
-    <div class="note">Algoritmos: ${esc(g("fuente_norm") || "–")}${g("fuente_norm") === "A" ? " (B no traduce a este jugador: menos de 150 minutos o temporada en curso)" : ""}. EL = equivalente EuroLeague 2025-26; A y B son los dos algoritmos del estudio de normalización.</div>${pista}
+    <div class="note">Algoritmos: ${esc(g("fuente_norm") || "–")}${g("fuente_norm") === "A" ? " (B no traduce a este jugador: menos de 150 minutos o temporada en curso)" : ""}${g("fuente_norm") === "V5.1" ? " (combinación por métrica de la v5 y la v3.2; las columnas A y B son las de la v3.2)" : ""}. EL = equivalente EuroLeague 2025-26; A y B son los dos algoritmos del estudio de normalización.</div>${pista}
     ${qButton({ tab: "jugadores", t: g("temporada"), l: g("liga"), f: "regular", e: g("team_id"), j: g("player_id") })}
     <button class="btn ghost" type="button" id="closePanel">Cerrar ficha</button>`;
 }
