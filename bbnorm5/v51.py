@@ -21,6 +21,8 @@ F5 · Landing (configs/v5_1/f2.yaml; la Landing de la F10 con configs/v5/f10.yam
 
 F6 · Integración (cualquier config):
 - incremental: proceso paralelo de la temporada en curso con los modelos congelados (data/v5_1/incremental/<t>/)
+- producto: superposición por temporada sobre la v3.2 y vara_v51.json (data/v5_1/producto/)
+- kit: lo mínimo de la v5 para el proceso paralelo en la rama de producción (data/v5_1/kit/)
 """
 from __future__ import annotations
 
@@ -64,6 +66,12 @@ def main(argv=None):
         elif paso == "incremental":
             from bbnorm5.simulador51 import incremental
             out = incremental.ejecutar(a.temporada, rehacer_caja=a.rehacer_caja)
+        elif paso == "producto":
+            from bbnorm5.salidas import producto51
+            out = producto51.generar()
+        elif paso == "kit":
+            from bbnorm5.simulador51 import kit
+            out = kit.exportar()
         elif paso == "generar":
             from bbnorm5.salidas import combinada
             out = combinada.generar(cfg)

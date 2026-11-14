@@ -9,13 +9,15 @@ import hashlib
 import json
 import platform
 from datetime import datetime, timezone
+import os
 from pathlib import Path
 
 import yaml
 
 RAIZ = Path(__file__).resolve().parents[2]
 DIR_CONFIGS = RAIZ / "configs" / "v5"
-DIR_DATOS = RAIZ / "data" / "v5"
+# v5.1 F6: BBNORM5_DATOS apunta a otra carpeta con la misma estructura (el kit del proceso paralelo); sin ella, data/v5
+DIR_DATOS = Path(os.environ["BBNORM5_DATOS"]).resolve() if os.environ.get("BBNORM5_DATOS") else RAIZ / "data" / "v5"
 
 
 def cargar(ruta: str | Path) -> dict:

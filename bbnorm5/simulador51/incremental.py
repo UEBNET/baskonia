@@ -54,7 +54,7 @@ def caja(t: str) -> dict:
     from bbnorm5.datos import caja_partido as K
     from bbnorm5.datos import caja_partido_agregados as KA
     cfg2 = C.cargar("configs/v5/f2.yaml")
-    ligas = list(cfg2.get("ligas") or _ligas(_anterior(t)))
+    ligas = sorted(pd.read_csv(DM.DIR / "hiperparametros.csv", usecols=["liga"])["liga"].unique())   # las del modelo
     r = K.construir(cfg2, ligas, [t])
     ra = KA.construir(ligas, [t])
     return {"caja": int(len(r)), "agregados": int(len(ra))}

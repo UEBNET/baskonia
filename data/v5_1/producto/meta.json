@@ -1,0 +1,57 @@
+{
+ "version_modelo": "5.0",
+ "fase": "v5.1-F6-producto",
+ "config": null,
+ "hash_config": "17e241c94ef8",
+ "hash_datos_entrada": null,
+ "fecha": "2026-11-14T11:07:44+00:00",
+ "python": "3.13.18",
+ "superposicion": [
+  {
+   "temporada": "2020-21",
+   "filas": 4282,
+   "de": 5465,
+   "combinadas": 4230
+  },
+  {
+   "temporada": "2021-22",
+   "filas": 4567,
+   "de": 5987,
+   "combinadas": 4517
+  },
+  {
+   "temporada": "2022-23",
+   "filas": 4961,
+   "de": 6144,
+   "combinadas": 4915
+  },
+  {
+   "temporada": "2023-24",
+   "filas": 7609,
+   "de": 9162,
+   "combinadas": 7484
+  },
+  {
+   "temporada": "2024-25",
+   "filas": 7656,
+   "de": 9264,
+   "combinadas": 7538
+  },
+  {
+   "temporada": "2025-26",
+   "filas": 7908,
+   "de": 9648,
+   "combinadas": 7777
+  },
+  {
+   "temporada": "2026-27",
+   "filas": 5746,
+   "de": 6965,
+   "combinadas": 5665
+  }
+ ],
+ "vara": {
+  "metricas_con_lambda": 18,
+  "kb": 730
+ }
+}
