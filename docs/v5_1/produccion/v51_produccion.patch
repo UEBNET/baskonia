@@ -1,0 +1,657 @@
+From 5e3411ee3f01f8abc0d6efd8e53f6c2049f32f68 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 14 Nov 2026 11:27:33 +0000
+Subject: [PATCH] =?UTF-8?q?v5.1:=20normalizaci=C3=B3n=20combinada=20v5=20?=
+ =?UTF-8?q?=C2=B7=20v3.2=20por=20defecto=20en=20el=20portal,=20con=20su=20?=
+ =?UTF-8?q?proceso=20de=20la=20temporada=20en=20curso?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- portal (index.html, clasico.html): selector «Normalización» en Ajustes (v5.1 por defecto,
+  v3.2 la anterior; almacenamiento local kerno.norm, recarga al cambiar); regular_v51.json
+  con vuelta a la v3.2 si falta; sin el historial v4.2 en la v5.1 (la v5 ya lleva su carrera);
+  vara de la v5 (vara_v51.json) mezclada con la de la v3.2 con la w de cada métrica
+- bbactualiza: paso normalizacion_v51 tras roles (también en la recalibración mensual) y
+  subpaso normalizados_v51 del artifact; la v5 se combina con la v3.2 vigente al publicar
+- bbnorm5 (kit de 38 MB en data/v5/: modelos congelados) y data/v5_1/producto (componente
+  v5 de 2020-21 a 2026-27 y vara_v51.json); intermedios en carpetas ignoradas
+- compactar incluye regular_v51.json; skills actualizar-temporada y anadir-liga; pyarrow
+- tests: v5_1/test_producto51.py y js/v51_normalizacion.js
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_013yvRFTPexuZMHcCMKuexmk
+---
+ .claude/skills/actualizar-temporada/SKILL.md |  9 ++-
+ .claude/skills/anadir-liga/SKILL.md          |  4 ++
+ .gitignore                                   |  6 ++
+ artifact/herramientas/compactar.py           |  2 +-
+ artifact/kerno/clasico.html                  | 52 +++++++++++++--
+ artifact/kerno/index.html                    | 67 +++++++++++++++++---
+ bbactualiza/artefacto.py                     | 38 ++++++++++-
+ bbactualiza/normalizacion51.py               | 49 ++++++++++++++
+ bbactualiza/orquestador.py                   | 10 ++-
+ bbactualiza/recalibrar.py                    |  2 +-
+ requirements-v3.txt                          |  1 +
+ tests/js/v51_normalizacion.js                | 47 ++++++++++++++
+ tests/v5_1/test_producto51.py                | 60 ++++++++++++++++++
+ 13 files changed, 326 insertions(+), 21 deletions(-)
+ create mode 100644 bbactualiza/normalizacion51.py
+ create mode 100644 tests/js/v51_normalizacion.js
+ create mode 100644 tests/v5_1/test_producto51.py
+
+diff --git a/.claude/skills/actualizar-temporada/SKILL.md b/.claude/skills/actualizar-temporada/SKILL.md
+index 9cfb0e5..4e31709 100644
+--- a/.claude/skills/actualizar-temporada/SKILL.md
++++ b/.claude/skills/actualizar-temporada/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: actualizar-temporada
+-description: Backend del botón «Actualizar 2026-27» de Kerno Analytics, que desde la v4.2 son tres artifacts (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn). Descarga sólo los partidos nuevos de la temporada en curso en las 21 ligas (con la Liga U de la ACB desde el 09-11-2026), aplica a esa temporada los modelos ya ajustados (normalización v3.2, contexto, roles, estilos, simulador v3.3, tríos y parejas v4.2) sin reajustar ni tocar el histórico, sube los datos a Git y republica en cada artifact sólo los ficheros suyos que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
++description: Backend del botón «Actualizar 2026-27» de Kerno Analytics, que desde la v4.2 son tres artifacts (Jugadores https://claude.ai/artifact/A7rufkL84rvRFcUBFBxFbC, Equipos https://claude.ai/artifact/SXFgQ6CpytxT3ZZupcEFcj y Metodología https://claude.ai/artifact/T83MBGZk5untACmegadfNn). Descarga sólo los partidos nuevos de la temporada en curso en las 21 ligas (con la Liga U de la ACB desde el 09-11-2026), aplica a esa temporada los modelos ya ajustados (normalización v3.2 y v5.1, contexto, roles, estilos, simulador v3.3, tríos y parejas v4.2) sin reajustar ni tocar el histórico, sube los datos a Git y republica en cada artifact sólo los ficheros suyos que cambian. Úsala cuando la lance la Routine «Actualizar 2026-27 · Kerno» o cuando pidan «actualizar los datos de la temporada», «pulsar el botón de actualización» o «poner al día 2026-27».
+ ---
+ 
+ # Actualizar la temporada en curso (botón del artifact)
+@@ -75,9 +75,10 @@ y el resto de líneas queda byte a byte igual.
+ | `normalizacion` | A con σ², τ², enlace congelados (μ del entorno recentrado), amortiguada con los δ y λ guardados, B vigente, ids de persona estables, v2 y **v3.2 incremental** (CVAE congelada de la última recalibración + v2 al día, con los pesos por métrica del examen) | traducciones A/B/amortiguada, `normalizado/2026-27.csv`, `v3_2/normalizado/2026-27.csv.gz` |
+ | `contexto` | contexto de nivel con la escala fija 2020-26 y segunda pasada del dataset normalizado | `contexto/2026-27.csv`, filas 2026-27 de `por_jugador_liga.csv` |
+ | `roles` | roles por minutos y tramos (reglas y BOCPD) | filas 2026-27 de `roles/*` |
++| `normalizacion_v51` | v5.1 (`bbactualiza.normalizacion51`): caja por partido de 2026-27 desde los brutos, medida y carrera de la v5 con los parámetros congelados (kit de `data/v5/`) y equivalente EuroLeague 2025-26 de la v5 (≈ 2 min) | `data/v5_1/producto/superposicion/2026-27.csv.gz` (los intermedios, en carpetas ignoradas por Git) |
+ | `entropia`, `estilos` | entropía y volatilidad; estilos unificados con la mezcla ajustada en 2020-26 (semilla fija) | `entropia/`, `estilos_unificados/` |
+ | `simulador` | dataset del simulador v3.3 y exportación al navegador con los pesos congelados | `data/artifact/simulador/` |
+-| `artifact` | tablas de datos, nacionalidades, evaluación de ligas, normalizados v3.2, Atlas (estilos e informe), quintetos | `data/artifact/` (no versionado) |
++| `artifact` | tablas de datos, nacionalidades, evaluación de ligas, normalizados v3.2 y v5.1 (`regular_v51.json`: la v3.2 recién calculada combinada por métrica con la v5, más `vara_v51.json`), Atlas (estilos e informe), quintetos | `data/artifact/` (no versionado) |
+ | `v42` | tríos, parejas y sinergia v4.2 de la temporada con los parámetros congelados (`bbequipo.v42.actualizar`; el filtro es causal, las temporadas cerradas no cambian). La previa del historial de jugador v4.2 sólo depende de temporadas cerradas: no se toca | filas 2026-27 de `data/modelos/v4_2/unidades/*_v42.csv.gz`, `artifact/kerno/quintetos/datos_v42/2026-27/`, su `indice.json` |
+ | `publicacion` | lote con sólo las rutas que dependen de 2026-27 (`.gz.txt` = gzip en base64), repartido entre los tres artifacts | `publicacion/lote0.json`, `lote_<sitio>_<n>.json`, `sitios.json` |
+ 
+@@ -90,7 +91,9 @@ partidos nuevos), `--ligas …` (descarga sólo esas ligas). El último informe
+ Lo que exige reajustar modelos no cabe en una pulsación rápida y va en la tarea programada mensual
+ (`python -m bbactualiza.recalibrar`, ver `docs/actualizacion_2026-27.md`): reentrenar las 20 redes CVAE de la
+ normalización v3.2 (los jugadores nuevos de 2026-27 tienen entretanto sólo la v2), el RAPM y los perfiles del modelo
+-de equipo v4.0 (`atlas/v40/`, `v40/`) y los pesos del simulador.
++de equipo v4.0 (`atlas/v40/`, `v40/`) y los pesos del simulador. La v5 de la v5.1 no se reajusta cada mes: sus modelos
++(medida, carrera, traducción entre ligas) quedan congelados hasta el siguiente reajuste anual; la recalibración vuelve a
++combinarla con la v3.2 recién reentrenada al pasar por el botón.
+ 
+ ## Reglas
+ 
+diff --git a/.claude/skills/anadir-liga/SKILL.md b/.claude/skills/anadir-liga/SKILL.md
+index 90a1601..4702cf4 100644
+--- a/.claude/skills/anadir-liga/SKILL.md
++++ b/.claude/skills/anadir-liga/SKILL.md
+@@ -198,6 +198,10 @@ Los exámenes prerregistrados de la v4.0 (`bbequipo rapm-examen`, `sinergia-exam
+ `equipo-examen`, `anclas-examen`) no van en la cadena: las decisiones vigentes se conservan. Ejecútalos si el
+ usuario quiere saber cómo rinde la v4.0 con la liga nueva (recomendable si la liga es grande o muy distinta).
+ 
++**v5.1 (normalización por defecto del portal).** La v5 no tiene la liga nueva hasta que se reajusta (medida, carrera y
++traducción entre ligas con la NUTS del paso 2; `docs/v5_1/07_F6_integracion.md`). Mientras tanto la v5.1 deja sus
++filas con la v3.2 (`fuente_norm` = «V3.2»), igual que la Liga U: no hay que hacer nada para que el botón la trate.
++
+ ## Fase 5 · El botón con la liga nueva
+ 
+ ```
+diff --git a/.gitignore b/.gitignore
+index fef1b47..9cd468b 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -18,3 +18,9 @@ data/modelos/v3_2/validacion/ablacion/escala_*.pkl
+ # lote de publicación incremental del artifact (python -m bbactualiza)
+ publicacion/
+ publicacion_completa/
++
++# v5.1 (proceso paralelo de la temporada en curso): intermedios regenerables en cada actualización; se versiona sólo
++# el componente v5 que se publica (data/v5_1/producto/superposicion/<t>.csv.gz)
++data/v5/limpios/caja_partido/
++data/v5/medida/pista_partidos.parquet
++data/v5_1/incremental/
+diff --git a/artifact/herramientas/compactar.py b/artifact/herramientas/compactar.py
+index 6844e03..214053f 100644
+--- a/artifact/herramientas/compactar.py
++++ b/artifact/herramientas/compactar.py
+@@ -78,7 +78,7 @@ def main(raiz: str = "data/artifact") -> None:
+             tablas(p)
+         elif p.stem.startswith("evaluacion_"):
+             _w(p, _r(json.loads(p.read_text(encoding="utf-8"))))
+-    for p in sorted(R.glob("normalizados/20*-*/regular.json")):
++    for p in sorted([*R.glob("normalizados/20*-*/regular.json"), *R.glob("normalizados/20*-*/regular_v51.json")]):
+         print(p, "columnas duplicadas quitadas:", normalizados(p))
+     for p in sorted(R.glob("normalizacion/jugadores_*.json")):
+         d = json.loads(p.read_text(encoding="utf-8"))
+diff --git a/artifact/kerno/clasico.html b/artifact/kerno/clasico.html
+index 3c7324e..d6c07ee 100644
+--- a/artifact/kerno/clasico.html
++++ b/artifact/kerno/clasico.html
+@@ -1234,16 +1234,45 @@ function colDesc(c) {
+ const VARA_NOMBRES = { euroleague: "EuroLeague", eurocup: "EuroCup", acb: "Liga Endesa (ACB)", nba: "NBA", gleague: "G League", lba: "LBA", bbl: "BBL", lnb: "LNB", bcl: "BCL", fec: "FIBA Europe Cup", bsl: "BSL", gbl: "GBL", feb1: "Primera FEB", feb2: "Segunda FEB", feb3: "Tercera FEB", cba: "CBA", bnxt: "BNXT", ncaa: "NCAA (top-50)", nbl: "NBL", vtb: "VTB", ligau: "Liga U" };
+ const varaNombre = () => VARA_NOMBRES[st.vara] || st.vara || "EuroLeague";
+ let VARA = null;
+-async function cargarVara() { if (!VARA) VARA = await getJSON("datos/normalizados/vara.json").catch(() => null); return VARA; }
++// v5.1 (encargo v5.1 F6): versión de la normalización elegida en Ajustes de la página principal («kerno.norm»; por defecto
++// v5.1, la combinación por métrica de la v5 y la v3.2). Su vara: vara_v51.json (bbnorm5.salidas.producto51).
++const NORMV = (() => { try { return localStorage.getItem("kerno.norm") === "v32" ? "v32" : "v51"; } catch (e) { return "v51"; } })();
++async function cargarVara() {
++  if (!VARA) {
++    const [vd, v51] = await Promise.all([getJSON("datos/normalizados/vara.json").catch(() => null),
++      NORMV === "v51" ? getJSON("datos/normalizados/vara_v51.json").catch(() => null) : null]);
++    if (vd) vd.v51 = v51;
++    VARA = vd;
++  }
++  return VARA;
++}
+ const TRv = (x, t) => { if (typeof x !== "number" || !isFinite(x)) return NaN; if (t === "raiz") return Math.sqrt(Math.max(0, x)); if (t === "log1") return Math.log1p(Math.max(0, x)); if (t === "proporcion") return Math.asin(Math.sqrt(Math.min(100, Math.max(0, x)) / 100)); return x; };
+ const TRvInv = (y, t) => { if (!isFinite(y)) return NaN; if (t === "raiz") return Math.max(0, y) ** 2; if (t === "log1") return Math.expm1(Math.max(0, y)); if (t === "proporcion") return 100 * Math.sin(Math.min(Math.PI / 2, Math.max(0, y))) ** 2; return y; };
+ function Phi(z) { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989422804014327 * Math.exp(-z * z / 2), p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429)))); return z > 0 ? 1 - p : p; }
++// v5.1: en las filas y métricas combinadas (máscaras v51_comb y v51_solo), valor en la vara = w·(traducción de la v5:
++// desplazamiento Δ_d en la escala del enlace, con la DT por par de nodos) + (1 − w)·(traducción de la v3.2 de arriba),
++// con la w de la combinada; percentil frente al jugador medio de su posición en la vara, como la v3.2.
++const ENL51 = { binomial: [(x) => Math.log(x / (1 - x)), (y) => 1 / (1 + Math.exp(-y))], poisson: [(x) => Math.log(x), (y) => Math.exp(y)], normal: [(x) => x, (y) => y] };
++function conv51(e, L, ld, liga, temp, v, lo, hi) {
++  if (!e || !e.delta || e.delta[ld] == null || typeof v !== "number" || !isFinite(v)) return null;
++  const [f, fi] = ENL51[e.familia] || ENL51.normal, k = e.k, Z = 1.2815516;
++  const enl = (x) => f(e.familia === "binomial" ? Math.min(1 - 1e-6, Math.max(1e-6, x / k)) : e.familia === "poisson" ? Math.max(1e-9, x / k) : x / k), inv = (y) => fi(y) * k;
++  let nodo = liga + ":" + temp;
++  if (!e.sp[nodo]) { const c = Object.keys(e.sp).filter((x) => x.startsWith(liga + ":")).sort(); nodo = c.length ? c[c.length - 1] : null; }
++  const sp = nodo ? e.sp[nodo] : null, spE = (sp && sp[L.indexOf("euroleague")]) || 0, spD = (sp && sp[L.indexOf(ld)]) || 0;
++  const ee = enl(v), ed = ee - e.delta[ld], o = { v: inv(ed) };
++  [["lo", lo, -1], ["hi", hi, 1]].forEach(([sx, x, sg]) => { if (typeof x !== "number" || !isFinite(x)) { o[sx] = null; return; }
++    const sdE = Math.abs(ee - enl(x)) / Z, vj = Math.max(sdE * sdE - spE * spE, 0.1 * sdE * sdE); o[sx] = inv(ed + sg * Z * Math.sqrt(vj + spD * spD)); });
++  return o;
++}
+ function convertirVara(idx, rows, vd, ld) {
+   const ligas = vd.ligas, iE = ligas.indexOf("euroleague"), iD = ligas.indexOf(ld), Z = vd.z80;
+   const out = rows.map((r) => r.slice());
++  const V51 = vd.v51 && vd.v51.metricas && idx.v51_comb != null ? vd.v51 : null;
+   NORM_M.forEach((m) => {
+     const k = vd.metricas[m], ic = idx[m];
+     if (ic == null) return;
++    const e51 = V51 && V51.metricas[m], b51 = V51 ? V51.orden.indexOf(m) : -1;
+     const cols = ["_lo", "_hi", "_pctel", "_A", "_B", "_ctx"].map((s) => idx[m + s]);
+     if (!k) { out.forEach((r) => { r[ic] = null; cols.forEach((c) => { if (c != null) r[c] = null; }); }); return; }
+     const tf = k.transf, sd_ = k.s[ld], dd = k.delta[ld], [sl, sh] = k.soporte[ld] || [-Infinity, Infinity];
+@@ -1252,7 +1281,7 @@ function convertirVara(idx, rows, vd, ld) {
+       const muE = k.mu["euroleague|" + p], tauE = k.tau["euroleague|" + p], muD = k.mu[ld + "|" + p], tauD = k.tau[ld + "|" + p];
+       const zEL = (x) => (TRv(x, tf) - muE) / tauE, aD = (z) => TRvInv(muD + tauD * z, tf);
+       const conv = (x) => (typeof x === "number" && isFinite(x) ? aD((zEL(x) - dd) / sd_) : null);
+-      const v = r[ic];
++      const v = r[ic], v0 = [v, r[idx[m + "_lo"]], r[idx[m + "_hi"]]];
+       if (typeof v !== "number" || !isFinite(v)) { cols.forEach((c) => { if (c != null && c !== idx[m + "_obs"]) r[c] = null; }); return; }
+       const ze = zEL(v), zd = (ze - dd) / sd_, ext = zd - Math.min(sh, Math.max(sl, zd));
+       let nodo = r[idx.liga] + ":" + r[idx.temporada];
+@@ -1266,6 +1295,18 @@ function convertirVara(idx, rows, vd, ld) {
+         r[c] = aD(zd + sg * Z * Math.sqrt((vj + spD * spD) / (sd_ * sd_) + ext * ext));
+       });
+       if (idx[m + "_pctel"] != null) r[idx[m + "_pctel"]] = 100 * Phi(k.sentido === "-1" || k.sentido === -1 ? -zd : zd);
++      if (e51 && b51 >= 0) {
++        const comb = ((+r[idx.v51_comb] || 0) >> b51) & 1, solo = ((+r[idx.v51_solo] || 0) >> b51) & 1;
++        const c5 = comb || solo ? conv51(e51, V51.ligas, ld, r[idx.liga], r[idx.temporada], ...v0) : null;
++        if (c5 && isFinite(c5.v)) {
++          const w = solo ? 1 : e51.w, mez = (a, z) => (a == null || !isFinite(a) ? z : z == null || !isFinite(z) ? a : w * a + (1 - w) * z);
++          r[ic] = mez(c5.v, r[ic]);
++          if (idx[m + "_lo"] != null) r[idx[m + "_lo"]] = mez(c5.lo, r[idx[m + "_lo"]]);
++          if (idx[m + "_hi"] != null) r[idx[m + "_hi"]] = mez(c5.hi, r[idx[m + "_hi"]]);
++          const zm = (TRv(r[ic], tf) - muD) / tauD;
++          if (idx[m + "_pctel"] != null && isFinite(zm)) r[idx[m + "_pctel"]] = 100 * Phi(k.sentido === "-1" || k.sentido === -1 ? -zm : zm);
++        }
++      }
+       ["_A", "_B", "_ctx"].forEach((s) => { const c = idx[m + s]; if (c != null) r[c] = conv(r[c]); });
+       if (ext) { if (idx.vara_extrapolacion == null) idx.vara_extrapolacion = Object.keys(idx).length; r[idx.vara_extrapolacion] = 1; }
+     });
+@@ -1423,8 +1464,9 @@ async function loadPhase(season, phase, vara = st.vara) {
+       .then(([base, vd]) => { if (!(vd && vd.ligas.includes(ld))) return base; const idx2 = { ...base.idx }; return { idx: idx2, rows: convertirVara(idx2, base.rows, vd, ld) }; });
+   }
+   if (!st.cache[key]) {
+-    const url = src === "norm" ? `datos/normalizados/${season}/regular.json` : `datos/${season}/${phase}.json`;
+-    st.cache[key] = Promise.all([getJSON(url), src === "norm" ? null : getJSON(`datos/${season}/nacionalidades.json`).catch(() => null)]).then(([doc, nac]) => {
++    const url = src === "norm" ? `datos/normalizados/${season}/regular${NORMV === "v51" ? "_v51" : ""}.json` : `datos/${season}/${phase}.json`;
++    const doc0 = src === "norm" && NORMV === "v51" ? getJSON(url).catch(() => getJSON(`datos/normalizados/${season}/regular.json`)) : getJSON(url);   // sin v5.1: la v3.2
++    st.cache[key] = Promise.all([doc0, src === "norm" ? null : getJSON(`datos/${season}/nacionalidades.json`).catch(() => null)]).then(([doc, nac]) => {
+       const idx = {}; doc.columnas.forEach((c, i) => (idx[c] = i));
+       if (nac) addNationality(idx, doc.filas, nac);
+       derive(idx, doc.filas);
+@@ -1945,7 +1987,7 @@ function panelNorm(g, R) {
+   }).join(""); }).join("");
+   const pista = NORM_PISTA.some((m) => g(m) != null) ? "" : `<div class="note">Sin datos jugada a jugada para esta liga y temporada (BBL 2020-23 y LNB 2020-21 no tienen quintetos): la fila «Pista» no se traduce.</div>`;
+   return head + kv + ctxBlock(g, R) + `<div class="nrm-table"><table><thead><tr><th>Métrica</th><th title="Valor observado en su liga">Su liga</th><th title="Equivalente ${varaNombre()} A+B">${st.vara === "euroleague" ? "EL" : st.vara.toUpperCase()}</th><th title="Intervalo del 80 %">Interv. 80 %</th><th title="${st.vara === "euroleague" ? "Percentil entre los jugadores de EuroLeague de su posición" : "Percentil aproximado en la vara de " + varaNombre()}">p.${st.vara === "euroleague" ? "EL" : st.vara.toUpperCase()}</th><th>A</th><th>B</th></tr></thead><tbody>${filas}</tbody></table></div>
+-    <div class="note">Algoritmos: ${esc(g("fuente_norm") || "–")}${g("fuente_norm") === "A" ? " (B no traduce a este jugador: menos de 150 minutos o temporada en curso)" : ""}. EL = equivalente EuroLeague 2025-26; A y B son los dos algoritmos del estudio de normalización.</div>${pista}
++    <div class="note">Algoritmos: ${esc(g("fuente_norm") || "–")}${g("fuente_norm") === "A" ? " (B no traduce a este jugador: menos de 150 minutos o temporada en curso)" : ""}${g("fuente_norm") === "V5.1" ? " (combinación por métrica de la v5 y la v3.2; las columnas A y B son las de la v3.2)" : ""}. EL = equivalente EuroLeague 2025-26; A y B son los dos algoritmos del estudio de normalización.</div>${pista}
+     ${qButton({ tab: "jugadores", t: g("temporada"), l: g("liga"), f: "regular", e: g("team_id"), j: g("player_id") })}
+     <button class="btn ghost" type="button" id="closePanel">Cerrar ficha</button>`;
+ }
+diff --git a/artifact/kerno/index.html b/artifact/kerno/index.html
+index 829798b..c5d448c 100644
+--- a/artifact/kerno/index.html
++++ b/artifact/kerno/index.html
+@@ -506,13 +506,14 @@ td.n b { font-weight: 600; }
+     </div>
+     <div class="pop" id="updPop" role="dialog" aria-labelledby="updTit" hidden>
+       <div class="row"><span class="label" id="updTit">Actualizar la temporada 2026-27</span><p class="upd-datos" id="updDatos">Cargando el estado de los datos…</p></div>
+-      <div class="row"><p>Descarga los partidos nuevos de las 20 ligas y aplica a 2026-27 los modelos ya ajustados: normalización v3.2, contexto, roles, estilos y simulador. El histórico (2020-21 a 2025-26) no cambia. Si no hay partidos nuevos, no se recalcula nada.</p>
++      <div class="row"><p>Descarga los partidos nuevos de las 20 ligas y aplica a 2026-27 los modelos ya ajustados: normalización v3.2 y v5.1, contexto, roles, estilos y simulador. El histórico (2020-21 a 2025-26) no cambia. Si no hay partidos nuevos, no se recalcula nada.</p>
+         <p>Tarda entre 30 y 90 minutos, según las webs de las ligas. Al terminar se publican los datos nuevos en esta página. El modelo de equipo v4.0 se reajusta aparte, una vez al mes.</p></div>
+       <div class="upd-acc"><button class="btn" type="button" id="updGo">Actualizar ahora</button><button class="btn quiet" type="button" id="updNo">Cancelar</button></div>
+       <p class="upd-ult" id="updUlt" role="status" aria-live="polite"></p>
+     </div>
+     <div class="pop" id="setPop" role="dialog" aria-label="Ajustes de lectura" hidden>
+       <div class="row"><span class="label">Vara</span><p>La vara es la liga de tu club en la temporada elegida. Cambia sola al cambiar de club.</p></div>
++      <div class="row"><span class="label">Normalización</span><div class="seg" id="setNorm" role="group" aria-label="Normalización"><button type="button" data-v="v51">v5.1</button><button type="button" data-v="v32">v3.2</button></div><p>v5.1: en cada métrica, la combinación de la v5 y la v3.2 que menos falla fuera de muestra (por defecto). v3.2: la anterior. Al cambiar, la página se recarga.</p></div>
+       <div class="row"><span class="label">Escala de nivel</span><div class="seg" id="setEsc" role="group" aria-label="Escala"><button type="button" data-v="escala">0–100</button><button type="button" data-v="original">Originales</button></div></div>
+       <div class="row"><span class="label">Ayudas de lectura</span><div class="seg" id="setAyu" role="group" aria-label="Ayudas"><button type="button" data-v="1">Visibles</button><button type="button" data-v="0">Plegadas</button></div></div>
+       <div class="row"><span class="label">Modo de color</span><div class="seg" id="setTema" role="group" aria-label="Modo de color"><button type="button" data-v="sistema">Sistema</button><button type="button" data-v="light">Día</button><button type="button" data-v="dark">Noche</button></div></div>
+@@ -612,17 +613,26 @@ const GRUPOS = [
+ ];
+ let SENT = {}; // sentido de cada métrica: 1 más es mejor, −1 menos es mejor, 0 estilo (de datos/normalizados/vara.json)
+ let VARA_LIGAS = ["euroleague"];
++// v5.1 (encargo v5.1 F6): versión de la normalización, común a las páginas (almacenamiento local «kerno.norm»).
++// «v51» (por defecto): combinación por métrica de la v5 y la v3.2 (datos/normalizados/<t>/regular_v51.json) con su vara
++// (vara_v51.json); «v32»: la v3.2 con el historial v4.2. Al cambiarla, la página se recarga (ninguna caché mezcla versiones).
++const NORMV = (() => { try { return localStorage.getItem("kerno.norm") === "v32" ? "v32" : "v51"; } catch (e) { return "v51"; } })();
++const NORM_TXT = () => (NORMV === "v51" ? "normalización v5.1 (combinada v5 · v3.2)" : "normalización v3.2");
++let VARA51 = null;
+ 
+ const SEAS = {}, PEND = {};
+ function temporada(t) {
+   if (SEAS[t]) return Promise.resolve(SEAS[t]);
+   if (PEND[t]) return PEND[t];
+-  PEND[t] = cargarJSON(`datos/normalizados/${t}/regular.json`).then(async (d) => {
++  const url = (v) => `datos/normalizados/${t}/${v === "v51" ? "regular_v51" : "regular"}.json`;
++  // v5.1: si la temporada no tiene tabla v5.1, la v3.2 (T.norm dice cuál se cargó)
++  PEND[t] = cargarJSON(url(NORMV)).then((d) => [d, NORMV])
++    .catch((e) => (NORMV === "v51" ? cargarJSON(url("v32")).then((d) => [d, "v32"]) : Promise.reject(e))).then(async ([d, nv]) => {
+     const I = {}; d.columnas.forEach((c, i) => { I[c] = i; });
+-    const T = { temp: t, I, rows: d.filas };
++    const T = { temp: t, I, rows: d.filas, norm: nv };
+     T.rows.forEach((r) => { r.T = T; });
+     T.byKey = new Map(T.rows.map((r) => [rk(r), r]));
+-    await historialV42(T);
++    if (nv !== "v51") await historialV42(T);          // la v5 ya lleva su filtro de carrera
+     SEAS[t] = T; v4Mapear(T); return T;
+   }).catch((e) => { delete PEND[t]; throw e; });
+   return PEND[t];
+@@ -688,7 +698,7 @@ const VN = () => ligaN(VARA());
+ const TRv = (x, t) => { if (typeof x !== "number" || !isFinite(x)) return NaN; if (t === "raiz") return Math.sqrt(Math.max(0, x)); if (t === "log1") return Math.log1p(Math.max(0, x)); if (t === "proporcion") return Math.asin(Math.sqrt(Math.min(100, Math.max(0, x)) / 100)); return x; };
+ const TRvInv = (y, t) => { if (!isFinite(y)) return NaN; if (t === "raiz") return Math.max(0, y) ** 2; if (t === "log1") return Math.expm1(Math.max(0, y)); if (t === "proporcion") return 100 * Math.sin(Math.min(Math.PI / 2, Math.max(0, y))) ** 2; return y; };
+ function Phi(z) { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989422804014327 * Math.exp(-z * z / 2), p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429)))); return z > 0 ? 1 - p : p; }
+-function convVara(r, m) {
++function convVara32(r, m) {
+   const ld = VARA(), k = VARAD && VARAD.metricas && VARAD.metricas[m];
+   if (!k || !k.s || k.s[ld] == null) return null;
+   const tf = k.transf, sd_ = k.s[ld], dd = k.delta[ld], sop = (k.soporte && k.soporte[ld]) || [-Infinity, Infinity];
+@@ -709,6 +719,39 @@ function convVara(r, m) {
+   o.pl = 100 * Phi(o.zlo); o.ph = 100 * Phi(o.zhi);
+   return o;
+ }
++// v5.1: la traducción de la v5 (vara_v51.json, bbnorm5.salidas.producto51) es un desplazamiento en la escala del enlace
++// (logit, log o identidad): η_d = η_EL − Δ_d; cada cola, como la v3.2, con la DT por par de nodos de la NUTS del paso 2.
++// En una métrica combinada, valor en la vara = w·(conversión v5) + (1 − w)·(conversión v3.2), con la w de la combinada
++// (sólo v5: w = 1); percentil frente al jugador medio de su posición en la vara, como la v3.2. Las métricas derivadas
++// (TS%, eFG%, por 100, STL%) no tienen Δ propio y se convierten con la v3.2.
++const ENL51 = { binomial: [(x) => Math.log(x / (1 - x)), (y) => 1 / (1 + Math.exp(-y))], poisson: [(x) => Math.log(x), (y) => Math.exp(y)], normal: [(x) => x, (y) => y] };
++function conv51(r, m, e) {
++  const ld = VARA(), L = VARA51.ligas; if (!e.delta || e.delta[ld] == null) return null;
++  const [f, fi] = ENL51[e.familia] || ENL51.normal, k = e.k, Z = VARA51.z80 || 1.2816;
++  const enl = (x) => f(e.familia === "binomial" ? Math.min(1 - 1e-6, Math.max(1e-6, x / k)) : e.familia === "poisson" ? Math.max(1e-9, x / k) : x / k), inv = (y) => fi(y) * k;
++  const v = g(r, m); if (typeof v !== "number" || !isFinite(v)) return null;
++  let nodo = g(r, "liga") + ":" + r.T.temp;
++  if (!e.sp[nodo]) { const c = Object.keys(e.sp).filter((x) => x.startsWith(g(r, "liga") + ":")).sort(); nodo = c.length ? c[c.length - 1] : null; }
++  const sp = nodo ? e.sp[nodo] : null, spE = (sp && sp[L.indexOf("euroleague")]) || 0, spD = (sp && sp[L.indexOf(ld)]) || 0;
++  const ee = enl(v), ed = ee - e.delta[ld], o = { v: inv(ed) };
++  [["lo", -1], ["hi", 1]].forEach(([sx, sg]) => { const x = g(r, m + "_" + sx); if (typeof x !== "number" || !isFinite(x)) { o[sx] = null; return; }
++    const sdE = Math.abs(ee - enl(x)) / Z, vj = Math.max(sdE * sdE - spE * spE, 0.1 * sdE * sdE); o[sx] = inv(ed + sg * Z * Math.sqrt(vj + spD * spD)); });
++  return o;
++}
++function convVara(r, m) {
++  const c = convVara32(r, m);
++  if (!c || r.T.norm !== "v51" || !VARA51 || !VARA51.metricas) return c;
++  const e = VARA51.metricas[m], b = (VARA51.orden || []).indexOf(m); if (!e || b < 0) return c;
++  const comb = ((+g(r, "v51_comb") || 0) >> b) & 1, solo = ((+g(r, "v51_solo") || 0) >> b) & 1; if (!comb && !solo) return c;
++  const c5 = conv51(r, m, e); if (!c5 || !isFinite(c5.v)) return c;
++  const w = solo ? 1 : e.w, mez = (a, z) => (a == null || !isFinite(a) ? z : z == null || !isFinite(z) ? a : w * a + (1 - w) * z);
++  const k = VARAD.metricas[m], ld = VARA(), p = ["E", "A", "I"].includes(g(r, "pos3")) ? g(r, "pos3") : "A";
++  const muD = k.mu[ld + "|" + p], tauD = k.tau[ld + "|" + p];
++  const pz = (x) => (x == null || !isFinite(x) || muD == null || !tauD ? null : 100 * Phi((TRv(x, k.transf) - muD) / tauD));
++  const o = { v: mez(c5.v, c.v), lo: mez(c5.lo, c.lo), hi: mez(c5.hi, c.hi) };
++  o.p = pz(o.v) ?? c.p; o.pl = pz(o.lo) ?? o.p; o.ph = pz(o.hi) ?? o.p;
++  return o;
++}
+ // v4.1 K4: el RAPM proyectado se lee en 0–100 (50 = jugador medio de la vara), con la curva de las escalas del Atlas:
+ // U = 50 + 50·tanh(x / (2·DT)), x = pts/100 sobre el jugador medio, DT = 1,2426 (familia «rapm» del bloque de escalas)
+ const DT_RAPM = 1.2426, U_RAPM = (x) => (x == null || !isFinite(x) ? x : 50 + 50 * Math.tanh(x / (2 * DT_RAPM)));
+@@ -935,7 +978,7 @@ function pintarEnt() {
+ }
+ function pintarAjustes() {
+   const marca = (id, v) => $(id).querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+-  marca("setEsc", CTX.escala); marca("setAyu", CTX.ayudas ? "1" : "0"); marca("setTema", CTX.tema);
++  marca("setEsc", CTX.escala); marca("setAyu", CTX.ayudas ? "1" : "0"); marca("setTema", CTX.tema); marca("setNorm", NORMV);
+ }
+ // lo que se comparte con las herramientas de detalle (mismo origen: almacenamiento local + mensaje al marco)
+ function publicarCtx(extra) {
+@@ -1136,7 +1179,7 @@ const cargando = (txt) => `<div class="loading"><div class="estela" aria-hidden=
+ const vigente = (tk) => tk === S.tk;
+ // pie: marcador de calles (8 marcas; la del paso actual 01–04, en latón) + fuente y fecha
+ const ticks = () => { const n = +((ITEM[S.route] || ITEM.inicio).sec.n || 0); return `<span class="k-ticks" aria-hidden="true">${[1, 2, 3, 4, 5, 6, 7, 8].map((i) => `<i${i === Math.max(1, n) ? ' class="on"' : ""}></i>`).join("")}</span>`; };
+-const pie = (t) => `<p class="src">${ticks()}<span>Datos públicos · ligas oficiales · ${esc(t || "")} · normalización v3.2 · vara ${esc(VN())} (liga de tu club) · intervalo del 80 %</span></p>`;
++const pie = (t) => `<p class="src">${ticks()}<span>Datos públicos · ligas oficiales · ${esc(t || "")} · ${NORM_TXT()} · vara ${esc(VN())} (liga de tu club) · intervalo del 80 %</span></p>`;
+ function toast(t) { const el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { el.hidden = true; }, 2400); }
+ const fallo = (e) => `<div class="callout"><span class="label">No se pudieron cargar los datos</span><p>${esc(e && e.message ? e.message : e)}. Recarga la página; si persiste, el archivo no está publicado junto a la herramienta.</p></div>`;
+ function filaJug(r) { return `${esc(g(r, "equipo"))} · ${esc(ligaN(g(r, "liga")))}${g(r, "pos3") ? " · " + POS[g(r, "pos3")] : ""}`; }
+@@ -1482,7 +1525,7 @@ VISTAS["como-leer"] = () => {
+     ["Estilos · Química de perfiles", "03 Evaluación · Química de perfiles"], ["Planificación (2 simuladores)", "04 Decisión"], ["Informe · Informe equipo", "01 Diagnóstico · Informe de equipo"], ["Informe · Lectura de fichaje", "03 Evaluación · Lectura de fichaje"], ["Metodología (4)", "Método"]];
+   V().innerHTML = `
+     <div class="block"><div class="block-h"><h3 class="h2">Toda estimación es un punto con su rango</h3></div>
+-      <p class="note" style="font-size:15px;color:var(--text-2)">Las vistas nuevas muestran cada métrica de jugador como <b>punto [extremo bajo–extremo alto]</b>. El rango es el intervalo del 80 %: en 8 de cada 10 casos el valor real cae dentro. Viene de la normalización v3.2 (combinación de dos algoritmos con amortiguación y una red jerárquica), que traduce cada liga a un equivalente común. <b>La vara es siempre la liga de tu club</b> en la temporada elegida (ahora, ${esc(VN())}): todos los valores se expresan como equivalente ${esc(VN())} ${REF_T}. Cambiar de club cambia la vara.</p>
++      <p class="note" style="font-size:15px;color:var(--text-2)">Las vistas nuevas muestran cada métrica de jugador como <b>punto [extremo bajo–extremo alto]</b>. El rango es el intervalo del 80 %: en 8 de cada 10 casos el valor real cae dentro. ${NORMV === "v51" ? "Viene de la normalización v5.1: en cada métrica, la combinación de la v5 (medida bayesiana por partido, carrera de cada jugador y traducción entre ligas con los jugadores que cambian de liga) y la v3.2 (dos algoritmos con amortiguación y una red jerárquica) que menos falla fuera de muestra. Traduce cada liga a un equivalente común." : "Viene de la normalización v3.2 (combinación de dos algoritmos con amortiguación y una red jerárquica), que traduce cada liga a un equivalente común."} <b>La vara es siempre la liga de tu club</b> en la temporada elegida (ahora, ${esc(VN())}): todos los valores se expresan como equivalente ${esc(VN())} ${REF_T}. Cambiar de club cambia la vara.</p>
+       <div class="tw"><table><thead><tr><th>Concepto</th><th>Cómo se lee</th></tr></thead><tbody>
+         <tr><td>Nivel Kerno (v4.0)</td><td>De 0 a 100: percentil esperado de la producción del jugador (minutos por partido × puntos por 100 posesiones) entre los de su puesto en la liga del club elegido, con los minutos que le da el motor en esa plantilla. 50 = fichaje mediano. Calibrado con 4.560 fichajes reales de 2022 a 2026; rango del 80 %.</td></tr>
+         <tr><td>Impacto (v4.0)</td><td>De 0 a 100: percentil del cambio esperado del Net del equipo con él en pista frente a sin él (capa 4), calibrado con el on/off real. Para los jugadores del club, lo que perdería el equipo sin él; para el resto, lo que ganaría como fichaje.</td></tr>
+@@ -1547,6 +1590,10 @@ document.addEventListener("click", (e) => {
+   }
+   const pf = t.closest("[data-perfil]"); if (pf) { NEC.perfil = pf.dataset.perfil; NEC.ver = 40; guardarNec(); ir("necesidad"); return; }
+   const sb = t.closest("#nPos [data-v], #nOrden [data-v]"); if (sb) { NEC[sb.parentElement.id === "nPos" ? "pos" : "orden"] = sb.dataset.v; NEC.ver = 40; guardarNec(); ir("necesidad"); return; }
++  const nb = t.closest("#setNorm [data-v]"); if (nb) {
++    try { localStorage.setItem("kerno.norm", nb.dataset.v); } catch (e) { /* sin almacenamiento: se queda la de esta carga */ }
++    if (nb.dataset.v !== NORMV) location.reload(); return;
++  }
+   const ab = t.closest("#setEsc [data-v], #setAyu [data-v], #setTema [data-v]"); if (ab) {
+     const id = ab.parentElement.id; if (id === "setEsc") CTX.escala = ab.dataset.v; else if (id === "setAyu") CTX.ayudas = ab.dataset.v === "1"; else { CTX.tema = ab.dataset.v; aplicarTema(); }
+     guardarCtx(); pintarAjustes(); publicarCtx(); return;
+@@ -1605,7 +1652,9 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if
+   aplicarTema(); pintarRail();
+   V().innerHTML = cargando("Preparando Kerno Analytics");
+   try {
+-    const [ix, va] = await Promise.all([cargarJSON("datos/normalizados/indice.json"), cargarJSON("datos/normalizados/vara.json").catch(() => null)]);
++    const [ix, va, v51] = await Promise.all([cargarJSON("datos/normalizados/indice.json"), cargarJSON("datos/normalizados/vara.json").catch(() => null),
++      NORMV === "v51" ? cargarJSON("datos/normalizados/vara_v51.json").catch(() => null) : null]);
++    VARA51 = v51;
+     TEMPS = Object.keys(ix.temporadas || {}).sort().reverse();
+     Object.values(ix.temporadas || {}).forEach((t) => Object.entries(t.ligas || {}).forEach(([k, v]) => { if (!LIGA_N[k] && v.nombre) LIGA_N[k] = v.nombre; }));
+     if (va && va.metricas) { VARAD = va; Object.entries(va.metricas).forEach(([m, o]) => { SENT[m] = +o.sentido || 0; }); VARA_LIGAS = va.ligas || VARA_LIGAS; }
+diff --git a/bbactualiza/artefacto.py b/bbactualiza/artefacto.py
+index 1f93540..0c01322 100644
+--- a/bbactualiza/artefacto.py
++++ b/bbactualiza/artefacto.py
+@@ -101,6 +101,41 @@ def normalizados(temporada: str = TEMPORADA) -> None:
+     _dump(indice, DA / "normalizados" / "indice.json")
+ 
+ 
++def _v51_tabla(temporada: str):
++    """Tabla v5.1 de una temporada: la v3.2 publicada (esquema v1) con el componente v5 combinado (bbnorm5.producto51)."""
++    from bbnorm5.salidas import producto51 as P
++    sup = P.DIR / "superposicion" / f"{temporada}.csv.gz"
++    if not sup.exists():
++        return None
++    cols = pd.read_csv(RAIZ / "data/modelos/normalizado" / f"{temporada}.csv", nrows=0).columns
++    v32 = pd.read_csv(RAIZ / "data/modelos/v3_2/normalizado" / f"{temporada}.csv.gz", low_memory=False)[list(cols)]
++    pesos = {m: e["w"] for m, e in json.loads((P.DIR / "vara_v51.json").read_text(encoding="utf-8"))["metricas"].items()}
++    df = P.aplicar(v32, pd.read_csv(sup, dtype={"player_id": str, "team_id": str}), pesos)
++    # <m>_am*: copias de la v3.2 que ninguna página lee (compactar las quita cuando son idénticas a <m>; en la v5.1 no lo son)
++    return df.drop(columns=[m + s for m in P.ORDEN for s in ("_am", "_am_lo", "_am_hi", "_am_pctel") if m + s in df.columns])
++
++
++def normalizados_v51(temporada: str = TEMPORADA) -> dict:
++    """v5.1 (encargo v5.1 F6): datos/normalizados/<t>/regular_v51.json (mismo esquema que regular.json, más las máscaras
++    v51_comb y v51_solo) y datos/normalizados/vara_v51.json."""
++    from bbmodel.dataset_normalizado import _columnar, _dump
++    from bbmodel.nombres import aplicar
++    from bbnorm5.salidas import producto51 as P
++    df = _v51_tabla(temporada)
++    if df is None:
++        return {"temporada": temporada, "filas": 0}
++    df = aplicar(df, fuente=False)
++    _dump(_columnar(df), DA / "normalizados" / temporada / "regular_v51.json")
++    _dump(json.loads((P.DIR / "vara_v51.json").read_text(encoding="utf-8")), DA / "normalizados" / "vara_v51.json")
++    return {"temporada": temporada, "filas": int(len(df)), "v51": int((df["fuente_norm"] == "V5.1").sum())}
++
++
++def normalizados_v51_todas() -> list[dict]:
++    from bbnorm5.salidas import producto51 as P
++    ts = sorted(f.name[:7] for f in (P.DIR / "superposicion").glob("*.csv.gz"))
++    return [normalizados_v51(t) for t in ts]
++
++
+ def compactar() -> None:
+     _py("artifact/herramientas/compactar.py", str(DA))
+ 
+@@ -160,7 +195,8 @@ def mapa(temporada: str = TEMPORADA) -> dict[str, Path]:
+             m[f"datos/{temporada}/{p.name}"] = p
+     if (DA / PREVIA / "evaluacion_regular.json").exists():          # «puentes» hacia la temporada en curso
+         m[f"datos/{PREVIA}/evaluacion_regular.json"] = DA / PREVIA / "evaluacion_regular.json"
+-    for rel in (f"normalizados/{temporada}/regular.json", "normalizados/indice.json",
++    for rel in (f"normalizados/{temporada}/regular.json", f"normalizados/{temporada}/regular_v51.json",
++                "normalizados/vara_v51.json", "normalizados/indice.json",
+                 f"normalizacion/jugadores_{temporada}.json"):
+         if (DA / rel).exists():
+             m[f"datos/{rel}"] = DA / rel
+diff --git a/bbactualiza/normalizacion51.py b/bbactualiza/normalizacion51.py
+new file mode 100644
+index 0000000..b8d11c9
+--- /dev/null
++++ b/bbactualiza/normalizacion51.py
+@@ -0,0 +1,49 @@
++"""Normalización v5.1 de la temporada en curso (encargo v5.1 F6; docs/v5_1/07_F6_integracion.md).
++
++La v5.1 es, en cada métrica, la combinación w·v5 + (1 − w)·v3.2 que menos falla fuera de muestra. El botón la pone al
++día con los modelos de la v5 congelados (como la v3.2 con su CVAE congelada):
++
++1. `normalizacion_v51` (tras `roles`): caja por partido de 2026-27 desde los brutos, zonas, medida y carrera de la v5 con
++   los parámetros congelados (kit de `data/v5/`), equivalente EuroLeague 2025-26 de la v5 y su componente por fila en
++   `data/v5_1/producto/superposicion/<t>.csv.gz` (lo único que se versiona; los intermedios van a carpetas ignoradas).
++2. `artifact` → `normalizados_v51`: combina ese componente con la v3.2 publicada (`bbnorm5.salidas.producto51.aplicar`)
++   y escribe `datos/normalizados/<t>/regular_v51.json` y `datos/normalizados/vara_v51.json`.
++
++El histórico (2020-21 … 2025-26) no cambia: su componente v5 está versionado y se combina con la v3.2 vigente al
++publicar todo (`python -m bbactualiza.normalizacion51 --todas`).
++"""
++from __future__ import annotations
++
++import argparse
++import json
++
++from . import TEMPORADA
++
++
++def ejecutar(temporada: str = TEMPORADA, progreso=print) -> dict:
++    from bbnorm5.salidas import producto51
++    from bbnorm5.simulador51 import incremental
++    r = incremental.ejecutar(temporada, rehacer_caja=True)
++    s = producto51.superposicion(temporada)
++    progreso(f"    v5.1 {temporada}: {r['personas']} personas ({r['personas_nuevas']} nuevas), "
++             f"{s['filas']} de {s['de']} filas con v5")
++    return {"personas": r["personas"], "personas_nuevas": r["personas_nuevas"], "filas_v5": s["filas"],
++            "filas": s["de"]}
++
++
++def main(argv=None) -> int:
++    ap = argparse.ArgumentParser(prog="python -m bbactualiza.normalizacion51")
++    ap.add_argument("--temporada", default=TEMPORADA)
++    ap.add_argument("--todas", action="store_true", help="sólo publica (regular_v51.json) todas las temporadas")
++    a = ap.parse_args(argv)
++    from . import artefacto as A
++    if a.todas:
++        print(json.dumps(A.normalizados_v51_todas(), ensure_ascii=False))
++    else:
++        print(json.dumps(ejecutar(a.temporada), ensure_ascii=False))
++        A.normalizados_v51(a.temporada)
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/bbactualiza/orquestador.py b/bbactualiza/orquestador.py
+index 6a9c1c2..a9a01d8 100644
+--- a/bbactualiza/orquestador.py
++++ b/bbactualiza/orquestador.py
+@@ -84,6 +84,13 @@ def p_roles(ctx):
+     return {"filas_roles": capas.roles(ctx["temporada"])}
+ 
+ 
++def p_normalizacion_v51(ctx):
++    """v5.1: componente v5 de la temporada en curso con los modelos congelados (tras la v3.2 final del contexto y los
++    partidos por jugador de roles, que usa la caja de las ligas agregadas)."""
++    from . import normalizacion51
++    return normalizacion51.ejecutar(ctx["temporada"], progreso=ctx["log"])
++
++
+ def p_entropia(ctx):
+     from . import capas
+     capas.entropia()
+@@ -107,6 +114,7 @@ def p_artifact(ctx):
+     t = ctx["temporada"]
+     sub = [("tablas", lambda: A.tablas(t)), ("nacionalidades", lambda: A.nacionalidades_json(t)),
+            ("evaluacion", lambda: A.evaluacion(t)), ("normalizados", lambda: A.normalizados(t)),
++           ("normalizados_v51", lambda: A.normalizados_v51(t)),
+            ("atlas_estilos", A.atlas_estilos),
+            ("informe", lambda: A.informe(t)),          # lee datos/<t>/regular.json en filas: antes de compactar
+            ("quintetos", lambda: A.quintetos(t)), ("compactar", A.compactar)]
+@@ -141,7 +149,7 @@ def p_publicacion(ctx):
+ 
+ 
+ PASOS = [("descarga", p_descarga), ("pista", p_pista), ("normalizacion", p_normalizacion), ("contexto", p_contexto),
+-         ("roles", p_roles), ("entropia", p_entropia), ("estilos", p_estilos), ("simulador", p_simulador),
++         ("roles", p_roles), ("normalizacion_v51", p_normalizacion_v51), ("entropia", p_entropia), ("estilos", p_estilos), ("simulador", p_simulador),
+          ("artifact", p_artifact), ("v42", p_v42), ("publicacion", p_publicacion)]
+ NOMBRES = [n for n, _ in PASOS]
+ 
+diff --git a/bbactualiza/recalibrar.py b/bbactualiza/recalibrar.py
+index 55e6c49..e8c7b40 100644
+--- a/bbactualiza/recalibrar.py
++++ b/bbactualiza/recalibrar.py
+@@ -132,7 +132,7 @@ def equipos_v40(temporada: str = TEMPORADA) -> Path:
+ 
+ 
+ def p_boton() -> None:
+-    _sh(sys.executable, "-m", "bbactualiza", "--sin-descarga", "--forzar", "--pasos", "contexto", "roles", "entropia",
++    _sh(sys.executable, "-m", "bbactualiza", "--sin-descarga", "--forzar", "--pasos", "contexto", "roles", "normalizacion_v51", "entropia",
+         "estilos", "simulador", "artifact", "v42", "publicacion")
+ 
+ 
+diff --git a/requirements-v3.txt b/requirements-v3.txt
+index b612c0b..c10264c 100644
+--- a/requirements-v3.txt
++++ b/requirements-v3.txt
+@@ -3,3 +3,4 @@
+ # requirements.txt, no descargue PyTorch.
+ #   pip install -r requirements.txt -r requirements-v3.txt --extra-index-url https://download.pytorch.org/whl/cpu
+ torch==2.5.1
++pyarrow>=14   # v5.1: proceso paralelo de la temporada en curso (bbnorm5, Parquet)
+diff --git a/tests/js/v51_normalizacion.js b/tests/js/v51_normalizacion.js
+new file mode 100644
+index 0000000..d7d5f52
+--- /dev/null
++++ b/tests/js/v51_normalizacion.js
+@@ -0,0 +1,47 @@
++// Prueba en navegador de la normalización v5.1 (encargo v5.1 F6): selector, tablas regular_v51.json y vara_v51.json.
++// Requiere una carpeta servida con la forma del Artifact (artifact/kerno/* + datos/normalizados/ con regular.json,
++// regular_v51.json, indice.json, vara.json y vara_v51.json; ver docs/v5_1/07_F6_integracion.md) y Playwright:
++//   node tests/js/v51_normalizacion.js http://localhost:8790
++// La conversión de vara de la v5 se contrasta con la referencia Python bbnorm5.salidas.producto51.convertir.
++const { chromium } = require("playwright");
++const base = process.argv[2] || "http://localhost:8790";
++(async () => {
++  const b = await chromium.launch();
++  const p = await b.newPage({ viewport: { width: 1400, height: 1000 } });
++  const errores = [], fallidas = [];
++  p.on("pageerror", (e) => errores.push(e.message));
++  p.on("requestfailed", (r) => fallidas.push(r.url()));
++  const r404 = []; p.on("response", (r) => { if (r.status() >= 400 && !r.url().endsWith(".gz.txt")) r404.push(r.status() + " " + r.url().replace(base, "")); });
++  await p.goto(`${base}/index.html`); await p.waitForTimeout(8000);
++  const est = await p.evaluate(async () => {
++    const T = await temporada("2025-26");
++    const r = T.rows.find((x) => g(x, "liga") === "acb" && g(x, "fuente_norm") === "V5.1" && (g(x, "min") || 0) > 800);
++    const o = { norm: T.norm, normv: NORMV, v51: !!VARA51, filas: T.rows.length, nombre: g(r, "nombre"), liga: g(r, "liga"),
++      fg3: [g(r, "fg3_pct"), g(r, "fg3_pct_lo"), g(r, "fg3_pct_hi")], comb: g(r, "v51_comb"), solo: g(r, "v51_solo"), pos: g(r, "pos3") };
++    CTX.liga = "feb1";                           // vara Primera FEB
++    o.c32 = convVara32(r, "fg3_pct"); o.c = convVara(r, "fg3_pct"); o.c5 = conv51(r, "fg3_pct", VARA51.metricas.fg3_pct);
++    o.w = VARA51.metricas.fg3_pct.w;
++    o.pts = [convVara32(r, "pts_p100"), convVara(r, "pts_p100")];
++    o.ts = [convVara32(r, "ts_pct"), convVara(r, "ts_pct")];     // derivada: sólo v3.2
++    CTX.liga = "euroleague";
++    o.pie = document.body.innerText.includes("normalización v5.1");
++    return o;
++  });
++  console.log(JSON.stringify(est, null, 0));
++  await p.click("#setBtn"); await p.waitForTimeout(300);
++  const seg = await p.evaluate(() => [...document.querySelectorAll("#setNorm button")].map((x) => x.innerText + ":" + x.getAttribute("aria-pressed")));
++  console.log("selector", seg);
++  await Promise.all([p.waitForNavigation({ timeout: 30000 }).catch(() => null), p.click('#setNorm button[data-v="v32"]')]);
++  await p.waitForTimeout(8000);
++  const e32 = await p.evaluate(async () => { const T = await temporada("2025-26"); return { norm: T.norm, normv: NORMV, v42: !!T.v42, pie: document.body.innerText.includes("normalización v3.2") }; });
++  console.log("tras cambiar a v3.2", JSON.stringify(e32));
++  await p.evaluate(() => localStorage.setItem("kerno.norm", "v51"));
++  // vista clásica: Datos normalizados con la vara de la ACB
++  await p.goto(`${base}/clasico.html`); await p.waitForTimeout(6000);
++  const cl = await p.evaluate(async () => { st.src = "norm"; const d = await loadPhase("2025-26", "regular", "euroleague"); const a = await loadPhase("2025-26", "regular", "acb");
++    const i = d.idx, k = d.rows.findIndex((r) => r[i.fuente_norm] === "V5.1" && r[i.liga] === "feb1");
++    return { norm: NORMV, n: d.rows.length, v51_cols: i.v51_comb != null, fila: d.rows[k][i.nombre], el: d.rows[k][i.fg3_pct], acb: a.rows[k][i.fg3_pct], pct: a.rows[k][i.fg3_pct_pctel] }; }).catch((e) => ({ error: String(e) }));
++  console.log("clasico", JSON.stringify(cl));
++  console.log("errores", errores.slice(0, 5)); console.log("404", [...new Set(r404)].slice(0, 15));
++  await b.close();
++})();
+diff --git a/tests/v5_1/test_producto51.py b/tests/v5_1/test_producto51.py
+new file mode 100644
+index 0000000..384eae1
+--- /dev/null
++++ b/tests/v5_1/test_producto51.py
+@@ -0,0 +1,60 @@
++"""v5.1 F6 · producto para el artifact: superposición sobre la v3.2 y conversión de vara."""
++import numpy as np
++import pandas as pd
++
++from bbnorm5.salidas import producto51 as P
++
++
++def _v32():
++    base = {"liga": ["euroleague", "euroleague", "ligau"], "player_id": ["1", "2", "3"], "team_id": ["10", "10", "20"],
++            "pos3": ["A", "A", "A"], "fuente_norm": "V3.2"}
++    for c in P.COLUMNAS:
++        base[c] = [1.0, 2.0, 3.0]
++    return pd.DataFrame(base)
++
++
++def _sup(v, m, x, x32=True):
++    s = v.iloc[[0]][P.CLAVE].copy()
++    s[m + "_v5"], s[m + "_v5_lo"], s[m + "_v5_hi"] = x, x - 1, x + 1
++    return s
++
++
++def test_aplicar_combina_con_la_v32_vigente_y_solo_donde_hay_v5():
++    v = _v32()
++    a = P.aplicar(v, _sup(v, "fg3_pct", 9.0), {"fg3_pct": 0.25})
++    assert len(a) == 3 and list(a["fuente_norm"]) == ["V5.1", "V3.2", "V3.2"]
++    assert np.isclose(a.loc[0, "fg3_pct"], 0.25 * 9 + 0.75 * 1)
++    assert np.isclose(a.loc[0, "fg3_pct_lo"], 0.25 * 8 + 0.75 * 1)
++    assert a.loc[0, "fg3_pct_pctel"] == 100.0                 # 3,0 > 2,0 entre los dos de la EuroLeague
++    assert a.loc[0, "pts_p100"] == 1.0                        # métrica sin v5: sigue la v3.2
++    assert a.loc[1, "fg3_pct"] == 2.0 and a.loc[2, "fg3_pct"] == 3.0
++    assert a.loc[0, "v51_comb"] == 1 << P.ORDEN.index("fg3_pct") and a.loc[0, "v51_solo"] == 0
++
++
++def test_aplicar_solo_v5_si_no_hay_v32():
++    v = _v32()
++    v.loc[0, "fg3_pct"] = np.nan
++    a = P.aplicar(v, _sup(v, "fg3_pct", 9.0), {"fg3_pct": 0.25})
++    assert a.loc[0, "fg3_pct"] == 9.0 and a.loc[0, "v51_solo"] == 1 << P.ORDEN.index("fg3_pct")
++
++
++def test_aplicar_sin_superposicion_es_la_v32():
++    v = _v32()
++    a = P.aplicar(v, pd.DataFrame(columns=P.CLAVE), {})
++    assert (a["fuente_norm"] == "V3.2").all()
++    for c in P.COLUMNAS:
++        assert np.allclose(a[c], v[c])
++
++
++def test_convertir_identidad_en_la_euroleague_y_desplazamiento_en_el_enlace():
++    L = ["acb", "euroleague"]
++    vd = {"z80": 1.2815516, "ligas": L, "metricas": {"fg3_pct": {
++        "familia": "binomial", "k": 100.0, "w": 0.3, "delta": {"acb": 0.2, "euroleague": 0.0},
++        "sp": {"acb:2025-26": [0.0, 0.05]}}}}
++    r = P.convertir(35.0, 30.0, 40.0, "fg3_pct", "acb", "2025-26", "euroleague", vd)
++    assert np.allclose([r["valor"], r["lo"], r["hi"]], [35.0, 30.0, 40.0], atol=1e-6)
++    r = P.convertir(35.0, 30.0, 40.0, "fg3_pct", "acb", "2026-27", "acb", vd)     # nodo ausente: el último
++    from scipy import special
++    assert np.isclose(r["valor"], 100 * special.expit(special.logit(0.35) - 0.2))
++    assert r["lo"] < r["valor"] < r["hi"]
++    assert P.convertir(35.0, 30.0, 40.0, "fg3_pct", "acb", "2025-26", "nba", vd) is None
+-- 
+2.43.0
+
